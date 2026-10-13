@@ -1,0 +1,136 @@
+{
+  "$schemaDescription": "CineNest local token format v1; literal values resolved through semantic key references in chart specs. Not a claim of DTCG compliance.",
+  "version": "1.0.0",
+  "status": "proposed-exact-values-pending-knowledge-pack",
+  "color": {
+    "brand.gold": "#F4BE78",
+    "brand.primary": "#5135FF",
+    "brand.gradientEnd": "#754CFF",
+    "brand.primaryHover": "#4126D9",
+    "sidebar.background": "#0B1522",
+    "sidebar.text": "#E8EDF5",
+    "sidebar.muted": "#AFBDD0",
+    "cinematic.background": "#080D18",
+    "cinematic.surface": "#131C2E",
+    "cinematic.text": "#F8FAFC",
+    "canvas": "#F4F6FA",
+    "surface": "#FFFFFF",
+    "surface.subtle": "#F8FAFC",
+    "text.primary": "#101828",
+    "text.secondary": "#475467",
+    "border": "#D0D5DD",
+    "border.control": "#667085",
+    "focus": "#5135FF",
+    "success.foreground": "#067647",
+    "success.background": "#ECFDF3",
+    "warning.foreground": "#854A0E",
+    "warning.background": "#FFFAEB",
+    "danger.foreground": "#B42318",
+    "danger.background": "#FEF3F2",
+    "info.foreground": "#175CD3",
+    "info.background": "#EFF8FF",
+    "neutral.foreground": "#344054",
+    "neutral.background": "#F2F4F7",
+    "chart.revenue": "#5135FF",
+    "chart.bookings": "#175CD3",
+    "chart.available": "#067647",
+    "chart.occupied": "#5135FF",
+    "chart.maintenance": "#B42318",
+    "chart.cleaning": "#854A0E",
+    "chart.unknown": "#667085",
+    "chart.grid": "#E4E7EC",
+    "chart.axis": "#475467"
+  },
+  "font": {
+    "family": "Inter, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif",
+    "size": {
+      "caption": "0.75rem",
+      "small": "0.875rem",
+      "body": "1rem",
+      "h3": "1.25rem",
+      "h2": "1.5rem",
+      "h1": "2rem",
+      "hero": "3rem"
+    },
+    "weight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "lineHeight": {
+      "body": 1.5,
+      "heading": 1.2
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "5": "1.25rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "10": "2.5rem",
+    "12": "3rem",
+    "16": "4rem"
+  },
+  "radius": {
+    "control": "0.5rem",
+    "card": "0.75rem",
+    "dialog": "1rem",
+    "pill": "999px"
+  },
+  "shadow": {
+    "card": "0 2px 8px rgb(16 24 40 / 6%)",
+    "overlay": "0 12px 32px rgb(16 24 40 / 18%)"
+  },
+  "breakpoint": {
+    "sm": 640,
+    "md": 768,
+    "lg": 1024,
+    "xl": 1280,
+    "xxl": 1536
+  },
+  "layout": {
+    "sidebar": "15rem",
+    "topbar": "4rem",
+    "contentMax": "90rem",
+    "formMax": "40rem",
+    "touchTarget": "2.75rem",
+    "gridColumns": 12
+  },
+  "motion": {
+    "fast": "120ms",
+    "standard": "200ms",
+    "easing": "cubic-bezier(0.2, 0, 0, 1)"
+  },
+  "gradient": {
+    "primary": {
+      "angle": "135deg",
+      "stops": [
+        "brand.primary",
+        "brand.gradientEnd"
+      ]
+    }
+  },
+  "component": {
+    "button": {
+      "background": "brand.primary",
+      "foreground": "surface",
+      "hover": "brand.primaryHover"
+    },
+    "card": {
+      "background": "surface",
+      "border": "border",
+      "radius": "card",
+      "shadow": "card"
+    },
+    "sidebar": {
+      "background": "sidebar.background",
+      "foreground": "sidebar.text",
+      "selected": "brand.primary"
+    }
+  }
+}

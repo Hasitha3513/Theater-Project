@@ -1,0 +1,100 @@
+/* Generated from tokens/cinenest-design-tokens.json by knowledge/validate_design_kb.py. Spec asset only; not wired into an application. */
+:root {
+  --cn-color-brand-gold: #F4BE78;
+  --cn-color-brand-primary: #5135FF;
+  --cn-color-brand-gradientEnd: #754CFF;
+  --cn-color-brand-primaryHover: #4126D9;
+  --cn-color-sidebar-background: #0B1522;
+  --cn-color-sidebar-text: #E8EDF5;
+  --cn-color-sidebar-muted: #AFBDD0;
+  --cn-color-cinematic-background: #080D18;
+  --cn-color-cinematic-surface: #131C2E;
+  --cn-color-cinematic-text: #F8FAFC;
+  --cn-color-canvas: #F4F6FA;
+  --cn-color-surface: #FFFFFF;
+  --cn-color-surface-subtle: #F8FAFC;
+  --cn-color-text-primary: #101828;
+  --cn-color-text-secondary: #475467;
+  --cn-color-border: #D0D5DD;
+  --cn-color-border-control: #667085;
+  --cn-color-focus: #5135FF;
+  --cn-color-success-foreground: #067647;
+  --cn-color-success-background: #ECFDF3;
+  --cn-color-warning-foreground: #854A0E;
+  --cn-color-warning-background: #FFFAEB;
+  --cn-color-danger-foreground: #B42318;
+  --cn-color-danger-background: #FEF3F2;
+  --cn-color-info-foreground: #175CD3;
+  --cn-color-info-background: #EFF8FF;
+  --cn-color-neutral-foreground: #344054;
+  --cn-color-neutral-background: #F2F4F7;
+  --cn-color-chart-revenue: #5135FF;
+  --cn-color-chart-bookings: #175CD3;
+  --cn-color-chart-available: #067647;
+  --cn-color-chart-occupied: #5135FF;
+  --cn-color-chart-maintenance: #B42318;
+  --cn-color-chart-cleaning: #854A0E;
+  --cn-color-chart-unknown: #667085;
+  --cn-color-chart-grid: #E4E7EC;
+  --cn-color-chart-axis: #475467;
+  --cn-font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --cn-spacing-0: 0;
+  --cn-spacing-1: 0.25rem;
+  --cn-spacing-2: 0.5rem;
+  --cn-spacing-3: 0.75rem;
+  --cn-spacing-4: 1rem;
+  --cn-spacing-5: 1.25rem;
+  --cn-spacing-6: 1.5rem;
+  --cn-spacing-8: 2rem;
+  --cn-spacing-10: 2.5rem;
+  --cn-spacing-12: 3rem;
+  --cn-spacing-16: 4rem;
+  --cn-radius-control: 0.5rem;
+  --cn-radius-card: 0.75rem;
+  --cn-radius-dialog: 1rem;
+  --cn-radius-pill: 999px;
+  --cn-shadow-card: 0 2px 8px rgb(16 24 40 / 6%);
+  --cn-shadow-overlay: 0 12px 32px rgb(16 24 40 / 18%);
+  --cn-font-size-caption: 0.75rem;
+  --cn-font-size-small: 0.875rem;
+  --cn-font-size-body: 1rem;
+  --cn-font-size-h3: 1.25rem;
+  --cn-font-size-h2: 1.5rem;
+  --cn-font-size-h1: 2rem;
+  --cn-font-size-hero: 3rem;
+  --cn-font-weight-regular: 400;
+  --cn-font-weight-medium: 500;
+  --cn-font-weight-semibold: 600;
+  --cn-font-weight-bold: 700;
+  --cn-font-lineheight-body: 1.5;
+  --cn-font-lineheight-heading: 1.2;
+  --cn-layout-sidebar: 15rem;
+  --cn-layout-topbar: 4rem;
+  --cn-layout-contentmax: 90rem;
+  --cn-layout-formmax: 40rem;
+  --cn-layout-touchtarget: 2.75rem;
+  --cn-layout-gridcolumns: 12;
+  --cn-motion-fast: 120ms;
+  --cn-motion-standard: 200ms;
+  --cn-motion-easing: cubic-bezier(0.2, 0, 0, 1);
+  --cn-gradient-primary: linear-gradient(135deg, var(--cn-color-brand-primary), var(--cn-color-brand-gradientEnd));
+  --cn-background: var(--cn-color-canvas);
+  --cn-foreground: var(--cn-color-text-primary);
+  --cn-card-background: var(--cn-color-surface);
+  --cn-focus-ring: var(--cn-color-focus);
+}
+[data-cn-theme="cinematic"] {
+  --cn-background: var(--cn-color-cinematic-background);
+  --cn-foreground: var(--cn-color-cinematic-text);
+  --cn-card-background: var(--cn-color-cinematic-surface);
+  --cn-focus-ring: var(--cn-color-brand-gold);
+}
+[data-cn-theme="booking-panel"] {
+  --cn-background: var(--cn-color-canvas);
+  --cn-foreground: var(--cn-color-text-primary);
+  --cn-card-background: var(--cn-color-surface);
+  --cn-focus-ring: var(--cn-color-focus);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --cn-motion-fast: 0ms; --cn-motion-standard: 0ms; }
+}

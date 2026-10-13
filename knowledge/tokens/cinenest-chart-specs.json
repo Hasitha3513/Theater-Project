@@ -1,0 +1,367 @@
+{
+  "version": "1.0.0",
+  "status": "proposed-contracts-no-backend-present",
+  "tokenFile": "cinenest-design-tokens.json",
+  "shared": {
+    "gridColorToken": "chart.grid",
+    "axisColorToken": "chart.axis",
+    "range": "[from,to)",
+    "nullMeans": "unavailable, undefined or incomplete; never automatically zero",
+    "money": "integer minor units per ISO currency; aggregate server-side before display rounding"
+  },
+  "contracts": {
+    "query": {
+      "from": "RFC3339 instant inclusive",
+      "to": "RFC3339 instant exclusive",
+      "timezone": "IANA identifier; proposed venue default Asia/Colombo, backend configuration authoritative",
+      "currency": "ISO 4217; proposed local presentation LKR; no cross-currency sum without approved FX",
+      "granularity": "hour/day/week/month supported by server",
+      "roomIds": "authorized opaque identifiers",
+      "locationIds": "only if architecture supports locations"
+    },
+    "envelope": {
+      "schemaVersion": "versioned string",
+      "asOf": "RFC3339 instant",
+      "timezone": "echo validated IANA zone",
+      "range": "from/to exact requested range",
+      "currency": "ISO currency or null for nonfinancial dataset",
+      "complete": "boolean",
+      "warnings": "safe machine codes with display mapping",
+      "data": "typed dataset below; empty array vs unavailable/null distinguished"
+    },
+    "financialBuckets": {
+      "bucketStart": "instant",
+      "bucketEnd": "instant",
+      "capturedMinor": "signed integer sum in one currency",
+      "refundedMinor": "nonnegative integer successful refund sum",
+      "recognizedRevenueMinor": "capturedMinor - refundedMinor",
+      "complete": "boolean"
+    },
+    "bookingBuckets": {
+      "bucketStart": "instant",
+      "bucketEnd": "instant",
+      "bookingCount": "nonnegative integer distinct confirmedAt events"
+    },
+    "roomSnapshot": {
+      "snapshotAt": "instant",
+      "rooms": "array {roomId, state: occupied|available|cleaning|maintenance|unknown, stateObservedAt, bookable}; one state per room"
+    },
+    "slotBuckets": {
+      "bandId": "stable string",
+      "label": "server configured label",
+      "startHour": "0..23",
+      "endHour": "0..24",
+      "dayOffset": "0 or 1",
+      "bookingCount": "integer"
+    },
+    "roomUtilization": {
+      "roomId": "opaque ID",
+      "roomName": "permitted display name",
+      "bookedMinutes": "nonnegative decimal",
+      "sellableMinutes": "nonnegative decimal",
+      "utilizationPercent": "0..100 or null",
+      "complete": "boolean"
+    },
+    "bookingStateBuckets": {
+      "bucketStart": "instant",
+      "bucketEnd": "instant",
+      "stateCounts": "map actual backend state \u2192 nonnegative integer",
+      "cohortTotal": "sum stateCounts",
+      "asOf": "instant"
+    },
+    "financialSummary": {
+      "capturedMinor": "integer",
+      "refundedMinor": "integer",
+      "recognizedRevenueMinor": "integer",
+      "confirmedQuoteTotalMinor": "integer",
+      "eligibleConfirmedBookingCount": "integer",
+      "averageBookingValueMinor": "number or null",
+      "previous": "same sums and exact prior range or null",
+      "asOf": "instant"
+    },
+    "serviceHealth": {
+      "entities": "array {id, status: online|degraded|offline|unknown, observedAt: instant|null, staleAfterSeconds: positive integer, required: boolean, safeReason: string|null}"
+    },
+    "deviceHealth": {
+      "entities": "array {deviceId, roomId, enabled, status, observedAt, staleAfterSeconds, safeReason, telemetrySchemaVersion}"
+    }
+  },
+  "charts": [
+    {
+      "id": "revenue-bookings",
+      "name": "Revenue and Bookings Chart",
+      "type": "bar-line",
+      "series": [
+        {
+          "key": "recognizedRevenueMinor",
+          "colorToken": "chart.revenue",
+          "axis": "left",
+          "label": "Recognized revenue"
+        },
+        {
+          "key": "bookingCount",
+          "colorToken": "chart.bookings",
+          "axis": "right",
+          "label": "Confirmed bookings"
+        }
+      ],
+      "formula": "Revenue = sum successful captured payment minor amounts - successful refund minor amounts, allocated to their respective financial event bucket; bookingCount = distinct booking IDs with confirmedAt inside bucket. Counts and money have separate event/date bases.",
+      "contract": "financialBuckets + bookingBuckets joined on exact start/end; never infer bookings from transaction counts.",
+      "axes": "X local bucket label; left money/currency; right integer booking count. Both start at zero; signed financial axis may extend below zero.",
+      "tooltip": "Bucket start/end/timezone, recognized revenue with currency, confirmed bookings, financial event basis and completeness.",
+      "filters": [
+        "range",
+        "granularity",
+        "room",
+        "location",
+        "currency",
+        "timezone"
+      ],
+      "legend": "Revenue bar and bookings line, visible with series toggle and equivalent table.",
+      "responsive": "Full width; minimum 240px plot; reduce ticks, stack legend; dual-axis labels retained, table available."
+    },
+    {
+      "id": "room-occupancy",
+      "name": "Room Occupancy Donut Chart",
+      "type": "donut",
+      "series": [
+        {
+          "key": "occupied",
+          "colorToken": "chart.occupied",
+          "label": "Occupied"
+        },
+        {
+          "key": "available",
+          "colorToken": "chart.available",
+          "label": "Available"
+        },
+        {
+          "key": "cleaning",
+          "colorToken": "chart.cleaning",
+          "label": "Cleaning"
+        },
+        {
+          "key": "maintenance",
+          "colorToken": "chart.maintenance",
+          "label": "Maintenance"
+        },
+        {
+          "key": "unknown",
+          "colorToken": "chart.unknown",
+          "label": "Unknown"
+        }
+      ],
+      "formula": "Snapshot occupancy = occupied bookable rooms / (occupied + available bookable rooms) \u00d7 100. Denominator excludes cleaning, maintenance and unknown; show excluded count. Donut slices show all rooms in scope, not just denominator. No eligible rooms yields N/A.",
+      "contract": "roomSnapshot with mutually exclusive states, stateObservedAt and snapshotAt; explicit unknown/stale handling.",
+      "axes": "No axes. Center labels operational snapshot occupancy and eligible denominator; never confuse with time utilization.",
+      "tooltip": "State, room count, share of all snapshot rooms, snapshotAt; unknown excluded from eligible rate.",
+      "filters": [
+        "location",
+        "room",
+        "snapshotAt"
+      ],
+      "legend": "All five states with counts; occupied violet, available green, cleaning amber, maintenance red, unknown gray.",
+      "responsive": "Minimum 240px graphic; legend below <lg; counts and table readable without hovering."
+    },
+    {
+      "id": "revenue-trend",
+      "name": "Revenue Trend Chart",
+      "type": "line-area",
+      "series": [
+        {
+          "key": "recognizedRevenueMinor",
+          "colorToken": "chart.revenue",
+          "label": "Recognized revenue"
+        }
+      ],
+      "formula": "Same financial event revenue definition as revenue-bookings; area is decorative transparent series color, not cumulative revenue.",
+      "contract": "financialBuckets with capturedMinor/refundedMinor/recognizedRevenueMinor and optional comparable previous buckets.",
+      "axes": "X bucket/date; Y money/currency; zero baseline and negative values preserved.",
+      "tooltip": "Bucket, captured, refunds, recognized revenue, currency, completeness and optional comparison.",
+      "filters": [
+        "range",
+        "granularity",
+        "room",
+        "location",
+        "currency",
+        "timezone"
+      ],
+      "legend": "Recognized revenue; previous period dashed only when data supplied.",
+      "responsive": "Full width; fewer ticks; area may be removed at small widths without removing values."
+    },
+    {
+      "id": "popular-time-slots",
+      "name": "Popular Time Slots Chart",
+      "type": "bar",
+      "series": [
+        {
+          "key": "bookingCount",
+          "colorToken": "chart.bookings",
+          "label": "Bookings started"
+        }
+      ],
+      "formula": "Distinct confirmed noncancelled booking IDs whose scheduled start falls within selected range, grouped by configured local hour band. Explicit business bands [startHour,endHour); cross-midnight bands split or carry dayOffset. Popularity is count, not occupied minutes.",
+      "contract": "slotBuckets with bandId, label, startHour/endHour/dayOffset and bookingCount; band definitions from configured operating hours.",
+      "axes": "X labelled local time bands (24-hour or locale time); Y integer booking count from zero.",
+      "tooltip": "Band including AM/PM or 24-hour clarity, booking count, range and timezone.",
+      "filters": [
+        "range",
+        "room",
+        "location",
+        "timezone",
+        "slotBandDefinition"
+      ],
+      "legend": "Bookings started; label rankings as tied when counts equal.",
+      "responsive": "Horizontal bars at <sm; preserve complete time-band labels; no ambiguous duplicate 9\u201312."
+    },
+    {
+      "id": "room-utilization",
+      "name": "Room Utilization Chart",
+      "type": "horizontal-bar",
+      "series": [
+        {
+          "key": "utilizationPercent",
+          "colorToken": "chart.occupied",
+          "label": "Time utilization"
+        }
+      ],
+      "formula": "For each room: union of noncancelled confirmed booking intervals intersected with sellable intervals and range, divided by union of sellable intervals within range \u00d7 100. Sellable intervals = configured operating intervals minus maintenance/blackouts and policy-defined turnaround. Count interval overlaps once. Zero sellable minutes \u2192 null/N/A.",
+      "contract": "roomUtilization with roomId/name, bookedMinutes, sellableMinutes, utilizationPercent and completeness; server resolves blackout/buffer policy.",
+      "axes": "Y room label; X 0\u2013100 percent. Never cap invalid >100 data silently; flag contract error.",
+      "tooltip": "Room, booked/sellable minutes, percent, excluded intervals and range/timezone.",
+      "filters": [
+        "range",
+        "room",
+        "location",
+        "timezone"
+      ],
+      "legend": "Time utilization; optional comparison dashed, not another occupancy definition.",
+      "responsive": "Vertical list of horizontal bars; long names wrap and table remains available."
+    },
+    {
+      "id": "booking-statistics",
+      "name": "Booking Statistics",
+      "type": "stacked-bar-and-summary",
+      "series": [
+        {
+          "key": "confirmed",
+          "colorToken": "chart.available",
+          "label": "Confirmed"
+        },
+        {
+          "key": "ongoing",
+          "colorToken": "chart.bookings",
+          "label": "Ongoing"
+        },
+        {
+          "key": "completed",
+          "colorToken": "chart.occupied",
+          "label": "Completed"
+        },
+        {
+          "key": "cancelled",
+          "colorToken": "chart.maintenance",
+          "label": "Cancelled"
+        },
+        {
+          "key": "other",
+          "colorToken": "chart.unknown",
+          "label": "Other states"
+        }
+      ],
+      "formula": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.",
+      "contract": "bookingStateBuckets with cohort basis createdAt, asOf and all backend states mapped to documented display buckets; totals from same dataset.",
+      "axes": "X creation bucket; Y integer booking count, zero baseline.",
+      "tooltip": "Bucket, each state count, cohort total, cancellation rate, asOf.",
+      "filters": [
+        "range",
+        "granularity",
+        "room",
+        "location",
+        "timezone"
+      ],
+      "legend": "All included states, with text and stable color; Other states expands in data table.",
+      "responsive": "Stacked chart stacks above summary cards <lg; table retains unmapped states."
+    },
+    {
+      "id": "financial-kpis",
+      "name": "Financial KPI Cards",
+      "type": "kpi-cards",
+      "series": [
+        {
+          "key": "recognizedRevenueMinor",
+          "colorToken": "chart.revenue",
+          "label": "Recognized revenue"
+        },
+        {
+          "key": "capturedMinor",
+          "colorToken": "chart.available",
+          "label": "Captured payments"
+        },
+        {
+          "key": "refundedMinor",
+          "colorToken": "chart.maintenance",
+          "label": "Successful refunds"
+        },
+        {
+          "key": "averageBookingValueMinor",
+          "colorToken": "chart.bookings",
+          "label": "Average booking value"
+        }
+      ],
+      "formula": "Captured = sum successful captures in event range; refunded = sum successful refunds in event range; recognized = captured - refunded. Average booking value = sum finalized quote totals of bookings confirmed in range / distinct such bookings, rounded for display only; excludes cancelled-at-asOf cohort and labelled asOf. Denominator 0 \u2192 N/A. Period delta = (current - previous) / abs(previous) \u00d7100; previous 0 or missing \u2192 N/A. Revenue may be negative.",
+      "contract": "financialSummary including sums, confirmedQuoteTotalMinor, eligibleConfirmedBookingCount, previous comparable range and asOf; all amounts per currency.",
+      "axes": "No axes; each card has label, value/currency and named comparison basis.",
+      "tooltip": "Metric definition, date basis, previous exact period, completeness, asOf.",
+      "filters": [
+        "range",
+        "room",
+        "location",
+        "currency",
+        "timezone"
+      ],
+      "legend": "Not required; label every card. Up/down is descriptive, not always good/bad.",
+      "responsive": "1/2/4 columns base/sm/lg; values wrap without truncation."
+    },
+    {
+      "id": "system-iot-status",
+      "name": "System and IoT Status Indicators",
+      "type": "status-list-and-timeline",
+      "series": [
+        {
+          "key": "online",
+          "colorToken": "chart.available",
+          "label": "Online"
+        },
+        {
+          "key": "degraded",
+          "colorToken": "chart.cleaning",
+          "label": "Degraded"
+        },
+        {
+          "key": "offline",
+          "colorToken": "chart.maintenance",
+          "label": "Offline"
+        },
+        {
+          "key": "unknown",
+          "colorToken": "chart.unknown",
+          "label": "Unknown"
+        }
+      ],
+      "formula": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices \u00d7100, unknown included; 0 devices \u2192 N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.",
+      "contract": "serviceHealth and deviceHealth with status, observedAt, staleAfterSeconds, required, safeReason and telemetry schema version.",
+      "axes": "Status list has no axes; optional timeline X instant/date, Y state per service/device lane.",
+      "tooltip": "Entity, status, observedAt/timezone, age, freshness threshold and safe diagnostic.",
+      "filters": [
+        "location",
+        "room",
+        "deviceType",
+        "service",
+        "range"
+      ],
+      "legend": "Online/degraded/offline/unknown with icons and words; no all-green default.",
+      "responsive": "List wraps to cards; timeline scrolls in labelled region; equivalent event table."
+    }
+  ]
+}
