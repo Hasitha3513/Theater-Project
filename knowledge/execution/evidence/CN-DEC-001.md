@@ -19,3 +19,5 @@ Brief acceptance: A baseline; B drivers; C authority/evidence; D permitted alter
 
 ## Publication and stop
 Pre-publication snapshot LOCAL until actual task commit/push receipt exists. User automatic task-owned Git publication remains applicable; no bypass/force/merge/deployment. Historical setup receipts retained separately. Single next action: owner responds to brief section I. Stack selection and foundation authorization remain separate pending gates; CN-FND-001 not executed.
+
+Verified publication: primary brief commit `f3ba0e179754a963fe4768e5cd6b9e06aaaaf43e` pushed to origin/main, independently matched by `git ls-remote` (exit0). [Receipt](CN-DEC-001-publication.json) supersedes the pre-publication LOCAL snapshot. Metadata-only closeout follows; derive its current HEAD from Git. Stack approval still pending; no implementation authorization.

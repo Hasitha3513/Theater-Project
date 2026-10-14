@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "LOCAL",
-  "publicationEvidence": "Current brief pre-publication snapshot; prior setup receipt remains historical",
-  "lastObservedHead": "55ee66be4022daae182933a3042d86e80e8600ee",
+  "publicationState": "PUSHED",
+  "publicationEvidence": "CN-DEC-001 primary brief commit f3ba0e179754a963fe4768e5cd6b9e06aaaaf43e pushed to origin/main; ls-remote matched. Receipt-only successor commit resolved via current Git, no merge/deployment/stack approval.",
+  "lastObservedHead": "f3ba0e179754a963fe4768e5cd6b9e06aaaaf43e",
   "evidencePath": "execution/evidence/CN-DEC-001.md",
   "evidenceFreshness": "Current brief input snapshot at 55ee66b and official sources accessed 2026-10-14; historical setup baseline source ledger retained",
   "availableTools": [

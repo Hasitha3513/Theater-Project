@@ -1,0 +1,51 @@
+{
+  "taskId": "CN-DEC-001",
+  "atLocal": "2026-10-14T13:41:04.296139+05:30",
+  "primaryBriefCommit": "f3ba0e179754a963fe4768e5cd6b9e06aaaaf43e",
+  "branch": "main",
+  "remote": "https://github.com/Hasitha3513/Theater-Project.git",
+  "pushExitCode": 0,
+  "remoteVerificationArgv": [
+    "git",
+    "ls-remote",
+    "origin",
+    "refs/heads/main"
+  ],
+  "verificationExitCode": 0,
+  "verifiedRemoteHead": "f3ba0e179754a963fe4768e5cd6b9e06aaaaf43e",
+  "briefCommitFiles": [
+    "knowledge/CHANGELOG.md",
+    "knowledge/README.md",
+    "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
+    "knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
+    "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+    "knowledge/decisions/cinenest-open-decisions.json",
+    "knowledge/execution/CINENEST-EXECUTION-PLAN.md",
+    "knowledge/execution/CINENEST-EXECUTION-STATUS.md",
+    "knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
+    "knowledge/execution/CINENEST-SESSION-HANDOFF.md",
+    "knowledge/execution/change-sets.json",
+    "knowledge/execution/evidence/CN-DEC-001-checks.json",
+    "knowledge/execution/evidence/CN-DEC-001-inputs-and-sources.json",
+    "knowledge/execution/evidence/CN-DEC-001-review.json",
+    "knowledge/execution/evidence/CN-DEC-001.md",
+    "knowledge/execution/requirements.json",
+    "knowledge/execution/source-ledger.json",
+    "knowledge/execution/status.json",
+    "knowledge/execution/test-plan.json",
+    "knowledge/execution/validate_execution.py",
+    "knowledge/manifest.json",
+    "knowledge/sources/CN-DEC-001-request.txt",
+    "knowledge/sources/cinenest-source-register.json",
+    "knowledge/validate_design_kb.py"
+  ],
+  "closeoutFiles": [
+    "knowledge/execution/status.json",
+    "knowledge/execution/evidence/CN-DEC-001-publication.json",
+    "knowledge/execution/evidence/CN-DEC-001.md",
+    "knowledge/execution/CINENEST-EXECUTION-STATUS.md",
+    "knowledge/execution/CINENEST-SESSION-HANDOFF.md",
+    "knowledge/manifest.json"
+  ],
+  "scope": "Decision-only brief and metadata; approval pending. This receipt records verified primary publication, its own successor SHA is derived through Git."
+}

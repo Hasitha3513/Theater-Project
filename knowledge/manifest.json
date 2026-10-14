@@ -212,7 +212,7 @@
       "path": "execution/CINENEST-EXECUTION-STATUS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "7669267f6ac8f0b364e8de486aaa788c859e54c2c22aaf6b1f9ebcf50a3b63a7"
+      "sha256": "76189116099999aca92167db9c7fcc724cb467f00ba3c894c3f1b6c19018f1c1"
     },
     {
       "path": "execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
@@ -224,7 +224,7 @@
       "path": "execution/CINENEST-SESSION-HANDOFF.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "227ff50335499a572b44b0ab606b00405afe5a5823c0b9e3bdf35181e3c3af7a"
+      "sha256": "4270c80475cf02042b2a73c1c6f6ccb09d54849bfcdaded0a5c0ea3bc6802d2b"
     },
     {
       "path": "execution/change-sets.json",
@@ -251,6 +251,12 @@
       "sha256": "76c6fd25617eb0662fc778643bdad694702dcf02dc474ccf594b69efba2faadb"
     },
     {
+      "path": "execution/evidence/CN-DEC-001-publication.json",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "b734a288a8452d1bc6a046a6bea08d119b4a6d8b772e57d867ce14bbc91aa911"
+    },
+    {
       "path": "execution/evidence/CN-DEC-001-review.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
@@ -260,7 +266,7 @@
       "path": "execution/evidence/CN-DEC-001.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "eeac7556678053fd6f7995c0d57ddf947f74839579503429409f513940009404"
+      "sha256": "7a2f1a4e39dfce33cdeaf5429628b383ef24cf19c14228d10c1afde7304f195c"
     },
     {
       "path": "execution/evidence/checks.json",
@@ -314,7 +320,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "edd830635248e011bd2191723e0912f8c7056c37d092ad71616f47b04fcb7863"
+      "sha256": "57229f8231a87cc6d9de2bb8b999b8736e49e22d35e63275a75ffe8adfd2f98e"
     },
     {
       "path": "execution/test-plan.json",
