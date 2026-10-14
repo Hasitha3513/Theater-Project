@@ -155,7 +155,7 @@ def main():
     if errors:
         print('\n'.join('FAIL '+message for message in errors))
         return 1
-    print('PASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 9 chart definitions/token references; catalog/rules/statuses/traceability/manifest; breakpoints; 16 selected contrast pairs.')
+    print('PASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 9 chart definitions/token references; catalog/rules/statuses/package requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.')
     print('Limits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.')
     return 0
 
@@ -172,6 +172,9 @@ def validate_expansion(check, tokens, specs):
         'delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md',
         'decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md',
         'CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md', 'CINENEST-DESIGN-DECISION-ADR-002.md',
+        'product/CINENEST-PACKAGE-MANAGEMENT.md', 'CINENEST-DESIGN-DECISION-ADR-003.md',
+        'delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md',
+        'sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt',
         'CHANGELOG.md', 'manifest.json', 'product/cinenest-feature-catalog.json',
         'product/cinenest-draft-rules.json', 'decisions/cinenest-open-decisions.json',
         'decisions/cinenest-palette-comparison.json', 'sources/cinenest-source-register.json',
@@ -203,7 +206,7 @@ def validate_expansion(check, tokens, specs):
     features = parsed['product/cinenest-feature-catalog.json']['features']
     ids = [f['id'] for f in features]
     check(len(ids) == len(set(ids)), 'Duplicate feature IDs')
-    check(set(ids) == {f'CN-C{i:02d}' for i in range(1, 10)} | {f'CN-A{i:02d}' for i in range(1, 12)} | {f'CN-O{i:02d}' for i in range(1, 5)}, 'Incomplete feature inventory')
+    check(set(ids) == {f'CN-C{i:02d}' for i in range(1, 10)} | {f'CN-A{i:02d}' for i in range(1, 13)} | {f'CN-O{i:02d}' for i in range(1, 5)}, 'Incomplete feature inventory')
     feature_doc = (ROOT / 'product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md').read_text()
     for f in features:
         for field in ['id', 'name', 'purpose', 'actors', 'workflow', 'rules', 'permissions', 'module',
@@ -246,7 +249,7 @@ def validate_expansion(check, tokens, specs):
         check(c['decisionStatus'] in decisions and c['implementationStatus'] == 'NOT_VERIFIED', f'Chart status {c["id"]}')
         check(set(c['sourceIds']) <= source_ids, f'Chart sources {c["id"]}')
     manifest = parsed['manifest.json']
-    check(manifest['kbVersion'] == '1.0.0', 'Unexpected first manifest version')
+    check(manifest['kbVersion'] == '1.1.0' and manifest['baselineKbVersion'] == '1.0.0', 'Package-task KB version/baseline mismatch')
     check(manifest['chartSpecVersion'] == specs['version'] == '1.1.0', 'Chart version mismatch')
     check(manifest['designTokenVersion'] == tokens['version'] == '1.0.0', 'Design-token version mismatch')
     actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and '__pycache__' not in p.parts}
@@ -258,8 +261,50 @@ def validate_expansion(check, tokens, specs):
         check(path.is_file(), f'Missing manifest file {entry["path"]}')
         if entry.get('sha256') and path.is_file():
             check(hashlib.sha256(path.read_bytes()).hexdigest() == entry['sha256'], f'Manifest checksum mismatch {entry["path"]}')
+    validate_package_spec(check, features, rules, source_ids)
     for filename, expected_hash in manifest['preservedAssets'].items():
         check(hashlib.sha256((ROOT / filename).read_bytes()).hexdigest() == expected_hash, f'Preserved asset changed {filename}')
+
+
+def validate_package_spec(check, features, rules, source_ids):
+    """Validate package documentation coverage; no service or hardware test claim."""
+    path = ROOT / 'product/CINENEST-PACKAGE-MANAGEMENT.md'
+    if not path.is_file():
+        check(False, 'Missing canonical package specification')
+        return
+    text = path.read_text()
+    feature = next((f for f in features if f['id'] == 'CN-A12'), None)
+    check(feature is not None, 'Missing package feature CN-A12')
+    if feature:
+        check(feature.get('requirementId') == 'PR-PKG-001', 'Package requirement ID mismatch')
+        check(feature['decisionStatus'] == 'APPROVED' and feature['implementationStatus'] == 'NOT_VERIFIED', 'Core package requirement status mismatch')
+        check(feature.get('supportingDesignDecisionStatus') == 'RECOMMENDED', 'Supporting design silently approved')
+        check(feature['sourceIds'] == ['S8'] and 'S8' in source_ids, 'Missing package requirement provenance')
+        check(feature.get('canonicalSpecification') == 'product/CINENEST-PACKAGE-MANAGEMENT.md', 'Conflicting package owner document')
+    check('without editing application code or requiring a deployment for each configuration change' in text, 'Core no-release capability missing')
+    for literal in ['PR-PKG-001', 'CN-A12', 'positive integer minutes', 'extra_minutes = selected_minutes - package_version.included_minutes',
+                    'extra_minutes % extension_increment_minutes == 0', 'effective_min = max(',
+                    'accepted quote', 'capturedAt', 'two-hour package', 'physical capacity', 'no binary floating point']:
+        check(literal.lower() in text.lower(), f'Missing package constraint {literal}')
+    for i in range(1, 14):
+        check(text.count(f'| PK-AC{i:02d} |') == 1, f'Missing/duplicate package acceptance PK-AC{i:02d}')
+    for heading in ['Actors and permissions', 'Fields and joint validation', 'Ownership and initial defaults',
+                    'Duration and server quotation model', 'Proposed administrative lifecycle',
+                    'Effective versions, scopes and concurrent publishing', 'Existing purchases and active checkout protections',
+                    'Proposed architecture/API and audit', 'Open decisions and provenance']:
+        check(f'## {heading}' in text, f'Missing package section {heading}')
+    check(rules.get('initialDefaultsOnly') is True, 'Draft initial values presented as immutable runtime rules')
+    check(rules.get('includedSessionMinutes') == 180, 'Initial included duration mismatch')
+    check(rules.get('extensionIncrementMinutes') == rules['extensionIncrementHours'] * 60 == 60, 'Initial extension units inconsistent')
+    check(set(rules.get('ownership', {})) == {'package', 'operations', 'sharedPricing'}, 'Default ownership incomplete')
+    for name in ['CINENEST-ADMIN-PAGES.md', 'CINENEST-CUSTOMER-BOOKING-PAGES.md',
+                 'product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md',
+                 'architecture/CINENEST-DATA-AND-API-CONTRACTS.md', 'architecture/CINENEST-SYSTEM-ARCHITECTURE.md',
+                 'delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md',
+                 'decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md']:
+        body = (ROOT / name).read_text()
+        check('CINENEST-PACKAGE-MANAGEMENT.md' in body, f'Missing canonical package link {name}')
+        check(body.count('## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001') == 1, f'Duplicate/missing task section {name}')
 
 
 if __name__ == '__main__':

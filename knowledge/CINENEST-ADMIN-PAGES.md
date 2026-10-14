@@ -156,7 +156,7 @@ Lists use backend pagination, stable sort plus ID tie-breaker, abortable filters
 
 | Requirement | Specification |
 |---|---|
-| Page layout | Section navigation for general, rooms/policies, integrations, access and notifications. |
+| Page layout | Section navigation for general, Packages & Pricing (proposed subsection), rooms/policies, integrations, access and notifications. |
 | Components | Scoped forms, secret masked fields, effective-date notices, unsaved-change guard. |
 | Tables | Configured integrations and permission assignments with server-supported scope; no invented role matrix. |
 | Filters | Section and location if supported; search visible settings. |
@@ -190,3 +190,20 @@ Lists use backend pagination, stable sort plus ID tie-breaker, abortable filters
 Manual bookings, changes, extensions and cancellations use the same authoritative database guard/quote/eligibility checks as customer flow. Approved operator capability is required, not assumed from admin sign-in. Customer session end and blocked-until/cleaning clearance are separate fields. Extension quotes check next booking and end-of-day rules. Configuration/price/refund-policy edits preserve existing purchase and consent snapshots. Room card/table modes use the same scoped dataset and action capabilities.
 
 Dashboard “today's confirmed bookings” and “today's scheduled sessions” are separate cards if both shown. Booking-based room status is not sensor-confirmed physical occupancy. Charts use [current metric specifications](CINENEST-CHARTS-AND-METRICS.md); net collections and recognized revenue cannot share a mislabeled value. Live Control shows paid/confirmed, provisioning and observed device state independently, plus cleaning work and overstay incidents. Emergency/cleaning staff process remains a launch gate, not a timer automation.
+
+## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+Information architecture: **System Settings → Packages & Pricing**, a proposed subsection, not a new verified route or duplicate pricing module. CN-A12/PR-PKG-001 core editable details/duration/prices are APPROVED; the supporting page/workflow below is RECOMMENDED, implementation NOT_VERIFIED. [Package specification](product/CINENEST-PACKAGE-MANAGEMENT.md) owns fields, constraints, exact pricing and lifecycle.
+
+| Requirement | Package subsection specification |
+|---|---|
+| Page layout/components | Header/search/filter toolbar, versioned package table; details/services/duration/price/applicability/publication/preview/history editor sections |
+| Table/filter | Package identity/name, included duration, currency/price, scope, version, availability, sales effective date and optional service window; search name/ID, filter state/venue/room/date, server paging |
+| Actions/permissions | View/history; create/duplicate/edit draft with package.edit; preview; Save draft distinct from Publish/Schedule with package.publish; deactivate/archive separately scoped |
+| Forms/preview | Persistent labels, positive integer minutes, exact monetary fields/currency, policy/service references and full joint validation. Customer card/quote preview labelled draft, before/after inclusions/duration/price/scope/effective summary |
+| Concurrency/errors | Unsaved-change guard; version token and stale-edit reload/diff; field errors and error summary; overlapping publication conflict; preserve safe draft data, no silent overwrite |
+| Confirmation/status | Publish confirmation names new version/time/scope and states existing bookings remain unchanged. Draft/scheduled/applicable/inactive/history are distinct; audit result visible |
+| Loading/empty/denied | Geometry-matched loading; no packages versus no filter matches; retry on failed load/publish; no edit/publish permission yields read-only allowed fields or scoped denied state |
+| Responsive/a11y | Existing hybrid shell/tokens; table scroll or compact cards below md; editor stacks, preview/history below form; minimum 44px actions, accessible dialogs/errors/version labels; no new theme |
+| Charts | Existing report definitions unchanged; historical revenue/duration use sold snapshots, not current catalog; no new demand-pricing chart |
+
+Separate operational-policy/room permissions control minimum/hours/cleaning/capacity. Package controls cannot increase safety capacity or extend active PINs. Exact backend capabilities/state names remain proposed.

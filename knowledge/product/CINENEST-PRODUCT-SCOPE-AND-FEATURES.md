@@ -438,3 +438,25 @@ No application manifests or implemented modules exist at the inspected HEAD. All
 | Source | S1 |
 | Decision | DOCUMENTED_DRAFT |
 | Implementation | NOT_VERIFIED |
+
+## CN-A12 — Admin-editable package details duration and prices
+
+| Field | Specification |
+|---|---|
+| Requirement ID | PR-PKG-001 |
+| Purpose | Authorized administrators can modify package details, session duration, and prices through the Admin Panel, without editing application code or requiring a deployment for each configuration change. |
+| Actors | Authorized package administrator; publisher/reviewer roles proposed |
+| Workflow | Edit core package settings via Admin Panel; supporting draft/preview/versioned publish/schedule/deactivate/archive flow RECOMMENDED |
+| Business rules | Canonical package specification; separate operational minimum, physical capacity and cleaning; immutable sold terms and accepted quotes |
+| Permissions | Proposed package.read/edit/publish/deactivate/archive independently within authorized venue scope |
+| Owning module | Pricing (existing proposed owner); Booking owns purchased snapshots |
+| UI pages | System Settings → Packages & Pricing (proposed subsection, no verified route); customer package/quote/confirmation views |
+| Integrations | Venues/Rooms constraints; Identity & Access; Booking; Payments; Audit; no device command from catalog edit |
+| Failure states | Invalid fields/constraints; denied scope; stale draft; overlapping versions; expired quote/hold; partial amendment outcome |
+| Acceptance criteria | PK-AC01–13 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections |
+| Decision | APPROVED |
+| Supporting design | RECOMMENDED |
+| Implementation | NOT_VERIFIED |
+| Source | [S8](../sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt), explicit user confirmation |
+
+Canonical definitions: [package management](CINENEST-PACKAGE-MANAGEMENT.md). Core APPROVED is limited to PR-PKG-001; broader policy/notification settings CN-A10 and quote/add-on behavior CN-C04 retain their existing statuses.

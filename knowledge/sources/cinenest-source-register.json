@@ -47,6 +47,13 @@
       "availability": "AVAILABLE_NORMALIZED_NAME_UNVERIFIED_EQUIVALENCE",
       "kind": "visual-reference",
       "sha256": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852"
+    },
+    {
+      "id": "S8",
+      "path": "sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt",
+      "availability": "AVAILABLE",
+      "kind": "user-confirmed-product-requirement-and-proposals",
+      "sha256": "1cd916c41a310b49aae6daff7405ad5f2c1fd01bd52f5ff486feccf6b536ee84"
     }
   ]
 }

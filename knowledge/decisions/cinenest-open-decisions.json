@@ -193,6 +193,79 @@
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
       "launchBlocker": "REPORT_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-17",
+      "conflict": "Package proration, rounding, zero-price and tax treatment unresolved",
+      "source": "S8; initial figures are examples",
+      "impact": "Exact payable totals and permitted shorter/included duration choices",
+      "options": "Initial extension-only no proration; resolve permitted zero/tax and exact rounding policy explicitly",
+      "owner": "TBD",
+      "evidenceRequired": "Product/finance/policy decision and exact quote fixtures",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-18",
+      "conflict": "Package price-change thresholds, role allocation and two-person approval not approved",
+      "source": "S8 core capability only",
+      "impact": "Who may edit/publish/archive and control sensitive changes",
+      "options": "Independent capabilities; self-publish vs approval workflow/threshold by scope",
+      "owner": "TBD",
+      "evidenceRequired": "Accountable role/scope matrix and approval/audit acceptance",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-19",
+      "conflict": "Scope precedence and sales/session-validity version selection needs final approval",
+      "source": "S8",
+      "impact": "Deterministic applicable version and scheduling concurrency",
+      "options": "Reject overlapping intersecting scope; decide explicit venue/room override if needed; distinguish sales vs service windows",
+      "owner": "TBD",
+      "evidenceRequired": "Boundary/scope precedence and concurrent-publish evidence",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-20",
+      "conflict": "Valid quote honor, deactivation/emergency withdrawal and payment-timing evidence",
+      "source": "S8 vs older generic revalidation language",
+      "impact": "Fair accepted prices and late capture/expired-hold recovery",
+      "options": "Recommend honor valid quote; capture-in-time vs callback timing; explicit emergency/withdrawal and approved cutoff alternatives",
+      "owner": "TBD",
+      "evidenceRequired": "Provider timestamp authenticity, product quote policy and reconciliation scenarios",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-21",
+      "conflict": "Minimum-duration operational-policy authority and change process",
+      "source": "S8 mandatory-minimum description; PDFs absent",
+      "impact": "Two-hour packages cannot bypass venue/global policy or terms",
+      "options": "Separate authorized minimum update, precedence/effective date and customer terms; reject invalid package-only change",
+      "owner": "TBD",
+      "evidenceRequired": "Source/policy review, approval rights and minimum boundary acceptance",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-22",
+      "conflict": "Shared fee/add-on definitions versus deliberate package overrides",
+      "source": "S8 and existing Pricing ownership",
+      "impact": "No duplicate definitions/double charging or inconsistent override precedence",
+      "options": "Versioned shared refs by default; override only after explicit design decision",
+      "owner": "TBD",
+      "evidenceRequired": "Pricing ownership/version resolution and included-extra fixtures",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "IMPLEMENTATION_GATE"
     }
-  ]
+  ],
+  "lastUpdatedTask": "CN-KB-PACKAGE-CONFIGURATION-001"
 }

@@ -5,13 +5,13 @@
 > Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
 
 
-## Canonical draft defaults
-[Rule specification](cinenest-draft-rules.json) is machine-readable documentation, never a runtime configuration change. All values originate in S1, not unseen PDFs. Backend configuration must be versioned and approved before launch. Open items: [decision register](../decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md).
+## Canonical initial draft defaults
+[Rule specification](cinenest-draft-rules.json) is machine-readable documentation, never a runtime configuration change. All initial values originate in S1 and are reaffirmed/classified by S8, not unseen PDFs. These are configurable initial defaults, not immutable application values; package content and rates are distinct from operational constraints. Backend configuration must be versioned and approved before launch. Open items: [decision register](../decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md).
 
 | ID | Draft rule | Constraints |
 |---|---|---|
 | BR-01 | LKR; Asia/Colombo; operating window 09:00–24:00 local | End is next-day midnight; customer session must end by closing under this draft. Cleaning beyond closing remains OD-10. |
-| BR-02 | Minimum 3 hours; extensions in whole hours | Reject shorter sessions/fractional extensions; purchased duration includes accepted extensions. |
+| BR-02 | Initial operational minimum and included package duration 180 minutes; extension increment 60 minutes | Separate minimum-policy control; package cannot bypass it. Extension calculations use the applicable package version/increment; purchased duration includes accepted extensions. |
 | BR-03 | LKR 2,500 for up to 4 guests; maximum 5 | Fifth guest adds LKR 800; an individual room capacity may be lower and cannot be exceeded. |
 | BR-04 | Additional hour LKR 1,000; PS4 LKR 1,000/session | Supported add-ons only; gaming availability/rights require validation. |
 | BR-05 | Online convenience fee LKR 100 | Manual-booking fee treatment, taxes, discounts and refundable components undecided; label quote channel. |
@@ -21,7 +21,7 @@
 | BR-09 | PIN valid [session_start,session_end) | No 15-minute pre-entry allowance. Length, revocation/re-entry/offline compatibility remain OD-02. |
 | BR-10 | Preserve booked price, refund-policy and consent snapshots | Future policy/admin edits affect new quotes; existing purchases never silently rewritten. |
 
-Quote (illustrative online, no discounts/taxes): base + fifth_guest_if_any + extra_hours × hourly_rate + PS4_if_selected + convenience_fee. Base booking = **LKR 2,600**; base plus PS4 = **LKR 3,600**. These examples are documentation fixtures, not operational prices or frontend constants. Pricing owns rounding, itemization and eligibility.
+Authoritative quote uses applicable package/fee/add-on versions and server line items; [parameterized calculation](CINENEST-PACKAGE-MANAGEMENT.md) handles included duration, eligible extension units and included extras without double charging. Labeled initial illustration (online, no discounts/decided tax treatment): Base booking = **LKR 2,600**; base plus PS4 = **LKR 3,600**. These examples are documentation fixtures, not operational prices or frontend constants. Pricing owns rounding, itemization and eligibility.
 
 ## Inventory, time and concurrency
 `session_end = session_start + purchased_duration` and `blocked_until = session_end + cleaning_buffer`. Reservation blocking interval is **[session_start,blocked_until)**; guest access interval is **[session_start,session_end)**. Distinguish the two in APIs, calendars, UI and device scheduling. Back-to-back session beginning exactly blocked_until is permissible only when readiness is cleared. Operating checks use venue-local calendar boundaries; storage uses UTC instants with original timezone/config version. Cleaning ending after midnight needs OD-10 resolution.
@@ -34,7 +34,7 @@ Recommended PostgreSQL exclusion constraint or equivalent database-enforced conf
 - Duplicate/out-of-order webhook: durable inbox keyed by provider event/transaction; preserve facts, version-aware state projection, reconcile provider status; do not move captured to failed on a late earlier event.
 - Retry: reuse logical operation idempotency key; provider lookup before another charge/refund/access write. Unknown outcome is not safe failure.
 - Reschedule: quote delta/terms, lock old/new scopes in deterministic order, atomically swap reservation; retain original history and agreed policy. If external delta fails, retain original booking or documented compensating path. No silent release before new slot secured.
-- Extend: whole hour, reprice, check next booking plus buffer/closing/readiness; replace reservation range atomically. Capture delta then update access only through durable workflow; payment success does not guarantee PIN end-time updated. Reconcile any partial outcome.
+- Extend: applicable configured whole increment (initially 60 minutes), accepted amendment delta quote, check next booking plus buffer/closing/readiness; replace reservation range atomically. Capture delta then update access only through durable workflow; payment success does not guarantee PIN end-time updated. Reconcile any partial outcome.
 - Cancel/refund: authorization and policy snapshot eligibility, cancel inventory and revoke access safely; refund remains separate asynchronous state until verified successful. No automatic card re-billing without separately approved consent/provider capability (OD-07).
 
 ## Proposed lifecycle transitions
@@ -107,3 +107,8 @@ All tables are desired behavior, not implemented states. State changes are versi
 | unknown → acknowledged/failed | STATUS_RECONCILED; authoritative response | Worker/operator | Reconcile original command | Expired command never replayed | Original command + reconciliation |
 
 See [IoT safety](../architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md) and [data contracts](../architecture/CINENEST-DATA-AND-API-CONTRACTS.md) for durable integration and failure ownership.
+
+## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+[Package management](CINENEST-PACKAGE-MANAGEMENT.md) is canonical for PR-PKG-001/CN-A12. Initial defaults do not prevent authorized future package-duration/price/content changes. Global/venue minimum-duration policy, hours, cleaning and physical capacity remain separate operational constraints; a two-hour package requires separately authorized minimum and customer-terms changes. Shared Pricing add-on/fee definitions are referenced, not duplicated per package. No pro-rata discount or new tax treatment inferred.
+
+Payment/eligibility revalidation checks the accepted quote version, verified amount/currency and current reservation eligibility, not a newly published catalog rate. Valid quote honor is RECOMMENDED, expired quote refresh needs acceptance; arrival time of a delayed webhook is separate from verified capture timing. [Package quote/amendment protections](CINENEST-PACKAGE-MANAGEMENT.md) qualify the existing late-payment and lifecycle recovery rules. Deactivation does not cancel purchased bookings; changing live catalog cannot rewrite snapshots, cleaning intervals or access credentials. Source PDFs remain missing and unchanged.

@@ -457,6 +457,29 @@
       ],
       "decisionStatus": "DOCUMENTED_DRAFT",
       "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A12",
+      "requirementId": "PR-PKG-001",
+      "name": "Admin-editable package details duration and prices",
+      "purpose": "Authorized administrators can modify package details, session duration, and prices through the Admin Panel, without editing application code or requiring a deployment for each configuration change.",
+      "actors": "Authorized package administrator; publisher/reviewer roles proposed",
+      "workflow": "Edit core package settings via Admin Panel; supporting draft/preview/versioned publish/schedule/deactivate/archive flow RECOMMENDED",
+      "rules": "Canonical package specification; separate operational minimum, physical capacity and cleaning; immutable sold terms and accepted quotes",
+      "permissions": "Proposed package.read/edit/publish/deactivate/archive independently within authorized venue scope",
+      "module": "Pricing (existing proposed owner); Booking owns purchased snapshots",
+      "pages": "System Settings \u2192 Packages & Pricing (proposed subsection, no verified route); customer package/quote/confirmation views",
+      "integrations": "Venues/Rooms constraints; Identity & Access; Booking; Payments; Audit; no device command from catalog edit",
+      "failureStates": "Invalid fields/constraints; denied scope; stale draft; overlapping versions; expired quote/hold; partial amendment outcome",
+      "acceptance": "PK-AC01\u201313 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
+      "sourceIds": [
+        "S8"
+      ],
+      "decisionStatus": "APPROVED",
+      "supportingDesignDecisionStatus": "RECOMMENDED",
+      "implementationStatus": "NOT_VERIFIED",
+      "canonicalSpecification": "product/CINENEST-PACKAGE-MANAGEMENT.md"
     }
-  ]
+  ],
+  "lastUpdatedTask": "CN-KB-PACKAGE-CONFIGURATION-001"
 }

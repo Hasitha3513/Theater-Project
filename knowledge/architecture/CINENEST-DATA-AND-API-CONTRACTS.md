@@ -12,8 +12,9 @@ Conceptual entities, table names and capabilities are proposals, not existing sc
 | Accounts | Identity & Access | accountId, provider subject mapping, profile, accountState; no OAuth tokens in response | Self profile/session; restricted account support |
 | Venues and rooms | Venues/Rooms | venueId, roomId, capacity, operatingWindowVersion, amenities, readiness and observedAt | Catalog read; scoped configuration/clearance |
 | Holds | Booking | holdId, ownerId, roomId, sessionStart/end, blockedUntil, expiresAt, quoteRef, version, consumed | Owner create/read/expire; no transferable hold |
-| Bookings and guests | Booking | bookingId, revision, ownerId, roomId, guestCount/required minimal guest checks, scheduled times, state, purchase snapshots | Owner list/detail/change; authorized manual bookings |
-| Quotations | Pricing | quoteId/version, currency, integer minor-unit line items, subtotal/discount/tax/fee/total, expiresAt, policyRefs | Server quote, acceptance and immutable purchase copy |
+| Bookings and guests | Booking | bookingId, revision, packageVersionRef/purchased display+line item+duration+buffer+policy snapshots, ownerId, roomId, guestCount/required minimal guest checks, scheduled times, state, purchase snapshots | Owner list/detail/change; authorized manual bookings |
+| Package catalog and published versions | Pricing | stable packageId, immutable packageVersionId/revision, display/inclusion/duration/exact-price refs, venue/room scope, sales interval and optional service interval | Authorized list/create/duplicate/edit/preview/publish/schedule/deactivate/archive/history; actual routes/tables proposed only |
+| Quotations | Pricing | quoteId/version, packageVersionRef, price/add-on/fee snapshots, currency, integer minor-unit line items, subtotal/discount/tax/fee/total, expiresAt, policyRefs | Server quote, acceptance and immutable purchase copy |
 | Payment attempts and captures | Payments | attemptId, booking/quote refs, providerRef, expected amount/currency, status, captured ledger refs | Create hosted checkout, verified callback/status, reconcile |
 | Refunds | Payments | refundId, captureRef, policy snapshot, requested/successful amount, reason, state and provider ref | Restricted request/status; balance checked atomically |
 | Verification decisions | Verification | evidenceRef, decisionId/version, eligible, policy/basis/reviewer/time/expiry; candidate OCR fields restricted | Owner submit/status; reviewer decision; separate evidence access |
@@ -34,7 +35,7 @@ Idempotency key is owner/scope/operation bound with request digest, durable resu
 ## Verified payment notification workflow
 1. Provider adapter validates configured authenticity/signature, expected merchant, transaction/attempt, amount/currency and replay/dedupe identifiers against official selected provider contract. Client redirect is advisory only.
 2. Persist inbox event and financial fact once; atomically create durable integration work/audit. Acknowledge provider only after durable acceptance. Reject or quarantine mismatches safely.
-3. Booking consumes verified fact once, checks quote/eligibility/hold/reservation under authoritative concurrency guard, confirms or records payment_exception; neither provider success nor Redis hold alone confirms inventory.
+3. Booking consumes verified fact once, checks accepted quote reference/amount/currency and eligibility/hold/reservation under authoritative concurrency guard (never silently checks latest catalog rate), confirms or records payment_exception; neither provider success nor Redis hold alone confirms inventory.
 4. Create durable access provisioning/notification work. Access failure remains visible independently of paid/confirmed booking.
 5. Reconciliation polls verified provider status on missing/out-of-order/unknown callbacks. Refund/compensation is a separate provider operation with its own idempotency and ledger.
 
@@ -61,3 +62,8 @@ This is a shape example, not a valid production timestamp fixture. Scope validat
 
 ## Reconciliation acceptance
 Future tests: duplicate/out-of-order captures, expired holds, concurrency, partial refunds, late success after cancellation, provider timeout, lost outbox ack, notification failure, failed access installation and stale telemetry. Audit evidence links original facts and compensation. [Chart contracts](../tokens/cinenest-chart-specs.json) consume safe authorized projections, not screenshots or client-subset totals.
+
+## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+[Canonical package contract](../product/CINENEST-PACKAGE-MANAGEMENT.md) proposes scoped package.read/edit/publish/deactivate/archive; opaque immutable revision IDs, version/ETag conditional updates and idempotent publish commands. Publication validates duration/inclusions/price/operational refs/schedule together; ambiguity/stale state rejects atomically, not partial publish. Versioned quote response includes package/price/fee/add-on/policy refs, snapshot line items, currency, total and expiry. Capture reconciliation uses accepted quote and verified capture timing rather than webhook receipt time/new catalog values.
+
+Confirmed Booking preserves purchased display details, duration/start/end/buffer, guests/services, exact total/line items, consent/policy/quote refs. Amendments have distinct accepted quote and guarded revision/payment/refund/access work; catalog events never update active PINs. PackagePublished safe event may contain stable ID/version, effective range, scope and correlation only; audit holds actor/time/reason/old-new values/version. Table names/routes, approval thresholds and distributed cache design unimplemented/proposed. See OD-17–22 for policy options.

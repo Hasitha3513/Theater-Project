@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "kbVersion": "1.0.0",
-  "baselineKbVersion": null,
-  "baselineCommit": "16710dcf3e3bfb2453bab24910890279691fc06d",
-  "taskId": "CN-KB-FEATURES-TECH-001",
+  "kbVersion": "1.1.0",
+  "baselineKbVersion": "1.0.0",
+  "baselineCommit": "6c5ed91e0997bcc191a1f7a983086619d7625ed9",
+  "taskId": "CN-KB-PACKAGE-CONFIGURATION-001",
   "recordedDate": "2026-10-14",
   "designTokenVersion": "1.0.0",
   "chartSpecVersion": "1.1.0",
-  "versionRationale": "First overall KB manifest; baseline overall version absent. Chart contract increments observed 1.0.0 only. No no-op version increment.",
+  "versionRationale": "Material additive package requirement CN-A12/PR-PKG-001 and ADR-003 from verified KB 1.0.0. Token/chart versions unchanged; no-op rerun retains version.",
   "decisionStatuses": [
     "APPROVED",
     "DOCUMENTED_DRAFT",
@@ -24,20 +24,22 @@
     "styles/cinenest-theme.css": "d3968b08519db0dea663f0336b40913207dd5a8613f1361c37f7a97b6c43533a",
     "CineNest Cinema Admin Dashboard Mockup-1.png": "52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f",
     "CineNest Cinema Dashboard Showcase-2.png": "27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7",
-    "CineNest Private Cinema Booking UI.png": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852"
+    "CineNest Private Cinema Booking UI.png": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852",
+    "tokens/cinenest-chart-specs.json": "f883ab8c8987ecc6fe3aa1a68bbd677e8862dd73a6e26560ab3d118c40f2aedb",
+    "CINENEST-CHARTS-AND-METRICS.md": "8916bd3951afff422886ba8e83e97b4a860745793987e5c1662507e24713c908"
   },
   "files": [
     {
       "path": "CHANGELOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "49d77a3e0498cab97dbc449071a8e9a877b0c96fc5c5ebda1732d08e426dd795"
+      "sha256": "d259c031628753c5a2e235fb7d0e551eca7b0c009eac126f9a8ca8c0221542b0"
     },
     {
       "path": "CINENEST-ADMIN-PAGES.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b4031c73d31c569482a7cc07c027867ea0e38cd5fa0f01b602fecb8adce496aa"
+      "sha256": "f7750ae064f2ff2e1aed3e6888af5444a3d0a217e88226cca1727b3bd9cd710c"
     },
     {
       "path": "CINENEST-CHARTS-AND-METRICS.md",
@@ -49,7 +51,7 @@
       "path": "CINENEST-CUSTOMER-BOOKING-PAGES.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "471dbebdf9f9b37f16b55365f19c1fad305d5f4e9b6f4589da2e40e4dc329ca2"
+      "sha256": "b4f153c2e67032ab18bdc44ff1c9c2b593b8e5959ef63d7e53f5a79c11276856"
     },
     {
       "path": "CINENEST-DESIGN-DECISION-ADR-001.md",
@@ -62,6 +64,12 @@
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "a754c3434b11a4da838c0f1304d93c5000ecc0097abec8973f0dacb71be6e42a"
+    },
+    {
+      "path": "CINENEST-DESIGN-DECISION-ADR-003.md",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "ec63908597d949b9493eb74234bec285c52aea2b6cbbbde5fcfad2eb1c2c786b"
     },
     {
       "path": "CINENEST-DESIGN-SYSTEM.md",
@@ -85,7 +93,7 @@
       "path": "CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "bc396ab896b27fabf153b668380ba6ec55197c8df0de3e84b491cfd0918e8f65"
+      "sha256": "90be74e9c8031a52abc7b384f4ba7f7431b1fab4bf6f0f54aef4f63dae754df4"
     },
     {
       "path": "CINENEST-VALIDATION-REPORT.md",
@@ -115,13 +123,13 @@
       "path": "README.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e7df3bacb1c5316ed504b49a464285b1b7cde9605f447f19ae766189c8555f7f"
+      "sha256": "5085e17ed71fe186b72d10120d67b6b3486e776c53e50c92009c7ea82b904818"
     },
     {
       "path": "architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "7076d2f3fee624f344f8590004973e3931e09cdb4c5da51ea3995cf7e11b0f6f"
+      "sha256": "9ab212d83691b9a9fd61db974935510172c401a60034ca90f1757a192815bbe6"
     },
     {
       "path": "architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md",
@@ -133,7 +141,7 @@
       "path": "architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6c534ba89514fcb8dd9f14b7d569d6c7b32e93f0c671b917d88e716baeef4825"
+      "sha256": "2fea6fe629c232ec6654147fe8e8d4ccb980116edad16e568e8479805310f593"
     },
     {
       "path": "architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
@@ -145,13 +153,13 @@
       "path": "decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "5ab4ac1be5c4beb1a06acdbf70e72adb84429436bcff6760272911235f4ad35e"
+      "sha256": "5925708414863f4513cab168f3f421d13ffe4d361c998a785ef4ff15632a70af"
     },
     {
       "path": "decisions/cinenest-open-decisions.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "fc9d913d0d177ecbd53fe238c888c3dbf4bcc04e174e6c2532b2a873fff7a0a5"
+      "sha256": "e882caed297a7dcaf95de149916529f7ef151945d594c17b5620527d5f8f7763"
     },
     {
       "path": "decisions/cinenest-palette-comparison.json",
@@ -163,7 +171,13 @@
       "path": "delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "05b325780a6c45488e48073eb5d30ad2f92104d3dfb881330448251c78b2144e"
+      "sha256": "e6ef51fb89c8bf44d0ca4cc504a3c0afb09604fc067aa4d25bc048f13fdf440a"
+    },
+    {
+      "path": "delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "1bdf75b06057b274816f0a3b7c51fe06a72d2fadc7190f96e78d89b29fa3926a"
     },
     {
       "path": "manifest.json",
@@ -174,25 +188,31 @@
       "path": "product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6682dffde615e53e3b4d4fa639f64f2b37590e11099737552066eb5ed8c56400"
+      "sha256": "8a1d51a2ed78b67fddd658189bc0a69951f585eed39f828d59d323689331f466"
+    },
+    {
+      "path": "product/CINENEST-PACKAGE-MANAGEMENT.md",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "902ead2119d8d9676efa88f4a71d77791dbf44ab7e75898c2f75f5009a0993af"
     },
     {
       "path": "product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "341e7d52340281e4808748f16d5622895e068a7db689444ca686b2970b06bd7c"
+      "sha256": "bad99ce184603d9ad04723455ff7af0bbf8a1ef3201177fd41b3cb88de93ef2e"
     },
     {
       "path": "product/cinenest-draft-rules.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "440aa40493a9ac4afff3926fe77807583362ed63d8d0aa87a6e66aa21c82bab4"
+      "sha256": "1827c0410b9c366ea390e7c4b6c23e160901379cd8b739bd561a84dae1e486bc"
     },
     {
       "path": "product/cinenest-feature-catalog.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c7d891f773deefb699ff5a16784e902df3ae4a040d7b15d4aa83701b477f7080"
+      "sha256": "3cecc6d108bca5fcf4b1bd72606c0304ff964d4e82dee4b989d26b0c24092a6f"
     },
     {
       "path": "security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md",
@@ -207,10 +227,16 @@
       "sha256": "9cf09c1dcbd849ddbd15449a0b76b9e21f478a33dc66439086ee93dad429f06d"
     },
     {
+      "path": "sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "1cd916c41a310b49aae6daff7405ad5f2c1fd01bd52f5ff486feccf6b536ee84"
+    },
+    {
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e688db5886f9d40c7b90f0fb991f51ca76a701e9ae4c2df3e2ffe02942490838"
+      "sha256": "825cc4ba88c32cd9bde12bc4639b71659c6f31ef75dab07d4dbab054271a1d3a"
     },
     {
       "path": "styles/cinenest-theme.css",
@@ -234,7 +260,14 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e0a3e4c0314f45c5d662a31c77b02f5b45010bf8a4100519fa454ed1a34fd58f"
+      "sha256": "74272d9de25c96b9d68bad76222d9a3dc99640f2320a75d01b65169dad5b7feb"
+    }
+  ],
+  "revisionHistory": [
+    {
+      "kbVersion": "1.0.0",
+      "taskId": "CN-KB-FEATURES-TECH-001",
+      "commit": "6c5ed91e0997bcc191a1f7a983086619d7625ed9"
     }
   ]
 }

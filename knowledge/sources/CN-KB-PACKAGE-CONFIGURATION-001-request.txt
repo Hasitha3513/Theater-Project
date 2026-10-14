@@ -1,0 +1,310 @@
+ROLE
+Act as the technical documentation maintainer and product architect
+for CineNest, the Theater Project's private cinema and IoT platform.
+
+TASK ID: CN-KB-PACKAGE-CONFIGURATION-001
+
+OBJECTIVE
+Update the actual Theater Project knowledge files to explicitly record:
+
+“Authorized administrators can modify package details, session duration,
+and prices through the Admin Panel, without editing application code
+or requiring a deployment for each configuration change.”
+
+Record this core capability as a user-confirmed product requirement.
+Do not describe it as implemented or tested without repository evidence.
+Supporting proposals below remain recommendations unless an existing
+approved decision establishes them.
+
+Perform the documentation changes, not merely a plan or chat summary.
+This is a DOCUMENTATION-ONLY task.
+
+
+1. VERIFY THE WORKSPACE AND EXISTING DOCUMENTATION
+
+- Confirm the correct CineNest / Theater Project workspace. Do not use
+  an unrelated project's repository, architecture, or permissions.
+- Read AGENTS.md, README, KB indexes, existing ADRs, version information,
+  and publication instructions.
+- Locate the existing knowledge-base root. Use docs/knowledge-base/
+  only if the project does not already have a different convention.
+- Read relevant product, business-rule, admin, customer, architecture,
+  and acceptance documents before editing.
+- Inspect Git branch, HEAD, status, and configured upstream if available.
+  Preserve pre-existing changes and avoid overwriting concurrent edits.
+- Verify files and versions rather than trusting earlier descriptions
+  of archives, file counts, completed updates, or successful pushes.
+- If the workspace is ambiguous, ask for its path before writing.
+  Report unavailable source files; do not invent their contents.
+
+Do not implement frontend/backend features, change runtime configuration,
+install dependencies, create migrations, deploy, or control IoT devices.
+Preserve approved design images, theme tokens, CSS, and chart definitions.
+
+
+2. CREATE A CANONICAL PACKAGE-MANAGEMENT SPECIFICATION
+
+Create or update, using the existing KB structure:
+
+product/CINENEST-PACKAGE-MANAGEMENT.md
+
+Reuse an equivalent existing document when one already owns this topic.
+Do not create a parallel or conflicting source of truth.
+
+Include:
+- Requirement provenance and decision/implementation status.
+- Actors and permissions.
+- Package fields and validation.
+- Administrative workflows and publication lifecycle.
+- Duration and pricing behavior.
+- Versioning and effective dates.
+- Existing-booking and checkout protections.
+- Customer-facing changes.
+- Architecture/API implications, labeled proposed where unimplemented.
+- Audit requirements, acceptance scenarios, and open decisions.
+
+Allocate stable feature IDs using the project's existing conventions.
+Do not renumber or duplicate existing IDs.
+
+
+3. SPECIFY THE ADMIN-EDITABLE INFORMATION
+
+Core fields:
+- Package name and description.
+- Included services and amenities.
+- Included customer session duration.
+- Base package price.
+
+Related proposed configuration:
+- Promotional image and display order.
+- Minimum and maximum selectable duration.
+- Whether extensions are allowed, their increments, and charges.
+- Included guest count and additional-guest charges.
+- Available add-ons and whether each is included or separately charged.
+- Applicable venues and compatible rooms.
+- Sales effective dates and optional session-validity dates.
+- Package availability and publication status.
+- Reference to an applicable versioned booking/refund policy.
+
+Define an admin workflow for listing, creating, duplicating, editing,
+previewing, publishing/scheduling, deactivating, and archiving packages.
+Mark supporting workflows as proposed unless already approved.
+
+Publishing should validate all related fields together. Do not permit
+partially published combinations of duration, inclusions, and price.
+
+Do not add automatic demand pricing, a generic rules engine, or unrelated
+promotion features as an implied consequence of editable package prices.
+
+
+4. RECONCILE FIXED DEFAULTS WITH CONFIGURABLE RULES
+
+Retain these source-described INITIAL DEFAULTS, not immutable code values:
+
+- Included/minimum session: 180 minutes.
+- Base package: LKR 2,500 for up to 4 guests.
+- Extension increment: 60 minutes.
+- Extension charge: LKR 1,000 per increment.
+- Additional fifth guest: LKR 800.
+- Current documented maximum room occupancy: 5 guests.
+- Optional PS4: LKR 1,000 per session.
+- Online convenience fee: LKR 100.
+- Post-session cleaning buffer: 15 minutes.
+
+Classify ownership clearly:
+- Package content, duration, price, and inclusions are package settings.
+- Venue operating hours, minimum-duration policy, cleaning requirements,
+  and physical room capacity are separate operational constraints.
+- Shared fees and add-on definitions use their existing owning module;
+  do not duplicate them into every package without a deliberate decision.
+
+The source documents currently describe a mandatory three-hour minimum.
+Explain that a two-hour package is possible only after the authorized
+minimum-duration policy and corresponding customer-facing terms are
+updated. A package edit alone must not bypass those constraints.
+Do not automatically rewrite the source PDFs or claim legal approval.
+
+Changing a package's included guest allowance cannot increase the room's
+approved physical occupancy limit or override safety requirements.
+
+Use positive integer minutes for duration fields and exact monetary
+representations consistent with the selected stack. Do not use binary
+floating-point calculations for authoritative payable totals.
+
+Document the relationship between included, minimum, and maximum duration.
+Do not silently assume shorter sessions receive prorated discounts.
+Unresolved proration, rounding, zero-price packages, tax treatment, and
+approval thresholds belong in the open-decisions register.
+
+Replace authoritative hardcoded pricing examples with parameterized
+pseudocode where appropriate. Retain constants only in labeled examples.
+
+For an extension model, calculate extra units from the selected duration,
+package-included duration, and configured extension increment after
+validating eligibility. Use server-side line items for the final quote.
+Do not charge again for an add-on already included in the package.
+
+Illustrative default totals, with no discounts or decided tax treatment:
+- Three hours, four guests, no PS4: LKR 2,600 including convenience fee.
+- Same booking with optional PS4: LKR 3,600.
+
+
+5. PROTECT EXISTING BOOKINGS AND PAYMENTS
+
+Document versioned publication rather than destructive edits to sold terms.
+A published change creates a new package version or equivalent immutable
+revision. Preserve the stable package identity and historical versions.
+
+Each confirmed booking retains the purchased snapshot:
+- Package/version reference and purchased display details.
+- Duration, session start/end, and reserved cleaning buffer.
+- Guest allowance and included/selected services.
+- Price line items, fees, discounts if applicable, and final total.
+- Accepted policy/consent versions and quote reference.
+
+Changing a catalog package must NOT silently change existing bookings,
+receipts, historical reports, purchased inclusions, or active access PINs.
+Deactivation prevents new sales under the defined rule; it does not
+cancel existing reservations. Preserve versions referenced by bookings.
+
+Differentiate:
+- When a package version becomes available for new purchases.
+- Which future cinema session dates that version may serve.
+
+Use explicit timezone-aware boundaries, with Asia/Colombo for venue-local
+rules. Define version precedence and prevent ambiguous overlapping versions
+for the same package and scope.
+
+An in-progress checkout is bound to an authoritative versioned quote
+with an expiry. Document the recommended policy to honor valid quotes
+and require clear acceptance of refreshed terms after expiry.
+
+Reconcile existing “revalidate price at payment confirmation” wording:
+validate against the accepted quote, payment amount/currency, and current
+reservation eligibility, not silently against a newly published rate.
+
+A delayed or duplicate webhook must not cause duplicate booking,
+retroactive repricing, or an unapproved extra charge. Define reconciliation
+and recovery for expired holds, late successful payments, and conflicts.
+Distinguish quote expiry from evidence that payment was completed in time.
+
+Changing a purchased booking is a separate authorized amendment workflow:
+check availability, obtain necessary customer acceptance, resolve payment
+or refund differences, update reserved intervals, then coordinate access
+and notifications with retry/failure handling.
+
+No package edit may extend PIN validity, disturb an active session,
+or bypass conflict checking and required cleaning time.
+
+
+6. UPDATE ADMIN AND CUSTOMER UI SPECIFICATIONS
+
+Add “Packages & Pricing” to the admin information architecture, either
+as a dedicated page or within the established Settings structure.
+Do not create duplicate pricing ownership or invent an existing route.
+Any suggested route must be labeled proposed.
+
+Describe:
+- Package table with search, filters, duration, price, scope, version,
+  availability, effective date, and permission-controlled actions.
+- Edit sections for details, services, duration, price, applicability,
+  publication, preview, and history.
+- Customer-facing price/duration preview and before/after change summary.
+- Save draft versus publish, unsaved-change handling, field validation,
+  stale-edit conflicts, and loading/empty/error/no-permission states.
+- Confirmation explaining that existing bookings remain unchanged.
+- Responsive layouts using the existing CineNest hybrid design system.
+
+Customer package cards, duration choices, quotation, checkout summary,
+and confirmation must obtain applicable configuration from the backend.
+Do not hardcode “3 hours” or “Rs. 2,500” into production UI components.
+Historical booking pages display their purchased snapshots.
+
+
+7. UPDATE THE RELATED KNOWLEDGE FILES
+
+Update affected sections in place and link to the canonical specification:
+
+product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md
+product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md
+design/CINENEST-ADMIN-PAGES.md
+design/CINENEST-CUSTOMER-BOOKING-PAGES.md
+architecture/CINENEST-DATA-AND-API-CONTRACTS.md
+architecture/CINENEST-SYSTEM-ARCHITECTURE.md
+delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md
+decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md
+
+Reuse equivalent paths/names if the repository differs.
+Update security, audit, IoT, chart, or UX-checklist documentation only where
+needed to reconcile package-change impacts. Do not rewrite unrelated scope.
+
+Describe proposed catalog/version, quote, and booking-snapshot ownership,
+API capabilities, publication validation, and concurrent-edit protection.
+Do not invent final database tables, API routes, migrations, or approvals.
+
+Record permission separation for view/edit/publish/archive and venue scope.
+Audit actor, timestamp, reason, old/new values, version, and effective date.
+Two-person approval thresholds remain a proposal unless already approved.
+
+Add or amend an ADR following existing numbering and status conventions.
+The core user-confirmed capability does not automatically approve every
+supporting implementation option in this prompt.
+
+Update the KB index, README, changelog, and manifest where present.
+Use the observed version and project rules; do not force a version number.
+A second no-change run must not duplicate sections or bump versions again.
+
+
+8. DOCUMENT ACCEPTANCE SCENARIOS AND RUN DOCUMENT CHECKS
+
+Record future implementation acceptance scenarios for:
+
+- Authorized admin changes details, duration, and price without a release.
+- Unauthorized or out-of-scope administrators cannot publish changes.
+- Invalid durations, negative charges, unsupported add-ons, and excess
+  guest capacity are rejected by the backend.
+- Changing the global/venue minimum follows a separate controlled policy
+  update; a package cannot bypass it.
+- New eligible bookings use the correct published version.
+- Confirmed bookings retain their purchased terms.
+- Valid quotes and expired quotes follow explicit, consistent rules.
+- Late/duplicate payment notifications are reconciled safely.
+- Scheduled changes and simultaneous admin edits are deterministic.
+- Included extras are not charged twice.
+- Deactivation retains purchased bookings and history.
+- Booking amendments respect availability, cleaning, payments, and PINs.
+- Historical revenue and duration reporting remains correct.
+
+These are acceptance requirements, not tests performed in this task.
+
+Run actual documentation checks for links, consistency, feature IDs,
+JSON/manifest syntax where applicable, and changed-file scope.
+Use existing safe validators after reading their purpose.
+Report exact checks run and limitations; do not claim application or
+hardware tests passed because Markdown checks passed.
+
+
+9. REVIEW, PUBLICATION, AND FINAL REPORT
+
+Review the actual diff and preserve unrelated modifications.
+Follow existing repository authorization for commits and pushes.
+Without an applicable instruction, leave changes ready for review.
+Never force-push, stage unrelated files, or claim unperformed publication.
+
+Report:
+- Verified workspace and baseline.
+- Actual created and updated file paths.
+- Core requirement and IDs recorded.
+- Defaults reconciled and booking protections documented.
+- Approved versus proposed decisions and outstanding questions.
+- Documentation validation results.
+- Version, Git status, and commit/push outcome or “not performed.”
+
+Do not claim ChatGPT Project attachments, a separate central KB,
+or another repository were synchronized without an actual operation.
+
+DEFINITION OF DONE
+The real CineNest KB explicitly specifies admin-editable package details,
+duration, and prices, with consistent UI, business, architecture, and
+acceptance documentation. Existing bookings and the approved visual
+design are protected. Runtime code and unrelated files are unchanged.

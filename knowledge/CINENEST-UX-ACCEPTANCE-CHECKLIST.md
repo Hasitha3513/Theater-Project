@@ -53,3 +53,10 @@ See [validation report](CINENEST-VALIDATION-REPORT.md) for evidence and limits. 
 - [ ] Select/approve stack, providers, hardware and actual authorization/data implementation with evidence.
 - [ ] Approve privacy/retention, all-guest checks, staffing/physical cleaning/emergency intervention, rights, refunds and hold/closing policy before launch.
 - [ ] Execute lifecycle/race/refund/webhook/command/offline acceptance against actual backend and hardware; documentation validation is not implementation proof.
+
+## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+- [x] PR-PKG-001/CN-A12 explicitly user-confirmed; implementation NOT_VERIFIED and supporting publication/API design RECOMMENDED.
+- [x] Initial defaults classified by package/shared Pricing/operational ownership; canonical package spec linked across affected docs.
+- [x] Active design/image/chart definitions preserved; customer UI consumes backend versioned configuration and purchased history.
+- [ ] Execute PK-AC01–13: authorized no-release changes, scope denial, invalid joint publish, separate minimum/capacity, deterministic effective versions, valid/expired quote/payment reconciliation, no double charge, sold history and safe amendments/access.
+- [ ] Approve OD-17–22 choices before affected implementation; doc validators do not establish product/hardware outcomes.

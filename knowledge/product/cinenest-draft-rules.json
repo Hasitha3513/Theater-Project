@@ -4,7 +4,8 @@
   "decisionStatus": "DOCUMENTED_DRAFT",
   "implementationStatus": "NOT_VERIFIED",
   "sourceIds": [
-    "S1"
+    "S1",
+    "S8"
   ],
   "currency": "LKR",
   "timezone": "Asia/Colombo",
@@ -36,5 +37,15 @@
   "examples": {
     "baseOnlineLkr": 2600,
     "baseOnlineWithPs4Lkr": 3600
-  }
+  },
+  "lastUpdatedTask": "CN-KB-PACKAGE-CONFIGURATION-001",
+  "initialDefaultsOnly": true,
+  "includedSessionMinutes": 180,
+  "extensionIncrementMinutes": 60,
+  "ownership": {
+    "package": "included duration, content/inclusions and base price in Pricing package versions",
+    "operations": "minimumSessionHours, operatingWindow, maximumGuests physical-capacity ceiling, cleaningBufferMinutes in venue/room policy",
+    "sharedPricing": "guest charge, extension charge, add-ons and channel fee via versioned Pricing references"
+  },
+  "packageSpecification": "CINENEST-PACKAGE-MANAGEMENT.md"
 }

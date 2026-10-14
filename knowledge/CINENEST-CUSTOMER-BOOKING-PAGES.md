@@ -26,7 +26,7 @@ Server-authoritative draft/hold → verified eligibility → quoted payment → 
 
 ## Cinema Room Selection
 
-**Layout and components:** Stage 1 Select Room: light panel inside cinematic shell; photo cards, room name, server-approved capacity/amenities, price/currency/duration, availability and select CTA.
+**Layout and components:** Stage 1 Select Room: light panel inside cinematic shell; room/package photo cards, room name, server-approved capacity/amenities and applicable package inclusions, backend price/currency/duration choices, availability and select CTA.
 
 **Interactions, data, permissions and safeguards:** Selected room has border, label and radio semantics; Continue uses server room ID. Popular badge only when derived from a defined ranking/window; unavailable rooms state reason. Room rates are indicative until quote.
 
@@ -108,3 +108,8 @@ Server-authoritative draft/hold → verified eligibility → quoted payment → 
 [Feature catalog](product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md) CN-C01–CN-C09 and [business rules/lifecycles](product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md) are canonical. Display capacity/guest surcharge, whole-hour extensions, optional PS4, online fee, itemized total, server hold expiry and purchase/refund-policy versions; do not duplicate price constants in page code. Illustrative total with selected PS4 must use the canonical example, not the inconsistent mockup amount.
 
 Sign-in is separate from explicit policy consent and verification. OCR extracts text only; uncertain documents need restricted manual review. Pending payment, confirmed booking, pending/installed access and delivery failure are separate customer messages. Confirmation must not imply PIN installation or guaranteed entry. Access window excludes the cleaning buffer. Modifications/extensions re-quote and recheck inventory, payment and access window revisions; late payment and refunds expose reconciliation status/support. Five-minute warning and checkout/exit events never imply everybody left or physical cleaning completed. Loyalty/referral rates remain OPEN_DECISION and hidden/disabled until supported.
+
+## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+[Package specification](product/CINENEST-PACKAGE-MANAGEMENT.md) owns configurable catalog/duration/price behavior. Room/package cards and supported duration choices resolve applicable published package/service/venue configuration from backend. No production component hardcodes “3 hours” or a base price; existing values are labeled initial examples only. Display customer-visible inclusions and optional charged add-ons clearly; included extras are not charged again.
+
+Booking Summary/Payment use authoritative accepted quote/version/line items, expiry and policy references. A catalog update does not silently replace a valid quote; expired quote refresh exposes before/after terms for explicit acceptance. Reservation hold and price quote validity are separate. Confirmation/history/receipts show purchased package/version/display/duration/guest/inclusion/price/policy snapshots, not current catalog. Existing booking changes go through authorized amendment workflow, inventory/cleaning/payment checks and access/notification coordination. Keep existing cinematic shell, stepper, responsive behavior and accessibility rules.

@@ -11,12 +11,12 @@ No phase is claimed started/completed. No schedule, date estimate, deployment or
 |---|---|---|---|
 | 1 | Architecture, safety review, data foundations and design system | None; authoritative docs and OD-01/02/04/05/11 review | Proposed boundaries/data invariants, risk ownership, active tokens and source/conflict inventory accepted for build |
 | 2 | Authentication, accounts, venues and rooms | Phase 1; session/roles/venue scope decisions | Owner/scope denial tests, admin auth, catalog/config/readiness and safe consent hooks |
-| 3 | Availability, reservations and pricing | Phase 2; OD-09/10; BR defaults approval | Database concurrency, expiry, buffer/closing boundaries, versioned quotes and DEMO fixture totals |
+| 3 | Availability, reservations and pricing | Phase 2; OD-09/10; BR defaults approval | Database concurrency, expiry, buffer/closing boundaries, versioned package configuration/quotes and DEMO fixture totals |
 | 4 | Verification and consent | Phase 2–3; OD-03/05 | Private upload/manual exception review, all-guest process, explicit versioned consent and deletion gates |
 | 5 | Payments, webhooks and refunds | Phase 3–4; OD-06/07 | Verified/deduped events, late payment/rollback compensation, hosted provider and refund reconciliation |
 | 6 | Smart access and PIN lifecycle | Phase 5; OD-02/04 | Paid != installed, window/revoke/re-entry, protected delivery and offline/egress evidence |
 | 7 | Room automation and physical operational controls | Phase 6; OD-02/04/13 | Capability-limited commands, ack vs observed, five-minute notice, physical cleaning and emergency intervention |
-| 8 | Full administrative operations | Phase 2–7 | Scoped manual bookings/refunds/review/control/export, equivalent room views, versioned settings and immutable audit |
+| 8 | Full administrative operations | Phase 2–7 | Scoped manual bookings/refunds/review/control/export, equivalent room views, versioned settings/Packages & Pricing permissions, atomic publication, immutable purchase snapshots and audit |
 | 9 | Notifications, customer dashboard and core reports | Phase 5–8; provider/metric decisions | Delivery failure/support, owner history, separate financial/time bases, report/export consistency |
 | 10 | Advanced analytics, loyalty and promotions | Phase 9; OD-08/16 | Approved ledger/attribution rules, reversal/expiry and qualified analytics; may defer optional scope |
 | 11 | Integrated security, performance, hardware and recovery acceptance | All preceding active scope; unresolved launch blockers resolved | End-to-end failures, physical safety, load/concurrency, backup restore, privacy and incident drills with evidence |
@@ -27,3 +27,6 @@ Use [feature acceptance](../product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md), [li
 
 ## Documentation-only publication
 Existing local baseline is clean main at 16710dc with origin/main pointing to the same commit. No AGENTS.md or CONTRIBUTING rules found. Previous user authorization permits commit/push of this CineNest KB work; preserve history and use non-force push only. Recheck upstream before push and stop for unexpected remote divergence. No application installation/config/migration/deployment/device operation is allowed here. Report actual commit and push result separately from documentation validation.
+
+## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+Phase 3 defines catalog/version/quote/constraint ownership; phase 8 exposes Packages & Pricing within admin Settings. [PK-AC01–13](../product/CINENEST-PACKAGE-MANAGEMENT.md) continuously gate permissions, no-release edits, complete joint publication, operational minimum/capacity, valid/expired quotes, late/duplicate payment, included extras, sold/history preservation and safe purchased amendments. Historical reporting in phase 9 uses purchase snapshots/ledger rather than live catalog. Two-person/threshold/proration/tax/quote-cutoff decisions remain OD-17–22. None of these application/hardware scenarios was tested by this documentation task.
