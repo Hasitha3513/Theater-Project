@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "kbVersion": "1.5.1",
-  "baselineKbVersion": "1.5.0",
-  "baselineCommit": "1d900cd1beecbcdd5793298d42c093537f2aae4a",
+  "kbVersion": "1.5.2",
+  "baselineKbVersion": "1.5.1",
+  "baselineCommit": "99fa99e935be72254368b412078e36bbb7a80a00",
   "taskId": "CN-KB-CONSOLIDATION-001",
   "recordedDate": "2026-10-14",
   "designTokenVersion": "1.0.0",
   "chartSpecVersion": "1.2.0",
-  "versionRationale": "Owner-requested editorial simplification of the existing four canonical files; projections from existing registries and consolidated shared guidance; no new documents/decisions/deletion.",
+  "versionRationale": "Owner-authorized exact 34-file removal after retained canonical content, registry and immutable historical evidence checks; no application or stack approval.",
   "decisionStatuses": [
     "APPROVED",
     "DOCUMENTED_DRAFT",
@@ -35,97 +35,6 @@
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "75ac9dec48b965230f5b60de384afe87a6394125326fe3bebb4cf84b046afe7f",
       "authority": "canonical-prose"
-    },
-    {
-      "path": "CHANGELOG.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ce39f2a345ecb937576f2a6869d318b0c38f66ff58f0262d0bdd293cac4a9514",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-ADMIN-PAGES.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "4b22349aed9090673225ce7de8e4fd661bcca21aac1437cf7b41eefd57f47597",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-CHARTS-AND-METRICS.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "8d4ef9040c3049babb5a83506ffa2e979b607ca44588d584f48aac6fb29973a3",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-CUSTOMER-BOOKING-PAGES.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cd6f2f9702780c40c272229e6e4d00626b009ffa64fd512592a9d7dbd8836191",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-DESIGN-DECISION-ADR-001.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "8f8389e3b90f155752c493c0c7afb51d08cd566010aad8d46c7f98f9bb47a926",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-DESIGN-DECISION-ADR-002.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "0c6ebfb332bf2e4f929d0c9c89a2937b4886a38324b2ed30b481688c14a2701d",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-DESIGN-DECISION-ADR-003.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "91e05bb9efeff5b53470f72e993d65132719f4b5cff1725560bbe29707f364de",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-DESIGN-DECISION-ADR-004.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "713b540d8374f71dd545b8d804ce1c143c26e4d85eb8d46b22444d835ce7dbef",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-DESIGN-SYSTEM.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "5259f794478dc452581a4d7e9a6192c0467d153cdd926e35e8733f6a94571488",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c93b5ad238b80cd37e9416d6fe8bfc32be5813949fe02eeaa3292b7d73ca9617",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-REFERENCE-TRACEABILITY.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ffeea19d7945721585d4e41d57cfc23cfd980d8dcfdcd86dd3698b1089deaca4",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "aa94688a7f6f62c59c418cf57ad3e3cdead451018adda7d9adbb89085966e23c",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "CINENEST-VALIDATION-REPORT.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "4fe0db0918a2f30e7cdf8342b0928aed81e870c55c1691dccccce77f7a84ac07",
-      "authority": "superseded-historical-snapshot"
     },
     {
       "path": "CineNest Cinema Admin Dashboard Mockup-1.png",
@@ -159,7 +68,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "dc86cebca2ffb415b08287812325c66b8660968531cf1d0d8e8d3c0725b0debb",
+      "sha256": "c1a25a2122f969c6d4de26a25edfd4314288299e287d98b34f1789b4e5c3fb60",
       "authority": "canonical-prose"
     },
     {
@@ -173,50 +82,8 @@
       "path": "README.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "5c07e0fb4d2695371cc5e6b8ef7fc5502eaeba9e7a852133637a87d9cd00b8e9",
+      "sha256": "5a1eaf7a8091fcc241afbf49da5e613c85220c3732d7b60ce5621a8643dfc20b",
       "authority": "structured-asset-or-evidence"
-    },
-    {
-      "path": "architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e92299925d748bdc73a7e082d8b470e734b127aec043320c83be9ab77457122d",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "342a468dfcb70584bd4088d73444c5e4bf013d0ee842c7e26734327c7bcc47c5",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "99f9f9d95c3f17e7a3fc3c280661ce655c24586457746cb5a8bdfb9b916bc714",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "8ff788bf932b1bc55f0bef4c891b632956ef2f2f17ad6503f97b1f7880af91ac",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "a154fae9d49e5c57378d4433773b0c0b4a88bf0b1b28a8a14b29272afe00f8db",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "1d81d25199769205711705e02c758eaf1a376ae68a3f295f3a2cd906c6142926",
-      "authority": "superseded-historical-snapshot"
     },
     {
       "path": "decisions/cinenest-open-decisions.json",
@@ -233,67 +100,11 @@
       "authority": "structured-asset-or-evidence"
     },
     {
-      "path": "delivery/CINENEST-BANK-PAYMENT-VALIDATION.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "fd706a1d133069731e758dc7c4aa0ca9a4df780aa188557e93617dc59062718a",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "4a880d515c3ac4327c4270d31cdd2164017588e8f1580bf43fd26c4cffe7a903",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "507d01c2eb9dbc0bc6ada9258f56bae8a2bc367d891070eb3cee19bf46d05c07",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "execution/CINENEST-EXECUTION-PLAN.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "67f803fb4d7278707987a8e3fd0368821be82a650c1ca4d2bf5fc23f39964e63",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "execution/CINENEST-EXECUTION-STATUS.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "f1b2598642513df27b56d5fe5a9a1d6b2a1924520f0297de05bb135e16b80cde",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "3e25625c39f7005aaaf734a1e7a5a7bcce89f0f2d1b3758cba6156f236ddd864",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "execution/CINENEST-SESSION-HANDOFF.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ce4cbb8a4a6cb807a37c0f19893fd2adf88f443de8699f16bea86c7954a5f736",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "74bc10cc38dfe7cd17277dac6d313fc8ac790e0a5e5a274876545782e12fa60f",
+      "sha256": "bdf17ef162da18464f84921a34a7fdb1c3ed07dead6a221f53907b8d2fb2e3d5",
       "authority": "structured-asset-or-evidence"
-    },
-    {
-      "path": "execution/evidence/CN-AGENT-SETUP-001.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "35d6a66457065807d176783967c45110f8d71f565f8a9308c15bf60f42a07400",
-      "authority": "superseded-historical-snapshot"
     },
     {
       "path": "execution/evidence/CN-DEC-001-checks.json",
@@ -322,13 +133,6 @@
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "8992bf0cbc6c313ba2201ecc60f7515bab4012c0e23c8a267c6940b46b217ec6",
       "authority": "structured-asset-or-evidence"
-    },
-    {
-      "path": "execution/evidence/CN-DEC-001.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b1078d0193673cd96dd3adaaaa2384b006ec191920724dae02561adef36344e5",
-      "authority": "superseded-historical-snapshot"
     },
     {
       "path": "execution/evidence/checks.json",
@@ -390,7 +194,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ff1e3bd5c5fc417c9e3745a0cc695e6b5542994b48bf8751f64da5ddfca4b118",
+      "sha256": "26c7d6eb0125b79a077848e2e17bf19dde8e9c6ccee2aaaa847ef7567cff23eb",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -404,7 +208,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "101f9e95aab9b8026ab771f1499882d9d2b97c094db0ecd99d09de1714a09987",
+      "sha256": "d1eaa0e7e83919a32d22264e470cd30813af96bd119485a75dc4c6eaab03ba1f",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -412,34 +216,6 @@
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "authority": "structured-asset-or-evidence"
-    },
-    {
-      "path": "product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "342d6b2550f5f4f56de146aef165a6ad809421194241aadf1bae7855a912dd33",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "0b67f3927ac8fd77cae587dbdca9b47cde58e7fa67b3673d5857daff88599398",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "product/CINENEST-PACKAGE-MANAGEMENT.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "2651b5096acaf25309850f84f35fdf128b1575b883f55c142f331b8bc65be47b",
-      "authority": "superseded-historical-snapshot"
-    },
-    {
-      "path": "product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "7ed42a8ea0487c6a64030d7ae832fed41f9152c0c28d55a68ee6c219c0a81258",
-      "authority": "superseded-historical-snapshot"
     },
     {
       "path": "product/cinenest-bank-payment-lifecycles.json",
@@ -461,13 +237,6 @@
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "bee233202471451aa10716254c9001b3ea24992c962413883b87791322f33dce",
       "authority": "structured-asset-or-evidence"
-    },
-    {
-      "path": "security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md",
-      "kind": "documentation-specification",
-      "implementationStatus": "NOT_VERIFIED",
-      "sha256": "62f1c0aa8806b08b7ed574aaadb9413f1f372cedc3e53db34f4fba028058e917",
-      "authority": "superseded-historical-snapshot"
     },
     {
       "path": "sources/CN-AGENT-SETUP-001-request.txt",
@@ -508,7 +277,7 @@
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "77ed95a11985b39928677f37b3accab0e1404ad0df24b972d6448d8833eff52a",
+      "sha256": "ba838d8c87cc7eda73aed2ebee51b2bc91954d1732c458b3f636bb7ad2d52b0a",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -536,7 +305,7 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "f221887b414976bcf7a728c71407d7882441ca21a149428e12e809f4a67512a7",
+      "sha256": "257aafa6d2db4930effb0ed953a1083804d66af57f2c66d05d771e2c305eb6ab",
       "authority": "structured-asset-or-evidence"
     }
   ],
@@ -570,6 +339,11 @@
       "kbVersion": "1.5.0",
       "taskId": "CN-KB-CONSOLIDATE-001",
       "commit": "1d900cd1beecbcdd5793298d42c093537f2aae4a"
+    },
+    {
+      "kbVersion": "1.5.1",
+      "taskId": "CN-KB-CONSOLIDATE-001",
+      "commit": "99fa99e935be72254368b412078e36bbb7a80a00"
     }
   ],
   "authorizedDefinitionChanges": {
@@ -632,13 +406,13 @@
   "externalInstructionFiles": [
     {
       "path": "AGENTS.md",
-      "sha256": "e5ad067f2739256e2c398e013991b61239e87f170c9650a34613c89dc3b8e59d",
+      "sha256": "de90b6f5d4d84316957388c68545ce3ad3c8904cbcbac3f430246f63ebbb1f86",
       "purpose": "Current root entry; charter consolidated into PROGRESS.md"
     }
   ],
   "consolidation": {
     "baselineRevision": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
-    "status": "CANONICALIZED_ORIGINALS_RETAINED_PENDING_OWNER_REVIEW",
+    "status": "COMPLETE_OWNER_APPROVED_REMOVAL",
     "canonicalDocuments": [
       "knowledge/PROJECT.md",
       "knowledge/ARCHITECTURE.md",
@@ -652,10 +426,16 @@
         "anchor": "features",
         "baselineSha256": "8a03d17c0e42e61f02209e6a49508b9579456c111b6231fb6baae8f6a81eb6f1",
         "baselineLines": 509,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "5d172f7d974f5dadedc8c08ca9b29a7e3df7fd81f744883161030a4d4439719a",
         "retainedSnapshotSha256": "7ed42a8ea0487c6a64030d7ae832fed41f9152c0c28d55a68ee6c219c0a81258",
-        "editorialDestination": "knowledge/PROJECT.md#features"
+        "editorialDestination": "knowledge/PROJECT.md#features",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md",
+          "sha256": "8a03d17c0e42e61f02209e6a49508b9579456c111b6231fb6baae8f6a81eb6f1",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md"
+        }
       },
       {
         "sourcePath": "knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md",
@@ -663,10 +443,16 @@
         "anchor": "business-rules",
         "baselineSha256": "06cc490f498bd7ca60a4d78ae47c711caacbe415153ec782fcb6c4ac5f55f389",
         "baselineLines": 120,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "4c00a3cba5296db9dc13ee73cf69a6037081663ee98407bf3be97d58ae7cd51a",
         "retainedSnapshotSha256": "0b67f3927ac8fd77cae587dbdca9b47cde58e7fa67b3673d5857daff88599398",
-        "editorialDestination": "knowledge/PROJECT.md#business-rules"
+        "editorialDestination": "knowledge/PROJECT.md#business-rules",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md",
+          "sha256": "06cc490f498bd7ca60a4d78ae47c711caacbe415153ec782fcb6c4ac5f55f389",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md"
+        }
       },
       {
         "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
@@ -674,10 +460,16 @@
         "anchor": "package-management",
         "baselineSha256": "5bc27e74fc988538417c7b60778c5e14912df28ac05b45c8b01bb652a6f1af6d",
         "baselineLines": 147,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "c28e395eebb00d98748496ba460db19c0fbb53e5c3d30788a650c6664a5098b1",
         "retainedSnapshotSha256": "2651b5096acaf25309850f84f35fdf128b1575b883f55c142f331b8bc65be47b",
-        "editorialDestination": "knowledge/PROJECT.md#package-management"
+        "editorialDestination": "knowledge/PROJECT.md#package-management",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+          "sha256": "5bc27e74fc988538417c7b60778c5e14912df28ac05b45c8b01bb652a6f1af6d",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md"
+        }
       },
       {
         "sourcePath": "knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md",
@@ -685,10 +477,16 @@
         "anchor": "bank-payments",
         "baselineSha256": "6fc54cfb64c71acd6968f92dc80436c846272963db4e1ee611e6923882dba62b",
         "baselineLines": 170,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "f70b9d0bdc661285e0cb871916e6d9f7b0f05e0a9bf177e5be646368008647c9",
         "retainedSnapshotSha256": "342d6b2550f5f4f56de146aef165a6ad809421194241aadf1bae7855a912dd33",
-        "editorialDestination": "knowledge/PROJECT.md#bank-payments"
+        "editorialDestination": "knowledge/PROJECT.md#bank-payments",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md",
+          "sha256": "6fc54cfb64c71acd6968f92dc80436c846272963db4e1ee611e6923882dba62b",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md"
+        }
       },
       {
         "sourcePath": "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
@@ -696,10 +494,16 @@
         "anchor": "technology",
         "baselineSha256": "770f5148545ac7611246324a0f86328e7817cf765e0d0eb532efd2f6fd796967",
         "baselineLines": 41,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "3f311145fe306216ba02e752a3eb728f50a00f6c8e1d01ea24c5437dbe00e10f",
         "retainedSnapshotSha256": "8ff788bf932b1bc55f0bef4c891b632956ef2f2f17ad6503f97b1f7880af91ac",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#technology"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#technology",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
+          "sha256": "770f5148545ac7611246324a0f86328e7817cf765e0d0eb532efd2f6fd796967",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md"
+        }
       },
       {
         "sourcePath": "knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
@@ -707,10 +511,16 @@
         "anchor": "system-architecture",
         "baselineSha256": "219917ff433cc6a2e9e1b8c3b0957ea56287bf754a919f18b9de09ff58417f7e",
         "baselineLines": 60,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "42772082eafe8b6f9197d2e64f8e248fab0d3f1aaee165d0e47a43f9a4856c12",
         "retainedSnapshotSha256": "99f9f9d95c3f17e7a3fc3c280661ce655c24586457746cb5a8bdfb9b916bc714",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#system-architecture"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#system-architecture",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
+          "sha256": "219917ff433cc6a2e9e1b8c3b0957ea56287bf754a919f18b9de09ff58417f7e",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md"
+        }
       },
       {
         "sourcePath": "knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
@@ -718,10 +528,16 @@
         "anchor": "data-api",
         "baselineSha256": "8644c75ab26c20f6136712739052eb15207e851de868e50491f85746b6fef5a9",
         "baselineLines": 88,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "64bfbe2b47ea3ca84b77750ee86ffeb72148090e477d18377a92d76ec264d1bb",
         "retainedSnapshotSha256": "e92299925d748bdc73a7e082d8b470e734b127aec043320c83be9ab77457122d",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#data-api"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#data-api",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
+          "sha256": "8644c75ab26c20f6136712739052eb15207e851de868e50491f85746b6fef5a9",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md"
+        }
       },
       {
         "sourcePath": "knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md",
@@ -729,10 +545,16 @@
         "anchor": "security-privacy",
         "baselineSha256": "6d5f8fdbaf96a62d01fc8e353685d61283c74f878195de451c99f9bd107c6254",
         "baselineLines": 38,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "f97e9c21d212b705318ff51321255b42af2f1416fded8355fc5eb3eb3cb83f3a",
         "retainedSnapshotSha256": "62f1c0aa8806b08b7ed574aaadb9413f1f372cedc3e53db34f4fba028058e917",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#security-privacy"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#security-privacy",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md",
+          "sha256": "6d5f8fdbaf96a62d01fc8e353685d61283c74f878195de451c99f9bd107c6254",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md"
+        }
       },
       {
         "sourcePath": "knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md",
@@ -740,10 +562,16 @@
         "anchor": "iot-access",
         "baselineSha256": "80f7bab32b8dd9f796b3f825f1375f604b20325f766fbf1766d6aa68f5a79587",
         "baselineLines": 36,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "744ff4dd126fa3c26147dbc7143ce8d345db0b64a9def16a546ab18318f53905",
         "retainedSnapshotSha256": "342a468dfcb70584bd4088d73444c5e4bf013d0ee842c7e26734327c7bcc47c5",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#iot-access"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#iot-access",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md",
+          "sha256": "80f7bab32b8dd9f796b3f825f1375f604b20325f766fbf1766d6aa68f5a79587",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-002.md",
@@ -751,10 +579,16 @@
         "anchor": "adr-002",
         "baselineSha256": "a754c3434b11a4da838c0f1304d93c5000ecc0097abec8973f0dacb71be6e42a",
         "baselineLines": 30,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "850408574da2edd27fab9b21443e9e982642b61aa6f25bdc0076c042f1023284",
         "retainedSnapshotSha256": "0c6ebfb332bf2e4f929d0c9c89a2937b4886a38324b2ed30b481688c14a2701d",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-002"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-002",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-DESIGN-DECISION-ADR-002.md",
+          "sha256": "a754c3434b11a4da838c0f1304d93c5000ecc0097abec8973f0dacb71be6e42a",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-DECISION-ADR-002.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-003.md",
@@ -762,10 +596,16 @@
         "anchor": "adr-003",
         "baselineSha256": "ec63908597d949b9493eb74234bec285c52aea2b6cbbbde5fcfad2eb1c2c786b",
         "baselineLines": 15,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "fc2239f1bfbcad6d7bbb350a6925d3eae2bf4b4f488a40b5b7337aca405c5d3b",
         "retainedSnapshotSha256": "91e05bb9efeff5b53470f72e993d65132719f4b5cff1725560bbe29707f364de",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-003"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-003",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-DESIGN-DECISION-ADR-003.md",
+          "sha256": "ec63908597d949b9493eb74234bec285c52aea2b6cbbbde5fcfad2eb1c2c786b",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-DECISION-ADR-003.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-004.md",
@@ -773,10 +613,16 @@
         "anchor": "adr-004",
         "baselineSha256": "b583bcc1eea367b75610ae9aee56da6dfcbebe16f8873c8cbf8379c5d015d321",
         "baselineLines": 19,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "4e8b2f71c089acbacdd9fb4473ecc9f619f6f3d41a3b23fce4a69fd73907ca32",
         "retainedSnapshotSha256": "713b540d8374f71dd545b8d804ce1c143c26e4d85eb8d46b22444d835ce7dbef",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-004"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-004",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-DESIGN-DECISION-ADR-004.md",
+          "sha256": "b583bcc1eea367b75610ae9aee56da6dfcbebe16f8873c8cbf8379c5d015d321",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-DECISION-ADR-004.md"
+        }
       },
       {
         "sourcePath": "knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
@@ -784,10 +630,16 @@
         "anchor": "open-decisions",
         "baselineSha256": "7db26b084b458d7576b8c2cd0af94c77fcd9ae789ad2291c4e1648c2c30891d9",
         "baselineLines": 66,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "5307868106251263571b5a8b62723c68612bf692b37f34faed1cd7e33dc0b2f3",
         "retainedSnapshotSha256": "a154fae9d49e5c57378d4433773b0c0b4a88bf0b1b28a8a14b29272afe00f8db",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#open-decisions"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#open-decisions",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
+          "sha256": "7db26b084b458d7576b8c2cd0af94c77fcd9ae789ad2291c4e1648c2c30891d9",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md"
+        }
       },
       {
         "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
@@ -795,10 +647,16 @@
         "anchor": "initial-stack-brief",
         "baselineSha256": "337a51b66c2b5eaddac486840c7b3ac32813895fc76d9e3d3f9ae0967d8cd62a",
         "baselineLines": 119,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "9539c2ff3f0d990e8337b3a2327fceea7c1e76f1d400429916d36f7ccf7670a5",
         "retainedSnapshotSha256": "1d81d25199769205711705e02c758eaf1a376ae68a3f295f3a2cd906c6142926",
-        "editorialDestination": "knowledge/ARCHITECTURE.md#initial-stack-brief"
+        "editorialDestination": "knowledge/ARCHITECTURE.md#initial-stack-brief",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+          "sha256": "337a51b66c2b5eaddac486840c7b3ac32813895fc76d9e3d3f9ae0967d8cd62a",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-SYSTEM.md",
@@ -806,10 +664,16 @@
         "anchor": "design-system",
         "baselineSha256": "3e294de4e355d5c63d3399fcfb093e15f0fe93e4ec274850ce394546a93f4c64",
         "baselineLines": 92,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "cf08527ae0acfdb7693b8e93d68d509b19573d2bc9fc4dbd1db56ee3e1927ceb",
         "retainedSnapshotSha256": "5259f794478dc452581a4d7e9a6192c0467d153cdd926e35e8733f6a94571488",
-        "editorialDestination": "knowledge/DESIGN.md#design-system"
+        "editorialDestination": "knowledge/DESIGN.md#design-system",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-DESIGN-SYSTEM.md",
+          "sha256": "3e294de4e355d5c63d3399fcfb093e15f0fe93e4ec274850ce394546a93f4c64",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-SYSTEM.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-ADMIN-PAGES.md",
@@ -817,10 +681,16 @@
         "anchor": "admin-pages",
         "baselineSha256": "17acce0fedbc8bce47f7dbdfc7a7c221914fb1efdba7fe67b1f311c9e6b5cde3",
         "baselineLines": 224,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "651e7d04483decd5e341d21c41a6976f375ecd3eb7b7657b6a42ded5e022b191",
         "retainedSnapshotSha256": "4b22349aed9090673225ce7de8e4fd661bcca21aac1437cf7b41eefd57f47597",
-        "editorialDestination": "knowledge/DESIGN.md#admin-pages"
+        "editorialDestination": "knowledge/DESIGN.md#admin-pages",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-ADMIN-PAGES.md",
+          "sha256": "17acce0fedbc8bce47f7dbdfc7a7c221914fb1efdba7fe67b1f311c9e6b5cde3",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-ADMIN-PAGES.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md",
@@ -828,10 +698,16 @@
         "anchor": "customer-pages",
         "baselineSha256": "9051833b03b265068d7a3820736949ff89aebebc2be79090259313c8af3973cc",
         "baselineLines": 124,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "f9964725c8053fcffd42cc02d62b4db27208d74ed66eb20d581fede75d0763d9",
         "retainedSnapshotSha256": "cd6f2f9702780c40c272229e6e4d00626b009ffa64fd512592a9d7dbd8836191",
-        "editorialDestination": "knowledge/DESIGN.md#customer-pages"
+        "editorialDestination": "knowledge/DESIGN.md#customer-pages",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md",
+          "sha256": "9051833b03b265068d7a3820736949ff89aebebc2be79090259313c8af3973cc",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-CHARTS-AND-METRICS.md",
@@ -839,10 +715,16 @@
         "anchor": "charts-metrics",
         "baselineSha256": "98e374b475cf251a678fedd75957ac51ace383d8cb0682348761e4f072def266",
         "baselineLines": 258,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "7f3c9daaed7ac0118b0f1b12e51334486a821699b257faf82f1555d794e113b1",
         "retainedSnapshotSha256": "8d4ef9040c3049babb5a83506ffa2e979b607ca44588d584f48aac6fb29973a3",
-        "editorialDestination": "knowledge/DESIGN.md#charts-metrics"
+        "editorialDestination": "knowledge/DESIGN.md#charts-metrics",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-CHARTS-AND-METRICS.md",
+          "sha256": "98e374b475cf251a678fedd75957ac51ace383d8cb0682348761e4f072def266",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-CHARTS-AND-METRICS.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md",
@@ -850,10 +732,16 @@
         "anchor": "interactions-a11y",
         "baselineSha256": "c07c9f8cd90fd6e5a3d6d223e591125cefca70e3512053ab8fed8af99e268e4c",
         "baselineLines": 22,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "27550343f434f83b6beb51334593d3b43b923a34214f59433549d4ebe9f03ee1",
         "retainedSnapshotSha256": "c93b5ad238b80cd37e9416d6fe8bfc32be5813949fe02eeaa3292b7d73ca9617",
-        "editorialDestination": "knowledge/DESIGN.md#interactions-a11y"
+        "editorialDestination": "knowledge/DESIGN.md#interactions-a11y",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md",
+          "sha256": "c07c9f8cd90fd6e5a3d6d223e591125cefca70e3512053ab8fed8af99e268e4c",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-001.md",
@@ -861,10 +749,16 @@
         "anchor": "adr-001",
         "baselineSha256": "df6dd80a4ba6f139c968f19aab34c7a2cc30a60bf7bb020fca3b8551934b823f",
         "baselineLines": 32,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "55128caf5217dc96ba79cc912609a98326d18fdd90982c0b784d6196cbb52b16",
         "retainedSnapshotSha256": "8f8389e3b90f155752c493c0c7afb51d08cd566010aad8d46c7f98f9bb47a926",
-        "editorialDestination": "knowledge/DESIGN.md#adr-001"
+        "editorialDestination": "knowledge/DESIGN.md#adr-001",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-DESIGN-DECISION-ADR-001.md",
+          "sha256": "df6dd80a4ba6f139c968f19aab34c7a2cc30a60bf7bb020fca3b8551934b823f",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-DECISION-ADR-001.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-REFERENCE-TRACEABILITY.md",
@@ -872,10 +766,16 @@
         "anchor": "reference-traceability",
         "baselineSha256": "a8c2b9f9b22e3fc511303b4db69a5987b12e78eb475fabc31fdd7103a73bde1c",
         "baselineLines": 57,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "cbbacf8a2399fd42a35ce482d075ff1fe97c811f1b62c986ea03a16c7535eb2e",
         "retainedSnapshotSha256": "ffeea19d7945721585d4e41d57cfc23cfd980d8dcfdcd86dd3698b1089deaca4",
-        "editorialDestination": "knowledge/DESIGN.md#reference-traceability"
+        "editorialDestination": "knowledge/DESIGN.md#reference-traceability",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-REFERENCE-TRACEABILITY.md",
+          "sha256": "a8c2b9f9b22e3fc511303b4db69a5987b12e78eb475fabc31fdd7103a73bde1c",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-REFERENCE-TRACEABILITY.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
@@ -883,10 +783,16 @@
         "anchor": "ux-acceptance",
         "baselineSha256": "4867f01b033a5dc3b81d2db5e225448a55c21f10218aadf6efcab6c283ab647f",
         "baselineLines": 69,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "4ab4a4c911657f4bb21fb4b4e6dedeb7a04be8031aca1633853a86d7c1879102",
         "retainedSnapshotSha256": "aa94688a7f6f62c59c418cf57ad3e3cdead451018adda7d9adbb89085966e23c",
-        "editorialDestination": "knowledge/DESIGN.md#ux-acceptance"
+        "editorialDestination": "knowledge/DESIGN.md#ux-acceptance",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
+          "sha256": "4867f01b033a5dc3b81d2db5e225448a55c21f10218aadf6efcab6c283ab647f",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md"
+        }
       },
       {
         "sourcePath": "docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md",
@@ -894,10 +800,16 @@
         "anchor": "execution-charter",
         "baselineSha256": "04df1e25fe31aaa8abaf3f7a8a77dbc822e6ba116aa09e320dfae39837597fe6",
         "baselineLines": 39,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "b0359160295d9715f57257aa9d0b2afe3d20ea2a176cc3e21a2a50080058e9b2",
         "retainedSnapshotSha256": "1e9aff79aa46fc13cbd49cf7aae60b7cefbb6b8d52112a91e3f625feb7d274b1",
-        "editorialDestination": "knowledge/PROGRESS.md#execution-charter"
+        "editorialDestination": "knowledge/PROGRESS.md#execution-charter",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md",
+          "sha256": "04df1e25fe31aaa8abaf3f7a8a77dbc822e6ba116aa09e320dfae39837597fe6",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md"
+        }
       },
       {
         "sourcePath": "knowledge/execution/CINENEST-EXECUTION-PLAN.md",
@@ -905,10 +817,16 @@
         "anchor": "execution-plan",
         "baselineSha256": "97ac517071210e5c8d8ad491201c2acc6c6a722b6b9c6654397b112ccdf724ff",
         "baselineLines": 602,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "61e743205aba4520c0fdd77794db78d4af69d2d6f7cc341d72674fdc458837e6",
         "retainedSnapshotSha256": "67f803fb4d7278707987a8e3fd0368821be82a650c1ca4d2bf5fc23f39964e63",
-        "editorialDestination": "knowledge/PROGRESS.md#execution-plan"
+        "editorialDestination": "knowledge/PROGRESS.md#execution-plan",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/execution/CINENEST-EXECUTION-PLAN.md",
+          "sha256": "97ac517071210e5c8d8ad491201c2acc6c6a722b6b9c6654397b112ccdf724ff",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/CINENEST-EXECUTION-PLAN.md"
+        }
       },
       {
         "sourcePath": "knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
@@ -916,10 +834,16 @@
         "anchor": "requirements-traceability",
         "baselineSha256": "0add9a54e1b52339dca94a933cb7a5104214b9c056770f88f8c7ae5ce84c2849",
         "baselineLines": 123,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "c47e72cb4c581697d8f2b79c61dc1eef8a5a9e2eb48d8a81f2b121b8346c826c",
         "retainedSnapshotSha256": "3e25625c39f7005aaaf734a1e7a5a7bcce89f0f2d1b3758cba6156f236ddd864",
-        "editorialDestination": "knowledge/PROGRESS.md#requirements-traceability"
+        "editorialDestination": "knowledge/PROGRESS.md#requirements-traceability",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
+          "sha256": "0add9a54e1b52339dca94a933cb7a5104214b9c056770f88f8c7ae5ce84c2849",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md"
+        }
       },
       {
         "sourcePath": "knowledge/execution/CINENEST-EXECUTION-STATUS.md",
@@ -927,10 +851,16 @@
         "anchor": "prior-status",
         "baselineSha256": "76189116099999aca92167db9c7fcc724cb467f00ba3c894c3f1b6c19018f1c1",
         "baselineLines": 11,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "a87c67e4a1d5e9653120b1e25241083571fb175a14dcce0bd0f5356f784e8a25",
         "retainedSnapshotSha256": "f1b2598642513df27b56d5fe5a9a1d6b2a1924520f0297de05bb135e16b80cde",
-        "editorialDestination": "knowledge/PROGRESS.md#prior-status"
+        "editorialDestination": "knowledge/PROGRESS.md#prior-status",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/execution/CINENEST-EXECUTION-STATUS.md",
+          "sha256": "76189116099999aca92167db9c7fcc724cb467f00ba3c894c3f1b6c19018f1c1",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/CINENEST-EXECUTION-STATUS.md"
+        }
       },
       {
         "sourcePath": "knowledge/execution/CINENEST-SESSION-HANDOFF.md",
@@ -938,10 +868,16 @@
         "anchor": "prior-handoff",
         "baselineSha256": "4270c80475cf02042b2a73c1c6f6ccb09d54849bfcdaded0a5c0ea3bc6802d2b",
         "baselineLines": 13,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "099412d7a440097f63addf557fb4e5244da524c7f261ab756511660a7d65ffd2",
         "retainedSnapshotSha256": "ce4cbb8a4a6cb807a37c0f19893fd2adf88f443de8699f16bea86c7954a5f736",
-        "editorialDestination": "knowledge/PROGRESS.md#prior-handoff"
+        "editorialDestination": "knowledge/PROGRESS.md#prior-handoff",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/execution/CINENEST-SESSION-HANDOFF.md",
+          "sha256": "4270c80475cf02042b2a73c1c6f6ccb09d54849bfcdaded0a5c0ea3bc6802d2b",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/CINENEST-SESSION-HANDOFF.md"
+        }
       },
       {
         "sourcePath": "knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md",
@@ -949,10 +885,16 @@
         "anchor": "delivery-phases",
         "baselineSha256": "1946ccdf99486ee8e00fff4a17fc18a7cd0d7860150fe8df45bf08a918bb74bc",
         "baselineLines": 35,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "ee662c7315d239ad3e26d11824f49a3ed8efe9b228f62b4008d4101f4fe4ef2a",
         "retainedSnapshotSha256": "4a880d515c3ac4327c4270d31cdd2164017588e8f1580bf43fd26c4cffe7a903",
-        "editorialDestination": "knowledge/PROGRESS.md#delivery-phases"
+        "editorialDestination": "knowledge/PROGRESS.md#delivery-phases",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md",
+          "sha256": "1946ccdf99486ee8e00fff4a17fc18a7cd0d7860150fe8df45bf08a918bb74bc",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md"
+        }
       },
       {
         "sourcePath": "knowledge/CHANGELOG.md",
@@ -960,10 +902,16 @@
         "anchor": "version-history",
         "baselineSha256": "8a330370cceab46f6f36eb3b7aa8fb06250c33f58bd77b9ae0cb5217d39d6441",
         "baselineLines": 27,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "0d19c77444bad1f948bea06ffdb2addad37657af99b14117f1b77aca25734a36",
         "retainedSnapshotSha256": "ce39f2a345ecb937576f2a6869d318b0c38f66ff58f0262d0bdd293cac4a9514",
-        "editorialDestination": "knowledge/PROGRESS.md#version-history"
+        "editorialDestination": "knowledge/PROGRESS.md#version-history",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CHANGELOG.md",
+          "sha256": "8a330370cceab46f6f36eb3b7aa8fb06250c33f58bd77b9ae0cb5217d39d6441",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CHANGELOG.md"
+        }
       },
       {
         "sourcePath": "knowledge/CINENEST-VALIDATION-REPORT.md",
@@ -971,10 +919,16 @@
         "anchor": "feature-validation-history",
         "baselineSha256": "fc683afb52ff7b618b07da650fd478c454ce64659adc695ed142c830ff2e390c",
         "baselineLines": 81,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "eaca4fc8b9a92f7f86939848420a9f7c723067be49d6bde32ac4fbed32e0faee",
         "retainedSnapshotSha256": "4fe0db0918a2f30e7cdf8342b0928aed81e870c55c1691dccccce77f7a84ac07",
-        "editorialDestination": "knowledge/PROGRESS.md#feature-validation-history"
+        "editorialDestination": "knowledge/PROGRESS.md#feature-validation-history",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/CINENEST-VALIDATION-REPORT.md",
+          "sha256": "fc683afb52ff7b618b07da650fd478c454ce64659adc695ed142c830ff2e390c",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-VALIDATION-REPORT.md"
+        }
       },
       {
         "sourcePath": "knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md",
@@ -982,10 +936,16 @@
         "anchor": "package-validation-history",
         "baselineSha256": "1bdf75b06057b274816f0a3b7c51fe06a72d2fadc7190f96e78d89b29fa3926a",
         "baselineLines": 81,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "58177d8d7b3403d620f3341c242269a0e8bae9f24e1a8edf04e5a2b875740e34",
         "retainedSnapshotSha256": "507d01c2eb9dbc0bc6ada9258f56bae8a2bc367d891070eb3cee19bf46d05c07",
-        "editorialDestination": "knowledge/PROGRESS.md#package-validation-history"
+        "editorialDestination": "knowledge/PROGRESS.md#package-validation-history",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md",
+          "sha256": "1bdf75b06057b274816f0a3b7c51fe06a72d2fadc7190f96e78d89b29fa3926a",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md"
+        }
       },
       {
         "sourcePath": "knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md",
@@ -993,10 +953,16 @@
         "anchor": "bank-validation-history",
         "baselineSha256": "41d04bae374c91e87d04c534d230f803ef55764336faf6d6a8a235b61f8a9701",
         "baselineLines": 82,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "b362cf677853122116c90a43922e132c54319b340367fdff02ea912360363f48",
         "retainedSnapshotSha256": "fd706a1d133069731e758dc7c4aa0ca9a4df780aa188557e93617dc59062718a",
-        "editorialDestination": "knowledge/PROGRESS.md#bank-validation-history"
+        "editorialDestination": "knowledge/PROGRESS.md#bank-validation-history",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md",
+          "sha256": "41d04bae374c91e87d04c534d230f803ef55764336faf6d6a8a235b61f8a9701",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md"
+        }
       },
       {
         "sourcePath": "knowledge/execution/evidence/CN-AGENT-SETUP-001.md",
@@ -1004,10 +970,16 @@
         "anchor": "setup-evidence-history",
         "baselineSha256": "7cd51cfe74dcaa68b14af8202e784d84abadcd2de6168f240cfa4d84931063db",
         "baselineLines": 32,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "840d1428c1a153564861179dd2a21d0f59724847e5262f12d94b91987a0c2ffd",
         "retainedSnapshotSha256": "35d6a66457065807d176783967c45110f8d71f565f8a9308c15bf60f42a07400",
-        "editorialDestination": "knowledge/PROGRESS.md#setup-evidence-history"
+        "editorialDestination": "knowledge/PROGRESS.md#setup-evidence-history",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/execution/evidence/CN-AGENT-SETUP-001.md",
+          "sha256": "7cd51cfe74dcaa68b14af8202e784d84abadcd2de6168f240cfa4d84931063db",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/evidence/CN-AGENT-SETUP-001.md"
+        }
       },
       {
         "sourcePath": "knowledge/execution/evidence/CN-DEC-001.md",
@@ -1015,14 +987,20 @@
         "anchor": "decision-evidence-history",
         "baselineSha256": "7a2f1a4e39dfce33cdeaf5429628b383ef24cf19c14228d10c1afde7304f195c",
         "baselineLines": 23,
-        "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
+        "status": "REMOVED_WITH_OWNER_APPROVAL",
         "canonicalPayloadSha256": "86e9eb10c6f7c97e02508006e4f90b4a63183036fbdc80754e8ee3228f1bb77d",
         "retainedSnapshotSha256": "b1078d0193673cd96dd3adaaaa2384b006ec191920724dae02561adef36344e5",
-        "editorialDestination": "knowledge/PROGRESS.md#decision-evidence-history"
+        "editorialDestination": "knowledge/PROGRESS.md#decision-evidence-history",
+        "historicalReference": {
+          "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+          "path": "knowledge/execution/evidence/CN-DEC-001.md",
+          "sha256": "7a2f1a4e39dfce33cdeaf5429628b383ef24cf19c14228d10c1afde7304f195c",
+          "url": "https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/evidence/CN-DEC-001.md"
+        }
       }
     ],
     "transformation": "Editorially retain subject requirements, collapse repeated metadata/shared chart rows; feature/task/decision definitions remain in existing machine authorities; current approval/evidence/history summaries stay accessible in PROGRESS. Original lossless grouping is historical at1d900cd, not the current editing constraint.",
-    "deletionApproved": false,
+    "deletionApproved": true,
     "editorialBaselineRevision": "1d900cd1beecbcdd5793298d42c093537f2aae4a",
     "editorialAuthorization": "S13 current attached user request, continuation alias CN-KB-CONSOLIDATION-001; no deletion",
     "editorialCoverage": [
@@ -1366,7 +1344,50 @@
         "reason": "Owner S13 supersedes per-decision-file maintenance guidance; decisions updated in place, never approves stack"
       }
     ],
-    "initialMigrationProof": "canonicalPayloadSha256 values describe lossless initial grouping at1d900cd; current content is editorially validated against that baseline and machine authorities"
+    "initialMigrationProof": "canonicalPayloadSha256 values describe lossless initial grouping at1d900cd; current content is editorially validated against that baseline and machine authorities",
+    "removalAuthorization": {
+      "sourceId": "S14",
+      "recordedDate": "2026-10-14",
+      "scope": "Exact 34 superseded files only; individual deletion after preservation checks; no folder, stack, implementation, policy or live authority",
+      "approvedPaths": [
+        "knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md",
+        "knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md",
+        "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md",
+        "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
+        "knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
+        "knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
+        "knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md",
+        "knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md",
+        "knowledge/CINENEST-DESIGN-DECISION-ADR-002.md",
+        "knowledge/CINENEST-DESIGN-DECISION-ADR-003.md",
+        "knowledge/CINENEST-DESIGN-DECISION-ADR-004.md",
+        "knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
+        "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "knowledge/CINENEST-DESIGN-SYSTEM.md",
+        "knowledge/CINENEST-ADMIN-PAGES.md",
+        "knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md",
+        "knowledge/CINENEST-CHARTS-AND-METRICS.md",
+        "knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md",
+        "knowledge/CINENEST-DESIGN-DECISION-ADR-001.md",
+        "knowledge/CINENEST-REFERENCE-TRACEABILITY.md",
+        "knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
+        "knowledge/execution/CINENEST-EXECUTION-PLAN.md",
+        "knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
+        "knowledge/execution/CINENEST-EXECUTION-STATUS.md",
+        "knowledge/execution/CINENEST-SESSION-HANDOFF.md",
+        "knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md",
+        "knowledge/CHANGELOG.md",
+        "knowledge/CINENEST-VALIDATION-REPORT.md",
+        "knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md",
+        "knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md",
+        "knowledge/execution/evidence/CN-AGENT-SETUP-001.md",
+        "knowledge/execution/evidence/CN-DEC-001.md",
+        "docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md"
+      ],
+      "requestSha256": "dae698471f7fd41372eac120aa32a2bba96b874b6844232f2f3cac4f3da7cb9d"
+    },
+    "removalBaselineRevision": "99fa99e935be72254368b412078e36bbb7a80a00"
   },
   "protectedCatalogBaseline": {
     "revision": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",

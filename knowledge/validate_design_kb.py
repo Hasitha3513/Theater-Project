@@ -60,18 +60,27 @@ def read_spec(name):
 
 
 def validate_consolidation(check):
-    """Verify source destinations, retained substantive lines, machine authorities and frozen originals."""
+    """Verify source destinations, retained substantive lines, machine authorities and immutable historical originals."""
     import os
     import subprocess
     manifest = json.loads((ROOT / 'manifest.json').read_text())
     migration = manifest['consolidation']; repo = ROOT.parent
-    check(migration['deletionApproved'] is False, 'Deletion approval falsely recorded')
+    authorization = migration.get('removalAuthorization', {})
+    check(migration['deletionApproved'] is True and authorization.get('sourceId') == 'S14', 'Exact owner removal approval missing')
+    check(authorization.get('requestSha256') == 'dae698471f7fd41372eac120aa32a2bba96b874b6844232f2f3cac4f3da7cb9d', 'Owner removal authorization provenance mismatch')
+    check(migration.get('removalBaselineRevision') == '99fa99e935be72254368b412078e36bbb7a80a00', 'Removal baseline mismatch')
     canonical = {'knowledge/PROJECT.md', 'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md'}
     check(set(migration['canonicalDocuments']) == canonical, 'Four-document canonical inventory missing')
     entries = migration['documents']; paths = [e['sourcePath'] for e in entries]
     expected = set(subprocess.check_output(['git', '-C', str(repo), 'ls-tree', '-r', '--name-only', migration['baselineRevision']], text=True).splitlines())
     expected = {p for p in expected if p.endswith('.md') and p not in {'AGENTS.md', 'knowledge/README.md'}}
     check(set(paths) == expected and len(paths) == len(expected), 'Superseded prose source omitted/duplicated')
+    check(set(authorization.get('approvedPaths', [])) == expected and len(authorization.get('approvedPaths', [])) == len(expected), 'Removal allowlist changed/duplicated')
+    removal_tree = set(subprocess.check_output(['git', '-C', str(repo), 'ls-tree', '-r', '--name-only', migration['removalBaselineRevision']], text=True).splitlines())
+    missing = {name for name in removal_tree if not (repo / name).is_file()}
+    check(missing == expected, 'Unlisted deletion or incomplete approved removal')
+    current_md = {p.relative_to(repo).as_posix() for p in repo.rglob('*.md') if '.git' not in p.parts}
+    check(current_md == {name for name in removal_tree if name.endswith('.md')} - expected, 'New narrative file or unlisted narrative deletion')
     mapping = {(repo / e['sourcePath']).resolve(): (repo / e['canonicalPath'], e['anchor']) for e in entries}
     for e in entries:
         raw = subprocess.check_output(['git', '-C', str(repo), 'show', migration['baselineRevision'] + ':' + e['sourcePath']])
@@ -98,8 +107,10 @@ def validate_consolidation(check):
         elif coverage:
             check(coverage['method'] == 'EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY', 'Unknown editorial coverage method')
             check((repo / coverage['authority']).is_file(), 'Editorial authority missing ' + e['sourcePath'])
-        check(source.is_file() and source.read_bytes().endswith(raw) and source.read_text().startswith('> **SUPERSEDED'), 'Original not retained for review ' + e['sourcePath'])
-        check(hashlib.sha256(source.read_bytes()).hexdigest() == e['retainedSnapshotSha256'], 'Frozen snapshot changed ' + e['sourcePath'])
+        ref = e.get('historicalReference', {})
+        check(not source.exists() and e.get('status') == 'REMOVED_WITH_OWNER_APPROVAL', 'Approved removal incomplete ' + e['sourcePath'])
+        check(ref == {'commit': migration['baselineRevision'], 'path': e['sourcePath'], 'sha256': e['baselineSha256'], 'url': 'https://github.com/Hasitha3513/Theater-Project/blob/' + migration['baselineRevision'] + '/' + e['sourcePath']}, 'Immutable history reference missing/changed ' + e['sourcePath'])
+        check(ref.get('url', '') in (ROOT / 'PROGRESS.md').read_text(), 'Historical original inaccessible from mapping ' + e['sourcePath'])
     allowed_nonprose_edits = {'knowledge/manifest.json', 'knowledge/validate_design_kb.py', 'knowledge/execution/validate_execution.py', 'knowledge/execution/refresh_manifest.py', 'knowledge/product/cinenest-feature-catalog.json', 'knowledge/decisions/cinenest-open-decisions.json', 'knowledge/execution/change-sets.json', 'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/omissions.json', 'knowledge/sources/cinenest-source-register.json'}
     all_baseline = subprocess.check_output(['git', '-C', str(repo), 'ls-tree', '-r', '--name-only', migration['baselineRevision']], text=True).splitlines()
     for name in all_baseline:
@@ -255,7 +266,7 @@ def main():
     if errors:
         print('\n'.join('FAIL '+message for message in errors))
         return 1
-    print(f'PASS consolidation: {migrated_count} source destinations/retained substantive content; frozen originals, complete registry payloads and anchors preserved.')
+    print(f'PASS consolidation: {migrated_count} source destinations/retained substantive content; exact approved removals, immutable historical originals, complete registry payloads and anchors preserved.')
     print('PASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.')
     print('Limits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.')
     return 0
@@ -306,7 +317,7 @@ def validate_expansion(check, tokens, specs):
             path = ROOT / source['path']
             check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256'], f'Source mismatch {source["id"]}')
         else:
-            check(source['availability'] == 'MISSING' or (source.get('id') in {'S12', 'S13'} and source['availability'] == 'CONVERSATION' and source.get('kind') == 'user-conversation-authorization' and bool(source.get('scope'))), f'Unverified source location {source["id"]}')
+            check(source['availability'] == 'MISSING' or (source.get('id') in {'S12', 'S13', 'S14'} and source['availability'] == 'CONVERSATION' and source.get('kind') == 'user-conversation-authorization' and bool(source.get('scope'))), f'Unverified source location {source["id"]}')
     features = parsed['product/cinenest-feature-catalog.json']['features']
     ids = [f['id'] for f in features]
     check(len(ids) == len(set(ids)), 'Duplicate feature IDs')
@@ -353,7 +364,7 @@ def validate_expansion(check, tokens, specs):
         check(c['decisionStatus'] in decisions and c['implementationStatus'] == 'NOT_VERIFIED', f'Chart status {c["id"]}')
         check(set(c['sourceIds']) <= source_ids, f'Chart sources {c["id"]}')
     manifest = parsed['manifest.json']
-    check(manifest['kbVersion'] == '1.5.1' and manifest['baselineKbVersion'] == '1.5.0', 'Consolidation KB version/baseline mismatch')
+    check(manifest['kbVersion'] == '1.5.2' and manifest['baselineKbVersion'] == '1.5.1', 'Consolidation KB version/baseline mismatch')
     check(manifest['chartSpecVersion'] == specs['version'] == '1.2.0', 'Chart version mismatch')
     check(manifest['designTokenVersion'] == tokens['version'] == '1.0.0', 'Design-token version mismatch')
     actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and '__pycache__' not in p.parts}

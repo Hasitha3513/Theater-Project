@@ -12,4 +12,4 @@ After inspecting them, run safe `python3 knowledge/validate_design_kb.py`, `pyth
 
 User's existing automatic task-owned Git commit/push authorization applies after checks/review and actual remote verification, subject to stronger branch rules. Stage owned files only; no force/history rewrite; report actual success/failure/SHA/clean state. Git publication does not authorize deployment, technology/policies, whole plan or deletion checkpoint. No external KB/attachment sync assumed.
 
-Default one change set, stop after it or required approval. For current consolidation, present superseded-document removal list in conversation and retain originals until explicit owner approval.
+Default one change set, stop after it or required approval. The exact superseded-file removal was authorized by S14; historical evidence is preserved through immutable commit/path links in PROGRESS and manifest. Any further deletion requires its own applicable authorization.

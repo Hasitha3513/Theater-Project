@@ -5,11 +5,11 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-CN-KB-CONSOLIDATION-001 continues the existing stable task CN-KB-CONSOLIDATE-001 as an alias; no second task/backlog/agent created. Fresh baseline: repository/ main → origin/main, local/remote `1d900cd1beecbcdd5793298d42c093537f2aae4a`, clean. Instructions manually read, only root AGENTS found; automatic host loading NOT_VERIFIED/native registration NOT_PERFORMED. Four existing canonical files reused; no new knowledge, report, prompt, archive or registry file created.
+CN-KB-CONSOLIDATION-001 continues the existing stable task CN-KB-CONSOLIDATE-001 as an alias; no second task/backlog/agent created. Removal-stage baseline: repository/ main → origin/main, local/remote `99fa99e935be72254368b412078e36bbb7a80a00`, clean; remote independently verified before edits. Instructions manually read, only root AGENTS found; automatic host loading NOT_VERIFIED/native registration NOT_PERFORMED. Four existing canonical files reused; no new knowledge, report, prompt, archive or registry file created.
 
-Scope: edit copied/repeated prose into navigable subject sections, derive feature/task/decision summaries from existing registries, preserve substantive requirements/approval evidence/assets, update validation and links. All superseded originals remain untouched pending owner removal approval. Current machine state: [status.json](execution/status.json); requirements/test ownership: [requirements](execution/requirements.json), [tests](execution/test-plan.json); task scope/dependencies/readiness: [backlog](execution/change-sets.json). No product completion percentage inferred from documentation.
+Scope: edit copied/repeated prose into navigable subject sections, derive feature/task/decision summaries from existing registries, preserve substantive requirements/approval evidence/assets, update validation and links. S14 approves only the exact 34-file removal after preservation checks; every original has a verified immutable historical commit/path and current retained destination in the mapping below. Current machine state: [status.json](execution/status.json); requirements/test ownership: [requirements](execution/requirements.json), [tests](execution/test-plan.json); task scope/dependencies/readiness: [backlog](execution/change-sets.json). No product completion percentage inferred from documentation.
 
-Approval queue: superseded-file removal remains PENDING_OWNER_REVIEW; CN-DEC-001 stack proposal awaits owner approval; CN-FND-001 remains BLOCKED until accepted stack plus separately authorized/refined implementation scope, tool permissions and compatibility checks. Future plan NOT_APPROVED; next READY NONE. No source/PDF/legal/merchant/hardware approval inferred.
+Approval queue: exact superseded-file removal approved by S14; validation is recorded below; CN-DEC-001 stack proposal awaits owner approval; CN-FND-001 remains BLOCKED until accepted stack plus separately authorized/refined implementation scope, tool permissions and compatibility checks. Future plan NOT_APPROVED; next READY NONE. No source/PDF/legal/merchant/hardware approval inferred.
 
 <a id="execution-charter"></a>
 ## Execution charter
@@ -111,9 +111,11 @@ Safe checks from Git root: `python3 knowledge/validate_design_kb.py`, `python3 k
 
 Historical evidence remains readily available: [setup checks](execution/evidence/checks.json), [source review](execution/evidence/source-review.json), [instruction discovery](execution/evidence/instruction-review.json), [decision checks](execution/evidence/CN-DEC-001-checks.json), [official source/input ledger](execution/evidence/CN-DEC-001-inputs-and-sources.json), [independent decision review](execution/evidence/CN-DEC-001-review.json), [setup publication](execution/evidence/publication.json), [decision publication](execution/evidence/CN-DEC-001-publication.json). Raw source/PDF/image availability and tool tests are separately qualified.
 
-Actual current checks on 2026-10-14: both validators exit0; `git diff --check` exit0. Retained substantive source lines, exact registry payload/statuses, task/feature/decision projections, anchors, source hashes and three visual/token/theme/chart assets checked. Fault injection detected missing PK-AC01 and a false completed task projection. Parent self-review; no independent review claimed this continuation. Exact command/output/timestamps in existing status.json. Missing PDFs are unread/unavailable; historical source review is reused with matched hashes, not represented as a new full-range read. No application/integration/provider/hardware tests run.
+Editorial-stage checks on 2026-10-14: both validators exit0; `git diff --check` exit0. Retained substantive source lines, exact registry payload/statuses, task/feature/decision projections, anchors, source hashes and three visual/token/theme/chart assets checked. Fault injection detected missing PK-AC01 and a false completed task projection. Parent self-review; no independent review claimed this continuation. Exact command/output/timestamps in existing status.json. Missing PDFs are unread/unavailable; historical source review is reused with matched hashes, not represented as a new full-range read. No application/integration/provider/hardware tests run.
 
-Verified publication: primary editorial commit `f32b25558d2ff442209a247d3a7c55079b7007af` pushed to origin/main; independent `git ls-remote` returned the same SHA (exit0). Receipt is in existing status.json; this metadata-only successor updates the same files, with no report/session file. Resolve final current HEAD from Git. Removal approval, stack approval and implementation authority remain pending.
+Historical verified publication: primary editorial commit `f32b25558d2ff442209a247d3a7c55079b7007af` pushed to origin/main; independent `git ls-remote` returned the same SHA (exit0). Receipt is in existing status.json; this metadata-only successor updates the same files, with no report/session file. Resolve final current HEAD from Git. That editorial publication predates S14 removal approval; stack approval and implementation authority remain pending.
+
+Removal-stage checks on 2026-10-14: both validators and `git diff --check` passed. Exactly 34 authorized files removed, zero exceptions/unlisted deletions/new narrative files. Existing source substantive coverage, complete requirement/test/decision payloads, 28-task dependencies/statuses, current instruction/anchor links, immutable originals and protected assets passed. In-memory negative controls rejected missing PK-AC01, altered requirement acceptance, false completed task projection and missing historical reference; no fault was written to disk. Parent self-review; application/hardware tests NOT RUN. Actual command outputs/timestamps and staged check are retained under removalChecks in existing status.json. Authorized publication outcome follows its actual receipt.
 
 <a id="version-history"></a>
 ## Approval and verification history
@@ -127,6 +129,7 @@ Verified publication: primary editorial commit `f32b25558d2ff442209a247d3a7c5507
 | CN-AGENT-SETUP-001 / c1d2ded; closeout55ee66b | KB1.3.0: persistent controlled workflow, 44 reviewed baseline assets, 92 records/tests and 27 blocked/proposed units. Manual fresh discovery passed; host auto-loading unverified. No app/native setup. |
 | CN-DEC-001 / f3ba0e1; closeout75cd23f | KB1.4.0: official-source initial stack brief with actual independent read-only review and document validators. Stack approval pending, implementation not granted; exact support dates/team/project tuple tests limited. |
 | CN-KB-CONSOLIDATE-001 / 4a18e66; closeout1d900cd | KB1.5.0: lossless initial grouping and 34 originals retained. Staged whitespace exit2 reached primary commit; formatting corrected, full baseline diff and validators passed at closeout. Prior receipt/check output retained in status.json editorialHistory. Current request edits that grouping rather than claiming it was already concise. |
+| CN-KB-CONSOLIDATE-001 / S14 exact removal | KB1.5.2: owner authorizes only 34 listed superseded files; retained current content plus verified immutable commit/path per file; no further document, technology, implementation, policy or live approval. |
 
 No ordinary revision copies/archives are created. Commit history provides ordinary revisions; the current documents and retained evidence/source artifacts preserve approval/proof that must stay visible.
 
@@ -140,7 +143,7 @@ Historical CN-DEC-001 baseline/status is retained in the decision input ledger a
 <a id="prior-handoff"></a>
 ## Prior handoff reference
 
-CN-DEC-001 handoff required owner stack approval and separate CN-FND-001 authority. Those gates remain pending; document removal review is the current documentation checkpoint.
+CN-DEC-001 handoff required owner stack approval and separate CN-FND-001 authority. Those gates remain pending; S14 exact document removal is complete after checks, and owner stack selection is the next project checkpoint.
 
 <a id="feature-validation-history"></a>
 ## Feature validation reference
@@ -168,47 +171,47 @@ Actual commands/review/publication are in setup checks/source-review/instruction
 Actual preflight55ee66b, current-source access2026-10-14, compatibility limitations, independent read-only review, exact commands and verified primary f3ba0e1 receipt remain in existing decision evidence JSON above. No installed tuple/application/provider/hardware check claimed.
 
 <a id="consolidation"></a>
-## Consolidation mapping and pending removal
+## Consolidation mapping and historical evidence
 
-The following mapping is derived from existing manifest.json. Each original remains frozen and labelled superseded; no deletion approved. Narrative is edited into subject sections, repeated metadata is removed, shared chart rows appear once, feature/decision/task details remain owned by existing registries, and ordinary session/report repetition is replaced with accessible approval/evidence summaries. No archive or new mapping/report file created.
+The mapping is derived from existing manifest.json. S14 owner authorization covers exactly these 34 files, individual removal only, after existing substantive-content, registry and asset checks passed. Necessary current content remains at the linked destination; detailed original decisions, reports, charter and evidence remain accessible at the exact immutable Git commit/path linked per row. The validator retrieves each original with `git show <commit>:<path>` and verifies its recorded SHA-256. Historical ledger JSON paths are snapshot references at their recorded reviewedRevision/sourceRevision, not active worktree dependencies. No archive, report, task or knowledge file was added. Removal verification and exceptions are recorded in existing status.json.
 
 <!-- projection:mapping -->
-| Superseded file (repository-relative) | Retained destination / reason |
-|---|---|
-| knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md | [knowledge/PROJECT.md#features](PROJECT.md#features) |
-| knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md | [knowledge/PROJECT.md#business-rules](PROJECT.md#business-rules) |
-| knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md | [knowledge/PROJECT.md#package-management](PROJECT.md#package-management) |
-| knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md | [knowledge/PROJECT.md#bank-payments](PROJECT.md#bank-payments) |
-| knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md | [knowledge/ARCHITECTURE.md#technology](ARCHITECTURE.md#technology) |
-| knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md | [knowledge/ARCHITECTURE.md#system-architecture](ARCHITECTURE.md#system-architecture) |
-| knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md | [knowledge/ARCHITECTURE.md#data-api](ARCHITECTURE.md#data-api) |
-| knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md | [knowledge/ARCHITECTURE.md#security-privacy](ARCHITECTURE.md#security-privacy) |
-| knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md | [knowledge/ARCHITECTURE.md#iot-access](ARCHITECTURE.md#iot-access) |
-| knowledge/CINENEST-DESIGN-DECISION-ADR-002.md | [knowledge/ARCHITECTURE.md#adr-002](ARCHITECTURE.md#adr-002) |
-| knowledge/CINENEST-DESIGN-DECISION-ADR-003.md | [knowledge/ARCHITECTURE.md#adr-003](ARCHITECTURE.md#adr-003) |
-| knowledge/CINENEST-DESIGN-DECISION-ADR-004.md | [knowledge/ARCHITECTURE.md#adr-004](ARCHITECTURE.md#adr-004) |
-| knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md | [knowledge/ARCHITECTURE.md#open-decisions](ARCHITECTURE.md#open-decisions) |
-| knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md | [knowledge/ARCHITECTURE.md#initial-stack-brief](ARCHITECTURE.md#initial-stack-brief) |
-| knowledge/CINENEST-DESIGN-SYSTEM.md | [knowledge/DESIGN.md#design-system](DESIGN.md#design-system) |
-| knowledge/CINENEST-ADMIN-PAGES.md | [knowledge/DESIGN.md#admin-pages](DESIGN.md#admin-pages) |
-| knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md | [knowledge/DESIGN.md#customer-pages](DESIGN.md#customer-pages) |
-| knowledge/CINENEST-CHARTS-AND-METRICS.md | [knowledge/DESIGN.md#charts-metrics](DESIGN.md#charts-metrics) |
-| knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md | [knowledge/DESIGN.md#interactions-a11y](DESIGN.md#interactions-a11y) |
-| knowledge/CINENEST-DESIGN-DECISION-ADR-001.md | [knowledge/DESIGN.md#adr-001](DESIGN.md#adr-001) |
-| knowledge/CINENEST-REFERENCE-TRACEABILITY.md | [knowledge/DESIGN.md#reference-traceability](DESIGN.md#reference-traceability) |
-| knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md | [knowledge/DESIGN.md#ux-acceptance](DESIGN.md#ux-acceptance) |
-| docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md | [knowledge/PROGRESS.md#execution-charter](PROGRESS.md#execution-charter) |
-| knowledge/execution/CINENEST-EXECUTION-PLAN.md | [knowledge/PROGRESS.md#execution-plan](PROGRESS.md#execution-plan) |
-| knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md | [knowledge/PROGRESS.md#requirements-traceability](PROGRESS.md#requirements-traceability) |
-| knowledge/execution/CINENEST-EXECUTION-STATUS.md | [knowledge/PROGRESS.md#prior-status](PROGRESS.md#prior-status) |
-| knowledge/execution/CINENEST-SESSION-HANDOFF.md | [knowledge/PROGRESS.md#prior-handoff](PROGRESS.md#prior-handoff) |
-| knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md | [knowledge/PROGRESS.md#delivery-phases](PROGRESS.md#delivery-phases) |
-| knowledge/CHANGELOG.md | [knowledge/PROGRESS.md#version-history](PROGRESS.md#version-history) |
-| knowledge/CINENEST-VALIDATION-REPORT.md | [knowledge/PROGRESS.md#feature-validation-history](PROGRESS.md#feature-validation-history) |
-| knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md | [knowledge/PROGRESS.md#package-validation-history](PROGRESS.md#package-validation-history) |
-| knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md | [knowledge/PROGRESS.md#bank-validation-history](PROGRESS.md#bank-validation-history) |
-| knowledge/execution/evidence/CN-AGENT-SETUP-001.md | [knowledge/PROGRESS.md#setup-evidence-history](PROGRESS.md#setup-evidence-history) |
-| knowledge/execution/evidence/CN-DEC-001.md | [knowledge/PROGRESS.md#decision-evidence-history](PROGRESS.md#decision-evidence-history) |
+| Removed file (repository-relative) | Retained destination | Immutable historical original |
+|---|---|---|
+| knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md | [knowledge/PROJECT.md#features](PROJECT.md#features) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md) |
+| knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md | [knowledge/PROJECT.md#business-rules](PROJECT.md#business-rules) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md) |
+| knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md | [knowledge/PROJECT.md#package-management](PROJECT.md#package-management) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md) |
+| knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md | [knowledge/PROJECT.md#bank-payments](PROJECT.md#bank-payments) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md) |
+| knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md | [knowledge/ARCHITECTURE.md#technology](ARCHITECTURE.md#technology) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md) |
+| knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md | [knowledge/ARCHITECTURE.md#system-architecture](ARCHITECTURE.md#system-architecture) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md) |
+| knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md | [knowledge/ARCHITECTURE.md#data-api](ARCHITECTURE.md#data-api) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md) |
+| knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md | [knowledge/ARCHITECTURE.md#security-privacy](ARCHITECTURE.md#security-privacy) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md) |
+| knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md | [knowledge/ARCHITECTURE.md#iot-access](ARCHITECTURE.md#iot-access) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md) |
+| knowledge/CINENEST-DESIGN-DECISION-ADR-002.md | [knowledge/ARCHITECTURE.md#adr-002](ARCHITECTURE.md#adr-002) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-DECISION-ADR-002.md) |
+| knowledge/CINENEST-DESIGN-DECISION-ADR-003.md | [knowledge/ARCHITECTURE.md#adr-003](ARCHITECTURE.md#adr-003) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-DECISION-ADR-003.md) |
+| knowledge/CINENEST-DESIGN-DECISION-ADR-004.md | [knowledge/ARCHITECTURE.md#adr-004](ARCHITECTURE.md#adr-004) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-DECISION-ADR-004.md) |
+| knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md | [knowledge/ARCHITECTURE.md#open-decisions](ARCHITECTURE.md#open-decisions) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md) |
+| knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md | [knowledge/ARCHITECTURE.md#initial-stack-brief](ARCHITECTURE.md#initial-stack-brief) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md) |
+| knowledge/CINENEST-DESIGN-SYSTEM.md | [knowledge/DESIGN.md#design-system](DESIGN.md#design-system) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-SYSTEM.md) |
+| knowledge/CINENEST-ADMIN-PAGES.md | [knowledge/DESIGN.md#admin-pages](DESIGN.md#admin-pages) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-ADMIN-PAGES.md) |
+| knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md | [knowledge/DESIGN.md#customer-pages](DESIGN.md#customer-pages) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md) |
+| knowledge/CINENEST-CHARTS-AND-METRICS.md | [knowledge/DESIGN.md#charts-metrics](DESIGN.md#charts-metrics) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-CHARTS-AND-METRICS.md) |
+| knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md | [knowledge/DESIGN.md#interactions-a11y](DESIGN.md#interactions-a11y) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md) |
+| knowledge/CINENEST-DESIGN-DECISION-ADR-001.md | [knowledge/DESIGN.md#adr-001](DESIGN.md#adr-001) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-DESIGN-DECISION-ADR-001.md) |
+| knowledge/CINENEST-REFERENCE-TRACEABILITY.md | [knowledge/DESIGN.md#reference-traceability](DESIGN.md#reference-traceability) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-REFERENCE-TRACEABILITY.md) |
+| knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md | [knowledge/DESIGN.md#ux-acceptance](DESIGN.md#ux-acceptance) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md) |
+| docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md | [knowledge/PROGRESS.md#execution-charter](PROGRESS.md#execution-charter) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md) |
+| knowledge/execution/CINENEST-EXECUTION-PLAN.md | [knowledge/PROGRESS.md#execution-plan](PROGRESS.md#execution-plan) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/CINENEST-EXECUTION-PLAN.md) |
+| knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md | [knowledge/PROGRESS.md#requirements-traceability](PROGRESS.md#requirements-traceability) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md) |
+| knowledge/execution/CINENEST-EXECUTION-STATUS.md | [knowledge/PROGRESS.md#prior-status](PROGRESS.md#prior-status) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/CINENEST-EXECUTION-STATUS.md) |
+| knowledge/execution/CINENEST-SESSION-HANDOFF.md | [knowledge/PROGRESS.md#prior-handoff](PROGRESS.md#prior-handoff) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/CINENEST-SESSION-HANDOFF.md) |
+| knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md | [knowledge/PROGRESS.md#delivery-phases](PROGRESS.md#delivery-phases) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md) |
+| knowledge/CHANGELOG.md | [knowledge/PROGRESS.md#version-history](PROGRESS.md#version-history) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CHANGELOG.md) |
+| knowledge/CINENEST-VALIDATION-REPORT.md | [knowledge/PROGRESS.md#feature-validation-history](PROGRESS.md#feature-validation-history) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/CINENEST-VALIDATION-REPORT.md) |
+| knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md | [knowledge/PROGRESS.md#package-validation-history](PROGRESS.md#package-validation-history) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md) |
+| knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md | [knowledge/PROGRESS.md#bank-validation-history](PROGRESS.md#bank-validation-history) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md) |
+| knowledge/execution/evidence/CN-AGENT-SETUP-001.md | [knowledge/PROGRESS.md#setup-evidence-history](PROGRESS.md#setup-evidence-history) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/evidence/CN-AGENT-SETUP-001.md) |
+| knowledge/execution/evidence/CN-DEC-001.md | [knowledge/PROGRESS.md#decision-evidence-history](PROGRESS.md#decision-evidence-history) | [original @ 75cd23f](https://github.com/Hasitha3513/Theater-Project/blob/75cd23f25fec8ab9eaee39556e0f5dd274ee7092/knowledge/execution/evidence/CN-DEC-001.md) |
 <!-- projection-end:mapping -->
 
 <a id="current-handoff"></a>
@@ -216,4 +219,4 @@ The following mapping is derived from existing manifest.json. Each original rema
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: owner reviews and approves or amends the superseded-file removal list in the conversation.** No files deleted. After explicit approval, recheck intervening changes and remove only approved originals with retained unique content, fix links/tooling and rerun checks; do not delete supporting evidence/assets. Stack approval and CN-FND-001 remain separate pending gates. Stop here; no background work or other repository/cloud synchronization.
+**Exact next action: owner approves, rejects or amends the proposed initial stack in [ARCHITECTURE section I](ARCHITECTURE.md#initial-stack-brief).** S14 approves removal only; OD-01 is still OPEN_DECISION, CN-FND-001 remains BLOCKED, and implementation authorization is NOT_GRANTED. Stop after cleanup, checks and authorized publication; no background work or other repository/cloud synchronization.

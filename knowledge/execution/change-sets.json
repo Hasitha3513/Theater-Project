@@ -974,13 +974,13 @@
         "CN-DEC-001"
       ],
       "blockingDecisionIds": [],
-      "affectedFilesModules": "Four canonical knowledge documents, AGENTS, existing index/registries/manifest/validators; retained superseded snapshots",
+      "affectedFilesModules": "Four canonical documents, AGENTS, existing index/registries/manifest/validators; exact 34 approved superseded files",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
       "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
       "plannedChecks": "Baseline-content reconstruction; all requirements/task IDs/statuses; existing design/coverage checks; links/anchors/JSON/asset preservation; diff check",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
-      "definitionOfDone": "Four canonical docs current; no requirement/approval/evidence loss; originals proposed for removal, not deleted; owner review checkpoint",
+      "definitionOfDone": "Four canonical docs current; requirements/IDs/approval/evidence preserved; exact approved originals removed with immutable historical references and validation",
       "requiredApproval": "S12 current user explicit consolidation scope; deletion and stack/code remain separate approval",
       "authorityAvailable": true,
       "readiness": "CLOSED",
@@ -990,13 +990,15 @@
       ],
       "verificationScope": "DOCUMENTATION_AND_EXPLICIT_READ_ONLY_DISCOVERY",
       "authorizationSource": "S12",
-      "authorizationScope": "Consolidation only; no new per-task document",
-      "deletionApproval": "PENDING_OWNER_REVIEW",
+      "authorizationScope": "Consolidation with S14 exact removal continuation only; no new knowledge file or stack/code/live authority",
+      "deletionApproval": "APPROVED_EXACT_ALLOWLIST",
       "aliases": [
         "CN-KB-CONSOLIDATION-001"
       ],
       "continuationAuthorization": "Current attached owner request; simplify existing canonical documents, no deletion/code/stack approval",
-      "continuationAuthorizationSource": "S13"
+      "continuationAuthorizationSource": "S13",
+      "removalAuthorizationSource": "S14",
+      "removalStatus": "VERIFIED"
     }
   ]
 }

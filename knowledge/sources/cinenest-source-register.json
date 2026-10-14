@@ -91,6 +91,16 @@
       "taskId": "CN-KB-CONSOLIDATION-001",
       "scope": "Edit existing four canonical documents into concise nonduplicated narrative; preserve machine authorities/evidence/IDs; no deletion before approval, no code/stack/live authority",
       "recordedDate": "2026-10-14"
+    },
+    {
+      "id": "S14",
+      "availability": "CONVERSATION",
+      "kind": "user-conversation-authorization",
+      "taskId": "CN-KB-CONSOLIDATE-001",
+      "scope": "Exact 34 superseded files only; individual deletion after preservation checks; no folder, stack, implementation, policy or live authority",
+      "recordedDate": "2026-10-14",
+      "requestSha256": "dae698471f7fd41372eac120aa32a2bba96b874b6844232f2f3cac4f3da7cb9d",
+      "approvalMapping": "manifest.json#consolidation.removalAuthorization.approvedPaths"
     }
   ]
 }

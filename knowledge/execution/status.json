@@ -8,12 +8,12 @@
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "1d900cd1beecbcdd5793298d42c093537f2aae4a",
+  "baselineHead": "99fa99e935be72254368b412078e36bbb7a80a00",
   "baselineWorktree": "CLEAN",
   "currentChangeSet": "CN-KB-CONSOLIDATE-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": null,
-  "nextAction": "Owner reviews superseded documents for removal; no deletion authorized yet",
+  "nextAction": "Owner approves, rejects or amends CN-DEC-001 proposed stack at ARCHITECTURE.md#initial-stack-brief; implementation remains separately unauthorized",
   "nextReadyChangeSet": null,
   "implementationEvidence": "No application manifests/code/tests/CI; all catalog features NOT_VERIFIED",
   "approvedCoreDecisions": [
@@ -31,11 +31,11 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PUSHED",
-  "publicationEvidence": "Primary editorial commit f32b25558d2ff442209a247d3a7c55079b7007af pushed to origin/main and independently matched by ls-remote exit0; normal metadata closeout successor resolved via current Git; no deletion/stack/code approval.",
+  "publicationState": "NOT_YET_PUBLISHED_CURRENT_REMOVAL",
+  "publicationEvidence": "Current removal not yet committed/pushed; prior publication retained separately",
   "lastObservedHead": "f32b25558d2ff442209a247d3a7c55079b7007af",
   "evidencePath": "PROGRESS.md#current-verification",
-  "evidenceFreshness": "Current editorial continuation baseline1d900cd; original registry/assets/statuses preserved",
+  "evidenceFreshness": "Current exact-removal baseline 99fa99e935be72254368b412078e36bbb7a80a00",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -57,7 +57,6 @@
   "implementationAuthorization": "NOT_GRANTED",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "Superseded document removal review",
     "CN-DEC-001 stack proposal approval",
     "Separate refined CN-FND-001 implementation authorization"
   ],
@@ -94,7 +93,7 @@
       "stderr": ""
     }
   ],
-  "review": "Current parent editorial/self-review; no new independent review claimed",
+  "review": "Parent self-review; no new independent review claimed",
   "negativeControls": {
     "result": "PASS",
     "cases": [
@@ -270,5 +269,87 @@
     ],
     "baselineCanonicalLines": 3762,
     "resultCanonicalLines": 2052
-  }
+  },
+  "removalOutcome": {
+    "authorizationSource": "S14",
+    "status": "VERIFIED",
+    "deletedFiles": 34,
+    "retainedExceptions": [],
+    "newKnowledgeFiles": 0,
+    "historicalReferences": "manifest.json consolidation.documents historicalReference; PROGRESS.md#consolidation",
+    "applicationAndHardwareTests": "NOT_RUN",
+    "preservedCoverage": {
+      "requirements": 92,
+      "testPlans": 92,
+      "taskIds": 28,
+      "openDecisions": 29
+    },
+    "verificationScope": "Canonical content/registry/IDs/links/integrity and exact removal only; no application/hardware or stack approval"
+  },
+  "removalNegativeControls": {
+    "result": "PASS",
+    "method": "In-memory Path.read_text injection; no filesystem mutation",
+    "executedDate": "2026-10-14",
+    "cases": [
+      "Missing canonical PK-AC01 rejected",
+      "Altered requirement acceptance criterion rejected",
+      "False completed task projection rejected",
+      "Missing immutable historical reference rejected"
+    ]
+  },
+  "historicalEditorialPublicationEvidence": "Primary editorial commit f32b25558d2ff442209a247d3a7c55079b7007af pushed to origin/main and independently matched by ls-remote exit0; normal metadata closeout successor resolved via current Git; no deletion/stack/code approval.",
+  "removalChecks": [
+    {
+      "argv": [
+        "python3",
+        "knowledge/validate_design_kb.py"
+      ],
+      "atLocal": "2026-10-14T15:59:47.998404+05:30",
+      "exitCode": 0,
+      "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 source destinations/retained substantive content; exact approved removals, immutable historical originals, complete registry payloads and anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "knowledge/execution/validate_execution.py"
+      ],
+      "atLocal": "2026-10-14T15:59:48.177765+05:30",
+      "exitCode": 0,
+      "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "atLocal": "2026-10-14T15:59:48.183994+05:30",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "in-memory fault injection against both validators"
+      ],
+      "atLocal": "2026-10-14T15:59:49.071967+05:30",
+      "exitCode": 0,
+      "stdout": "PASS negative control: Missing canonical PK-AC01 rejected\nPASS negative control: Missing immutable original reference rejected\nPASS negative control: False completed task projection rejected\nIn-memory injection only; no filesystem modifications\nPASS negative control: Altered requirement acceptance criterion rejected\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "atLocal": "2026-10-14T16:00:13.669705+05:30",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
 }
