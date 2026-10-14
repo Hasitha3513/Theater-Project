@@ -15,3 +15,5 @@ Source ledger covers baseline asset hashes/ranges and three actual visual inspec
 
 ## Closeout/publication snapshot
 Checks/results and read-only review recorded in [setup evidence](evidence/CN-AGENT-SETUP-001.md); live machine state is authoritative over this narrative. This pre-publication snapshot is LOCAL until concrete Git verification; actual committed/pushed verification must be recorded separately with concrete SHA/remote response. User auto commit/push applies to task-owned Git work only, not deployments/live operations. Read current Git on every resume; no self-referential final commit invented.
+
+Publication receipt: primary setup commit `c1d2ded8f58d8b156bf1c329bd337e7cb53abda7` pushed successfully to `origin/main`; `git ls-remote` matched. See [receipt](evidence/publication.json). This snapshot precedes the metadata closeout commit; resolve current HEAD through Git.

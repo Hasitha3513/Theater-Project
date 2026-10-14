@@ -28,3 +28,5 @@ AG-AC01 actual baseline/instructions/tools; AG-AC02 reviewed-source ledger with 
 - [Machine command evidence](checks.json) captures actual UTC/Asia-Colombo timestamps/environment/exit/output. Setup VERIFIED as documentation only. All product/application/sandbox/physical/business/deployment checks NOT RUN; product acceptance NOT_ACCEPTED.
 
 Next and stop: authorize CN-DEC-001 bounded initial-stack decision brief. No second code/decision unit executed this session. Git publication recorded only after actual success; no external KB/attachment sync.
+
+Publication receipt: primary setup commit `c1d2ded8f58d8b156bf1c329bd337e7cb53abda7` pushed successfully to `origin/main`; `git ls-remote` matched. See [receipt](publication.json). This snapshot precedes the metadata closeout commit; resolve current HEAD through Git.

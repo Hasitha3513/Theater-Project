@@ -1,0 +1,17 @@
+{
+  "taskId": "CN-AGENT-SETUP-001",
+  "timestamp": "2026-10-14T13:06:28.781402+05:30",
+  "primarySetupCommit": "c1d2ded8f58d8b156bf1c329bd337e7cb53abda7",
+  "remote": "https://github.com/Hasitha3513/Theater-Project.git",
+  "branch": "main",
+  "pushExitCode": 0,
+  "verifiedRemoteHead": "c1d2ded8f58d8b156bf1c329bd337e7cb53abda7",
+  "verificationCommand": [
+    "git",
+    "ls-remote",
+    "origin",
+    "refs/heads/main"
+  ],
+  "verificationExitCode": 0,
+  "scope": "Documentation only; receipt is committed in a subsequent metadata closeout, whose current SHA must be derived from Git."
+}

@@ -31,9 +31,9 @@
   "instructionDiscovery": "VERIFIED_EXPLICIT_READ_ONLY_DISCOVERY",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "LOCAL",
-  "publicationEvidence": "Pre-commit snapshot; actual task publication checked in Git at closeout, never self-referential final SHA",
-  "lastObservedHead": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+  "publicationState": "PUSHED",
+  "publicationEvidence": "Primary setup commit c1d2ded8f58d8b156bf1c329bd337e7cb53abda7 pushed to origin/main; git ls-remote returned identical SHA. Receipt snapshot precedes metadata-only closeout commit; derive current HEAD from Git.",
+  "lastObservedHead": "c1d2ded8f58d8b156bf1c329bd337e7cb53abda7",
   "evidencePath": "execution/evidence/CN-AGENT-SETUP-001.md",
   "evidenceFreshness": "Source ledger baseline hashes a48cc6e; changed control/index/manifest files re-read and validated at closeout; old reports historical only",
   "availableTools": [

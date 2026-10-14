@@ -14,3 +14,5 @@ Inspect [evidence](evidence/CN-AGENT-SETUP-001.md) and [status](status.json) for
 3. Next action **authorize CN-DEC-001 bounded initial-stack decision brief**. Until authorization, answer guidance/read-only; no READY application change set. After authorization, compare official current support and requirements, write proposed ADR/selection brief only, then obtain explicit final choice before CN-FND-001. Spring Modulith recommendation and NestJS alternative remain undecided; cloud/provider/policy/hardware gates not auto-resolved.
 
 Missing PDFs requested only when needed for a blocked policy task; no fabricated source. Original S7 `(1)` alias unverified. Host automatic instruction loading remains NOT VERIFIED even if manual fresh read-only discovery passes; safe host check described in status/charter. One completed unit/required approval is the stop checkpoint.
+
+Publication receipt: primary setup commit `c1d2ded8f58d8b156bf1c329bd337e7cb53abda7` pushed successfully to `origin/main`; `git ls-remote` matched. See [receipt](evidence/publication.json). This snapshot precedes the metadata closeout commit; resolve current HEAD through Git.

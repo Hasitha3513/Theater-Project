@@ -206,7 +206,7 @@
       "path": "execution/CINENEST-EXECUTION-STATUS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "3d82ba647cc45785533be4b1d1644aebad099f4c67557343e02396da1c245e4d"
+      "sha256": "c393c3f481d18937ac01a6b5a8676e41676d3a1e0aa21aebcc75123c0ec55b79"
     },
     {
       "path": "execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
@@ -218,7 +218,7 @@
       "path": "execution/CINENEST-SESSION-HANDOFF.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ac44e904f67909822a8ea75d6c9a5bed067530be237ed4cc84d44bdfa0ec4257"
+      "sha256": "e70896be3df7bf04641f0db11226f29d43088a196ac827d4b2dd41181a0d0688"
     },
     {
       "path": "execution/change-sets.json",
@@ -230,7 +230,7 @@
       "path": "execution/evidence/CN-AGENT-SETUP-001.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ba582542ed7eaa204d10fcc741364dc7e310223403f552a2c8d744158e369c39"
+      "sha256": "7cd51cfe74dcaa68b14af8202e784d84abadcd2de6168f240cfa4d84931063db"
     },
     {
       "path": "execution/evidence/checks.json",
@@ -243,6 +243,12 @@
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "c7c51a4dd1793f053af3d8b53f9444eca015a49ecb19eb80ea405fcc3f47a650"
+    },
+    {
+      "path": "execution/evidence/publication.json",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "464768ddb38eed03c963e133bf70cd24c1e12be0c1970b3e1fefe6d45a290869"
     },
     {
       "path": "execution/evidence/source-review.json",
@@ -278,7 +284,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c619a36e3788afd32d6bb124e43b0962a4834f72d6d0a9e7b47d34594156d098"
+      "sha256": "ea4835781d4a77b89c2204bac04bb6f5bc38ae9dc6973ecafb0b3659d4e0969e"
     },
     {
       "path": "execution/test-plan.json",
