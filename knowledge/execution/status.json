@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "LOCAL",
-  "publicationEvidence": "Editorial continuation pre-publication snapshot; prior receipts retained in editorialHistory",
-  "lastObservedHead": "1d900cd1beecbcdd5793298d42c093537f2aae4a",
+  "publicationState": "PUSHED",
+  "publicationEvidence": "Primary editorial commit f32b25558d2ff442209a247d3a7c55079b7007af pushed to origin/main and independently matched by ls-remote exit0; normal metadata closeout successor resolved via current Git; no deletion/stack/code approval.",
+  "lastObservedHead": "f32b25558d2ff442209a247d3a7c55079b7007af",
   "evidencePath": "PROGRESS.md#current-verification",
   "evidenceFreshness": "Current editorial continuation baseline1d900cd; original registry/assets/statuses preserved",
   "availableTools": [
@@ -105,11 +105,12 @@
     "executedDate": "2026-10-14"
   },
   "publicationReceipt": {
-    "primaryCommit": "4a18e668523bc2958a385a09ad4b2b6e66fe9187",
-    "verifiedRemote": "4a18e668523bc2958a385a09ad4b2b6e66fe9187",
+    "primaryEditorialCommit": "f32b25558d2ff442209a247d3a7c55079b7007af",
+    "verifiedRemote": "f32b25558d2ff442209a247d3a7c55079b7007af",
+    "branch": "main",
     "pushExitCode": 0,
     "remoteCheckExitCode": 0,
-    "atLocal": "2026-10-14T15:11:44.956483+05:30"
+    "atLocal": "2026-10-14T15:43:43.215037+05:30"
   },
   "verificationCorrections": [
     {
@@ -124,7 +125,40 @@
       "disposition": "Removed formatting-only trailing blank lines; full baseline-to-final diff and staged check must pass before closeout; initial commit was published before this correction"
     }
   ],
-  "finalChecks": [],
+  "finalChecks": [
+    {
+      "argv": [
+        "python3",
+        "knowledge/validate_design_kb.py"
+      ],
+      "atLocal": "2026-10-14T15:44:25.449029+05:30",
+      "exitCode": 0,
+      "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 source destinations/retained substantive content; frozen originals, complete registry payloads and anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "knowledge/execution/validate_execution.py"
+      ],
+      "atLocal": "2026-10-14T15:44:25.624718+05:30",
+      "exitCode": 0,
+      "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "1d900cd1beecbcdd5793298d42c093537f2aae4a",
+        "--check"
+      ],
+      "atLocal": "2026-10-14T15:44:25.631883+05:30",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
   "editorialHistory": {
     "checks": [
       {
@@ -235,6 +269,6 @@
       "Missing PDFs S2/S3/S4; no page-level review claimed"
     ],
     "baselineCanonicalLines": 3762,
-    "resultCanonicalLines": 2048
+    "resultCanonicalLines": 2052
   }
 }

@@ -159,7 +159,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "3170dac0039f3e2ab65f4e3afd427f5a0af92ebeb20aab311d9c68142c75de26",
+      "sha256": "dc86cebca2ffb415b08287812325c66b8660968531cf1d0d8e8d3c0725b0debb",
       "authority": "canonical-prose"
     },
     {
@@ -390,7 +390,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "4ba65ec861f983d2a1ef5b10953a8ea9a39c234688d85c299d51a67cf91c4a88",
+      "sha256": "ff1e3bd5c5fc417c9e3745a0cc695e6b5542994b48bf8751f64da5ddfca4b118",
       "authority": "structured-asset-or-evidence"
     },
     {
