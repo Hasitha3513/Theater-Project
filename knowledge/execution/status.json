@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "NOT_YET_PUBLISHED_CURRENT_REMOVAL",
-  "publicationEvidence": "Current removal not yet committed/pushed; prior publication retained separately",
-  "lastObservedHead": "f32b25558d2ff442209a247d3a7c55079b7007af",
+  "publicationState": "PUSHED",
+  "publicationEvidence": "Removal commit 5a33c266b1d3f465233cf1e49ad1865dd45e39ea pushed to origin/main; git ls-remote independently matched SHA, exit0. In-place receipt successor contains no additional deletions or authority changes; final HEAD resolved from Git.",
+  "lastObservedHead": "5a33c266b1d3f465233cf1e49ad1865dd45e39ea",
   "evidencePath": "PROGRESS.md#current-verification",
   "evidenceFreshness": "Current exact-removal baseline 99fa99e935be72254368b412078e36bbb7a80a00",
   "availableTools": [
@@ -351,5 +351,14 @@
       "stdout": "",
       "stderr": ""
     }
-  ]
+  ],
+  "removalPublicationReceipt": {
+    "primaryCommit": "5a33c266b1d3f465233cf1e49ad1865dd45e39ea",
+    "verifiedRemote": "5a33c266b1d3f465233cf1e49ad1865dd45e39ea",
+    "branch": "main",
+    "pushExitCode": 0,
+    "remoteCheckExitCode": 0,
+    "atLocal": "2026-10-14T16:01:50.878223+05:30",
+    "observedWorktree": "CLEAN"
+  }
 }
