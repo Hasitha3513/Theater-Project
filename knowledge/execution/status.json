@@ -599,7 +599,7 @@
     "mermaidSyntaxAndRendering": "NOT_VERIFIED_NO_LOCAL_VALIDATOR",
     "implementationOrPolicyApproval": "NOT_GRANTED",
     "evidencePath": "PROGRESS.md#diagram-publication",
-    "publicationState": "STAGED_VALIDATED",
+    "publicationState": "PUSHED",
     "checks": [
       {
         "argv": [
@@ -681,6 +681,16 @@
         "stdout": "",
         "stderr": ""
       }
-    ]
+    ],
+    "publicationReceipt": {
+      "primaryCommit": "dff96868a904d29f6709974a222ee1fdd9f640c9",
+      "commitMessage": "docs(knowledge): add CineNest architecture and workflow diagrams",
+      "destination": "origin/main",
+      "verifiedRemote": "dff96868a904d29f6709974a222ee1fdd9f640c9",
+      "pushExitCode": 0,
+      "remoteCheckExitCode": 0,
+      "atLocal": "2026-10-14T23:51:33.631814+05:30",
+      "worktreeAfterPrimaryPush": "CLEAN"
+    }
   }
 }

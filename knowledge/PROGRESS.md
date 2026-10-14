@@ -22,6 +22,8 @@ Raster references include superseded or unapproved suggestions (JWT/Redis sessio
 
 Review: all 38 Markdown sources have balanced fences and proposed/unverified notices; all relative links resolve; 11 PNGs visually inspected and CRC-checked; the initially present ZIP contained safe unencrypted names and matching original ER sources but is now absent and excluded. No credential-pattern matches or apparent sensitive image data found; largest file 1,918,151 bytes, total supplied bytes about18.2MB; no Git/LFS attributes or custom active hooks found. No repository Mermaid validator, mmdc or local Mermaid package found; full syntax/rendering NOT_VERIFIED and no tools installed. Application/hardware tests NOT_RUN. Current command results/publication state are recorded in existing status.json diagramPublication. Root collision and foundation/qualification/policy gates remain unchanged. Stop after this publication.
 
+Verified diagram publication: primary commit `dff96868a904d29f6709974a222ee1fdd9f640c9` (`docs(knowledge): add CineNest architecture and workflow diagrams`) pushed to origin/main; independent `git ls-remote` matched exactly (both exit0). Worktree clean afterward; 49 supplied files added with no deletions/unrelated changes. Both knowledge validators and staged/unstaged whitespace checks passed. Existing status holds receipt; in-place receipt successor changes no diagrams or approvals. Resolve final current HEAD from Git.
+
 <a id="root-relocation-inspection"></a>
 ## Root relocation inspection — blocked before any move
 
