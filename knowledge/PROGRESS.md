@@ -5,9 +5,22 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
+Latest directory-layout request is blocked before movement by destination `.git` and `knowledge/` collisions; see [inspection](#root-relocation-inspection). Current authoritative root remains nested.
+
 S16 initial-stack approval recorded under existing **CN-DEC-001** after comparison with the actual Initial Stack Brief. Starting root repository/, main → origin/main at `bfc4a3ffd49adb0982cd1f88fa8243f2f0956816`, tracked clean; two unrelated untracked mind-map assets remain unchanged/unpublished. Instructions manually read; automatic loading NOT_VERIFIED. No new task/requirement/test/decision ID or knowledge file.
 
 Current [status](execution/status.json), [backlog](execution/change-sets.json) and [OD-01](decisions/cinenest-open-decisions.json) record owner-approved initial technology direction, exact qualification PENDING and implementation NOT_GRANTED. CN-DEC-001 brief stays VERIFIED/CLOSED; CN-FND-001 and CN-AUTH-001 remain BLOCKED with no implementation authority. Future plan NOT_APPROVED; next READY NONE. Hybrid RBAC+ABAC direction and its 18 planned scenarios remain unchanged; exact policies/owners remain open. No application/runtime/live operation.
+
+<a id="root-relocation-inspection"></a>
+## Root relocation inspection — blocked before any move
+
+Owner requested actual root `/home/hasitha-wijerathna/Documents/Theater Project`. Inspected nested authoritative root `/home/hasitha-wijerathna/Documents/Theater Project/repository`, main → origin/main at `3d3b610d4f93198eda701c7325d971c21a671254`; staged/unstaged tracked changes empty, two existing untracked mind-map assets retained. Origin fetch/push is `https://github.com/Hasitha3513/Theater-Project.git`. Repository .git is an ordinary directory with one primary worktree; no linked registrations, submodules/gitlinks or symlinks found. Parent and outer knowledge are not Git repositories.
+
+Immediate parent project folders are `repository/` (authoritative Git checkout, current canonical knowledge and instructions) and `knowledge/` (initial pre-clone knowledge copy). All 16 outer files match exact bytes at first immutable commit `16710dcf3e3bfb2453bab24910890279691fc06d`: five still match current counterparts, three same-path files differ from current revisions, eight are historical superseded prose with no current same-path counterpart. No unique outer file content found. Existing hidden parent `.git/.agents/.codex/.aws` are empty read-only directories (0555); no private contents read or disclosed.
+
+Reversible candidate move inventory is nested `.git`, `AGENTS.md`, `docs/`, `knowledge/` → same names in parent using same-filesystem renames, including all hidden/untracked contents, with inverse renames as rollback before further edits. **Not executed:** parent `.git` and `knowledge/` already occupy destination names. User explicitly requires stopping before collisions; no merge/overwrite, repository initialization/clone, deletion or wrapper removal performed. The wrapper is not empty and its primary worktree still points there. Needed resolution: explicit owner disposition/cleanup approval for the exact accounted historical outer knowledge and a supported environment resolution for the empty read-only parent Git placeholder. Do not bypass reserved filesystem permissions or silently replace Git metadata.
+
+Both existing validators and `git diff --check` passed at preflight; these are pre-relocation checks, not evidence relocation succeeded. No pre-existing validation failure found. Approval/qualification/implementation gates remain unchanged; no application/hardware tests run. Record only this inspection and blocker in existing files; no archive, new report/KB/task created. Layout remains nested pending collision resolution.
 
 <a id="stack-approval-update"></a>
 ## Stack approval record and verification
@@ -250,4 +263,4 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: owner separately authorizes [CN-FND-001 bounded scope and conditions](#foundation-prerequisites).** Initial technology direction is approved by S16; exact qualification remains PENDING, OD-01 broader choices OPEN_DECISION, foundation/security implementation NOT_GRANTED. Stop after recording, checks and authorized publication; no scaffolding, installs or live actions.
+**Exact next action: owner resolves the parent `knowledge/` historical-copy disposition and the empty read-only `.git` collision before root relocation.** No move/cleanup authorized by inference, no files overwritten/deleted. Initial technology direction remains approved by S16; exact qualification PENDING and foundation/security implementation NOT_GRANTED. CN-FND-001 is not started.

@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-DEC-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": null,
-  "nextAction": "Owner separately authorizes CN-FND-001 bounded skeleton/CI scope and reviewed environment/acceptance conditions at PROGRESS.md#foundation-prerequisites",
+  "nextAction": "Owner resolves parent knowledge historical-copy disposition and empty read-only .git collision before root relocation; no move performed",
   "nextReadyChangeSet": null,
   "implementationEvidence": "No application manifests/code/tests/CI; all catalog features NOT_VERIFIED",
   "approvedCoreDecisions": [
@@ -561,5 +561,27 @@
       "trackedWorktree": "CLEAN_AFTER_PRIMARY_PUSH",
       "unrelatedUntrackedFiles": 2
     }
+  },
+  "rootRelocationInspection": {
+    "baselineHead": "3d3b610d4f93198eda701c7325d971c21a671254",
+    "currentRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
+    "desiredRoot": "/home/hasitha-wijerathna/Documents/Theater Project",
+    "status": "BLOCKED_BEFORE_MOVE",
+    "collisions": [
+      "knowledge",
+      ".git"
+    ],
+    "outerHistoricalFiles": 16,
+    "matchedHistoricalRevision": "16710dcf3e3bfb2453bab24910890279691fc06d",
+    "movedFiles": 0,
+    "deletedFiles": 0,
+    "untrackedMindMapsPreserved": 2,
+    "preflightChecks": {
+      "designValidator": 0,
+      "executionValidator": 0,
+      "gitDiffCheck": 0
+    },
+    "evidencePath": "PROGRESS.md#root-relocation-inspection",
+    "publication": "Inspection documentation only; actual local layout remains unchanged"
   }
 }
