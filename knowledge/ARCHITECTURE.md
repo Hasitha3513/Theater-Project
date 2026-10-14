@@ -10,6 +10,7 @@ This document owns technology proposals, module/data/API and integration design,
 - [System Architecture](#system-architecture)
 - [Data Api](#data-api)
 - [Security Privacy](#security-privacy)
+- [Hybrid authorization](#authorization)
 - [Iot Access](#iot-access)
 - [Adr 002](#adr-002)
 - [Adr 003](#adr-003)
@@ -234,6 +235,79 @@ Threat model customer/admin/device/provider trust boundaries; test object-level 
 [Bank evidence/security specification](PROJECT.md#bank-payments) extends existing principles: own authenticated upload and restricted review/evidence/verify/allocation/refund/account-management scopes, private encrypted generated-key storage, true JPEG/PNG/PDF type/size validation, scan/quarantine, safe restricted previews, history and approved retention/deletion. Receipt upload is not original-ID admission verification, and OCR/email/image hash cannot independently prove credit or authorize approval.
 
 Never request bank passwords/PINs/OTPs/card security codes. Bank details/receipt/statement/credentials excluded from public URLs, ordinary logs/event payloads and notification attachments; use protected scoped views/links. Separate receiving-account changes from ordinary review, independently verify instructions/refund destination and audit actor/time/reason/evidence/correlation. Thresholds/roles/retention/upload limits OPEN_DECISION OD-26/28; no current account, bank connectivity/legal approval or provider support asserted. Third-party payer differences require legitimate matching, not automatic fraud label. Erroneous approval and actual bank reversal append safe correction history; no deletion/occupant trapping. No bank account/money/real payment affected by this task.
+
+<a id="authorization"></a>
+## Hybrid authorization specification
+
+### Direction and approval boundaries
+
+S15 user-requested direction:
+
+> CineNest combines RBAC permissions with ABAC restrictions. Roles grant action permissions. Attribute-based policies restrict those permissions to authorized venues, resources, ownership, approval limits, and relevant circumstances.
+>
+> Authorization is enforced by the backend and defaults to denial. It does not replace business-integrity or physical-safety rules.
+
+The direction is established; runtime enforcement **NOT_VERIFIED**. Proposed role responsibilities are owned by [PROJECT](PROJECT.md#authorization-requirements). Exact bundles, financial thresholds, independent-review/self-approval and exception procedures remain PROPOSED/OPEN; no numeric limits selected. Stack remains awaiting approval, CN-FND-001 and security implementation unauthorized. Approved public catalog operations may deliberately allow anonymous access; unspecified actions default to deny. An unset required limit is not unlimited authority.
+
+### Permission vocabulary and scoped grants
+
+Keep permissions independent of role names. Existing proposed labels stay: package.read/edit/publish/deactivate/archive; booking.create/read/update/cancel; payment.claim.submit; bank.review/verify/allocate/adjust; payments.refund; verification.review and separately verification.evidence.read; device.command; report.read/export; audit.read; bank.account.manage. These labels are conceptual contracts, not a deployed permission catalog. S15 package.update/booking.amend/payment.receipt.submit/payment.bank.review/payment.bank.verify/room.control/payment.bank_account.manage examples map conceptually to those existing labels, without adding runtime aliases or renaming established specifications. Proposed refund.request/refund.approve/refund.execute/refund.reconcile split the currently broad payments.refund capability; identity.role.assign is a proposed dedicated control. Exact catalog/splits are owner-review choices, not blanket grants.
+
+A proposed grant is `(grantId, principalId, roleVersion OR explicitPermission, permissionSetVersion, venue/resourceScope, accountScope where applicable, limits with currency, validityInterval, conditions, grantVersion)`. Store trusted assignments; use role expansion only inside its grant. A principal's Finance Reviewer grant at Venue A plus Operations grant at Venue B cannot produce finance access at Venue B. No Cartesian product of all principal permissions with all assigned venues. Multi-venue resource writes require complete authority coverage for the proposed change; define permitted grant composition without mixing unrelated permissions/scopes. Unknown scope, missing relevant assignment or unresolved mandatory limit denies the affected action.
+
+### Authoritative attributes and evaluation
+
+| Attribute owner | Relevant authoritative values |
+|---|---|
+| Identity & Access | Current account eligibility/suspension, scoped role assignments, grant/permission versions, venue assignments, authentication assurance and approved financial authority |
+| Owning business module | Resource owner, venue/room/account, booking/customer association, case assignment, sensitivity, exact amount/currency, protected revision |
+| Server/policy context | Operation, current policy version, server time, independent-approval provenance and legitimate resource-specific evidence purpose |
+
+Browser venue/owner/role/amount/purpose claims are inputs to validate, never sufficient authorization evidence. Purpose must be supported by authorized case assignment/workflow, not an arbitrary supplied string. Trusted integration/device identities require their own credentials and constrained scope, not customer sessions.
+
+Proposed evaluation order:
+1. Classify operation; anonymous access only for an explicitly approved public operation. Otherwise authenticate principal and require current eligibility/assurance.
+2. Load authoritative resource attributes through the owning module's interface and current grant/policy snapshot. Missing required attributes or unavailable mandatory policy information denies; return safe unavailable/denial outcome without protected details.
+3. Apply mandatory global restrictions and explicit denials (including suspension and any approved self-approval prohibition). They override every alternative grant; holding multiple roles cannot bypass them.
+4. Find an applicable grant whose permission, resource/venue/account scope, approved limit/currency, validity and contextual restrictions all match together. For customer paths require verified ownership; staff paths need separately applicable staff authority.
+5. Evaluate the owning module's business invariants and concurrency guards independently. Only then accept an authorized valid mutation and durable audit/work intent. Record decision provenance, never imply external execution succeeded.
+
+Authorization asks “May this actor attempt this operation on this resource?” Business validation asks “Is the operation valid given the actual business state?” Actual bank credit, no double allocation, exact refundable balance, reservation conflict/capacity/hours, immutable purchases and safe device lifecycle remain domain rules. Do not put every business invariant into a generic policy engine. Sensitive writes must coordinate sufficiently current authorization and resource versions with transaction/locking or equivalent concurrency checks; a decision made before grant revocation or resource change is not indefinite authority. Exact version/locking/cache protocol requires future design and race tests.
+
+### Module and channel enforcement
+
+Identity & Access owns identity, permission definitions, role versions and scoped assignments; each business application boundary enforces resource-specific authorization. Booking owns customer ownership/reservation administration; Pricing owns scoped package edit/publication; Payments owns bank/account/financial/refund checks; Verification owns case/purpose/evidence disclosure; IoT and Access Control own permitted room/credential/command checks; Analytics and Audit own scoped projections. Use published interfaces/authorization context, not foreign repositories or persistence entities. Preserve the modular monolith recommendation.
+
+| Boundary | Required enforcement |
+|---|---|
+| HTTP and application use cases | Authenticate entry and enforce application/resource authorization on every call, including internal paths; object IDs never grant access. |
+| Detail, lists, search, counts, reports, aggregates and exports | Scope queries before returning rows/totals and apply consistent filters to exports/drilldowns; frontend filtering is insufficient; no existence leakage. |
+| Receipt/identity downloads and access reveal | Dedicated sensitivity/purpose/ownership checks; private scoped delivery and audited reads; issued download links must respect selected expiry/revocation design, not permanent authority. |
+| Live subscriptions and reconnects | Authorize stream and resource scope, refresh eligibility on reconnect and permission change; close/re-scope revoked subscriptions and avoid leaked cached events. |
+| Workers and integrations | Constrained service/device identity per action/resource. Gateway authenticity/dedupe and device credentials/ACLs are separate from staff/customer authorization; jobs do not run as universal ADMIN. |
+
+Accepted durable business work is distinct from a new privileged action. Store accepted operation, actor/grant/policy/resource version and evidence references; execute permitted steps through narrowly scoped service authority while rechecking current financial/safety/lifecycle constraints. A new refund/privileged mutation needs current authorization, not a copied revoked user's grants. Revocation cannot silently erase accepted credits/refund obligations; pause and reconcile uncertain/prohibited work with an incident. Which accepted operations may continue, and whether later approval must be repeated, remains an explicit OD-28/01 policy/design choice before that slice.
+
+Initial implementation recommendation: explicit, testable policies inside the modular monolith, with shared grant evaluation and module-owned resource rules. No authorization microservice, external policy engine, arbitrary policy-script editor or expression language selected. Framework neutral until stack acceptance; if the Spring proposal is chosen, request authentication/authorization plus method/application-boundary checks and domain policy interfaces must be configured and tested using then-supported Spring Security mechanisms. Nothing is enabled/configured today; documentation is not executable evidence.
+
+### Revocation and audit
+
+Suspension, role removal, venue reassignment and policy changes must invalidate relevant grants/cached decisions and affect protected sessions/streams. A valid login does not freeze authorization. Recommended versioned policies/grants and invalidation support sufficiently current checks on sensitive mutations; maximum cache staleness, revocation propagation, session termination and signed-download revocation mechanisms are **OPEN**, with no invented latency guarantee. Missing mandatory fresh information fails closed for the affected operation; recovery must preserve accepted financial obligations and independent egress. Test reconnects, caches, concurrent role changes and background work before verification.
+
+Audit appropriate allow/deny/sensitive-read/assignment/override events with actor or service identity, action/target, authorized scope, outcome/reason, grant/policy versions, server timestamp/correlation, approval/override provenance. Restrict audit access and choose retention/denial-volume policy under OD-05; audit must not leak raw PINs, auth tokens, bank credentials, complete documents/receipts or secret links. No ordinary staff self-elevation; dedicated role assignment and receiving-account controls require approved target/scope/independent-review rules. Generic ADMIN/SUPER_ADMIN is never an implicit bypass.
+
+### Decision status and implementation evidence
+
+| Item | State / existing gate |
+|---|---|
+| Hybrid RBAC + ABAC, backend/default denial | USER_REQUESTED_DIRECTION, S15; NOT_VERIFIED runtime; CN-NFR-02 owns acceptance |
+| Six role groupings and exact permission catalog | PROPOSED; capability allocation OD-18/28, privacy OD-05, venue/tenancy OD-12; owners TBD |
+| Financial limits, self-approval, independent review and exceptions | OPEN_DECISION OD-18/28; source S8/S9/S15 does not set thresholds or approve every recommendation |
+| Evidence-purpose/case access and retention | Desired dedicated controls; exact operational/privacy process OD-03/05/28 unresolved |
+| Revocation/cache/session and accepted-work revalidation | RECOMMENDED approach, exact protocol/latency/operation policy OPEN under OD-01/05/28; no guarantee |
+| Framework enforcement | Dependent on OD-01 stack approval and separately authorized CN-AUTH-001/owning slices; NOT_GRANTED implementation |
+
+The authoritative [open-decision registry](decisions/cinenest-open-decisions.json) retains all 29 IDs/statuses/owners. S15 refines authorization direction, not resolution of those choices. [T-CN-NFR-02](execution/test-plan.json) links the 18 additional planned scenarios at CN-NFR-02; existing scenarios remain. Verification requires actual policy fixtures, backend object/query/download/stream denial and positive tests, database races, revocation/cache/worker tests, audit redaction, browser-state checks and commit/environment/results. No executable tests exist here; no application, provider or physical enforcement verified. Independent physical egress needs separately qualified hardware evidence.
 
 <a id="iot-access"></a>
 ## Iot Access

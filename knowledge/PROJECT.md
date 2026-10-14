@@ -8,10 +8,29 @@ Users include customers/bookers, booking/room operators, identity reviewers, ban
 
 ## Navigation
 
+- [Actors and access](#authorization-requirements)
 - [Features](#features)
 - [Business Rules](#business-rules)
 - [Package Management](#package-management)
 - [Bank Payments](#bank-payments)
+
+<a id="authorization-requirements"></a>
+## Actors and access requirements
+
+S15 establishes the user-requested hybrid authorization direction, not implementation acceptance. Roles group action permissions; restrictions bind those permissions to the same authorized venue/resource grant, customer ownership, limits and relevant circumstances. Backend denial is the default. [Technical policy](ARCHITECTURE.md#authorization) owns evaluation/enforcement; [interface behavior](DESIGN.md#permission-aware-ui) owns presentation. Exact bundles and exception/independent-review procedures remain PROPOSED or OPEN. These groups are not staffing mandates; one person may hold multiple roles only as approved separation-of-duties rules allow.
+
+| Proposed grouping | Responsibility and restrictions |
+|---|---|
+| Customer | Permitted own profile/bookings, bank evidence submission, receipts and protected access information; verified ownership plus appropriate permission. Booking ID knowledge is insufficient; no staff/payment approval authority. |
+| Venue Administrator | Assigned venues and granted package/room/booking/local operations only; finance approval and identity evidence are not automatic. |
+| Finance Reviewer | Scoped bank review/match/independent credit verification, reconciliation and explicitly granted refund actions; approved account/venue/currency/amount limits, no assumed unlimited financial authority. |
+| Verification Officer | Authorized verification cases and necessary evidence for legitimate review purpose; dedicated evidence access, minimal disclosure and audited sensitive reads. |
+| Operations Staff | Authorized room monitoring/readiness and permitted device commands; no default identity-document, bank approval or refund powers. |
+| Platform/System Administrator | Explicit account/role/permission/configuration functions; no implicit financial, privacy or safety bypass and no ordinary self-escalation. |
+
+Customers and staff have separate ownership versus venue-scoped access paths. Package edit and publication remain distinct; multi-venue publication requires authority over its whole intended scope and cannot rewrite purchased terms. Financial grants never replace independent bank-credit evidence, capped/deduped allocations or valid refundable balance. Prohibiting one's own customer-payment approval and additional independent refund approval are recommendations pending OD-28, not new approved policies. Third-party payer matching remains the approved-policy gate OD-27/28. General customer management cannot disclose identity documents; dashboard visibility cannot authorize a room command or role/bank-account assignment. Physical egress remains independent of authentication, payment and session validity.
+
+Existing **CN-NFR-02** owns the additional 18 planned scenarios in [requirements.json](execution/requirements.json); **T-CN-NFR-02** references that authority in [test-plan.json](execution/test-plan.json). Existing CN-AUTH-001/CN-GATE-001/CN-VERIFY-001/CN-ADMIN-001/CN-ACCEPT-001 mappings remain, with financial/package/device/booking boundary cases exercised in their separately authorized slices. CN-C02/CN-A06 and all PK/BP/booking requirements remain intact. This documentation adds no feature/task denominator or product acceptance. Tests NOT_RUN, product implementation NOT_VERIFIED; exact role matrix, revocation policy, financial thresholds and accountable owners remain unresolved.
 
 <a id="features"></a>
 ## Features

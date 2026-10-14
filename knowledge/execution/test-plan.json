@@ -530,7 +530,9 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "authorizationScenarioSource": "execution/requirements.json#CN-NFR-02.authorizationAcceptanceScenarios",
+      "authorizationEvidenceNeeded": "After separate stack/slice/policy approval: executable policy allow/deny fixtures; direct API object/venue tests; real database authorization/resource-change races; session/cache/revocation tests; list/export/count/download/stream reconnect tests; constrained worker/callback tests; audit redaction and browser-state tests; commit/environment/commands/results. Qualified independent physical-egress evidence remains separate; no implementation/physical acceptance from KB checks."
     },
     {
       "id": "T-CN-NFR-03",

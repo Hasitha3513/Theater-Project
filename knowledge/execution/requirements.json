@@ -1476,7 +1476,8 @@
       "decisionStatus": "DOCUMENTED_DRAFT",
       "sourceIds": [
         "S1",
-        "S10"
+        "S10",
+        "S15"
       ],
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
@@ -1525,6 +1526,33 @@
         "OD-18",
         "OD-28",
         "Future change-set scope/authority required"
+      ],
+      "authorizationDirection": {
+        "sourceId": "S15",
+        "status": "USER_REQUESTED_DIRECTION",
+        "implementationStatus": "NOT_VERIFIED",
+        "canonicalSpecification": "ARCHITECTURE.md#authorization",
+        "scope": "RBAC permissions plus ABAC restrictions, backend enforced/default deny; exact role bundles, financial limits, independent-review and exceptions remain proposed/open; no stack or implementation approval"
+      },
+      "authorizationAcceptanceScenarios": [
+        "Customer A cannot access Customer B booking, receipt or credentials; changing IDs in direct API calls does not bypass verified ownership.",
+        "Venue A staff cannot read or mutate Venue B resources without a matching grant.",
+        "Finance permission at Venue A cannot combine with Operations scope at Venue B for a Venue B payment.",
+        "Correct permission and resource scope within one applicable grant permit the intended operation when all mandatory restrictions and business guards pass.",
+        "Missing permissions, mandatory attributes or mandatory policy information deny; explicitly approved public browsing can remain anonymous.",
+        "When the proposed self-approval prohibition is approved, it applies globally across all roles and alternative grants; verify independent-review rules chosen by the owner.",
+        "Refund approval obeys approved account/venue/currency limits; unset required limit is not unlimited; approval is distinct from execution.",
+        "Ordinary customer/account management does not grant identity-evidence access; dedicated permission, authorized case and legitimate server-validated review purpose required; sensitive reads audited.",
+        "Unauthorized package publication, multi-venue scope expansion and receiving-bank-account changes rejected; package edit does not grant publish.",
+        "List/search/count/aggregate/report/export/download and live subscription/reconnect paths scope data server-side, without protected existence/count leakage.",
+        "Removed roles, suspension, venue reassignment and policy changes invalidate stale authority within the explicitly selected revocation policy; valid login alone is insufficient.",
+        "Concurrent permission/policy/resource changes cannot bypass sensitive mutation authorization and business-state checks.",
+        "Service/device/integration identities remain within their assigned actions and resource scope; authenticated callbacks are distinct from customer sessions.",
+        "Authorized actors cannot verify nonexistent funds, double allocate, exceed refundable balance, violate reservation/capacity/hours or rewrite purchased terms.",
+        "Authorization failure, session expiry or payment state cannot obstruct independent physical emergency exit; simulator evidence is insufficient physical proof.",
+        "Ordinary staff cannot self-escalate roles/permissions; dedicated assignment controls enforce permitted target/scope and audit attempts without generic ADMIN bypass.",
+        "Accepted durable work is distinguished from a new privileged action; revalidate under the selected service/current-safety policy without indefinitely inheriting revoked actor grants or silently losing accepted financial obligations.",
+        "Permission-aware UI handles denial, expired session, changed permissions and policy unavailability; clears/refetches protected content, ends revoked streams and reports success only after backend confirmation."
       ]
     },
     {

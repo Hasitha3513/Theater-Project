@@ -101,6 +101,15 @@
       "recordedDate": "2026-10-14",
       "requestSha256": "dae698471f7fd41372eac120aa32a2bba96b874b6844232f2f3cac4f3da7cb9d",
       "approvalMapping": "manifest.json#consolidation.removalAuthorization.approvedPaths"
+    },
+    {
+      "id": "S15",
+      "availability": "CONVERSATION",
+      "kind": "user-conversation-authorization",
+      "taskId": "CN-AUTH-001",
+      "scope": "User-requested hybrid RBAC plus ABAC direction and documentation only; role bundles/limits/independent-review/exceptions proposed or open; no stack/foundation/security implementation or live authority",
+      "recordedDate": "2026-10-14",
+      "requestSha256": "5f34793babf2a3cb29d94ce8f69d8355f00c73576e3d356996611c021b9c2e08"
     }
   ]
 }

@@ -38,7 +38,7 @@ def main():
     check(len(entry.encode()) < 12000, 'Instruction entry point too long')
     # All actual repository Markdown paths; exclude Git internals, URL schemes and headings-only anchors.
     for path in R.rglob('*.md'):
-        if '.git' in path.parts:
+        if '.git' in path.parts or path.relative_to(R).as_posix() in {'knowledge/' + name for name in json.loads((K / 'manifest.json').read_text()).get('unmanagedWorkspaceAssets', {})}:
             continue
         for target in re.findall(r'\]\(([^)]+)\)', path.read_text()):
             target = target.strip('<>')
@@ -127,7 +127,8 @@ def main():
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
     check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None, 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-KB-CONSOLIDATE-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
+    check(state['taskId'] == 'CN-AUTH-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
+    check(state['workStatus'] == cmap['CN-AUTH-001']['workStatus'] == 'BLOCKED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
     check(state.get('stackApproval') == 'AWAITING_OWNER_APPROVAL' and state.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
@@ -165,18 +166,40 @@ def main():
         if path == 'execution/test-plan.json':
             workflow = expected['tests'][0]
             workflow['owningChangeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['evidencePaths'].append('PROGRESS.md#current-verification')
-        check(expected == json.loads((K / path).read_text()), 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
+        current_payload = json.loads((K / path).read_text())
+        # S15 adds only the bounded authorization extension; preserve every prior field/criterion.
+        if path == 'execution/requirements.json':
+            row = next(x for x in current_payload['requirements'] if x['id'] == 'CN-NFR-02')
+            added = {key: row.pop(key, None) for key in ['authorizationDirection', 'authorizationAcceptanceScenarios']}
+            check(hashlib.sha256(json.dumps(added, sort_keys=True).encode()).hexdigest() == '453d05d5a48e099a8c8db5c85ed26097ada87be67b77702ed112513599ed209e', 'Authorized requirement extension lost/changed')
+            original_row = next(x for x in expected['requirements'] if x['id'] == 'CN-NFR-02')
+            check(row['sourceIds'] == original_row['sourceIds'] + ['S15'], 'S15 requirement provenance changed')
+            row['sourceIds'] = original_row['sourceIds']
+        if path == 'execution/test-plan.json':
+            row = next(x for x in current_payload['tests'] if x['id'] == 'T-CN-NFR-02')
+            added = {key: row.pop(key, None) for key in ['authorizationScenarioSource', 'authorizationEvidenceNeeded']}
+            check(hashlib.sha256(json.dumps(added, sort_keys=True).encode()).hexdigest() == '3c59995ce6b04b02dc2b681665eb941e3782744c0926ae741df8cde53e7ef5b8', 'Authorized test extension lost/changed')
+        check(expected == current_payload, 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
-    check(changes[:-1] == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001' and changes[-1].get('aliases') == ['CN-KB-CONSOLIDATION-001'] and changes[-1].get('continuationAuthorizationSource') == 'S13', 'Existing backlog content lost/altered')
+    prior_changes = json.loads(json.dumps(changes[:-1]))
+    auth_task = next(x for x in prior_changes if x['id'] == 'CN-AUTH-001')
+    update = auth_task.pop('documentationUpdate', None)
+    check(hashlib.sha256(json.dumps(update, sort_keys=True).encode()).hexdigest() == 'c4a84f904aed007cbd50cc4a6d6b44e985f101024e0f9f4397b223a2621b022f', 'Authorization documentation scope/status changed')
+    check(prior_changes == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001' and changes[-1].get('aliases') == ['CN-KB-CONSOLIDATION-001'] and changes[-1].get('continuationAuthorizationSource') == 'S13', 'Existing backlog content lost/altered')
     old_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
     current_sources = json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']
-    check(current_sources[:-3] == old_sources and [x['id'] for x in current_sources[-3:]] == ['S12', 'S13', 'S14'], 'Prior source evidence lost/altered')
+    check(current_sources[:-4] == old_sources and [x['id'] for x in current_sources[-4:]] == ['S12', 'S13', 'S14', 'S15'], 'Prior source evidence lost/altered')
     removal_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', manifest['consolidation']['removalBaselineRevision'] + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
-    check(current_sources[:-1] == removal_sources, 'Consolidation/editorial approval history changed')
+    check(current_sources[:-2] == removal_sources, 'Consolidation/editorial approval history changed')
     removal = manifest['consolidation']['removalAuthorization']
     check(manifest['consolidation']['status'] == 'COMPLETE_OWNER_APPROVED_REMOVAL' and state.get('removalOutcome', {}).get('status') == 'VERIFIED', 'Removal completion/status mismatch')
     check(state.get('removalOutcome', {}).get('deletedFiles') == len(manifest['consolidation']['documents']) and state.get('removalOutcome', {}).get('retainedExceptions') == [], 'Removal outcome/count inconsistent')
-    check(current_sources[-1].get('requestSha256') == removal['requestSha256'] and current_sources[-1].get('scope') == removal['scope'], 'S14 approval provenance/scope diverges')
+    check(current_sources[-2].get('requestSha256') == removal['requestSha256'] and current_sources[-2].get('scope') == removal['scope'], 'S14 approval provenance/scope diverges')
+    check(hashlib.sha256(json.dumps(current_sources[-1], sort_keys=True).encode()).hexdigest() == 'bd5c27afa50fafa8e4b1bff49946ffe1fc467665c055baf5785001a5e2e009f7', 'S15 owner direction/scope provenance changed')
+    auth = (K / 'ARCHITECTURE.md').read_text()
+    for required in ['Finance Reviewer grant at Venue A', 'No Cartesian product', 'mandatory global restrictions', 'An unset required limit is not unlimited', 'accepted operation', 'CN-NFR-02', 'NOT_VERIFIED', 'raw PINs']:
+        check(required.lower() in auth.lower(), 'Authorization specification missing ' + required)
+    check('<a id="authorization-requirements"></a>' in (K / 'PROJECT.md').read_text() and '<a id="permission-aware-ui"></a>' in (K / 'DESIGN.md').read_text(), 'Authorization product/UI sections missing')
     old_omissions = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/omissions.json'], text=True))['omissions']
     current_omissions = read_json('omissions.json')['omissions']
     check([o['id'] for o in current_omissions] == [o['id'] for o in old_omissions], 'Omission IDs dropped/changed')
@@ -199,7 +222,7 @@ def main():
     check(decision_rows in architecture, 'ARCHITECTURE decision projection diverges from authority')
     for number in range(1, 9):
         check(f'AG-AC{number:02d}' in progress, 'Setup acceptance history omitted')
-    check(state.get('requestedTaskId') == 'CN-KB-CONSOLIDATION-001', 'Owner task ID alias lost')
+    check(state.get('requestedTaskId') == 'CN-AUTH-001' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
     # Active reference fields must resolve to real canonical sections/assets; historical ledgers stay snapshots.
     def references(value):
         if isinstance(value, dict):

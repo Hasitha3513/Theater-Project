@@ -106,6 +106,21 @@ Shared visual direction remains APPROVED; exact active tokens are proposed appro
 
 Use [business rules](PROJECT.md#business-rules) for draft rates, capacity, session/access window and reservation buffers; [security](ARCHITECTURE.md#security-privacy) for identity/consent and evidence access; [catalog](PROJECT.md#features) for stable feature IDs. Desired status presentation is not implementation evidence. Do not turn draft rule JSON into frontend hardcoded operational data.
 
+<a id="permission-aware-ui"></a>
+## Permission-aware interface behavior
+
+Use the existing theme, shells, responsive components and chart/data-table patterns. [PROJECT actors](PROJECT.md#authorization-requirements) define responsibilities; [ARCHITECTURE authorization](ARCHITECTURE.md#authorization) defines the security boundary. Proposed client capability DTOs expose only authorized action/resource scope and safe unavailable reasons, never role-name shortcuts, secret policy data or an authoritative client decision. Show relevant permitted actions; disable with a safe explanation only when that does not reveal protected facts. Context switch/refetch must use permission+venue+resource keyed private data. Customer own records and staff venue scope remain distinct.
+
+| Outcome | Required presentation and recovery |
+|---|---|
+| Restricted action / denied access | Hide unavailable navigation/actions or show safe denied state. Direct-route/action denial also handled; generic message and correlation ID without confirming protected resource existence. Safe authorized destination and accessible focus/status. |
+| Expired session | Explain sign-in required; stop protected refresh/streams, clear sensitive views/caches, preserve only safe non-sensitive intent. After login reload authorization/data; do not auto-replay payment/refund/device actions. |
+| Changed permission or venue assignment | Refresh authorized actions and scope, remove revoked sensitive content, cancel/close denied downloads/subscriptions as supported, return focus to safe context. Valid login alone does not preserve staff powers. |
+| Mandatory policy unavailable | No enabled sensitive action or optimistic success; show safe temporarily unavailable/retry/support state, never assume full authority or unlimited limit. |
+| Pending/failed/unknown operation | Backend accepted/pending differs from confirmed execution. Show status lookup/reconciliation with safe correlation; grant removal does not invent refund failure or erase accepted funds. |
+
+General account/customer screens never display identity evidence merely from customer-management access; evidence views require dedicated permission and legitimate case purpose, and sensitive reads are audited. Finance review/verify/refund and account-change controls use separate capabilities; authorization does not turn receipt/OCR into funds or approval into completed transfer. Room control shows only permitted room commands with existing acknowledged/observed/safety states. Error/count/export/chart/stream outputs all use the same backend scope. Revocation propagation/cache clearing and browser tests remain planned; never claim an unimplemented guarantee. Application denial must not obstruct physical emergency exit.
+
 <a id="admin-pages"></a>
 ## Admin Pages
 

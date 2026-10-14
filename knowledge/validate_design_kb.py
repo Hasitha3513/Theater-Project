@@ -7,6 +7,8 @@ import sys
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parent
+# Existing unrelated untracked files at the S15 preflight; not maintained/approved KB.
+UNMANAGED_WORKSPACE_ASSETS = {'CineNest End-to-End Architecture Mind Map.png': '007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f', 'CineNest_E2E_Mind_Map.md': 'e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5'}
 REQUIRED = [
     'CINENEST-DESIGN-SYSTEM.md', 'CINENEST-ADMIN-PAGES.md',
     'CINENEST-CUSTOMER-BOOKING-PAGES.md', 'CINENEST-CHARTS-AND-METRICS.md',
@@ -69,6 +71,11 @@ def validate_consolidation(check):
     check(migration['deletionApproved'] is True and authorization.get('sourceId') == 'S14', 'Exact owner removal approval missing')
     check(authorization.get('requestSha256') == 'dae698471f7fd41372eac120aa32a2bba96b874b6844232f2f3cac4f3da7cb9d', 'Owner removal authorization provenance mismatch')
     check(migration.get('removalBaselineRevision') == '99fa99e935be72254368b412078e36bbb7a80a00', 'Removal baseline mismatch')
+    check(manifest.get('unmanagedWorkspaceAssets') == UNMANAGED_WORKSPACE_ASSETS, 'Unmanaged preflight inventory changed')
+    for name, expected_hash in UNMANAGED_WORKSPACE_ASSETS.items():
+        # Local untracked artifacts need not exist in a fresh clone; validate exact bytes when present.
+        if (ROOT / name).exists():
+            check((ROOT / name).is_file() and hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected_hash, 'Unrelated workspace file changed ' + name)
     canonical = {'knowledge/PROJECT.md', 'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md'}
     check(set(migration['canonicalDocuments']) == canonical, 'Four-document canonical inventory missing')
     entries = migration['documents']; paths = [e['sourcePath'] for e in entries]
@@ -79,7 +86,7 @@ def validate_consolidation(check):
     removal_tree = set(subprocess.check_output(['git', '-C', str(repo), 'ls-tree', '-r', '--name-only', migration['removalBaselineRevision']], text=True).splitlines())
     missing = {name for name in removal_tree if not (repo / name).is_file()}
     check(missing == expected, 'Unlisted deletion or incomplete approved removal')
-    current_md = {p.relative_to(repo).as_posix() for p in repo.rglob('*.md') if '.git' not in p.parts}
+    current_md = {p.relative_to(repo).as_posix() for p in repo.rglob('*.md') if '.git' not in p.parts and p.relative_to(repo).as_posix() not in {'knowledge/' + name for name in UNMANAGED_WORKSPACE_ASSETS}}
     check(current_md == {name for name in removal_tree if name.endswith('.md')} - expected, 'New narrative file or unlisted narrative deletion')
     mapping = {(repo / e['sourcePath']).resolve(): (repo / e['canonicalPath'], e['anchor']) for e in entries}
     for e in entries:
@@ -317,7 +324,7 @@ def validate_expansion(check, tokens, specs):
             path = ROOT / source['path']
             check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256'], f'Source mismatch {source["id"]}')
         else:
-            check(source['availability'] == 'MISSING' or (source.get('id') in {'S12', 'S13', 'S14'} and source['availability'] == 'CONVERSATION' and source.get('kind') == 'user-conversation-authorization' and bool(source.get('scope'))), f'Unverified source location {source["id"]}')
+            check(source['availability'] == 'MISSING' or (source.get('id') in {'S12', 'S13', 'S14', 'S15'} and source['availability'] == 'CONVERSATION' and source.get('kind') == 'user-conversation-authorization' and bool(source.get('scope'))), f'Unverified source location {source["id"]}')
     features = parsed['product/cinenest-feature-catalog.json']['features']
     ids = [f['id'] for f in features]
     check(len(ids) == len(set(ids)), 'Duplicate feature IDs')
@@ -364,10 +371,10 @@ def validate_expansion(check, tokens, specs):
         check(c['decisionStatus'] in decisions and c['implementationStatus'] == 'NOT_VERIFIED', f'Chart status {c["id"]}')
         check(set(c['sourceIds']) <= source_ids, f'Chart sources {c["id"]}')
     manifest = parsed['manifest.json']
-    check(manifest['kbVersion'] == '1.5.2' and manifest['baselineKbVersion'] == '1.5.1', 'Consolidation KB version/baseline mismatch')
+    check(manifest['kbVersion'] == '1.6.0' and manifest['baselineKbVersion'] == '1.5.2', 'Consolidation KB version/baseline mismatch')
     check(manifest['chartSpecVersion'] == specs['version'] == '1.2.0', 'Chart version mismatch')
     check(manifest['designTokenVersion'] == tokens['version'] == '1.0.0', 'Design-token version mismatch')
-    actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and '__pycache__' not in p.parts}
+    actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.relative_to(ROOT).as_posix() not in UNMANAGED_WORKSPACE_ASSETS}
     entries = manifest['files']
     check(len({x['path'] for x in entries}) == len(entries), 'Duplicate manifest entries')
     check({x['path'] for x in entries} == actual, 'Manifest inventory mismatch')

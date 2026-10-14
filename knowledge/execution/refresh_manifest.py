@@ -20,7 +20,7 @@ def main():
             raise SystemExit('Preserved definition changed; requires explicit reconciliation: '+name)
     entries = []
     for asset in sorted(K.rglob('*')):
-        if not asset.is_file() or '__pycache__' in asset.parts:
+        if not asset.is_file() or '__pycache__' in asset.parts or asset.relative_to(K).as_posix() in m.get('unmanagedWorkspaceAssets', {}):
             continue
         name = asset.relative_to(K).as_posix()
         item = {'path': name, 'kind': 'visual-reference' if name.endswith('.png') else 'documentation-specification', 'implementationStatus': 'NOT_VERIFIED'}

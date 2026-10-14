@@ -203,7 +203,14 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "documentationUpdate": {
+        "sourceId": "S15",
+        "scope": "Hybrid authorization knowledge update only; existing CN-NFR-02/T-CN-NFR-02 extended, no duplicate task",
+        "status": "VERIFIED_DOCUMENTATION_ONLY",
+        "evidencePath": "PROGRESS.md#authorization-update",
+        "implementationAuthorization": "NOT_GRANTED"
+      }
     },
     {
       "id": "CN-ROOM-001",
