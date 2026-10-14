@@ -479,7 +479,53 @@
       "supportingDesignDecisionStatus": "RECOMMENDED",
       "implementationStatus": "NOT_VERIFIED",
       "canonicalSpecification": "product/CINENEST-PACKAGE-MANAGEMENT.md"
+    },
+    {
+      "id": "CN-C10",
+      "name": "Bank deposit transfer and receipt claim",
+      "actors": "Customer; authorized financial reviewer",
+      "module": "Payments; Booking; Notifications",
+      "pages": "Payment Processing; Customer Dashboard/Booking History; protected claim upload/status",
+      "purpose": "Customer bank deposit/transfer and receipt submission with confirmation after authorized independent verification; retain online gateway option",
+      "workflow": "Accepted quote/request and provisional hold \u2192 evidence claim \u2192 admin review \u2192 verified funds/allocation \u2192 eligible confirmation \u2192 access workflow",
+      "rules": "PR-BANK-001; receipt not verified; verified not confirmed/access-ready; method policy/fee/deadline open; purchased terms retained",
+      "permissions": "Own bank request/claim read/submit; restricted review/verify/allocate; server venue/owner scope",
+      "integrations": "Manual receiving-bank record matching recommended; private receipt storage; no bank API support claimed",
+      "failureStates": "Under/excess/wrong funds; unmatched/late claim; expired inventory; notification/access failure",
+      "acceptance": "BP-AC01\u201313; independent bank credit and guarded one-booking result; not tests run",
+      "sourceIds": [
+        "S9"
+      ],
+      "decisionStatus": "APPROVED",
+      "confirmationStatus": "USER-CONFIRMED",
+      "supportingDesignDecisionStatus": "RECOMMENDED",
+      "implementationStatus": "NOT_VERIFIED",
+      "requirementId": "PR-BANK-001",
+      "canonicalSpecification": "product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md"
+    },
+    {
+      "id": "CN-A13",
+      "name": "Bank payment review and reviewer notification",
+      "actors": "Authorized reviewer/verifier/allocator; bank settings and refund staff separately authorized",
+      "module": "Payments; Booking; Notifications; Audit",
+      "pages": "Payments \u2192 Bank Deposit Reviews (proposed subsection)",
+      "purpose": "Notify scoped admins of review-required bank claims and enable independent receiving-account verification/approval",
+      "workflow": "Durable review queue/alert \u2192 inspect restricted evidence and actual bank record \u2192 record credit \u2192 guard allocation/booking or resolution",
+      "rules": "Bank credit fact retained even if service unavailable; no duplicate allocation/booking; adjustment/refund separate audited evidence",
+      "permissions": "bank.review/evidence.read/verify/allocate/resolve distinct from bank.account.manage and refund execute/approve",
+      "integrations": "Manual statement matching recommended; existing gateway unchanged; durable outbox/access interfaces",
+      "failureStates": "Concurrent reviewers; reused receipt/transaction; unmatched bank credit; overdue review; suspicious correction; failed alerts",
+      "acceptance": "BP-AC01\u201313; alert failure retains queue; approval alone no completed booking/access/refund",
+      "sourceIds": [
+        "S9"
+      ],
+      "decisionStatus": "APPROVED",
+      "confirmationStatus": "USER-CONFIRMED",
+      "supportingDesignDecisionStatus": "RECOMMENDED",
+      "implementationStatus": "NOT_VERIFIED",
+      "requirementId": "PR-BANK-001",
+      "canonicalSpecification": "product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md"
     }
   ],
-  "lastUpdatedTask": "CN-KB-PACKAGE-CONFIGURATION-001"
+  "lastUpdatedTask": "CN-KB-BANK-PAYMENT-001"
 }

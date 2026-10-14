@@ -1,11 +1,11 @@
 # CineNest Charts and Metrics
 
-> CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT. Implementation: NOT_VERIFIED. Source S1. Contract version 1.1.0 updates verified chart-spec version 1.0.0; no backend or chart library is implemented.
+> CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT. Implementation: NOT_VERIFIED. Source S1 with S9 bank extension (supporting bank metrics RECOMMENDED). Contract version 1.2.0 extends observed chart-spec 1.1.0 for bank payments; historical 1.0.0→1.1.0 corrections remain in ADR-002; no backend or chart library is implemented.
 
 ## Canonical semantics and boundaries
 [Chart JSON](tokens/cinenest-chart-specs.json) is machine-readable contract guidance; [active tokens](tokens/cinenest-design-tokens.json) remain byte-for-byte unchanged. [ADR-002](CINENEST-DESIGN-DECISION-ADR-002.md) records corrections from the initial cash-as-revenue/ambiguous donut definition. [Business rules](product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md) and [API contracts](architecture/CINENEST-DATA-AND-API-CONTRACTS.md) define authoritative proposed sources.
 
-Captured collections, net collections (captures less successful refunds), and recognized revenue (approved recognition ledger/policy) are distinct. No approved recognition policy exists; recognized revenue is Unavailable. These are not net profit. Provider fees, taxes, chargebacks and recognition allocation require OD-16/07 approval. Deduplicate unique ledger events; refund events use refund date and original purchase scope. Do not infer booking count from capture count.
+Gateway captures, independently verified bank credit collections, net collections (both incoming channels less evidenced outgoing refunds/reversals), and recognized revenue (approved recognition ledger/policy) are distinct. Uploaded/declared receipt values are never collections; allocations and verification processing are not second incoming cash events. No approved recognition policy exists; recognized revenue is Unavailable. These are not net profit. Provider fees, taxes, chargebacks and recognition allocation require OD-16/07 approval. Deduplicate unique ledger events; refund events use refund date and original purchase scope. Do not infer booking count from capture count.
 
 Today's confirmed bookings use confirmedAt; today's sessions use scheduled session_start; creation-cohort statistics use createdAt. Live booking-based status and physical occupancy are distinct. Unknown sensors/exit events do not imply unoccupied. Donut center and slices share all scoped enabled rooms including unknown; a bookable-only rate must be another explicitly labelled metric. Utilization uses customer session minutes, not cleaning or motion minutes, and a versioned sellable-minute denominator.
 
@@ -27,14 +27,14 @@ Grid/axis use chart.grid/chart.axis. Series use stable tokens and non-color diff
 |---|---|
 | Metric ID | CN-M-REVENUE-BOOKINGS |
 | Chart type | bar-line |
-| Formula | Captured collections = sum unique successful capture ledger event amounts in financial event range; refunds = sum unique successful refund event amounts in refund event range; net collections = captures - refunds. Recognized revenue is separate, only from finance-approved recognition entries/policy and never inferred from cash. Booking count = distinct booking IDs confirmedAt in bucket (not sessions scheduled today). |
-| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Formula | Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Booking count = distinct confirmedAt booking IDs, source-independent (not receipt/credit count). Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately. |
+| Population | Unique independently verified incoming money ledger events in financial range and authorized scope; bank unallocated/excess scope is authorized receiving account, room attribution only when reliable; disclosed unmatched scope, no fabricated room assignment. |
 | Units | LKR minor units with ISO currency and integer counts (separate scales) |
-| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Time basis | UTC instants; Asia/Colombo reporting boundaries; gateway capturedAt, bank_credited_at, confirmed outgoing refund/reversal event times; verified_at cutoff asOf. Booking confirmedAt and service session_start_at independent. |
 | Axes/labels | X local bucket label; left money/currency; right integer booking count. Both start at zero; signed financial axis may extend below zero. |
 | Filters | range, granularity, room, location, currency, timezone |
-| Tooltip | Exact bucket/timezone, captured collections, successful refunds, net collections, currency/date basis/completeness; confirmedAt bookings on combo. Recognized revenue only if approved recognition data explicitly selected. |
-| Contract | financialBuckets + bookingBuckets (combo only), with separate capture/refund event basis and confirmedAt count; recognitionBuckets separate optional contract. |
+| Tooltip | Exact range/asOf/timezone/currency; gateway captures, independently verified bank credits, confirmed outgoing refunds/reversals, total/net collections; distinct verified_at/creditedAt/allocatedAt bases, completeness. Recognition only with approved policy; confirmed bookings separate scale. |
+| Contract | financialBuckets/financialSummary fields gatewayCapturedMinor, verifiedBankCreditMinor, confirmedRefundMinor, verifiedReversalMinor, netCollectionsMinor; event time + asOf evidence cutoff; distinct bookingBuckets/recognitionBuckets. |
 | Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
 | Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
 | Legend | Net collections; confirmed bookings (combo only); explicit selected basis. Recognized revenue never an alias of net collections. |
@@ -71,14 +71,14 @@ Grid/axis use chart.grid/chart.axis. Series use stable tokens and non-color diff
 |---|---|
 | Metric ID | CN-M-REVENUE-TREND |
 | Chart type | line-area |
-| Formula | Captured collections = sum unique successful capture ledger event amounts in financial event range; refunds = sum unique successful refund event amounts in refund event range; net collections = captures - refunds. Recognized revenue is separate, only from finance-approved recognition entries/policy and never inferred from cash. Area is decorative, not cumulative. Negative net collections preserved. |
-| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Formula | Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately. |
+| Population | Unique independently verified incoming money ledger events in financial range and authorized scope; bank unallocated/excess scope is authorized receiving account, room attribution only when reliable; disclosed unmatched scope, no fabricated room assignment. |
 | Units | LKR minor units with ISO currency and integer counts (separate scales) |
-| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Time basis | UTC instants; Asia/Colombo reporting boundaries; gateway capturedAt, bank_credited_at, confirmed outgoing refund/reversal event times; verified_at cutoff asOf. Booking confirmedAt and service session_start_at independent. |
 | Axes/labels | X bucket/date; Y money/currency; zero baseline and negative values preserved. |
 | Filters | range, granularity, room, location, currency, timezone |
-| Tooltip | Exact bucket/timezone, captured collections, successful refunds, net collections, currency/date basis/completeness; confirmedAt bookings on combo. Recognized revenue only if approved recognition data explicitly selected. |
-| Contract | financialBuckets + bookingBuckets (combo only), with separate capture/refund event basis and confirmedAt count; recognitionBuckets separate optional contract. |
+| Tooltip | Exact range/asOf/timezone/currency; gateway captures, independently verified bank credits, confirmed outgoing refunds/reversals, total/net collections; distinct verified_at/creditedAt/allocatedAt bases, completeness. Recognition only with approved policy; confirmed bookings separate scale. |
+| Contract | financialBuckets/financialSummary fields gatewayCapturedMinor, verifiedBankCreditMinor, confirmedRefundMinor, verifiedReversalMinor, netCollectionsMinor; event time + asOf evidence cutoff; distinct bookingBuckets/recognitionBuckets. |
 | Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
 | Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
 | Legend | Net collections; confirmed bookings (combo only); explicit selected basis. Recognized revenue never an alias of net collections. |
@@ -159,21 +159,21 @@ Grid/axis use chart.grid/chart.axis. Series use stable tokens and non-color diff
 |---|---|
 | Metric ID | CN-M-FINANCIAL-KPIS |
 | Chart type | kpi-cards |
-| Formula | Captured collections and successful refunds sum unique ledger events in event range; net collections = captures - refunds. Recognized revenue is separate finance-approved recognition entries by recognition/service policy date, null if no policy/entries. Average booking value = finalized quote totals / distinct eligible noncancelled-at-asOf bookings confirmed in range. Zero denominator → N/A. Delta = (current - previous)/abs(previous) ×100; zero/missing previous → N/A. |
-| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Formula | Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator → N/A; prior zero/missing → N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately. |
+| Population | Unique independently verified incoming money ledger events in financial range and authorized scope; bank unallocated/excess scope is authorized receiving account, room attribution only when reliable; disclosed unmatched scope, no fabricated room assignment. |
 | Units | LKR minor units with ISO currency and integer counts (separate scales) |
-| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Time basis | UTC instants; Asia/Colombo reporting boundaries; gateway capturedAt, bank_credited_at, confirmed outgoing refund/reversal event times; verified_at cutoff asOf. Booking confirmedAt and service session_start_at independent. |
 | Axes/labels | No axes; each card has label, value/currency and named comparison basis. |
 | Filters | range, room, location, currency, timezone |
-| Tooltip | Each named metric, currency, distinct date basis, completeness, asOf and exact comparable period; missing recognition policy displays Unavailable. |
-| Contract | financialSummary including sums, confirmedQuoteTotalMinor, eligibleConfirmedBookingCount, previous comparable range and asOf; all amounts per currency. |
+| Tooltip | Exact range/asOf/timezone/currency; gateway captures, independently verified bank credits, confirmed outgoing refunds/reversals, total/net collections; distinct verified_at/creditedAt/allocatedAt bases, completeness. Recognition only with approved policy; confirmed bookings separate scale. |
+| Contract | financialBuckets/financialSummary fields gatewayCapturedMinor, verifiedBankCreditMinor, confirmedRefundMinor, verifiedReversalMinor, netCollectionsMinor; event time + asOf evidence cutoff; distinct bookingBuckets/recognitionBuckets. |
 | Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
 | Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
 | Legend | Not required; label every card. Up/down is descriptive, not always good/bad. |
 | Responsive | 1/2/4 columns base/sm/lg; values wrap without truncation. |
 | Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
 | Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
-| Colors | Net collections = `chart.revenue`; Captured payments = `chart.available`; Successful refunds = `chart.maintenance`; Average booking value = `chart.bookings`; Recognized revenue (only with approved recognition policy) = `chart.revenue` |
+| Colors | Net collections = `chart.revenue`; Gateway captured collections = `chart.available`; Successful refunds = `chart.maintenance`; Average booking value = `chart.bookings`; Recognized revenue (only with approved recognition policy) = `chart.revenue` |
 
 ## System and IoT Status Indicators
 
@@ -203,18 +203,56 @@ Grid/axis use chart.grid/chart.axis. Series use stable tokens and non-color diff
 |---|---|
 | Metric ID | CN-M-PAYMENT-ADDON-BREAKDOWN |
 | Chart type | separate-bars |
-| Formula | Payment panel sums unique successful capture event amounts by verified provider/method, financial event range. Add-on panel sums finalized itemized sold add-on amounts and quantities for noncancelled confirmedAt cohort at asOf; PS4/extra-hour/fifth-guest lines use versioned quote types. Do not treat sold line items as cash or recognized revenue. Refund allocation shown only if authoritative line allocations exist; otherwise explicitly unavailable. |
-| Population | Successful unique capture ledger events for payments; finalized quote item lines of eligible confirmedAt booking cohort for add-ons. |
+| Formula | Payment panel groups deduped independently verified gateway capture and bank credit incoming money by channel/method, respective financial event time and asOf evidence cutoff; uploaded/declared or allocated amounts not extra collections. Add-on panel retains sold immutable quote-item values/quantities by eligible confirmedAt cohort, not cash/recognition; include purchased package inclusion flags so included free extras are not a paid sale. Unmatched/excess bank balance displayed separately, never add-on revenue. |
+| Population | Verified incoming money by channel for payment panel; finalized purchased quote item lines for add-ons; scope/date basis separately labelled. |
 | Units | Single ISO currency minor-unit amounts, quantities and distinct counts separately labelled. |
-| Time basis | Payment event time versus booking confirmedAt cohort; Asia/Colombo boundaries and UTC instant storage. |
+| Time basis | Gateway capturedAt versus bank_credited_at with verified_at asOf cutoff; sold add-on confirmedAt cohort/session date distinct. |
 | Axes/labels | Separate panels: category vs money/quantity with explicitly selected unit; zero baseline; retain negative refund-adjusted views when supplied. |
 | Filters | range, room, location, currency, timezone, paymentMethod, addonType |
-| Tooltip | Method/type, amount/currency, quantity/count, exact cohort/date basis, refund allocation availability and asOf. |
-| Contract | paymentBreakdown {methodId, capturedMinor, captureCount}; addonBreakdown {itemType, soldAddonMinor, quantity, bookingCount, cohortBasis, asOf}; per currency/scope. |
+| Tooltip | Channel, verified incoming amount/currency/event-time/asOf and allocation/unmatched qualification; add-on purchased item count/amount/cohort distinct; no receipt amount as collections. |
+| Contract | paymentBreakdown {methodId, gatewayCapturedMinor, verifiedBankCreditMinor, collectionsMinor, externalEventCount}; addonBreakdown remains sold quote-item cohort; unmatchedBankBalance separate. |
 | Authorized data source | Payments ledger and Pricing/Booking immutable purchase-item projection; payments.read/analytics.read scope. |
 | Freshness | Server asOf/complete; stale or missing allocation labelled. |
-| Legend | Captured collections and sold add-on values are separate panels/populations; never a combined pie denominator. |
+| Legend | Verified incoming collections by channel (gateway captures and bank credits) and sold add-on values are separate populations; never a combined pie denominator. |
 | Responsive | Horizontal bars on mobile; full labels and supporting tables remain. |
 | Accessibility | Equivalent data table, non-color labels, focus/tap tooltips and keyboard filters. |
 | Empty/error states | Valid complete empty counts zero; unknown allocations unavailable; error/partial dataset never invented zero. |
-| Colors | Captured by provider/payment method = `chart.revenue`; Sold add-ons by type = `chart.bookings` |
+| Colors | Verified incoming collections by payment channel = `chart.revenue`; Sold add-ons by type = `chart.bookings` |
+
+## Bank Payment Review and Finance Metrics
+
+> CN-KB-BANK-PAYMENT-001 · Supporting metrics RECOMMENDED; Implementation NOT_VERIFIED. [Canonical bank workflow](product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md) owns fund/review states. [Chart JSON](tokens/cinenest-chart-specs.json) supplies contracts; no live bank/provider/API is verified.
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-BANK-PAYMENT-REVIEW-FINANCES |
+| Chart type | kpi-cards-and-review-age-bars |
+| Formula | BN-M01–08 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero. |
+| Population | Open bank review requests, unique bank credit ledger, allocation ledger and outgoing refunds; each named metric uses explicit population. |
+| Units | Integer counts, elapsed minutes, exact single-currency minor units; no shared axis across unlike units. |
+| Time basis | Snapshot asOf vs evidence_submitted_at/bank_credited_at/verified_at/allocated_at/bank_refund_confirmed_at/session_start_at; UTC storage and Asia/Colombo boundaries. |
+| Axes/labels | Queue age bars: X elapsed minutes, Y request/age band; finance cards no axes, labelled currency/time basis. No receipt amount collections axis. |
+| Filters | range, venue, roomWhenAttributed, receivingAccount, reviewState, assignee, paymentChannel, currency, timezone, explicitTimeBasis |
+| Tooltip | Metric ID/definition/population, exact date basis/asOf/currency, aging SLA configuration, scope/attribution/completeness; no raw receipts or bank details. |
+| Contract | bankReviewMetrics with asOf/openRequestCount/ageMinutes/reviewDueAt; bankCredit/Allocation/Refund ledger aggregates keyed by external credit/operation ID; bankMetrics definitions authoritative. |
+| Authorized data source | Backend Payments authorized bank.review/payments.read/report.export and venue/receiving-account scope; Booking purchased refs; no actual API/bank feed verified. |
+| Freshness | asOf/complete/warnings and individual submission/credit/verify/allocation times; review updates/delayed bank matching labelled; configured stale thresholds open. |
+| Legend | Each named metric/date basis explicit; colors reuse chart.bookings/available/revenue/cleaning/maintenance; no new palette, non-color status labels. |
+| Responsive | Finance cards 1/2/4 columns; queue age horizontal bars with labelled table and wrapped legends on mobile. |
+| Accessibility | Equivalent scoped data table, textual units/state/date basis, focus/tap tooltips, keyboard filters; no color-only or inaccessible receipt preview. |
+| Empty/error states | Empty reviewed population = zero valid count; age with no requests → N/A; unavailable/partial/stale permission/error distinct with retry; never DEMO or declared values fallback. |
+
+### Bank metric populations and clocks
+
+| ID / metric | Population | Formula | Units | Time basis | Color |
+|---|---|---|---|---|---|
+| BN-M01 / pendingReviewCount | Distinct bank request IDs with unresolved submitted/review_required/reviewing/awaiting_credit/information_requested work, one per request; repeated receipts do not add requests | count distinct requestId in open review states at asOf | integer request count | snapshot asOf; submitted date filter explicitly independent | `chart.bookings` |
+| BN-M02 / queueAgeMinutes | Same open request population as BN-M01; first outstanding submission since unresolved cycle, corrections do not reset | asOf - oldest unresolved evidence_submitted_at per request in elapsed minutes; distribution/buckets from configured service; overdue only if approved review_due_at passed | elapsed minutes; separate approved service-hours SLA if selected | snapshot asOf and evidence_submitted_at, never approvedAt; elapsed vs service hours labelled | `chart.cleaning` |
+| BN-M03 / verifiedBankFundsMinor | Unique independently verified receiving-account credit facts, including unallocated/excess; declared/uploaded amounts excluded | sum unique positive verified credit amountMinor first verified_at in range; verification correction/bank reversal separate evidence, no double verification entry | integer minor units / ISO currency | verified_at operational processing range, credited_at shown separately; not total collections-by-credit-date | `chart.available` |
+| BN-M04 / bankCollectionsMinor | Unique actual verified receiving-account credits with bank_credited_at in range and verified by asOf; all actual credits including excess but not booking revenue | sum deduped bank credit amountMinor; bank-verified reversals/refunds separately deducted for net money measure, allocation never adds another credit | integer minor units / ISO currency | bank_credited_at financial event time; verified_at cutoff asOf; late review can revise historical projection with clear asOf | `chart.revenue` |
+| BN-M05 / allocatedBookingPaymentsMinor | Scoped accepted quote-linked bank/gateway allocation ledger deltas at asOf; only authenticated gateway/bank-reconciled funds | sum signed unique allocation amount deltas (including separately audited allocation reversals), capped by quote due and available verified funds; source channels separate | integer minor units / ISO currency | allocated_at ledger event range, booking session_start_at is separate service filter; allocation is not cash recognition | `chart.bookings` |
+| BN-M06 / unmatchedExcessMinor | Unique verified bank credits asOf minus active non-refunded allocations (after linked reversals/refund adjustments) and confirmed outgoing refunds/actual bank reversals; refund-reserved portion explicitly identified | per-credit remaining amount; split unmatched vs accepted-quote overpayment/excess only using linked facts; never derive from receipt claim; nonnegative invariant failures flagged; active allocations released/refined through refund adjustments so outgoing refunds not deducted twice; reserved/available balances separate | integer minor units / ISO currency | balance snapshot asOf, optional credited-date cohort explicit; not a movement summed again with collections | `chart.cleaning` |
+| BN-M07 / confirmedBankRefundsMinor | Unique actual outgoing bank refunds with approved destination and independently supported completion evidence | sum confirmed outgoing refund amountMinor once; requested/approved/initiated/sent/failed/unknown excluded from completed money movements | integer minor units / ISO currency | bank_refund_confirmed_at/outgoing settlement instant selected by evidenced bank contract; not approval time | `chart.maintenance` |
+| BN-M08 / paymentChannelCollectionsMinor | Deduped gateway captures + actual verified bank credits; matched internal own-account transfers/duplicates excluded through reconciliation; allocation excluded | group verified incoming collections by gateway vs bank, sum once per external money event. Source bank credit is never card capture; refunds shown as separate channel movements | integer minor units / ISO currency | gateway capturedAt and bank_credited_at, verified/asOf cutoff labelled; recognition/service revenue remains separate | `chart.revenue` |
+
+Room-filtered booking allocation and global receiving-account collections can have different attributable scope; label unmatched/unknown room attribution rather than invent it. Exports use identical authorized scope, asOf/clock/currency and metric IDs as view. Receipt-uploaded amounts excluded even when review count is positive. AsOf late verification can legitimately revise past credit-date collections; display processing time separately. No recognized service revenue without approved recognition policy; excess is not sold package/add-on revenue. Existing DEMO fixtures are gateway-only unless labelled otherwise, never production fallback.

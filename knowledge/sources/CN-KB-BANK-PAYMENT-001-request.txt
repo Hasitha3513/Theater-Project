@@ -1,0 +1,415 @@
+ROLE
+Act as the product architect and technical knowledge-base maintainer for
+CineNest, the Theater Project's private cinema and IoT platform.
+
+TASK ID: CN-KB-BANK-PAYMENT-001
+TASK TYPE: Documentation-only knowledge-base update.
+
+OBJECTIVE
+Update the actual project knowledge files with this user-requested feature:
+
+"Customers who do not use online gateway payment can deposit or transfer
+funds to the business bank account, upload a receipt, and receive booking
+confirmation after an authorized administrator verifies and approves
+the payment. The system notifies administrators when review is required."
+
+Preserve the existing online gateway payment option.
+Record the core feature as USER-CONFIRMED / IMPLEMENTATION NOT VERIFIED.
+Record supporting controls and policy choices below as recommendations
+unless already approved. Do not convert suggested deadlines into approved
+business rules.
+
+Central distinction:
+RECEIPT UPLOADED is not PAYMENT VERIFIED.
+PAYMENT VERIFIED is not automatically BOOKING CONFIRMED or ACCESS READY.
+
+Perform the documentation edits, not merely a plan or chat summary.
+Do not implement application features, modify runtime settings, install
+packages, create database migrations, approve real payments, move money,
+change real bank details, deploy, or issue IoT commands.
+
+
+1. VERIFY THE WORKSPACE AND BASELINE
+
+- Confirm the workspace belongs to CineNest / Theater Project.
+  Do not assume a repository name, local path, or remote.
+- Read AGENTS.md, README, KB indexes, ADRs, version information,
+  and repository contribution/publication instructions.
+- Locate and read existing payment, booking, package-management,
+  security, UI, architecture, and acceptance documentation.
+- Inspect Git branch, HEAD, status, and upstream where available.
+  Preserve pre-existing changes and stop before overwriting conflicting
+  work. Inspect relevant source code read-only when needed for evidence.
+- Verify the actual files and versions. Do not trust earlier claims
+  about archive contents, completed updates, test results, or Git pushes.
+- Reuse the established KB root. Use docs/knowledge-base/ only when
+  there is no existing convention. Do not create a competing KB tree.
+- Ask for the correct workspace if ambiguous. Report unavailable sources
+  without inventing their contents.
+
+Preserve the approved CineNest hybrid design, reference images, tokens,
+CSS, chart colors, and existing admin-editable package requirements.
+
+
+2. CREATE THE CANONICAL FEATURE SPECIFICATION
+
+Create or update:
+
+product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md
+
+Reuse an equivalent existing document if it already owns this feature.
+Include actors, permissions, customer/admin workflows, configuration,
+state transitions, transaction matching, booking protection, failures,
+notifications, security, acceptance scenarios, and open decisions.
+
+Update affected sections and cross-links in existing documents:
+
+product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md
+product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md
+product/CINENEST-PACKAGE-MANAGEMENT.md
+
+design/CINENEST-ADMIN-PAGES.md
+design/CINENEST-CUSTOMER-BOOKING-PAGES.md
+design/CINENEST-CHARTS-AND-METRICS.md
+design/CINENEST-UX-ACCEPTANCE-CHECKLIST.md
+
+architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md
+architecture/CINENEST-SYSTEM-ARCHITECTURE.md
+architecture/CINENEST-DATA-AND-API-CONTRACTS.md
+architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md
+
+security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md
+delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md
+decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md
+
+Use equivalent actual paths where different. Update only relevant sections;
+use links rather than copying the complete specification into every file.
+Do not silently create a full unrelated specification just because one
+of these supporting files is missing.
+
+Update the KB index, README, changelog, manifest, and appropriate ADR.
+Preserve established feature IDs and ADR numbering.
+
+
+3. DOCUMENT THE CUSTOMER WORKFLOW
+
+1. Customer selects the package, room, session, guests, and add-ons.
+2. Backend supplies a versioned quote and checks booking eligibility.
+3. Checkout offers Online Payment and Bank Deposit / Transfer.
+4. For bank payment, create a linked payment request and provisional hold.
+5. Display verified business bank details, exact payable amount, currency,
+   unique request/reference, deadlines, review hours, and hold status.
+6. Customer deposits cash at a bank or transfers funds to that account.
+7. Customer uploads evidence and submits payment details.
+8. System acknowledges submission and notifies authorized reviewers.
+9. Customer sees Payment Under Review, not Paid or Confirmed.
+10. Reviewer matches funds against the business's own bank records.
+11. Successful verification records the payment and its allocation.
+12. If the reservation and required eligibility checks remain valid,
+    confirm it and queue notifications and smart-access provisioning.
+
+Recommended initial scope:
+- Full quoted payment before confirmation, not installment booking.
+- Each payment request relates to a specific package, room, date, and time.
+- No wallet, transferable credit, or open-date voucher is implied.
+- Third-party payers can be supported with adequate matching information;
+  a different payer name alone need not mean fraud.
+
+Receipt submission fields:
+Booking/payment-request reference, receipt file, declared amount,
+payment date/time, bank reference where available, optional payer name,
+and explanatory note. Distinguish customer-declared fields from verified
+bank-side facts. Preserve earlier submissions when requesting corrections.
+
+Explain that receipts acknowledge a payment claim, not bank confirmation.
+Do not call the uploaded document a CineNest-issued payment receipt.
+
+Never request banking passwords, PINs, OTPs, or card security codes.
+
+
+4. DOCUMENT ADMIN REVIEW AND AUTHORITATIVE APPROVAL
+
+Proposed location: Admin Panel > Payments > Bank Deposit Reviews.
+Follow established routes; label any new route as proposed.
+
+Queue columns:
+Booking/customer, venue/room/session, package, expected amount, declared
+amount, submission time, review status, assigned reviewer, hold expiry,
+and overdue/exception indicators. Support filters and scoped search.
+
+Detail view:
+Safe receipt preview, purchased quote, bank-account instruction version,
+submission history, matched bank transaction, allocated/unallocated funds,
+reservation eligibility, audit history, and notification status.
+
+Actions:
+- Verify Funds and Approve.
+- Request More Information.
+- Await Bank Credit.
+- Reject Payment Claim, with a reason.
+- Resolve Booking/Amount Exception.
+
+Approval must be based on funds independently verified in the receiving
+account, not a customer screenshot, email, OCR result, or notification.
+Require receiving-account identity, bank-side transaction/statement
+reference, credit date, verified currency/amount, reviewer, and notes.
+
+Where a bank lacks a usable unique reference, document a controlled
+statement-entry matching process. Customer-entered reference strings
+must not be treated as globally unique bank transaction identifiers.
+
+Persist verified funds even when the booking cannot be fulfilled.
+Use Funds Received / Booking Resolution Required rather than calling
+actual received money a failed payment.
+
+Duplicate submissions, concurrent reviewers, and repeated approval
+requests must not allocate the same funds twice or issue two bookings.
+Image hashes may flag repeated files but are not proof of payment or
+sufficient duplicate-allocation protection.
+
+Document any suspicious or erroneous approval correction as a separate,
+audited reversal/adjustment process, not deletion of financial history.
+
+
+5. DEFINE HOLDS, QUOTES, AND REVIEW DEADLINES
+
+Do not reuse the gateway's short checkout hold unchanged for manual
+bank payments. Do not create indefinite holds or unlimited extensions.
+
+Specify separate configurable concepts:
+- Minimum lead time before the cinema session.
+- Payment deadline.
+- Receipt-submission deadline.
+- Review service hours and review deadline.
+- Reservation-hold expiry and extension rules.
+- Quote/payment-request validity and escalation thresholds.
+
+The earlier suggestion of bookings at least 24 hours ahead is an example,
+not an approved numeric setting. Exact durations require business approval.
+
+Document a durable reservation hold, enforced against the same room
+inventory as gateway bookings, including cleaning and maintenance blocks.
+Redis may assist but cannot be the only record of a long review hold.
+
+A timely submission may enter a bounded review hold. Repeated uploads
+must not restart deadlines. Show what is and is not reserved at each stage.
+Stop inviting payment against expired requests, but still accept late
+claims into a traceable reconciliation/resolution workflow.
+
+Define payment initiation, bank credit, evidence submission, and admin
+verification timestamps separately. Decide which timestamp satisfies
+payment timeliness; do not silently choose the review timestamp.
+
+At approval, atomically check reservation validity and conflicts.
+Never displace another confirmed booking after a hold expired.
+
+For operator-caused delay after timely customer compliance, document
+restoration if available, a customer-agreed alternative, or an appropriate
+refund when the service cannot be provided. Do not silently forfeit funds.
+Acknowledge the real staffing commitment of manual review.
+
+
+6. PRESERVE PACKAGE TERMS AND KEEP STATES SEPARATE
+
+Store the payment request's package version, duration, session times,
+guest count, inclusions, extras, itemized quote, fees, policy versions,
+validity, and receiving-account instruction version.
+
+Later package edits must not silently alter a valid accepted quote or
+purchased booking. Validate payment against the accepted quote and
+currency, not a newer catalog price. Expired quotes require clear
+re-quotation and acceptance; received money remains traceable.
+
+Define separate proposed state machines for:
+- Receipt submission/review.
+- Verified funds and allocation.
+- Payment request/satisfaction.
+- Reservation/booking.
+- Access provisioning.
+- Refund processing.
+
+For each transition specify actor, permissions, evidence, guard,
+side effects, timeout, retry behavior, and audit record.
+
+Replace gateway-only confirmation assumptions with:
+
+"Payment is verified through either an authenticated supported gateway
+result or an authorized bank-reconciled manual-payment decision.
+Booking confirmation additionally requires sufficient allocated payment,
+valid reservation inventory, and applicable pre-confirmation eligibility."
+
+Keep on-site original-ID checks as a separate entry requirement.
+Manual payment approval must not bypass identity, age, consent, capacity,
+operating-hour, or physical-safety rules.
+
+Do not forge a gateway webhook for a manual payment.
+Do not mark bank credits as card captures.
+No PIN release while payment is unverified. After verification and booking
+confirmation, use the existing provisioning workflow and actual device
+acknowledgements. PINs retain the purchased session window.
+
+
+7. COVER MONEY AND SERVICE EXCEPTIONS
+
+Document expected handling for:
+
+- Underpayment: record received amount and outstanding balance; do not
+  confirm as fully paid. Full-payment launch scope does not erase partial
+  money that actually arrived.
+- Overpayment: allocate only what is due; retain the excess for controlled
+  refund/resolution. Do not count it as extra booking revenue.
+- Same transaction claimed against multiple bookings: prevent duplicate
+  allocation. Shared-deposit/multi-booking allocations are future scope
+  unless separately approved.
+- Customer pays through both bank and gateway: reconcile both attempts,
+  confirm only one reservation, and resolve duplicate funds.
+- Receipt rejected before funds later arrive: reopen reconciliation.
+- Wrong account, wrong currency, missing reference, unreadable evidence,
+  unmatched bank credit, or suspicious submission: explicit review states.
+- Expired/cancelled booking with received funds: retain the financial record
+  and offer an approved resolution without silently creating a new booking.
+- Reviewer notification failure: submission remains visible and escalates.
+- Access provisioning failure: payment remains verified; retry or open an
+  access incident rather than pretending payment failed.
+- Refund: distinguish requested, approved, initiated, sent, confirmed,
+  and failed as supported by evidence. Verify the destination and record
+  the outgoing transfer; approval alone is not a completed refund.
+
+Do not assume a card token exists for bank-paying customers.
+Automatic damage card re-billing is not available merely because a bank
+booking was approved. Any alternative requires a separate approved policy.
+
+The existing LKR 100 convenience fee needs an explicit bank-method decision.
+Do not assume it is waived or retained. Show all approved fees before
+payment and preserve the quoted treatment. Do not invent taxes or bank fees.
+
+
+8. SPECIFY SECURITY, BANK SETTINGS, AND UI BEHAVIOR
+
+- Authenticate uploads; check booking ownership and authorized review scope.
+- Propose necessary JPEG/PNG/PDF support with an approved upload limit.
+  Validate actual file types, scan/quarantine, and provide safe previews.
+- Use private storage, generated object keys, encryption, restricted signed
+  access, version history, and a defined retention/deletion policy.
+- Receipt-upload rules are not the same as original physical-ID entry rules.
+- Keep documents, bank details, PINs, and secrets out of public URLs,
+  ordinary logs, and notification attachments.
+- Enforce server-side permissions for review, approval, refund, and bank
+  account changes. Match existing roles instead of inventing admin access.
+- Separate ordinary payment review from managing receiving-bank accounts.
+  Recommend independent verification for account changes and higher-risk
+  refunds/overrides. Exact approval thresholds remain open.
+- Version bank instructions; changes must not rewrite existing requests.
+  Emergency redirection requires a controlled customer-verification process.
+- Audit evidence access, bank matches, approvals, rejections, allocations,
+  account changes, and refunds with actor, reason, time, and correlation ID.
+
+Add customer payment instructions, upload/status views, correction flow,
+and final confirmation to the UI specification. Preserve shared components,
+accessibility, responsive layouts, and clear error/loading/offline states.
+Admin actions must display pending/success/failure from server outcomes.
+
+Suggested customer microcopy:
+"Receipt submitted for verification. Your booking is not yet confirmed.
+Your provisional hold expires at [date/time]. We will notify you after
+review. Please do not pay again."
+
+Use that hold statement only when a valid hold actually exists.
+
+
+9. DOCUMENT ARCHITECTURE, NOT NEW IMPLEMENTATION
+
+Keep this within existing Payments, Booking, Notifications, Access,
+and Audit boundaries. Do not introduce a second booking system or an
+unnecessary microservice.
+
+Propose conceptual records for payment requests, receipt submissions,
+verified bank transactions, allocations, review decisions, and refunds.
+Describe bank-account instruction versioning and quote/booking links.
+Label names, API routes, event names, and schema details as proposals
+unless established by source code.
+
+Describe idempotent, concurrency-safe approval and allocation, independent
+recording of received funds, and atomic eligible booking confirmation.
+Queue notifications/access work durably with bounded retries and recovery.
+External failures must not erase verified funds or fabricate completion.
+
+Optional internal payment-verification events must identify the evidence
+source, stable IDs, amount/currency, authorization scope, and correlation.
+Never include raw receipts, bank credentials, or access PINs in events.
+
+Manual matching is the launch recommendation. Receipt OCR may suggest
+fields but never prove receipt authenticity or approve payments.
+Bank-feed/API matching is future scope contingent on verified bank support.
+Do not claim bank connectivity, live account details, provider capability,
+legal compliance, or current fees without evidence.
+
+
+10. UPDATE NOTIFICATIONS, REPORTS, AND ACCEPTANCE
+
+Notifications:
+Customer submission acknowledgement, correction request, verification
+outcome, booking outcome, expiry, and refund progress; admin new-review,
+overdue, unmatched-funds, and access-failure alerts. Use authenticated links,
+retryable delivery, and no sensitive attachments. Failures must not remove
+work from the review queue.
+
+Reports:
+Pending reviews and queue age; verified bank funds; allocated booking
+payments; unmatched/excess funds; bank refunds; payment-channel breakdown.
+Do not count uploaded or declared amounts as collections. Do not count
+both verification and allocation as two receipts of money.
+
+Distinguish bank_credited_at, verified_at, allocated_at, and session_start_at.
+Define each metric's population and time basis. Keep collections separate
+from recognized service revenue and preserve historical booking snapshots.
+Maintain existing chart tokens, authorization, and timezone conventions.
+
+Record future acceptance scenarios covering successful bank approval,
+wrong/partial/excess amounts, duplicate receipts/transactions, concurrent
+reviewers, cross-user access, mixed-method payments, stale package prices,
+expired holds, operator delay, malicious uploads, account changes,
+notification/provisioning failures, refunds, and historical reporting.
+
+These are implementation acceptance requirements, not tests run in this
+knowledge-base task.
+
+
+11. TRACEABILITY, VALIDATION, AND PUBLICATION
+
+Record the core feature as user-confirmed; separate recommended controls
+from unresolved policy and technical choices. Track review hours, lead time,
+deadlines, fee treatment, matching identifiers, upload limits, retention,
+refund destination checks, and approval thresholds as open where undecided.
+
+Reconcile conflicting gateway-only wording throughout affected documents.
+Do not rewrite original PDF terms or claim legal endorsement.
+No unrelated promotions, wallet, installment, or subscription scope creep.
+
+Run actual document checks: internal links, valid JSON/manifest where
+applicable, unique IDs, consistent states and terminology, correct source
+references, preserved design assets, and task-scoped diff.
+Report commands/results honestly. Do not claim application or hardware
+verification from documentation checks.
+
+Use the observed KB version and repository rules. Do not force a version
+or target file count. Reruns must not duplicate sections or bump a version
+without substantive changes.
+
+Commit/push only under explicit authorization or applicable repository
+instructions. Stage only task-owned changes; never force-push or overwrite
+unrelated work. Otherwise leave the documentation ready for review.
+Do not claim ChatGPT Project attachments or a separate central KB were
+updated without an actual authorized synchronization operation.
+
+FINAL REPORT
+Show verified baseline, actual created/updated files, feature IDs, conflicts
+resolved, open decisions, preserved design/package rules, validation results,
+version, Git status, and commit/push outcome or "not performed."
+
+DEFINITION OF DONE
+The real CineNest KB consistently documents bank deposit/transfer,
+receipt upload, administrator notification, independent funds verification,
+controlled booking confirmation, access provisioning, exceptions, and
+security. Existing online payments and purchased package terms remain
+protected. Runtime code, real transactions, and unrelated files are unchanged.

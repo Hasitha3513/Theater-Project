@@ -92,14 +92,14 @@ Lists use backend pagination, stable sort plus ID tie-breaker, abortable filters
 
 | Requirement | Specification |
 |---|---|
-| Page layout | Financial summary, transaction tabs, filters, ledger and transaction/refund detail. |
+| Page layout | Financial summary, transaction tabs including proposed Bank Deposit Reviews subsection, filters, ledger and transaction/refund detail. |
 | Components | Currency-aware amount, reconciliation status, refund history and reason dialog. |
 | Tables | Transaction ID, booking ID, provider reference masked, gross/fee/refund/net amounts, currency, settlement state, timestamps. |
 | Filters | Transaction/refund state, provider, currency, date basis, booking reference. |
 | Buttons | View, Request refund, Check status, Export; server confirms actual eligibility and amount. |
 | Forms | Refund amount/reason within server-computed refundable balance; confirmation names currency and consequence. |
 | Charts | Financial KPI Cards; Revenue Trend labelled net collections or separate approved recognition measure; Payment/Add-on Breakdown panels. |
-| Status indicators | Pending/authorized/captured/failed/refunded/partially refunded; pending refund does not reduce settled totals until successful. |
+| Status indicators | Gateway pending/authorized/captured/failed/refunded separately from bank under-review/verified-funds/allocated/booking-resolution/refund progress; pending refund does not reduce collections until verified successful. |
 | Permissions | payments.read/refund/export independently; no card credentials or provider secrets in UI. |
 | Responsive behavior | Ledger scrolls; amount columns retained; refund dialog stacks without hiding balances. |
 | Error and empty states | Duplicate request returns existing operation; webhook delay shows pending; charge/refund timeout never offers blind retry; no transactions differs from failed reconciliation. |
@@ -207,3 +207,18 @@ Information architecture: **System Settings → Packages & Pricing**, a proposed
 | Charts | Existing report definitions unchanged; historical revenue/duration use sold snapshots, not current catalog; no new demand-pricing chart |
 
 Separate operational-policy/room permissions control minimum/hours/cleaning/capacity. Package controls cannot increase safety capacity or extend active PINs. Exact backend capabilities/state names remain proposed.
+
+## Bank payment — CN-KB-BANK-PAYMENT-001
+**Payments → Bank Deposit Reviews** is a proposed subsection (no verified route), supporting CN-A13 notified independent review and preserved online transactions. [Canonical specification](product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md) defines authority, matches, allocation/confirmation guards and bank instructions; review privilege does not imply account-change/refund/verify permission.
+
+| Requirement | Design specification |
+|---|---|
+| Queue/layout | Review filters/summary and server-paged table; detail drawer/page with restricted preview, accepted quote, instruction version, submission history, bank-match/evidence, balances, inventory, audit and notice timeline |
+| Columns/filter | Booking/customer, venue/room/session, package/version, expected/declared amount, submittedAt, status/queue age, assignee, hold expiry, overdue/exception and notification flags; scoped reference search/date/status/assignee filters |
+| Buttons/forms | Verify Funds and Approve; Request More Information; Await Bank Credit; Reject Claim with reason; Resolve Booking/Amount Exception. Verification requires receiving-account/bank-side reference or controlled statement entry, creditedAt/amount/currency/reviewer/notes; conditional versions and pending server results |
+| States/errors | Uploaded != verified != sufficiently allocated != confirmed != access-ready; partial/excess/wrong currency, unmatched/expired hold, duplicate allocation/concurrent reviewer, malformed/quarantined preview, denied scope and notification failure explicit; no silent replacement/false success |
+| Settings/audit | Separate bank-account management permission and instruction version/history; ordinary reviewer cannot modify destination; independently verified/high-risk controls proposed, thresholds open; evidence/approval/allocation/refund access audited |
+| Responsive/a11y | Existing hybrid shell; dense queue labelled scroll/compact cards below md, details/preview stacked with exact amount/currency/expiry visible; 44px controls, keyboard preview/link access, error summary and polite updates |
+| Charts/empty | Bank review age/funds/allocation/unmatched/refund/channel metrics from verified ledger only; no pending-review amount in collections. Empty queue vs filtered/no-permission/service error distinguished |
+
+Pending/success/error comes from authoritative operations. Composite approval can show funds verified but booking resolution required. No money/real-bank/device action performed by documentation task.

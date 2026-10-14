@@ -1,0 +1,303 @@
+{
+  "schemaVersion": "1.0.0",
+  "taskId": "CN-KB-BANK-PAYMENT-001",
+  "decisionStatus": "RECOMMENDED",
+  "implementationStatus": "NOT_VERIFIED",
+  "sourceIds": [
+    "S9"
+  ],
+  "transitionFields": [
+    "transition",
+    "actorPermissions",
+    "evidence",
+    "guards",
+    "sideEffects",
+    "timeout",
+    "retry",
+    "audit"
+  ],
+  "machines": {
+    "receipt_review": [
+      {
+        "transition": "none \u2192 submitted",
+        "actorPermissions": "Customer / payment.claim.submit, own request",
+        "evidence": "Authenticated allowed upload and declared details; evidence submission timestamp",
+        "guards": "Valid own request or explicitly late-claim recovery; private scan/quarantine",
+        "sideEffects": "Immutable submission revision; durable reviewer work/acknowledgement",
+        "timeout": "Upload/submission deadline configurable; late claim retained, no hold reset",
+        "retry": "Retry same submission ID/idempotency; preserve history",
+        "audit": "Actor, request/submission refs, declared facts, correlation"
+      },
+      {
+        "transition": "submitted \u2192 review_required/quarantined",
+        "actorPermissions": "Upload worker / service scope",
+        "evidence": "Actual file validation/scan outcome",
+        "guards": "File safe to preview; quarantined cannot be opened ordinarily",
+        "sideEffects": "Safe preview or isolated quarantine; queue not dropped",
+        "timeout": "Scan timeout pending/unknown with staff escalation",
+        "retry": "Bounded scan retry; no payment approval from scan",
+        "audit": "Scan/result/version refs; no raw image"
+      },
+      {
+        "transition": "review_required \u2192 reviewing",
+        "actorPermissions": "Reviewer / bank.review, venue scope",
+        "evidence": "Assignment and current record version",
+        "guards": "Authorized reviewer, conditional version/assignment claim",
+        "sideEffects": "Review ownership recorded; no fund allocation",
+        "timeout": "Assignment timeout configurable; reassign without resetting customer deadline",
+        "retry": "Concurrent claims return conflict/current assignee",
+        "audit": "Reviewer/time/assignment history"
+      },
+      {
+        "transition": "reviewing \u2192 information_requested/awaiting_credit/rejected_claim",
+        "actorPermissions": "Reviewer / bank.review",
+        "evidence": "Safe reason, receiving bank query if available",
+        "guards": "Insufficient matching/credit or suspicious/unreadable claim; rejection is not denial that money may later arrive",
+        "sideEffects": "Customer correction/credit/rejection status and durable notice",
+        "timeout": "Review/correction due times policy open; late funds trigger new reconciliation",
+        "retry": "New submissions retained; rejection reversible via auditable new decision",
+        "audit": "Reason/evidence/previous decision refs"
+      },
+      {
+        "transition": "reviewing/awaiting_credit \u2192 funds_matched",
+        "actorPermissions": "Reviewer / bank.verify",
+        "evidence": "Independent receiving-account record and verified fund ID",
+        "guards": "Currency/credit identity and match sufficient, not screenshot/OCR; credited funds persisted separately",
+        "sideEffects": "Link verified fund to claim; allocation/payment status checked separately",
+        "timeout": "Review overdue escalates; no promised booking",
+        "retry": "Idempotent match; original bank fact retained",
+        "audit": "Bank match, reviewer, decision/version"
+      },
+      {
+        "transition": "information_requested/rejected_claim \u2192 review_required",
+        "actorPermissions": "Customer or reviewer / own submit or bank.review",
+        "evidence": "New correction or independently discovered later credit",
+        "guards": "Preserve prior submissions/decisions; no deadline reset",
+        "sideEffects": "Append history, reopen review/reconciliation",
+        "timeout": "Late claim stays traceable even if inventory expired",
+        "retry": "Deduped reopen with new evidence ID",
+        "audit": "Reopen actor/reason/parent decision"
+      }
+    ],
+    "verified_funds_allocation": [
+      {
+        "transition": "unmatched bank record \u2192 verified_unallocated",
+        "actorPermissions": "Reviewer / bank.verify",
+        "evidence": "Receiving-account identity, bank-side reference/controlled statement entry, credit date, amount/currency, notes",
+        "guards": "Independent bank credit uniqueness/authentication within controlled process",
+        "sideEffects": "Append immutable incoming bank fund ledger fact even if booking unavailable",
+        "timeout": "No funds expiry; unresolved balance escalation policy open",
+        "retry": "Deduplicate bank-side identity, not customer ref/file hash",
+        "audit": "Verifier/evidence/credit identity and recordedAt"
+      },
+      {
+        "transition": "verified_unallocated \u2192 allocated/partially_allocated",
+        "actorPermissions": "Reviewer / bank.allocate (or approved verify command)",
+        "evidence": "Accepted quote/request refs, sufficient outstanding balance",
+        "guards": "Lock fund/request; allocation \u2264 available credit and due; initial no shared-deposit multi-booking scope",
+        "sideEffects": "Allocation ledger append; payment satisfaction projection; excess remains unallocated",
+        "timeout": "No silent forfeit; unresolved remainder tracked",
+        "retry": "Logical operation key + unique allocation constraints/versions",
+        "audit": "Fund/request/allocation refs, exact amounts and actor"
+      },
+      {
+        "transition": "allocated \u2192 adjusted/reversed allocation (new record)",
+        "actorPermissions": "Authorized correction reviewer / bank.adjust",
+        "evidence": "Error/suspicion decision and linked original allocation",
+        "guards": "Approved correction process; no delete/overwrite bank receipt fact",
+        "sideEffects": "Append compensating allocation entry; recalc satisfaction/booking incident, no egress trap",
+        "timeout": "Incident/refund/recovery deadlines open",
+        "retry": "Idempotent correction ID; dual control threshold open",
+        "audit": "Old/new ledger refs, reason, reviewer, resulting incident"
+      },
+      {
+        "transition": "verified_unallocated/excess \u2192 refund_resolution",
+        "actorPermissions": "Finance / payments.refund or resolution scope",
+        "evidence": "Verified balance, destination and approved resolution",
+        "guards": "No double allocation/refund; customer accepted resolution if alternative service",
+        "sideEffects": "Link refund/resolution operation, funds remain traceable until completion",
+        "timeout": "Escalation configured; never erase received money",
+        "retry": "Reconcile outgoing transfer before retry",
+        "audit": "Destination-check/result and ledger refs"
+      }
+    ],
+    "payment_request_satisfaction": [
+      {
+        "transition": "draft \u2192 awaiting_payment",
+        "actorPermissions": "Customer / own bank.request.create",
+        "evidence": "Versioned quote, receiving instruction version, scope/session/policy refs",
+        "guards": "Bank method enabled, lead time/deadlines approved, provisional inventory available",
+        "sideEffects": "Immutable request snapshot/reference and durable bounded reservation hold",
+        "timeout": "Separate payment/submission/quote/hold deadlines; no invented duration",
+        "retry": "Idempotent request creation",
+        "audit": "Quote/package/account instruction/hold IDs"
+      },
+      {
+        "transition": "awaiting_payment \u2192 under_review",
+        "actorPermissions": "Customer / payment.claim.submit",
+        "evidence": "Submission revision timestamp",
+        "guards": "Timely under approved policy to qualify for bounded review hold; late goes resolution",
+        "sideEffects": "Review work; hold condition displayed accurately, not Paid",
+        "timeout": "Review service hours/deadline/hold bounded; repeated upload never extends automatically",
+        "retry": "Submission dedupe; do not request another payment blindly",
+        "audit": "SubmittedAt/hold transition and scope"
+      },
+      {
+        "transition": "under_review \u2192 satisfied/partially_satisfied",
+        "actorPermissions": "Reviewer / bank.verify + bank.allocate as permitted",
+        "evidence": "Verified ledger allocations in accepted quote currency",
+        "guards": "Accepted quote/payment timing policy; total allocated capped at due; no latest-price lookup",
+        "sideEffects": "Payment satisfaction only; booking transaction guard separately evaluated",
+        "timeout": "Insufficient balance remains outstanding, no paid-in-full confirmation",
+        "retry": "Aggregate allocations idempotent; cross-method payment lock",
+        "audit": "Allocation/quote/verification refs and outstanding balance"
+      },
+      {
+        "transition": "awaiting_payment/under_review \u2192 expired/cancelled_resolution",
+        "actorPermissions": "Scheduler or owner / scoped request policy",
+        "evidence": "Deadline/cancel facts",
+        "guards": "Expiry stops new payment invitation; verified credits retained; pending claims remain reviewable",
+        "sideEffects": "Release hold when policy requires, resolution queue for late claims/funds",
+        "timeout": "No indefinite extension; operator-delay escalation/open resolution",
+        "retry": "Dedupe expiry; recover with explicit re-quote/customer acceptance",
+        "audit": "Expiry/cancel/time and retained claim/ledger refs"
+      },
+      {
+        "transition": "expired/rejected resolution \u2192 funds_received_booking_resolution_required",
+        "actorPermissions": "Reviewer / bank.verify",
+        "evidence": "Later verified actual credit",
+        "guards": "Request no longer eligible or quote/inventory conflict",
+        "sideEffects": "Persist received funds; alternative/refund/support, not failed payment",
+        "timeout": "Resolution SLA open; no silent forfeiture",
+        "retry": "Idempotent ledger and incident, no new booking automatically",
+        "audit": "Credit/exception/customer agreed resolution refs"
+      }
+    ],
+    "reservation_booking": [
+      {
+        "transition": "available \u2192 provisional_bank_hold",
+        "actorPermissions": "Booking service / bank.request.create scope",
+        "evidence": "Request/quote/config and room range including buffer",
+        "guards": "Database-enforced no conflict with gateway/manual holds, maintenance and confirmed bookings",
+        "sideEffects": "Durable hold in same Booking inventory; no Redis-only guarantee",
+        "timeout": "Exact hold policy OPEN_DECISION; bounded initial/review phases",
+        "retry": "Idempotent hold ID and conditional range writes",
+        "audit": "Range, expiry, policy, request refs"
+      },
+      {
+        "transition": "provisional_bank_hold \u2192 bounded_review_hold",
+        "actorPermissions": "Booking service / service scope",
+        "evidence": "Timely submission and policy version",
+        "guards": "Current hold and policy permits review interval; repeated upload not reset",
+        "sideEffects": "Controlled bounded extension/transition; show reserved vs not reserved",
+        "timeout": "Review deadline/staffing gate; release on approved expiry",
+        "retry": "Version/transition key prevents repeated extensions",
+        "audit": "SubmittedAt/policy/old-new expiry"
+      },
+      {
+        "transition": "held \u2192 confirmed",
+        "actorPermissions": "Booking service / authorized verified payment decision",
+        "evidence": "Sufficient allocated gateway/bank payment facts and accepted quote",
+        "guards": "Atomically validate inventory/current reservation, pre-confirmation identity/age/consent/capacity/hours; manual reviewer cannot bypass",
+        "sideEffects": "One immutable booking snapshot; durable notifications/access work",
+        "timeout": "Access result separate; unknown command/notice outcomes tracked",
+        "retry": "Request/booking identity and unique guarded confirmation",
+        "audit": "Evidence source, allocations, reservation/eligibility snapshot"
+      },
+      {
+        "transition": "expired hold + received funds \u2192 resolution, not displacement",
+        "actorPermissions": "Reviewer + Booking service / resolution scope",
+        "evidence": "Verified credit, expired range and availability check",
+        "guards": "Never displace another confirmed booking; restoration only if available under policy",
+        "sideEffects": "Customer-agreed alternate/refund if service unavailable; retain fund fact",
+        "timeout": "Operator-caused delay after timely compliance escalates accountable staffing",
+        "retry": "Single resolution operation, explicit alternative/re-quote acceptance",
+        "audit": "Cause/timing/attempted restore/customer agreement"
+      },
+      {
+        "transition": "confirmed \u2192 cancelled/amended revision",
+        "actorPermissions": "Owner or booking agent / existing change permissions",
+        "evidence": "Purchase policy + consent + delta quote and payment/refund facts",
+        "guards": "Existing amendment/cancel guards; bank method is no bypass",
+        "sideEffects": "Durable allocation/refund/access revision, preserve history",
+        "timeout": "Partial result incident; independent egress intact",
+        "retry": "Existing idempotent revision/compensation workflow",
+        "audit": "Original/new snapshot and financial/access refs"
+      }
+    ],
+    "access_provisioning": [
+      {
+        "transition": "not_requested \u2192 requested/pending",
+        "actorPermissions": "Access worker / service scope",
+        "evidence": "Confirmed booking with sufficient verified allocated payment",
+        "guards": "No PIN release while payment unverified; accepted session window and tested lock capability",
+        "sideEffects": "Durable credential install; protected instruction delivery when eligible",
+        "timeout": "Bounded before-arrival retries; expiry prevents stale install",
+        "retry": "Same credential/command version, reconcile before retry",
+        "audit": "Booking/allocation/credential/command refs, no PIN"
+      },
+      {
+        "transition": "pending \u2192 installed/failed/unknown",
+        "actorPermissions": "Authenticated adapter / device scope",
+        "evidence": "Actual acknowledgement/status lookup or safe failure",
+        "guards": "Never infer installed from dispatch or bank approval",
+        "sideEffects": "Access-ready only with verified install outcome; payment remains verified on failure",
+        "timeout": "Incident/escalation if unresolved; no payment-failed fiction",
+        "retry": "Bounded retry/status reconciliation",
+        "audit": "Device evidence, observation time and incident"
+      },
+      {
+        "transition": "installed/active \u2192 expired/revoked",
+        "actorPermissions": "Access schedule/authority / existing scope",
+        "evidence": "Purchased session end/cancel/security decision",
+        "guards": "Keep purchased validity, independent egress; no bank review override",
+        "sideEffects": "Deny new entry safely; actual revocation acknowledgement tracked",
+        "timeout": "Offline revoke remains unknown until evidence",
+        "retry": "Idempotent command/version; no replay of expired action",
+        "audit": "Reason/window and actual device result"
+      }
+    ],
+    "bank_refund": [
+      {
+        "transition": "resolution \u2192 requested",
+        "actorPermissions": "Customer/finance / own request or payments.refund",
+        "evidence": "Verified unallocated/excess or eligible allocation/refund-policy snapshot",
+        "guards": "Refundable balance, currency and legitimate recipient; no card token assumed",
+        "sideEffects": "Separate refund case; bank receipt/ledger retained",
+        "timeout": "Policy review deadline open",
+        "retry": "Idempotent request and balance reservation",
+        "audit": "Reason, funds/booking refs and requester"
+      },
+      {
+        "transition": "requested \u2192 approved/rejected",
+        "actorPermissions": "Reviewer / payments.refund.approve",
+        "evidence": "Destination check, entitlement/amount/currency and review",
+        "guards": "Approval threshold/account verification policy selected",
+        "sideEffects": "Approval only, no refunded flag",
+        "timeout": "Escalate review delay; preserve reason/history",
+        "retry": "Version conflict check; append decision",
+        "audit": "Approver, amount/destination verification ref"
+      },
+      {
+        "transition": "approved \u2192 initiated \u2192 sent",
+        "actorPermissions": "Finance operator / bank.refund.execute",
+        "evidence": "Authorized outgoing transfer instruction then bank-side sending evidence",
+        "guards": "Locked refundable amount; independent controls if policy requires",
+        "sideEffects": "Persist outgoing operation/reference; neither approval nor initiation proves final transfer",
+        "timeout": "Unknown send outcome \u2192 bank reconciliation before resend",
+        "retry": "Same operation ID; prevent duplicate outgoing refund",
+        "audit": "Executor/approval/outgoing transaction/time refs"
+      },
+      {
+        "transition": "sent/unknown \u2192 confirmed/failed",
+        "actorPermissions": "Reconciler / bank.refund.reconcile",
+        "evidence": "Receiving/outgoing bank settlement evidence appropriate to selected bank",
+        "guards": "Supported verified completion/failure; do not invent connectivity",
+        "sideEffects": "Final outgoing ledger fact or safe retry/incident; failure retains obligation",
+        "timeout": "Bounded reconciliation and escalation",
+        "retry": "Bank lookup before retry, no blind repeat transfer",
+        "audit": "Confirmed/failedAt, bank reference and reconciliation evidence"
+      }
+    ]
+  }
+}

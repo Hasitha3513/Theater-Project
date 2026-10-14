@@ -54,6 +54,13 @@
       "availability": "AVAILABLE",
       "kind": "user-confirmed-product-requirement-and-proposals",
       "sha256": "1cd916c41a310b49aae6daff7405ad5f2c1fd01bd52f5ff486feccf6b536ee84"
+    },
+    {
+      "id": "S9",
+      "path": "sources/CN-KB-BANK-PAYMENT-001-request.txt",
+      "availability": "AVAILABLE",
+      "kind": "user-confirmed-bank-payment-feature-and-recommended-controls",
+      "sha256": "4c63f237b0bb3e67011efd2103ffc614b702f313fb2970ae1ceaf72d9e19c0b1"
     }
   ]
 }

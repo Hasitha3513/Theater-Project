@@ -265,7 +265,91 @@
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
       "launchBlocker": "IMPLEMENTATION_GATE"
+    },
+    {
+      "id": "OD-23",
+      "conflict": "Bank lead time/payment/submission/review/hold/request validity and bounded extension settings",
+      "source": "S9; gateway hold candidates cannot decide manual policy",
+      "impact": "Inventory protection, payment invitation and review staffing",
+      "options": "Select method-specific configured deadlines/hours; 24-hour lead only example; finite provisional/review transitions",
+      "owner": "TBD",
+      "evidenceRequired": "Business timing/hold plan and expiry/reupload/concurrency cases",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-24",
+      "conflict": "Bank timeliness clock and quote-validity/operator-delay treatment",
+      "source": "S9 vs gateway capturedAt evidence model",
+      "impact": "Fair accepted price, timely compliance and expired-slot recovery",
+      "options": "Decide initiated/credited/submitted evidence versus review time; recommend valid accepted quote and accountable alternative/refund after delay",
+      "owner": "TBD",
+      "evidenceRequired": "Authoritative timestamp evidence, quote terms and resolution acceptance",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-25",
+      "conflict": "Convenience fee treatment for bank method",
+      "source": "S9 and initial online LKR 100",
+      "impact": "Quoted payable amount and finance treatment",
+      "options": "Retain/waive/different approved method fee; explicit quote snapshot, no guessed tax or bank fee",
+      "owner": "TBD",
+      "evidenceRequired": "Product/finance approved fee/disclosure and quote fixtures",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-26",
+      "conflict": "Receipt upload size/types/scan-preview and retention/deletion",
+      "source": "S9; existing identity-evidence policy not enough",
+      "impact": "Malicious uploads and private financial evidence lifecycle",
+      "options": "Proposed JPEG/PNG/PDF, approved limits/storage/scan/quarantine/retention; restricted evidence history",
+      "owner": "TBD",
+      "evidenceRequired": "Security/privacy/storage decision and safe-preview/deletion tests",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-27",
+      "conflict": "Bank-side identity/controlled statement matching, partial top-ups/shared-deposit allocation",
+      "source": "S9",
+      "impact": "Duplicate credit/allocation prevention and outstanding/excess resolution",
+      "options": "Manual matching launch; bank assigned IDs or controlled statement entries; no wallet/installments/multi-booking by default; decide limited top-up process",
+      "owner": "TBD",
+      "evidenceRequired": "Bank record formats, dedupe procedure and partial/mixed-method concurrency acceptance",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-28",
+      "conflict": "Bank-review/account-change/refund role separation and high-risk approval controls",
+      "source": "S9; existing roles absent",
+      "impact": "Unauthorized credit approvals/account redirection/refund abuse",
+      "options": "Independent capabilities/verification; receiving instruction versions; controlled third-party payer/destination and correction/refund approvals; thresholds TBD",
+      "owner": "TBD",
+      "evidenceRequired": "Role matrix, instruction verification/refund-destination process and audited controls",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+    },
+    {
+      "id": "OD-29",
+      "conflict": "Manual-review service staffing, overdue escalation and operator-caused failure compensation",
+      "source": "S9 versus staff-less marketing",
+      "impact": "Real review workload and customer loss of inventory after timely compliance",
+      "options": "Staffed hours/durable alerts; bounded delays; available restoration/agreed alternative/refund with accountable escalation",
+      "owner": "TBD",
+      "evidenceRequired": "Operational staffing/service plan and notification/outage/delay drills",
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED",
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
     }
   ],
-  "lastUpdatedTask": "CN-KB-PACKAGE-CONFIGURATION-001"
+  "lastUpdatedTask": "CN-KB-BANK-PAYMENT-001"
 }

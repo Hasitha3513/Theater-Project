@@ -460,3 +460,50 @@ No application manifests or implemented modules exist at the inspected HEAD. All
 | Source | [S8](../sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt), explicit user confirmation |
 
 Canonical definitions: [package management](CINENEST-PACKAGE-MANAGEMENT.md). Core APPROVED is limited to PR-PKG-001; broader policy/notification settings CN-A10 and quote/add-on behavior CN-C04 retain their existing statuses.
+
+## CN-C10 — Bank deposit transfer and receipt claim
+
+| Field | Specification |
+|---|---|
+| Requirement | PR-BANK-001 |
+| Purpose | Customer bank deposit/transfer and receipt submission with confirmation after authorized independent verification; retain online gateway option |
+| Actors | Customer; authorized financial reviewer |
+| Workflow | Accepted quote/request and provisional hold → evidence claim → admin review → verified funds/allocation → eligible confirmation → access workflow |
+| Business rules | PR-BANK-001; receipt not verified; verified not confirmed/access-ready; method policy/fee/deadline open; purchased terms retained |
+| Permissions | Own bank request/claim read/submit; restricted review/verify/allocate; server venue/owner scope |
+| Owner | Payments; Booking; Notifications |
+| UI | Payment Processing; Customer Dashboard/Booking History; protected claim upload/status |
+| Integrations | Manual receiving-bank record matching recommended; private receipt storage; no bank API support claimed |
+| Failures | Under/excess/wrong funds; unmatched/late claim; expired inventory; notification/access failure |
+| Acceptance | BP-AC01–13; independent bank credit and guarded one-booking result; not tests run |
+| Decision | APPROVED |
+| Provenance | USER-CONFIRMED |
+| Supporting design | RECOMMENDED |
+| Implementation | NOT_VERIFIED |
+| Source | S9, explicit user feature request |
+
+Canonical [bank payment specification](CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md); supporting method policies remain open.
+
+
+## CN-A13 — Bank payment review and reviewer notification
+
+| Field | Specification |
+|---|---|
+| Requirement | PR-BANK-001 |
+| Purpose | Notify scoped admins of review-required bank claims and enable independent receiving-account verification/approval |
+| Actors | Authorized reviewer/verifier/allocator; bank settings and refund staff separately authorized |
+| Workflow | Durable review queue/alert → inspect restricted evidence and actual bank record → record credit → guard allocation/booking or resolution |
+| Business rules | Bank credit fact retained even if service unavailable; no duplicate allocation/booking; adjustment/refund separate audited evidence |
+| Permissions | bank.review/evidence.read/verify/allocate/resolve distinct from bank.account.manage and refund execute/approve |
+| Owner | Payments; Booking; Notifications; Audit |
+| UI | Payments → Bank Deposit Reviews (proposed subsection) |
+| Integrations | Manual statement matching recommended; existing gateway unchanged; durable outbox/access interfaces |
+| Failures | Concurrent reviewers; reused receipt/transaction; unmatched bank credit; overdue review; suspicious correction; failed alerts |
+| Acceptance | BP-AC01–13; alert failure retains queue; approval alone no completed booking/access/refund |
+| Decision | APPROVED |
+| Provenance | USER-CONFIRMED |
+| Supporting design | RECOMMENDED |
+| Implementation | NOT_VERIFIED |
+| Source | S9, explicit user feature request |
+
+Canonical [bank payment specification](CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md); supporting method policies remain open.

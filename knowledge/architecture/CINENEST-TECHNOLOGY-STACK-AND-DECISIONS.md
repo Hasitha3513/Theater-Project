@@ -30,3 +30,8 @@ No package.json, pom.xml, build.gradle, lockfile, application code, migrations o
 
 ## Selection gates
 Use [open decisions](../decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md) OD-01/02/05/06/11 and a new ADR for an approved final stack; preserve [ADR-001](../CINENEST-DESIGN-DECISION-ADR-001.md) visual approval. Use one broker, one chart library and one initial backend approach after evaluation, not all candidates by default. Compatibility versions should be selected from official supported versions at implementation time and recorded with source/date; no invented latest versions now. Do not import framework decisions from unrelated repositories.
+
+## Bank payment — CN-KB-BANK-PAYMENT-001
+Core bank-deposit/transfer/upload/reviewer notification capability USER-CONFIRMED (Decision APPROVED, Implementation NOT_VERIFIED). [Manual matching](../product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md) against business bank records is RECOMMENDED launch support within Payments, not a new bank gateway/library/microservice. Existing PayHere/bank-IPG/Stripe candidate selection and hosted online path remain unchanged.
+
+Private receipt storage and safe JPEG/PNG/PDF scanning/preview use selected secure storage design (provider/size/retention open). Receipt OCR optional suggested extraction only; never approval/authenticity. Bank-feed/API matching future scope only after verified official bank/account/provider support/privacy. No bank connection, real receiving details, fees or installed integration claimed; no dependency/runtime changes.

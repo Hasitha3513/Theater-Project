@@ -1,5 +1,10 @@
 # CineNest Knowledge Base Changelog
 
+## KB 1.2.0 — 2026-10-14 — CN-KB-BANK-PAYMENT-001
+Material additive revision from observed KB/chart 1.1.0 at 79c4269. Core PR-BANK-001/CN-C10/CN-A13 USER-CONFIRMED / APPROVED, implementation NOT_VERIFIED: bank deposit/transfer, receipt upload, independent authorized bank verification and review notifications alongside online gateway. Added canonical bank spec, six recommended lifecycle/ledger state machines, source S9, ADR-004 and BP-AC01–13 future acceptance.
+
+Affected product/rules/package/UI/architecture/IoT/security/delivery/decision/index/checklist updated without unrelated rewrite. Durable method-specific hold/deadline/fee/matching/account/refund/upload/staffing policy OD-23–29 remains open; no 24-hour default/card token/real bank integration. Accepted package/quote/instruction and purchased booking protection retained. Charts distinguish gateway captures, verified bank credits, allocations/unmatched/excess and outgoing evidence, no claim/double counting/recognition fiction; chart spec 1.1.0→1.2.0, original series colors/tokens/CSS/images unchanged. Documentation checks/manifest updated; no application/runtime/migration/account/money/device/deployment operations. No-change reruns retain version/IDs.
+
 ## KB 1.1.0 — 2026-10-14 — CN-KB-PACKAGE-CONFIGURATION-001
 Material additive revision from verified KB 1.0.0 at 6c5ed91. Added canonical package management, feature CN-A12/requirement PR-PKG-001 with core APPROVED and implementation NOT_VERIFIED; source S8, ADR-003 and future PK-AC01–13 scenarios. Related product/rules/admin/customer/architecture/contracts/delivery/decision/UX/index updated in place. Existing IDs/history retained; no per-edit application deployment is a confirmed product requirement, not tested behavior.
 

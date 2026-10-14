@@ -60,3 +60,10 @@ See [validation report](CINENEST-VALIDATION-REPORT.md) for evidence and limits. 
 - [x] Active design/image/chart definitions preserved; customer UI consumes backend versioned configuration and purchased history.
 - [ ] Execute PK-AC01–13: authorized no-release changes, scope denial, invalid joint publish, separate minimum/capacity, deterministic effective versions, valid/expired quote/payment reconciliation, no double charge, sold history and safe amendments/access.
 - [ ] Approve OD-17–22 choices before affected implementation; doc validators do not establish product/hardware outcomes.
+
+## Bank payment — CN-KB-BANK-PAYMENT-001
+- [x] CN-C10/CN-A13 / PR-BANK-001 USER-CONFIRMED, core APPROVED and implementation NOT_VERIFIED; supporting recommendations/open method policies distinct.
+- [x] [Canonical bank spec](product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md) linked: receipts, verified funds, allocations, request, booking, access, refund states separate; online checkout/package protections retained.
+- [x] Customer/admin under-review, correction/expiry/amount exceptions and protected bank instruction/evidence UI documented with existing tokens/a11y; claims not collections.
+- [ ] Execute BP-AC01–13 with actual receiving bank records/backend/authorization and hardware outcomes as applicable; notification failure must retain queue work.
+- [ ] Approve review/hold/payment timing/fee/upload/retention/matching/account/refund/staffing choices OD-23–29; no invented 24-hour rule/automatic extension/card token.
