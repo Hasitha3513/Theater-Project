@@ -27,6 +27,10 @@ Safe checks from Git root: `python3 knowledge/validate_design_kb.py`, `python3 k
 
 Actual validation on 2026-10-14: both safe validators exit0; `git diff --check` exit0. Lossless reconstruction covers all 34 baseline prose sources, all existing IDs/approval states and complete registry payloads; original bodies retained for review. Three images/token/theme/chart bytes and historical source/evidence JSON preserved against Git baseline. Negative controls caught missing canonical PK-AC01 and altered registry criterion even with unchanged IDs/statuses/snapshots; no file mutations. Parent self-review completed; no independent review claimed for this consolidation. Exact commands/output/timestamps are in existing status.json. Initial migration check caught an old package destination assertion; corrected to canonical PROJECT anchor without removing the check. Application/provider/hardware/physical tests NOT RUN. Evidence capture precedes final inventory refresh/rerun/publication; derive current Git SHA at closeout.
 
+Publication: primary consolidation commit `4a18e668523bc2958a385a09ad4b2b6e66fe9187` pushed successfully; `git ls-remote origin refs/heads/main` matched (exit0). Receipt is recorded in existing status.json, with no new report/session file. A staged whitespace check (exit2) caught trailing blank lines in three newly staged docs that the earlier untracked diff check did not cover; the first commit proceeded before correction. Formatting-only lines removed outside migrated payloads; complete baseline-to-final and staged diff checks rerun before normal successor closeout. Current final HEAD must be derived from Git; no history rewrite/deletion/stack/code/live approval.
+
+Final correction checks: both validators exit0; `git diff 75cd23f25fec8ab9eaee39556e0f5dd274ee7092 --check` exit0, covering all new canonical files and the full consolidation diff. Exact outputs/timestamps recorded in status.json finalChecks.
+
 <a id="history"></a>
 ## Preserved knowledge and execution history
 

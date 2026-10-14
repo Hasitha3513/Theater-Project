@@ -580,4 +580,3 @@ The owner may accept, reject or amend this proposal. **Do not record approval un
 Current result: brief prepared for review; **technology approval PENDING**, **implementation authorization NOT_GRANTED**, **next READY unit NONE**. Single next action: owner responds to section I. Stop here.
 
 <!-- migrated-end:knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md -->
-

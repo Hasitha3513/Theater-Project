@@ -934,4 +934,3 @@ See [validation report](PROGRESS.md#feature-validation-history) for evidence and
 - [ ] Approve review/hold/payment timing/fee/upload/retention/matching/account/refund/staffing choices OD-23–29; no invented 24-hour rule/automatic extension/card token.
 
 <!-- migrated-end:knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md -->
-

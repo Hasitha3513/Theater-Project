@@ -976,4 +976,3 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 OD-23–29 in [decision register](ARCHITECTURE.md#open-decisions) track lead/payment/submission/review/hold validity, time basis, fee treatment, upload/retention, matching/allocation/top-ups, roles/account/refund thresholds and operational-delay staffing. All owners TBD. Suggested 24 hours and gateway hold candidates are not bank defaults. Original PDFs missing and not rewritten; no banking/provider/legal claim inferred. Core USER-CONFIRMED does not approve every supporting proposal or imply implementation. [ADR-004](ARCHITECTURE.md#adr-004) records the gateway-only wording correction and separate financial state semantics.
 
 <!-- migrated-end:knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md -->
-

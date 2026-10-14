@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "LOCAL",
-  "publicationEvidence": "Current consolidation pre-publication snapshot; previous decision receipt preserved",
-  "lastObservedHead": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+  "publicationState": "PUSHED",
+  "publicationEvidence": "Primary consolidation commit 4a18e668523bc2958a385a09ad4b2b6e66fe9187 pushed to origin/main; independently matched by ls-remote exit0. Formatting correction and inline receipt follow in normal successor commit; derive final HEAD from Git. No deletion/stack/code approval.",
+  "lastObservedHead": "4a18e668523bc2958a385a09ad4b2b6e66fe9187",
   "evidencePath": "PROGRESS.md#current-verification",
   "evidenceFreshness": "Consolidation baseline 75cd23f with manifest lossless-migration map",
   "availableTools": [
@@ -103,5 +103,59 @@
     ],
     "method": "Actual in-memory Path.read_text fault injection; no filesystem mutation",
     "executedDate": "2026-10-14"
-  }
+  },
+  "publicationReceipt": {
+    "primaryCommit": "4a18e668523bc2958a385a09ad4b2b6e66fe9187",
+    "verifiedRemote": "4a18e668523bc2958a385a09ad4b2b6e66fe9187",
+    "pushExitCode": 0,
+    "remoteCheckExitCode": 0,
+    "atLocal": "2026-10-14T15:11:44.956483+05:30"
+  },
+  "verificationCorrections": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exitCode": 2,
+      "finding": "Trailing blank lines in newly staged PROJECT/ARCHITECTURE/DESIGN not covered by earlier untracked diff check",
+      "disposition": "Removed formatting-only trailing blank lines; full baseline-to-final diff and staged check must pass before closeout; initial commit was published before this correction"
+    }
+  ],
+  "finalChecks": [
+    {
+      "argv": [
+        "python3",
+        "knowledge/validate_design_kb.py"
+      ],
+      "atLocal": "2026-10-14T15:12:06.328162+05:30",
+      "exitCode": 0,
+      "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 complete baseline prose documents migrated; originals retained; catalog fields/anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "knowledge/execution/validate_execution.py"
+      ],
+      "atLocal": "2026-10-14T15:12:06.512466+05:30",
+      "exitCode": 0,
+      "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+        "--check"
+      ],
+      "atLocal": "2026-10-14T15:12:06.525262+05:30",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
 }
