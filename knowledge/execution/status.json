@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "NOT_YET_PUBLISHED_AUTHORIZATION_UPDATE",
-  "publicationEvidence": "Current S15 documentation update not yet published; prior receipts preserved",
-  "lastObservedHead": "5a33c266b1d3f465233cf1e49ad1865dd45e39ea",
+  "publicationState": "PUSHED",
+  "publicationEvidence": "Authorization knowledge commit c96ae828b4a0ae3df0f32b101ff107fa9613459c pushed to origin/main and independently matched by git ls-remote exit0; unrelated untracked assets preserved and excluded; final receipt successor resolved from Git.",
+  "lastObservedHead": "c96ae828b4a0ae3df0f32b101ff107fa9613459c",
   "evidencePath": "PROGRESS.md#authorization-update",
   "evidenceFreshness": "Current exact-removal baseline 99fa99e935be72254368b412078e36bbb7a80a00",
   "availableTools": [
@@ -459,6 +459,15 @@
         "Missing cross-venue authorization scenario"
       ]
     },
-    "review": "Parent self-review: original approval/status/criteria/dependencies/assets retained; no new executable implementation evidence"
+    "review": "Parent self-review: original approval/status/criteria/dependencies/assets retained; no new executable implementation evidence",
+    "publicationReceipt": {
+      "primaryCommit": "c96ae828b4a0ae3df0f32b101ff107fa9613459c",
+      "verifiedRemote": "c96ae828b4a0ae3df0f32b101ff107fa9613459c",
+      "pushExitCode": 0,
+      "remoteCheckExitCode": 0,
+      "atLocal": "2026-10-14T17:18:39.363938+05:30",
+      "trackedWorktree": "CLEAN_AFTER_PRIMARY_PUSH",
+      "unrelatedUntrackedFiles": 2
+    }
   }
 }
