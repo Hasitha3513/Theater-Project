@@ -583,5 +583,104 @@
     },
     "evidencePath": "PROGRESS.md#root-relocation-inspection",
     "publication": "Inspection documentation only; actual local layout remains unchanged"
+  },
+  "diagramPublication": {
+    "scope": "Current owner explicit publication of supplied proposal diagrams only",
+    "baselineHead": "c4fdd64d67a6be6fc2376748c15a3336b8c713f6",
+    "actualRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
+    "branch": "main",
+    "suppliedFiles": 49,
+    "markdownSources": 38,
+    "pngAssets": 11,
+    "existingZip": 0,
+    "linkCorrections": 186,
+    "outgoingCommitsBeforeTask": 0,
+    "incomingStagedChanges": 0,
+    "mermaidSyntaxAndRendering": "NOT_VERIFIED_NO_LOCAL_VALIDATOR",
+    "implementationOrPolicyApproval": "NOT_GRANTED",
+    "evidencePath": "PROGRESS.md#diagram-publication",
+    "publicationState": "STAGED_VALIDATED",
+    "checks": [
+      {
+        "argv": [
+          "python3",
+          "knowledge/validate_design_kb.py"
+        ],
+        "atLocal": "2026-10-14T23:31:15.963199+05:30",
+        "exitCode": 0,
+        "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 source destinations/retained substantive content; exact approved removals, immutable historical originals, complete registry payloads and anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/execution/validate_execution.py"
+        ],
+        "atLocal": "2026-10-14T23:31:16.157256+05:30",
+        "exitCode": 0,
+        "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "atLocal": "2026-10-14T23:31:16.162551+05:30",
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "negativeControls": "PASS: existing original-content/approval-boundary controls plus modified Mermaid block rejection, all in memory",
+    "absentExcludedAsset": "knowledge/CineNest_ER_Diagrams.zip disappeared during inspection; no agent deletion, no restore or publication",
+    "review": "Parent self-review: explicit allowlist, 38 sources/proposed notices, 11 visual/CRC PNGs, 186 corrected links; no diagram/body/binary rewrite, no architecture/runtime approval",
+    "formattingCorrections": 111,
+    "finalPrecommitChecks": [
+      {
+        "argv": [
+          "python3",
+          "knowledge/validate_design_kb.py"
+        ],
+        "atLocal": "2026-10-14T23:32:57.413794+05:30",
+        "exitCode": 0,
+        "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 source destinations/retained substantive content; exact approved removals, immutable historical originals, complete registry payloads and anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/execution/validate_execution.py"
+        ],
+        "atLocal": "2026-10-14T23:32:57.617854+05:30",
+        "exitCode": 0,
+        "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "atLocal": "2026-10-14T23:32:57.619984+05:30",
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--cached",
+          "--check"
+        ],
+        "atLocal": "2026-10-14T23:32:57.623723+05:30",
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ]
   }
 }

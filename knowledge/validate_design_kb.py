@@ -7,8 +7,8 @@ import sys
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parent
-# Existing unrelated untracked files at the S15 preflight; not maintained/approved KB.
-UNMANAGED_WORKSPACE_ASSETS = {'CineNest End-to-End Architecture Mind Map.png': '007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f', 'CineNest_E2E_Mind_Map.md': 'e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5'}
+# No remaining unmanaged artifacts: the owner now authorizes publication of the reviewed diagrams.
+UNMANAGED_WORKSPACE_ASSETS = {}
 REQUIRED = [
     'CINENEST-DESIGN-SYSTEM.md', 'CINENEST-ADMIN-PAGES.md',
     'CINENEST-CUSTOMER-BOOKING-PAGES.md', 'CINENEST-CHARTS-AND-METRICS.md',
@@ -76,6 +76,20 @@ def validate_consolidation(check):
         # Local untracked artifacts need not exist in a fresh clone; validate exact bytes when present.
         if (ROOT / name).exists():
             check((ROOT / name).is_file() and hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected_hash, 'Unrelated workspace file changed ' + name)
+    exports = manifest.get('diagramPublication', {}).get('files', [])
+    check(hashlib.sha256(json.dumps(exports, sort_keys=True).encode()).hexdigest() == 'db61dbe6f6378b5ea52e11b45f1f20f555340aa48ecbc991b06cffbafb831878', 'Reviewed diagram export allowlist changed')
+    export_paths = {item['path'] for item in exports}
+    for item in exports:
+        asset = ROOT / item['path']
+        check(asset.is_file() and hashlib.sha256(asset.read_bytes()).hexdigest() == item['sha256'], 'Reviewed diagram export changed ' + item['path'])
+        check(item['authority'] == 'owner-supplied-proposed-diagram-export' and item['implementationStatus'] == 'NOT_VERIFIED', 'Diagram promoted to canonical/runtime authority')
+        if asset.suffix == '.md':
+            body = asset.read_text()
+            blocks = re.findall(r'^```mermaid[^\n]*\n(.*?)^```\s*$', body, re.S | re.M)
+            check(len(re.findall(r'^```', body, re.M)) == 2 and len(blocks) == 1, 'Diagram fence/block mismatch ' + item['path'])
+            if len(blocks) == 1:
+                check(hashlib.sha256(blocks[0].encode()).hexdigest() == item['mermaidSha256'], 'Supplied Mermaid diagram code rewritten ' + item['path'])
+            check(bool(re.search(r'(?i)proposed|planned behavior', body[:1000])) and bool(re.search(r'(?i)not verified|not evidence|not established', body[:1000])), 'Diagram status notice missing ' + item['path'])
     canonical = {'knowledge/PROJECT.md', 'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md'}
     check(set(migration['canonicalDocuments']) == canonical, 'Four-document canonical inventory missing')
     entries = migration['documents']; paths = [e['sourcePath'] for e in entries]
@@ -86,7 +100,7 @@ def validate_consolidation(check):
     removal_tree = set(subprocess.check_output(['git', '-C', str(repo), 'ls-tree', '-r', '--name-only', migration['removalBaselineRevision']], text=True).splitlines())
     missing = {name for name in removal_tree if not (repo / name).is_file()}
     check(missing == expected, 'Unlisted deletion or incomplete approved removal')
-    current_md = {p.relative_to(repo).as_posix() for p in repo.rglob('*.md') if '.git' not in p.parts and p.relative_to(repo).as_posix() not in {'knowledge/' + name for name in UNMANAGED_WORKSPACE_ASSETS}}
+    current_md = {p.relative_to(repo).as_posix() for p in repo.rglob('*.md') if '.git' not in p.parts and p.relative_to(repo).as_posix() not in {'knowledge/' + name for name in UNMANAGED_WORKSPACE_ASSETS} and p.relative_to(repo).as_posix() not in {'knowledge/' + name for name in export_paths}}
     check(current_md == {name for name in removal_tree if name.endswith('.md')} - expected, 'New narrative file or unlisted narrative deletion')
     mapping = {(repo / e['sourcePath']).resolve(): (repo / e['canonicalPath'], e['anchor']) for e in entries}
     for e in entries:
@@ -230,8 +244,9 @@ def main():
                 continue
             target = unquote(target.split('#')[0])
             check((path.parent / target).is_file(), f'Broken link {path.name}: {target}')
+        export = next((item for item in json.loads((ROOT / 'manifest.json').read_text()).get('diagramPublication', {}).get('files', []) if item['path'] == path.relative_to(ROOT).as_posix()), None)
         for hex_value in re.findall(r'#[0-9A-Fa-f]{6}\b', text):
-            check(hex_value.upper() in colors.values() or (path.name in {'CINENEST-DESIGN-DECISION-ADR-002.md', 'ARCHITECTURE.md'} and hex_value.upper() in candidate_colors), f'Uncentralized color {path.name}: {hex_value}')
+            check(hex_value.upper() in colors.values() or (path.name in {'CINENEST-DESIGN-DECISION-ADR-002.md', 'ARCHITECTURE.md'} and hex_value.upper() in candidate_colors) or (export is not None and hex_value.upper() in export.get('illustrativeColors', [])), f'Uncentralized color {path.name}: {hex_value}')
     for name, expected in IMAGES.items():
         path = ROOT / name
         check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == expected, f'Reference changed/missing {name}')

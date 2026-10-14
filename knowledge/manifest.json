@@ -30,11 +30,284 @@
   },
   "files": [
     {
+      "path": "01_ActivityDiagram_Customer_Booking_and_Online_Payment.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "c966f0290f7b3d00b3545f972a4481a6896f50411b5654a9c1e62083e7a5ac9b",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "01_Component Architecture Diagram_Platform_Components_and_Integration_Boundaries.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "4780fb3f761cabd4be1748fa7cf67696564ac8a89b2a121a4f12026e9db1e662",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "01_ER_Diagrams_Core_Relationship_Overview.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "5ace6f964b784bf7a4423e464baf92690f24cb93c83ce198fce15551c35857a1",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "01_Sequence_Diagrams_Customer_Booking_and_Online_Payment.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "ea6150b4cd8912a98df55889a536bc7176c75208d9dfa8b785a59f5ffd8b51cc",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "01_System_Context_Overview.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "1337d7c9cd0a8cd9a75f70cc15126fff0432f821958ddbc9a7749e4bf8aa3c1f",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "01_Use case_Customer_Booking_and_Account.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "e0e7632fbcefcdb46deb9bc864757328af339043939b3906cd5bff34ae159b05",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "02_ActivityDiagram_Bank_Deposit_Receipt_Review_and_Approval.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "8caf610bb9080c45dced24b20e48045ee4eb582506b04d5e50d3d8a6bfeb7d2c",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "02_Component Architecture Diagram_Payments_Module_Hexagonal_Ports_and_Adapters.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "a616e07fee58640ac3eb22c234372b520950fd3172ef3f8ba329fa572c7d4ec7",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "02_ER_Diagrams_Identity_Sessions_and_Scoped_RBAC_ABAC.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "efb68d1da16443fe89da02257c39e9e40b353f850a16ebec0409f5084b10c5b3",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "02_Sequence_Diagrams_Bank_Deposit_Receipt_Review_and_Approval.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "b572974e8d52a8467fac313efdf812e8badfcec6bdef7870841cfd32956ffb71",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "02_System_Context_External_Actors_and_Data_Exchanges.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "f7bdd5ba48a5beef1c7fa8cf931e0bd078be08ba7f002495fdeaf007a130dd0e",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "02_Use case_Package_and_Venue_Administration.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "1ce618104c6812a625984afaef72dad8083b2701bad25c6edd6b2148cc7104f0",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "03_ActivityDiagram_Package_Editing_Publication_and_Deactivation.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "cf8da514f9618fac071c91aeffda019a47bd95aa6bf48e675c03c716613eb5fb",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "03_ER_Diagrams_Venues_Versioned_Packages_and_Add_Ons.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "6d9ffe75f6e4941aed7f352240872d13429a0c27e8f27a428f5e5622690dd100",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "03_Sequence_Diagrams_Package_Editing_Publication_and_Deactivation.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "45f65b9fbff49ba581e780805c016963f31724c66509ec45565634ce2c4d5533",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "03_Use case_Payments_Bank_Review_and_Refunds.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "f943e4507e954ef5f9dbc0bf3e7a511e5dd75beca42dd0d4fdb2b928083d0b96",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "04_ActivityDiagram_Identity_Evidence_and_Eligibility_Review.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "9c55c1bbb69e1f2f77170a483ceacffb95d83eaae115daa422b76f426325b41a",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "04_ER_Diagrams_Quotes_Reservation_Holds_and_Booking_Revisions.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "97ab66bcaf7aa82bf5a1c6015f8d209e209d13e216d96340894f869c14b014da",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "04_Sequence_Diagrams_Identity_Evidence_and_Eligibility_Review.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "db351d9357efe128f8a9ee19b0de1a9fb858881786447fe7d64224453a9d7642",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "04_Use case_Identity_Verification_and_Authorization.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "02d007e2d4800106d8f565981063f1afb5e19500076ad0f3cd5f6cc2de399247",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "05_ActivityDiagram_Scoped_RBAC_and_ABAC_Authorization.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "7c59f7f67fff37a7009be325d1097fdc1e8f4b9c8ca07b9b58d1abedf46f9a40",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "05_ER_Diagrams_Payments_Bank_Evidence_Allocations_and_Refunds.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "1bcb6600d96f2205fc57fa60499caf53424d4109047b3a11cb7c2d873af9638e",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "05_Sequence_Diagrams_Scoped_RBAC_and_ABAC_Authorization.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "2f50e2e2a1fd68439dff7344c2a5974853bec8dfa6a6161deec1d239baa5bb0b",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "05_Use case_Cinema_Access_and_IoT_Operations.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "69e586cdff1e8e2aa1bbd0e8b73e6b417d0c862442600ac1cc3e3c9140330c54",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "06_ActivityDiagram_Booking_Amendment_and_Session_Extension.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "f7e374edcd32caacd8efb11a6f9cfcd6e279b0ce4e2a08a7b8400411cae3a66a",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "06_ER_Diagrams_Identity_Evidence_Guest_Check_In_and_Access_Credentials.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "2d91f322d22760a86b9e13db4883bd038b07779795ac6ba24cb73915b2015dd0",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "06_Sequence_Diagrams_Booking_Amendment_and_Session_Extension.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "1aa3721afa0271e9cf29612344deaa0ae23d6683e8bf0a44b38351fd1dfab588",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "07_ActivityDiagram_Booking_Cancellation_and_Refund_Execution.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "6c529adef0c63e6507878bf38a2887d3399de4d745a18f6d738e628ad2f05a44",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "07_ER_Diagrams_Sessions_Devices_Maintenance_and_Readiness.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "ea8754a7b0acc0530a115ccaf08d2ec42361db684a5892c066fc718c81b2c497",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "07_Sequence_Diagrams_Cancellation_and_Refund_Execution.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "0b42ef9c1eb756ca8dc5f406ad79c4118cd4587937dec6424b9d83b445a5b45a",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "08_ActivityDiagram_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "94e17ac06403a52a622ab2943c32ef6a369f03add81259e58779584d77b63a34",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "08_ER_Diagrams_Durable_Work_Notifications_and_Audit.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "5771f7abbfcc403aca0e638f92c0695bef5366aee431f5aa87e48320c1ce15ba",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "08_Sequence_Diagrams_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "3219d3fc2fa5b1e0fc2cb1eaf131ce37899b4dce00ba8a4bf3054b483b175ac2",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "09_ActivityDiagram_Room_Maintenance_and_Controlled_Closure.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "041ae51c6712800d143512b04bad966340765a657bbda6ec5560d2b13da1504f",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "09_Sequence_Diagrams_Room_Maintenance_and_Controlled_Closure.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "5d65ef724b5687756a10584db66be165729d22f8502e89ad244f277821821da2",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "10_ActivityDiagram_Operational_Incident_and_Recovery.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "3134b63a975314ed0989b332456fa9314944cd0e74f426c63c4c95678e04f19d",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "10_Sequence_Diagrams_Operational_Incident_and_Recovery.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "f6c3bcb355afcf667616fb7f9723363a8cbe361490647971b2cfd9c21b4ebb31",
+      "authority": "supporting-proposed-export"
+    },
+    {
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "6062f2dfcfc0f84a27f377e01771cfa5c8f491af1dc9ca3087c6d291e2b1c142",
       "authority": "canonical-prose"
+    },
+    {
+      "path": "Analysis output 1.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "e4b6d0b2b7f56dbefb381e58f6e48ccadfc3bdb027a8e9f18bf4af89900a3045",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "Analysis output Component1.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "dc56360810fc8b23f79465e61908a702a3acfffa92075d7f8737bbaaaafbff84",
+      "authority": "supporting-proposed-export"
     },
     {
       "path": "CineNest Cinema Admin Dashboard Mockup-1.png",
@@ -44,6 +317,27 @@
       "authority": "structured-asset-or-evidence"
     },
     {
+      "path": "CineNest Cinema Booking Activity Diagrams.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "7e2f8a66688f04791723d4ed6fc586b3a6c6d3327a730bc9318d6e5b8655f386",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "CineNest Cinema Booking ERD Poster.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "5de9cb08255fbf11816f5c5110f9f6cb7aec099c0ae136230b46961d12bded08",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "CineNest Cinema Booking System Context Diagram-1.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "d9ad0d359f72e23a2f9800a122954063224ca17a01e2a7e28ff16e6cd6d937fd",
+      "authority": "supporting-proposed-export"
+    },
+    {
       "path": "CineNest Cinema Dashboard Showcase-2.png",
       "kind": "visual-reference",
       "implementationStatus": "NOT_VERIFIED",
@@ -51,11 +345,60 @@
       "authority": "structured-asset-or-evidence"
     },
     {
+      "path": "CineNest Component Architecture Diagram-2.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "8c955cec4888b9c3082c329263977664301b08c2f93e7f172785c246e7b6a2c2",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "CineNest End-to-End Architecture Mind Map.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "CineNest Modular Monolith Architecture Diagram-1.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "ef0b7f4573fe6ee9ece71aeb442cf48393d3576e2d9cdbac7fe6cfd50e31e7b4",
+      "authority": "supporting-proposed-export"
+    },
+    {
       "path": "CineNest Private Cinema Booking UI.png",
       "kind": "visual-reference",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852",
       "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "CineNest Sequence Diagrams Overview.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "867cea5376ef3cf7e394074baa5474b3ab8e433ae1b6714c7afa4078e1e0da21",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "CineNest System Context Diagram-2.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "a43214fd222f5c69fc7f836477824f0ea1caf9747a2e338febe8072088ffbdf0",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "CineNest Use Case Diagram Infographic.png",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "5dbee4d681192108cc0620ba61b02639a0441777375ce3b1ec8fbdcfd28bfe61",
+      "authority": "supporting-proposed-export"
+    },
+    {
+      "path": "CineNest_E2E_Mind_Map.md",
+      "kind": "owner-supplied-diagram-export",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5",
+      "authority": "supporting-proposed-export"
     },
     {
       "path": "DESIGN.md",
@@ -68,7 +411,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "bbd317176bcf1129bfb088a35fe084cc68b31f7d59fa9207173c470fed55c55d",
+      "sha256": "e46c2fcb18ac8e98854a8271e4effca85435264fef3bb6682ebdf8cb1e3cfeae",
       "authority": "canonical-prose"
     },
     {
@@ -173,7 +516,7 @@
       "path": "execution/refresh_manifest.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "9199adab47e4a8462f56dc83880b312fa2862fe1457a8c5ad22721e0b88343ba",
+      "sha256": "5d3e650a258f669d4d44b354147ff4c25c7dbd61008fdec5269d681b2f59fb59",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -194,7 +537,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "26c12fe994367bde18bec136b2a9aa7892d4d93d92c4c6bd8b53c72b203d2137",
+      "sha256": "921b85ec4114c8c00414c00e7f0f229db40994b1f40b3e372ce8df22b4fb3db0",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -305,7 +648,7 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b0969803a08360b42310517392bbc43cc6c137216b880f09749db2bcf8f94cf4",
+      "sha256": "be81f9542c654af7c1b0b686119ad5e35af43e3cf9998efb69def2366cbdec17",
       "authority": "structured-asset-or-evidence"
     }
   ],
@@ -1462,10 +1805,6 @@
       "canonicalSpecification canonical destination only"
     ]
   },
-  "unmanagedWorkspaceAssets": {
-    "CineNest End-to-End Architecture Mind Map.png": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
-    "CineNest_E2E_Mind_Map.md": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5"
-  },
   "authorizationUpdate": {
     "sourceId": "S15",
     "baselineRevision": "e8b0712269061ed3f30fb6fcad43c316c1102627",
@@ -1480,5 +1819,890 @@
     "scope": "Initial technology direction only",
     "qualificationStatus": "PENDING",
     "implementationAuthorization": "NOT_GRANTED"
-  }
+  },
+  "diagramPublication": {
+    "authorization": "Current owner explicit task-scoped diagram commit/push; exports only, no architectural or implementation approval",
+    "baselineRevision": "c4fdd64d67a6be6fc2376748c15a3336b8c713f6",
+    "canonicalAuthorities": [
+      "PROJECT.md",
+      "ARCHITECTURE.md",
+      "DESIGN.md",
+      "PROGRESS.md"
+    ],
+    "disposition": "Supporting proposed/unverified exports; illustration colors are not adopted design tokens; original ZIP is an immutable supplied export with original internal names",
+    "linkCorrections": 186,
+    "mermaidValidation": "Balanced fences and unchanged block hashes checked; no local parser/renderer available, full syntax/rendering NOT_VERIFIED",
+    "files": [
+      {
+        "path": "01_ActivityDiagram_Customer_Booking_and_Online_Payment.md",
+        "sha256": "c966f0290f7b3d00b3545f972a4481a6896f50411b5654a9c1e62083e7a5ac9b",
+        "bytes": 11253,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "f8aacb7a35021b44bae6c9439bf6dd262fe2634baa283cf5c92d467ce880c0d2",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "01_Component Architecture Diagram_Platform_Components_and_Integration_Boundaries.md",
+        "sha256": "4780fb3f761cabd4be1748fa7cf67696564ac8a89b2a121a4f12026e9db1e662",
+        "bytes": 22239,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "dd1458ecdae5fc15b6847ef554f962f025ddd360e23b4e3a54fb7fa51d1f8516",
+        "illustrativeColors": [
+          "#0284C7",
+          "#0B1526",
+          "#0C4A6E",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#334155",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#78350F",
+          "#94A3B8",
+          "#B45309",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#E0F2FE",
+          "#F0EEFF",
+          "#F1F5F9",
+          "#F8FAFC",
+          "#FEF3C7",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "01_ER_Diagrams_Core_Relationship_Overview.md",
+        "sha256": "5ace6f964b784bf7a4423e464baf92690f24cb93c83ce198fce15551c35857a1",
+        "bytes": 10367,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "c1e7681f3071dc9d1d448812efe98efce72f78f35785221538a8a8a56821f4a2",
+        "illustrativeColors": [
+          "#111827",
+          "#5B4BFF",
+          "#64748B",
+          "#F0EEFF"
+        ]
+      },
+      {
+        "path": "01_Sequence_Diagrams_Customer_Booking_and_Online_Payment.md",
+        "sha256": "ea6150b4cd8912a98df55889a536bc7176c75208d9dfa8b785a59f5ffd8b51cc",
+        "bytes": 11709,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "b87c5c49d20f6349ee012f468fe67d2b31a429cd556b4d4604ce954f37086435",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "01_System_Context_Overview.md",
+        "sha256": "1337d7c9cd0a8cd9a75f70cc15126fff0432f821958ddbc9a7749e4bf8aa3c1f",
+        "bytes": 12674,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "18efba77b95df80186ba172a76dc3caf613928aba54b148aefcb686987c69b74",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#5B4BFF",
+          "#64748B",
+          "#78350F",
+          "#B45309",
+          "#CBD5E1",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "01_Use case_Customer_Booking_and_Account.md",
+        "sha256": "e0e7632fbcefcdb46deb9bc864757328af339043939b3906cd5bff34ae159b05",
+        "bytes": 9937,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "c5d5b5703f8ef0f4c71b38539df86e13063f490c1d1eb1b0aac1e6661ecb9710",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#2878FF",
+          "#5B4BFF",
+          "#64748B",
+          "#D6A449",
+          "#DBEAFE",
+          "#F0EEFF",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "02_ActivityDiagram_Bank_Deposit_Receipt_Review_and_Approval.md",
+        "sha256": "8caf610bb9080c45dced24b20e48045ee4eb582506b04d5e50d3d8a6bfeb7d2c",
+        "bytes": 11240,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "a65040460dea2afa2ebab22f7a635c5004d079332584767a4ae1b97ad4a6163c",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "02_Component Architecture Diagram_Payments_Module_Hexagonal_Ports_and_Adapters.md",
+        "sha256": "a616e07fee58640ac3eb22c234372b520950fd3172ef3f8ba329fa572c7d4ec7",
+        "bytes": 19717,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "023c15627e3a3db7d0ed7db2938dfa567d5f3504f1073ba7a74aeda7c618e6ee",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#334155",
+          "#475569",
+          "#4C1D95",
+          "#5B4BFF",
+          "#64748B",
+          "#78350F",
+          "#94A3B8",
+          "#B45309",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F1F5F9",
+          "#F8FAFC",
+          "#FEF3C7",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "02_ER_Diagrams_Identity_Sessions_and_Scoped_RBAC_ABAC.md",
+        "sha256": "efb68d1da16443fe89da02257c39e9e40b353f850a16ebec0409f5084b10c5b3",
+        "bytes": 10561,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "dcf5268ca7095ff316eec334d78c189cb88e72da3ff850cc0dba667e01159a3f",
+        "illustrativeColors": [
+          "#111827",
+          "#2878FF",
+          "#64748B",
+          "#DBEAFE"
+        ]
+      },
+      {
+        "path": "02_Sequence_Diagrams_Bank_Deposit_Receipt_Review_and_Approval.md",
+        "sha256": "b572974e8d52a8467fac313efdf812e8badfcec6bdef7870841cfd32956ffb71",
+        "bytes": 12248,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "f5f2f5ff3be3452d1f3120a293b3fa70d3f23070813a76c36ad69506cb18d78f",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "02_System_Context_External_Actors_and_Data_Exchanges.md",
+        "sha256": "f7bdd5ba48a5beef1c7fa8cf931e0bd078be08ba7f002495fdeaf007a130dd0e",
+        "bytes": 15929,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "12ca5d2e3232352efb94b22d014aa1449b07032e0c202b23f5a47a570720e3c4",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#78350F",
+          "#94A3B8",
+          "#B45309",
+          "#CBD5E1",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "02_Use case_Package_and_Venue_Administration.md",
+        "sha256": "1ce618104c6812a625984afaef72dad8083b2701bad25c6edd6b2148cc7104f0",
+        "bytes": 9524,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "38fefdf8e6979a5d8e1245cb7bc4900d76a4fee8bb7eec1f74bc7ae63726bbc6",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#2878FF",
+          "#5B4BFF",
+          "#64748B",
+          "#D6A449",
+          "#DBEAFE",
+          "#F0EEFF",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "03_ActivityDiagram_Package_Editing_Publication_and_Deactivation.md",
+        "sha256": "cf8da514f9618fac071c91aeffda019a47bd95aa6bf48e675c03c716613eb5fb",
+        "bytes": 10342,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "933ce121885c4d1ad4e3bbda093c8114a4b94e512e2b9b57c2c720bcdc053382",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "03_ER_Diagrams_Venues_Versioned_Packages_and_Add_Ons.md",
+        "sha256": "6d9ffe75f6e4941aed7f352240872d13429a0c27e8f27a428f5e5622690dd100",
+        "bytes": 10786,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "ed9a7f44c64af707b5aabd53a4b24f51b0cf926f1de7622cc4ff59f8bedc5d12",
+        "illustrativeColors": [
+          "#111827",
+          "#5B4BFF",
+          "#64748B",
+          "#F0EEFF"
+        ]
+      },
+      {
+        "path": "03_Sequence_Diagrams_Package_Editing_Publication_and_Deactivation.md",
+        "sha256": "45f65b9fbff49ba581e780805c016963f31724c66509ec45565634ce2c4d5533",
+        "bytes": 10454,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "f5f3cc6712d56eda66dca4041df4536371c9bdba97c12cbaf81413f83bd1e051",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "03_Use case_Payments_Bank_Review_and_Refunds.md",
+        "sha256": "f943e4507e954ef5f9dbc0bf3e7a511e5dd75beca42dd0d4fdb2b928083d0b96",
+        "bytes": 11534,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "2de2d86b4e2714c5b73c1d504aec032f5f9884e1726793b1e873841a9c015cee",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#2878FF",
+          "#5B4BFF",
+          "#64748B",
+          "#D6A449",
+          "#DBEAFE",
+          "#F0EEFF",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "04_ActivityDiagram_Identity_Evidence_and_Eligibility_Review.md",
+        "sha256": "9c55c1bbb69e1f2f77170a483ceacffb95d83eaae115daa422b76f426325b41a",
+        "bytes": 9932,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "825ba78324902861ed2e791d8829a1c9a02a2722e50779af0046d96d595e2d2a",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "04_ER_Diagrams_Quotes_Reservation_Holds_and_Booking_Revisions.md",
+        "sha256": "97ab66bcaf7aa82bf5a1c6015f8d209e209d13e216d96340894f869c14b014da",
+        "bytes": 13498,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "5e1bfe716f0266b6bf0a26e1cf6436c7e2e1469766f22a35bfb79384f2da3de6",
+        "illustrativeColors": [
+          "#111827",
+          "#64748B",
+          "#B45309",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "04_Sequence_Diagrams_Identity_Evidence_and_Eligibility_Review.md",
+        "sha256": "db351d9357efe128f8a9ee19b0de1a9fb858881786447fe7d64224453a9d7642",
+        "bytes": 11195,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "a066de78eda56560794f379b9220e68b1782d6e899e0d1f48d8ba5070585d287",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "04_Use case_Identity_Verification_and_Authorization.md",
+        "sha256": "02d007e2d4800106d8f565981063f1afb5e19500076ad0f3cd5f6cc2de399247",
+        "bytes": 11101,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "d560c7966702a72c1d49e034246d512a81de9a8d03d2d67311778253012577b0",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#2878FF",
+          "#5B4BFF",
+          "#64748B",
+          "#D6A449",
+          "#DBEAFE",
+          "#F0EEFF",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "05_ActivityDiagram_Scoped_RBAC_and_ABAC_Authorization.md",
+        "sha256": "7c59f7f67fff37a7009be325d1097fdc1e8f4b9c8ca07b9b58d1abedf46f9a40",
+        "bytes": 10177,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "f91aec88e43cf4866089102b85a6e68618d079d48195f12513de06b447b68d33",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "05_ER_Diagrams_Payments_Bank_Evidence_Allocations_and_Refunds.md",
+        "sha256": "1bcb6600d96f2205fc57fa60499caf53424d4109047b3a11cb7c2d873af9638e",
+        "bytes": 16223,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "89e616e67d7a99bd01441565ad9038fcd3e529e0cc52ef01ed6e57438c0d6b98",
+        "illustrativeColors": [
+          "#111827",
+          "#15803D",
+          "#64748B",
+          "#DCFCE7"
+        ]
+      },
+      {
+        "path": "05_Sequence_Diagrams_Scoped_RBAC_and_ABAC_Authorization.md",
+        "sha256": "2f50e2e2a1fd68439dff7344c2a5974853bec8dfa6a6161deec1d239baa5bb0b",
+        "bytes": 11697,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "2794bd541249deb7b7abee38811c5ce403a714c4b59e1cd775f365148152e90d",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "05_Use case_Cinema_Access_and_IoT_Operations.md",
+        "sha256": "69e586cdff1e8e2aa1bbd0e8b73e6b417d0c862442600ac1cc3e3c9140330c54",
+        "bytes": 12026,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "192a0baa709e0669293cd789317f43eddd4530f1c2526d773545374d46d523ba",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#2878FF",
+          "#5B4BFF",
+          "#64748B",
+          "#D6A449",
+          "#DBEAFE",
+          "#F0EEFF",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "06_ActivityDiagram_Booking_Amendment_and_Session_Extension.md",
+        "sha256": "f7e374edcd32caacd8efb11a6f9cfcd6e279b0ce4e2a08a7b8400411cae3a66a",
+        "bytes": 10673,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "b1c11b3329333aa75c9f710004e7aebe70d55f000e2d0fa105c33aab2290beaf",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "06_ER_Diagrams_Identity_Evidence_Guest_Check_In_and_Access_Credentials.md",
+        "sha256": "2d91f322d22760a86b9e13db4883bd038b07779795ac6ba24cb73915b2015dd0",
+        "bytes": 13633,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "dee89bfa53cc3fcc5d9eec89a7edf7a74d072c642422bf09c8d5bc2337c9d4be",
+        "illustrativeColors": [
+          "#111827",
+          "#64748B",
+          "#7C3AED",
+          "#EDE9FE"
+        ]
+      },
+      {
+        "path": "06_Sequence_Diagrams_Booking_Amendment_and_Session_Extension.md",
+        "sha256": "1aa3721afa0271e9cf29612344deaa0ae23d6683e8bf0a44b38351fd1dfab588",
+        "bytes": 11868,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "a44eb1fb92e050b9a81865e484299c4d6cad6240e431e96fcdfc6cfe71a52007",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "07_ActivityDiagram_Booking_Cancellation_and_Refund_Execution.md",
+        "sha256": "6c529adef0c63e6507878bf38a2887d3399de4d745a18f6d738e628ad2f05a44",
+        "bytes": 11113,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "83089705ea27d40992e1dde6616ffc75917c6f2a1cf445ec855f806fa03177bc",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "07_ER_Diagrams_Sessions_Devices_Maintenance_and_Readiness.md",
+        "sha256": "ea8754a7b0acc0530a115ccaf08d2ec42361db684a5892c066fc718c81b2c497",
+        "bytes": 14647,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "d812a862dc38701e760c4c23b82ff5111a8517ed599d237d7d2f9bb86895fd5f",
+        "illustrativeColors": [
+          "#0284C7",
+          "#111827",
+          "#64748B",
+          "#E0F2FE"
+        ]
+      },
+      {
+        "path": "07_Sequence_Diagrams_Cancellation_and_Refund_Execution.md",
+        "sha256": "0b42ef9c1eb756ca8dc5f406ad79c4118cd4587937dec6424b9d83b445a5b45a",
+        "bytes": 11859,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "d09a17aee90b7ad95124d00c36f47bd606c1c79e0bd2e6468b16838409f10481",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "08_ActivityDiagram_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+        "sha256": "94e17ac06403a52a622ab2943c32ef6a369f03add81259e58779584d77b63a34",
+        "bytes": 12835,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "e363e5f8ae37281e82d958ccf17061ee37c9ae531962e8beda47001696511770",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "08_ER_Diagrams_Durable_Work_Notifications_and_Audit.md",
+        "sha256": "5771f7abbfcc403aca0e638f92c0695bef5366aee431f5aa87e48320c1ce15ba",
+        "bytes": 12696,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "4d17b292b390df858ec26d2f023929645dd2d6a45f0a9763a1ce88811170dd16",
+        "illustrativeColors": [
+          "#111827",
+          "#64748B",
+          "#F1F5F9"
+        ]
+      },
+      {
+        "path": "08_Sequence_Diagrams_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+        "sha256": "3219d3fc2fa5b1e0fc2cb1eaf131ce37899b4dce00ba8a4bf3054b483b175ac2",
+        "bytes": 13874,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "49e7b1f55b04a39a098e45d8f0502462578d68e0c530f1891c4b029141e2c650",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "09_ActivityDiagram_Room_Maintenance_and_Controlled_Closure.md",
+        "sha256": "041ae51c6712800d143512b04bad966340765a657bbda6ec5560d2b13da1504f",
+        "bytes": 11022,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "7ce469308f66fc61dad886ed243501faeea7af11eadade1f4cf19ad172f580e5",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "09_Sequence_Diagrams_Room_Maintenance_and_Controlled_Closure.md",
+        "sha256": "5d65ef724b5687756a10584db66be165729d22f8502e89ad244f277821821da2",
+        "bytes": 11641,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "e558090b543e6ca22281a7205efcf41a87f244d5379ce766f718a7c8aa7a2899",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "10_ActivityDiagram_Operational_Incident_and_Recovery.md",
+        "sha256": "3134b63a975314ed0989b332456fa9314944cd0e74f426c63c4c95678e04f19d",
+        "bytes": 11644,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "ab798f577220c53c17a827cd6547371690a739e746941dc776db96eddfb9d3e2",
+        "illustrativeColors": [
+          "#0B1526",
+          "#111827",
+          "#14532D",
+          "#15803D",
+          "#2878FF",
+          "#475569",
+          "#5B4BFF",
+          "#64748B",
+          "#7F1D1D",
+          "#94A3B8",
+          "#B45309",
+          "#B91C1C",
+          "#DBEAFE",
+          "#DCFCE7",
+          "#F0EEFF",
+          "#F8FAFC",
+          "#FEE2E2",
+          "#FFF7E6",
+          "#FFFFFF"
+        ]
+      },
+      {
+        "path": "10_Sequence_Diagrams_Operational_Incident_and_Recovery.md",
+        "sha256": "f6c3bcb355afcf667616fb7f9723363a8cbe361490647971b2cfd9c21b4ebb31",
+        "bytes": 12679,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "883aaaf5e9cbfbc606eea6a76cbbd9804f99e7dfd079ed8e419aaf36f85f67ca",
+        "illustrativeColors": [
+          "#111827",
+          "#334155",
+          "#5B4BFF",
+          "#B45309",
+          "#F0EEFF",
+          "#FFF7E6"
+        ]
+      },
+      {
+        "path": "Analysis output 1.png",
+        "sha256": "e4b6d0b2b7f56dbefb381e58f6e48ccadfc3bdb027a8e9f18bf4af89900a3045",
+        "bytes": 1111963,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "Analysis output Component1.png",
+        "sha256": "dc56360810fc8b23f79465e61908a702a3acfffa92075d7f8737bbaaaafbff84",
+        "bytes": 573299,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest Cinema Booking Activity Diagrams.png",
+        "sha256": "7e2f8a66688f04791723d4ed6fc586b3a6c6d3327a730bc9318d6e5b8655f386",
+        "bytes": 1699170,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest Cinema Booking ERD Poster.png",
+        "sha256": "5de9cb08255fbf11816f5c5110f9f6cb7aec099c0ae136230b46961d12bded08",
+        "bytes": 1764444,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest Cinema Booking System Context Diagram-1.png",
+        "sha256": "d9ad0d359f72e23a2f9800a122954063224ca17a01e2a7e28ff16e6cd6d937fd",
+        "bytes": 1815479,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest Component Architecture Diagram-2.png",
+        "sha256": "8c955cec4888b9c3082c329263977664301b08c2f93e7f172785c246e7b6a2c2",
+        "bytes": 1773670,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest End-to-End Architecture Mind Map.png",
+        "sha256": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
+        "bytes": 1918151,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest Modular Monolith Architecture Diagram-1.png",
+        "sha256": "ef0b7f4573fe6ee9ece71aeb442cf48393d3576e2d9cdbac7fe6cfd50e31e7b4",
+        "bytes": 1685898,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest Sequence Diagrams Overview.png",
+        "sha256": "867cea5376ef3cf7e394074baa5474b3ab8e433ae1b6714c7afa4078e1e0da21",
+        "bytes": 1802732,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest System Context Diagram-2.png",
+        "sha256": "a43214fd222f5c69fc7f836477824f0ea1caf9747a2e338febe8072088ffbdf0",
+        "bytes": 1627114,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest Use Case Diagram Infographic.png",
+        "sha256": "5dbee4d681192108cc0620ba61b02639a0441777375ce3b1ec8fbdcfd28bfe61",
+        "bytes": 1916400,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED"
+      },
+      {
+        "path": "CineNest_E2E_Mind_Map.md",
+        "sha256": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5",
+        "bytes": 12204,
+        "authority": "owner-supplied-proposed-diagram-export",
+        "implementationStatus": "NOT_VERIFIED",
+        "mermaidSha256": "dfafa174de8679c48b57a051112689046dd2903bec2d8b2a4f1495958fbbb937",
+        "illustrativeColors": []
+      }
+    ],
+    "formattingCorrections": 111
+  },
+  "historicalUnmanagedWorkspaceAssets": {
+    "CineNest End-to-End Architecture Mind Map.png": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
+    "CineNest_E2E_Mind_Map.md": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5"
+  },
+  "unmanagedWorkspaceAssets": {}
 }

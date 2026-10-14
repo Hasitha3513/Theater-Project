@@ -27,6 +27,8 @@ def main():
         if name != 'manifest.json':
             item['sha256'] = hashlib.sha256(asset.read_bytes()).hexdigest()
         item['authority'] = 'canonical-prose' if name in {'PROJECT.md', 'ARCHITECTURE.md', 'DESIGN.md', 'PROGRESS.md'} else 'superseded-historical-snapshot' if 'knowledge/' + name in {e['sourcePath'] for e in m['consolidation']['documents']} else 'structured-asset-or-evidence'
+        if name in {entry['path'] for entry in m.get('diagramPublication', {}).get('files', [])}:
+            item['kind'] = 'owner-supplied-diagram-export'; item['authority'] = 'supporting-proposed-export'
         entries.append(item)
     m['files'] = entries
     m['externalInstructionFiles'] = [{'path': 'AGENTS.md', 'sha256': hashlib.sha256((R / 'AGENTS.md').read_bytes()).hexdigest(), 'purpose': 'Current root entry; charter consolidated into PROGRESS.md'}]
