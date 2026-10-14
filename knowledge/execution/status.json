@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0.0",
+  "taskId": "CN-AGENT-SETUP-001",
+  "mode": "SETUP",
+  "workStatus": "VERIFIED",
+  "productStage": "PRE_IMPLEMENTATION",
+  "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
+  "canonicalKb": "knowledge/",
+  "branch": "main",
+  "upstream": "origin/main",
+  "baselineHead": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+  "baselineWorktree": "CLEAN",
+  "currentChangeSet": "CN-AGENT-SETUP-001",
+  "futurePlanApproval": "NOT_APPROVED",
+  "nextRecommendedChangeSet": "CN-DEC-001",
+  "nextAction": "Authorize CN-DEC-001 bounded initial-stack decision brief; no application scaffold or final technology approval implied",
+  "nextReadyChangeSet": null,
+  "implementationEvidence": "No application manifests/code/tests/CI; all catalog features NOT_VERIFIED",
+  "approvedCoreDecisions": [
+    "PR-UI-001",
+    "PR-PKG-001",
+    "PR-BANK-001"
+  ],
+  "blockers": [
+    "OD-01 final stack",
+    "No approved future implementation plan",
+    "OD-15 missing original sources",
+    "OD-02/03/04/05/06/07/14 hardware/privacy/safety/provider/rights gates",
+    "OD-17\u201329 package/bank policies and accountable owners"
+  ],
+  "instructionDiscovery": "VERIFIED_EXPLICIT_READ_ONLY_DISCOVERY",
+  "hostAutomaticInstructionLoading": "NOT_VERIFIED",
+  "nativeAgentRegistration": "NOT_PERFORMED",
+  "publicationState": "LOCAL",
+  "publicationEvidence": "Pre-commit snapshot; actual task publication checked in Git at closeout, never self-referential final SHA",
+  "lastObservedHead": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+  "evidencePath": "execution/evidence/CN-AGENT-SETUP-001.md",
+  "evidenceFreshness": "Source ledger baseline hashes a48cc6e; changed control/index/manifest files re-read and validated at closeout; old reports historical only",
+  "availableTools": [
+    "exec/file reads/edits",
+    "Git CLI 2.53.0",
+    "Python 3.14.4 (documentation validation)",
+    "view_image",
+    "bounded read-only collaboration review",
+    "Git remote network requires sandbox escalation"
+  ],
+  "notRunChecks": [
+    "Application lint/build/unit/integration/auth/concurrency/migration: no stack/code/manifests",
+    "Rendered application/a11y: no application, only references",
+    "Provider sandbox/bank/hardware/safety/business/deployment: unavailable/unapproved"
+  ],
+  "omissionRegister": "execution/omissions.json",
+  "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
+  "verificationScope": "Documentation checks + manual fresh read-only discovery only; product/native host not verified",
+  "productAcceptance": "NOT_ACCEPTED"
+}

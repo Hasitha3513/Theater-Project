@@ -252,7 +252,7 @@ def validate_expansion(check, tokens, specs):
         check(c['decisionStatus'] in decisions and c['implementationStatus'] == 'NOT_VERIFIED', f'Chart status {c["id"]}')
         check(set(c['sourceIds']) <= source_ids, f'Chart sources {c["id"]}')
     manifest = parsed['manifest.json']
-    check(manifest['kbVersion'] == '1.2.0' and manifest['baselineKbVersion'] == '1.1.0', 'Bank-task KB version/baseline mismatch')
+    check(manifest['kbVersion'] == '1.3.0' and manifest['baselineKbVersion'] == '1.2.0', 'Setup-task KB version/baseline mismatch')
     check(manifest['chartSpecVersion'] == specs['version'] == '1.2.0', 'Chart version mismatch')
     check(manifest['designTokenVersion'] == tokens['version'] == '1.0.0', 'Design-token version mismatch')
     actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and '__pycache__' not in p.parts}

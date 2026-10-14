@@ -1,5 +1,10 @@
 # CineNest Knowledge Base Changelog
 
+## KB 1.3.0 — 2026-10-14 — CN-AGENT-SETUP-001
+Material additive execution workflow from verified KB 1.2.0/a48cc6e. Added root AGENTS, detailed charter under docs/agents, canonical knowledge/execution plan/status/handoff/source ledger/requirements/tests/omissions/checks and real setup evidence. Setup scope explicitly authorized; future roadmap/code units remain proposed BLOCKED, architecture/business choices unchanged. All existing feature IDs retained; supplemental workflow/UI/NFR/support tracking aliases do not approve product policies.
+
+Current metadata reconciles three approved core decisions and historical baseline text; UX chart count matches ten. Normative product/package/bank/design/chart/token/CSS/image definitions preserved. Safe document/coverage checks and bounded read-only source/discovery reviews distinguish file discovery from unverified desktop auto-loading/native registration. No application framework/bootstrap, runtime/config/migration/install/background/live financial/device/production work. Stop after setup before next authorization; no no-op version bump.
+
 ## KB 1.2.0 — 2026-10-14 — CN-KB-BANK-PAYMENT-001
 Material additive revision from observed KB/chart 1.1.0 at 79c4269. Core PR-BANK-001/CN-C10/CN-A13 USER-CONFIRMED / APPROVED, implementation NOT_VERIFIED: bank deposit/transfer, receipt upload, independent authorized bank verification and review notifications alongside online gateway. Added canonical bank spec, six recommended lifecycle/ledger state machines, source S9, ADR-004 and BP-AC01–13 future acceptance.
 

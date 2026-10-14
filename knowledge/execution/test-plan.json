@@ -1,0 +1,1429 @@
+{
+  "schemaVersion": "1.0.0",
+  "tests": [
+    {
+      "id": "T-CN-AGENT-WORKFLOW-001",
+      "requirementIds": [
+        "CN-AGENT-WORKFLOW-001"
+      ],
+      "acceptanceCriteria": "Root entry points to charter/status/plan; available-source review and approved requirement mapping; honest readiness, evidence and safe resume",
+      "owningChangeSetIds": [
+        "CN-AGENT-SETUP-001"
+      ],
+      "status": "PASS",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [
+        "knowledge/validate_design_kb.py",
+        "knowledge/execution/validate_execution.py"
+      ],
+      "evidencePaths": [
+        "execution/evidence/checks.json",
+        "execution/evidence/instruction-review.json"
+      ],
+      "reasonNotRun": "Not applicable: actual documentation/discovery checks executed; no application test represented"
+    },
+    {
+      "id": "T-PR-UI-001",
+      "requirementIds": [
+        "PR-UI-001"
+      ],
+      "acceptanceCriteria": "Reference direction/tokens retained; future rendered interfaces use shared shells/components, no screenshot data as operational truth",
+      "owningChangeSetIds": [
+        "CN-UI-001",
+        "CN-DEC-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PR-PKG-001",
+      "requirementIds": [
+        "PR-PKG-001"
+      ],
+      "acceptanceCriteria": "PK-AC01\u201313, after supporting policy decisions; core editing and bought-term protection distinct",
+      "owningChangeSetIds": [
+        "CN-PKG-001",
+        "CN-PKG-002",
+        "CN-QUOTE-001",
+        "CN-AMEND-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PR-BANK-001",
+      "requirementIds": [
+        "PR-BANK-001"
+      ],
+      "acceptanceCriteria": "BP-AC01\u201313, no receipt/funds/booking/access conflation, online path retained",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001",
+        "CN-PAY-BANK-002",
+        "CN-REFUND-001",
+        "CN-NOTIFY-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C01",
+      "requirementIds": [
+        "CN-C01"
+      ],
+      "acceptanceCriteria": "Usable catalog without auth; no fabricated availability or production sample price",
+      "owningChangeSetIds": [
+        "CN-ROOM-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C02",
+      "requirementIds": [
+        "CN-C02"
+      ],
+      "acceptanceCriteria": "Owner-scoped session/profile; explicit policy version/time persisted",
+      "owningChangeSetIds": [
+        "CN-AUTH-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C03",
+      "requirementIds": [
+        "CN-C03"
+      ],
+      "acceptanceCriteria": "Two conflicting reservations cannot both commit; server expiresAt shown",
+      "owningChangeSetIds": [
+        "CN-BOOK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C04",
+      "requirementIds": [
+        "CN-C04"
+      ],
+      "acceptanceCriteria": "Base/PS4 examples correct; fifth guest charged once; final total server generated",
+      "owningChangeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C05",
+      "requirementIds": [
+        "CN-C05"
+      ],
+      "acceptanceCriteria": "OCR cannot alone prove authenticity; restricted decision/evidence access",
+      "owningChangeSetIds": [
+        "CN-VERIFY-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C06",
+      "requirementIds": [
+        "CN-C06"
+      ],
+      "acceptanceCriteria": "Redirect never grants success; duplicate events have one effect; receipt from ledger",
+      "owningChangeSetIds": [
+        "CN-PAY-GW-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C07",
+      "requirementIds": [
+        "CN-C07"
+      ],
+      "acceptanceCriteria": "No access-ready state before install evidence; delivery failure yields support",
+      "owningChangeSetIds": [
+        "CN-ACCESS-001",
+        "CN-NOTIFY-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C08",
+      "requirementIds": [
+        "CN-C08"
+      ],
+      "acceptanceCriteria": "No cross-customer reads; retain history and original terms",
+      "owningChangeSetIds": [
+        "CN-CUSTOMER-001",
+        "CN-AMEND-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C09",
+      "requirementIds": [
+        "CN-C09"
+      ],
+      "acceptanceCriteria": "No invented earn rate; reversals audited; unavailable feature not promoted",
+      "owningChangeSetIds": [
+        "CN-ENG-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A01",
+      "requirementIds": [
+        "CN-A01"
+      ],
+      "acceptanceCriteria": "All card labels include basis/asOf; no unavailable-to-zero fallback",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A02",
+      "requirementIds": [
+        "CN-A02"
+      ],
+      "acceptanceCriteria": "Stable paging; permissions checked server-side; no silent price rewriting",
+      "owningChangeSetIds": [
+        "CN-BOOK-001",
+        "CN-AMEND-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A03",
+      "requirementIds": [
+        "CN-A03"
+      ],
+      "acceptanceCriteria": "Existing reservation impacts shown; enabled does not mean clean/healthy",
+      "owningChangeSetIds": [
+        "CN-ROOM-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A04",
+      "requirementIds": [
+        "CN-A04"
+      ],
+      "acceptanceCriteria": "Both views return same IDs/states and preserve filters",
+      "owningChangeSetIds": [
+        "CN-UI-001",
+        "CN-ROOM-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A05",
+      "requirementIds": [
+        "CN-A05"
+      ],
+      "acceptanceCriteria": "Requested != observed; no unsafe egress/power action",
+      "owningChangeSetIds": [
+        "CN-IOT-001",
+        "CN-OPS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A06",
+      "requirementIds": [
+        "CN-A06"
+      ],
+      "acceptanceCriteria": "Suspended != rejected; raw documents never in customer list",
+      "owningChangeSetIds": [
+        "CN-AUTH-001",
+        "CN-VERIFY-001",
+        "CN-ADMIN-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A07",
+      "requirementIds": [
+        "CN-A07"
+      ],
+      "acceptanceCriteria": "Refund balance enforced; reconciliation discoverable; no card-data collection",
+      "owningChangeSetIds": [
+        "CN-PAY-GW-001",
+        "CN-REFUND-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A08",
+      "requirementIds": [
+        "CN-A08"
+      ],
+      "acceptanceCriteria": "Export matches visible filters and metric IDs; separate scales",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A09",
+      "requirementIds": [
+        "CN-A09"
+      ],
+      "acceptanceCriteria": "Versioned eligibility; no retroactive rule changes to earned rewards without approved process",
+      "owningChangeSetIds": [
+        "CN-ENG-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A10",
+      "requirementIds": [
+        "CN-A10"
+      ],
+      "acceptanceCriteria": "Prior purchases/consent retained; no privilege escalation",
+      "owningChangeSetIds": [
+        "CN-ADMIN-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A11",
+      "requirementIds": [
+        "CN-A11"
+      ],
+      "acceptanceCriteria": "Actor/resource/reason/correlation recorded; no edit/delete UX",
+      "owningChangeSetIds": [
+        "CN-ADMIN-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-O01",
+      "requirementIds": [
+        "CN-O01"
+      ],
+      "acceptanceCriteria": "Valid only session interval; re-entry tested, not presumed",
+      "owningChangeSetIds": [
+        "CN-ACCESS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-O02",
+      "requirementIds": [
+        "CN-O02"
+      ],
+      "acceptanceCriteria": "Only capability-supported operations; per-device auth and expiring commands",
+      "owningChangeSetIds": [
+        "CN-IOT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-O03",
+      "requirementIds": [
+        "CN-O03"
+      ],
+      "acceptanceCriteria": "No physical-cleaning claim from timer; accountable intervention path",
+      "owningChangeSetIds": [
+        "CN-OPS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-O04",
+      "requirementIds": [
+        "CN-O04"
+      ],
+      "acceptanceCriteria": "Unknown not OFF/empty; independent egress and trained response verified before launch",
+      "owningChangeSetIds": [
+        "CN-IOT-001",
+        "CN-OPS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A12",
+      "requirementIds": [
+        "CN-A12"
+      ],
+      "acceptanceCriteria": "PK-AC01\u201313 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
+      "owningChangeSetIds": [
+        "CN-PKG-001",
+        "CN-PKG-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-C10",
+      "requirementIds": [
+        "CN-C10"
+      ],
+      "acceptanceCriteria": "BP-AC01\u201313; independent bank credit and guarded one-booking result; not tests run",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001",
+        "CN-PAY-BANK-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-A13",
+      "requirementIds": [
+        "CN-A13"
+      ],
+      "acceptanceCriteria": "BP-AC01\u201313; alert failure retains queue; approval alone no completed booking/access/refund",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001",
+        "CN-PAY-BANK-002",
+        "CN-NOTIFY-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-NFR-01",
+      "requirementIds": [
+        "CN-NFR-01"
+      ],
+      "acceptanceCriteria": "Rendered keyboard/screen reader/contrast/reflow and equivalent data tests, target not certification",
+      "owningChangeSetIds": [
+        "CN-UI-001",
+        "CN-ACCEPT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-NFR-02",
+      "requirementIds": [
+        "CN-NFR-02"
+      ],
+      "acceptanceCriteria": "Owner/venue denial, consent/evidence retention/secret and incident tests plus approved policy",
+      "owningChangeSetIds": [
+        "CN-GATE-001",
+        "CN-AUTH-001",
+        "CN-VERIFY-001",
+        "CN-ADMIN-001",
+        "CN-ACCEPT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-NFR-03",
+      "requirementIds": [
+        "CN-NFR-03"
+      ],
+      "acceptanceCriteria": "Safe logs/metrics/correlation, scoped fresh reports/alerts and no sensitive event payload",
+      "owningChangeSetIds": [
+        "CN-FND-001",
+        "CN-REPORT-001",
+        "CN-ACCEPT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-NFR-04",
+      "requirementIds": [
+        "CN-NFR-04"
+      ],
+      "acceptanceCriteria": "Defined recovery objectives and actual isolated restore/failover evidence, not backup existence alone",
+      "owningChangeSetIds": [
+        "CN-ACCEPT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-NFR-05",
+      "requirementIds": [
+        "CN-NFR-05"
+      ],
+      "acceptanceCriteria": "Qualified egress/offline/wiring/cleaning/guest/manual-review staff evidence; simulator not physical acceptance",
+      "owningChangeSetIds": [
+        "CN-GATE-001",
+        "CN-OPS-001",
+        "CN-ACCEPT-001",
+        "CN-LAUNCH-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-NFR-06",
+      "requirementIds": [
+        "CN-NFR-06"
+      ],
+      "acceptanceCriteria": "Specific release authority, actual environment/rollback/monitoring/support and named acceptance",
+      "owningChangeSetIds": [
+        "CN-ACCEPT-001",
+        "CN-LAUNCH-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-SUP-01",
+      "requirementIds": [
+        "CN-SUP-01"
+      ],
+      "acceptanceCriteria": "Unresolved verification/payment/access/service cases have safe status and accountable support workflow",
+      "owningChangeSetIds": [
+        "CN-CUSTOMER-001",
+        "CN-NOTIFY-001",
+        "CN-OPS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-01",
+      "requirementIds": [
+        "BR-01"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-BOOK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-02",
+      "requirementIds": [
+        "BR-02"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-PKG-002",
+        "CN-BOOK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-03",
+      "requirementIds": [
+        "BR-03"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-04",
+      "requirementIds": [
+        "BR-04"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-05",
+      "requirementIds": [
+        "BR-05"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-06",
+      "requirementIds": [
+        "BR-06"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-BOOK-001",
+        "CN-OPS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-07",
+      "requirementIds": [
+        "BR-07"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-BOOK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-08",
+      "requirementIds": [
+        "BR-08"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-VERIFY-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-09",
+      "requirementIds": [
+        "BR-09"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-ACCESS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BR-10",
+      "requirementIds": [
+        "BR-10"
+      ],
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "owningChangeSetIds": [
+        "CN-QUOTE-001",
+        "CN-AMEND-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC01",
+      "requirementIds": [
+        "PK-AC01"
+      ],
+      "acceptanceCriteria": "Authorized admin edits details, included duration and price; eligible customer catalog changes without application-code edit/release; config/audit evidence",
+      "owningChangeSetIds": [
+        "CN-PKG-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC02",
+      "requirementIds": [
+        "PK-AC02"
+      ],
+      "acceptanceCriteria": "Unauthorized/out-of-venue reader/editor/publisher cannot access or publish; edit privilege does not grant publish/archive or operational-policy change",
+      "owningChangeSetIds": [
+        "CN-PKG-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC03",
+      "requirementIds": [
+        "PK-AC03"
+      ],
+      "acceptanceCriteria": "Backend rejects noninteger/nonpositive durations, negative charges, unsupported/duplicate charged inclusions and capacity excess",
+      "owningChangeSetIds": [
+        "CN-PKG-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC04",
+      "requirementIds": [
+        "PK-AC04"
+      ],
+      "acceptanceCriteria": "Two-hour edit rejected under 180-minute minimum; separately authorized minimum/terms update required before shorter package eligibility",
+      "owningChangeSetIds": [
+        "CN-PKG-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC05",
+      "requirementIds": [
+        "PK-AC05"
+      ],
+      "acceptanceCriteria": "New eligible purchase resolves deterministic package version by sales time, service window and scope; boundaries and overlapping versions tested",
+      "owningChangeSetIds": [
+        "CN-PKG-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC06",
+      "requirementIds": [
+        "PK-AC06"
+      ],
+      "acceptanceCriteria": "Confirmed purchase preserves display/rate/inclusions/duration/buffer/policy/receipt/report snapshots after edits/deactivation/archive",
+      "owningChangeSetIds": [
+        "CN-PKG-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC07",
+      "requirementIds": [
+        "PK-AC07"
+      ],
+      "acceptanceCriteria": "Valid quote honors accepted terms; expired quote requires refreshed explicit acceptance; inventory hold tested independently Conditional on explicit OD-20 policy decision; no quote-honor approval inferred from test prose.",
+      "owningChangeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC08",
+      "requirementIds": [
+        "PK-AC08"
+      ],
+      "acceptanceCriteria": "Duplicate/delayed capture events reconcile accepted quote/capturedAt/amount/currency; no extra booking/reprice/charge; unavailable slot goes exception/compensation",
+      "owningChangeSetIds": [
+        "CN-PAY-GW-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC09",
+      "requirementIds": [
+        "PK-AC09"
+      ],
+      "acceptanceCriteria": "Scheduled edits and simultaneous admins produce atomic complete publication or deterministic stale/conflict failure; no partial combination",
+      "owningChangeSetIds": [
+        "CN-PKG-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC10",
+      "requirementIds": [
+        "PK-AC10"
+      ],
+      "acceptanceCriteria": "Included PS4/service/add-on never charged twice; configured exact extension-unit and guest-charge calculations validated",
+      "owningChangeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC11",
+      "requirementIds": [
+        "PK-AC11"
+      ],
+      "acceptanceCriteria": "Deactivation prevents new quote sales according to approved cutoff while preserving issued-quote policy and existing reservations/history",
+      "owningChangeSetIds": [
+        "CN-PKG-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC12",
+      "requirementIds": [
+        "PK-AC12"
+      ],
+      "acceptanceCriteria": "Purchased amendment rechecks availability/cleaning/payment/consent and coordinates PIN/notification revision safely; catalog edit alone leaves active session/PIN unchanged",
+      "owningChangeSetIds": [
+        "CN-ACCESS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-PK-AC13",
+      "requirementIds": [
+        "PK-AC13"
+      ],
+      "acceptanceCriteria": "Historical reports use purchased snapshots/ledger refs and correct metric time basis, not current catalog prices or durations",
+      "owningChangeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC01",
+      "requirementIds": [
+        "BP-AC01"
+      ],
+      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility \u2192 one confirmed snapshot, separate acknowledged access",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC02",
+      "requirementIds": [
+        "BP-AC02"
+      ],
+      "acceptanceCriteria": "Partial/excess/wrong funds | Persist partial/excess credit, cap allocation, reject wrong currency/account proof, no full-paid/extra revenue fiction",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC03",
+      "requirementIds": [
+        "BP-AC03"
+      ],
+      "acceptanceCriteria": "Duplicate receipt/credit/approval | Hashes do not authorize; bank-side dedupe, repeated operation and simultaneous reviewers allocate once",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC04",
+      "requirementIds": [
+        "BP-AC04"
+      ],
+      "acceptanceCriteria": "Cross-user/scope denial | Own upload/preview and reviewer venue/permission gates; assignment does not grant verify/account/refund power",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC05",
+      "requirementIds": [
+        "BP-AC05"
+      ],
+      "acceptanceCriteria": "Mixed gateway/bank | Record both sources, one reservation/quote satisfaction, excess resolution; no forged webhook/card token",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-002"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC06",
+      "requirementIds": [
+        "BP-AC06"
+      ],
+      "acceptanceCriteria": "Stale package rates/expiry | Accepted quote/version/fee/instruction retained; clear accepted re-quote after expiry; no latest rate substitution",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC07",
+      "requirementIds": [
+        "BP-AC07"
+      ],
+      "acceptanceCriteria": "Expired hold/operator delay | No displacement, timely compliance evidence separate from reviewAt; available restoration/agreed alternative/refund, no forfeit",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC08",
+      "requirementIds": [
+        "BP-AC08"
+      ],
+      "acceptanceCriteria": "Malicious/corrected evidence | True type/size/quarantine/safe preview, correction history/late claims; OCR alone never approval",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC09",
+      "requirementIds": [
+        "BP-AC09"
+      ],
+      "acceptanceCriteria": "Instruction/account changes | Version old requests; independent changes and controlled verified emergency communication; no live account overwritten",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC10",
+      "requirementIds": [
+        "BP-AC10"
+      ],
+      "acceptanceCriteria": "Notification failure | Claim stays in queue, bounded retry/escalation and accurate submitted/under-review labels; no sensitive attachment",
+      "owningChangeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC11",
+      "requirementIds": [
+        "BP-AC11"
+      ],
+      "acceptanceCriteria": "Access failure/safety | Verified payment remains, incident/retry, no PIN until eligible confirmed provisioning; egress and original-ID checks intact",
+      "owningChangeSetIds": [
+        "CN-ACCESS-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC12",
+      "requirementIds": [
+        "BP-AC12"
+      ],
+      "acceptanceCriteria": "Refund/correction | Destination/outgoing proof, no completed refund from approval, unknown send reconciles before retry, append correction audit",
+      "owningChangeSetIds": [
+        "CN-REFUND-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BP-AC13",
+      "requirementIds": [
+        "BP-AC13"
+      ],
+      "acceptanceCriteria": "Historical reports | Declared amounts excluded, credits counted once, allocations/excess separated, timestamps/quote snapshots/recognition basis correct",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-REVENUE-BOOKINGS",
+      "requirementIds": [
+        "CN-M-REVENUE-BOOKINGS"
+      ],
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Booking count = distinct confirmedAt booking IDs, source-independent (not receipt/credit count). Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-ROOM-OCCUPANCY",
+      "requirementIds": [
+        "CN-M-ROOM-OCCUPANCY"
+      ],
+      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts \u00d7 100. Zero rooms \u2192 N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-REVENUE-TREND",
+      "requirementIds": [
+        "CN-M-REVENUE-TREND"
+      ],
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-POPULAR-TIME-SLOTS",
+      "requirementIds": [
+        "CN-M-POPULAR-TIME-SLOTS"
+      ],
+      "acceptanceCriteria": "Distinct confirmed noncancelled booking IDs whose scheduled start falls within selected range, grouped by configured local hour band. Explicit business bands [startHour,endHour); cross-midnight bands split or carry dayOffset. Popularity is count, not occupied minutes.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-ROOM-UTILIZATION",
+      "requirementIds": [
+        "CN-M-ROOM-UTILIZATION"
+      ],
+      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range \u00d7 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator \u2192 N/A; unknown/incomplete inputs \u2192 unavailable.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-BOOKING-STATISTICS",
+      "requirementIds": [
+        "CN-M-BOOKING-STATISTICS"
+      ],
+      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-FINANCIAL-KPIS",
+      "requirementIds": [
+        "CN-M-FINANCIAL-KPIS"
+      ],
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator \u2192 N/A; prior zero/missing \u2192 N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-SYSTEM-IOT-STATUS",
+      "requirementIds": [
+        "CN-M-SYSTEM-IOT-STATUS"
+      ],
+      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices \u00d7100, unknown included; 0 devices \u2192 N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-PAYMENT-ADDON-BREAKDOWN",
+      "requirementIds": [
+        "CN-M-PAYMENT-ADDON-BREAKDOWN"
+      ],
+      "acceptanceCriteria": "Payment panel groups deduped independently verified gateway capture and bank credit incoming money by channel/method, respective financial event time and asOf evidence cutoff; uploaded/declared or allocated amounts not extra collections. Add-on panel retains sold immutable quote-item values/quantities by eligible confirmedAt cohort, not cash/recognition; include purchased package inclusion flags so included free extras are not a paid sale. Unmatched/excess bank balance displayed separately, never add-on revenue.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-CN-M-BANK-PAYMENT-REVIEW-FINANCES",
+      "requirementIds": [
+        "CN-M-BANK-PAYMENT-REVIEW-FINANCES"
+      ],
+      "acceptanceCriteria": "BN-M01\u201308 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BN-M01",
+      "requirementIds": [
+        "BN-M01"
+      ],
+      "acceptanceCriteria": "count distinct requestId in open review states at asOf; snapshot asOf; submitted date filter explicitly independent",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BN-M02",
+      "requirementIds": [
+        "BN-M02"
+      ],
+      "acceptanceCriteria": "asOf - oldest unresolved evidence_submitted_at per request in elapsed minutes; distribution/buckets from configured service; overdue only if approved review_due_at passed; snapshot asOf and evidence_submitted_at, never approvedAt; elapsed vs service hours labelled",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BN-M03",
+      "requirementIds": [
+        "BN-M03"
+      ],
+      "acceptanceCriteria": "sum unique positive verified credit amountMinor first verified_at in range; verification correction/bank reversal separate evidence, no double verification entry; verified_at operational processing range, credited_at shown separately; not total collections-by-credit-date",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BN-M04",
+      "requirementIds": [
+        "BN-M04"
+      ],
+      "acceptanceCriteria": "sum deduped bank credit amountMinor; bank-verified reversals/refunds separately deducted for net money measure, allocation never adds another credit; bank_credited_at financial event time; verified_at cutoff asOf; late review can revise historical projection with clear asOf",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BN-M05",
+      "requirementIds": [
+        "BN-M05"
+      ],
+      "acceptanceCriteria": "sum signed unique allocation amount deltas (including separately audited allocation reversals), capped by quote due and available verified funds; source channels separate; allocated_at ledger event range, booking session_start_at is separate service filter; allocation is not cash recognition",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BN-M06",
+      "requirementIds": [
+        "BN-M06"
+      ],
+      "acceptanceCriteria": "per-credit remaining amount; split unmatched vs accepted-quote overpayment/excess only using linked facts; never derive from receipt claim; nonnegative invariant failures flagged Allocation/refund adjustment workflow must release/refine active allocation before subtracting completed outgoing refund so no amount deducted twice; refund-reserved and available-to-allocate are separate balances.; balance snapshot asOf, optional credited-date cohort explicit; not a movement summed again with collections",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BN-M07",
+      "requirementIds": [
+        "BN-M07"
+      ],
+      "acceptanceCriteria": "sum confirmed outgoing refund amountMinor once; requested/approved/initiated/sent/failed/unknown excluded from completed money movements; bank_refund_confirmed_at/outgoing settlement instant selected by evidenced bank contract; not approval time",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    },
+    {
+      "id": "T-BN-M08",
+      "requirementIds": [
+        "BN-M08"
+      ],
+      "acceptanceCriteria": "group verified incoming collections by gateway vs bank, sum once per external money event. Source bank credit is never card capture; refunds shown as separate channel movements; gateway capturedAt and bank_credited_at, verified/asOf cutoff labelled; recognition/service revenue remains separate",
+      "owningChangeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "status": "NOT_RUN",
+      "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
+      "actualTestPaths": [],
+      "evidencePaths": [],
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+    }
+  ],
+  "allApplicationTests": "NOT_RUN: no approved stack/code/build/tests/external or physical environment",
+  "notPercentage": "Requirement/test plans are not completed test/implementation acceptance counts"
+}

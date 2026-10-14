@@ -9,7 +9,7 @@ Source [S1](../sources/CN-KB-FEATURES-TECH-001-request.txt) is a preserved copy 
 
 Decision values: APPROVED = explicit accepted choice; DOCUMENTED_DRAFT = user-discussed/default requirement pending final review; RECOMMENDED = architectural option advocated but unselected; OPEN_DECISION = unresolved alternatives/conflict. Implementation values: NOT_VERIFIED = no code/test evidence; PARTIAL_WITH_EVIDENCE and VERIFIED_WITH_EVIDENCE require concrete paths/commit/tests and scope. Document existence is not feature implementation evidence. No feature currently receives a verified implementation status.
 
-Approved: hybrid admin/customer visual direction (ADR-001). Draft: business defaults and desired workflows S1. Recommended: Spring Modulith and supporting stack options. Open: providers, exact token migration, hardware, privacy, all-guest process and other register rows. PDFs, if later provided, are draft requirements, never legal/merchant/hardware approval evidence.
+Current approved core decisions: hybrid admin/customer visual direction (ADR-001), PR-PKG-001/CN-A12 admin-editable package details/duration/price (ADR-003/S8), PR-BANK-001/CN-C10/CN-A13 bank payment and notified independent review (ADR-004/S9), reaffirmed by S10. Supporting policies remain open. Draft: business defaults and desired workflows S1. Recommended: Spring Modulith and supporting stack options. Open: providers, exact token migration, hardware, privacy, all-guest process and other register rows. PDFs, if later provided, are draft requirements, never legal/merchant/hardware approval evidence.
 
 ## Open-decision register
 | ID | Conflict | Source | Impact | Options | Owner | Evidence required | Decision | Implementation | Launch blocker classification |

@@ -1,0 +1,953 @@
+{
+  "schemaVersion": "1.0.0",
+  "taskId": "CN-AGENT-SETUP-001",
+  "setupScopeApproval": "USER-CONFIRMED S10; current request",
+  "futurePlanApproval": "NOT_APPROVED",
+  "changeSets": [
+    {
+      "id": "CN-AGENT-SETUP-001",
+      "phase": 0,
+      "priority": "P0",
+      "objective": "Execution workflow setup",
+      "requirementIds": [
+        "CN-AGENT-WORKFLOW-001",
+        "PR-UI-001",
+        "PR-PKG-001",
+        "PR-BANK-001"
+      ],
+      "inScope": "Repository instructions, charter, complete available-source review, requirement/test mapping, blocked backlog, status/evidence/handoff",
+      "outOfScope": "No app bootstrap, stack/policy decision, live external operation",
+      "dependencies": [],
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "AGENTS.md; docs/agents; knowledge/execution; related indexes/source register/manifest",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Documentation links/IDs/hashes/coverage, baseline KB validator, fresh read-only discovery and bounded review",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "All setup acceptance checks recorded; product still unimplemented; one exact next action",
+      "requiredApproval": "Explicit user S10 and current setup request",
+      "authorityAvailable": true,
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "execution/evidence/CN-AGENT-SETUP-001.md"
+      ],
+      "verificationScope": "DOCUMENTATION_AND_EXPLICIT_READ_ONLY_DISCOVERY"
+    },
+    {
+      "id": "CN-DEC-001",
+      "phase": 1,
+      "priority": "P0",
+      "objective": "Bounded initial-stack decision brief",
+      "requirementIds": [
+        "CN-AGENT-WORKFLOW-001",
+        "PR-UI-001",
+        "PR-PKG-001",
+        "PR-BANK-001"
+      ],
+      "inScope": "Compare initial backend/frontend/transactional storage recommendations to official supported docs and required module/safety boundaries; prepare proposed selection ADR for user",
+      "outOfScope": "No installing/scaffolding, cloud/provider/hardware choice or automatic final stack approval",
+      "dependencies": [
+        "CN-AGENT-SETUP-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01"
+      ],
+      "affectedFilesModules": "architecture stack/boundaries; new proposed ADR; execution evidence",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Official sources/date, criterion matrix, approved requirements and risk/gate review",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "One bounded proposed stack choice/alternatives and impact; user decision needed before code",
+      "requiredApproval": "User must approve CN-DEC-001 decision-brief scope; final choices require explicit owner/user approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-GATE-001",
+      "phase": 1,
+      "priority": "P0",
+      "objective": "Source and accountable policy gate brief",
+      "requirementIds": [
+        "CN-NFR-02",
+        "CN-NFR-05",
+        "CN-C05"
+      ],
+      "inScope": "Obtain missing sources and record named privacy/admission/operating/safety decision owners with required evidence",
+      "outOfScope": "No final legal/admission/privacy/deadline policy assumed",
+      "dependencies": [
+        "CN-AGENT-SETUP-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-03",
+        "OD-04",
+        "OD-05",
+        "OD-15"
+      ],
+      "affectedFilesModules": "sources; security; existing open-decision register",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Actual source page review, conflicts and owner/evidence mapping",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Missing/available sources and accountable launch gates explicit",
+      "requiredApproval": "User authorization + supplied sources/owners; qualified acceptance remains external",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-FND-001",
+      "phase": 1,
+      "priority": "P0",
+      "objective": "Selected-stack repository skeleton and CI",
+      "requirementIds": [
+        "PR-UI-001",
+        "PR-PKG-001",
+        "PR-BANK-001",
+        "CN-NFR-02",
+        "CN-NFR-03"
+      ],
+      "inScope": "Only approved local project/module skeleton, safe build/test and scoped CI definition after stack selection",
+      "outOfScope": "No production/cloud provisioning, provider setup or business feature",
+      "dependencies": [
+        "CN-DEC-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01"
+      ],
+      "affectedFilesModules": "Future source/build/tests/CI paths TBD after approved ADR",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Actual selected build/lint/unit/module-boundary commands, no production data",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Repeatable approved local skeleton and test evidence; no feature-complete claim",
+      "requiredApproval": "Explicit implementation unit approval and accepted stack ADR",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-UI-001",
+      "phase": 2,
+      "priority": "P1",
+      "objective": "Shared shell and token consumers",
+      "requirementIds": [
+        "PR-UI-001",
+        "CN-A04",
+        "CN-NFR-01"
+      ],
+      "inScope": "First admin/customer shell and reusable control/card/table primitives, only labelled fixtures",
+      "outOfScope": "No backend business implementation or new palette/library without decision",
+      "dependencies": [
+        "CN-FND-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-11"
+      ],
+      "affectedFilesModules": "Future UI components; design tokens unchanged unless authorized",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Rendered mobile/reflow/keyboard/contrast and card-table parity",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Approved hybrid reproduced with usable primitives and DEMO-only fixtures",
+      "requiredApproval": "Explicit UI slice approval and component/palette decisions",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-AUTH-001",
+      "phase": 2,
+      "priority": "P1",
+      "objective": "Identity/session and resource scope skeleton",
+      "requirementIds": [
+        "CN-C02",
+        "CN-A06",
+        "CN-NFR-02"
+      ],
+      "inScope": "First owner/venue scoped session/auth interfaces and permitted account read",
+      "outOfScope": "No real OAuth secrets/users/MFA policy chosen",
+      "dependencies": [
+        "CN-FND-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-12"
+      ],
+      "affectedFilesModules": "Identity & Access/UI/auth contracts TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Session/CSRF/revoke/object-scope denial tests with isolated data",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Owner/scope guards demonstrable; admin policy gaps visible",
+      "requiredApproval": "Slice + identity/role/session choices approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-ROOM-001",
+      "phase": 2,
+      "priority": "P1",
+      "objective": "Catalog and scoped room configuration",
+      "requirementIds": [
+        "CN-C01",
+        "CN-A03",
+        "CN-A04"
+      ],
+      "inScope": "First room/catalog/capacity/config read/edit slice using approved operations model and identical card/table query",
+      "outOfScope": "No hardware mapping changes or rights/safety approval inferred",
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-04",
+        "OD-10",
+        "OD-14"
+      ],
+      "affectedFilesModules": "Venues/Rooms and catalog UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Config permission/version and catalog/empty/error/room-view parity",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Room settings cannot rewrite purchases or certify safety",
+      "requiredApproval": "Slice + venue/room/operating scope approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-PKG-001",
+      "phase": 3,
+      "priority": "P1",
+      "objective": "Package drafts and scoped editor",
+      "requirementIds": [
+        "PR-PKG-001",
+        "CN-A12",
+        "PK-AC01",
+        "PK-AC02",
+        "PK-AC03"
+      ],
+      "inScope": "Bounded draft package model/edit/preview and separate publish privilege metadata",
+      "outOfScope": "No selling/publishing unfinished policy, demand pricing or operational minimum override",
+      "dependencies": [
+        "CN-ROOM-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-21",
+        "OD-22"
+      ],
+      "affectedFilesModules": "Pricing + Settings Packages & Pricing TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Draft permission/stale edit/exact amount/duration/inclusions validation",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Authorized core editing demonstrated without code release; no sales yet",
+      "requiredApproval": "Slice and relevant package/role/policy approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-PKG-002",
+      "phase": 3,
+      "priority": "P1",
+      "objective": "Immutable package publication/applicability",
+      "requirementIds": [
+        "PR-PKG-001",
+        "CN-A12",
+        "PK-AC04",
+        "PK-AC05",
+        "PK-AC06",
+        "PK-AC09",
+        "PK-AC11"
+      ],
+      "inScope": "One versioned publish/schedule/deactivate/history slice with atomic scope/time constraint checks",
+      "outOfScope": "No purchased amendment/access change",
+      "dependencies": [
+        "CN-PKG-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22"
+      ],
+      "affectedFilesModules": "Pricing publication/read projection TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Concurrent publish/effective boundaries/old snapshots/minimum-capacity tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Joint valid publication and no retroactive sold-term edits",
+      "requiredApproval": "Explicit publication slice and policy choices approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-BOOK-001",
+      "phase": 3,
+      "priority": "P1",
+      "objective": "Shared inventory hold/conflict guard",
+      "requirementIds": [
+        "CN-C03",
+        "CN-A02",
+        "BR-01",
+        "BR-02",
+        "BR-06",
+        "BR-07"
+      ],
+      "inScope": "Bounded database-enforced intervals and gateway-hold creation/expiry slice",
+      "outOfScope": "No Redis-only authority or indefinite holds/bank deadline assumption",
+      "dependencies": [
+        "CN-ROOM-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-09",
+        "OD-10",
+        "OD-21"
+      ],
+      "affectedFilesModules": "Booking/database owned schema/API/UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Concurrent overlapping holds/reservations/buffer/closing/idempotency tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Conflicting room ranges cannot both commit under approved semantics",
+      "requiredApproval": "Inventory slice + hold/closing/minimum policy approval; migration explicitly reviewed",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-QUOTE-001",
+      "phase": 3,
+      "priority": "P1",
+      "objective": "Exact quote and purchase snapshot contract",
+      "requirementIds": [
+        "CN-C04",
+        "PR-PKG-001",
+        "PK-AC07",
+        "PK-AC10",
+        "PK-AC13",
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-10"
+      ],
+      "inScope": "One quote construction/expiry/version/snapshot slice and itemized customer summary",
+      "outOfScope": "No guessed proration/fee/tax or automatic latest-price substitution",
+      "dependencies": [
+        "CN-PKG-002",
+        "CN-BOOK-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25"
+      ],
+      "affectedFilesModules": "Pricing/Booking/UI quote contract TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Exact unit/guest/included-extra/quote-expiry/snapshot fixture tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
+      "requiredApproval": "Quote slice + price/timing/method policy approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-VERIFY-001",
+      "phase": 4,
+      "priority": "P1",
+      "objective": "Private booker evidence and eligibility review",
+      "requirementIds": [
+        "CN-C05",
+        "CN-A06",
+        "CN-NFR-02"
+      ],
+      "inScope": "One authenticated private evidence/review/decision and explicit consent slice",
+      "outOfScope": "No OCR authenticity claim or all-guest process bypass",
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-QUOTE-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-03",
+        "OD-05"
+      ],
+      "affectedFilesModules": "Verification/storage/identity UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Upload/private scope/retention/review/consent tests and operational gate",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Restricted booker eligibility separate from on-site guest entry",
+      "requiredApproval": "Slice + approved evidence/admission/privacy/storage process",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-PAY-GW-001",
+      "phase": 5,
+      "priority": "P1",
+      "objective": "Gateway sandbox attempt/verification slice",
+      "requirementIds": [
+        "CN-C06",
+        "CN-A07",
+        "PK-AC08"
+      ],
+      "inScope": "One approved hosted sandbox attempt, verified inbox/ledger and guarded confirmation",
+      "outOfScope": "No real charges/refunds/merchant secrets or redirect success assumption",
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-06",
+        "OD-07",
+        "OD-20"
+      ],
+      "affectedFilesModules": "Payments/Booking/Notifications sandbox UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Signature/replay/amount/late-success/idempotency/hold conflict tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "One verified fact/booking or explicit compensation incident",
+      "requiredApproval": "Slice + provider/merchant sandbox and refund/quote policy authority",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-PAY-BANK-001",
+      "phase": 5,
+      "priority": "P1",
+      "objective": "Bank request/receipt and durable reviewer work",
+      "requirementIds": [
+        "PR-BANK-001",
+        "CN-C10",
+        "CN-A13",
+        "BP-AC04",
+        "BP-AC06",
+        "BP-AC07",
+        "BP-AC08",
+        "BP-AC09",
+        "BP-AC10"
+      ],
+      "inScope": "One method request/shared durable hold/private receipt/status/notification queue slice",
+      "outOfScope": "No real receiving account/credit verification or indefinite review hold",
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29"
+      ],
+      "affectedFilesModules": "Payments/Booking/Notifications/customer/review UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Own/scoped upload/version/expiry/quarantine/failed notification tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Claim is under review, queue survives delivery failure, quotes protected",
+      "requiredApproval": "Slice + approved review/timing/fee/privacy/account/staffing controls",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-PAY-BANK-002",
+      "phase": 5,
+      "priority": "P1",
+      "objective": "Bank evidence/allocation and guarded confirmation",
+      "requirementIds": [
+        "PR-BANK-001",
+        "CN-C10",
+        "CN-A13",
+        "BP-AC01",
+        "BP-AC02",
+        "BP-AC03",
+        "BP-AC05"
+      ],
+      "inScope": "One isolated/mock reconciliation ledger/allocation/booking-resolution slice",
+      "outOfScope": "No actual bank approval/money movement, forged webhook or wallet",
+      "dependencies": [
+        "CN-PAY-BANK-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "affectedFilesModules": "Payments/Booking/review UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Concurrent reviewer/deduped credit/partial-excess/mixed-method/expired hold tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Funds retained independently; one eligible booking; no duplicate allocation",
+      "requiredApproval": "Explicit isolated-ledger slice approval and final matching/allocation controls",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-REFUND-001",
+      "phase": 5,
+      "priority": "P1",
+      "objective": "Evidence-based refunds and corrections",
+      "requirementIds": [
+        "CN-A07",
+        "BP-AC12",
+        "CN-NFR-02"
+      ],
+      "inScope": "One simulated/sandbox refund/correction workflow with destination/evidence/status guard",
+      "outOfScope": "No real refund/card re-bill or deletion of finance history",
+      "dependencies": [
+        "CN-PAY-GW-001",
+        "CN-PAY-BANK-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-07",
+        "OD-28"
+      ],
+      "affectedFilesModules": "Payments/UI/Audit TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Refund balance/destination/unknown send/retry/append-only correction tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Approval distinct from outgoing completion; receipt facts preserved",
+      "requiredApproval": "Slice + method refund/control approval; live money remains separately gated",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-ACCESS-001",
+      "phase": 6,
+      "priority": "P1",
+      "objective": "Simulated credential scheduling/recovery",
+      "requirementIds": [
+        "CN-C07",
+        "CN-O01",
+        "BP-AC11",
+        "PK-AC12"
+      ],
+      "inScope": "One explicitly simulated credential lifecycle/status/retry slice using purchased window",
+      "outOfScope": "No physical certification/unlock/cloud request; no release for unverified payment",
+      "dependencies": [
+        "CN-PAY-GW-001",
+        "CN-PAY-BANK-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-02",
+        "OD-04"
+      ],
+      "affectedFilesModules": "Access/Booking/Notifications/UI and simulator TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Paid-confirmed-provisioned distinction/expiry/revoke/unknown/retry tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Software behavior verified only with simulator; physical gate remains open",
+      "requiredApproval": "Simulation slice and access-window/process approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-IOT-001",
+      "phase": 7,
+      "priority": "P1",
+      "objective": "Simulated device command/observation slice",
+      "requirementIds": [
+        "CN-O02",
+        "CN-O04",
+        "CN-A05"
+      ],
+      "inScope": "One desired/ack/observed status adapter and simulator with TTL/permissions",
+      "outOfScope": "No live lock/power/alarm or claimed offline safety",
+      "dependencies": [
+        "CN-ACCESS-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-02",
+        "OD-13"
+      ],
+      "affectedFilesModules": "IoT/adapters/operator UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "TTL/ACL/reconnect/out-of-order/no-stale-actuation tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Unknown never OFF/available; simulator evidence qualified",
+      "requiredApproval": "Simulator slice + protocol/capability approval, physical work separate",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-OPS-001",
+      "phase": 7,
+      "priority": "P1",
+      "objective": "Room readiness/incident software slice",
+      "requirementIds": [
+        "CN-O03",
+        "CN-O04",
+        "CN-A05",
+        "CN-NFR-05"
+      ],
+      "inScope": "One cleaning task/clearance/session-warning/incident interface under approved staffing process",
+      "outOfScope": "No timer-is-clean or exit-proves-empty inference",
+      "dependencies": [
+        "CN-IOT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-29"
+      ],
+      "affectedFilesModules": "Booking/Rooms/IoT/notification/operator UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Missing clearance/overstay/warning-delay/incident authorization tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Physical readiness requires accountable evidence and staff",
+      "requiredApproval": "Slice + staffing/readiness/escalation policy approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-ADMIN-001",
+      "phase": 8,
+      "priority": "P1",
+      "objective": "Read-only scoped account/audit operations",
+      "requirementIds": [
+        "CN-A06",
+        "CN-A11",
+        "CN-A10",
+        "CN-NFR-02"
+      ],
+      "inScope": "One restricted account status/audit listing slice; mutations handled by owning prior units",
+      "outOfScope": "No unrestricted administrator, secret exposure or operational policy edits",
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28"
+      ],
+      "affectedFilesModules": "Identity/Verification/Audit/UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Scoped list/detail/export/redaction/paging tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Role-specific safe read controls and audit visibility",
+      "requiredApproval": "Bounded admin slice + role/retention/export approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-NOTIFY-001",
+      "phase": 9,
+      "priority": "P1",
+      "objective": "One notification channel and durable delivery",
+      "requirementIds": [
+        "CN-C07",
+        "CN-A13",
+        "CN-SUP-01"
+      ],
+      "inScope": "One approved sandbox channel/templated protected link and queue recovery slice",
+      "outOfScope": "No real customer messages or raw evidence/PIN attachments",
+      "dependencies": [
+        "CN-PAY-BANK-001",
+        "CN-ACCESS-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-05",
+        "OD-29"
+      ],
+      "affectedFilesModules": "Notifications/customer/operator UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Dedupe/retry/bounce/failed-alert queue and privacy tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Delivery failure does not delete review or change payment truth",
+      "requiredApproval": "Channel/sandbox scope and notification/privacy approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-CUSTOMER-001",
+      "phase": 9,
+      "priority": "P1",
+      "objective": "Owned history and support status",
+      "requirementIds": [
+        "CN-C08",
+        "CN-SUP-01"
+      ],
+      "inScope": "One upcoming/history/detail and actionable support-status slice",
+      "outOfScope": "No amendment policy guessed; amendment later refined task under package/payment owners",
+      "dependencies": [
+        "CN-ACCESS-001",
+        "CN-NOTIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-07",
+        "OD-20",
+        "OD-28"
+      ],
+      "affectedFilesModules": "Booking/customer UI/support TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Owner denial/snapshot/pending review/access/refund/error tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Historical purchase shown; unresolved state never false success",
+      "requiredApproval": "Slice + support/contact/privacy policy approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-AMEND-001",
+      "phase": 9,
+      "priority": "P1",
+      "objective": "One purchased booking change/extension slice",
+      "requirementIds": [
+        "CN-C08",
+        "CN-A02",
+        "PK-AC12",
+        "BR-10"
+      ],
+      "inScope": "One agreed amendment with range/delta money/access coordination",
+      "outOfScope": "No automatic latest catalog rate or free unsafe extension",
+      "dependencies": [
+        "CN-CUSTOMER-001",
+        "CN-QUOTE-001",
+        "CN-REFUND-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-07",
+        "OD-20",
+        "OD-21",
+        "OD-24"
+      ],
+      "affectedFilesModules": "Booking/Pricing/Payments/Access/UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Conflict/buffer/consent/partial payment/access recovery tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Original purchase history retained with safe accepted revision",
+      "requiredApproval": "Amendment slice and agreed policy/payment method approval",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-REPORT-001",
+      "phase": 9,
+      "priority": "P1",
+      "objective": "Core authorized money/booking projection",
+      "requirementIds": [
+        "CN-A01",
+        "CN-A08",
+        "CN-NFR-03",
+        "BP-AC13"
+      ],
+      "inScope": "One collections/booking/channel report with matched export/scopes and snapshot times",
+      "outOfScope": "No certified accounting profit or fabricated room attribution",
+      "dependencies": [
+        "CN-PAY-GW-001",
+        "CN-PAY-BANK-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "affectedFilesModules": "Analytics/Payments/Booking/UI TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Credited/verified/allocated clock, no-double-count/null/asOf/export tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Only authoritative safe metrics, further charts refined before READY",
+      "requiredApproval": "Report slice + approved metric definition/recognition exclusions",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-ENG-001",
+      "phase": 10,
+      "priority": "P1",
+      "objective": "Engagement scope/rule decision brief",
+      "requirementIds": [
+        "CN-C09",
+        "CN-A09"
+      ],
+      "inScope": "Bounded optional loyalty/referral/promotion proposal with rule/abuse/reversal choices",
+      "outOfScope": "No earning rate/feature implementation or silent scope deferral",
+      "dependencies": [
+        "CN-REPORT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-08"
+      ],
+      "affectedFilesModules": "Existing Engagement/Pricing decision docs TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Trace rule options/eligibility and acceptance proposal",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Explicit approve/defer decision remains required",
+      "requiredApproval": "User authorizes brief; optional feature scope/rules separately approved",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-ACCEPT-001",
+      "phase": 11,
+      "priority": "P1",
+      "objective": "Integrated evidence and recovery gate",
+      "requirementIds": [
+        "CN-NFR-01",
+        "CN-NFR-02",
+        "CN-NFR-03",
+        "CN-NFR-04",
+        "CN-NFR-05",
+        "CN-NFR-06"
+      ],
+      "inScope": "Review actual integrated tests/restore/physical results and missing launch acceptance",
+      "outOfScope": "No waive prior gates; physical test is separately authorized/qualified, no simulator substitution",
+      "dependencies": [
+        "CN-AMEND-001",
+        "CN-REPORT-001",
+        "CN-OPS-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-02",
+        "OD-03",
+        "OD-04",
+        "OD-05",
+        "OD-14",
+        "OD-15"
+      ],
+      "affectedFilesModules": "Cross-module CI/acceptance/runbooks TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Actual performance/auth/concurrency/backup restore/UI/physical owner evidence",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Evidence classes/owner acceptance distinct; unresolved gates remain blocking",
+      "requiredApproval": "Integrated test scope + qualified physical/business/legal authority",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    },
+    {
+      "id": "CN-LAUNCH-001",
+      "phase": 12,
+      "priority": "P1",
+      "objective": "Authorized controlled launch/handover",
+      "requirementIds": [
+        "CN-NFR-05",
+        "CN-NFR-06",
+        "PR-UI-001",
+        "PR-PKG-001",
+        "PR-BANK-001"
+      ],
+      "inScope": "Approved controlled rollout with responders/monitoring/recovery/handover",
+      "outOfScope": "No automatic deployment/cost or omitted optional feature disguised as done",
+      "dependencies": [
+        "CN-ACCEPT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-02",
+        "OD-04",
+        "OD-06",
+        "OD-14",
+        "OD-29"
+      ],
+      "affectedFilesModules": "Deployment/operations/provider/hardware paths TBD",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Named signoff, environment/rollback/alert/recovery evidence",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Launch accepted by responsible owners; NOT just code/test green",
+      "requiredApproval": "Explicit release/production/cost/live-device authorizations and all launch gates",
+      "authorityAvailable": false,
+      "readiness": "BLOCKED",
+      "workStatus": "BLOCKED",
+      "evidencePaths": []
+    }
+  ]
+}

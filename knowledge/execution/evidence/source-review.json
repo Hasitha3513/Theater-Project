@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0.0",
+  "taskId": "CN-AGENT-SETUP-001",
+  "reviewer": "source_review (read-only subagent)",
+  "scope": "19 baseline source/JSON/CSS/validator/architecture/security files plus 3 product/delivery files in follow-up",
+  "mode": "READ_ONLY",
+  "reviewKind": "INDEPENDENT_SOURCE_REVIEW",
+  "result": "Sources and statuses coherent with explicit missing evidence; implementation must remain blocked",
+  "findings": [
+    {
+      "id": "SR-01",
+      "finding": "No selected-stack ADR, all 29 owners TBD and no code/provider/hardware evidence",
+      "disposition": "Recorded OM-02/03/04 and dependency gates, no policy selected"
+    },
+    {
+      "id": "SR-02",
+      "finding": "Package prose calls capacity approved despite draft-source/physical evidence gap; PK-AC07 definitive wording despite OD-20",
+      "disposition": "OM-04/05; preserve safety ceiling, conditional future tests, no broad approval claimed"
+    },
+    {
+      "id": "SR-03",
+      "finding": "Generic chart population/unit fields and legacy refundedMinor vs combined confirmedRefundMinor mapping",
+      "disposition": "OM-06 before report implementation; not silently changed in setup"
+    },
+    {
+      "id": "SR-04",
+      "finding": "Source endings appeared incomplete from wc -l but unterminated final lines complete",
+      "disposition": "Reviewer corrected after actual tail/splitlines; no source-gap claim retained"
+    },
+    {
+      "id": "SR-05",
+      "finding": "Historical delivery publication text is not authority for current work",
+      "disposition": "Current explicit auto commit/push user instruction separate PUB-AUTO-001; baseline metadata reconciled"
+    }
+  ],
+  "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+  "writes": "NONE",
+  "decisionApprovals": "NONE"
+}

@@ -61,6 +61,13 @@
       "availability": "AVAILABLE",
       "kind": "user-confirmed-bank-payment-feature-and-recommended-controls",
       "sha256": "4c63f237b0bb3e67011efd2103ffc614b702f313fb2970ae1ceaf72d9e19c0b1"
+    },
+    {
+      "id": "S10",
+      "path": "sources/CN-AGENT-SETUP-001-request.txt",
+      "availability": "AVAILABLE",
+      "kind": "user-agent-setup-scope-and-carried-forward-approved-requirements",
+      "sha256": "5069b092f2eb4b71e180e11d13e701b2a99a3c8f143a3e1f992bbcaf862e72f2"
     }
   ]
 }

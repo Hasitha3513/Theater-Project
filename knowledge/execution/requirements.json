@@ -1,0 +1,4083 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+  "scopeApproval": "Core product A/B/C and operating setup only; future implementation plan not approved",
+  "requirements": [
+    {
+      "id": "CN-AGENT-WORKFLOW-001",
+      "title": "Persistent preflight/controlled execution/evidence/handoff",
+      "decisionStatus": "APPROVED",
+      "sourceIds": [
+        "S10"
+      ],
+      "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
+      "priority": "P0",
+      "scope": "authorized setup only",
+      "acceptanceCriteria": "Root entry points to charter/status/plan; available-source review and approved requirement mapping; honest readiness, evidence and safe resume",
+      "moduleOwnership": "Repository workflow",
+      "uiApiOwnership": "AGENTS.md and execution controls; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-AGENT-SETUP-001"
+      ],
+      "dependencies": [],
+      "blockingDecisionIds": [],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-AGENT-WORKFLOW-001"
+      ],
+      "plannedTestStatus": "PASS_DOCUMENTATION",
+      "workStatus": "VERIFIED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [
+        "execution/evidence/CN-AGENT-SETUP-001.md",
+        "execution/evidence/checks.json",
+        "execution/evidence/instruction-review.json"
+      ],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "Host automatic instruction loading not verified"
+      ],
+      "verificationScope": "Document and manual discovery only; host loading NOT_VERIFIED"
+    },
+    {
+      "id": "PR-UI-001",
+      "title": "Preserve approved hybrid visual direction (tracking alias, not a new decision)",
+      "decisionStatus": "APPROVED",
+      "sourceIds": [
+        "S1",
+        "S10"
+      ],
+      "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Reference direction/tokens retained; future rendered interfaces use shared shells/components, no screenshot data as operational truth",
+      "moduleOwnership": "Shared frontend/design",
+      "uiApiOwnership": "Admin/customer/page/a11y definitions; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-UI-001",
+        "CN-DEC-001"
+      ],
+      "dependencies": [
+        "CN-AGENT-SETUP-001",
+        "CN-FND-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-11"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PR-UI-001"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-11",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PR-PKG-001",
+      "title": "Admin-editable package content/duration/price without per-edit release",
+      "decisionStatus": "APPROVED",
+      "sourceIds": [
+        "S8",
+        "S10"
+      ],
+      "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "PK-AC01\u201313, after supporting policy decisions; core editing and bought-term protection distinct",
+      "moduleOwnership": "Pricing/Booking",
+      "uiApiOwnership": "Packages & Pricing/customer quote; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-001",
+        "CN-PKG-002",
+        "CN-QUOTE-001",
+        "CN-AMEND-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-CUSTOMER-001",
+        "CN-PKG-001",
+        "CN-PKG-002",
+        "CN-QUOTE-001",
+        "CN-REFUND-001",
+        "CN-ROOM-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-20",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PR-PKG-001"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-20",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PR-BANK-001",
+      "title": "Bank deposit/receipt/scoped admin notification and independent authorized verification",
+      "decisionStatus": "APPROVED",
+      "sourceIds": [
+        "S9",
+        "S10"
+      ],
+      "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "BP-AC01\u201313, no receipt/funds/booking/access conflation, online path retained",
+      "moduleOwnership": "Payments/Booking/Notifications/Audit",
+      "uiApiOwnership": "Customer claim and admin review; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001",
+        "CN-PAY-BANK-002",
+        "CN-REFUND-001",
+        "CN-NOTIFY-001"
+      ],
+      "dependencies": [
+        "CN-ACCESS-001",
+        "CN-PAY-BANK-001",
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001",
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PR-BANK-001"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-27",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C01",
+      "title": "Discovery",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Usable catalog without auth; no fabricated availability or production sample price",
+      "moduleOwnership": "Venues/Rooms",
+      "uiApiOwnership": "Landing Page; Cinema Room Selection; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ROOM-001"
+      ],
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-04",
+        "OD-10",
+        "OD-14"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-04",
+        "OD-10",
+        "OD-14",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C02",
+      "title": "Identity, profile and consent",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Owner-scoped session/profile; explicit policy version/time persisted",
+      "moduleOwnership": "Identity & Access",
+      "uiApiOwnership": "Google Authentication; Customer Dashboard; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-AUTH-001"
+      ],
+      "dependencies": [
+        "CN-FND-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-12"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C02"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-12",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C03",
+      "title": "Availability and temporary holds",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Two conflicting reservations cannot both commit; server expiresAt shown",
+      "moduleOwnership": "Booking",
+      "uiApiOwnership": "Date and Time Selection; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-BOOK-001"
+      ],
+      "dependencies": [
+        "CN-ROOM-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-09",
+        "OD-10",
+        "OD-21"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C03"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-09",
+        "OD-10",
+        "OD-21",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C04",
+      "title": "Quotation and add-ons",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Base/PS4 examples correct; fifth guest charged once; final total server generated",
+      "moduleOwnership": "Pricing",
+      "uiApiOwnership": "Booking Summary; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-PKG-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C04"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C05",
+      "title": "Booker verification",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "OCR cannot alone prove authenticity; restricted decision/evidence access",
+      "moduleOwnership": "Verification",
+      "uiApiOwnership": "Identity Verification; Customer Management; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-VERIFY-001"
+      ],
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-QUOTE-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-03",
+        "OD-05"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C05"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-03",
+        "OD-05",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C06",
+      "title": "Hosted payment and confirmation",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Redirect never grants success; duplicate events have one effect; receipt from ledger",
+      "moduleOwnership": "Payments",
+      "uiApiOwnership": "Payment Processing; Booking Confirmation; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-GW-001"
+      ],
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-06",
+        "OD-07",
+        "OD-20"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C06"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-06",
+        "OD-07",
+        "OD-20",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C07",
+      "title": "Protected access and delivery",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "No access-ready state before install evidence; delivery failure yields support",
+      "moduleOwnership": "Access Control; Notifications",
+      "uiApiOwnership": "Smart Door Access PIN; Booking Confirmation; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ACCESS-001",
+        "CN-NOTIFY-001"
+      ],
+      "dependencies": [
+        "CN-ACCESS-001",
+        "CN-PAY-BANK-001",
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-02",
+        "OD-04",
+        "OD-05",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C07"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-02",
+        "OD-04",
+        "OD-05",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C08",
+      "title": "Self-service booking history",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "No cross-customer reads; retain history and original terms",
+      "moduleOwnership": "Booking",
+      "uiApiOwnership": "Customer Dashboard; Booking History; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-CUSTOMER-001",
+        "CN-AMEND-001"
+      ],
+      "dependencies": [
+        "CN-ACCESS-001",
+        "CN-CUSTOMER-001",
+        "CN-NOTIFY-001",
+        "CN-QUOTE-001",
+        "CN-REFUND-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-07",
+        "OD-20",
+        "OD-21",
+        "OD-24",
+        "OD-28"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C08"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-07",
+        "OD-20",
+        "OD-21",
+        "OD-24",
+        "OD-28",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C09",
+      "title": "Referral and loyalty",
+      "decisionStatus": "OPEN_DECISION",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "No invented earn rate; reversals audited; unavailable feature not promoted",
+      "moduleOwnership": "Customer Engagement",
+      "uiApiOwnership": "Loyalty and Referrals; Promotions and Loyalty; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ENG-001"
+      ],
+      "dependencies": [
+        "CN-REPORT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-08"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C09"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-08",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A01",
+      "title": "Operational dashboard",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "All card labels include basis/asOf; no unavailable-to-zero fallback",
+      "moduleOwnership": "Analytics",
+      "uiApiOwnership": "Dashboard; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A02",
+      "title": "Booking administration",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Stable paging; permissions checked server-side; no silent price rewriting",
+      "moduleOwnership": "Booking",
+      "uiApiOwnership": "Booking Management; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-BOOK-001",
+        "CN-AMEND-001"
+      ],
+      "dependencies": [
+        "CN-CUSTOMER-001",
+        "CN-QUOTE-001",
+        "CN-REFUND-001",
+        "CN-ROOM-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-07",
+        "OD-09",
+        "OD-10",
+        "OD-20",
+        "OD-21",
+        "OD-24"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A02"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-07",
+        "OD-09",
+        "OD-10",
+        "OD-20",
+        "OD-21",
+        "OD-24",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A03",
+      "title": "Venue and room configuration",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Existing reservation impacts shown; enabled does not mean clean/healthy",
+      "moduleOwnership": "Venues/Rooms",
+      "uiApiOwnership": "Cinema Room Management; System Settings; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ROOM-001"
+      ],
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-04",
+        "OD-10",
+        "OD-14"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A03"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-04",
+        "OD-10",
+        "OD-14",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A04",
+      "title": "Equivalent room views",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Both views return same IDs/states and preserve filters",
+      "moduleOwnership": "Venues/Rooms",
+      "uiApiOwnership": "Cinema Room Management; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-UI-001",
+        "CN-ROOM-001"
+      ],
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-FND-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-04",
+        "OD-10",
+        "OD-11",
+        "OD-14"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A04"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-04",
+        "OD-10",
+        "OD-11",
+        "OD-14",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A05",
+      "title": "Live control and incidents",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Requested != observed; no unsafe egress/power action",
+      "moduleOwnership": "IoT; Access Control",
+      "uiApiOwnership": "Room Live Control; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-IOT-001",
+        "CN-OPS-001"
+      ],
+      "dependencies": [
+        "CN-ACCESS-001",
+        "CN-IOT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-02",
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A05"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-02",
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A06",
+      "title": "Account and verification review",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Suspended != rejected; raw documents never in customer list",
+      "moduleOwnership": "Identity & Access; Verification",
+      "uiApiOwnership": "Customer Management; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-AUTH-001",
+        "CN-VERIFY-001",
+        "CN-ADMIN-001"
+      ],
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-FND-001",
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-03",
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A06"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-03",
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A07",
+      "title": "Finance operations",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Refund balance enforced; reconciliation discoverable; no card-data collection",
+      "moduleOwnership": "Payments",
+      "uiApiOwnership": "Payments and Refunds; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-GW-001",
+        "CN-REFUND-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001",
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-06",
+        "OD-07",
+        "OD-20",
+        "OD-28"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A07"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-06",
+        "OD-07",
+        "OD-20",
+        "OD-28",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A08",
+      "title": "Analytics and exports",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Export matches visible filters and metric IDs; separate scales",
+      "moduleOwnership": "Analytics",
+      "uiApiOwnership": "Analytics and Reports; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A08"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A09",
+      "title": "Engagement administration",
+      "decisionStatus": "OPEN_DECISION",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Versioned eligibility; no retroactive rule changes to earned rewards without approved process",
+      "moduleOwnership": "Customer Engagement",
+      "uiApiOwnership": "Promotions and Loyalty; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ENG-001"
+      ],
+      "dependencies": [
+        "CN-REPORT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-08"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A09"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-08",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A10",
+      "title": "Policy and notification settings",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Prior purchases/consent retained; no privilege escalation",
+      "moduleOwnership": "Pricing; Notifications; Identity & Access",
+      "uiApiOwnership": "System Settings; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ADMIN-001"
+      ],
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A10"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A11",
+      "title": "Audit visibility",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Actor/resource/reason/correlation recorded; no edit/delete UX",
+      "moduleOwnership": "Audit",
+      "uiApiOwnership": "Audit Logs; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ADMIN-001"
+      ],
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A11"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-O01",
+      "title": "Access credential lifecycle",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Valid only session interval; re-entry tested, not presumed",
+      "moduleOwnership": "Access Control",
+      "uiApiOwnership": "Smart Door Access PIN; Room Live Control; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ACCESS-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-02",
+        "OD-04"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-O01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-02",
+        "OD-04",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-O02",
+      "title": "ESP32 and room automation",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Only capability-supported operations; per-device auth and expiring commands",
+      "moduleOwnership": "IoT",
+      "uiApiOwnership": "Room Live Control; IoT Device Management; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-IOT-001"
+      ],
+      "dependencies": [
+        "CN-ACCESS-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-02",
+        "OD-13"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-O02"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-02",
+        "OD-13",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-O03",
+      "title": "End-of-session operations",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "No physical-cleaning claim from timer; accountable intervention path",
+      "moduleOwnership": "Booking; Notifications; Venues/Rooms",
+      "uiApiOwnership": "Customer Dashboard; Room Live Control; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-OPS-001"
+      ],
+      "dependencies": [
+        "CN-IOT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-O03"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-O04",
+      "title": "Connectivity and emergency recovery",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Unknown not OFF/empty; independent egress and trained response verified before launch",
+      "moduleOwnership": "IoT; Access Control",
+      "uiApiOwnership": "IoT Device Management; Room Live Control; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-IOT-001",
+        "CN-OPS-001"
+      ],
+      "dependencies": [
+        "CN-ACCESS-001",
+        "CN-IOT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-02",
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-O04"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-02",
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A12",
+      "title": "Admin-editable package details duration and prices",
+      "decisionStatus": "APPROVED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "PK-AC01\u201313 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
+      "moduleOwnership": "Pricing (existing proposed owner); Booking owns purchased snapshots",
+      "uiApiOwnership": "System Settings \u2192 Packages & Pricing (proposed subsection, no verified route); customer package/quote/confirmation views; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-001",
+        "CN-PKG-002"
+      ],
+      "dependencies": [
+        "CN-PKG-001",
+        "CN-ROOM-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A12"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-C10",
+      "title": "Bank deposit transfer and receipt claim",
+      "decisionStatus": "APPROVED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "BP-AC01\u201313; independent bank credit and guarded one-booking result; not tests run",
+      "moduleOwnership": "Payments; Booking; Notifications",
+      "uiApiOwnership": "Payment Processing; Customer Dashboard/Booking History; protected claim upload/status; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001",
+        "CN-PAY-BANK-002"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-001",
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-C10"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-27",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-A13",
+      "title": "Bank payment review and reviewer notification",
+      "decisionStatus": "APPROVED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "BP-AC01\u201313; alert failure retains queue; approval alone no completed booking/access/refund",
+      "moduleOwnership": "Payments; Booking; Notifications; Audit",
+      "uiApiOwnership": "Payments \u2192 Bank Deposit Reviews (proposed subsection); actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001",
+        "CN-PAY-BANK-002",
+        "CN-NOTIFY-001"
+      ],
+      "dependencies": [
+        "CN-ACCESS-001",
+        "CN-PAY-BANK-001",
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-05",
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-A13"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-05",
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-27",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-NFR-01",
+      "title": "Responsive/accessibility acceptance",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S10"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "coverage topic from existing docs/S10; no invented approval",
+      "acceptanceCriteria": "Rendered keyboard/screen reader/contrast/reflow and equivalent data tests, target not certification",
+      "moduleOwnership": "Shared frontend",
+      "uiApiOwnership": "Relevant customer/admin status and support controls; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-UI-001",
+        "CN-ACCEPT-001"
+      ],
+      "dependencies": [
+        "CN-AMEND-001",
+        "CN-FND-001",
+        "CN-OPS-001",
+        "CN-REPORT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-11"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-NFR-01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-11",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-NFR-02",
+      "title": "Security/privacy/permissions and consent",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S10"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "coverage topic from existing docs/S10; no invented approval",
+      "acceptanceCriteria": "Owner/venue denial, consent/evidence retention/secret and incident tests plus approved policy",
+      "moduleOwnership": "All protected modules",
+      "uiApiOwnership": "Relevant customer/admin status and support controls; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-GATE-001",
+        "CN-AUTH-001",
+        "CN-VERIFY-001",
+        "CN-ADMIN-001",
+        "CN-ACCEPT-001"
+      ],
+      "dependencies": [
+        "CN-AGENT-SETUP-001",
+        "CN-AMEND-001",
+        "CN-AUTH-001",
+        "CN-FND-001",
+        "CN-OPS-001",
+        "CN-QUOTE-001",
+        "CN-REPORT-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-03",
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-NFR-02"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-03",
+        "OD-05",
+        "OD-12",
+        "OD-18",
+        "OD-28",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-NFR-03",
+      "title": "Observability/audit/metric freshness",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S10"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "coverage topic from existing docs/S10; no invented approval",
+      "acceptanceCriteria": "Safe logs/metrics/correlation, scoped fresh reports/alerts and no sensitive event payload",
+      "moduleOwnership": "Audit/Analytics/Operations",
+      "uiApiOwnership": "Relevant customer/admin status and support controls; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-FND-001",
+        "CN-REPORT-001",
+        "CN-ACCEPT-001"
+      ],
+      "dependencies": [
+        "CN-AMEND-001",
+        "CN-DEC-001",
+        "CN-OPS-001",
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001",
+        "CN-REPORT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-NFR-03"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-NFR-04",
+      "title": "Backups and tested recovery",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S10"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "coverage topic from existing docs/S10; no invented approval",
+      "acceptanceCriteria": "Defined recovery objectives and actual isolated restore/failover evidence, not backup existence alone",
+      "moduleOwnership": "Delivery/Operations",
+      "uiApiOwnership": "Relevant customer/admin status and support controls; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ACCEPT-001"
+      ],
+      "dependencies": [
+        "CN-AMEND-001",
+        "CN-OPS-001",
+        "CN-REPORT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-05"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-NFR-04"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-05",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-NFR-05",
+      "title": "Physical safety/readiness/emergency handover",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S10"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "coverage topic from existing docs/S10; no invented approval",
+      "acceptanceCriteria": "Qualified egress/offline/wiring/cleaning/guest/manual-review staff evidence; simulator not physical acceptance",
+      "moduleOwnership": "Access/IoT/Venues/Operations",
+      "uiApiOwnership": "Relevant customer/admin status and support controls; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-GATE-001",
+        "CN-OPS-001",
+        "CN-ACCEPT-001",
+        "CN-LAUNCH-001"
+      ],
+      "dependencies": [
+        "CN-ACCEPT-001",
+        "CN-AGENT-SETUP-001",
+        "CN-AMEND-001",
+        "CN-IOT-001",
+        "CN-OPS-001",
+        "CN-REPORT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-02",
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-14",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-NFR-05"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-02",
+        "OD-04",
+        "OD-10",
+        "OD-13",
+        "OD-14",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-NFR-06",
+      "title": "Controlled deployment/operational handover",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S10"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "coverage topic from existing docs/S10; no invented approval",
+      "acceptanceCriteria": "Specific release authority, actual environment/rollback/monitoring/support and named acceptance",
+      "moduleOwnership": "Delivery",
+      "uiApiOwnership": "Relevant customer/admin status and support controls; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ACCEPT-001",
+        "CN-LAUNCH-001"
+      ],
+      "dependencies": [
+        "CN-ACCEPT-001",
+        "CN-AMEND-001",
+        "CN-OPS-001",
+        "CN-REPORT-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-01",
+        "OD-06",
+        "OD-14"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-NFR-06"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-01",
+        "OD-06",
+        "OD-14",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-SUP-01",
+      "title": "Customer/incident support and accountable response",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S10"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "coverage topic from existing docs/S10; no invented approval",
+      "acceptanceCriteria": "Unresolved verification/payment/access/service cases have safe status and accountable support workflow",
+      "moduleOwnership": "Support/Notifications/Operations",
+      "uiApiOwnership": "Relevant customer/admin status and support controls; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-CUSTOMER-001",
+        "CN-NOTIFY-001",
+        "CN-OPS-001"
+      ],
+      "dependencies": [
+        "CN-ACCESS-001",
+        "CN-IOT-001",
+        "CN-NOTIFY-001",
+        "CN-PAY-BANK-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-04",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-SUP-01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-04",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-01",
+      "title": "Existing canonical initial rule BR-01",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-BOOK-001"
+      ],
+      "dependencies": [
+        "CN-ROOM-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-09",
+        "OD-10",
+        "OD-21"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-09",
+        "OD-10",
+        "OD-21",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-02",
+      "title": "Existing canonical initial rule BR-02",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-002",
+        "CN-BOOK-001"
+      ],
+      "dependencies": [
+        "CN-PKG-001",
+        "CN-ROOM-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-09",
+        "OD-10",
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-02"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-09",
+        "OD-10",
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-03",
+      "title": "Existing canonical initial rule BR-03",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-PKG-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-03"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-04",
+      "title": "Existing canonical initial rule BR-04",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-PKG-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-04"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-05",
+      "title": "Existing canonical initial rule BR-05",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-PKG-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-05"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-06",
+      "title": "Existing canonical initial rule BR-06",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-BOOK-001",
+        "CN-OPS-001"
+      ],
+      "dependencies": [
+        "CN-IOT-001",
+        "CN-ROOM-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-04",
+        "OD-09",
+        "OD-10",
+        "OD-13",
+        "OD-21",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-06"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-04",
+        "OD-09",
+        "OD-10",
+        "OD-13",
+        "OD-21",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-07",
+      "title": "Existing canonical initial rule BR-07",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-BOOK-001"
+      ],
+      "dependencies": [
+        "CN-ROOM-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-09",
+        "OD-10",
+        "OD-21"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-07"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-09",
+        "OD-10",
+        "OD-21",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-08",
+      "title": "Existing canonical initial rule BR-08",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-VERIFY-001"
+      ],
+      "dependencies": [
+        "CN-AUTH-001",
+        "CN-QUOTE-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-03",
+        "OD-05"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-08"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-03",
+        "OD-05",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-09",
+      "title": "Existing canonical initial rule BR-09",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ACCESS-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-02",
+        "OD-04"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-09"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-02",
+        "OD-04",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BR-10",
+      "title": "Existing canonical initial rule BR-10",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "desired product",
+      "acceptanceCriteria": "Canonical rule and versioned-policy boundary tests; current defaults not automatically launch-approved",
+      "moduleOwnership": "Owning Pricing/Booking/Venue/Verification/Access module",
+      "uiApiOwnership": "Canonical business-rule/lifecycle contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-QUOTE-001",
+        "CN-AMEND-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-CUSTOMER-001",
+        "CN-PKG-002",
+        "CN-QUOTE-001",
+        "CN-REFUND-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-07",
+        "OD-17",
+        "OD-20",
+        "OD-21",
+        "OD-22",
+        "OD-24",
+        "OD-25"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BR-10"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-07",
+        "OD-17",
+        "OD-20",
+        "OD-21",
+        "OD-22",
+        "OD-24",
+        "OD-25",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC01",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Authorized admin edits details, included duration and price; eligible customer catalog changes without application-code edit/release; config/audit evidence",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-001"
+      ],
+      "dependencies": [
+        "CN-ROOM-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC02",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Unauthorized/out-of-venue reader/editor/publisher cannot access or publish; edit privilege does not grant publish/archive or operational-policy change",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-001"
+      ],
+      "dependencies": [
+        "CN-ROOM-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC02"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC03",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Backend rejects noninteger/nonpositive durations, negative charges, unsupported/duplicate charged inclusions and capacity excess",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-001"
+      ],
+      "dependencies": [
+        "CN-ROOM-001",
+        "CN-UI-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC03"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC04",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Two-hour edit rejected under 180-minute minimum; separately authorized minimum/terms update required before shorter package eligibility",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-002"
+      ],
+      "dependencies": [
+        "CN-PKG-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC04"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC05",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "New eligible purchase resolves deterministic package version by sales time, service window and scope; boundaries and overlapping versions tested",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-002"
+      ],
+      "dependencies": [
+        "CN-PKG-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC05"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC06",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Confirmed purchase preserves display/rate/inclusions/duration/buffer/policy/receipt/report snapshots after edits/deactivation/archive",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-002"
+      ],
+      "dependencies": [
+        "CN-PKG-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC06"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC07",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Valid quote honors accepted terms; expired quote requires refreshed explicit acceptance; inventory hold tested independently Conditional on explicit OD-20 policy decision; no quote-honor approval inferred from test prose.",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-PKG-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC07"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC08",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Duplicate/delayed capture events reconcile accepted quote/capturedAt/amount/currency; no extra booking/reprice/charge; unavailable slot goes exception/compensation",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-GW-001"
+      ],
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-06",
+        "OD-07",
+        "OD-20"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC08"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-06",
+        "OD-07",
+        "OD-20",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC09",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Scheduled edits and simultaneous admins produce atomic complete publication or deterministic stale/conflict failure; no partial combination",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-002"
+      ],
+      "dependencies": [
+        "CN-PKG-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC09"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC10",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Included PS4/service/add-on never charged twice; configured exact extension-unit and guest-charge calculations validated",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-PKG-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC10"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC11",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Deactivation prevents new quote sales according to approved cutoff while preserving issued-quote policy and existing reservations/history",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PKG-002"
+      ],
+      "dependencies": [
+        "CN-PKG-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC11"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-18",
+        "OD-19",
+        "OD-21",
+        "OD-22",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC12",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Purchased amendment rechecks availability/cleaning/payment/consent and coordinates PIN/notification revision safely; catalog edit alone leaves active session/PIN unchanged",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ACCESS-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-02",
+        "OD-04"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC12"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-02",
+        "OD-04",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "PK-AC13",
+      "title": "Existing PK acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S8"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Historical reports use purchased snapshots/ledger refs and correct metric time basis, not current catalog prices or durations",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-QUOTE-001"
+      ],
+      "dependencies": [
+        "CN-BOOK-001",
+        "CN-PKG-002"
+      ],
+      "blockingDecisionIds": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-PK-AC13"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-17",
+        "OD-20",
+        "OD-22",
+        "OD-25",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC01",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility \u2192 one confirmed snapshot, separate acknowledged access",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-002"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC02",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Partial/excess/wrong funds | Persist partial/excess credit, cap allocation, reject wrong currency/account proof, no full-paid/extra revenue fiction",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-002"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC02"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC03",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Duplicate receipt/credit/approval | Hashes do not authorize; bank-side dedupe, repeated operation and simultaneous reviewers allocate once",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-002"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC03"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC04",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Cross-user/scope denial | Own upload/preview and reviewer venue/permission gates; assignment does not grant verify/account/refund power",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC04"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC05",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Mixed gateway/bank | Record both sources, one reservation/quote satisfaction, excess resolution; no forged webhook/card token",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-002"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC05"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC06",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Stale package rates/expiry | Accepted quote/version/fee/instruction retained; clear accepted re-quote after expiry; no latest rate substitution",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC06"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC07",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Expired hold/operator delay | No displacement, timely compliance evidence separate from reviewAt; available restoration/agreed alternative/refund, no forfeit",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC07"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC08",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Malicious/corrected evidence | True type/size/quarantine/safe preview, correction history/late claims; OCR alone never approval",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC08"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC09",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Instruction/account changes | Version old requests; independent changes and controlled verified emergency communication; no live account overwritten",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC09"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC10",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Notification failure | Claim stays in queue, bounded retry/escalation and accurate submitted/under-review labels; no sensitive attachment",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-PAY-BANK-001"
+      ],
+      "dependencies": [
+        "CN-QUOTE-001",
+        "CN-VERIFY-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC10"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-23",
+        "OD-24",
+        "OD-25",
+        "OD-26",
+        "OD-28",
+        "OD-29",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC11",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Access failure/safety | Verified payment remains, incident/retry, no PIN until eligible confirmed provisioning; egress and original-ID checks intact",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-ACCESS-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-02",
+        "OD-04"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC11"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-02",
+        "OD-04",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC12",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Refund/correction | Destination/outgoing proof, no completed refund from approval, unknown send reconciles before retry, append correction audit",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REFUND-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-07",
+        "OD-28"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC12"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-07",
+        "OD-28",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BP-AC13",
+      "title": "Existing BP acceptance scenario",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "future acceptance conditional on final supporting policy; not an executed test",
+      "acceptanceCriteria": "Historical reports | Declared amounts excluded, credits counted once, allocations/excess separated, timestamps/quote snapshots/recognition basis correct",
+      "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
+      "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BP-AC13"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-REVENUE-BOOKINGS",
+      "title": "Revenue and Bookings Chart",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Booking count = distinct confirmedAt booking IDs, source-independent (not receipt/credit count). Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-REVENUE-BOOKINGS"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-ROOM-OCCUPANCY",
+      "title": "Room Status Donut Chart",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts \u00d7 100. Zero rooms \u2192 N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-ROOM-OCCUPANCY"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-REVENUE-TREND",
+      "title": "Revenue Trend Chart",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-REVENUE-TREND"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-POPULAR-TIME-SLOTS",
+      "title": "Popular Time Slots Chart",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Distinct confirmed noncancelled booking IDs whose scheduled start falls within selected range, grouped by configured local hour band. Explicit business bands [startHour,endHour); cross-midnight bands split or carry dayOffset. Popularity is count, not occupied minutes.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-POPULAR-TIME-SLOTS"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-ROOM-UTILIZATION",
+      "title": "Room Utilization Chart",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range \u00d7 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator \u2192 N/A; unknown/incomplete inputs \u2192 unavailable.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-ROOM-UTILIZATION"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-BOOKING-STATISTICS",
+      "title": "Booking Statistics",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-BOOKING-STATISTICS"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-FINANCIAL-KPIS",
+      "title": "Financial KPI Cards",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator \u2192 N/A; prior zero/missing \u2192 N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-FINANCIAL-KPIS"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-SYSTEM-IOT-STATUS",
+      "title": "System and IoT Status Indicators",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices \u00d7100, unknown included; 0 devices \u2192 N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-SYSTEM-IOT-STATUS"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-PAYMENT-ADDON-BREAKDOWN",
+      "title": "Payment and Add-on Breakdown Charts",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "sourceIds": [
+        "S1",
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "Payment panel groups deduped independently verified gateway capture and bank credit incoming money by channel/method, respective financial event time and asOf evidence cutoff; uploaded/declared or allocated amounts not extra collections. Add-on panel retains sold immutable quote-item values/quantities by eligible confirmedAt cohort, not cash/recognition; include purchased package inclusion flags so included free extras are not a paid sale. Unmatched/excess bank balance displayed separately, never add-on revenue.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-PAYMENT-ADDON-BREAKDOWN"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "CN-M-BANK-PAYMENT-REVIEW-FINANCES",
+      "title": "Bank Payment Review and Finance Metrics",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed metric/report; not real operational facts",
+      "acceptanceCriteria": "BN-M01\u201308 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
+      "moduleOwnership": "Analytics/owning source module",
+      "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-CN-M-BANK-PAYMENT-REVIEW-FINANCES"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BN-M01",
+      "title": "pendingReviewCount",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed bank metric; requires explicit source/clock mapping",
+      "acceptanceCriteria": "count distinct requestId in open review states at asOf; snapshot asOf; submitted date filter explicitly independent",
+      "moduleOwnership": "Payments/Analytics",
+      "uiApiOwnership": "Bank finance/review projections; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BN-M01"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BN-M02",
+      "title": "queueAgeMinutes",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed bank metric; requires explicit source/clock mapping",
+      "acceptanceCriteria": "asOf - oldest unresolved evidence_submitted_at per request in elapsed minutes; distribution/buckets from configured service; overdue only if approved review_due_at passed; snapshot asOf and evidence_submitted_at, never approvedAt; elapsed vs service hours labelled",
+      "moduleOwnership": "Payments/Analytics",
+      "uiApiOwnership": "Bank finance/review projections; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BN-M02"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BN-M03",
+      "title": "verifiedBankFundsMinor",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed bank metric; requires explicit source/clock mapping",
+      "acceptanceCriteria": "sum unique positive verified credit amountMinor first verified_at in range; verification correction/bank reversal separate evidence, no double verification entry; verified_at operational processing range, credited_at shown separately; not total collections-by-credit-date",
+      "moduleOwnership": "Payments/Analytics",
+      "uiApiOwnership": "Bank finance/review projections; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BN-M03"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BN-M04",
+      "title": "bankCollectionsMinor",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed bank metric; requires explicit source/clock mapping",
+      "acceptanceCriteria": "sum deduped bank credit amountMinor; bank-verified reversals/refunds separately deducted for net money measure, allocation never adds another credit; bank_credited_at financial event time; verified_at cutoff asOf; late review can revise historical projection with clear asOf",
+      "moduleOwnership": "Payments/Analytics",
+      "uiApiOwnership": "Bank finance/review projections; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BN-M04"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BN-M05",
+      "title": "allocatedBookingPaymentsMinor",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed bank metric; requires explicit source/clock mapping",
+      "acceptanceCriteria": "sum signed unique allocation amount deltas (including separately audited allocation reversals), capped by quote due and available verified funds; source channels separate; allocated_at ledger event range, booking session_start_at is separate service filter; allocation is not cash recognition",
+      "moduleOwnership": "Payments/Analytics",
+      "uiApiOwnership": "Bank finance/review projections; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BN-M05"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BN-M06",
+      "title": "unmatchedExcessMinor",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed bank metric; requires explicit source/clock mapping",
+      "acceptanceCriteria": "per-credit remaining amount; split unmatched vs accepted-quote overpayment/excess only using linked facts; never derive from receipt claim; nonnegative invariant failures flagged Allocation/refund adjustment workflow must release/refine active allocation before subtracting completed outgoing refund so no amount deducted twice; refund-reserved and available-to-allocate are separate balances.; balance snapshot asOf, optional credited-date cohort explicit; not a movement summed again with collections",
+      "moduleOwnership": "Payments/Analytics",
+      "uiApiOwnership": "Bank finance/review projections; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BN-M06"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BN-M07",
+      "title": "confirmedBankRefundsMinor",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed bank metric; requires explicit source/clock mapping",
+      "acceptanceCriteria": "sum confirmed outgoing refund amountMinor once; requested/approved/initiated/sent/failed/unknown excluded from completed money movements; bank_refund_confirmed_at/outgoing settlement instant selected by evidenced bank contract; not approval time",
+      "moduleOwnership": "Payments/Analytics",
+      "uiApiOwnership": "Bank finance/review projections; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BN-M07"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27",
+        "Future change-set scope/authority required"
+      ]
+    },
+    {
+      "id": "BN-M08",
+      "title": "paymentChannelCollectionsMinor",
+      "decisionStatus": "RECOMMENDED",
+      "sourceIds": [
+        "S9"
+      ],
+      "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
+      "priority": "P1",
+      "scope": "proposed bank metric; requires explicit source/clock mapping",
+      "acceptanceCriteria": "group verified incoming collections by gateway vs bank, sum once per external money event. Source bank credit is never card capture; refunds shown as separate channel movements; gateway capturedAt and bank_credited_at, verified/asOf cutoff labelled; recognition/service revenue remains separate",
+      "moduleOwnership": "Payments/Analytics",
+      "uiApiOwnership": "Bank finance/review projections; actual backend/API and UI implementation absent, interfaces are proposals",
+      "changeSetIds": [
+        "CN-REPORT-001"
+      ],
+      "dependencies": [
+        "CN-PAY-BANK-002",
+        "CN-PAY-GW-001"
+      ],
+      "blockingDecisionIds": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27"
+      ],
+      "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
+      "testIds": [
+        "T-BN-M08"
+      ],
+      "plannedTestStatus": "NOT_RUN",
+      "workStatus": "BLOCKED",
+      "implementationStatus": "NOT_VERIFIED",
+      "codeEvidence": [],
+      "verificationEvidence": [],
+      "acceptanceStatus": "NOT_ACCEPTED",
+      "unresolvedQuestions": [
+        "OD-16",
+        "OD-23",
+        "OD-24",
+        "OD-27",
+        "Future change-set scope/authority required"
+      ]
+    }
+  ]
+}

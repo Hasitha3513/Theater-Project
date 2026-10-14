@@ -1,0 +1,752 @@
+{
+  "schemaVersion": "1.0.0",
+  "reviewedRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+  "baselineFiles": [
+    {
+      "path": "knowledge/CHANGELOG.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "6d7b78e12bad0ee6c33d0a5dcbbcbfb4f31041dd5ab4c8f4b3f055440522cbb4",
+      "logicalLines": 19,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          19
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-ADMIN-PAGES.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "17acce0fedbc8bce47f7dbdfc7a7c221914fb1efdba7fe67b1f311c9e6b5cde3",
+      "logicalLines": 224,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          224
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-CHARTS-AND-METRICS.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "98e374b475cf251a678fedd75957ac51ace383d8cb0682348761e4f072def266",
+      "logicalLines": 258,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          258
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "9051833b03b265068d7a3820736949ff89aebebc2be79090259313c8af3973cc",
+      "logicalLines": 124,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          124
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-DESIGN-DECISION-ADR-001.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "df6dd80a4ba6f139c968f19aab34c7a2cc30a60bf7bb020fca3b8551934b823f",
+      "logicalLines": 32,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          32
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-DESIGN-DECISION-ADR-002.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "a754c3434b11a4da838c0f1304d93c5000ecc0097abec8973f0dacb71be6e42a",
+      "logicalLines": 30,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          30
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-DESIGN-DECISION-ADR-003.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "ec63908597d949b9493eb74234bec285c52aea2b6cbbbde5fcfad2eb1c2c786b",
+      "logicalLines": 15,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          15
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-DESIGN-DECISION-ADR-004.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "b583bcc1eea367b75610ae9aee56da6dfcbebe16f8873c8cbf8379c5d015d321",
+      "logicalLines": 19,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          19
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-DESIGN-SYSTEM.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "3e294de4e355d5c63d3399fcfb093e15f0fe93e4ec274850ce394546a93f4c64",
+      "logicalLines": 92,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          92
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "c07c9f8cd90fd6e5a3d6d223e591125cefca70e3512053ab8fed8af99e268e4c",
+      "logicalLines": 22,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          22
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-REFERENCE-TRACEABILITY.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "a8c2b9f9b22e3fc511303b4db69a5987b12e78eb475fabc31fdd7103a73bde1c",
+      "logicalLines": 57,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          57
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "f2a935571c73a6155bd71231942205bdffb2fa933a292c484530772582452eca",
+      "logicalLines": 69,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          69
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CINENEST-VALIDATION-REPORT.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "fc683afb52ff7b618b07da650fd478c454ce64659adc695ed142c830ff2e390c",
+      "logicalLines": 81,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          81
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CineNest Cinema Admin Dashboard Mockup-1.png",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f",
+      "logicalLines": null,
+      "readStatus": "VISUALLY_REVIEWED",
+      "rangesRead": [],
+      "sectionsCovered": "visual composite",
+      "reviewer": "parent via view_image",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CineNest Cinema Dashboard Showcase-2.png",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7",
+      "logicalLines": null,
+      "readStatus": "VISUALLY_REVIEWED",
+      "rangesRead": [],
+      "sectionsCovered": "visual composite",
+      "reviewer": "parent via view_image",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/CineNest Private Cinema Booking UI.png",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852",
+      "logicalLines": null,
+      "readStatus": "VISUALLY_REVIEWED",
+      "rangesRead": [],
+      "sectionsCovered": "visual composite",
+      "reviewer": "parent via view_image",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/README.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "d6a403943320b977d8f220223bc3a56494ce52964c2c1ebf2c47dabef9a473af",
+      "logicalLines": 41,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          41
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "8644c75ab26c20f6136712739052eb15207e851de868e50491f85746b6fef5a9",
+      "logicalLines": 88,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          88
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "80f7bab32b8dd9f796b3f825f1375f604b20325f766fbf1766d6aa68f5a79587",
+      "logicalLines": 36,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          36
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "219917ff433cc6a2e9e1b8c3b0957ea56287bf754a919f18b9de09ff58417f7e",
+      "logicalLines": 60,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          60
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "7de6ac86d1e14f07891c8449d15cccb9c648aff237fc3f087fd98f0291ecf273",
+      "logicalLines": 37,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          37
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "668d565d383261c8c7305cec6800a12e30ca15a19c45047eba907cac0276b55d",
+      "logicalLines": 62,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          62
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/decisions/cinenest-open-decisions.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "015d2977ab223c0e1ae5068460620b861a70778a51ba920b590822e1eb8a3d6a",
+      "logicalLines": 355,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          355
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/decisions/cinenest-palette-comparison.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "7c3927eb45669e1971d6edb341800228d8b5eebef8235c4f60ebb200cb330318",
+      "logicalLines": 25,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          25
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "41d04bae374c91e87d04c534d230f803ef55764336faf6d6a8a235b61f8a9701",
+      "logicalLines": 82,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          82
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "86fb5fe1d04032f22318550dca160838bb8c6814f41667325f260e5dae1f4d4c",
+      "logicalLines": 35,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          35
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "1bdf75b06057b274816f0a3b7c51fe06a72d2fadc7190f96e78d89b29fa3926a",
+      "logicalLines": 81,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          81
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/manifest.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "940ca24f20fe71d998b5af6e182df0eaf984c7a5f36b2bddcb69d7f1bbf5a9ac",
+      "logicalLines": 363,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          363
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "6fc54cfb64c71acd6968f92dc80436c846272963db4e1ee611e6923882dba62b",
+      "logicalLines": 170,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          170
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "06cc490f498bd7ca60a4d78ae47c711caacbe415153ec782fcb6c4ac5f55f389",
+      "logicalLines": 120,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          120
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "5bc27e74fc988538417c7b60778c5e14912df28ac05b45c8b01bb652a6f1af6d",
+      "logicalLines": 147,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          147
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "8a03d17c0e42e61f02209e6a49508b9579456c111b6231fb6baae8f6a81eb6f1",
+      "logicalLines": 509,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          509
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "parent bounded read",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/product/cinenest-bank-payment-lifecycles.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "c12a0454905509c14cfad5eae94e83b861a36d3fe02bc3ad283d1afeb142599f",
+      "logicalLines": 303,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          303
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/product/cinenest-draft-rules.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "1827c0410b9c366ea390e7c4b6c23e160901379cd8b739bd561a84dae1e486bc",
+      "logicalLines": 51,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          51
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/product/cinenest-feature-catalog.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "90d6e13b988d7966e2f6da4b05186a4373923b90615c4cee9761b58cf7d283b2",
+      "logicalLines": 531,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          531
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "6d5f8fdbaf96a62d01fc8e353685d61283c74f878195de451c99f9bd107c6254",
+      "logicalLines": 38,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          38
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/sources/CN-KB-BANK-PAYMENT-001-request.txt",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "4c63f237b0bb3e67011efd2103ffc614b702f313fb2970ae1ceaf72d9e19c0b1",
+      "logicalLines": 415,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          415
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/sources/CN-KB-FEATURES-TECH-001-request.txt",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "9cf09c1dcbd849ddbd15449a0b76b9e21f478a33dc66439086ee93dad429f06d",
+      "logicalLines": 669,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          669
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "1cd916c41a310b49aae6daff7405ad5f2c1fd01bd52f5ff486feccf6b536ee84",
+      "logicalLines": 310,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          310
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/sources/cinenest-source-register.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "0947d183abd824d80b20d11f386ee9ca569a09ef311211af90a2c348b576c42b",
+      "logicalLines": 66,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          66
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/styles/cinenest-theme.css",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "d3968b08519db0dea663f0336b40913207dd5a8613f1361c37f7a97b6c43533a",
+      "logicalLines": 100,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          100
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/tokens/cinenest-chart-specs.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "e4300304ba0aa0fcc6fa363cefe91b21da5150761fbe12ca9308315ba1f9c275",
+      "logicalLines": 729,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          729
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/tokens/cinenest-design-tokens.json",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "8c817e4f055eadb28ab556c868ff21cd899430001cb3d374d2265b2b8df74cea",
+      "logicalLines": 136,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          136
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    },
+    {
+      "path": "knowledge/validate_design_kb.py",
+      "sourceRevision": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
+      "sha256": "54a5cf79bc5e3bcbd0e5d1822ba2a5ec393d84bed46fd52d8ff946dfdc5ec4b0",
+      "logicalLines": 378,
+      "readStatus": "FULLY_READ",
+      "rangesRead": [
+        [
+          1,
+          378
+        ]
+      ],
+      "sectionsCovered": "all logical lines; historical evidence distinguished from current requirements",
+      "reviewer": "source_review read-only subagent",
+      "recordedAt": "2026-10-14T12:42:52+05:30",
+      "changedSourcePolicy": "Re-read changed relevant sources; baseline review hash is not current-file claim after an authorized edit"
+    }
+  ],
+  "newSource": {
+    "id": "S10",
+    "path": "knowledge/sources/CN-AGENT-SETUP-001-request.txt",
+    "readStatus": "FULLY_READ",
+    "sha256": "5069b092f2eb4b71e180e11d13e701b2a99a3c8f143a3e1f992bbcaf862e72f2"
+  },
+  "missingSources": [
+    "S2",
+    "S3",
+    "S4"
+  ],
+  "missingOriginalCustomerAlias": "CineNest Private Cinema Booking UI(1).png",
+  "hostNativeInstructionLoading": "NOT_VERIFIED"
+}

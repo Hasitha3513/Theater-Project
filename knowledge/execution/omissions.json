@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "1.0.0",
+  "omissions": [
+    {
+      "id": "OM-01",
+      "gap": "Original PDF/source pack missing",
+      "linkedDecisionOrTask": "OD-15",
+      "status": "BLOCKED",
+      "recovery": "Obtain actual sources only before dependent policy/task; no quotations fabricated"
+    },
+    {
+      "id": "OM-02",
+      "gap": "No approved application stack or implementation change-set plan",
+      "linkedDecisionOrTask": "OD-01",
+      "status": "BLOCKED",
+      "recovery": "Authorize CN-DEC-001 bounded decision brief; final stack remains user decision"
+    },
+    {
+      "id": "OM-03",
+      "gap": "No application code/build/tests/backend behavior for UI controls",
+      "linkedDecisionOrTask": "CN-FND-001",
+      "status": "OPEN",
+      "recovery": "All feature tests NOT RUN, code evidence empty; backend scope required in slices"
+    },
+    {
+      "id": "OM-04",
+      "gap": "All decision owners TBD; actual physical capacity/readiness not certified",
+      "linkedDecisionOrTask": "OD-02/03/04/05/14/29",
+      "status": "BLOCKED",
+      "recovery": "Preserve draft ceiling/guards while assigning accountable qualified owners before launch"
+    },
+    {
+      "id": "OM-05",
+      "gap": "Definitive quote-honor acceptance language versus open OD-20",
+      "linkedDecisionOrTask": "OD-20",
+      "status": "OPEN",
+      "recovery": "Future PK-AC07/quote tests conditional on selected policy; no approval inferred"
+    },
+    {
+      "id": "OM-06",
+      "gap": "Chart generic population/unit fields and legacy refundedMinor/confirmedRefundMinor mapping",
+      "linkedDecisionOrTask": "OD-16",
+      "status": "OPEN",
+      "recovery": "Resolve precise source/DTO mapping before CN-REPORT-001; do not rewrite charts during agent setup"
+    },
+    {
+      "id": "OM-07",
+      "gap": "Current desktop cwd is parent; automatic instruction loading not tested",
+      "linkedDecisionOrTask": "CN-AGENT-SETUP-001",
+      "status": "OPEN",
+      "recovery": "Fresh read-only task rooted at repository/ must automatically identify AGENTS/charter/control files; file discovery alone not native registration"
+    },
+    {
+      "id": "OM-08",
+      "gap": "Optional engagement scope/rates undeclared; no approved defer",
+      "linkedDecisionOrTask": "OD-08",
+      "status": "BLOCKED",
+      "recovery": "Retain CN-C09/CN-A09 denominator; explicit scope/rule/deferral decision required"
+    },
+    {
+      "id": "OM-09",
+      "gap": "No CI/recovery objectives/backup or production environment evidence",
+      "linkedDecisionOrTask": "CN-NFR-03/04/06",
+      "status": "OPEN",
+      "recovery": "Future stack/infra authorization and tests, no deployments or guessed schedules"
+    },
+    {
+      "id": "OM-10",
+      "gap": "Physical/sandbox/business/production acceptance all absent",
+      "linkedDecisionOrTask": "CN-ACCEPT-001",
+      "status": "BLOCKED",
+      "recovery": "Simulations/docs cannot waive external and qualified acceptance"
+    }
+  ]
+}

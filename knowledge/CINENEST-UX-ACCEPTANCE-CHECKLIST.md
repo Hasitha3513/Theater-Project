@@ -6,7 +6,7 @@
 ## Knowledge-base acceptance (this task)
 - [x] All requested documentation, token JSON, chart JSON and theme CSS exist.
 - [x] Eleven admin modules and twelve customer destinations/flows are specified.
-- [x] Nine chart/metric specifications have calculations, contracts and display guidance.
+- [x] Ten chart/panel specifications currently have calculations, contracts and display guidance (bank extension included; historical task counts remain in changelog).
 - [x] Shared typography, semantic colors, spacing, controls, navigation, tables and states documented.
 - [x] Breakpoints, mobile layouts, chart/table alternatives and zoom/reflow targets documented.
 - [x] Accessibility target and keyboard, contrast, focus, motion and screen-reader requirements documented.
