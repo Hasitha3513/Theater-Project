@@ -14,6 +14,8 @@ Current [status](execution/status.json), [backlog](execution/change-sets.json) a
 
 S16 approval matches the original version lines/database-session-recovery responsibilities; npm recording and stable/resolved-qualification conditions explicit. Actual approval scope is owned by [ARCHITECTURE](ARCHITECTURE.md#stack-approval), with historical proposal/research preserved. OD-01 initial subset accepted; broader cloud/provider/library and qualification decisions remain OPEN_DECISION. All 92 requirements/test plans, 28 tasks and 29 decision records retained; original criteria/dependencies and S15 mappings unchanged. S16 approves no role bundle, limit, independent-review/exception/revocation policy, physical/provider outcome or foundation execution. Both validators and unstaged whitespace checks passed; eight in-memory negative controls rejected loss or unauthorized promotion. OD-01 projection mismatch found during validation was corrected from its registry; no check weakened. Current self-review/checks/publication receipt are recorded in existing status.json stackApprovalUpdate; no independent review or new runtime qualification claimed.
 
+Verified publication: primary S16 approval-record commit `0bc10a1f9059df97cb6dbbf233f42af03285abf9` pushed to origin/main and independently matched by `git ls-remote` (both exit0). Staged whitespace check passed. Existing status holds the receipt; this metadata closeout adds no scope or qualification claim. Tracked changes clean after push; both unrelated untracked files remain unchanged/unpublished. Resolve final HEAD from Git.
+
 <a id="foundation-prerequisites"></a>
 ## Actual CN-FND-001 prerequisite review
 

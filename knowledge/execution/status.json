@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "NOT_YET_PUBLISHED_STACK_APPROVAL",
-  "publicationEvidence": "Current S16 record not yet published; previous receipts retained",
-  "lastObservedHead": "c96ae828b4a0ae3df0f32b101ff107fa9613459c",
+  "publicationState": "PUSHED",
+  "publicationEvidence": "S16 initial-stack approval record 0bc10a1f9059df97cb6dbbf233f42af03285abf9 pushed to origin/main and independently matched by git ls-remote exit0; exact qualification pending and implementation not granted; in-place closeout successor resolved from Git.",
+  "lastObservedHead": "0bc10a1f9059df97cb6dbbf233f42af03285abf9",
   "evidencePath": "PROGRESS.md#stack-approval-update",
   "evidenceFreshness": "Current S16 approval baseline bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
   "availableTools": [
@@ -551,6 +551,15 @@
         "finding": "OD-01 canonical projection still had historical conflict text after approved registry update",
         "disposition": "Regenerated matching OD-01 row; both validators passed afterward"
       }
-    ]
+    ],
+    "publicationReceipt": {
+      "primaryCommit": "0bc10a1f9059df97cb6dbbf233f42af03285abf9",
+      "verifiedRemote": "0bc10a1f9059df97cb6dbbf233f42af03285abf9",
+      "pushExitCode": 0,
+      "remoteCheckExitCode": 0,
+      "atLocal": "2026-10-14T17:42:26.069392+05:30",
+      "trackedWorktree": "CLEAN_AFTER_PRIMARY_PUSH",
+      "unrelatedUntrackedFiles": 2
+    }
   }
 }
