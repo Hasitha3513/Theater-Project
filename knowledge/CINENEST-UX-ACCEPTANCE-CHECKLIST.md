@@ -1,12 +1,12 @@
 # CineNest UX Acceptance Checklist
 
 > Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
-> Recorded: 2026-10-13. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+> Original record: 2026-10-13. Updated: 2026-10-14, CN-KB-FEATURES-TECH-001. Decision: APPROVED for hybrid direction; DOCUMENTED_DRAFT for detailed behavior. Implementation: NOT_VERIFIED. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
 
 ## Knowledge-base acceptance (this task)
 - [x] All requested documentation, token JSON, chart JSON and theme CSS exist.
 - [x] Eleven admin modules and twelve customer destinations/flows are specified.
-- [x] Eight chart/metric specifications have calculations, contracts and display guidance.
+- [x] Nine chart/metric specifications have calculations, contracts and display guidance.
 - [x] Shared typography, semantic colors, spacing, controls, navigation, tables and states documented.
 - [x] Breakpoints, mobile layouts, chart/table alternatives and zoom/reflow targets documented.
 - [x] Accessibility target and keyboard, contrast, focus, motion and screen-reader requirements documented.
@@ -18,7 +18,7 @@
 - [ ] Verify exact unavailable customer “(1)” source equivalence if needed.
 - [x] Clone user-supplied canonical Git repository into a separate folder; verify it is empty.
 - [x] Resolve author identity from existing local Git configuration and review staged knowledge-only diff.
-- [ ] Confirm initial commit and push outcome in Git history and task completion report (this checklist is the pre-publication snapshot).
+- [x] Initial publication commit 16710dc verified locally with matching origin/main ref at baseline inspection. New task publication is reported separately.
 
 See [validation report](CINENEST-VALIDATION-REPORT.md) for evidence and limits. Checked boxes describe documentation checks, not implemented UI compliance.
 
@@ -42,3 +42,14 @@ See [validation report](CINENEST-VALIDATION-REPORT.md) for evidence and limits. 
 - [ ] Loading/no-records/no-matches/denied/not-configured/stale/error states tested independently.
 - [ ] No screenshot sample data reaches production; fixtures labelled synthetic and isolated.
 - [ ] Design/architecture owners resolve traceability conflicts; ADR and published KB versions recorded.
+
+## CN-KB-FEATURES-TECH-001 documentation and future gates
+- [x] Product, rules, stack, architecture, contracts, IoT, privacy, phases and decision register authored with separate decision/implementation statuses.
+- [x] Stable feature IDs, sources, proposed modules, permissions and acceptance recorded.
+- [x] Active design tokens/CSS and original image bytes preserved; candidate palette conflict explicit, not applied.
+- [x] Exact draft time/price/buffer/PIN rules centralized; unresolved hold/closing/all-guest policy explicit.
+- [x] Net collections separate from recognized revenue; consistent donut denominator and payment/add-on panels documented.
+- [ ] Verify missing PDFs, including relevant image-based/Sinhala pages, and reconcile discrepancies.
+- [ ] Select/approve stack, providers, hardware and actual authorization/data implementation with evidence.
+- [ ] Approve privacy/retention, all-guest checks, staffing/physical cleaning/emergency intervention, rights, refunds and hold/closing policy before launch.
+- [ ] Execute lifecycle/race/refund/webhook/command/offline acceptance against actual backend and hardware; documentation validation is not implementation proof.

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0.0",
+  "decisionStatus": "OPEN_DECISION",
+  "implementationStatus": "NOT_VERIFIED",
+  "sourceIds": [
+    "S1"
+  ],
+  "activeFile": "../tokens/cinenest-design-tokens.json",
+  "requestedCandidate": {
+    "sidebar.background": "#0B1526",
+    "canvas": "#F5F7FC",
+    "surface": "#FFFFFF",
+    "brand.primary": "#5B4BFF",
+    "brand.primaryHover": "#5142ED",
+    "brand.gradientEnd": "#7254FF",
+    "chart.bookings": "#2878FF",
+    "brand.gold": "#F4C77B",
+    "text.primary": "#111827",
+    "text.secondary": "#64748B",
+    "success.foreground": "#15803D",
+    "warning.foreground": "#B45309",
+    "danger.foreground": "#B91C1C"
+  },
+  "applied": false
+}

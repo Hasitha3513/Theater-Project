@@ -1,0 +1,462 @@
+{
+  "schemaVersion": "1.0.0",
+  "taskId": "CN-KB-FEATURES-TECH-001",
+  "features": [
+    {
+      "id": "CN-C01",
+      "name": "Discovery",
+      "actors": "Customer",
+      "module": "Venues/Rooms",
+      "pages": "Landing Page; Cinema Room Selection",
+      "purpose": "Discover cinematic venue/rooms with photos, amenities, capacity and indicative prices",
+      "workflow": "Browse catalog \u2192 inspect room \u2192 choose",
+      "rules": "BR-01/03; truthful rights/amenities",
+      "permissions": "Public catalog read",
+      "integrations": "Private asset delivery/CMS candidate",
+      "failureStates": "Catalog/photo unavailable",
+      "acceptance": "Usable catalog without auth; no fabricated availability or production sample price",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-C02",
+      "name": "Identity, profile and consent",
+      "actors": "Customer; support",
+      "module": "Identity & Access",
+      "pages": "Google Authentication; Customer Dashboard",
+      "purpose": "Google sign-in, profile and secure session with explicit versioned policy acceptance",
+      "workflow": "OIDC \u2192 server session \u2192 profile \u2192 consent record",
+      "rules": "BR-08/10; auth does not equal consent/verification",
+      "permissions": "Self profile; restricted account support",
+      "integrations": "Google OIDC candidate",
+      "failureStates": "Callback/session/consent failure",
+      "acceptance": "Owner-scoped session/profile; explicit policy version/time persisted",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-C03",
+      "name": "Availability and temporary holds",
+      "actors": "Customer; booking agent",
+      "module": "Booking",
+      "pages": "Date and Time Selection",
+      "purpose": "Choose room/date/time with conflict protection",
+      "workflow": "Query slots \u2192 create expiring hold \u2192 checkout",
+      "rules": "BR-01/02/06/07; database interval guard",
+      "permissions": "Owner hold; booking.create",
+      "integrations": "PostgreSQL; Redis recommended",
+      "failureStates": "Expired hold; concurrent slot conflict",
+      "acceptance": "Two conflicting reservations cannot both commit; server expiresAt shown",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-C04",
+      "name": "Quotation and add-ons",
+      "actors": "Customer; pricing manager",
+      "module": "Pricing",
+      "pages": "Booking Summary",
+      "purpose": "Authoritative guest/duration/PS4 itemization",
+      "workflow": "Choose guests/extras \u2192 server quote \u2192 accept version",
+      "rules": "BR-02/03/04/05/10",
+      "permissions": "Owner quote; pricing.write separate",
+      "integrations": "Booking availability",
+      "failureStates": "Price change; capacity/extension conflict",
+      "acceptance": "Base/PS4 examples correct; fifth guest charged once; final total server generated",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-C05",
+      "name": "Booker verification",
+      "actors": "Booker; verifier",
+      "module": "Verification",
+      "pages": "Identity Verification; Customer Management",
+      "purpose": "NIC/passport upload, OCR assistance, age policy and manual exceptions",
+      "workflow": "Consent \u2192 private upload \u2192 extract \u2192 validate/review \u2192 decide",
+      "rules": "BR-08; all-guests process OD-03",
+      "permissions": "Self submission; identity.review/evidence.read separate",
+      "integrations": "OCR/private storage candidates",
+      "failureStates": "Unreadable upload; ambiguous/rejected/pending",
+      "acceptance": "OCR cannot alone prove authenticity; restricted decision/evidence access",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-C06",
+      "name": "Hosted payment and confirmation",
+      "actors": "Customer; finance",
+      "module": "Payments",
+      "pages": "Payment Processing; Booking Confirmation",
+      "purpose": "Hosted checkout, receipts and authoritative confirmation",
+      "workflow": "Attempt \u2192 hosted provider \u2192 verified notification \u2192 reserve/confirm",
+      "rules": "BR-05/10; webhook and inventory guard",
+      "permissions": "Owner pay/read; payments.read",
+      "integrations": "PayHere or bank IPG candidates",
+      "failureStates": "Pending/failure/late success/duplicate notification",
+      "acceptance": "Redirect never grants success; duplicate events have one effect; receipt from ledger",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-C07",
+      "name": "Protected access and delivery",
+      "actors": "Customer; access operator",
+      "module": "Access Control; Notifications",
+      "pages": "Smart Door Access PIN; Booking Confirmation",
+      "purpose": "Provisioning status, time-bound PIN and SMS/email access instructions",
+      "workflow": "Confirm \u2192 install \u2192 acknowledge \u2192 deliver protected access \u2192 admit",
+      "rules": "BR-09; paid != installed",
+      "permissions": "Owner reveal; access.manage restricted",
+      "integrations": "Lock API; SMS/email candidates",
+      "failureStates": "Install/delivery/access failure",
+      "acceptance": "No access-ready state before install evidence; delivery failure yields support",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-C08",
+      "name": "Self-service booking history",
+      "actors": "Customer",
+      "module": "Booking",
+      "pages": "Customer Dashboard; Booking History",
+      "purpose": "Upcoming/past records, receipt and permitted changes",
+      "workflow": "Owner list \u2192 detail \u2192 policy-checked modify/extend/cancel/refund",
+      "rules": "BR-02/06/10; refund snapshot",
+      "permissions": "Self booking; separate refund eligibility",
+      "integrations": "Pricing/Payments/Access",
+      "failureStates": "Expired session; conflict; pending refund",
+      "acceptance": "No cross-customer reads; retain history and original terms",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-C09",
+      "name": "Referral and loyalty",
+      "actors": "Customer; engagement manager",
+      "module": "Customer Engagement",
+      "pages": "Loyalty and Referrals; Promotions and Loyalty",
+      "purpose": "Proposed earning, expiry, redemption and referral rewards",
+      "workflow": "Qualify \u2192 pending/earned \u2192 redeem/expire/reverse",
+      "rules": "OD-08; rules not selected",
+      "permissions": "Self ledger; loyalty.adjust restricted",
+      "integrations": "Booking/payment ledger",
+      "failureStates": "Ineligible referral; reversal; unavailable rules",
+      "acceptance": "No invented earn rate; reversals audited; unavailable feature not promoted",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A01",
+      "name": "Operational dashboard",
+      "actors": "Admin; operator; finance",
+      "module": "Analytics",
+      "pages": "Dashboard",
+      "purpose": "KPIs, charts, live rooms, activity and system health",
+      "workflow": "Select scope/range \u2192 authorized aggregates \u2192 drill-down",
+      "rules": "Metric definitions; live vs physical occupancy separate",
+      "permissions": "dashboard.read plus finance/room scope",
+      "integrations": "Module read projections",
+      "failureStates": "Stale/partial metrics",
+      "acceptance": "All card labels include basis/asOf; no unavailable-to-zero fallback",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A02",
+      "name": "Booking administration",
+      "actors": "Booking agent; operator",
+      "module": "Booking",
+      "pages": "Booking Management",
+      "purpose": "Search/filter/page/detail/manual creation/change/cancel/extend",
+      "workflow": "Find booking \u2192 permitted action \u2192 validate/quote \u2192 audited result",
+      "rules": "BR-01\u201310; agreed revision and policy snapshots",
+      "permissions": "booking.read/create/update/cancel/export",
+      "integrations": "Pricing/Verification/Payments/Access",
+      "failureStates": "Concurrent edits; expiry; late payment",
+      "acceptance": "Stable paging; permissions checked server-side; no silent price rewriting",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A03",
+      "name": "Venue and room configuration",
+      "actors": "Room manager",
+      "module": "Venues/Rooms",
+      "pages": "Cinema Room Management; System Settings",
+      "purpose": "Amenities/photos/hours/maintenance/enable/disable/device mapping",
+      "workflow": "Configure version \u2192 impact review \u2192 effective update",
+      "rules": "BR-01/03/06; booked purchases preserved",
+      "permissions": "room.read/write; device assignment distinct",
+      "integrations": "IoT inventory/private asset storage",
+      "failureStates": "Unsafe disable; conflicting schedules",
+      "acceptance": "Existing reservation impacts shown; enabled does not mean clean/healthy",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A04",
+      "name": "Equivalent room views",
+      "actors": "Room manager; operator",
+      "module": "Venues/Rooms",
+      "pages": "Cinema Room Management",
+      "purpose": "Card/table views of same rooms and permitted actions",
+      "workflow": "Load scoped dataset \u2192 switch view",
+      "rules": "One shared query, status map and permissions",
+      "permissions": "room.read; action capabilities independent",
+      "integrations": "Same room projection",
+      "failureStates": "Empty/filter/no-permission states",
+      "acceptance": "Both views return same IDs/states and preserve filters",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A05",
+      "name": "Live control and incidents",
+      "actors": "Operator; responder",
+      "module": "IoT; Access Control",
+      "pages": "Room Live Control",
+      "purpose": "Health, acknowledged controls, timers and incident handling",
+      "workflow": "Inspect freshness \u2192 safe command \u2192 ack \u2192 observe/escalate",
+      "rules": "Safety guards; no inference of empty room from exit/motion",
+      "permissions": "room.control/device.command; override separate",
+      "integrations": "ESP32/MQTT/vendor adapters",
+      "failureStates": "Unknown outcome; offline; overstay",
+      "acceptance": "Requested != observed; no unsafe egress/power action",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A06",
+      "name": "Account and verification review",
+      "actors": "Support; verifier",
+      "module": "Identity & Access; Verification",
+      "pages": "Customer Management",
+      "purpose": "Separate account/verification statuses and restricted evidence review",
+      "workflow": "Find owner \u2192 permitted profile/review \u2192 reasoned decision",
+      "rules": "BR-08/10; minimal evidence exposure",
+      "permissions": "customer.read/write; identity.review; evidence.read",
+      "integrations": "OIDC/storage/OCR candidate",
+      "failureStates": "Denied evidence; expired decision",
+      "acceptance": "Suspended != rejected; raw documents never in customer list",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A07",
+      "name": "Finance operations",
+      "actors": "Finance; auditor",
+      "module": "Payments",
+      "pages": "Payments and Refunds",
+      "purpose": "Transactions, fees, refunds, reconciliation and scoped exports",
+      "workflow": "Ledger \u2192 eligibility \u2192 refund/reconcile \u2192 verified result",
+      "rules": "Booked refund snapshot; ledger event dedupe",
+      "permissions": "payments.read/refund/export distinct",
+      "integrations": "Hosted provider/bank IPG candidate",
+      "failureStates": "Partial/failed/unknown refund; duplicate capture",
+      "acceptance": "Refund balance enforced; reconciliation discoverable; no card-data collection",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A08",
+      "name": "Analytics and exports",
+      "actors": "Analyst; finance",
+      "module": "Analytics",
+      "pages": "Analytics and Reports",
+      "purpose": "Reports and financial/nonfinancial chart drill-down",
+      "workflow": "Scope/query \u2192 definitions \u2192 aggregate \u2192 export",
+      "rules": "Canonical units/population/time basis",
+      "permissions": "analytics.read; finance and export separate",
+      "integrations": "Authorized read models",
+      "failureStates": "Partial data; mixed currency; undefined recognition",
+      "acceptance": "Export matches visible filters and metric IDs; separate scales",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A09",
+      "name": "Engagement administration",
+      "actors": "Campaign manager",
+      "module": "Customer Engagement",
+      "pages": "Promotions and Loyalty",
+      "purpose": "Promotions, loyalty/referrals and audited adjustments",
+      "workflow": "Version draft \u2192 approve rules \u2192 publish \u2192 ledger reversal",
+      "rules": "OD-08; stacking/caps/expiry undecided",
+      "permissions": "promotion.read/write; loyalty.adjust",
+      "integrations": "Pricing/booking facts",
+      "failureStates": "Duplicate code; caps; invalid reversal",
+      "acceptance": "Versioned eligibility; no retroactive rule changes to earned rewards without approved process",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A10",
+      "name": "Policy and notification settings",
+      "actors": "Policy manager; admin",
+      "module": "Pricing; Notifications; Identity & Access",
+      "pages": "System Settings",
+      "purpose": "Versioned pricing/policies/templates/integration settings",
+      "workflow": "Draft \u2192 review impact \u2192 effective version",
+      "rules": "BR-10; secrets write-only; consent versions",
+      "permissions": "settings.read/write; secrets/manage-access separate",
+      "integrations": "Selected providers only",
+      "failureStates": "Concurrent update; invalid provider; failed test",
+      "acceptance": "Prior purchases/consent retained; no privilege escalation",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-A11",
+      "name": "Audit visibility",
+      "actors": "Auditor; restricted admin",
+      "module": "Audit",
+      "pages": "Audit Logs",
+      "purpose": "Scoped immutable operational evidence",
+      "workflow": "Filter \u2192 redacted event detail \u2192 export",
+      "rules": "No credentials/raw ID/card data; retention OD-05",
+      "permissions": "audit.read/export",
+      "integrations": "All module audit envelopes",
+      "failureStates": "Delayed ingestion; denied/retention boundary",
+      "acceptance": "Actor/resource/reason/correlation recorded; no edit/delete UX",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-O01",
+      "name": "Access credential lifecycle",
+      "actors": "Access service; operator; customer",
+      "module": "Access Control",
+      "pages": "Smart Door Access PIN; Room Live Control",
+      "purpose": "Install/activate/expire/revoke and supported re-entry",
+      "workflow": "Confirmed purchase \u2192 credential version \u2192 device ack \u2192 timed entry",
+      "rules": "BR-09; egress independent; OD-02",
+      "permissions": "Service scope; owner reveal; access.manage",
+      "integrations": "Tested TTLock/Tuya-compatible hardware candidates",
+      "failureStates": "Offline install/revoke; clock drift; lock failure",
+      "acceptance": "Valid only session interval; re-entry tested, not presumed",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-O02",
+      "name": "ESP32 and room automation",
+      "actors": "Operator; IoT service",
+      "module": "IoT",
+      "pages": "Room Live Control; IoT Device Management",
+      "purpose": "MQTT lighting scenes, AC and supported projector control",
+      "workflow": "Register device \u2192 capability map \u2192 authorized command \u2192 ack/telemetry",
+      "rules": "TLS; bounded setpoints; safety circuits excluded",
+      "permissions": "device.manage/command",
+      "integrations": "ESP32; EMQX or Mosquitto candidates",
+      "failureStates": "Firmware mismatch; stale telemetry; command expiry",
+      "acceptance": "Only capability-supported operations; per-device auth and expiring commands",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-O03",
+      "name": "End-of-session operations",
+      "actors": "Scheduler; customer; staff",
+      "module": "Booking; Notifications; Venues/Rooms",
+      "pages": "Customer Dashboard; Room Live Control",
+      "purpose": "Five-minute warning, checkout/exit recording, cleaning and overstay escalation",
+      "workflow": "Warn \u2192 session ends \u2192 safe expiry \u2192 cleaning task \u2192 staff clearance",
+      "rules": "BR-06/09; exit event != all persons exited",
+      "permissions": "Worker scope; incident/cleaning staff",
+      "integrations": "SMS/email; optional sensors",
+      "failureStates": "Missed warning; no cleaner; suspected overstay",
+      "acceptance": "No physical-cleaning claim from timer; accountable intervention path",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    {
+      "id": "CN-O04",
+      "name": "Connectivity and emergency recovery",
+      "actors": "Operator; responder",
+      "module": "IoT; Access Control",
+      "pages": "IoT Device Management; Room Live Control",
+      "purpose": "Monitoring, tested offline entry, bounded retries/recovery and intervention",
+      "workflow": "Detect stale \u2192 safe degraded state \u2192 reconcile \u2192 tested fallback",
+      "rules": "OD-02/04; cloud unlock is not offline access",
+      "permissions": "Health read; recovery/override restricted",
+      "integrations": "Lock/controller/broker connectivity",
+      "failureStates": "Power/cloud/broker/vendor loss",
+      "acceptance": "Unknown not OFF/empty; independent egress and trained response verified before launch",
+      "sourceIds": [
+        "S1"
+      ],
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED"
+    }
+  ]
+}

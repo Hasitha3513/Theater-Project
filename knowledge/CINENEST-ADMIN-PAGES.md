@@ -1,7 +1,7 @@
 # CineNest Admin Page Specifications
 
 > Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
-> Recorded: 2026-10-13. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+> Original record: 2026-10-13. Updated: 2026-10-14, CN-KB-FEATURES-TECH-001. Decision: APPROVED for hybrid direction; DOCUMENTED_DRAFT for detailed behavior. Implementation: NOT_VERIFIED. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
 
 ## Shared admin contract
 Use the shared shell, tokens, components, accessibility and responsive rules in [design system](CINENEST-DESIGN-SYSTEM.md). [Chart definitions](CINENEST-CHARTS-AND-METRICS.md) are authoritative for metric meaning. Capability names below are proposed contract labels, not existing roles. Server authorization is mandatory on each resource/action; hiding a button is insufficient. Resolve actual role mappings from the missing architecture. Never automatically grant Administrator every sensitive permission.
@@ -36,7 +36,7 @@ Lists use backend pagination, stable sort plus ID tie-breaker, abortable filters
 | Forms | Room, slot, guest count, customer reference and quote; edit checks latest version/availability. |
 | Charts | Optional booking counts by state; link to Booking Statistics. |
 | Status indicators | Proposed states held/pending/confirmed/ongoing/completed/cancelled/expired; map actual backend states explicitly. |
-| Permissions | booking.read/create/update/cancel/export independently; enforce tenant/branch scope server-side. |
+| Permissions | booking.read/create/update/cancel/export independently; enforce authorized venue/resource scope server-side; tenant architecture is undecided. |
 | Responsive behavior | Table scroll or compact cards at <md; detail drawer becomes full-screen. |
 | Error and empty states | Conflict/expired hold requires reselect and re-quote; no silent success; empty tabs distinguish zero counts from unavailable counts. |
 
@@ -67,7 +67,7 @@ Lists use backend pagination, stable sort plus ID tie-breaker, abortable filters
 | Buttons | Lock/Unlock, AC adjustment, Lights, Projector, Test alert, Restart where supported; confirm high-impact actions with reason. |
 | Forms | Bounded AC temperature and light percentage from server capability metadata; reason for exceptional override. |
 | Charts | IoT health/status timeline only; telemetry values are actual observed values. |
-| Status indicators | Requested/pending/acknowledged/failed/timed-out; commanded state never displayed as observed state before telemetry confirms. |
+| Status indicators | Requested/pending/acknowledged/failed/expired/unknown; commanded state never displayed as observed state before telemetry confirms. |
 | Permissions | room.control and device.command scoped by room; exceptional override requires separate authorization and audit. |
 | Responsive behavior | Stack room context and command panels; minimum target 44px; critical session context visible while controlling. |
 | Error and empty states | Stale/offline disables unsupported commands; timeout permits status lookup before retry; emergency egress must remain independent of UI/network. Never infer occupancy or safe-to-lock from motion alone. |
@@ -98,7 +98,7 @@ Lists use backend pagination, stable sort plus ID tie-breaker, abortable filters
 | Filters | Transaction/refund state, provider, currency, date basis, booking reference. |
 | Buttons | View, Request refund, Check status, Export; server confirms actual eligibility and amount. |
 | Forms | Refund amount/reason within server-computed refundable balance; confirmation names currency and consequence. |
-| Charts | Financial KPI Cards; Revenue Trend with explicit gross/net basis. |
+| Charts | Financial KPI Cards; Revenue Trend labelled net collections or separate approved recognition measure; Payment/Add-on Breakdown panels. |
 | Status indicators | Pending/authorized/captured/failed/refunded/partially refunded; pending refund does not reduce settled totals until successful. |
 | Permissions | payments.read/refund/export independently; no card credentials or provider secrets in UI. |
 | Responsive behavior | Ledger scrolls; amount columns retained; refund dialog stacks without hiding balances. |
@@ -183,3 +183,10 @@ Lists use backend pagination, stable sort plus ID tie-breaker, abortable filters
 | Permissions | audit.read/export; restrict sensitive diffs independently and record audit access as architecture requires. |
 | Responsive behavior | Scrollable table; details full-screen at <md with readable wrapped diffs. |
 | Error and empty states | No events, no matching filters, retention boundary, partial ingestion and permission denial separately explained; redact PINs/tokens/ID scans from all events. |
+
+## Canonical feature/rule integration
+[Catalog](product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md) CN-A01–CN-A11 and CN-O01–CN-O04 map these pages to modules, permissions, integrations, failures and acceptance. [Lifecycles](product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md) define separate booking, payment, verification, access, session, readiness and command state machines. Tabs/counters must not mix those states.
+
+Manual bookings, changes, extensions and cancellations use the same authoritative database guard/quote/eligibility checks as customer flow. Approved operator capability is required, not assumed from admin sign-in. Customer session end and blocked-until/cleaning clearance are separate fields. Extension quotes check next booking and end-of-day rules. Configuration/price/refund-policy edits preserve existing purchase and consent snapshots. Room card/table modes use the same scoped dataset and action capabilities.
+
+Dashboard “today's confirmed bookings” and “today's scheduled sessions” are separate cards if both shown. Booking-based room status is not sensor-confirmed physical occupancy. Charts use [current metric specifications](CINENEST-CHARTS-AND-METRICS.md); net collections and recognized revenue cannot share a mislabeled value. Live Control shows paid/confirmed, provisioning and observed device state independently, plus cleaning work and overstay incidents. Emergency/cleaning staff process remains a launch gate, not a timer automation.

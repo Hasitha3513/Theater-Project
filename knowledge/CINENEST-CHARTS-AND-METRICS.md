@@ -1,149 +1,220 @@
 # CineNest Charts and Metrics
 
-> Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
-> Recorded: 2026-10-13. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+> CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT. Implementation: NOT_VERIFIED. Source S1. Contract version 1.1.0 updates verified chart-spec version 1.0.0; no backend or chart library is implemented.
 
-## Data authority and reusable configuration
-[tokens/cinenest-chart-specs.json](tokens/cinenest-chart-specs.json) contains the shared machine-readable specification and proposed typed contracts; chart colors reference [design tokens](tokens/cinenest-design-tokens.json). No chart package, endpoints, database schema or existing chart components were found. Do not select a library or invent endpoint compatibility here. Backend adapters must map actual domain contracts and lifecycle states before rendering. All screenshots are illustrative; never seed production with screenshot counts, names, prices or percentages.
+## Canonical semantics and boundaries
+[Chart JSON](tokens/cinenest-chart-specs.json) is machine-readable contract guidance; [active tokens](tokens/cinenest-design-tokens.json) remain byte-for-byte unchanged. [ADR-002](CINENEST-DESIGN-DECISION-ADR-002.md) records corrections from the initial cash-as-revenue/ambiguous donut definition. [Business rules](product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md) and [API contracts](architecture/CINENEST-DATA-AND-API-CONTRACTS.md) define authoritative proposed sources.
 
-## Calculation and time conventions
-Use server aggregates at the authorized room/location scope with matching data versions/asOf. Range is half-open [from,to); timestamps are RFC3339 instants stored in UTC, local buckets are calculated server-side using a validated IANA timezone. Proposed venue presentation is Asia/Colombo and LKR, inferred from references; both require configuration confirmation. Currency values are integer minor units and formatted with locale plus explicit ISO currency where ambiguous (Rs. alone is insufficient). Do not assume every currency has two decimals. No mixed-currency totals without approved conversion source, effective time and display disclosure.
+Captured collections, net collections (captures less successful refunds), and recognized revenue (approved recognition ledger/policy) are distinct. No approved recognition policy exists; recognized revenue is Unavailable. These are not net profit. Provider fees, taxes, chargebacks and recognition allocation require OD-16/07 approval. Deduplicate unique ledger events; refund events use refund date and original purchase scope. Do not infer booking count from capture count.
 
-Calendar “today” is local midnight to next local midnight in venue timezone, never browser time. Week starts Monday as a proposal pending business rules. Inclusive end-date UI converts to next local day exclusive. DST zones may produce 23/25-hour days and duplicate wall-clock hours; retain offset in ambiguous labels and unique instant bucket keys. Bucket boundaries and clipping come from server, not client timezone arithmetic. Future incomplete buckets remain gaps, not invented zeros.
+Today's confirmed bookings use confirmedAt; today's sessions use scheduled session_start; creation-cohort statistics use createdAt. Live booking-based status and physical occupancy are distinct. Unknown sensors/exit events do not imply unoccupied. Donut center and slices share all scoped enabled rooms including unknown; a bookable-only rate must be another explicitly labelled metric. Utilization uses customer session minutes, not cleaning or motion minutes, and a versioned sellable-minute denominator.
 
-Previous period: immediately preceding calendar period of equal selected calendar length in same timezone and granularity, excluding incomplete current bucket for a comparable comparison; server returns exact boundaries and completeness. Labels disclose comparison range; do not compare partial today with full yesterday silently. Missing comparison → N/A. Delta denominators use absolute previous value; zero baseline → N/A. Every dataset reports asOf/freshness. Async filters must not allow an older response to overwrite newer query data.
+Storage: UTC RFC3339 instants; reporting: explicit Asia/Colombo half-open [from,to), local midnight to next local midnight. End-date UI converts to next local date exclusive. Other supported zones require explicit configuration and offset-disambiguated DST labels; do not use browser timezone. Week start Monday remains proposed. Currency default LKR from S1, integer minor units, locale/ISO label; mixed currency never summed without approved FX. Round only display, not source aggregates.
 
-Revenue here is a provisional operational cash-event measure, **not certified accounting revenue**: successful captures minus successful refunds by event date. Confirm treatment of taxes, provider fees, settlement, failed chargebacks and revenue recognition with finance requirements before calling it net profit or accounting revenue. Refunds link to original booking/room for scope attribution but appear at refund event date. A transaction can have multiple captures/refunds: sum successful unique ledger events once by event ID. Prevent duplicate webhook counting. Booking counts use distinct booking IDs and a named date basis. Actual domain lifecycle maps must be reconciled; financial event counts cannot stand in for bookings.
+Prior comparison returns exact preceding calendar boundaries in same timezone/granularity, compares equivalent complete portions and labels partial periods. Zero/missing denominator or previous baseline → N/A; unavailable/partial data never zero. Complete empty counts can be zero. DEMO examples never serve as production fallback. Missing buckets show gaps. Freshness includes asOf, completeness and observedAt; actual thresholds/refresh are open. Authorized exports use exactly visible filters, units, metric IDs/date bases and scope, not a paginated subset. No secret or identity evidence in reports/tooltips.
 
-Time utilization measures booked sellable interval minutes, not motion-detected attendance. Interval union/clipping, blackout exclusion and turnover rules belong to the backend. Operational snapshot occupancy and time utilization intentionally use different denominators and must be labelled. For all divisions, denominator zero → null/N/A. Complete empty financial/count bucket → zero; unavailable/partial bucket → null plus warning. Never connect chart lines across missing data by default. All rounded numbers retain unrounded source precision for aggregate computation.
+Grid/axis use chart.grid/chart.axis. Series use stable tokens and non-color differentiation; equivalent tables, focus/tap tooltips and full labels required. Responsive plots minimum 240px with reduced ticks/wrapped legends; errors/no records/no scope/stale/partial are explicit. Chart library selection remains open (Recharts OR Apache ECharts).
 
-## Shared presentation and contracts
-Grid uses chart.grid; labels/axes use chart.axis; semantic series tokens below. Legends are visible, textual, stable across pages and keyboard-operable when toggled. Distinguish series through marks, patterns/dashes and accessible table equivalents. Tooltips work on focus/tap and hover, show original units/date basis; they never expose identity documents, PINs, secrets or unnecessary PII. Do not truncate amounts or omit currency. Plot titles include metric, scope and time basis. At small widths retain labels using horizontal bars or reduced tick density. No-data/error/partial-data states differ from valid zero.
-
-All contract field descriptions and query/envelope fields appear in the JSON. Endpoints are intentionally unspecified. Require schema version, exact range, timezone, currency, asOf, completeness/warnings, and typed data. Authentication/authorization applies before aggregation and export. Date presets, room/location filters and currency are sent to backend; do not filter a paginated subset and call it a complete total. Refresh cadence is configured per service; pause background polling when hidden and label stale snapshots. Accessible equivalent table/export uses the same data and scope.
-
-## Calculation examples (synthetic validation fixtures only)
-- Captured 100000 minor units and successful refunds 20000 → recognized 80000; pending refund excluded. Two distinct confirmed bookings → count 2 regardless of capture count.
-- Snapshot: 2 occupied, 2 available, 1 cleaning, 1 maintenance, 1 unknown → occupancy 50% (2/4), donut 7 rooms; excluded denominator count 3.
-- Sellable [09:00,17:00), blackout [12:00,13:00) → 420 minutes; bookings [10:00,12:00) and [11:00,14:00) union then clipped → 180 booked minutes; utilization 42.857…%.
-- Creation cohort 5, cancelled 1 → cancellation 20%; zero cohort → N/A. Prior revenue 0 → delta N/A, not infinite growth.
+## DEMO calculation fixtures
+- Capture 100000 and successful refund 20000 minor units → net collections 80000; recognized revenue unavailable without recognition policy. Two confirmed booking IDs remain count 2 even if three captures.
+- Room states 2 occupied + 2 available + 1 cleaning + 1 maintenance + 1 unknown → 7 slices; center booking-based occupancy 2/7 = 28.571…%. Physical occupancy remains unknown.
+- Operating interval 09:00–17:00 minus 12:00–13:00 blackout → 420 sellable minutes; session union 10:00–14:00 clipped excluding blackout → 180 minutes, 42.857…%. Any buffer exclusions require the reported policy version.
+- Cohort 5 / cancelled 1 → 20%; zero denominator → N/A. Captures today and scheduled sessions today are intentionally different cohorts.
 
 ## Revenue and Bookings Chart
 
 | Aspect | Specification |
 |---|---|
+| Metric ID | CN-M-REVENUE-BOOKINGS |
 | Chart type | bar-line |
-| Colors | Recognized revenue = `chart.revenue`; Confirmed bookings = `chart.bookings` |
-| Axes and labels | X local bucket label; left money/currency; right integer booking count. Both start at zero; signed financial axis may extend below zero. |
-| Legends | Revenue bar and bookings line, visible with series toggle and equivalent table. |
-| Tooltips | Bucket start/end/timezone, recognized revenue with currency, confirmed bookings, financial event basis and completeness. |
+| Formula | Captured collections = sum unique successful capture ledger event amounts in financial event range; refunds = sum unique successful refund event amounts in refund event range; net collections = captures - refunds. Recognized revenue is separate, only from finance-approved recognition entries/policy and never inferred from cash. Booking count = distinct booking IDs confirmedAt in bucket (not sessions scheduled today). |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | LKR minor units with ISO currency and integer counts (separate scales) |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | X local bucket label; left money/currency; right integer booking count. Both start at zero; signed financial axis may extend below zero. |
 | Filters | range, granularity, room, location, currency, timezone |
-| Metric calculations | Revenue = sum successful captured payment minor amounts - successful refund minor amounts, allocated to their respective financial event bucket; bookingCount = distinct booking IDs with confirmedAt inside bucket. Counts and money have separate event/date bases. |
-| Data source contract | financialBuckets + bookingBuckets joined on exact start/end; never infer bookings from transaction counts. |
-| Date/timezone | Shared half-open range and server-local buckets above; snapshot/health uses observedAt/asOf instants. |
-| Responsive layout | Full width; minimum 240px plot; reduce ticks, stack legend; dual-axis labels retained, table available. |
+| Tooltip | Exact bucket/timezone, captured collections, successful refunds, net collections, currency/date basis/completeness; confirmedAt bookings on combo. Recognized revenue only if approved recognition data explicitly selected. |
+| Contract | financialBuckets + bookingBuckets (combo only), with separate capture/refund event basis and confirmedAt count; recognitionBuckets separate optional contract. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Net collections; confirmed bookings (combo only); explicit selected basis. Recognized revenue never an alias of net collections. |
+| Responsive | Full width; minimum 240px plot; reduce ticks, stack legend; dual-axis labels retained, table available. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Net collections = `chart.revenue`; Confirmed bookings = `chart.bookings` |
 
-## Room Occupancy Donut Chart
+## Room Status Donut Chart
 
 | Aspect | Specification |
 |---|---|
+| Metric ID | CN-M-ROOM-OCCUPANCY |
 | Chart type | donut |
-| Colors | Occupied = `chart.occupied`; Available = `chart.available`; Cleaning = `chart.cleaning`; Maintenance = `chart.maintenance`; Unknown = `chart.unknown` |
-| Axes and labels | No axes. Center labels operational snapshot occupancy and eligible denominator; never confuse with time utilization. |
-| Legends | All five states with counts; occupied violet, available green, cleaning amber, maintenance red, unknown gray. |
-| Tooltips | State, room count, share of all snapshot rooms, snapshotAt; unknown excluded from eligible rate. |
+| Formula | Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts × 100. Zero rooms → N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. State mapping uses versioned maintenance > unknown/stale readiness > cleaning > scheduled occupied > cleared available precedence; conflicting facts raise an incident and never prove physical presence. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | integer counts / defined percent / state labels |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | No axes; center label booking-based occupied / all scoped rooms and denominator. Physical occupancy unknown unless separate validated observation contract. |
 | Filters | location, room, snapshotAt |
-| Metric calculations | Snapshot occupancy = occupied bookable rooms / (occupied + available bookable rooms) × 100. Denominator excludes cleaning, maintenance and unknown; show excluded count. Donut slices show all rooms in scope, not just denominator. No eligible rooms yields N/A. |
-| Data source contract | roomSnapshot with mutually exclusive states, stateObservedAt and snapshotAt; explicit unknown/stale handling. |
-| Date/timezone | Shared half-open range and server-local buckets above; snapshot/health uses observedAt/asOf instants. |
-| Responsive layout | Minimum 240px graphic; legend below <lg; counts and table readable without hovering. |
+| Tooltip | State, count, percentage of all scoped status rooms, observedAt and freshness. Unknown is not unoccupied. |
+| Contract | roomSnapshot with mutually exclusive states, stateObservedAt and snapshotAt; explicit unknown/stale handling. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | All five states with counts; occupied violet, available green, cleaning amber, maintenance red, unknown gray. |
+| Responsive | Minimum 240px graphic; legend below <lg; counts and table readable without hovering. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Occupied = `chart.occupied`; Available = `chart.available`; Cleaning = `chart.cleaning`; Maintenance = `chart.maintenance`; Unknown = `chart.unknown` |
 
 ## Revenue Trend Chart
 
 | Aspect | Specification |
 |---|---|
+| Metric ID | CN-M-REVENUE-TREND |
 | Chart type | line-area |
-| Colors | Recognized revenue = `chart.revenue` |
-| Axes and labels | X bucket/date; Y money/currency; zero baseline and negative values preserved. |
-| Legends | Recognized revenue; previous period dashed only when data supplied. |
-| Tooltips | Bucket, captured, refunds, recognized revenue, currency, completeness and optional comparison. |
+| Formula | Captured collections = sum unique successful capture ledger event amounts in financial event range; refunds = sum unique successful refund event amounts in refund event range; net collections = captures - refunds. Recognized revenue is separate, only from finance-approved recognition entries/policy and never inferred from cash. Area is decorative, not cumulative. Negative net collections preserved. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | LKR minor units with ISO currency and integer counts (separate scales) |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | X bucket/date; Y money/currency; zero baseline and negative values preserved. |
 | Filters | range, granularity, room, location, currency, timezone |
-| Metric calculations | Same financial event revenue definition as revenue-bookings; area is decorative transparent series color, not cumulative revenue. |
-| Data source contract | financialBuckets with capturedMinor/refundedMinor/recognizedRevenueMinor and optional comparable previous buckets. |
-| Date/timezone | Shared half-open range and server-local buckets above; snapshot/health uses observedAt/asOf instants. |
-| Responsive layout | Full width; fewer ticks; area may be removed at small widths without removing values. |
+| Tooltip | Exact bucket/timezone, captured collections, successful refunds, net collections, currency/date basis/completeness; confirmedAt bookings on combo. Recognized revenue only if approved recognition data explicitly selected. |
+| Contract | financialBuckets + bookingBuckets (combo only), with separate capture/refund event basis and confirmedAt count; recognitionBuckets separate optional contract. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Net collections; confirmed bookings (combo only); explicit selected basis. Recognized revenue never an alias of net collections. |
+| Responsive | Full width; fewer ticks; area may be removed at small widths without removing values. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Net collections = `chart.revenue` |
 
 ## Popular Time Slots Chart
 
 | Aspect | Specification |
 |---|---|
+| Metric ID | CN-M-POPULAR-TIME-SLOTS |
 | Chart type | bar |
-| Colors | Bookings started = `chart.bookings` |
-| Axes and labels | X labelled local time bands (24-hour or locale time); Y integer booking count from zero. |
-| Legends | Bookings started; label rankings as tied when counts equal. |
-| Tooltips | Band including AM/PM or 24-hour clarity, booking count, range and timezone. |
+| Formula | Distinct confirmed noncancelled booking IDs whose scheduled start falls within selected range, grouped by configured local hour band. Explicit business bands [startHour,endHour); cross-midnight bands split or carry dayOffset. Popularity is count, not occupied minutes. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | integer counts / defined percent / state labels |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | X labelled local time bands (24-hour or locale time); Y integer booking count from zero. |
 | Filters | range, room, location, timezone, slotBandDefinition |
-| Metric calculations | Distinct confirmed noncancelled booking IDs whose scheduled start falls within selected range, grouped by configured local hour band. Explicit business bands [startHour,endHour); cross-midnight bands split or carry dayOffset. Popularity is count, not occupied minutes. |
-| Data source contract | slotBuckets with bandId, label, startHour/endHour/dayOffset and bookingCount; band definitions from configured operating hours. |
-| Date/timezone | Shared half-open range and server-local buckets above; snapshot/health uses observedAt/asOf instants. |
-| Responsive layout | Horizontal bars at <sm; preserve complete time-band labels; no ambiguous duplicate 9–12. |
+| Tooltip | Band including AM/PM or 24-hour clarity, booking count, range and timezone. |
+| Contract | slotBuckets with bandId, label, startHour/endHour/dayOffset and bookingCount; band definitions from configured operating hours. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Bookings started; label rankings as tied when counts equal. |
+| Responsive | Horizontal bars at <sm; preserve complete time-band labels; no ambiguous duplicate 9–12. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Bookings started = `chart.bookings` |
 
 ## Room Utilization Chart
 
 | Aspect | Specification |
 |---|---|
+| Metric ID | CN-M-ROOM-UTILIZATION |
 | Chart type | horizontal-bar |
-| Colors | Time utilization = `chart.occupied` |
-| Axes and labels | Y room label; X 0–100 percent. Never cap invalid >100 data silently; flag contract error. |
-| Legends | Time utilization; optional comparison dashed, not another occupancy definition. |
-| Tooltips | Room, booked/sellable minutes, percent, excluded intervals and range/timezone. |
+| Formula | Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range × 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator → N/A; unknown/incomplete inputs → unavailable. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | percent and minutes |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | Y room label; X 0–100 percent. Never cap invalid >100 data silently; flag contract error. |
 | Filters | range, room, location, timezone |
-| Metric calculations | For each room: union of noncancelled confirmed booking intervals intersected with sellable intervals and range, divided by union of sellable intervals within range × 100. Sellable intervals = configured operating intervals minus maintenance/blackouts and policy-defined turnaround. Count interval overlaps once. Zero sellable minutes → null/N/A. |
-| Data source contract | roomUtilization with roomId/name, bookedMinutes, sellableMinutes, utilizationPercent and completeness; server resolves blackout/buffer policy. |
-| Date/timezone | Shared half-open range and server-local buckets above; snapshot/health uses observedAt/asOf instants. |
-| Responsive layout | Vertical list of horizontal bars; long names wrap and table remains available. |
+| Tooltip | Room, booked/sellable minutes, percent, excluded intervals and range/timezone. |
+| Contract | roomUtilization with roomId/name, bookedMinutes, sellableMinutes, utilizationPercent and completeness; server resolves blackout/buffer policy. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Time utilization; optional comparison dashed, not another occupancy definition. |
+| Responsive | Vertical list of horizontal bars; long names wrap and table remains available. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Time utilization = `chart.occupied` |
 
 ## Booking Statistics
 
 | Aspect | Specification |
 |---|---|
+| Metric ID | CN-M-BOOKING-STATISTICS |
 | Chart type | stacked-bar-and-summary |
-| Colors | Confirmed = `chart.available`; Ongoing = `chart.bookings`; Completed = `chart.occupied`; Cancelled = `chart.maintenance`; Other states = `chart.unknown` |
-| Axes and labels | X creation bucket; Y integer booking count, zero baseline. |
-| Legends | All included states, with text and stable color; Other states expands in data table. |
-| Tooltips | Bucket, each state count, cohort total, cancellation rate, asOf. |
+| Formula | Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | integer counts / defined percent / state labels |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | X creation bucket; Y integer booking count, zero baseline. |
 | Filters | range, granularity, room, location, timezone |
-| Metric calculations | Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort. |
-| Data source contract | bookingStateBuckets with cohort basis createdAt, asOf and all backend states mapped to documented display buckets; totals from same dataset. |
-| Date/timezone | Shared half-open range and server-local buckets above; snapshot/health uses observedAt/asOf instants. |
-| Responsive layout | Stacked chart stacks above summary cards <lg; table retains unmapped states. |
+| Tooltip | Bucket, each state count, cohort total, cancellation rate, asOf. |
+| Contract | bookingStateBuckets with cohort basis createdAt, asOf and all backend states mapped to documented display buckets; totals from same dataset. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | All included states, with text and stable color; Other states expands in data table. |
+| Responsive | Stacked chart stacks above summary cards <lg; table retains unmapped states. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Confirmed = `chart.available`; Ongoing = `chart.bookings`; Completed = `chart.occupied`; Cancelled = `chart.maintenance`; Other states = `chart.unknown` |
 
 ## Financial KPI Cards
 
 | Aspect | Specification |
 |---|---|
+| Metric ID | CN-M-FINANCIAL-KPIS |
 | Chart type | kpi-cards |
-| Colors | Recognized revenue = `chart.revenue`; Captured payments = `chart.available`; Successful refunds = `chart.maintenance`; Average booking value = `chart.bookings` |
-| Axes and labels | No axes; each card has label, value/currency and named comparison basis. |
-| Legends | Not required; label every card. Up/down is descriptive, not always good/bad. |
-| Tooltips | Metric definition, date basis, previous exact period, completeness, asOf. |
+| Formula | Captured collections and successful refunds sum unique ledger events in event range; net collections = captures - refunds. Recognized revenue is separate finance-approved recognition entries by recognition/service policy date, null if no policy/entries. Average booking value = finalized quote totals / distinct eligible noncancelled-at-asOf bookings confirmed in range. Zero denominator → N/A. Delta = (current - previous)/abs(previous) ×100; zero/missing previous → N/A. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | LKR minor units with ISO currency and integer counts (separate scales) |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | No axes; each card has label, value/currency and named comparison basis. |
 | Filters | range, room, location, currency, timezone |
-| Metric calculations | Captured = sum successful captures in event range; refunded = sum successful refunds in event range; recognized = captured - refunded. Average booking value = sum finalized quote totals of bookings confirmed in range / distinct such bookings, rounded for display only; excludes cancelled-at-asOf cohort and labelled asOf. Denominator 0 → N/A. Period delta = (current - previous) / abs(previous) ×100; previous 0 or missing → N/A. Revenue may be negative. |
-| Data source contract | financialSummary including sums, confirmedQuoteTotalMinor, eligibleConfirmedBookingCount, previous comparable range and asOf; all amounts per currency. |
-| Date/timezone | Shared half-open range and server-local buckets above; snapshot/health uses observedAt/asOf instants. |
-| Responsive layout | 1/2/4 columns base/sm/lg; values wrap without truncation. |
+| Tooltip | Each named metric, currency, distinct date basis, completeness, asOf and exact comparable period; missing recognition policy displays Unavailable. |
+| Contract | financialSummary including sums, confirmedQuoteTotalMinor, eligibleConfirmedBookingCount, previous comparable range and asOf; all amounts per currency. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Not required; label every card. Up/down is descriptive, not always good/bad. |
+| Responsive | 1/2/4 columns base/sm/lg; values wrap without truncation. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Net collections = `chart.revenue`; Captured payments = `chart.available`; Successful refunds = `chart.maintenance`; Average booking value = `chart.bookings`; Recognized revenue (only with approved recognition policy) = `chart.revenue` |
 
 ## System and IoT Status Indicators
 
 | Aspect | Specification |
 |---|---|
+| Metric ID | CN-M-SYSTEM-IOT-STATUS |
 | Chart type | status-list-and-timeline |
-| Colors | Online = `chart.available`; Degraded = `chart.cleaning`; Offline = `chart.maintenance`; Unknown = `chart.unknown` |
-| Axes and labels | Status list has no axes; optional timeline X instant/date, Y state per service/device lane. |
-| Legends | Online/degraded/offline/unknown with icons and words; no all-green default. |
-| Tooltips | Entity, status, observedAt/timezone, age, freshness threshold and safe diagnostic. |
+| Formula | Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices ×100, unknown included; 0 devices → N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | integer counts / defined percent / state labels |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | Status list has no axes; optional timeline X instant/date, Y state per service/device lane. |
 | Filters | location, room, deviceType, service, range |
-| Metric calculations | Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices ×100, unknown included; 0 devices → N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim. |
-| Data source contract | serviceHealth and deviceHealth with status, observedAt, staleAfterSeconds, required, safeReason and telemetry schema version. |
-| Date/timezone | Shared half-open range and server-local buckets above; snapshot/health uses observedAt/asOf instants. |
-| Responsive layout | List wraps to cards; timeline scrolls in labelled region; equivalent event table. |
+| Tooltip | Entity, status, observedAt/timezone, age, freshness threshold and safe diagnostic. |
+| Contract | serviceHealth and deviceHealth with status, observedAt, staleAfterSeconds, required, safeReason and telemetry schema version. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Online/degraded/offline/unknown with icons and words; no all-green default. |
+| Responsive | List wraps to cards; timeline scrolls in labelled region; equivalent event table. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Online = `chart.available`; Degraded = `chart.cleaning`; Offline = `chart.maintenance`; Unknown = `chart.unknown` |
+
+## Payment and Add-on Breakdown Charts
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-PAYMENT-ADDON-BREAKDOWN |
+| Chart type | separate-bars |
+| Formula | Payment panel sums unique successful capture event amounts by verified provider/method, financial event range. Add-on panel sums finalized itemized sold add-on amounts and quantities for noncancelled confirmedAt cohort at asOf; PS4/extra-hour/fifth-guest lines use versioned quote types. Do not treat sold line items as cash or recognized revenue. Refund allocation shown only if authoritative line allocations exist; otherwise explicitly unavailable. |
+| Population | Successful unique capture ledger events for payments; finalized quote item lines of eligible confirmedAt booking cohort for add-ons. |
+| Units | Single ISO currency minor-unit amounts, quantities and distinct counts separately labelled. |
+| Time basis | Payment event time versus booking confirmedAt cohort; Asia/Colombo boundaries and UTC instant storage. |
+| Axes/labels | Separate panels: category vs money/quantity with explicitly selected unit; zero baseline; retain negative refund-adjusted views when supplied. |
+| Filters | range, room, location, currency, timezone, paymentMethod, addonType |
+| Tooltip | Method/type, amount/currency, quantity/count, exact cohort/date basis, refund allocation availability and asOf. |
+| Contract | paymentBreakdown {methodId, capturedMinor, captureCount}; addonBreakdown {itemType, soldAddonMinor, quantity, bookingCount, cohortBasis, asOf}; per currency/scope. |
+| Authorized data source | Payments ledger and Pricing/Booking immutable purchase-item projection; payments.read/analytics.read scope. |
+| Freshness | Server asOf/complete; stale or missing allocation labelled. |
+| Legend | Captured collections and sold add-on values are separate panels/populations; never a combined pie denominator. |
+| Responsive | Horizontal bars on mobile; full labels and supporting tables remain. |
+| Accessibility | Equivalent data table, non-color labels, focus/tap tooltips and keyboard filters. |
+| Empty/error states | Valid complete empty counts zero; unknown allocations unavailable; error/partial dataset never invented zero. |
+| Colors | Captured by provider/payment method = `chart.revenue`; Sold add-ons by type = `chart.bookings` |

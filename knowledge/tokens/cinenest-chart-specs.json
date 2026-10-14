@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "proposed-contracts-no-backend-present",
   "tokenFile": "cinenest-design-tokens.json",
   "shared": {
@@ -7,7 +7,15 @@
     "axisColorToken": "chart.axis",
     "range": "[from,to)",
     "nullMeans": "unavailable, undefined or incomplete; never automatically zero",
-    "money": "integer minor units per ISO currency; aggregate server-side before display rounding"
+    "money": "integer minor units per ISO currency; aggregate server-side before display rounding",
+    "metrics": {
+      "todayConfirmedBookings": "distinct booking IDs confirmedAt in local day",
+      "todaySessions": "distinct noncancelled confirmed booking revisions with scheduled session_start in local day",
+      "capturedCollections": "successful capture ledger events",
+      "netCollections": "captures minus successful refund events",
+      "recognizedRevenue": "approved recognition ledger only; unavailable otherwise",
+      "physicalOccupancy": "validated observation/process only; unknown absent evidence"
+    }
   },
   "contracts": {
     "query": {
@@ -34,8 +42,8 @@
       "bucketEnd": "instant",
       "capturedMinor": "signed integer sum in one currency",
       "refundedMinor": "nonnegative integer successful refund sum",
-      "recognizedRevenueMinor": "capturedMinor - refundedMinor",
-      "complete": "boolean"
+      "complete": "boolean",
+      "netCollectionsMinor": "capturedMinor - refundedMinor"
     },
     "bookingBuckets": {
       "bucketStart": "instant",
@@ -44,7 +52,9 @@
     },
     "roomSnapshot": {
       "snapshotAt": "instant",
-      "rooms": "array {roomId, state: occupied|available|cleaning|maintenance|unknown, stateObservedAt, bookable}; one state per room"
+      "rooms": "array {roomId, state: occupied|available|cleaning|maintenance|unknown, stateObservedAt, bookable}; one state per room",
+      "population": "all enabled scoped rooms incl unknown; same denominator for slices and center",
+      "statePolicyVersion": "versioned maintenance/unknown/cleaning/active scheduled session/cleared available precedence; conflicts surfaced as incidents"
     },
     "slotBuckets": {
       "bandId": "stable string",
@@ -60,7 +70,8 @@
       "bookedMinutes": "nonnegative decimal",
       "sellableMinutes": "nonnegative decimal",
       "utilizationPercent": "0..100 or null",
-      "complete": "boolean"
+      "complete": "boolean",
+      "sellablePolicyVersion": "approved denominator policy version; non-sellable buffer/blackout treatment explicit"
     },
     "bookingStateBuckets": {
       "bucketStart": "instant",
@@ -72,18 +83,34 @@
     "financialSummary": {
       "capturedMinor": "integer",
       "refundedMinor": "integer",
-      "recognizedRevenueMinor": "integer",
+      "recognizedRevenueMinor": "separate recognition ledger/policy sum or null; never cash alias",
       "confirmedQuoteTotalMinor": "integer",
       "eligibleConfirmedBookingCount": "integer",
       "averageBookingValueMinor": "number or null",
       "previous": "same sums and exact prior range or null",
-      "asOf": "instant"
+      "asOf": "instant",
+      "netCollectionsMinor": "captures - successful refunds in financial event range"
     },
     "serviceHealth": {
       "entities": "array {id, status: online|degraded|offline|unknown, observedAt: instant|null, staleAfterSeconds: positive integer, required: boolean, safeReason: string|null}"
     },
     "deviceHealth": {
       "entities": "array {deviceId, roomId, enabled, status, observedAt, staleAfterSeconds, safeReason, telemetrySchemaVersion}"
+    },
+    "recognitionBuckets": {
+      "bucketStart": "instant",
+      "bucketEnd": "instant",
+      "recognizedRevenueMinor": "integer or null",
+      "recognitionPolicyVersion": "approved policy reference or null",
+      "complete": "boolean"
+    },
+    "paymentBreakdown": {
+      "data": "array {methodId,capturedMinor,captureCount}",
+      "basis": "successful capture ledger event time"
+    },
+    "addonBreakdown": {
+      "data": "array {itemType,soldAddonMinor,quantity,bookingCount}",
+      "basis": "confirmedAt eligible booking cohort at asOf; finalized item snapshots"
     }
   },
   "charts": [
@@ -93,10 +120,10 @@
       "type": "bar-line",
       "series": [
         {
-          "key": "recognizedRevenueMinor",
+          "key": "netCollectionsMinor",
           "colorToken": "chart.revenue",
           "axis": "left",
-          "label": "Recognized revenue"
+          "label": "Net collections"
         },
         {
           "key": "bookingCount",
@@ -105,10 +132,10 @@
           "label": "Confirmed bookings"
         }
       ],
-      "formula": "Revenue = sum successful captured payment minor amounts - successful refund minor amounts, allocated to their respective financial event bucket; bookingCount = distinct booking IDs with confirmedAt inside bucket. Counts and money have separate event/date bases.",
-      "contract": "financialBuckets + bookingBuckets joined on exact start/end; never infer bookings from transaction counts.",
+      "formula": "Captured collections = sum unique successful capture ledger event amounts in financial event range; refunds = sum unique successful refund event amounts in refund event range; net collections = captures - refunds. Recognized revenue is separate, only from finance-approved recognition entries/policy and never inferred from cash. Booking count = distinct booking IDs confirmedAt in bucket (not sessions scheduled today).",
+      "contract": "financialBuckets + bookingBuckets (combo only), with separate capture/refund event basis and confirmedAt count; recognitionBuckets separate optional contract.",
       "axes": "X local bucket label; left money/currency; right integer booking count. Both start at zero; signed financial axis may extend below zero.",
-      "tooltip": "Bucket start/end/timezone, recognized revenue with currency, confirmed bookings, financial event basis and completeness.",
+      "tooltip": "Exact bucket/timezone, captured collections, successful refunds, net collections, currency/date basis/completeness; confirmedAt bookings on combo. Recognized revenue only if approved recognition data explicitly selected.",
       "filters": [
         "range",
         "granularity",
@@ -117,12 +144,25 @@
         "currency",
         "timezone"
       ],
-      "legend": "Revenue bar and bookings line, visible with series toggle and equivalent table.",
-      "responsive": "Full width; minimum 240px plot; reduce ticks, stack legend; dual-axis labels retained, table available."
+      "legend": "Net collections; confirmed bookings (combo only); explicit selected basis. Recognized revenue never an alias of net collections.",
+      "responsive": "Full width; minimum 240px plot; reduce ticks, stack legend; dual-axis labels retained, table available.",
+      "metricId": "CN-M-REVENUE-BOOKINGS",
+      "population": "Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates.",
+      "units": "LKR minor units with ISO currency and integer counts (separate scales)",
+      "timeBasis": "UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states.",
+      "authorizedDataSource": "Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified.",
+      "freshness": "Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained.",
+      "accessibility": "Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion.",
+      "emptyErrorStates": "Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
     },
     {
       "id": "room-occupancy",
-      "name": "Room Occupancy Donut Chart",
+      "name": "Room Status Donut Chart",
       "type": "donut",
       "series": [
         {
@@ -151,17 +191,30 @@
           "label": "Unknown"
         }
       ],
-      "formula": "Snapshot occupancy = occupied bookable rooms / (occupied + available bookable rooms) \u00d7 100. Denominator excludes cleaning, maintenance and unknown; show excluded count. Donut slices show all rooms in scope, not just denominator. No eligible rooms yields N/A.",
+      "formula": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts \u00d7 100. Zero rooms \u2192 N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.",
       "contract": "roomSnapshot with mutually exclusive states, stateObservedAt and snapshotAt; explicit unknown/stale handling.",
-      "axes": "No axes. Center labels operational snapshot occupancy and eligible denominator; never confuse with time utilization.",
-      "tooltip": "State, room count, share of all snapshot rooms, snapshotAt; unknown excluded from eligible rate.",
+      "axes": "No axes; center label booking-based occupied / all scoped rooms and denominator. Physical occupancy unknown unless separate validated observation contract.",
+      "tooltip": "State, count, percentage of all scoped status rooms, observedAt and freshness. Unknown is not unoccupied.",
       "filters": [
         "location",
         "room",
         "snapshotAt"
       ],
       "legend": "All five states with counts; occupied violet, available green, cleaning amber, maintenance red, unknown gray.",
-      "responsive": "Minimum 240px graphic; legend below <lg; counts and table readable without hovering."
+      "responsive": "Minimum 240px graphic; legend below <lg; counts and table readable without hovering.",
+      "metricId": "CN-M-ROOM-OCCUPANCY",
+      "population": "Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates.",
+      "units": "integer counts / defined percent / state labels",
+      "timeBasis": "UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states.",
+      "authorizedDataSource": "Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified.",
+      "freshness": "Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained.",
+      "accessibility": "Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion.",
+      "emptyErrorStates": "Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
     },
     {
       "id": "revenue-trend",
@@ -169,15 +222,15 @@
       "type": "line-area",
       "series": [
         {
-          "key": "recognizedRevenueMinor",
+          "key": "netCollectionsMinor",
           "colorToken": "chart.revenue",
-          "label": "Recognized revenue"
+          "label": "Net collections"
         }
       ],
-      "formula": "Same financial event revenue definition as revenue-bookings; area is decorative transparent series color, not cumulative revenue.",
-      "contract": "financialBuckets with capturedMinor/refundedMinor/recognizedRevenueMinor and optional comparable previous buckets.",
+      "formula": "Captured collections = sum unique successful capture ledger event amounts in financial event range; refunds = sum unique successful refund event amounts in refund event range; net collections = captures - refunds. Recognized revenue is separate, only from finance-approved recognition entries/policy and never inferred from cash. Area is decorative, not cumulative. Negative net collections preserved.",
+      "contract": "financialBuckets + bookingBuckets (combo only), with separate capture/refund event basis and confirmedAt count; recognitionBuckets separate optional contract.",
       "axes": "X bucket/date; Y money/currency; zero baseline and negative values preserved.",
-      "tooltip": "Bucket, captured, refunds, recognized revenue, currency, completeness and optional comparison.",
+      "tooltip": "Exact bucket/timezone, captured collections, successful refunds, net collections, currency/date basis/completeness; confirmedAt bookings on combo. Recognized revenue only if approved recognition data explicitly selected.",
       "filters": [
         "range",
         "granularity",
@@ -186,8 +239,21 @@
         "currency",
         "timezone"
       ],
-      "legend": "Recognized revenue; previous period dashed only when data supplied.",
-      "responsive": "Full width; fewer ticks; area may be removed at small widths without removing values."
+      "legend": "Net collections; confirmed bookings (combo only); explicit selected basis. Recognized revenue never an alias of net collections.",
+      "responsive": "Full width; fewer ticks; area may be removed at small widths without removing values.",
+      "metricId": "CN-M-REVENUE-TREND",
+      "population": "Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates.",
+      "units": "LKR minor units with ISO currency and integer counts (separate scales)",
+      "timeBasis": "UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states.",
+      "authorizedDataSource": "Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified.",
+      "freshness": "Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained.",
+      "accessibility": "Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion.",
+      "emptyErrorStates": "Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
     },
     {
       "id": "popular-time-slots",
@@ -212,7 +278,20 @@
         "slotBandDefinition"
       ],
       "legend": "Bookings started; label rankings as tied when counts equal.",
-      "responsive": "Horizontal bars at <sm; preserve complete time-band labels; no ambiguous duplicate 9\u201312."
+      "responsive": "Horizontal bars at <sm; preserve complete time-band labels; no ambiguous duplicate 9\u201312.",
+      "metricId": "CN-M-POPULAR-TIME-SLOTS",
+      "population": "Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates.",
+      "units": "integer counts / defined percent / state labels",
+      "timeBasis": "UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states.",
+      "authorizedDataSource": "Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified.",
+      "freshness": "Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained.",
+      "accessibility": "Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion.",
+      "emptyErrorStates": "Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
     },
     {
       "id": "room-utilization",
@@ -225,7 +304,7 @@
           "label": "Time utilization"
         }
       ],
-      "formula": "For each room: union of noncancelled confirmed booking intervals intersected with sellable intervals and range, divided by union of sellable intervals within range \u00d7 100. Sellable intervals = configured operating intervals minus maintenance/blackouts and policy-defined turnaround. Count interval overlaps once. Zero sellable minutes \u2192 null/N/A.",
+      "formula": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range \u00d7 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator \u2192 N/A; unknown/incomplete inputs \u2192 unavailable.",
       "contract": "roomUtilization with roomId/name, bookedMinutes, sellableMinutes, utilizationPercent and completeness; server resolves blackout/buffer policy.",
       "axes": "Y room label; X 0\u2013100 percent. Never cap invalid >100 data silently; flag contract error.",
       "tooltip": "Room, booked/sellable minutes, percent, excluded intervals and range/timezone.",
@@ -236,7 +315,20 @@
         "timezone"
       ],
       "legend": "Time utilization; optional comparison dashed, not another occupancy definition.",
-      "responsive": "Vertical list of horizontal bars; long names wrap and table remains available."
+      "responsive": "Vertical list of horizontal bars; long names wrap and table remains available.",
+      "metricId": "CN-M-ROOM-UTILIZATION",
+      "population": "Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates.",
+      "units": "percent and minutes",
+      "timeBasis": "UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states.",
+      "authorizedDataSource": "Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified.",
+      "freshness": "Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained.",
+      "accessibility": "Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion.",
+      "emptyErrorStates": "Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
     },
     {
       "id": "booking-statistics",
@@ -281,7 +373,20 @@
         "timezone"
       ],
       "legend": "All included states, with text and stable color; Other states expands in data table.",
-      "responsive": "Stacked chart stacks above summary cards <lg; table retains unmapped states."
+      "responsive": "Stacked chart stacks above summary cards <lg; table retains unmapped states.",
+      "metricId": "CN-M-BOOKING-STATISTICS",
+      "population": "Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates.",
+      "units": "integer counts / defined percent / state labels",
+      "timeBasis": "UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states.",
+      "authorizedDataSource": "Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified.",
+      "freshness": "Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained.",
+      "accessibility": "Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion.",
+      "emptyErrorStates": "Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
     },
     {
       "id": "financial-kpis",
@@ -289,9 +394,9 @@
       "type": "kpi-cards",
       "series": [
         {
-          "key": "recognizedRevenueMinor",
+          "key": "netCollectionsMinor",
           "colorToken": "chart.revenue",
-          "label": "Recognized revenue"
+          "label": "Net collections"
         },
         {
           "key": "capturedMinor",
@@ -307,12 +412,17 @@
           "key": "averageBookingValueMinor",
           "colorToken": "chart.bookings",
           "label": "Average booking value"
+        },
+        {
+          "key": "recognizedRevenueMinor",
+          "colorToken": "chart.revenue",
+          "label": "Recognized revenue (only with approved recognition policy)"
         }
       ],
-      "formula": "Captured = sum successful captures in event range; refunded = sum successful refunds in event range; recognized = captured - refunded. Average booking value = sum finalized quote totals of bookings confirmed in range / distinct such bookings, rounded for display only; excludes cancelled-at-asOf cohort and labelled asOf. Denominator 0 \u2192 N/A. Period delta = (current - previous) / abs(previous) \u00d7100; previous 0 or missing \u2192 N/A. Revenue may be negative.",
+      "formula": "Captured collections and successful refunds sum unique ledger events in event range; net collections = captures - refunds. Recognized revenue is separate finance-approved recognition entries by recognition/service policy date, null if no policy/entries. Average booking value = finalized quote totals / distinct eligible noncancelled-at-asOf bookings confirmed in range. Zero denominator \u2192 N/A. Delta = (current - previous)/abs(previous) \u00d7100; zero/missing previous \u2192 N/A.",
       "contract": "financialSummary including sums, confirmedQuoteTotalMinor, eligibleConfirmedBookingCount, previous comparable range and asOf; all amounts per currency.",
       "axes": "No axes; each card has label, value/currency and named comparison basis.",
-      "tooltip": "Metric definition, date basis, previous exact period, completeness, asOf.",
+      "tooltip": "Each named metric, currency, distinct date basis, completeness, asOf and exact comparable period; missing recognition policy displays Unavailable.",
       "filters": [
         "range",
         "room",
@@ -321,7 +431,20 @@
         "timezone"
       ],
       "legend": "Not required; label every card. Up/down is descriptive, not always good/bad.",
-      "responsive": "1/2/4 columns base/sm/lg; values wrap without truncation."
+      "responsive": "1/2/4 columns base/sm/lg; values wrap without truncation.",
+      "metricId": "CN-M-FINANCIAL-KPIS",
+      "population": "Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates.",
+      "units": "LKR minor units with ISO currency and integer counts (separate scales)",
+      "timeBasis": "UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states.",
+      "authorizedDataSource": "Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified.",
+      "freshness": "Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained.",
+      "accessibility": "Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion.",
+      "emptyErrorStates": "Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
     },
     {
       "id": "system-iot-status",
@@ -361,7 +484,70 @@
         "range"
       ],
       "legend": "Online/degraded/offline/unknown with icons and words; no all-green default.",
-      "responsive": "List wraps to cards; timeline scrolls in labelled region; equivalent event table."
+      "responsive": "List wraps to cards; timeline scrolls in labelled region; equivalent event table.",
+      "metricId": "CN-M-SYSTEM-IOT-STATUS",
+      "population": "Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates.",
+      "units": "integer counts / defined percent / state labels",
+      "timeBasis": "UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states.",
+      "authorizedDataSource": "Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified.",
+      "freshness": "Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained.",
+      "accessibility": "Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion.",
+      "emptyErrorStates": "Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
+    },
+    {
+      "id": "payment-addon-breakdown",
+      "name": "Payment and Add-on Breakdown Charts",
+      "metricId": "CN-M-PAYMENT-ADDON-BREAKDOWN",
+      "type": "separate-bars",
+      "series": [
+        {
+          "key": "capturedMinor",
+          "colorToken": "chart.revenue",
+          "label": "Captured by provider/payment method"
+        },
+        {
+          "key": "soldAddonMinor",
+          "colorToken": "chart.bookings",
+          "label": "Sold add-ons by type"
+        }
+      ],
+      "formula": "Payment panel sums unique successful capture event amounts by verified provider/method, financial event range. Add-on panel sums finalized itemized sold add-on amounts and quantities for noncancelled confirmedAt cohort at asOf; PS4/extra-hour/fifth-guest lines use versioned quote types. Do not treat sold line items as cash or recognized revenue. Refund allocation shown only if authoritative line allocations exist; otherwise explicitly unavailable.",
+      "contract": "paymentBreakdown {methodId, capturedMinor, captureCount}; addonBreakdown {itemType, soldAddonMinor, quantity, bookingCount, cohortBasis, asOf}; per currency/scope.",
+      "axes": "Separate panels: category vs money/quantity with explicitly selected unit; zero baseline; retain negative refund-adjusted views when supplied.",
+      "tooltip": "Method/type, amount/currency, quantity/count, exact cohort/date basis, refund allocation availability and asOf.",
+      "filters": [
+        "range",
+        "room",
+        "location",
+        "currency",
+        "timezone",
+        "paymentMethod",
+        "addonType"
+      ],
+      "legend": "Captured collections and sold add-on values are separate panels/populations; never a combined pie denominator.",
+      "responsive": "Horizontal bars on mobile; full labels and supporting tables remain.",
+      "population": "Successful unique capture ledger events for payments; finalized quote item lines of eligible confirmedAt booking cohort for add-ons.",
+      "units": "Single ISO currency minor-unit amounts, quantities and distinct counts separately labelled.",
+      "timeBasis": "Payment event time versus booking confirmedAt cohort; Asia/Colombo boundaries and UTC instant storage.",
+      "authorizedDataSource": "Payments ledger and Pricing/Booking immutable purchase-item projection; payments.read/analytics.read scope.",
+      "freshness": "Server asOf/complete; stale or missing allocation labelled.",
+      "accessibility": "Equivalent data table, non-color labels, focus/tap tooltips and keyboard filters.",
+      "emptyErrorStates": "Valid complete empty counts zero; unknown allocations unavailable; error/partial dataset never invented zero.",
+      "decisionStatus": "DOCUMENTED_DRAFT",
+      "implementationStatus": "NOT_VERIFIED",
+      "sourceIds": [
+        "S1"
+      ]
     }
+  ],
+  "decisionStatus": "DOCUMENTED_DRAFT",
+  "implementationStatus": "NOT_VERIFIED",
+  "sourceIds": [
+    "S1"
   ]
 }

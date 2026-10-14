@@ -1,0 +1,669 @@
+ROLE AND TASK
+
+Act as the technical documentation maintainer, software architect,
+and UI/UX knowledge-base editor for CineNest, the Theater Project's
+Smart Automated Private Cinema & IoT Management Platform.
+
+Task ID: CN-KB-FEATURES-TECH-001
+
+Update the ACTUAL knowledge files in the current Theater Project
+workspace with the features, technology options, architecture
+recommendations, business rules, and design decisions below.
+
+Create missing documents and update existing ones in place.
+Perform the file changes, not merely a proposed plan.
+
+This is a DOCUMENTATION-ONLY task.
+
+Do not implement application features, install dependencies, alter
+database migrations, change runtime configuration, deploy anything,
+or send commands to physical devices.
+
+
+1. INSPECT THE REAL BASELINE
+
+Before editing:
+
+- Confirm the project root and that it belongs to CineNest /
+  Theater Project. Do not assume a repository name, remote,
+  or local path.
+
+- Read AGENTS.md, README files, documentation indexes, existing
+  ADRs, and repository contribution/publication instructions.
+
+- Locate the existing knowledge-base root, version, manifest,
+  design tokens, chart specifications, reference images, and
+  validation scripts.
+
+- If Git is available, record the branch, HEAD, worktree status,
+  and upstream configuration. Preserve all pre-existing changes.
+
+- Inspect relevant application manifests and module structure
+  read-only to distinguish implemented technology from proposed
+  technology.
+
+- Do not assume a previously described v1.1.0 archive, file count,
+  successful validation, or Git push actually exists. Verify
+  everything from accessible files and tool results.
+
+Use the existing KB location. Default to docs/knowledge-base/
+only when no established location exists.
+
+Do not create a second competing KB tree or overwrite unrelated
+documentation.
+
+If the target workspace is ambiguous, ask for its path before writing.
+
+
+2. SOURCES AND DECISION STATUS
+
+Read available existing KB documents, supplied discussion notes,
+and these source files:
+
+- Mini movie theater Ruels and Conditions.pdf
+- Smart_Cinema_Platform.pdf
+- The Smart Automated Private Cinema & IoT System Architecture
+  Proposal PDF, which may have a Sinhala filename.
+
+Preserve these reference images or their existing normalized copies:
+
+- CineNest Cinema Admin Dashboard Mockup-1.png
+- CineNest Cinema Dashboard Showcase-2.png
+- CineNest Private Cinema Booking UI(1).png
+
+Read the actual source content, including relevant image-based pages.
+
+List missing sources honestly. Do not fabricate quotations, assets,
+or source locations.
+
+Apply separate fields for decision status and implementation status:
+
+Decision:
+- APPROVED
+- DOCUMENTED_DRAFT
+- RECOMMENDED
+- OPEN_DECISION
+
+Implementation:
+- NOT_VERIFIED
+- PARTIAL_WITH_EVIDENCE
+- VERIFIED_WITH_EVIDENCE
+
+The user approved the hybrid visual direction.
+
+Exact color tokens are proposed implementation approximations.
+
+The preferred backend and other proposed technologies are NOT
+automatically approved or implemented.
+
+Record current implemented behavior separately from desired behavior.
+
+Resolve conflicting approved decisions through an ADR or
+open-decision entry, not a silent rewrite.
+
+Source PDFs are draft requirements, not evidence of legal compliance,
+merchant approval, or working hardware.
+
+
+3. CREATE OR UPDATE THE DOCUMENTS
+
+Reuse equivalent existing files; otherwise create these under
+the KB root:
+
+product/
+  CINENEST-PRODUCT-SCOPE-AND-FEATURES.md
+  CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md
+
+architecture/
+  CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md
+  CINENEST-SYSTEM-ARCHITECTURE.md
+  CINENEST-DATA-AND-API-CONTRACTS.md
+  CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md
+
+security/
+  CINENEST-SECURITY-PRIVACY-COMPLIANCE.md
+
+delivery/
+  CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md
+
+decisions/
+  CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md
+
+Update relevant cross-references and requirements in existing
+design files:
+
+- CINENEST-DESIGN-SYSTEM.md
+- CINENEST-ADMIN-PAGES.md
+- CINENEST-CUSTOMER-BOOKING-PAGES.md
+- CINENEST-CHARTS-AND-METRICS.md
+- CINENEST-DESIGN-DECISION-ADR-001.md
+- CINENEST-REFERENCE-TRACEABILITY.md
+- CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md
+- CINENEST-UX-ACCEPTANCE-CHECKLIST.md
+
+Update the KB index, README, changelog, and manifest where present.
+
+Preserve ADR numbering and historical decisions.
+
+Use canonical definitions with links rather than duplicating rules
+across every document.
+
+
+4. DOCUMENT THE COMPLETE FEATURE CATALOG
+
+Use stable feature IDs, retaining existing IDs when available.
+
+For each feature record:
+
+Purpose, actors, workflow, business rules, permissions, owning module,
+UI pages, integrations, failure states, acceptance criteria, source,
+and status.
+
+CUSTOMER CAPABILITIES
+
+- Cinematic homepage, venue/room discovery, photographs,
+  amenities, capacity, and prices.
+
+- Google sign-in, customer profile, secure sessions,
+  and explicit policy consent.
+
+- Room/date/time selection, availability calendar, temporary
+  checkout holds, and conflict prevention.
+
+- Backend-authoritative quotations, guest count, extra hours,
+  fifth-guest surcharge, and optional PS4.
+
+- NIC/passport upload, OCR-assisted text extraction, age validation,
+  manual-review exceptions, and verification status.
+
+- Hosted checkout, payment pending/success/failure handling,
+  receipts, and booking confirmation.
+
+- Smart-access provisioning status, protected time-bound PIN,
+  SMS/email delivery, and support for failed delivery or access.
+
+- Customer dashboard, upcoming and past bookings, modifications,
+  extensions, cancellations, and eligible refunds.
+
+- Referral and loyalty features as proposed scope, with earning,
+  reversal, expiry, and redemption rules still requiring decisions.
+
+ADMINISTRATION CAPABILITIES
+
+- Dashboard KPIs, charts, live room cards, recent activity,
+  and system health.
+
+- Booking search, filters, pagination, details, authorized manual
+  bookings, modifications, cancellations, and extensions.
+
+- Venue/room setup, amenities, photographs, operating hours,
+  maintenance, enable/disable, and device assignment.
+
+- Both card and table room views using the same data
+  and permissions.
+
+- Live room controls, device health, command acknowledgements,
+  session timers, and incident handling.
+
+- Customer accounts, verification review, separate account and
+  verification statuses, and restricted evidence access.
+
+- Payments, refunds, reconciliation, transaction history,
+  fee breakdowns, and permission-controlled exports.
+
+- Analytics, promotions, loyalty/referrals, versioned pricing/policies,
+  notification settings, and audit logs.
+
+IOT AND OPERATIONAL CAPABILITIES
+
+- Smart-lock PIN provisioning, activation, expiry, revocation,
+  and supported re-entry.
+
+- ESP32 integration, MQTT messaging, lighting scenes,
+  AC controls, and supported projector controls.
+
+- Five-minute expiry notifications, checkout/exit events,
+  cleaning readiness, and overstay incident escalation.
+
+- Connectivity monitoring, supported offline access, retries,
+  recovery, and emergency intervention.
+
+Do not imply that scheduled cleaning performs physical cleaning,
+or that an exit event proves everyone has left.
+
+
+5. CAPTURE BUSINESS RULES AND LIFECYCLES
+
+Record these as documented draft defaults, configurable
+through the backend:
+
+- Currency: LKR.
+- Venue timezone: Asia/Colombo.
+- Operating window: 09:00 to midnight.
+- Minimum session: 3 hours.
+- Extensions: whole-hour increments.
+- Base package: LKR 2,500 for up to 4 guests.
+- Maximum occupancy: 5 guests.
+- Fifth guest: LKR 800.
+- Additional hour: LKR 1,000.
+- PS4 add-on: LKR 1,000 per session.
+- Online convenience fee: LKR 100.
+- Cleaning buffer: 15 minutes after the customer session.
+- Temporary checkout hold: proposed 10–15 minutes.
+  Select a precise configurable duration later.
+- Baseline admission policy: 18+ for all guests, with final
+  legal/operational validation outstanding.
+- Digital document processing primarily covers the booker.
+  All-guest on-site original-document checks require a defined
+  operational process.
+- Entry PIN validity: scheduled session start to session end,
+  not 15 minutes before start.
+
+Separate:
+
+  session_end = session_start + purchased_duration
+  blocked_until = session_end + cleaning_buffer
+
+Document half-open reservation intervals and database-enforced
+conflict checks.
+
+Clarify whether cleaning may extend beyond closing time as
+an open decision.
+
+Redis is a temporary hold mechanism, not the sole guarantee against
+overlapping reservations.
+
+Explain expired holds, late successful payments, duplicate webhooks,
+refunds, retries, rescheduling, and extension conflicts.
+
+Show illustrative totals excluding discounts/taxes:
+
+- Base booking: LKR 2,600.
+- Base booking plus PS4: LKR 3,600.
+
+Do not reproduce the mockup's inconsistent selected-add-on total.
+
+Define separate proposed state machines for:
+
+Booking, payment, verification, access provisioning, session,
+room readiness, and device commands.
+
+For each transition identify its trigger, guards, authorized actor,
+side effects, timeout, recovery, and audit evidence.
+
+Do not confuse:
+
+- "Paid" with "PIN successfully installed."
+- "Device command sent" with "device state confirmed."
+
+Preserve booking-time price, refund-policy, and consent snapshots.
+
+Administrative edits must not silently rewrite existing purchases.
+
+
+6. DOCUMENT TECHNOLOGY WITHOUT INVENTING APPROVAL
+
+Create a decision matrix covering:
+
+Layer, current evidence, preferred recommendation, alternatives,
+purpose, dependencies, risks, approval state, and validation needed.
+
+Previously discussed direction:
+
+FRONTEND
+
+- Customer and admin frontend:
+  Next.js, React, TypeScript, Tailwind CSS, and shared CineNest
+  design tokens/components.
+
+- Frontend candidates:
+  TanStack Query, React Hook Form, Zod, and a consistent
+  accessible component library.
+
+- Preserve any already-approved repository choices.
+
+- Charts:
+  Recharts OR Apache ECharts.
+  Selection pending, not both by default.
+
+BACKEND
+
+- Preferred initial recommendation:
+  Java Spring Boot with Spring Modulith as a modular monolith.
+
+- Alternative from the proposal:
+  Node.js with NestJS.
+
+- Supporting recommendations:
+  Spring Security, validation, Spring Data JPA, and Flyway,
+  where compatible with the selected stack.
+
+DATA AND STORAGE
+
+- PostgreSQL for authoritative transactions.
+- Redis for temporary holds and selected caching.
+- Private object storage:
+  AWS S3 or Cloudflare R2, subject to provider selection
+  and privacy review.
+
+IDENTITY AND VERIFICATION
+
+- Google OpenID Connect.
+- Secure application sessions.
+- Backend authorization.
+- Stronger administrative authentication.
+- OCR candidates:
+  Google Cloud Vision, AWS Textract, or a validated alternative.
+
+PAYMENTS
+
+- PayHere or a supported bank IPG.
+- Stripe only after merchant/country/product eligibility is verified.
+
+IOT AND COMMUNICATIONS
+
+- Tested TTLock/Tuya-compatible hardware and supported vendor APIs.
+- ESP32 edge controllers.
+- MQTT over TLS.
+- EMQX or Mosquitto broker.
+- HTTPS REST application APIs.
+- SSE or WebSocket for live administrative updates, as appropriate.
+
+NOTIFICATIONS
+
+- SMS candidates: Notify.lk / Twilio.
+- Email candidates: SendGrid / AWS SES.
+
+DELIVERY AND OPERATIONS
+
+- Containerized builds.
+- CI/CD.
+- Centralized logs, metrics, and alerts.
+- Backups and tested recovery.
+- Cloud provider remains undecided.
+
+Do not pin invented "latest" versions, introduce extra frameworks,
+or import technology decisions from unrelated projects.
+
+Check actual repository manifests first.
+
+Any new claim about current provider support must use official
+documentation or remain explicitly unverified.
+
+
+7. DOCUMENT ARCHITECTURE, DATA, AND INTEGRATION CONTRACTS
+
+Describe the proposed modular monolith with boundaries for:
+
+- Identity & Access.
+- Venues/Rooms.
+- Booking.
+- Pricing.
+- Verification.
+- Payments.
+- Access Control.
+- IoT.
+- Notifications.
+- Customer Engagement.
+- Analytics.
+- Audit.
+
+For each module identify ownership, responsibilities, permitted
+interfaces, transaction boundaries, and dependencies.
+
+Treat module/table names as proposals unless code evidence
+establishes them.
+
+Document conceptual entities and API capabilities for:
+
+Accounts, venues, rooms, holds, bookings, guests, quotations,
+payment attempts, refunds, verification decisions, access credentials,
+sessions, devices, commands, telemetry, notifications, policy versions,
+consent, and audit events.
+
+Describe authoritative verified payment notifications, idempotency,
+durable integration work, bounded retries, duplicate/out-of-order
+events, and compensating actions.
+
+Do not claim a database rollback reverses an already captured
+external payment.
+
+Propose event envelopes with:
+
+Event ID, correlation ID, event/schema version, timestamp,
+and authorized venue scope.
+
+Do not place raw identity documents, access PINs, card data,
+or secrets in ordinary events/logs.
+
+Do not assume multi-location support is a fully isolated multi-tenant
+SaaS product.
+
+Record tenant/subscription architecture as undecided unless
+explicitly established.
+
+
+8. PRESERVE DESIGN AND MAKE CHARTS CONSISTENT
+
+Preserve the approved hybrid visual direction and existing
+source tokens:
+
+- Sidebar: #0B1526.
+- Main background: #F5F7FC.
+- Cards: #FFFFFF.
+- Primary violet: #5B4BFF.
+- Hover: #5142ED.
+- Gradient accent: #7254FF.
+- Chart blue: #2878FF.
+- Brand gold: #F4C77B.
+- Main text: #111827.
+- Secondary text: #64748B.
+- Success: #15803D.
+- Warning: #B45309.
+- Danger: #B91C1C.
+
+Keep typography, spacing, borders, shadows, responsive rules,
+and one shared application shell.
+
+Preserve original reference-image bytes and existing JSON/CSS
+tokens unless correcting a documented inconsistency.
+
+Images are visual references, not production screens or business data.
+
+For every chart document:
+
+Chart type, metric ID, formula, population, units, time basis,
+axes, colors, filters, tooltip, authorized data source, freshness,
+accessibility, and empty/error states.
+
+Required charts:
+
+- Revenue/bookings combo.
+- Room-status donut.
+- Revenue trend.
+- Popular time slots.
+- Room utilization.
+- Payment/add-on breakdowns.
+- Device health.
+
+Required semantics:
+
+- Revenue and booking counts use separately labeled scales
+  or separate charts.
+
+- Captured collections, net collections, and recognized revenue
+  are distinct measures.
+
+- "Today's bookings" by confirmation time is distinct from
+  "Today's sessions" by service time.
+
+- Live booking-based occupancy is distinct from sensor-confirmed
+  physical occupancy.
+
+- Utilization is booked session minutes / defined sellable minutes.
+
+- Donut segments and center percentage must use consistent
+  populations and filters.
+
+- Zero denominators produce N/A.
+  Unavailable data is not zero.
+
+- Use explicit Asia/Colombo reporting boundaries and appropriate
+  UTC instant storage.
+
+- Exports use the same scope and definitions as the visible report.
+
+- Sample data is labeled DEMO and never becomes a production fallback.
+
+
+9. DOCUMENT SAFETY, PRIVACY, AND OPEN DECISIONS
+
+Preserve and extend the existing safety requirements:
+
+- Emergency egress cannot depend on cloud access, payment,
+  PIN entry, or an administrator.
+
+- Access revocation must not trap occupants.
+  Remote power actions must not disable safety systems.
+
+- Unknown/offline is not OFF, available, or unoccupied.
+
+- Remote commands distinguish requested, pending, acknowledged,
+  failed, expired, and unknown states.
+
+- Offline capabilities depend on tested lock/controller compatibility.
+  Cloud remote unlock is not an offline guarantee.
+
+- OCR text extraction is not proof of document authenticity,
+  identity, or liveness.
+
+- Manual review, least-privilege evidence access, private encrypted
+  storage, retention decisions, and deletion workflows are
+  required design topics.
+
+- Google login is not a substitute for explicit, versioned
+  policy acceptance.
+
+Track open decisions for:
+
+- Final stack, cloud, and providers.
+- Hardware and offline behavior.
+- All-guest verification.
+- Cleaning and emergency staffing.
+- Privacy and retention.
+- Commercial screening and gaming rights.
+- Refunds and card re-billing.
+- Occupancy detection.
+- Loyalty rules.
+- Hold duration.
+- Closing-time cleaning.
+
+For each record:
+
+Conflict, source, impact, proposed options, decision owner
+(TBD when unknown), evidence required, status, and launch-blocker
+classification.
+
+No claims of guaranteed legal compliance or approved licensing.
+
+
+10. ROADMAP, VALIDATION, AND PUBLICATION
+
+Document the discussed 12-phase sequence:
+
+1. Architecture, safety review, data foundations, and design system.
+2. Authentication, accounts, venues, and rooms.
+3. Availability, reservations, and pricing.
+4. Verification and consent.
+5. Payments, webhooks, and refunds.
+6. Smart access and PIN lifecycle.
+7. Room automation and physical operational controls.
+8. Full administrative operations.
+9. Notifications, customer dashboard, and core reports.
+10. Advanced analytics, loyalty, and promotions.
+11. Integrated security, performance, hardware, and recovery acceptance.
+12. Controlled deployment and venue launch.
+
+Treat security and testing as continuous gates, not work postponed
+until phase 11.
+
+Identify dependencies and unresolved decisions.
+
+Do not invent schedules, completed features, or hardware test results.
+
+VALIDATION
+
+Validate actual:
+
+- File presence.
+- Markdown links.
+- JSON syntax.
+- Token/CSS consistency.
+- Image checksums.
+- Traceability.
+- Rule consistency.
+- Metric definitions.
+- Manifest entries.
+
+Run existing relevant documentation validators after reading them.
+
+Report actual commands and results.
+
+Distinguish checks run from future implementation tests.
+
+VERSIONING
+
+Use the observed KB version and repository versioning rules.
+
+A verified 1.0.0 baseline may become 1.1.0 for this additive update.
+
+Never downgrade newer content or increment versions on a no-op rerun.
+
+Do not target an invented file count.
+
+GIT AND PUBLICATION
+
+Inspect the final diff.
+
+Update only task-related files.
+
+Do not stage unrelated work, force-push, rewrite history,
+or alter protected branches.
+
+Commit/push only when the repository workflow or explicit user
+authorization permits it.
+
+Otherwise leave the documentation changes ready for review.
+
+A push failure must be reported as a failure.
+
+FINAL REPORT
+
+Include:
+
+- Verified baseline and resulting version.
+- Actual created, updated, unchanged, and missing files.
+- Features/technology coverage and preserved design assets.
+- Approved decisions versus recommendations and unresolved blockers.
+- Validation evidence and limitations.
+- Git branch, commit, and push outcome, or "not performed."
+- Whether changes are workspace-only or published.
+
+Do not claim ChatGPT Project attachments, a separate central KB,
+or another repository were synchronized without an actual authorized
+operation and evidence.
+
+
+DEFINITION OF DONE
+
+The real CineNest knowledge files are updated in place.
+
+Missing feature/technology documents are created.
+
+The approved design is preserved.
+
+Sources and statuses are explicit.
+
+Validation/publication results are truthfully reported.
+
+Application code and unrelated files remain unchanged.

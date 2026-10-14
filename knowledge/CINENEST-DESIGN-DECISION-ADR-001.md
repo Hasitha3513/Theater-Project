@@ -27,3 +27,6 @@ The user supplied the canonical repository https://github.com/Hasitha3513/Theate
 
 ## Acceptance and follow-up
 Documentation and machine-readable checks can pass now. Full architecture reconciliation, implementation QA, source-pack approval remain outstanding; initial publication is authorized. See [validation report](CINENEST-VALIDATION-REPORT.md). Scope contains no new frontend features.
+
+## Historical follow-up — 2026-10-14
+Decision status: APPROVED (hybrid visual direction only). Implementation: NOT_VERIFIED. Initial publication is now evidenced locally by commit 16710dcf3e3bfb2453bab24910890279691fc06d and its origin/main tracking ref at inspection; the initial empty-clone narrative above is historical. CN-KB-FEATURES-TECH-001 adds features, draft rules and architecture recommendations. [ADR-002](CINENEST-DESIGN-DECISION-ADR-002.md) records explicit PIN-window/metric clarifications and preserves active tokens amid a source-palette conflict. It does not supersede hybrid direction approval or invent approved technology.

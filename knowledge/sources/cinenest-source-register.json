@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "sources": [
+    {
+      "id": "S1",
+      "path": "sources/CN-KB-FEATURES-TECH-001-request.txt",
+      "availability": "AVAILABLE",
+      "kind": "user-task-notes",
+      "sha256": "9cf09c1dcbd849ddbd15449a0b76b9e21f478a33dc66439086ee93dad429f06d"
+    },
+    {
+      "id": "S2",
+      "name": "Mini movie theater Ruels and Conditions.pdf",
+      "availability": "MISSING",
+      "kind": "draft-requirements"
+    },
+    {
+      "id": "S3",
+      "name": "Smart_Cinema_Platform.pdf",
+      "availability": "MISSING",
+      "kind": "draft-requirements"
+    },
+    {
+      "id": "S4",
+      "name": "The Smart Automated Private Cinema & IoT System Architecture Proposal PDF (possibly Sinhala filename)",
+      "availability": "MISSING",
+      "kind": "draft-architecture"
+    },
+    {
+      "id": "S5",
+      "path": "CineNest Cinema Admin Dashboard Mockup-1.png",
+      "availability": "AVAILABLE",
+      "kind": "visual-reference",
+      "sha256": "52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f"
+    },
+    {
+      "id": "S6",
+      "path": "CineNest Cinema Dashboard Showcase-2.png",
+      "availability": "AVAILABLE",
+      "kind": "visual-reference",
+      "sha256": "27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7"
+    },
+    {
+      "id": "S7",
+      "path": "CineNest Private Cinema Booking UI.png",
+      "requestedName": "CineNest Private Cinema Booking UI(1).png",
+      "availability": "AVAILABLE_NORMALIZED_NAME_UNVERIFIED_EQUIVALENCE",
+      "kind": "visual-reference",
+      "sha256": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # CineNest Customer Booking Page Specifications
 
 > Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
-> Recorded: 2026-10-13. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+> Original record: 2026-10-13. Updated: 2026-10-14, CN-KB-FEATURES-TECH-001. Decision: APPROVED for hybrid direction; DOCUMENTED_DRAFT for detailed behavior. Implementation: NOT_VERIFIED. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
 
 ## Shared customer flow
 Use [design system](CINENEST-DESIGN-SYSTEM.md) and [reference decisions](CINENEST-DESIGN-DECISION-ADR-001.md). Maintain cinematic public/account shell and readable light booking panels. The consistent stepper is **1 Select Room → 2 Date & Time → 3 Verify → 4 Payment → 5 Confirmation**. Authentication is a prerequisite when needed, summary is part of Payment, and PIN is a secure post-confirmation subview. Fix duplicate/misnumbered steps shown in the composite reference.
@@ -44,7 +44,7 @@ Server-authoritative draft/hold → verified eligibility → quoted payment → 
 
 **Layout and components:** Stage 3 Verify: policy explanation, required document type/input, restricted preview, verification progress/result and Continue.
 
-**Interactions, data, permissions and safeguards:** Mockup suggests 18+ and National ID/passport/driving licence, but age threshold, accepted documents, limits, consent, retention and review process require policy approval. Server determines eligibility. Do not expose full ID number, birth date or document image unnecessarily. Delete draft preview after secure submission; no public storage links. Pending review cannot silently advance to a paid eligible booking.
+**Interactions, data, permissions and safeguards:** S1 documents draft 18+ for all guests and booker NIC/passport processing; on-site original-document checks for every guest require a defined process. Driving licence shown in mockup is not a selected accepted document. Final eligibility, upload limits, consent, retention and review policy remain open. Server determines eligibility. Do not expose full ID number, birth date or document image unnecessarily. Delete draft preview after secure submission; no public storage links. Pending review cannot silently advance to a paid eligible booking.
 
 **Responsive, accessibility, error and empty behavior:** Accessible file input with upload alternative/support when policy allows; mobile camera optional. Clear rejection reason and safe retry; manual-review/pending/expired/network states distinct. Preview masked by default and permission scoped.
 
@@ -76,7 +76,7 @@ Server-authoritative draft/hold → verified eligibility → quoted payment → 
 
 **Layout and components:** Secure subview on confirmation/dashboard with masked credential, intentional Reveal/Hide and Copy, server validity window, room instructions and support.
 
-**Interactions, data, permissions and safeguards:** PIN length, activation (mockup says 15 minutes before), expiry, generation, rotation, rate limits and offline fallback are unresolved backend/security policy. Never adopt sample 482915. Reveal requires authorized owner/session and server eligibility; no PIN in URL, exports, chart events, notifications, shared tickets or logs. Clipboard copy explicit with warning about shared devices; conceal on session end. Unlock success requires actual device response.
+**Interactions, data, permissions and safeguards:** Draft PIN entry validity is [scheduled session start, session end), replacing the mockup pre-entry suggestion via ADR-002. Length, generation, rotation, revocation/re-entry, rate limits and offline compatibility remain open. Never adopt sample 482915. Reveal requires authorized owner/session and server eligibility; no raw PIN in URLs, exports, chart events, ordinary notifications, shared tickets or logs. SMS/email should deliver protected access links/instructions; raw-secret delivery requires a separate security decision. Clipboard copy explicit with warning about shared devices; conceal on session end. Unlock success requires actual device response.
 
 **Responsive, accessibility, error and empty behavior:** Readable masked/reveal controls and text explanation; do not announce full PIN automatically. Outside validity: unavailable reason and window. Device/network failure shows approved support path, never an invented bypass; emergency egress remains independently governed.
 
@@ -103,3 +103,8 @@ Server-authoritative draft/hold → verified eligibility → quoted payment → 
 **Interactions, data, permissions and safeguards:** Backend calculates points, expiry, reversals and qualifying referrals. Do not copy 320 points or invent reward rates. Share/copy is intentional; no automatic messages. Reward discounts re-quote booking and respect eligibility/caps; referral attribution is privacy limited.
 
 **Responsive, accessibility, error and empty behavior:** Balance uses text, not color alone; ledger scroll/cards. No eligible rewards, expired points, disqualified referral and service failure clearly distinguished. Disabled feature has no misleading active CTA.
+
+## Draft business behavior and source traceability
+[Feature catalog](product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md) CN-C01–CN-C09 and [business rules/lifecycles](product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md) are canonical. Display capacity/guest surcharge, whole-hour extensions, optional PS4, online fee, itemized total, server hold expiry and purchase/refund-policy versions; do not duplicate price constants in page code. Illustrative total with selected PS4 must use the canonical example, not the inconsistent mockup amount.
+
+Sign-in is separate from explicit policy consent and verification. OCR extracts text only; uncertain documents need restricted manual review. Pending payment, confirmed booking, pending/installed access and delivery failure are separate customer messages. Confirmation must not imply PIN installation or guaranteed entry. Access window excludes the cleaning buffer. Modifications/extensions re-quote and recheck inventory, payment and access window revisions; late payment and refunds expose reconciliation status/support. Five-minute warning and checkout/exit events never imply everybody left or physical cleaning completed. Loyalty/referral rates remain OPEN_DECISION and hidden/disabled until supported.

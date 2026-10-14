@@ -1,7 +1,7 @@
 # CineNest Design System
 
 > Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
-> Recorded: 2026-10-13. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+> Original record: 2026-10-13. Updated: 2026-10-14, CN-KB-FEATURES-TECH-001. Decision: APPROVED for hybrid direction; DOCUMENTED_DRAFT for detailed behavior. Implementation: NOT_VERIFIED. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
 
 ## Authority and scope
 The user's approved direction combines Admin Mockup-1's operational layout and Showcase-2's room cards and device details with the customer reference's cinematic identity. Exact sampled colors and a font cannot be established authoritatively from raster images. The values in [design tokens](tokens/cinenest-design-tokens.json) are proposed normalized values, not recovered knowledge-pack tokens. This document is the shared baseline for future admin and customer interfaces, subject to reconciliation of the missing source documents. Existing approved architectural/business decisions take priority.
@@ -85,3 +85,8 @@ Mobile-first: <640px base; sm ≥640; md ≥768; lg ≥1024; xl ≥1280; xxl ≥
 
 ## Accessibility requirements
 Target WCAG 2.2 AA (project acceptance target, not a certification). Text contrast ≥4.5:1, large text ≥3:1, essential graphics/controls/focus ≥3:1. Automated token contrast checks are necessary but insufficient: test final gradients, photos, disabled states, overlays, charts, and focus against adjacent colors. Full keyboard operation, visible focus, skip link, landmarks, correct labels, logical reading order and no keyboard traps. Charts offer equivalent tables; status must not depend on hue. Respect reduced motion, avoid flashing/autoplay audio, caption content video, and give room images useful alternative text. Support password-manager/paste where applicable, no cognitive-only authentication test, accessible Google sign-in and verification fallback. Warn before timed holds expire and offer extension only if backend policy allows. PINs and ID data require intentional disclosure and accessible masking controls. Test a screen reader and keyboard in each future critical booking and live-control flow.
+
+## Feature and source reconciliation (CN-KB-FEATURES-TECH-001)
+Shared visual direction remains APPROVED; exact active tokens are proposed approximations and preserved byte-for-byte. S1’s claimed existing HEX palette differs; [ADR-002](CINENEST-DESIGN-DECISION-ADR-002.md) and OD-11 record the candidate conflict without silently migrating JSON/CSS. Keep the same typography, spacing, borders, shadows, responsive rules and role-adapted shared shell. [Interactions/accessibility](CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md) complements these component rules.
+
+Use [business rules](product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md) for draft rates, capacity, session/access window and reservation buffers; [security](security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md) for identity/consent and evidence access; [catalog](product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md) for stable feature IDs. Desired status presentation is not implementation evidence. Do not turn draft rule JSON into frontend hardcoded operational data.

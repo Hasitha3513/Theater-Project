@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 import sys
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parent
 REQUIRED = [
@@ -99,18 +100,21 @@ def main():
     check((ROOT / 'styles/cinenest-theme.css').read_text() == css, 'CSS not synchronized; run --generate-css')
     css_defs = set(re.findall(r'(--cn-[\w-]+)\s*:', css))
     check(set(re.findall(r'var\((--cn-[\w-]+)\)', css)) <= css_defs, 'Undefined CSS reference')
+    palette = json.loads((ROOT / 'decisions/cinenest-palette-comparison.json').read_text())
+    candidate_colors = set(palette['requestedCandidate'].values())
+    check(palette['applied'] is False, 'Candidate palette unexpectedly applied')
     ds = (ROOT / 'CINENEST-DESIGN-SYSTEM.md').read_text()
     for key, value in colors.items():
         check(f'| `{key}` | `{value}` |' in ds, f'Palette docs mismatch {key}')
-    for path in ROOT.glob('*.md'):
+    for path in ROOT.rglob('*.md'):
         text = path.read_text()
         for target in re.findall(r'\]\(([^)]+)\)', text):
             if target.startswith(('http:', 'https:', '#')):
                 continue
-            target = target.split('#')[0].replace('%20', ' ')
+            target = unquote(target.split('#')[0])
             check((path.parent / target).is_file(), f'Broken link {path.name}: {target}')
         for hex_value in re.findall(r'#[0-9A-Fa-f]{6}\b', text):
-            check(hex_value.upper() in colors.values(), f'Uncentralized color {path.name}: {hex_value}')
+            check(hex_value.upper() in colors.values() or (path.name == 'CINENEST-DESIGN-DECISION-ADR-002.md' and hex_value.upper() in candidate_colors), f'Uncentralized color {path.name}: {hex_value}')
     for name, expected in IMAGES.items():
         path = ROOT / name
         check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == expected, f'Reference changed/missing {name}')
@@ -123,11 +127,11 @@ def main():
     customer = (ROOT / 'CINENEST-CUSTOMER-BOOKING-PAGES.md').read_text()
     for name in CUSTOMER:
         check(f'## {name}\n' in customer, f'Customer missing {name}')
-    check(len(specs['charts']) == 8, 'Expected eight metric specs')
-    check(len({c['id'] for c in specs['charts']}) == 8, 'Duplicate chart IDs')
+    check(len(specs['charts']) == 9, 'Expected nine chart specifications')
+    check(len({c['id'] for c in specs['charts']}) == len(specs['charts']), 'Duplicate chart IDs')
     charts_doc = (ROOT / 'CINENEST-CHARTS-AND-METRICS.md').read_text()
     for chart in specs['charts']:
-        for field in ['id', 'name', 'type', 'series', 'formula', 'contract', 'axes', 'tooltip', 'filters', 'legend', 'responsive']:
+        for field in ['id', 'name', 'type', 'series', 'formula', 'contract', 'axes', 'tooltip', 'filters', 'legend', 'responsive', 'metricId', 'population', 'units', 'timeBasis', 'authorizedDataSource', 'freshness', 'accessibility', 'emptyErrorStates', 'decisionStatus', 'implementationStatus', 'sourceIds']:
             check(bool(chart.get(field)), f'Chart {chart.get("id")} missing {field}')
         check(f'## {chart["name"]}\n' in charts_doc, f'Chart docs missing {chart["id"]}')
         for series in chart['series']:
@@ -147,12 +151,116 @@ def main():
         ratio = (b + 0.05) / (a + 0.05)
         print(f'Contrast {fg}/{bg}: {ratio:.2f}:1 (target {threshold})')
         check(ratio >= threshold, f'Contrast below target: {fg}/{bg} {ratio:.2f}')
+    validate_expansion(check, tokens, specs)
     if errors:
         print('\n'.join('FAIL '+message for message in errors))
         return 1
-    print('PASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 8 chart definitions/token references; breakpoints; 16 selected contrast pairs.')
+    print('PASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 9 chart definitions/token references; catalog/rules/statuses/traceability/manifest; breakpoints; 16 selected contrast pairs.')
     print('Limits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.')
     return 0
+
+def validate_expansion(check, tokens, specs):
+    """Check source/status and canonical rule consistency, not implementation correctness."""
+    new_required = [
+        'product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md',
+        'product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md',
+        'architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md',
+        'architecture/CINENEST-SYSTEM-ARCHITECTURE.md',
+        'architecture/CINENEST-DATA-AND-API-CONTRACTS.md',
+        'architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md',
+        'security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md',
+        'delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md',
+        'decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md',
+        'CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md', 'CINENEST-DESIGN-DECISION-ADR-002.md',
+        'CHANGELOG.md', 'manifest.json', 'product/cinenest-feature-catalog.json',
+        'product/cinenest-draft-rules.json', 'decisions/cinenest-open-decisions.json',
+        'decisions/cinenest-palette-comparison.json', 'sources/cinenest-source-register.json',
+        'sources/CN-KB-FEATURES-TECH-001-request.txt',
+    ]
+    for name in new_required:
+        check((ROOT / name).is_file(), f'Missing {name}')
+    parsed = {}
+    for path in ROOT.rglob('*.json'):
+        try:
+            parsed[path.relative_to(ROOT).as_posix()] = json.loads(path.read_text())
+        except ValueError as exc:
+            check(False, f'Invalid JSON {path}: {exc}')
+    if not all(key in parsed for key in ['manifest.json', 'product/cinenest-feature-catalog.json',
+                                        'product/cinenest-draft-rules.json', 'decisions/cinenest-open-decisions.json',
+                                        'sources/cinenest-source-register.json']):
+        return
+    decisions = {'APPROVED', 'DOCUMENTED_DRAFT', 'RECOMMENDED', 'OPEN_DECISION'}
+    implementations = {'NOT_VERIFIED', 'PARTIAL_WITH_EVIDENCE', 'VERIFIED_WITH_EVIDENCE'}
+    sources = parsed['sources/cinenest-source-register.json']['sources']
+    source_ids = {x['id'] for x in sources}
+    check(len(source_ids) == len(sources), 'Duplicate source IDs')
+    for source in sources:
+        if source.get('path'):
+            path = ROOT / source['path']
+            check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256'], f'Source mismatch {source["id"]}')
+        else:
+            check(source['availability'] == 'MISSING', f'Unverified source location {source["id"]}')
+    features = parsed['product/cinenest-feature-catalog.json']['features']
+    ids = [f['id'] for f in features]
+    check(len(ids) == len(set(ids)), 'Duplicate feature IDs')
+    check(set(ids) == {f'CN-C{i:02d}' for i in range(1, 10)} | {f'CN-A{i:02d}' for i in range(1, 12)} | {f'CN-O{i:02d}' for i in range(1, 5)}, 'Incomplete feature inventory')
+    feature_doc = (ROOT / 'product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md').read_text()
+    for f in features:
+        for field in ['id', 'name', 'purpose', 'actors', 'workflow', 'rules', 'permissions', 'module',
+                      'pages', 'integrations', 'failureStates', 'acceptance', 'sourceIds']:
+            check(bool(f.get(field)), f'Feature {f.get("id")} missing {field}')
+        check(f['decisionStatus'] in decisions and f['implementationStatus'] in implementations, f'Invalid feature status {f["id"]}')
+        check(f['implementationStatus'] == 'NOT_VERIFIED', f'Unexpected implementation claim {f["id"]}')
+        check(set(f['sourceIds']) <= source_ids, f'Unknown source {f["id"]}')
+        check(f'## {f["id"]} —' in feature_doc, f'Missing catalog heading {f["id"]}')
+    opens = parsed['decisions/cinenest-open-decisions.json']['decisions']
+    check(len({d['id'] for d in opens}) == len(opens), 'Duplicate decision IDs')
+    for d in opens:
+        for field in ['conflict', 'source', 'impact', 'options', 'owner', 'evidenceRequired', 'launchBlocker']:
+            check(bool(d.get(field)), f'Decision {d.get("id")} missing {field}')
+        check(d['decisionStatus'] in decisions and d['implementationStatus'] in implementations, f'Invalid decision status {d["id"]}')
+    rules = parsed['product/cinenest-draft-rules.json']
+    expected = {'currency': 'LKR', 'timezone': 'Asia/Colombo', 'minimumSessionHours': 3,
+                'extensionIncrementHours': 1, 'baseGuests': 4, 'maximumGuests': 5,
+                'basePackageLkr': 2500, 'fifthGuestLkr': 800, 'additionalHourLkr': 1000,
+                'ps4PerSessionLkr': 1000, 'onlineConvenienceFeeLkr': 100, 'cleaningBufferMinutes': 15,
+                'minimumGuestAgeYears': 18, 'pinValidity': '[session_start,session_end)'}
+    for key, value in expected.items():
+        check(rules.get(key) == value, f'Draft rule mismatch {key}')
+    check(rules['checkoutHold']['selectedMinutes'] is None and rules['checkoutHold']['decisionStatus'] == 'OPEN_DECISION', 'Hold duration silently selected')
+    check(rules['operatingWindow'] == {'start': '09:00', 'end': '24:00'}, 'Operating window mismatch')
+    check(rules['examples']['baseOnlineLkr'] == rules['basePackageLkr'] + rules['onlineConvenienceFeeLkr'], 'Base total mismatch')
+    check(rules['examples']['baseOnlineWithPs4Lkr'] == rules['examples']['baseOnlineLkr'] + rules['ps4PerSessionLkr'], 'PS4 total mismatch')
+    rules_doc = (ROOT / 'product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md').read_text()
+    for heading in ['Booking', 'Payment (attempt state and refund ledger separate)', 'Verification',
+                    'Access provisioning', 'Session', 'Room readiness', 'Device command']:
+        check(f'### {heading}' in rules_doc, f'Lifecycle missing {heading}')
+    for formula in ['session_end = session_start + purchased_duration', 'blocked_until = session_end + cleaning_buffer']:
+        check(formula in rules_doc, f'Missing time formula {formula}')
+    for literal in ['LKR 2,600', 'LKR 3,600', '[session_start,session_end)', '[session_start,blocked_until)']:
+        check(literal in rules_doc, f'Missing canonical rule {literal}')
+    customer = (ROOT / 'CINENEST-CUSTOMER-BOOKING-PAGES.md').read_text()
+    check('Draft PIN entry validity is [scheduled session start, session end)' in customer, 'Customer PIN rule not reconciled')
+    check(len({c['metricId'] for c in specs['charts']}) == len(specs['charts']), 'Duplicate metric IDs')
+    for c in specs['charts']:
+        check(c['decisionStatus'] in decisions and c['implementationStatus'] == 'NOT_VERIFIED', f'Chart status {c["id"]}')
+        check(set(c['sourceIds']) <= source_ids, f'Chart sources {c["id"]}')
+    manifest = parsed['manifest.json']
+    check(manifest['kbVersion'] == '1.0.0', 'Unexpected first manifest version')
+    check(manifest['chartSpecVersion'] == specs['version'] == '1.1.0', 'Chart version mismatch')
+    check(manifest['designTokenVersion'] == tokens['version'] == '1.0.0', 'Design-token version mismatch')
+    actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and '__pycache__' not in p.parts}
+    entries = manifest['files']
+    check(len({x['path'] for x in entries}) == len(entries), 'Duplicate manifest entries')
+    check({x['path'] for x in entries} == actual, 'Manifest inventory mismatch')
+    for entry in entries:
+        path = ROOT / entry['path']
+        check(path.is_file(), f'Missing manifest file {entry["path"]}')
+        if entry.get('sha256') and path.is_file():
+            check(hashlib.sha256(path.read_bytes()).hexdigest() == entry['sha256'], f'Manifest checksum mismatch {entry["path"]}')
+    for filename, expected_hash in manifest['preservedAssets'].items():
+        check(hashlib.sha256((ROOT / filename).read_bytes()).hexdigest() == expected_hash, f'Preserved asset changed {filename}')
+
 
 if __name__ == '__main__':
     raise SystemExit(main())

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0.0",
+  "taskId": "CN-KB-FEATURES-TECH-001",
+  "decisionStatus": "DOCUMENTED_DRAFT",
+  "implementationStatus": "NOT_VERIFIED",
+  "sourceIds": [
+    "S1"
+  ],
+  "currency": "LKR",
+  "timezone": "Asia/Colombo",
+  "operatingWindow": {
+    "start": "09:00",
+    "end": "24:00"
+  },
+  "minimumSessionHours": 3,
+  "extensionIncrementHours": 1,
+  "baseGuests": 4,
+  "maximumGuests": 5,
+  "basePackageLkr": 2500,
+  "fifthGuestLkr": 800,
+  "additionalHourLkr": 1000,
+  "ps4PerSessionLkr": 1000,
+  "onlineConvenienceFeeLkr": 100,
+  "cleaningBufferMinutes": 15,
+  "checkoutHold": {
+    "decisionStatus": "OPEN_DECISION",
+    "candidateMinutes": [
+      10,
+      15
+    ],
+    "selectedMinutes": null
+  },
+  "minimumGuestAgeYears": 18,
+  "pinValidity": "[session_start,session_end)",
+  "closingTimeCleaningDecision": "OPEN_DECISION",
+  "examples": {
+    "baseOnlineLkr": 2600,
+    "baseOnlineWithPs4Lkr": 3600
+  }
+}
