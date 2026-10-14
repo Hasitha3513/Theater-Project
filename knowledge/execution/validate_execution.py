@@ -71,7 +71,11 @@ def main():
         check(set(c['dependencies']) <= set(cids), f'Unknown dependency {c["id"]}')
         check(c['id'] not in c['dependencies'], f'Self dependency {c["id"]}')
         check(set(c['blockingDecisionIds']) <= decisions, f'Unknown blocking decision {c["id"]}')
-        if c['id'] != 'CN-AGENT-SETUP-001':
+        if c['id'] == 'CN-DEC-001':
+            check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED', 'Decision brief status unsupported')
+            check(c.get('authorizationSource') == 'S11' and c.get('approvalStatus') == 'AWAITING_OWNER_APPROVAL' and c.get('implementationAuthorization') == 'NOT_GRANTED', 'Decision brief promoted to stack/code authority')
+            check(c.get('pendingDecisionIds') == ['OD-01'] and c['blockingDecisionIds'] == [], 'Brief/selection gates conflated')
+        elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
     def visit(id):
@@ -121,7 +125,13 @@ def main():
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
     check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None, 'Unsupported READY plan')
-    check(state['nextRecommendedChangeSet'] == 'CN-DEC-001', 'Unexpected next checkpoint')
+    check(state['taskId'] == 'CN-DEC-001' and state['nextRecommendedChangeSet'] == 'CN-FND-001', 'Unexpected next checkpoint')
+    check(state.get('stackApproval') == 'AWAITING_OWNER_APPROVAL' and state.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported stack/implementation approval')
+    od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
+    check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
+    brief = K / 'decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md'
+    check(brief.is_file() and 'PROPOSED / AWAITING OWNER APPROVAL' in brief.read_text(), 'Missing proposed decision brief')
+    check((K / 'sources/CN-DEC-001-request.txt').is_file() and 'S11' in sources, 'Missing decision scope authority')
     check(state['hostAutomaticInstructionLoading'] == 'NOT_VERIFIED' and state['nativeAgentRegistration'] == 'NOT_PERFORMED', 'Host/native claim unsupported')
     manifest = json.loads((K / 'manifest.json').read_text())
     for item in manifest.get('externalInstructionFiles', []):

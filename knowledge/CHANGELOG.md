@@ -1,5 +1,8 @@
 # CineNest Knowledge Base Changelog
 
+## KB 1.4.0 — 2026-10-14 — CN-DEC-001
+Material additive researched decision brief from verified KB1.3.0/55ee66b. Compared existing Spring Modulith/NestJS candidates; proposed initial Spring/Next/PostgreSQL stack and stable-version policy, explicitly awaiting owner approval. S11 brief-only authority recorded; no stack/business/whole-plan acceptance. Updated relevant decision references, scoped coverage, status/evidence/handoff and validator decision checkpoint. Preserved all product/token/chart/image definitions and stable IDs. No installs/scaffold/manifests/migrations/live operations; current-source limitations and independent read-only review explicit. CN-FND-001 still blocked pending accepted stack plus separate bounded authority.
+
 ## KB 1.3.0 — 2026-10-14 — CN-AGENT-SETUP-001
 Material additive execution workflow from verified KB 1.2.0/a48cc6e. Added root AGENTS, detailed charter under docs/agents, canonical knowledge/execution plan/status/handoff/source ledger/requirements/tests/omissions/checks and real setup evidence. Setup scope explicitly authorized; future roadmap/code units remain proposed BLOCKED, architecture/business choices unchanged. All existing feature IDs retained; supplemental workflow/UI/NFR/support tracking aliases do not approve product policies.
 

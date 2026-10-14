@@ -748,5 +748,13 @@
     "S4"
   ],
   "missingOriginalCustomerAlias": "CineNest Private Cinema Booking UI(1).png",
-  "hostNativeInstructionLoading": "NOT_VERIFIED"
+  "hostNativeInstructionLoading": "NOT_VERIFIED",
+  "supplementalReviews": [
+    {
+      "taskId": "CN-DEC-001",
+      "sourceRevision": "55ee66be4022daae182933a3042d86e80e8600ee",
+      "evidence": "execution/evidence/CN-DEC-001-inputs-and-sources.json",
+      "scope": "Current decision inputs/research, historical full source ledger retained"
+    }
+  ]
 }

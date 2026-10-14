@@ -1,0 +1,375 @@
+TASK: CN-DEC-001 — Initial Stack Decision Brief
+
+Continue as the existing CineNest Project Execution Agent.
+
+Follow the repository instructions, agent charter, execution plan,
+traceability records, and current session handoff.
+
+Do not repeat CN-AGENT-SETUP-001 or create a second agent/backlog.
+
+
+AUTHORIZATION
+
+I authorize CN-DEC-001 only.
+
+You may:
+- Read the project knowledge and inspect the repository.
+- Research current technology compatibility using official sources.
+- Compare the permitted initial-stack alternatives.
+- Prepare one justified stack recommendation.
+- Update the relevant decision and execution documentation.
+
+This authorization does NOT approve the recommended stack.
+It does NOT authorize application implementation, dependency installation,
+scaffolding, deployment, or execution of the next change set.
+
+Stop after preparing the decision brief for explicit owner approval.
+
+
+1. VERIFY THE BASELINE
+
+Reported workspace:
+
+/home/hasitha-wijerathna/Documents/Theater Project/repository
+
+Reported state:
+- Branch: main.
+- HEAD and remote main: 55ee66b, abbreviated.
+- Worktree: clean.
+- CN-AGENT-SETUP-001 completed.
+- 92 requirement/test-plan records and 27 change sets validated.
+- Product tests remain unverified.
+- Automatic instruction loading remains unverified.
+
+Treat these as expected observations, not fresh verification.
+
+Resolve and record:
+- Actual project root.
+- Branch and full HEAD SHA.
+- Worktree status.
+- Upstream and remote branch state, where accessible.
+- Applicable repository instructions.
+- Current execution and approval status.
+
+Do not reset or overwrite the workspace to force a baseline match.
+Explain legitimate baseline advancement. Stop for conflicting changes
+or uncertain workspace identity.
+
+Read:
+- AGENTS.md and applicable overrides.
+- The established CineNest execution-agent charter.
+- The actual CN-DEC-001 backlog entry.
+- Current execution status and traceability.
+- Relevant setup evidence.
+- knowledge/execution/CINENEST-SESSION-HANDOFF.md
+
+Use discovered canonical paths rather than creating a new documentation
+structure.
+
+Follow CN-DEC-001's actual recorded scope. If it is narrower than the
+topics below, preserve that boundary and defer the remaining decisions.
+
+
+2. VERIFY AGENT INSTRUCTION USE
+
+State whether repository instructions were automatically discovered
+or manually read.
+
+A manual read does not prove automatic instruction loading.
+
+A supported fresh read-only instruction-loading check is permitted.
+Do not change global configuration, disable sandboxing, or weaken
+approval settings.
+
+If automatic loading cannot be verified, keep that gate explicitly open.
+Safe decision research may proceed after the instructions are read
+manually.
+
+
+3. ESTABLISH THE DECISION INPUTS
+
+Read the relevant:
+- Product scope and business rules.
+- Technology proposals and architecture decisions.
+- Package-management requirements.
+- Bank-payment and receipt-review requirements.
+- Security, privacy, and IoT requirements.
+- Customer/admin design specifications.
+- Chart and reporting definitions.
+- Implementation roadmap and acceptance criteria.
+
+Inspect existing application/build manifests read-only, if present.
+
+Separate:
+- User-confirmed requirements.
+- Approved architecture decisions.
+- Draft source proposals.
+- Engineering recommendations.
+- Observed implementation.
+- Unresolved choices and missing evidence.
+
+Preserve these confirmed requirements:
+1. The approved hybrid CineNest customer/admin design.
+2. Admin-editable package details, duration, and prices.
+3. Bank deposit/transfer with receipt upload, reviewer notification,
+   and authorized payment verification alongside gateway payments.
+
+Do not make a confirmed requirement optional merely because one
+technology choice handles it less conveniently.
+
+Do not inherit technology versions or decisions from the user's
+other projects.
+
+Do not invent team experience, budget, expected traffic, or hardware
+availability. Clearly identify necessary assumptions.
+
+
+4. COMPARE THE NECESSARY INITIAL TECHNOLOGY CHOICES
+
+Start with the existing CineNest candidates, including:
+- Java / Spring Boot / Spring Modulith.
+- Node.js / NestJS.
+
+Include only genuine alternatives within the recorded decision scope.
+Do not introduce additional frameworks simply to enlarge the comparison.
+
+Address initial decisions needed before implementation:
+- Backend runtime/framework.
+- Modular deployment approach.
+- Customer/admin frontend framework and language.
+- Shared design-system implementation.
+- PostgreSQL and database migration tooling.
+- Redis responsibilities and limitations.
+- Authentication/session and authorization approach.
+- Transaction boundaries and durable integration work.
+- Build/package management.
+- Local development and testing foundations.
+
+For chart libraries, UI libraries, MQTT brokers, cloud hosting,
+storage, payment providers, OCR, notifications, and smart-lock hardware,
+identify what must be decided now and what can safely remain deferred.
+
+Do not force a provider selection just to fill every row.
+
+Evaluate the existing modular-monolith recommendation against project
+needs. Do not silently promote it to an approved decision or introduce
+microservices without a specific supported reason.
+
+Compare:
+- Development and operational complexity.
+- Maintainability.
+- Transaction and concurrency safety.
+- Authorization and security.
+- Failure recovery.
+- Testing and integration support.
+- Deployment constraints.
+- Support lifecycle.
+- Migration/reversal effort.
+- Documented team capability.
+
+Include the disadvantages of the preferred option.
+
+Any scoring must be labeled as architectural judgment, not measured
+performance or benchmark evidence.
+
+
+5. CHECK CURRENT COMPATIBILITY
+
+Use current official documentation for proposed runtime/framework
+compatibility and support information.
+
+Record:
+- Source links.
+- Access date.
+- Supported version relationships.
+- Relevant constraints.
+- Verification limitations.
+
+Do not assume that the newest release is automatically the best choice.
+Do not combine incompatible runtime, framework, or module versions.
+
+Distinguish researched facts from assumptions and recommendations.
+
+If a required fact cannot be verified, mark it UNVERIFIED and explain
+whether it blocks the decision.
+
+Do not fabricate:
+- Performance benchmarks.
+- Exact operating costs.
+- Bank API availability.
+- Payment-provider eligibility.
+- Cloud or hardware compatibility.
+
+Prepare a compatibility table for the proposed components.
+
+Do not generate manifests, lockfiles, scaffolding, or runtime
+configuration during this task.
+
+
+6. EVALUATE AGAINST CINENEST'S IMPORTANT WORKFLOWS
+
+Explain how each serious candidate supports:
+
+PACKAGES AND BOOKINGS
+- Configurable packages and durations.
+- Versioned prices and authoritative quotes.
+- Preservation of purchased booking terms.
+- Concurrent reservations and durable holds.
+- Cleaning and maintenance intervals.
+- Expiry and amendment recovery.
+
+PAYMENTS
+- Verified online gateway payments.
+- Independently bank-reconciled manual approval.
+- Duplicate receipts/webhooks and concurrent approvals.
+- Payment allocation, reconciliation, and refunds.
+- Separate payment, booking, verification, and access states.
+
+IOT AND NOTIFICATIONS
+- Durable notification and device-command work.
+- Retries and failed PIN provisioning.
+- Observed versus requested device state.
+- Hardware-independent software testing.
+- Explicit physical and offline acceptance gates.
+
+SECURITY AND UI
+- Private identity/receipt evidence.
+- Venue-scoped permissions and audit history.
+- The approved customer/admin design.
+- Truthful, authorized reporting and charts.
+
+Identify risky assumptions and proposed validation spikes.
+Do not execute implementation spikes in this decision-only task.
+
+Leave legal, operational, financial-policy, bank-review deadline,
+guest-verification, egress, and hardware approvals in their proper
+decision queues.
+
+
+7. PREPARE THE DECISION BRIEF
+
+Reuse an equivalent existing document, or create a clearly named
+CN-DEC-001 brief in the established decision directory.
+
+Include:
+
+A. Decision scope and verified repository baseline.
+
+B. Requirements driving the choice.
+
+C. Existing approvals, assumptions, exclusions, and open choices.
+
+D. A concise comparison of the permitted alternatives.
+
+E. Current-source compatibility evidence and limitations.
+
+F. One preferred initial stack, explicitly marked:
+   PROPOSED / AWAITING OWNER APPROVAL.
+
+G. Tradeoffs, disadvantages, risks, and consequences.
+
+H. Decisions that can be deferred and why they do not block the
+   proposed first implementation step.
+
+I. The exact approval statement the owner would need to provide,
+   listing only the components and versions or version-selection
+   policy being proposed.
+
+J. The next existing change-set ID that could become eligible
+   after approval, including its remaining prerequisites.
+
+Make the recommendation concrete enough to approve.
+
+Approval of an initial stack must not silently approve:
+- Deferred vendors.
+- Spending or contracts.
+- Operational policies.
+- Production deployment.
+- All 27 change sets.
+
+An ADR may be drafted using the repository's proposed status.
+Do not mark it accepted or rewrite the canonical stack as approved.
+
+
+8. UPDATE EXECUTION RECORDS
+
+Update only relevant:
+- Decision references.
+- Requirement traceability.
+- Execution status.
+- Evidence.
+- Session handoff.
+
+Preserve the existing coverage model and stable IDs.
+
+Do not mechanically target 92 records or 27 change sets if a legitimate,
+explained correction is necessary.
+
+Distinguish:
+- Brief prepared and ready for review.
+- Technology selection approved.
+- Implementation authorized.
+
+Only the first may be completed by this task.
+The latter two remain pending explicit owner approval.
+
+
+9. VALIDATE AND REVIEW
+
+Locate and inspect the repository's two existing validators.
+Run them and the relevant documentation/link/JSON checks.
+
+Run:
+git diff --check
+
+Record actual commands, results, and limitations.
+
+Do not describe requirement/test-plan validation as passing
+application or hardware tests.
+
+If an independent read-only reviewer is available, request a bounded
+review of:
+- Compatibility evidence.
+- Requirements omitted from the comparison.
+- Unsupported claims.
+- Accidental scope expansion or approval.
+
+Otherwise label the review self-review.
+Do not invent an independent review.
+
+
+10. PUBLICATION AND FINAL CHECKPOINT
+
+Follow the repository's existing commit/push authorization.
+
+Stage only task-owned changes.
+Respect branch protections and the applicable publication workflow.
+Do not assume the earlier push authorizes bypassing current rules.
+
+Without applicable authorization, leave changes ready for review.
+Report the actual commit/push outcome.
+
+No application code, dependencies, migrations, deployments, live
+notifications, bank transactions, or IoT actions are authorized.
+
+Do not alter the agent charter to remove this approval checkpoint.
+
+FINAL REPORT
+
+Show:
+- Verified baseline.
+- Instruction-loading status.
+- Files actually changed.
+- Sources consulted.
+- Recommended stack.
+- Main tradeoffs and risks.
+- Validation and review evidence.
+- Open/deferred decisions.
+- Git/publication outcome.
+- Exact owner approval requested.
+
+STOP after delivering the brief.
+
+Do not scaffold the application, implement features, or execute the
+next change set until I explicitly approve the proposed technology
+choices and authorize that work.

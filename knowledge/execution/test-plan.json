@@ -8,7 +8,8 @@
       ],
       "acceptanceCriteria": "Root entry points to charter/status/plan; available-source review and approved requirement mapping; honest readiness, evidence and safe resume",
       "owningChangeSetIds": [
-        "CN-AGENT-SETUP-001"
+        "CN-AGENT-SETUP-001",
+        "CN-DEC-001"
       ],
       "status": "PASS",
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
@@ -48,7 +49,8 @@
         "CN-PKG-001",
         "CN-PKG-002",
         "CN-QUOTE-001",
-        "CN-AMEND-001"
+        "CN-AMEND-001",
+        "CN-DEC-001"
       ],
       "status": "NOT_RUN",
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
@@ -66,7 +68,8 @@
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002",
         "CN-REFUND-001",
-        "CN-NOTIFY-001"
+        "CN-NOTIFY-001",
+        "CN-DEC-001"
       ],
       "status": "NOT_RUN",
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",

@@ -51,9 +51,7 @@
       "dependencies": [
         "CN-AGENT-SETUP-001"
       ],
-      "blockingDecisionIds": [
-        "OD-01"
-      ],
+      "blockingDecisionIds": [],
       "affectedFilesModules": "architecture stack/boundaries; new proposed ADR; execution evidence",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
@@ -61,11 +59,21 @@
       "plannedChecks": "Official sources/date, criterion matrix, approved requirements and risk/gate review",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "One bounded proposed stack choice/alternatives and impact; user decision needed before code",
-      "requiredApproval": "User must approve CN-DEC-001 decision-brief scope; final choices require explicit owner/user approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "requiredApproval": "S11 authorized preparing this brief only; explicit owner approval of stack and separate foundation authorization remain required",
+      "authorityAvailable": true,
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "execution/evidence/CN-DEC-001.md",
+        "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md"
+      ],
+      "authorizationSource": "S11",
+      "authorizationScope": "Brief only; no stack approval or implementation",
+      "approvalStatus": "AWAITING_OWNER_APPROVAL",
+      "implementationAuthorization": "NOT_GRANTED",
+      "pendingDecisionIds": [
+        "OD-01"
+      ]
     },
     {
       "id": "CN-GATE-001",

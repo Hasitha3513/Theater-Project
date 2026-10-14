@@ -12,7 +12,10 @@
       "evidenceRequired": "Architecture feasibility, team capacity, official support and selection ADR",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "IMPLEMENTATION_GATE"
+      "launchBlocker": "IMPLEMENTATION_GATE",
+      "proposalReference": "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+      "proposalStatus": "PROPOSED_AWAITING_OWNER_APPROVAL",
+      "scopeNote": "Initial subset only; cloud/vendors/policies deferred, full OD-01 remains OPEN_DECISION"
     },
     {
       "id": "OD-02",
@@ -351,5 +354,5 @@
       "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
     }
   ],
-  "lastUpdatedTask": "CN-KB-BANK-PAYMENT-001"
+  "lastUpdatedTask": "CN-DEC-001"
 }

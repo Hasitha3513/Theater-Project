@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "kbVersion": "1.3.0",
-  "baselineKbVersion": "1.2.0",
-  "baselineCommit": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b",
-  "taskId": "CN-AGENT-SETUP-001",
+  "kbVersion": "1.4.0",
+  "baselineKbVersion": "1.3.0",
+  "baselineCommit": "55ee66be4022daae182933a3042d86e80e8600ee",
+  "taskId": "CN-DEC-001",
   "recordedDate": "2026-10-14",
   "designTokenVersion": "1.0.0",
   "chartSpecVersion": "1.2.0",
-  "versionRationale": "Material additive project execution instructions/source coverage/backlog/evidence/handoff; no app or policy decisions. Chart/token versions unchanged; no no-op increment.",
+  "versionRationale": "Material researched proposed stack brief and bounded decision evidence; not accepted stack or implementation. Tokens/chart/product definitions unchanged.",
   "decisionStatuses": [
     "APPROVED",
     "DOCUMENTED_DRAFT",
@@ -38,7 +38,7 @@
       "path": "CHANGELOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "2cab8ce4aa381d37790e2b35d91f543c8198aadaab45cff8954c6dab4550c800"
+      "sha256": "8a330370cceab46f6f36eb3b7aa8fb06250c33f58bd77b9ae0cb5217d39d6441"
     },
     {
       "path": "CINENEST-ADMIN-PAGES.md",
@@ -134,7 +134,7 @@
       "path": "README.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ba2296c390d06bf1c80969de1fdc91db7a5aa5bd5f0fdaaac4bbfab5d64125c4"
+      "sha256": "f857dd66aa18d5c1da0b4298e218195e13fca7e15b466bd567b6808940daf6c5"
     },
     {
       "path": "architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
@@ -158,19 +158,25 @@
       "path": "architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "7de6ac86d1e14f07891c8449d15cccb9c648aff237fc3f087fd98f0291ecf273"
+      "sha256": "770f5148545ac7611246324a0f86328e7817cf765e0d0eb532efd2f6fd796967"
     },
     {
       "path": "decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "77f887a3ed8deeba53c225323259987b860972708f8ac95695e476ba8f903846"
+      "sha256": "7db26b084b458d7576b8c2cd0af94c77fcd9ae789ad2291c4e1648c2c30891d9"
+    },
+    {
+      "path": "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "337a51b66c2b5eaddac486840c7b3ac32813895fc76d9e3d3f9ae0967d8cd62a"
     },
     {
       "path": "decisions/cinenest-open-decisions.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "015d2977ab223c0e1ae5068460620b861a70778a51ba920b590822e1eb8a3d6a"
+      "sha256": "9561137851f37142e252922019f4cc8d09977129f41145b95efc7ea6b4a035c8"
     },
     {
       "path": "decisions/cinenest-palette-comparison.json",
@@ -200,37 +206,61 @@
       "path": "execution/CINENEST-EXECUTION-PLAN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "3c5f9e866ea35b0210c81cdeaf02174a1898aa95fb69c48e816321c3c32722b4"
+      "sha256": "97ac517071210e5c8d8ad491201c2acc6c6a722b6b9c6654397b112ccdf724ff"
     },
     {
       "path": "execution/CINENEST-EXECUTION-STATUS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c393c3f481d18937ac01a6b5a8676e41676d3a1e0aa21aebcc75123c0ec55b79"
+      "sha256": "7669267f6ac8f0b364e8de486aaa788c859e54c2c22aaf6b1f9ebcf50a3b63a7"
     },
     {
       "path": "execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c29ead24682cc808a15626cc1dbfeb4e23a282841b5901177dd25c5db0421a53"
+      "sha256": "0add9a54e1b52339dca94a933cb7a5104214b9c056770f88f8c7ae5ce84c2849"
     },
     {
       "path": "execution/CINENEST-SESSION-HANDOFF.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e70896be3df7bf04641f0db11226f29d43088a196ac827d4b2dd41181a0d0688"
+      "sha256": "227ff50335499a572b44b0ab606b00405afe5a5823c0b9e3bdf35181e3c3af7a"
     },
     {
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "62088ca7f30232cece6a101583ac9805e46143220d991bcd267349ce584d1b95"
+      "sha256": "4c812c729e4779d5d4f2c9943e0b55a192acc569be40bf5d88ef2de343f1a250"
     },
     {
       "path": "execution/evidence/CN-AGENT-SETUP-001.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "7cd51cfe74dcaa68b14af8202e784d84abadcd2de6168f240cfa4d84931063db"
+    },
+    {
+      "path": "execution/evidence/CN-DEC-001-checks.json",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "284a6f2e7ece5f930ce157ec2dc6e7246336f681abfcf51b43bf4a240990cf79"
+    },
+    {
+      "path": "execution/evidence/CN-DEC-001-inputs-and-sources.json",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "76c6fd25617eb0662fc778643bdad694702dcf02dc474ccf594b69efba2faadb"
+    },
+    {
+      "path": "execution/evidence/CN-DEC-001-review.json",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "8992bf0cbc6c313ba2201ecc60f7515bab4012c0e23c8a267c6940b46b217ec6"
+    },
+    {
+      "path": "execution/evidence/CN-DEC-001.md",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "eeac7556678053fd6f7995c0d57ddf947f74839579503429409f513940009404"
     },
     {
       "path": "execution/evidence/checks.json",
@@ -272,31 +302,31 @@
       "path": "execution/requirements.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cdfb631c216b7b735ffec3e80eea7205a0eb18361197a4c448facb0bef09542d"
+      "sha256": "dfee919d4f35fc766c66deb3413a394fbd2bffe631bdddd64d57e78eddfee366"
     },
     {
       "path": "execution/source-ledger.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "7d69bf462918c7db54619e3a3668f3470794174776ab3d88b5a6472f12c1b77c"
+      "sha256": "be3f7dff80bc0c5d321187c6b3df430a3f24e9c7c7cf80c7dab96bcabc68ad6a"
     },
     {
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ea4835781d4a77b89c2204bac04bb6f5bc38ae9dc6973ecafb0b3659d4e0969e"
+      "sha256": "edd830635248e011bd2191723e0912f8c7056c37d092ad71616f47b04fcb7863"
     },
     {
       "path": "execution/test-plan.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "fbd77ecbd8fa68b8bb500fbe9fbc84c0449acae6d4213084b50e3d541d0f6afe"
+      "sha256": "5b5a1b53ac6de02c4b0f916b9e8879bb66e7c162d083167a64fb23a4562e99b0"
     },
     {
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "38fb5a43f328acba9dca910658a6a3f6fb9659606f25bd8f54d7f94a0e0218d1"
+      "sha256": "09c6a161f91f41629645401dc7c5c8ff58f0f73ca52cdf627c9c1eb5ad0c8e6a"
     },
     {
       "path": "manifest.json",
@@ -358,6 +388,12 @@
       "sha256": "5069b092f2eb4b71e180e11d13e701b2a99a3c8f143a3e1f992bbcaf862e72f2"
     },
     {
+      "path": "sources/CN-DEC-001-request.txt",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "c13879ccf2719e8d1e36b813ad3c971f109514822fdae6da1e98ee1261943d0f"
+    },
+    {
       "path": "sources/CN-KB-BANK-PAYMENT-001-request.txt",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
@@ -379,7 +415,7 @@
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cf88adb30e05e838a03b0a060297fa72186c0336dec9fb2a87f34880cbc3f544"
+      "sha256": "b11d97fe377eec1842cca266d8ba07ef3b5dce70af637d3c1ae340b8871d8e6c"
     },
     {
       "path": "styles/cinenest-theme.css",
@@ -403,7 +439,7 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "95c5526484470e7a7ef4c67a5024378cd25253a110ee8a2790eb541067ba8bf7"
+      "sha256": "0d6b244dafa6baddf574ee3a3eb5e7a84b3e9ff667c0801d3bfb75427f860d47"
     }
   ],
   "revisionHistory": [
@@ -421,6 +457,11 @@
       "kbVersion": "1.2.0",
       "taskId": "CN-KB-BANK-PAYMENT-001",
       "commit": "a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b"
+    },
+    {
+      "kbVersion": "1.3.0",
+      "taskId": "CN-AGENT-SETUP-001",
+      "commit": "55ee66be4022daae182933a3042d86e80e8600ee"
     }
   ],
   "authorizedDefinitionChanges": {

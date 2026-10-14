@@ -1,9 +1,9 @@
 # CineNest Execution Plan
 
-CN-AGENT-SETUP-001 · 2026-10-14. Canonical backlog [change-sets.json](change-sets.json). Setup is user-authorized; all future entries are **PROPOSED / BLOCKED**, not an approved implementation plan. Existing [12-phase delivery intent](../delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md) retained, no phase complete. No preexisting READY approved backlog was found, so only attached setup scope was eligible this session.
+CN-DEC-001 · 2026-10-14. Canonical backlog [change-sets.json](change-sets.json). Setup completed; S11 authorized the initial decision brief only, now VERIFIED documentation / CLOSED. All other future units remain PROPOSED / BLOCKED; future implementation plan NOT_APPROVED. [Prepared proposal](../decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md) is awaiting explicit owner approval, not an accepted stack.
 
 ## Readiness and selection
-READY = prerequisites + bounded acceptance/checks + tools + applicable task authority + all necessary decisions. Future outlines must be refined to actual selected-stack files/test/migration/rollback scope before READY; listed proposed paths/controls are not final tables/routes/frameworks. No whole-plan approval by implication. Default one change set per session. Setup checkpoint ends before CN-DEC-001. Next single action: **authorize CN-DEC-001 bounded stack-decision brief**; it produces a proposal for explicit final choice, not app scaffolding or automatic selection. Spring Modulith remains recommendation, NestJS alternative; frontend/database/cloud/provider choices keep actual status.
+READY = prerequisites + bounded acceptance/checks + tools + applicable task authority + all necessary decisions. Future outlines must be refined to actual selected-stack files/test/migration/rollback scope before READY; listed proposed paths/controls are not final tables/routes/frameworks. No whole-plan approval by implication. Default one change set per session. Current checkpoint ends after CN-DEC-001. Next single action: **owner approval response to the prepared CN-DEC-001 brief**. CN-FND-001 remains BLOCKED until stack acceptance and separate refined implementation authorization. Spring Modulith remains recommendation, NestJS alternative; frontend/database/cloud/provider choices keep actual status.
 
 Every vertical slice carries associated UI/backend scope checks, notifications/failure/reconciliation/support and tests rather than postponing them to phase 11. Phases 1–12 here reflect delivery dependencies, not schedules or completion. No optional requirement removed/deferred without user approval. One writer controls shared status; no invented atomic work claim.
 
@@ -39,7 +39,7 @@ Every vertical slice carries associated UI/backend scope checks, notifications/f
 | In scope | Compare initial backend/frontend/transactional storage recommendations to official supported docs and required module/safety boundaries; prepare proposed selection ADR for user |
 | Out of scope | No installing/scaffolding, cloud/provider/hardware choice or automatic final stack approval |
 | Dependencies | CN-AGENT-SETUP-001 |
-| Blocking decisions | OD-01 |
+| Blocking decisions | None to prepare authorized brief; OD-01 awaits owner acceptance before code |
 | Files/modules | architecture stack/boundaries; new proposed ADR; execution evidence |
 | DB/API/UI | None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY |
 | Risks | Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized |
@@ -47,9 +47,9 @@ Every vertical slice carries associated UI/backend scope checks, notifications/f
 | Checks/tests | Official sources/date, criterion matrix, approved requirements and risk/gate review |
 | Rollback | Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY |
 | Definition of done | One bounded proposed stack choice/alternatives and impact; user decision needed before code |
-| Approval | User must approve CN-DEC-001 decision-brief scope; final choices require explicit owner/user approval |
-| Readiness | BLOCKED |
-| Work status | BLOCKED |
+| Approval | S11 authorizes brief only; stack acceptance and implementation remain pending |
+| Readiness | CLOSED (was READY under S11 brief authorization) |
+| Work status | VERIFIED documentation; proposal AWAITING OWNER APPROVAL |
 
 ## CN-GATE-001 — Source and accountable policy gate brief
 

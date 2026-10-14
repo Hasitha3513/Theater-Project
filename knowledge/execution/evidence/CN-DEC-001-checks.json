@@ -1,0 +1,92 @@
+{
+  "taskId": "CN-DEC-001",
+  "state": "PASS_DOCUMENTATION_ONLY",
+  "baselineHead": "55ee66be4022daae182933a3042d86e80e8600ee",
+  "checks": [
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "atUtc": "2026-10-14T08:02:19.840496+00:00",
+      "atLocal": "2026-10-14T13:32:19.840629+05:30",
+      "exitCode": 0,
+      "stdout": "git version 2.53.0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "--version"
+      ],
+      "atUtc": "2026-10-14T08:02:19.841950+00:00",
+      "atLocal": "2026-10-14T13:32:19.841963+05:30",
+      "exitCode": 0,
+      "stdout": "Python 3.14.4\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "knowledge/validate_design_kb.py"
+      ],
+      "atUtc": "2026-10-14T08:02:19.899316+00:00",
+      "atLocal": "2026-10-14T13:32:19.899328+05:30",
+      "exitCode": 0,
+      "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "knowledge/execution/validate_execution.py"
+      ],
+      "atUtc": "2026-10-14T08:02:20.048198+00:00",
+      "atLocal": "2026-10-14T13:32:20.048213+05:30",
+      "exitCode": 0,
+      "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 27 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "atUtc": "2026-10-14T08:02:20.054121+00:00",
+      "atLocal": "2026-10-14T13:32:20.054142+05:30",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "changedFiles": [
+    "knowledge/CHANGELOG.md",
+    "knowledge/README.md",
+    "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
+    "knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
+    "knowledge/decisions/cinenest-open-decisions.json",
+    "knowledge/execution/CINENEST-EXECUTION-PLAN.md",
+    "knowledge/execution/CINENEST-EXECUTION-STATUS.md",
+    "knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
+    "knowledge/execution/CINENEST-SESSION-HANDOFF.md",
+    "knowledge/execution/change-sets.json",
+    "knowledge/execution/requirements.json",
+    "knowledge/execution/source-ledger.json",
+    "knowledge/execution/status.json",
+    "knowledge/execution/test-plan.json",
+    "knowledge/execution/validate_execution.py",
+    "knowledge/manifest.json",
+    "knowledge/sources/cinenest-source-register.json",
+    "knowledge/validate_design_kb.py"
+  ],
+  "createdFiles": [
+    "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+    "knowledge/execution/evidence/CN-DEC-001-checks.json",
+    "knowledge/execution/evidence/CN-DEC-001-inputs-and-sources.json",
+    "knowledge/execution/evidence/CN-DEC-001-review.json",
+    "knowledge/execution/evidence/CN-DEC-001.md",
+    "knowledge/sources/CN-DEC-001-request.txt"
+  ],
+  "captureNote": "Actual pre-publication check capture; after this evidence write inventory is refreshed and both validators/diff rerun. No application tests represented."
+}

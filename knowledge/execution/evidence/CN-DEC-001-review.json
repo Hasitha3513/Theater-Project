@@ -1,0 +1,30 @@
+{
+  "taskId": "CN-DEC-001",
+  "recordedAt": "2026-10-14T13:31:37.181312+05:30",
+  "reviewer": "/root/dec_compat_review",
+  "independent": true,
+  "scope": "Read-only official compatibility, omitted core/workflow requirements, unsupported claims and approval/scope expansion in prepared brief",
+  "result": "NO_BLOCKING_DEFECTS",
+  "findings": [
+    {
+      "issue": "PostgreSQL chosen-for wording could imply acceptance",
+      "disposition": "Changed to proposed-for"
+    },
+    {
+      "issue": "Ten metrics wording could conflate chart definitions with BN fields",
+      "disposition": "Clarified ten chart specifications plus BN-M01\u201308 bank reporting fields"
+    },
+    {
+      "issue": "Official project-index/reference patch versions differ; appendix stale",
+      "disposition": "Tagged observed tuple; no latest claim; compatible stable patch pin/support recheck before foundation"
+    },
+    {
+      "issue": "Support-end dates/team capacity/project tuple tests unverified",
+      "disposition": "Explicit gates/unknowns; no fabricated evidence"
+    }
+  ],
+  "writes": "NONE",
+  "approvalAuthority": "NONE",
+  "productTestExecution": "NONE",
+  "controlCloseoutReview": "Parent self-review of actual diff/control/check/publication records"
+}

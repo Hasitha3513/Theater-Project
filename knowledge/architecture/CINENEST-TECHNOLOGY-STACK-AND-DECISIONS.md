@@ -35,3 +35,7 @@ Use [open decisions](../decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md) O
 Core bank-deposit/transfer/upload/reviewer notification capability USER-CONFIRMED (Decision APPROVED, Implementation NOT_VERIFIED). [Manual matching](../product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md) against business bank records is RECOMMENDED launch support within Payments, not a new bank gateway/library/microservice. Existing PayHere/bank-IPG/Stripe candidate selection and hosted online path remain unchanged.
 
 Private receipt storage and safe JPEG/PNG/PDF scanning/preview use selected secure storage design (provider/size/retention open). Receipt OCR optional suggested extraction only; never approval/authenticity. Bank-feed/API matching future scope only after verified official bank/account/provider support/privacy. No bank connection, real receiving details, fees or installed integration claimed; no dependency/runtime changes.
+
+## CN-DEC-001 initial proposal (not accepted)
+
+[Decision brief](../decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md), S11, proposes Java25/Boot4.1/Modulith2.1, PostgreSQL18/Flyway, Next16/React19/TypeScript5/Tailwind4/Node24, Maven/npm and database-backed sessions/work. Exact stable patches require current official compatibility/support and foundation tests. PROPOSED / AWAITING OWNER APPROVAL; OD-01 remains OPEN_DECISION; implementation NOT_VERIFIED. This supplements historical candidate rows without accepting their other vendors. No code, dependency or runtime configuration was created.

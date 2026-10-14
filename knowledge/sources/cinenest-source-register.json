@@ -68,6 +68,13 @@
       "availability": "AVAILABLE",
       "kind": "user-agent-setup-scope-and-carried-forward-approved-requirements",
       "sha256": "5069b092f2eb4b71e180e11d13e701b2a99a3c8f143a3e1f992bbcaf862e72f2"
+    },
+    {
+      "id": "S11",
+      "path": "sources/CN-DEC-001-request.txt",
+      "availability": "AVAILABLE",
+      "kind": "user-authorization-decision-brief-only-no-stack-or-implementation-approval",
+      "sha256": "c13879ccf2719e8d1e36b813ad3c971f109514822fdae6da1e98ee1261943d0f"
     }
   ]
 }

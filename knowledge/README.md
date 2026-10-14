@@ -1,18 +1,17 @@
 # CineNest Knowledge Base
 
-Task CN-AGENT-SETUP-001 · Updated 2026-10-14. Canonical Git root is repository/ in the desktop parent workspace; KB remains knowledge/. Every CineNest request follows [root instructions](../AGENTS.md), [charter](../docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md), [status](execution/CINENEST-EXECUTION-STATUS.md) and [handoff](execution/CINENEST-SESSION-HANDOFF.md). Read-only requests remain read-only; no native agent registration/background service implied.
+Task CN-DEC-001 · Updated 2026-10-14. Canonical Git root repository/; KB knowledge/. Every request follows [instructions](../AGENTS.md), [charter](../docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md), [status](execution/CINENEST-EXECUTION-STATUS.md) and [handoff](execution/CINENEST-SESSION-HANDOFF.md). Read-only remains read-only; no native registration/background service.
 
-Verified baseline KB **1.2.0** at a48cc6e; resulting KB **1.3.0** adds material execution workflow/coverage records only. Chart **1.2.0**, token **1.0.0**, existing business/design/JSON/CSS/image definitions unchanged except narrow current metadata/count reconciliation. Prior IDs/ADRs/history retained; no no-op increment. Baseline 44 tracked assets source-reviewed, original PDFs remain missing.
+Verified baseline KB **1.3.0** at 55ee66b; resulting KB **1.4.0** adds a researched initial-stack proposal and scoped decision evidence. Chart **1.2.0**, token **1.0.0**, normative product/design/image definitions unchanged. Setup historical review inventory remains dated; current inputs/changes tracked in decision evidence.
 
-Approved product decisions: hybrid direction, PR-PKG-001/CN-A12 editable packages without per-edit release, PR-BANK-001/CN-C10/CN-A13 bank deposit/receipt/notified independent authorized review. Setup workflow explicitly user-approved S10; future code/backlog plan **NOT_APPROVED**. All product implementation NOT_VERIFIED. Proposed technology/deadlines/fees/policies/hardware/cloud remain unresolved; documentation verification never equals product acceptance.
-
-Only current setup was READY/authorized; no application scaffold. Next single action: **authorize CN-DEC-001 bounded initial-stack decision brief**; final choice remains separate approval before implementation. [Coverage/omissions](execution/CINENEST-REQUIREMENTS-TRACEABILITY.md) retains all approved/draft features and launch gates, no invented completion percentage.
+Approved core: hybrid direction, PR-PKG-001 editable packages, PR-BANK-001 bank receipt/notified independent verification alongside gateway. S11 authorizes CN-DEC-001 brief only. [Initial stack brief](decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md) is **PROPOSED / AWAITING OWNER APPROVAL**, implementation NOT_VERIFIED. Future implementation plan NOT_APPROVED; next READY NONE. Single next action: owner responds to brief section I. CN-FND-001 remains blocked until stack acceptance, separate bounded implementation authority and prerequisites. Missing sources, policies, vendors and hardware remain explicit gates.
 
 | Canonical artifact | Purpose |
 |---|---|
 | [Execution plan](execution/CINENEST-EXECUTION-PLAN.md) | Canonical proposed bounded change-set backlog and readiness gates |
 | [Execution coverage](execution/CINENEST-REQUIREMENTS-TRACEABILITY.md) | Source ledger, requirements/test plans, omissions and evidence classes |
 | [Execution status/handoff](execution/CINENEST-EXECUTION-STATUS.md) / [handoff](execution/CINENEST-SESSION-HANDOFF.md) | Mandatory current controls and one safe next action |
+| [Decision brief](decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md) / [evidence](execution/evidence/CN-DEC-001.md) | Current proposed stack and verified research/check scope |
 | [Setup evidence](execution/evidence/CN-AGENT-SETUP-001.md) | Actual preflight/checks/reviews/publication verification |
 | [Product/features](product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md) | Stable feature catalog and acceptance |
 | [Bank deposit/manual payment](product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md) | Canonical confirmed feature, separate review/funds/booking/access states |

@@ -8,16 +8,18 @@
       "title": "Persistent preflight/controlled execution/evidence/handoff",
       "decisionStatus": "APPROVED",
       "sourceIds": [
-        "S10"
+        "S10",
+        "S11"
       ],
-      "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
+      "approvalEvidence": "S10 approved workflow/setup; S11 authorized CN-DEC-001 brief only. No stack/implementation approval",
       "priority": "P0",
-      "scope": "authorized setup only",
+      "scope": "Approved execution workflow; S11 authorizes decision brief only",
       "acceptanceCriteria": "Root entry points to charter/status/plan; available-source review and approved requirement mapping; honest readiness, evidence and safe resume",
       "moduleOwnership": "Repository workflow",
       "uiApiOwnership": "AGENTS.md and execution controls; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
-        "CN-AGENT-SETUP-001"
+        "CN-AGENT-SETUP-001",
+        "CN-DEC-001"
       ],
       "dependencies": [],
       "blockingDecisionIds": [],
@@ -38,7 +40,12 @@
       "unresolvedQuestions": [
         "Host automatic instruction loading not verified"
       ],
-      "verificationScope": "Document and manual discovery only; host loading NOT_VERIFIED"
+      "verificationScope": "Document and manual discovery only; host loading NOT_VERIFIED",
+      "decisionBriefEvidence": [
+        "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "execution/evidence/CN-DEC-001.md"
+      ],
+      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL"
     },
     {
       "id": "PR-UI-001",
@@ -80,7 +87,12 @@
         "OD-01",
         "OD-11",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "decisionBriefEvidence": [
+        "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "execution/evidence/CN-DEC-001.md"
+      ],
+      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL"
     },
     {
       "id": "PR-PKG-001",
@@ -100,7 +112,8 @@
         "CN-PKG-001",
         "CN-PKG-002",
         "CN-QUOTE-001",
-        "CN-AMEND-001"
+        "CN-AMEND-001",
+        "CN-DEC-001"
       ],
       "dependencies": [
         "CN-BOOK-001",
@@ -138,7 +151,12 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "decisionBriefEvidence": [
+        "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "execution/evidence/CN-DEC-001.md"
+      ],
+      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL"
     },
     {
       "id": "PR-BANK-001",
@@ -158,7 +176,8 @@
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002",
         "CN-REFUND-001",
-        "CN-NOTIFY-001"
+        "CN-NOTIFY-001",
+        "CN-DEC-001"
       ],
       "dependencies": [
         "CN-ACCESS-001",
@@ -196,7 +215,12 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "decisionBriefEvidence": [
+        "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "execution/evidence/CN-DEC-001.md"
+      ],
+      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL"
     },
     {
       "id": "CN-C01",

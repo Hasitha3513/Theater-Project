@@ -15,10 +15,10 @@ Every row includes source/approval, priority/scope/criteria/module/UI/API owners
 
 | Requirement | Decision | Change sets | Work | Test plan | Acceptance |
 |---|---|---|---|---|---|
-| CN-AGENT-WORKFLOW-001 | APPROVED | CN-AGENT-SETUP-001 | VERIFIED (documentation) | T-CN-AGENT-WORKFLOW-001 / PASS DOC CHECKS | NOT ACCEPTED (no product acceptance) |
+| CN-AGENT-WORKFLOW-001 | APPROVED | CN-AGENT-SETUP-001, CN-DEC-001 | VERIFIED (documentation) | T-CN-AGENT-WORKFLOW-001 / PASS DOC CHECKS | NOT ACCEPTED (no product acceptance) |
 | PR-UI-001 | APPROVED | CN-UI-001, CN-DEC-001 | BLOCKED | T-PR-UI-001 / NOT RUN | NOT ACCEPTED |
-| PR-PKG-001 | APPROVED | CN-PKG-001, CN-PKG-002, CN-QUOTE-001, CN-AMEND-001 | BLOCKED | T-PR-PKG-001 / NOT RUN | NOT ACCEPTED |
-| PR-BANK-001 | APPROVED | CN-PAY-BANK-001, CN-PAY-BANK-002, CN-REFUND-001, CN-NOTIFY-001 | BLOCKED | T-PR-BANK-001 / NOT RUN | NOT ACCEPTED |
+| PR-PKG-001 | APPROVED | CN-PKG-001, CN-PKG-002, CN-QUOTE-001, CN-AMEND-001, CN-DEC-001 | BLOCKED | T-PR-PKG-001 / NOT RUN | NOT ACCEPTED |
+| PR-BANK-001 | APPROVED | CN-PAY-BANK-001, CN-PAY-BANK-002, CN-REFUND-001, CN-NOTIFY-001, CN-DEC-001 | BLOCKED | T-PR-BANK-001 / NOT RUN | NOT ACCEPTED |
 | CN-C01 | DOCUMENTED_DRAFT | CN-ROOM-001 | BLOCKED | T-CN-C01 / NOT RUN | NOT ACCEPTED |
 | CN-C02 | DOCUMENTED_DRAFT | CN-AUTH-001 | BLOCKED | T-CN-C02 / NOT RUN | NOT ACCEPTED |
 | CN-C03 | DOCUMENTED_DRAFT | CN-BOOK-001 | BLOCKED | T-CN-C03 / NOT RUN | NOT ACCEPTED |
@@ -110,10 +110,14 @@ Every row includes source/approval, priority/scope/criteria/module/UI/API owners
 
 ## Omission check at selection and closeout
 1. Approved unmapped requirements: validator checks all approved IDs have known task links/blocked state. No application criterion claimed executed; tests/evidence empty until actual run.
-2. Task without approved scope: all future backlog items authorityAvailable=false / BLOCKED; their linked draft requirements do not authorize code. Setup alone explicit S10/current scope.
+2. Task without approved scope: all implementation backlog items authorityAvailable=false / BLOCKED; CN-DEC-001 only has S11 brief authority; their linked draft requirements do not authorize code. Setup S10 and decision brief S11 have separate bounded documentation authority.
 3. UI control without backend/auth: all current pages are specs, all corresponding code/tests absent. Planned slices include scopes/error paths; omission stays visible.
 4. Failure path/operational/migration/launch gate: future task risk/test/migration/DoD fields required; critical policies linked to OD IDs, physical/staff/provider/recovery acceptance missing. Test planning is not completion.
 5. Claimed result without evidence: setup evidence links exact commands/reviews, product results not claimed. Whole-project completion percentage deliberately omitted. Source review counts, verified documentation and actual software/physical/business acceptance remain separate.
 
 
 Setup closeout: workflow document/discovery checks passed with actual evidence; all other planned tests remain NOT RUN. Source ranges/hashes establish declared inventory consistency and reviewers recorded actual reads, not a proof of future model auto-loading or implemented product.
+
+## CN-DEC-001 decision evidence
+
+[Brief](../decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md) maps all three approved core requirements and workflow coverage; [evidence](evidence/CN-DEC-001.md) records official research and independent read-only review. Stable 92 requirement/test-plan and 27 change-set records retained; symmetric core/workflow task links corrected to include the already-listed decision task. Product test statuses stay NOT RUN and all product implementation NOT_VERIFIED. Brief preparation is VERIFIED documentation; technology approval AWAITING_OWNER_APPROVAL and implementation authorization NOT_GRANTED. Historical setup ledger remains its dated baseline, not a claim current edited files retain old hashes.
