@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROGRESS.md#execution-plan). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Execution Plan
 
 CN-DEC-001 · 2026-10-14. Canonical backlog [change-sets.json](change-sets.json). Setup completed; S11 authorized the initial decision brief only, now VERIFIED documentation / CLOSED. All other future units remain PROPOSED / BLOCKED; future implementation plan NOT_APPROVED. [Prepared proposal](../decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md) is awaiting explicit owner approval, not an accepted stack.

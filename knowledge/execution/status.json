@@ -1,19 +1,19 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-DEC-001",
-  "mode": "EXECUTION_DECISION_BRIEF",
+  "taskId": "CN-KB-CONSOLIDATE-001",
+  "mode": "DOCUMENTATION_CONSOLIDATION",
   "workStatus": "VERIFIED",
   "productStage": "PRE_IMPLEMENTATION",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "55ee66be4022daae182933a3042d86e80e8600ee",
+  "baselineHead": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
   "baselineWorktree": "CLEAN",
-  "currentChangeSet": "CN-DEC-001",
+  "currentChangeSet": "CN-KB-CONSOLIDATE-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-FND-001",
-  "nextAction": "Owner approval response to CN-DEC-001 section I; CN-FND-001 separately authorized only after accepted stack and bounded prerequisites",
+  "nextRecommendedChangeSet": null,
+  "nextAction": "Owner reviews superseded documents for removal; no deletion authorized yet",
   "nextReadyChangeSet": null,
   "implementationEvidence": "No application manifests/code/tests/CI; all catalog features NOT_VERIFIED",
   "approvedCoreDecisions": [
@@ -31,11 +31,11 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PUSHED",
-  "publicationEvidence": "CN-DEC-001 primary brief commit f3ba0e179754a963fe4768e5cd6b9e06aaaaf43e pushed to origin/main; ls-remote matched. Receipt-only successor commit resolved via current Git, no merge/deployment/stack approval.",
-  "lastObservedHead": "f3ba0e179754a963fe4768e5cd6b9e06aaaaf43e",
-  "evidencePath": "execution/evidence/CN-DEC-001.md",
-  "evidenceFreshness": "Current brief input snapshot at 55ee66b and official sources accessed 2026-10-14; historical setup baseline source ledger retained",
+  "publicationState": "LOCAL",
+  "publicationEvidence": "Current consolidation pre-publication snapshot; previous decision receipt preserved",
+  "lastObservedHead": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
+  "evidencePath": "PROGRESS.md#current-verification",
+  "evidenceFreshness": "Consolidation baseline 75cd23f with manifest lossless-migration map",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -51,9 +51,57 @@
   ],
   "omissionRegister": "execution/omissions.json",
   "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
-  "verificationScope": "Decision documentation/research/read-only review only; no installed tuple/product/native verification",
+  "verificationScope": "Documentation migration/coverage only; no application/hardware/approval claim",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "AWAITING_OWNER_APPROVAL",
   "implementationAuthorization": "NOT_GRANTED",
-  "instructionUse": "MANUALLY_READ"
+  "instructionUse": "MANUALLY_READ",
+  "approvalQueue": [
+    "Superseded document removal review",
+    "CN-DEC-001 stack proposal approval",
+    "Separate refined CN-FND-001 implementation authorization"
+  ],
+  "checks": [
+    {
+      "argv": [
+        "python3",
+        "knowledge/validate_design_kb.py"
+      ],
+      "atLocal": "2026-10-14T14:45:17.619118+05:30",
+      "exitCode": 0,
+      "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 complete baseline prose documents migrated; originals retained; catalog fields/anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "knowledge/execution/validate_execution.py"
+      ],
+      "atLocal": "2026-10-14T14:45:17.792346+05:30",
+      "exitCode": 0,
+      "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "atLocal": "2026-10-14T14:45:17.802234+05:30",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "review": "Parent self-review of actual diff, canonical/provenance links, complete payload and unchanged approval comparisons; no independent review claimed this task",
+  "negativeControls": {
+    "result": "PASS",
+    "cases": [
+      "Missing canonical PK-AC01 detected despite intact snapshot",
+      "Altered registry acceptance criterion detected despite intact IDs/statuses"
+    ],
+    "method": "Actual in-memory Path.read_text fault injection; no filesystem mutation",
+    "executedDate": "2026-10-14"
+  }
 }

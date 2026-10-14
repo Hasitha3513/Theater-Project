@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROJECT.md#features). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Product Scope and Feature Catalog
 
 > Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).

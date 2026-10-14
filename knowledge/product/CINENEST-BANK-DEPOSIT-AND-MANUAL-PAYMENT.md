@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROJECT.md#bank-payments). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Bank Deposit and Manual Payment
 
 Task CN-KB-BANK-PAYMENT-001 · 2026-10-14 (Asia/Colombo). Source [S9 user request](../sources/CN-KB-BANK-PAYMENT-001-request.txt). Provenance **USER-CONFIRMED**; core Decision **APPROVED**, Implementation **NOT_VERIFIED**. Supporting controls/workflows/data design **RECOMMENDED**; numeric deadlines, fee/config/provider/operational choices **OPEN_DECISION**. No code, real account details/bank connectivity, transactions, money movement or review/hardware test evidenced.

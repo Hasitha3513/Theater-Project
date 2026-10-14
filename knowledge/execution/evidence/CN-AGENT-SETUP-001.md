@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../../PROGRESS.md#setup-evidence-history). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CN-AGENT-SETUP-001 Evidence
 
 Mode SETUP, user S10/current task approval; product code not implemented. Baseline a48cc6e7b7ff4f8190eb80ae497f8e13b1660d3b; Linux, Git 2.53.0, Python 3.14.4. First observed timestamp 2026-10-14T12:42:52+05:30 (clock tool UTC 07:12:52). Later command timestamps are appended with actual results, not invented hardware/service evidence.

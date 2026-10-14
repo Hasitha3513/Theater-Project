@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../ARCHITECTURE.md#security-privacy). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Security Privacy and Compliance
 
 > Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).

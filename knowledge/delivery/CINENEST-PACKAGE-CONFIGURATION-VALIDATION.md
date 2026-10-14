@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROGRESS.md#package-validation-history). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Package Configuration Validation Report
 
 Task CN-KB-PACKAGE-CONFIGURATION-001 · 2026-10-14 (Asia/Colombo). Documentation-only pre-publication snapshot. Decision APPROVED for PR-PKG-001/CN-A12 core product requirement; RECOMMENDED for supporting designs; Implementation NOT_VERIFIED.

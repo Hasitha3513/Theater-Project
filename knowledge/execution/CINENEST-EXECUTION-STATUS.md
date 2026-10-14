@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROGRESS.md#prior-status). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Execution Status
 
 CN-DEC-001 · 2026-10-14. Canonical [machine state](status.json). S11 decision-brief scope only; brief VERIFIED as documentation, **PROPOSED / AWAITING OWNER APPROVAL**. Implementation authorization NOT_GRANTED, product PRE_IMPLEMENTATION / NOT_VERIFIED, future plan NOT_APPROVED, next READY unit NONE.

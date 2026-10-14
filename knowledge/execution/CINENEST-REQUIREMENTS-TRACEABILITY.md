@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROGRESS.md#requirements-traceability). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Requirements Traceability and Source Coverage
 
 CN-AGENT-SETUP-001 · 2026-10-14. Canonical [source ledger](source-ledger.json), [requirements](requirements.json), [test plan](test-plan.json) and [omissions](omissions.json); [backlog](change-sets.json) is the only work model. Existing [open-decision register](../decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md) remains the only business/architecture decision model.

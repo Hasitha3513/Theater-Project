@@ -26,9 +26,10 @@ def main():
         item = {'path': name, 'kind': 'visual-reference' if name.endswith('.png') else 'documentation-specification', 'implementationStatus': 'NOT_VERIFIED'}
         if name != 'manifest.json':
             item['sha256'] = hashlib.sha256(asset.read_bytes()).hexdigest()
+        item['authority'] = 'canonical-prose' if name in {'PROJECT.md', 'ARCHITECTURE.md', 'DESIGN.md', 'PROGRESS.md'} else 'superseded-historical-snapshot' if 'knowledge/' + name in {e['sourcePath'] for e in m['consolidation']['documents']} else 'structured-asset-or-evidence'
         entries.append(item)
     m['files'] = entries
-    m['externalInstructionFiles'] = [{'path': name, 'sha256': hashlib.sha256((R / name).read_bytes()).hexdigest(), 'purpose': 'Explicit root instruction/charter entry outside canonical KB'} for name in ['AGENTS.md', 'docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md']]
+    m['externalInstructionFiles'] = [{'path': 'AGENTS.md', 'sha256': hashlib.sha256((R / 'AGENTS.md').read_bytes()).hexdigest(), 'purpose': 'Current root entry; charter consolidated into PROGRESS.md'}]
     text = json.dumps(m, indent=2) + '\n'
     changed = path.read_text() != text
     if args.write and changed:

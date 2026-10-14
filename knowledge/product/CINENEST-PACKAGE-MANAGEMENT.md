@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROJECT.md#package-management). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Package Management
 
 Task CN-KB-PACKAGE-CONFIGURATION-001 · 2026-10-14 (Asia/Colombo). Source [S8 user request](../sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt). Core decision APPROVED (user-confirmed requirement); supporting design RECOMMENDED unless explicitly marked OPEN_DECISION. Implementation NOT_VERIFIED: no application manifest, package admin, API, database or execution test exists in inspected repository.

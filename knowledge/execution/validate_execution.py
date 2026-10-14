@@ -22,18 +22,17 @@ def main():
         except (OSError, ValueError) as exc:
             check(False, f'{name}: {exc}')
             return {}
-    controls = ['CINENEST-EXECUTION-PLAN.md', 'CINENEST-REQUIREMENTS-TRACEABILITY.md',
-                'CINENEST-EXECUTION-STATUS.md', 'CINENEST-SESSION-HANDOFF.md',
+    controls = [
                 'change-sets.json', 'requirements.json', 'test-plan.json', 'source-ledger.json',
-                'status.json', 'omissions.json', 'evidence/CN-AGENT-SETUP-001.md',
+                'status.json', 'omissions.json',
                 'evidence/source-review.json']
     for name in controls:
         check((E / name).is_file(), f'Missing control {name}')
     check((R / 'AGENTS.md').is_file(), 'No root instructions')
-    check((R / 'docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md').is_file(), 'No charter')
+    check((K / 'PROGRESS.md').is_file() and '<a id="execution-charter"></a>' in (K / 'PROGRESS.md').read_text(), 'No consolidated charter')
     entry = (R / 'AGENTS.md').read_text()
-    for required in ['every CineNest request', 'CINENEST-PROJECT-EXECUTION-AGENT.md',
-                     'CINENEST-EXECUTION-STATUS.md', 'CINENEST-SESSION-HANDOFF.md',
+    for required in ['every CineNest request', 'PROGRESS.md', 'PROJECT.md', 'ARCHITECTURE.md', 'DESIGN.md',
+                     'New knowledge files require explicit owner approval',
                      'READY authorized change set', 'read-only', 'No production']:
         check(required in entry, f'Instruction guard missing {required}')
     check(len(entry.encode()) < 12000, 'Instruction entry point too long')
@@ -75,6 +74,9 @@ def main():
             check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED', 'Decision brief status unsupported')
             check(c.get('authorizationSource') == 'S11' and c.get('approvalStatus') == 'AWAITING_OWNER_APPROVAL' and c.get('implementationAuthorization') == 'NOT_GRANTED', 'Decision brief promoted to stack/code authority')
             check(c.get('pendingDecisionIds') == ['OD-01'] and c['blockingDecisionIds'] == [], 'Brief/selection gates conflated')
+        elif c['id'] == 'CN-KB-CONSOLIDATE-001':
+            check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED' and c.get('authorizationSource') == 'S12', 'Consolidation authority/status missing')
+            check(c.get('deletionApproval') == 'PENDING_OWNER_REVIEW', 'Unauthorized deletion approval')
         elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
@@ -125,18 +127,78 @@ def main():
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
     check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None, 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-DEC-001' and state['nextRecommendedChangeSet'] == 'CN-FND-001', 'Unexpected next checkpoint')
+    check(state['taskId'] == 'CN-KB-CONSOLIDATE-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
     check(state.get('stackApproval') == 'AWAITING_OWNER_APPROVAL' and state.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
-    brief = K / 'decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md'
+    brief = K / 'ARCHITECTURE.md'
     check(brief.is_file() and 'PROPOSED / AWAITING OWNER APPROVAL' in brief.read_text(), 'Missing proposed decision brief')
     check((K / 'sources/CN-DEC-001-request.txt').is_file() and 'S11' in sources, 'Missing decision scope authority')
     check(state['hostAutomaticInstructionLoading'] == 'NOT_VERIFIED' and state['nativeAgentRegistration'] == 'NOT_PERFORMED', 'Host/native claim unsupported')
     manifest = json.loads((K / 'manifest.json').read_text())
     for item in manifest.get('externalInstructionFiles', []):
         check((R / item['path']).is_file() and hashlib.sha256((R / item['path']).read_bytes()).hexdigest() == item['sha256'], f'Instruction hash mismatch {item["path"]}')
-    check({x['path'] for x in manifest.get('externalInstructionFiles', [])} == {'AGENTS.md', 'docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md'}, 'External instruction inventory incomplete')
+    check({x['path'] for x in manifest.get('externalInstructionFiles', [])} == {'AGENTS.md'}, 'External instruction inventory incomplete')
+    baseline = manifest['consolidation']['baselineRevision']
+    for path, field in [('execution/requirements.json', 'requirements'), ('execution/test-plan.json', 'tests'), ('execution/change-sets.json', 'changeSets'), ('decisions/cinenest-open-decisions.json', 'decisions')]:
+        prior = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/' + path], text=True))
+        current = json.loads((K / path).read_text())
+        before = {x['id']: x for x in prior[field]}; after = {x['id']: x for x in current[field]}
+        check(set(before) <= set(after), 'Baseline IDs dropped ' + path)
+        for id, old in before.items():
+            for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
+                if key in old:
+                    check(after[id].get(key) == old[key], 'Baseline status changed ' + id + '/' + key)
+    canonical_map = {e['sourcePath'].removeprefix('knowledge/'): e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] for e in manifest['consolidation']['documents']}
+    def migrated(value):
+        if isinstance(value, dict):
+            return {key: migrated(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [migrated(item) for item in value]
+        return canonical_map.get(value, value) if isinstance(value, str) else value
+    # Compare full requirement/test/decision payloads, not just counts/statuses.
+    for path in ['execution/requirements.json', 'execution/test-plan.json', 'decisions/cinenest-open-decisions.json']:
+        expected = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/' + path], text=True)))
+        if path == 'execution/requirements.json':
+            workflow = expected['requirements'][0]
+            workflow['sourceIds'].append('S12'); workflow['changeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['verificationEvidence'].append('PROGRESS.md#current-verification')
+        if path == 'execution/test-plan.json':
+            workflow = expected['tests'][0]
+            workflow['owningChangeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['evidencePaths'].append('PROGRESS.md#current-verification')
+        check(expected == json.loads((K / path).read_text()), 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
+    old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
+    check(changes[:-1] == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001', 'Existing backlog content lost/altered')
+    old_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
+    current_sources = json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']
+    check(current_sources[:-1] == old_sources and current_sources[-1]['id'] == 'S12', 'Prior source evidence lost/altered')
+    old_omissions = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/omissions.json'], text=True))['omissions']
+    current_omissions = read_json('omissions.json')['omissions']
+    check([o['id'] for o in current_omissions] == [o['id'] for o in old_omissions], 'Omission IDs dropped/changed')
+    for old, current in zip(old_omissions, current_omissions):
+        expected = dict(old)
+        if old['id'] in {'OM-02', 'OM-07'}:
+            expected['recovery'] = current['recovery']  # Updated pending-stack/canonical-instruction guidance only.
+        check(expected == current, 'Omission gap/status silently changed ' + old['id'])
+    # Active reference fields must resolve to real canonical sections/assets; historical ledgers stay snapshots.
+    def references(value):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if key in {'canonicalSpecification', 'proposalReference', 'evidencePath', 'evidencePaths', 'verificationEvidence', 'decisionBriefEvidence', 'actualTestPaths'}:
+                    for target in item if isinstance(item, list) else [item]:
+                        if not target or not isinstance(target, str):
+                            continue
+                        name, sep, anchor = target.partition('#'); asset = K / name
+                        if not asset.exists():
+                            asset = R / name
+                        check(asset.is_file(), 'Active reference missing ' + target)
+                        if sep and asset.name in {'PROJECT.md', 'ARCHITECTURE.md', 'DESIGN.md', 'PROGRESS.md'}:
+                            check(('<a id="' + anchor + '"></a>') in asset.read_text(), 'Active anchor missing ' + target)
+                references(item)
+        elif isinstance(value, list):
+            for item in value:
+                references(item)
+    for data in [backlog, coverage, tests_doc, state, {'decisions': od}]:
+        references(data)
     if errors:
         print('\n'.join('FAIL '+e for e in errors))
         return 1

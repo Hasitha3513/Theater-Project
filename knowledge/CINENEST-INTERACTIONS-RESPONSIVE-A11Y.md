@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](DESIGN.md#interactions-a11y). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Interactions Responsive Design and Accessibility
 
 CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT. Implementation: NOT_VERIFIED. Source S1 and existing visual/page guidance. No rendered application exists.

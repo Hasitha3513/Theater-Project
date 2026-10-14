@@ -9,7 +9,8 @@
       "acceptanceCriteria": "Root entry points to charter/status/plan; available-source review and approved requirement mapping; honest readiness, evidence and safe resume",
       "owningChangeSetIds": [
         "CN-AGENT-SETUP-001",
-        "CN-DEC-001"
+        "CN-DEC-001",
+        "CN-KB-CONSOLIDATE-001"
       ],
       "status": "PASS",
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
@@ -19,7 +20,8 @@
       ],
       "evidencePaths": [
         "execution/evidence/checks.json",
-        "execution/evidence/instruction-review.json"
+        "execution/evidence/instruction-review.json",
+        "PROGRESS.md#current-verification"
       ],
       "reasonNotRun": "Not applicable: actual documentation/discovery checks executed; no application test represented"
     },

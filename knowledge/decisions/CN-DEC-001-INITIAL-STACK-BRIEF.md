@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../ARCHITECTURE.md#initial-stack-brief). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CN-DEC-001 — Initial Stack Decision Brief
 
 **PROPOSED / AWAITING OWNER APPROVAL.** Prepared 2026-10-14, Asia/Colombo. Brief authorization is S11, not stack approval or implementation permission. OD-01 remains OPEN_DECISION. All product implementation remains NOT_VERIFIED.

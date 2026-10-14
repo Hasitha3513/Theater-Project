@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](ARCHITECTURE.md#adr-004). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # ADR-004: User-confirmed Bank Deposit and Manual Payment
 
 CN-KB-BANK-PAYMENT-001 · 2026-10-14. Source S9, provenance USER-CONFIRMED; core Decision APPROVED, Implementation NOT_VERIFIED. Supporting workflow/controls/contract/report choices RECOMMENDED, method policies OPEN_DECISION. ADR-001–003 unchanged; existing package requirement approved and retained.

@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](PROGRESS.md#version-history). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Knowledge Base Changelog
 
 ## KB 1.4.0 — 2026-10-14 — CN-DEC-001

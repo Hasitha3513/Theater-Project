@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](ARCHITECTURE.md#adr-003). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # ADR-003: User-confirmed Admin Package Configuration
 
 Task CN-KB-PACKAGE-CONFIGURATION-001 · 2026-10-14. Source S8. Decision APPROVED for PR-PKG-001 / CN-A12 core requirement; RECOMMENDED for supporting publication, quote and implementation design. Implementation NOT_VERIFIED. ADR-001/002 historical decisions retained.

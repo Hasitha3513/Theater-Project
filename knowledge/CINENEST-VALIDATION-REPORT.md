@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](PROGRESS.md#feature-validation-history). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CN-KB-FEATURES-TECH-001 Validation and Publication Report
 
 Recorded 2026-10-14 (Asia/Colombo). Decision: DOCUMENTED_DRAFT for behavioral specifications, APPROVED for retained hybrid visual direction. Implementation: NOT_VERIFIED for all application features. Documentation only.

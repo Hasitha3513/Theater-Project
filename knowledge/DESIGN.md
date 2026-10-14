@@ -1,0 +1,937 @@
+# CineNest Design
+
+Canonical approved hybrid UI/UX direction, shared component/token guidance, all page specifications, charts and acceptance. [Project](PROJECT.md), [architecture](ARCHITECTURE.md), [progress](PROGRESS.md).
+
+Preserve Admin Mockup-1 operational structure + Showcase-2 room/device views + cinematic customer visual theme. Approved direction does not approve screenshot statistics, operational policy or unimplemented features. Active token1.0.0/theme and chart contract1.2.0 remain unchanged. Proposed palette migration OD-11 is unapplied; ADR-002 in ARCHITECTURE preserves the conflict. Eleven admin modules, twelve customer flows, ten chart definitions and eight BN bank metric definitions remain below. Runtime data must be authorized backend facts, never generated screenshot fallback. Accessibility target WCAG2.2 AA requires future rendered testing, not documentation certification.
+
+[Tokens](tokens/cinenest-design-tokens.json), [chart contracts](tokens/cinenest-chart-specs.json), [theme CSS](styles/cinenest-theme.css) remain the single machine-readable definitions; prose explains them without a second token store.
+
+## Contents
+
+- [Design System](#design-system)
+- [Admin Pages](#admin-pages)
+- [Customer Pages](#customer-pages)
+- [Charts Metrics](#charts-metrics)
+- [Interactions A11Y](#interactions-a11y)
+- [Adr 001](#adr-001)
+- [Reference Traceability](#reference-traceability)
+- [Ux Acceptance](#ux-acceptance)
+
+<a id="design-system"></a>
+<!-- migrated-begin:knowledge/CINENEST-DESIGN-SYSTEM.md -->
+### CineNest Design System
+
+> Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
+> Original record: 2026-10-13. Updated: 2026-10-14, CN-KB-FEATURES-TECH-001. Decision: APPROVED for hybrid direction; DOCUMENTED_DRAFT for detailed behavior. Implementation: NOT_VERIFIED. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+
+#### Authority and scope
+The user's approved direction combines Admin Mockup-1's operational layout and Showcase-2's room cards and device details with the customer reference's cinematic identity. Exact sampled colors and a font cannot be established authoritatively from raster images. The values in [design tokens](tokens/cinenest-design-tokens.json) are proposed normalized values, not recovered knowledge-pack tokens. This document is the shared baseline for future admin and customer interfaces, subject to reconciliation of the missing source documents. Existing approved architectural/business decisions take priority.
+
+See [admin pages](DESIGN.md#admin-pages), [customer pages](DESIGN.md#customer-pages), [charts](DESIGN.md#charts-metrics), [ADR](DESIGN.md#adr-001), [traceability](DESIGN.md#reference-traceability), and [acceptance checklist](DESIGN.md#ux-acceptance).
+
+#### Brand identity
+CineNest is a private, automated cinema experience: welcoming, immersive, precise, and trustworthy. Preserve the gold film-reel identity, dark cinema photography, and violet actions. The references are visual evidence; their composite logos and room photos are not production asset or licensing approval. Use an approved original logo asset when supplied, with meaningful alternative text and consistent clear space (one icon width). No speculative claims about streaming availability, safety, or automation capabilities.
+
+#### Palette and usage
+All exact values below come from the centralized proposed token file. Reuse semantic variables from [theme CSS](styles/cinenest-theme.css); never repeat literal colors in future components. Chart aliases deliberately share semantic values. Token changes require coordinated documentation, CSS regeneration, chart validation, and contrast review.
+
+| Role | HEX | Usage |
+|---|---|---|
+| `brand.gold` | `#F4BE78` | See semantic key; use only in its named context. |
+| `brand.primary` | `#5135FF` | See semantic key; use only in its named context. |
+| `brand.gradientEnd` | `#754CFF` | See semantic key; use only in its named context. |
+| `brand.primaryHover` | `#4126D9` | See semantic key; use only in its named context. |
+| `sidebar.background` | `#0B1522` | See semantic key; use only in its named context. |
+| `sidebar.text` | `#E8EDF5` | See semantic key; use only in its named context. |
+| `sidebar.muted` | `#AFBDD0` | See semantic key; use only in its named context. |
+| `cinematic.background` | `#080D18` | See semantic key; use only in its named context. |
+| `cinematic.surface` | `#131C2E` | See semantic key; use only in its named context. |
+| `cinematic.text` | `#F8FAFC` | See semantic key; use only in its named context. |
+| `canvas` | `#F4F6FA` | See semantic key; use only in its named context. |
+| `surface` | `#FFFFFF` | See semantic key; use only in its named context. |
+| `surface.subtle` | `#F8FAFC` | See semantic key; use only in its named context. |
+| `text.primary` | `#101828` | See semantic key; use only in its named context. |
+| `text.secondary` | `#475467` | See semantic key; use only in its named context. |
+| `border` | `#D0D5DD` | See semantic key; use only in its named context. |
+| `border.control` | `#667085` | See semantic key; use only in its named context. |
+| `focus` | `#5135FF` | See semantic key; use only in its named context. |
+| `success.foreground` | `#067647` | See semantic key; use only in its named context. |
+| `success.background` | `#ECFDF3` | See semantic key; use only in its named context. |
+| `warning.foreground` | `#854A0E` | See semantic key; use only in its named context. |
+| `warning.background` | `#FFFAEB` | See semantic key; use only in its named context. |
+| `danger.foreground` | `#B42318` | See semantic key; use only in its named context. |
+| `danger.background` | `#FEF3F2` | See semantic key; use only in its named context. |
+| `info.foreground` | `#175CD3` | See semantic key; use only in its named context. |
+| `info.background` | `#EFF8FF` | See semantic key; use only in its named context. |
+| `neutral.foreground` | `#344054` | See semantic key; use only in its named context. |
+| `neutral.background` | `#F2F4F7` | See semantic key; use only in its named context. |
+| `chart.revenue` | `#5135FF` | Analytics series/grid alias. |
+| `chart.bookings` | `#175CD3` | Analytics series/grid alias. |
+| `chart.available` | `#067647` | Analytics series/grid alias. |
+| `chart.occupied` | `#5135FF` | Analytics series/grid alias. |
+| `chart.maintenance` | `#B42318` | Analytics series/grid alias. |
+| `chart.cleaning` | `#854A0E` | Analytics series/grid alias. |
+| `chart.unknown` | `#667085` | Analytics series/grid alias. |
+| `chart.grid` | `#E4E7EC` | Analytics series/grid alias. |
+| `chart.axis` | `#475467` | Analytics series/grid alias. |
+
+#### Typography
+Proposed font: Inter with system fallbacks; confirm font licensing and delivery strategy before inclusion. Body 16px/1.5, small 14px/1.5, caption 12px/1.5, H3 20px/1.2, H2 24px/1.2, H1 32px/1.2, hero 48px/1.2. Use rem, retain browser zoom, and reduce hero to H1 at small widths. Weights 400 body, 500 labels, 600 controls/subheadings, 700 page titles/KPIs. One H1 per page; headings reflect document hierarchy. Financial values use tabular numerals; never use small captions for essential terms.
+
+#### Surfaces, cards, borders, shadows
+Admin: canvas background, white cards, subtle table headers, dark sidebar. Customer: cinematic shell with explicit light booking-panel theme on forms. Image text uses a dark scrim whose final rendered contrast must be measured. Cards use card radius, 1px border, spacing-6 padding on desktop / spacing-4 mobile and card shadow. Overlays use dialog radius and overlay shadow. Input boundaries use border.control, because the decorative border is too light for essential control identification. Never use shadow alone to communicate selection. Elevation hierarchy: canvas, card, sticky header, drawer, modal, toast; dialogs block underlying focus.
+
+#### Spacing and grid
+Base unit 4px: 0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64px. Token rem values assume a 16px browser default. Desktop 12-column grid with 24px gutters; tablet 8 columns/16px; mobile 4 columns/16px. Content max 1440px; sidebar 240px; topbar 64px; forms max 640px. Page padding 32px desktop, 24px tablet, 16px mobile. Avoid fixed-height cards containing variable text.
+
+#### Navigation and icons
+Admin shell: persistent dark sidebar, gold logo, global search, notifications, user menu, branch selector only when architecture supports branches. Group modules consistently; active link uses violet background, icon, text and aria-current. Room Live Control is a nested destination of Rooms. Audit Logs is explicit and permission-gated. Customer shell: public header and booking stepper; authenticated account navigation becomes a drawer on mobile. Keep role contexts visibly distinct.
+Use one approved outline icon library (not yet selected), 20px navigation / 16px inline / 24px feature icons, consistent stroke and rounded alignment. Icons inherit semantic text colors; icon-only controls require accessible names. Decorative icons are aria-hidden.
+
+#### Buttons and interactions
+Primary: brand.primary to brand.gradientEnd, white text, primaryHover interaction. Secondary: surface with primary text and border.control; tertiary: text.secondary with visible hover/focus; destructive: danger.foreground with surface text and explicit consequence. One dominant action per section. Minimum target 44×44px, spacing-3 horizontal padding; no action conveyed solely by icon or color. Gradient is directional decoration, never a metric scale. Busy actions show a label and spinner, prevent duplicate submission, and retain width. Disabled controls use explicit unavailable reason where needed, not opacity alone. Focus uses 2px ring + 2px offset; cinematic focus uses gold. No hover-only functionality.
+
+#### Forms and controls
+Persistent labels, optional/required annotation, examples, inline error tied by aria-describedby, and page error summary focused on failed submission. Use appropriate input modes/autocomplete. Do not use placeholders as labels. Checkbox/radio groups have fieldsets/legends; toggle states are textual and expose aria-checked. Dates and prices are server validated; a UI date picker never overrides availability. Preserve safe form values after failure, never credentials or sensitive uploads. Native semantics preferred. File uploads expose type/size limits supplied by backend; do not copy 5MB from the mockup as policy. Dialogs trap focus, Escape closes safe dialogs, and focus returns to trigger.
+
+#### Tables and pagination
+Semantic tables with captions and scoped headers; sortable headers use aria-sort. Row selection is explicit, never automatic on page change. Keep identifier, status and primary action visible. Server-side pagination/filter/sort; default proposal 25 rows with 10/25/50 choices, bounded by backend. Cursor paging shows next/previous; display total/pages only when supplied. Filters survive safe navigation and are represented in URL without PII. CSV export obeys server permissions and current scope. Below md: compact cards for short records, horizontal scroll with labelled region for dense financial/audit tables. Do not hide essential values to fit width.
+
+#### Status, loading, empty, errors
+Success: available/confirmed/online; warning: pending/cleaning/degraded; danger: failed/offline/maintenance; info: upcoming/in progress; neutral: completed/unknown. Occupied room chart color is violet to match references, while booking in-progress badge uses info. Statuses are domain-specific and must not imply equivalence (paid does not mean confirmed; unknown does not mean offline). Every badge has text and optional icon.
+Initial load: geometry-matched skeleton with aria-busy; live refresh retains prior data with updated timestamp. Zero is valid data; missing is “Unavailable.” Empty states distinguish no records, no filter matches, no permission, not configured, and network failure. Provide appropriate reset/retry/action. Errors include safe correlation ID, no raw service payloads. Offline telemetry is stale with last observation time. Live announcements are polite and throttled; urgent failures announce once.
+
+#### Responsive behavior
+Mobile-first: <640px base; sm ≥640; md ≥768; lg ≥1024; xl ≥1280; xxl ≥1536. Breakpoints in JSON are canonical; CSS media queries in future builds must be generated from these numbers (CSS custom properties do not work in media conditions). At <lg, sidebar becomes a labelled drawer, focus-trapped while open. KPI grid 1/2/4 columns at base/sm/lg. Room grid 1/2/3 at base/md/xl; main dashboard 1 column below lg. Charts use full width, minimum 240px plot height, reduced tick density and persistent data-table access. Booking summary stacks below md, becomes two columns above md. Stepper becomes current-step label plus progress at <sm; all five steps remain accessible. Sticky CTAs must not obscure focus, terms, or content; account for safe-area insets. Test 320, 375, 640, 768, 1024, 1280, 1536px, landscape, 200% zoom, and 400% zoom/reflow.
+
+#### Accessibility requirements
+Target WCAG 2.2 AA (project acceptance target, not a certification). Text contrast ≥4.5:1, large text ≥3:1, essential graphics/controls/focus ≥3:1. Automated token contrast checks are necessary but insufficient: test final gradients, photos, disabled states, overlays, charts, and focus against adjacent colors. Full keyboard operation, visible focus, skip link, landmarks, correct labels, logical reading order and no keyboard traps. Charts offer equivalent tables; status must not depend on hue. Respect reduced motion, avoid flashing/autoplay audio, caption content video, and give room images useful alternative text. Support password-manager/paste where applicable, no cognitive-only authentication test, accessible Google sign-in and verification fallback. Warn before timed holds expire and offer extension only if backend policy allows. PINs and ID data require intentional disclosure and accessible masking controls. Test a screen reader and keyboard in each future critical booking and live-control flow.
+
+#### Feature and source reconciliation (CN-KB-FEATURES-TECH-001)
+Shared visual direction remains APPROVED; exact active tokens are proposed approximations and preserved byte-for-byte. S1’s claimed existing HEX palette differs; [ADR-002](ARCHITECTURE.md#adr-002) and OD-11 record the candidate conflict without silently migrating JSON/CSS. Keep the same typography, spacing, borders, shadows, responsive rules and role-adapted shared shell. [Interactions/accessibility](DESIGN.md#interactions-a11y) complements these component rules.
+
+Use [business rules](PROJECT.md#business-rules) for draft rates, capacity, session/access window and reservation buffers; [security](ARCHITECTURE.md#security-privacy) for identity/consent and evidence access; [catalog](PROJECT.md#features) for stable feature IDs. Desired status presentation is not implementation evidence. Do not turn draft rule JSON into frontend hardcoded operational data.
+
+<!-- migrated-end:knowledge/CINENEST-DESIGN-SYSTEM.md -->
+
+<a id="admin-pages"></a>
+<!-- migrated-begin:knowledge/CINENEST-ADMIN-PAGES.md -->
+### CineNest Admin Page Specifications
+
+> Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
+> Original record: 2026-10-13. Updated: 2026-10-14, CN-KB-FEATURES-TECH-001. Decision: APPROVED for hybrid direction; DOCUMENTED_DRAFT for detailed behavior. Implementation: NOT_VERIFIED. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+
+#### Shared admin contract
+Use the shared shell, tokens, components, accessibility and responsive rules in [design system](DESIGN.md#design-system). [Chart definitions](DESIGN.md#charts-metrics) are authoritative for metric meaning. Capability names below are proposed contract labels, not existing roles. Server authorization is mandatory on each resource/action; hiding a button is insufficient. Resolve actual role mappings from the missing architecture. Never automatically grant Administrator every sensitive permission.
+
+Lists use backend pagination, stable sort plus ID tie-breaker, abortable filters, loading/empty/error states and asOf timestamps. Detail edits use entity version/conflict handling. Monetary values are minor-unit integers plus ISO currency. Commands, booking changes and refunds use server-supported idempotency keys. Each mutation surfaces pending/success/failure, audit reference and safe retry behavior. Modals restore focus; tables preserve active filters. Confirm consequential actions and show reason/impact; routine viewing needs no confirmation. Proposed lifecycle labels must map to actual domain states before implementation.
+
+#### Dashboard
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Four KPI cards; revenue/bookings and occupancy plots; live rooms, recent bookings/activity, system health. Optional cinematic banner below operational content. |
+| Components | KPI card, room thumbnail, activity feed, health list, date range. |
+| Tables | Recent bookings: ID, customer display name, room, local start/end, booking status, payment status; room tiles link to controls. |
+| Filters | Location if supported, date range, granularity; click chart segments applies explicit filter. |
+| Buttons | View all bookings, View rooms, Refresh; global search uses permitted entities. |
+| Forms | No operational edit form; date filter validation only. |
+| Charts | Revenue & Bookings; Room Occupancy; financial KPI cards; health indicators. |
+| Status indicators | Separate booking/payment/room/telemetry states; observedAt and stale labels. |
+| Permissions | dashboard.read plus resource scopes; finance KPIs require payments.read; control links require room.control. |
+| Responsive behavior | KPI 1/2/4 columns; charts and live rooms stack below lg. |
+| Error and empty states | Distinguish empty range, no configured rooms, partial-service failure and denied financial widgets; retry each failed widget. |
+
+#### Booking Management
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Page title/primary action, booking-state tabs, filter toolbar, results table and details drawer. |
+| Components | State tabs, date picker, room selector, server paging, booking timeline. |
+| Tables | ID, customer, room, start/end, guests, amount/currency, booking status, payment status, actions; no full ID/PIN in rows. |
+| Filters | Date, room, booking/payment state, permitted customer/ID search; sort start time or created time. |
+| Buttons | New booking, View, Modify, Cancel, scoped Export; destructive confirmation states refund consequence. |
+| Forms | Room, slot, guest count, customer reference and quote; edit checks latest version/availability. |
+| Charts | Optional booking counts by state; link to Booking Statistics. |
+| Status indicators | Proposed states held/pending/confirmed/ongoing/completed/cancelled/expired; map actual backend states explicitly. |
+| Permissions | booking.read/create/update/cancel/export independently; enforce authorized venue/resource scope server-side; tenant architecture is undecided. |
+| Responsive behavior | Table scroll or compact cards at <md; detail drawer becomes full-screen. |
+| Error and empty states | Conflict/expired hold requires reselect and re-quote; no silent success; empty tabs distinguish zero counts from unavailable counts. |
+
+#### Cinema Room Management
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Room grid/table switch, room filters, room detail and configuration drawer. |
+| Components | Photo cards, amenities, capacity, state badges, device summaries, availability calendar. |
+| Tables | Room ID/name, capacity, amenities, operating state, connectivity, current/next booking, actions. |
+| Filters | Location, operating state, connectivity, name; selected view persists locally. |
+| Buttons | Add room, View details, Edit, Control room, Archive only if business policy permits. |
+| Forms | Name, capacity, photos, amenities, operating schedule, approved rate reference and device associations; unique identifiers validated. |
+| Charts | Room Utilization in details; no fake occupancy on room cards. |
+| Status indicators | Available/occupied/cleaning/maintenance/unknown; device health separate from bookability. |
+| Permissions | room.read/write; room.control separate; room pricing and device associations require their own capability. |
+| Responsive behavior | 1/2/3 room cards; table mode scrolls; forms single-column on mobile. |
+| Error and empty states | Prevent unsafe archive/schedule changes affecting bookings; unavailable image fallback; no rooms gives authorized setup action. |
+
+#### Room Live Control
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Room header and session timer, room photo/info, command panels, device status and command history. |
+| Components | Lock panel; AC setpoint; light dimmer; projector power; last-seen time; pending/acknowledged command feedback. |
+| Tables | Command ID, device, actor, requested action, requestedAt, acknowledgment/result; device ID/type/state/lastSeen. |
+| Filters | Room and device type/state; command time range; current room stays visible. |
+| Buttons | Lock/Unlock, AC adjustment, Lights, Projector, Test alert, Restart where supported; confirm high-impact actions with reason. |
+| Forms | Bounded AC temperature and light percentage from server capability metadata; reason for exceptional override. |
+| Charts | IoT health/status timeline only; telemetry values are actual observed values. |
+| Status indicators | Requested/pending/acknowledged/failed/expired/unknown; commanded state never displayed as observed state before telemetry confirms. |
+| Permissions | room.control and device.command scoped by room; exceptional override requires separate authorization and audit. |
+| Responsive behavior | Stack room context and command panels; minimum target 44px; critical session context visible while controlling. |
+| Error and empty states | Stale/offline disables unsupported commands; timeout permits status lookup before retry; emergency egress must remain independent of UI/network. Never infer occupancy or safe-to-lock from motion alone. |
+
+#### Customer Management
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Customer tabs/filter row, directory table, profile and restricted verification panel. |
+| Components | Profile, booking history, verification status, account state, consent/preferences when supported. |
+| Tables | Opaque ID, name, masked contact, joinedAt, verification state, booking count, account state, actions. |
+| Filters | Verification/account state, joined range, permission-scoped contact search; sort latest joined. |
+| Buttons | View, Add user only if architecture permits, restricted verification review, Suspend/reactivate, scoped Export. |
+| Forms | Profile edits; review decision/reason; suspension reason; never expose raw identity data in list. |
+| Charts | Booking statistics within permitted customer scope only. |
+| Status indicators | Verification pending/verified/rejected/expired separate from active/suspended account. |
+| Permissions | customer.read/write/export; identity.review separate; customer PII and uploads require restricted server scopes. |
+| Responsive behavior | Cards for directory on small screens; verification panel full-screen with safe document preview. |
+| Error and empty states | Missing identity provider, pending verification, unavailable image, denied PII and service failure each have explicit states; no automatic approval based on screenshot age. |
+
+#### Payments and Refunds
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Financial summary, transaction tabs including proposed Bank Deposit Reviews subsection, filters, ledger and transaction/refund detail. |
+| Components | Currency-aware amount, reconciliation status, refund history and reason dialog. |
+| Tables | Transaction ID, booking ID, provider reference masked, gross/fee/refund/net amounts, currency, settlement state, timestamps. |
+| Filters | Transaction/refund state, provider, currency, date basis, booking reference. |
+| Buttons | View, Request refund, Check status, Export; server confirms actual eligibility and amount. |
+| Forms | Refund amount/reason within server-computed refundable balance; confirmation names currency and consequence. |
+| Charts | Financial KPI Cards; Revenue Trend labelled net collections or separate approved recognition measure; Payment/Add-on Breakdown panels. |
+| Status indicators | Gateway pending/authorized/captured/failed/refunded separately from bank under-review/verified-funds/allocated/booking-resolution/refund progress; pending refund does not reduce collections until verified successful. |
+| Permissions | payments.read/refund/export independently; no card credentials or provider secrets in UI. |
+| Responsive behavior | Ledger scrolls; amount columns retained; refund dialog stacks without hiding balances. |
+| Error and empty states | Duplicate request returns existing operation; webhook delay shows pending; charge/refund timeout never offers blind retry; no transactions differs from failed reconciliation. |
+
+#### IoT Device Management
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Fleet health cards, device inventory, device detail/configuration and logs. |
+| Components | Connectivity badges, capability list, lastSeen, firmware metadata, command/event history. |
+| Tables | Device ID, type, room, connection, firmware, lastSeen, safe diagnostics, actions. |
+| Filters | Room, device type, health, firmware; time range for events. |
+| Buttons | Register/pair, Assign room, View logs, Test, Restart, Disable only if supported and authorized. |
+| Forms | Pairing workflow and room mapping; capability-specific settings; secrets write-only and never echoed. |
+| Charts | System and IoT Status Indicators; availability trends only from telemetry. |
+| Status indicators | Online/offline/degraded/unknown and freshness threshold from backend policy. |
+| Permissions | device.read/manage/command; firmware/security operations separately controlled. |
+| Responsive behavior | Fleet cards wrap; logs scroll; settings stack below md. |
+| Error and empty states | Device not provisioned, pairing expired, incompatible firmware, stale events and failed commands have actionable safe diagnostics; operations affecting occupied rooms require server safety checks. |
+
+#### Analytics and Reports
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Filter toolbar, KPI row, revenue/slot/utilization plots, supporting tables and export. |
+| Components | Date/granularity controls, currency selector, metric definitions, comparison period. |
+| Tables | Bucket/date, room, booking counts, sellable/booked minutes, occupancy, financial amounts; accessible chart-equivalent table. |
+| Filters | Range, timezone, location/room, currency, date basis, granularity; independent filters explicitly labelled. |
+| Buttons | Apply, Reset, Download permitted report, View source records. |
+| Forms | Filter form only; bounded ranges enforced by service. |
+| Charts | All specifications in charts document; avoid duplicate conflicting definitions. |
+| Status indicators | Fresh/stale/partial/unavailable; no-data is not zero unless dataset complete. |
+| Permissions | analytics.read; finance data additionally payments.read; reports.export scoped. |
+| Responsive behavior | Charts stack below lg; legends wrap; full supporting table remains available. |
+| Error and empty states | Sparse ranges, zero denominator, missing FX support and partial data labelled; export failures keep current view. |
+
+#### Promotions and Loyalty
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Campaign tabs, promotion list, reward ledger, campaign detail. |
+| Components | Eligibility preview, redemption limits, referral state, scheduled validity window. |
+| Tables | Campaign ID/code, scope, discount type/value, validFrom/Until, usage/cap, state; loyalty ledger customer reference, delta, reason, timestamp. |
+| Filters | Active/scheduled/expired, room/location, campaign type; ledger date/customer scope. |
+| Buttons | Create, Edit, Disable, View redemptions; reward adjustment with restricted permission and reason. |
+| Forms | Discount bounds, eligible rooms, validity timezone, stacking and usage limits; reward rules pending source approval. |
+| Charts | Redemption counts and attribution only when server contract exists; do not invent ROI. |
+| Status indicators | Draft/scheduled/active/expired/disabled; rewards pending/earned/reversed/redeemed as backend-defined. |
+| Permissions | promotion.read/write; loyalty.read/adjust; export separate. |
+| Responsive behavior | Tables scroll; create form stacks and validation remains beside fields. |
+| Error and empty states | Duplicate code, ineligible booking, cap reached, reversal conflict and unavailable loyalty service; no campaigns offers authorized create action. |
+
+#### System Settings
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Section navigation for general, Packages & Pricing (proposed subsection), rooms/policies, integrations, access and notifications. |
+| Components | Scoped forms, secret masked fields, effective-date notices, unsaved-change guard. |
+| Tables | Configured integrations and permission assignments with server-supported scope; no invented role matrix. |
+| Filters | Section and location if supported; search visible settings. |
+| Buttons | Save section, Test connection, Revert draft; sensitive changes require review of impact. |
+| Forms | Timezone/currency/operating schedules, booking policies, identity settings, integration references; values supplied by backend. |
+| Charts | System indicators for integration test outcomes only. |
+| Status indicators | Saved/unsaved/test pending/failed; effective configuration version visible. |
+| Permissions | settings.read/write; secrets/manage-access capabilities separate; backend prevents privilege escalation. |
+| Responsive behavior | Tabs become section selector; long forms one column below md. |
+| Error and empty states | Concurrent update prompts reload/diff; never silently overwrite; absent integration differs from offline; failed save preserves safe drafts. |
+
+#### Audit Logs
+
+| Requirement | Specification |
+|---|---|
+| Page layout | Read-only filter toolbar, chronological event table, event detail panel. |
+| Components | Actor/resource links with permissions, redacted before/after, correlation IDs. |
+| Tables | Event ID, occurredAt, actor ID/display, action, resource, outcome, reason, correlation ID; redacted change summary. |
+| Filters | Time, actor, action, resource, result and room/location scope; cursor ordering timestamp+ID. |
+| Buttons | View details, authorized Export; no edit/delete action. |
+| Forms | Filter form only; retention controlled by backend policy. |
+| Charts | Optional event outcome summary derived from same scoped events; never operational booking KPIs. |
+| Status indicators | Success/denied/failed; late-arriving events retain event and ingestion timestamps. |
+| Permissions | audit.read/export; restrict sensitive diffs independently and record audit access as architecture requires. |
+| Responsive behavior | Scrollable table; details full-screen at <md with readable wrapped diffs. |
+| Error and empty states | No events, no matching filters, retention boundary, partial ingestion and permission denial separately explained; redact PINs/tokens/ID scans from all events. |
+
+#### Canonical feature/rule integration
+[Catalog](PROJECT.md#features) CN-A01–CN-A11 and CN-O01–CN-O04 map these pages to modules, permissions, integrations, failures and acceptance. [Lifecycles](PROJECT.md#business-rules) define separate booking, payment, verification, access, session, readiness and command state machines. Tabs/counters must not mix those states.
+
+Manual bookings, changes, extensions and cancellations use the same authoritative database guard/quote/eligibility checks as customer flow. Approved operator capability is required, not assumed from admin sign-in. Customer session end and blocked-until/cleaning clearance are separate fields. Extension quotes check next booking and end-of-day rules. Configuration/price/refund-policy edits preserve existing purchase and consent snapshots. Room card/table modes use the same scoped dataset and action capabilities.
+
+Dashboard “today's confirmed bookings” and “today's scheduled sessions” are separate cards if both shown. Booking-based room status is not sensor-confirmed physical occupancy. Charts use [current metric specifications](DESIGN.md#charts-metrics); net collections and recognized revenue cannot share a mislabeled value. Live Control shows paid/confirmed, provisioning and observed device state independently, plus cleaning work and overstay incidents. Emergency/cleaning staff process remains a launch gate, not a timer automation.
+
+#### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+Information architecture: **System Settings → Packages & Pricing**, a proposed subsection, not a new verified route or duplicate pricing module. CN-A12/PR-PKG-001 core editable details/duration/prices are APPROVED; the supporting page/workflow below is RECOMMENDED, implementation NOT_VERIFIED. [Package specification](PROJECT.md#package-management) owns fields, constraints, exact pricing and lifecycle.
+
+| Requirement | Package subsection specification |
+|---|---|
+| Page layout/components | Header/search/filter toolbar, versioned package table; details/services/duration/price/applicability/publication/preview/history editor sections |
+| Table/filter | Package identity/name, included duration, currency/price, scope, version, availability, sales effective date and optional service window; search name/ID, filter state/venue/room/date, server paging |
+| Actions/permissions | View/history; create/duplicate/edit draft with package.edit; preview; Save draft distinct from Publish/Schedule with package.publish; deactivate/archive separately scoped |
+| Forms/preview | Persistent labels, positive integer minutes, exact monetary fields/currency, policy/service references and full joint validation. Customer card/quote preview labelled draft, before/after inclusions/duration/price/scope/effective summary |
+| Concurrency/errors | Unsaved-change guard; version token and stale-edit reload/diff; field errors and error summary; overlapping publication conflict; preserve safe draft data, no silent overwrite |
+| Confirmation/status | Publish confirmation names new version/time/scope and states existing bookings remain unchanged. Draft/scheduled/applicable/inactive/history are distinct; audit result visible |
+| Loading/empty/denied | Geometry-matched loading; no packages versus no filter matches; retry on failed load/publish; no edit/publish permission yields read-only allowed fields or scoped denied state |
+| Responsive/a11y | Existing hybrid shell/tokens; table scroll or compact cards below md; editor stacks, preview/history below form; minimum 44px actions, accessible dialogs/errors/version labels; no new theme |
+| Charts | Existing report definitions unchanged; historical revenue/duration use sold snapshots, not current catalog; no new demand-pricing chart |
+
+Separate operational-policy/room permissions control minimum/hours/cleaning/capacity. Package controls cannot increase safety capacity or extend active PINs. Exact backend capabilities/state names remain proposed.
+
+#### Bank payment — CN-KB-BANK-PAYMENT-001
+**Payments → Bank Deposit Reviews** is a proposed subsection (no verified route), supporting CN-A13 notified independent review and preserved online transactions. [Canonical specification](PROJECT.md#bank-payments) defines authority, matches, allocation/confirmation guards and bank instructions; review privilege does not imply account-change/refund/verify permission.
+
+| Requirement | Design specification |
+|---|---|
+| Queue/layout | Review filters/summary and server-paged table; detail drawer/page with restricted preview, accepted quote, instruction version, submission history, bank-match/evidence, balances, inventory, audit and notice timeline |
+| Columns/filter | Booking/customer, venue/room/session, package/version, expected/declared amount, submittedAt, status/queue age, assignee, hold expiry, overdue/exception and notification flags; scoped reference search/date/status/assignee filters |
+| Buttons/forms | Verify Funds and Approve; Request More Information; Await Bank Credit; Reject Claim with reason; Resolve Booking/Amount Exception. Verification requires receiving-account/bank-side reference or controlled statement entry, creditedAt/amount/currency/reviewer/notes; conditional versions and pending server results |
+| States/errors | Uploaded != verified != sufficiently allocated != confirmed != access-ready; partial/excess/wrong currency, unmatched/expired hold, duplicate allocation/concurrent reviewer, malformed/quarantined preview, denied scope and notification failure explicit; no silent replacement/false success |
+| Settings/audit | Separate bank-account management permission and instruction version/history; ordinary reviewer cannot modify destination; independently verified/high-risk controls proposed, thresholds open; evidence/approval/allocation/refund access audited |
+| Responsive/a11y | Existing hybrid shell; dense queue labelled scroll/compact cards below md, details/preview stacked with exact amount/currency/expiry visible; 44px controls, keyboard preview/link access, error summary and polite updates |
+| Charts/empty | Bank review age/funds/allocation/unmatched/refund/channel metrics from verified ledger only; no pending-review amount in collections. Empty queue vs filtered/no-permission/service error distinguished |
+
+Pending/success/error comes from authoritative operations. Composite approval can show funds verified but booking resolution required. No money/real-bank/device action performed by documentation task.
+
+<!-- migrated-end:knowledge/CINENEST-ADMIN-PAGES.md -->
+
+<a id="customer-pages"></a>
+<!-- migrated-begin:knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md -->
+### CineNest Customer Booking Page Specifications
+
+> Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
+> Original record: 2026-10-13. Updated: 2026-10-14, CN-KB-FEATURES-TECH-001. Decision: APPROVED for hybrid direction; DOCUMENTED_DRAFT for detailed behavior. Implementation: NOT_VERIFIED. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+
+#### Shared customer flow
+Use [design system](DESIGN.md#design-system) and [reference decisions](DESIGN.md#adr-001). Maintain cinematic public/account shell and readable light booking panels. The consistent stepper is **1 Select Room → 2 Date & Time → 3 Verify → 4 Payment → 5 Confirmation**. Authentication is a prerequisite when needed, summary is part of Payment, and PIN is a secure post-confirmation subview. Fix duplicate/misnumbered steps shown in the composite reference.
+
+Server-authoritative draft/hold → verified eligibility → quoted payment → confirmed booking is a proposed flow; actual lifecycle must be reconciled with domain rules. Steps cannot bypass backend authorization or policy. Safe Back/Edit preserves only allowed draft data; slot/price changes invalidate quotes. Page refresh resolves current state from server. Customer scope is the signed-in owner; admin support is a separate permissioned flow. All screens require keyboard, loading, empty, validation, network-error and session-expiry handling. Never use screenshot names, statistics, identity documents, PINs or transaction values as operational data.
+
+#### Landing Page
+
+**Layout and components:** Dark cinema photography with readable scrim, gold logo, short hero, violet Book now, amenities, room previews, how-it-works and support/footer. Header shows Google sign-in or account.
+
+**Interactions, data, permissions and safeguards:** Browse rooms without mandatory sign-in; booking continues into the five-stage flow. Content claims, venue, amenities and pricing are backend/CMS approved, not copied screenshot facts.
+
+**Responsive, accessibility, error and empty behavior:** Room photos use alternatives; header becomes mobile drawer, hero text scales, CTA remains visible without covering copy. Image failure uses cinematic surface; unavailable catalog shows retry/support.
+
+#### Google Authentication
+
+**Layout and components:** Provider-compliant Google sign-in button and a concise explanation of account use; return destination and privacy links.
+
+**Interactions, data, permissions and safeguards:** Use configured identity integration; server verifies identity and establishes secure session. Handle popup blocked, cancelled consent, callback/state failure, session expiry and account linking safely; do not store OAuth tokens in URLs or local logs. Preserve safe room/slot draft on sign-in return. Alternate recovery/support depends on architecture.
+
+**Responsive, accessibility, error and empty behavior:** Keyboard and accessible provider flow; disable duplicate requests, show pending; mobile redirect supported by chosen provider. Authentication does not imply age/identity verification.
+
+#### Cinema Room Selection
+
+**Layout and components:** Stage 1 Select Room: light panel inside cinematic shell; room/package photo cards, room name, server-approved capacity/amenities and applicable package inclusions, backend price/currency/duration choices, availability and select CTA.
+
+**Interactions, data, permissions and safeguards:** Selected room has border, label and radio semantics; Continue uses server room ID. Popular badge only when derived from a defined ranking/window; unavailable rooms state reason. Room rates are indicative until quote.
+
+**Responsive, accessibility, error and empty behavior:** 1/2/3 card grid; essential terms and capacity remain visible; empty catalog, maintenance and catalog failure distinct. Guest count cannot exceed server capacity.
+
+#### Date and Time Selection
+
+**Layout and components:** Stage 2 Date & Time: locale calendar, day selector, timezone label, available slot chips, duration/guest inputs and sticky-safe quote summary.
+
+**Interactions, data, permissions and safeguards:** Read live availability; hold inventory only by server contract. Slot chosen by ID and exact start/end, not client wall-time string. Include operating windows, buffers and blackouts from backend. Revalidate when continuing; show hold expiration and accessible warning. Extensions require new availability/quote.
+
+**Responsive, accessibility, error and empty behavior:** Calendar keyboard arrows and labelled disabled days; slot radio groups. Stack summary below md. No slots suggests permitted alternate day/room; conflict reselects; network failure never declares sold out.
+
+#### Identity Verification
+
+**Layout and components:** Stage 3 Verify: policy explanation, required document type/input, restricted preview, verification progress/result and Continue.
+
+**Interactions, data, permissions and safeguards:** S1 documents draft 18+ for all guests and booker NIC/passport processing; on-site original-document checks for every guest require a defined process. Driving licence shown in mockup is not a selected accepted document. Final eligibility, upload limits, consent, retention and review policy remain open. Server determines eligibility. Do not expose full ID number, birth date or document image unnecessarily. Delete draft preview after secure submission; no public storage links. Pending review cannot silently advance to a paid eligible booking.
+
+**Responsive, accessibility, error and empty behavior:** Accessible file input with upload alternative/support when policy allows; mobile camera optional. Clear rejection reason and safe retry; manual-review/pending/expired/network states distinct. Preview masked by default and permission scoped.
+
+#### Booking Summary
+
+**Layout and components:** Persistent summary at payment stage: room, local date/time/timezone, duration, guests, itemized base/extras/discount/tax/fees, currency and server total, hold expiry and applicable cancellation terms.
+
+**Interactions, data, permissions and safeguards:** Use versioned server quote; extras such as gaming or extra hour appear only when supported. Editing room/slot/extras invalidates quote and rechecks availability. Require explicit terms consent if policy mandates; disclose full payable total before payment. Screenshot totals and fees are illustrative.
+
+**Responsive, accessibility, error and empty behavior:** Two columns ≥md, stacked below; total visible with terms, no overlapping footer. Quote stale/changed shows before/after and explicit acceptance; no hardcoded amounts.
+
+#### Payment Processing
+
+**Layout and components:** Stage 4 Payment: booking summary and methods actually enabled by server/provider, primary Pay with formatted amount for online checkout or bank instruction/submission/status panels, secure provider handoff where selected, and progress.
+
+**Interactions, data, permissions and safeguards:** Online gateway choices such as PayHere/cards/Apple/Google Pay remain candidates requiring provider approval. Preserve hosted/tokenized online checkout; gateway result requires verified server notification/reconciliation, never redirect alone. Bank Deposit / Transfer is now a separate user-confirmed manual-payment option with request/evidence/review and receiving-account verification, not an online bank IPG or fake webhook. Both paths use accepted quote and guarded inventory; verified payment with unavailable reservation becomes resolution, not false confirmation.
+
+**Responsive, accessibility, error and empty behavior:** Accessible provider iframe/redirect and return path; pending/cancelled/failed/timeout show status lookup and support. Prevent duplicate charge. Mobile summary collapses only with total and essential terms still visible.
+
+#### Booking Confirmation
+
+**Layout and components:** Stage 5 Confirmation: success only after server-confirmed booking/payment policy, booking ID, room, schedule/timezone, guests, paid amount and next steps.
+
+**Interactions, data, permissions and safeguards:** Pending reconciliation gets explicit processing view. Ticket download/calendar include no PIN or identity documents by default; share is safe/redacted and opt-in. Calendar timestamps use real instant with timezone; receipt details come from backend. Download failures do not cancel booking.
+
+**Responsive, accessibility, error and empty behavior:** Stack details below md; heading/status announced once. Confirmation refresh must recover server booking by authorized ID; inaccessible/nonexistent booking returns safe error.
+
+#### Smart Door Access PIN
+
+**Layout and components:** Secure subview on confirmation/dashboard with masked credential, intentional Reveal/Hide and Copy, server validity window, room instructions and support.
+
+**Interactions, data, permissions and safeguards:** Draft PIN entry validity is [scheduled session start, session end), replacing the mockup pre-entry suggestion via ADR-002. Length, generation, rotation, revocation/re-entry, rate limits and offline compatibility remain open. Never adopt sample 482915. Reveal requires authorized owner/session and server eligibility; no raw PIN in URLs, exports, chart events, ordinary notifications, shared tickets or logs. SMS/email should deliver protected access links/instructions; raw-secret delivery requires a separate security decision. Clipboard copy explicit with warning about shared devices; conceal on session end. Unlock success requires actual device response.
+
+**Responsive, accessibility, error and empty behavior:** Readable masked/reveal controls and text explanation; do not announce full PIN automatically. Outside validity: unavailable reason and window. Device/network failure shows approved support path, never an invented bypass; emergency egress remains independently governed.
+
+#### Customer Dashboard
+
+**Layout and components:** Cinematic header/sidebar, greeting, upcoming/past tabs, booking cards, loyalty balance and referral banner only when enabled.
+
+**Interactions, data, permissions and safeguards:** Owner-scoped server bookings; show room, schedule, state, summary and View. PIN is masked and eligibility-gated. Modify/cancel eligibility and fees come from server policy; re-quote amendments. Loyalty and referral placeholders are omitted when feature unavailable.
+
+**Responsive, accessibility, error and empty behavior:** Sidebar becomes drawer below lg; cards stack; zero bookings offers Browse rooms; partial loyalty failure does not hide bookings. Expired session returns to auth preserving safe destination.
+
+#### Booking History
+
+**Layout and components:** Account destination with range/state/room filters, paginated list and detail/receipt.
+
+**Interactions, data, permissions and safeguards:** Record ID, room, date/time/timezone, amount/currency, booking and payment/refund state separately; owner authorization on every query/download. Retention limits labelled; paid cancellation is not automatically refunded.
+
+**Responsive, accessibility, error and empty behavior:** Compact cards <md or labelled horizontal table; filter reset for no matches, first-booking CTA for empty history, retry for service failure; downloads accessible and redacted.
+
+#### Loyalty and Referrals
+
+**Layout and components:** Balance panel, earned/pending/redeemed ledger, referral link, qualification rules, redemption options and progress when enabled.
+
+**Interactions, data, permissions and safeguards:** Backend calculates points, expiry, reversals and qualifying referrals. Do not copy 320 points or invent reward rates. Share/copy is intentional; no automatic messages. Reward discounts re-quote booking and respect eligibility/caps; referral attribution is privacy limited.
+
+**Responsive, accessibility, error and empty behavior:** Balance uses text, not color alone; ledger scroll/cards. No eligible rewards, expired points, disqualified referral and service failure clearly distinguished. Disabled feature has no misleading active CTA.
+
+#### Draft business behavior and source traceability
+[Feature catalog](PROJECT.md#features) CN-C01–CN-C09 and [business rules/lifecycles](PROJECT.md#business-rules) are canonical. Display capacity/guest surcharge, whole-hour extensions, optional PS4, online fee, itemized total, server hold expiry and purchase/refund-policy versions; do not duplicate price constants in page code. Illustrative total with selected PS4 must use the canonical example, not the inconsistent mockup amount.
+
+Sign-in is separate from explicit policy consent and verification. OCR extracts text only; uncertain documents need restricted manual review. Pending payment, confirmed booking, pending/installed access and delivery failure are separate customer messages. Confirmation must not imply PIN installation or guaranteed entry. Access window excludes the cleaning buffer. Modifications/extensions re-quote and recheck inventory, payment and access window revisions; late payment and refunds expose reconciliation status/support. Five-minute warning and checkout/exit events never imply everybody left or physical cleaning completed. Loyalty/referral rates remain OPEN_DECISION and hidden/disabled until supported.
+
+#### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+[Package specification](PROJECT.md#package-management) owns configurable catalog/duration/price behavior. Room/package cards and supported duration choices resolve applicable published package/service/venue configuration from backend. No production component hardcodes “3 hours” or a base price; existing values are labeled initial examples only. Display customer-visible inclusions and optional charged add-ons clearly; included extras are not charged again.
+
+Booking Summary/Payment use authoritative accepted quote/version/line items, expiry and policy references. A catalog update does not silently replace a valid quote; expired quote refresh exposes before/after terms for explicit acceptance. Reservation hold and price quote validity are separate. Confirmation/history/receipts show purchased package/version/display/duration/guest/inclusion/price/policy snapshots, not current catalog. Existing booking changes go through authorized amendment workflow, inventory/cleaning/payment checks and access/notification coordination. Keep existing cinematic shell, stepper, responsive behavior and accessibility rules.
+
+#### Bank payment — CN-KB-BANK-PAYMENT-001
+Payment stage offers existing Online Payment and Bank Deposit / Transfer (CN-C10 USER-CONFIRMED, implementation NOT_VERIFIED); render bank option only when approved instructions/method policy and review capacity configured. [Canonical bank workflow](PROJECT.md#bank-payments) owns request/quote/instruction versions, exact amount/fee, separate deadlines/service hours and actual hold status.
+
+Authenticated instructions view shows verified business details from versioned backend data, not invented accounts. File input declares permitted JPEG/PNG/PDF/size after policy choice, safe preview/progress and persistent labels for reference, declared amount/date/time, optional payer/name/note. Upload acknowledgement is **Payment Under Review**, never Paid/Confirmed or a CineNest-issued receipt. Display correction history and separate verified/allocated/outstanding/excess status without raw bank facts in public UI. Request-more-info, await-credit, rejection/late-claim, funds-received/booking-resolution and refund states link to support/status.
+
+Example copy: “Receipt submitted for verification. Your booking is not yet confirmed. We will notify you after review. Please do not pay again.” Only add provisional-expiry wording when inventory truly held; expired view stops inviting payment while preserving reconciliation/late-claim intake. Live server refresh is authoritative; offline/stale/error never reports successful upload/approval. Exact reviewer deadlines/lead time/fee remain open, no 24-hour numeric promise.
+
+After enough independently verified allocated funds and valid inventory/eligibility, confirmation displays purchased snapshot, verified ledger receipt and separate access pending/installed status. Notification or device failure does not change payment to failed. Owner dashboard/history shows unresolved requests and safe corrections/refund progress. No PIN release for unverified payment; original-ID entry checks unchanged. Shared cinematic/light panels, mobile stacked forms/amount/deadline cards, keyboard labels/error summaries/progress and accessible protected previews use existing tokens/components; no new theme or hover-only controls.
+
+<!-- migrated-end:knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md -->
+
+<a id="charts-metrics"></a>
+<!-- migrated-begin:knowledge/CINENEST-CHARTS-AND-METRICS.md -->
+### CineNest Charts and Metrics
+
+> CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT. Implementation: NOT_VERIFIED. Source S1 with S9 bank extension (supporting bank metrics RECOMMENDED). Contract version 1.2.0 extends observed chart-spec 1.1.0 for bank payments; historical 1.0.0→1.1.0 corrections remain in ADR-002; no backend or chart library is implemented.
+
+#### Canonical semantics and boundaries
+[Chart JSON](tokens/cinenest-chart-specs.json) is machine-readable contract guidance; [active tokens](tokens/cinenest-design-tokens.json) remain byte-for-byte unchanged. [ADR-002](ARCHITECTURE.md#adr-002) records corrections from the initial cash-as-revenue/ambiguous donut definition. [Business rules](PROJECT.md#business-rules) and [API contracts](ARCHITECTURE.md#data-api) define authoritative proposed sources.
+
+Gateway captures, independently verified bank credit collections, net collections (both incoming channels less evidenced outgoing refunds/reversals), and recognized revenue (approved recognition ledger/policy) are distinct. Uploaded/declared receipt values are never collections; allocations and verification processing are not second incoming cash events. No approved recognition policy exists; recognized revenue is Unavailable. These are not net profit. Provider fees, taxes, chargebacks and recognition allocation require OD-16/07 approval. Deduplicate unique ledger events; refund events use refund date and original purchase scope. Do not infer booking count from capture count.
+
+Today's confirmed bookings use confirmedAt; today's sessions use scheduled session_start; creation-cohort statistics use createdAt. Live booking-based status and physical occupancy are distinct. Unknown sensors/exit events do not imply unoccupied. Donut center and slices share all scoped enabled rooms including unknown; a bookable-only rate must be another explicitly labelled metric. Utilization uses customer session minutes, not cleaning or motion minutes, and a versioned sellable-minute denominator.
+
+Storage: UTC RFC3339 instants; reporting: explicit Asia/Colombo half-open [from,to), local midnight to next local midnight. End-date UI converts to next local date exclusive. Other supported zones require explicit configuration and offset-disambiguated DST labels; do not use browser timezone. Week start Monday remains proposed. Currency default LKR from S1, integer minor units, locale/ISO label; mixed currency never summed without approved FX. Round only display, not source aggregates.
+
+Prior comparison returns exact preceding calendar boundaries in same timezone/granularity, compares equivalent complete portions and labels partial periods. Zero/missing denominator or previous baseline → N/A; unavailable/partial data never zero. Complete empty counts can be zero. DEMO examples never serve as production fallback. Missing buckets show gaps. Freshness includes asOf, completeness and observedAt; actual thresholds/refresh are open. Authorized exports use exactly visible filters, units, metric IDs/date bases and scope, not a paginated subset. No secret or identity evidence in reports/tooltips.
+
+Grid/axis use chart.grid/chart.axis. Series use stable tokens and non-color differentiation; equivalent tables, focus/tap tooltips and full labels required. Responsive plots minimum 240px with reduced ticks/wrapped legends; errors/no records/no scope/stale/partial are explicit. Chart library selection remains open (Recharts OR Apache ECharts).
+
+#### DEMO calculation fixtures
+- Capture 100000 and successful refund 20000 minor units → net collections 80000; recognized revenue unavailable without recognition policy. Two confirmed booking IDs remain count 2 even if three captures.
+- Room states 2 occupied + 2 available + 1 cleaning + 1 maintenance + 1 unknown → 7 slices; center booking-based occupancy 2/7 = 28.571…%. Physical occupancy remains unknown.
+- Operating interval 09:00–17:00 minus 12:00–13:00 blackout → 420 sellable minutes; session union 10:00–14:00 clipped excluding blackout → 180 minutes, 42.857…%. Any buffer exclusions require the reported policy version.
+- Cohort 5 / cancelled 1 → 20%; zero denominator → N/A. Captures today and scheduled sessions today are intentionally different cohorts.
+
+#### Revenue and Bookings Chart
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-REVENUE-BOOKINGS |
+| Chart type | bar-line |
+| Formula | Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Booking count = distinct confirmedAt booking IDs, source-independent (not receipt/credit count). Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately. |
+| Population | Unique independently verified incoming money ledger events in financial range and authorized scope; bank unallocated/excess scope is authorized receiving account, room attribution only when reliable; disclosed unmatched scope, no fabricated room assignment. |
+| Units | LKR minor units with ISO currency and integer counts (separate scales) |
+| Time basis | UTC instants; Asia/Colombo reporting boundaries; gateway capturedAt, bank_credited_at, confirmed outgoing refund/reversal event times; verified_at cutoff asOf. Booking confirmedAt and service session_start_at independent. |
+| Axes/labels | X local bucket label; left money/currency; right integer booking count. Both start at zero; signed financial axis may extend below zero. |
+| Filters | range, granularity, room, location, currency, timezone |
+| Tooltip | Exact range/asOf/timezone/currency; gateway captures, independently verified bank credits, confirmed outgoing refunds/reversals, total/net collections; distinct verified_at/creditedAt/allocatedAt bases, completeness. Recognition only with approved policy; confirmed bookings separate scale. |
+| Contract | financialBuckets/financialSummary fields gatewayCapturedMinor, verifiedBankCreditMinor, confirmedRefundMinor, verifiedReversalMinor, netCollectionsMinor; event time + asOf evidence cutoff; distinct bookingBuckets/recognitionBuckets. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Net collections; confirmed bookings (combo only); explicit selected basis. Recognized revenue never an alias of net collections. |
+| Responsive | Full width; minimum 240px plot; reduce ticks, stack legend; dual-axis labels retained, table available. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Net collections = `chart.revenue`; Confirmed bookings = `chart.bookings` |
+
+#### Room Status Donut Chart
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-ROOM-OCCUPANCY |
+| Chart type | donut |
+| Formula | Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts × 100. Zero rooms → N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. State mapping uses versioned maintenance > unknown/stale readiness > cleaning > scheduled occupied > cleared available precedence; conflicting facts raise an incident and never prove physical presence. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | integer counts / defined percent / state labels |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | No axes; center label booking-based occupied / all scoped rooms and denominator. Physical occupancy unknown unless separate validated observation contract. |
+| Filters | location, room, snapshotAt |
+| Tooltip | State, count, percentage of all scoped status rooms, observedAt and freshness. Unknown is not unoccupied. |
+| Contract | roomSnapshot with mutually exclusive states, stateObservedAt and snapshotAt; explicit unknown/stale handling. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | All five states with counts; occupied violet, available green, cleaning amber, maintenance red, unknown gray. |
+| Responsive | Minimum 240px graphic; legend below <lg; counts and table readable without hovering. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Occupied = `chart.occupied`; Available = `chart.available`; Cleaning = `chart.cleaning`; Maintenance = `chart.maintenance`; Unknown = `chart.unknown` |
+
+#### Revenue Trend Chart
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-REVENUE-TREND |
+| Chart type | line-area |
+| Formula | Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately. |
+| Population | Unique independently verified incoming money ledger events in financial range and authorized scope; bank unallocated/excess scope is authorized receiving account, room attribution only when reliable; disclosed unmatched scope, no fabricated room assignment. |
+| Units | LKR minor units with ISO currency and integer counts (separate scales) |
+| Time basis | UTC instants; Asia/Colombo reporting boundaries; gateway capturedAt, bank_credited_at, confirmed outgoing refund/reversal event times; verified_at cutoff asOf. Booking confirmedAt and service session_start_at independent. |
+| Axes/labels | X bucket/date; Y money/currency; zero baseline and negative values preserved. |
+| Filters | range, granularity, room, location, currency, timezone |
+| Tooltip | Exact range/asOf/timezone/currency; gateway captures, independently verified bank credits, confirmed outgoing refunds/reversals, total/net collections; distinct verified_at/creditedAt/allocatedAt bases, completeness. Recognition only with approved policy; confirmed bookings separate scale. |
+| Contract | financialBuckets/financialSummary fields gatewayCapturedMinor, verifiedBankCreditMinor, confirmedRefundMinor, verifiedReversalMinor, netCollectionsMinor; event time + asOf evidence cutoff; distinct bookingBuckets/recognitionBuckets. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Net collections; confirmed bookings (combo only); explicit selected basis. Recognized revenue never an alias of net collections. |
+| Responsive | Full width; fewer ticks; area may be removed at small widths without removing values. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Net collections = `chart.revenue` |
+
+#### Popular Time Slots Chart
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-POPULAR-TIME-SLOTS |
+| Chart type | bar |
+| Formula | Distinct confirmed noncancelled booking IDs whose scheduled start falls within selected range, grouped by configured local hour band. Explicit business bands [startHour,endHour); cross-midnight bands split or carry dayOffset. Popularity is count, not occupied minutes. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | integer counts / defined percent / state labels |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | X labelled local time bands (24-hour or locale time); Y integer booking count from zero. |
+| Filters | range, room, location, timezone, slotBandDefinition |
+| Tooltip | Band including AM/PM or 24-hour clarity, booking count, range and timezone. |
+| Contract | slotBuckets with bandId, label, startHour/endHour/dayOffset and bookingCount; band definitions from configured operating hours. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Bookings started; label rankings as tied when counts equal. |
+| Responsive | Horizontal bars at <sm; preserve complete time-band labels; no ambiguous duplicate 9–12. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Bookings started = `chart.bookings` |
+
+#### Room Utilization Chart
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-ROOM-UTILIZATION |
+| Chart type | horizontal-bar |
+| Formula | Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range × 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator → N/A; unknown/incomplete inputs → unavailable. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | percent and minutes |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | Y room label; X 0–100 percent. Never cap invalid >100 data silently; flag contract error. |
+| Filters | range, room, location, timezone |
+| Tooltip | Room, booked/sellable minutes, percent, excluded intervals and range/timezone. |
+| Contract | roomUtilization with roomId/name, bookedMinutes, sellableMinutes, utilizationPercent and completeness; server resolves blackout/buffer policy. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Time utilization; optional comparison dashed, not another occupancy definition. |
+| Responsive | Vertical list of horizontal bars; long names wrap and table remains available. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Time utilization = `chart.occupied` |
+
+#### Booking Statistics
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-BOOKING-STATISTICS |
+| Chart type | stacked-bar-and-summary |
+| Formula | Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | integer counts / defined percent / state labels |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | X creation bucket; Y integer booking count, zero baseline. |
+| Filters | range, granularity, room, location, timezone |
+| Tooltip | Bucket, each state count, cohort total, cancellation rate, asOf. |
+| Contract | bookingStateBuckets with cohort basis createdAt, asOf and all backend states mapped to documented display buckets; totals from same dataset. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | All included states, with text and stable color; Other states expands in data table. |
+| Responsive | Stacked chart stacks above summary cards <lg; table retains unmapped states. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Confirmed = `chart.available`; Ongoing = `chart.bookings`; Completed = `chart.occupied`; Cancelled = `chart.maintenance`; Other states = `chart.unknown` |
+
+#### Financial KPI Cards
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-FINANCIAL-KPIS |
+| Chart type | kpi-cards |
+| Formula | Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator → N/A; prior zero/missing → N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately. |
+| Population | Unique independently verified incoming money ledger events in financial range and authorized scope; bank unallocated/excess scope is authorized receiving account, room attribution only when reliable; disclosed unmatched scope, no fabricated room assignment. |
+| Units | LKR minor units with ISO currency and integer counts (separate scales) |
+| Time basis | UTC instants; Asia/Colombo reporting boundaries; gateway capturedAt, bank_credited_at, confirmed outgoing refund/reversal event times; verified_at cutoff asOf. Booking confirmedAt and service session_start_at independent. |
+| Axes/labels | No axes; each card has label, value/currency and named comparison basis. |
+| Filters | range, room, location, currency, timezone |
+| Tooltip | Exact range/asOf/timezone/currency; gateway captures, independently verified bank credits, confirmed outgoing refunds/reversals, total/net collections; distinct verified_at/creditedAt/allocatedAt bases, completeness. Recognition only with approved policy; confirmed bookings separate scale. |
+| Contract | financialBuckets/financialSummary fields gatewayCapturedMinor, verifiedBankCreditMinor, confirmedRefundMinor, verifiedReversalMinor, netCollectionsMinor; event time + asOf evidence cutoff; distinct bookingBuckets/recognitionBuckets. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Not required; label every card. Up/down is descriptive, not always good/bad. |
+| Responsive | 1/2/4 columns base/sm/lg; values wrap without truncation. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Net collections = `chart.revenue`; Gateway captured collections = `chart.available`; Successful refunds = `chart.maintenance`; Average booking value = `chart.bookings`; Recognized revenue (only with approved recognition policy) = `chart.revenue` |
+
+#### System and IoT Status Indicators
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-SYSTEM-IOT-STATUS |
+| Chart type | status-list-and-timeline |
+| Formula | Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices ×100, unknown included; 0 devices → N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim. |
+| Population | Authorized venue/room dataset; finance ledger events, booking cohort or room/device snapshot as specified in formula; no client-page-only aggregates. |
+| Units | integer counts / defined percent / state labels |
+| Time basis | UTC instants; explicit Asia/Colombo [from,to) local reporting boundaries; named financial event / confirmedAt / createdAt / scheduled service / snapshot basis as formula states. |
+| Axes/labels | Status list has no axes; optional timeline X instant/date, Y state per service/device lane. |
+| Filters | location, room, deviceType, service, range |
+| Tooltip | Entity, status, observedAt/timezone, age, freshness threshold and safe diagnostic. |
+| Contract | serviceHealth and deviceHealth with status, observedAt, staleAfterSeconds, required, safeReason and telemetry schema version. |
+| Authorized data source | Backend-authorized module read projections under analytics.read, room/device.read or payments.read where applicable; proposed contract, no actual endpoint verified. |
+| Freshness | Response asOf/complete/warnings plus observedAt for snapshots; per-service refresh/stale threshold policy TBD, stale values labelled and retained. |
+| Legend | Online/degraded/offline/unknown with icons and words; no all-green default. |
+| Responsive | List wraps to cards; timeline scrolls in labelled region; equivalent event table. |
+| Accessibility | Text legend/labels, focus/tap tooltip, non-color cues and equivalent authorized data table; keyboard controls and reduced motion. |
+| Empty/error states | Complete empty dataset = valid zero counts; denominator zero = N/A; missing/partial/error = unavailable/partial with retry and freshness, never zero or DEMO fallback. |
+| Colors | Online = `chart.available`; Degraded = `chart.cleaning`; Offline = `chart.maintenance`; Unknown = `chart.unknown` |
+
+#### Payment and Add-on Breakdown Charts
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-PAYMENT-ADDON-BREAKDOWN |
+| Chart type | separate-bars |
+| Formula | Payment panel groups deduped independently verified gateway capture and bank credit incoming money by channel/method, respective financial event time and asOf evidence cutoff; uploaded/declared or allocated amounts not extra collections. Add-on panel retains sold immutable quote-item values/quantities by eligible confirmedAt cohort, not cash/recognition; include purchased package inclusion flags so included free extras are not a paid sale. Unmatched/excess bank balance displayed separately, never add-on revenue. |
+| Population | Verified incoming money by channel for payment panel; finalized purchased quote item lines for add-ons; scope/date basis separately labelled. |
+| Units | Single ISO currency minor-unit amounts, quantities and distinct counts separately labelled. |
+| Time basis | Gateway capturedAt versus bank_credited_at with verified_at asOf cutoff; sold add-on confirmedAt cohort/session date distinct. |
+| Axes/labels | Separate panels: category vs money/quantity with explicitly selected unit; zero baseline; retain negative refund-adjusted views when supplied. |
+| Filters | range, room, location, currency, timezone, paymentMethod, addonType |
+| Tooltip | Channel, verified incoming amount/currency/event-time/asOf and allocation/unmatched qualification; add-on purchased item count/amount/cohort distinct; no receipt amount as collections. |
+| Contract | paymentBreakdown {methodId, gatewayCapturedMinor, verifiedBankCreditMinor, collectionsMinor, externalEventCount}; addonBreakdown remains sold quote-item cohort; unmatchedBankBalance separate. |
+| Authorized data source | Payments ledger and Pricing/Booking immutable purchase-item projection; payments.read/analytics.read scope. |
+| Freshness | Server asOf/complete; stale or missing allocation labelled. |
+| Legend | Verified incoming collections by channel (gateway captures and bank credits) and sold add-on values are separate populations; never a combined pie denominator. |
+| Responsive | Horizontal bars on mobile; full labels and supporting tables remain. |
+| Accessibility | Equivalent data table, non-color labels, focus/tap tooltips and keyboard filters. |
+| Empty/error states | Valid complete empty counts zero; unknown allocations unavailable; error/partial dataset never invented zero. |
+| Colors | Verified incoming collections by payment channel = `chart.revenue`; Sold add-ons by type = `chart.bookings` |
+
+#### Bank Payment Review and Finance Metrics
+
+> CN-KB-BANK-PAYMENT-001 · Supporting metrics RECOMMENDED; Implementation NOT_VERIFIED. [Canonical bank workflow](PROJECT.md#bank-payments) owns fund/review states. [Chart JSON](tokens/cinenest-chart-specs.json) supplies contracts; no live bank/provider/API is verified.
+
+| Aspect | Specification |
+|---|---|
+| Metric ID | CN-M-BANK-PAYMENT-REVIEW-FINANCES |
+| Chart type | kpi-cards-and-review-age-bars |
+| Formula | BN-M01–08 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero. |
+| Population | Open bank review requests, unique bank credit ledger, allocation ledger and outgoing refunds; each named metric uses explicit population. |
+| Units | Integer counts, elapsed minutes, exact single-currency minor units; no shared axis across unlike units. |
+| Time basis | Snapshot asOf vs evidence_submitted_at/bank_credited_at/verified_at/allocated_at/bank_refund_confirmed_at/session_start_at; UTC storage and Asia/Colombo boundaries. |
+| Axes/labels | Queue age bars: X elapsed minutes, Y request/age band; finance cards no axes, labelled currency/time basis. No receipt amount collections axis. |
+| Filters | range, venue, roomWhenAttributed, receivingAccount, reviewState, assignee, paymentChannel, currency, timezone, explicitTimeBasis |
+| Tooltip | Metric ID/definition/population, exact date basis/asOf/currency, aging SLA configuration, scope/attribution/completeness; no raw receipts or bank details. |
+| Contract | bankReviewMetrics with asOf/openRequestCount/ageMinutes/reviewDueAt; bankCredit/Allocation/Refund ledger aggregates keyed by external credit/operation ID; bankMetrics definitions authoritative. |
+| Authorized data source | Backend Payments authorized bank.review/payments.read/report.export and venue/receiving-account scope; Booking purchased refs; no actual API/bank feed verified. |
+| Freshness | asOf/complete/warnings and individual submission/credit/verify/allocation times; review updates/delayed bank matching labelled; configured stale thresholds open. |
+| Legend | Each named metric/date basis explicit; colors reuse chart.bookings/available/revenue/cleaning/maintenance; no new palette, non-color status labels. |
+| Responsive | Finance cards 1/2/4 columns; queue age horizontal bars with labelled table and wrapped legends on mobile. |
+| Accessibility | Equivalent scoped data table, textual units/state/date basis, focus/tap tooltips, keyboard filters; no color-only or inaccessible receipt preview. |
+| Empty/error states | Empty reviewed population = zero valid count; age with no requests → N/A; unavailable/partial/stale permission/error distinct with retry; never DEMO or declared values fallback. |
+
+##### Bank metric populations and clocks
+
+| ID / metric | Population | Formula | Units | Time basis | Color |
+|---|---|---|---|---|---|
+| BN-M01 / pendingReviewCount | Distinct bank request IDs with unresolved submitted/review_required/reviewing/awaiting_credit/information_requested work, one per request; repeated receipts do not add requests | count distinct requestId in open review states at asOf | integer request count | snapshot asOf; submitted date filter explicitly independent | `chart.bookings` |
+| BN-M02 / queueAgeMinutes | Same open request population as BN-M01; first outstanding submission since unresolved cycle, corrections do not reset | asOf - oldest unresolved evidence_submitted_at per request in elapsed minutes; distribution/buckets from configured service; overdue only if approved review_due_at passed | elapsed minutes; separate approved service-hours SLA if selected | snapshot asOf and evidence_submitted_at, never approvedAt; elapsed vs service hours labelled | `chart.cleaning` |
+| BN-M03 / verifiedBankFundsMinor | Unique independently verified receiving-account credit facts, including unallocated/excess; declared/uploaded amounts excluded | sum unique positive verified credit amountMinor first verified_at in range; verification correction/bank reversal separate evidence, no double verification entry | integer minor units / ISO currency | verified_at operational processing range, credited_at shown separately; not total collections-by-credit-date | `chart.available` |
+| BN-M04 / bankCollectionsMinor | Unique actual verified receiving-account credits with bank_credited_at in range and verified by asOf; all actual credits including excess but not booking revenue | sum deduped bank credit amountMinor; bank-verified reversals/refunds separately deducted for net money measure, allocation never adds another credit | integer minor units / ISO currency | bank_credited_at financial event time; verified_at cutoff asOf; late review can revise historical projection with clear asOf | `chart.revenue` |
+| BN-M05 / allocatedBookingPaymentsMinor | Scoped accepted quote-linked bank/gateway allocation ledger deltas at asOf; only authenticated gateway/bank-reconciled funds | sum signed unique allocation amount deltas (including separately audited allocation reversals), capped by quote due and available verified funds; source channels separate | integer minor units / ISO currency | allocated_at ledger event range, booking session_start_at is separate service filter; allocation is not cash recognition | `chart.bookings` |
+| BN-M06 / unmatchedExcessMinor | Unique verified bank credits asOf minus active non-refunded allocations (after linked reversals/refund adjustments) and confirmed outgoing refunds/actual bank reversals; refund-reserved portion explicitly identified | per-credit remaining amount; split unmatched vs accepted-quote overpayment/excess only using linked facts; never derive from receipt claim; nonnegative invariant failures flagged; active allocations released/refined through refund adjustments so outgoing refunds not deducted twice; reserved/available balances separate | integer minor units / ISO currency | balance snapshot asOf, optional credited-date cohort explicit; not a movement summed again with collections | `chart.cleaning` |
+| BN-M07 / confirmedBankRefundsMinor | Unique actual outgoing bank refunds with approved destination and independently supported completion evidence | sum confirmed outgoing refund amountMinor once; requested/approved/initiated/sent/failed/unknown excluded from completed money movements | integer minor units / ISO currency | bank_refund_confirmed_at/outgoing settlement instant selected by evidenced bank contract; not approval time | `chart.maintenance` |
+| BN-M08 / paymentChannelCollectionsMinor | Deduped gateway captures + actual verified bank credits; matched internal own-account transfers/duplicates excluded through reconciliation; allocation excluded | group verified incoming collections by gateway vs bank, sum once per external money event. Source bank credit is never card capture; refunds shown as separate channel movements | integer minor units / ISO currency | gateway capturedAt and bank_credited_at, verified/asOf cutoff labelled; recognition/service revenue remains separate | `chart.revenue` |
+
+Room-filtered booking allocation and global receiving-account collections can have different attributable scope; label unmatched/unknown room attribution rather than invent it. Exports use identical authorized scope, asOf/clock/currency and metric IDs as view. Receipt-uploaded amounts excluded even when review count is positive. AsOf late verification can legitimately revise past credit-date collections; display processing time separately. No recognized service revenue without approved recognition policy; excess is not sold package/add-on revenue. Existing DEMO fixtures are gateway-only unless labelled otherwise, never production fallback.
+
+<!-- migrated-end:knowledge/CINENEST-CHARTS-AND-METRICS.md -->
+
+<a id="interactions-a11y"></a>
+<!-- migrated-begin:knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md -->
+### CineNest Interactions Responsive Design and Accessibility
+
+CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT. Implementation: NOT_VERIFIED. Source S1 and existing visual/page guidance. No rendered application exists.
+
+#### Canonical shared references
+[Design system](DESIGN.md#design-system) defines tokens/typography/spacing/breakpoints; [admin](DESIGN.md#admin-pages) and [customer](DESIGN.md#customer-pages) define pages; [business lifecycles](PROJECT.md#business-rules) define behavior. Reuse shared shell/components with role-specific navigation, not divergent page styles.
+
+#### Interaction states and safe feedback
+Each request has initial/loading/complete/empty/error/denied/stale states. Async writes keep requested/pending/result distinct; button loading prevents duplicate submission while preserving label/focus. Success comes from authoritative resource state, not browser navigation. Failed transport shows unknown outcome/status lookup before retry. Use safe correlation IDs and actionable messages, no raw provider payload. Skeletons retain geometry; background refresh preserves previous data with freshness.
+
+Hold countdown comes from server expiresAt with accessible non-ticking status announcements; warn before expiry and permit extension only by server policy. An expired hold revalidates availability/quote, never silently confirms late payment. Forms have persistent labels, fieldset/legend, descriptions, inline errors and focusable error summary. Preserve safe draft inputs across reauthentication, never evidence/PINs/tokens in query strings or generic storage.
+
+Dialogs trap/restore focus; Escape closes safe dialogs, destructive actions explain consequences/reason. Confirmed booking with access pending, payment unknown, device offline, cleaning_required and physical occupancy unknown must be distinguishable with text/icons. Do not infer OFF from telemetry absence or success from device command dispatch. PIN reveal/copy is explicit and owner-scoped, masked by default; no automatic screen-reader announcement of full credential.
+
+#### Responsive acceptance
+Use existing token breakpoints base/<640, sm/640, md/768, lg/1024, xl/1280, xxl/1536. Below lg sidebar becomes focus-managed drawer; KPI 1/2/4 columns base/sm/lg, room cards 1/2/3 base/md/xl. Summary/payment stack below md; <sm stepper gives current label/progress with all steps available. Dense ledgers/audit charts offer labelled scroll/data-table alternatives instead of hiding essential information. Preserve room-card/table parity. Mobile time bands/amount/currency/status stay unambiguous. Sticky controls cannot cover terms/errors/focus; safe-area and landscape checked.
+
+#### Accessibility acceptance target
+WCAG 2.2 AA is a desired acceptance target, not certification. Keyboard-only critical flows, visible focus, semantic landmarks/one H1, skip link, logical order, labelled controls, ≥44px targets, appropriate text/nontext contrast, reduced motion, captions/alternatives and screen-reader announcements. Tables retain scope/caption/aria-sort; charts supply equivalent scoped data tables/non-color series cues. No hover-only action. Login/upload/payment provider flow must be accessible or have approved alternative/support. Test 320–1536px plus 200%/400% zoom/reflow; image/gradient/control/focus contrast measured in rendered states.
+
+#### Future evidence (not run here)
+Booking conflict/hold expiry, quote revision, upload ambiguity/manual review, payment duplicate/pending/late capture, access installation/delivery failure, extension conflict and offline device control need keyboard/screen-reader and real backend/hardware tests. [Acceptance checklist](DESIGN.md#ux-acceptance) and [delivery phases](PROGRESS.md#delivery-phases) capture continuous gates.
+
+<!-- migrated-end:knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md -->
+
+<a id="adr-001"></a>
+<!-- migrated-begin:knowledge/CINENEST-DESIGN-DECISION-ADR-001.md -->
+### ADR-001: Unified CineNest Hybrid UI
+
+> Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
+> Recorded: 2026-10-13. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+
+#### Decision
+Accept the user's approval of combining both admin references into one coherent admin interface and retaining the customer cinematic theme. Approval covers visual direction; this ADR does not assert approval of missing business policies or exact proposed HEX values. Adopt Mockup-1's operational dashboard/sidebar, Showcase-2's room cards, device details and health visibility, and the customer reference's dark hero/light booking panels. All future interfaces must use shared semantic tokens and components in [design system](DESIGN.md#design-system).
+
+#### Context and alternatives
+The two admin composites overlap but differ in dashboard hero prominence, room state labels, live-control arrangement and analytics naming. Copying either alone loses useful approved features; allowing independent page styling creates inconsistent state/control language. A unified shell/component model preserves both references and supports customer identity without applying dark backgrounds to every form.
+
+#### Consequences
+Use operational information before decorative hero content; hero is optional and never replaces status. Canonical labels: Customer Management (mockups “Users”), Analytics and Reports (mockups “Analytics”/“Reports”), Room Live Control nested under Rooms. Use consistent room cards and independent room/device states. Five customer booking steps are stable across all screens. Preserve charts but define their actual metrics and backend data sources. Room control presents context, requested state and observed state separately. Responsive behavior and accessibility can alter exact screenshot density/spacing.
+
+#### Priority and conflict resolution
+1. Confirmed business, safety, privacy and legal requirements and existing approved architecture govern behavior.
+2. This approved hybrid direction and shared accessibility acceptance target govern visual consistency.
+3. Proposed detailed tokens/contracts govern only until reconciled with missing authoritative sources.
+4. Screenshot details are illustrative, not operational policy or truth.
+
+No source documents were found to verify level 1. Record unresolved decisions in [traceability](DESIGN.md#reference-traceability); do not invent architecture compliance. Security-sensitive actions must remain unimplemented until backend authorization, device safety, identity handling and payment reconciliation rules are confirmed. Approving a visual does not authorize unsafe automation.
+
+#### Change and publication governance
+Before implementation, design/architecture owners attach knowledge-pack and source versions, map proposed capabilities/contracts to actual services, approve privacy/safety/finance decisions, and reconcile exact tokens. Design-system changes update token JSON first, regenerate theme, update chart specs and affected page specs, run [validation](validate_design_kb.py) and complete [acceptance](DESIGN.md#ux-acceptance). A material change to this hybrid direction requires a superseding ADR linked here; preserve history.
+
+The user supplied the canonical repository https://github.com/Hasitha3513/Theater-Project.git on 2026-10-13. A separate clone under repository/ confirms it is empty (no commits or files). Its initial branch is main and origin points to that URL. No AGENTS.md or commit/publication conventions exist in the remote yet. Preserve the original workspace and its read-only .git placeholder; use the separate clone for Git operations. The user explicitly authorized commit and push. Reuse the existing local Git author configuration for the initial knowledge-only commit. Do not invent an identity, copy unrelated repository policies, or publish externally without authorization. Report commit/push results accurately. This ADR records the pre-publication decision; inspect Git history and the task completion report for the resulting commit and push evidence.
+
+#### Acceptance and follow-up
+Documentation and machine-readable checks can pass now. Full architecture reconciliation, implementation QA, source-pack approval remain outstanding; initial publication is authorized. See [validation report](PROGRESS.md#feature-validation-history). Scope contains no new frontend features.
+
+#### Historical follow-up — 2026-10-14
+Decision status: APPROVED (hybrid visual direction only). Implementation: NOT_VERIFIED. Initial publication is now evidenced locally by commit 16710dcf3e3bfb2453bab24910890279691fc06d and its origin/main tracking ref at inspection; the initial empty-clone narrative above is historical. CN-KB-FEATURES-TECH-001 adds features, draft rules and architecture recommendations. [ADR-002](ARCHITECTURE.md#adr-002) records explicit PIN-window/metric clarifications and preserves active tokens amid a source-palette conflict. It does not supersede hybrid direction approval or invent approved technology.
+
+<!-- migrated-end:knowledge/CINENEST-DESIGN-DECISION-ADR-001.md -->
+
+<a id="reference-traceability"></a>
+<!-- migrated-begin:knowledge/CINENEST-REFERENCE-TRACEABILITY.md -->
+### CineNest Reference Traceability
+
+> Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
+> Recorded: 2026-10-13. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+
+#### Inspected repository inventory
+Initial workspace: knowledge/ containing exactly three PNG images; empty read-only .git/.agents/.codex/.aws directories. No existing knowledge-base prose, UI documentation, source code, frontend architecture, package manifest, tokens, theme configuration, chart components, development standards or applicable AGENTS.md were found. Follow-up: the user supplied the canonical GitHub URL, which was successfully cloned into repository/ and found to be empty, with no commits or files. Thus no remote architecture or standards are available either. No existing source file was modified. Proposed architecture-neutral specification assets are under knowledge/, not application styles or API code. The requested knowledge pack, architecture, requirements and conditions remain unavailable after user accepted proceeding (“ok”). Do not interpret this absence as approval of a framework, provider or policy.
+
+#### Preserved references
+The third requested name includes “(1)”, but the only customer image available is named without it. Preserve the available original without renaming and record the mapping; it was visually inspected and is the customer composite described. Exact-file equivalence to an unavailable “(1)” image is not verified.
+
+| Reference | Original file | Evidence | SHA-256 |
+|---|---|---|---|
+| R1 | [CineNest Cinema Admin Dashboard Mockup-1.png](CineNest%20Cinema%20Admin%20Dashboard%20Mockup-1.png) | Operational dashboard, dark sidebar, KPI tiles, revenue+bookings, room live-control, customers/analytics. | `52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f` |
+| R2 | [CineNest Cinema Dashboard Showcase-2.png](CineNest%20Cinema%20Dashboard%20Showcase-2.png) | Cinematic banner, room/device cards, health list, detailed room controls and booking/customer tables. | `27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7` |
+| R3 | [CineNest Private Cinema Booking UI.png](CineNest%20Private%20Cinema%20Booking%20UI.png) | Dark customer hero, gold identity, light wizard, room selection, verification/payment/confirmation and account cards. | `a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852` |
+
+#### Decision-to-source mapping
+| Decision / pages | Evidence | Resolution and specification |
+|---|---|---|
+| Unified admin shell, Dashboard | R1 dashboard/topbar; R2 hero/health | Operational-first, optional banner; [admin](DESIGN.md#admin-pages), [ADR](DESIGN.md#adr-001) |
+| Booking Management | R1/R2 booking tables | Shared filters, state/payment separation, scoped actions; admin spec |
+| Room Management and Live Control | R1 room grid/control; R2 device cards/control | Card/table toggle, telemetry freshness and acknowledged commands; admin spec |
+| Customer Management | R1/R2 user tables | Canonical customer naming, restricted verification; admin spec |
+| Payments/Refunds, IoT, Promotions, Settings | R1/R2 sidebar references; limited full-page evidence | Full-page proposals derived from named modules, not unseen visual approval; admin spec |
+| Analytics/Reports | R1 analytics and both dashboards | Shared metrics and chart tokens; [charts](DESIGN.md#charts-metrics) |
+| Audit Logs | User required module; no full mockup | Proposed permissioned read-only page; admin spec |
+| Landing, room selection, verification, summary, payment, confirmation, account | R3 composite | Cinematic shell/light panels; [customer](DESIGN.md#customer-pages) |
+| Google auth, Date/Time, PIN, history, loyalty | R3 controls/step labels plus user scope | Full interactions are proposed; no provider/policy claims; customer spec |
+| Gold/violet identity, dark sidebar, white cards | R1/R2/R3 | Normalized proposed palette; [tokens](tokens/cinenest-design-tokens.json) and [design system](DESIGN.md#design-system) |
+| Responsive, accessibility, capabilities, backend contracts | User scope and architectural guidance; not screenshot evidence | Proposed shared baseline; acceptance checklist, charts and page specs |
+
+#### Conflict and missing-source register
+| ID | Conflict or uncertainty | Resolution now | Owner / implementation gate |
+|---|---|---|---|
+| C01 | Exact proposed knowledge-pack tokens unavailable | Mark palette/font proposed; no invented supplied-token claim | Design owner supplies pack and approves/reconciles values |
+| C02 | Existing architecture/roles/endpoints absent | Capability and data contracts are proposals; framework neutral | Architect maps actual roles/services before implementation |
+| C03 | Requirements/conditions/safety documents absent | Do not claim age, upload limits, pricing, cancellation or access policy approved | Product/security owners attach source versions |
+| C04 | Booking step numbering inconsistent in R3 | Stable five-step sequence; summary within Payment | Resolved visual inconsistency under hybrid decision |
+| C05 | Screenshot price/extras totals inconsistent and static metrics | Server itemized quote/aggregates only; sample numbers never operational | Product/finance validate quote and ledger semantics |
+| C06 | Occupancy donut vs time utilization and maintenance states | Separate snapshot rate and interval utilization; cleaning/unknown explicit | Backend owner confirms state map and sellable intervals |
+| C07 | R1 binary lights/lock vs R2 dimmer/device detail | Capability-driven controls with requested vs observed state | IoT/safety owner confirms bounds, occupied-room operations and safe egress |
+| C08 | R3 full identity card/age and exposed sample PIN | Restrict previews, mask data, intentional PIN reveal; no sample credentials | Privacy/security approve retention, verification and PIN lifecycle |
+| C09 | 18+, 5MB, 15-minute activation, providers and amenities shown | Illustrations only; no policy inference | Business/security approve exact rules/integrations |
+| C10 | Hero competes with operational dashboard | Optional secondary hero; status first | Resolved visual hierarchy |
+| C11 | Screenshot text/control contrast and dense desktop layout | Accessible normalized tokens, reflow/table alternatives | Future UI requires rendered keyboard/screen-reader/contrast QA |
+| C12 | Customer requested filename differs | Keep available original and hash; exact missing alias unverified | User can supply alternate source if materially different |
+| C13 | Initial workspace Git placeholder unusable; supplied remote is empty | Separate clone of https://github.com/Hasitha3513/Theater-Project.git created; knowledge assets prepared for initial main commit | Existing local Git author configuration reused; user explicitly authorized commit and push; no remote governance yet |
+| C14 | Loyalty/referral earning, eligibility and refund rules absent | Render only backend-supported feature/rules; no invented rate | Product/finance approve ledger and reversals |
+| C15 | Branch/currency/timezone support unknown | Location scopes conditional; Asia/Colombo/LKR proposed presentation | Architect/business confirms venue configuration |
+
+No actual contradiction with an existing architecture document can be assessed because none is present. Safety/privacy guidance here is proposed design guardrails, not a replacement for project-specific rules. Resolve open rows with dated source references; preserve the original evidence and update ADR/checklist together.
+
+#### Current source reconciliation — CN-KB-FEATURES-TECH-001
+2026-10-14: established Git KB is repository/knowledge/ at inspected HEAD 16710dc, not an empty repository now. No application manifests/modules or source PDFs are present. Existing tokens/chart specs are version 1.0.0 at baseline; no overall KB version/manifest/changelog/archive was present. Source locations, checksums, missing PDFs and decision/implementation fields are maintained in [source register](sources/cinenest-source-register.json) and [open decisions](ARCHITECTURE.md#open-decisions).
+
+S1 supplied current business defaults as DOCUMENTED_DRAFT: canonical [rules](PROJECT.md#business-rules). C09’s mockup pre-entry timing is superseded as draft by session-start-to-end access in ADR-002; no approved policy inferred. C01’s exact tokens conflict remains OD-11; active JSON/CSS preserved. C06's donut denominator and C05's cash/revenue/add-on semantics are explicitly corrected in [ADR-002](ARCHITECTURE.md#adr-002). C13’s initial Git setup obstacle is historically resolved by initial publication; missing source/implementation evidence remains unresolved. Full catalog/stack/module/acceptance traceability now uses S1; absent PDFs have no page-level claims. The outer workspace knowledge/ copy is a historical duplicate and is not a second authoritative KB or synchronized by this task.
+
+<!-- migrated-end:knowledge/CINENEST-REFERENCE-TRACEABILITY.md -->
+
+<a id="ux-acceptance"></a>
+<!-- migrated-begin:knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md -->
+### CineNest UX Acceptance Checklist
+
+> Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.
+> Original record: 2026-10-13. Updated: 2026-10-14, CN-KB-FEATURES-TECH-001. Decision: APPROVED for hybrid direction; DOCUMENTED_DRAFT for detailed behavior. Implementation: NOT_VERIFIED. Scope: knowledge base only. Maintainer: CineNest project design/architecture owners.
+
+#### Knowledge-base acceptance (this task)
+- [x] All requested documentation, token JSON, chart JSON and theme CSS exist.
+- [x] Eleven admin modules and twelve customer destinations/flows are specified.
+- [x] Ten chart/panel specifications currently have calculations, contracts and display guidance (bank extension included; historical task counts remain in changelog).
+- [x] Shared typography, semantic colors, spacing, controls, navigation, tables and states documented.
+- [x] Breakpoints, mobile layouts, chart/table alternatives and zoom/reflow targets documented.
+- [x] Accessibility target and keyboard, contrast, focus, motion and screen-reader requirements documented.
+- [x] Original three available references retained byte-for-byte with recorded hashes.
+- [x] Screenshot numbers/PINs/identity data explicitly excluded from operational truth.
+- [x] JSON parsing, semantic token references, local documentation links, CSS/token consistency and selected contrast pairs checked by [validator](validate_design_kb.py).
+- [x] No frontend feature/source code introduced; theme is an unintegrated specification asset.
+- [ ] Reconcile knowledge pack exact tokens, architecture, requirements and conditions (not supplied).
+- [ ] Verify exact unavailable customer “(1)” source equivalence if needed.
+- [x] Clone user-supplied canonical Git repository into a separate folder; verify it is empty.
+- [x] Resolve author identity from existing local Git configuration and review staged knowledge-only diff.
+- [x] Initial publication commit 16710dc verified locally with matching origin/main ref at baseline inspection. New task publication is reported separately.
+
+See [validation report](PROGRESS.md#feature-validation-history) for evidence and limits. Checked boxes describe documentation checks, not implemented UI compliance.
+
+#### Future frontend implementation gates
+- [ ] Actual role/capability mapping and server ownership/tenant scope tested on every read, action and export.
+- [ ] No literal component colors outside centralized token generation; semantic themes and chart aliases synchronized.
+- [ ] All admin/customer screens match shared shell/components, state language and canonical stepper.
+- [ ] Full keyboard flow, logical landmarks/headings, skip link, focus return/traps and 44px controls tested.
+- [ ] Rendered text/gradient/image/control/focus/chart contrast meets target; automated scans plus manual QA.
+- [ ] 320–1536px, landscape, 200%/400% zoom, reduced motion, screen-reader booking and live control verified.
+- [ ] Forms retain safe data, expose error summary/inline labels and tolerate session/network failures.
+- [ ] Charts match authorized backend aggregates, complete/null/zero semantics, currency and timezone definitions.
+- [ ] Metric fixtures cover duplicate events, refunds, negative revenue, zero denominator, interval overlap, blackouts, DST, half-open boundaries and partial periods.
+- [ ] Financial chart ledger semantics approved; no accounting-profit implication from operational revenue.
+- [ ] Payment duplication/timeouts/webhook delays, hold expiry, quote change and paid-but-unconfirmed recovery tested.
+- [ ] Identity policy, accepted inputs, age, consent, retention, restricted preview and manual-review support approved.
+- [ ] PIN generation/validity/reveal/expiry, privacy and support policy confirmed; no sensitive data in logs/exports/shared artifacts.
+- [ ] IoT stale/unknown states, command acknowledgment, timeout/retry and idempotency tested against real device contract.
+- [ ] Lock/restart operations follow approved safety rules; emergency egress independent of network/UI confirmed by responsible owner.
+- [ ] Promotions/referral/loyalty rules and reversals derive from authorized backend ledger.
+- [ ] Loading/no-records/no-matches/denied/not-configured/stale/error states tested independently.
+- [ ] No screenshot sample data reaches production; fixtures labelled synthetic and isolated.
+- [ ] Design/architecture owners resolve traceability conflicts; ADR and published KB versions recorded.
+
+#### CN-KB-FEATURES-TECH-001 documentation and future gates
+- [x] Product, rules, stack, architecture, contracts, IoT, privacy, phases and decision register authored with separate decision/implementation statuses.
+- [x] Stable feature IDs, sources, proposed modules, permissions and acceptance recorded.
+- [x] Active design tokens/CSS and original image bytes preserved; candidate palette conflict explicit, not applied.
+- [x] Exact draft time/price/buffer/PIN rules centralized; unresolved hold/closing/all-guest policy explicit.
+- [x] Net collections separate from recognized revenue; consistent donut denominator and payment/add-on panels documented.
+- [ ] Verify missing PDFs, including relevant image-based/Sinhala pages, and reconcile discrepancies.
+- [ ] Select/approve stack, providers, hardware and actual authorization/data implementation with evidence.
+- [ ] Approve privacy/retention, all-guest checks, staffing/physical cleaning/emergency intervention, rights, refunds and hold/closing policy before launch.
+- [ ] Execute lifecycle/race/refund/webhook/command/offline acceptance against actual backend and hardware; documentation validation is not implementation proof.
+
+#### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+- [x] PR-PKG-001/CN-A12 explicitly user-confirmed; implementation NOT_VERIFIED and supporting publication/API design RECOMMENDED.
+- [x] Initial defaults classified by package/shared Pricing/operational ownership; canonical package spec linked across affected docs.
+- [x] Active design/image/chart definitions preserved; customer UI consumes backend versioned configuration and purchased history.
+- [ ] Execute PK-AC01–13: authorized no-release changes, scope denial, invalid joint publish, separate minimum/capacity, deterministic effective versions, valid/expired quote/payment reconciliation, no double charge, sold history and safe amendments/access.
+- [ ] Approve OD-17–22 choices before affected implementation; doc validators do not establish product/hardware outcomes.
+
+#### Bank payment — CN-KB-BANK-PAYMENT-001
+- [x] CN-C10/CN-A13 / PR-BANK-001 USER-CONFIRMED, core APPROVED and implementation NOT_VERIFIED; supporting recommendations/open method policies distinct.
+- [x] [Canonical bank spec](PROJECT.md#bank-payments) linked: receipts, verified funds, allocations, request, booking, access, refund states separate; online checkout/package protections retained.
+- [x] Customer/admin under-review, correction/expiry/amount exceptions and protected bank instruction/evidence UI documented with existing tokens/a11y; claims not collections.
+- [ ] Execute BP-AC01–13 with actual receiving bank records/backend/authorization and hardware outcomes as applicable; notification failure must retain queue work.
+- [ ] Approve review/hold/payment timing/fee/upload/retention/matching/account/refund/staffing choices OD-23–29; no invented 24-hour rule/automatic extension/card token.
+
+<!-- migrated-end:knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md -->
+

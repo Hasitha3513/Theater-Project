@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../../PROGRESS.md#decision-evidence-history). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CN-DEC-001 Evidence
 
 Decision-only execution, S11 explicit brief authorization. Initial Git root repository/, main → origin/main; full local/remote `55ee66be4022daae182933a3042d86e80e8600ee`, clean. Remote queried using `git ls-remote origin refs/heads/main`, exit0; `git rev-parse` resolved root/HEAD/branch/upstream, exit0; `git status --short --branch`, exit0. No force/reset. Git2.53.0/Python3.14.4/Linux as documented tool environment; no backend/frontend runtime selected or installed. Recorded 2026-10-14T13:31:37.181312+05:30.

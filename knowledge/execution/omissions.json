@@ -13,7 +13,7 @@
       "gap": "No approved application stack or implementation change-set plan",
       "linkedDecisionOrTask": "OD-01",
       "status": "BLOCKED",
-      "recovery": "Authorize CN-DEC-001 bounded decision brief; final stack remains user decision"
+      "recovery": "CN-DEC-001 brief prepared; owner stack approval and separately authorized refined CN-FND-001 scope still required"
     },
     {
       "id": "OM-03",
@@ -48,7 +48,7 @@
       "gap": "Current desktop cwd is parent; automatic instruction loading not tested",
       "linkedDecisionOrTask": "CN-AGENT-SETUP-001",
       "status": "OPEN",
-      "recovery": "Fresh read-only task rooted at repository/ must automatically identify AGENTS/charter/control files; file discovery alone not native registration"
+      "recovery": "Fresh read-only task rooted at repository/ must automatically identify AGENTS and canonical PROGRESS charter/status/handoff; manual reading is not automatic-loading or native-registration proof"
     },
     {
       "id": "OM-08",

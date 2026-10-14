@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](DESIGN.md#charts-metrics). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Charts and Metrics
 
 > CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT. Implementation: NOT_VERIFIED. Source S1 with S9 bank extension (supporting bank metrics RECOMMENDED). Contract version 1.2.0 extends observed chart-spec 1.1.0 for bank payments; historical 1.0.0→1.1.0 corrections remain in ADR-002; no backend or chart library is implemented.

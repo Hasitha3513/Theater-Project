@@ -75,6 +75,14 @@
       "availability": "AVAILABLE",
       "kind": "user-authorization-decision-brief-only-no-stack-or-implementation-approval",
       "sha256": "c13879ccf2719e8d1e36b813ad3c971f109514822fdae6da1e98ee1261943d0f"
+    },
+    {
+      "id": "S12",
+      "availability": "CONVERSATION",
+      "kind": "user-conversation-authorization",
+      "taskId": "CN-KB-CONSOLIDATE-001",
+      "scope": "Consolidate existing KB into PROJECT/ARCHITECTURE/DESIGN/PROGRESS; retain originals pending removal review; no stack/implementation/live authorization",
+      "recordedDate": "2026-10-14"
     }
   ]
 }

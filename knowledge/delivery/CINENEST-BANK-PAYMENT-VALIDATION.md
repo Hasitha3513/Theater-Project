@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROGRESS.md#bank-validation-history). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Bank Payment Documentation Validation Report
 
 CN-KB-BANK-PAYMENT-001 · 2026-10-14 (Asia/Colombo). Core PR-BANK-001/CN-C10/CN-A13 USER-CONFIRMED, Decision APPROVED; supporting controls/reporting RECOMMENDED; method policies OPEN_DECISION. Implementation NOT_VERIFIED. Documentation-only pre-publication snapshot.

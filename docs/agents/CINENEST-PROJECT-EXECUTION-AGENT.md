@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../../knowledge/PROGRESS.md#execution-charter). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Project Execution Agent Charter
 
 CN-AGENT-SETUP-001 · user source S10 · 2026-10-14 (Asia/Colombo). This is repository workflow, not a deployed chatbot/service/native agent registration. No global configuration changed. One writer owns shared plan/status/handoff.

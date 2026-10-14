@@ -31,7 +31,7 @@
       "readiness": "CLOSED",
       "workStatus": "VERIFIED",
       "evidencePaths": [
-        "execution/evidence/CN-AGENT-SETUP-001.md"
+        "PROGRESS.md#setup-evidence-history"
       ],
       "verificationScope": "DOCUMENTATION_AND_EXPLICIT_READ_ONLY_DISCOVERY"
     },
@@ -64,8 +64,8 @@
       "readiness": "CLOSED",
       "workStatus": "VERIFIED",
       "evidencePaths": [
-        "execution/evidence/CN-DEC-001.md",
-        "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md"
+        "PROGRESS.md#decision-evidence-history",
+        "ARCHITECTURE.md#initial-stack-brief"
       ],
       "authorizationSource": "S11",
       "authorizationScope": "Brief only; no stack approval or implementation",
@@ -956,6 +956,42 @@
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
       "evidencePaths": []
+    },
+    {
+      "id": "CN-KB-CONSOLIDATE-001",
+      "phase": 0,
+      "priority": "P0",
+      "objective": "Owner-authorized four-document consolidation",
+      "requirementIds": [
+        "CN-AGENT-WORKFLOW-001",
+        "PR-UI-001",
+        "PR-PKG-001",
+        "PR-BANK-001"
+      ],
+      "inScope": "Lossless canonical document migration, instruction/link/registry/validator updates and in-place evidence/handoff",
+      "outOfScope": "No deletion before review; no additional per-feature/decision/session/prompt/report files; no code/stack/live approval",
+      "dependencies": [
+        "CN-DEC-001"
+      ],
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Four canonical knowledge documents, AGENTS, existing index/registries/manifest/validators; retained superseded snapshots",
+      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "plannedChecks": "Baseline-content reconstruction; all requirements/task IDs/statuses; existing design/coverage checks; links/anchors/JSON/asset preservation; diff check",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Four canonical docs current; no requirement/approval/evidence loss; originals proposed for removal, not deleted; owner review checkpoint",
+      "requiredApproval": "S12 current user explicit consolidation scope; deletion and stack/code remain separate approval",
+      "authorityAvailable": true,
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "PROGRESS.md#current-verification"
+      ],
+      "verificationScope": "DOCUMENTATION_AND_EXPLICIT_READ_ONLY_DISCOVERY",
+      "authorizationSource": "S12",
+      "authorizationScope": "Consolidation only; no new per-task document",
+      "deletionApproval": "PENDING_OWNER_REVIEW"
     }
   ]
 }

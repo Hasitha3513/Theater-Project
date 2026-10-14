@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](ARCHITECTURE.md#adr-002). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # ADR-002: Draft Business Defaults, Metric Clarification and Token Preservation
 
 Task CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT (business and metric specification), OPEN_DECISION (palette migration). Implementation: NOT_VERIFIED. Source: S1 user request. ADR-001 hybrid direction remains APPROVED; its history and numbering are preserved.

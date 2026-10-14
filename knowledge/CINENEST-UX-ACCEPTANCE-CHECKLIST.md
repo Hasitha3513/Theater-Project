@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](DESIGN.md#ux-acceptance). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest UX Acceptance Checklist
 
 > Status: approved hybrid visual direction; detailed specifications below are proposed implementation guidance. The supplied knowledge pack, architecture, requirements, and rules/conditions are absent from this workspace. Reconcile them before implementing affected functionality. No backend, frontend, roles, providers, or operational statistics have been verified.

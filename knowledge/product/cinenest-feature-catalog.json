@@ -478,7 +478,7 @@
       "decisionStatus": "APPROVED",
       "supportingDesignDecisionStatus": "RECOMMENDED",
       "implementationStatus": "NOT_VERIFIED",
-      "canonicalSpecification": "product/CINENEST-PACKAGE-MANAGEMENT.md"
+      "canonicalSpecification": "PROJECT.md#package-management"
     },
     {
       "id": "CN-C10",
@@ -501,7 +501,7 @@
       "supportingDesignDecisionStatus": "RECOMMENDED",
       "implementationStatus": "NOT_VERIFIED",
       "requirementId": "PR-BANK-001",
-      "canonicalSpecification": "product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md"
+      "canonicalSpecification": "PROJECT.md#bank-payments"
     },
     {
       "id": "CN-A13",
@@ -524,7 +524,7 @@
       "supportingDesignDecisionStatus": "RECOMMENDED",
       "implementationStatus": "NOT_VERIFIED",
       "requirementId": "PR-BANK-001",
-      "canonicalSpecification": "product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md"
+      "canonicalSpecification": "PROJECT.md#bank-payments"
     }
   ],
   "lastUpdatedTask": "CN-KB-BANK-PAYMENT-001"

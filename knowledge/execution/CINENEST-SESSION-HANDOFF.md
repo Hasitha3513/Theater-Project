@@ -1,3 +1,5 @@
+> **SUPERSEDED — historical snapshot retained pending owner deletion review.** Current canonical content: [open section](../PROGRESS.md#prior-handoff). Do not update this file; update the four canonical documents in place. Older status/next-action text below is historical.
+
 # CineNest Session Handoff
 
 CN-DEC-001 · 2026-10-14. One parent writer; decision-only execution completed. No background work or native registration.

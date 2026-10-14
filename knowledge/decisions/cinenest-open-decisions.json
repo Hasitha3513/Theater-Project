@@ -13,7 +13,7 @@
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
       "launchBlocker": "IMPLEMENTATION_GATE",
-      "proposalReference": "decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+      "proposalReference": "ARCHITECTURE.md#initial-stack-brief",
       "proposalStatus": "PROPOSED_AWAITING_OWNER_APPROVAL",
       "scopeNote": "Initial subset only; cloud/vendors/policies deferred, full OD-01 remains OPEN_DECISION"
     },
