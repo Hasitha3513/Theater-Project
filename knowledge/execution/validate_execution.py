@@ -167,10 +167,10 @@ def main():
             workflow['owningChangeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['evidencePaths'].append('PROGRESS.md#current-verification')
         check(expected == json.loads((K / path).read_text()), 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
-    check(changes[:-1] == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001', 'Existing backlog content lost/altered')
+    check(changes[:-1] == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001' and changes[-1].get('aliases') == ['CN-KB-CONSOLIDATION-001'] and changes[-1].get('continuationAuthorizationSource') == 'S13', 'Existing backlog content lost/altered')
     old_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
     current_sources = json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']
-    check(current_sources[:-1] == old_sources and current_sources[-1]['id'] == 'S12', 'Prior source evidence lost/altered')
+    check(current_sources[:-2] == old_sources and [x['id'] for x in current_sources[-2:]] == ['S12', 'S13'], 'Prior source evidence lost/altered')
     old_omissions = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/omissions.json'], text=True))['omissions']
     current_omissions = read_json('omissions.json')['omissions']
     check([o['id'] for o in current_omissions] == [o['id'] for o in old_omissions], 'Omission IDs dropped/changed')
@@ -179,6 +179,21 @@ def main():
         if old['id'] in {'OM-02', 'OM-07'}:
             expected['recovery'] = current['recovery']  # Updated pending-stack/canonical-instruction guidance only.
         check(expected == current, 'Omission gap/status silently changed ' + old['id'])
+    progress = (K / 'PROGRESS.md').read_text()
+    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(c['dependencies']) or 'None') + ' | ' + c['workStatus'] + ' / ' + c['readiness'] + ' |\n' for c in changes)
+    check(task_rows in progress, 'PROGRESS task projection diverges from authority')
+    mapping_rows = ''.join('| ' + e['sourcePath'] + ' | [' + e['canonicalPath'] + '#' + e['anchor'] + '](' + e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] + ') |\n' for e in manifest['consolidation']['documents'])
+    check(mapping_rows in progress and '<a id="consolidation"></a>' in progress, 'PROGRESS source/destination/removal mapping omitted')
+    project = (K / 'PROJECT.md').read_text()
+    feature_catalog = json.loads((K / 'product/cinenest-feature-catalog.json').read_text())['features']
+    feature_rows = ''.join('| ' + f['id'] + ' | ' + f['name'] + ' — ' + f['purpose'] + ' | ' + f['module'] + ' | ' + f['decisionStatus'] + ' |\n' for f in feature_catalog)
+    check(feature_rows in project, 'PROJECT feature projection diverges from authority')
+    architecture = (K / 'ARCHITECTURE.md').read_text()
+    decision_rows = ''.join('| ' + d['id'] + ' | ' + d['conflict'] + ' | ' + d['launchBlocker'] + ' |\n' for d in od)
+    check(decision_rows in architecture, 'ARCHITECTURE decision projection diverges from authority')
+    for number in range(1, 9):
+        check(f'AG-AC{number:02d}' in progress, 'Setup acceptance history omitted')
+    check(state.get('requestedTaskId') == 'CN-KB-CONSOLIDATION-001', 'Owner task ID alias lost')
     # Active reference fields must resolve to real canonical sections/assets; historical ledgers stay snapshots.
     def references(value):
         if isinstance(value, dict):

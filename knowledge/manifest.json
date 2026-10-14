@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "kbVersion": "1.5.0",
-  "baselineKbVersion": "1.4.0",
-  "baselineCommit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",
-  "taskId": "CN-KB-CONSOLIDATE-001",
+  "kbVersion": "1.5.1",
+  "baselineKbVersion": "1.5.0",
+  "baselineCommit": "1d900cd1beecbcdd5793298d42c093537f2aae4a",
+  "taskId": "CN-KB-CONSOLIDATION-001",
   "recordedDate": "2026-10-14",
   "designTokenVersion": "1.0.0",
   "chartSpecVersion": "1.2.0",
-  "versionRationale": "Owner-authorized consolidation into four canonical documents; lossless body/link/heading migration and current links; retained superseded snapshots await deletion approval. No product/stack approval.",
+  "versionRationale": "Owner-requested editorial simplification of the existing four canonical files; projections from existing registries and consolidated shared guidance; no new documents/decisions/deletion.",
   "decisionStatuses": [
     "APPROVED",
     "DOCUMENTED_DRAFT",
@@ -33,7 +33,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "dd5e8af6a57379b91dea1ce8e7ee9dbeb924531ff325debcdb429ed7512c2576",
+      "sha256": "75ac9dec48b965230f5b60de384afe87a6394125326fe3bebb4cf84b046afe7f",
       "authority": "canonical-prose"
     },
     {
@@ -152,28 +152,28 @@
       "path": "DESIGN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "850f8b91e62bba3d0f2fed5f321444aafe72322cf05a6ec2f214eb7f3ae2f0c8",
+      "sha256": "5c912e33e5fc781d1a975516b4e02771cc518c2a0d6f453a739d08571928f79c",
       "authority": "canonical-prose"
     },
     {
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c8d0267656ed3eac1a26657ec0782396cd878c5d540d44e365f46c4e41295ecf",
+      "sha256": "3170dac0039f3e2ab65f4e3afd427f5a0af92ebeb20aab311d9c68142c75de26",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cce0b902bf3c412dcee0f77a26884ca8d51888326137e55b1d66ec9361c75e36",
+      "sha256": "389e36bc117b4e2ab6993c43ac66badc964fc78598db265ccd9539f8d1c5eaf3",
       "authority": "canonical-prose"
     },
     {
       "path": "README.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "32c3bb9c61722c47e1d02fe412b996ec867cf8cc1fccd702fc96ec9f3e532195",
+      "sha256": "5c07e0fb4d2695371cc5e6b8ef7fc5502eaeba9e7a852133637a87d9cd00b8e9",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -285,7 +285,7 @@
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "4fe82a3f4bdee08b6ef11bf57dfa94d02cfd3eeeb1224a002d7c7a636f7d43ae",
+      "sha256": "74bc10cc38dfe7cd17277dac6d313fc8ac790e0a5e5a274876545782e12fa60f",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -390,7 +390,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6e44fe055d4e415a6173aa1c4aa0cfe140d0a654088e380cd29279e3d705b60d",
+      "sha256": "4ba65ec861f983d2a1ef5b10953a8ea9a39c234688d85c299d51a67cf91c4a88",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -404,7 +404,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "0b177b5e69cb3b19828402e179e71c0465f380a6710425ba153c0de12fb8959b",
+      "sha256": "101f9e95aab9b8026ab771f1499882d9d2b97c094db0ecd99d09de1714a09987",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -508,7 +508,7 @@
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "076525fde7c87af8497db513202df14d7dba1c9a5b81864068d9d2fad912c658",
+      "sha256": "77ed95a11985b39928677f37b3accab0e1404ad0df24b972d6448d8833eff52a",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -536,7 +536,7 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "efc5ed627a5d8bb72ccd98e11df35ccc17e8a94792db4ad2a747753c0dc47af4",
+      "sha256": "f221887b414976bcf7a728c71407d7882441ca21a149428e12e809f4a67512a7",
       "authority": "structured-asset-or-evidence"
     }
   ],
@@ -565,6 +565,11 @@
       "kbVersion": "1.4.0",
       "taskId": "CN-DEC-001",
       "commit": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092"
+    },
+    {
+      "kbVersion": "1.5.0",
+      "taskId": "CN-KB-CONSOLIDATE-001",
+      "commit": "1d900cd1beecbcdd5793298d42c093537f2aae4a"
     }
   ],
   "authorizedDefinitionChanges": {
@@ -627,7 +632,7 @@
   "externalInstructionFiles": [
     {
       "path": "AGENTS.md",
-      "sha256": "3e894ca2cbf9b1ca6cdec307275f9e715a91f5c091def205677fd1dd3e56bf31",
+      "sha256": "e5ad067f2739256e2c398e013991b61239e87f170c9650a34613c89dc3b8e59d",
       "purpose": "Current root entry; charter consolidated into PROGRESS.md"
     }
   ],
@@ -649,7 +654,8 @@
         "baselineLines": 509,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "5d172f7d974f5dadedc8c08ca9b29a7e3df7fd81f744883161030a4d4439719a",
-        "retainedSnapshotSha256": "7ed42a8ea0487c6a64030d7ae832fed41f9152c0c28d55a68ee6c219c0a81258"
+        "retainedSnapshotSha256": "7ed42a8ea0487c6a64030d7ae832fed41f9152c0c28d55a68ee6c219c0a81258",
+        "editorialDestination": "knowledge/PROJECT.md#features"
       },
       {
         "sourcePath": "knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md",
@@ -659,7 +665,8 @@
         "baselineLines": 120,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "4c00a3cba5296db9dc13ee73cf69a6037081663ee98407bf3be97d58ae7cd51a",
-        "retainedSnapshotSha256": "0b67f3927ac8fd77cae587dbdca9b47cde58e7fa67b3673d5857daff88599398"
+        "retainedSnapshotSha256": "0b67f3927ac8fd77cae587dbdca9b47cde58e7fa67b3673d5857daff88599398",
+        "editorialDestination": "knowledge/PROJECT.md#business-rules"
       },
       {
         "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
@@ -669,7 +676,8 @@
         "baselineLines": 147,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "c28e395eebb00d98748496ba460db19c0fbb53e5c3d30788a650c6664a5098b1",
-        "retainedSnapshotSha256": "2651b5096acaf25309850f84f35fdf128b1575b883f55c142f331b8bc65be47b"
+        "retainedSnapshotSha256": "2651b5096acaf25309850f84f35fdf128b1575b883f55c142f331b8bc65be47b",
+        "editorialDestination": "knowledge/PROJECT.md#package-management"
       },
       {
         "sourcePath": "knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md",
@@ -679,7 +687,8 @@
         "baselineLines": 170,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "f70b9d0bdc661285e0cb871916e6d9f7b0f05e0a9bf177e5be646368008647c9",
-        "retainedSnapshotSha256": "342d6b2550f5f4f56de146aef165a6ad809421194241aadf1bae7855a912dd33"
+        "retainedSnapshotSha256": "342d6b2550f5f4f56de146aef165a6ad809421194241aadf1bae7855a912dd33",
+        "editorialDestination": "knowledge/PROJECT.md#bank-payments"
       },
       {
         "sourcePath": "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
@@ -689,7 +698,8 @@
         "baselineLines": 41,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "3f311145fe306216ba02e752a3eb728f50a00f6c8e1d01ea24c5437dbe00e10f",
-        "retainedSnapshotSha256": "8ff788bf932b1bc55f0bef4c891b632956ef2f2f17ad6503f97b1f7880af91ac"
+        "retainedSnapshotSha256": "8ff788bf932b1bc55f0bef4c891b632956ef2f2f17ad6503f97b1f7880af91ac",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#technology"
       },
       {
         "sourcePath": "knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
@@ -699,7 +709,8 @@
         "baselineLines": 60,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "42772082eafe8b6f9197d2e64f8e248fab0d3f1aaee165d0e47a43f9a4856c12",
-        "retainedSnapshotSha256": "99f9f9d95c3f17e7a3fc3c280661ce655c24586457746cb5a8bdfb9b916bc714"
+        "retainedSnapshotSha256": "99f9f9d95c3f17e7a3fc3c280661ce655c24586457746cb5a8bdfb9b916bc714",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#system-architecture"
       },
       {
         "sourcePath": "knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
@@ -709,7 +720,8 @@
         "baselineLines": 88,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "64bfbe2b47ea3ca84b77750ee86ffeb72148090e477d18377a92d76ec264d1bb",
-        "retainedSnapshotSha256": "e92299925d748bdc73a7e082d8b470e734b127aec043320c83be9ab77457122d"
+        "retainedSnapshotSha256": "e92299925d748bdc73a7e082d8b470e734b127aec043320c83be9ab77457122d",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#data-api"
       },
       {
         "sourcePath": "knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md",
@@ -719,7 +731,8 @@
         "baselineLines": 38,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "f97e9c21d212b705318ff51321255b42af2f1416fded8355fc5eb3eb3cb83f3a",
-        "retainedSnapshotSha256": "62f1c0aa8806b08b7ed574aaadb9413f1f372cedc3e53db34f4fba028058e917"
+        "retainedSnapshotSha256": "62f1c0aa8806b08b7ed574aaadb9413f1f372cedc3e53db34f4fba028058e917",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#security-privacy"
       },
       {
         "sourcePath": "knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md",
@@ -729,7 +742,8 @@
         "baselineLines": 36,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "744ff4dd126fa3c26147dbc7143ce8d345db0b64a9def16a546ab18318f53905",
-        "retainedSnapshotSha256": "342a468dfcb70584bd4088d73444c5e4bf013d0ee842c7e26734327c7bcc47c5"
+        "retainedSnapshotSha256": "342a468dfcb70584bd4088d73444c5e4bf013d0ee842c7e26734327c7bcc47c5",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#iot-access"
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-002.md",
@@ -739,7 +753,8 @@
         "baselineLines": 30,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "850408574da2edd27fab9b21443e9e982642b61aa6f25bdc0076c042f1023284",
-        "retainedSnapshotSha256": "0c6ebfb332bf2e4f929d0c9c89a2937b4886a38324b2ed30b481688c14a2701d"
+        "retainedSnapshotSha256": "0c6ebfb332bf2e4f929d0c9c89a2937b4886a38324b2ed30b481688c14a2701d",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-002"
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-003.md",
@@ -749,7 +764,8 @@
         "baselineLines": 15,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "fc2239f1bfbcad6d7bbb350a6925d3eae2bf4b4f488a40b5b7337aca405c5d3b",
-        "retainedSnapshotSha256": "91e05bb9efeff5b53470f72e993d65132719f4b5cff1725560bbe29707f364de"
+        "retainedSnapshotSha256": "91e05bb9efeff5b53470f72e993d65132719f4b5cff1725560bbe29707f364de",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-003"
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-004.md",
@@ -759,7 +775,8 @@
         "baselineLines": 19,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "4e8b2f71c089acbacdd9fb4473ecc9f619f6f3d41a3b23fce4a69fd73907ca32",
-        "retainedSnapshotSha256": "713b540d8374f71dd545b8d804ce1c143c26e4d85eb8d46b22444d835ce7dbef"
+        "retainedSnapshotSha256": "713b540d8374f71dd545b8d804ce1c143c26e4d85eb8d46b22444d835ce7dbef",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#adr-004"
       },
       {
         "sourcePath": "knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
@@ -769,7 +786,8 @@
         "baselineLines": 66,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "5307868106251263571b5a8b62723c68612bf692b37f34faed1cd7e33dc0b2f3",
-        "retainedSnapshotSha256": "a154fae9d49e5c57378d4433773b0c0b4a88bf0b1b28a8a14b29272afe00f8db"
+        "retainedSnapshotSha256": "a154fae9d49e5c57378d4433773b0c0b4a88bf0b1b28a8a14b29272afe00f8db",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#open-decisions"
       },
       {
         "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
@@ -779,7 +797,8 @@
         "baselineLines": 119,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "9539c2ff3f0d990e8337b3a2327fceea7c1e76f1d400429916d36f7ccf7670a5",
-        "retainedSnapshotSha256": "1d81d25199769205711705e02c758eaf1a376ae68a3f295f3a2cd906c6142926"
+        "retainedSnapshotSha256": "1d81d25199769205711705e02c758eaf1a376ae68a3f295f3a2cd906c6142926",
+        "editorialDestination": "knowledge/ARCHITECTURE.md#initial-stack-brief"
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-SYSTEM.md",
@@ -789,7 +808,8 @@
         "baselineLines": 92,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "cf08527ae0acfdb7693b8e93d68d509b19573d2bc9fc4dbd1db56ee3e1927ceb",
-        "retainedSnapshotSha256": "5259f794478dc452581a4d7e9a6192c0467d153cdd926e35e8733f6a94571488"
+        "retainedSnapshotSha256": "5259f794478dc452581a4d7e9a6192c0467d153cdd926e35e8733f6a94571488",
+        "editorialDestination": "knowledge/DESIGN.md#design-system"
       },
       {
         "sourcePath": "knowledge/CINENEST-ADMIN-PAGES.md",
@@ -799,7 +819,8 @@
         "baselineLines": 224,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "651e7d04483decd5e341d21c41a6976f375ecd3eb7b7657b6a42ded5e022b191",
-        "retainedSnapshotSha256": "4b22349aed9090673225ce7de8e4fd661bcca21aac1437cf7b41eefd57f47597"
+        "retainedSnapshotSha256": "4b22349aed9090673225ce7de8e4fd661bcca21aac1437cf7b41eefd57f47597",
+        "editorialDestination": "knowledge/DESIGN.md#admin-pages"
       },
       {
         "sourcePath": "knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md",
@@ -809,7 +830,8 @@
         "baselineLines": 124,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "f9964725c8053fcffd42cc02d62b4db27208d74ed66eb20d581fede75d0763d9",
-        "retainedSnapshotSha256": "cd6f2f9702780c40c272229e6e4d00626b009ffa64fd512592a9d7dbd8836191"
+        "retainedSnapshotSha256": "cd6f2f9702780c40c272229e6e4d00626b009ffa64fd512592a9d7dbd8836191",
+        "editorialDestination": "knowledge/DESIGN.md#customer-pages"
       },
       {
         "sourcePath": "knowledge/CINENEST-CHARTS-AND-METRICS.md",
@@ -819,7 +841,8 @@
         "baselineLines": 258,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "7f3c9daaed7ac0118b0f1b12e51334486a821699b257faf82f1555d794e113b1",
-        "retainedSnapshotSha256": "8d4ef9040c3049babb5a83506ffa2e979b607ca44588d584f48aac6fb29973a3"
+        "retainedSnapshotSha256": "8d4ef9040c3049babb5a83506ffa2e979b607ca44588d584f48aac6fb29973a3",
+        "editorialDestination": "knowledge/DESIGN.md#charts-metrics"
       },
       {
         "sourcePath": "knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md",
@@ -829,7 +852,8 @@
         "baselineLines": 22,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "27550343f434f83b6beb51334593d3b43b923a34214f59433549d4ebe9f03ee1",
-        "retainedSnapshotSha256": "c93b5ad238b80cd37e9416d6fe8bfc32be5813949fe02eeaa3292b7d73ca9617"
+        "retainedSnapshotSha256": "c93b5ad238b80cd37e9416d6fe8bfc32be5813949fe02eeaa3292b7d73ca9617",
+        "editorialDestination": "knowledge/DESIGN.md#interactions-a11y"
       },
       {
         "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-001.md",
@@ -839,7 +863,8 @@
         "baselineLines": 32,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "55128caf5217dc96ba79cc912609a98326d18fdd90982c0b784d6196cbb52b16",
-        "retainedSnapshotSha256": "8f8389e3b90f155752c493c0c7afb51d08cd566010aad8d46c7f98f9bb47a926"
+        "retainedSnapshotSha256": "8f8389e3b90f155752c493c0c7afb51d08cd566010aad8d46c7f98f9bb47a926",
+        "editorialDestination": "knowledge/DESIGN.md#adr-001"
       },
       {
         "sourcePath": "knowledge/CINENEST-REFERENCE-TRACEABILITY.md",
@@ -849,7 +874,8 @@
         "baselineLines": 57,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "cbbacf8a2399fd42a35ce482d075ff1fe97c811f1b62c986ea03a16c7535eb2e",
-        "retainedSnapshotSha256": "ffeea19d7945721585d4e41d57cfc23cfd980d8dcfdcd86dd3698b1089deaca4"
+        "retainedSnapshotSha256": "ffeea19d7945721585d4e41d57cfc23cfd980d8dcfdcd86dd3698b1089deaca4",
+        "editorialDestination": "knowledge/DESIGN.md#reference-traceability"
       },
       {
         "sourcePath": "knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
@@ -859,7 +885,8 @@
         "baselineLines": 69,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "4ab4a4c911657f4bb21fb4b4e6dedeb7a04be8031aca1633853a86d7c1879102",
-        "retainedSnapshotSha256": "aa94688a7f6f62c59c418cf57ad3e3cdead451018adda7d9adbb89085966e23c"
+        "retainedSnapshotSha256": "aa94688a7f6f62c59c418cf57ad3e3cdead451018adda7d9adbb89085966e23c",
+        "editorialDestination": "knowledge/DESIGN.md#ux-acceptance"
       },
       {
         "sourcePath": "docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md",
@@ -869,7 +896,8 @@
         "baselineLines": 39,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "b0359160295d9715f57257aa9d0b2afe3d20ea2a176cc3e21a2a50080058e9b2",
-        "retainedSnapshotSha256": "1e9aff79aa46fc13cbd49cf7aae60b7cefbb6b8d52112a91e3f625feb7d274b1"
+        "retainedSnapshotSha256": "1e9aff79aa46fc13cbd49cf7aae60b7cefbb6b8d52112a91e3f625feb7d274b1",
+        "editorialDestination": "knowledge/PROGRESS.md#execution-charter"
       },
       {
         "sourcePath": "knowledge/execution/CINENEST-EXECUTION-PLAN.md",
@@ -879,7 +907,8 @@
         "baselineLines": 602,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "61e743205aba4520c0fdd77794db78d4af69d2d6f7cc341d72674fdc458837e6",
-        "retainedSnapshotSha256": "67f803fb4d7278707987a8e3fd0368821be82a650c1ca4d2bf5fc23f39964e63"
+        "retainedSnapshotSha256": "67f803fb4d7278707987a8e3fd0368821be82a650c1ca4d2bf5fc23f39964e63",
+        "editorialDestination": "knowledge/PROGRESS.md#execution-plan"
       },
       {
         "sourcePath": "knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
@@ -889,7 +918,8 @@
         "baselineLines": 123,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "c47e72cb4c581697d8f2b79c61dc1eef8a5a9e2eb48d8a81f2b121b8346c826c",
-        "retainedSnapshotSha256": "3e25625c39f7005aaaf734a1e7a5a7bcce89f0f2d1b3758cba6156f236ddd864"
+        "retainedSnapshotSha256": "3e25625c39f7005aaaf734a1e7a5a7bcce89f0f2d1b3758cba6156f236ddd864",
+        "editorialDestination": "knowledge/PROGRESS.md#requirements-traceability"
       },
       {
         "sourcePath": "knowledge/execution/CINENEST-EXECUTION-STATUS.md",
@@ -899,7 +929,8 @@
         "baselineLines": 11,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "a87c67e4a1d5e9653120b1e25241083571fb175a14dcce0bd0f5356f784e8a25",
-        "retainedSnapshotSha256": "f1b2598642513df27b56d5fe5a9a1d6b2a1924520f0297de05bb135e16b80cde"
+        "retainedSnapshotSha256": "f1b2598642513df27b56d5fe5a9a1d6b2a1924520f0297de05bb135e16b80cde",
+        "editorialDestination": "knowledge/PROGRESS.md#prior-status"
       },
       {
         "sourcePath": "knowledge/execution/CINENEST-SESSION-HANDOFF.md",
@@ -909,7 +940,8 @@
         "baselineLines": 13,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "099412d7a440097f63addf557fb4e5244da524c7f261ab756511660a7d65ffd2",
-        "retainedSnapshotSha256": "ce4cbb8a4a6cb807a37c0f19893fd2adf88f443de8699f16bea86c7954a5f736"
+        "retainedSnapshotSha256": "ce4cbb8a4a6cb807a37c0f19893fd2adf88f443de8699f16bea86c7954a5f736",
+        "editorialDestination": "knowledge/PROGRESS.md#prior-handoff"
       },
       {
         "sourcePath": "knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md",
@@ -919,7 +951,8 @@
         "baselineLines": 35,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "ee662c7315d239ad3e26d11824f49a3ed8efe9b228f62b4008d4101f4fe4ef2a",
-        "retainedSnapshotSha256": "4a880d515c3ac4327c4270d31cdd2164017588e8f1580bf43fd26c4cffe7a903"
+        "retainedSnapshotSha256": "4a880d515c3ac4327c4270d31cdd2164017588e8f1580bf43fd26c4cffe7a903",
+        "editorialDestination": "knowledge/PROGRESS.md#delivery-phases"
       },
       {
         "sourcePath": "knowledge/CHANGELOG.md",
@@ -929,7 +962,8 @@
         "baselineLines": 27,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "0d19c77444bad1f948bea06ffdb2addad37657af99b14117f1b77aca25734a36",
-        "retainedSnapshotSha256": "ce39f2a345ecb937576f2a6869d318b0c38f66ff58f0262d0bdd293cac4a9514"
+        "retainedSnapshotSha256": "ce39f2a345ecb937576f2a6869d318b0c38f66ff58f0262d0bdd293cac4a9514",
+        "editorialDestination": "knowledge/PROGRESS.md#version-history"
       },
       {
         "sourcePath": "knowledge/CINENEST-VALIDATION-REPORT.md",
@@ -939,7 +973,8 @@
         "baselineLines": 81,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "eaca4fc8b9a92f7f86939848420a9f7c723067be49d6bde32ac4fbed32e0faee",
-        "retainedSnapshotSha256": "4fe0db0918a2f30e7cdf8342b0928aed81e870c55c1691dccccce77f7a84ac07"
+        "retainedSnapshotSha256": "4fe0db0918a2f30e7cdf8342b0928aed81e870c55c1691dccccce77f7a84ac07",
+        "editorialDestination": "knowledge/PROGRESS.md#feature-validation-history"
       },
       {
         "sourcePath": "knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md",
@@ -949,7 +984,8 @@
         "baselineLines": 81,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "58177d8d7b3403d620f3341c242269a0e8bae9f24e1a8edf04e5a2b875740e34",
-        "retainedSnapshotSha256": "507d01c2eb9dbc0bc6ada9258f56bae8a2bc367d891070eb3cee19bf46d05c07"
+        "retainedSnapshotSha256": "507d01c2eb9dbc0bc6ada9258f56bae8a2bc367d891070eb3cee19bf46d05c07",
+        "editorialDestination": "knowledge/PROGRESS.md#package-validation-history"
       },
       {
         "sourcePath": "knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md",
@@ -959,7 +995,8 @@
         "baselineLines": 82,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "b362cf677853122116c90a43922e132c54319b340367fdff02ea912360363f48",
-        "retainedSnapshotSha256": "fd706a1d133069731e758dc7c4aa0ca9a4df780aa188557e93617dc59062718a"
+        "retainedSnapshotSha256": "fd706a1d133069731e758dc7c4aa0ca9a4df780aa188557e93617dc59062718a",
+        "editorialDestination": "knowledge/PROGRESS.md#bank-validation-history"
       },
       {
         "sourcePath": "knowledge/execution/evidence/CN-AGENT-SETUP-001.md",
@@ -969,7 +1006,8 @@
         "baselineLines": 32,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "840d1428c1a153564861179dd2a21d0f59724847e5262f12d94b91987a0c2ffd",
-        "retainedSnapshotSha256": "35d6a66457065807d176783967c45110f8d71f565f8a9308c15bf60f42a07400"
+        "retainedSnapshotSha256": "35d6a66457065807d176783967c45110f8d71f565f8a9308c15bf60f42a07400",
+        "editorialDestination": "knowledge/PROGRESS.md#setup-evidence-history"
       },
       {
         "sourcePath": "knowledge/execution/evidence/CN-DEC-001.md",
@@ -979,11 +1017,356 @@
         "baselineLines": 23,
         "status": "SUPERSEDED_RETAINED_PENDING_OWNER_DELETION_REVIEW",
         "canonicalPayloadSha256": "86e9eb10c6f7c97e02508006e4f90b4a63183036fbdc80754e8ee3228f1bb77d",
-        "retainedSnapshotSha256": "b1078d0193673cd96dd3adaaaa2384b006ec191920724dae02561adef36344e5"
+        "retainedSnapshotSha256": "b1078d0193673cd96dd3adaaaa2384b006ec191920724dae02561adef36344e5",
+        "editorialDestination": "knowledge/PROGRESS.md#decision-evidence-history"
       }
     ],
-    "transformation": "Resolve local Markdown links to canonical anchored sections/assets, demote headings by two outside fenced code; preserve every other source byte. Mark original snapshots superseded, never delete before owner approval.",
-    "deletionApproved": false
+    "transformation": "Editorially retain subject requirements, collapse repeated metadata/shared chart rows; feature/task/decision definitions remain in existing machine authorities; current approval/evidence/history summaries stay accessible in PROGRESS. Original lossless grouping is historical at1d900cd, not the current editing constraint.",
+    "deletionApproved": false,
+    "editorialBaselineRevision": "1d900cd1beecbcdd5793298d42c093537f2aae4a",
+    "editorialAuthorization": "S13 current attached user request, continuation alias CN-KB-CONSOLIDATION-001; no deletion",
+    "editorialCoverage": [
+      {
+        "sourcePath": "knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md",
+        "destination": "knowledge/PROJECT.md#features",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/product/cinenest-feature-catalog.json"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md",
+        "destination": "knowledge/PROJECT.md#business-rules",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "destination": "knowledge/PROJECT.md#package-management",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md",
+        "destination": "knowledge/PROJECT.md#bank-payments",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
+        "destination": "knowledge/ARCHITECTURE.md#technology",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
+        "destination": "knowledge/ARCHITECTURE.md#system-architecture",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md",
+        "destination": "knowledge/ARCHITECTURE.md#data-api",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md",
+        "destination": "knowledge/ARCHITECTURE.md#security-privacy",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md",
+        "destination": "knowledge/ARCHITECTURE.md#iot-access",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-002.md",
+        "destination": "knowledge/ARCHITECTURE.md#adr-002",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-003.md",
+        "destination": "knowledge/ARCHITECTURE.md#adr-003",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-004.md",
+        "destination": "knowledge/ARCHITECTURE.md#adr-004",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md",
+        "destination": "knowledge/ARCHITECTURE.md#open-decisions",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/decisions/cinenest-open-decisions.json"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "destination": "knowledge/ARCHITECTURE.md#initial-stack-brief",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-DESIGN-SYSTEM.md",
+        "destination": "knowledge/DESIGN.md#design-system",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-ADMIN-PAGES.md",
+        "destination": "knowledge/DESIGN.md#admin-pages",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-CUSTOMER-BOOKING-PAGES.md",
+        "destination": "knowledge/DESIGN.md#customer-pages",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-CHARTS-AND-METRICS.md",
+        "destination": "knowledge/DESIGN.md#charts-metrics",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-INTERACTIONS-RESPONSIVE-A11Y.md",
+        "destination": "knowledge/DESIGN.md#interactions-a11y",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-DESIGN-DECISION-ADR-001.md",
+        "destination": "knowledge/DESIGN.md#adr-001",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-REFERENCE-TRACEABILITY.md",
+        "destination": "knowledge/DESIGN.md#reference-traceability",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
+        "destination": "knowledge/DESIGN.md#ux-acceptance",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "docs/agents/CINENEST-PROJECT-EXECUTION-AGENT.md",
+        "destination": "knowledge/PROGRESS.md#execution-charter",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      },
+      {
+        "sourcePath": "knowledge/execution/CINENEST-EXECUTION-PLAN.md",
+        "destination": "knowledge/PROGRESS.md#execution-plan",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/execution/change-sets.json"
+      },
+      {
+        "sourcePath": "knowledge/execution/CINENEST-REQUIREMENTS-TRACEABILITY.md",
+        "destination": "knowledge/PROGRESS.md#requirements-traceability",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/execution/requirements.json"
+      },
+      {
+        "sourcePath": "knowledge/execution/CINENEST-EXECUTION-STATUS.md",
+        "destination": "knowledge/PROGRESS.md#prior-status",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      },
+      {
+        "sourcePath": "knowledge/execution/CINENEST-SESSION-HANDOFF.md",
+        "destination": "knowledge/PROGRESS.md#prior-handoff",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      },
+      {
+        "sourcePath": "knowledge/delivery/CINENEST-IMPLEMENTATION-PHASES-AND-ACCEPTANCE.md",
+        "destination": "knowledge/PROGRESS.md#delivery-phases",
+        "method": "RETAINED_SUBSTANTIVE_LINES"
+      },
+      {
+        "sourcePath": "knowledge/CHANGELOG.md",
+        "destination": "knowledge/PROGRESS.md#version-history",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-VALIDATION-REPORT.md",
+        "destination": "knowledge/PROGRESS.md#feature-validation-history",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      },
+      {
+        "sourcePath": "knowledge/delivery/CINENEST-PACKAGE-CONFIGURATION-VALIDATION.md",
+        "destination": "knowledge/PROGRESS.md#package-validation-history",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      },
+      {
+        "sourcePath": "knowledge/delivery/CINENEST-BANK-PAYMENT-VALIDATION.md",
+        "destination": "knowledge/PROGRESS.md#bank-validation-history",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      },
+      {
+        "sourcePath": "knowledge/execution/evidence/CN-AGENT-SETUP-001.md",
+        "destination": "knowledge/PROGRESS.md#setup-evidence-history",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      },
+      {
+        "sourcePath": "knowledge/execution/evidence/CN-DEC-001.md",
+        "destination": "knowledge/PROGRESS.md#decision-evidence-history",
+        "method": "EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY",
+        "authority": "knowledge/PROGRESS.md"
+      }
+    ],
+    "editorialAllowedRelocations": [
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 46,
+        "sha256": "8cd51983755a1128da525d0b091317cc2ffec7616219f2725b605ffce83047e7",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 48,
+        "sha256": "151d05f68806e0551ce690fcb030665ceb637786d51948ac2cfce3ed50d0f524",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 49,
+        "sha256": "38f664dc641ba5a6b744aea20a631b948f5099ecf0be22f6bc5fd80aa43811f6",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 50,
+        "sha256": "2ed4be6fe60c4b7a91a25b320c2fe2f46e216b58308bbb705c329401cce5803b",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 51,
+        "sha256": "7a7f7005018f448f1a740b230e757b5255c7b7e689eb28960c7fd0e531b6e013",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 52,
+        "sha256": "f54014f3966ec286564395a856a516c789f7fa154799f21e35a7d6cec8a3b9ca",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 53,
+        "sha256": "9c57e1eec5930c5e56c421e363049d0dc38a05eb66eaf4ab47f92ab5ce0b2cc0",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 54,
+        "sha256": "dd99658e40728d453f428e6031324cf3129b887e2119afb8a45252861fc09b43",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 55,
+        "sha256": "8f7bd036fb19fc05aac040e44305cac54bbf208bdcb1843aa89aeacbfdb2c965",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md",
+        "sourceLine": 56,
+        "sha256": "430581ae5b77f1e785603ac32f0af7c80cafa926fad54bb15ea57ae513ba0053",
+        "destination": "PROJECT.md#business-rules",
+        "reason": "Initial default values/ownership consolidated into PROJECT business-rules and unchanged draft-rules registry; capacity assurance explicitly unresolved"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 7,
+        "sha256": "113074254f570208cf23b6ab5ca76fe00bd46e0ed1c5e327bb43ba0885a0386b",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 9,
+        "sha256": "3ceeece6c0409f44bd80e9fa6547f39a42b49ace89e8df85a50f7cdde083a0d6",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 13,
+        "sha256": "94dde745e3607add98ee35263117693b296271a556567b1f16cab60f894e0cbe",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 15,
+        "sha256": "f36d731d87d44f2e68137997499cd58fc33db9fdcf854c6f8af7ad07be47b241",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 16,
+        "sha256": "8ec64f1546fe140b74ba489d56a5f6a5ce4446b1938b3e4290d21507fda1322f",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 17,
+        "sha256": "c615b862a3fad79264a2aa1f7aa0356d4b2958378adb20c7bb0e8643cc7cec39",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 18,
+        "sha256": "bf18d6df7954a3ff24e4a83ba1d6b5418ed9b4e4246114b100bfd1b74bcc5a7a",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 19,
+        "sha256": "8fd9bbcb57e13fecda2726d197f2c4280927ed06917e90ceee55b0a3a709cd2a",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 20,
+        "sha256": "da39278308a8516a46dd2abd0ba3bfb206cb45b0aeb15eb95746e4a2028b62fb",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 21,
+        "sha256": "9c4e30d8c017d1e6799969088ed1a67e9c49f3e4e198839543fa9d2ecc38baa2",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 23,
+        "sha256": "b5bd4e1c474652f363ae8ba8b15ff99c4eb69f04c26246e72d2046cbcf995872",
+        "destination": "PROGRESS.md#decision-evidence-history",
+        "reason": "Duplicate decision preflight/drivers/source links consolidated into PROJECT/ARCHITECTURE and existing decision input/check/publication evidence; no selection approval"
+      },
+      {
+        "sourcePath": "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
+        "sourceLine": 32,
+        "sha256": "347e8c719dbb97f7083407abd5d8e9fb27fadfe77f8f2dcda8e7eaaa28a044ee",
+        "destination": "ARCHITECTURE.md#technology",
+        "reason": "Owner S13 supersedes per-decision-file maintenance guidance; decisions updated in place, never approves stack"
+      }
+    ],
+    "initialMigrationProof": "canonicalPayloadSha256 values describe lossless initial grouping at1d900cd; current content is editorially validated against that baseline and machine authorities"
   },
   "protectedCatalogBaseline": {
     "revision": "75cd23f25fec8ab9eaee39556e0f5dd274ee7092",

@@ -1,10 +1,12 @@
 # CineNest Project
 
-Canonical product knowledge: overview, scope, feature IDs, business rules and acceptance requirements. Update this file in place; new knowledge files need explicit owner approval. [Architecture](ARCHITECTURE.md), [design](DESIGN.md), [progress and handoff](PROGRESS.md).
+CineNest is the Smart Automated Private Cinema and IoT Management Platform. This document owns product scope, business rules, package/booking/payment lifecycles and acceptance. [Architecture](ARCHITECTURE.md), [design](DESIGN.md), [progress](PROGRESS.md).
 
-CineNest is the Smart Automated Private Cinema and IoT Management Platform. Confirmed core: approved hybrid customer/admin visuals; authorized admin-editable package details/duration/prices without per-edit deployment; bank deposit/receipt upload/notified independent verification alongside gateway payments. Supporting defaults/policies and implementation remain draft/unverified. All 27 feature IDs, BR-01–10, PK-AC01–13 and BP-AC01–13 are retained below. Machine catalog/rules/lifecycles and execution registries remain structured specifications, not a deployed application. No requirements are dropped by consolidation.
+Approved core: hybrid visuals (ADR-001); PR-PKG-001/CN-A12 admin-editable details, duration and price without per-edit code deployment (S8); PR-BANK-001/CN-C10/CN-A13 bank deposit/receipt/reviewer notification and independent authorized credit verification alongside gateway payment (S9). Supporting rules/designs remain draft or recommended; all product implementation NOT_VERIFIED. No new fee, deadline, role, capacity exception or policy is selected here. Original PDFs/knowledge pack remain missing.
 
-## Contents
+Users include customers/bookers, booking/room operators, identity reviewers, bank reviewers/verifiers/allocators, finance/refund staff, package editors/publishers, auditors and responders. Capability allocation and thresholds remain open; admin login does not grant every sensitive capability. Business rules below own customer obligations; ARCHITECTURE owns technical enforcement; DESIGN specifies presentation and links to these rules.
+
+## Navigation
 
 - [Features](#features)
 - [Business Rules](#business-rules)
@@ -12,529 +14,44 @@ CineNest is the Smart Automated Private Cinema and IoT Management Platform. Conf
 - [Bank Payments](#bank-payments)
 
 <a id="features"></a>
-<!-- migrated-begin:knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md -->
-### CineNest Product Scope and Feature Catalog
+## Features
 
-> Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).
-> Decision: DOCUMENTED_DRAFT unless a row specifies otherwise. Implementation: NOT_VERIFIED.
-> Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
+Full feature definitions (actors, workflow, rules, capabilities, ownership, pages, integration, failure and acceptance) are owned by the existing [feature catalog](product/cinenest-feature-catalog.json). The following overview is derived from it; no feature is removed or deferred by this table. Approval and implementation are independent. Core approval provenance: S8 explicit user confirmation for CN-A12; S9 explicit user feature request for CN-C10/CN-A13.
 
-#### Baseline and canonical links
-No application manifests or implemented modules exist at the inspected HEAD. All workflows below are desired behavior, with Implementation NOT_VERIFIED. IDs are newly allocated because no feature IDs existed in the baseline. Source S1 and detailed evidence status are recorded in [traceability](ARCHITECTURE.md#open-decisions). Rules refer to [canonical business defaults/lifecycles](PROJECT.md#business-rules); no duplicated prices/policies here. Ownership means proposed module, not verified tables/classes. [UI page specs](DESIGN.md#admin-pages) and [customer specs](DESIGN.md#customer-pages) remain canonical layouts.
-
-#### CN-C01 — Discovery
-
-| Field | Specification |
-|---|---|
-| Purpose | Discover cinematic venue/rooms with photos, amenities, capacity and indicative prices |
-| Actors | Customer |
-| Workflow | Browse catalog → inspect room → choose |
-| Business rules | BR-01/03; truthful rights/amenities |
-| Permissions | Public catalog read |
-| Owning module | Venues/Rooms |
-| UI pages | Landing Page; Cinema Room Selection |
-| Integrations | Private asset delivery/CMS candidate |
-| Failure states | Catalog/photo unavailable |
-| Acceptance criteria | Usable catalog without auth; no fabricated availability or production sample price |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-C02 — Identity, profile and consent
-
-| Field | Specification |
-|---|---|
-| Purpose | Google sign-in, profile and secure session with explicit versioned policy acceptance |
-| Actors | Customer; support |
-| Workflow | OIDC → server session → profile → consent record |
-| Business rules | BR-08/10; auth does not equal consent/verification |
-| Permissions | Self profile; restricted account support |
-| Owning module | Identity & Access |
-| UI pages | Google Authentication; Customer Dashboard |
-| Integrations | Google OIDC candidate |
-| Failure states | Callback/session/consent failure |
-| Acceptance criteria | Owner-scoped session/profile; explicit policy version/time persisted |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-C03 — Availability and temporary holds
-
-| Field | Specification |
-|---|---|
-| Purpose | Choose room/date/time with conflict protection |
-| Actors | Customer; booking agent |
-| Workflow | Query slots → create expiring hold → checkout |
-| Business rules | BR-01/02/06/07; database interval guard |
-| Permissions | Owner hold; booking.create |
-| Owning module | Booking |
-| UI pages | Date and Time Selection |
-| Integrations | PostgreSQL; Redis recommended |
-| Failure states | Expired hold; concurrent slot conflict |
-| Acceptance criteria | Two conflicting reservations cannot both commit; server expiresAt shown |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-C04 — Quotation and add-ons
-
-| Field | Specification |
-|---|---|
-| Purpose | Authoritative guest/duration/PS4 itemization |
-| Actors | Customer; pricing manager |
-| Workflow | Choose guests/extras → server quote → accept version |
-| Business rules | BR-02/03/04/05/10 |
-| Permissions | Owner quote; pricing.write separate |
-| Owning module | Pricing |
-| UI pages | Booking Summary |
-| Integrations | Booking availability |
-| Failure states | Price change; capacity/extension conflict |
-| Acceptance criteria | Base/PS4 examples correct; fifth guest charged once; final total server generated |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-C05 — Booker verification
-
-| Field | Specification |
-|---|---|
-| Purpose | NIC/passport upload, OCR assistance, age policy and manual exceptions |
-| Actors | Booker; verifier |
-| Workflow | Consent → private upload → extract → validate/review → decide |
-| Business rules | BR-08; all-guests process OD-03 |
-| Permissions | Self submission; identity.review/evidence.read separate |
-| Owning module | Verification |
-| UI pages | Identity Verification; Customer Management |
-| Integrations | OCR/private storage candidates |
-| Failure states | Unreadable upload; ambiguous/rejected/pending |
-| Acceptance criteria | OCR cannot alone prove authenticity; restricted decision/evidence access |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-C06 — Hosted payment and confirmation
-
-| Field | Specification |
-|---|---|
-| Purpose | Hosted checkout, receipts and authoritative confirmation |
-| Actors | Customer; finance |
-| Workflow | Attempt → hosted provider → verified notification → reserve/confirm |
-| Business rules | BR-05/10; webhook and inventory guard |
-| Permissions | Owner pay/read; payments.read |
-| Owning module | Payments |
-| UI pages | Payment Processing; Booking Confirmation |
-| Integrations | PayHere or bank IPG candidates |
-| Failure states | Pending/failure/late success/duplicate notification |
-| Acceptance criteria | Redirect never grants success; duplicate events have one effect; receipt from ledger |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-C07 — Protected access and delivery
-
-| Field | Specification |
-|---|---|
-| Purpose | Provisioning status, time-bound PIN and SMS/email access instructions |
-| Actors | Customer; access operator |
-| Workflow | Confirm → install → acknowledge → deliver protected access → admit |
-| Business rules | BR-09; paid != installed |
-| Permissions | Owner reveal; access.manage restricted |
-| Owning module | Access Control; Notifications |
-| UI pages | Smart Door Access PIN; Booking Confirmation |
-| Integrations | Lock API; SMS/email candidates |
-| Failure states | Install/delivery/access failure |
-| Acceptance criteria | No access-ready state before install evidence; delivery failure yields support |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-C08 — Self-service booking history
-
-| Field | Specification |
-|---|---|
-| Purpose | Upcoming/past records, receipt and permitted changes |
-| Actors | Customer |
-| Workflow | Owner list → detail → policy-checked modify/extend/cancel/refund |
-| Business rules | BR-02/06/10; refund snapshot |
-| Permissions | Self booking; separate refund eligibility |
-| Owning module | Booking |
-| UI pages | Customer Dashboard; Booking History |
-| Integrations | Pricing/Payments/Access |
-| Failure states | Expired session; conflict; pending refund |
-| Acceptance criteria | No cross-customer reads; retain history and original terms |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-C09 — Referral and loyalty
-
-| Field | Specification |
-|---|---|
-| Purpose | Proposed earning, expiry, redemption and referral rewards |
-| Actors | Customer; engagement manager |
-| Workflow | Qualify → pending/earned → redeem/expire/reverse |
-| Business rules | OD-08; rules not selected |
-| Permissions | Self ledger; loyalty.adjust restricted |
-| Owning module | Customer Engagement |
-| UI pages | Loyalty and Referrals; Promotions and Loyalty |
-| Integrations | Booking/payment ledger |
-| Failure states | Ineligible referral; reversal; unavailable rules |
-| Acceptance criteria | No invented earn rate; reversals audited; unavailable feature not promoted |
-| Source | S1 |
-| Decision | OPEN_DECISION |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A01 — Operational dashboard
-
-| Field | Specification |
-|---|---|
-| Purpose | KPIs, charts, live rooms, activity and system health |
-| Actors | Admin; operator; finance |
-| Workflow | Select scope/range → authorized aggregates → drill-down |
-| Business rules | Metric definitions; live vs physical occupancy separate |
-| Permissions | dashboard.read plus finance/room scope |
-| Owning module | Analytics |
-| UI pages | Dashboard |
-| Integrations | Module read projections |
-| Failure states | Stale/partial metrics |
-| Acceptance criteria | All card labels include basis/asOf; no unavailable-to-zero fallback |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A02 — Booking administration
-
-| Field | Specification |
-|---|---|
-| Purpose | Search/filter/page/detail/manual creation/change/cancel/extend |
-| Actors | Booking agent; operator |
-| Workflow | Find booking → permitted action → validate/quote → audited result |
-| Business rules | BR-01–10; agreed revision and policy snapshots |
-| Permissions | booking.read/create/update/cancel/export |
-| Owning module | Booking |
-| UI pages | Booking Management |
-| Integrations | Pricing/Verification/Payments/Access |
-| Failure states | Concurrent edits; expiry; late payment |
-| Acceptance criteria | Stable paging; permissions checked server-side; no silent price rewriting |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A03 — Venue and room configuration
-
-| Field | Specification |
-|---|---|
-| Purpose | Amenities/photos/hours/maintenance/enable/disable/device mapping |
-| Actors | Room manager |
-| Workflow | Configure version → impact review → effective update |
-| Business rules | BR-01/03/06; booked purchases preserved |
-| Permissions | room.read/write; device assignment distinct |
-| Owning module | Venues/Rooms |
-| UI pages | Cinema Room Management; System Settings |
-| Integrations | IoT inventory/private asset storage |
-| Failure states | Unsafe disable; conflicting schedules |
-| Acceptance criteria | Existing reservation impacts shown; enabled does not mean clean/healthy |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A04 — Equivalent room views
-
-| Field | Specification |
-|---|---|
-| Purpose | Card/table views of same rooms and permitted actions |
-| Actors | Room manager; operator |
-| Workflow | Load scoped dataset → switch view |
-| Business rules | One shared query, status map and permissions |
-| Permissions | room.read; action capabilities independent |
-| Owning module | Venues/Rooms |
-| UI pages | Cinema Room Management |
-| Integrations | Same room projection |
-| Failure states | Empty/filter/no-permission states |
-| Acceptance criteria | Both views return same IDs/states and preserve filters |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A05 — Live control and incidents
-
-| Field | Specification |
-|---|---|
-| Purpose | Health, acknowledged controls, timers and incident handling |
-| Actors | Operator; responder |
-| Workflow | Inspect freshness → safe command → ack → observe/escalate |
-| Business rules | Safety guards; no inference of empty room from exit/motion |
-| Permissions | room.control/device.command; override separate |
-| Owning module | IoT; Access Control |
-| UI pages | Room Live Control |
-| Integrations | ESP32/MQTT/vendor adapters |
-| Failure states | Unknown outcome; offline; overstay |
-| Acceptance criteria | Requested != observed; no unsafe egress/power action |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A06 — Account and verification review
-
-| Field | Specification |
-|---|---|
-| Purpose | Separate account/verification statuses and restricted evidence review |
-| Actors | Support; verifier |
-| Workflow | Find owner → permitted profile/review → reasoned decision |
-| Business rules | BR-08/10; minimal evidence exposure |
-| Permissions | customer.read/write; identity.review; evidence.read |
-| Owning module | Identity & Access; Verification |
-| UI pages | Customer Management |
-| Integrations | OIDC/storage/OCR candidate |
-| Failure states | Denied evidence; expired decision |
-| Acceptance criteria | Suspended != rejected; raw documents never in customer list |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A07 — Finance operations
-
-| Field | Specification |
-|---|---|
-| Purpose | Transactions, fees, refunds, reconciliation and scoped exports |
-| Actors | Finance; auditor |
-| Workflow | Ledger → eligibility → refund/reconcile → verified result |
-| Business rules | Booked refund snapshot; ledger event dedupe |
-| Permissions | payments.read/refund/export distinct |
-| Owning module | Payments |
-| UI pages | Payments and Refunds |
-| Integrations | Hosted provider/bank IPG candidate |
-| Failure states | Partial/failed/unknown refund; duplicate capture |
-| Acceptance criteria | Refund balance enforced; reconciliation discoverable; no card-data collection |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A08 — Analytics and exports
-
-| Field | Specification |
-|---|---|
-| Purpose | Reports and financial/nonfinancial chart drill-down |
-| Actors | Analyst; finance |
-| Workflow | Scope/query → definitions → aggregate → export |
-| Business rules | Canonical units/population/time basis |
-| Permissions | analytics.read; finance and export separate |
-| Owning module | Analytics |
-| UI pages | Analytics and Reports |
-| Integrations | Authorized read models |
-| Failure states | Partial data; mixed currency; undefined recognition |
-| Acceptance criteria | Export matches visible filters and metric IDs; separate scales |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A09 — Engagement administration
-
-| Field | Specification |
-|---|---|
-| Purpose | Promotions, loyalty/referrals and audited adjustments |
-| Actors | Campaign manager |
-| Workflow | Version draft → approve rules → publish → ledger reversal |
-| Business rules | OD-08; stacking/caps/expiry undecided |
-| Permissions | promotion.read/write; loyalty.adjust |
-| Owning module | Customer Engagement |
-| UI pages | Promotions and Loyalty |
-| Integrations | Pricing/booking facts |
-| Failure states | Duplicate code; caps; invalid reversal |
-| Acceptance criteria | Versioned eligibility; no retroactive rule changes to earned rewards without approved process |
-| Source | S1 |
-| Decision | OPEN_DECISION |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A10 — Policy and notification settings
-
-| Field | Specification |
-|---|---|
-| Purpose | Versioned pricing/policies/templates/integration settings |
-| Actors | Policy manager; admin |
-| Workflow | Draft → review impact → effective version |
-| Business rules | BR-10; secrets write-only; consent versions |
-| Permissions | settings.read/write; secrets/manage-access separate |
-| Owning module | Pricing; Notifications; Identity & Access |
-| UI pages | System Settings |
-| Integrations | Selected providers only |
-| Failure states | Concurrent update; invalid provider; failed test |
-| Acceptance criteria | Prior purchases/consent retained; no privilege escalation |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A11 — Audit visibility
-
-| Field | Specification |
-|---|---|
-| Purpose | Scoped immutable operational evidence |
-| Actors | Auditor; restricted admin |
-| Workflow | Filter → redacted event detail → export |
-| Business rules | No credentials/raw ID/card data; retention OD-05 |
-| Permissions | audit.read/export |
-| Owning module | Audit |
-| UI pages | Audit Logs |
-| Integrations | All module audit envelopes |
-| Failure states | Delayed ingestion; denied/retention boundary |
-| Acceptance criteria | Actor/resource/reason/correlation recorded; no edit/delete UX |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-O01 — Access credential lifecycle
-
-| Field | Specification |
-|---|---|
-| Purpose | Install/activate/expire/revoke and supported re-entry |
-| Actors | Access service; operator; customer |
-| Workflow | Confirmed purchase → credential version → device ack → timed entry |
-| Business rules | BR-09; egress independent; OD-02 |
-| Permissions | Service scope; owner reveal; access.manage |
-| Owning module | Access Control |
-| UI pages | Smart Door Access PIN; Room Live Control |
-| Integrations | Tested TTLock/Tuya-compatible hardware candidates |
-| Failure states | Offline install/revoke; clock drift; lock failure |
-| Acceptance criteria | Valid only session interval; re-entry tested, not presumed |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-O02 — ESP32 and room automation
-
-| Field | Specification |
-|---|---|
-| Purpose | MQTT lighting scenes, AC and supported projector control |
-| Actors | Operator; IoT service |
-| Workflow | Register device → capability map → authorized command → ack/telemetry |
-| Business rules | TLS; bounded setpoints; safety circuits excluded |
-| Permissions | device.manage/command |
-| Owning module | IoT |
-| UI pages | Room Live Control; IoT Device Management |
-| Integrations | ESP32; EMQX or Mosquitto candidates |
-| Failure states | Firmware mismatch; stale telemetry; command expiry |
-| Acceptance criteria | Only capability-supported operations; per-device auth and expiring commands |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-O03 — End-of-session operations
-
-| Field | Specification |
-|---|---|
-| Purpose | Five-minute warning, checkout/exit recording, cleaning and overstay escalation |
-| Actors | Scheduler; customer; staff |
-| Workflow | Warn → session ends → safe expiry → cleaning task → staff clearance |
-| Business rules | BR-06/09; exit event != all persons exited |
-| Permissions | Worker scope; incident/cleaning staff |
-| Owning module | Booking; Notifications; Venues/Rooms |
-| UI pages | Customer Dashboard; Room Live Control |
-| Integrations | SMS/email; optional sensors |
-| Failure states | Missed warning; no cleaner; suspected overstay |
-| Acceptance criteria | No physical-cleaning claim from timer; accountable intervention path |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-O04 — Connectivity and emergency recovery
-
-| Field | Specification |
-|---|---|
-| Purpose | Monitoring, tested offline entry, bounded retries/recovery and intervention |
-| Actors | Operator; responder |
-| Workflow | Detect stale → safe degraded state → reconcile → tested fallback |
-| Business rules | OD-02/04; cloud unlock is not offline access |
-| Permissions | Health read; recovery/override restricted |
-| Owning module | IoT; Access Control |
-| UI pages | IoT Device Management; Room Live Control |
-| Integrations | Lock/controller/broker connectivity |
-| Failure states | Power/cloud/broker/vendor loss |
-| Acceptance criteria | Unknown not OFF/empty; independent egress and trained response verified before launch |
-| Source | S1 |
-| Decision | DOCUMENTED_DRAFT |
-| Implementation | NOT_VERIFIED |
-
-#### CN-A12 — Admin-editable package details duration and prices
-
-| Field | Specification |
-|---|---|
-| Requirement ID | PR-PKG-001 |
-| Purpose | Authorized administrators can modify package details, session duration, and prices through the Admin Panel, without editing application code or requiring a deployment for each configuration change. |
-| Actors | Authorized package administrator; publisher/reviewer roles proposed |
-| Workflow | Edit core package settings via Admin Panel; supporting draft/preview/versioned publish/schedule/deactivate/archive flow RECOMMENDED |
-| Business rules | Canonical package specification; separate operational minimum, physical capacity and cleaning; immutable sold terms and accepted quotes |
-| Permissions | Proposed package.read/edit/publish/deactivate/archive independently within authorized venue scope |
-| Owning module | Pricing (existing proposed owner); Booking owns purchased snapshots |
-| UI pages | System Settings → Packages & Pricing (proposed subsection, no verified route); customer package/quote/confirmation views |
-| Integrations | Venues/Rooms constraints; Identity & Access; Booking; Payments; Audit; no device command from catalog edit |
-| Failure states | Invalid fields/constraints; denied scope; stale draft; overlapping versions; expired quote/hold; partial amendment outcome |
-| Acceptance criteria | PK-AC01–13 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections |
-| Decision | APPROVED |
-| Supporting design | RECOMMENDED |
-| Implementation | NOT_VERIFIED |
-| Source | [S8](sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt), explicit user confirmation |
-
-Canonical definitions: [package management](PROJECT.md#package-management). Core APPROVED is limited to PR-PKG-001; broader policy/notification settings CN-A10 and quote/add-on behavior CN-C04 retain their existing statuses.
-
-#### CN-C10 — Bank deposit transfer and receipt claim
-
-| Field | Specification |
-|---|---|
-| Requirement | PR-BANK-001 |
-| Purpose | Customer bank deposit/transfer and receipt submission with confirmation after authorized independent verification; retain online gateway option |
-| Actors | Customer; authorized financial reviewer |
-| Workflow | Accepted quote/request and provisional hold → evidence claim → admin review → verified funds/allocation → eligible confirmation → access workflow |
-| Business rules | PR-BANK-001; receipt not verified; verified not confirmed/access-ready; method policy/fee/deadline open; purchased terms retained |
-| Permissions | Own bank request/claim read/submit; restricted review/verify/allocate; server venue/owner scope |
-| Owner | Payments; Booking; Notifications |
-| UI | Payment Processing; Customer Dashboard/Booking History; protected claim upload/status |
-| Integrations | Manual receiving-bank record matching recommended; private receipt storage; no bank API support claimed |
-| Failures | Under/excess/wrong funds; unmatched/late claim; expired inventory; notification/access failure |
-| Acceptance | BP-AC01–13; independent bank credit and guarded one-booking result; not tests run |
-| Decision | APPROVED |
-| Provenance | USER-CONFIRMED |
-| Supporting design | RECOMMENDED |
-| Implementation | NOT_VERIFIED |
-| Source | S9, explicit user feature request |
-
-Canonical [bank payment specification](PROJECT.md#bank-payments); supporting method policies remain open.
-
-
-#### CN-A13 — Bank payment review and reviewer notification
-
-| Field | Specification |
-|---|---|
-| Requirement | PR-BANK-001 |
-| Purpose | Notify scoped admins of review-required bank claims and enable independent receiving-account verification/approval |
-| Actors | Authorized reviewer/verifier/allocator; bank settings and refund staff separately authorized |
-| Workflow | Durable review queue/alert → inspect restricted evidence and actual bank record → record credit → guard allocation/booking or resolution |
-| Business rules | Bank credit fact retained even if service unavailable; no duplicate allocation/booking; adjustment/refund separate audited evidence |
-| Permissions | bank.review/evidence.read/verify/allocate/resolve distinct from bank.account.manage and refund execute/approve |
-| Owner | Payments; Booking; Notifications; Audit |
-| UI | Payments → Bank Deposit Reviews (proposed subsection) |
-| Integrations | Manual statement matching recommended; existing gateway unchanged; durable outbox/access interfaces |
-| Failures | Concurrent reviewers; reused receipt/transaction; unmatched bank credit; overdue review; suspicious correction; failed alerts |
-| Acceptance | BP-AC01–13; alert failure retains queue; approval alone no completed booking/access/refund |
-| Decision | APPROVED |
-| Provenance | USER-CONFIRMED |
-| Supporting design | RECOMMENDED |
-| Implementation | NOT_VERIFIED |
-| Source | S9, explicit user feature request |
-
-Canonical [bank payment specification](PROJECT.md#bank-payments); supporting method policies remain open.
-
-<!-- migrated-end:knowledge/product/CINENEST-PRODUCT-SCOPE-AND-FEATURES.md -->
+| ID | Feature / purpose | Module | Decision |
+|---|---|---|---|
+| CN-C01 | Discovery — Discover cinematic venue/rooms with photos, amenities, capacity and indicative prices | Venues/Rooms | DOCUMENTED_DRAFT |
+| CN-C02 | Identity, profile and consent — Google sign-in, profile and secure session with explicit versioned policy acceptance | Identity & Access | DOCUMENTED_DRAFT |
+| CN-C03 | Availability and temporary holds — Choose room/date/time with conflict protection | Booking | DOCUMENTED_DRAFT |
+| CN-C04 | Quotation and add-ons — Authoritative guest/duration/PS4 itemization | Pricing | DOCUMENTED_DRAFT |
+| CN-C05 | Booker verification — NIC/passport upload, OCR assistance, age policy and manual exceptions | Verification | DOCUMENTED_DRAFT |
+| CN-C06 | Hosted payment and confirmation — Hosted checkout, receipts and authoritative confirmation | Payments | DOCUMENTED_DRAFT |
+| CN-C07 | Protected access and delivery — Provisioning status, time-bound PIN and SMS/email access instructions | Access Control; Notifications | DOCUMENTED_DRAFT |
+| CN-C08 | Self-service booking history — Upcoming/past records, receipt and permitted changes | Booking | DOCUMENTED_DRAFT |
+| CN-C09 | Referral and loyalty — Proposed earning, expiry, redemption and referral rewards | Customer Engagement | OPEN_DECISION |
+| CN-A01 | Operational dashboard — KPIs, charts, live rooms, activity and system health | Analytics | DOCUMENTED_DRAFT |
+| CN-A02 | Booking administration — Search/filter/page/detail/manual creation/change/cancel/extend | Booking | DOCUMENTED_DRAFT |
+| CN-A03 | Venue and room configuration — Amenities/photos/hours/maintenance/enable/disable/device mapping | Venues/Rooms | DOCUMENTED_DRAFT |
+| CN-A04 | Equivalent room views — Card/table views of same rooms and permitted actions | Venues/Rooms | DOCUMENTED_DRAFT |
+| CN-A05 | Live control and incidents — Health, acknowledged controls, timers and incident handling | IoT; Access Control | DOCUMENTED_DRAFT |
+| CN-A06 | Account and verification review — Separate account/verification statuses and restricted evidence review | Identity & Access; Verification | DOCUMENTED_DRAFT |
+| CN-A07 | Finance operations — Transactions, fees, refunds, reconciliation and scoped exports | Payments | DOCUMENTED_DRAFT |
+| CN-A08 | Analytics and exports — Reports and financial/nonfinancial chart drill-down | Analytics | DOCUMENTED_DRAFT |
+| CN-A09 | Engagement administration — Promotions, loyalty/referrals and audited adjustments | Customer Engagement | OPEN_DECISION |
+| CN-A10 | Policy and notification settings — Versioned pricing/policies/templates/integration settings | Pricing; Notifications; Identity & Access | DOCUMENTED_DRAFT |
+| CN-A11 | Audit visibility — Scoped immutable operational evidence | Audit | DOCUMENTED_DRAFT |
+| CN-O01 | Access credential lifecycle — Install/activate/expire/revoke and supported re-entry | Access Control | DOCUMENTED_DRAFT |
+| CN-O02 | ESP32 and room automation — MQTT lighting scenes, AC and supported projector control | IoT | DOCUMENTED_DRAFT |
+| CN-O03 | End-of-session operations — Five-minute warning, checkout/exit recording, cleaning and overstay escalation | Booking; Notifications; Venues/Rooms | DOCUMENTED_DRAFT |
+| CN-O04 | Connectivity and emergency recovery — Monitoring, tested offline entry, bounded retries/recovery and intervention | IoT; Access Control | DOCUMENTED_DRAFT |
+| CN-A12 | Admin-editable package details duration and prices — Authorized administrators can modify package details, session duration, and prices through the Admin Panel, without editing application code or requiring a deployment for each configuration change. | Pricing (existing proposed owner); Booking owns purchased snapshots | APPROVED |
+| CN-C10 | Bank deposit transfer and receipt claim — Customer bank deposit/transfer and receipt submission with confirmation after authorized independent verification; retain online gateway option | Payments; Booking; Notifications | APPROVED |
+| CN-A13 | Bank payment review and reviewer notification — Notify scoped admins of review-required bank claims and enable independent receiving-account verification/approval | Payments; Booking; Notifications; Audit | APPROVED |
 
 <a id="business-rules"></a>
-<!-- migrated-begin:knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md -->
-### CineNest Business Rules and Lifecycles
+## Business Rules
 
-> Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).
-> Decision: DOCUMENTED_DRAFT unless a row specifies otherwise. Implementation: NOT_VERIFIED.
-> Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
-
-
-#### Canonical initial draft defaults
+### Canonical initial draft defaults
 [Rule specification](product/cinenest-draft-rules.json) is machine-readable documentation, never a runtime configuration change. All initial values originate in S1 and are reaffirmed/classified by S8, not unseen PDFs. These are configurable initial defaults, not immutable application values; package content and rates are distinct from operational constraints. Backend configuration must be versioned and approved before launch. Open items: [decision register](ARCHITECTURE.md#open-decisions).
 
 | ID | Draft rule | Constraints |
@@ -552,12 +69,12 @@ Canonical [bank payment specification](PROJECT.md#bank-payments); supporting met
 
 Authoritative quote uses applicable package/fee/add-on versions and server line items; [parameterized calculation](PROJECT.md#package-management) handles included duration, eligible extension units and included extras without double charging. Labeled initial illustration (online, no discounts/decided tax treatment): Base booking = **LKR 2,600**; base plus PS4 = **LKR 3,600**. These examples are documentation fixtures, not operational prices or frontend constants. Pricing owns rounding, itemization and eligibility.
 
-#### Inventory, time and concurrency
+### Inventory, time and concurrency
 `session_end = session_start + purchased_duration` and `blocked_until = session_end + cleaning_buffer`. Reservation blocking interval is **[session_start,blocked_until)**; guest access interval is **[session_start,session_end)**. Distinguish the two in APIs, calendars, UI and device scheduling. Back-to-back session beginning exactly blocked_until is permissible only when readiness is cleared. Operating checks use venue-local calendar boundaries; storage uses UTC instants with original timezone/config version. Cleaning ending after midnight needs OD-10 resolution.
 
 Recommended PostgreSQL exclusion constraint or equivalent database-enforced conflict guard on room plus active blocking range; transaction serialization/locking validates holds, booking writes, extensions and reschedules together. Redis is an optional temporary hold/cache mechanism, never the sole overlap guarantee. If Redis fails, fail safe or fall back to authoritative database-backed holds; do not bypass reservation checks. Hold owner, expiry, quote version and consumed flag checked atomically. A hold is not a confirmed booking.
 
-#### Edge workflows
+### Edge workflows
 - Expired hold: mark expired, release inventory, refresh availability/quote. Do not extend from browser countdown alone.
 - Late gateway capture: deduplicate verified provider event; recheck reservation under database guard. Confirm only if inventory/policy remains valid; otherwise payment exception and compensating refund/support. External capture is not undone by database rollback.
 - Duplicate/out-of-order webhook: durable inbox keyed by provider event/transaction; preserve facts, version-aware state projection, reconcile provider status; do not move captured to failed on a late earlier event.
@@ -566,10 +83,10 @@ Recommended PostgreSQL exclusion constraint or equivalent database-enforced conf
 - Extend: applicable configured whole increment (initially 60 minutes), accepted amendment delta quote, check next booking plus buffer/closing/readiness; replace reservation range atomically. Capture delta then update access only through durable workflow; payment success does not guarantee PIN end-time updated. Reconcile any partial outcome.
 - Cancel/refund: authorization and policy snapshot eligibility, cancel inventory and revoke access safely; refund remains separate asynchronous state until verified successful. No automatic card re-billing without separately approved consent/provider capability (OD-07).
 
-#### Proposed lifecycle transitions
+### Proposed lifecycle transitions
 All tables are desired behavior, not implemented states. State changes are versioned and server authorized. Timeouts are policy-configured (not invented numbers); each requires a durable audit event containing actor, resource, reason, prior/new state and correlation ID without secrets. Trigger codes below are reused in contracts. Account active/suspended is separate from verification.
 
-##### Booking
+#### Booking
 | Transition | Trigger / guard | Actor | Side effects | Timeout / recovery | Audit evidence |
 |---|---|---|---|---|---|
 | draft → held | HOLD_CREATED; available blocking range, capacity, owner | Customer or authorized booking creator | Hold + versioned quote | Server expiresAt; reselect | Hold ID/range/version |
@@ -581,7 +98,7 @@ All tables are desired behavior, not implemented states. State changes are versi
 | confirmed → completed | SESSION_FINISHED; session ended | Session service | Archive purchase/history | No exit/readiness inference | Session completion reference |
 | awaiting_payment → payment_exception | LATE_CAPTURE_CONFLICT; capture but slot unavailable | Reconciliation service | Compensation request + incident | Manual support/refund reconciliation | Capture/conflict/compensation IDs |
 
-##### Payment (attempt state and refund ledger separate)
+#### Payment (attempt state and refund ledger separate)
 These attempt/capture transitions describe gateway payment only. Manual receipt/funds/request/refund transitions are separately canonical in the bank specification; a bank credit is not a card capture.
 | Transition | Trigger / guard | Actor | Side effects | Timeout / recovery | Audit evidence |
 |---|---|---|---|---|---|
@@ -591,7 +108,7 @@ These attempt/capture transitions describe gateway payment only. Manual receipt/
 | unknown/authorized → captured/failed | PROVIDER_RECONCILED; verified outcome | Reconciliation service | Exactly-once ledger effect | Escalate bounded failures | Reconciliation ref |
 | refund requested → pending → succeeded/failed/unknown | REFUND_REQUESTED/VERIFIED_RESULT; refundable balance, policy | payments.refund actor / worker | Separate refund ledger; captured facts retained | Provider lookup/idempotent retry; escalate | Refund amount/policy/event refs |
 
-##### Verification
+#### Verification
 | Transition | Trigger / guard | Actor | Side effects | Timeout / recovery | Audit evidence |
 |---|---|---|---|---|---|
 | not_submitted → submitted | DOCUMENT_UPLOADED; consent, allowed type/size | Booker | Private upload ref | Upload expiry/retry | Evidence ref, consent version |
@@ -600,7 +117,7 @@ These attempt/capture transitions describe gateway payment only. Manual receipt/
 | processing/review_required → verified/rejected | VERIFICATION_DECIDED; approved eligibility process, not OCR alone | Authorized verifier | Minimal decision, expiry/scope | Appeal/reupload per policy | Reviewer, basis, policy version |
 | verified → expired/revoked | VALIDITY_ENDED/REVIEW_REVOKED | Policy worker / restricted verifier | Block future eligible checkout | Reverify; existing session impact assessed | Reason/scope/time |
 
-##### Access provisioning
+#### Access provisioning
 | Transition | Trigger / guard | Actor | Side effects | Timeout / recovery | Audit evidence |
 |---|---|---|---|---|---|
 | not_requested → requested → pending | BOOKING_CONFIRMED; tested lock capability | Access service | Private credential + durable install command | Bounded retries before session; incident | Booking/credential ref, no PIN |
@@ -609,7 +126,7 @@ These attempt/capture transitions describe gateway payment only. Manual receipt/
 | installed → active | WINDOW_STARTED; valid session and policy | Lock/local schedule / service | Permit entry per tested device behavior | Clock/offline risk OD-02 | Configured window + observation |
 | active → expired/revoked | WINDOW_ENDED/CANCEL/SECURITY_REVOCATION | Lock schedule / access authority | Deny new entry; preserve independent egress | Offline revocation reconciliation | Reason, ack/unknown state |
 
-##### Session
+#### Session
 | Transition | Trigger / guard | Actor | Side effects | Timeout / recovery | Audit evidence |
 |---|---|---|---|---|---|
 | scheduled → active | SESSION_START; booking/window | Session worker | Approved scenes; status | Command failure does not falsify observed state | Booking/time/command refs |
@@ -618,7 +135,7 @@ These attempt/capture transitions describe gateway payment only. Manual receipt/
 | active/ending → active (revision) | EXTENSION_CONFIRMED; range/delta/access reconciled | Booking/session services | New end, reschedule notices | Partial outcomes → incident | Revision and access result |
 | ended → overstay_incident | OVERSTAY_SUSPECTED; evidence/operational check | Operator or monitoring service | Escalation to accountable staff | Never infer all occupants exited | Evidence type and intervention |
 
-##### Room readiness
+#### Room readiness
 | Transition | Trigger / guard | Actor | Side effects | Timeout / recovery | Audit evidence |
 |---|---|---|---|---|---|
 | ready → reserved/in_session | RESERVATION/SESSION_START; schedule + cleared readiness | Booking/session service | Availability projection | Projection lag → refresh | Reservation/session IDs |
@@ -627,7 +144,7 @@ These attempt/capture transitions describe gateway payment only. Manual receipt/
 | any → maintenance/unknown | FAULT/STALE_CLEARANCE | Operator/health service | Block unsafe readiness | Inspection/reconciliation | Reason/observation |
 | maintenance/unknown → ready | INSPECTION_CLEARED; no conflict, physical assurance | Authorized operator | Updated safe readiness | Escalate failed checks | Inspection result |
 
-##### Device command
+#### Device command
 | Transition | Trigger / guard | Actor | Side effects | Timeout / recovery | Audit evidence |
 |---|---|---|---|---|---|
 | requested → pending | COMMAND_ACCEPTED; permission/capability/safety/expiry | device.command actor / worker | Durable publish with command ID | Bounded retries | Requested action/resource/actor |
@@ -638,30 +155,27 @@ These attempt/capture transitions describe gateway payment only. Manual receipt/
 
 See [IoT safety](ARCHITECTURE.md#iot-access) and [data contracts](ARCHITECTURE.md#data-api) for durable integration and failure ownership.
 
-#### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
 [Package management](PROJECT.md#package-management) is canonical for PR-PKG-001/CN-A12. Initial defaults do not prevent authorized future package-duration/price/content changes. Global/venue minimum-duration policy, hours, cleaning and physical capacity remain separate operational constraints; a two-hour package requires separately authorized minimum and customer-terms changes. Shared Pricing add-on/fee definitions are referenced, not duplicated per package. No pro-rata discount or new tax treatment inferred.
 
 Payment/eligibility revalidation checks the accepted quote version, verified amount/currency and current reservation eligibility, not a newly published catalog rate. Valid quote honor is RECOMMENDED, expired quote refresh needs acceptance; arrival time of a delayed webhook is separate from verified capture timing. [Package quote/amendment protections](PROJECT.md#package-management) qualify the existing late-payment and lifecycle recovery rules. Deactivation does not cancel purchased bookings; changing live catalog cannot rewrite snapshots, cleaning intervals or access credentials. Source PDFs remain missing and unchanged.
 
-#### Bank payment — CN-KB-BANK-PAYMENT-001
+### Bank payment — CN-KB-BANK-PAYMENT-001
 [Bank deposit/manual payment](PROJECT.md#bank-payments) owns PR-BANK-001/CN-C10/CN-A13. Core USER-CONFIRMED / APPROVED; supporting flow RECOMMENDED, implementation NOT_VERIFIED. Receipt submission, verified bank fund, allocation/satisfaction, inventory/booking, access and bank refund states are distinct; on-site original-ID entry checks remain separate. Payment verification accepts authenticated supported gateway result OR authorized receiving-bank reconciliation, not screenshot/OCR. Sufficient allocated payment plus current inventory/pre-confirmation eligibility gates one booking.
 
 Bank request/hold uses durable shared inventory with session/cleaning/maintenance constraints and method-specific lead/payment/submission/review/hold/quote policies. Do not reuse gateway short-hold candidate or assume 24-hour minimum; no numeric bank default selected. Reuploads do not restart deadlines. Hold expires independently of price validity; timely compliance/operator delay requires accountable restoration/alternative/refund handling, never displacement/forfeit. Verify accepted quote/currency, not newest package. Underpayment, excess, late received funds and dual-method payments retain real ledger facts independently of booking resolution. Bank-method convenience fee is OD-25, not automatic LKR 100/waiver; no card token/damage re-billing assumed. All existing operational/package/safety constraints remain.
 
-<!-- migrated-end:knowledge/product/CINENEST-BUSINESS-RULES-AND-LIFECYCLES.md -->
-
 <a id="package-management"></a>
-<!-- migrated-begin:knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md -->
-### CineNest Package Management
+## Package Management
 
 Task CN-KB-PACKAGE-CONFIGURATION-001 · 2026-10-14 (Asia/Colombo). Source [S8 user request](sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt). Core decision APPROVED (user-confirmed requirement); supporting design RECOMMENDED unless explicitly marked OPEN_DECISION. Implementation NOT_VERIFIED: no application manifest, package admin, API, database or execution test exists in inspected repository.
 
-#### Requirement and scope
+### Requirement and scope
 **PR-PKG-001 / feature CN-A12:** “Authorized administrators can modify package details, session duration, and prices through the Admin Panel, without editing application code or requiring a deployment for each configuration change.”
 
 This confirms the product capability, not a selected implementation, tested workflow, provider approval or legal authorization. Proposed listing/create/duplicate/edit/preview/publish/schedule/deactivate/archive mechanics below support that capability. Canonical ownership stays in existing proposed Pricing module; no second pricing module, generic rules engine, automatic demand pricing or implied unrelated promotion scope. Historical [ADR-001](DESIGN.md#adr-001)/[ADR-002](ARCHITECTURE.md#adr-002) remain; [ADR-003](ARCHITECTURE.md#adr-003) records this update.
 
-#### Actors and permissions (proposed capability labels)
+### Actors and permissions (proposed capability labels)
 | Actor | Capability and scope | Separation |
 |---|---|---|
 | Package viewer | package.read in authorized venue scope | Read drafts/history only if permitted; customer sees eligible published catalog |
@@ -673,7 +187,7 @@ This confirms the product capability, not a selected implementation, tested work
 
 Exact role names, capability allocation, self-publication and two-person approval thresholds remain OD-18. Backend authorization on every read/write/publish and scope mapping; hiding controls is insufficient. Customer only accesses applicable versions and own quotes/purchases.
 
-#### Fields and joint validation
+### Fields and joint validation
 Core editability is APPROVED; field representations and validation design below are RECOMMENDED. Publishing validates the entire candidate snapshot and related configured constraints in one authoritative operation, never partially updates duration/inclusions/price.
 
 | Field/group | Decision | Representation and validation |
@@ -694,24 +208,14 @@ Core editability is APPROVED; field representations and validation design below 
 
 Do not duplicate shared fee/add-on definitions inside each package by default. Versioned references preserve the configured values used in quotes; intentional overrides need an explicit future design decision.
 
-#### Ownership and initial defaults
+### Ownership and initial defaults
 [Business rules](PROJECT.md#business-rules) / [draft JSON](product/cinenest-draft-rules.json) retain S1/S8-described initial defaults, not immutable code values. Original PDFs are missing; S8 reports a mandatory three-hour minimum, which is retained as a draft constraint pending final source/policy verification. No PDF rewritten or legal approval inferred.
 
-| Initial default | Owner / constraint |
-|---|---|
-| Included package duration 180 minutes; base LKR 2,500 / up to 4 guests | Pricing package content/version settings |
-| Minimum customer session 180 minutes | Separate global/venue operational minimum-duration policy; package cannot bypass |
-| Extension increment 60 minutes; LKR 1,000 per increment | Pricing versioned extension model/reference |
-| Fifth guest LKR 800 | Pricing guest-charge rule/reference; not occupancy permission |
-| Current documented maximum occupancy 5 guests | Venues/Rooms approved physical capacity; individual room may be lower |
-| Optional PS4 LKR 1,000 per session | Existing Pricing shared add-on definition; include/optional mode via versioned package reference |
-| Online convenience fee LKR 100 | Existing Pricing shared fee definition, selected by channel/version |
-| Post-session cleaning buffer 15 minutes | Separate Venues/Rooms operational requirements/policy; reservation retains buffer snapshot |
-| Operating hours | Separate venue operational settings; see canonical rules |
+Initial rates, duration, guest allowance, occupancy ceiling, fee and buffer are listed once in [business rules](PROJECT.md#business-rules), with owning modules in the existing draft-rules registry. Package settings cannot change the independent minimum/hours/cleaning/physical ceiling. References to physical capacity describe required approval, not evidence of certification (OM-04).
 
 A two-hour package is eligible only after a separately authorized minimum-duration policy and corresponding customer terms are updated. A package editor cannot lower the venue minimum or exceed physical capacity by changing included guests. The current capacity ceiling is not a configurable safety exception. Exact scope/precedence of global versus venue minimum changes and approval gates are OD-21.
 
-#### Duration and server quotation model
+### Duration and server quotation model
 Proposed initial extension-only model: selected duration ≥ included duration and effective minimum. `effective_min = max(package.minimumSelectableMinutes, operational.minimumSessionMinutes)`; include must also meet operational minimum; maximum ≥ included and effective_min. Selecting fewer minutes than included does not imply proration; unsupported shorter selection rejected until OD-17 resolves a different model. If extensions disabled, selected must equal included. If enabled, extra minutes must be an exact nonnegative multiple of configured increment and selected ≤ maximum. Check venue schedule and [session_end, blocked_until](PROJECT.md#business-rules) against reservations/cleaning readiness before quoting or amending.
 
 Parameterized pseudocode (desired server behavior; not implemented):
@@ -738,7 +242,7 @@ return versioned_quote(line_items, total_minor, currency, expiry, terms_and_pack
 ```
 Rates/counts never substituted from browser text or live catalog after acceptance. Tax, proration, rounding, zero-price and price/approval thresholds remain OD-17/18; no invented tax treatment. Labeled default examples only: three hours/four guests/no PS4 **LKR 2,600** with online fee; optional PS4 **LKR 3,600**, no discounts or decided tax treatment.
 
-#### Proposed administrative lifecycle
+### Proposed administrative lifecycle
 | Action/transition | Guard and result | Publication/recovery |
 |---|---|---|
 | List/search → view | package.read and scope; list applicable/draft/history versions | Safe pagination; no unrelated tenant assumption |
@@ -752,12 +256,12 @@ Rates/counts never substituted from browser text or live catalog after acceptanc
 
 Two-person review is proposed, not approved. Suggested lifecycle state names are not implemented schema. Draft save is distinct from publish; exact state model/provider/deployment remains architecture work.
 
-#### Effective versions, scopes and concurrent publishing
+### Effective versions, scopes and concurrent publishing
 Stable packageId owns immutable published packageVersionId/revision and purchased display/inclusion/price terms. Any sold-term edit creates a new revision; publication never destructively edits a referenced revision. Store sales [effectiveFrom,effectiveTo) and separate optional session/service [validFrom,validTo) with explicit venue-local timezone (Asia/Colombo), resolved UTC instants and policy version. Sales time selects new purchase applicability; service-time eligibility independently checks scheduled session. Date-only end boundary resolves to next local midnight exclusive.
 
 Recommended: prevent overlapping sales intervals for the same stable package and intersecting venue/room scope. Joint validation and transactional version token/uniqueness guard reject ambiguity rather than “latest timestamp wins.” A superseding schedule closes prior sales eligibility atomically at cutoff, preserving immutable sold terms and audited prior schedule. More specific room scope does not silently override venue scope; ambiguous mappings rejected until OD-19 chooses precedence. Recheck concurrent policy/room revisions on publish; cached catalog never authorizes an invalid quote.
 
-#### Existing purchases and active checkout protections
+### Existing purchases and active checkout protections
 Each confirmed booking stores package/version reference and purchased display details; included/selected duration, session_start/end and reserved cleaning-buffer snapshot; guest allowance and included/selected services; exact price line items, fees/discounts/final total/currency; accepted booking/refund-policy and consent versions; quote reference. Package name/description edits also cannot rewrite historical tickets/receipts/reports.
 
 Catalog changes cannot silently alter existing bookings, receipts, historical duration/revenue reporting, inclusions or active PINs. Deactivation blocks new sales under defined cutoff; it does not cancel reservations. Sold versions remain referentially intact. Access reads booking/session snapshots, not live package duration.
@@ -770,12 +274,12 @@ Expired hold/late capture/conflict → durable reconciliation/payment exception 
 
 Purchased booking amendment is a separate authorized workflow: availability and capacity/readiness check → versioned delta quote and customer terms acceptance → payment/refund difference resolution → guarded reservation revision → access-window/notification coordination with durable retries/unknown outcomes. Do not derive amended terms automatically from latest package. Partial external outcomes require compensation/support while protecting previous purchase history. Package publication alone never sends access/IoT commands, extends a PIN, interrupts an active session or drops buffer/conflict guards.
 
-#### Proposed architecture/API and audit
+### Proposed architecture/API and audit
 Pricing owns stable catalog identities, immutable versions, applicability schedule and quote construction. Booking owns reservation/confirmed snapshot; Venues/Rooms own operational constraints/capacity; Identity & Access handles capabilities; Payments validates accepted quote and ledger; Access uses purchased session; Audit preserves evidence. No final tables, API routes, migrations, module additions or installed stack claimed. [Contracts](ARCHITECTURE.md#data-api) defines proposed capabilities: list/detail/history, create/duplicate draft, update with version, preview, publish/schedule, deactivate/archive, resolve applicable version and quote.
 
 Persist atomic publication/audit intent; invalidate scoped catalog caches/durable projections without per-edit code release. Request idempotency and concurrent version tokens protect mutation retry/publish schedules. Audit actor, authorized scope, timestamp, reason, old/new values, stable package/version IDs, effective boundaries and policy references; no PII/PIN/card data. Booking amendment has its own audit and agreed difference. Exact table/ETag/event designs RECOMMENDED, not approved core capability.
 
-#### Future implementation acceptance (not tests run here)
+### Future implementation acceptance (not tests run here)
 | ID | Scenario / required evidence |
 |---|---|
 | PK-AC01 | Authorized admin edits details, included duration and price; eligible customer catalog changes without application-code edit/release; config/audit evidence |
@@ -792,30 +296,27 @@ Persist atomic publication/audit intent; invalidate scoped catalog caches/durabl
 | PK-AC12 | Purchased amendment rechecks availability/cleaning/payment/consent and coordinates PIN/notification revision safely; catalog edit alone leaves active session/PIN unchanged |
 | PK-AC13 | Historical reports use purchased snapshots/ledger refs and correct metric time basis, not current catalog prices or durations |
 
-#### Open decisions and provenance
+### Open decisions and provenance
 [OD-17–OD-22](ARCHITECTURE.md#open-decisions) track proration/rounding/zero/taxes, price and two-person thresholds, scope/version precedence, quote/deactivation/capture timing, minimum-policy ownership and shared-fee/add-on overrides. S8 confirms core admin editability only; S1/S8 defaults remain initial draft values. Original PDFs missing and no production configuration exists. Documentation validation cannot establish these acceptance outcomes or hardware/legal approval.
 
-#### Bank payment — CN-KB-BANK-PAYMENT-001
+### Bank payment — CN-KB-BANK-PAYMENT-001
 Package editability CN-A12/PR-PKG-001 and existing approved/no-release requirement are unchanged. [Bank payment](PROJECT.md#bank-payments) snapshots package/version/display/session/buffer/guests/inclusions/extras/item lines/consent/policy/quote and receiving-instruction version into request. Bank quotes preserve applicable explicitly approved method fee treatment; the online LKR 100 initial example does not decide bank fee (OD-25).
 
 The earlier capturedAt/timing discussion applies to gateway. Manual timeliness distinguishes declared initiated time, actual bank credit, submission and authorized verification; selected authoritative clock is OD-24, not implicitly review time. Accepted quote/currency remains protected from catalog changes while valid; expiry/re-quote acceptance and independent received-fund traceability follow the method policy. Bank review/verification never modifies packages, cancels sold terms, auto-amends bookings or extends PINs. New bank-funded purchased amendments still use the existing separate guarded quote/payment/refund/access workflow, without assuming a stored card.
 
-<!-- migrated-end:knowledge/product/CINENEST-PACKAGE-MANAGEMENT.md -->
-
 <a id="bank-payments"></a>
-<!-- migrated-begin:knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md -->
-### CineNest Bank Deposit and Manual Payment
+## Bank Payments
 
 Task CN-KB-BANK-PAYMENT-001 · 2026-10-14 (Asia/Colombo). Source [S9 user request](sources/CN-KB-BANK-PAYMENT-001-request.txt). Provenance **USER-CONFIRMED**; core Decision **APPROVED**, Implementation **NOT_VERIFIED**. Supporting controls/workflows/data design **RECOMMENDED**; numeric deadlines, fee/config/provider/operational choices **OPEN_DECISION**. No code, real account details/bank connectivity, transactions, money movement or review/hardware test evidenced.
 
-#### Core requirement and scope
+### Core requirement and scope
 **PR-BANK-001 / CN-C10 and CN-A13:** Customers can deposit/transfer funds to the business bank account, upload payment evidence, and obtain confirmation after an authorized administrator independently verifies and approves payment; the system notifies authorized administrators when review is required. Existing online gateway payment remains available.
 
 **RECEIPT UPLOADED is not PAYMENT VERIFIED. PAYMENT VERIFIED is not automatically BOOKING CONFIRMED or ACCESS READY.** Bank deposit/transfer is distinct from bank IPG online gateway; do not forge a webhook or record bank credit as card capture. A customer document is a payment claim, not a CineNest-issued receipt or proof funds arrived. Post-confirmation financial acknowledgement/receipt comes from verified ledger and allocation.
 
 Recommended launch scope: full accepted quoted payment before confirmation, request bound to package/room/session/guests/extras; no installment booking, wallet, transferable credit, open-date voucher, subscription or multi-booking shared-deposit entitlement. Partial funds still recorded; additional top-up handling requires an explicit policy (OD-27), not an installment product. Third-party payer name may differ legitimately; collect adequate matching context, never reject solely for name difference.
 
-#### Actors, permissions and configuration
+### Actors, permissions and configuration
 | Actor | Proposed capabilities | Boundary |
 |---|---|---|
 | Customer | bank.request.create/read; payment.claim.submit for own booking/request | No cross-owner preview; cannot verify funds or allocate credit |
@@ -828,7 +329,7 @@ Recommended launch scope: full accepted quoted payment before confirmation, requ
 
 Capability names/role allocation are proposals, not existing code. Bank settings expose verified business account identity/instructions via authenticated request-bound view, with instruction version/check timestamp/account-manager audit. Do not invent a live bank name, account number, support, bank fee or integration. Secrets/credentials never displayed or requested. Changes do not rewrite issued requests; emergency redirect requires controlled direct customer verification, never an unauthenticated message.
 
-#### Customer workflow
+### Customer workflow
 1. Choose package, room/session, guests/add-ons; backend resolves versioned quote, scope and pre-confirmation eligibility.
 2. Select **Online Payment** (existing hosted gateway) or **Bank Deposit / Transfer**. Bank option only enabled after receiving instructions, manual-review capacity, fee and timing policy are approved/configured.
 3. Create linked bank payment request plus bounded durable provisional inventory hold. Display request/reference, account-instruction version, exact accepted amount/currency/fee treatment, separate deadlines/review hours and actual hold status.
@@ -838,12 +339,12 @@ Capability names/role allocation are proposals, not existing code. Bank settings
 7. Staff matches actual receiving-account credit, records verified fund fact and lawful allocation. If payment sufficient and reservation/eligibility valid, confirm one booking and queue notification/access provisioning. Otherwise **Funds Received / Booking Resolution Required**, never discard actual money.
 8. Customer tracks separate review/payment/booking/access/refund outcomes and corrections/support. Do not invite payment against expired request; accept late evidence through reconciliation intake without promising inventory.
 
-#### Proposed reviewer queue and actions
+### Proposed reviewer queue and actions
 Location **Admin → Payments → Bank Deposit Reviews** (proposed subsection, no route invented). Queue columns: request/booking/customer, venue/room/session, package version, expected/declared amount/currency, submittedAt, review status/age, assignee, hold expiry, overdue/exception flag and notification status. Filters: scope/room/session date, review/hold status, assignee/overdue, safe request reference search; server pagination and privacy-scoped searches.
 
 Detail: restricted safe preview, declared versus verified facts, accepted quote/item lines/policies/package, instruction version, full submission/correction history, receiving-bank match, verified/allocated/unallocated balance, current inventory/eligibility, timeline/audit and notification state. Controls **Verify Funds and Approve**, **Request More Information**, **Await Bank Credit**, **Reject Payment Claim** (reason), **Resolve Booking/Amount Exception**. “Verify Funds and Approve” is a composite UI action with independently persisted funds and guarded allocation/confirmation; display each result instead of conflating them. Server result controls pending/success/conflict/error. Rejection of claim does not delete funds or prevent later independent credit discovery.
 
-#### Independent verification, matching and allocation
+### Independent verification, matching and allocation
 Require receiving-account identity and instruction version; bank-side transaction/reference (or controlled statement-entry identity), bank credit date/time, verified currency/amount, reviewer and reason/notes with evidence reference. Customer screenshot/email/OCR/provider notification alone cannot authorize credit verification. No current bank connection assumed; manual matching against the business’s own authoritative records is the launch recommendation. OCR can suggest fields only; bank feeds/APIs are future scope after official support/account/privacy evidence.
 
 Recommended matching key: receiving-account identity + genuinely bank-assigned stable transaction ID where available. Otherwise staff records controlled statement identity/period plus unique statement-entry/line and verified credit details, with cross-statement reconciliation/deduplication and ambiguity review. Customer-entered reference is a matching hint, not a globally unique ledger key. Same receipt hash is a duplicate-risk signal, not evidence of payment or allocation protection.
@@ -854,19 +355,19 @@ For a composite approval: (A) persist independently verified unique fund fact an
 
 Error/suspicion correction appends a reversal/adjustment of match/allocation with authorized actor/reason/original references. It does not delete bank credit or rewrite approved history; actual credit later reversed by bank is a separate verified bank reversal fact and linked resolution. Booking/access consequences are explicit safe incident/amendment actions, never occupant trapping.
 
-#### Holds, quotes and deadlines (unapproved values)
+### Holds, quotes and deadlines (unapproved values)
 Separate configurable settings: minimum session lead time; payment deadline; evidence-submission deadline; review service hours/deadline; provisional/review-hold expiry and bounded extensions; quote/payment-request validity; overdue/escalation thresholds. Exact values **OPEN_DECISION OD-23**; 24-hour lead time is only an earlier suggestion/example, not approved or selected. Do not copy gateway 10–15 minute candidates into bank flow, or create indefinite review holds.
 
 Durable bank holds use the same database-enforced room/session+cleaning reservation ranges as gateway holds/confirmed bookings/maintenance. Redis may cache, never sole long-hold record. Timely submission may transition to policy-bounded review hold; repeated uploads/corrections do not reset clock automatically. Show separately quote validity, request validity and whether/through-when inventory is reserved. At approval recheck reservation atomically; expired hold never authorizes displacement. Manual review creates a real staffed service commitment, hours and escalation staffing OD-29.
 
 Timestamps separate: payment_initiated_at (declared unless independently evidenced), bank_credited_at, evidence_submitted_at, verified_at, allocated_at and booking_confirmed_at. Which timestamp satisfies timeliness is **OD-24**, not implicitly verified_at or notification arrival. No quote repricing to newest catalog at approval. Valid accepted quote honor remains recommended with method-specific review/request validity policy; after expiry clear re-quote acceptance, received funds still traceable. Operator delay after timely customer compliance: restore slot if available under policy, customer-agreed alternative or appropriate approved refund if service unavailable; never silently forfeit or assume new terms. Hold extension/exceptions remain bounded and audited.
 
-#### Package, eligibility and confirmation invariant
+### Package, eligibility and confirmation invariant
 Request snapshots package/version/display/duration/session/buffer/guests/inclusions/extras/item lines/fee treatment/currency/policy/consent/quote validity and receiving-account instruction version. Protect [package terms](PROJECT.md#package-management); bank-method convenience fee requires OD-25 decision, neither automatically LKR 100 nor waived. No invented tax/bank surcharge. Show selected approved treatment before paying and preserve it.
 
 **Payment is verified through either an authenticated supported gateway result or an authorized bank-reconciled manual-payment decision. Booking confirmation additionally requires sufficient allocated payment, valid reservation inventory, and applicable pre-confirmation eligibility.** Independent on-site original-ID checks remain a separate entry requirement; bank approval cannot bypass identity/age/consent/capacity/hours/physical-safety rules. Verified partial payment or unmatched funds do not satisfy full quote. No PIN release while payment unverified; confirmed purchase then uses existing acknowledged provisioning and purchased [session_start,session_end) validity. Provisioning failure is access pending/incident, not payment failed.
 
-#### Money and service exception matrix
+### Money and service exception matrix
 | Situation | Required desired handling |
 |---|---|
 | Underpayment | Persist actual received credit, partial allocation and outstanding; full-payment launch does not erase partial money or authorize confirmation; top-up policy OD-27 |
@@ -884,20 +385,20 @@ Request snapshots package/version/display/duration/session/buffer/guests/inclusi
 
 No card token assumed for bank customer; automatic damage card re-billing is unavailable merely because bank booking was approved. Any alternate damage payment policy requires independent approval. Refund recipient identity/third-party payer/authority and high-risk controls remain OD-28; avoid directing refunds based only on a newly messaged account number.
 
-#### Security and instruction lifecycle
+### Security and instruction lifecycle
 Authenticated owner/scoped uploads; proposed JPEG/PNG/PDF with approved size/retention limits **OD-26**. Validate true content type, generate private object keys, scan/quarantine and restrict PDF/image safe preview (no active document execution); approved storage/private encryption/short scoped signed links/access audit and deletion lifecycle. Receipt-upload requirements do not substitute for physical original-ID entry checks. Preserve original submissions for controlled review subject to approved retention, not infinite storage.
 
 Keep raw receipt/statement/customer payer data, bank instructions/details, credentials and PINs out of public URLs, ordinary logs, event payloads and notification attachments. Notifications use authenticated links; instruction versions change only through separately authorized independently verified bank-account management. Evidence-view/review/verify/allocate/refund/account-change permissions distinct. Exact roles/approval limits independent review are recommendations or OD-28, not blanket Admin access. Audit account changes, evidence access, match/reject/approve/adjust/allocate/refund with actor/time/reason/scope/correlation and redacted before/after. No real bank setting changed here.
 
-#### Notifications and reporting
+### Notifications and reporting
 Durable customer submission acknowledgement, correction/await-credit, verification outcome, booking outcome, expiry and refund progress. Durable admin new-review, overdue, unmatched-funds and access-failure alerts with scoped deep links; send retries/bounded failure escalations never delete queue work. A sent notification does not verify funds, clear claim, confirm booking or prove PIN installed. In-app review queue remains authoritative; no sensitive attachments or credentials.
 
 [Bank reporting](DESIGN.md#charts-metrics) defines pending-review age/population, verified credit, booking allocation, unmatched/excess and refunds/channel breakdown. Never use uploaded/declared amounts as collections; verification+allocation is one incoming credit with two processing timestamps. Keep bank_credited_at, verified_at, allocated_at and session_start_at separate. Collections ≠ recognized service revenue. Historical package/duration reports read immutable purchase snapshots; LKR/Asia/Colombo and existing chart semantic colors/authorization unchanged.
 
-#### Proposed architecture and acceptance
+### Proposed architecture and acceptance
 Within Payments (request/evidence/verified bank credit/allocation/review/refund/instruction metadata), Booking (durable hold/guarded confirmation/snapshot), Notifications, Access and Audit; no second booking system/microservice. Conceptual names/APIs/events are unimplemented. [Data/API contracts](ARCHITECTURE.md#data-api) detail safe evidence-source events and local atomic/durable boundaries. State-machine specification follows; all transitions are RECOMMENDED design and have actor/permission/evidence/guard/side effect/timeout/retry/audit. No numeric deadline approved.
 
-##### receipt_review
+#### receipt_review
 
 | Transition | Actor / permissions | Evidence | Guards | Side effects | Timeout | Retry | Audit |
 |---|---|---|---|---|---|---|---|
@@ -908,7 +409,7 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 | reviewing/awaiting_credit → funds_matched | Reviewer / bank.verify | Independent receiving-account record and verified fund ID | Currency/credit identity and match sufficient, not screenshot/OCR; credited funds persisted separately | Link verified fund to claim; allocation/payment status checked separately | Review overdue escalates; no promised booking | Idempotent match; original bank fact retained | Bank match, reviewer, decision/version |
 | information_requested/rejected_claim → review_required | Customer or reviewer / own submit or bank.review | New correction or independently discovered later credit | Preserve prior submissions/decisions; no deadline reset | Append history, reopen review/reconciliation | Late claim stays traceable even if inventory expired | Deduped reopen with new evidence ID | Reopen actor/reason/parent decision |
 
-##### verified_funds_allocation
+#### verified_funds_allocation
 
 | Transition | Actor / permissions | Evidence | Guards | Side effects | Timeout | Retry | Audit |
 |---|---|---|---|---|---|---|---|
@@ -917,7 +418,7 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 | allocated → adjusted/reversed allocation (new record) | Authorized correction reviewer / bank.adjust | Error/suspicion decision and linked original allocation | Approved correction process; no delete/overwrite bank receipt fact | Append compensating allocation entry; recalc satisfaction/booking incident, no egress trap | Incident/refund/recovery deadlines open | Idempotent correction ID; dual control threshold open | Old/new ledger refs, reason, reviewer, resulting incident |
 | verified_unallocated/excess → refund_resolution | Finance / payments.refund or resolution scope | Verified balance, destination and approved resolution | No double allocation/refund; customer accepted resolution if alternative service | Link refund/resolution operation, funds remain traceable until completion | Escalation configured; never erase received money | Reconcile outgoing transfer before retry | Destination-check/result and ledger refs |
 
-##### payment_request_satisfaction
+#### payment_request_satisfaction
 
 | Transition | Actor / permissions | Evidence | Guards | Side effects | Timeout | Retry | Audit |
 |---|---|---|---|---|---|---|---|
@@ -927,7 +428,7 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 | awaiting_payment/under_review → expired/cancelled_resolution | Scheduler or owner / scoped request policy | Deadline/cancel facts | Expiry stops new payment invitation; verified credits retained; pending claims remain reviewable | Release hold when policy requires, resolution queue for late claims/funds | No indefinite extension; operator-delay escalation/open resolution | Dedupe expiry; recover with explicit re-quote/customer acceptance | Expiry/cancel/time and retained claim/ledger refs |
 | expired/rejected resolution → funds_received_booking_resolution_required | Reviewer / bank.verify | Later verified actual credit | Request no longer eligible or quote/inventory conflict | Persist received funds; alternative/refund/support, not failed payment | Resolution SLA open; no silent forfeiture | Idempotent ledger and incident, no new booking automatically | Credit/exception/customer agreed resolution refs |
 
-##### reservation_booking
+#### reservation_booking
 
 | Transition | Actor / permissions | Evidence | Guards | Side effects | Timeout | Retry | Audit |
 |---|---|---|---|---|---|---|---|
@@ -937,7 +438,7 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 | expired hold + received funds → resolution, not displacement | Reviewer + Booking service / resolution scope | Verified credit, expired range and availability check | Never displace another confirmed booking; restoration only if available under policy | Customer-agreed alternate/refund if service unavailable; retain fund fact | Operator-caused delay after timely compliance escalates accountable staffing | Single resolution operation, explicit alternative/re-quote acceptance | Cause/timing/attempted restore/customer agreement |
 | confirmed → cancelled/amended revision | Owner or booking agent / existing change permissions | Purchase policy + consent + delta quote and payment/refund facts | Existing amendment/cancel guards; bank method is no bypass | Durable allocation/refund/access revision, preserve history | Partial result incident; independent egress intact | Existing idempotent revision/compensation workflow | Original/new snapshot and financial/access refs |
 
-##### access_provisioning
+#### access_provisioning
 
 | Transition | Actor / permissions | Evidence | Guards | Side effects | Timeout | Retry | Audit |
 |---|---|---|---|---|---|---|---|
@@ -945,7 +446,7 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 | pending → installed/failed/unknown | Authenticated adapter / device scope | Actual acknowledgement/status lookup or safe failure | Never infer installed from dispatch or bank approval | Access-ready only with verified install outcome; payment remains verified on failure | Incident/escalation if unresolved; no payment-failed fiction | Bounded retry/status reconciliation | Device evidence, observation time and incident |
 | installed/active → expired/revoked | Access schedule/authority / existing scope | Purchased session end/cancel/security decision | Keep purchased validity, independent egress; no bank review override | Deny new entry safely; actual revocation acknowledgement tracked | Offline revoke remains unknown until evidence | Idempotent command/version; no replay of expired action | Reason/window and actual device result |
 
-##### bank_refund
+#### bank_refund
 
 | Transition | Actor / permissions | Evidence | Guards | Side effects | Timeout | Retry | Audit |
 |---|---|---|---|---|---|---|---|
@@ -954,7 +455,7 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 | approved → initiated → sent | Finance operator / bank.refund.execute | Authorized outgoing transfer instruction then bank-side sending evidence | Locked refundable amount; independent controls if policy requires | Persist outgoing operation/reference; neither approval nor initiation proves final transfer | Unknown send outcome → bank reconciliation before resend | Same operation ID; prevent duplicate outgoing refund | Executor/approval/outgoing transaction/time refs |
 | sent/unknown → confirmed/failed | Reconciler / bank.refund.reconcile | Receiving/outgoing bank settlement evidence appropriate to selected bank | Supported verified completion/failure; do not invent connectivity | Final outgoing ledger fact or safe retry/incident; failure retains obligation | Bounded reconciliation and escalation | Bank lookup before retry, no blind repeat transfer | Confirmed/failedAt, bank reference and reconciliation evidence |
 
-#### Future implementation acceptance (not run in this task)
+### Future implementation acceptance (not run in this task)
 
 | ID | Scenario | Evidence needed |
 |---|---|---|
@@ -972,7 +473,5 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 | BP-AC12 | Refund/correction | Destination/outgoing proof, no completed refund from approval, unknown send reconciles before retry, append correction audit |
 | BP-AC13 | Historical reports | Declared amounts excluded, credits counted once, allocations/excess separated, timestamps/quote snapshots/recognition basis correct |
 
-#### Open decisions and source limits
+### Open decisions and source limits
 OD-23–29 in [decision register](ARCHITECTURE.md#open-decisions) track lead/payment/submission/review/hold validity, time basis, fee treatment, upload/retention, matching/allocation/top-ups, roles/account/refund thresholds and operational-delay staffing. All owners TBD. Suggested 24 hours and gateway hold candidates are not bank defaults. Original PDFs missing and not rewritten; no banking/provider/legal claim inferred. Core USER-CONFIRMED does not approve every supporting proposal or imply implementation. [ADR-004](ARCHITECTURE.md#adr-004) records the gateway-only wording correction and separate financial state semantics.
-
-<!-- migrated-end:knowledge/product/CINENEST-BANK-DEPOSIT-AND-MANUAL-PAYMENT.md -->

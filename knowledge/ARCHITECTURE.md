@@ -1,12 +1,10 @@
 # CineNest Architecture
 
-Canonical technology, module/data/API, security/privacy, IoT and decision knowledge. Update decisions here in place; preserve their IDs/status/history. [Project](PROJECT.md), [design](DESIGN.md), [progress](PROGRESS.md).
+This document owns technology proposals, module/data/API and integration design, security/privacy, IoT and decision history. [Project](PROJECT.md), [design](DESIGN.md), [progress](PROGRESS.md). Business definitions belong in PROJECT; their enforcement belongs here.
 
-**Current stack: PROPOSED / AWAITING OWNER APPROVAL.** CN-DEC-001 recommends Java25/Boot4.1/Modulith2.1, PostgreSQL18/Flyway and Next16/React19/TypeScript5/Tailwind4/Node24. Publication of the brief did not approve technology or implementation. OD-01 remains OPEN_DECISION; all 29 decision IDs and owners TBD remain. Exact patches/support/compatibility and team capability require later verification. No application manifests, dependency installation, deployment or live/provider/hardware evidence exists.
+**PROPOSED / AWAITING OWNER APPROVAL:** CN-DEC-001 initial stack. S11 authorized research/brief only; no technology or implementation approval. No application manifests/build/runtime/providers/hardware are implemented. Exact patches/support and team capacity remain unverified implementation prerequisites. All candidate/vendor descriptions below are recommended/open, not supported account/hardware claims.
 
-Core ADR-001 hybrid direction is approved; ADR-003 and ADR-004 approve core package/bank requirements only. Their supporting designs remain RECOMMENDED; ADR-002 business defaults and metric clarifications remain DOCUMENTED_DRAFT. [OD registry](decisions/cinenest-open-decisions.json) stores machine statuses; [hybrid history](DESIGN.md#adr-001) is retained in DESIGN.
-
-## Contents
+## Navigation
 
 - [Technology](#technology)
 - [System Architecture](#system-architecture)
@@ -20,14 +18,9 @@ Core ADR-001 hybrid direction is approved; ADR-003 and ADR-004 approve core pack
 - [Initial Stack Brief](#initial-stack-brief)
 
 <a id="technology"></a>
-<!-- migrated-begin:knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md -->
-### CineNest Technology Stack and Decisions
+## Technology
 
-> Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).
-> Decision: DOCUMENTED_DRAFT unless a row specifies otherwise. Implementation: NOT_VERIFIED.
-> Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
-
-#### Evidence and status discipline
+### Evidence and status discipline
 No package.json, pom.xml, build.gradle, lockfile, application code, migrations or infrastructure configuration exists in the inspected repository. Current evidence for every layer below: **documentation only; Implementation NOT_VERIFIED**. Recommendations come from S1; preferred does not mean APPROVED. No versions are pinned or claimed latest. No dependency installs/runtime config changes were made. No current provider country/product/API support is asserted; all requires official documentation and account/model validation before selection. This avoids treating an unseen proposal PDF as evidence.
 
 | Layer | Current evidence | Preferred recommendation | Alternatives | Purpose | Dependencies | Risks | Decision | Validation needed |
@@ -51,29 +44,22 @@ No package.json, pom.xml, build.gradle, lockfile, application code, migrations o
 | Email | Docs only; NOT_VERIFIED | SendGrid OR AWS SES | Approved delivery provider | Receipts, protected access instructions and operations | Domain verification, consent/template/provider choice | Bounces, spam and leaked credentials | RECOMMENDED; provider/library selection OPEN_DECISION | Provider/account verification and bounce handling tests |
 | Delivery/operations | Docs only; NOT_VERIFIED | Containerized builds, CI/CD, centralized logs/metrics/alerts, backups and tested recovery | Tool choices pending; no cloud selected | Repeatable safe operations | Selected hosting/secrets/monitoring and accountable responders | Supply chain, untested restore, missing on-call process | RECOMMENDED; provider/library selection OPEN_DECISION | Recovery objectives decision, restore/failover drill and scoped deploy gates |
 
-#### Selection gates
-Use [open decisions](ARCHITECTURE.md#open-decisions) OD-01/02/05/06/11 and a new ADR for an approved final stack; preserve [ADR-001](DESIGN.md#adr-001) visual approval. Use one broker, one chart library and one initial backend approach after evaluation, not all candidates by default. Compatibility versions should be selected from official supported versions at implementation time and recorded with source/date; no invented latest versions now. Do not import framework decisions from unrelated repositories.
+### Selection gates
+Use [open decisions](ARCHITECTURE.md#open-decisions) OD-01/02/05/06/11 and update this ARCHITECTURE decision section after explicit final-stack approval; preserve [ADR-001](DESIGN.md#adr-001) visual approval. A new knowledge file requires explicit owner approval. Use one broker, one chart library and one initial backend approach after evaluation, not all candidates by default. Compatibility versions should be selected from official supported versions at implementation time and recorded with source/date; no invented latest versions now. Do not import framework decisions from unrelated repositories.
 
-#### Bank payment — CN-KB-BANK-PAYMENT-001
+### Bank payment — CN-KB-BANK-PAYMENT-001
 Core bank-deposit/transfer/upload/reviewer notification capability USER-CONFIRMED (Decision APPROVED, Implementation NOT_VERIFIED). [Manual matching](PROJECT.md#bank-payments) against business bank records is RECOMMENDED launch support within Payments, not a new bank gateway/library/microservice. Existing PayHere/bank-IPG/Stripe candidate selection and hosted online path remain unchanged.
 
 Private receipt storage and safe JPEG/PNG/PDF scanning/preview use selected secure storage design (provider/size/retention open). Receipt OCR optional suggested extraction only; never approval/authenticity. Bank-feed/API matching future scope only after verified official bank/account/provider support/privacy. No bank connection, real receiving details, fees or installed integration claimed; no dependency/runtime changes.
 
-#### CN-DEC-001 initial proposal (not accepted)
+### CN-DEC-001 initial proposal (not accepted)
 
 [Decision brief](ARCHITECTURE.md#initial-stack-brief), S11, proposes Java25/Boot4.1/Modulith2.1, PostgreSQL18/Flyway, Next16/React19/TypeScript5/Tailwind4/Node24, Maven/npm and database-backed sessions/work. Exact stable patches require current official compatibility/support and foundation tests. PROPOSED / AWAITING OWNER APPROVAL; OD-01 remains OPEN_DECISION; implementation NOT_VERIFIED. This supplements historical candidate rows without accepting their other vendors. No code, dependency or runtime configuration was created.
 
-<!-- migrated-end:knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md -->
-
 <a id="system-architecture"></a>
-<!-- migrated-begin:knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md -->
-### CineNest System Architecture
+## System Architecture
 
-> Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).
-> Decision: DOCUMENTED_DRAFT unless a row specifies otherwise. Implementation: NOT_VERIFIED.
-> Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
-
-#### Desired architecture and implemented baseline
+### Desired architecture and implemented baseline
 Decision RECOMMENDED: one Spring Boot/Spring Modulith modular monolith with explicit internal boundaries. NestJS remains an alternative; final approval OD-01. No module/table/API implementation is verified. One deployable initially does not imply one unrestricted persistence layer. Public/customer, admin, provider webhook and device ingress have separate trust/authorization boundaries.
 
 ```mermaid
@@ -111,34 +97,27 @@ Arrows express permitted integration flows, not deployed infrastructure. Object 
 | Analytics | Scoped read projections, metric definitions and report freshness | Aggregate authoritative facts without changing domain writes | Projection updates idempotent; eventual consistency explicitly labelled | Domain events/approved read interfaces; finance scopes; no cross-module table mutation |
 | Audit | Redacted immutable audit event store and access projection | Actor/action/resource/reason/evidence/correlation trail | Domain durable audit intent in same local transaction; bounded ingestion/recovery | All modules emit safe events; restricted read/export interfaces |
 
-#### Interface and failure boundaries
+### Interface and failure boundaries
 Modules use stable commands/queries/events through published interfaces; no direct mutation of another module’s tables or import of its persistence entities. Reservation-critical writes stay within Booking with immutable references to approved quotes/decisions/payment facts; accept a capture fact once, then transactionally guard inventory. External side effects use an outbox/durable work coordinator with durable failure state and compensating actions. A committed purchase is not silently rewritten when a downstream service fails.
 
 Each module documents ownership, invariant tests, transaction scope, safe event payload and capability checks before implementation. Shared IDs/time/money/envelopes are contracts, not a shared catch-all domain module. [Data contracts](ARCHITECTURE.md#data-api) define proposed integration behavior; [IoT failure modes](ARCHITECTURE.md#iot-access) define hardware gates. Stream updates follow the same authorized venue/owner scope and report asOf; clients recover after gaps using an authoritative snapshot.
 
 Multi-venue configuration is proposed resource scoping. It is **not evidence of a fully isolated multi-tenant SaaS product**. Tenant/subscription architecture, data isolation model, onboarding/billing and cross-venue roles remain OD-12. Retain explicit venue IDs where applicable without inventing a tenant schema. Do not call current access isolation implemented.
 
-#### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
 Core CN-A12 is user-confirmed; [package implementation design](PROJECT.md#package-management) remains RECOMMENDED. Pricing owns stable catalog identity/versioned terms and quote construction; Booking owns sold snapshots/reservations; Venues/Rooms owns minimum/hours/cleaning/physical capacity; Payments checks accepted quote; Access reads purchased session only. Package administration fits existing boundaries, not a new module or generic rules engine.
 
 A desired configuration write/atomic publish transaction validates related fields, scope/schedules, optimistic version and operational references; durable audited cache/projection invalidation updates eligible catalog without per-edit code deployment. Provider capture/device commands remain outside publication transaction. Sold versions, payment/quote references and booked intervals are immutable except separate agreed amendment revisions. No architecture code/table/deployment evidence asserted.
 
-#### Bank payment — CN-KB-BANK-PAYMENT-001
+### Bank payment — CN-KB-BANK-PAYMENT-001
 Existing Payments owns bank requests/evidence/review/verified credits/allocation/refund/instruction versions; Booking owns shared durable holds, inventory guard and confirmed snapshots; Notifications owns reviewer/customer delivery; Access consumes eligible confirmed purchase; Audit owns safe immutable evidence. No second booking system or new microservice. [Canonical manual-payment design](PROJECT.md#bank-payments) is RECOMMENDED; core feature confirmed but unimplemented.
 
 Verified fund fact persists independently of booking transaction success. Guarded allocation and eligible confirmation lock relevant financial/request/inventory state, dedupe operations and create durable access/notice work. Funds receipt cannot be rolled back by external failure or rejected inventory; unmatched/excess/late funds remain resolution obligations. Gateway and bank attempt satisfaction share one booking aggregate to avoid double confirmation/allocation; corrections append ledger entries. Bank credits never synthesize gateway callbacks or card capture facts. Existing package versions/quotes/snapshots and operational minimum/capacity/cleaning boundaries preserved.
 
-<!-- migrated-end:knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md -->
-
 <a id="data-api"></a>
-<!-- migrated-begin:knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md -->
-### CineNest Data and API Contracts
+## Data Api
 
-> Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).
-> Decision: DOCUMENTED_DRAFT unless a row specifies otherwise. Implementation: NOT_VERIFIED.
-> Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
-
-#### Contract conventions
+### Contract conventions
 Conceptual entities, table names and capabilities are proposals, not existing schema/endpoints. No database migrations/runtime API changes in this task. ISO currency with integer minor-unit amounts (LKR draft), UTC RFC3339 instants and IANA reporting timezone. Half-open session/reservation intervals follow [business rules](PROJECT.md#business-rules). Opaque IDs, version/ETag for writes, stable timestamp+ID sorting and bounded server pagination. Requests/exports/streams enforce owner and authorized venue scope before reading data; venue scope does not assert tenancy.
 
 | Entity | Owner | Proposed fields | API capabilities (not paths) |
@@ -161,12 +140,12 @@ Conceptual entities, table names and capabilities are proposals, not existing sc
 | Engagement ledger | Customer Engagement | ledgerId, accountRef, ruleVersion, delta/reason/expiry/reversalRef; eligibility decisions | Owner read; restricted idempotent adjust/redeem |
 | Audit events | Audit | eventId, actor, action, authorized venue, resourceRef, reason, timestamp, correlation and redacted diff | Scoped immutable read/export; never expose credentials |
 
-#### Application and integration responses
+### Application and integration responses
 Successful writes return resource ID, new version, operation status, correlation ID and server asOf. Async writes return accepted/pending plus status capability, never an unconfirmed success. Failed operations return a safe code (availability_conflict, hold_expired, quote_changed, verification_required, scope_denied, provider_pending, access_unknown), recoverability, safe message and correlation ID; no raw provider secret or identity evidence. A failed HTTP transport is unknown outcome until status queried. Validation fields reference persistent UI labels.
 
 Idempotency key is owner/scope/operation bound with request digest, durable result and retention defined by final policy. Same key/same intent returns original result; same key/different intent conflicts. Authenticate and authorize before key lookup so results cannot leak across users. Mutations check entity version; stale edits surface reload/diff, not overwrite.
 
-#### Verified gateway payment notification workflow
+### Verified gateway payment notification workflow
 1. Provider adapter validates configured authenticity/signature, expected merchant, transaction/attempt, amount/currency and replay/dedupe identifiers against official selected provider contract. Client redirect is advisory only.
 2. Persist inbox event and financial fact once; atomically create durable integration work/audit. Acknowledge provider only after durable acceptance. Reject or quarantine mismatches safely.
 3. For gateway, Booking consumes verified fact once, checks accepted quote reference/amount/currency and eligibility/hold/reservation under authoritative concurrency guard (never silently checks latest catalog rate), confirms or records payment_exception; neither provider success nor Redis hold alone confirms inventory.
@@ -175,7 +154,7 @@ Idempotency key is owner/scope/operation bound with request digest, durable resu
 
 A database rollback does not reverse an external capture. Outbox workers retry with bounded exponential backoff/jitter and per-operation TTL/maximum attempts determined before launch. Persist attempts and nextAttemptAt; exhausted work goes to incident/manual review, not infinite retry. Access work expires when no longer useful; no replay of stale unlock/power command. Provider operations query status before retry where outcome uncertain. Inbox/event IDs deduplicate; aggregate version/sequence handles out-of-order facts without losing original events.
 
-#### Proposed safe event envelope
+### Proposed safe event envelope
 ```json
 {
   "eventId": "opaque-unique-id",
@@ -194,15 +173,15 @@ A database rollback does not reverse an external capture. Outbox workers retry w
 ```
 This is a shape example, not a valid production timestamp fixture. Scope validated server-side, never trusted from caller payload. No raw identity document/OCR dump, PIN, card data, access token or secret in ordinary events/logs. Protected secret installation uses an explicitly secured narrow adapter channel and credential reference in normal events. Envelope timestamp distinguishes occurrence from ingestion. Consumers idempotently checkpoint; projection rebuilds preserve authorization/freshness and do not reexecute external side effects.
 
-#### Reconciliation acceptance
+### Reconciliation acceptance
 Future tests: duplicate/out-of-order captures, expired holds, concurrency, partial refunds, late success after cancellation, provider timeout, lost outbox ack, notification failure, failed access installation and stale telemetry. Audit evidence links original facts and compensation. [Chart contracts](tokens/cinenest-chart-specs.json) consume safe authorized projections, not screenshots or client-subset totals.
 
-#### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
+### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
 [Canonical package contract](PROJECT.md#package-management) proposes scoped package.read/edit/publish/deactivate/archive; opaque immutable revision IDs, version/ETag conditional updates and idempotent publish commands. Publication validates duration/inclusions/price/operational refs/schedule together; ambiguity/stale state rejects atomically, not partial publish. Versioned quote response includes package/price/fee/add-on/policy refs, snapshot line items, currency, total and expiry. Capture reconciliation uses accepted quote and verified capture timing rather than webhook receipt time/new catalog values.
 
 Confirmed Booking preserves purchased display details, duration/start/end/buffer, guests/services, exact total/line items, consent/policy/quote refs. Amendments have distinct accepted quote and guarded revision/payment/refund/access work; catalog events never update active PINs. PackagePublished safe event may contain stable ID/version, effective range, scope and correlation only; audit holds actor/time/reason/old-new values/version. Table names/routes, approval thresholds and distributed cache design unimplemented/proposed. See OD-17–22 for policy options.
 
-#### Bank payment — CN-KB-BANK-PAYMENT-001
+### Bank payment — CN-KB-BANK-PAYMENT-001
 [Canonical spec](PROJECT.md#bank-payments) supplies full workflows/lifecycles; conceptual names/capabilities below are proposals, not tables/routes.
 
 | Record | Proposed owner/fields | Capabilities |
@@ -221,66 +200,50 @@ Record unique incoming credit with bank-side identity independently; then local 
 
 API outcomes expose review, verified-funds/allocation balance, booking and access separately; rejected receipt ≠ failed actual credit. Model initiated/credited/submitted/verified/allocated/confirmed timestamps independently; manual timeliness policy open. Existing refunds/adjustments use approved bank evidence/destination process, append history and bounded recovery. All actual routes/schema/thresholds/support remain unimplemented.
 
-<!-- migrated-end:knowledge/architecture/CINENEST-DATA-AND-API-CONTRACTS.md -->
-
 <a id="security-privacy"></a>
-<!-- migrated-begin:knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md -->
-### CineNest Security Privacy and Compliance
+## Security Privacy
 
-> Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).
-> Decision: DOCUMENTED_DRAFT unless a row specifies otherwise. Implementation: NOT_VERIFIED.
-> Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
-
-
-#### Scope and status
+### Scope and status
 Desired controls DOCUMENTED_DRAFT, implementation NOT_VERIFIED. No legal-compliance, merchant approval, screening licence or hardware-safety certification asserted. Source PDFs (if later supplied) are draft requirements, not proof of any approval. This document defines review topics and acceptance evidence; specific legal obligations need qualified local review, not inferred rules.
 
-#### Identity and authorization
+### Identity and authorization
 Google OIDC proves a provider login, not age, physical identity or policy consent. Verify OIDC protocol/session securely; secure HttpOnly application cookies, appropriate SameSite/CSRF and session revocation; exact deployment strategy requires stack approval. Enforce least-privilege capabilities, owner/authorized venue scope, stronger administrative authentication and restricted emergency overrides. Separate booking management, finance refund/export, document review/evidence view, access secret reveal and device command permissions. Every protected action checked backend-side; UI hiding is insufficient. Do not presume multi-tenant SaaS isolation.
 
-#### Evidence processing and privacy
+### Evidence processing and privacy
 NIC/passport extraction primarily covers booker; OCR only offers candidate text. It does not prove document authenticity, identity or liveness. Age/date interpretation, rejection/appeal, manual review, all-guest original-document checks, guardian/admission policy and exception handling need final decisions (OD-03). Collect minimum required data, restrict evidence preview/export, mask IDs, log evidence access without raw contents, segregate contact/verification/access data. Private encrypted storage and controlled encryption keys; bounded signed upload/read links, file type/size validation, malware handling, audit and deletion workflows need provider/design review.
 
 Retention periods, processing purposes, consent/legal basis, regional transfers/subprocessors, backups/deletion lag, incident obligations and account deletion conflicts are OPEN_DECISION OD-05. No invented retention days. Deletion workflow authenticates requester, checks approved legal holds/ledger obligations, removes active evidence and tracks pending copies/backups per approved lifecycle; deletion success never asserted solely from UI click. Raw documents/OCR text are excluded from ordinary events, logs and analytics.
 
-#### Consent and purchases
+### Consent and purchases
 Explicit versioned terms/privacy/admission acceptance records actor, policy versions/hash, timestamp and context. Google sign-in and a prechecked box do not substitute for consent. Preserve booking-time quote, refund terms and consent snapshot; new policy settings cannot silently rewrite purchases. Dark patterns, hidden fees and blanket automatic card re-billing are outside approved behavior. Refund/charge consent/provider eligibility remains OD-07.
 
-#### Payment and secret boundaries
+### Payment and secret boundaries
 Hosted/tokenized checkout avoids application collection/storage of raw card credentials. Official provider merchant/country/product support, webhook authenticity, refund rules and responsibilities must be verified (OD-06). Do not claim hosted checkout eliminates every security/compliance responsibility. Verify events and dedupe financial facts; no client-redirect success trust.
 
 PIN default delivery should be a protected link/in-app reveal in SMS/email, not raw secrets in templates or normal notification events. If raw PIN delivery is later required, it needs an explicit risk/consent/retention decision and narrow secure delivery channel. Mask on lists and shared receipts; exclude from URLs/query logs/analytics/exports. Credential storage/installation uses least-privilege secured adapters, secret encryption, rotation/revocation and access audit. Delivery receipt does not prove customer received or could enter.
 
-#### Safety and commercial review
+### Safety and commercial review
 Follow [IoT requirements](ARCHITECTURE.md#iot-access): independent egress, no occupant trapping or safety power interruption, unknown/offline never treated as OFF/empty. Product claims “fully automated/staff-less” cannot override required emergency, verification or physical-cleaning staffing.
 
 Commercial screening/streaming subscriptions, public exhibition/content rights, gaming licences, photography/logo rights and venue/admission conditions remain OD-14. Consumer pricing/refund disclosures and final 18+ policy require review before launch. No guaranteed legal compliance or approved licensing is claimed.
 
-#### Future security evidence
+### Future security evidence
 Threat model customer/admin/device/provider trust boundaries; test object-level scope, privileged MFA/recovery, CSRF/session fixation, signed URLs/upload validation, secret/log leakage, webhook replay, broker ACLs, device credential rotation, dependency/supply-chain scanning, restore and incident response. These are continuous delivery gates, not tests run by this documentation task.
 
-#### Bank payment — CN-KB-BANK-PAYMENT-001
+### Bank payment — CN-KB-BANK-PAYMENT-001
 [Bank evidence/security specification](PROJECT.md#bank-payments) extends existing principles: own authenticated upload and restricted review/evidence/verify/allocation/refund/account-management scopes, private encrypted generated-key storage, true JPEG/PNG/PDF type/size validation, scan/quarantine, safe restricted previews, history and approved retention/deletion. Receipt upload is not original-ID admission verification, and OCR/email/image hash cannot independently prove credit or authorize approval.
 
 Never request bank passwords/PINs/OTPs/card security codes. Bank details/receipt/statement/credentials excluded from public URLs, ordinary logs/event payloads and notification attachments; use protected scoped views/links. Separate receiving-account changes from ordinary review, independently verify instructions/refund destination and audit actor/time/reason/evidence/correlation. Thresholds/roles/retention/upload limits OPEN_DECISION OD-26/28; no current account, bank connectivity/legal approval or provider support asserted. Third-party payer differences require legitimate matching, not automatic fraud label. Erroneous approval and actual bank reversal append safe correction history; no deletion/occupant trapping. No bank account/money/real payment affected by this task.
 
-<!-- migrated-end:knowledge/security/CINENEST-SECURITY-PRIVACY-COMPLIANCE.md -->
-
 <a id="iot-access"></a>
-<!-- migrated-begin:knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md -->
-### CineNest IoT Access and Failure Modes
+## Iot Access
 
-> Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).
-> Decision: DOCUMENTED_DRAFT unless a row specifies otherwise. Implementation: NOT_VERIFIED.
-> Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
-
-
-#### Hard design constraints and proof status
+### Hard design constraints and proof status
 Decision DOCUMENTED_DRAFT safety requirements from S1; Implementation NOT_VERIFIED. Emergency egress must not depend on cloud, payment, PIN or administrator intervention. Access expiry/revocation denies new entry and must not trap occupants. Remote lighting/AC/projector actions must not disable safety circuits, alarms, egress lighting or emergency mechanisms. Actual hardware, wiring, fail modes, physical inspection and accountable staffing are launch blockers OD-02/04, not verified by this document.
 
 Entry valid only [session_start,session_end); requested credential installation is not installed until authoritative acknowledgement/lookup. Session/cleaning schedules follow [lifecycles](PROJECT.md#business-rules). Exit/checkout event is evidence of an event, never proof every person left. Physical occupancy status is unknown unless a validated detection/operational process supports a qualified claim.
 
-#### Capability and hardware acceptance matrix
+### Capability and hardware acceptance matrix
 For each lock/controller/model/firmware record local PIN capacity, scheduled validity, clock sync/drift behavior, provisioning acknowledgement, offline entry, power failure, revoke while offline, re-entry, manual/emergency egress and vendor API/country/account compatibility. Every field is currently NOT_VERIFIED. TTLock/Tuya-compatible is a candidate description, not tested compatibility. Cloud remote unlock cannot establish offline capability. Record test evidence and responsible reviewer before enabling any supported badge/control.
 
 | Failure | Desired UI/state | Safe behavior/recovery | Evidence/launch gate |
@@ -296,29 +259,26 @@ For each lock/controller/model/firmware record local PIN capacity, scheduled val
 | Buffer elapsed, cleaning unconfirmed | Cleaning_required, not ready | Physical checklist/clearance, block unsafe next admission | Staffing/readiness policy OD-04/10 |
 | Clock drift or stale scheduled command | Unknown validity; expiry visible | Server/local schedule reconciliation, expire stale work; safe intervention | Time-sync/offline window boundary tests |
 
-#### Secure command contract
+### Secure command contract
 Authenticated device identities and MQTT over TLS with topic/resource ACLs; credentials unique/rotatable/revocable. Capability-scoped commands include command ID, desired action/units, actor/correlation, schema version, issuedAt and expiresAt. Reject stale/unauthorized/unsupported values at server and edge. Do not retain actionable unlock/power commands for replay after reboot; retained telemetry still needs freshness checks. Ack confirms receipt/processing per capability, not physical state unless explicit observed evidence. UI labels requested, pending, acknowledged, failed, expired and unknown; actual observation has observedAt/quality.
 
-#### Operations and continuous acceptance
+### Operations and continuous acceptance
 Run simulated and physical safety-reviewed tests before controlled launch; documentation makes no hardware result claim. Maintain incident ownership/contacts, manual recovery runbooks, safe maintenance and emergency staffing. Five-minute notifications are scheduled durably and deduplicated per session revision; missed jobs do not send misleading warnings after expiry. Separate notification delivery from session end and physical cleaning. No physical commands are sent by this task.
 
-#### Bank payment — CN-KB-BANK-PAYMENT-001
+### Bank payment — CN-KB-BANK-PAYMENT-001
 [Bank verification](PROJECT.md#bank-payments) never unlocks directly. Receipt submission/reviewer alert is not verified funds; verified funds alone are not confirmation or installed access. Only sufficient authorized allocation, valid inventory and pre-confirmation eligibility allow Booking to queue existing provisioning. No PIN release while payment unverified; keep purchased session window and actual device acknowledgement. Access failure remains access pending/incident while bank payment stays verified; no reversal fiction. Original-ID entry checks and independent egress remain unchanged. Bank payment implies no card token or damage card re-billing; alternate policy requires separate approval. No real lock/controller commands sent here.
 
-<!-- migrated-end:knowledge/architecture/CINENEST-IOT-ACCESS-AND-FAILURE-MODES.md -->
-
 <a id="adr-002"></a>
-<!-- migrated-begin:knowledge/CINENEST-DESIGN-DECISION-ADR-002.md -->
-### ADR-002: Draft Business Defaults, Metric Clarification and Token Preservation
+## Adr 002
 
 Task CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT (business and metric specification), OPEN_DECISION (palette migration). Implementation: NOT_VERIFIED. Source: S1 user request. ADR-001 hybrid direction remains APPROVED; its history and numbering are preserved.
 
-#### Context and resolution
+### Context and resolution
 New notes specify draft rates, capacity, schedule, buffer, admission and PIN window. Previous UI docs left these unresolved and referenced illustrative pre-entry timing. Adopt S1 as documented draft requirements via [canonical lifecycles](PROJECT.md#business-rules), without claiming PDF/legal/provider validation. PIN entry window is scheduled session start to end, not 15 minutes before; any source/mockup conflict is retained here. Protected access-link delivery via SMS/email is desired; ordinary events/notifications still exclude raw credentials. Raw PIN delivery remains a separate risk decision.
 
 Old charts called captures minus refunds “recognized revenue.” Correct to net collections by financial event time; recognized revenue is a separate finance-policy-defined measure, unavailable until approved. Donut center now uses the same full scoped population as its slices (occupied / all included status rooms); a denominator limited to bookable rooms must be a separately labelled metric rather than the old ambiguous center. Booking-based status cannot certify physical occupancy. Proposed sellable minutes explicitly exclude approved non-sellable buffers/blackouts and remain finance/operations reviewed.
 
-#### Palette conflict (not applied)
+### Palette conflict (not applied)
 The request calls the following source tokens existing; the checked-in JSON differs. Preserve current JSON/CSS bytes because these active approximations are already consistent and no source pack resolves the discrepancy. [Comparison data](decisions/cinenest-palette-comparison.json) is documentation, not an imported theme. OD-11 must be resolved by design owner with contrast/render evidence before migration. Typography, spacing, borders, shadows, shell and images remain unchanged.
 
 | Semantic role | Checked-in active approximation | S1 requested candidate |
@@ -337,41 +297,35 @@ The request calls the following source tokens existing; the checked-in JSON diff
 | `warning.foreground` | `#854A0E` | `#B45309` |
 | `danger.foreground` | `#B42318` | `#B91C1C` |
 
-#### Consequences and acceptance
+### Consequences and acceptance
 Source PDFs remain missing. Final stack/provider/hardware choices remain recommended/open and implementation NOT_VERIFIED. Contract/metric semantics may change before code exists, but updates remain explicit and traceable. [Open decisions](ARCHITECTURE.md#open-decisions) and [changelog](PROGRESS.md#version-history) record scope. No existing approved behavior is silently replaced; no application/runtime configuration changes are made.
 
-<!-- migrated-end:knowledge/CINENEST-DESIGN-DECISION-ADR-002.md -->
-
 <a id="adr-003"></a>
-<!-- migrated-begin:knowledge/CINENEST-DESIGN-DECISION-ADR-003.md -->
-### ADR-003: User-confirmed Admin Package Configuration
+## Adr 003
 
 Task CN-KB-PACKAGE-CONFIGURATION-001 · 2026-10-14. Source S8. Decision APPROVED for PR-PKG-001 / CN-A12 core requirement; RECOMMENDED for supporting publication, quote and implementation design. Implementation NOT_VERIFIED. ADR-001/002 historical decisions retained.
 
-#### Decision and provenance
+### Decision and provenance
 User confirms authorized administrators can modify package details, customer session duration and prices via Admin Panel without code edits or a deployment per configuration change. [Canonical package management](PROJECT.md#package-management) owns this topic within existing proposed Pricing boundaries; Packages & Pricing is a proposed subsection of System Settings, not a new module/verified route or independent promotion engine.
 
-#### Defaults and invariant protection
+### Defaults and invariant protection
 Source-described three-hour/base/guest/extension/add-on/fee/buffer values remain initial defaults. Package settings cannot override separate operational minimum-duration policy, cleaning requirements or approved physical capacity. A shorter package requires authorized operational policy and customer terms changes. Core editability does not imply approval of proration, zero prices, dynamic pricing or tax/threshold choices.
 
-#### Supporting recommendations
+### Supporting recommendations
 Immutable published versions; joint validation/atomic publication; explicit scoped sales versus service windows; valid accepted quote honor; historical purchase snapshots; separate purchased amendment and access coordination. These designs are recommendations, not implemented/automatically approved requirements. Existing payment revalidation is clarified to accepted quote amount/currency and current inventory eligibility, not latest catalog price. No catalog edit changes booked terms/PINs or sends device commands. Conflicts/options are OD-17–22; missing PDFs/legal/hardware validation unchanged.
 
-#### Consequences and acceptance
+### Consequences and acceptance
 Existing feature IDs retained; CN-A12 added. [Package acceptance scenarios](PROJECT.md#package-management) are future implementation requirements. KB 1.0.0 → 1.1.0 is a material additive documentation revision; token/chart versions and bytes are unchanged. A no-change rerun does not duplicate IDs/sections or bump versions. No application/runtime/migration/dependency/deployment/device changes.
 
-<!-- migrated-end:knowledge/CINENEST-DESIGN-DECISION-ADR-003.md -->
-
 <a id="adr-004"></a>
-<!-- migrated-begin:knowledge/CINENEST-DESIGN-DECISION-ADR-004.md -->
-### ADR-004: User-confirmed Bank Deposit and Manual Payment
+## Adr 004
 
 CN-KB-BANK-PAYMENT-001 · 2026-10-14. Source S9, provenance USER-CONFIRMED; core Decision APPROVED, Implementation NOT_VERIFIED. Supporting workflow/controls/contract/report choices RECOMMENDED, method policies OPEN_DECISION. ADR-001–003 unchanged; existing package requirement approved and retained.
 
-#### Core decision
+### Core decision
 Add customer deposit/transfer to business account, receipt submission, administrator review notification and independently verified authorized payment approval alongside existing hosted online gateway option. [Canonical specification](PROJECT.md#bank-payments) owns PR-BANK-001/CN-C10/CN-A13. No real receiving account or connectivity is established by documentation.
 
-#### Conflicts and explicit resolution
+### Conflicts and explicit resolution
 - Receipt uploaded ≠ independent receiving-bank credit verification; verified funds ≠ allocation/sufficient payment ≠ guarded booking confirmation ≠ acknowledged access.
 - Existing gateway notification/attempt/capture language now scoped to gateway. Bank reconciliation emits internal evidence-source facts, never forged gateway callbacks/card capture. Pre-confirmation inventory/identity/age/consent/hours/capacity remain required; original-ID checks still entry requirement.
 - Gateway short checkout holds cannot silently govern manual review. Method-specific durable bounded holds/timeliness/service hours/deadlines remain OD-23/24/29; 24-hour lead is not selected.
@@ -379,117 +333,64 @@ Add customer deposit/transfer to business account, receipt submission, administr
 - Valid package/quote/instruction snapshots preserved. Received funds survive unavailable booking; safe restoration/customer-agreed alternative/approved refund, not displacement/forfeit or latest catalog reprice.
 - Chart financial semantics extended from gateway captures to explicit bank credits with credited/verified/allocated/refund clocks. Receipts and allocation never double-count collections; excess/unmatched actual cash not automatic booking/recognized revenue. Existing chart series colors unchanged; chart contract content version advances intentionally. Token/CSS/image bytes preserved.
 
-#### Supporting recommendations and acceptance
+### Supporting recommendations and acceptance
 Independent manual matching, controlled statement entry identity, append-only verified funds/allocations/adjustments, concurrent/idempotent guarded booking, durable alerts/access and evidence-based refunds are recommended unimplemented design. Bank feed/OCR approval/current provider support not asserted; original PDFs missing and no legal endorsement.
 
 BP-AC01–13 require future implementation evidence. OD-23–29 cover unresolved fee/timing/matching/privacy/account/refund/staffing decisions. Material additive KB 1.1.0→1.2.0, chart contract 1.1.0→1.2.0; tokens remain 1.0.0. No no-op increment/duplicate IDs. Application/runtime/money/account/device/deployment unchanged.
 
-<!-- migrated-end:knowledge/CINENEST-DESIGN-DECISION-ADR-004.md -->
-
 <a id="open-decisions"></a>
-<!-- migrated-begin:knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md -->
-### CineNest Open Decisions and Traceability
+## Open Decisions
 
-> Task: CN-KB-FEATURES-TECH-001 · Recorded: 2026-10-14 (Asia/Colombo).
-> Decision: DOCUMENTED_DRAFT unless a row specifies otherwise. Implementation: NOT_VERIFIED.
-> Source S1: user-supplied task text; source PDFs are missing. This is documentation, not proof of implementation, legal compliance, merchant approval or working hardware.
+The existing [decision registry](decisions/cinenest-open-decisions.json) owns each conflict, source, impact, options, owner, evidence and blocker classification. All rows remain OPEN_DECISION / NOT_VERIFIED, owners TBD. Resolving a row requires a named owner, explicit decision evidence and updated affected requirements/tests; documentation or Git publication cannot supply that authority.
 
-#### Source inventory and decision semantics
-Source [S1](sources/CN-KB-FEATURES-TECH-001-request.txt) is a preserved copy of the actual user request. [Source register](sources/cinenest-source-register.json) includes checksums. S2 Mini movie theater Ruels and Conditions.pdf, S3 Smart_Cinema_Platform.pdf and S4 architecture proposal PDF (possibly Sinhala name) were not found in the project workspace or accessible attachment directory. No PDF text or image-page content was read because no PDF is available. No fabricated quotation or source-page claim. Requested customer image alias with “(1)” remains unavailable; normalized existing S7 is preserved with its original checksum, exact alias equivalence unverified.
+| ID | Required decision / conflict | Blocker |
+|---|---|---|
+| OD-01 | Final stack, cloud and libraries/providers unselected | IMPLEMENTATION_GATE |
+| OD-02 | Lock/controller compatibility, offline/re-entry/revocation and clocks untested | LAUNCH_BLOCKER |
+| OD-03 | 18+ draft applies all guests; digital verification covers booker | LAUNCH_BLOCKER |
+| OD-04 | Staff-less visuals versus physical cleaning/emergency intervention | LAUNCH_BLOCKER |
+| OD-05 | Privacy, storage provider, regional processing and retention undecided | LAUNCH_BLOCKER |
+| OD-06 | Payment providers/merchant product/country support unverified | LAUNCH_BLOCKER |
+| OD-07 | Refund fees/taxes/cancellation and card re-billing not finalized | LAUNCH_BLOCKER |
+| OD-08 | Loyalty earning, reversal, expiry/redemption and promotion stacking undefined | FEATURE_LAUNCH_BLOCKER |
+| OD-09 | Temporary hold range 10–15 min is not precise | LAUNCH_BLOCKER |
+| OD-10 | Cleaning buffer after closing not resolved | LAUNCH_BLOCKER |
+| OD-11 | Requested source palette differs from checked-in proposed tokens | DESIGN_IMPLEMENTATION_GATE |
+| OD-12 | Multi-venue scope is not an approved multi-tenant/subscription SaaS model | SCOPE_DEPENDENT_GATE |
+| OD-13 | Physical occupancy detection and overstay evidence unvalidated | FEATURE_LAUNCH_BLOCKER |
+| OD-14 | Commercial screening/streaming/gaming/media rights unverified | LAUNCH_BLOCKER |
+| OD-15 | PDF sources/knowledge pack absent; no page-level verification | RECONCILIATION_GATE |
+| OD-16 | Recognized revenue and sellable-minute policy not approved | REPORT_LAUNCH_BLOCKER |
+| OD-17 | Package proration, rounding, zero-price and tax treatment unresolved | FEATURE_LAUNCH_BLOCKER |
+| OD-18 | Package price-change thresholds, role allocation and two-person approval not approved | FEATURE_LAUNCH_BLOCKER |
+| OD-19 | Scope precedence and sales/session-validity version selection needs final approval | FEATURE_LAUNCH_BLOCKER |
+| OD-20 | Valid quote honor, deactivation/emergency withdrawal and payment-timing evidence | FEATURE_LAUNCH_BLOCKER |
+| OD-21 | Minimum-duration operational-policy authority and change process | FEATURE_LAUNCH_BLOCKER |
+| OD-22 | Shared fee/add-on definitions versus deliberate package overrides | IMPLEMENTATION_GATE |
+| OD-23 | Bank lead time/payment/submission/review/hold/request validity and bounded extension settings | FEATURE_LAUNCH_BLOCKER |
+| OD-24 | Bank timeliness clock and quote-validity/operator-delay treatment | FEATURE_LAUNCH_BLOCKER |
+| OD-25 | Convenience fee treatment for bank method | FEATURE_LAUNCH_BLOCKER |
+| OD-26 | Receipt upload size/types/scan-preview and retention/deletion | FEATURE_LAUNCH_BLOCKER |
+| OD-27 | Bank-side identity/controlled statement matching, partial top-ups/shared-deposit allocation | FEATURE_LAUNCH_BLOCKER |
+| OD-28 | Bank-review/account-change/refund role separation and high-risk approval controls | FEATURE_LAUNCH_BLOCKER |
+| OD-29 | Manual-review service staffing, overdue escalation and operator-caused failure compensation | FEATURE_LAUNCH_BLOCKER |
 
-Decision values: APPROVED = explicit accepted choice; DOCUMENTED_DRAFT = user-discussed/default requirement pending final review; RECOMMENDED = architectural option advocated but unselected; OPEN_DECISION = unresolved alternatives/conflict. Implementation values: NOT_VERIFIED = no code/test evidence; PARTIAL_WITH_EVIDENCE and VERIFIED_WITH_EVIDENCE require concrete paths/commit/tests and scope. Document existence is not feature implementation evidence. No feature currently receives a verified implementation status.
-
-Current approved core decisions: hybrid admin/customer visual direction (ADR-001), PR-PKG-001/CN-A12 admin-editable package details/duration/price (ADR-003/S8), PR-BANK-001/CN-C10/CN-A13 bank payment and notified independent review (ADR-004/S9), reaffirmed by S10. Supporting policies remain open. Draft: business defaults and desired workflows S1. Recommended: Spring Modulith and supporting stack options. Open: providers, exact token migration, hardware, privacy, all-guest process and other register rows. PDFs, if later provided, are draft requirements, never legal/merchant/hardware approval evidence.
-
-#### Open-decision register
-| ID | Conflict | Source | Impact | Options | Owner | Evidence required | Decision | Implementation | Launch blocker classification |
-|---|---|---|---|---|---|---|---|---|---|
-| OD-01 | Final stack, cloud and libraries/providers unselected | S1 vs no implementation evidence | Build/deployment and operational commitments | Spring Modulith vs NestJS; one chart/broker; cloud evaluation | TBD | Architecture feasibility, team capacity, official support and selection ADR | OPEN_DECISION | NOT_VERIFIED | IMPLEMENTATION_GATE |
-| OD-02 | Lock/controller compatibility, offline/re-entry/revocation and clocks untested | S1; unavailable S4 | Entry reliability and occupant safety | Test exact models/local schedules/manual fallback; do not promise cloud unlock offline | TBD | Physical model/firmware/API/outage/egress evidence | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-03 | 18+ draft applies all guests; digital verification covers booker | S1; unavailable S2/S3 | Admission enforcement and review staffing | Defined on-site originals process vs approved alternative; manual exceptions | TBD | Qualified policy review, operational process and identity/OCR validation | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-04 | Staff-less visuals versus physical cleaning/emergency intervention | S1 and visual references | Safe room turnover and response | Accountable onsite/on-call staffing, cleaning checklist and emergency plan | TBD | Venue staffing/responder drills and physical readiness clearance | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-05 | Privacy, storage provider, regional processing and retention undecided | S1; missing source PDFs | Sensitive identity evidence processing | Private storage/provider review; minimal data; defined retain/delete/backup handling | TBD | Privacy/legal review, data-flow map and deletion/access tests | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-06 | Payment providers/merchant product/country support unverified | S1; mockup badges not approval | Ability to collect/refund/reconcile lawfully under provider terms | PayHere or supported bank IPG; Stripe only if eligible | TBD | Official docs and merchant confirmation; sandbox/webhook/refund evidence | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-07 | Refund fees/taxes/cancellation and card re-billing not finalized | S1 and historical screenshot ambiguity | Purchased terms, financial disputes and compensation | Versioned explicit policy; no automatic new charge without approved consent/capability | TBD | Finance/product/provider/legal approval and lifecycle tests | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-08 | Loyalty earning, reversal, expiry/redemption and promotion stacking undefined | S1 proposed scope | Engagement ledger and discount consistency | Defer feature or approve versioned eligibility/rates/caps | TBD | Product/finance rules and abuse/reversal tests | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-09 | Temporary hold range 10–15 min is not precise | S1 | Expiry UI, payment handoff and inventory utilization | Choose configurable 10 or 15 minutes (or justified value) later | TBD | Checkout/provider timing and conflict/expiry tests | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-10 | Cleaning buffer after closing not resolved | S1 | Latest bookable start/physical staffing schedule | Disallow buffer beyond closing vs permit staffed post-close cleaning | TBD | Operating/readiness approval and boundary tests | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-11 | Requested source palette differs from checked-in proposed tokens | S1 vs HEAD 16710dc | Visual consistency and contrast | Preserve active tokens now; explicit future palette migration after contrast review | TBD | Design owner reconciles source pack; rendered/token contrast evidence | OPEN_DECISION | NOT_VERIFIED | DESIGN_IMPLEMENTATION_GATE |
-| OD-12 | Multi-venue scope is not an approved multi-tenant/subscription SaaS model | S1; no code evidence | Isolation, permissions and billing architecture | Venue-scoped single organization vs explicit future tenant isolation | TBD | Architecture/business scope decision and isolation tests | OPEN_DECISION | NOT_VERIFIED | SCOPE_DEPENDENT_GATE |
-| OD-13 | Physical occupancy detection and overstay evidence unvalidated | S1; motion/exit visuals | Unsafe empty-room assumptions and false dashboards | Keep booking-based status; label physical unknown; evaluate validated sensors/staff checks | TBD | Hardware/privacy accuracy and safety review | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-14 | Commercial screening/streaming/gaming/media rights unverified | S1 and screenshot amenities | Launch claims and content use | Obtain appropriate rights or restrict advertised/offered amenities | TBD | Qualified commercial/licensing/venue review; no legal claim from PDFs | OPEN_DECISION | NOT_VERIFIED | LAUNCH_BLOCKER |
-| OD-15 | PDF sources/knowledge pack absent; no page-level verification | S2/S3/S4 unavailable | Requirements completeness and source fidelity | Supply actual sources; read text and relevant image-only/Sinhala pages; reconcile via ADR | TBD | Accessible originals, checksums, page evidence and conflict review | OPEN_DECISION | NOT_VERIFIED | RECONCILIATION_GATE |
-| OD-16 | Recognized revenue and sellable-minute policy not approved | S1 vs old cash-event label | Financial reporting and utilization comparability | Cash collections separate; recognized accrual only after approved policy; explicit blackout/buffer denominator | TBD | Finance definitions and backend aggregate fixture checks | OPEN_DECISION | NOT_VERIFIED | REPORT_LAUNCH_BLOCKER |
-
-#### Traceability and historical conflicts
-Initial catalog features reference S1; CN-A12 references S8; each maps owning module/UI/permissions/acceptance; default rules reference S1; exact visual evidence S5–S7 supports direction, not operational figures. Existing C01–C15 remain historical in [reference traceability](DESIGN.md#reference-traceability); use this register for current cross-domain decisions. [ADR-002](ARCHITECTURE.md#adr-002) records the rule/metric corrections and active-token preservation without changing ADR-001 numbering or hybrid approval. Source-derived contradictory approved decisions require a subsequent ADR, not silently overwriting policy.
-
-Resolving a row requires named owner, dated evidence, explicit selected option/status, affected artifact updates and acceptance gate; NOT_VERIFIED changes only with actual implementation/test evidence. No deadlines/hardware results invented. Safety-critical rows must be resolved before venue launch, even when a marketing mockup says staff-less/100% automated.
-
-#### Package configuration — CN-KB-PACKAGE-CONFIGURATION-001
-S8 explicitly confirms PR-PKG-001/CN-A12 core editability without per-change deployment: Decision APPROVED, Implementation NOT_VERIFIED. Supporting version/quote/publication architecture is RECOMMENDED; it does not approve all field/workflow options. Canonical [package spec](PROJECT.md#package-management) and [ADR-003](ARCHITECTURE.md#adr-003) record ownership/protections. New questions below leave prior IDs/statuses unchanged.
-
-| ID | Conflict | Source | Impact | Options | Owner | Evidence required | Decision | Implementation | Launch blocker classification |
-|---|---|---|---|---|---|---|---|---|---|
-| OD-17 | Package proration, rounding, zero-price and tax treatment unresolved | S8; initial figures are examples | Exact payable totals and permitted shorter/included duration choices | Initial extension-only no proration; resolve permitted zero/tax and exact rounding policy explicitly | TBD | Product/finance/policy decision and exact quote fixtures | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-18 | Package price-change thresholds, role allocation and two-person approval not approved | S8 core capability only | Who may edit/publish/archive and control sensitive changes | Independent capabilities; self-publish vs approval workflow/threshold by scope | TBD | Accountable role/scope matrix and approval/audit acceptance | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-19 | Scope precedence and sales/session-validity version selection needs final approval | S8 | Deterministic applicable version and scheduling concurrency | Reject overlapping intersecting scope; decide explicit venue/room override if needed; distinguish sales vs service windows | TBD | Boundary/scope precedence and concurrent-publish evidence | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-20 | Valid quote honor, deactivation/emergency withdrawal and payment-timing evidence | S8 vs older generic revalidation language | Fair accepted prices and late capture/expired-hold recovery | Recommend honor valid quote; capture-in-time vs callback timing; explicit emergency/withdrawal and approved cutoff alternatives | TBD | Provider timestamp authenticity, product quote policy and reconciliation scenarios | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-21 | Minimum-duration operational-policy authority and change process | S8 mandatory-minimum description; PDFs absent | Two-hour packages cannot bypass venue/global policy or terms | Separate authorized minimum update, precedence/effective date and customer terms; reject invalid package-only change | TBD | Source/policy review, approval rights and minimum boundary acceptance | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-22 | Shared fee/add-on definitions versus deliberate package overrides | S8 and existing Pricing ownership | No duplicate definitions/double charging or inconsistent override precedence | Versioned shared refs by default; override only after explicit design decision | TBD | Pricing ownership/version resolution and included-extra fixtures | OPEN_DECISION | NOT_VERIFIED | IMPLEMENTATION_GATE |
-
-#### Bank payment — CN-KB-BANK-PAYMENT-001
-S9 [actual request](sources/CN-KB-BANK-PAYMENT-001-request.txt) USER-CONFIRMED PR-BANK-001 / CN-C10 and CN-A13, core Decision APPROVED, Implementation NOT_VERIFIED. Supporting controls RECOMMENDED. [Canonical bank spec](PROJECT.md#bank-payments) and [ADR-004](ARCHITECTURE.md#adr-004) reconcile gateway-only wording, funds/allocation/booking/access separation and cash/channel clocks. Existing package PR-PKG-001 approval/rules, previous IDs and online path retained. No source PDFs, real bank details/current fees, legal/merchant/account/hardware support verified.
-
-| ID | Conflict | Source | Impact | Options | Owner | Evidence required | Decision | Implementation | Launch blocker |
-|---|---|---|---|---|---|---|---|---|---|
-| OD-23 | Bank lead time/payment/submission/review/hold/request validity and bounded extension settings | S9; gateway hold candidates cannot decide manual policy | Inventory protection, payment invitation and review staffing | Select method-specific configured deadlines/hours; 24-hour lead only example; finite provisional/review transitions | TBD | Business timing/hold plan and expiry/reupload/concurrency cases | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-24 | Bank timeliness clock and quote-validity/operator-delay treatment | S9 vs gateway capturedAt evidence model | Fair accepted price, timely compliance and expired-slot recovery | Decide initiated/credited/submitted evidence versus review time; recommend valid accepted quote and accountable alternative/refund after delay | TBD | Authoritative timestamp evidence, quote terms and resolution acceptance | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-25 | Convenience fee treatment for bank method | S9 and initial online LKR 100 | Quoted payable amount and finance treatment | Retain/waive/different approved method fee; explicit quote snapshot, no guessed tax or bank fee | TBD | Product/finance approved fee/disclosure and quote fixtures | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-26 | Receipt upload size/types/scan-preview and retention/deletion | S9; existing identity-evidence policy not enough | Malicious uploads and private financial evidence lifecycle | Proposed JPEG/PNG/PDF, approved limits/storage/scan/quarantine/retention; restricted evidence history | TBD | Security/privacy/storage decision and safe-preview/deletion tests | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-27 | Bank-side identity/controlled statement matching, partial top-ups/shared-deposit allocation | S9 | Duplicate credit/allocation prevention and outstanding/excess resolution | Manual matching launch; bank assigned IDs or controlled statement entries; no wallet/installments/multi-booking by default; decide limited top-up process | TBD | Bank record formats, dedupe procedure and partial/mixed-method concurrency acceptance | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-28 | Bank-review/account-change/refund role separation and high-risk approval controls | S9; existing roles absent | Unauthorized credit approvals/account redirection/refund abuse | Independent capabilities/verification; receiving instruction versions; controlled third-party payer/destination and correction/refund approvals; thresholds TBD | TBD | Role matrix, instruction verification/refund-destination process and audited controls | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-| OD-29 | Manual-review service staffing, overdue escalation and operator-caused failure compensation | S9 versus staff-less marketing | Real review workload and customer loss of inventory after timely compliance | Staffed hours/durable alerts; bounded delays; available restoration/agreed alternative/refund with accountable escalation | TBD | Operational staffing/service plan and notification/outage/delay drills | OPEN_DECISION | NOT_VERIFIED | FEATURE_LAUNCH_BLOCKER |
-
-#### CN-DEC-001 proposal checkpoint
-
-S11 authorizes the [initial stack brief](ARCHITECTURE.md#initial-stack-brief) only. OD-01 remains OPEN_DECISION with owner TBD; initial-stack proposal is awaiting owner approval, broader vendor/cloud/library decisions remain deferred. No business policy or feature acceptance changed. Exact support dates, team capability and project compatibility tests remain explicit limitations.
-
-<!-- migrated-end:knowledge/decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md -->
+Core hybrid direction is approved. [PR-PKG-001 / CN-A12](PROJECT.md#package-management), S8, and [PR-BANK-001 / CN-C10/CN-A13](PROJECT.md#bank-payments), S9, are approved core requirements; supporting designs remain RECOMMENDED and policies OPEN_DECISION. Quote honor/withdrawal remains OD-20, missing originals OD-15, physical capacity assurance OM-04, legacy chart DTO mapping OM-06. Prior visual conflicts C01–C15 remain in DESIGN reference traceability. CN-DEC-001 S11 authorizes its brief only; broader OD-01 cloud/providers/library scope remains open even if the initial subset is later accepted.
 
 <a id="initial-stack-brief"></a>
-<!-- migrated-begin:knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md -->
-### CN-DEC-001 — Initial Stack Decision Brief
+## Initial Stack Brief
 
 **PROPOSED / AWAITING OWNER APPROVAL.** Prepared 2026-10-14, Asia/Colombo. Brief authorization is S11, not stack approval or implementation permission. OD-01 remains OPEN_DECISION. All product implementation remains NOT_VERIFIED.
 
-#### A. Scope and verified baseline
+The original brief baseline, commands/review and publication receipt remain in [PROGRESS verification history](PROGRESS.md#decision-evidence-history) and existing evidence JSON. Drivers are the [project requirements](PROJECT.md#features) and module/transaction/security contracts above. No implementation spike or version installation has been authorized.
 
-Canonical Git root `/home/hasitha-wijerathna/Documents/Theater Project/repository`; branch `main`, upstream `origin/main`; initial full HEAD and independently queried remote main `55ee66be4022daae182933a3042d86e80e8600ee`; initial worktree clean. This legitimately includes the setup publication receipt commit after its primary `c1d2ded` commit. No reset performed. Instructions were **manually read**, including root AGENTS, linked charter, current controls, actual CN-DEC-001 entry and setup evidence. Ancestor/nested discovery and build-manifest inspection found no additional applicable overrides or application manifests. Automatic host loading remains NOT_VERIFIED; no global configuration or native registration change.
-
-The existing entry permits comparing initial backend/frontend/transactional storage and proposing a selection. Related build, test, session and durable-work choices below support that comparison. No scaffolding, dependencies, manifests, lockfiles, migration SQL, runtime configuration, spikes, provider choice, live operation or next change set is performed. Charter and approval checkpoint remain intact. [Evidence](PROGRESS.md#decision-evidence-history) records fresh observations, input hashes, sources and checks.
-
-#### B. Requirements driving the choice
-
-| Driver / existing IDs | Architectural consequence proposed |
-|---|---|
-| Approved hybrid design PR-UI-001; 11 admin modules/12 customer flows | Shared React components and existing semantic tokens; cinematic customer shell, operational admin shell, responsive/a11y tests; no theme migration |
-| Approved editable packages PR-PKG-001 / CN-A12; PK-AC01–13 | Database catalog and immutable published/purchased versions, atomic publication, authoritative quotes; no code release for each edit |
-| Approved bank option PR-BANK-001 / CN-C10/CN-A13; BP-AC01–13, alongside gateway | Independent restricted review, durable alerts, unique verified credits, capped allocations and shared inventory; receipt is never payment proof |
-| CN-C03/BR-06/07 and amendments BR-10 | Database-enforced room interval conflicts covering holds, sessions, cleaning and maintenance, expiry/revision recovery |
-| CN-C02/05/A06/A11, security/privacy | Backend owner/venue capability enforcement, private evidence, revocable sessions, redacted immutable audit intent |
-| CN-C07/O01–04 | Durable time-bound commands/notices, requested/acknowledged/observed distinctions, simulated adapters and separate physical acceptance |
-| All ten chart specifications plus BN-M01–08 bank reporting fields | Scoped authoritative projections, exact money, UTC instants/Asia-Colombo boundaries, explicit asOf and completeness; no screenshot fallback |
-
-Sources: [catalog](PROJECT.md#features), [rules](PROJECT.md#business-rules), [packages](PROJECT.md#package-management), [bank payments](PROJECT.md#bank-payments), [security](ARCHITECTURE.md#security-privacy), [IoT](ARCHITECTURE.md#iot-access), [admin](DESIGN.md#admin-pages), [customer](DESIGN.md#customer-pages), [metrics](DESIGN.md#charts-metrics), [roadmap](PROGRESS.md#delivery-phases).
-
-#### C. Evidence, assumptions and exclusions
+### C. Evidence, assumptions and exclusions
 
 Approved architecture evidence: hybrid visual ADR-001 plus core package ADR-003 and bank ADR-004 requirements. These do not accept the implementation mechanisms below. Existing [stack](ARCHITECTURE.md#technology) and [module design](ARCHITECTURE.md#system-architecture) recommend Spring Modulith and list NestJS as alternative; those are recommendations, not approved architecture. Original PDFs S2/S3/S4 and knowledge pack remain missing; no page-level source validation invented. Current observed implementation is documentation and validators only.
 
 Assumptions for this proposal: an initially unified backend deployment is acceptable; future authorized foundation can use isolated development containers and two language toolchains; no requirement yet demonstrates independently deployed services. Team capability, staffing, budget, traffic/load, hosting footprint, devices and provider eligibility are **UNKNOWN**. No delivery estimate, benchmark or exact cost follows from this proposal. Owner should confirm team/toolchain feasibility before accepting; if TypeScript-only capability is documented later, reopen the comparison. Venue scope is resource authorization, not accepted SaaS tenancy (OD-12).
 
-#### D. Permitted alternatives
+### D. Permitted alternatives
 
 The table is architectural judgment against the existing requirements, not measured performance or a numeric score. Both options retain the same UI, PostgreSQL integrity model and mandatory bank/package capability.
 
@@ -508,7 +409,7 @@ The table is architectural judgment against the existing requirements, not measu
 
 **Preferred:** Spring Boot/Spring Modulith modular monolith. The differentiator is available module verification and persistent internal-event tooling matching the proposed boundaries, together with one local transactional database. This is not a claim Java prevents races or Nest cannot implement safe money/booking workflows. There is no supported reason in current evidence to introduce microservices: distributed deployment would add transactional compensation/operations before a scale/team need is established. UI remains a separate presentation build; “one backend deployable” does not mean one combined JVM/Node artifact. Scale, HA and worker topology require later measured operational design.
 
-#### E. Official compatibility evidence
+### E. Official compatibility evidence
 
 Access date for every source below: **2026-10-14**. Observed versions are documentation/tag facts, not an installed/tested CineNest tuple or a guarantee they are newest. The proposed selection policy pins exact supported stable versions during a separately authorized foundation; never uses floating `latest` or automatic major upgrades.
 
@@ -527,7 +428,7 @@ Access date for every source below: **2026-10-14**. Observed versions are docume
 
 [Next support policy](https://nextjs.org/support-policy) identifies 16.x Active LTS. Spring projects/reference patch listings may differ; the reviewer observed newer project index patches than tagged reference sources. No exact “latest” patch claim is made. Spring and Nest precise current support end dates could not be independently established from the retrieved support pages; mark **UNVERIFIED**, require recheck before foundation/release, and stop if proposed lines are no longer supported. This does not block review of a version-line policy today; it blocks using stale versions unchecked. PostgreSQL's five-year policy is independently available. Security advisories, dependency resolution, host toolchain, licences, runtime tests, merchant/cloud/hardware compatibility remain unverified.
 
-#### F. One proposed initial stack
+### F. One proposed initial stack
 
 Propose Java25 + Spring Boot4.1/Spring Modulith2.1, Maven3.9 wrapper, Spring MVC HTTPS REST modular backend; PostgreSQL18; Boot-managed Spring Data JPA for module-owned persistence with explicit JDBC/SQL where range/ledger invariants demand it; Flyway SQL migrations as sole schema authority (no automatic production schema update); Boot-managed Spring Security/OIDC and Spring Session JDBC. Start with PostgreSQL-persisted internal events and domain work/inbox records. No message broker or job platform required for skeleton. Event registry is a tool, not a complete external workflow engine: its [documentation](https://docs.spring.io/spring-modulith/reference/events.html) explicitly qualifies native externalization limitations.
 
@@ -539,7 +440,7 @@ Redis: defer provisioning/version/library. Optional later availability/catalog c
 
 Build/testing proposal: Maven wrapper/backend Boot-managed JUnit/Modulith tests; frontend npm with exact lockfile and `npm ci`, explicit TypeScript/ESLint checks plus Next build (build alone does not replace lint). Isolated real PostgreSQL18 integration tests through Boot-compatible Testcontainers managed version; frontend Node test runner for pure logic and Playwright browser tests before critical UI slices. Exact auxiliary test-tool patches and browser downloads remain compatibility checks in authorized foundation/UI scope, not packages installed now. Local containers/dev-only secrets/sample data; no production migrations, CI secrets or cloud configured. Failure/concurrency/CSRF/scope/migration/accessibility tests accompany relevant slices, not end-only testing.
 
-#### G. Workflow fit, disadvantages and validation risks
+### G. Workflow fit, disadvantages and validation risks
 
 Both serious candidates must implement the following. Spring tooling assists structure; the invariant comes from correctly designed transactions, constraints and tests, not framework choice. Proposed strategies are subject to accepted ADR and later bounded implementation design; no schema or business policy is silently settled.
 
@@ -554,7 +455,7 @@ Both serious candidates must implement the following. Spring tooling assists str
 
 Disadvantages: two-language maintenance; Spring/JPA proxy/lazy-loading/transaction surprises; explicit SQL still required; JVM footprint/build duration not measured; Modulith learning/upgrades; Next server/client/cache/security surface and canary internals; PostgreSQL-specific range constraints reduce database portability. No commercial support or operational capacity assumed. One backend deployable shares failure/release blast radius; module tests do not isolate process failures. A later backend rewrite is expensive even when UI/API contracts survive. Team capacity and a representative build/module/database spike could overturn this preference; those spikes require later authorization and are not run here.
 
-#### H. Deferred choices and gates
+### H. Deferred choices and gates
 
 | Choice | Why not needed for CN-FND-001 skeleton / when required |
 |---|---|
@@ -567,16 +468,14 @@ Disadvantages: two-language maintenance; Spring/JPA proxy/lazy-loading/transacti
 
 No feature is dropped from coverage or declared accepted through deferral. Accountable decision owners remain TBD. Approval of tools does not resolve these policies or accept capacity/safety evidence.
 
-#### I. Exact owner approval requested
+### I. Exact owner approval requested
 
 > I approve the CN-DEC-001 proposed initial stack: Java 25 LTS using a maintained licence-reviewed OpenJDK distribution; Spring Boot 4.1.x with aligned Spring Modulith 2.1.x modular backend, Spring MVC, Boot-managed Security/OIDC, Session JDBC, Data JPA/JDBC and validation; PostgreSQL 18.x and Boot-managed Flyway core/PostgreSQL plugin and JDBC driver; Maven latest maintained 3.9.x wrapper; Next.js 16.x App Router with matched React/React DOM 19.x, TypeScript 5.x, Tailwind CSS 4.x, Node.js 24.x LTS and npm lockfile. I approve database-authoritative reservations/sessions/ledger and durable internal events/work, with Redis provisioning deferred and no Redis-only integrity. Exact supported stable patches must be freshly verified, pinned and tested before foundation; incompatible or unsupported lines require a revised brief. I acknowledge the stated browser floor and unknown team capability. This approves the initial technology proposal only; it does not authorize implementation, deferred vendors, spending, policies, production deployment or the whole backlog.
 
 The owner may accept, reject or amend this proposal. **Do not record approval until an explicit owner response exists.** Supporting test-tool exact patches are future bounded foundation selections subject to this compatibility policy; no extra vendors/frameworks implicitly accepted. Approval and implementation authorization are separate gates.
 
-#### J. Next existing change set and stop
+### J. Next existing change set and stop
 
 **CN-FND-001** could become eligible after stack approval **and separate explicit authorization** of its bounded skeleton/CI scope. Remaining prerequisites: accept the selected stack ADR/OD-01 initial subset; refine actual owned files, skeleton-only acceptance/check commands, permitted local tool/container installation and safe CI permissions; freshly confirm support/patches/licences, PostgreSQL migration/Testcontainers compatibility and available toolchain. Record no product/provider/data/device operation. OD-01 broader cloud/library/provider scope remains open even if initial stack accepted. CN-GATE-001 policy/source brief remains unapproved and gates affected feature/launch work; it is not silently executed alongside foundation.
 
 Current result: brief prepared for review; **technology approval PENDING**, **implementation authorization NOT_GRANTED**, **next READY unit NONE**. Single next action: owner responds to section I. Stop here.
-
-<!-- migrated-end:knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md -->

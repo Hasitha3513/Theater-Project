@@ -991,7 +991,12 @@
       "verificationScope": "DOCUMENTATION_AND_EXPLICIT_READ_ONLY_DISCOVERY",
       "authorizationSource": "S12",
       "authorizationScope": "Consolidation only; no new per-task document",
-      "deletionApproval": "PENDING_OWNER_REVIEW"
+      "deletionApproval": "PENDING_OWNER_REVIEW",
+      "aliases": [
+        "CN-KB-CONSOLIDATION-001"
+      ],
+      "continuationAuthorization": "Current attached owner request; simplify existing canonical documents, no deletion/code/stack approval",
+      "continuationAuthorizationSource": "S13"
     }
   ]
 }

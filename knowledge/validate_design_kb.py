@@ -47,22 +47,20 @@ def read_spec(name):
     if entry is None:
         return (ROOT / name).read_text()
     text = (ROOT.parent / entry['canonicalPath']).read_text()
-    begin = '<!-- migrated-begin:' + entry['sourcePath'] + ' -->\n'
-    end = '\n<!-- migrated-end:' + entry['sourcePath'] + ' -->'
-    body = text.split(begin, 1)[1].split(end, 1)[0]
-    # Compatibility view retains old heading depth for existing substantive checks.
+    marker = '<a id="' + entry['anchor'] + '"></a>'
+    body = text.split(marker, 1)[1].split('<a id="', 1)[0]
     lines = []; fenced = False
     for line in body.splitlines(keepends=True):
         if line.startswith('```'):
             fenced = not fenced
-        if not fenced and re.match(r'^###{1,4} ', line):
-            line = line[2:]
+        if not fenced and re.match(r'^#{3,5} ', line):
+            line = line[1:]
         lines.append(line)
     return ''.join(lines)
 
 
 def validate_consolidation(check):
-    """Reconstruct every baseline source, verifying lossless canonical migration and frozen originals."""
+    """Verify source destinations, retained substantive lines, machine authorities and frozen originals."""
     import os
     import subprocess
     manifest = json.loads((ROOT / 'manifest.json').read_text())
@@ -79,29 +77,27 @@ def validate_consolidation(check):
         raw = subprocess.check_output(['git', '-C', str(repo), 'show', migration['baselineRevision'] + ':' + e['sourcePath']])
         check(hashlib.sha256(raw).hexdigest() == e['baselineSha256'], 'Migration baseline mismatch ' + e['sourcePath'])
         source = repo / e['sourcePath']; dest = repo / e['canonicalPath']
-        def replace_link(match):
-            target = match.group(1)
-            if target.startswith(('https:', 'http:', '#', 'codex:')):
-                return match.group(0)
-            name, sep, fragment = target.partition('#'); resolved = (source.parent / name).resolve()
-            if resolved in mapping:
-                new, anchor = mapping[resolved]
-                return '](' + os.path.relpath(new, dest.parent) + '#' + anchor + ')'
-            return '](' + os.path.relpath(resolved, dest.parent) + (sep + fragment if sep else '') + ')'
-        expected_body = re.sub(r'\]\(([^)]+)\)', replace_link, raw.decode())
-        lines = []; fenced = False
-        for line in expected_body.splitlines(keepends=True):
-            if line.startswith('```'):
-                fenced = not fenced
-            if not fenced and re.match(r'^#{1,4} ', line):
-                line = '##' + line
-            lines.append(line)
-        expected_body = ''.join(lines)
-        text = dest.read_text(); begin = '<!-- migrated-begin:' + e['sourcePath'] + ' -->\n'; end = '\n<!-- migrated-end:' + e['sourcePath'] + ' -->'
-        check(text.count(begin) == text.count(end) == 1, 'Migration segment missing/duplicated ' + e['sourcePath'])
-        body = text.split(begin, 1)[1].split(end, 1)[0] if begin in text and end in text else ''
-        check(body == expected_body and hashlib.sha256(body.encode()).hexdigest() == e['canonicalPayloadSha256'], 'Canonical content lost/changed ' + e['sourcePath'])
+        text = dest.read_text()
         check(('<a id="' + e['anchor'] + '"></a>') in text, 'Canonical anchor missing ' + e['anchor'])
+        # Editorial preservation checks the pre-edit substantive lines, not copied metadata/headings.
+        editorial = migration['editorialBaselineRevision']
+        old_doc = subprocess.check_output(['git', '-C', str(repo), 'show', editorial + ':' + e['canonicalPath']], text=True)
+        begin = '<!-- migrated-begin:' + e['sourcePath'] + ' -->\n'; end = '\n<!-- migrated-end:' + e['sourcePath'] + ' -->'
+        body = old_doc.split(begin, 1)[1].split(end, 1)[0]
+        coverage = next((c for c in migration['editorialCoverage'] if c['sourcePath'] == e['sourcePath']), None)
+        check(coverage is not None, 'Editorial source coverage omitted ' + e['sourcePath'])
+        if coverage and coverage['method'] == 'RETAINED_SUBSTANTIVE_LINES':
+            for number, line in enumerate(body.splitlines(), 1):
+                if not line.strip() or line.startswith(('#', '> Task:', '> Decision:', '> Source S1:', '> Original record:', '> Status:')):
+                    continue
+                relocated = next((c for c in migration['editorialAllowedRelocations'] if c['sourcePath'] == e['sourcePath'] and c['sourceLine'] == number), None)
+                if relocated:
+                    check(hashlib.sha256(line.encode()).hexdigest() == relocated['sha256'] and bool(relocated['reason']), 'Relocation provenance mismatch ' + e['sourcePath'])
+                else:
+                    check(line in text, 'Unique substantive source line lost ' + e['sourcePath'] + ':' + str(number))
+        elif coverage:
+            check(coverage['method'] == 'EXISTING_REGISTRY_OR_APPROVAL_EVIDENCE_SUMMARY', 'Unknown editorial coverage method')
+            check((repo / coverage['authority']).is_file(), 'Editorial authority missing ' + e['sourcePath'])
         check(source.is_file() and source.read_bytes().endswith(raw) and source.read_text().startswith('> **SUPERSEDED'), 'Original not retained for review ' + e['sourcePath'])
         check(hashlib.sha256(source.read_bytes()).hexdigest() == e['retainedSnapshotSha256'], 'Frozen snapshot changed ' + e['sourcePath'])
     allowed_nonprose_edits = {'knowledge/manifest.json', 'knowledge/validate_design_kb.py', 'knowledge/execution/validate_execution.py', 'knowledge/execution/refresh_manifest.py', 'knowledge/product/cinenest-feature-catalog.json', 'knowledge/decisions/cinenest-open-decisions.json', 'knowledge/execution/change-sets.json', 'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/omissions.json', 'knowledge/sources/cinenest-source-register.json'}
@@ -259,7 +255,7 @@ def main():
     if errors:
         print('\n'.join('FAIL '+message for message in errors))
         return 1
-    print(f'PASS consolidation: {migrated_count} complete baseline prose documents migrated; originals retained; catalog fields/anchors preserved.')
+    print(f'PASS consolidation: {migrated_count} source destinations/retained substantive content; frozen originals, complete registry payloads and anchors preserved.')
     print('PASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.')
     print('Limits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.')
     return 0
@@ -310,7 +306,7 @@ def validate_expansion(check, tokens, specs):
             path = ROOT / source['path']
             check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256'], f'Source mismatch {source["id"]}')
         else:
-            check(source['availability'] == 'MISSING' or (source.get('id') == 'S12' and source['availability'] == 'CONVERSATION' and source.get('kind') == 'user-conversation-authorization' and bool(source.get('scope'))), f'Unverified source location {source["id"]}')
+            check(source['availability'] == 'MISSING' or (source.get('id') in {'S12', 'S13'} and source['availability'] == 'CONVERSATION' and source.get('kind') == 'user-conversation-authorization' and bool(source.get('scope'))), f'Unverified source location {source["id"]}')
     features = parsed['product/cinenest-feature-catalog.json']['features']
     ids = [f['id'] for f in features]
     check(len(ids) == len(set(ids)), 'Duplicate feature IDs')
@@ -323,7 +319,7 @@ def validate_expansion(check, tokens, specs):
         check(f['decisionStatus'] in decisions and f['implementationStatus'] in implementations, f'Invalid feature status {f["id"]}')
         check(f['implementationStatus'] == 'NOT_VERIFIED', f'Unexpected implementation claim {f["id"]}')
         check(set(f['sourceIds']) <= source_ids, f'Unknown source {f["id"]}')
-        check(f'## {f["id"]} —' in feature_doc, f'Missing catalog heading {f["id"]}')
+        check(f'| {f["id"]} |' in feature_doc, f'Missing catalog projection {f["id"]}')
     opens = parsed['decisions/cinenest-open-decisions.json']['decisions']
     check(len({d['id'] for d in opens}) == len(opens), 'Duplicate decision IDs')
     for d in opens:
@@ -357,7 +353,7 @@ def validate_expansion(check, tokens, specs):
         check(c['decisionStatus'] in decisions and c['implementationStatus'] == 'NOT_VERIFIED', f'Chart status {c["id"]}')
         check(set(c['sourceIds']) <= source_ids, f'Chart sources {c["id"]}')
     manifest = parsed['manifest.json']
-    check(manifest['kbVersion'] == '1.5.0' and manifest['baselineKbVersion'] == '1.4.0', 'Consolidation KB version/baseline mismatch')
+    check(manifest['kbVersion'] == '1.5.1' and manifest['baselineKbVersion'] == '1.5.0', 'Consolidation KB version/baseline mismatch')
     check(manifest['chartSpecVersion'] == specs['version'] == '1.2.0', 'Chart version mismatch')
     check(manifest['designTokenVersion'] == tokens['version'] == '1.0.0', 'Design-token version mismatch')
     actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and '__pycache__' not in p.parts}
@@ -413,7 +409,10 @@ def validate_package_spec(check, features, rules, source_ids):
                  'decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md']:
         body = read_spec(name)
         check('PROJECT.md#package-management' in body, f'Missing canonical package link {name}')
-        check(body.count('## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001') == 1, f'Duplicate/missing task section {name}')
+        if name == 'decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md':
+            check('PR-PKG-001' in body and 'S8' in body and 'RECOMMENDED' in body, 'Package approval provenance missing in decision summary')
+        else:
+            check(body.count('## Package configuration — CN-KB-PACKAGE-CONFIGURATION-001') == 1, f'Duplicate/missing task section {name}')
 
 
 def validate_bank_spec(check, features, specs, source_ids, parsed, manifest):
@@ -476,7 +475,10 @@ def validate_bank_spec(check, features, specs, source_ids, parsed, manifest):
                  'decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md']:
         body = read_spec(name)
         check('PROJECT.md#bank-payments' in body, f'Missing bank canonical link {name}')
-        check(body.count('## Bank payment — CN-KB-BANK-PAYMENT-001') == 1, f'Duplicate/missing bank task section {name}')
+        if name == 'decisions/CINENEST-OPEN-DECISIONS-AND-TRACEABILITY.md':
+            check('PR-BANK-001' in body and 'S9' in body and 'OPEN_DECISION' in body, 'Bank approval provenance/policy gates missing in decision summary')
+        else:
+            check(body.count('## Bank payment — CN-KB-BANK-PAYMENT-001') == 1, f'Duplicate/missing bank task section {name}')
     customer = read_spec('CINENEST-CUSTOMER-BOOKING-PAGES.md')
     check('not an online bank IPG or fake webhook' in customer, 'Customer gateway/manual distinction missing')
 

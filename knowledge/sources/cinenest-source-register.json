@@ -83,6 +83,14 @@
       "taskId": "CN-KB-CONSOLIDATE-001",
       "scope": "Consolidate existing KB into PROJECT/ARCHITECTURE/DESIGN/PROGRESS; retain originals pending removal review; no stack/implementation/live authorization",
       "recordedDate": "2026-10-14"
+    },
+    {
+      "id": "S13",
+      "availability": "CONVERSATION",
+      "kind": "user-conversation-authorization",
+      "taskId": "CN-KB-CONSOLIDATION-001",
+      "scope": "Edit existing four canonical documents into concise nonduplicated narrative; preserve machine authorities/evidence/IDs; no deletion before approval, no code/stack/live authority",
+      "recordedDate": "2026-10-14"
     }
   ]
 }
