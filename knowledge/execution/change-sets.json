@@ -69,11 +69,19 @@
       ],
       "authorizationSource": "S11",
       "authorizationScope": "Brief only; no stack approval or implementation",
-      "approvalStatus": "AWAITING_OWNER_APPROVAL",
+      "approvalStatus": "OWNER_APPROVED_INITIAL_DIRECTION",
       "implementationAuthorization": "NOT_GRANTED",
       "pendingDecisionIds": [
         "OD-01"
-      ]
+      ],
+      "stackApproval": {
+        "sourceId": "S16",
+        "status": "OWNER_APPROVED_INITIAL_DIRECTION",
+        "qualificationStatus": "PENDING",
+        "decisionReference": "decisions/cinenest-open-decisions.json#OD-01.initialStackApproval",
+        "canonicalSpecification": "ARCHITECTURE.md#stack-approval",
+        "implementationAuthorization": "NOT_GRANTED"
+      }
     },
     {
       "id": "CN-GATE-001",
@@ -140,7 +148,15 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "prerequisiteEvidence": {
+        "initialStackDirection": "OWNER_APPROVED_INITIAL_DIRECTION",
+        "sourceId": "S16",
+        "qualification": "PENDING",
+        "boundedScopeRefinement": "REQUIRED",
+        "implementationAuthorization": "NOT_GRANTED",
+        "reference": "PROGRESS.md#foundation-prerequisites"
+      }
     },
     {
       "id": "CN-UI-001",

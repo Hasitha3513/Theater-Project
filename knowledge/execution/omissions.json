@@ -10,10 +10,11 @@
     },
     {
       "id": "OM-02",
-      "gap": "No approved application stack or implementation change-set plan",
+      "gap": "Initial technology direction approved; exact dependency/runtime qualification and implementation change-set scope/authority remain pending",
       "linkedDecisionOrTask": "OD-01",
       "status": "BLOCKED",
-      "recovery": "CN-DEC-001 brief prepared; owner stack approval and separately authorized refined CN-FND-001 scope still required"
+      "recovery": "S16 approval recorded; refine CN-FND-001 owned files/environment/acceptance and obtain separate explicit implementation authority; qualify supported stable resolved stack before implementation",
+      "approvalSource": "S16"
     },
     {
       "id": "OM-03",

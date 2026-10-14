@@ -871,7 +871,7 @@ See [validation report](PROGRESS.md#feature-validation-history) for evidence and
 - [x] Exact draft time/price/buffer/PIN rules centralized; unresolved hold/closing/all-guest policy explicit.
 - [x] Net collections separate from recognized revenue; consistent donut denominator and payment/add-on panels documented.
 - [ ] Verify missing PDFs, including relevant image-based/Sinhala pages, and reconcile discrepancies.
-- [ ] Select/approve stack, providers, hardware and actual authorization/data implementation with evidence.
+- [ ] Qualify the S16-approved initial stack; select remaining providers/hardware and verify actual authorization/data implementation with evidence.
 - [ ] Approve privacy/retention, all-guest checks, staffing/physical cleaning/emergency intervention, rights, refunds and hold/closing policy before launch.
 - [ ] Execute lifecycle/race/refund/webhook/command/offline acceptance against actual backend and hardware; documentation validation is not implementation proof.
 

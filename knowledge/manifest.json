@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "kbVersion": "1.6.0",
-  "baselineKbVersion": "1.5.2",
-  "baselineCommit": "e8b0712269061ed3f30fb6fcad43c316c1102627",
-  "taskId": "CN-AUTH-001",
+  "kbVersion": "1.6.1",
+  "baselineKbVersion": "1.6.0",
+  "baselineCommit": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
+  "taskId": "CN-DEC-001",
   "recordedDate": "2026-10-14",
   "designTokenVersion": "1.0.0",
   "chartSpecVersion": "1.2.0",
-  "versionRationale": "S15 hybrid RBAC/ABAC documentation direction; extend existing requirement/test/task in place; no implemented security or stack acceptance.",
+  "versionRationale": "Record S16 owner initial-stack direction approval in place after scope comparison; no dependency/runtime qualification or foundation authorization",
   "decisionStatuses": [
     "APPROVED",
     "DOCUMENTED_DRAFT",
@@ -33,7 +33,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "0f8fd5d1428a5a8edfdc48f39b06241c94eef18da6bb412aec0a72472fc2d087",
+      "sha256": "6062f2dfcfc0f84a27f377e01771cfa5c8f491af1dc9ca3087c6d291e2b1c142",
       "authority": "canonical-prose"
     },
     {
@@ -61,14 +61,14 @@
       "path": "DESIGN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "dca5fd84b6b35d7e801ff32f3af1ed0d0e2275740dc42ca39df064fa0641494c",
+      "sha256": "d9e91e5b471062e3560f2ee9927d8e06080e4402bbcebfdc413f956b00cb9ddc",
       "authority": "canonical-prose"
     },
     {
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "40a0b3ad79ffa2498cd7279dbf4b3e75a2437d7a039f169c402f596c5a8a5a19",
+      "sha256": "db70c7707483370c6b2ccac7753d556b4285e3faeb009e9dce5fe14773596baa",
       "authority": "canonical-prose"
     },
     {
@@ -82,14 +82,14 @@
       "path": "README.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "67196a39d9d868ea3286d7c9eaade17b86f401a7b336becfc7fb6494fb1f0007",
+      "sha256": "8dd5806350a870db5dae1920ef6fd92dde8c0aae2f6792dfc7a4e5c9e8d2609a",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "decisions/cinenest-open-decisions.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "3bb98726b5702fdaf5c4f3009a07e52ed627a72926e80b0823c1b994795c46aa",
+      "sha256": "d86faaf29ee8a53aa4b2bc43d15868c4fc12b681c4f413e0c2a37524311c639a",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -103,7 +103,7 @@
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6e129107c49f2ed8d5ae5f05b80cf67651c5c762d616b4f0997dd68a53fe9c9a",
+      "sha256": "e4d99cec6278ac6e030f2d44c6eb8c2756f1891e8a26ecda16e251430bea0341",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -166,7 +166,7 @@
       "path": "execution/omissions.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "efabc576b1087496ff9ff1d6c2c67f621dd09a764722a0a23944cbeb8229c2ea",
+      "sha256": "8843be4eee345c21eab97962d36bbe7855d7ddff6695fbdf5f6a27f99aaef6fe",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -194,7 +194,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cdbb1c9fd42440c926c86330be2af1cfbd35561277e3e7b8b1981698a16d5428",
+      "sha256": "2853dce6801891401b1fe749baab81ae6bc08bb64e6aeaeb37faae7e98749ac3",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -208,7 +208,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "98149cc685d8b692c7c787292f650af5cb7c4fefa205d214880ab00a6eb4a5c7",
+      "sha256": "35f662c79093bc32ebd9ac981ce952f8adc4b0f84747f9ec2a306ad9fb279b8a",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -277,7 +277,7 @@
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c3a50ba830511826ece9ee576a2b424790183d31dbdb705765b54c6efc438d29",
+      "sha256": "b01ad9766f7e12b89acb1b1de7a0ab44d74b02bb988751b0ffa1a843369dde47",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -305,7 +305,7 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "103357893e0741e4833bc0bbf354cc053190f989d4440eab8655e50b299dc921",
+      "sha256": "b0969803a08360b42310517392bbc43cc6c137216b880f09749db2bcf8f94cf4",
       "authority": "structured-asset-or-evidence"
     }
   ],
@@ -349,6 +349,11 @@
       "kbVersion": "1.5.2",
       "taskId": "CN-KB-CONSOLIDATE-001",
       "commit": "e8b0712269061ed3f30fb6fcad43c316c1102627"
+    },
+    {
+      "kbVersion": "1.6.0",
+      "taskId": "CN-AUTH-001",
+      "commit": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816"
     }
   ],
   "authorizedDefinitionChanges": {
@@ -1347,6 +1352,62 @@
         "sha256": "347e8c719dbb97f7083407abd5d8e9fb27fadfe77f8f2dcda8e7eaaa28a044ee",
         "destination": "ARCHITECTURE.md#technology",
         "reason": "Owner S13 supersedes per-decision-file maintenance guidance; decisions updated in place, never approves stack"
+      },
+      {
+        "sourcePath": "knowledge/architecture/CINENEST-TECHNOLOGY-STACK-AND-DECISIONS.md",
+        "sourceLine": 41,
+        "sha256": "09edb2877f58ac6b28a7156e32a092fccb453d0547f3792278c675fa5985450b",
+        "destination": "knowledge/ARCHITECTURE.md#stack-approval",
+        "reason": "S16 owner initial-direction approval supersedes this historical pending-selection statement; original remains at immutable Git reference; qualification/implementation not approved",
+        "authorizationSource": "S16"
+      },
+      {
+        "sourcePath": "knowledge/architecture/CINENEST-SYSTEM-ARCHITECTURE.md",
+        "sourceLine": 8,
+        "sha256": "bc6cdac8514438f6a84fbd15ac8d53ae5b9e5a771064f376e858a3670623f07f",
+        "destination": "knowledge/ARCHITECTURE.md#stack-approval",
+        "reason": "S16 owner initial-direction approval supersedes this historical pending-selection statement; original remains at immutable Git reference; qualification/implementation not approved",
+        "authorizationSource": "S16"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 3,
+        "sha256": "97cc5641c84c3b94b51ee292050ac00a86055c368efcdd0d6e099465ec4429ad",
+        "destination": "knowledge/ARCHITECTURE.md#stack-approval",
+        "reason": "S16 owner initial-direction approval supersedes this historical pending-selection statement; original remains at immutable Git reference; qualification/implementation not approved",
+        "authorizationSource": "S16"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 113,
+        "sha256": "e2c09c391416c9f980f824be94f33769c15a009603228ba0cb7a4e7719c97e68",
+        "destination": "knowledge/ARCHITECTURE.md#stack-approval",
+        "reason": "S16 owner initial-direction approval supersedes this historical pending-selection statement; original remains at immutable Git reference; qualification/implementation not approved",
+        "authorizationSource": "S16"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 117,
+        "sha256": "02f989b3ec0e4af06af618be9235cde403cb77402d6cabcb889c236ee593eac2",
+        "destination": "knowledge/ARCHITECTURE.md#stack-approval",
+        "reason": "S16 owner initial-direction approval supersedes this historical pending-selection statement; original remains at immutable Git reference; qualification/implementation not approved",
+        "authorizationSource": "S16"
+      },
+      {
+        "sourcePath": "knowledge/decisions/CN-DEC-001-INITIAL-STACK-BRIEF.md",
+        "sourceLine": 119,
+        "sha256": "bf2463fb906d9d4c694fcfd9a7d1294a4d836ecfdfacb3efc3c93ef2b7a5b97d",
+        "destination": "knowledge/ARCHITECTURE.md#stack-approval",
+        "reason": "S16 owner initial-direction approval supersedes this historical pending-selection statement; original remains at immutable Git reference; qualification/implementation not approved",
+        "authorizationSource": "S16"
+      },
+      {
+        "sourcePath": "knowledge/CINENEST-UX-ACCEPTANCE-CHECKLIST.md",
+        "sourceLine": 53,
+        "sha256": "1905e57ed80da37b569249ee5b6d58cdb0e56c388962eadd80e099a8fad14003",
+        "destination": "knowledge/DESIGN.md#ux-acceptance",
+        "reason": "S16 initial stack selection approved; checkbox still unfulfilled for qualification/deferred providers/hardware/implementation; historical original retained",
+        "authorizationSource": "S16"
       }
     ],
     "initialMigrationProof": "canonicalPayloadSha256 values describe lossless initial grouping at1d900cd; current content is editorially validated against that baseline and machine authorities",
@@ -1411,6 +1472,13 @@
     "requirementId": "CN-NFR-02",
     "testId": "T-CN-NFR-02",
     "taskId": "CN-AUTH-001",
+    "implementationAuthorization": "NOT_GRANTED"
+  },
+  "stackApprovalUpdate": {
+    "sourceId": "S16",
+    "baselineRevision": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
+    "scope": "Initial technology direction only",
+    "qualificationStatus": "PENDING",
     "implementationAuthorization": "NOT_GRANTED"
   }
 }

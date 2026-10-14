@@ -72,7 +72,7 @@ def main():
         check(set(c['blockingDecisionIds']) <= decisions, f'Unknown blocking decision {c["id"]}')
         if c['id'] == 'CN-DEC-001':
             check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED', 'Decision brief status unsupported')
-            check(c.get('authorizationSource') == 'S11' and c.get('approvalStatus') == 'AWAITING_OWNER_APPROVAL' and c.get('implementationAuthorization') == 'NOT_GRANTED', 'Decision brief promoted to stack/code authority')
+            check(c.get('authorizationSource') == 'S11' and c.get('approvalStatus') == 'OWNER_APPROVED_INITIAL_DIRECTION' and c.get('implementationAuthorization') == 'NOT_GRANTED', 'Decision brief promoted to stack/code authority')
             check(c.get('pendingDecisionIds') == ['OD-01'] and c['blockingDecisionIds'] == [], 'Brief/selection gates conflated')
         elif c['id'] == 'CN-KB-CONSOLIDATE-001':
             check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED' and c.get('authorizationSource') == 'S12', 'Consolidation authority/status missing')
@@ -127,13 +127,13 @@ def main():
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
     check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None, 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-AUTH-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
-    check(state['workStatus'] == cmap['CN-AUTH-001']['workStatus'] == 'BLOCKED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
-    check(state.get('stackApproval') == 'AWAITING_OWNER_APPROVAL' and state.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported stack/implementation approval')
+    check(state['taskId'] == 'CN-DEC-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
+    check(state['workStatus'] == cmap['CN-DEC-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'BLOCKED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
+    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
     brief = K / 'ARCHITECTURE.md'
-    check(brief.is_file() and 'PROPOSED / AWAITING OWNER APPROVAL' in brief.read_text(), 'Missing proposed decision brief')
+    check(brief.is_file() and 'OWNER_APPROVED_INITIAL_DIRECTION / QUALIFICATION_PENDING' in brief.read_text(), 'Missing proposed decision brief')
     check((K / 'sources/CN-DEC-001-request.txt').is_file() and 'S11' in sources, 'Missing decision scope authority')
     check(state['hostAutomaticInstructionLoading'] == 'NOT_VERIFIED' and state['nativeAgentRegistration'] == 'NOT_PERFORMED', 'Host/native claim unsupported')
     manifest = json.loads((K / 'manifest.json').read_text())
@@ -149,7 +149,8 @@ def main():
         for id, old in before.items():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
-                    check(after[id].get(key) == old[key], 'Baseline status changed ' + id + '/' + key)
+                    expected_status = 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    check(after[id].get(key) == expected_status, 'Baseline status changed ' + id + '/' + key)
     canonical_map = {e['sourcePath'].removeprefix('knowledge/'): e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] for e in manifest['consolidation']['documents']}
     def migrated(value):
         if isinstance(value, dict):
@@ -179,23 +180,37 @@ def main():
             row = next(x for x in current_payload['tests'] if x['id'] == 'T-CN-NFR-02')
             added = {key: row.pop(key, None) for key in ['authorizationScenarioSource', 'authorizationEvidenceNeeded']}
             check(hashlib.sha256(json.dumps(added, sort_keys=True).encode()).hexdigest() == '3c59995ce6b04b02dc2b681665eb941e3782744c0926ae741df8cde53e7ef5b8', 'Authorized test extension lost/changed')
+        if path == 'decisions/cinenest-open-decisions.json':
+            current_od = next(x for x in current_payload['decisions'] if x['id'] == 'OD-01')
+            check(hashlib.sha256(json.dumps(current_od, sort_keys=True).encode()).hexdigest() == '3f3f05eb387eb006672f8e38a559af25fc5c30d69ff0bc7a9221a0eda02e495d', 'S16 bounded OD-01 approval/status/conditions changed')
+            old_od = next(x for x in expected['decisions'] if x['id'] == 'OD-01')
+            current_payload['decisions'][current_payload['decisions'].index(current_od)] = old_od
         check(expected == current_payload, 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
     prior_changes = json.loads(json.dumps(changes[:-1]))
     auth_task = next(x for x in prior_changes if x['id'] == 'CN-AUTH-001')
     update = auth_task.pop('documentationUpdate', None)
     check(hashlib.sha256(json.dumps(update, sort_keys=True).encode()).hexdigest() == 'c4a84f904aed007cbd50cc4a6d6b44e985f101024e0f9f4397b223a2621b022f', 'Authorization documentation scope/status changed')
+    dec_task = next(x for x in prior_changes if x['id'] == 'CN-DEC-001')
+    stack_update = dec_task.pop('stackApproval', None)
+    check(hashlib.sha256(json.dumps(stack_update, sort_keys=True).encode()).hexdigest() == '5c437231891b422e60b3c884a50a6c4590570bb91fa33a45e3e69977fd47f251', 'S16 brief approval/source boundary changed')
+    check(dec_task['approvalStatus'] == 'OWNER_APPROVED_INITIAL_DIRECTION', 'Initial direction approval lost')
+    dec_task['approvalStatus'] = 'AWAITING_OWNER_APPROVAL'  # Reconstruct historical S11 baseline; no other field change permitted.
+    foundation = next(x for x in prior_changes if x['id'] == 'CN-FND-001')
+    prerequisite = foundation.pop('prerequisiteEvidence', None)
+    check(hashlib.sha256(json.dumps(prerequisite, sort_keys=True).encode()).hexdigest() == '06daec5b97345a591adc27d4403fb205e2b07f4cbdb94eedea10fff76289819f', 'Foundation qualification/authority prerequisites changed')
     check(prior_changes == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001' and changes[-1].get('aliases') == ['CN-KB-CONSOLIDATION-001'] and changes[-1].get('continuationAuthorizationSource') == 'S13', 'Existing backlog content lost/altered')
     old_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
     current_sources = json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']
-    check(current_sources[:-4] == old_sources and [x['id'] for x in current_sources[-4:]] == ['S12', 'S13', 'S14', 'S15'], 'Prior source evidence lost/altered')
+    check(current_sources[:-5] == old_sources and [x['id'] for x in current_sources[-5:]] == ['S12', 'S13', 'S14', 'S15', 'S16'], 'Prior source evidence lost/altered')
     removal_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', manifest['consolidation']['removalBaselineRevision'] + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
-    check(current_sources[:-2] == removal_sources, 'Consolidation/editorial approval history changed')
+    check(current_sources[:-3] == removal_sources, 'Consolidation/editorial approval history changed')
     removal = manifest['consolidation']['removalAuthorization']
     check(manifest['consolidation']['status'] == 'COMPLETE_OWNER_APPROVED_REMOVAL' and state.get('removalOutcome', {}).get('status') == 'VERIFIED', 'Removal completion/status mismatch')
     check(state.get('removalOutcome', {}).get('deletedFiles') == len(manifest['consolidation']['documents']) and state.get('removalOutcome', {}).get('retainedExceptions') == [], 'Removal outcome/count inconsistent')
-    check(current_sources[-2].get('requestSha256') == removal['requestSha256'] and current_sources[-2].get('scope') == removal['scope'], 'S14 approval provenance/scope diverges')
-    check(hashlib.sha256(json.dumps(current_sources[-1], sort_keys=True).encode()).hexdigest() == 'bd5c27afa50fafa8e4b1bff49946ffe1fc467665c055baf5785001a5e2e009f7', 'S15 owner direction/scope provenance changed')
+    check(current_sources[-3].get('requestSha256') == removal['requestSha256'] and current_sources[-3].get('scope') == removal['scope'], 'S14 approval provenance/scope diverges')
+    check(hashlib.sha256(json.dumps(current_sources[-2], sort_keys=True).encode()).hexdigest() == 'bd5c27afa50fafa8e4b1bff49946ffe1fc467665c055baf5785001a5e2e009f7', 'S15 owner direction/scope provenance changed')
+    check(hashlib.sha256(json.dumps(current_sources[-1], sort_keys=True).encode()).hexdigest() == '90019c67e0d2864accc21fa918d76fcb52ff364c789f0a4026123498277ae35c', 'S16 owner approval provenance changed')
     auth = (K / 'ARCHITECTURE.md').read_text()
     for required in ['Finance Reviewer grant at Venue A', 'No Cartesian product', 'mandatory global restrictions', 'An unset required limit is not unlimited', 'accepted operation', 'CN-NFR-02', 'NOT_VERIFIED', 'raw PINs']:
         check(required.lower() in auth.lower(), 'Authorization specification missing ' + required)
@@ -207,7 +222,10 @@ def main():
         expected = dict(old)
         if old['id'] in {'OM-02', 'OM-07'}:
             expected['recovery'] = current['recovery']  # Updated pending-stack/canonical-instruction guidance only.
-        check(expected == current, 'Omission gap/status silently changed ' + old['id'])
+        if old['id'] == 'OM-02':
+            check(hashlib.sha256(json.dumps(current, sort_keys=True).encode()).hexdigest() == '0fa71dc92228f079187378f0fd14feb102a172c2cac991158d53bb1a6bbd2a15', 'S16 remaining qualification/authority omission changed')
+        else:
+            check(expected == current, 'Omission gap/status silently changed ' + old['id'])
     progress = (K / 'PROGRESS.md').read_text()
     task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(c['dependencies']) or 'None') + ' | ' + c['workStatus'] + ' / ' + c['readiness'] + ' |\n' for c in changes)
     check(task_rows in progress, 'PROGRESS task projection diverges from authority')
@@ -222,7 +240,11 @@ def main():
     check(decision_rows in architecture, 'ARCHITECTURE decision projection diverges from authority')
     for number in range(1, 9):
         check(f'AG-AC{number:02d}' in progress, 'Setup acceptance history omitted')
-    check(state.get('requestedTaskId') == 'CN-AUTH-001' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
+    check(state.get('requestedTaskId') == 'CN-DEC-001' and state.get('stackApprovalUpdate', {}).get('sourceId') == 'S16' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
+    check(state.get('stackApprovalUpdate', {}).get('qualificationStatus') == 'PENDING' and state.get('stackApprovalUpdate', {}).get('implementationAuthorization') == 'NOT_GRANTED', 'Approval promoted to qualification/implementation')
+    for required in ['<a id="stack-approval"></a>', 'No material incompatibility found', 'compatible, explicitly recorded npm', 'No pre-release dependencies', 'CN-FND-001 implementation **NOT_GRANTED**']:
+        check(required in architecture, 'S16 canonical approval condition missing ' + required)
+    check('<a id="foundation-prerequisites"></a>' in progress and 'Selected-stack repository skeleton and CI' in progress, 'Actual foundation scope review missing')
     # Active reference fields must resolve to real canonical sections/assets; historical ledgers stay snapshots.
     def references(value):
         if isinstance(value, dict):

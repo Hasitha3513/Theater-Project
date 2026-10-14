@@ -1,19 +1,19 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-AUTH-001",
-  "mode": "AUTHORIZATION_KNOWLEDGE_UPDATE",
-  "workStatus": "BLOCKED",
+  "taskId": "CN-DEC-001",
+  "mode": "OWNER_STACK_APPROVAL_RECORD",
+  "workStatus": "VERIFIED",
   "productStage": "PRE_IMPLEMENTATION",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "e8b0712269061ed3f30fb6fcad43c316c1102627",
+  "baselineHead": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
   "baselineWorktree": "TWO_UNRELATED_UNTRACKED_ASSETS_PRESERVED",
-  "currentChangeSet": "CN-AUTH-001",
+  "currentChangeSet": "CN-DEC-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": null,
-  "nextAction": "Owner approves, rejects or amends CN-DEC-001 proposed stack at ARCHITECTURE.md#initial-stack-brief; implementation remains separately unauthorized",
+  "nextAction": "Owner separately authorizes CN-FND-001 bounded skeleton/CI scope and reviewed environment/acceptance conditions at PROGRESS.md#foundation-prerequisites",
   "nextReadyChangeSet": null,
   "implementationEvidence": "No application manifests/code/tests/CI; all catalog features NOT_VERIFIED",
   "approvedCoreDecisions": [
@@ -22,7 +22,7 @@
     "PR-BANK-001"
   ],
   "blockers": [
-    "OD-01 final stack",
+    "OD-01 exact qualification and deferred cloud/libraries/providers",
     "No approved future implementation plan",
     "OD-15 missing original sources",
     "OD-02/03/04/05/06/07/14 hardware/privacy/safety/provider/rights gates",
@@ -31,11 +31,11 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PUSHED",
-  "publicationEvidence": "Authorization knowledge commit c96ae828b4a0ae3df0f32b101ff107fa9613459c pushed to origin/main and independently matched by git ls-remote exit0; unrelated untracked assets preserved and excluded; final receipt successor resolved from Git.",
+  "publicationState": "NOT_YET_PUBLISHED_STACK_APPROVAL",
+  "publicationEvidence": "Current S16 record not yet published; previous receipts retained",
   "lastObservedHead": "c96ae828b4a0ae3df0f32b101ff107fa9613459c",
-  "evidencePath": "PROGRESS.md#authorization-update",
-  "evidenceFreshness": "Current exact-removal baseline 99fa99e935be72254368b412078e36bbb7a80a00",
+  "evidencePath": "PROGRESS.md#stack-approval-update",
+  "evidenceFreshness": "Current S16 approval baseline bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -45,7 +45,7 @@
     "Git remote network requires sandbox escalation"
   ],
   "notRunChecks": [
-    "Application lint/build/unit/integration/auth/concurrency/migration: no stack/code/manifests",
+    "Application lint/build/unit/integration/auth/concurrency/migration: no application code/manifests or implementation authorization; approved direction not qualified",
     "Rendered application/a11y: no application, only references",
     "Provider sandbox/bank/hardware/safety/business/deployment: unavailable/unapproved"
   ],
@@ -53,12 +53,11 @@
   "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
   "verificationScope": "Documentation migration/coverage only; no application/hardware/approval claim",
   "productAcceptance": "NOT_ACCEPTED",
-  "stackApproval": "AWAITING_OWNER_APPROVAL",
+  "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
   "implementationAuthorization": "NOT_GRANTED",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "CN-DEC-001 stack proposal approval",
-    "Separate refined CN-FND-001 implementation authorization"
+    "Separate bounded CN-FND-001 implementation authorization"
   ],
   "checks": [
     {
@@ -257,7 +256,7 @@
     ],
     "review": "Parent self-review of actual diff, canonical/provenance links, complete payload and unchanged approval comparisons; no independent review claimed this task"
   },
-  "requestedTaskId": "CN-AUTH-001",
+  "requestedTaskId": "CN-DEC-001",
   "editorialOutcome": {
     "canonicalFilesReused": 4,
     "newKnowledgeFiles": 0,
@@ -469,5 +468,89 @@
       "trackedWorktree": "CLEAN_AFTER_PRIMARY_PUSH",
       "unrelatedUntrackedFiles": 2
     }
+  },
+  "previousAuthorizationState": {
+    "taskId": "CN-AUTH-001",
+    "mode": "AUTHORIZATION_KNOWLEDGE_UPDATE",
+    "workStatus": "BLOCKED",
+    "baselineHead": "e8b0712269061ed3f30fb6fcad43c316c1102627",
+    "requestedTaskId": "CN-AUTH-001",
+    "stackApproval": "AWAITING_OWNER_APPROVAL",
+    "publicationEvidence": "Authorization knowledge commit c96ae828b4a0ae3df0f32b101ff107fa9613459c pushed to origin/main and independently matched by git ls-remote exit0; unrelated untracked assets preserved and excluded; final receipt successor resolved from Git."
+  },
+  "stackApprovalUpdate": {
+    "sourceId": "S16",
+    "scopeComparison": "MATCHED",
+    "status": "VERIFIED_APPROVAL_RECORD",
+    "qualificationStatus": "PENDING",
+    "implementationAuthorization": "NOT_GRANTED",
+    "decisionReference": "decisions/cinenest-open-decisions.json#OD-01.initialStackApproval",
+    "checks": [
+      {
+        "argv": [
+          "python3",
+          "knowledge/validate_design_kb.py"
+        ],
+        "atLocal": "2026-10-14T17:39:27.130058+05:30",
+        "exitCode": 0,
+        "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 source destinations/retained substantive content; exact approved removals, immutable historical originals, complete registry payloads and anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/execution/validate_execution.py"
+        ],
+        "atLocal": "2026-10-14T17:39:27.308752+05:30",
+        "exitCode": 0,
+        "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "atLocal": "2026-10-14T17:39:27.314891+05:30",
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--cached",
+          "--check"
+        ],
+        "atLocal": "2026-10-14T17:39:52.275077+05:30",
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "negativeControls": {
+      "result": "PASS",
+      "method": "In-memory Path.read_text injection; no filesystem mutation",
+      "cases": [
+        "Missing PK-AC01",
+        "Missing historical reference",
+        "False completed task projection",
+        "Altered acceptance criterion",
+        "Unauthorized foundation authority",
+        "False dependency qualification",
+        "Unapproved OD-28 policy approval",
+        "Lost S15 authorization scenario"
+      ]
+    },
+    "validationCorrections": [
+      {
+        "check": "execution validator",
+        "exitCode": 1,
+        "finding": "OD-01 canonical projection still had historical conflict text after approved registry update",
+        "disposition": "Regenerated matching OD-01 row; both validators passed afterward"
+      }
+    ]
   }
 }

@@ -4,18 +4,67 @@
   "decisions": [
     {
       "id": "OD-01",
-      "conflict": "Final stack, cloud and libraries/providers unselected",
-      "source": "S1 vs no implementation evidence",
+      "conflict": "Initial technology direction approved; exact qualification, cloud and remaining libraries/providers unresolved",
+      "source": "S1 vs no implementation evidence; S16 initial direction approval only",
       "impact": "Build/deployment and operational commitments",
-      "options": "Spring Modulith vs NestJS; one chart/broker; cloud evaluation",
+      "options": "Qualify approved version lines; remaining cloud/library/provider choices deferred; line changes require justified owner amendment; historical Spring/Nest comparison retained in brief",
       "owner": "TBD",
       "evidenceRequired": "Architecture feasibility, team capacity, official support and selection ADR",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
       "launchBlocker": "IMPLEMENTATION_GATE",
       "proposalReference": "ARCHITECTURE.md#initial-stack-brief",
-      "proposalStatus": "PROPOSED_AWAITING_OWNER_APPROVAL",
-      "scopeNote": "Initial subset only; cloud/vendors/policies deferred, full OD-01 remains OPEN_DECISION"
+      "proposalStatus": "OWNER_APPROVED_INITIAL_DIRECTION",
+      "scopeNote": "S16 approves initial technology direction only; exact qualification pending, broader OD-01 remains OPEN_DECISION; no implementation authority",
+      "initialStackApproval": {
+        "sourceId": "S16",
+        "recordedDate": "2026-10-14",
+        "status": "OWNER_APPROVED_INITIAL_DIRECTION",
+        "canonicalSpecification": "ARCHITECTURE.md#stack-approval",
+        "scopeComparison": "MATCHED_VERSION_LINES_AND_INITIAL_RESPONSIBILITIES; npm recording/stable qualification conditions explicit; historical mechanism recommendations are not additional unlisted approvals",
+        "backend": [
+          "Java 25",
+          "Spring Boot 4.1.x",
+          "Compatible Spring Modulith 2.1.x",
+          "Modular monolith"
+        ],
+        "database": [
+          "PostgreSQL 18.x",
+          "Compatible Boot-managed Flyway including PostgreSQL-specific support",
+          "Compatible Boot-managed PostgreSQL JDBC dependencies"
+        ],
+        "frontend": [
+          "Next.js 16.x",
+          "Compatible React 19.x and react-dom",
+          "TypeScript 5.x meeting selected framework requirements",
+          "Tailwind CSS 4.x"
+        ],
+        "tooling": [
+          "Maintained Maven 3.9.x patch",
+          "Node.js 24 LTS",
+          "Compatible explicitly recorded npm version"
+        ],
+        "sessionsAndRecovery": [
+          "Database-backed sessions",
+          "Durable events/background work with explicit recovery",
+          "Redis deferred initially"
+        ],
+        "qualificationStatus": "PENDING",
+        "implementationAuthorization": "NOT_GRANTED",
+        "conditions": [
+          "Verify exact supported stable patches against official sources before foundation",
+          "Qualify complete resolved dependency combination through separately authorized build/tests",
+          "Record reproducible versions when implementation authorized",
+          "No pre-release dependencies, unapproved version lines or independent overrides without justified amendment",
+          "Unqualifiable combination requires evidence and owner-reviewed amendment; no silent substitution"
+        ],
+        "exclusions": [
+          "Foundation/security implementation",
+          "Role bundles/financial limits/independent-review/exceptions/revocation policy approval",
+          "Cloud/provider/hardware selection",
+          "Spending/deployment/live operations"
+        ]
+      }
     },
     {
       "id": "OD-02",

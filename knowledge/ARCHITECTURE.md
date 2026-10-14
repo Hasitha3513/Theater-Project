@@ -2,7 +2,7 @@
 
 This document owns technology proposals, module/data/API and integration design, security/privacy, IoT and decision history. [Project](PROJECT.md), [design](DESIGN.md), [progress](PROGRESS.md). Business definitions belong in PROJECT; their enforcement belongs here.
 
-**PROPOSED / AWAITING OWNER APPROVAL:** CN-DEC-001 initial stack. S11 authorized research/brief only; no technology or implementation approval. No application manifests/build/runtime/providers/hardware are implemented. Exact patches/support and team capacity remain unverified implementation prerequisites. All candidate/vendor descriptions below are recommended/open, not supported account/hardware claims.
+**OWNER-APPROVED INITIAL DIRECTION (S16):** [approved scope](#stack-approval), after comparison with CN-DEC-001. S11 authorized historical research/brief only; S16 approves technology direction, with exact dependency/runtime qualification PENDING and implementation NOT_GRANTED. No application manifests/build/runtime/providers/hardware are implemented. Exact patches/support and team capacity remain unverified implementation prerequisites. All candidate/vendor descriptions below are recommended/open, not supported account/hardware claims.
 
 ## Navigation
 
@@ -21,7 +21,9 @@ This document owns technology proposals, module/data/API and integration design,
 <a id="technology"></a>
 ## Technology
 
-### Evidence and status discipline
+### Historical candidate inventory and evidence discipline
+
+The candidate rows below preserve pre-S16 recommendations and research, not competing current stack selections. S16 selects the initial version lines and responsibilities at [approval](#stack-approval); unlisted vendors/libraries/module details remain recommended/open. No patches or toolchain have been qualified.
 No package.json, pom.xml, build.gradle, lockfile, application code, migrations or infrastructure configuration exists in the inspected repository. Current evidence for every layer below: **documentation only; Implementation NOT_VERIFIED**. Recommendations come from S1; preferred does not mean APPROVED. No versions are pinned or claimed latest. No dependency installs/runtime config changes were made. No current provider country/product/API support is asserted; all requires official documentation and account/model validation before selection. This avoids treating an unseen proposal PDF as evidence.
 
 | Layer | Current evidence | Preferred recommendation | Alternatives | Purpose | Dependencies | Risks | Decision | Validation needed |
@@ -53,15 +55,15 @@ Core bank-deposit/transfer/upload/reviewer notification capability USER-CONFIRME
 
 Private receipt storage and safe JPEG/PNG/PDF scanning/preview use selected secure storage design (provider/size/retention open). Receipt OCR optional suggested extraction only; never approval/authenticity. Bank-feed/API matching future scope only after verified official bank/account/provider support/privacy. No bank connection, real receiving details, fees or installed integration claimed; no dependency/runtime changes.
 
-### CN-DEC-001 initial proposal (not accepted)
+### CN-DEC-001 initial direction (owner approved; qualification pending)
 
-[Decision brief](ARCHITECTURE.md#initial-stack-brief), S11, proposes Java25/Boot4.1/Modulith2.1, PostgreSQL18/Flyway, Next16/React19/TypeScript5/Tailwind4/Node24, Maven/npm and database-backed sessions/work. Exact stable patches require current official compatibility/support and foundation tests. PROPOSED / AWAITING OWNER APPROVAL; OD-01 remains OPEN_DECISION; implementation NOT_VERIFIED. This supplements historical candidate rows without accepting their other vendors. No code, dependency or runtime configuration was created.
+[Decision brief](ARCHITECTURE.md#initial-stack-brief), S11, proposes Java25/Boot4.1/Modulith2.1, PostgreSQL18/Flyway, Next16/React19/TypeScript5/Tailwind4/Node24, Maven/npm and database-backed sessions/work. S16 approves those initial version lines and responsibilities, with [exact conditions](#stack-approval); supported stable patch/dependency qualification PENDING, OD-01 broader choices remain OPEN_DECISION, implementation NOT_VERIFIED. This supplements historical candidate rows without accepting their other vendors. No code, dependency or runtime configuration was created.
 
 <a id="system-architecture"></a>
 ## System Architecture
 
 ### Desired architecture and implemented baseline
-Decision RECOMMENDED: one Spring Boot/Spring Modulith modular monolith with explicit internal boundaries. NestJS remains an alternative; final approval OD-01. No module/table/API implementation is verified. One deployable initially does not imply one unrestricted persistence layer. Public/customer, admin, provider webhook and device ingress have separate trust/authorization boundaries.
+S16 approves the initial Spring Boot/Spring Modulith modular-monolith direction; exact internal interfaces below remain RECOMMENDED. NestJS is a historical comparison, not an equally selected current backend; a changed line requires an owner-reviewed amendment. No module/table/API implementation is verified. One deployable initially does not imply one unrestricted persistence layer. Public/customer, admin, provider webhook and device ingress have separate trust/authorization boundaries.
 
 ```mermaid
 flowchart LR
@@ -247,7 +249,7 @@ S15 user-requested direction:
 >
 > Authorization is enforced by the backend and defaults to denial. It does not replace business-integrity or physical-safety rules.
 
-The direction is established; runtime enforcement **NOT_VERIFIED**. Proposed role responsibilities are owned by [PROJECT](PROJECT.md#authorization-requirements). Exact bundles, financial thresholds, independent-review/self-approval and exception procedures remain PROPOSED/OPEN; no numeric limits selected. Stack remains awaiting approval, CN-FND-001 and security implementation unauthorized. Approved public catalog operations may deliberately allow anonymous access; unspecified actions default to deny. An unset required limit is not unlimited authority.
+The direction is established; runtime enforcement **NOT_VERIFIED**. Proposed role responsibilities are owned by [PROJECT](PROJECT.md#authorization-requirements). Exact bundles, financial thresholds, independent-review/self-approval and exception procedures remain PROPOSED/OPEN; no numeric limits selected. Initial stack direction is owner-approved by S16; exact qualification pending, CN-FND-001 and security implementation unauthorized. Approved public catalog operations may deliberately allow anonymous access; unspecified actions default to deny. An unset required limit is not unlimited authority.
 
 ### Permission vocabulary and scoped grants
 
@@ -288,7 +290,7 @@ Identity & Access owns identity, permission definitions, role versions and scope
 
 Accepted durable business work is distinct from a new privileged action. Store accepted operation, actor/grant/policy/resource version and evidence references; execute permitted steps through narrowly scoped service authority while rechecking current financial/safety/lifecycle constraints. A new refund/privileged mutation needs current authorization, not a copied revoked user's grants. Revocation cannot silently erase accepted credits/refund obligations; pause and reconcile uncertain/prohibited work with an incident. Which accepted operations may continue, and whether later approval must be repeated, remains an explicit OD-28/01 policy/design choice before that slice.
 
-Initial implementation recommendation: explicit, testable policies inside the modular monolith, with shared grant evaluation and module-owned resource rules. No authorization microservice, external policy engine, arbitrary policy-script editor or expression language selected. Framework neutral until stack acceptance; if the Spring proposal is chosen, request authentication/authorization plus method/application-boundary checks and domain policy interfaces must be configured and tested using then-supported Spring Security mechanisms. Nothing is enabled/configured today; documentation is not executable evidence.
+Initial implementation recommendation: explicit, testable policies inside the modular monolith, with shared grant evaluation and module-owned resource rules. No authorization microservice, external policy engine, arbitrary policy-script editor or expression language selected. The Spring version-line direction is approved by S16; concrete security configuration remains a proposed implementation, and request authentication/authorization plus method/application-boundary checks and domain policy interfaces must be configured and tested using then-supported Spring Security mechanisms. Nothing is enabled/configured today; documentation is not executable evidence.
 
 ### Revocation and audit
 
@@ -305,7 +307,7 @@ Audit appropriate allow/deny/sensitive-read/assignment/override events with acto
 | Financial limits, self-approval, independent review and exceptions | OPEN_DECISION OD-18/28; source S8/S9/S15 does not set thresholds or approve every recommendation |
 | Evidence-purpose/case access and retention | Desired dedicated controls; exact operational/privacy process OD-03/05/28 unresolved |
 | Revocation/cache/session and accepted-work revalidation | RECOMMENDED approach, exact protocol/latency/operation policy OPEN under OD-01/05/28; no guarantee |
-| Framework enforcement | Dependent on OD-01 stack approval and separately authorized CN-AUTH-001/owning slices; NOT_GRANTED implementation |
+| Framework enforcement | S16 initial direction accepted; exact qualification and separately authorized CN-AUTH-001/owning slices still required; NOT_GRANTED implementation |
 
 The authoritative [open-decision registry](decisions/cinenest-open-decisions.json) retains all 29 IDs/statuses/owners. S15 refines authorization direction, not resolution of those choices. [T-CN-NFR-02](execution/test-plan.json) links the 18 additional planned scenarios at CN-NFR-02; existing scenarios remain. Verification requires actual policy fixtures, backend object/query/download/stream denial and positive tests, database races, revocation/cache/worker tests, audit redaction, browser-state checks and commit/environment/results. No executable tests exist here; no application, provider or physical enforcement verified. Independent physical egress needs separately qualified hardware evidence.
 
@@ -419,7 +421,7 @@ The existing [decision registry](decisions/cinenest-open-decisions.json) owns ea
 
 | ID | Required decision / conflict | Blocker |
 |---|---|---|
-| OD-01 | Final stack, cloud and libraries/providers unselected | IMPLEMENTATION_GATE |
+| OD-01 | Initial technology direction approved; exact qualification, cloud and remaining libraries/providers unresolved | IMPLEMENTATION_GATE |
 | OD-02 | Lock/controller compatibility, offline/re-entry/revocation and clocks untested | LAUNCH_BLOCKER |
 | OD-03 | 18+ draft applies all guests; digital verification covers booker | LAUNCH_BLOCKER |
 | OD-04 | Staff-less visuals versus physical cleaning/emergency intervention | LAUNCH_BLOCKER |
@@ -449,16 +451,16 @@ The existing [decision registry](decisions/cinenest-open-decisions.json) owns ea
 | OD-28 | Bank-review/account-change/refund role separation and high-risk approval controls | FEATURE_LAUNCH_BLOCKER |
 | OD-29 | Manual-review service staffing, overdue escalation and operator-caused failure compensation | FEATURE_LAUNCH_BLOCKER |
 
-Core hybrid direction is approved. [PR-PKG-001 / CN-A12](PROJECT.md#package-management), S8, and [PR-BANK-001 / CN-C10/CN-A13](PROJECT.md#bank-payments), S9, are approved core requirements; supporting designs remain RECOMMENDED and policies OPEN_DECISION. Quote honor/withdrawal remains OD-20, missing originals OD-15, physical capacity assurance OM-04, legacy chart DTO mapping OM-06. Prior visual conflicts C01–C15 remain in DESIGN reference traceability. CN-DEC-001 S11 authorizes its brief only; broader OD-01 cloud/providers/library scope remains open even if the initial subset is later accepted.
+Core hybrid direction is approved. [PR-PKG-001 / CN-A12](PROJECT.md#package-management), S8, and [PR-BANK-001 / CN-C10/CN-A13](PROJECT.md#bank-payments), S9, are approved core requirements; supporting designs remain RECOMMENDED and policies OPEN_DECISION. Quote honor/withdrawal remains OD-20, missing originals OD-15, physical capacity assurance OM-04, legacy chart DTO mapping OM-06. Prior visual conflicts C01–C15 remain in DESIGN reference traceability. CN-DEC-001 S11 authorizes its brief only; S16 accepts the initial subset only; broader OD-01 cloud/providers/library scope remains open.
 
 <a id="initial-stack-brief"></a>
 ## Initial Stack Brief
 
-**PROPOSED / AWAITING OWNER APPROVAL.** Prepared 2026-10-14, Asia/Colombo. Brief authorization is S11, not stack approval or implementation permission. OD-01 remains OPEN_DECISION. All product implementation remains NOT_VERIFIED.
+**OWNER_APPROVED_INITIAL_DIRECTION / QUALIFICATION_PENDING.** Brief prepared under S11, 2026-10-14, Asia/Colombo; initial direction accepted by S16 after scope comparison. Research and proposed mechanisms below are retained as historical evidence; [current approval](#stack-approval) governs its bounded scope. OD-01 broader choices remain OPEN_DECISION. All product implementation remains NOT_VERIFIED.
 
 The original brief baseline, commands/review and publication receipt remain in [PROGRESS verification history](PROGRESS.md#decision-evidence-history) and existing evidence JSON. Drivers are the [project requirements](PROJECT.md#features) and module/transaction/security contracts above. No implementation spike or version installation has been authorized.
 
-### C. Evidence, assumptions and exclusions
+### C. Historical proposal evidence, assumptions and exclusions (before S16)
 
 Approved architecture evidence: hybrid visual ADR-001 plus core package ADR-003 and bank ADR-004 requirements. These do not accept the implementation mechanisms below. Existing [stack](ARCHITECTURE.md#technology) and [module design](ARCHITECTURE.md#system-architecture) recommend Spring Modulith and list NestJS as alternative; those are recommendations, not approved architecture. Original PDFs S2/S3/S4 and knowledge pack remain missing; no page-level source validation invented. Current observed implementation is documentation and validators only.
 
@@ -542,14 +544,31 @@ Disadvantages: two-language maintenance; Spring/JPA proxy/lazy-loading/transacti
 
 No feature is dropped from coverage or declared accepted through deferral. Accountable decision owners remain TBD. Approval of tools does not resolve these policies or accept capacity/safety evidence.
 
-### I. Exact owner approval requested
+### I. Historical exact approval request (before S16)
 
 > I approve the CN-DEC-001 proposed initial stack: Java 25 LTS using a maintained licence-reviewed OpenJDK distribution; Spring Boot 4.1.x with aligned Spring Modulith 2.1.x modular backend, Spring MVC, Boot-managed Security/OIDC, Session JDBC, Data JPA/JDBC and validation; PostgreSQL 18.x and Boot-managed Flyway core/PostgreSQL plugin and JDBC driver; Maven latest maintained 3.9.x wrapper; Next.js 16.x App Router with matched React/React DOM 19.x, TypeScript 5.x, Tailwind CSS 4.x, Node.js 24.x LTS and npm lockfile. I approve database-authoritative reservations/sessions/ledger and durable internal events/work, with Redis provisioning deferred and no Redis-only integrity. Exact supported stable patches must be freshly verified, pinned and tested before foundation; incompatible or unsupported lines require a revised brief. I acknowledge the stated browser floor and unknown team capability. This approves the initial technology proposal only; it does not authorize implementation, deferred vendors, spending, policies, production deployment or the whole backlog.
 
-The owner may accept, reject or amend this proposal. **Do not record approval until an explicit owner response exists.** Supporting test-tool exact patches are future bounded foundation selections subject to this compatibility policy; no extra vendors/frameworks implicitly accepted. Approval and implementation authorization are separate gates.
+The statement above is the original requested approval, retained unchanged as research/proposal history; it is not the owner's actual message. S16 is the actual bounded approval below. Supporting test tools and unlisted implementation details remain recommendations subject to qualification and separately authorized execution.
+
+<a id="stack-approval"></a>
+### Owner approval S16 and scope comparison
+
+Recorded 2026-10-14 against actual baseline `bfc4a3ffd49adb0982cd1f88fa8243f2f0956816`. Source S16 is the current owner conversation instruction, with its request hash in the existing source register. Compared against the actual original section I: approved backend/database/frontend/tooling version lines, modular-monolith direction, database-backed sessions, durable recoverable work and initially deferred Redis match. S16 makes compatible npm recording, stable supported patches, resolved dependency qualification and amendment conditions explicit. No material incompatibility found. Approval is limited to the explicit owner list; prior MVC/JPA/Session JDBC/App Router and auxiliary-tool details remain retained recommendations where not explicitly stated, not additional standalone selections or execution authority. Browser-floor/team capability risks remain visible in the research; neither is now verified.
+
+| Approved initial scope | Direction |
+|---|---|
+| Backend | Java 25; Spring Boot 4.1.x; compatible Spring Modulith 2.1.x; modular monolith |
+| Database | PostgreSQL 18.x; compatible Boot-managed Flyway/PostgreSQL JDBC dependencies, including PostgreSQL-specific Flyway support |
+| Customer/admin frontend | Next.js 16.x; compatible React 19.x/react-dom; TypeScript 5.x satisfying framework requirements; Tailwind CSS 4.x |
+| Tooling | Maintained Maven 3.9.x patch; Node.js 24 LTS; compatible, explicitly recorded npm version |
+| Sessions/recovery | Database-backed sessions; durable events/background work with explicit recovery; Redis deferred initially |
+
+**Version-selection conditions:** verify exact supported stable patches against official sources before foundation implementation; qualify the complete resolved combination through the separately authorized build/test process; record reproducible versions when implementation is authorized. No pre-release dependencies, unapproved version lines or independent overrides without a justified amendment. If qualification fails, present evidence and proposed amendment for owner review; no silent stack substitution. Approval does not claim installed dependencies, successful tests, support qualification or runtime behavior. The dated official-source research above remains historical and must be refreshed at qualification, not relabeled as today's new research.
+
+Status separation: CN-DEC-001 brief VERIFIED/CLOSED and published; initial technology direction **OWNER_APPROVED_INITIAL_DIRECTION**; exact dependency/runtime qualification **PENDING**; RBAC + ABAC runtime **NOT_VERIFIED**; CN-FND-001 implementation **NOT_GRANTED**. Exact role bundles, limits, independent-review/exception/revocation policies and OD-18/28 owners remain open. No migrations/runtime configuration, real users/permissions/sessions, providers/cloud/hardware, costs, deployment or live actions authorized. Full OD-01 remains OPEN_DECISION because broader choices and qualification are unresolved; its existing registry holds initialStackApproval rather than closing unrelated gates.
 
 ### J. Next existing change set and stop
 
-**CN-FND-001** could become eligible after stack approval **and separate explicit authorization** of its bounded skeleton/CI scope. Remaining prerequisites: accept the selected stack ADR/OD-01 initial subset; refine actual owned files, skeleton-only acceptance/check commands, permitted local tool/container installation and safe CI permissions; freshly confirm support/patches/licences, PostgreSQL migration/Testcontainers compatibility and available toolchain. Record no product/provider/data/device operation. OD-01 broader cloud/library/provider scope remains open even if initial stack accepted. CN-GATE-001 policy/source brief remains unapproved and gates affected feature/launch work; it is not silently executed alongside foundation.
+**CN-FND-001 — Selected-stack repository skeleton and CI** retains its exact registry scope: “Only approved local project/module skeleton, safe build/test and scoped CI definition after stack selection.” S16 satisfies initial direction approval only. See the actual [foundation prerequisite review](PROGRESS.md#foundation-prerequisites): owned paths, environment/tool permissions, qualified supported patches and complete resolved dependency/build/test acceptance still require refinement and separate explicit implementation authorization. No business feature/provider/cloud/physical effect is included. OD-01 broader choices and CN-GATE-001 affected-policy/source gates remain open; no other task executed.
 
-Current result: brief prepared for review; **technology approval PENDING**, **implementation authorization NOT_GRANTED**, **next READY unit NONE**. Single next action: owner responds to section I. Stop here.
+Current result: initial direction approval recorded; **qualification PENDING**, **implementation NOT_GRANTED**, **next READY unit NONE**. Single next action: owner explicitly authorizes the bounded CN-FND-001 skeleton/CI scope and its reviewed environment/acceptance conditions. Stop here.
