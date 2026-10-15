@@ -1,16 +1,16 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-KB-CONSOLIDATE-001",
-  "mode": "ROADMAP_KNOWLEDGE_MAINTENANCE",
+  "taskId": "CN-FND-001",
+  "mode": "BOUNDED_FOUNDATION_IMPLEMENTATION",
   "workStatus": "VERIFIED",
-  "productStage": "PRE_IMPLEMENTATION",
+  "productStage": "FOUNDATION_LOCAL_VERIFIED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
+  "baselineHead": "4bc627781780d26d8c541768d958b18c3269a88d",
   "baselineWorktree": "CLEAN",
-  "currentChangeSet": "CN-KB-CONSOLIDATE-001",
+  "currentChangeSet": "CN-FND-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": null,
   "nextAction": "Review CN-AUTH-001 OD-12 venue/tenancy and exact session/revocation/policy choices; no auth READY claim",
@@ -22,20 +22,21 @@
     "PR-BANK-001"
   ],
   "blockers": [
-    "OD-01 exact qualification and deferred cloud/libraries/providers",
-    "No approved future implementation plan",
+    "CN-AUTH-001 OD-12 venue/tenancy and exact session/revocation policy choices",
+    "OD-01 broader cloud/libraries/providers remain open; foundation tuple locally qualified",
+    "No approval for the full future implementation plan",
     "OD-15 missing original sources",
-    "OD-02/03/04/05/06/07/14 hardware/privacy/safety/provider/rights gates",
-    "OD-17\u201329 package/bank policies and accountable owners"
+    "Affected-feature OD-02/03/04/05/06/07/14 hardware/privacy/safety/provider/rights gates",
+    "Affected-feature OD-17\u201329 package/bank policies and accountable owners"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
   "publicationState": "PUSHED",
-  "publicationEvidence": "S17 MVP roadmap maintenance commit ed67d0274049f49f24dafeed00b8193bf20b7513 pushed to origin/main and independently matched by git ls-remote exit0; receipt successor updates existing records only, no phase execution/acceptance claim",
-  "lastObservedHead": "ed67d0274049f49f24dafeed00b8193bf20b7513",
-  "evidencePath": "PROGRESS.md#mvp-roadmap",
-  "evidenceFreshness": "2026-10-15 roadmap reconciliation against 7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
+  "publicationEvidence": "Foundation commits through dc13a55 pushed to origin/main; remote CI result tracked separately in foundationImplementation; final closeout successor resolved from Git",
+  "lastObservedHead": "dc13a55573c666aa824c67b9e1c7d7afb61202d8",
+  "evidencePath": "PROGRESS.md#foundation-implementation",
+  "evidenceFreshness": "2026-10-15 foundation closeout; exact checks/versions in foundationImplementation",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -45,19 +46,19 @@
     "Git remote network requires sandbox escalation"
   ],
   "notRunChecks": [
-    "Application lint/build/unit/integration/auth/concurrency/migration: no application code/manifests or implementation authorization; approved direction not qualified",
-    "Rendered application/a11y: no application, only references",
-    "Provider sandbox/bank/hardware/safety/business/deployment: unavailable/unapproved"
+    "Future auth/business endpoint security/concurrency/recovery scenarios; no owning feature implemented",
+    "Rendered browser accessibility/responsive audit",
+    "Provider/bank/hardware/safety/business/deployment and customer acceptance"
   ],
   "omissionRegister": "execution/omissions.json",
   "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
-  "verificationScope": "Documentation migration/coverage only; no application/hardware/approval claim",
+  "verificationScope": "Local backend/frontend foundation, PostgreSQL migration/startup and scoped architecture only; no business/auth/physical/customer acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "NOT_GRANTED",
+  "implementationAuthorization": "GRANTED_CN_FND_001_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "Separate bounded CN-FND-001 implementation authorization"
+    "OD-12: choose single-organization venue scope versus explicitly approved SaaS tenancy before CN-AUTH-001; retain applicable session/revocation policy review"
   ],
   "checks": [
     {
@@ -256,7 +257,7 @@
     ],
     "review": "Parent self-review of actual diff, canonical/provenance links, complete payload and unchanged approval comparisons; no independent review claimed this task"
   },
-  "requestedTaskId": "CN-KB-CONSOLIDATE-001",
+  "requestedTaskId": "CN-FND-001",
   "editorialOutcome": {
     "canonicalFilesReused": 4,
     "newKnowledgeFiles": 0,
@@ -944,7 +945,7 @@
     "atLocal": "2026-10-15T11:00:07.990613+05:30",
     "evidencePath": "PROGRESS.md#foundation-implementation",
     "ownedFiles": {
-      ".github/workflows/foundation.yml": "a87117844ddaeee9c3fbf5e7dbcf4ab202638cfeb50c1e5e064b8b3d94e7e8ca",
+      ".github/workflows/foundation.yml": "65736e42e414e125a9707b3cb172fb6b94ff43e3827a7fe81e7855200930e2d5",
       ".gitignore": "1887d372ea3606b8c02fa2b175bec1e3e3372a32d22263a9a1c993dd50628435",
       "backend/.mvn/wrapper/maven-wrapper.properties": "9e702bcd7e68ba1cace0a3382a7082e6e1e1b321688a7a3fbf4d5ae7eb0af533",
       "backend/mvnw": "cae96cef89ebea3531221f4ae17c23cf8edf67d00eae8306d4186ae1bbed4d02",
@@ -1037,7 +1038,7 @@
       }
     ],
     "frontendTests": 1,
-    "remoteCI": "FAILED_INITIAL_SETUP_JAVA_VERSION_PARSER; FIX_PENDING_RUN",
+    "remoteCI": "PENDING_FULL_HISTORY_RETRY",
     "review": "Self-review; no independent reviewer or customer acceptance",
     "limitations": [
       "One foundation module only; no future business-boundary claim",
@@ -1052,7 +1053,8 @@
       "Initial ESLint/Next tool chain: 5 high development advisories; selected supported Biome instead; final npm audit 0",
       "Biome ignore root corrected to existing repository root; configuration migrated using Biome",
       "Publication preflight: ignored tsbuildinfo removed from evidence inventory (never committed); generated Windows wrapper CRLF normalized to LF; sequential checked publication steps enforced before push",
-      "Initial remote CI setup-java v5 rejected four-part Java patch; switch to checksum-pinned exact same JDK archive via supported jdkfile install"
+      "Initial remote CI setup-java v5 rejected four-part Java patch; switch to checksum-pinned exact same JDK archive via supported jdkfile install",
+      "Second remote run: backend/frontend passed, immutable-baseline knowledge checks failed on shallow checkout; CI now fetches history instead of weakening validator"
     ],
     "notRun": [
       "Remote CI pending publication",
@@ -1096,6 +1098,15 @@
         "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38687499707",
         "failure": "setup-java v5 rejects four-part 25.0.4.1+1 SemVer; build steps never ran",
         "correction": "Official exact Temurin archive with verified SHA-256, supported jdkfile installer; no runtime downgrade"
+      },
+      {
+        "runId": 38687790645,
+        "headSha": "dc13a55573c666aa824c67b9e1c7d7afb61202d8",
+        "conclusion": "failure",
+        "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38687790645",
+        "passed": "Java/Node setup, backend build/tests/PostgreSQL/packaged startup, frontend clean install/build/type/lint/smoke/audit",
+        "failure": "Knowledge validator immutable baseline commit absent in default shallow checkout",
+        "correction": "fetch-depth: 0; no historical validation removed"
       }
     ]
   }

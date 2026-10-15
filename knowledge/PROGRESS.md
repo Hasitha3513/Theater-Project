@@ -45,6 +45,8 @@ Self-review only. Existing validators must preserve every historical requirement
 
 Remote CI first run [38687499707](https://github.com/Hasitha3513/Theater-Project/actions/runs/38687499707) at bdf8595 failed before builds: setup-java v5 rejected four-part version string 25.0.4.1+1. Correction pins the exact official Temurin archive and its SHA-256, using supported jdkfile installation with major-version cache label; no runtime downgrade or floating download. Replacement run outcome is tracked separately in existing status.foundationImplementation.
 
+Remote CI second run [38687790645](https://github.com/Hasitha3513/Theater-Project/actions/runs/38687790645) at dc13a55 passed backend/PostgreSQL/packaged startup and frontend build/type/lint/smoke/audit, then failed knowledge validation because default shallow checkout omitted immutable baseline commits. Workflow now requests full Git history; no validator history/evidence checks removed. Final run outcome remains separate in status.foundationImplementation.
+
 Single next decision: resolve CN-AUTH-001's actual OD-12 single-organization/venue versus SaaS-tenancy scope and applicable exact session/revocation/security policy choices; OD-01 broader providers/libraries stay OPEN. CN-AUTH-001 is not READY merely because foundation passed; do not begin it here.
 
 <a id="root-relocation-inspection"></a>
@@ -279,7 +281,7 @@ Goal/outcome: Make a clean checkout build and start with protected identity/sess
 
 - [ ] **P1-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: A clean checkout builds and starts. Representative identity/session, ownership, and cross-venue denial tests pass with evidence.
 
-Current status: PLANNED / execution BLOCKED, implementation NOT_VERIFIED. Next: review actual dependencies and blocking policies, refine the corresponding bounded task and obtain its authority; do not start from the phase label.
+Current status: PARTIAL; CN-FND-001 locally VERIFIED/CLOSED, identity/session/shared UI still BLOCKED/NOT_VERIFIED; P1 NOT_ACCEPTED. Next: resolve the owning auth/UI decisions and authorization before those tasks; do not infer whole-phase completion from foundation.
 
 <a id="roadmap-p2"></a>
 #### P2. Venues, Packages And Customer Discovery

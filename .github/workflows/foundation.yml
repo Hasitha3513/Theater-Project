@@ -12,6 +12,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0 # Existing knowledge validators verify immutable historical commits
       - name: Fetch exact Temurin archive (setup-java v5 cannot parse four-part patch strings)
         run: |
           curl --fail --location --retry 3 'https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_linux_hotspot_25.0.4.1_1.tar.gz' --output "$RUNNER_TEMP/cinenest-jdk.tar.gz"
