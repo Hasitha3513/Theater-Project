@@ -137,7 +137,7 @@
       "blockingDecisionIds": [
         "OD-01"
       ],
-      "affectedFilesModules": "Future source/build/tests/CI paths TBD after approved ADR",
+      "affectedFilesModules": "backend/, frontend/, scripts/verify-foundation.py, .github/workflows/foundation.yml; scoped knowledge closeout",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
       "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
@@ -145,10 +145,12 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Repeatable approved local skeleton and test evidence; no feature-complete claim",
       "requiredApproval": "Explicit implementation unit approval and accepted stack ADR",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": [],
+      "authorityAvailable": true,
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "PROGRESS.md#foundation-implementation"
+      ],
       "prerequisiteEvidence": {
         "initialStackDirection": "OWNER_APPROVED_INITIAL_DIRECTION",
         "sourceId": "S16",
@@ -156,6 +158,12 @@
         "boundedScopeRefinement": "REQUIRED",
         "implementationAuthorization": "NOT_GRANTED",
         "reference": "PROGRESS.md#foundation-prerequisites"
+      },
+      "implementationEvidence": {
+        "status": "VERIFIED_LOCAL_FOUNDATION",
+        "authorizationRequestSha256": "bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "remoteCI": "NOT_YET_RUN"
       }
     },
     {

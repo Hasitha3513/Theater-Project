@@ -1,0 +1,9 @@
+# Local tools, secrets and generated output
+.cache/
+.env
+.env.*
+!.env.example
+backend/target/
+frontend/node_modules/
+frontend/.next/
+frontend/tsconfig.tsbuildinfo

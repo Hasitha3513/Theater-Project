@@ -100,7 +100,7 @@ def validate_consolidation(check):
     removal_tree = set(subprocess.check_output(['git', '-C', str(repo), 'ls-tree', '-r', '--name-only', migration['removalBaselineRevision']], text=True).splitlines())
     missing = {name for name in removal_tree if not (repo / name).is_file()}
     check(missing == expected, 'Unlisted deletion or incomplete approved removal')
-    current_md = {p.relative_to(repo).as_posix() for p in repo.rglob('*.md') if '.git' not in p.parts and p.relative_to(repo).as_posix() not in {'knowledge/' + name for name in UNMANAGED_WORKSPACE_ASSETS} and p.relative_to(repo).as_posix() not in {'knowledge/' + name for name in export_paths}}
+    current_md = {name for name in subprocess.check_output(['git', '-C', str(repo), 'ls-files', '--cached', '--others', '--exclude-standard'], text=True).splitlines() if name.endswith('.md') and (repo / name).is_file() and name not in {'knowledge/' + name for name in UNMANAGED_WORKSPACE_ASSETS} and name not in {'knowledge/' + name for name in export_paths}}
     check(current_md == {name for name in removal_tree if name.endswith('.md')} - expected, 'New narrative file or unlisted narrative deletion')
     mapping = {(repo / e['sourcePath']).resolve(): (repo / e['canonicalPath'], e['anchor']) for e in entries}
     for e in entries:

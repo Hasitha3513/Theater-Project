@@ -95,7 +95,13 @@
         "ARCHITECTURE.md#initial-stack-brief",
         "PROGRESS.md#decision-evidence-history"
       ],
-      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL"
+      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL",
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "PR-PKG-001",
@@ -159,7 +165,13 @@
         "ARCHITECTURE.md#initial-stack-brief",
         "PROGRESS.md#decision-evidence-history"
       ],
-      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL"
+      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL",
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "PR-BANK-001",
@@ -223,7 +235,13 @@
         "ARCHITECTURE.md#initial-stack-brief",
         "PROGRESS.md#decision-evidence-history"
       ],
-      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL"
+      "decisionBriefStatus": "PREPARED_AWAITING_OWNER_APPROVAL",
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "CN-C01",
@@ -1553,7 +1571,13 @@
         "Ordinary staff cannot self-escalate roles/permissions; dedicated assignment controls enforce permitted target/scope and audit attempts without generic ADMIN bypass.",
         "Accepted durable work is distinguished from a new privileged action; revalidate under the selected service/current-safety policy without indefinitely inheriting revoked actor grants or silently losing accepted financial obligations.",
         "Permission-aware UI handles denial, expired session, changed permissions and policy unavailability; clears/refetches protected content, ends revoked streams and reports success only after backend confirmation."
-      ]
+      ],
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "CN-NFR-03",
@@ -1600,7 +1624,13 @@
         "OD-01",
         "OD-16",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "CN-NFR-04",

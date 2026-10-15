@@ -1,0 +1,24 @@
+package com.cinenest;
+
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+import org.junit.jupiter.api.Test;
+import org.springframework.modulith.core.ApplicationModules;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class FoundationArchitectureTest {
+    @Test
+    void declaredFoundationModuleHasAnEncapsulatedImplementation() {
+        var modules = ApplicationModules.of(CineNestApplication.class);
+        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactly("foundation");
+        modules.verify();
+    }
+
+    @Test
+    void publicFoundationApiCannotDependOnItsAdapter() {
+        var classes = new ClassFileImporter().importPackages("com.cinenest.foundation");
+        noClasses().that().resideInAPackage("com.cinenest.foundation")
+            .should().dependOnClassesThat().resideInAPackage("com.cinenest.foundation.internal")
+            .check(classes);
+    }
+}

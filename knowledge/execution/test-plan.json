@@ -39,7 +39,13 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "T-PR-PKG-001",
@@ -58,7 +64,13 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "T-PR-BANK-001",
@@ -77,7 +89,13 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "T-CN-C01",
@@ -532,7 +550,13 @@
       "evidencePaths": [],
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "authorizationScenarioSource": "execution/requirements.json#CN-NFR-02.authorizationAcceptanceScenarios",
-      "authorizationEvidenceNeeded": "After separate stack/slice/policy approval: executable policy allow/deny fixtures; direct API object/venue tests; real database authorization/resource-change races; session/cache/revocation tests; list/export/count/download/stream reconnect tests; constrained worker/callback tests; audit redaction and browser-state tests; commit/environment/commands/results. Qualified independent physical-egress evidence remains separate; no implementation/physical acceptance from KB checks."
+      "authorizationEvidenceNeeded": "After separate stack/slice/policy approval: executable policy allow/deny fixtures; direct API object/venue tests; real database authorization/resource-change races; session/cache/revocation tests; list/export/count/download/stream reconnect tests; constrained worker/callback tests; audit redaction and browser-state tests; commit/environment/commands/results. Qualified independent physical-egress evidence remains separate; no implementation/physical acceptance from KB checks.",
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "T-CN-NFR-03",
@@ -549,7 +573,13 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "foundationEvidence": {
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "status": "FOUNDATION_SUBSET_ONLY",
+        "fullRequirementVerified": false
+      }
     },
     {
       "id": "T-CN-NFR-04",

@@ -37,7 +37,10 @@ def main():
         check(required in entry, f'Instruction guard missing {required}')
     check(len(entry.encode()) < 12000, 'Instruction entry point too long')
     # All actual repository Markdown paths; exclude Git internals, URL schemes and headings-only anchors.
-    for path in R.rglob('*.md'):
+    for relative in subprocess.check_output(['git', '-C', str(R), 'ls-files', '--cached', '--others', '--exclude-standard'], text=True).splitlines():
+        path = R / relative
+        if path.suffix != '.md':
+            continue
         if '.git' in path.parts or path.relative_to(R).as_posix() in {'knowledge/' + name for name in json.loads((K / 'manifest.json').read_text()).get('unmanagedWorkspaceAssets', {})}:
             continue
         for target in re.findall(r'\]\(([^)]+)\)', path.read_text()):
@@ -54,6 +57,22 @@ def main():
         print('\n'.join(errors))
         return 1
     changes = backlog['changeSets']; reqs = coverage['requirements']; tests = tests_doc['tests']
+    # Bounded owner-authorized CN-FND-001 successor. Historical payload checks below remain intact.
+    foundation_evidence = state.get('foundationImplementation', {})
+    check(foundation_evidence.get('authorizationRequestSha256') == 'bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c', 'Foundation owner provenance missing/changed')
+    check(foundation_evidence.get('status') == 'VERIFIED_LOCAL_FOUNDATION' and foundation_evidence.get('implementationAuthorization') == 'GRANTED_CN_FND_001_ONLY', 'Foundation authority/evidence missing')
+    check(foundation_evidence.get('qualificationStatus') == 'LOCAL_BUILD_TEST_VERIFIED', 'Foundation qualification missing')
+    owned = foundation_evidence.get('ownedFiles', {})
+    required_foundation = {'backend/pom.xml', 'backend/mvnw', 'frontend/package-lock.json', 'frontend/package.json', 'scripts/verify-foundation.py', '.github/workflows/foundation.yml'}
+    check(required_foundation <= set(owned) and len(owned) == 30, 'Foundation source/build/test inventory missing')
+    for name, digest in owned.items():
+        path = R / name
+        check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == digest, 'Foundation source checksum mismatch ' + name)
+    results = foundation_evidence.get('checks', [])
+    check(len(results) == 7 and all(c.get('exitCode') == 0 for c in results), 'Foundation verification failure/missing checks')
+    check(bool(results) and results[0].get('backendTests') == 4 and results[0].get('packagedStartup') is True and foundation_evidence.get('frontendTests') == 1, 'Foundation executed checks missing')
+    foundation_subset = {'taskId':'CN-FND-001','evidencePath':'PROGRESS.md#foundation-implementation','status':'FOUNDATION_SUBSET_ONLY','fullRequirementVerified':False}
+
     cids = [x['id'] for x in changes]; rids = [x['id'] for x in reqs]; tids = [x['id'] for x in tests]
     for label, ids in [('changes', cids), ('requirements', rids), ('tests', tids)]:
         check(len(ids) == len(set(ids)), f'Duplicate {label} IDs')
@@ -77,6 +96,10 @@ def main():
         elif c['id'] == 'CN-KB-CONSOLIDATE-001':
             check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED' and c.get('authorizationSource') == 'S12', 'Consolidation authority/status missing')
             check(c.get('deletionApproval') == 'APPROVED_EXACT_ALLOWLIST' and c.get('removalAuthorizationSource') == 'S14' and c.get('removalStatus') == 'VERIFIED', 'Exact removal approval/status missing')
+        elif c['id'] == 'CN-FND-001':
+            check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED', 'Foundation task/evidence diverge')
+            check(c['dependencies'] == ['CN-DEC-001'] and c['blockingDecisionIds'] == ['OD-01'], 'Foundation dependency/policy edges changed')
+            check(c.get('evidencePaths') == ['PROGRESS.md#foundation-implementation'], 'Foundation completion evidence missing')
         elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
@@ -128,7 +151,7 @@ def main():
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
     check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None, 'Unsupported READY plan')
     check(state['taskId'] == 'CN-KB-CONSOLIDATE-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
-    check(state['workStatus'] == cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'BLOCKED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
+    check(state['workStatus'] == cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
     check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
@@ -150,7 +173,7 @@ def main():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
                     expected_status = 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
-                    check(after[id].get(key) == expected_status, 'Baseline status changed ' + id + '/' + key)
+                    check(after.get(id, {}).get(key) == ({'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status) if id == 'CN-FND-001' else expected_status), 'Baseline status changed beyond scoped foundation authority ' + id + '/' + key)
     canonical_map = {e['sourcePath'].removeprefix('knowledge/'): e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] for e in manifest['consolidation']['documents']}
     def migrated(value):
         if isinstance(value, dict):
@@ -168,6 +191,15 @@ def main():
             workflow = expected['tests'][0]
             workflow['owningChangeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['evidencePaths'].append('PROGRESS.md#current-verification')
         current_payload = json.loads((K / path).read_text())
+        if path in {'execution/requirements.json', 'execution/test-plan.json'}:
+            key = 'requirements' if path.endswith('requirements.json') else 'tests'
+            mapped = {'PR-UI-001','PR-PKG-001','PR-BANK-001','CN-NFR-02','CN-NFR-03'}
+            if key == 'tests':
+                mapped = {'T-' + value for value in mapped}
+            for row in current_payload[key]:
+                if row['id'] in mapped:
+                    check(row.pop('foundationEvidence', None) == foundation_subset, 'Foundation subset/full feature distinction lost ' + row['id'])
+
         # S15 adds only the bounded authorization extension; preserve every prior field/criterion.
         if path == 'execution/requirements.json':
             row = next(x for x in current_payload['requirements'] if x['id'] == 'CN-NFR-02')
@@ -182,6 +214,8 @@ def main():
             check(hashlib.sha256(json.dumps(added, sort_keys=True).encode()).hexdigest() == '3c59995ce6b04b02dc2b681665eb941e3782744c0926ae741df8cde53e7ef5b8', 'Authorized test extension lost/changed')
         if path == 'decisions/cinenest-open-decisions.json':
             current_od = next(x for x in current_payload['decisions'] if x['id'] == 'OD-01')
+            qualification = current_od.pop('foundationQualification', None)
+            check(qualification == {'status':'LOCAL_BUILD_TEST_VERIFIED','taskId':'CN-FND-001','evidencePath':'PROGRESS.md#foundation-implementation','remainingScope':'Broader cloud/providers/libraries and auth-specific session/revocation decisions remain open; no automatic CN-AUTH-001 readiness'}, 'Foundation qualification promoted beyond scope')
             check(hashlib.sha256(json.dumps(current_od, sort_keys=True).encode()).hexdigest() == '3f3f05eb387eb006672f8e38a559af25fc5c30d69ff0bc7a9221a0eda02e495d', 'S16 bounded OD-01 approval/status/conditions changed')
             old_od = next(x for x in expected['decisions'] if x['id'] == 'OD-01')
             current_payload['decisions'][current_payload['decisions'].index(current_od)] = old_od
@@ -199,6 +233,12 @@ def main():
     foundation = next(x for x in prior_changes if x['id'] == 'CN-FND-001')
     prerequisite = foundation.pop('prerequisiteEvidence', None)
     check(hashlib.sha256(json.dumps(prerequisite, sort_keys=True).encode()).hexdigest() == '06daec5b97345a591adc27d4403fb205e2b07f4cbdb94eedea10fff76289819f', 'Foundation qualification/authority prerequisites changed')
+    implementation = foundation.pop('implementationEvidence', None)
+    check(implementation == {'status':'VERIFIED_LOCAL_FOUNDATION','authorizationRequestSha256':'bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c','evidencePath':'PROGRESS.md#foundation-implementation','remoteCI':'NOT_YET_RUN'}, 'Foundation scoped implementation record changed')
+    historical_foundation = next(x for x in old_backlog['changeSets'] if x['id'] == 'CN-FND-001')
+    check(foundation['affectedFilesModules'] == 'backend/, frontend/, scripts/verify-foundation.py, .github/workflows/foundation.yml; scoped knowledge closeout', 'Foundation owned scope changed')
+    for field in ['authorityAvailable','readiness','workStatus','evidencePaths','affectedFilesModules']:
+        foundation[field] = historical_foundation[field]
     check(prior_changes == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001' and changes[-1].get('aliases') == ['CN-KB-CONSOLIDATION-001'] and changes[-1].get('continuationAuthorizationSource') == 'S13', 'Existing backlog content lost/altered')
     old_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
     current_sources = json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']
@@ -274,8 +314,8 @@ def main():
         criterion_requirements[cid] = rset
         if box == 'x':
             checked.append(cid)
-            check(number == '0' and 'DOC_VERIFIED' in evidence, 'Implementation checked without actual evidence ' + cid)
-    check(checked == ['P0-C01','P0-C02','P0-C03','P0-C04','P0-C05'], 'Readiness preparation/evidence roll-up changed')
+            check((number == '0' and 'DOC_VERIFIED' in evidence) or (cid == 'P1-C01' and 'LOCAL_FOUNDATION_VERIFIED' in evidence), 'Implementation checked without actual scoped evidence ' + cid)
+    check(checked == ['P0-C01','P0-C02','P0-C03','P0-C04','P0-C05','P0-C06','P1-C01'], 'Readiness preparation/evidence roll-up changed')
     check(re.findall(r'^#### P(\d+)\.', roadmap, re.M) == [str(i) for i in range(11)], 'Phase definitions duplicated/missing')
     gates = re.findall(r'^- \[([ x])\] \*\*(P\d+-ACCEPT)\*\*', roadmap, re.M)
     check(gates == [(' ', 'P'+str(i)+'-ACCEPT') for i in range(11)], 'Phase accepted without reviewer/evidence/prerequisite closure')
@@ -294,7 +334,7 @@ def main():
     for tid, phase, deps, status in task_projection:
         check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == cmap[tid]['workStatus']+' / '+cmap[tid]['readiness'], 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
-    check(state_roadmap.get('readinessCriteria') == {'checked':5,'total':8,'evidenceClass':'DOC_VERIFIED_ONLY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':5,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
+    check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')
     for warning in ['illustrative','UNKNOWN/TBD','NOT_HELD','NOT_ACCEPTED','NEEDS_RECHECK','CN-NOTIFY-001 (P5) depends on CN-ACCESS-001 (P7)','HTML','one venue']:
         check(warning in roadmap, 'Roadmap qualification missing ' + warning)

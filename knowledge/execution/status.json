@@ -13,9 +13,9 @@
   "currentChangeSet": "CN-KB-CONSOLIDATE-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": null,
-  "nextAction": "Owner explicitly selects root-correction-first or relocation deferral, then separately authorizes bounded CN-FND-001 paths/environment/qualification; no READY implementation task",
+  "nextAction": "Review CN-AUTH-001 OD-12 venue/tenancy and exact session/revocation/policy choices; no auth READY claim",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "No application manifests/code/tests/CI; all catalog features NOT_VERIFIED",
+  "implementationEvidence": "CN-FND-001 local backend/frontend foundation verified; no business/auth/provider implementation",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
@@ -740,13 +740,13 @@
     "status": "VERIFIED_DOCUMENTATION_ONLY",
     "evidencePath": "PROGRESS.md#mvp-roadmap",
     "readinessCriteria": {
-      "checked": 5,
+      "checked": 6,
       "total": 8,
-      "evidenceClass": "DOC_VERIFIED_ONLY",
+      "evidenceClass": "DOCUMENTATION_AND_SCOPED_AUTHORITY",
       "accepted": false
     },
     "planningCriteria": {
-      "checked": 5,
+      "checked": 7,
       "total": 74,
       "overallEffortPercentage": null
     },
@@ -932,5 +932,160 @@
     "implementationStatusChanged": false,
     "review": "Self-review only; script navigation/consistency verified, no timed or rendered presentation/customer review",
     "rehearsedAtLocal": "2026-10-15T10:26:53.174307+05:30"
+  },
+  "foundationImplementation": {
+    "taskId": "CN-FND-001",
+    "authorizationSource": "Current owner instruction: Execute the existing CN-FND-001; use existing nested repository; qualify dependencies as part of work",
+    "authorizationRequestSha256": "bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c",
+    "sourceBaseline": "4bc627781780d26d8c541768d958b18c3269a88d",
+    "status": "VERIFIED_LOCAL_FOUNDATION",
+    "implementationAuthorization": "GRANTED_CN_FND_001_ONLY",
+    "qualificationStatus": "LOCAL_BUILD_TEST_VERIFIED",
+    "atLocal": "2026-10-15T11:00:07.990613+05:30",
+    "evidencePath": "PROGRESS.md#foundation-implementation",
+    "ownedFiles": {
+      ".github/workflows/foundation.yml": "7c0882e22b0d603d3b3a21a5d08bb81621903cbb1bb2ffc8a0d4c586c85a0a6a",
+      ".gitignore": "1887d372ea3606b8c02fa2b175bec1e3e3372a32d22263a9a1c993dd50628435",
+      "backend/.mvn/wrapper/maven-wrapper.properties": "9e702bcd7e68ba1cace0a3382a7082e6e1e1b321688a7a3fbf4d5ae7eb0af533",
+      "backend/mvnw": "cae96cef89ebea3531221f4ae17c23cf8edf67d00eae8306d4186ae1bbed4d02",
+      "backend/mvnw.cmd": "46eedb8419bd14fe70d5bb2916d7b6f51806e51b39d5b76a42610384ca929c1c",
+      "backend/pom.xml": "d504008b88aec034a7883102cb0aff29cff70cc37f1289dbb07d256ac1957920",
+      "backend/src/main/java/com/cinenest/CineNestApplication.java": "621b4d3d7c60e2d215060cac68a6237a950fe2920391200776d1e7d89bdddce2",
+      "backend/src/main/java/com/cinenest/foundation/MigrationStatus.java": "b526bb80ad6e0f03dbeb0ba32a2f26c6d56ff293cb1a3de9a12151248e2e0585",
+      "backend/src/main/java/com/cinenest/foundation/internal/ClosedHttpBoundary.java": "84d7b9f675a00f14e8c0d88cdc538af54481445808ffdfbfa43b2f4d06c58fd8",
+      "backend/src/main/java/com/cinenest/foundation/internal/FlywayMigrationStatus.java": "156eba2b82c5e70c48cf6751e1982d23e48a132a72616be5eaf69b63f3ef14b8",
+      "backend/src/main/java/com/cinenest/foundation/package-info.java": "7d57ab9f704d8e8611f4f88e402073e56f16448932f6bd1ef313d3041253024a",
+      "backend/src/main/resources/application.properties": "87f268aa76c7ad7bbd3afe0175c3746aad139052ee13d57aeaa10469b46eae27",
+      "backend/src/main/resources/db/migration/V1__foundation_namespace.sql": "fd31a33e9a5fbcdfa61ef619559a1669d6674b76036b129631b19ac3293b92f1",
+      "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java": "594da1cf95d48232e5e24e71869a4930af1f29938cde764561cdcaf70324f0b8",
+      "backend/src/test/java/com/cinenest/FoundationIntegrationTest.java": "fa5a3da844bfb6ff163ddacb0e89fcc8e2a67072fe8bfaf1021817d3bb0d05f6",
+      "frontend/.node-version": "a1c56e968c358e10872d64220b3ae759ffe7feaffc4da95fae425dbcca43fe44",
+      "frontend/.npmrc": "7151cf397def0c2cb0ab65643701d27d335a72c90f775675b5f826bc7005818a",
+      "frontend/app/globals.css": "dc65160e8bc2a327c2a93ec08b52f707d5d4370754c639721b0deeb6358606c9",
+      "frontend/app/layout.tsx": "98d9230eb69743af3e0fb1b9b84594e22bebbe4d149d6e78d0d1dc97e68b9eaa",
+      "frontend/app/page.tsx": "023d97abad5910c2153b90ef2f5f1e08be8c2222cb29634fcbbe8e9dfb94f218",
+      "frontend/biome.json": "29f50a9e55c6eeeaded8a62452d1799eb8d6b7d818b86fd5a96561ac3195fbf0",
+      "frontend/next-env.d.ts": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+      "frontend/next.config.mjs": "ac1f75b90cceaf5a403be62a93b34bf933be40cd6a4d7e5282a65bd644de9f33",
+      "frontend/package-lock.json": "792d01e71f6cccb885ba1c32fb588205bf9e577136e2f1431561c4d71763cb78",
+      "frontend/package.json": "e5f1fa01dfd5ab3f12a39a6b00d498961fdbc1b4ff5e20cee9ada2741169b94c",
+      "frontend/postcss.config.mjs": "a1a188221f064d964dd9958c3d48b0c23252fabbeb6099d95ee8e15c764718b0",
+      "frontend/tests/foundation.test.mjs": "508789630e53500b1b9f1407320e8d7f8f66c8aa1a80d4cbbbd90b300803c3b7",
+      "frontend/tsconfig.json": "fe301561c5f9f7556924d85c875b73846f4fc6891001acb4ce3ca299984d06c0",
+      "frontend/tsconfig.tsbuildinfo": "9351c3d82ccd2df67db52ed53c80fc37f12249da923f3439b94c55326d0eebf3",
+      "scripts/verify-foundation.py": "41e16e600d2e6a386c6d5fe448f38d8df7bdcc28fc254b7be24b96d8ca195c46"
+    },
+    "versions": {
+      "java": "Ubuntu OpenJDK 25.0.4.1+1-1-26.04.4-Ubuntu (GPL-2 with Classpath exception; packaged copyright inspected)",
+      "maven": "3.9.16",
+      "wrapper": "3.3.4 only-script; distribution SHA-256 pinned",
+      "springBoot": "4.1.1",
+      "springModulith": "2.1.1",
+      "flyway": "12.4.0 Boot-managed core/PostgreSQL support",
+      "postgresqlJdbc": "42.7.13 Boot-managed",
+      "postgresql": "18.6 digest 74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336",
+      "node": "24.22.0 checksum cc2f601cee82d9a5a233302fe307abc600727035fd7d2c3a3571755989e95008",
+      "npm": "11.19.1",
+      "next": "16.4.1",
+      "reactAndReactDom": "19.3.1",
+      "typescript": "5.9.3",
+      "tailwindAndPostcss": "4.3.3",
+      "biome": "2.5.15",
+      "junit": "6.0.3 Boot-managed",
+      "ciJava": "Temurin 25.0.4.1+1; remote execution not yet verified"
+    },
+    "checks": [
+      {
+        "command": "DOCKER_HOST=unix:///var/run/docker.sock python3 scripts/verify-foundation.py",
+        "exitCode": 0,
+        "result": "PASS",
+        "runs": 2,
+        "backendTests": 4,
+        "failures": 0,
+        "skipped": 0,
+        "packagedStartup": true,
+        "database": "PostgreSQL 18.6; tmpfs; loopback random port; no persistent volume"
+      },
+      {
+        "command": "cd frontend; npm ci --cache ../.cache/npm --no-fund",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "cd frontend; npm run build",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "cd frontend; npm run typecheck",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "cd frontend; npm run lint",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "cd frontend; npm test",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "command": "cd frontend; npm audit --audit-level=high",
+        "exitCode": 0,
+        "result": "PASS"
+      }
+    ],
+    "frontendTests": 1,
+    "remoteCI": "NOT_YET_RUN",
+    "review": "Self-review; no independent reviewer or customer acceptance",
+    "limitations": [
+      "One foundation module only; no future business-boundary claim",
+      "No account/session, RBAC/ABAC or business feature implementation",
+      "No provider/hardware/customer demo acceptance",
+      "OD-01 remains open for broader choices and auth-specific details; OD-12 venue/tenancy still open"
+    ],
+    "failuresResolved": [
+      "Docker desktop socket absent; explicitly used existing system socket without changing defaults",
+      "Initial architecture test used removed getName API; corrected to getIdentifier",
+      "Sandbox TypeScript subprocess parse failure; production build passed outside sandbox",
+      "Initial ESLint/Next tool chain: 5 high development advisories; selected supported Biome instead; final npm audit 0",
+      "Biome ignore root corrected to existing repository root; configuration migrated using Biome"
+    ],
+    "notRun": [
+      "Remote CI pending publication",
+      "Rendered browser accessibility/responsive audit",
+      "Future business security/concurrency/recovery scenarios",
+      "Customer demonstrations and physical/provider acceptance"
+    ],
+    "negativeControls": [
+      {
+        "case": "Unauthorized auth READY",
+        "result": "REJECTED_AS_EXPECTED"
+      },
+      {
+        "case": "Lost requirement",
+        "result": "REJECTED_AS_EXPECTED"
+      },
+      {
+        "case": "Changed foundation hash",
+        "result": "REJECTED_AS_EXPECTED"
+      }
+    ],
+    "knowledgeChecks": [
+      {
+        "command": "python3 knowledge/validate_design_kb.py",
+        "exitCode": 0
+      },
+      {
+        "command": "python3 knowledge/execution/validate_execution.py",
+        "exitCode": 0
+      },
+      {
+        "command": "git diff --check",
+        "exitCode": 0
+      }
+    ]
   }
 }

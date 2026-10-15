@@ -64,6 +64,12 @@
           "Cloud/provider/hardware selection",
           "Spending/deployment/live operations"
         ]
+      },
+      "foundationQualification": {
+        "status": "LOCAL_BUILD_TEST_VERIFIED",
+        "taskId": "CN-FND-001",
+        "evidencePath": "PROGRESS.md#foundation-implementation",
+        "remainingScope": "Broader cloud/providers/libraries and auth-specific session/revocation decisions remain open; no automatic CN-AUTH-001 readiness"
       }
     },
     {
