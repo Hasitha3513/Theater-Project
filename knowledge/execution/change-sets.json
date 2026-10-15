@@ -223,9 +223,11 @@
       "definitionOfDone": "Owner/scope guards demonstrable; admin policy gaps visible",
       "requiredApproval": "Slice + identity/role/session choices approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "PLANNED",
-      "evidencePaths": [],
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "PROGRESS.md#auth-implementation"
+      ],
       "documentationUpdate": {
         "sourceId": "S15",
         "scope": "Hybrid authorization knowledge update only; existing CN-NFR-02/T-CN-NFR-02 extended, no duplicate task",
@@ -258,7 +260,14 @@
           "scope": "CN-AUTH-001 bounded account/session policy only",
           "status": "APPROVED"
         }
-      ]
+      ],
+      "implementationEvidence": {
+        "taskId": "CN-AUTH-001",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ",
+        "evidencePath": "PROGRESS.md#auth-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-ROOM-001",

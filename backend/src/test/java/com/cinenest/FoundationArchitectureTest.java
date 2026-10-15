@@ -10,7 +10,7 @@ class FoundationArchitectureTest {
     @Test
     void declaredFoundationModuleHasAnEncapsulatedImplementation() {
         var modules = ApplicationModules.of(CineNestApplication.class);
-        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactly("foundation");
+        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity");
         modules.verify();
     }
 
@@ -19,6 +19,13 @@ class FoundationArchitectureTest {
         var classes = new ClassFileImporter().importPackages("com.cinenest.foundation");
         noClasses().that().resideInAPackage("com.cinenest.foundation")
             .should().dependOnClassesThat().resideInAPackage("com.cinenest.foundation.internal")
+            .check(classes);
+    }
+    @Test
+    void publicIdentityApiCannotDependOnPersistenceOrInternalAdapters() {
+        var classes = new ClassFileImporter().importPackages("com.cinenest.identity");
+        noClasses().that().resideInAPackage("com.cinenest.identity")
+            .should().dependOnClassesThat().resideInAnyPackage("com.cinenest.identity.internal..", "org.springframework.jdbc..")
             .check(classes);
     }
 }

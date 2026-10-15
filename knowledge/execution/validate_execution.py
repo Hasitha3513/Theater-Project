@@ -62,12 +62,42 @@ def main():
     check(foundation_evidence.get('authorizationRequestSha256') == 'bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c', 'Foundation owner provenance missing/changed')
     check(foundation_evidence.get('status') == 'VERIFIED_LOCAL_FOUNDATION' and foundation_evidence.get('implementationAuthorization') == 'GRANTED_CN_FND_001_ONLY', 'Foundation authority/evidence missing')
     check(foundation_evidence.get('qualificationStatus') == 'LOCAL_BUILD_TEST_VERIFIED', 'Foundation qualification missing')
+    auth_evidence = state.get('authImplementation', {})
+    check(auth_evidence.get('authorizationRequestSha256') == 'a16002da5ca579ff5693881b6ffe8ac0b45c6e8a45983440bec01faa599d9ac0', 'Auth implementation owner provenance missing')
+    check(auth_evidence.get('status') == 'VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ' and auth_evidence.get('baselineHead') == 'ec355715c1942d060dc58360bded4c1f423a82bc', 'Auth bounded implementation evidence missing')
+    auth_owned = auth_evidence.get('ownedFiles', {})
+    expected_auth_owned = {
+        'backend/pom.xml', 'backend/src/main/java/com/cinenest/foundation/internal/ClosedHttpBoundary.java',
+        'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java',
+        'backend/src/main/java/com/cinenest/identity/package-info.java',
+        'backend/src/main/java/com/cinenest/identity/AccountView.java',
+        'backend/src/main/java/com/cinenest/identity/internal/AccountController.java',
+        'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java',
+        'backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java',
+        'backend/src/main/resources/db/migration/V2__identity_accounts_grants_sessions.sql',
+        'backend/src/test/java/com/cinenest/IdentityIntegrationTest.java',
+        'backend/src/test/java/com/cinenest/SyntheticOidcIssuer.java'}
+    check(set(auth_owned) == expected_auth_owned, 'Auth source inventory changed beyond bounded task')
+    for name, digest in auth_owned.items():
+        check((R / name).is_file() and hashlib.sha256((R / name).read_bytes()).hexdigest() == digest, 'Auth source checksum mismatch ' + name)
+    auth_checks = auth_evidence.get('checks', [])
+    check(len(auth_checks) == 1 and auth_checks[0].get('exitCode') == 0 and auth_checks[0].get('backendTests') == 36
+          and auth_checks[0].get('identityIntegrationTests') == 31 and auth_checks[0].get('architectureTests') == 3
+          and auth_checks[0].get('foundationIntegrationTests') == 2 and auth_checks[0].get('packagedStartup') is True
+          and all(auth_checks[0].get(k) == 0 for k in ['failures','errors','skipped']), 'Auth execution evidence incomplete')
+    check(set(auth_evidence.get('authorizationScenarioMapping', {})) == {'1','2','3','4','5','11','12','6-10,13-18'}
+          and all(v.startswith('PARTIAL:') if k != '6-10,13-18' else v.startswith('NOT_RUN:') for k,v in auth_evidence.get('authorizationScenarioMapping', {}).items()), 'Full future authorization scenarios falsely complete')
+    check(auth_evidence.get('p1') == 'PARTIAL_NOT_ACCEPTED' and auth_evidence.get('d1') == 'NOT_READY_NOT_HELD_NOT_ACCEPTED', 'Auth promoted to phase/demo acceptance')
+    auth_subset = {'taskId':'CN-AUTH-001','status':'VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ','evidencePath':'PROGRESS.md#auth-implementation','fullRequirementVerified':False,'fullRequirementAcceptance':'NOT_ACCEPTED'}
     owned = foundation_evidence.get('ownedFiles', {})
     required_foundation = {'backend/pom.xml', 'backend/mvnw', 'frontend/package-lock.json', 'frontend/package.json', 'scripts/verify-foundation.py', '.github/workflows/foundation.yml'}
     check(required_foundation <= set(owned) and len(owned) == 29, 'Foundation source/build/test inventory missing')
     for name, digest in owned.items():
         path = R / name
-        check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == digest, 'Foundation source checksum mismatch ' + name)
+        # Historical foundation evidence stays immutable. Only explicitly owned auth successors
+        # may differ now; both their current hashes above and original source hashes are checked.
+        data = subprocess.check_output(['git', '-C', str(R), 'show', 'aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15:' + name]) if name in auth_owned else path.read_bytes() if path.is_file() else b''
+        check(path.is_file() and hashlib.sha256(data).hexdigest() == digest, 'Foundation source checksum mismatch ' + name)
     results = foundation_evidence.get('checks', [])
     check(len(results) == 7 and all(c.get('exitCode') == 0 for c in results), 'Foundation verification failure/missing checks')
     check(bool(results) and results[0].get('backendTests') == 4 and results[0].get('packagedStartup') is True and foundation_evidence.get('frontendTests') == 1, 'Foundation executed checks missing')
@@ -102,9 +132,9 @@ def main():
             check(c['dependencies'] == ['CN-DEC-001'] and c['blockingDecisionIds'] == ['OD-01'], 'Foundation dependency/policy edges changed')
             check(c.get('evidencePaths') == ['PROGRESS.md#foundation-implementation'], 'Foundation completion evidence missing')
         elif c['id'] == 'CN-AUTH-001':
-            check(c['authorityAvailable'] is True and c['readiness'] == 'READY' and c['workStatus'] == 'PLANNED', 'Auth readiness promoted beyond approved planned unit')
+            check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED', 'Auth bounded task completion/evidence diverge')
             check(c['dependencies'] == ['CN-FND-001'] and c['blockingDecisionIds'] == [] and c.get('resolvedDecisionIds') == ['OD-12'], 'Auth prerequisite/scope dependency altered')
-            check(c.get('evidencePaths') == [], 'Auth implementation/test evidence invented')
+            check(c.get('evidencePaths') == ['PROGRESS.md#auth-implementation'] and c.get('implementationEvidence') == auth_subset, 'Auth scoped implementation evidence missing')
         elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
@@ -154,10 +184,10 @@ def main():
         else:
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
-    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] == 'CN-AUTH-001' and [c['id'] for c in changes if c['readiness'] == 'READY'] == ['CN-AUTH-001'], 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-FND-001' and state['nextRecommendedChangeSet'] == 'CN-AUTH-001' and state.get('nextReadyChangeSet') == 'CN-AUTH-001', 'Unexpected next checkpoint')
+    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == [], 'Unsupported READY plan')
+    check(state['taskId'] == 'CN-AUTH-001' and state['nextRecommendedChangeSet'] == 'CN-UI-001' and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
     check(state['workStatus'] == cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
-    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_CN_FND_001_ONLY', 'Unsupported stack/implementation approval')
+    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_CN_AUTH_001_ONLY', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
     brief = K / 'ARCHITECTURE.md'
@@ -179,7 +209,7 @@ def main():
                 if key in old:
                     expected_status = 'APPROVED' if id == 'OD-12' and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
                     if id == 'CN-AUTH-001':
-                        expected_status = {'workStatus':'PLANNED','authorityAvailable':True,'readiness':'READY'}.get(key, expected_status)
+                        expected_status = {'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status)
                     check(after.get(id, {}).get(key) == ({'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status) if id == 'CN-FND-001' else expected_status), 'Baseline status changed beyond scoped foundation authority ' + id + '/' + key)
     canonical_map = {e['sourcePath'].removeprefix('knowledge/'): e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] for e in manifest['consolidation']['documents']}
     def migrated(value):
@@ -207,6 +237,7 @@ def main():
                 targets = {'T-' + value for value in targets}
             for row in current_payload[kind]:
                 if row['id'] in targets:
+                    check(row.pop('authImplementationEvidence', None) == auth_subset, 'Bounded auth evidence missing/overstated ' + row['id'])
                     check(row.pop('boundedAuthPolicyApproval', None) == {'taskId':'CN-AUTH-001','canonicalSpecification':'ARCHITECTURE.md#auth-bounded-policy','readiness':'READY','implementationStatus':'NOT_VERIFIED','tests':'NOT_RUN','fullRequirementAcceptance':'NOT_ACCEPTED'}, 'Auth approval conflated with test/requirement completion ' + row['id'])
 
         if path in {'execution/requirements.json', 'execution/test-plan.json'}:
@@ -261,6 +292,9 @@ def main():
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
     prior_changes = json.loads(json.dumps(changes[:-1]))
     auth_task = next(x for x in prior_changes if x['id'] == 'CN-AUTH-001')
+    check(auth_task.pop('implementationEvidence', None) == auth_subset, 'Auth historical/full scope evidence changed')
+    check(auth_task['evidencePaths'] == ['PROGRESS.md#auth-implementation'], 'Auth implementation reference missing')
+    auth_task['evidencePaths'] = []
     auth_policy = auth_task.pop('policyApproval', None)
     check(hashlib.sha256(json.dumps(auth_policy, sort_keys=True).encode()).hexdigest() == '174d165e8369dbbbaf9cb641822462fa26217e4a4ac64c3f8a1a930364821d09', 'Auth task approval/source/historical readiness lost')
     check(auth_task.pop('implementationAuthorization', None) == 'GRANTED_BOUNDED_TASK_ON_READY_PREREQUISITES', 'Auth bounded conditional authority changed')
@@ -332,7 +366,7 @@ def main():
     check(decision_rows in architecture, 'ARCHITECTURE decision projection diverges from authority')
     approval = state.get('od12DecisionUpdate', {})
     check(approval.get('decisionId') == 'OD-12' and approval.get('status') == 'APPROVED_DECISION_ONLY' and approval.get('implementationAuthorization') == 'NOT_GRANTED_BY_THIS_DECISION', 'OD-12 approval promoted to implementation')
-    check(cmap['CN-AUTH-001']['readiness'] == 'READY' and cmap['CN-AUTH-001']['blockingDecisionIds'] == [], 'Auth READY does not match bounded final approval')
+    check(cmap['CN-AUTH-001']['readiness'] == 'CLOSED' and cmap['CN-AUTH-001']['blockingDecisionIds'] == [], 'Auth READY does not match bounded final approval')
     reconciliation = state.get('authReadinessReconciliation', {})
     check(reconciliation.get('requestSha256') == '7411e72e0db40ad99d70ac76c4d2c92876635449376bb9a3203df02a34730945' and reconciliation.get('readiness') == 'READY' and reconciliation.get('implementationStatus') == 'NOT_VERIFIED' and reconciliation.get('sessionScope') == 'DECISION_RECORDING_ONLY', 'Auth readiness reconciliation scope lost/promoted')
     check('<a id="auth-bounded-policy"></a>' in architecture and '<a id="auth-policy-readiness"></a>' in progress, 'Approved auth contract/handoff missing')
@@ -341,7 +375,7 @@ def main():
         check(phrase in project, 'Approved organization requirement missing ' + phrase)
     for number in range(1, 9):
         check(f'AG-AC{number:02d}' in progress, 'Setup acceptance history omitted')
-    check(state.get('requestedTaskId') == 'CN-FND-001' and state.get('stackApprovalUpdate', {}).get('sourceId') == 'S16' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
+    check(state.get('requestedTaskId') == 'CN-AUTH-001' and state.get('stackApprovalUpdate', {}).get('sourceId') == 'S16' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
     check(state.get('stackApprovalUpdate', {}).get('qualificationStatus') == 'PENDING' and state.get('stackApprovalUpdate', {}).get('implementationAuthorization') == 'NOT_GRANTED', 'Approval promoted to qualification/implementation')
     for required in ['<a id="stack-approval"></a>', 'No material incompatibility found', 'compatible, explicitly recorded npm', 'No pre-release dependencies', 'CN-FND-001 implementation **NOT_GRANTED**']:
         check(required in architecture, 'S16 canonical approval condition missing ' + required)

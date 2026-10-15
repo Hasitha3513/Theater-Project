@@ -331,6 +331,13 @@
         "implementationStatus": "NOT_VERIFIED",
         "tests": "NOT_RUN",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "authImplementationEvidence": {
+        "taskId": "CN-AUTH-001",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ",
+        "evidencePath": "PROGRESS.md#auth-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -920,6 +927,13 @@
         "readiness": "READY",
         "implementationStatus": "NOT_VERIFIED",
         "tests": "NOT_RUN",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "authImplementationEvidence": {
+        "taskId": "CN-AUTH-001",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ",
+        "evidencePath": "PROGRESS.md#auth-implementation",
+        "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
@@ -1605,6 +1619,13 @@
         "readiness": "READY",
         "implementationStatus": "NOT_VERIFIED",
         "tests": "NOT_RUN",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "authImplementationEvidence": {
+        "taskId": "CN-AUTH-001",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ",
+        "evidencePath": "PROGRESS.md#auth-implementation",
+        "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },

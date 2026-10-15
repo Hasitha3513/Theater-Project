@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-FND-001",
-  "mode": "BOUNDED_FOUNDATION_IMPLEMENTATION",
+  "taskId": "CN-AUTH-001",
+  "mode": "BOUNDED_IDENTITY_IMPLEMENTATION",
   "workStatus": "VERIFIED",
   "productStage": "FOUNDATION_LOCAL_VERIFIED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
@@ -10,12 +10,12 @@
   "upstream": "origin/main",
   "baselineHead": "4bc627781780d26d8c541768d958b18c3269a88d",
   "baselineWorktree": "CLEAN",
-  "currentChangeSet": "CN-FND-001",
+  "currentChangeSet": "CN-AUTH-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-AUTH-001",
-  "nextAction": "Execute only READY CN-AUTH-001 under existing bounded implementation authorization in a future implementation invocation; this session stops after policy reconciliation",
-  "nextReadyChangeSet": "CN-AUTH-001",
-  "implementationEvidence": "CN-FND-001 local backend/frontend foundation verified; no business/auth/provider implementation",
+  "nextRecommendedChangeSet": "CN-UI-001",
+  "nextAction": "Resolve OD-11 and separately authorize CN-UI-001; no next READY task",
+  "nextReadyChangeSet": null,
+  "implementationEvidence": "CN-FND-001 and bounded CN-AUTH-001 locally verified; full features and P1/customer acceptance remain incomplete",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
@@ -31,7 +31,7 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PUSHED",
+  "publicationState": "PENDING_TASK_PUBLICATION",
   "publicationEvidence": "CN-FND-001 implementation through aa2bb4e pushed to origin/main; full remote CI 38689239097 SUCCESS at that source commit; metadata-only receipt successor resolved from Git",
   "lastObservedHead": "aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15",
   "evidencePath": "PROGRESS.md#foundation-implementation",
@@ -54,7 +54,7 @@
   "verificationScope": "Local backend/frontend foundation, PostgreSQL migration/startup and scoped architecture only; no business/auth/physical/customer acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "GRANTED_CN_FND_001_ONLY",
+  "implementationAuthorization": "GRANTED_CN_AUTH_001_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
     "No remaining owner-policy prerequisite for bounded synthetic/test CN-AUTH-001; deferred production/feature policies retain their existing gates"
@@ -256,7 +256,7 @@
     ],
     "review": "Parent self-review of actual diff, canonical/provenance links, complete payload and unchanged approval comparisons; no independent review claimed this task"
   },
-  "requestedTaskId": "CN-FND-001",
+  "requestedTaskId": "CN-AUTH-001",
   "editorialOutcome": {
     "canonicalFilesReused": 4,
     "newKnowledgeFiles": 0,
@@ -1246,5 +1246,107 @@
     ],
     "review": "Self-review; exact owner bounded policy matched; no application/build/migration/executable test/diagram changes; no new file or requirement/task/decision; all planned tests and acceptance states retained",
     "verifiedAtLocal": "2026-10-15T12:27:44.108316+05:30"
+  },
+  "authImplementation": {
+    "status": "VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ",
+    "authorizationRequestSha256": "a16002da5ca579ff5693881b6ffe8ac0b45c6e8a45983440bec01faa599d9ac0",
+    "authorizationSource": "Owner implementation instruction in conversation, attached 5bdcc8b7-65ac-4c1a-b7bb-33589e5854e1/Pasted text.txt",
+    "baselineHead": "ec355715c1942d060dc58360bded4c1f423a82bc",
+    "baselineWorktree": "CLEAN",
+    "actualRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
+    "evidencePath": "PROGRESS.md#auth-implementation",
+    "ownedFiles": {
+      "backend/pom.xml": "fd3e031c2bc9b2ba2a11750371b03716d373e78f8e8e46d448a64fca5b8d5ba3",
+      "backend/src/main/java/com/cinenest/foundation/internal/ClosedHttpBoundary.java": "a1fa1d2c7f4a2a2520707b130afbe06602ecd2fe14bbe74f9384ac40433c7f4e",
+      "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java": "e7fad6b2ba5ab8bf97b80ede43eb336fd152b53e9e5a938bce566f19773f64f7",
+      "backend/src/main/java/com/cinenest/identity/AccountView.java": "c1b532a2d5defa9c48f877a40927566dd22548ce1014dd3d2302e660ab0ce1cd",
+      "backend/src/main/java/com/cinenest/identity/internal/AccountController.java": "7da4071612e454d980ac761a5b21f200c41ec7918de6f65304d0878c684da583",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "e89d28d024640100b9bccc1674dfaebd683b7ef99069c6660a36e3ebb4cc54ed",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java": "1b0844f578bc500be922b5f7b737f89723c62df7538fece5c6186cfce72174e0",
+      "backend/src/main/java/com/cinenest/identity/package-info.java": "7a966c6affe42e14ba52085f9829cda32657070d08e6d07c7ede7abe79474354",
+      "backend/src/main/resources/db/migration/V2__identity_accounts_grants_sessions.sql": "6794628d83c27062205d473a84808a293592ec8c31f9e9b50f26038e13f1e2c1",
+      "backend/src/test/java/com/cinenest/IdentityIntegrationTest.java": "5f359da8a9630510817fb10b2ad7536de57c905ea22f8dfa049638b21a91a2fa",
+      "backend/src/test/java/com/cinenest/SyntheticOidcIssuer.java": "712538f372e93464212dcd2d967db070eea17f6e98e9f4b22241037d11e57d94"
+    },
+    "dependencyQualification": {
+      "SpringBoot": "4.1.1",
+      "SpringModulith": "2.1.1",
+      "SpringSession": "4.1.1",
+      "SpringSecurity": "7.1.1",
+      "policy": "Boot managed; no version overrides; resolved compile/runtime and real PostgreSQL verified"
+    },
+    "checks": [
+      {
+        "command": "DOCKER_HOST=unix:///var/run/docker.sock python3 scripts/verify-foundation.py",
+        "exitCode": 0,
+        "backendTests": 36,
+        "identityIntegrationTests": 31,
+        "architectureTests": 3,
+        "foundationIntegrationTests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "packagedStartup": true,
+        "postgresql": "18.6 pinned image in existing harness",
+        "evidence": "Maven clean verify and packaged smoke; local ignored .cache/auth-verification.log; CI will independently reproduce"
+      }
+    ],
+    "actualTestPaths": [
+      "backend/src/test/java/com/cinenest/IdentityIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/SyntheticOidcIssuer.java",
+      "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java"
+    ],
+    "authorizationScenarioMapping": {
+      "1": "PARTIAL: account IDOR only; booking/receipt/credential endpoints remain NOT_RUN",
+      "2": "PARTIAL: venue-scoped account read only; future venue mutations remain NOT_RUN",
+      "3": "PARTIAL: account.read plus unrelated grants rejected; actual payment scenario NOT_RUN",
+      "4": "PARTIAL: applicable account.read grant permits read; future business invariants NOT_RUN",
+      "5": "PARTIAL: missing permission/scope denied; public browsing not opened",
+      "11": "PARTIAL: suspension, ineligibility, grant revocation/expiry and removed venue assignment affect next account read; role/policy administration remains NOT_RUN",
+      "12": "PARTIAL: concurrent uncommitted/committed grant update and read tested with PostgreSQL MVCC; sensitive mutations NOT_RUN",
+      "6-10,13-18": "NOT_RUN: future finance/evidence/list/export/service/device/booking/safety/escalation/durable-work/UI endpoints absent"
+    },
+    "securityReview": {
+      "method": "Primary-agent hostile diff review; no independent review claimed",
+      "findingsFixed": [
+        "Invalid/replayed OIDC callback cannot force logout of an existing local session; regression passed",
+        "Expiry fixture corrected to model framework last-access/inactivity expiry, rather than cleanup-only expiry_time",
+        "Authentication audit failure invalidates partially established framework session; outage/recovery regression passed"
+      ],
+      "reviewed": [
+        "IDOR and opaque unknown-ID denial",
+        "single-grant action/venue matching",
+        "trusted target scope",
+        "session fixation, expiry, logout and cross-instance recovery",
+        "CSRF and default-deny routes",
+        "current committed eligibility/grants without positive cache",
+        "minimal DTO, redacted audit and no provider token session persistence",
+        "module-owned migration, API and persistence boundaries"
+      ]
+    },
+    "notRun": [
+      "Live Google/provider qualification",
+      "Frontend checks locally: frontend unchanged",
+      "Production security/timeout/admission/MFA",
+      "All 18 full authorization scenarios",
+      "Customer demonstration or acceptance",
+      "Hardware/finance/production operations"
+    ],
+    "remoteCI": "PENDING_PUBLICATION",
+    "publication": "NOT_YET_COMMITTED",
+    "p1": "PARTIAL_NOT_ACCEPTED",
+    "d1": "NOT_READY_NOT_HELD_NOT_ACCEPTED",
+    "artifactVersionsVerifiedFromPackagedJar": [
+      "spring-security-core-7.1.1.jar",
+      "spring-security-oauth2-client-7.1.1.jar",
+      "spring-session-jdbc-4.1.1.jar"
+    ],
+    "knowledgeChecks": {
+      "designValidator": "PASS",
+      "executionValidator": "PASS",
+      "whitespace": "PASS",
+      "negativeControls": "Four in-memory controls rejected missing implementation provenance, unauthorized UI READY, full CN-NFR-02 verification and full T-CN-NFR-02 pass; no files mutated",
+      "coverage": "92 requirements / 92 test plans / 28 tasks; all IDs, full criteria and approval history preserved"
+    }
   }
 }

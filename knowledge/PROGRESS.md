@@ -9,7 +9,7 @@ Current planning direction is S17; the maintained [MVP roadmap](#mvp-roadmap) ha
 
 S16 initial-stack approval recorded under existing **CN-DEC-001** after comparison with the actual Initial Stack Brief. Starting root repository/, main → origin/main at `bfc4a3ffd49adb0982cd1f88fa8243f2f0956816`, tracked clean; two unrelated untracked mind-map assets remain unchanged/unpublished. Instructions manually read; automatic loading NOT_VERIFIED. No new task/requirement/test/decision ID or knowledge file.
 
-Current [foundation evidence](#foundation-implementation) records authorized CN-FND-001 local implementation/qualification, VERIFIED/CLOSED. CN-DEC-001 remains VERIFIED/CLOSED; CN-AUTH-001 is now READY / PLANNED under the [approved bounded policy](#auth-policy-readiness), with implementation NOT_VERIFIED. OD-01 broader scope remains open; full future plan NOT_APPROVED. No business feature, provider, live operation or customer acceptance is established.
+Current [foundation evidence](#foundation-implementation) records authorized CN-FND-001 local implementation/qualification, VERIFIED/CLOSED. CN-DEC-001 remains VERIFIED/CLOSED; CN-AUTH-001 is VERIFIED/CLOSED for the [bounded synthetic account/session scope](#auth-implementation). OD-01 broader scope remains open; full future plan NOT_APPROVED. No business feature, provider, live operation or customer acceptance is established.
 
 <a id="diagram-publication"></a>
 ## Owner-supplied diagram publication
@@ -51,8 +51,23 @@ Verified publication/CI: implementation source commit `aa2bb4e13a9a7bf4e495c856a
 
 Historical next decision at foundation closeout (now superseded by [bounded auth readiness](#auth-policy-readiness)): OD-12 organization scope is APPROVED; review CN-AUTH-001's applicable exact session/revocation/security policy choices; OD-01 broader providers/libraries stay OPEN. CN-AUTH-001 is not READY merely because foundation passed; do not begin it here.
 
+<a id="auth-implementation"></a>
+## CN-AUTH-001 implemented bounded account/session reads — 2026-10-15
+
+Owner explicitly authorized full recorded CN-AUTH-001 scope in the current conversation attachment; its request SHA-256, starting clean main → origin/main at ec355715c1942d060dc58360bded4c1f423a82bc, exact source hashes/checks and scenario mapping are in existing execution/status.json authImplementation. Actual root remains repository/; no relocation. CN-FND-001 VERIFIED/CLOSED, OD-12 APPROVED and bounded OD-01 policy were verified before edits. Original task IDs/scope/exclusions/DoD/dependencies and all broader decision histories are preserved. Earlier READY/NOT_VERIFIED statements below describe the prior decision-only checkpoint and are superseded for this implemented unit by this section.
+
+Implemented V2 after unchanged V1, Identity module, explicitly associated synthetic OIDC admission, framework JDBC sessions/configured expiry/current-session logout, minimum own account read and trusted single-grant venue-scoped account.read. Exact routes/configuration/schema/security semantics are owned by [ARCHITECTURE](ARCHITECTURE.md#auth-implemented-boundary). No production identity admission, passwords, role bundles, staff provisioning, finance, documents, booking, UI or hardware feature. Auth disabled by default; no secret or production expiry value is committed. Rollback is scoped history-preserving code revert; V2 has only additive module-owned tables. Do not delete persisted data or roll back shared schema without a separate approved data/recovery plan; tests create only disposable owned databases.
+
+Verification: full existing harness clean verify against isolated PostgreSQL 18.6 passed **36 tests: 31 identity integration cases, 3 architecture cases and 2 foundation integration cases**, zero failures/errors/skips, then packaged-JAR startup/HTTP deny smoke passed. V1→V2 upgrade, repeat migration/validation, issuer/audience/expiry/nonce/signature/state rejection, unknown/unassociated/no-email-merge/no-production admission, authentication audit outage/recovery, session fixation/expiry/deletion/logout/CSRF/replay, cross-instance session recovery/invalidation, IDOR/opaque errors, permission/scope mismatch/grant stitching, live suspension/revocation/expiry/reassignment and concurrent committed-state visibility are exercised using real HTTP, signed synthetic OIDC and real PostgreSQL. Audit/DTO/cookie/token redaction assertions pass. First run failed an expiry fixture that changed cleanup expiry_time alone; fixture now sets last_access_time too, matching framework expiry. No failure hidden or test excluded. Hostile self-review fixed forged/replayed callback logout of an existing valid session and retains regression; no independent reviewer claimed. Frontend unchanged, so local frontend checks not rerun; full CI outcome/publication recorded separately after push.
+
+Existing 18 authorization scenarios: **partial executable account-read coverage for 1–5, 11–12**; payment/booking/receipt/credential examples in those scenarios are not passed. Scenarios 6–10 and 13–18 remain NOT_RUN, as do full feature scopes for all 18. Future finance/evidence/list/export/service/device/mutation/safety/escalation/durable-work/UI endpoints are absent. Existing CN-C02/CN-A06/CN-NFR-02 and T-* records retain full-feature NOT_VERIFIED/NOT_RUN/NOT_ACCEPTED and add scoped evidence instead of falsely claiming completion. No requirement/task/test/decision IDs added or dropped.
+
+CN-AUTH-001 DoD met for the bounded unit: owner/scope guards demonstrable and administrative policy gaps explicit; VERIFIED/CLOSED. P1 remains PARTIAL/NOT_ACCEPTED: P1-C02–C05 gain scoped evidence but stay unchecked for broader boundaries/durable work/admin authentication/full authorization; P1-C06 needs shared UI. P0 remains 6/8 preparation, overall 7/74 criteria; accepted phases 0, demos held/accepted 0. D0 remains prepared DESIGN ONLY; **D1 NOT_READY** because working catalog/admin/shared shell are missing. No customer demonstration held or accepted. Colorful Mermaid source updated; missing HTML not recreated. Next candidate CN-UI-001 is BLOCKED by OD-11 and explicit slice authority, so no next READY implementation is asserted. Stop after this task.
+
 <a id="auth-policy-readiness"></a>
 ## CN-AUTH-001 final bounded policy approval / readiness — 2026-10-15
+
+Historical decision-only checkpoint; current implementation evidence is [above](#auth-implementation).
 
 Verified actual nested root `/home/hasitha-wijerathna/Documents/Theater Project/repository`, main → origin/main, baseline `3c582a2c13768637432319dbda6c50bc148df95b`, clean. CN-FND-001 is VERIFIED/CLOSED with qualified local/remote evidence; OD-12 is APPROVED. Migration head remains V1__foundation_namespace.sql, HTTP remains deny-all. Prior owner conditional CN-AUTH-001 implementation authorization exists; current owner expressly approves the final bounded policy contract but limits this session to decision recording. Request SHA-256 and source are in the existing OD-01 record and status.authReadinessReconciliation, not a new source/ADR/report file.
 
@@ -170,7 +185,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-GATE-001 | 1 | Source and accountable policy gate brief | CN-AGENT-SETUP-001 | BLOCKED / BLOCKED |
 | CN-FND-001 | 1 | Selected-stack repository skeleton and CI | CN-DEC-001 | VERIFIED / CLOSED |
 | CN-UI-001 | 2 | Shared shell and token consumers | CN-FND-001 | BLOCKED / BLOCKED |
-| CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | PLANNED / READY |
+| CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | VERIFIED / CLOSED |
 | CN-ROOM-001 | 2 | Catalog and scoped room configuration | CN-AUTH-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-001 | 3 | Package drafts and scoped editor | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-002 | 3 | Immutable package publication/applicability | CN-PKG-001 | BLOCKED / BLOCKED |
@@ -220,9 +235,9 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-AUTH-001 READY: synthetic/test scope only<br/>Other feature/production gates remain"]
+  G["CN-AUTH-001 VERIFIED: synthetic/test scope only<br/>Other feature/production gates remain"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
-  P1["P1 Foundation/access<br/>Foundation locally VERIFIED; auth READY / UI BLOCKED<br/>NOT_ACCEPTED"]
+  P1["P1 Foundation/access<br/>Foundation + bounded auth VERIFIED; UI BLOCKED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>W3-4 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>W5-6 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>W7-8 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -308,15 +323,15 @@ Current status: partial preparation, readiness BLOCKED. Next: resolve root colli
 Goal/outcome: Make a clean checkout build and start with protected identity/session flows and demonstrated ownership/venue denial. Timing: Illustrative weeks 1–2. Depends on P0. Responsible roles: Engineering, security, QA/UI; all named owners/reviewers TBD. Presentation dependency: P0; actual task dependencies below override phase-number assumptions. Blocking decisions: applicable OD-01/03/05/18/28 and auth slice authority; OD-12 approved, foundation complete.
 
 - [x] **P1-C01** Approved versions qualified and reproducible builds established. — Req: CN-NFR-03; tests: T-CN-NFR-03; tasks: CN-ACCEPT-001, CN-FND-001, CN-REPORT-001. Evidence: LOCAL_FOUNDATION_VERIFIED reproducible backend/frontend builds and isolated PostgreSQL; foundation-implementation.
-- [ ] **P1-C02** Modular boundaries, persistence ownership, and meaningful ports established. — Req: CN-NFR-02, CN-NFR-03; tests: T-CN-NFR-02, T-CN-NFR-03; tasks: CN-ACCEPT-001, CN-ADMIN-001, CN-AUTH-001, CN-FND-001, CN-GATE-001, CN-REPORT-001, CN-VERIFY-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P1-C03** Initial feature migrations, session storage, and durable-work foundations implemented. — Req: CN-NFR-02, CN-NFR-03; tests: T-CN-NFR-02, T-CN-NFR-03; tasks: CN-ACCEPT-001, CN-ADMIN-001, CN-AUTH-001, CN-FND-001, CN-GATE-001, CN-REPORT-001, CN-VERIFY-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P1-C04** Configured sign-in, sessions, logout, and approved admin authentication implemented. — Req: CN-C02, CN-A06; tests: T-CN-A06, T-CN-C02; tasks: CN-ADMIN-001, CN-AUTH-001, CN-VERIFY-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P1-C05** Initial scoped RBAC + ABAC and negative authorization tests implemented. — Req: CN-NFR-02; tests: T-CN-NFR-02; tasks: CN-ACCEPT-001, CN-ADMIN-001, CN-AUTH-001, CN-GATE-001, CN-VERIFY-001. Evidence: NOT_RUN / no current acceptance evidence.
+- [ ] **P1-C02** Modular boundaries, persistence ownership, and meaningful ports established. — Req: CN-NFR-02, CN-NFR-03; tests: T-CN-NFR-02, T-CN-NFR-03; tasks: CN-ACCEPT-001, CN-ADMIN-001, CN-AUTH-001, CN-FND-001, CN-GATE-001, CN-REPORT-001, CN-VERIFY-001. Evidence: BOUNDED_AUTH_VERIFIED account/session subset only; auth-implementation; broader criterion NOT_VERIFIED / NOT_ACCEPTED.
+- [ ] **P1-C03** Initial feature migrations, session storage, and durable-work foundations implemented. — Req: CN-NFR-02, CN-NFR-03; tests: T-CN-NFR-02, T-CN-NFR-03; tasks: CN-ACCEPT-001, CN-ADMIN-001, CN-AUTH-001, CN-FND-001, CN-GATE-001, CN-REPORT-001, CN-VERIFY-001. Evidence: BOUNDED_AUTH_VERIFIED account/session subset only; auth-implementation; broader criterion NOT_VERIFIED / NOT_ACCEPTED.
+- [ ] **P1-C04** Configured sign-in, sessions, logout, and approved admin authentication implemented. — Req: CN-C02, CN-A06; tests: T-CN-A06, T-CN-C02; tasks: CN-ADMIN-001, CN-AUTH-001, CN-VERIFY-001. Evidence: BOUNDED_AUTH_VERIFIED account/session subset only; auth-implementation; broader criterion NOT_VERIFIED / NOT_ACCEPTED.
+- [ ] **P1-C05** Initial scoped RBAC + ABAC and negative authorization tests implemented. — Req: CN-NFR-02; tests: T-CN-NFR-02; tasks: CN-ACCEPT-001, CN-ADMIN-001, CN-AUTH-001, CN-GATE-001, CN-VERIFY-001. Evidence: BOUNDED_AUTH_VERIFIED account/session subset only; auth-implementation; broader criterion NOT_VERIFIED / NOT_ACCEPTED.
 - [ ] **P1-C06** Shared UI shell, design tokens, accessibility baseline, CI, and isolated demo environment established. — Req: PR-UI-001, CN-NFR-01; tests: T-CN-NFR-01, T-PR-UI-001; tasks: CN-ACCEPT-001, CN-DEC-001, CN-UI-001. Evidence: NOT_RUN / no current acceptance evidence.
 
 - [ ] **P1-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: A clean checkout builds and starts. Representative identity/session, ownership, and cross-venue denial tests pass with evidence.
 
-Current status: PARTIAL; CN-FND-001 locally VERIFIED/CLOSED, identity/session READY/PLANNED and NOT_VERIFIED, shared UI still BLOCKED/NOT_VERIFIED; P1 NOT_ACCEPTED. Next: resolve the owning auth/UI decisions and authorization before those tasks; do not infer whole-phase completion from foundation.
+Current status: PARTIAL; CN-FND-001 and bounded CN-AUTH-001 VERIFIED/CLOSED, shared UI BLOCKED/NOT_VERIFIED; P1 NOT_ACCEPTED. Next: OD-11 and separate CN-UI-001 slice authority; no READY task. See auth-implementation for scoped evidence and remaining scenarios.
 
 <a id="roadmap-p2"></a>
 #### P2. Venues, Packages And Customer Discovery
@@ -585,7 +600,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-GATE-001 | P0 | CN-AGENT-SETUP-001 | BLOCKED / BLOCKED |
 | CN-FND-001 | P1 | CN-DEC-001 | VERIFIED / CLOSED |
 | CN-UI-001 | P1 | CN-FND-001 | BLOCKED / BLOCKED |
-| CN-AUTH-001 | P1 | CN-FND-001 | PLANNED / READY |
+| CN-AUTH-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
 | CN-ROOM-001 | P2 | CN-AUTH-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-001 | P2 | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-002 | P2 | CN-PKG-001 | BLOCKED / BLOCKED |
@@ -873,4 +888,4 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: execute only READY CN-AUTH-001 in a future implementation invocation under the existing bounded authorization and approved account/session policy.** This session is decision recording only; no code/tests run or implementation inferred. Foundation is VERIFIED/CLOSED, OD-12 APPROVED, and OD-01’s bounded auth policy scope is approved; unrelated feature/production decisions and customer acceptance remain at their actual gates. See [readiness evidence](#auth-policy-readiness).
+**Exact next action: resolve OD-11 and separately authorize the existing CN-UI-001 slice. No next task is READY.** CN-AUTH-001 is VERIFIED/CLOSED for its bounded synthetic scope; see [actual evidence](#auth-implementation). P1, full product requirements and D1 remain incomplete; no further implementation in this session.
