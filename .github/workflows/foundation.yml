@@ -12,10 +12,15 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Fetch exact Temurin archive (setup-java v5 cannot parse four-part patch strings)
+        run: |
+          curl --fail --location --retry 3 'https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_linux_hotspot_25.0.4.1_1.tar.gz' --output "$RUNNER_TEMP/cinenest-jdk.tar.gz"
+          echo 'dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e  '"$RUNNER_TEMP/cinenest-jdk.tar.gz" | sha256sum --check --strict
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
-          distribution: temurin
-          java-version: '25.0.4.1+1'
+          distribution: jdkfile
+          java-version: '25' # Cache label only: archive URL/checksum pins 25.0.4.1+1 exactly
+          jdkFile: ${{ runner.temp }}/cinenest-jdk.tar.gz
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version-file: frontend/.node-version

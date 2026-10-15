@@ -944,7 +944,7 @@
     "atLocal": "2026-10-15T11:00:07.990613+05:30",
     "evidencePath": "PROGRESS.md#foundation-implementation",
     "ownedFiles": {
-      ".github/workflows/foundation.yml": "7c0882e22b0d603d3b3a21a5d08bb81621903cbb1bb2ffc8a0d4c586c85a0a6a",
+      ".github/workflows/foundation.yml": "a87117844ddaeee9c3fbf5e7dbcf4ab202638cfeb50c1e5e064b8b3d94e7e8ca",
       ".gitignore": "1887d372ea3606b8c02fa2b175bec1e3e3372a32d22263a9a1c993dd50628435",
       "backend/.mvn/wrapper/maven-wrapper.properties": "9e702bcd7e68ba1cace0a3382a7082e6e1e1b321688a7a3fbf4d5ae7eb0af533",
       "backend/mvnw": "cae96cef89ebea3531221f4ae17c23cf8edf67d00eae8306d4186ae1bbed4d02",
@@ -1037,7 +1037,7 @@
       }
     ],
     "frontendTests": 1,
-    "remoteCI": "NOT_YET_RUN",
+    "remoteCI": "FAILED_INITIAL_SETUP_JAVA_VERSION_PARSER; FIX_PENDING_RUN",
     "review": "Self-review; no independent reviewer or customer acceptance",
     "limitations": [
       "One foundation module only; no future business-boundary claim",
@@ -1051,7 +1051,8 @@
       "Sandbox TypeScript subprocess parse failure; production build passed outside sandbox",
       "Initial ESLint/Next tool chain: 5 high development advisories; selected supported Biome instead; final npm audit 0",
       "Biome ignore root corrected to existing repository root; configuration migrated using Biome",
-      "Publication preflight: ignored tsbuildinfo removed from evidence inventory (never committed); generated Windows wrapper CRLF normalized to LF; sequential checked publication steps enforced before push"
+      "Publication preflight: ignored tsbuildinfo removed from evidence inventory (never committed); generated Windows wrapper CRLF normalized to LF; sequential checked publication steps enforced before push",
+      "Initial remote CI setup-java v5 rejected four-part Java patch; switch to checksum-pinned exact same JDK archive via supported jdkfile install"
     ],
     "notRun": [
       "Remote CI pending publication",
@@ -1085,6 +1086,16 @@
       {
         "command": "git diff --check",
         "exitCode": 0
+      }
+    ],
+    "ciRuns": [
+      {
+        "runId": 38687499707,
+        "headSha": "bdf85958b7849edf35207abeeed2514f83aefb85",
+        "conclusion": "failure",
+        "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38687499707",
+        "failure": "setup-java v5 rejects four-part 25.0.4.1+1 SemVer; build steps never ran",
+        "correction": "Official exact Temurin archive with verified SHA-256, supported jdkfile installer; no runtime downgrade"
       }
     ]
   }

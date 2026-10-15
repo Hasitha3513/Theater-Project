@@ -43,6 +43,8 @@ Acceptance: recorded local skeleton/reproducible build/test DoD met; CN-FND-001 
 
 Self-review only. Existing validators must preserve every historical requirement/task/dependency/proposal and allow only this request-hashed scoped successor; new code hashes and bounded status guards added, not broad permission for later work. No browser-rendered accessibility audit, business authorization/concurrency/recovery tests, providers, hardware or customer acceptance run. Rollback is a normal scoped Git revert; temporary test services are cleaned by the runner, with no live data migration to undo.
 
+Remote CI first run [38687499707](https://github.com/Hasitha3513/Theater-Project/actions/runs/38687499707) at bdf8595 failed before builds: setup-java v5 rejected four-part version string 25.0.4.1+1. Correction pins the exact official Temurin archive and its SHA-256, using supported jdkfile installation with major-version cache label; no runtime downgrade or floating download. Replacement run outcome is tracked separately in existing status.foundationImplementation.
+
 Single next decision: resolve CN-AUTH-001's actual OD-12 single-organization/venue versus SaaS-tenancy scope and applicable exact session/revocation/security policy choices; OD-01 broader providers/libraries stay OPEN. CN-AUTH-001 is not READY merely because foundation passed; do not begin it here.
 
 <a id="root-relocation-inspection"></a>
