@@ -6,6 +6,7 @@ This document owns technology proposals, module/data/API and integration design,
 
 ## Navigation
 
+- [Technical delivery gates](#delivery-gates)
 - [Technology](#technology)
 - [System Architecture](#system-architecture)
 - [Data Api](#data-api)
@@ -572,3 +573,19 @@ Status separation: CN-DEC-001 brief VERIFIED/CLOSED and published; initial techn
 **CN-FND-001 — Selected-stack repository skeleton and CI** retains its exact registry scope: “Only approved local project/module skeleton, safe build/test and scoped CI definition after stack selection.” S16 satisfies initial direction approval only. See the actual [foundation prerequisite review](PROGRESS.md#foundation-prerequisites): owned paths, environment/tool permissions, qualified supported patches and complete resolved dependency/build/test acceptance still require refinement and separate explicit implementation authorization. No business feature/provider/cloud/physical effect is included. OD-01 broader choices and CN-GATE-001 affected-policy/source gates remain open; no other task executed.
 
 Current result: initial direction approval recorded; **qualification PENDING**, **implementation NOT_GRANTED**, **next READY unit NONE**. Single next action: owner explicitly authorizes the bounded CN-FND-001 skeleton/CI scope and its reviewed environment/acceptance conditions. Stop here.
+
+<a id="delivery-gates"></a>
+## Technical delivery gates and roadmap dependencies
+
+[S17 roadmap](PROGRESS.md#mvp-roadmap) is owner-requested presentation, not an accepted implementation sequence. Preserve S16-approved initial stack direction, pending exact qualification and separately unauthorized foundation. Modular-monolith direction is approved; meaningful hexagonal module interfaces, module-owned persistence and durable-work designs remain recommended technical approaches until implemented/verified. ER concepts never establish actual tables. Original task dependencies remain authoritative; [phase/task conflicts](PROGRESS.md#mvp-roadmap) require explicit scope/sequence refinement rather than dropping prerequisites.
+
+| Delivery gate | Existing decisions and evidence needed |
+|---|---|
+| P0 → P1 | OD-01 supported stable complete dependency qualification and actual CN-FND-001 authority; initial session/admin/role/cookie/revocation decisions OD-03/05/12/18/28; local tooling/CI ownership and acceptance scope |
+| Before P3 | OD-09/10/17/19/20/21/22 quote/hold/minimum/closing/cleaning/holiday/amendment rules; transaction/concurrency and immutable purchase tests, not arbitrary frontend values |
+| Before P4/P6 | OD-03/05/23–29 evidence/privacy, bank hours/deadlines/fees/account changes, independent review/limits/refund destination; manual receiving-bank evidence and durable financial recovery |
+| Start P0, close before P7/P8 acceptance | OD-02/03/04/13 actual lock/controller/installation/check-in/offline/revoke/egress and accountable responders/cleaning; simulators cannot close physical gates |
+| Define early, verify by P9 | OD-11/16 and OM-06 chart DTO mapping, currency/time/populations; owner-agreed performance/browser/a11y/recovery targets and real database/replay/scope tests |
+| Before P10 | OD-02–07/14/15/28/29 applicable privacy/rights/merchant/physical/provider/financial readiness, named operational cover and separate production go/no-go/pilot authority |
+
+Cross-module policy checks must use owning interfaces, not shared foreign repositories; durable work does not make external payment/notification/device effects atomic. Test these constraints throughout slices, not only P9. CN-NOTIFY/CN-CUSTOMER/CN-AMEND dependencies and simulation-only task scopes conflict with some illustrative phase dates; maintain blockers and obtain amendments, never claim all phase deliverables fit one existing task. Unnamed accountable owners and qualification gaps stay unresolved.

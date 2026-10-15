@@ -8,6 +8,7 @@ Users include customers/bookers, booking/room operators, identity reviewers, ban
 
 ## Navigation
 
+- [MVP scope](#mvp-scope)
 - [Actors and access](#authorization-requirements)
 - [Features](#features)
 - [Business Rules](#business-rules)
@@ -494,3 +495,10 @@ Within Payments (request/evidence/verified bank credit/allocation/review/refund/
 
 ### Open decisions and source limits
 OD-23–29 in [decision register](ARCHITECTURE.md#open-decisions) track lead/payment/submission/review/hold validity, time basis, fee treatment, upload/retention, matching/allocation/top-ups, roles/account/refund thresholds and operational-delay staffing. All owners TBD. Suggested 24 hours and gateway hold candidates are not bank defaults. Original PDFs missing and not rewritten; no banking/provider/legal claim inferred. Core USER-CONFIRMED does not approve every supporting proposal or imply implementation. [ADR-004](ARCHITECTURE.md#adr-004) records the gateway-only wording correction and separate financial state semantics.
+
+<a id="mvp-scope"></a>
+## MVP scope and customer demonstration responsibilities
+
+S17 requests phased delivery planning, not product execution authority. [PROGRESS P0–P10](PROGRESS.md#mvp-roadmap) owns74 planning criteria, one delivery-home projection for all92 canonical requirements and links to their existing test/task IDs. Preserve27 features and detailed business/package/bank rules above. Approved core remains hybrid visuals, editable packages and bank-review capability; other target functionality retains its existing draft/recommended status. Loyalty/referrals/promotions and advanced engagement remain visible/UNDECIDED under OD-08, not silently excluded. Approved-deferred scope: none recorded. A proposed one-venue/representative-room pilot is not scope reduction or evidence multi-venue isolation is unnecessary.
+
+Customer outcomes progress from discovery/versioned offers through valid inventory/quotes, eligibility, independently verified money, amendments/refunds, timed access, safe physical turnaround, truthful reporting and supported handover. [D0–D6](PROGRESS.md#customer-demonstrations) reviews happen during development, with held and accepted scope recorded independently. Product/owner and customer reviewers must be assigned for each scoped acceptance; finance and qualified physical/safety reviewers remain separate responsibilities, all named people TBD. No invitation, agreed meeting date, staffing commitment or completed demonstration is established. Planned tests/design artifacts cannot meet acceptance until actual evidence exists.

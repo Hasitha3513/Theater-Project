@@ -1021,7 +1021,13 @@
       "continuationAuthorization": "Current attached owner request; simplify existing canonical documents, no deletion/code/stack approval",
       "continuationAuthorizationSource": "S13",
       "removalAuthorizationSource": "S14",
-      "removalStatus": "VERIFIED"
+      "removalStatus": "VERIFIED",
+      "roadmapMaintenance": {
+        "authorizationSource": "S17",
+        "scope": "Canonical phased MVP roadmap/checklist/demo maintenance only; no phase execution authority",
+        "status": "VERIFIED_DOCUMENTATION_ONLY",
+        "evidencePath": "PROGRESS.md#mvp-roadmap"
+      }
     }
   ]
 }

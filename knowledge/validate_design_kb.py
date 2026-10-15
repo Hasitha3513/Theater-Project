@@ -339,7 +339,7 @@ def validate_expansion(check, tokens, specs):
             path = ROOT / source['path']
             check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256'], f'Source mismatch {source["id"]}')
         else:
-            check(source['availability'] == 'MISSING' or (source.get('id') in {'S12', 'S13', 'S14', 'S15', 'S16'} and source['availability'] == 'CONVERSATION' and source.get('kind') == 'user-conversation-authorization' and bool(source.get('scope'))), f'Unverified source location {source["id"]}')
+            check(source['availability'] == 'MISSING' or (source.get('id') in {'S12', 'S13', 'S14', 'S15', 'S16', 'S17'} and source['availability'] == 'CONVERSATION' and source.get('kind') == 'user-conversation-authorization' and bool(source.get('scope'))), f'Unverified source location {source["id"]}')
     features = parsed['product/cinenest-feature-catalog.json']['features']
     ids = [f['id'] for f in features]
     check(len(ids) == len(set(ids)), 'Duplicate feature IDs')
@@ -386,7 +386,7 @@ def validate_expansion(check, tokens, specs):
         check(c['decisionStatus'] in decisions and c['implementationStatus'] == 'NOT_VERIFIED', f'Chart status {c["id"]}')
         check(set(c['sourceIds']) <= source_ids, f'Chart sources {c["id"]}')
     manifest = parsed['manifest.json']
-    check(manifest['kbVersion'] == '1.6.1' and manifest['baselineKbVersion'] == '1.6.0', 'Consolidation KB version/baseline mismatch')
+    check(manifest['kbVersion'] == '1.7.0' and manifest['baselineKbVersion'] == '1.6.1', 'Consolidation KB version/baseline mismatch')
     check(manifest['chartSpecVersion'] == specs['version'] == '1.2.0', 'Chart version mismatch')
     check(manifest['designTokenVersion'] == tokens['version'] == '1.0.0', 'Design-token version mismatch')
     actual = {p.relative_to(ROOT).as_posix() for p in ROOT.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.relative_to(ROOT).as_posix() not in UNMANAGED_WORKSPACE_ASSETS}

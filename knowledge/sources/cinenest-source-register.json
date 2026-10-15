@@ -119,6 +119,15 @@
       "scope": "Owner approval of matching initial technology direction only; exact qualification pending; no foundation/security implementation, policy/provider/cloud/hardware/live authorization",
       "recordedDate": "2026-10-14",
       "requestSha256": "a9ebfde302bb4cc67d9a6b516f106c61a6862232dfff93d440f4348b126c3fea"
+    },
+    {
+      "id": "S17",
+      "availability": "CONVERSATION",
+      "kind": "user-conversation-authorization",
+      "taskId": "CN-KB-CONSOLIDATE-001",
+      "scope": "Owner-requested P0\u2013P10 planning/checklists/D0\u2013D6 demo process and graphical maintenance only; no execution/policy/provider/hardware/live authority; preserve actual S16 approval",
+      "recordedDate": "2026-10-15",
+      "requestSha256": "be62084f7c5ae2323fefb535f76831f4fea6c2d772a9a2151b4a1ba931ac9f46"
     }
   ]
 }

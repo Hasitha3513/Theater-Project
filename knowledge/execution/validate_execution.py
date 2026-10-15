@@ -127,8 +127,8 @@ def main():
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
     check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None, 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-DEC-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
-    check(state['workStatus'] == cmap['CN-DEC-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'BLOCKED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
+    check(state['taskId'] == 'CN-KB-CONSOLIDATE-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
+    check(state['workStatus'] == cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'BLOCKED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
     check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
@@ -202,15 +202,17 @@ def main():
     check(prior_changes == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001' and changes[-1].get('aliases') == ['CN-KB-CONSOLIDATION-001'] and changes[-1].get('continuationAuthorizationSource') == 'S13', 'Existing backlog content lost/altered')
     old_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
     current_sources = json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']
-    check(current_sources[:-5] == old_sources and [x['id'] for x in current_sources[-5:]] == ['S12', 'S13', 'S14', 'S15', 'S16'], 'Prior source evidence lost/altered')
+    check(current_sources[:-6] == old_sources and [x['id'] for x in current_sources[-6:]] == ['S12', 'S13', 'S14', 'S15', 'S16', 'S17'], 'Prior source evidence lost/altered')
     removal_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', manifest['consolidation']['removalBaselineRevision'] + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
-    check(current_sources[:-3] == removal_sources, 'Consolidation/editorial approval history changed')
+    check(current_sources[:-4] == removal_sources, 'Consolidation/editorial approval history changed')
     removal = manifest['consolidation']['removalAuthorization']
     check(manifest['consolidation']['status'] == 'COMPLETE_OWNER_APPROVED_REMOVAL' and state.get('removalOutcome', {}).get('status') == 'VERIFIED', 'Removal completion/status mismatch')
     check(state.get('removalOutcome', {}).get('deletedFiles') == len(manifest['consolidation']['documents']) and state.get('removalOutcome', {}).get('retainedExceptions') == [], 'Removal outcome/count inconsistent')
-    check(current_sources[-3].get('requestSha256') == removal['requestSha256'] and current_sources[-3].get('scope') == removal['scope'], 'S14 approval provenance/scope diverges')
-    check(hashlib.sha256(json.dumps(current_sources[-2], sort_keys=True).encode()).hexdigest() == 'bd5c27afa50fafa8e4b1bff49946ffe1fc467665c055baf5785001a5e2e009f7', 'S15 owner direction/scope provenance changed')
-    check(hashlib.sha256(json.dumps(current_sources[-1], sort_keys=True).encode()).hexdigest() == '90019c67e0d2864accc21fa918d76fcb52ff364c789f0a4026123498277ae35c', 'S16 owner approval provenance changed')
+    check(current_sources[-4].get('requestSha256') == removal['requestSha256'] and current_sources[-4].get('scope') == removal['scope'], 'S14 approval provenance/scope diverges')
+    check(hashlib.sha256(json.dumps(current_sources[-3], sort_keys=True).encode()).hexdigest() == 'bd5c27afa50fafa8e4b1bff49946ffe1fc467665c055baf5785001a5e2e009f7', 'S15 owner direction/scope provenance changed')
+    check(hashlib.sha256(json.dumps(current_sources[-2], sort_keys=True).encode()).hexdigest() == '90019c67e0d2864accc21fa918d76fcb52ff364c789f0a4026123498277ae35c', 'S16 owner approval provenance changed')
+    check(hashlib.sha256(json.dumps(current_sources[-1], sort_keys=True).encode()).hexdigest() == '875be64d3ec278c5ec8a9cec24a3e7e586e1100ffab90417d1f64fffaca9f8d4', 'S17 planning authority/scope changed')
+    check(hashlib.sha256(json.dumps(changes[-1].get('roadmapMaintenance'), sort_keys=True).encode()).hexdigest() == '42b7eff46c72c78c5faad65c88b12971235b3c63961552d7e9e81400952400f9', 'Roadmap maintenance promoted beyond documentation authority')
     auth = (K / 'ARCHITECTURE.md').read_text()
     for required in ['Finance Reviewer grant at Venue A', 'No Cartesian product', 'mandatory global restrictions', 'An unset required limit is not unlimited', 'accepted operation', 'CN-NFR-02', 'NOT_VERIFIED', 'raw PINs']:
         check(required.lower() in auth.lower(), 'Authorization specification missing ' + required)
@@ -240,11 +242,63 @@ def main():
     check(decision_rows in architecture, 'ARCHITECTURE decision projection diverges from authority')
     for number in range(1, 9):
         check(f'AG-AC{number:02d}' in progress, 'Setup acceptance history omitted')
-    check(state.get('requestedTaskId') == 'CN-DEC-001' and state.get('stackApprovalUpdate', {}).get('sourceId') == 'S16' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
+    check(state.get('requestedTaskId') == 'CN-KB-CONSOLIDATE-001' and state.get('stackApprovalUpdate', {}).get('sourceId') == 'S16' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
     check(state.get('stackApprovalUpdate', {}).get('qualificationStatus') == 'PENDING' and state.get('stackApprovalUpdate', {}).get('implementationAuthorization') == 'NOT_GRANTED', 'Approval promoted to qualification/implementation')
     for required in ['<a id="stack-approval"></a>', 'No material incompatibility found', 'compatible, explicitly recorded npm', 'No pre-release dependencies', 'CN-FND-001 implementation **NOT_GRANTED**']:
         check(required in architecture, 'S16 canonical approval condition missing ' + required)
     check('<a id="foundation-prerequisites"></a>' in progress and 'Selected-stack repository skeleton and CI' in progress, 'Actual foundation scope review missing')
+    roadmap = progress.split('<a id="mvp-roadmap"></a>', 1)[-1].split('<!-- mvp-roadmap-end -->', 1)[0]
+    check(progress.count('<a id="mvp-roadmap"></a>') == 1 and progress.count('<!-- mvp-roadmap-end -->') == 1, 'Roadmap duplicated/missing')
+    criteria = re.findall(r'^- \[([ x])\] \*\*(P(\d+)-C(\d{2}))\*\* (.*?) — Req: (.*?); tests: (.*?); tasks: (.*?)\. Evidence: (.*?)\.$', roadmap, re.M)
+    expected_counts = [8, 6, 6, 6, 8, 6, 6, 6, 7, 8, 7]
+    expected_ids = [f'P{i}-C{j:02d}' for i, count in enumerate(expected_counts) for j in range(1, count+1)]
+    check([row[1] for row in criteria] == expected_ids, '74 planning criteria missing/duplicated/renumbered')
+    grouped = [[row[4] for row in criteria if int(row[2]) == i] for i in range(11)]
+    roadmap_meta = manifest['roadmapMaintenance']
+    check(hashlib.sha256(json.dumps(grouped, sort_keys=True).encode()).hexdigest() == roadmap_meta['checklistSha256'], 'Owner planning criterion wording lost/changed')
+    check(roadmap_meta['templateCriterionCount'] == 74 and roadmap_meta['phaseIds'] == ['P'+str(i) for i in range(11)] and roadmap_meta['demonstrationIds'] == ['D'+str(i) for i in range(7)], 'Phase/demo identities changed')
+    graph = re.search(r'```mermaid\n(.*?)\n```', roadmap, re.S)
+    check(graph is not None, 'Graphical roadmap missing')
+    if graph:
+        graph_nodes = re.findall(r'^  (\w+)\[', graph[1], re.M)
+        check(graph_nodes == ['G'] + ['P'+str(i) for i in range(11)] + ['D'+str(i) for i in range(7)], 'Roadmap graph phase/demo source nodes diverge')
+        check('P0 --> P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7 --> P8 --> P9 --> P10' in graph[1], 'Illustrative roadmap dependency chain omitted')
+    req_by_id = {r['id']: r for r in reqs}
+    checked = []
+    criterion_requirements = {}
+    for box, cid, number, seq, wording, req_text, test_text, task_text, evidence in criteria:
+        rset = set(req_text.split(', ')); tset = set(test_text.split(', ')); cset = set(task_text.split(', '))
+        check(bool(rset) and rset <= set(rids) and tset <= set(tids) and cset <= set(cids), 'Roadmap orphan mapping ' + cid)
+        if rset <= set(rids):
+            check(tset == {tid for rid in rset for tid in req_by_id[rid]['testIds']} and cset == {task for rid in rset for task in req_by_id[rid]['changeSetIds']}, 'Criterion mapping differs from authority ' + cid)
+        criterion_requirements[cid] = rset
+        if box == 'x':
+            checked.append(cid)
+            check(number == '0' and 'DOC_VERIFIED' in evidence, 'Implementation checked without actual evidence ' + cid)
+    check(checked == ['P0-C01','P0-C02','P0-C03','P0-C04','P0-C05'], 'Readiness preparation/evidence roll-up changed')
+    check(re.findall(r'^#### P(\d+)\.', roadmap, re.M) == [str(i) for i in range(11)], 'Phase definitions duplicated/missing')
+    gates = re.findall(r'^- \[([ x])\] \*\*(P\d+-ACCEPT)\*\*', roadmap, re.M)
+    check(gates == [(' ', 'P'+str(i)+'-ACCEPT') for i in range(11)], 'Phase accepted without reviewer/evidence/prerequisite closure')
+    demos = re.findall(r'^#### (D\d+) — ', roadmap, re.M)
+    check(demos == ['D'+str(i) for i in range(7)], 'Demonstration definitions missing/duplicated')
+    demo_boxes = re.findall(r'^- \[([ x])\] \*\*(D\d+-(?:HELD|SCOPE-ACCEPTED))\*\*', roadmap, re.M)
+    check(demo_boxes == [(' ', f'D{i}-{kind}') for i in range(7) for kind in ['HELD','SCOPE-ACCEPTED']], 'Demo held/accepted without actual evidence')
+    coverage_rows = re.findall(r'^\| ([^|]+) \| (P\d+-C\d{2}) \| ([^|]+) \| ([^|]+) \| ([^|]+) \|$', roadmap.split('<!-- roadmap:coverage -->',1)[-1].split('<!-- roadmap-end:coverage -->',1)[0], re.M)
+    check([row[0] for row in coverage_rows] == rids, 'Retained requirement delivery-home coverage lost/duplicated')
+    for rid, home, test_text, task_text, evidence in coverage_rows:
+        if rid in req_by_id:
+            check(rid in criterion_requirements.get(home, set()) and test_text.split(', ') == req_by_id[rid]['testIds'] and task_text.split(', ') == req_by_id[rid]['changeSetIds'], 'Requirement home mapping invalid ' + rid)
+    task_section = roadmap.split('<!-- roadmap:tasks -->',1)[-1].split('<!-- roadmap-end:tasks -->',1)[0]
+    task_projection = re.findall(r'^\| (CN-[^|]+) \| (P\d+) \| ([^|]+) \| ([^|]+) \|$', task_section, re.M)
+    check([row[0] for row in task_projection] == cids, 'Existing task roadmap coverage lost/duplicated')
+    for tid, phase, deps, status in task_projection:
+        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == cmap[tid]['workStatus']+' / '+cmap[tid]['readiness'], 'Task dependency/status altered by roadmap ' + tid)
+    state_roadmap = state.get('roadmapMaintenance', {})
+    check(state_roadmap.get('readinessCriteria') == {'checked':5,'total':8,'evidenceClass':'DOC_VERIFIED_ONLY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':5,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
+    check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')
+    for warning in ['illustrative','UNKNOWN/TBD','NOT_HELD','NOT_ACCEPTED','NEEDS_RECHECK','CN-NOTIFY-001 (P5) depends on CN-ACCESS-001 (P7)','HTML','one venue']:
+        check(warning in roadmap, 'Roadmap qualification missing ' + warning)
+    check('MVP phase criteria/blockers' in entry and 'graphical roadmap' in entry and 'No background monitoring' in entry, 'Roadmap closeout instruction missing')
     # Active reference fields must resolve to real canonical sections/assets; historical ledgers stay snapshots.
     def references(value):
         if isinstance(value, dict):

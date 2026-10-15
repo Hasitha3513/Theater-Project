@@ -6,6 +6,7 @@ ADR-001 hybrid direction is APPROVED; detailed page behavior is DOCUMENTED_DRAFT
 
 ## Navigation
 
+- [Roadmap presentation](#roadmap-presentation)
 - [Design System](#design-system)
 - [Admin Pages](#admin-pages)
 - [Customer Pages](#customer-pages)
@@ -888,3 +889,12 @@ See [validation report](PROGRESS.md#feature-validation-history) for evidence and
 - [x] Customer/admin under-review, correction/expiry/amount exceptions and protected bank instruction/evidence UI documented with existing tokens/a11y; claims not collections.
 - [ ] Execute BP-AC01–13 with actual receiving bank records/backend/authorization and hardware outcomes as applicable; notification failure must retain queue work.
 - [ ] Approve review/hold/payment timing/fee/upload/retention/matching/account/refund/staffing choices OD-23–29; no invented 24-hour rule/automatic extension/card token.
+
+<a id="roadmap-presentation"></a>
+## Roadmap and customer-demo presentation
+
+The [maintained roadmap](PROGRESS.md#mvp-roadmap) is planning visualization, distinct from operational analytics/chart contracts. Use existing semantic token colors: neutral gray for planned/unverified, info blue/brand violet for actual active work, warning amber for decisions/evidence review, danger red for blockers, success green only for verified AND accepted gates. Workstream accents can differ while neutral status fills/text remain explicit; a green physical-workstream bar in the supplied preview does not mean completion. Never change centralized tokens/theme or product charts to match a planning export.
+
+Use readable text labels, checklist state and evidence freshness in addition to color; maintain equivalent phase/status and requirement/task tables. Diagram labels wrap, layout scrolls/reflows accessibly with plain text alternatives and zoom; current source is not proof of rendered accessibility. D0 uses marked design-only references; D1/D2 running software/synthetic records, D3 provider sandbox, D4 actual representative hardware, D5 staging/UAT with required physical evidence, D6 separately authorized production pilot. Always label fixtures, simulations and notification test sinks. Show denial, pending/unknown, failure/recovery and scope limitations alongside the happy path using existing approved shell/components.
+
+HTML saved-copy entries must preserve owner notes as proposed state pending review; saved-copy restore, dependency reopening, checkbox roll-ups and section export require isolated browser tests when source exists. No whole-PROGRESS replacement. HTML is unavailable now; external Downloads preview inspected only, not regenerated/imported. No browser/export/interaction or full Mermaid rendering pass claimed. Current textual graph and status table are the maintained graphical source until the supplied HTML can be reconciled.

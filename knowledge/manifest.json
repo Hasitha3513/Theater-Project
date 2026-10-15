@@ -1,13 +1,13 @@
 {
   "schemaVersion": "1.0.0",
-  "kbVersion": "1.6.1",
-  "baselineKbVersion": "1.6.0",
-  "baselineCommit": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
-  "taskId": "CN-DEC-001",
+  "kbVersion": "1.7.0",
+  "baselineKbVersion": "1.6.1",
+  "baselineCommit": "7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
+  "taskId": "CN-KB-CONSOLIDATE-001",
   "recordedDate": "2026-10-14",
   "designTokenVersion": "1.0.0",
   "chartSpecVersion": "1.2.0",
-  "versionRationale": "Record S16 owner initial-stack direction approval in place after scope comparison; no dependency/runtime qualification or foundation authorization",
+  "versionRationale": "Owner-requested P0\u2013P10 roadmap/74 template criteria and D0\u2013D6 demonstration planning in four canonical files; missing HTML explicit, no implementation authority",
   "decisionStatuses": [
     "APPROVED",
     "DOCUMENTED_DRAFT",
@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6062f2dfcfc0f84a27f377e01771cfa5c8f491af1dc9ca3087c6d291e2b1c142",
+      "sha256": "96b805c82f742d4c60507368b1bb4642e3adf216a0d5e68ef7cbb4b55d3f5006",
       "authority": "canonical-prose"
     },
     {
@@ -404,28 +404,28 @@
       "path": "DESIGN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "d9e91e5b471062e3560f2ee9927d8e06080e4402bbcebfdc413f956b00cb9ddc",
+      "sha256": "aca2c6d0b3075207300fb3daafc96804f85879658e31ca1a94b954d1049d8bf2",
       "authority": "canonical-prose"
     },
     {
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "da59defd09027596207710b9e2907d4a8317f50c876d7834320a7beb354ad9b2",
+      "sha256": "2f8b24070512b0b2d58cbf90390fa356864824c4c81378e9ac84a53105d29099",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "d2d601f632b842ca0f21bd2d89f35c4df9d33bdc698e9f6a8554f5be9cb22672",
+      "sha256": "1d3f288517b8535986148209e183f1f49f89838d6e24bdac9aeecfc676d5aac7",
       "authority": "canonical-prose"
     },
     {
       "path": "README.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "8dd5806350a870db5dae1920ef6fd92dde8c0aae2f6792dfc7a4e5c9e8d2609a",
+      "sha256": "164d2549e8941e547987dc801fbc0b1ae48aef1056e2f6badf30f21f9479cc54",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -446,7 +446,7 @@
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e4d99cec6278ac6e030f2d44c6eb8c2756f1891e8a26ecda16e251430bea0341",
+      "sha256": "1e90726967cca7cbc71568751d9f900681700c802526eb70b2e32c5b400d910a",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -537,7 +537,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "a1a64685a19ca48c4187da23fcf3913f5105deaca617d703794d13d955354637",
+      "sha256": "a0a42293566ca3affbb35a60649c5ab15502fb905d372925a21a9b6c7b16cb02",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -551,7 +551,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "35f662c79093bc32ebd9ac981ce952f8adc4b0f84747f9ec2a306ad9fb279b8a",
+      "sha256": "e0f00310b613e93e880689d161946a90eb1a7b7a87b83a71c7982536efaf080c",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -620,7 +620,7 @@
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b01ad9766f7e12b89acb1b1de7a0ab44d74b02bb988751b0ffa1a843369dde47",
+      "sha256": "b1b5a9872ac81633d12ec0ba08739553c492f2d02574cd8b2e44a7f87edc2e80",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -648,7 +648,7 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "be81f9542c654af7c1b0b686119ad5e35af43e3cf9998efb69def2366cbdec17",
+      "sha256": "d25fc7bee00098863983fb04415ef86257d319ed9f9f5be0a5b65539609e1002",
       "authority": "structured-asset-or-evidence"
     }
   ],
@@ -697,6 +697,11 @@
       "kbVersion": "1.6.0",
       "taskId": "CN-AUTH-001",
       "commit": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816"
+    },
+    {
+      "kbVersion": "1.6.1",
+      "taskId": "CN-KB-CONSOLIDATE-001",
+      "commit": "7ad20d42b4551ba07bd5d728a0cbc1d295e65f94"
     }
   ],
   "authorizedDefinitionChanges": {
@@ -759,7 +764,7 @@
   "externalInstructionFiles": [
     {
       "path": "AGENTS.md",
-      "sha256": "de90b6f5d4d84316957388c68545ce3ad3c8904cbcbac3f430246f63ebbb1f86",
+      "sha256": "b2cdf5ec74932ae01fa2596b0f5a03229c19b563fe1ad8edc2a1a6a59a947a28",
       "purpose": "Current root entry; charter consolidated into PROGRESS.md"
     }
   ],
@@ -2704,5 +2709,45 @@
     "CineNest End-to-End Architecture Mind Map.png": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
     "CineNest_E2E_Mind_Map.md": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5"
   },
-  "unmanagedWorkspaceAssets": {}
+  "unmanagedWorkspaceAssets": {},
+  "roadmapMaintenance": {
+    "sourceId": "S17",
+    "baselineRevision": "7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
+    "authority": "PROGRESS.md#mvp-roadmap",
+    "criteriaSource": "Owner request templates; HTML original IDs/notes unavailable",
+    "templateCriterionCount": 74,
+    "phaseIds": [
+      "P0",
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6",
+      "P7",
+      "P8",
+      "P9",
+      "P10"
+    ],
+    "demonstrationIds": [
+      "D0",
+      "D1",
+      "D2",
+      "D3",
+      "D4",
+      "D5",
+      "D6"
+    ],
+    "htmlAvailability": "MISSING",
+    "previewSource": {
+      "path": "/home/hasitha-wijerathna/Downloads/CineNest_MVP_Roadmap_Preview.png",
+      "availability": "EXTERNAL_PREVIEW_ONLY",
+      "sha256": "154328d7dfed88bc3dabba24f7518222efeb8e7e7f6623f4c1ef58675b9846d2",
+      "renderRegenerated": false,
+      "inspectedDate": "2026-10-15"
+    },
+    "checklistSha256": "0998cfa36ec81cfa3db6786666116d206a1a56b709347d5b71668840304cc80d",
+    "graphRefreshDate": "2026-10-15",
+    "previewRefresh": "NOT_PERFORMED_HTML_MISSING"
+  }
 }

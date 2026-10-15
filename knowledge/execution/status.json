@@ -1,16 +1,16 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-DEC-001",
-  "mode": "OWNER_STACK_APPROVAL_RECORD",
+  "taskId": "CN-KB-CONSOLIDATE-001",
+  "mode": "ROADMAP_KNOWLEDGE_MAINTENANCE",
   "workStatus": "VERIFIED",
   "productStage": "PRE_IMPLEMENTATION",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
-  "baselineWorktree": "TWO_UNRELATED_UNTRACKED_ASSETS_PRESERVED",
-  "currentChangeSet": "CN-DEC-001",
+  "baselineHead": "7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
+  "baselineWorktree": "CLEAN",
+  "currentChangeSet": "CN-KB-CONSOLIDATE-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": null,
   "nextAction": "Owner resolves parent knowledge historical-copy disposition and empty read-only .git collision before root relocation; no move performed",
@@ -31,11 +31,11 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PUSHED",
-  "publicationEvidence": "S16 initial-stack approval record 0bc10a1f9059df97cb6dbbf233f42af03285abf9 pushed to origin/main and independently matched by git ls-remote exit0; exact qualification pending and implementation not granted; in-place closeout successor resolved from Git.",
+  "publicationState": "NOT_YET_PUBLISHED_ROADMAP",
+  "publicationEvidence": "S17 roadmap documentation update not yet published; previous receipts retained",
   "lastObservedHead": "0bc10a1f9059df97cb6dbbf233f42af03285abf9",
-  "evidencePath": "PROGRESS.md#stack-approval-update",
-  "evidenceFreshness": "Current S16 approval baseline bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
+  "evidencePath": "PROGRESS.md#mvp-roadmap",
+  "evidenceFreshness": "2026-10-15 roadmap reconciliation against 7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -256,7 +256,7 @@
     ],
     "review": "Parent self-review of actual diff, canonical/provenance links, complete payload and unchanged approval comparisons; no independent review claimed this task"
   },
-  "requestedTaskId": "CN-DEC-001",
+  "requestedTaskId": "CN-KB-CONSOLIDATE-001",
   "editorialOutcome": {
     "canonicalFilesReused": 4,
     "newKnowledgeFiles": 0,
@@ -692,5 +692,139 @@
       "atLocal": "2026-10-14T23:51:33.631814+05:30",
       "worktreeAfterPrimaryPush": "CLEAN"
     }
+  },
+  "roadmapMaintenance": {
+    "sourceId": "S17",
+    "taskId": "CN-KB-CONSOLIDATE-001",
+    "status": "VERIFIED_DOCUMENTATION_ONLY",
+    "evidencePath": "PROGRESS.md#mvp-roadmap",
+    "readinessCriteria": {
+      "checked": 5,
+      "total": 8,
+      "evidenceClass": "DOC_VERIFIED_ONLY",
+      "accepted": false
+    },
+    "planningCriteria": {
+      "checked": 5,
+      "total": 74,
+      "overallEffortPercentage": null
+    },
+    "acceptedDeliveryPhases": 0,
+    "deliveryPhaseTotal": 10,
+    "demonstrationsHeld": 0,
+    "demonstrationScopesAccepted": 0,
+    "demonstrationTotal": 7,
+    "implementationAuthorization": "NOT_GRANTED",
+    "htmlAvailability": "MISSING",
+    "previewAvailability": "EXTERNAL_PREVIEW_ONLY",
+    "sourceBaseline": "7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
+    "actualProjectRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
+    "nextAction": "Owner resolves root-collision disposition; no READY implementation task; separately refine/authorize foundation after readiness",
+    "checks": [
+      {
+        "argv": [
+          "python3",
+          "knowledge/validate_design_kb.py"
+        ],
+        "atLocal": "2026-10-15T09:21:04.014017+05:30",
+        "exitCode": 0,
+        "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 source destinations/retained substantive content; exact approved removals, immutable historical originals, complete registry payloads and anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/execution/validate_execution.py"
+        ],
+        "atLocal": "2026-10-15T09:21:04.222595+05:30",
+        "exitCode": 0,
+        "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "atLocal": "2026-10-15T09:21:04.228961+05:30",
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/validate_design_kb.py"
+        ],
+        "atLocal": "2026-10-15T09:22:44.231068+05:30",
+        "exitCode": 0,
+        "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 source destinations/retained substantive content; exact approved removals, immutable historical originals, complete registry payloads and anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/execution/validate_execution.py"
+        ],
+        "atLocal": "2026-10-15T09:22:44.440718+05:30",
+        "exitCode": 0,
+        "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "atLocal": "2026-10-15T09:22:44.448007+05:30",
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--cached",
+          "--check"
+        ],
+        "atLocal": "2026-10-15T09:23:49.939319+05:30",
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      }
+    ],
+    "negativeControls": {
+      "result": "PASS",
+      "method": "In-memory Path.read_text injection; no file/browser state modified",
+      "cases": [
+        "Lost criterion",
+        "Unsupported phase acceptance",
+        "False demo held",
+        "Missing requirement coverage",
+        "Altered dependency projection",
+        "Lost PK-AC01 source criterion",
+        "Altered canonical security acceptance",
+        "Unauthorized foundation authority",
+        "Downgraded S16 approval"
+      ],
+      "historicalTransientScripts": "Not present; corresponding current-validator core cases reconstructed and executed"
+    },
+    "notRun": [
+      "HTML checkbox/restore/reopening/section-export/responsive interactions: HTML source missing",
+      "Full Mermaid syntax/rendering: no local renderer; structural nodes/chain and token references checked",
+      "Application/provider/hardware/customer acceptance: implementation unauthorized/absent"
+    ],
+    "review": "Parent self-review: original requirements/tests/decisions and 49 diagrams byte-identical; all mapping/acceptance/dependency guards preserved; prepared-source boxes distinct from phase/customer acceptance",
+    "publicationState": "STAGED_VALIDATED"
+  },
+  "previousExecutionContextBeforeRoadmap": {
+    "taskId": "CN-DEC-001",
+    "mode": "OWNER_STACK_APPROVAL_RECORD",
+    "baselineHead": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
+    "requestedTaskId": "CN-DEC-001",
+    "publicationEvidence": "S16 initial-stack approval record 0bc10a1f9059df97cb6dbbf233f42af03285abf9 pushed to origin/main and independently matched by git ls-remote exit0; exact qualification pending and implementation not granted; in-place closeout successor resolved from Git."
   }
 }
