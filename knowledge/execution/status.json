@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "NOT_YET_PUBLISHED_ROADMAP",
-  "publicationEvidence": "S17 roadmap documentation update not yet published; previous receipts retained",
-  "lastObservedHead": "0bc10a1f9059df97cb6dbbf233f42af03285abf9",
+  "publicationState": "PUSHED",
+  "publicationEvidence": "S17 MVP roadmap maintenance commit ed67d0274049f49f24dafeed00b8193bf20b7513 pushed to origin/main and independently matched by git ls-remote exit0; receipt successor updates existing records only, no phase execution/acceptance claim",
+  "lastObservedHead": "ed67d0274049f49f24dafeed00b8193bf20b7513",
   "evidencePath": "PROGRESS.md#mvp-roadmap",
   "evidenceFreshness": "2026-10-15 roadmap reconciliation against 7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
   "availableTools": [
@@ -818,7 +818,16 @@
       "Application/provider/hardware/customer acceptance: implementation unauthorized/absent"
     ],
     "review": "Parent self-review: original requirements/tests/decisions and 49 diagrams byte-identical; all mapping/acceptance/dependency guards preserved; prepared-source boxes distinct from phase/customer acceptance",
-    "publicationState": "STAGED_VALIDATED"
+    "publicationState": "PUSHED",
+    "publicationReceipt": {
+      "primaryCommit": "ed67d0274049f49f24dafeed00b8193bf20b7513",
+      "verifiedRemote": "ed67d0274049f49f24dafeed00b8193bf20b7513",
+      "destination": "origin/main",
+      "pushExitCode": 0,
+      "remoteCheckExitCode": 0,
+      "atLocal": "2026-10-15T09:27:34.664387+05:30",
+      "observedWorktree": "CLEAN"
+    }
   },
   "previousExecutionContextBeforeRoadmap": {
     "taskId": "CN-DEC-001",
