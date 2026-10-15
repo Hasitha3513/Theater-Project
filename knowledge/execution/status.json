@@ -876,5 +876,61 @@
     "baselineHead": "bfc4a3ffd49adb0982cd1f88fa8243f2f0956816",
     "requestedTaskId": "CN-DEC-001",
     "publicationEvidence": "S16 initial-stack approval record 0bc10a1f9059df97cb6dbbf233f42af03285abf9 pushed to origin/main and independently matched by git ls-remote exit0; exact qualification pending and implementation not granted; in-place closeout successor resolved from Git."
+  },
+  "demoPreparation": {
+    "milestone": "D0",
+    "evidenceClass": "DESIGN ONLY",
+    "source": "Current owner conversation: prepare and locally rehearse next eligible customer demonstration",
+    "sourceBaseline": "c6a42956291ecb455b6a2929597c36f4fa11ab6b",
+    "prepared": true,
+    "rehearsalLevel": "DOCUMENT_NAVIGATION_AND_SCRIPT_CONSISTENCY_ONLY",
+    "held": false,
+    "accepted": false,
+    "presenter": null,
+    "customerReviewer": null,
+    "proposedDate": null,
+    "evidencePath": "PROGRESS.md#customer-demonstrations",
+    "applicationBuild": "NOT_APPLICABLE",
+    "checks": [
+      {
+        "check": "D0 source navigation, anchors, requirement mapping, negative/recovery scenario and all demo signoff boxes",
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/validate_design_kb.py"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/execution/validate_execution.py"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      }
+    ],
+    "notRun": [
+      "Timed spoken presentation",
+      "Rendered browser or Mermaid rehearsal",
+      "Application/provider/hardware tests",
+      "Customer meeting/signoff"
+    ],
+    "implementationStatusChanged": false,
+    "review": "Self-review only; script navigation/consistency verified, no timed or rendered presentation/customer review",
+    "rehearsedAtLocal": "2026-10-15T10:26:53.174307+05:30"
   }
 }
