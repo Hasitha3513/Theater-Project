@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-KB-CONSOLIDATE-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": null,
-  "nextAction": "Owner resolves parent knowledge historical-copy disposition and empty read-only .git collision before root relocation; no move performed",
+  "nextAction": "Owner explicitly selects root-correction-first or relocation deferral, then separately authorizes bounded CN-FND-001 paths/environment/qualification; no READY implementation task",
   "nextReadyChangeSet": null,
   "implementationEvidence": "No application manifests/code/tests/CI; all catalog features NOT_VERIFIED",
   "approvedCoreDecisions": [
@@ -560,6 +560,47 @@
       "atLocal": "2026-10-14T17:42:26.069392+05:30",
       "trackedWorktree": "CLEAN_AFTER_PRIMARY_PUSH",
       "unrelatedUntrackedFiles": 2
+    },
+    "ownerReaffirmation": {
+      "dateLocal": "2026-10-15",
+      "source": "Current owner conversation: OWNER STACK APPROVAL and version-selection policy",
+      "canonicalReference": "ARCHITECTURE.md#stack-approval",
+      "scopeComparison": "MATCHED_S16_BOUNDED_DIRECTION",
+      "qualificationStatus": "PENDING",
+      "implementationAuthorization": "NOT_GRANTED",
+      "dependencyChanges": false,
+      "p0CheckboxChanges": false,
+      "checks": [
+        {
+          "argv": [
+            "python3",
+            "knowledge/validate_design_kb.py"
+          ],
+          "exitCode": 0,
+          "result": "PASS",
+          "atLocal": "2026-10-15T10:04:28.015012+05:30"
+        },
+        {
+          "argv": [
+            "python3",
+            "knowledge/execution/validate_execution.py"
+          ],
+          "exitCode": 0,
+          "result": "PASS",
+          "atLocal": "2026-10-15T10:04:28.220731+05:30"
+        },
+        {
+          "argv": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exitCode": 0,
+          "result": "PASS",
+          "atLocal": "2026-10-15T10:04:28.226612+05:30"
+        }
+      ],
+      "review": "Self-review: only approval reaffirmation, actual root/blocker clarification and proposed scope sequencing; no dependencies, approvals, checkbox or implementation statuses promoted."
     }
   },
   "rootRelocationInspection": {
