@@ -71,6 +71,7 @@ def main():
     results = foundation_evidence.get('checks', [])
     check(len(results) == 7 and all(c.get('exitCode') == 0 for c in results), 'Foundation verification failure/missing checks')
     check(bool(results) and results[0].get('backendTests') == 4 and results[0].get('packagedStartup') is True and foundation_evidence.get('frontendTests') == 1, 'Foundation executed checks missing')
+    check(foundation_evidence.get('remoteCI') == 'SUCCESS' and any(run.get('runId') == 38689239097 and run.get('headSha') == 'aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15' and run.get('conclusion') == 'success' for run in foundation_evidence.get('ciRuns', [])), 'Verified source-commit CI receipt lost/promoted')
     foundation_subset = {'taskId':'CN-FND-001','evidencePath':'PROGRESS.md#foundation-implementation','status':'FOUNDATION_SUBSET_ONLY','fullRequirementVerified':False}
 
     cids = [x['id'] for x in changes]; rids = [x['id'] for x in reqs]; tids = [x['id'] for x in tests]
@@ -234,7 +235,7 @@ def main():
     prerequisite = foundation.pop('prerequisiteEvidence', None)
     check(hashlib.sha256(json.dumps(prerequisite, sort_keys=True).encode()).hexdigest() == '06daec5b97345a591adc27d4403fb205e2b07f4cbdb94eedea10fff76289819f', 'Foundation qualification/authority prerequisites changed')
     implementation = foundation.pop('implementationEvidence', None)
-    check(implementation == {'status':'VERIFIED_LOCAL_FOUNDATION','authorizationRequestSha256':'bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c','evidencePath':'PROGRESS.md#foundation-implementation','remoteCI':'NOT_YET_RUN'}, 'Foundation scoped implementation record changed')
+    check(implementation == {'status':'VERIFIED_LOCAL_FOUNDATION','authorizationRequestSha256':'bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c','evidencePath':'PROGRESS.md#foundation-implementation','remoteCI':'SUCCESS','remoteCIReference':'execution/status.json#foundationImplementation'}, 'Foundation scoped implementation record changed')
     historical_foundation = next(x for x in old_backlog['changeSets'] if x['id'] == 'CN-FND-001')
     check(foundation['affectedFilesModules'] == 'backend/, frontend/, scripts/verify-foundation.py, .github/workflows/foundation.yml; scoped knowledge closeout', 'Foundation owned scope changed')
     for field in ['authorityAvailable','readiness','workStatus','evidencePaths','affectedFilesModules']:

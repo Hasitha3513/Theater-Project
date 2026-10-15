@@ -163,7 +163,8 @@
         "status": "VERIFIED_LOCAL_FOUNDATION",
         "authorizationRequestSha256": "bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c",
         "evidencePath": "PROGRESS.md#foundation-implementation",
-        "remoteCI": "NOT_YET_RUN"
+        "remoteCI": "SUCCESS",
+        "remoteCIReference": "execution/status.json#foundationImplementation"
       }
     },
     {

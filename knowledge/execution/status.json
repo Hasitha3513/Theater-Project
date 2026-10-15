@@ -33,8 +33,8 @@
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
   "publicationState": "PUSHED",
-  "publicationEvidence": "Foundation commits through dc13a55 pushed to origin/main; remote CI result tracked separately in foundationImplementation; final closeout successor resolved from Git",
-  "lastObservedHead": "dc13a55573c666aa824c67b9e1c7d7afb61202d8",
+  "publicationEvidence": "CN-FND-001 implementation through aa2bb4e pushed to origin/main; full remote CI 38689239097 SUCCESS at that source commit; metadata-only receipt successor resolved from Git",
+  "lastObservedHead": "aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15",
   "evidencePath": "PROGRESS.md#foundation-implementation",
   "evidenceFreshness": "2026-10-15 foundation closeout; exact checks/versions in foundationImplementation",
   "availableTools": [
@@ -992,7 +992,7 @@
       "tailwindAndPostcss": "4.3.3",
       "biome": "2.5.15",
       "junit": "6.0.3 Boot-managed",
-      "ciJava": "Temurin 25.0.4.1+1; remote execution not yet verified"
+      "ciJava": "Temurin 25.0.4.1+1 exact archive/checksum; verified by remote CI 38689239097"
     },
     "checks": [
       {
@@ -1038,7 +1038,7 @@
       }
     ],
     "frontendTests": 1,
-    "remoteCI": "PENDING_FULL_HISTORY_RETRY",
+    "remoteCI": "SUCCESS",
     "review": "Self-review; no independent reviewer or customer acceptance",
     "limitations": [
       "One foundation module only; no future business-boundary claim",
@@ -1057,7 +1057,6 @@
       "Second remote run: backend/frontend passed, immutable-baseline knowledge checks failed on shallow checkout; CI now fetches history instead of weakening validator"
     ],
     "notRun": [
-      "Remote CI pending publication",
       "Rendered browser accessibility/responsive audit",
       "Future business security/concurrency/recovery scenarios",
       "Customer demonstrations and physical/provider acceptance"
@@ -1107,7 +1106,21 @@
         "passed": "Java/Node setup, backend build/tests/PostgreSQL/packaged startup, frontend clean install/build/type/lint/smoke/audit",
         "failure": "Knowledge validator immutable baseline commit absent in default shallow checkout",
         "correction": "fetch-depth: 0; no historical validation removed"
+      },
+      {
+        "runId": 38689239097,
+        "headSha": "aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15",
+        "conclusion": "success",
+        "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38689239097",
+        "passed": "Exact Temurin/Node setup; 4 backend tests, PostgreSQL migration/packaged startup; frontend build/type/lint/1 smoke test/audit; both knowledge validators and whitespace"
       }
-    ]
+    ],
+    "publicationReceipt": {
+      "destination": "origin/main",
+      "verifiedImplementationCommit": "aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15",
+      "remoteCI": "SUCCESS",
+      "runId": 38689239097,
+      "receiptSuccessor": "Metadata-only closeout; resolve its final SHA from Git"
+    }
   }
 }
