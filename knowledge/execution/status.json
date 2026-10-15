@@ -3,12 +3,12 @@
   "taskId": "CN-AUTH-001",
   "mode": "BOUNDED_IDENTITY_IMPLEMENTATION",
   "workStatus": "VERIFIED",
-  "productStage": "FOUNDATION_LOCAL_VERIFIED",
+  "productStage": "FOUNDATION_AND_BOUNDED_AUTH_VERIFIED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "4bc627781780d26d8c541768d958b18c3269a88d",
+  "baselineHead": "ec355715c1942d060dc58360bded4c1f423a82bc",
   "baselineWorktree": "CLEAN",
   "currentChangeSet": "CN-AUTH-001",
   "futurePlanApproval": "NOT_APPROVED",
@@ -31,10 +31,10 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PENDING_TASK_PUBLICATION",
+  "publicationState": "PUSHED",
   "publicationEvidence": "CN-FND-001 implementation through aa2bb4e pushed to origin/main; full remote CI 38689239097 SUCCESS at that source commit; metadata-only receipt successor resolved from Git",
-  "lastObservedHead": "aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15",
-  "evidencePath": "PROGRESS.md#foundation-implementation",
+  "lastObservedHead": "7fc0f62fa3db7b29f8be289f73b57d01809bf14a",
+  "evidencePath": "PROGRESS.md#auth-implementation",
   "evidenceFreshness": "2026-10-15 foundation closeout; exact checks/versions in foundationImplementation",
   "availableTools": [
     "exec/file reads/edits",
@@ -45,13 +45,13 @@
     "Git remote network requires sandbox escalation"
   ],
   "notRunChecks": [
-    "Future auth/business endpoint security/concurrency/recovery scenarios; no owning feature implemented",
-    "Rendered browser accessibility/responsive audit",
-    "Provider/bank/hardware/safety/business/deployment and customer acceptance"
+    "Full 18 authorization scenarios beyond the bounded account-read mapping; future owning endpoints absent",
+    "Rendered browser accessibility/responsive/TLS/SameSite audit",
+    "Live provider/bank/hardware/safety/business/deployment and customer acceptance"
   ],
   "omissionRegister": "execution/omissions.json",
   "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
-  "verificationScope": "Local backend/frontend foundation, PostgreSQL migration/startup and scoped architecture only; no business/auth/physical/customer acceptance",
+  "verificationScope": "Bounded synthetic identity/session and owner/venue account read; local and remote PostgreSQL/backend/frontend/KB checks; no full product, live provider, physical or customer acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
   "implementationAuthorization": "GRANTED_CN_AUTH_001_ONLY",
@@ -1332,8 +1332,17 @@
       "Customer demonstration or acceptance",
       "Hardware/finance/production operations"
     ],
-    "remoteCI": "PENDING_PUBLICATION",
-    "publication": "NOT_YET_COMMITTED",
+    "remoteCI": "SUCCESS",
+    "publication": {
+      "status": "PUSHED_VERIFIED",
+      "implementationCommit": "7fc0f62fa3db7b29f8be289f73b57d01809bf14a",
+      "message": "feat(identity): establish scoped account sessions and reads",
+      "destination": "origin refs/heads/main",
+      "verifiedRemoteSha": "7fc0f62fa3db7b29f8be289f73b57d01809bf14a",
+      "files": 19,
+      "worktreeAfterImplementationPush": "CLEAN",
+      "receiptSuccessor": "Documentation-only receipt commit; resolve final HEAD and remote SHA from Git"
+    },
     "p1": "PARTIAL_NOT_ACCEPTED",
     "d1": "NOT_READY_NOT_HELD_NOT_ACCEPTED",
     "artifactVersionsVerifiedFromPackagedJar": [
@@ -1347,6 +1356,23 @@
       "whitespace": "PASS",
       "negativeControls": "Four in-memory controls rejected missing implementation provenance, unauthorized UI READY, full CN-NFR-02 verification and full T-CN-NFR-02 pass; no files mutated",
       "coverage": "92 requirements / 92 test plans / 28 tasks; all IDs, full criteria and approval history preserved"
+    },
+    "ciRuns": [
+      {
+        "runId": 38699715108,
+        "headSha": "7fc0f62fa3db7b29f8be289f73b57d01809bf14a",
+        "conclusion": "success",
+        "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38699715108",
+        "completedAt": "2026-10-15T07:36:39Z",
+        "scope": "Full backend/PostgreSQL/packaged startup, unchanged frontend verification, knowledge and whitespace"
+      }
+    ],
+    "previousFoundationCurrentFields": {
+      "baselineHead": "4bc627781780d26d8c541768d958b18c3269a88d",
+      "lastObservedHead": "aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15",
+      "verificationScope": "Local backend/frontend foundation, PostgreSQL migration/startup and scoped architecture only; no business/auth/physical/customer acceptance",
+      "productStage": "FOUNDATION_LOCAL_VERIFIED",
+      "evidencePath": "PROGRESS.md#foundation-implementation"
     }
   }
 }

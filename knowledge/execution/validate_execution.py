@@ -88,6 +88,12 @@ def main():
     check(set(auth_evidence.get('authorizationScenarioMapping', {})) == {'1','2','3','4','5','11','12','6-10,13-18'}
           and all(v.startswith('PARTIAL:') if k != '6-10,13-18' else v.startswith('NOT_RUN:') for k,v in auth_evidence.get('authorizationScenarioMapping', {}).items()), 'Full future authorization scenarios falsely complete')
     check(auth_evidence.get('p1') == 'PARTIAL_NOT_ACCEPTED' and auth_evidence.get('d1') == 'NOT_READY_NOT_HELD_NOT_ACCEPTED', 'Auth promoted to phase/demo acceptance')
+    if auth_evidence.get('remoteCI') == 'SUCCESS':
+        check(any(run.get('runId') == 38699715108 and run.get('headSha') == '7fc0f62fa3db7b29f8be289f73b57d01809bf14a'
+                  and run.get('conclusion') == 'success' for run in auth_evidence.get('ciRuns', [])), 'Auth source CI receipt missing')
+        for name, digest in auth_owned.items():
+            source = subprocess.check_output(['git', '-C', str(R), 'show', '7fc0f62fa3db7b29f8be289f73b57d01809bf14a:' + name])
+            check(hashlib.sha256(source).hexdigest() == digest, 'Auth CI source does not match current evidence ' + name)
     auth_subset = {'taskId':'CN-AUTH-001','status':'VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ','evidencePath':'PROGRESS.md#auth-implementation','fullRequirementVerified':False,'fullRequirementAcceptance':'NOT_ACCEPTED'}
     owned = foundation_evidence.get('ownedFiles', {})
     required_foundation = {'backend/pom.xml', 'backend/mvnw', 'frontend/package-lock.json', 'frontend/package.json', 'scripts/verify-foundation.py', '.github/workflows/foundation.yml'}

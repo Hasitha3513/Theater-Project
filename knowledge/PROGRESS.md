@@ -64,6 +64,8 @@ Existing 18 authorization scenarios: **partial executable account-read coverage 
 
 CN-AUTH-001 DoD met for the bounded unit: owner/scope guards demonstrable and administrative policy gaps explicit; VERIFIED/CLOSED. P1 remains PARTIAL/NOT_ACCEPTED: P1-C02–C05 gain scoped evidence but stay unchecked for broader boundaries/durable work/admin authentication/full authorization; P1-C06 needs shared UI. P0 remains 6/8 preparation, overall 7/74 criteria; accepted phases 0, demos held/accepted 0. D0 remains prepared DESIGN ONLY; **D1 NOT_READY** because working catalog/admin/shared shell are missing. No customer demonstration held or accepted. Colorful Mermaid source updated; missing HTML not recreated. Next candidate CN-UI-001 is BLOCKED by OD-11 and explicit slice authority, so no next READY implementation is asserted. Stop after this task.
 
+Verified implementation publication: `7fc0f62fa3db7b29f8be289f73b57d01809bf14a` (`feat(identity): establish scoped account sessions and reads`) pushed to origin/main; independent remote SHA matched, worktree clean. [GitHub Actions 38699715108](https://github.com/Hasitha3513/Theater-Project/actions/runs/38699715108) completed SUCCESS, including real PostgreSQL/backend tests/packaged startup, frontend verification, both knowledge validators and whitespace. This receipt successor changes only existing knowledge/status validation metadata; final receipt SHA/remote state are resolved from Git. No additional task or acceptance follows.
+
 <a id="auth-policy-readiness"></a>
 ## CN-AUTH-001 final bounded policy approval / readiness — 2026-10-15
 
