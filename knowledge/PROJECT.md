@@ -15,6 +15,13 @@ Users include customers/bookers, booking/room operators, identity reviewers, ban
 - [Package Management](#package-management)
 - [Bank Payments](#bank-payments)
 
+<a id="organization-scope"></a>
+## Approved MVP organization scope — OD-12
+
+Owner decision 2026-10-15: **SINGLE-ORGANIZATION WITH VENUE-SCOPED AUTHORIZATION**. CineNest serves one operating business organization with one or more cinema venues. Customers, employees, administrators, finance reviewers, verification personnel and operations staff belong to this CineNest organization; customers are not tenants. Roles/permissions may differ by venue. Protected bookings, receipts and access credentials require ownership and applicable venue/resource authority. Permission and scope must match an applicable grant: finance at Venue A plus operations at Venue B never creates finance at Venue B. A system administrator label cannot bypass financial, evidence-access or independent physical-safety controls.
+
+The MVP has no tenant subscriptions/billing/Super Admin product, holding-company hierarchy, organization signup/self-service provisioning, per-tenant databases/schemas, speculative tenant_id propagation, cross-organization sharing rules or tenant-aware infrastructure without another approved requirement. Venue IDs remain business authorization attributes. Future SaaS tenancy requires a separate evidence-backed architecture/product decision; avoid gratuitous coupling without adding speculative abstractions. [ARCHITECTURE](ARCHITECTURE.md#organization-scope) owns technical boundaries; existing OD-12 registry preserves the original question, current owner approval and NOT_VERIFIED implementation. This decision does not approve exact role bundles, limits, revocation/privacy policies or CN-AUTH-001 implementation.
+
 <a id="authorization-requirements"></a>
 ## Actors and access requirements
 

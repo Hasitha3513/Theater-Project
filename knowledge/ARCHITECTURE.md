@@ -19,6 +19,13 @@ This document owns technology proposals, module/data/API and integration design,
 - [Open Decisions](#open-decisions)
 - [Initial Stack Brief](#initial-stack-brief)
 
+<a id="organization-scope"></a>
+### OD-12 approved organization and venue boundary
+
+Owner decision 2026-10-15 selects **SINGLE-ORGANIZATION WITH VENUE-SCOPED AUTHORIZATION**, exactly matching OD-12's “Venue-scoped single organization vs explicit future tenant isolation” question. [PROJECT](PROJECT.md#organization-scope) owns the product scope; the existing OD-12 record owns approval provenance and retained historical context. Venue/resource IDs are business authorization attributes, not tenant boundaries. One CineNest operating organization may have multiple venues and venue-specific grants. Evaluate permission and target scope within an applicable grant; never combine unrelated grants. Customer ownership remains mandatory for private bookings/receipts/credentials; system administration supplies no implicit finance/evidence/physical-safety bypass.
+
+No tenant subscriptions, tenant billing, tenant-level Super Admin product, holding-company hierarchy, organization signup/provisioning, per-tenant databases/schemas, speculative tenant_id propagation, cross-organization sharing or tenant-aware infrastructure without another approved requirement. Keep meaningful module interfaces and opaque IDs without speculative tenant abstractions. SaaS tenancy is deferred unless a separate owner decision supported by real business requirements changes the product model. Actual isolation enforcement and tests remain NOT_VERIFIED/NOT_RUN. Exact role bundles, session/revocation/privacy and high-risk approval policies remain at OD-01/03/05/18/28 as applicable; this decision authorizes no code.
+
 <a id="technology"></a>
 ## Technology
 
@@ -105,6 +112,8 @@ Arrows express permitted integration flows, not deployed infrastructure. Object 
 Modules use stable commands/queries/events through published interfaces; no direct mutation of another module’s tables or import of its persistence entities. Reservation-critical writes stay within Booking with immutable references to approved quotes/decisions/payment facts; accept a capture fact once, then transactionally guard inventory. External side effects use an outbox/durable work coordinator with durable failure state and compensating actions. A committed purchase is not silently rewritten when a downstream service fails.
 
 Each module documents ownership, invariant tests, transaction scope, safe event payload and capability checks before implementation. Shared IDs/time/money/envelopes are contracts, not a shared catch-all domain module. [Data contracts](ARCHITECTURE.md#data-api) define proposed integration behavior; [IoT failure modes](ARCHITECTURE.md#iot-access) define hardware gates. Stream updates follow the same authorized venue/owner scope and report asOf; clients recover after gaps using an authoritative snapshot.
+
+Historical pre-approval context (retained verbatim); [current OD-12 decision](#organization-scope) supersedes the unresolved scope below:
 
 Multi-venue configuration is proposed resource scoping. It is **not evidence of a fully isolated multi-tenant SaaS product**. Tenant/subscription architecture, data isolation model, onboarding/billing and cross-venue roles remain OD-12. Retain explicit venue IDs where applicable without inventing a tenant schema. Do not call current access isolation implemented.
 
@@ -304,7 +313,7 @@ Audit appropriate allow/deny/sensitive-read/assignment/override events with acto
 | Item | State / existing gate |
 |---|---|
 | Hybrid RBAC + ABAC, backend/default denial | USER_REQUESTED_DIRECTION, S15; NOT_VERIFIED runtime; CN-NFR-02 owns acceptance |
-| Six role groupings and exact permission catalog | PROPOSED; capability allocation OD-18/28, privacy OD-05, venue/tenancy OD-12; owners TBD |
+| Six role groupings and exact permission catalog | PROPOSED; capability allocation OD-18/28, privacy OD-05; OD-12 single-organization venue scope APPROVED, exact capability owners TBD |
 | Financial limits, self-approval, independent review and exceptions | OPEN_DECISION OD-18/28; source S8/S9/S15 does not set thresholds or approve every recommendation |
 | Evidence-purpose/case access and retention | Desired dedicated controls; exact operational/privacy process OD-03/05/28 unresolved |
 | Revocation/cache/session and accepted-work revalidation | RECOMMENDED approach, exact protocol/latency/operation policy OPEN under OD-01/05/28; no guarantee |
@@ -534,6 +543,8 @@ Disadvantages: two-language maintenance; Spring/JPA proxy/lazy-loading/transacti
 
 ### H. Deferred choices and gates
 
+Historical proposal table retained: its then-open OD-12 is superseded by the [approved organization scope](#organization-scope).
+
 | Choice | Why not needed for CN-FND-001 skeleton / when required |
 |---|---|
 | Charts Recharts vs ECharts; accessible UI primitives; query/forms libraries; icon/font assets | Foundation can expose no business screens. Evaluate before CN-UI-001/complex page work; current canonical tokens and WCAG target preserved. No typography/licensing approval invented |
@@ -573,7 +584,7 @@ Owner reaffirmation, 2026-10-15, current conversation instruction headed “OWNE
 <a id="foundation-qualified-baseline"></a>
 ### Current CN-FND-001 local baseline — 2026-10-15
 
-The owner subsequently authorized foundation implementation and the nested repository explicitly. [Foundation evidence](PROGRESS.md#foundation-implementation) now records Boot4.1.1/Modulith2.1.1, Java25, PostgreSQL18.6 with Boot-managed Flyway12.4.0/JDBC42.7.13, Maven3.9.16 and Next16.4.1/React19.3.1/TypeScript5.9.3/Tailwind4.3.3/Node24.22.0/npm11.19.1 local qualification. Exact pins are in backend/pom.xml, wrapper properties, frontend/package-lock.json and the isolated verification script; existing status holds source hashes and command evidence. One foundation migration-status API/adapter is exercised, no universal shared repository or generated business modules. HTTP is deny-all; no login/session/RBAC use cases. Canonical CSS is imported without copied palette values. Sessions/durable work remain the approved direction for later authorized slices, not implemented here. OD-01 remains OPEN for broader choices and auth-specific qualification; OD-12 remains OPEN. Historical S16 NOT_GRANTED/pending statements describe that earlier approval, not current foundation authority. No customer/physical/provider acceptance follows.
+The owner subsequently authorized foundation implementation and the nested repository explicitly. [Foundation evidence](PROGRESS.md#foundation-implementation) now records Boot4.1.1/Modulith2.1.1, Java25, PostgreSQL18.6 with Boot-managed Flyway12.4.0/JDBC42.7.13, Maven3.9.16 and Next16.4.1/React19.3.1/TypeScript5.9.3/Tailwind4.3.3/Node24.22.0/npm11.19.1 local qualification. Exact pins are in backend/pom.xml, wrapper properties, frontend/package-lock.json and the isolated verification script; existing status holds source hashes and command evidence. One foundation migration-status API/adapter is exercised, no universal shared repository or generated business modules. HTTP is deny-all; no login/session/RBAC use cases. Canonical CSS is imported without copied palette values. Sessions/durable work remain the approved direction for later authorized slices, not implemented here. OD-01 remains OPEN for broader choices and auth-specific qualification; OD-12 is now APPROVED for single-organization venue scope; isolation implementation remains NOT_VERIFIED. Historical S16 NOT_GRANTED/pending statements describe that earlier approval, not current foundation authority. No customer/physical/provider acceptance follows.
 
 ### J. Next existing change set and stop
 

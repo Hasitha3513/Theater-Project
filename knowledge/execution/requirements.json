@@ -305,8 +305,7 @@
         "CN-FND-001"
       ],
       "blockingDecisionIds": [
-        "OD-01",
-        "OD-12"
+        "OD-01"
       ],
       "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
       "testIds": [
@@ -320,8 +319,10 @@
       "acceptanceStatus": "NOT_ACCEPTED",
       "unresolvedQuestions": [
         "OD-01",
-        "OD-12",
         "Future change-set scope/authority required"
+      ],
+      "resolvedDecisionIds": [
+        "OD-12"
       ]
     },
     {
@@ -881,7 +882,6 @@
         "OD-01",
         "OD-03",
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28"
       ],
@@ -899,10 +899,12 @@
         "OD-01",
         "OD-03",
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28",
         "Future change-set scope/authority required"
+      ],
+      "resolvedDecisionIds": [
+        "OD-12"
       ]
     },
     {
@@ -1049,7 +1051,6 @@
       ],
       "blockingDecisionIds": [
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28"
       ],
@@ -1065,10 +1066,12 @@
       "acceptanceStatus": "NOT_ACCEPTED",
       "unresolvedQuestions": [
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28",
         "Future change-set scope/authority required"
+      ],
+      "resolvedDecisionIds": [
+        "OD-12"
       ]
     },
     {
@@ -1093,7 +1096,6 @@
       ],
       "blockingDecisionIds": [
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28"
       ],
@@ -1109,10 +1111,12 @@
       "acceptanceStatus": "NOT_ACCEPTED",
       "unresolvedQuestions": [
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28",
         "Future change-set scope/authority required"
+      ],
+      "resolvedDecisionIds": [
+        "OD-12"
       ]
     },
     {
@@ -1523,7 +1527,6 @@
       "blockingDecisionIds": [
         "OD-03",
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28"
       ],
@@ -1540,7 +1543,6 @@
       "unresolvedQuestions": [
         "OD-03",
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28",
         "Future change-set scope/authority required"
@@ -1577,7 +1579,10 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
-      }
+      },
+      "resolvedDecisionIds": [
+        "OD-12"
+      ]
     },
     {
       "id": "CN-NFR-03",

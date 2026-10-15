@@ -198,11 +198,46 @@
       "source": "S1; no code evidence",
       "impact": "Isolation, permissions and billing architecture",
       "options": "Venue-scoped single organization vs explicit future tenant isolation",
-      "owner": "TBD",
+      "owner": "Project owner",
       "evidenceRequired": "Architecture/business scope decision and isolation tests",
-      "decisionStatus": "OPEN_DECISION",
+      "decisionStatus": "APPROVED",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "SCOPE_DEPENDENT_GATE"
+      "launchBlocker": "SCOPE_DEPENDENT_GATE",
+      "resolution": {
+        "recordedDate": "2026-10-15",
+        "approvalSource": "Current owner conversation: TASK Resolve the existing OD-12 architecture/product decision; OWNER DECISION",
+        "scopeComparison": "MATCHED: venue-scoped single organization versus future tenant isolation",
+        "approvedModel": "SINGLE_ORGANIZATION_WITH_VENUE_SCOPED_AUTHORIZATION",
+        "organizationScope": "One operating business organization; one or more venues; customers are not tenants",
+        "grantRule": "Permission and venue/resource scope must match one applicable grant; unrelated grants cannot be combined",
+        "restrictions": "Ownership, evidence/financial controls and independent physical safety are never bypassed by a system administrator label",
+        "excludedMvpScope": [
+          "Tenant subscriptions/billing/Super Admin products",
+          "Holding-company hierarchy",
+          "Organization signup/self-service provisioning",
+          "Per-tenant databases/schemas",
+          "Speculative tenant_id propagation",
+          "Cross-organization data-sharing",
+          "Tenant-aware infrastructure without another approved requirement"
+        ],
+        "futureEvolution": "Separate owner architecture/product decision supported by real business requirements; avoid gratuitous coupling, no speculative tenant abstraction",
+        "canonicalSpecification": "ARCHITECTURE.md#organization-scope",
+        "implementationStatus": "NOT_VERIFIED",
+        "isolationTests": "NOT_RUN; implementation task evidence still required",
+        "implementationAuthorization": "NOT_GRANTED_BY_THIS_DECISION"
+      },
+      "historicalContext": {
+        "id": "OD-12",
+        "conflict": "Multi-venue scope is not an approved multi-tenant/subscription SaaS model",
+        "source": "S1; no code evidence",
+        "impact": "Isolation, permissions and billing architecture",
+        "options": "Venue-scoped single organization vs explicit future tenant isolation",
+        "owner": "TBD",
+        "evidenceRequired": "Architecture/business scope decision and isolation tests",
+        "decisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "launchBlocker": "SCOPE_DEPENDENT_GATE"
+      }
     },
     {
       "id": "OD-13",

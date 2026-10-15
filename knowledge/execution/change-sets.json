@@ -214,8 +214,7 @@
         "CN-FND-001"
       ],
       "blockingDecisionIds": [
-        "OD-01",
-        "OD-12"
+        "OD-01"
       ],
       "affectedFilesModules": "Identity & Access/UI/auth contracts TBD",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
@@ -235,7 +234,10 @@
         "status": "VERIFIED_DOCUMENTATION_ONLY",
         "evidencePath": "PROGRESS.md#authorization-update",
         "implementationAuthorization": "NOT_GRANTED"
-      }
+      },
+      "resolvedDecisionIds": [
+        "OD-12"
+      ]
     },
     {
       "id": "CN-ROOM-001",
@@ -726,7 +728,6 @@
       ],
       "blockingDecisionIds": [
         "OD-05",
-        "OD-12",
         "OD-18",
         "OD-28"
       ],
@@ -741,7 +742,10 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-12"
+      ]
     },
     {
       "id": "CN-NOTIFY-001",

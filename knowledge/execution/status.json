@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-FND-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": null,
-  "nextAction": "Review CN-AUTH-001 OD-12 venue/tenancy and exact session/revocation/policy choices; no auth READY claim",
+  "nextAction": "Review CN-AUTH-001 concrete identity/session mechanisms and exact eligibility/revocation/authorization policies; OD-12 approved, foundation complete; auth remains BLOCKED",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-FND-001 local backend/frontend foundation verified; no business/auth/provider implementation",
   "approvedCoreDecisions": [
@@ -22,7 +22,7 @@
     "PR-BANK-001"
   ],
   "blockers": [
-    "CN-AUTH-001 OD-12 venue/tenancy and exact session/revocation policy choices",
+    "CN-AUTH-001 concrete identity/session and applicable exact eligibility/revocation/authorization policies; OD-12 resolved",
     "OD-01 broader cloud/libraries/providers remain open; foundation tuple locally qualified",
     "No approval for the full future implementation plan",
     "OD-15 missing original sources",
@@ -58,7 +58,7 @@
   "implementationAuthorization": "GRANTED_CN_FND_001_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "OD-12: choose single-organization venue scope versus explicitly approved SaaS tenancy before CN-AUTH-001; retain applicable session/revocation policy review"
+    "CN-AUTH-001 bounded identity/session choices and applicable exact revocation/freshness, permissions and account-read policy; no implementation in OD-12 session"
   ],
   "checks": [
     {
@@ -1044,7 +1044,7 @@
       "One foundation module only; no future business-boundary claim",
       "No account/session, RBAC/ABAC or business feature implementation",
       "No provider/hardware/customer demo acceptance",
-      "OD-01 remains open for broader choices and auth-specific details; OD-12 venue/tenancy still open"
+      "OD-01 remains open for broader choices and auth-specific details; OD-12 single-organization venue scope now approved, isolation enforcement still unverified"
     ],
     "failuresResolved": [
       "Docker desktop socket absent; explicitly used existing system socket without changing defaults",
@@ -1122,5 +1122,69 @@
       "runId": 38689239097,
       "receiptSuccessor": "Metadata-only closeout; resolve its final SHA from Git"
     }
+  },
+  "od12DecisionUpdate": {
+    "approvalSource": "Current owner conversation: TASK Resolve the existing OD-12 architecture/product decision; OWNER DECISION",
+    "scopeComparison": "MATCHED",
+    "status": "APPROVED_DECISION_ONLY",
+    "decisionId": "OD-12",
+    "decisionRecordSha256": "f0c28928c78d85f729be6ee8d57a904889d524210c37af8b798978b0adef9060",
+    "evidencePath": "PROGRESS.md#od12-decision",
+    "implementationAuthorization": "NOT_GRANTED_BY_THIS_DECISION",
+    "affectedTasks": [
+      "CN-AUTH-001",
+      "CN-ADMIN-001"
+    ],
+    "affectedRequirements": [
+      "CN-C02",
+      "CN-A06",
+      "CN-A10",
+      "CN-A11",
+      "CN-NFR-02"
+    ],
+    "checks": [
+      {
+        "argv": [
+          "python3",
+          "knowledge/validate_design_kb.py"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/execution/validate_execution.py"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      }
+    ],
+    "negativeControls": [
+      {
+        "case": "Speculative tenancy rejected",
+        "result": "REJECTED_AS_EXPECTED"
+      },
+      {
+        "case": "Auth READY promotion rejected",
+        "result": "REJECTED_AS_EXPECTED"
+      },
+      {
+        "case": "Unrelated OD-01 removal rejected",
+        "result": "REJECTED_AS_EXPECTED"
+      }
+    ],
+    "review": "Self-review; decision scope matches original question; app/migrations/diagrams unchanged; 92 requirements, 92 test records, 28 tasks, 29 decisions retained",
+    "verifiedAtLocal": "2026-10-15T11:49:43.817088+05:30",
+    "validationCorrections": "Initial retained-source checks required moving the new architecture anchor outside the frozen migrated section and retaining historical wording with explicit current-decision links; final original-content checks pass without removal"
   }
 }

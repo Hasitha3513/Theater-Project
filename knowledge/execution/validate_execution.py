@@ -173,7 +173,7 @@ def main():
         for id, old in before.items():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
-                    expected_status = 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    expected_status = 'APPROVED' if id == 'OD-12' and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
                     check(after.get(id, {}).get(key) == ({'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status) if id == 'CN-FND-001' else expected_status), 'Baseline status changed beyond scoped foundation authority ' + id + '/' + key)
     canonical_map = {e['sourcePath'].removeprefix('knowledge/'): e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] for e in manifest['consolidation']['documents']}
     def migrated(value):
@@ -182,6 +182,8 @@ def main():
         if isinstance(value, list):
             return [migrated(item) for item in value]
         return canonical_map.get(value, value) if isinstance(value, str) else value
+    od12_requirement_ids = {'CN-C02','CN-A06','CN-A10','CN-A11','CN-NFR-02'}
+    od12_task_ids = {'CN-AUTH-001','CN-ADMIN-001'}
     # Compare full requirement/test/decision payloads, not just counts/statuses.
     for path in ['execution/requirements.json', 'execution/test-plan.json', 'decisions/cinenest-open-decisions.json']:
         expected = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/' + path], text=True)))
@@ -201,6 +203,14 @@ def main():
                 if row['id'] in mapped:
                     check(row.pop('foundationEvidence', None) == foundation_subset, 'Foundation subset/full feature distinction lost ' + row['id'])
 
+        if path == 'execution/requirements.json':
+            for row in current_payload['requirements']:
+                if row['id'] in od12_requirement_ids:
+                    original = next(x for x in expected['requirements'] if x['id'] == row['id'])
+                    check(row.pop('resolvedDecisionIds', None) == ['OD-12'], 'Resolved venue decision trace missing ' + row['id'])
+                    for field in ['blockingDecisionIds','unresolvedQuestions']:
+                        check(row[field] == [value for value in original[field] if value != 'OD-12'], 'Unrelated requirement blocker changed ' + row['id'])
+                        row[field] = original[field]
         # S15 adds only the bounded authorization extension; preserve every prior field/criterion.
         if path == 'execution/requirements.json':
             row = next(x for x in current_payload['requirements'] if x['id'] == 'CN-NFR-02')
@@ -220,6 +230,12 @@ def main():
             check(hashlib.sha256(json.dumps(current_od, sort_keys=True).encode()).hexdigest() == '3f3f05eb387eb006672f8e38a559af25fc5c30d69ff0bc7a9221a0eda02e495d', 'S16 bounded OD-01 approval/status/conditions changed')
             old_od = next(x for x in expected['decisions'] if x['id'] == 'OD-01')
             current_payload['decisions'][current_payload['decisions'].index(current_od)] = old_od
+        if path == 'decisions/cinenest-open-decisions.json':
+            current_od12 = next(x for x in current_payload['decisions'] if x['id'] == 'OD-12')
+            check(hashlib.sha256(json.dumps(current_od12, sort_keys=True).encode()).hexdigest() == 'f0c28928c78d85f729be6ee8d57a904889d524210c37af8b798978b0adef9060', 'OD-12 exact owner decision/provenance/exclusions changed')
+            original_od12 = next(x for x in expected['decisions'] if x['id'] == 'OD-12')
+            check(current_od12.get('historicalContext') == original_od12, 'OD-12 historical context lost')
+            current_payload['decisions'][current_payload['decisions'].index(current_od12)] = original_od12
         check(expected == current_payload, 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
     prior_changes = json.loads(json.dumps(changes[:-1]))
@@ -240,6 +256,12 @@ def main():
     check(foundation['affectedFilesModules'] == 'backend/, frontend/, scripts/verify-foundation.py, .github/workflows/foundation.yml; scoped knowledge closeout', 'Foundation owned scope changed')
     for field in ['authorityAvailable','readiness','workStatus','evidencePaths','affectedFilesModules']:
         foundation[field] = historical_foundation[field]
+    for row in prior_changes:
+        if row['id'] in od12_task_ids:
+            original = next(x for x in old_backlog['changeSets'] if x['id'] == row['id'])
+            check(row.pop('resolvedDecisionIds', None) == ['OD-12'], 'Task resolved OD-12 trace missing ' + row['id'])
+            check(row['blockingDecisionIds'] == [value for value in original['blockingDecisionIds'] if value != 'OD-12'], 'Unrelated task blocker changed ' + row['id'])
+            row['blockingDecisionIds'] = original['blockingDecisionIds']
     check(prior_changes == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001' and changes[-1].get('aliases') == ['CN-KB-CONSOLIDATION-001'] and changes[-1].get('continuationAuthorizationSource') == 'S13', 'Existing backlog content lost/altered')
     old_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
     current_sources = json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']
@@ -281,6 +303,12 @@ def main():
     architecture = (K / 'ARCHITECTURE.md').read_text()
     decision_rows = ''.join('| ' + d['id'] + ' | ' + d['conflict'] + ' | ' + d['launchBlocker'] + ' |\n' for d in od)
     check(decision_rows in architecture, 'ARCHITECTURE decision projection diverges from authority')
+    approval = state.get('od12DecisionUpdate', {})
+    check(approval.get('decisionId') == 'OD-12' and approval.get('status') == 'APPROVED_DECISION_ONLY' and approval.get('implementationAuthorization') == 'NOT_GRANTED_BY_THIS_DECISION', 'OD-12 approval promoted to implementation')
+    check(cmap['CN-AUTH-001']['readiness'] == 'BLOCKED' and cmap['CN-AUTH-001']['blockingDecisionIds'] == ['OD-01'], 'Auth readiness/gates changed beyond OD-12 resolution')
+    check('<a id="organization-scope"></a>' in architecture and '<a id="organization-scope"></a>' in project and '<a id="od12-decision"></a>' in progress, 'OD-12 canonical scope/reference missing')
+    for phrase in ['SINGLE-ORGANIZATION WITH VENUE-SCOPED AUTHORIZATION','customers are not tenants','tenant_id','SaaS']:
+        check(phrase in project, 'Approved organization requirement missing ' + phrase)
     for number in range(1, 9):
         check(f'AG-AC{number:02d}' in progress, 'Setup acceptance history omitted')
     check(state.get('requestedTaskId') == 'CN-FND-001' and state.get('stackApprovalUpdate', {}).get('sourceId') == 'S16' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
