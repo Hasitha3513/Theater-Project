@@ -537,7 +537,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "a9d3c3249e232703265c5e7620b41ba8d5774452dde98a0c751b92ee194bf9ea",
+      "sha256": "5e21450926f2e5830ec8f02d7187be528f0d28aee0badf72ee59a5afa56be339",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -551,7 +551,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "2775c1ed8dac4a2a68e554ada378bc935a1b6f1bf93f82d8f41ed6cfd9fe50ab",
+      "sha256": "65c378418cd5813f27d7bea836e177f9451f28ddd6ef440c3e9667bc88242b9a",
       "authority": "structured-asset-or-evidence"
     },
     {

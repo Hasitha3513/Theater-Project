@@ -64,7 +64,7 @@ def main():
     check(foundation_evidence.get('qualificationStatus') == 'LOCAL_BUILD_TEST_VERIFIED', 'Foundation qualification missing')
     owned = foundation_evidence.get('ownedFiles', {})
     required_foundation = {'backend/pom.xml', 'backend/mvnw', 'frontend/package-lock.json', 'frontend/package.json', 'scripts/verify-foundation.py', '.github/workflows/foundation.yml'}
-    check(required_foundation <= set(owned) and len(owned) == 30, 'Foundation source/build/test inventory missing')
+    check(required_foundation <= set(owned) and len(owned) == 29, 'Foundation source/build/test inventory missing')
     for name, digest in owned.items():
         path = R / name
         check(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == digest, 'Foundation source checksum mismatch ' + name)

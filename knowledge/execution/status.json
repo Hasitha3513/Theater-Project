@@ -948,7 +948,7 @@
       ".gitignore": "1887d372ea3606b8c02fa2b175bec1e3e3372a32d22263a9a1c993dd50628435",
       "backend/.mvn/wrapper/maven-wrapper.properties": "9e702bcd7e68ba1cace0a3382a7082e6e1e1b321688a7a3fbf4d5ae7eb0af533",
       "backend/mvnw": "cae96cef89ebea3531221f4ae17c23cf8edf67d00eae8306d4186ae1bbed4d02",
-      "backend/mvnw.cmd": "46eedb8419bd14fe70d5bb2916d7b6f51806e51b39d5b76a42610384ca929c1c",
+      "backend/mvnw.cmd": "4a361e1374a3e5ad6d03e18e9adc0cf181ac5058ac6203b76f0ba3b456b56481",
       "backend/pom.xml": "d504008b88aec034a7883102cb0aff29cff70cc37f1289dbb07d256ac1957920",
       "backend/src/main/java/com/cinenest/CineNestApplication.java": "621b4d3d7c60e2d215060cac68a6237a950fe2920391200776d1e7d89bdddce2",
       "backend/src/main/java/com/cinenest/foundation/MigrationStatus.java": "b526bb80ad6e0f03dbeb0ba32a2f26c6d56ff293cb1a3de9a12151248e2e0585",
@@ -972,7 +972,6 @@
       "frontend/postcss.config.mjs": "a1a188221f064d964dd9958c3d48b0c23252fabbeb6099d95ee8e15c764718b0",
       "frontend/tests/foundation.test.mjs": "508789630e53500b1b9f1407320e8d7f8f66c8aa1a80d4cbbbd90b300803c3b7",
       "frontend/tsconfig.json": "fe301561c5f9f7556924d85c875b73846f4fc6891001acb4ce3ca299984d06c0",
-      "frontend/tsconfig.tsbuildinfo": "9351c3d82ccd2df67db52ed53c80fc37f12249da923f3439b94c55326d0eebf3",
       "scripts/verify-foundation.py": "41e16e600d2e6a386c6d5fe448f38d8df7bdcc28fc254b7be24b96d8ca195c46"
     },
     "versions": {
@@ -1051,7 +1050,8 @@
       "Initial architecture test used removed getName API; corrected to getIdentifier",
       "Sandbox TypeScript subprocess parse failure; production build passed outside sandbox",
       "Initial ESLint/Next tool chain: 5 high development advisories; selected supported Biome instead; final npm audit 0",
-      "Biome ignore root corrected to existing repository root; configuration migrated using Biome"
+      "Biome ignore root corrected to existing repository root; configuration migrated using Biome",
+      "Publication preflight: ignored tsbuildinfo removed from evidence inventory (never committed); generated Windows wrapper CRLF normalized to LF; sequential checked publication steps enforced before push"
     ],
     "notRun": [
       "Remote CI pending publication",
