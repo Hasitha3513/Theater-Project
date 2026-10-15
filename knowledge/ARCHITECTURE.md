@@ -19,6 +19,21 @@ This document owns technology proposals, module/data/API and integration design,
 - [Open Decisions](#open-decisions)
 - [Initial Stack Brief](#initial-stack-brief)
 
+<a id="auth-bounded-policy"></a>
+## CN-AUTH-001 approved bounded account/session contract — 2026-10-15
+
+Current owner approval (request SHA-256 in OD-01.boundedAuthPolicyApproval and existing status.authReadinessReconciliation) resolves the remaining policy gates for **CN-AUTH-001 only**. The authoritative task still means “First owner/venue scoped session/auth interfaces and permitted account read”; no scope expansion, new task or full security roadmap approval. CN-FND-001 is VERIFIED/CLOSED and OD-12 approves single-organization venue-scoped authorization. CN-AUTH-001 is now READY / PLANNED under existing conditional implementation authorization, not implemented/verified. This session records decisions only. Auth-specific library/configuration qualification is work to perform within the future unit on the verified foundation, not missing owner policy evidence.
+
+Approved admission is explicitly associated synthetic/test accounts only. Stable provider identity semantics govern association (provider/issuer and stable subject); email must not become the authoritative key or trigger automatic account merging. No automatic production provisioning, production self-registration or provider onboarding. Google provider login does not establish age, identity evidence or consent; canonical backend-owned OIDC/session recommendations remain subject to actual configuration/protocol tests, with no real provider credentials/users selected here.
+
+Own-account reads return only the minimum representation needed by the use case. Staff/service reads require an applicable grant containing both action permission and relevant target scope; current eligibility, ownership and venue/resource attributes come from authoritative server records. No account directory, unrelated-grant stitching, generic administrator bypass or client-supplied authority. No full financial/verification/operations permission catalog or service/device provisioning implied.
+
+Application sessions are database-backed. Expiry configuration is mandatory; explicit deterministic local/test values are permitted but never production defaults or approved production timeout values. Current application session logout performs server-side invalidation; it does not mean global logout across every device. Evaluate current account eligibility and applicable database-backed grants on every protected request; no positive authorization decision cache. Suspended/ineligible accounts and revoked/expired applicable grants stop authorizing subsequent protected requests. More advanced production caching/revocation strategies remain deferred; no invented latency or numeric lifetime guarantee.
+
+Record appropriate redacted authentication/authorization events; never raw session IDs/tokens, provider secrets, documents, access PINs, bank credentials or unrelated sensitive evidence. Audit does not authorize an operation. Production sensitive-data storage/retention/provider and real-user rollout remain open; this synthetic test contract does not set retention days or other unrelated policy values.
+
+Explicitly deferred unless an existing task requirement genuinely needs them: document/OCR policies, financial limits/separation of duties, refunds, device/service provisioning, production IdP onboarding/account self-registration, passwords, SaaS identity behavior and payment/booking/verification/IoT endpoints. OD-01 remains OPEN for broader choices; OD-03/05/18/28 remain OPEN for their full feature/production scopes. Their bounded auth applicability is recorded in the same existing decision records. Earlier blocked/pending policy narratives are historical and superseded only for this bounded unit. No migration, application, frontend, build file or executable test changes in this decision session; all 18 planned authorization scenarios retain their actual NOT_RUN state.
+
 <a id="organization-scope"></a>
 ### OD-12 approved organization and venue boundary
 

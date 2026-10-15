@@ -323,7 +323,15 @@
       ],
       "resolvedDecisionIds": [
         "OD-12"
-      ]
+      ],
+      "boundedAuthPolicyApproval": {
+        "taskId": "CN-AUTH-001",
+        "canonicalSpecification": "ARCHITECTURE.md#auth-bounded-policy",
+        "readiness": "READY",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-C03",
@@ -905,7 +913,15 @@
       ],
       "resolvedDecisionIds": [
         "OD-12"
-      ]
+      ],
+      "boundedAuthPolicyApproval": {
+        "taskId": "CN-AUTH-001",
+        "canonicalSpecification": "ARCHITECTURE.md#auth-bounded-policy",
+        "readiness": "READY",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-A07",
@@ -1582,7 +1598,15 @@
       },
       "resolvedDecisionIds": [
         "OD-12"
-      ]
+      ],
+      "boundedAuthPolicyApproval": {
+        "taskId": "CN-AUTH-001",
+        "canonicalSpecification": "ARCHITECTURE.md#auth-bounded-policy",
+        "readiness": "READY",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-NFR-03",

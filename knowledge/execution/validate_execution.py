@@ -101,6 +101,10 @@ def main():
             check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED', 'Foundation task/evidence diverge')
             check(c['dependencies'] == ['CN-DEC-001'] and c['blockingDecisionIds'] == ['OD-01'], 'Foundation dependency/policy edges changed')
             check(c.get('evidencePaths') == ['PROGRESS.md#foundation-implementation'], 'Foundation completion evidence missing')
+        elif c['id'] == 'CN-AUTH-001':
+            check(c['authorityAvailable'] is True and c['readiness'] == 'READY' and c['workStatus'] == 'PLANNED', 'Auth readiness promoted beyond approved planned unit')
+            check(c['dependencies'] == ['CN-FND-001'] and c['blockingDecisionIds'] == [] and c.get('resolvedDecisionIds') == ['OD-12'], 'Auth prerequisite/scope dependency altered')
+            check(c.get('evidencePaths') == [], 'Auth implementation/test evidence invented')
         elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
@@ -150,8 +154,8 @@ def main():
         else:
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
-    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None, 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-FND-001' and state['nextRecommendedChangeSet'] is None, 'Unexpected next checkpoint')
+    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] == 'CN-AUTH-001' and [c['id'] for c in changes if c['readiness'] == 'READY'] == ['CN-AUTH-001'], 'Unsupported READY plan')
+    check(state['taskId'] == 'CN-FND-001' and state['nextRecommendedChangeSet'] == 'CN-AUTH-001' and state.get('nextReadyChangeSet') == 'CN-AUTH-001', 'Unexpected next checkpoint')
     check(state['workStatus'] == cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
     check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_CN_FND_001_ONLY', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
@@ -174,6 +178,8 @@ def main():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
                     expected_status = 'APPROVED' if id == 'OD-12' and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    if id == 'CN-AUTH-001':
+                        expected_status = {'workStatus':'PLANNED','authorityAvailable':True,'readiness':'READY'}.get(key, expected_status)
                     check(after.get(id, {}).get(key) == ({'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status) if id == 'CN-FND-001' else expected_status), 'Baseline status changed beyond scoped foundation authority ' + id + '/' + key)
     canonical_map = {e['sourcePath'].removeprefix('knowledge/'): e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] for e in manifest['consolidation']['documents']}
     def migrated(value):
@@ -194,6 +200,15 @@ def main():
             workflow = expected['tests'][0]
             workflow['owningChangeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['evidencePaths'].append('PROGRESS.md#current-verification')
         current_payload = json.loads((K / path).read_text())
+        if path in {'execution/requirements.json','execution/test-plan.json'}:
+            kind = 'requirements' if path.endswith('requirements.json') else 'tests'
+            targets = {'CN-C02','CN-A06','CN-NFR-02'}
+            if kind == 'tests':
+                targets = {'T-' + value for value in targets}
+            for row in current_payload[kind]:
+                if row['id'] in targets:
+                    check(row.pop('boundedAuthPolicyApproval', None) == {'taskId':'CN-AUTH-001','canonicalSpecification':'ARCHITECTURE.md#auth-bounded-policy','readiness':'READY','implementationStatus':'NOT_VERIFIED','tests':'NOT_RUN','fullRequirementAcceptance':'NOT_ACCEPTED'}, 'Auth approval conflated with test/requirement completion ' + row['id'])
+
         if path in {'execution/requirements.json', 'execution/test-plan.json'}:
             key = 'requirements' if path.endswith('requirements.json') else 'tests'
             mapped = {'PR-UI-001','PR-PKG-001','PR-BANK-001','CN-NFR-02','CN-NFR-03'}
@@ -225,6 +240,8 @@ def main():
             check(hashlib.sha256(json.dumps(added, sort_keys=True).encode()).hexdigest() == '3c59995ce6b04b02dc2b681665eb941e3782744c0926ae741df8cde53e7ef5b8', 'Authorized test extension lost/changed')
         if path == 'decisions/cinenest-open-decisions.json':
             current_od = next(x for x in current_payload['decisions'] if x['id'] == 'OD-01')
+            bounded = current_od.pop('boundedAuthPolicyApproval', None)
+            check(hashlib.sha256(json.dumps(bounded, sort_keys=True).encode()).hexdigest() == 'a37aa83d3e180d8efb8e5fb333510551596c2b13fd5fca07346db88451c98332', 'Exact bounded auth owner policy/source/deferrals changed')
             qualification = current_od.pop('foundationQualification', None)
             check(qualification == {'status':'LOCAL_BUILD_TEST_VERIFIED','taskId':'CN-FND-001','evidencePath':'PROGRESS.md#foundation-implementation','remainingScope':'Broader cloud/providers/libraries and auth-specific session/revocation decisions remain open; no automatic CN-AUTH-001 readiness'}, 'Foundation qualification promoted beyond scope')
             check(hashlib.sha256(json.dumps(current_od, sort_keys=True).encode()).hexdigest() == '3f3f05eb387eb006672f8e38a559af25fc5c30d69ff0bc7a9221a0eda02e495d', 'S16 bounded OD-01 approval/status/conditions changed')
@@ -236,10 +253,20 @@ def main():
             original_od12 = next(x for x in expected['decisions'] if x['id'] == 'OD-12')
             check(current_od12.get('historicalContext') == original_od12, 'OD-12 historical context lost')
             current_payload['decisions'][current_payload['decisions'].index(current_od12)] = original_od12
+        if path == 'decisions/cinenest-open-decisions.json':
+            for row in current_payload['decisions']:
+                if row['id'] in {'OD-03','OD-05','OD-18','OD-28'}:
+                    check(row.pop('boundedAuthApplicability', None) == {'taskId':'CN-AUTH-001','approvalReference':'ARCHITECTURE.md#auth-bounded-policy','policyGateForBoundedUnit':'SATISFIED_OR_EXCLUDED_BY_OWNER_SCOPE','fullDecisionStatus':'OPEN_DECISION','implementationStatus':'NOT_VERIFIED','scope':'Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates'}, 'Unrelated feature decision closed/promoted ' + row['id'])
         check(expected == current_payload, 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
     prior_changes = json.loads(json.dumps(changes[:-1]))
     auth_task = next(x for x in prior_changes if x['id'] == 'CN-AUTH-001')
+    auth_policy = auth_task.pop('policyApproval', None)
+    check(hashlib.sha256(json.dumps(auth_policy, sort_keys=True).encode()).hexdigest() == '174d165e8369dbbbaf9cb641822462fa26217e4a4ac64c3f8a1a930364821d09', 'Auth task approval/source/historical readiness lost')
+    check(auth_task.pop('implementationAuthorization', None) == 'GRANTED_BOUNDED_TASK_ON_READY_PREREQUISITES', 'Auth bounded conditional authority changed')
+    check(auth_task.pop('decisionScopeApprovals', None) == [{'decisionId':'OD-01','scope':'CN-AUTH-001 bounded account/session policy only','status':'APPROVED'}], 'OD-01 broader scope silently closed')
+    for field, value in {'authorityAvailable':False,'readiness':'BLOCKED','workStatus':'BLOCKED','blockingDecisionIds':['OD-01']}.items():
+        auth_task[field] = value
     update = auth_task.pop('documentationUpdate', None)
     check(hashlib.sha256(json.dumps(update, sort_keys=True).encode()).hexdigest() == 'c4a84f904aed007cbd50cc4a6d6b44e985f101024e0f9f4397b223a2621b022f', 'Authorization documentation scope/status changed')
     dec_task = next(x for x in prior_changes if x['id'] == 'CN-DEC-001')
@@ -305,7 +332,10 @@ def main():
     check(decision_rows in architecture, 'ARCHITECTURE decision projection diverges from authority')
     approval = state.get('od12DecisionUpdate', {})
     check(approval.get('decisionId') == 'OD-12' and approval.get('status') == 'APPROVED_DECISION_ONLY' and approval.get('implementationAuthorization') == 'NOT_GRANTED_BY_THIS_DECISION', 'OD-12 approval promoted to implementation')
-    check(cmap['CN-AUTH-001']['readiness'] == 'BLOCKED' and cmap['CN-AUTH-001']['blockingDecisionIds'] == ['OD-01'], 'Auth readiness/gates changed beyond OD-12 resolution')
+    check(cmap['CN-AUTH-001']['readiness'] == 'READY' and cmap['CN-AUTH-001']['blockingDecisionIds'] == [], 'Auth READY does not match bounded final approval')
+    reconciliation = state.get('authReadinessReconciliation', {})
+    check(reconciliation.get('requestSha256') == '7411e72e0db40ad99d70ac76c4d2c92876635449376bb9a3203df02a34730945' and reconciliation.get('readiness') == 'READY' and reconciliation.get('implementationStatus') == 'NOT_VERIFIED' and reconciliation.get('sessionScope') == 'DECISION_RECORDING_ONLY', 'Auth readiness reconciliation scope lost/promoted')
+    check('<a id="auth-bounded-policy"></a>' in architecture and '<a id="auth-policy-readiness"></a>' in progress, 'Approved auth contract/handoff missing')
     check('<a id="organization-scope"></a>' in architecture and '<a id="organization-scope"></a>' in project and '<a id="od12-decision"></a>' in progress, 'OD-12 canonical scope/reference missing')
     for phrase in ['SINGLE-ORGANIZATION WITH VENUE-SCOPED AUTHORIZATION','customers are not tenants','tenant_id','SaaS']:
         check(phrase in project, 'Approved organization requirement missing ' + phrase)

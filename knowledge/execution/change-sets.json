@@ -213,9 +213,7 @@
       "dependencies": [
         "CN-FND-001"
       ],
-      "blockingDecisionIds": [
-        "OD-01"
-      ],
+      "blockingDecisionIds": [],
       "affectedFilesModules": "Identity & Access/UI/auth contracts TBD",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
@@ -224,9 +222,9 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Owner/scope guards demonstrable; admin policy gaps visible",
       "requiredApproval": "Slice + identity/role/session choices approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "PLANNED",
       "evidencePaths": [],
       "documentationUpdate": {
         "sourceId": "S15",
@@ -237,6 +235,29 @@
       },
       "resolvedDecisionIds": [
         "OD-12"
+      ],
+      "implementationAuthorization": "GRANTED_BOUNDED_TASK_ON_READY_PREREQUISITES",
+      "policyApproval": {
+        "requestSha256": "7411e72e0db40ad99d70ac76c4d2c92876635449376bb9a3203df02a34730945",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "canonicalSpecification": "ARCHITECTURE.md#auth-bounded-policy",
+        "decisionReference": "decisions/cinenest-open-decisions.json#OD-01.boundedAuthPolicyApproval",
+        "historicalReadiness": {
+          "authorityAvailable": false,
+          "readiness": "BLOCKED",
+          "workStatus": "BLOCKED",
+          "blockingDecisionIds": [
+            "OD-01"
+          ]
+        },
+        "scope": "Existing task scope, explicitly associated synthetic/test accounts only; no code authorized in this decision-recording session"
+      },
+      "decisionScopeApprovals": [
+        {
+          "decisionId": "OD-01",
+          "scope": "CN-AUTH-001 bounded account/session policy only",
+          "status": "APPROVED"
+        }
       ]
     },
     {

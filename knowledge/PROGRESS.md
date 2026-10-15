@@ -9,7 +9,7 @@ Current planning direction is S17; the maintained [MVP roadmap](#mvp-roadmap) ha
 
 S16 initial-stack approval recorded under existing **CN-DEC-001** after comparison with the actual Initial Stack Brief. Starting root repository/, main → origin/main at `bfc4a3ffd49adb0982cd1f88fa8243f2f0956816`, tracked clean; two unrelated untracked mind-map assets remain unchanged/unpublished. Instructions manually read; automatic loading NOT_VERIFIED. No new task/requirement/test/decision ID or knowledge file.
 
-Current [foundation evidence](#foundation-implementation) records authorized CN-FND-001 local implementation/qualification, VERIFIED/CLOSED. CN-DEC-001 remains VERIFIED/CLOSED; CN-AUTH-001 remains BLOCKED by its own unresolved decisions, not automatically READY. OD-01 broader scope remains open; full future plan NOT_APPROVED. No business feature, provider, live operation or customer acceptance is established.
+Current [foundation evidence](#foundation-implementation) records authorized CN-FND-001 local implementation/qualification, VERIFIED/CLOSED. CN-DEC-001 remains VERIFIED/CLOSED; CN-AUTH-001 is now READY / PLANNED under the [approved bounded policy](#auth-policy-readiness), with implementation NOT_VERIFIED. OD-01 broader scope remains open; full future plan NOT_APPROVED. No business feature, provider, live operation or customer acceptance is established.
 
 <a id="diagram-publication"></a>
 ## Owner-supplied diagram publication
@@ -49,10 +49,25 @@ Remote CI second run [38687790645](https://github.com/Hasitha3513/Theater-Projec
 
 Verified publication/CI: implementation source commit `aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15` pushed to origin/main; [full CI run 38689239097](https://github.com/Hasitha3513/Theater-Project/actions/runs/38689239097) completed SUCCESS, including exact Temurin/Node setup, real PostgreSQL/backend tests/packaged startup, frontend build/type/lint/smoke/audit, both knowledge validators and whitespace. Earlier failed runs remain recorded above. This in-place receipt successor changes only knowledge/status validation metadata; resolve its final SHA and remote result from Git. No extra task, customer demonstration or product acceptance follows.
 
-Current next decision: OD-12 organization scope is APPROVED; review CN-AUTH-001's applicable exact session/revocation/security policy choices; OD-01 broader providers/libraries stay OPEN. CN-AUTH-001 is not READY merely because foundation passed; do not begin it here.
+Historical next decision at foundation closeout (now superseded by [bounded auth readiness](#auth-policy-readiness)): OD-12 organization scope is APPROVED; review CN-AUTH-001's applicable exact session/revocation/security policy choices; OD-01 broader providers/libraries stay OPEN. CN-AUTH-001 is not READY merely because foundation passed; do not begin it here.
+
+<a id="auth-policy-readiness"></a>
+## CN-AUTH-001 final bounded policy approval / readiness — 2026-10-15
+
+Verified actual nested root `/home/hasitha-wijerathna/Documents/Theater Project/repository`, main → origin/main, baseline `3c582a2c13768637432319dbda6c50bc148df95b`, clean. CN-FND-001 is VERIFIED/CLOSED with qualified local/remote evidence; OD-12 is APPROVED. Migration head remains V1__foundation_namespace.sql, HTTP remains deny-all. Prior owner conditional CN-AUTH-001 implementation authorization exists; current owner expressly approves the final bounded policy contract but limits this session to decision recording. Request SHA-256 and source are in the existing OD-01 record and status.authReadinessReconciliation, not a new source/ADR/report file.
+
+Scope comparison MATCHED: all current policy blockers for “First owner/venue scoped session/auth interfaces and permitted account read” are satisfied within explicitly associated synthetic/test accounts. Approved account admission/read, database sessions/configured expiry, per-request eligibility/grant freshness without positive cache, current-session server logout and redacted audit are in [ARCHITECTURE](ARCHITECTURE.md#auth-bounded-policy), with product scope in [PROJECT](PROJECT.md#auth-bounded-scope). No mandatory decision outside this approval was found for this bounded unit. Production values/admission, unrelated providers, documents, finance/independent review/refunds and devices remain deferred at affected feature gates. Do not ask for foundation/OD-12 or the same conditional task authorization again merely because earlier historical fields show BLOCKED/NOT_GRANTED.
+
+Readiness: CN-AUTH-001 **READY / PLANNED**, authority available for bounded future implementation; no active decision blocker within this scope. Its task dependency stays CN-FND-001; original in/out scope, DoD, planned checks and requirement mappings unchanged. Resolved OD-12 remains traceable; OD-01 has an approved bounded scope, not global closure. OD-03/05/18/28 retain OPEN_DECISION and NOT_VERIFIED for their full feature scopes with explicit bounded-auth applicability. Keep unrelated future tasks BLOCKED. Auth-specific dependency/configuration qualification, migration selection after V1, actual tests and hostile review are implementation deliverables, not already completed evidence.
+
+All CN-AUTH-001 executable checks and the 18 authorization scenarios remain NOT_RUN; mapped full requirements remain NOT_VERIFIED/NOT_ACCEPTED. No P1 criterion or phase/demo acceptance newly checked. Colorful source graph/handoff reflect READY auth without implying working software. No application source, migration, manifest/build or executable test file changed; no new narrative knowledge file, registry or decision record. Existing test-plan JSON only adds bounded approval references, not passing results. Validation outcomes/self-review and negative controls are in existing status.authReadinessReconciliation. The unavailable HTML is untouched.
+
+Exact next action: in a future implementation invocation, execute only READY CN-AUTH-001 under the existing bounded authorization and approved contract, then qualify/test/review/record actual results. This decision-recording session stops here without implementing it.
 
 <a id="od12-decision"></a>
 ## OD-12 owner decision — 2026-10-15
+
+Historical OD-12 reconciliation: the then-open CN-AUTH-001 policy findings below are superseded by the later [bounded approval/readiness](#auth-policy-readiness); the OD-12 decision itself remains APPROVED.
 
 Verified nested root `/home/hasitha-wijerathna/Documents/Theater Project/repository`, main → origin/main, baseline `38dadd0b66f2950519d4f155e6d2f40e7d2297a8`, clean. Exact existing question: “Multi-venue scope is not an approved multi-tenant/subscription SaaS model”; options “Venue-scoped single organization vs explicit future tenant isolation.” Current owner decision MATCHES; no uncovered material concern found. OD-12 is APPROVED: single operating organization, one or more venues, per-grant permissions/ownership/venue scope; no SaaS tenant product or speculative tenant infrastructure. Original question/options/status context retained in the same decision record. [PROJECT](PROJECT.md#organization-scope) and [ARCHITECTURE](ARCHITECTURE.md#organization-scope) specify product and technical effects.
 
@@ -155,7 +170,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-GATE-001 | 1 | Source and accountable policy gate brief | CN-AGENT-SETUP-001 | BLOCKED / BLOCKED |
 | CN-FND-001 | 1 | Selected-stack repository skeleton and CI | CN-DEC-001 | VERIFIED / CLOSED |
 | CN-UI-001 | 2 | Shared shell and token consumers | CN-FND-001 | BLOCKED / BLOCKED |
-| CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | BLOCKED / BLOCKED |
+| CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | PLANNED / READY |
 | CN-ROOM-001 | 2 | Catalog and scoped room configuration | CN-AUTH-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-001 | 3 | Package drafts and scoped editor | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-002 | 3 | Immutable package publication/applicability | CN-PKG-001 | BLOCKED / BLOCKED |
@@ -205,9 +220,9 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["Next task BLOCKED: auth scope/policy decisions<br/>Root relocation deferred for foundation only"]
+  G["CN-AUTH-001 READY: synthetic/test scope only<br/>Other feature/production gates remain"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
-  P1["P1 Foundation/access<br/>Foundation locally VERIFIED; auth/UI BLOCKED<br/>NOT_ACCEPTED"]
+  P1["P1 Foundation/access<br/>Foundation locally VERIFIED; auth READY / UI BLOCKED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>W3-4 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>W5-6 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>W7-8 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -301,7 +316,7 @@ Goal/outcome: Make a clean checkout build and start with protected identity/sess
 
 - [ ] **P1-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: A clean checkout builds and starts. Representative identity/session, ownership, and cross-venue denial tests pass with evidence.
 
-Current status: PARTIAL; CN-FND-001 locally VERIFIED/CLOSED, identity/session/shared UI still BLOCKED/NOT_VERIFIED; P1 NOT_ACCEPTED. Next: resolve the owning auth/UI decisions and authorization before those tasks; do not infer whole-phase completion from foundation.
+Current status: PARTIAL; CN-FND-001 locally VERIFIED/CLOSED, identity/session READY/PLANNED and NOT_VERIFIED, shared UI still BLOCKED/NOT_VERIFIED; P1 NOT_ACCEPTED. Next: resolve the owning auth/UI decisions and authorization before those tasks; do not infer whole-phase completion from foundation.
 
 <a id="roadmap-p2"></a>
 #### P2. Venues, Packages And Customer Discovery
@@ -570,7 +585,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-GATE-001 | P0 | CN-AGENT-SETUP-001 | BLOCKED / BLOCKED |
 | CN-FND-001 | P1 | CN-DEC-001 | VERIFIED / CLOSED |
 | CN-UI-001 | P1 | CN-FND-001 | BLOCKED / BLOCKED |
-| CN-AUTH-001 | P1 | CN-FND-001 | BLOCKED / BLOCKED |
+| CN-AUTH-001 | P1 | CN-FND-001 | PLANNED / READY |
 | CN-ROOM-001 | P2 | CN-AUTH-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-001 | P2 | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-002 | P2 | CN-PKG-001 | BLOCKED / BLOCKED |
@@ -858,4 +873,4 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: owner reviews CN-AUTH-001 concrete identity/session and applicable exact eligibility/revocation/authorization policies; OD-12 is APPROVED and no longer blocks it.** CN-FND-001 alone is locally VERIFIED/CLOSED under explicit nested-root implementation authority; broader OD-01, other features, customer acceptance and root relocation remain open at their own scopes. See [actual foundation evidence](#foundation-implementation); no next implementation task is silently authorized.
+**Exact next action: execute only READY CN-AUTH-001 in a future implementation invocation under the existing bounded authorization and approved account/session policy.** This session is decision recording only; no code/tests run or implementation inferred. Foundation is VERIFIED/CLOSED, OD-12 APPROVED, and OD-01’s bounded auth policy scope is approved; unrelated feature/production decisions and customer acceptance remain at their actual gates. See [readiness evidence](#auth-policy-readiness).

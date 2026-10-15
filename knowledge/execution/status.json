@@ -12,9 +12,9 @@
   "baselineWorktree": "CLEAN",
   "currentChangeSet": "CN-FND-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": null,
-  "nextAction": "Review CN-AUTH-001 concrete identity/session mechanisms and exact eligibility/revocation/authorization policies; OD-12 approved, foundation complete; auth remains BLOCKED",
-  "nextReadyChangeSet": null,
+  "nextRecommendedChangeSet": "CN-AUTH-001",
+  "nextAction": "Execute only READY CN-AUTH-001 under existing bounded implementation authorization in a future implementation invocation; this session stops after policy reconciliation",
+  "nextReadyChangeSet": "CN-AUTH-001",
   "implementationEvidence": "CN-FND-001 local backend/frontend foundation verified; no business/auth/provider implementation",
   "approvedCoreDecisions": [
     "PR-UI-001",
@@ -22,7 +22,6 @@
     "PR-BANK-001"
   ],
   "blockers": [
-    "CN-AUTH-001 concrete identity/session and applicable exact eligibility/revocation/authorization policies; OD-12 resolved",
     "OD-01 broader cloud/libraries/providers remain open; foundation tuple locally qualified",
     "No approval for the full future implementation plan",
     "OD-15 missing original sources",
@@ -58,7 +57,7 @@
   "implementationAuthorization": "GRANTED_CN_FND_001_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "CN-AUTH-001 bounded identity/session choices and applicable exact revocation/freshness, permissions and account-read policy; no implementation in OD-12 session"
+    "No remaining owner-policy prerequisite for bounded synthetic/test CN-AUTH-001; deferred production/feature policies retain their existing gates"
   ],
   "checks": [
     {
@@ -1044,7 +1043,7 @@
       "One foundation module only; no future business-boundary claim",
       "No account/session, RBAC/ABAC or business feature implementation",
       "No provider/hardware/customer demo acceptance",
-      "OD-01 remains open for broader choices and auth-specific details; OD-12 single-organization venue scope now approved, isolation enforcement still unverified"
+      "OD-01 broader/production choices remain open; bounded synthetic CN-AUTH-001 policy and OD-12 scope now approved; isolation enforcement still unverified"
     ],
     "failuresResolved": [
       "Docker desktop socket absent; explicitly used existing system socket without changing defaults",
@@ -1186,5 +1185,66 @@
     "review": "Self-review; decision scope matches original question; app/migrations/diagrams unchanged; 92 requirements, 92 test records, 28 tasks, 29 decisions retained",
     "verifiedAtLocal": "2026-10-15T11:49:43.817088+05:30",
     "validationCorrections": "Initial retained-source checks required moving the new architecture anchor outside the frozen migrated section and retaining historical wording with explicit current-decision links; final original-content checks pass without removal"
+  },
+  "authReadinessReconciliation": {
+    "taskId": "CN-AUTH-001",
+    "approvalSource": "Current owner instruction: Record the owner approval as the final bounded policy approval required for CN-AUTH-001 readiness",
+    "requestSha256": "7411e72e0db40ad99d70ac76c4d2c92876635449376bb9a3203df02a34730945",
+    "baselineHead": "3c582a2c13768637432319dbda6c50bc148df95b",
+    "scopeComparison": "MATCHED_ALL_CURRENT_POLICY_GATES",
+    "foundation": "VERIFIED/CLOSED",
+    "organizationDecision": "OD-12 APPROVED",
+    "readiness": "READY",
+    "workStatus": "PLANNED",
+    "implementationStatus": "NOT_VERIFIED",
+    "evidencePath": "PROGRESS.md#auth-policy-readiness",
+    "sessionScope": "DECISION_RECORDING_ONLY",
+    "checks": [
+      {
+        "argv": [
+          "python3",
+          "knowledge/validate_design_kb.py"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "argv": [
+          "python3",
+          "knowledge/execution/validate_execution.py"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--check"
+        ],
+        "exitCode": 0,
+        "result": "PASS"
+      }
+    ],
+    "negativeControls": [
+      {
+        "case": "Production admission expansion",
+        "result": "REJECTED_AS_EXPECTED"
+      },
+      {
+        "case": "False auth completion",
+        "result": "REJECTED_AS_EXPECTED"
+      },
+      {
+        "case": "Unrelated READY task",
+        "result": "REJECTED_AS_EXPECTED"
+      },
+      {
+        "case": "Planned authorization test falsely passed",
+        "result": "REJECTED_AS_EXPECTED"
+      }
+    ],
+    "review": "Self-review; exact owner bounded policy matched; no application/build/migration/executable test/diagram changes; no new file or requirement/task/decision; all planned tests and acceptance states retained",
+    "verifiedAtLocal": "2026-10-15T12:27:44.108316+05:30"
   }
 }

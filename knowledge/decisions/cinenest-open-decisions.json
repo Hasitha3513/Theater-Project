@@ -70,6 +70,36 @@
         "taskId": "CN-FND-001",
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "remainingScope": "Broader cloud/providers/libraries and auth-specific session/revocation decisions remain open; no automatic CN-AUTH-001 readiness"
+      },
+      "boundedAuthPolicyApproval": {
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-15",
+        "approvalSource": "Current owner instruction: Record the owner approval as the final bounded policy approval required for CN-AUTH-001 readiness",
+        "requestSha256": "7411e72e0db40ad99d70ac76c4d2c92876635449376bb9a3203df02a34730945",
+        "canonicalSpecification": "ARCHITECTURE.md#auth-bounded-policy",
+        "taskId": "CN-AUTH-001",
+        "accountAdmission": "Explicitly associated synthetic/test accounts only; no automatic production provisioning or email-based merging; stable provider identity association; production admission deferred",
+        "accountReads": "Minimum own-account representation; staff/service action permission and target scope in an applicable trusted server-side grant; no account directory/admin bypass",
+        "sessions": "Database-backed; expiry explicitly required; deterministic local/test values permitted and distinct from unapproved production timeout values; no session/token logging",
+        "freshness": "Current eligibility and applicable database-backed grants on every protected request; no positive authorization cache; suspended/ineligible account or revoked/expired grant cannot authorize subsequent protected requests",
+        "logout": "Server-side invalidation of current application session; no implied global device logout",
+        "audit": "Appropriate redacted authentication/authorization events; no raw session/provider secrets, identity documents, PINs, bank credentials or unrelated sensitive evidence; audit is not authorization",
+        "deferred": [
+          "Identity-document/OCR evidence policy",
+          "Finance limits/separation of duties",
+          "Refund policies",
+          "Device/service provisioning beyond the task",
+          "Production identity-provider onboarding",
+          "Production account self-registration",
+          "Password authentication",
+          "Multi-tenant/SaaS behavior",
+          "Payment/booking/verification/IoT endpoints"
+        ],
+        "scopeComparison": "MATCHED_ALL_CURRENT_CN_AUTH_001_POLICY_GATES; no unrelated decision resolved",
+        "implementationStatus": "NOT_VERIFIED",
+        "sessionExecution": "DECISION_RECORDING_ONLY; do not implement during this session",
+        "implementationAuthority": "Existing conditional CN-AUTH-001 implementation authorization; readiness prerequisites now satisfied for bounded future execution",
+        "technicalQualification": "Auth-specific dependency/configuration qualification remains implementation work on the verified foundation, not a new owner policy prerequisite"
       }
     },
     {
@@ -94,7 +124,15 @@
       "evidenceRequired": "Qualified policy review, operational process and identity/OCR validation",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "boundedAuthApplicability": {
+        "taskId": "CN-AUTH-001",
+        "approvalReference": "ARCHITECTURE.md#auth-bounded-policy",
+        "policyGateForBoundedUnit": "SATISFIED_OR_EXCLUDED_BY_OWNER_SCOPE",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "scope": "Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates"
+      }
     },
     {
       "id": "OD-04",
@@ -118,7 +156,15 @@
       "evidenceRequired": "Privacy/legal review, data-flow map and deletion/access tests",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "boundedAuthApplicability": {
+        "taskId": "CN-AUTH-001",
+        "approvalReference": "ARCHITECTURE.md#auth-bounded-policy",
+        "policyGateForBoundedUnit": "SATISFIED_OR_EXCLUDED_BY_OWNER_SCOPE",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "scope": "Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates"
+      }
     },
     {
       "id": "OD-06",
@@ -309,7 +355,15 @@
       "evidenceRequired": "Accountable role/scope matrix and approval/audit acceptance",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedAuthApplicability": {
+        "taskId": "CN-AUTH-001",
+        "approvalReference": "ARCHITECTURE.md#auth-bounded-policy",
+        "policyGateForBoundedUnit": "SATISFIED_OR_EXCLUDED_BY_OWNER_SCOPE",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "scope": "Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates"
+      }
     },
     {
       "id": "OD-19",
@@ -429,7 +483,15 @@
       "evidenceRequired": "Role matrix, instruction verification/refund-destination process and audited controls",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedAuthApplicability": {
+        "taskId": "CN-AUTH-001",
+        "approvalReference": "ARCHITECTURE.md#auth-bounded-policy",
+        "policyGateForBoundedUnit": "SATISFIED_OR_EXCLUDED_BY_OWNER_SCOPE",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "scope": "Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates"
+      }
     },
     {
       "id": "OD-29",

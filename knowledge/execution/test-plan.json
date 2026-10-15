@@ -125,7 +125,15 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedAuthPolicyApproval": {
+        "taskId": "CN-AUTH-001",
+        "canonicalSpecification": "ARCHITECTURE.md#auth-bounded-policy",
+        "readiness": "READY",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-C03",
@@ -327,7 +335,15 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedAuthPolicyApproval": {
+        "taskId": "CN-AUTH-001",
+        "canonicalSpecification": "ARCHITECTURE.md#auth-bounded-policy",
+        "readiness": "READY",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-A07",
@@ -556,6 +572,14 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
+      },
+      "boundedAuthPolicyApproval": {
+        "taskId": "CN-AUTH-001",
+        "canonicalSpecification": "ARCHITECTURE.md#auth-bounded-policy",
+        "readiness": "READY",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {

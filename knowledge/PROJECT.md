@@ -15,6 +15,13 @@ Users include customers/bookers, booking/room operators, identity reviewers, ban
 - [Package Management](#package-management)
 - [Bank Payments](#bank-payments)
 
+<a id="auth-bounded-scope"></a>
+## Approved first account/session scope
+
+Owner approval 2026-10-15 makes CN-AUTH-001 READY for its existing bounded scope using explicitly associated synthetic/test accounts. Minimum own-account reads and grant-matched staff/service reads preserve ownership and authoritative venue/resource scope. No directory or administrator bypass, automatic production registration, email-based account merging or speculative SaaS identity behavior. Database-backed sessions require explicit expiry; deterministic test values are not production policy. Current-session logout invalidates server state. Every protected request evaluates current eligibility and applicable database-backed grants without a positive decision cache; suspension/ineligibility and revoked/expired grants deny subsequent requests. Authentication/audit must not leak tokens, credentials or private evidence.
+
+[ARCHITECTURE](ARCHITECTURE.md#auth-bounded-policy) owns the approved technical contract and deferrals; OD-01's existing record owns approval provenance. Full admission/privacy/financial/device/production policies remain at their owning feature gates. This approval is not product implementation, acceptance of CN-C02/CN-A06/CN-NFR-02 in full, or approval of all future role bundles. No code is implemented in the decision-recording session.
+
 <a id="organization-scope"></a>
 ## Approved MVP organization scope — OD-12
 
