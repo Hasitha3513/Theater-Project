@@ -973,3 +973,5 @@ Frontend build/typecheck/lint and44 tests PASS; browser17 publication+17 draft+1
 Final knowledge/whitespace PASS; four in-memory negative controls reject premature publication closure, unauthorized booking readiness, false full purchase acceptance and lost bounded approval. No files created by negative checks. Source CI pending; closure withheld.
 
 Final isolation review: automatic polling is disabled in test-only YAML across cached Spring contexts, avoiding unrelated scheduler threads racing synthetic fixtures. Activation/recovery tests explicitly drive the real transactional service; packaged runtime worker configuration remains unchanged. Follow-up test-only source commit must also receive exact-source CI before closure.
+
+Audit review correction: publish/replace/activate/withdraw/retry/invalidation events now link their exact publication_id in the same transaction. PostgreSQL assertion checks withdrawal attribution; audit-failure rollback remains exercised. Prior source and isolation CI passed, but closure waits for CI on this corrected source.

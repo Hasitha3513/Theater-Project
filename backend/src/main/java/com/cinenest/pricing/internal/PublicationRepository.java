@@ -1,6 +1,7 @@
 package com.cinenest.pricing.internal;
 import java.util.*;
 interface PublicationRepository {
+ void audit(UUID actor,UUID venue,UUID pkg,UUID publication,String action,Long oldRevision,Long newRevision,String reason);
  void lock(UUID venue,UUID pkg);
  UUID author(UUID pkg,long revision);
  List<Map<String,Object>> versions(UUID venue,UUID pkg);
