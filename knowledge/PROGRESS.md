@@ -11,6 +11,15 @@ S16 initial-stack approval recorded under existing **CN-DEC-001** after comparis
 
 Current [foundation evidence](#foundation-implementation) records authorized CN-FND-001 local implementation/qualification, VERIFIED/CLOSED. CN-DEC-001 remains VERIFIED/CLOSED; CN-AUTH-001 is VERIFIED/CLOSED for the [bounded synthetic account/session scope](#auth-implementation), and CN-UI-001 is VERIFIED/CLOSED for the [shared shell/primitives](#ui-implementation). OD-01 broader scope remains open; full future plan NOT_APPROVED. No business feature, provider, live operation or customer acceptance is established.
 
+<a id="room-decision-scope-review"></a>
+## OD-04/10/14 approvals and CN-ROOM-001 scope preparation — 2026-10-16
+
+Verified clean nested root `/home/hasitha-wijerathna/Documents/Theater Project/repository`, main → origin/main, full HEAD `3ad4a17ecfcbb0d52ebc93232f98f6fa0ebc163a`, 0 ahead/behind at inspection. No relocation. Current owner instruction approves decision recording and bounded scope preparation only; exact questions match. OD-04/10/14 now APPROVED, historical original records retained. [PROJECT](PROJECT.md#room-operating-decisions) owns policy: staff-supported operations, separate customer/blocked intervals with conditionally staffed post-close cleaning, restricted media claims pending independent rights verification. Physical/operational/licensing evidence remains NOT_VERIFIED and applicable launch gates remain. No unrelated decision closed.
+
+[CN-ROOM-001 proposal](ARCHITECTURE.md#room-scope-proposal) specifies six proposed tables, eleven endpoints, owned module/Identity port, migrations, contracts, controls, tests and recovery. [UI boundary](DESIGN.md#room-ui-scope-proposal) covers facilities/images, public discovery, venue-scoped administration and equivalent card/table views. Existing task registry owns the proposal inventory. Policy-decision gates reconciled on all explicit dependent task/requirement edges; physical/operational/licensing obligations retained as verificationDecisionIds. No hard task dependency removed, no requirement/task/test ID or count changed. CN-ROOM-001 stays BLOCKED, authorityAvailable=false; separate complete scope approval and implementation authorization are outstanding. No application, migration, token, dependency, diagram/export or asset changes. No new knowledge document.
+
+P0 remains 6/8, P1 2/6, P2–P10 implementation checkboxes unchanged; total 8/74, accepted phases 0/10, demos held/accepted 0/7. D1 NOT_READY; policy/scope preparation is not working software or customer acceptance. Historical UI next-blocker statements below describe their checkpoint and are superseded by this section. Both knowledge validators and whitespace passed; three in-memory negative controls rejected unauthorized READY, false licensing implementation evidence and loss of verification gates. Existing execution/status.json roomScopePreparation records preparation evidence; final publication result is reported in the conversation and resolved from Git, not inferred from intent.
+
 <a id="ui-implementation"></a>
 ## CN-UI-001 implemented shared shell — 2026-10-16
 
@@ -249,7 +258,7 @@ Fresh baseline: `7ad20d42b4551ba07bd5d728a0cbc1d295e65f94`, main → origin/main
 
 Source reconciliation: HTML `CineNest_MVP_Roadmap.html` was not found in workspace, attachments, Downloads or /tmp. Preview found at `/home/hasitha-wijerathna/Downloads/CineNest_MVP_Roadmap_Preview.png`, visually inspected, not imported/changed; source hash in existing manifest. It shows illustrative weeks 1–20, workstream colors, D1–D6, no committed start date. Original HTML criterion IDs, detailed notes, browser saved entries and interactions cannot be inspected/restored without the HTML. The owner's supplied templates contain exactly 74 criteria, retained verbatim below; Pn-Cnn are local stable planning anchors derived from those template positions, not invented canonical requirement IDs or claimed original HTML IDs. Missing source stays visible; no replacement dashboard, image or runtime service created. Graphical refresh below is dated 2026-10-15 and reviewed against this baseline.
 
-Current roll-ups (distinct measures): P0 preparation 6/8; P1 criteria 2/6 (C01 and C06), C02–C05 partial; delivery phases accepted 0/10. Planning criteria 8/74 checked and 66 unchecked, not an effort percentage. Canonical scope 92 requirements and 92 test plans; 91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED and their full test plans NOT_RUN; one workflow documentation plan PASS. Scoped foundation/auth/UI evidence is separate. Existing 28 tasks: six VERIFIED/CLOSED and 22 BLOCKED, none READY. Decision registry: 29 records, 27 OPEN_DECISION and OD-11/12 APPROVED; OD-01 approved subsets do not close its broader scope. Authorization remains partial, including the account-session presentation subset of scenario18; no 18/18 claim. Demos held0/7 and accepted0/7. No phase/customer acceptance or schedule/staffing approval inferred.
+Current roll-ups (distinct measures): P0 preparation 6/8; P1 criteria 2/6 (C01 and C06), C02–C05 partial; delivery phases accepted 0/10. Planning criteria 8/74 checked and 66 unchecked, not an effort percentage. Canonical scope 92 requirements and 92 test plans; 91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED and their full test plans NOT_RUN; one workflow documentation plan PASS. Scoped foundation/auth/UI evidence is separate. Existing 28 tasks: six VERIFIED/CLOSED and 22 BLOCKED, none READY. Decision registry: 29 records, 24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; OD-01 approved subsets do not close its broader scope. Authorization remains partial, including the account-session presentation subset of scenario18; no 18/18 claim. Demos held0/7 and accepted0/7. No phase/customer acceptance or schedule/staffing approval inferred.
 
 Historical S17 roll-up (superseded by the current roll-up above): Roll-ups (distinct measures): P0 preparation DOC_VERIFIED 5/8, readiness acceptance NOT_ACCEPTED; P1–P10 accepted 0/10; planning criteria 5/74 checked (documentation preparation only), 69 unchecked; canonical scope 92 requirements and 92 test plans, including 91 product records BLOCKED/NOT_VERIFIED/NOT_ACCEPTED with 91 tests NOT_RUN plus one workflow documentation record/test PASS; existing 28 tasks (three documentation VERIFIED/CLOSED, 25 BLOCKED) ; 29 OPEN_DECISION records, with OD-01 approved initial subset distinct; 18 authorization scenarios PLANNED. Demos held0/7, scopes accepted0/7. None is an overall effort percentage. No approved deferral, schedule, staffing or accepted phase inferred.
 
@@ -269,7 +278,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-ROOM-001 BLOCKED: OD-04 / OD-10 / OD-14<br/>Other feature/production gates remain"]
+  G["CN-ROOM-001 BLOCKED: separate scope approval/authority<br/>OD-04/10/14 approved; physical/legal gates remain"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>W3-4 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -317,8 +326,8 @@ flowchart TB
 
 | Phase | Window after readiness (illustrative) | Criterion preparation / implementation | Current acceptance | Next gate |
 |---|---|---|---|---|
-| P0 — Readiness And Owner Decisions | Before start | 5/8 DOC_VERIFIED; not software | NOT_ACCEPTED; reviewer/date unassigned | Resolve readiness and scope authority |
-| P1 — Engineering Foundation And Access Baseline | 1–2 | 0/6 implemented/verified | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
+| P0 — Readiness And Owner Decisions | Before start | 6/8 DOC_VERIFIED; not software | NOT_ACCEPTED; reviewer/date unassigned | Resolve readiness and scope authority |
+| P1 — Engineering Foundation And Access Baseline | 1–2 | 2/6 complete; C02–C05 partial | NOT_ACCEPTED; reviewer/date unassigned | Complete remaining access criteria |
 | P2 — Venues, Packages And Customer Discovery | 3–4 | 0/6 implemented/verified | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
 | P3 — Quotes, Availability And Reservations | 5–6 | 0/6 implemented/verified | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
 | P4 — Identity Review And Bank-Deposit Booking | 7–8 | 0/8 implemented/verified | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
@@ -336,7 +345,7 @@ Requirement/test/task references below are existing IDs. Detailed rules stay in 
 <a id="roadmap-p0"></a>
 #### P0. Readiness And Owner Decisions
 
-Goal/outcome: Establish accountable decisions, reviewed scope and one genuinely executable next unit before implementation. Timing: Before implementation. Responsible roles: Owner/product, architect, policy/physical reviewers; all named owners/reviewers TBD. Presentation dependency: readiness source/owner gates; actual task dependencies below override phase-number assumptions. Blocking decisions: Root collisions; OD-01 qualification, OD-02/03/04/05/06/14/15/18/28/29 and unassigned owners.
+Goal/outcome: Establish accountable decisions, reviewed scope and one genuinely executable next unit before implementation. Timing: Before implementation. Responsible roles: Owner/product, architect, policy/physical reviewers; all named owners/reviewers TBD. Presentation dependency: readiness source/owner gates; actual task dependencies below override phase-number assumptions. Blocking decisions: Root collisions; broader OD-01, OD-02/03/05/06/15/18/28/29 and unassigned owners. OD-04/10/14 policies approved; physical/operational/licensing evidence remains separate.
 
 - [x] **P0-C01** Execution-agent setup and documentation workflow prepared. — Req: CN-AGENT-WORKFLOW-001; tests: T-CN-AGENT-WORKFLOW-001; tasks: CN-AGENT-SETUP-001, CN-DEC-001, CN-KB-CONSOLIDATE-001. Evidence: DOC_VERIFIED; retained history and current baseline checks only.
 - [x] **P0-C02** Four canonical knowledge documents established. — Req: CN-AGENT-WORKFLOW-001; tests: T-CN-AGENT-WORKFLOW-001; tasks: CN-AGENT-SETUP-001, CN-DEC-001, CN-KB-CONSOLIDATE-001. Evidence: DOC_VERIFIED; retained history and current baseline checks only.
@@ -365,12 +374,12 @@ Goal/outcome: Make a clean checkout build and start with protected identity/sess
 
 - [ ] **P1-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: A clean checkout builds and starts. Representative identity/session, ownership, and cross-venue denial tests pass with evidence.
 
-Current status: PARTIAL; CN-FND-001 and bounded CN-AUTH-001 VERIFIED/CLOSED, shared UI VERIFIED/CLOSED; P1 NOT_ACCEPTED. C01 and C06 complete (2/6); C02–C05 partial; next CN-ROOM-001 remains policy/authority BLOCKED. See auth-implementation for scoped evidence and remaining scenarios.
+Current status: PARTIAL; CN-FND-001 and bounded CN-AUTH-001 VERIFIED/CLOSED, shared UI VERIFIED/CLOSED; P1 NOT_ACCEPTED. C01 and C06 complete (2/6); C02–C05 partial; next CN-ROOM-001 remains scope-approval/authority BLOCKED. See auth-implementation for scoped evidence and remaining scenarios.
 
 <a id="roadmap-p2"></a>
 #### P2. Venues, Packages And Customer Discovery
 
-Goal/outcome: Let scoped staff publish versioned offers that customers can discover without a code release or rewritten purchases. Timing: Illustrative weeks 3–4. Depends on P1. Responsible roles: Catalog/product, engineering, QA/UI; all named owners/reviewers TBD. Presentation dependency: P1; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-17/18/19/21/22; rights and physical capacity. OD-11 resolved for the preserved MVP token baseline; CN-UI-001 implementation still required.
+Goal/outcome: Let scoped staff publish versioned offers that customers can discover without a code release or rewritten purchases. Timing: Illustrative weeks 3–4. Depends on P1. Responsible roles: Catalog/product, engineering, QA/UI; all named owners/reviewers TBD. Presentation dependency: P1; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-17/18/19/21/22; physical capacity/licensing acceptance remains separate. OD-04/10/14 policy choices approved; CN-ROOM-001 awaits its separate scope approval/authority. OD-11 resolved and CN-UI-001 VERIFIED/CLOSED.
 
 - [ ] **P2-C01** Venue/room configuration, images, facilities, capacity, and operating windows implemented. — Req: CN-C01, CN-A03; tests: T-CN-A03, T-CN-C01; tasks: CN-ROOM-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P2-C02** Package creation, duplication, editable durations/prices, guest allowances, and extras implemented. — Req: PR-PKG-001, CN-A12, PK-AC01, PK-AC02, PK-AC03; tests: T-CN-A12, T-PK-AC01, T-PK-AC02, T-PK-AC03, T-PR-PKG-001; tasks: CN-AMEND-001, CN-DEC-001, CN-PKG-001, CN-PKG-002, CN-QUOTE-001. Evidence: NOT_RUN / no current acceptance evidence.
@@ -386,7 +395,7 @@ Current status: PLANNED / execution BLOCKED, implementation NOT_VERIFIED. Next: 
 <a id="roadmap-p3"></a>
 #### P3. Quotes, Availability And Reservations
 
-Goal/outcome: Give customers exact accepted quotes and nonconflicting, deadline-controlled reservation inventory. Timing: Illustrative weeks 5–6. Depends on P2. Responsible roles: Booking/pricing engineering and QA; all named owners/reviewers TBD. Presentation dependency: P2; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-09/10/17/19/20/21/22; approved inventory and amendment rules.
+Goal/outcome: Give customers exact accepted quotes and nonconflicting, deadline-controlled reservation inventory. Timing: Illustrative weeks 5–6. Depends on P2. Responsible roles: Booking/pricing engineering and QA; all named owners/reviewers TBD. Presentation dependency: P2; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-09/17/19/20/21/22; approved inventory and amendment rules. OD-10 policy approved; operational conditions still apply.
 
 - [ ] **P3-C01** Itemized backend quotations, exact monetary calculations, and policy acceptance implemented. — Req: CN-C04, BR-03, BR-04, BR-05, BR-10, PK-AC07, PK-AC10, PK-AC13; tests: T-BR-03, T-BR-04, T-BR-05, T-BR-10, T-CN-C04, T-PK-AC07, T-PK-AC10, T-PK-AC13; tasks: CN-AMEND-001, CN-QUOTE-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P3-C02** Calendar enforces operating, capacity, duration, cleaning, and maintenance constraints. — Req: BR-01, BR-02, BR-03, BR-06, CN-A03; tests: T-BR-01, T-BR-02, T-BR-03, T-BR-06, T-CN-A03; tasks: CN-BOOK-001, CN-OPS-001, CN-PKG-002, CN-QUOTE-001, CN-ROOM-001. Evidence: NOT_RUN / no current acceptance evidence.
@@ -924,4 +933,4 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: owner resolves CN-ROOM-001 OD-04/10/14 operating, closing-buffer and media-rights decisions and separately authorizes its existing slice. No next task is READY.** Foundation, bounded auth and bounded UI are VERIFIED/CLOSED; [UI evidence](#ui-implementation). P1 remains incomplete and D1 NOT_READY. Stop after CN-UI-001.
+**Exact next action: owner reviews and approves the complete CN-ROOM-001 proposal at [ARCHITECTURE](ARCHITECTURE.md#room-scope-proposal) and separately authorizes its bounded implementation. No next task is READY.** OD-04/10/14 policy decisions are APPROVED; physical/licensing gates remain. Foundation, bounded auth and bounded UI are VERIFIED/CLOSED. P1 remains incomplete; D1 NOT_READY. Stop after decision recording/scope preparation.

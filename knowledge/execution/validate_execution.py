@@ -57,6 +57,47 @@ def main():
         print('\n'.join(errors))
         return 1
     changes = backlog['changeSets']; reqs = coverage['requirements']; tests = tests_doc['tests']
+    # Owner-authorized OD-04/10/14 policy resolution and proposed (never READY) room scope.
+    # Validate the exact delta against the last published checkpoint, then reconstruct
+    # only that authorized delta for the older immutable-payload comparisons below.
+    room_ids = {'OD-04','OD-10','OD-14'}
+    room_base = '3ad4a17ecfcbb0d52ebc93232f98f6fa0ebc163a'
+    room_approval_hashes = {'OD-04': '269a9cf5aa93972f7cf1840eaf5f7ea4ff0eeafaeae4ea22277b5461fbe68938', 'OD-10': '0878e6831223cefff5dfb5880369896f4244aa9111247903b7c06ca25979c920', 'OD-14': '1194db8d4a74bd7d34e57777a259e4f922dab1decf4ba5fb8ee88cf42b3ba2e4'}
+    room_proposal_hash = '3affc4f83c8252b4692d756f18521377ab0255b648c1e2576073f1c00960472e'
+    def room_historical_payload(payload, path):
+        historical = json.loads(subprocess.check_output(['git','-C',str(R),'show',room_base + ':knowledge/' + path], text=True))
+        kind = {'execution/requirements.json':'requirements','execution/change-sets.json':'changeSets','decisions/cinenest-open-decisions.json':'decisions'}[path]
+        originals = {row['id']:row for row in historical[kind]}
+        for row in payload[kind]:
+            old = originals.get(row['id'])
+            if old is None:
+                check(False, 'Unapproved room-review ID ' + row['id']); continue
+            expected = json.loads(json.dumps(old))
+            if kind == 'decisions' and row['id'] in room_ids:
+                approval = row.get('ownerApproval')
+                check(hashlib.sha256(json.dumps(approval,sort_keys=True).encode()).hexdigest() == room_approval_hashes[row['id']], 'Room owner decision/source/exclusions changed ' + row['id'])
+                expected.update(historicalContext=old, decisionStatus='APPROVED', owner='Project owner', ownerApproval=approval)
+            elif kind in {'requirements','changeSets'}:
+                matched = [i for i in old['blockingDecisionIds'] if i in room_ids]
+                if matched:
+                    expected['blockingDecisionIds'] = [i for i in old['blockingDecisionIds'] if i not in room_ids]
+                    expected['resolvedDecisionIds'] = old.get('resolvedDecisionIds',[]) + matched
+                    expected['verificationDecisionIds'] = matched
+                    if 'unresolvedQuestions' in old:
+                        expected['unresolvedQuestions'] = [i for i in old['unresolvedQuestions'] if i not in room_ids]
+                if kind == 'changeSets' and row['id'] == 'CN-ROOM-001':
+                    proposal = row.get('scopeProposal')
+                    check(hashlib.sha256(json.dumps(proposal,sort_keys=True).encode()).hexdigest() == room_proposal_hash, 'Room proposed scope/status changed without approval')
+                    expected['scopeProposal'] = proposal
+            check(row == expected, 'Unauthorized room-review delta ' + path + '/' + row['id'])
+        check(set(originals) == {row['id'] for row in payload[kind]}, 'Room-review coverage changed ' + path)
+        return historical
+    room_task = next(row for row in changes if row['id'] == 'CN-ROOM-001')
+    check(room_task['authorityAvailable'] is False and room_task['readiness'] == room_task['workStatus'] == 'BLOCKED'
+          and room_task['blockingDecisionIds'] == [] and room_task.get('resolvedDecisionIds') == ['OD-04','OD-10','OD-14'], 'Room decisions conflated with implementation authority')
+    check(state.get('roomScopePreparation',{}).get('sessionScope') == 'DECISION_RECORDING_AND_SCOPE_PREPARATION_ONLY'
+          and state['roomScopePreparation'].get('authorityAvailable') is False, 'Room session authority broadened')
+    room_historical_payload(json.loads(json.dumps(backlog)), 'execution/change-sets.json')
     # Bounded owner-authorized CN-FND-001 successor. Historical payload checks below remain intact.
     foundation_evidence = state.get('foundationImplementation', {})
     check(foundation_evidence.get('authorizationRequestSha256') == 'bb1985f3433d63595f5ff15cb22db92aec17ea5359be55d26de5cca0cddfab4c', 'Foundation owner provenance missing/changed')
@@ -247,7 +288,7 @@ def main():
         for id, old in before.items():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
-                    expected_status = 'APPROVED' if id in {'OD-11','OD-12'} and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    expected_status = 'APPROVED' if id in {'OD-04','OD-10','OD-11','OD-12','OD-14'} and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
                     if id == 'CN-UI-001':
                         expected_status = {'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status)
                     if id == 'CN-AUTH-001':
@@ -272,6 +313,8 @@ def main():
             workflow = expected['tests'][0]
             workflow['owningChangeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['evidencePaths'].append('PROGRESS.md#current-verification')
         current_payload = json.loads((K / path).read_text())
+        if path != 'execution/test-plan.json':
+            current_payload = room_historical_payload(current_payload, path)
         if path in {'execution/requirements.json','execution/test-plan.json'}:
             kind = 'requirements' if path.endswith('requirements.json') else 'tests'
             targets = {'CN-C02','CN-A06','CN-NFR-02'}
@@ -357,7 +400,7 @@ def main():
                     check(row.pop('boundedAuthApplicability', None) == {'taskId':'CN-AUTH-001','approvalReference':'ARCHITECTURE.md#auth-bounded-policy','policyGateForBoundedUnit':'SATISFIED_OR_EXCLUDED_BY_OWNER_SCOPE','fullDecisionStatus':'OPEN_DECISION','implementationStatus':'NOT_VERIFIED','scope':'Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates'}, 'Unrelated feature decision closed/promoted ' + row['id'])
         check(expected == current_payload, 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
-    prior_changes = json.loads(json.dumps(changes[:-1]))
+    prior_changes = room_historical_payload(json.loads(json.dumps(backlog)), 'execution/change-sets.json')['changeSets'][:-1]
     ui_task = next(x for x in prior_changes if x['id'] == 'CN-UI-001')
     check(ui_task.pop('implementationEvidence', None) == ui_subset and ui_task['evidencePaths'] == ['PROGRESS.md#ui-implementation'], 'UI scoped implementation evidence missing')
     ui_task['evidencePaths'] = []

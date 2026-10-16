@@ -100,7 +100,6 @@
       ],
       "blockingDecisionIds": [
         "OD-03",
-        "OD-04",
         "OD-05",
         "OD-15"
       ],
@@ -115,7 +114,13 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-04"
+      ],
+      "verificationDecisionIds": [
+        "OD-04"
+      ]
     },
     {
       "id": "CN-FND-001",
@@ -312,11 +317,7 @@
         "CN-AUTH-001",
         "CN-UI-001"
       ],
-      "blockingDecisionIds": [
-        "OD-04",
-        "OD-10",
-        "OD-14"
-      ],
+      "blockingDecisionIds": [],
       "affectedFilesModules": "Venues/Rooms and catalog UI TBD",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
@@ -328,7 +329,78 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-04",
+        "OD-10",
+        "OD-14"
+      ],
+      "scopeProposal": {
+        "status": "PROPOSED_AWAITING_SEPARATE_OWNER_APPROVAL",
+        "canonicalSpecification": "ARCHITECTURE.md#room-scope-proposal",
+        "uiSpecification": "DESIGN.md#room-ui-scope-proposal",
+        "approvalSource": "Current owner instruction authorizes scope preparation only; no implementation or READY status",
+        "modules": [
+          "Venues/Rooms: com.cinenest.rooms owns cinenest_rooms data and room/catalog API",
+          "Identity: narrow public grant/eligibility authorization port; no cross-module SQL or grant administration",
+          "frontend existing shell/primitives/session transport; scoped room/catalog pages",
+          "Existing PostgreSQL harness, architecture tests and CI"
+        ],
+        "tables": [
+          "cinenest_rooms.venue",
+          "cinenest_rooms.venue_operating_window",
+          "cinenest_rooms.room",
+          "cinenest_rooms.room_facility",
+          "cinenest_rooms.room_image",
+          "cinenest_rooms.configuration_audit"
+        ],
+        "migration": "Proposed V3__venue_room_catalog.sql; additive PostgreSQL schema/tables/constraints/indexes only; no production seed or changes to V1/V2",
+        "apiEndpoints": [
+          "GET /api/catalog/venues",
+          "GET /api/catalog/rooms",
+          "GET /api/catalog/rooms/{roomId}",
+          "GET /api/admin/venues",
+          "POST /api/admin/venues",
+          "GET /api/admin/venues/{venueId}",
+          "PUT /api/admin/venues/{venueId}",
+          "GET /api/admin/venues/{venueId}/rooms",
+          "POST /api/admin/venues/{venueId}/rooms",
+          "GET /api/admin/venues/{venueId}/rooms/{roomId}",
+          "PUT /api/admin/venues/{venueId}/rooms/{roomId}"
+        ],
+        "requirements": [
+          "CN-C01",
+          "CN-A03",
+          "CN-A04"
+        ],
+        "testPlans": [
+          "T-CN-C01",
+          "T-CN-A03",
+          "T-CN-A04",
+          "T-CN-NFR-02 applicable boundary subset only"
+        ],
+        "remainingApproval": [
+          "Approve complete schema/API/UI/migration/test/rollback proposal at canonicalSpecification",
+          "Explicitly authorize implementation of this bounded CN-ROOM-001 only"
+        ],
+        "exclusions": [
+          "Package editing/publication/prices/add-ons",
+          "Booking/availability holds/reservation writes",
+          "Payments/refunds",
+          "Hardware mapping/device integration/live IoT",
+          "Automatic physical readiness certification",
+          "Production account provisioning/grant administration/media licensing certification",
+          "Physical room/customer acceptance"
+        ],
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "authorityAvailable": false
+      },
+      "verificationDecisionIds": [
+        "OD-04",
+        "OD-10",
+        "OD-14"
+      ]
     },
     {
       "id": "CN-PKG-001",
@@ -426,7 +498,6 @@
       ],
       "blockingDecisionIds": [
         "OD-09",
-        "OD-10",
         "OD-21"
       ],
       "affectedFilesModules": "Booking/database owned schema/API/UI TBD",
@@ -440,7 +511,13 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-10"
+      ],
+      "verificationDecisionIds": [
+        "OD-10"
+      ]
     },
     {
       "id": "CN-QUOTE-001",
@@ -682,8 +759,7 @@
         "CN-PAY-BANK-002"
       ],
       "blockingDecisionIds": [
-        "OD-02",
-        "OD-04"
+        "OD-02"
       ],
       "affectedFilesModules": "Access/Booking/Notifications/UI and simulator TBD",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
@@ -696,7 +772,13 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-04"
+      ],
+      "verificationDecisionIds": [
+        "OD-04"
+      ]
     },
     {
       "id": "CN-IOT-001",
@@ -748,8 +830,6 @@
         "CN-IOT-001"
       ],
       "blockingDecisionIds": [
-        "OD-04",
-        "OD-10",
         "OD-13",
         "OD-29"
       ],
@@ -764,7 +844,15 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-04",
+        "OD-10"
+      ],
+      "verificationDecisionIds": [
+        "OD-04",
+        "OD-10"
+      ]
     },
     {
       "id": "CN-ADMIN-001",
@@ -994,9 +1082,7 @@
       "blockingDecisionIds": [
         "OD-02",
         "OD-03",
-        "OD-04",
         "OD-05",
-        "OD-14",
         "OD-15"
       ],
       "affectedFilesModules": "Cross-module CI/acceptance/runbooks TBD",
@@ -1010,7 +1096,15 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-04",
+        "OD-14"
+      ],
+      "verificationDecisionIds": [
+        "OD-04",
+        "OD-14"
+      ]
     },
     {
       "id": "CN-LAUNCH-001",
@@ -1032,9 +1126,7 @@
       "blockingDecisionIds": [
         "OD-01",
         "OD-02",
-        "OD-04",
         "OD-06",
-        "OD-14",
         "OD-29"
       ],
       "affectedFilesModules": "Deployment/operations/provider/hardware paths TBD",
@@ -1048,7 +1140,15 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-04",
+        "OD-14"
+      ],
+      "verificationDecisionIds": [
+        "OD-04",
+        "OD-14"
+      ]
     },
     {
       "id": "CN-KB-CONSOLIDATE-001",

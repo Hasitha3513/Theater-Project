@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-UI-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-ROOM-001",
-  "nextAction": "Owner resolves CN-ROOM-001 OD-04/10/14 and separately authorizes its existing bounded slice; no next READY task",
+  "nextAction": "Owner approves concrete CN-ROOM-001 scope and separately authorizes bounded implementation; no next READY task",
   "nextReadyChangeSet": null,
   "implementationEvidence": "Foundation, bounded auth and bounded shared UI verified; no P2 business implementation or phase/customer acceptance",
   "approvedCoreDecisions": [
@@ -1611,5 +1611,36 @@
     "nextReadyChangeSet": "CN-UI-001",
     "nextAction": "Implement only READY CN-UI-001 in a future implementation session under the recorded bounded owner authorization; stop now after decision/readiness",
     "evidencePath": "PROGRESS.md#ui-readiness"
+  },
+  "roomScopePreparation": {
+    "baselineHead": "3ad4a17ecfcbb0d52ebc93232f98f6fa0ebc163a",
+    "dateLocal": "2026-10-16",
+    "sessionScope": "DECISION_RECORDING_AND_SCOPE_PREPARATION_ONLY",
+    "decisionIds": [
+      "OD-04",
+      "OD-10",
+      "OD-14"
+    ],
+    "decisionStatus": "APPROVED",
+    "scopeReference": "ARCHITECTURE.md#room-scope-proposal",
+    "taskStatus": "BLOCKED",
+    "authorityAvailable": false,
+    "implementation": "NOT_STARTED",
+    "tests": "NOT_RUN_APPLICATION_CHECKS",
+    "knowledgeChecks": {
+      "designValidator": "PASS",
+      "executionValidator": "PASS",
+      "whitespace": "PASS",
+      "negativeControls": [
+        "Unauthorized room READY rejected",
+        "False OD-14 implementation verification rejected",
+        "Lost physical/licensing verification gate rejected"
+      ],
+      "coverage": "92 requirements, 92 test plans, 28 tasks; counts/IDs unchanged",
+      "applicationChanges": "NONE",
+      "applicationTests": "NOT_RUN; documentation/scope session only"
+    },
+    "publication": "PENDING_AT_PREPARATION; final commit/push/remote verification reported in conversation and resolved from Git",
+    "nextAction": "Owner approves concrete CN-ROOM-001 scope and separately authorizes bounded implementation; no next READY task"
   }
 }

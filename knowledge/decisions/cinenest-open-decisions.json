@@ -140,11 +140,37 @@
       "source": "S1 and visual references",
       "impact": "Safe room turnover and response",
       "options": "Accountable onsite/on-call staffing, cleaning checklist and emergency plan",
-      "owner": "TBD",
+      "owner": "Project owner",
       "evidenceRequired": "Venue staffing/responder drills and physical readiness clearance",
-      "decisionStatus": "OPEN_DECISION",
+      "decisionStatus": "APPROVED",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "historicalContext": {
+        "id": "OD-04",
+        "conflict": "Staff-less visuals versus physical cleaning/emergency intervention",
+        "source": "S1 and visual references",
+        "impact": "Safe room turnover and response",
+        "options": "Accountable onsite/on-call staffing, cleaning checklist and emergency plan",
+        "owner": "TBD",
+        "evidenceRequired": "Venue staffing/responder drills and physical readiness clearance",
+        "decisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "launchBlocker": "LAUNCH_BLOCKER"
+      },
+      "ownerApproval": {
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction: Record OD-04, OD-10 and OD-14 using my attached decisions; decision recording and scope preparation only",
+        "scopeComparison": "MATCHES_RECORDED_QUESTION",
+        "canonicalSpecification": "PROJECT.md#room-operating-decisions",
+        "decisions": [
+          "Staff-supported MVP: responsible personnel perform or supervise required guest check-in, physical cleaning, readiness confirmation, maintenance intervention, incident and emergency response.",
+          "Do not describe the MVP as fully staffless; booking timers, door events and device acknowledgements never certify physical readiness.",
+          "Emergency egress remains independent of application, payment, network connectivity and access credentials.",
+          "Detailed staffing levels, responder drills and physical acceptance remain separate gates."
+        ],
+        "implementationAuthorization": "NOT_GRANTED",
+        "remainingAcceptance": "Original evidenceRequired and LAUNCH_BLOCKER retained for applicable physical/operational/licensing verification; policy choice is resolved, implementation NOT_VERIFIED"
+      }
     },
     {
       "id": "OD-05",
@@ -204,7 +230,7 @@
     },
     {
       "id": "OD-09",
-      "conflict": "Temporary hold range 10\u201315 min is not precise",
+      "conflict": "Temporary hold range 10–15 min is not precise",
       "source": "S1",
       "impact": "Expiry UI, payment handoff and inventory utilization",
       "options": "Choose configurable 10 or 15 minutes (or justified value) later",
@@ -220,11 +246,37 @@
       "source": "S1",
       "impact": "Latest bookable start/physical staffing schedule",
       "options": "Disallow buffer beyond closing vs permit staffed post-close cleaning",
-      "owner": "TBD",
+      "owner": "Project owner",
       "evidenceRequired": "Operating/readiness approval and boundary tests",
-      "decisionStatus": "OPEN_DECISION",
+      "decisionStatus": "APPROVED",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "historicalContext": {
+        "id": "OD-10",
+        "conflict": "Cleaning buffer after closing not resolved",
+        "source": "S1",
+        "impact": "Latest bookable start/physical staffing schedule",
+        "options": "Disallow buffer beyond closing vs permit staffed post-close cleaning",
+        "owner": "TBD",
+        "evidenceRequired": "Operating/readiness approval and boundary tests",
+        "decisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "launchBlocker": "LAUNCH_BLOCKER"
+      },
+      "ownerApproval": {
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction: Record OD-04, OD-10 and OD-14 using my attached decisions; decision recording and scope preparation only",
+        "scopeComparison": "MATCHES_RECORDED_QUESTION",
+        "canonicalSpecification": "PROJECT.md#room-operating-decisions",
+        "decisions": [
+          "Separate customer operating intervals from room-blocking intervals: customer sessions end by configured venue closing unless an explicitly approved exception applies.",
+          "Cleaning/reset buffers may extend after closing only with an approved staffing and operational process; post-close cleaning is not sellable customer viewing time.",
+          "Represent customer session start/end, cleaning/reset buffer and inventory blocked-until separately; use venue-local time interpretation.",
+          "Illustrative times/durations are not approved defaults; special-day policies and exceptions remain unresolved."
+        ],
+        "implementationAuthorization": "NOT_GRANTED",
+        "remainingAcceptance": "Original evidenceRequired and LAUNCH_BLOCKER retained for applicable physical/operational/licensing verification; policy choice is resolved, implementation NOT_VERIFIED"
+      }
     },
     {
       "id": "OD-11",
@@ -359,11 +411,37 @@
       "source": "S1 and screenshot amenities",
       "impact": "Launch claims and content use",
       "options": "Obtain appropriate rights or restrict advertised/offered amenities",
-      "owner": "TBD",
+      "owner": "Project owner",
       "evidenceRequired": "Qualified commercial/licensing/venue review; no legal claim from PDFs",
-      "decisionStatus": "OPEN_DECISION",
+      "decisionStatus": "APPROVED",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "historicalContext": {
+        "id": "OD-14",
+        "conflict": "Commercial screening/streaming/gaming/media rights unverified",
+        "source": "S1 and screenshot amenities",
+        "impact": "Launch claims and content use",
+        "options": "Obtain appropriate rights or restrict advertised/offered amenities",
+        "owner": "TBD",
+        "evidenceRequired": "Qualified commercial/licensing/venue review; no legal claim from PDFs",
+        "decisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "launchBlocker": "LAUNCH_BLOCKER"
+      },
+      "ownerApproval": {
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction: Record OD-04, OD-10 and OD-14 using my attached decisions; decision recording and scope preparation only",
+        "scopeComparison": "MATCHES_RECORDED_QUESTION",
+        "canonicalSpecification": "PROJECT.md#room-operating-decisions",
+        "decisions": [
+          "Restrict media/content offerings until appropriate commercial rights and provider terms are independently verified.",
+          "Advertise neutral physical capabilities only: projector/display, sound, supported inputs, console/equipment compatibility and other approved facilities.",
+          "Do not advertise unverified screening/streaming/gaming-content entitlements or infer commercial exhibition rights from a consumer subscription.",
+          "Independent legal/licensing verification remains a separate acceptance gate; this approval is not legal certification."
+        ],
+        "implementationAuthorization": "NOT_GRANTED",
+        "remainingAcceptance": "Original evidenceRequired and LAUNCH_BLOCKER retained for applicable physical/operational/licensing verification; policy choice is resolved, implementation NOT_VERIFIED"
+      }
     },
     {
       "id": "OD-15",
