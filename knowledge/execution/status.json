@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-PKG-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-BOOK-001",
-  "nextAction": "Owner review of CN-BOOK-001 bounded inventory scope and OD-09/OD-21 remaining gates; no READY successor",
+  "nextAction": "In a separate invocation, reconcile the already provided CN-BOOK-001 policy/scope authorization and actual readiness; do not request duplicate approval",
   "nextReadyChangeSet": null,
   "implementationEvidence": "Bounded room/catalog verified; package/booking/physical and phase/customer acceptance remain open",
   "approvedCoreDecisions": [
@@ -2057,7 +2057,7 @@
     }
   },
   "localDevelopmentWorkflow": {
-    "status": "VERIFIED_LOCAL_WORKFLOW",
+    "status": "VERIFIED_PUBLISHED_WORKFLOW",
     "baselineHead": "00164620cb03487e9dd74722e4763d12dce99ec2",
     "authorization": "Current owner task: Standardize CineNest local development scripts; script-only, no business implementation",
     "evidencePath": "PROGRESS.md#local-development-maintenance",
@@ -2079,8 +2079,19 @@
       "existingFrontendTests": 44,
       "localOnlineAudit": "NOT_RUN_OFFLINE",
       "knowledge": "PASS",
-      "ci": "PENDING_PUBLICATION"
+      "ci": "SUCCESS"
     },
-    "bookAuthorization": "Current owner approves preceding CN-BOOK-001 policies/scope; preserved for next separate reconciliation, not implemented or marked READY in this script-only task"
+    "bookAuthorization": "Current owner approves preceding CN-BOOK-001 policies/scope; preserved for next separate reconciliation, not implemented or marked READY in this script-only task",
+    "ciReceipt": {
+      "headSha": "01db4b153d0a402fc968b385ae84c4318da15992",
+      "runId": 38923682178,
+      "conclusion": "success",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38923682178"
+    },
+    "publication": {
+      "destination": "origin/main",
+      "sourceCommit": "01db4b153d0a402fc968b385ae84c4318da15992",
+      "finalReceipt": "Final documentation commit/remote tip and CI verified separately in conversation"
+    }
   }
 }

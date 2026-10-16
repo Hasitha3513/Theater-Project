@@ -106,6 +106,12 @@ def main():
         if name.endswith('.sh'):check((R/name).stat().st_mode & 0o111 != 0,'Local launcher not executable '+name)
     workflow_before=subprocess.check_output(['git','-C',str(R),'show','00164620cb03487e9dd74722e4763d12dce99ec2:.github/workflows/foundation.yml'])
     check((R/'.github/workflows/foundation.yml').read_bytes()==workflow_before.replace(b'      - name: Knowledge and whitespace',b'      - name: Local launcher contracts\n        run: python3 scripts/test-launchers.py\n      - name: Knowledge and whitespace'),'Unrelated CI changes in local workflow')
+    if workflow.get('checks',{}).get('ci')=='SUCCESS':
+        receipt=workflow.get('ciReceipt',{});sha=receipt.get('headSha','')
+        check(receipt.get('conclusion')=='success' and isinstance(receipt.get('runId'),int) and re.fullmatch('[0-9a-f]{40}',sha) is not None,'Local workflow CI receipt missing')
+        if re.fullmatch('[0-9a-f]{40}',sha):
+            for name,digest in workflow_owned.items():
+                check(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',sha+':'+name])).hexdigest()==digest,'Local workflow current/CI source mismatch '+name)
     check(workflow.get('baselineHead')=='00164620cb03487e9dd74722e4763d12dce99ec2' and workflow.get('checks',{}).get('launcherTests')==14,'Local workflow baseline/evidence missing')
     changes = backlog['changeSets']; reqs = coverage['requirements']; tests = tests_doc['tests']
     # Explicit bounded CN-PKG-001 successor; compare its exact authorized delta before historical checks.
