@@ -95,6 +95,36 @@ def main():
             source = subprocess.check_output(['git', '-C', str(R), 'show', '7fc0f62fa3db7b29f8be289f73b57d01809bf14a:' + name])
             check(hashlib.sha256(source).hexdigest() == digest, 'Auth CI source does not match current evidence ' + name)
     auth_subset = {'taskId':'CN-AUTH-001','status':'VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ','evidencePath':'PROGRESS.md#auth-implementation','fullRequirementVerified':False,'fullRequirementAcceptance':'NOT_ACCEPTED'}
+    ui_evidence = state.get('uiImplementation', {})
+    check(ui_evidence.get('authorizationRequestSha256') == 'd5e0c2f2835e0d24cfb8e18252429916ad06b0cc5352c60d5808354553c7c2de'
+          and ui_evidence.get('baselineHead') == 'fd19bc5a02dc7ed598aebb06731001c7b98e674d'
+          and ui_evidence.get('status') == 'VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES', 'UI bounded owner implementation provenance missing')
+    ui_owned = ui_evidence.get('ownedFiles', {})
+    expected_ui_owned = {'frontend/package.json', 'frontend/app/globals.css', 'frontend/lib/backend.ts', 'frontend/tests/tsx-loader.mjs', 'frontend/app/api/session/logout/route.ts', 'frontend/app/layout.tsx', 'frontend/app/page.tsx', 'frontend/app/api/session/csrf/route.ts', 'frontend/components/examples.tsx', 'frontend/app/account/page.tsx', 'frontend/app/admin/page.tsx', 'frontend/scripts/generate-breakpoints.mjs', 'frontend/components/session-panel.tsx', 'frontend/lib/session.ts', 'frontend/tests/ui-browser.mjs', 'frontend/tests/ui.test.mjs', 'frontend/tests/transport.test.mjs', 'frontend/app/admin/account/page.tsx', 'frontend/components/shell.tsx', 'frontend/components/primitives.tsx', 'frontend/tests/foundation.test.mjs', 'frontend/styles/breakpoints.css', 'frontend/app/admin/components/page.tsx', 'frontend/app/api/accounts/me/route.ts'}
+    check(set(ui_owned) == expected_ui_owned, 'UI bounded source inventory changed')
+    for name, digest in ui_owned.items():
+        check((R / name).is_file() and hashlib.sha256((R / name).read_bytes()).hexdigest() == digest, 'UI source checksum mismatch ' + name)
+    ui_checks = ui_evidence.get('checks', {})
+    check(ui_checks.get('frontendTests', {}).get('total') == 23 and ui_checks.get('frontendTests', {}).get('failures') == 0
+          and ui_checks.get('frontendTests', {}).get('skipped') == 0 and ui_checks.get('backendRegression', {}).get('total') == 36
+          and ui_checks.get('backendRegression', {}).get('failures') == 0 and ui_checks.get('browser', {}).get('checkGroups') == 19
+          and ui_checks.get('browser', {}).get('widths') == [320,375,640,768,1024,1280,1536], 'UI executed verification evidence incomplete')
+    check(ui_evidence.get('p1') == 'PARTIAL_NOT_ACCEPTED' and ui_evidence.get('d1') == 'NOT_READY', 'UI promoted to phase/demo acceptance')
+    ui_subset = {'taskId':'CN-UI-001','status':'VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES','evidencePath':'PROGRESS.md#ui-implementation','fullRequirementVerified':False,'fullRequirementAcceptance':'NOT_ACCEPTED'}
+    ui_ci = ui_evidence.get('remoteCI') == 'SUCCESS'
+    if ui_ci:
+        receipt = ui_evidence.get('ciReceipt', {})
+        check(receipt.get('conclusion') == 'success' and isinstance(receipt.get('runId'), int)
+              and re.fullmatch(r'[0-9a-f]{40}', receipt.get('headSha', '')) is not None, 'UI exact-source CI receipt missing')
+        if re.fullmatch(r'[0-9a-f]{40}', receipt.get('headSha', '')):
+            for name, digest in ui_owned.items():
+                content = subprocess.check_output(['git', '-C', str(R), 'show', receipt['headSha'] + ':' + name])
+                check(hashlib.sha256(content).hexdigest() == digest, 'UI CI source mismatch ' + name)
+    # Scripts may extend verification; dependencies, engines and all other metadata remain identical.
+    old_package = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', 'fd19bc5a02dc7ed598aebb06731001c7b98e674d:frontend/package.json'], text=True))
+    current_package = json.loads((R / 'frontend/package.json').read_text())
+    old_package['scripts'].pop('test'); current_package['scripts'].pop('test')
+    check(old_package == current_package, 'Unapproved frontend dependency/toolchain/script change')
     owned = foundation_evidence.get('ownedFiles', {})
     required_foundation = {'backend/pom.xml', 'backend/mvnw', 'frontend/package-lock.json', 'frontend/package.json', 'scripts/verify-foundation.py', '.github/workflows/foundation.yml'}
     check(required_foundation <= set(owned) and len(owned) == 29, 'Foundation source/build/test inventory missing')
@@ -102,7 +132,7 @@ def main():
         path = R / name
         # Historical foundation evidence stays immutable. Only explicitly owned auth successors
         # may differ now; both their current hashes above and original source hashes are checked.
-        data = subprocess.check_output(['git', '-C', str(R), 'show', 'aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15:' + name]) if name in auth_owned else path.read_bytes() if path.is_file() else b''
+        data = subprocess.check_output(['git', '-C', str(R), 'show', 'aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15:' + name]) if name in auth_owned or name in ui_owned else path.read_bytes() if path.is_file() else b''
         check(path.is_file() and hashlib.sha256(data).hexdigest() == digest, 'Foundation source checksum mismatch ' + name)
     results = foundation_evidence.get('checks', [])
     check(len(results) == 7 and all(c.get('exitCode') == 0 for c in results), 'Foundation verification failure/missing checks')
@@ -142,9 +172,9 @@ def main():
             check(c['dependencies'] == ['CN-FND-001'] and c['blockingDecisionIds'] == [] and c.get('resolvedDecisionIds') == ['OD-12'], 'Auth prerequisite/scope dependency altered')
             check(c.get('evidencePaths') == ['PROGRESS.md#auth-implementation'] and c.get('implementationEvidence') == auth_subset, 'Auth scoped implementation evidence missing')
         elif c['id'] == 'CN-UI-001':
-            check(c['authorityAvailable'] is True and c['readiness'] == 'READY' and c['workStatus'] == 'PLANNED', 'UI readiness promoted to implementation')
+            check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED', 'UI bounded completion/evidence diverge')
             check(c['dependencies'] == ['CN-FND-001'] and c['blockingDecisionIds'] == [] and c.get('resolvedDecisionIds') == ['OD-11'], 'UI dependency/resolution changed')
-            check(c.get('evidencePaths') == [] and c.get('implementationAuthorization') == 'GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS', 'UI implementation evidence invented or scope missing')
+            check(c.get('evidencePaths') == ['PROGRESS.md#ui-implementation'] and c.get('implementationEvidence') == ui_subset and c.get('implementationAuthorization') == 'GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS', 'UI implementation evidence invented or scope missing')
         elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
@@ -194,8 +224,8 @@ def main():
         else:
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
-    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] == 'CN-UI-001' and [c['id'] for c in changes if c['readiness'] == 'READY'] == ['CN-UI-001'], 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-UI-001' and state['nextRecommendedChangeSet'] == 'CN-UI-001' and state.get('nextReadyChangeSet') == 'CN-UI-001', 'Unexpected next checkpoint')
+    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == [], 'Unsupported READY plan')
+    check(state['taskId'] == 'CN-UI-001' and state['nextRecommendedChangeSet'] == 'CN-ROOM-001' and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
     check(state['workStatus'] == cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
     check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
@@ -219,7 +249,7 @@ def main():
                 if key in old:
                     expected_status = 'APPROVED' if id in {'OD-11','OD-12'} and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
                     if id == 'CN-UI-001':
-                        expected_status = {'workStatus':'PLANNED','authorityAvailable':True,'readiness':'READY'}.get(key, expected_status)
+                        expected_status = {'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status)
                     if id == 'CN-AUTH-001':
                         expected_status = {'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status)
                     check(after.get(id, {}).get(key) == ({'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status) if id == 'CN-FND-001' else expected_status), 'Baseline status changed beyond scoped foundation authority ' + id + '/' + key)
@@ -248,6 +278,8 @@ def main():
             if kind == 'tests':
                 targets = {'T-' + value for value in targets}
             for row in current_payload[kind]:
+                if row['id'].removeprefix('T-') in {'PR-UI-001','CN-A04','CN-NFR-01'}:
+                    check(row.pop('uiImplementationEvidence', None) == ui_subset, 'UI subset/full feature evidence lost ' + row['id'])
                 if row['id'] in targets:
                     check(row.pop('authImplementationEvidence', None) == auth_subset, 'Bounded auth evidence missing/overstated ' + row['id'])
                     check(row.pop('boundedAuthPolicyApproval', None) == {'taskId':'CN-AUTH-001','canonicalSpecification':'ARCHITECTURE.md#auth-bounded-policy','readiness':'READY','implementationStatus':'NOT_VERIFIED','tests':'NOT_RUN','fullRequirementAcceptance':'NOT_ACCEPTED'}, 'Auth approval conflated with test/requirement completion ' + row['id'])
@@ -327,6 +359,8 @@ def main():
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
     prior_changes = json.loads(json.dumps(changes[:-1]))
     ui_task = next(x for x in prior_changes if x['id'] == 'CN-UI-001')
+    check(ui_task.pop('implementationEvidence', None) == ui_subset and ui_task['evidencePaths'] == ['PROGRESS.md#ui-implementation'], 'UI scoped implementation evidence missing')
+    ui_task['evidencePaths'] = []
     ui_approval = ui_task.pop('readinessApproval', None)
     check(hashlib.sha256(json.dumps(ui_approval, sort_keys=True).encode()).hexdigest() == '2ed1969a5cbfa74fdd11c72ba96f5d29562ca876b9e66bbcf806842e1d2fd22c', 'UI readiness approval/history changed')
     check(ui_task.pop('implementationAuthorization', None) == 'GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS'
@@ -420,7 +454,8 @@ def main():
     protected = subprocess.check_output(['git', '-C', str(R), 'ls-tree', '-r', '--name-only', '78e4c74cf1462bcf69b384df045f019d61fafe3f', '--', 'backend', 'frontend', 'knowledge/tokens', 'knowledge/styles'], text=True).splitlines()
     for name in protected:
         baseline_bytes = subprocess.check_output(['git', '-C', str(R), 'show', '78e4c74cf1462bcf69b384df045f019d61fafe3f:' + name])
-        check((R / name).is_file() and (R / name).read_bytes() == baseline_bytes, 'Decision-only UI session changed protected source/token/dependency ' + name)
+        if name not in ui_owned:
+            check((R / name).is_file() and (R / name).read_bytes() == baseline_bytes, 'Unapproved protected source/token/dependency change ' + name)
     check('<a id="od11-approved-baseline"></a>' in (K / 'DESIGN.md').read_text() and '<a id="ui-readiness"></a>' in progress, 'UI canonical approval/readiness missing')
     reconciliation = state.get('authReadinessReconciliation', {})
     check(reconciliation.get('requestSha256') == '7411e72e0db40ad99d70ac76c4d2c92876635449376bb9a3203df02a34730945' and reconciliation.get('readiness') == 'READY' and reconciliation.get('implementationStatus') == 'NOT_VERIFIED' and reconciliation.get('sessionScope') == 'DECISION_RECORDING_ONLY', 'Auth readiness reconciliation scope lost/promoted')
@@ -462,8 +497,8 @@ def main():
         criterion_requirements[cid] = rset
         if box == 'x':
             checked.append(cid)
-            check((number == '0' and 'DOC_VERIFIED' in evidence) or (cid == 'P1-C01' and 'LOCAL_FOUNDATION_VERIFIED' in evidence), 'Implementation checked without actual scoped evidence ' + cid)
-    check(checked == ['P0-C01','P0-C02','P0-C03','P0-C04','P0-C05','P0-C06','P1-C01'], 'Readiness preparation/evidence roll-up changed')
+            check((number == '0' and 'DOC_VERIFIED' in evidence) or (cid == 'P1-C01' and 'LOCAL_FOUNDATION_VERIFIED' in evidence) or (cid == 'P1-C06' and ui_ci and 'UI_SHELL_VERIFIED' in evidence), 'Implementation checked without actual scoped evidence ' + cid)
+    check(checked == ['P0-C01','P0-C02','P0-C03','P0-C04','P0-C05','P0-C06','P1-C01'] + (['P1-C06'] if ui_ci else []), 'Readiness preparation/evidence roll-up changed')
     check(re.findall(r'^#### P(\d+)\.', roadmap, re.M) == [str(i) for i in range(11)], 'Phase definitions duplicated/missing')
     gates = re.findall(r'^- \[([ x])\] \*\*(P\d+-ACCEPT)\*\*', roadmap, re.M)
     check(gates == [(' ', 'P'+str(i)+'-ACCEPT') for i in range(11)], 'Phase accepted without reviewer/evidence/prerequisite closure')
@@ -482,7 +517,7 @@ def main():
     for tid, phase, deps, status in task_projection:
         check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == cmap[tid]['workStatus']+' / '+cmap[tid]['readiness'], 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
-    check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
+    check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')
     for warning in ['illustrative','UNKNOWN/TBD','NOT_HELD','NOT_ACCEPTED','NEEDS_RECHECK','CN-NOTIFY-001 (P5) depends on CN-ACCESS-001 (P7)','HTML','one venue']:
         check(warning in roadmap, 'Roadmap qualification missing ' + warning)

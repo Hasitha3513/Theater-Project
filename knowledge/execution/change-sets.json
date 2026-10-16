@@ -192,9 +192,11 @@
       "definitionOfDone": "Approved hybrid reproduced with usable primitives and DEMO-only fixtures",
       "requiredApproval": "Explicit UI slice approval and component/palette decisions",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "PLANNED",
-      "evidencePaths": [],
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "PROGRESS.md#ui-implementation"
+      ],
       "resolvedDecisionIds": [
         "OD-11"
       ],
@@ -214,6 +216,13 @@
         },
         "implementationStatus": "NOT_VERIFIED",
         "tests": "NOT_RUN"
+      },
+      "implementationEvidence": {
+        "taskId": "CN-UI-001",
+        "status": "VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES",
+        "evidencePath": "PROGRESS.md#ui-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {

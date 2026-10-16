@@ -19,6 +19,15 @@ This document owns technology proposals, module/data/API and integration design,
 - [Open Decisions](#open-decisions)
 - [Initial Stack Brief](#initial-stack-brief)
 
+<a id="ui-implemented-boundary"></a>
+## Implemented shared UI boundary — 2026-10-16
+
+CN-UI-001 provides one root ApplicationShell and five public preview pages: /, /account, /admin, /admin/components, /admin/account. Public shell visibility is not an administration grant; unavailable business modules are Planned text without working routes. No client role/capability is invented. Generic synthetic UI examples have one shared filtered collection for cards/tables, separate from production state. No direct database or frontend business rules.
+
+The optional CINENEST_AUTH_ORIGIN server environment value configures only the existing backend origin (HTTPS, or HTTP loopback for local verification; origin only, no credentials/path/query). Without configuration, the three same-origin transport adapters return 503 and the UI shows unconfigured state. GET /api/accounts/me, GET /api/session/csrf and POST /api/session/logout forward only those exact existing CN-AUTH-001 routes. No new authentication/admission endpoint, provider redirect proxy or second session store. Sign-in/provider/TLS deployment configuration remains separately qualified; no fake login button or production default. Requests forward only CINENEST_SESSION, not arbitrary cookies, Authorization, query roles or owner/venue attributes. Logout requires same incoming Host/request protocol Origin and the backend CSRF header; forwarded host headers never establish authority. Backend redirects/raw errors are not relayed. Account responses expose accountId/eligibility only; csrf is transient for the existing logout mechanism. All responses no-store, no sensitive logs/storage; network failures are safe 502 states. The five-second transport timeout is a technical request bound, not session expiry or authorization lifetime.
+
+Client presentation reads no roles; eligibility failure/401/403 clears the visible account. It clears data before refresh/logout, when window focus returns, and rejects stale async results on navigation; this is presentation hygiene, not revocation enforcement. Backend still checks current authority. Isolated backend PostgreSQL evidence and actual HTTP transport tests are separate from simulated browser response tests; no full live-provider/browser session integration claim. Dependency versions, lockfile, backend policy and V1/V2 remain unchanged. See [execution](PROGRESS.md#ui-implementation) and [visual baseline](DESIGN.md#ui-implemented-baseline).
+
 <a id="od11-resolution"></a>
 ## OD-11 resolution and bounded UI authority — 2026-10-16
 

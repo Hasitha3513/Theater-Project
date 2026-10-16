@@ -102,7 +102,14 @@
       },
       "resolvedDecisionIds": [
         "OD-11"
-      ]
+      ],
+      "uiImplementationEvidence": {
+        "taskId": "CN-UI-001",
+        "status": "VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES",
+        "evidencePath": "PROGRESS.md#ui-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "PR-PKG-001",
@@ -820,7 +827,14 @@
       ],
       "resolvedDecisionIds": [
         "OD-11"
-      ]
+      ],
+      "uiImplementationEvidence": {
+        "taskId": "CN-UI-001",
+        "status": "VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES",
+        "evidencePath": "PROGRESS.md#ui-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-A05",
@@ -1522,7 +1536,14 @@
       ],
       "resolvedDecisionIds": [
         "OD-11"
-      ]
+      ],
+      "uiImplementationEvidence": {
+        "taskId": "CN-UI-001",
+        "status": "VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES",
+        "evidencePath": "PROGRESS.md#ui-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-NFR-02",

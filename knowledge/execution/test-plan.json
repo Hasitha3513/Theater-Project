@@ -45,6 +45,13 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
+      },
+      "uiImplementationEvidence": {
+        "taskId": "CN-UI-001",
+        "status": "VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES",
+        "evidencePath": "PROGRESS.md#ui-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -309,7 +316,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "uiImplementationEvidence": {
+        "taskId": "CN-UI-001",
+        "status": "VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES",
+        "evidencePath": "PROGRESS.md#ui-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-A05",
@@ -559,7 +573,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "uiImplementationEvidence": {
+        "taskId": "CN-UI-001",
+        "status": "VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES",
+        "evidencePath": "PROGRESS.md#ui-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-NFR-02",

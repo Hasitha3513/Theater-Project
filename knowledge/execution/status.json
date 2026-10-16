@@ -1,21 +1,21 @@
 {
   "schemaVersion": "1.0.0",
   "taskId": "CN-UI-001",
-  "mode": "DECISION_AND_READINESS_RECONCILIATION",
+  "mode": "BOUNDED_UI_IMPLEMENTATION",
   "workStatus": "VERIFIED",
   "productStage": "FOUNDATION_AND_BOUNDED_AUTH_VERIFIED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "78e4c74cf1462bcf69b384df045f019d61fafe3f",
+  "baselineHead": "fd19bc5a02dc7ed598aebb06731001c7b98e674d",
   "baselineWorktree": "CLEAN",
   "currentChangeSet": "CN-UI-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-UI-001",
-  "nextAction": "Implement only READY CN-UI-001 in a future implementation session under the recorded bounded owner authorization; stop now after decision/readiness",
-  "nextReadyChangeSet": "CN-UI-001",
-  "implementationEvidence": "CN-FND-001 and bounded CN-AUTH-001 locally verified; full features and P1/customer acceptance remain incomplete",
+  "nextRecommendedChangeSet": "CN-ROOM-001",
+  "nextAction": "Owner resolves CN-ROOM-001 OD-04/10/14 and separately authorizes its existing bounded slice; no next READY task",
+  "nextReadyChangeSet": null,
+  "implementationEvidence": "Foundation, bounded auth and bounded shared UI verified; no P2 business implementation or phase/customer acceptance",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
@@ -31,10 +31,10 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PUSHED",
+  "publicationState": "PENDING_TASK_PUBLICATION",
   "publicationEvidence": "CN-FND-001 implementation through aa2bb4e pushed to origin/main; full remote CI 38689239097 SUCCESS at that source commit; metadata-only receipt successor resolved from Git",
   "lastObservedHead": "f38eaa55030564993b24d52ed7f97fb5b216e931",
-  "evidencePath": "PROGRESS.md#ui-readiness",
+  "evidencePath": "PROGRESS.md#ui-implementation",
   "evidenceFreshness": "2026-10-15 foundation closeout; exact checks/versions in foundationImplementation",
   "availableTools": [
     "exec/file reads/edits",
@@ -1431,5 +1431,170 @@
     "baselineHead": "ec355715c1942d060dc58360bded4c1f423a82bc",
     "lastObservedHead": "7fc0f62fa3db7b29f8be289f73b57d01809bf14a",
     "requestedTaskId": "CN-AUTH-001"
+  },
+  "uiImplementation": {
+    "status": "VERIFIED_BOUNDED_SHELL_AND_PRIMITIVES",
+    "authorizationRequestSha256": "d5e0c2f2835e0d24cfb8e18252429916ad06b0cc5352c60d5808354553c7c2de",
+    "authorizationSource": "Owner invocation and attachment a00a10c6-8e7f-4b5f-95a4-342e27ef94b6/Pasted text.txt",
+    "baselineHead": "fd19bc5a02dc7ed598aebb06731001c7b98e674d",
+    "baselineWorktree": "CLEAN",
+    "evidencePath": "PROGRESS.md#ui-implementation",
+    "ownedFiles": {
+      "frontend/app/account/page.tsx": "4a828f3ac81d4fef3b605203dc3892b2d87062e74f75586873f942016d799bc6",
+      "frontend/app/admin/account/page.tsx": "d47e478fad6975796cc44d9c4c518b58d56617e6208baf19329046e07a6a2648",
+      "frontend/app/admin/components/page.tsx": "f5026b248a5ecbe5bed806e8c9f907ef24b44203981adfd00d92a69653ede5ab",
+      "frontend/app/admin/page.tsx": "d778415c351653a44017beb457ea6400fdfcd5d7a349f34579ceaceb90d02b4e",
+      "frontend/app/api/accounts/me/route.ts": "a8d2a80cde279c9d56e395cdf9f21a0c78bbf3b89be490c88ce6d01d6adbe0f2",
+      "frontend/app/api/session/csrf/route.ts": "41a4f30e4bc310ec0496bfbf5a5ed77ad20263a154e14453bc53e4f926c87918",
+      "frontend/app/api/session/logout/route.ts": "15a2c3f1c6ecfbb896804ba8ac52007543cc5fbb22df4de0be68da3e0686d3cd",
+      "frontend/app/globals.css": "fdc329e0ac4c22fe8ad65dd331946cb092053319cf2bc80fc779c28549a7e552",
+      "frontend/app/layout.tsx": "abc6473520d9d65d048c388ce664e5bef0292289d483d83f834e63c2753c8f30",
+      "frontend/app/page.tsx": "1727178f7313c351e4c9ab49187b30e0248c4eff796e910a476fdbe3480a8e53",
+      "frontend/components/examples.tsx": "cb05963216f4d8ffc0d4876f3c7a3255717969d2f6e4f348fb11585f1c2b9758",
+      "frontend/components/primitives.tsx": "fe7fb599bd1427e2bc3b08acc774fd225ab754b13caf690b8d28defc34bbec78",
+      "frontend/components/session-panel.tsx": "3dd0f79084e09a1252e403d394d0b6c4aa42c7fe9ab97aeba494d61948d34767",
+      "frontend/components/shell.tsx": "f1826751cf2aae17695a618d7321dd45ddd1705b3ef0549b224626c841bf0188",
+      "frontend/lib/backend.ts": "a36a7361a7e2ef5933513d16a2ba87e8bb5c3fe6d8fe0717290c541e96c7d916",
+      "frontend/lib/session.ts": "bc6b0fcfb53d27602e37c83694b73a3bc76b69f75e8447c6c185e7f83ed74b67",
+      "frontend/package.json": "8de9b319d13afc8b40d9ed1ac6b3a5077ef2a4911927b7e61086e76d2000b998",
+      "frontend/scripts/generate-breakpoints.mjs": "05152d683749a65bfd5092e052e665d92ae3f159e103ecc7be5872e285c0a642",
+      "frontend/styles/breakpoints.css": "73bc83b2fd918821659ee01906b73a49b7c120e000720a0bb57da42a6841075b",
+      "frontend/tests/foundation.test.mjs": "14f89d49469ea85b5c55a5cfcd89f4cf09a8170d95cf1ebbde22778f3f9b88b7",
+      "frontend/tests/transport.test.mjs": "9f950673cad7735643f70977e66e3a6dfa9d7eaafa0556b05057708d01ee3c93",
+      "frontend/tests/tsx-loader.mjs": "54f4b0a56d6e3ea94898a7fbe1ce0410f2e036d73a7878c06a055eb323c7bcad",
+      "frontend/tests/ui-browser.mjs": "e4e94c490f6d84f7e9667be47b3455ed5c210c90ffc147ed963550290ab142e4",
+      "frontend/tests/ui.test.mjs": "ebd3a1331486833e1988b12f451738daff029939b67e3825fec6a867f111a8c7"
+    },
+    "toolchain": {
+      "node": "24.22.0",
+      "npm": "11.19.1",
+      "installation": "Existing qualified distribution restored checksum-verified to /tmp only; no global install"
+    },
+    "checks": {
+      "cleanInstall": "PASS npm ci --cache ../.cache/npm --no-fund; 0 vulnerabilities",
+      "productionBuild": "PASS npm run build",
+      "typecheck": "PASS npm run typecheck",
+      "lint": "PASS npm run lint",
+      "frontendTests": {
+        "command": "npm test",
+        "total": 23,
+        "unitComponentTransport": 21,
+        "packagedHttpSmoke": 2,
+        "failures": 0,
+        "skipped": 0
+      },
+      "backendRegression": {
+        "command": "DOCKER_HOST=unix:///var/run/docker.sock python3 scripts/verify-foundation.py",
+        "total": 36,
+        "identity": 31,
+        "architecture": 3,
+        "foundation": 2,
+        "failures": 0,
+        "skipped": 0,
+        "postgresql": "18.6 isolated tmpfs container, V1/V2 migration and packaged startup passed"
+      },
+      "browser": {
+        "command": "PLAYWRIGHT_MODULE_PATH=<existing-host-playwright> node tests/ui-browser.mjs",
+        "checkGroups": 19,
+        "widths": [
+          320,
+          375,
+          640,
+          768,
+          1024,
+          1280,
+          1536
+        ],
+        "pages": [
+          "/",
+          "/admin",
+          "/admin/components",
+          "/account"
+        ],
+        "results": "All passed; mobile focus containment/Escape/restoration, route activity, collection parity/filter/reset, state views, disabled/busy controls, session presentation, skip link, reduced motion and no runtime errors",
+        "sessionEvidence": "SIMULATED upstream/browser responses for UI interaction; actual HTTP transport separately tested; backend auth separately real PostgreSQL; no combined live provider/browser sign-in claim",
+        "visualReview": "Three local ignored screenshots viewed against the preserved references; no obvious overflow/duplicate headers/unreadable content",
+        "artifactPaths": [
+          ".cache/ui-admin-desktop.png",
+          ".cache/ui-customer-desktop.png",
+          ".cache/ui-examples-mobile.png"
+        ]
+      }
+    },
+    "actualTestPaths": [
+      "frontend/tests/foundation.test.mjs",
+      "frontend/tests/transport.test.mjs",
+      "frontend/tests/ui.test.mjs",
+      "frontend/tests/ui-browser.mjs"
+    ],
+    "securityReview": {
+      "method": "Primary-agent hostile review, no independent review claimed",
+      "fixed": [
+        "320px customer header overflow",
+        "Responsive stylesheet ordering so desktop sidebar is actually visible",
+        "Explicit Tab wrapping in native modal navigation; Escape preserved",
+        "Next internal localhost URL mismatch: same-origin logout checks incoming Host and request protocol, never forwarded/client role authority",
+        "Busy button width preserved; no duplicate action while waiting"
+      ],
+      "invariants": [
+        "Public shell preview grants no admin/venue capability",
+        "Future business navigation remains noninteractive Planned text",
+        "Only existing me/CSRF/logout paths forwarded; no direct DB or second session store",
+        "Only CineNest session cookie forwarded; no Authorization or unrelated cookie forwarding",
+        "Response DTO strips unknown fields; upstream errors/redirects suppressed",
+        "Current view clears account data before request, on failed/logout results and on focus return; stale async results discarded",
+        "No account/token localStorage or sessionStorage; no secret/response logging",
+        "Synthetic generic examples isolated from business state"
+      ]
+    },
+    "verificationCorrections": [
+      "Lint semantic labels/fieldset/region corrections; no global rule weakened",
+      "Node --import/--test worker combination counted only a file; component suite now invoked directly and actually reports all 21 named cases",
+      "Browser assertions await Next route transition, target the collection empty reset control and normalize equivalent CSS zero time units"
+    ],
+    "authorizationScenario18": "PARTIAL: account UI clears protected data on failure/session refresh/logout; no future live subscriptions or full feature policy-unavailability scenarios claimed",
+    "unchanged": [
+      "Token JSON/theme CSS and chart contracts",
+      "Frontend dependency/version/engine fields and package-lock",
+      "Backend, migrations, security policy",
+      "All owner decisions including OD-11 approval and future palette rules"
+    ],
+    "notRun": [
+      "Screen-reader usability audit",
+      "Actual browser zoom beyond tested 320px reflow",
+      "Formal WCAG certification",
+      "Live provider sign-in or production users",
+      "Room/package/booking/payment/report/IoT workflows",
+      "Customer demonstration/phase acceptance"
+    ],
+    "remoteCI": "PENDING_PUBLICATION",
+    "publication": "NOT_YET_COMMITTED",
+    "p1": "PARTIAL_NOT_ACCEPTED",
+    "p1C06": "PARTIAL_PENDING_EXACT_SOURCE_CI",
+    "d1": "NOT_READY",
+    "nextReadyChangeSet": null,
+    "nextBlockers": {
+      "CN-ROOM-001": [
+        "OD-04",
+        "OD-10",
+        "OD-14",
+        "Separate bounded room implementation authorization"
+      ]
+    },
+    "knowledgeChecks": {
+      "designValidator": "PASS",
+      "executionValidator": "PASS",
+      "whitespace": "PASS",
+      "negativeControls": "Three in-memory unauthorized room READY/full room requirement verification/owner provenance controls rejected",
+      "counts": "92 requirements / 92 test plans / 28 tasks unchanged",
+      "preservation": "Backend/token/theme/lock/decision files unchanged; package metadata except test script unchanged"
+    }
+  },
+  "previousExecutionContextBeforeUiImplementation": {
+    "mode": "DECISION_AND_READINESS_RECONCILIATION",
+    "baselineHead": "78e4c74cf1462bcf69b384df045f019d61fafe3f",
+    "nextReadyChangeSet": "CN-UI-001",
+    "nextAction": "Implement only READY CN-UI-001 in a future implementation session under the recorded bounded owner authorization; stop now after decision/readiness",
+    "evidencePath": "PROGRESS.md#ui-readiness"
   }
 }
