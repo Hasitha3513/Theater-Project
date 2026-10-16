@@ -255,7 +255,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | VERIFIED / CLOSED |
 | CN-ROOM-001 | 2 | Catalog and scoped room configuration | CN-AUTH-001, CN-UI-001 | VERIFIED / CLOSED |
 | CN-PKG-001 | 3 | Package drafts and scoped editor | CN-ROOM-001, CN-UI-001 | VERIFIED / CLOSED |
-| CN-PKG-002 | 3 | Immutable package publication/applicability | CN-PKG-001 | BLOCKED / BLOCKED |
+| CN-PKG-002 | 3 | Immutable package publication/applicability | CN-PKG-001 | IN_PROGRESS / READY |
 | CN-BOOK-001 | 3 | Shared inventory hold/conflict guard | CN-ROOM-001 | BLOCKED / BLOCKED |
 | CN-QUOTE-001 | 3 | Exact quote and purchase snapshot contract | CN-PKG-002, CN-BOOK-001 | BLOCKED / BLOCKED |
 | CN-VERIFY-001 | 4 | Private booker evidence and eligibility review | CN-AUTH-001, CN-QUOTE-001 | BLOCKED / BLOCKED |
@@ -284,7 +284,7 @@ Fresh baseline: `7ad20d42b4551ba07bd5d728a0cbc1d295e65f94`, main → origin/main
 
 Source reconciliation: HTML `CineNest_MVP_Roadmap.html` was not found in workspace, attachments, Downloads or /tmp. Preview found at `/home/hasitha-wijerathna/Downloads/CineNest_MVP_Roadmap_Preview.png`, visually inspected, not imported/changed; source hash in existing manifest. It shows illustrative weeks 1–20, workstream colors, D1–D6, no committed start date. Original HTML criterion IDs, detailed notes, browser saved entries and interactions cannot be inspected/restored without the HTML. The owner's supplied templates contain exactly 74 criteria, retained verbatim below; Pn-Cnn are local stable planning anchors derived from those template positions, not invented canonical requirement IDs or claimed original HTML IDs. Missing source stays visible; no replacement dashboard, image or runtime service created. Graphical refresh below is dated 2026-10-15 and reviewed against this baseline.
 
-Current roll-ups (distinct measures): P0 preparation 6/8; P1 criteria 2/6 (C01 and C06), C02–C05 partial; delivery phases accepted 0/10. Planning criteria 10/74 checked and 64 unchecked, not an effort percentage. Canonical scope 92 requirements and 92 test plans; 91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED and their full test plans NOT_RUN; one workflow documentation plan PASS. Scoped foundation/auth/UI evidence is separate. Existing 28 tasks: eight VERIFIED/CLOSED and 20 BLOCKED; zero READY. Decision registry: 29 records, 24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; OD-01 approved subsets do not close its broader scope. Authorization remains partial, including the account-session presentation subset of scenario18; no 18/18 claim. Demos held0/7 and accepted0/7. No phase/customer acceptance or schedule/staffing approval inferred.
+Current roll-ups (distinct measures): P0 preparation 6/8; P1 criteria 2/6 (C01 and C06), C02–C05 partial; delivery phases accepted 0/10. Planning criteria 10/74 checked and 64 unchecked, not an effort percentage. Canonical scope 92 requirements and 92 test plans; 91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED and their full test plans NOT_RUN; one workflow documentation plan PASS. Scoped foundation/auth/UI evidence is separate. Existing 28 tasks: eight VERIFIED/CLOSED, one IN_PROGRESS/READY and 19 BLOCKED. Decision registry: 29 records, 24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; OD-01 approved subsets do not close its broader scope. Authorization remains partial, including the account-session presentation subset of scenario18; no 18/18 claim. Demos held0/7 and accepted0/7. No phase/customer acceptance or schedule/staffing approval inferred.
 
 Historical S17 roll-up (superseded by the current roll-up above): Roll-ups (distinct measures): P0 preparation DOC_VERIFIED 5/8, readiness acceptance NOT_ACCEPTED; P1–P10 accepted 0/10; planning criteria 5/74 checked (documentation preparation only), 69 unchecked; canonical scope 92 requirements and 92 test plans, including 91 product records BLOCKED/NOT_VERIFIED/NOT_ACCEPTED with 91 tests NOT_RUN plus one workflow documentation record/test PASS; existing 28 tasks (three documentation VERIFIED/CLOSED, 25 BLOCKED) ; 29 OPEN_DECISION records, with OD-01 approved initial subset distinct; 18 authorization scenarios PLANNED. Demos held0/7, scopes accepted0/7. None is an overall effort percentage. No approved deferral, schedule, staffing or accepted phase inferred.
 
@@ -307,7 +307,7 @@ flowchart TB
   G["CN-PKG-001 draft slice VERIFIED; exact-source CI SUCCESS<br/>No publication or other task authorized"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
-  P2["P2 Catalog/discovery<br/>Room slice VERIFIED; 1 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
+  P2["P2 Catalog/discovery<br/>Room and package draft slices VERIFIED; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>W5-6 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>W7-8 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -672,7 +672,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-AUTH-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
 | CN-ROOM-001 | P2 | CN-AUTH-001, CN-UI-001 | VERIFIED / CLOSED |
 | CN-PKG-001 | P2 | CN-ROOM-001, CN-UI-001 | VERIFIED / CLOSED |
-| CN-PKG-002 | P2 | CN-PKG-001 | BLOCKED / BLOCKED |
+| CN-PKG-002 | P2 | CN-PKG-001 | IN_PROGRESS / READY |
 | CN-BOOK-001 | P3 | CN-ROOM-001 | BLOCKED / BLOCKED |
 | CN-QUOTE-001 | P3 | CN-PKG-002, CN-BOOK-001 | BLOCKED / BLOCKED |
 | CN-VERIFY-001 | P4 | CN-AUTH-001, CN-QUOTE-001 | BLOCKED / BLOCKED |
@@ -959,4 +959,15 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: owner review of CN-PKG-002 remaining publication decisions and bounded implementation scope.** Broader OD-17/18/19/21/22 publication gates and CN-PKG-002 authority remain unresolved. D1 NOT_READY; no demo held/accepted. Stop after CN-PKG-001.
+**Exact next action: verify exact-source CN-PKG-002 CI before closure.** Current owner grants bounded publication policies/scope; broader commercial gates remain unresolved. D1 NOT_READY; no demo held/accepted. Stop after CN-PKG-001.
+
+<a id="publication-implementation"></a>
+## CN-PKG-002 implementation — 2026-10-16
+
+Start main/origin main at61c2fd5f444a1a3ee2f5231eb34760c02a3d3a14, clean. All five hard/transitive prerequisites VERIFIED/CLOSED, V4 current. Owner approves bounded OD17/18/19/21/22 plus exact reviewed scope, including indicative-only offers and deferred full purchase/quote acceptance. Task reconciled READY then IN_PROGRESS. No unrelated dependency removed. Implementation/checks/CI pending; no closure or demo acceptance claimed.
+
+Publication local evidence: backend102 tests (17 publication integration,3 publication time/hash, retained82 regression including5 architecture), failures/errors/skips0; real isolated PostgreSQL18.6, cleanV1-V5/populatedV4-V5/repeat, concurrent independent publishers, half-open adjacency/conflicts, exact immutable snapshot/rate, self/wrong-venue/revoked/suspended/stitched authority, CSRF/private-field denial, required-audit rollback, durable activation/replay/retry and current room/policy/service invalidation. Replacement requires both publish and deactivate; preview hash binds its target/revision as well as content/scope/dates/reason. Audit metadata retains command-key/actor/hash/publication receipts transactionally; no production actors, policies or service records created.
+
+Frontend build/typecheck/lint and44 tests PASS; browser17 publication+17 draft+17 room+19 shell groups (70 total), seven existing widths, labelled synthetic responses. Publication tests include denial/conflict/review/publish/withdraw, failed-activation retry/scheduled state and service recovery; screenshots inspected, no actual WCAG/screen-reader/zoom/customer certification. Initial upgrade-test target and synthetic membership failures corrected without weakening assertions; malformed-response room regression fixed with safe client contract validation; screenshot stale publication-unavailable copy corrected. Final self-review tightened withdrawal authorization and persistent idempotency receipts. No dependency/token/style/diagram/reference changes. Both knowledge validators and whitespace must pass after final manifest refresh. Exact-source CI pending; task remains IN_PROGRESS/READY, P2 stays2/6 and overall10/74 until that gate. V5 rollback disables commands/workers, retains schema/history/pending work and uses history-preserving revert; recovery reconciles before resumption. D1 NOT_READY: historical purchase portion needs actual quote/booking endpoints and full rehearsal; no demo held/accepted.
+
+Final knowledge/whitespace PASS; four in-memory negative controls reject premature publication closure, unauthorized booking readiness, false full purchase acceptance and lost bounded approval. No files created by negative checks. Source CI pending; closure withheld.

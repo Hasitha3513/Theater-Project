@@ -1,4 +1,5 @@
 "use client";
+import { IndicativeCatalog } from "./publications";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -236,11 +237,11 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 						>
 							Show {view === "cards" ? "table" : "cards"}
 						</Button>
-						{venue && data?.permittedActions?.includes("room.write") && !error && (
-							<Button onClick={() => setEditing(null)}>
-								Add room
-							</Button>
-						)}
+						{venue &&
+							data?.permittedActions?.includes("room.write") &&
+							!error && (
+								<Button onClick={() => setEditing(null)}>Add room</Button>
+							)}
 					</>
 				)}
 			</div>
@@ -398,6 +399,7 @@ export function RoomDetail({ id }: { id: string }) {
 			) : (
 				<>
 					<RoomSummary room={room} admin={false} />
+					<IndicativeCatalog venueId={room.venueId} roomId={room.roomId} />
 					<Card title="Customer operating windows">
 						<p>
 							{room.venue?.displayName} · {room.venue?.timezone}

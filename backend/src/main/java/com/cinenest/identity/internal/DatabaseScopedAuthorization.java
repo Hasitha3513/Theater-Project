@@ -17,7 +17,7 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
     }
     private String writeEquivalent(String action) {
         return switch(action) { case "room.read" -> "room.write"; case "venue.read" -> "venue.write";
-            case "package.read" -> "package.edit"; case "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
+            case "package.read" -> "package.edit"; case "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
     }
     @Transactional
     public boolean permits(UUID actor, UUID venue, String action, boolean lock) {
@@ -32,9 +32,9 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
         return jdbc.sql("""
             SELECT count(*) FROM cinenest_identity.access_grant g
             WHERE g.account_id=:actor AND g.venue_id=:venue AND g.scope_kind='VENUE'
-              AND g.permission IN (:action,:equivalent) AND g.state='ACTIVE'
+              AND g.permission IN (:permissions) AND g.state='ACTIVE'
               AND g.valid_from<=clock_timestamp() AND g.valid_until>clock_timestamp()
-            """).param("actor",actor).param("venue",venue).param("action",action).param("equivalent",equivalent)
+            """).param("actor",actor).param("venue",venue).param("permissions",action.equals("package.read")?java.util.List.of("package.read","package.edit","package.publish","package.deactivate"):java.util.List.of(action,equivalent))
             .query(Integer.class).single()>0;
     }
     @Transactional
@@ -45,8 +45,8 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
             SELECT DISTINCT g.venue_id FROM cinenest_identity.access_grant g
             JOIN cinenest_identity.account a ON a.account_id=g.account_id
             WHERE a.account_id=:actor AND a.synthetic=TRUE AND a.eligibility='ELIGIBLE'
-             AND g.scope_kind='VENUE' AND g.permission IN (:action,:equivalent) AND g.state='ACTIVE'
+             AND g.scope_kind='VENUE' AND g.permission IN (:permissions) AND g.state='ACTIVE'
              AND g.valid_from<=clock_timestamp() AND g.valid_until>clock_timestamp()
-            """).param("actor",actor).param("action",action).param("equivalent",equivalent).query(UUID.class).list());
+            """).param("actor",actor).param("permissions",action.equals("package.read")?java.util.List.of("package.read","package.edit","package.publish","package.deactivate"):java.util.List.of(action,equivalent)).query(UUID.class).list());
     }
 }

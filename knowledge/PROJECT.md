@@ -549,3 +549,13 @@ Current owner instruction and attachment approve the preceding conversation prop
 - OD-22: Pricing owns shared service definitions/immutable rate references. Each package service is INCLUDED or OPTIONAL; included never creates a second charge. Fixed per-session optional units; no arbitrary package overrides/shared-master administration/fee or tax engine. Room compatibility comes from Rooms configuration, not live availability/content rights. No approved definitions means no selectable extras. Broader shared-fee, final quotation and publication decisions remain their existing gates.
 
 [Implemented boundary](ARCHITECTURE.md#package-draft-boundary) and [actual evidence](PROGRESS.md#package-draft-implementation) cover only drafts. Core package editability is demonstrated without per-edit code release; full PR-PKG-001/CN-A12/PK-AC01 customer publication and later purchase scenarios remain future. No approved requirement is removed or silently deferred.
+
+<a id="publication-approved-policy"></a>
+## Approved bounded publication policies
+
+OD-17: Indicative-only LKR exact components, unresolved tax/fees disclosed, purchasable=false; no zero-base/discounts/overrides; sales deferred
+OD-18: Separate venue publish/deactivate; independent exact-revision author/publisher; content/scope/dates/hash/reason bound; current authority rechecked including activation; no edit implication or grant stitching
+OD-19: Immutable single-venue versions, frozen room set; separate half-open sales/service intervals; venue-local conversion rejects DST gaps/ambiguity; reject intersecting room/sales overlap; explicit atomic replacement; durable fail-closed activation/recovery; quote honor deferred
+OD-21: Rooms current/known future effective policies authoritative; initial180 unchanged; publication/activation/catalog revalidation; persist invalidation; restoration requires new publication approval; no policy API
+OD-22: Freeze shared selected rate/display/mode/currency/basis/amount; INCLUDED zero additional; OPTIONAL displayed separately; current service/room compatibility; no auto-upgrade or fee engine
+Owner authorization SHA256 f27c9494bea4951f6d8c66abe001f01d0813d5bc82556a114109880aeb5b18a2. Earlier draft approvals preserved; all wider decisions remain open. Publication means indicative catalog, not commercial sale. Full purchase/quote acceptance deferred to owning endpoints.

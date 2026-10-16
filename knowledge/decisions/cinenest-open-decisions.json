@@ -230,7 +230,7 @@
     },
     {
       "id": "OD-09",
-      "conflict": "Temporary hold range 10\u201315 min is not precise",
+      "conflict": "Temporary hold range 10–15 min is not precise",
       "source": "S1",
       "impact": "Expiry UI, payment handoff and inventory utilization",
       "options": "Choose configurable 10 or 15 minutes (or justified value) later",
@@ -488,6 +488,16 @@
         "canonicalSpecification": "PROJECT.md#package-bounded-approval",
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED"
+      },
+      "boundedPublicationApproval": {
+        "taskId": "CN-PKG-002",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment edd1c633-080e-4052-bbec-8b592fd632a6",
+        "requestSha256": "f27c9494bea4951f6d8c66abe001f01d0813d5bc82556a114109880aeb5b18a2",
+        "scope": "Indicative-only LKR exact components, unresolved tax/fees disclosed, purchasable=false; no zero-base/discounts/overrides; sales deferred",
+        "canonicalSpecification": "PROJECT.md#publication-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -519,6 +529,16 @@
         "canonicalSpecification": "PROJECT.md#package-bounded-approval",
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED"
+      },
+      "boundedPublicationApproval": {
+        "taskId": "CN-PKG-002",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment edd1c633-080e-4052-bbec-8b592fd632a6",
+        "requestSha256": "f27c9494bea4951f6d8c66abe001f01d0813d5bc82556a114109880aeb5b18a2",
+        "scope": "Separate venue publish/deactivate; independent exact-revision author/publisher; content/scope/dates/hash/reason bound; current authority rechecked including activation; no edit implication or grant stitching",
+        "canonicalSpecification": "PROJECT.md#publication-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -531,7 +551,17 @@
       "evidenceRequired": "Boundary/scope precedence and concurrent-publish evidence",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedPublicationApproval": {
+        "taskId": "CN-PKG-002",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment edd1c633-080e-4052-bbec-8b592fd632a6",
+        "requestSha256": "f27c9494bea4951f6d8c66abe001f01d0813d5bc82556a114109880aeb5b18a2",
+        "scope": "Immutable single-venue versions, frozen room set; separate half-open sales/service intervals; venue-local conversion rejects DST gaps/ambiguity; reject intersecting room/sales overlap; explicit atomic replacement; durable fail-closed activation/recovery; quote honor deferred",
+        "canonicalSpecification": "PROJECT.md#publication-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
+      }
     },
     {
       "id": "OD-20",
@@ -566,6 +596,16 @@
         "canonicalSpecification": "PROJECT.md#package-bounded-approval",
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED"
+      },
+      "boundedPublicationApproval": {
+        "taskId": "CN-PKG-002",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment edd1c633-080e-4052-bbec-8b592fd632a6",
+        "requestSha256": "f27c9494bea4951f6d8c66abe001f01d0813d5bc82556a114109880aeb5b18a2",
+        "scope": "Rooms current/known future effective policies authoritative; initial180 unchanged; publication/activation/catalog revalidation; persist invalidation; restoration requires new publication approval; no policy API",
+        "canonicalSpecification": "PROJECT.md#publication-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -589,6 +629,16 @@
         "canonicalSpecification": "PROJECT.md#package-bounded-approval",
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED"
+      },
+      "boundedPublicationApproval": {
+        "taskId": "CN-PKG-002",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment edd1c633-080e-4052-bbec-8b592fd632a6",
+        "requestSha256": "f27c9494bea4951f6d8c66abe001f01d0813d5bc82556a114109880aeb5b18a2",
+        "scope": "Freeze shared selected rate/display/mode/currency/basis/amount; INCLUDED zero additional; OPTIONAL displayed separately; current service/room compatibility; no auto-upgrade or fee engine",
+        "canonicalSpecification": "PROJECT.md#publication-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {

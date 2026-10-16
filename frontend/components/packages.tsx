@@ -1,15 +1,17 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import { Button, Card, Field, PageHeading, StateMessage } from "./primitives";
+import { useEffect, useRef, useState } from "react";
+import type { Draft, Option, OptionCatalog, Preview } from "../lib/packages";
 import {
+	displayMoney,
 	packageRequest,
+	parseMoney,
 	RoomRequestError,
 	stateFor,
-	parseMoney,
-	displayMoney,
 } from "../lib/packages";
-import type { Draft, Option, OptionCatalog, Preview } from "../lib/packages";
+import { Button, Card, Field, PageHeading, StateMessage } from "./primitives";
+import { PublicationAdministration } from "./publications";
+
 type PackagePage = {
 	items: Draft[];
 	total: number;
@@ -110,9 +112,9 @@ export function PackageAdministration() {
 				eyebrow="System Settings · Packages & Pricing"
 				title="Package drafts"
 			>
-				Unpublished commercial configuration. Drafts cannot be sold or
-				published. Taxes, checkout fees and final payable quotations remain
-				unresolved.
+				Draft configuration requires independent publication approval. Customer
+				sales, taxes, checkout fees and final payable quotations remain
+				unavailable or unresolved.
 			</PageHeading>
 			<div className="filter-grid">
 				<Field
@@ -162,8 +164,8 @@ export function PackageAdministration() {
 						</Button>
 					)}
 					<p>
-						Publication, scheduling, deactivation and customer sales are
-						unavailable.
+						Publication controls require separate current venue authority.
+						Customer sales and payable quotations remain unavailable.
 					</p>
 					{data.items.length === 0 ? (
 						<p role="status">No matching package drafts.</p>
@@ -182,6 +184,7 @@ export function PackageAdministration() {
 										{d.includedGuests} included guests · maximum{" "}
 										{d.maximumGuests}
 									</p>
+									<PublicationAdministration draft={d} />
 									<div className="toolbar">
 										<Button
 											variant="secondary"

@@ -15,6 +15,36 @@ export function roomRoute(path: string, method: string) {
 		return ["GET", "PUT"].includes(method);
 	return false;
 }
+export function publicationRoute(path: string, method: string) {
+	if (new RegExp(`^/api/venues/${id}/packages(/${id})?$`).test(path))
+		return method === "GET";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${id}/packages/${id}/publication-preview$`,
+		).test(path)
+	)
+		return method === "POST";
+	if (
+		new RegExp(`^/api/admin/venues/${id}/packages/${id}/publications$`).test(
+			path,
+		)
+	)
+		return ["GET", "POST"].includes(method);
+	if (
+		new RegExp(
+			`^/api/admin/venues/${id}/packages/${id}/publications/${id}$`,
+		).test(path)
+	)
+		return method === "GET";
+	return (
+		new RegExp(
+			`^/api/admin/venues/${id}/packages/${id}/publications/${id}/(deactivate|retry)$`,
+		).test(path) && method === "POST"
+	);
+}
+export async function forwardPublications(request: Request) {
+	return forwardConfigured(request, publicationRoute);
+}
 export function packageRoute(path: string, method: string) {
 	if (new RegExp(`^/api/admin/venues/${id}/packages$`).test(path))
 		return ["GET", "POST"].includes(method);
@@ -89,6 +119,9 @@ async function forwardConfigured(
 		const query = new URLSearchParams();
 		for (const key of [
 			"venueId",
+			"roomId",
+			"sessionStart",
+			"sessionEnd",
 			"q",
 			"minimumCapacity",
 			"facility",

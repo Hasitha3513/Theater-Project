@@ -193,6 +193,14 @@
           "frontend/tests/packages.test.mjs",
           "frontend/tests/packages-browser.mjs"
         ]
+      },
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
       }
     },
     {
@@ -321,6 +329,14 @@
           "frontend/tests/rooms.test.mjs",
           "frontend/tests/rooms-browser.mjs"
         ]
+      },
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
       }
     },
     {
@@ -1486,6 +1502,14 @@
           "frontend/tests/packages.test.mjs",
           "frontend/tests/packages-browser.mjs"
         ]
+      },
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
       }
     },
     {
@@ -1779,6 +1803,14 @@
           "frontend/tests/packages.test.mjs",
           "frontend/tests/packages-browser.mjs"
         ]
+      },
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
       }
     },
     {
@@ -2730,7 +2762,15 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      }
     },
     {
       "id": "PK-AC05",
@@ -2775,7 +2815,15 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      }
     },
     {
       "id": "PK-AC06",
@@ -2820,7 +2868,15 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      }
     },
     {
       "id": "PK-AC07",
@@ -2951,7 +3007,15 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      }
     },
     {
       "id": "PK-AC10",
@@ -3040,7 +3104,15 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "publicationImplementationEvidence": {
+        "taskId": "CN-PKG-002",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      }
     },
     {
       "id": "PK-AC12",

@@ -489,25 +489,33 @@
       "dependencies": [
         "CN-PKG-001"
       ],
-      "blockingDecisionIds": [
-        "OD-17",
-        "OD-18",
-        "OD-19",
-        "OD-21",
-        "OD-22"
-      ],
-      "affectedFilesModules": "Pricing publication/read projection TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Pricing publication persistence/service/controller/worker; Rooms public constraint port; Identity scoped capabilities; existing admin/public-room UI and explicit transport; owned tests and KB",
+      "dbApiUiImpact": "Five Pricing publication tables in additive V5; six admin and two public operations; indicative-only published cards/details; no purchasing",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "V5__indicative_package_publication.sql additive; V1-V4 unchanged; retain history and pending durable work on rollback",
       "plannedChecks": "Concurrent publish/effective boundaries/old snapshots/minimum-capacity tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Joint valid publication and no retroactive sold-term edits",
       "requiredApproval": "Explicit publication slice and policy choices approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "PROGRESS.md#publication-implementation"
+      ],
+      "scopeApproval": {
+        "status": "OWNER_APPROVED_CN_PKG_002_ONLY",
+        "requestSha256": "f27c9494bea4951f6d8c66abe001f01d0813d5bc82556a114109880aeb5b18a2",
+        "baselineHead": "61c2fd5f444a1a3ee2f5231eb34760c02a3d3a14",
+        "canonicalSpecification": "ARCHITECTURE.md#publication-boundary",
+        "scope": "Five-table additive V5; six admin plus two public operations; existing admin and public room UI; indicative-only; no quotes/bookings/payments/IoT/deployment"
+      },
+      "implementationEvidence": {
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#publication-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-BOOK-001",

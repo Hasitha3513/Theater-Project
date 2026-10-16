@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-PKG-001",
+  "taskId": "CN-PKG-002",
   "mode": "BOUNDED_PACKAGE_DRAFT_IMPLEMENTATION",
-  "workStatus": "VERIFIED",
+  "workStatus": "IN_PROGRESS",
   "productStage": "FOUNDATION_AUTH_UI_ROOM_AND_PACKAGE_DRAFTS_VERIFIED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-PKG-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-PKG-002",
-  "nextAction": "Owner review of remaining CN-PKG-002 publication decisions and bounded scope; no READY task",
+  "nextAction": "Verify exact-source publication CI before closure; no other implementation authorized",
   "nextReadyChangeSet": null,
   "implementationEvidence": "Bounded room/catalog verified; package/booking/physical and phase/customer acceptance remain open",
   "approvedCoreDecisions": [
@@ -1938,6 +1938,105 @@
       "destination": "origin/main",
       "verifiedRemoteSourceSha": "cc461eb38ed3cf918b8f4fe173300d9267fcba11",
       "closureReceipt": "Final receipt commit and its CI verified separately at closeout"
+    }
+  },
+  "previousExecutionContextBeforePublication": {
+    "taskId": "CN-PKG-001",
+    "workStatus": "VERIFIED",
+    "nextAction": "Owner review of remaining CN-PKG-002 publication decisions and bounded scope; no READY task",
+    "nextRecommendedChangeSet": "CN-PKG-002",
+    "productStage": "FOUNDATION_AUTH_UI_ROOM_AND_PACKAGE_DRAFTS_VERIFIED"
+  },
+  "publicationImplementation": {
+    "status": "LOCAL_VERIFIED_CI_PENDING",
+    "remoteCI": "PENDING",
+    "baselineHead": "61c2fd5f444a1a3ee2f5231eb34760c02a3d3a14",
+    "scopeApproval": {
+      "status": "OWNER_APPROVED_CN_PKG_002_ONLY",
+      "requestSha256": "f27c9494bea4951f6d8c66abe001f01d0813d5bc82556a114109880aeb5b18a2",
+      "baselineHead": "61c2fd5f444a1a3ee2f5231eb34760c02a3d3a14",
+      "canonicalSpecification": "ARCHITECTURE.md#publication-boundary",
+      "scope": "Five-table additive V5; six admin plus two public operations; existing admin and public room UI; indicative-only; no quotes/bookings/payments/IoT/deployment"
+    },
+    "ownedFiles": {
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java": "e895bf3ab7839e44b9c77472726da4ad5ea19eb72c62f05a5237d20eeeb18b11",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "8e6b8a51111f62efb6a8ede800e3f782065b445db80a895ddad366e463cea730",
+      "backend/src/main/java/com/cinenest/pricing/internal/DraftService.java": "0589f504f662b86286a000db2146750a4c563b7b2cd10a49dfd374faa5a347bd",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcDraftRepository.java": "df7b2c1088c9cf5881960fd6423ffcfae098858d7209013d239d5ef3ee5c48b0",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcPublicationRepository.java": "a9c63445279fae66932c1dab3a34c93f35d53b29e535b6bd6a2c2f4bdd060c62",
+      "backend/src/main/java/com/cinenest/pricing/internal/PublicationController.java": "0ad9cf8bd8135acadd7fa898936ca18a4637b935f57802ac41ac5ab1306a4a60",
+      "backend/src/main/java/com/cinenest/pricing/internal/PublicationRepository.java": "e60da4802e7326b8f75ba29db16d35471190f05fb16e9460ca4018ac4d93a086",
+      "backend/src/main/java/com/cinenest/pricing/internal/PublicationService.java": "beb61d191ecb034540caa5856956155df1e5f12c9dcc4f562a354a0511c299da",
+      "backend/src/main/java/com/cinenest/pricing/internal/PublicationWorker.java": "12b0e31ace6b59798ab05a86a91520bafb01b9decddd91caca43d8ef35c8addb",
+      "backend/src/main/java/com/cinenest/rooms/PackageConstraints.java": "53814dc6c74678c070ec7cdd001c6cd90f716454cf866a3a00814ca9c5cb6233",
+      "backend/src/main/java/com/cinenest/rooms/internal/PackageConstraintAdapter.java": "e6e1fa3dbd8e2dfb62a7a3aa336081abb290b7b9713f570244ebb5a7173eadc9",
+      "backend/src/main/resources/db/migration/V5__indicative_package_publication.sql": "825350b732a8f9e1bab0a958a42bcc08ed35a12f163cffe0297f52819112dac8",
+      "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java": "6b3c2061715dcfc0a5d8ede70599586e51e7089949e4ae00d5bf78319533ede4",
+      "backend/src/test/java/com/cinenest/PricingIntegrationTest.java": "f91594451a587cf278fdd4ee26370923b576a093d6226e473dec273774708520",
+      "backend/src/test/java/com/cinenest/PublicationIntegrationTest.java": "8f3a738cdb7fddd031c72e2c6ee8413cc8565ce7bc39d04227652e7d5dfcc304",
+      "backend/src/test/java/com/cinenest/pricing/internal/PublicationTimeTest.java": "b46ea42bdc4c931c9fe64d0f1abfb6b22d32f4b7fcf225218ad0025886106b28",
+      "frontend/app/api/admin/venues/[venueId]/packages/[packageId]/publication-preview/route.ts": "ade89a44cf3af4a6d8225408112b0be62539c3595519479d7cde2777202c9b0f",
+      "frontend/app/api/admin/venues/[venueId]/packages/[packageId]/publications/[publicationId]/deactivate/route.ts": "5cb7e1e73e5fe6ed123c10bfd928fc7f00c0fb25c9179ba26881c8806577c54e",
+      "frontend/app/api/admin/venues/[venueId]/packages/[packageId]/publications/[publicationId]/retry/route.ts": "5cb7e1e73e5fe6ed123c10bfd928fc7f00c0fb25c9179ba26881c8806577c54e",
+      "frontend/app/api/admin/venues/[venueId]/packages/[packageId]/publications/[publicationId]/route.ts": "4e70622b115e2e14861afa4bd2de4b99efbe68455a9e53ea669bd76c8bb9e54d",
+      "frontend/app/api/admin/venues/[venueId]/packages/[packageId]/publications/route.ts": "7eca8253a88eee2faebb530a11084591d04d40303780e94dbaa89fe601c50c86",
+      "frontend/app/api/venues/[venueId]/packages/[packageId]/route.ts": "a212336e44271e71b40add3af489a7ebc9000be5a42afb7b992a292a06966baf",
+      "frontend/app/api/venues/[venueId]/packages/route.ts": "87e855a4af2f911019218435a6698b8f265cd1ade1c8d0d7d7701393df51c350",
+      "frontend/components/packages.tsx": "3d97df1925d88e920ff123f0fdaedb175203afd88b6052a554d463bb22b93b80",
+      "frontend/components/publications.tsx": "9a8debcae88ba914e953fd9873969781589f6d02e34a6e7cd46bd3136d6e6f99",
+      "frontend/components/rooms.tsx": "7c01b07e0b4ad3f9e0531404a20033c42371d0aae9c87d269888774f0f3e1470",
+      "frontend/lib/publications.ts": "0c143118684be1aad524b882f3ffa7d2975acc6c8906c49774c0b96656167545",
+      "frontend/lib/room-backend.ts": "dbd18e3c4484844825b3c68df4447175f7e721aeb9fb0379f1dc6a95e3371337",
+      "frontend/package.json": "324893953d9472e84d985568628dc7af282176d33fd57a2663e2f9a942ab3c8f",
+      "frontend/tests/packages.test.mjs": "36e4342531a5c06f42b99d1764529b50683ddd8b1f05a5053791393ea61ee06d",
+      "frontend/tests/publications-browser.mjs": "4dc6261dc9e7f3cb7ff7ec94f9dc11ee2b0646f126b47bfbe5983132e3639e0b",
+      "frontend/tests/publications.test.mjs": "7717dd858626f87c81c903e59faeb881fbb50c17f475f9c136528905553dfc0c"
+    },
+    "checks": {
+      "backendTests": 102,
+      "publicationIntegrationTests": 17,
+      "publicationTimeTests": 3,
+      "architectureTests": 5,
+      "backendFailures": 0,
+      "backendSkipped": 0,
+      "frontendTests": 44,
+      "publicationFrontendTests": 5,
+      "publicationBrowserGroups": 17,
+      "packageBrowserGroups": 17,
+      "shellBrowserGroups": 19,
+      "roomBrowserGroups": 17,
+      "postgresql": "Real isolated PostgreSQL18.6 clean V1-V5, populated V4-V5, repeat, concurrency/rollback/activation/replay",
+      "frontendBuild": "PASS",
+      "typecheck": "PASS",
+      "lint": "PASS",
+      "browserEvidence": "SYNTHETIC intercepted fixtures; desktop/mobile screenshots visually inspected; seven widths320/375/640/768/1024/1280/1536; no actual customer/production acceptance",
+      "initialFailuresAndCorrections": [
+        "V3-V4 legacy upgrade test initially included V5; explicit target4 preserves its original scope",
+        "Synthetic actor grant fixture lacked account_scope membership; fixed actual synthetic membership, not authorization checks",
+        "Room browser generic fixture malformed new catalog response; added safe contract validation and regression",
+        "Screenshot review found stale unavailable-publication copy; corrected",
+        "Self-review required withdrawal capability for explicit replacement and durable command-key receipts"
+      ]
+    },
+    "evidencePath": "PROGRESS.md#publication-implementation",
+    "d1": "NOT_READY",
+    "p2": "PARTIAL_NOT_ACCEPTED",
+    "notRun": [
+      "Actual purchase/accepted quote/reservation/payment scenarios",
+      "Production, physical hardware, customer meeting or acceptance",
+      "Full WCAG/screen-reader/actual browser zoom certification"
+    ],
+    "rollback": "Disable publication/worker, history-preserving application revert, retain additive V5/history/pending work; reconcile before resumption",
+    "knowledgeChecks": {
+      "design": "PASS",
+      "execution": "PASS",
+      "whitespace": "PASS",
+      "negativeControls": [
+        "premature closure rejected",
+        "unauthorized booking READY rejected",
+        "false full purchase acceptance rejected",
+        "lost bounded approval rejected"
+      ]
     }
   }
 }

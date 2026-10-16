@@ -1,16 +1,17 @@
-import { test } from "node:test";
 import assert from "node:assert/strict";
+import { once } from "node:events";
+import { createServer } from "node:http";
+import { test } from "node:test";
 import { createElement as h } from "react";
 import { renderToStaticMarkup as render } from "react-dom/server";
-import { createServer } from "node:http";
-import { once } from "node:events";
-import { parseMoney, displayMoney } from "../lib/packages.ts";
 import { PackageAdministration, PreviewView } from "../components/packages.tsx";
+import { displayMoney, parseMoney } from "../lib/packages.ts";
 import {
-	packageRoute,
 	forwardPackages,
+	packageRoute,
 	roomRoute,
 } from "../lib/room-backend.ts";
+
 const id = "00000000-0000-4000-8000-000000000001";
 test("money parses exact minor units without floating point or rounding", () => {
 	assert.equal(parseMoney("12.34"), "1234");
@@ -25,7 +26,7 @@ test("excess precision negative input exponent and overflow reject", () => {
 test("draft page names the unavailable sales and fee boundaries", () => {
 	const html = render(h(PackageAdministration));
 	assert.match(html, /Package drafts/);
-	assert.match(html, /cannot be sold or published/);
+	assert.match(html, /requires independent publication approval/);
 	assert.match(html, /Assigned venue ID/);
 	assert.doesNotMatch(html, /Publish now|Checkout now/);
 });
