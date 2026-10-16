@@ -230,7 +230,7 @@
     },
     {
       "id": "OD-09",
-      "conflict": "Temporary hold range 10–15 min is not precise",
+      "conflict": "Temporary hold range 10\u201315 min is not precise",
       "source": "S1",
       "impact": "Expiry UI, payment handoff and inventory utilization",
       "options": "Choose configurable 10 or 15 minutes (or justified value) later",
@@ -506,6 +506,16 @@
         "scope": "Indicative-only LKR exact components, unresolved tax/fees disclosed, purchasable=false; no zero-base/discounts/overrides; sales deferred",
         "canonicalSpecification": "PROJECT.md#publication-approved-policy",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedQuotationApproval": {
+        "taskId": "CN-QUOTE-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment 51bdfb3e-a05e-4f12-acb7-59f4ec9d5bd5",
+        "requestSha256": "7f3031ac557a3e2716baf4ef6a534ecb9fee9338f7716a6e41040403b56c2d55",
+        "scope": "LKR exact integer minor units; positive base, nonnegative supplements; whole-unit extensions/no proration/rounding/discounts/overrides. Explicit synthetic tax fixtures only; no real tax profile approved and real issuance disabled.",
+        "canonicalSpecification": "PROJECT.md#quotation-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -581,7 +591,17 @@
       "evidenceRequired": "Provider timestamp authenticity, product quote policy and reconciliation scenarios",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedQuotationApproval": {
+        "taskId": "CN-QUOTE-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment 51bdfb3e-a05e-4f12-acb7-59f4ec9d5bd5",
+        "requestSha256": "7f3031ac557a3e2716baf4ef6a534ecb9fee9338f7716a6e41040403b56c2d55",
+        "scope": "Versioned issuance, explicit quote-specific synthetic acceptance, immutable snapshots, expiry no later than original hold; no hold extension/latest-price substitution. Ordinary withdrawal does not rewrite snapshots; operational invalidity/expiry denies acceptance. No payment-timing rules or booking confirmation.",
+        "canonicalSpecification": "PROJECT.md#quotation-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
+      }
     },
     {
       "id": "OD-21",
@@ -655,6 +675,16 @@
         "scope": "Freeze shared selected rate/display/mode/currency/basis/amount; INCLUDED zero additional; OPTIONAL displayed separately; current service/room compatibility; no auto-upgrade or fee engine",
         "canonicalSpecification": "PROJECT.md#publication-approved-policy",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedQuotationApproval": {
+        "taskId": "CN-QUOTE-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment 51bdfb3e-a05e-4f12-acb7-59f4ec9d5bd5",
+        "requestSha256": "7f3031ac557a3e2716baf4ef6a534ecb9fee9338f7716a6e41040403b56c2d55",
+        "scope": "Frozen published service/rate references; INCLUDED adds zero; OPTIONAL PER_SESSION quantity 0/1; no duplicate charge/latest upgrade/override; preserve selections and compatibility.",
+        "canonicalSpecification": "PROJECT.md#quotation-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -691,7 +721,17 @@
       "evidenceRequired": "Product/finance approved fee/disclosure and quote fixtures",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedQuotationApproval": {
+        "taskId": "CN-QUOTE-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attachment 51bdfb3e-a05e-4f12-acb7-59f4ec9d5bd5",
+        "requestSha256": "7f3031ac557a3e2716baf4ef6a534ecb9fee9338f7716a6e41040403b56c2d55",
+        "scope": "Explicit versioned zero CineNest-added BANK/GATEWAY surcharge; missing method policy fails closed; method changes require a newly reviewed revision; no claim about external costs or payment implementation.",
+        "canonicalSpecification": "PROJECT.md#quotation-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION"
+      }
     },
     {
       "id": "OD-26",

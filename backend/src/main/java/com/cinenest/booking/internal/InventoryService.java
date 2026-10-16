@@ -12,7 +12,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @Service
-class InventoryService {
+class InventoryService implements com.cinenest.booking.QuotationHolds {
     private final InventoryRepository repository;
     private final InventoryConstraints rooms;
     private final ScopedAuthorization identity;
@@ -108,6 +108,19 @@ class InventoryService {
     }
     Set<UUID> pendingVenues() {return repository.activeVenues();}
     void reconcile(UUID venue) {tx.executeWithoutResult(status->{rooms.lock(venue);reconcileLocked(venue);});}
+    private static com.cinenest.booking.QuotationHolds.Facts quotationFacts(InventoryRepository.Hold h) {
+        return new com.cinenest.booking.QuotationHolds.Facts(h.id(),h.owner(),h.venue(),h.room(),h.start(),h.end(),h.expires(),h.state(),h.revision(),h.guests(),h.timezone(),h.buffer(),h.until(),h.configuration());
+    }
+    public Optional<com.cinenest.booking.QuotationHolds.Facts> locate(UUID hold) {
+        return repository.hold(hold).map(InventoryService::quotationFacts);
+    }
+    public Optional<com.cinenest.booking.QuotationHolds.Facts> lockAndInspect(UUID actor,UUID hold) {
+        if(!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Quotation hold inspection requires caller transaction");
+        var h=repository.hold(hold);
+        if(h.isEmpty() || !h.get().owner().equals(actor))return Optional.empty();
+        rooms.lock(h.get().venue());reconcileLocked(h.get().venue());
+        return repository.hold(hold).map(InventoryService::quotationFacts);
+    }
     private void reconcileLocked(UUID venue) {
         for(var h:repository.active(venue)) {
             if(!repository.now().isBefore(h.expires())) {repository.transition(h,"EXPIRED",null);continue;}

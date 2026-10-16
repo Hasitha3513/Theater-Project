@@ -1,4 +1,5 @@
 "use client";
+import { SyntheticQuotation } from "./quotes";
 import type { FormEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import type { Candidate, Hold } from "../lib/inventory";
@@ -41,9 +42,11 @@ export function HoldStatus({
 	);
 }
 export function InventoryHold({
+	venueId,
 	roomId,
 	timezone,
 }: {
+	venueId: string;
 	roomId: string;
 	timezone: string;
 }) {
@@ -239,6 +242,7 @@ export function InventoryHold({
 			{hold && (
 				<>
 					<HoldStatus hold={hold} elapsedMs={elapsed} />
+					{hold.state === "ACTIVE" && <SyntheticQuotation key={hold.holdId} hold={hold} venueId={venueId} />}
 					<div className="toolbar">
 						<Button disabled={busy} onClick={refresh}>
 							Refresh hold state

@@ -401,7 +401,7 @@ export function RoomDetail({ id }: { id: string }) {
 				<>
 					<RoomSummary room={room} admin={false} />
 					<IndicativeCatalog venueId={room.venueId} roomId={room.roomId} />
-					<InventoryHold roomId={room.roomId} timezone={room.venue?.timezone ?? "Unconfigured"} />
+					<InventoryHold venueId={room.venueId} roomId={room.roomId} timezone={room.venue?.timezone ?? "Unconfigured"} />
 					<Card title="Customer operating windows">
 						<p>
 							{room.venue?.displayName} · {room.venue?.timezone}

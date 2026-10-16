@@ -122,7 +122,7 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "PK-AC01–13, after supporting policy decisions; core editing and bought-term protection distinct",
+      "acceptanceCriteria": "PK-AC01\u201313, after supporting policy decisions; core editing and bought-term protection distinct",
       "moduleOwnership": "Pricing/Booking",
       "uiApiOwnership": "Packages & Pricing/customer quote; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -201,6 +201,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      },
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
       }
     },
     {
@@ -214,7 +228,7 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "BP-AC01–13, no receipt/funds/booking/access conflation, online path retained",
+      "acceptanceCriteria": "BP-AC01\u201313, no receipt/funds/booking/access conflation, online path retained",
       "moduleOwnership": "Payments/Booking/Notifications/Audit",
       "uiApiOwnership": "Customer claim and admin review; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -495,7 +509,21 @@
         "OD-22",
         "OD-25",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      }
     },
     {
       "id": "CN-C05",
@@ -1480,9 +1508,9 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "PK-AC01–13 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
+      "acceptanceCriteria": "PK-AC01\u201313 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
       "moduleOwnership": "Pricing (existing proposed owner); Booking owns purchased snapshots",
-      "uiApiOwnership": "System Settings → Packages & Pricing (proposed subsection, no verified route); customer package/quote/confirmation views; actual backend/API and UI implementation absent, interfaces are proposals",
+      "uiApiOwnership": "System Settings \u2192 Packages & Pricing (proposed subsection, no verified route); customer package/quote/confirmation views; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
         "CN-PKG-001",
         "CN-PKG-002"
@@ -1550,7 +1578,7 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "BP-AC01–13; independent bank credit and guarded one-booking result; not tests run",
+      "acceptanceCriteria": "BP-AC01\u201313; independent bank credit and guarded one-booking result; not tests run",
       "moduleOwnership": "Payments; Booking; Notifications",
       "uiApiOwnership": "Payment Processing; Customer Dashboard/Booking History; protected claim upload/status; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -1602,9 +1630,9 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "BP-AC01–13; alert failure retains queue; approval alone no completed booking/access/refund",
+      "acceptanceCriteria": "BP-AC01\u201313; alert failure retains queue; approval alone no completed booking/access/refund",
       "moduleOwnership": "Payments; Booking; Notifications; Audit",
-      "uiApiOwnership": "Payments → Bank Deposit Reviews (proposed subsection); actual backend/API and UI implementation absent, interfaces are proposals",
+      "uiApiOwnership": "Payments \u2192 Bank Deposit Reviews (proposed subsection); actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002",
@@ -1853,6 +1881,20 @@
           "frontend/tests/inventory-browser.mjs"
         ],
         "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      },
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
       }
     },
     {
@@ -2282,7 +2324,21 @@
         "OD-22",
         "OD-25",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      }
     },
     {
       "id": "BR-04",
@@ -2327,7 +2383,21 @@
         "OD-22",
         "OD-25",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      }
     },
     {
       "id": "BR-05",
@@ -2372,7 +2442,21 @@
         "OD-22",
         "OD-25",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      }
     },
     {
       "id": "BR-06",
@@ -2641,7 +2725,21 @@
         "OD-24",
         "OD-25",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      }
     },
     {
       "id": "PK-AC01",
@@ -3018,7 +3116,21 @@
         "OD-22",
         "OD-25",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      }
     },
     {
       "id": "PK-AC08",
@@ -3157,7 +3269,21 @@
         "OD-22",
         "OD-25",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      }
     },
     {
       "id": "PK-AC11",
@@ -3298,7 +3424,21 @@
         "OD-22",
         "OD-25",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "quotationImplementationEvidence": {
+        "taskId": "CN-QUOTE-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+          "frontend/tests/quotes.test.mjs",
+          "frontend/tests/quotes-browser.mjs"
+        ],
+        "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      }
     },
     {
       "id": "BP-AC01",
@@ -3310,7 +3450,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "future acceptance conditional on final supporting policy; not an executed test",
-      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility → one confirmed snapshot, separate acknowledged access",
+      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility \u2192 one confirmed snapshot, separate acknowledged access",
       "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
       "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -3931,7 +4071,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts × 100. Zero rooms → N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts \u00d7 100. Zero rooms \u2192 N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -4046,7 +4186,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range × 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator → N/A; unknown/incomplete inputs → unavailable.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range \u00d7 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator \u2192 N/A; unknown/incomplete inputs \u2192 unavailable.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -4084,7 +4224,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -4123,7 +4263,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator → N/A; prior zero/missing → N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator \u2192 N/A; prior zero/missing \u2192 N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -4161,7 +4301,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices ×100, unknown included; 0 devices → N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices \u00d7100, unknown included; 0 devices \u2192 N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -4238,7 +4378,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "BN-M01–08 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "BN-M01\u201308 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [

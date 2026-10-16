@@ -84,6 +84,8 @@ class IdentitySecurity {
                 .requestMatchers("/api/admin/venues", "/api/admin/venues/*", "/api/admin/venues/*/rooms", "/api/admin/venues/*/rooms/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/rooms/*/availability", "/api/holds/*", "/api/admin/venues/*/inventory").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/holds", "/api/holds/*/release").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/quotes/*").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/quotes", "/api/quotes/*/revisions", "/api/quotes/*/accept").authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request, response, failure) -> {

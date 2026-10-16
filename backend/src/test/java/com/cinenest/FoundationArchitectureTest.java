@@ -40,11 +40,16 @@ class FoundationArchitectureTest {
 
     @Test void pricingUsesOnlyPublicOwnerInterfacesAndItsOwnAdapter() {
         var classes=new ClassFileImporter().importPackages("com.cinenest");
-        noClasses().that().resideInAPackage("com.cinenest.pricing..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.rooms.internal..","com.cinenest.identity.internal..").check(classes);
+        noClasses().that().resideInAPackage("com.cinenest.pricing..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.rooms.internal..","com.cinenest.identity.internal..","com.cinenest.booking.internal..").check(classes);
         noClasses().that().haveSimpleName("DraftService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
         noClasses().that().haveSimpleName("DraftService").should().dependOnClassesThat().haveSimpleName("JdbcDraftRepository").check(classes);
         noClasses().that().haveSimpleName("PublicationService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
         noClasses().that().haveSimpleName("PublicationService").should().dependOnClassesThat().haveSimpleName("JdbcPublicationRepository").check(classes);
+    }
+    @Test void quotationUsesOnlyPublicHoldFactsAndItsOwnPersistencePort() {
+        var classes=new ClassFileImporter().importPackages("com.cinenest");
+        noClasses().that().haveSimpleName("QuoteService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+        noClasses().that().resideInAPackage("com.cinenest.booking").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.booking.internal..","org.springframework.jdbc..").check(classes);
     }
     @Test void bookingUsesOwnerPortsAndItsOwnPersistenceAdapter() {
         var classes=new ClassFileImporter().importPackages("com.cinenest");

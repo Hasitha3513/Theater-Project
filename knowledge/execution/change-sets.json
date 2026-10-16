@@ -645,24 +645,80 @@
         "CN-PKG-002",
         "CN-BOOK-001"
       ],
-      "blockingDecisionIds": [
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Pricing quotation domain/application/persistence/HTTP; public Booking hold port; Identity explicit route security; frontend quote transport/UI/tests; existing knowledge",
+      "dbApiUiImpact": "Seven Pricing quotation tables; POST /api/quotes, GET /api/quotes/{quoteId}, POST /api/quotes/{quoteId}/revisions, POST /api/quotes/{quoteId}/accept; synthetic-only itemized review/acceptance",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1\u2013V6; no production seed/down migration",
+      "plannedChecks": "Exact unit/guest/included-extra/quote-expiry/snapshot fixture tests",
+      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
+      "requiredApproval": "Quote slice + price/timing/method policy approval",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "PROGRESS.md#quotation-implementation"
+      ],
+      "historicalPreApproval": {
+        "id": "CN-QUOTE-001",
+        "phase": 3,
+        "priority": "P1",
+        "objective": "Exact quote and purchase snapshot contract",
+        "requirementIds": [
+          "CN-C04",
+          "PR-PKG-001",
+          "PK-AC07",
+          "PK-AC10",
+          "PK-AC13",
+          "BR-03",
+          "BR-04",
+          "BR-05",
+          "BR-10"
+        ],
+        "inScope": "One quote construction/expiry/version/snapshot slice and itemized customer summary",
+        "outOfScope": "No guessed proration/fee/tax or automatic latest-price substitution",
+        "dependencies": [
+          "CN-PKG-002",
+          "CN-BOOK-001"
+        ],
+        "blockingDecisionIds": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "affectedFilesModules": "Pricing/Booking/UI quote contract TBD",
+        "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+        "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+        "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+        "plannedChecks": "Exact unit/guest/included-extra/quote-expiry/snapshot fixture tests",
+        "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+        "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
+        "requiredApproval": "Quote slice + price/timing/method policy approval",
+        "authorityAvailable": false,
+        "readiness": "BLOCKED",
+        "workStatus": "BLOCKED",
+        "evidencePaths": []
+      },
+      "scopeApproval": {
+        "status": "OWNER_APPROVED_SYNTHETIC_CN_QUOTE_001_ONLY",
+        "requestSha256": "7f3031ac557a3e2716baf4ef6a534ecb9fee9338f7716a6e41040403b56c2d55",
+        "baselineHead": "13a27464a281205f897670cc6593cbddbb1f3ecd",
+        "canonicalSpecification": "ARCHITECTURE.md#quotation-boundary",
+        "scope": "Seven Pricing tables/additive V7; four owned synthetic quote operations and itemized UI; real issuance/acceptance/checkout/payments/booking confirmation disabled"
+      },
+      "resolvedDecisionIds": [
         "OD-17",
         "OD-20",
         "OD-22",
         "OD-25"
       ],
-      "affectedFilesModules": "Pricing/Booking/UI quote contract TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
-      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
-      "plannedChecks": "Exact unit/guest/included-extra/quote-expiry/snapshot fixture tests",
-      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
-      "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
-      "requiredApproval": "Quote slice + price/timing/method policy approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "implementationEvidence": {
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#quotation-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-VERIFY-001",

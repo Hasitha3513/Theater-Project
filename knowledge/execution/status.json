@@ -1,21 +1,21 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-BOOK-001",
-  "mode": "BOUNDED_INVENTORY_IMPLEMENTATION",
-  "workStatus": "VERIFIED",
-  "productStage": "FOUNDATION_AUTH_UI_ROOM_PACKAGES_AND_BOUNDED_INVENTORY_VERIFIED",
+  "taskId": "CN-QUOTE-001",
+  "mode": "BOUNDED_SYNTHETIC_QUOTATION_IMPLEMENTATION",
+  "workStatus": "IN_PROGRESS",
+  "productStage": "BOUNDED_SYNTHETIC_QUOTATIONS_LOCALLY_VERIFIED_CI_PENDING",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "53d0e8ea713888d213ff85c157f73924a9b78778",
+  "baselineHead": "13a27464a281205f897670cc6593cbddbb1f3ecd",
   "baselineWorktree": "PRE_EXISTING_FRONTEND_GENERATED_TYPE_CHANGE_PRESERVED",
-  "currentChangeSet": "CN-BOOK-001",
+  "currentChangeSet": "CN-QUOTE-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-QUOTE-001",
-  "nextAction": "Owner review of CN-QUOTE-001 bounded scope and remaining OD-17/20/22/25 gates; no next implementation task authorized",
+  "nextRecommendedChangeSet": "CN-VERIFY-001",
+  "nextAction": "Review CN-VERIFY-001 bounded evidence/admission/privacy scope and OD-03/05 gates; no next implementation authorized",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "Bounded inventory slice VERIFIED; full quote/booking/payment/physical and customer/phase acceptance remain open",
+  "implementationEvidence": "Synthetic-only quote snapshot/acceptance locally verified; CI pending. Commercial issuance, purchase/payment, phase/customer acceptance remain disabled/open",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
@@ -26,16 +26,16 @@
     "No approval for the full future implementation plan",
     "OD-15 missing original sources",
     "Affected-feature OD-02/03/04/05/06/07/14 hardware/privacy/safety/provider/rights gates",
-    "Affected-feature OD-17–29 package/bank policies and accountable owners"
+    "Affected-feature OD-17\u201329 package/bank policies and accountable owners"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS_CLOSURE_RECEIPT_PENDING",
-  "publicationEvidence": "CN-BOOK-001 source cbd6f07f6bfdef5384cdf66a2d12c4b7feefaf93 pushed to origin/main and remote tip matched; exact-source CI 38934373590 SUCCESS; final documentation receipt verified separately",
-  "lastObservedHead": "cbd6f07f6bfdef5384cdf66a2d12c4b7feefaf93",
-  "evidencePath": "PROGRESS.md#inventory-implementation",
-  "evidenceFreshness": "2026-10-16 CN-BOOK-001 exact-source CI and source hash receipt",
+  "publicationState": "NOT_PUBLISHED_LOCAL_CHECKS_PENDING_FINAL_VERIFICATION",
+  "publicationEvidence": "No quotation commit or push performed yet",
+  "lastObservedHead": "13a27464a281205f897670cc6593cbddbb1f3ecd",
+  "evidencePath": "PROGRESS.md#quotation-implementation",
+  "evidenceFreshness": "2026-10-16 bounded synthetic quotation local checks",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -51,13 +51,14 @@
   ],
   "omissionRegister": "execution/omissions.json",
   "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
-  "verificationScope": "Bounded inventory source: PostgreSQL overlap, hold lifecycle/expiry/recovery/idempotency, owner/venue/eligibility/CSRF/rate, API/UI plus existing regressions; no full commercial or physical acceptance",
+  "verificationScope": "Bounded synthetic quote calculations/history/acceptance/expiry/concurrency/security/migration/UI; full commercial and customer acceptance remain open",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "GRANTED_BOUNDED_CN_BOOK_001",
+  "implementationAuthorization": "GRANTED_SYNTHETIC_CN_QUOTE_001_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "CN-QUOTE-001 scope and OD-17/20/22/25 decisions at their quote-specific boundaries; existing inventory approvals retained"
+    "CN-VERIFY-001 bounded scope, OD-03 admission/all-guest process and OD-05 private evidence/privacy/storage decisions",
+    "Real commercial tax/profile and payment/confirmation policies remain separate gates; no production quotation issuance approval"
   ],
   "checks": [
     {
@@ -2220,5 +2221,92 @@
       "verifiedRemoteSourceSha": "cbd6f07f6bfdef5384cdf66a2d12c4b7feefaf93",
       "finalReceipt": "Final knowledge-only commit/remote SHA and CI verified separately at closeout"
     }
+  },
+  "quotationImplementation": {
+    "status": "LOCAL_VERIFIED_CI_PENDING",
+    "baselineHead": "13a27464a281205f897670cc6593cbddbb1f3ecd",
+    "scopeApproval": {
+      "status": "OWNER_APPROVED_SYNTHETIC_CN_QUOTE_001_ONLY",
+      "requestSha256": "7f3031ac557a3e2716baf4ef6a534ecb9fee9338f7716a6e41040403b56c2d55",
+      "baselineHead": "13a27464a281205f897670cc6593cbddbb1f3ecd",
+      "canonicalSpecification": "ARCHITECTURE.md#quotation-boundary",
+      "scope": "Seven Pricing tables/additive V7; four owned synthetic quote operations and itemized UI; real issuance/acceptance/checkout/payments/booking confirmation disabled"
+    },
+    "commercialIssuance": "DISABLED",
+    "d1": "NOT_READY",
+    "remoteCI": "NOT_RUN",
+    "ownedFiles": {
+      "backend/src/main/java/com/cinenest/booking/QuotationHolds.java": "7522aa953069af8d4c7472751e4e29a5b1a046371623c655f40517692b677916",
+      "backend/src/main/java/com/cinenest/booking/internal/InventoryService.java": "526befa06205066ab5d53908103033345a3393e07a18b8becaf5721d2c112d6b",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "b0b7c10e9eac39528867618e0c3bfdd3c4881b7890568f0b63ad4780abd0bcad",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcQuoteRepository.java": "71b46999ec8d33004b76d3d27906c15c8fa12962d27953e83211d592bd461a67",
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java": "0fdc1416ef9a077f7d10151dcd2a65cfb827c6a66b2d9bd720eba6e8941dc83b",
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteDenialAudit.java": "b05f889736f49796b5f701fdb5c79e1f35d2b1c2fb5df1d67358d693c8acfa38",
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteRepository.java": "a7650c8031c0bf977284f9de87a80759ec3285110fa9227ce0eb347e3bc9390e",
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteRules.java": "85a86714691459cf47ed0d5f5f743256739ecdd53d773e09d521a3760a929741",
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteService.java": "110f1cb2a74e5e9ad655807b044c373c722b47ad617e29f0b91ef6067bad1a7e",
+      "backend/src/main/java/com/cinenest/pricing/package-info.java": "bd0824c7f53af460a210d6e827224c459a6168eec2a9249dfd3f23f02c27ae73",
+      "backend/src/main/resources/db/migration/V7__synthetic_quotations.sql": "22e67f40702d78b4914a64d854767d38e86d447251e0bb1e2cb713125f0f63ff",
+      "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java": "b9dab1fa28278951e7db87870926e3484c35b8d240e575225eb616e357815d3f",
+      "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java": "93790777c82dc17f4b93b8631d336bf14f716f39c5a5621b90a4d168b9c89d6c",
+      "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java": "b64a819bba0fb868d0b305c2eef6fa38a0f7b6769e239346f23f47b1c2f7ed48",
+      "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java": "57233046ba7df4c091905ff2872689901da54a0a5e1c7d1b3b12dd9ee00d8255",
+      "frontend/app/api/quotes/[quoteId]/accept/route.ts": "daea6d72904b2a99876cdda8ea4307335b1c1039ccd9454483cca2fcccbbda88",
+      "frontend/app/api/quotes/[quoteId]/revisions/route.ts": "daea6d72904b2a99876cdda8ea4307335b1c1039ccd9454483cca2fcccbbda88",
+      "frontend/app/api/quotes/[quoteId]/route.ts": "1e6e7975b103fcd50c6c56643aef37835552856a1b23bd0ffcd91fd572f599c5",
+      "frontend/app/api/quotes/route.ts": "94ee82256de1810dd3f511d71491235a376da18b44c5d3735c5747f2dc736c2c",
+      "frontend/components/inventory.tsx": "a48fabf58ef7d57a2b099a66677ebb85e480e3863826d59da45c9f1305a040dd",
+      "frontend/components/quotes.tsx": "1ea9765480cf734e961144ff1c9cfeeaa063e9eb04e96f2eb17d771ff44388c5",
+      "frontend/components/rooms.tsx": "9dd0d7f3c3a7c9742de11ea24ecb31e9ede35b6cdc8037e34be4a037bb9626ac",
+      "frontend/lib/quotes.ts": "ea28e9227456cb59245dbc55727845c804caf8075feeb3be9eb9fd246b4bb6c1",
+      "frontend/lib/room-backend.ts": "bb2411a57de27e0e87c8f589fa542043bfd10b0f8e76888082ceb49611402963",
+      "frontend/package.json": "9d29e6810a63338853982d4c4b54d9e472a8e953c419ce914fec481e0b7b709b",
+      "frontend/tests/quotes-browser.mjs": "a5be87147ddc787d575da30406a125d1a7ed20ced6dcb243d1960a8c7a4e42c4",
+      "frontend/tests/quotes.test.mjs": "0468a478e37f06215141f50101169ccc463f9177982a6670459b252b50e38beb"
+    },
+    "checks": {
+      "backendTests": 144,
+      "quoteIntegrationTests": 13,
+      "quoteDomainTests": 6,
+      "architectureTests": 7,
+      "frontendTests": 56,
+      "quoteFrontendTests": 5,
+      "quoteBrowserGroups": 14,
+      "regressionBrowserGroups": 85,
+      "browserWidths": [
+        320,
+        375,
+        640,
+        768,
+        1024,
+        1280,
+        1536
+      ],
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "postgresql": "18.6 pinned isolated real database; clean V1-V7, populated V6-V7, repeat, expiry lock wait, quote revision/idempotency/hold release races and audit rollback PASS",
+      "frontend": "Isolated locked install/build/typecheck/lint/unit/HTTP transport and synthetic browser checks PASS; desktop/mobile screenshots reviewed",
+      "npmAudit": "NOT_RUN_LOCALLY_OFFLINE; existing CI retains online audit",
+      "launcherContracts": 14,
+      "fullRunVerifyOffline": "PASS_ISOLATED_CHECKOUT",
+      "knowledgeValidators": "PASS_ISOLATED_CHECKOUT",
+      "whitespace": "PASS",
+      "negativeControls": 6
+    },
+    "generatedFileIsolation": {
+      "path": "frontend/next-env.d.ts",
+      "strategy": "Detached /tmp validation checkout; live pre-existing bytes untouched and excluded from source allowlist/staging",
+      "baselineKnowledgeValidators": "PASS_IN_ISOLATION",
+      "liveKnownFailures": [
+        "Foundation source checksum mismatch frontend/next-env.d.ts",
+        "Unapproved protected source/token/dependency change frontend/next-env.d.ts"
+      ]
+    },
+    "limits": [
+      "Synthetic fixtures only; no Sri Lankan tax or commercial acceptance proof",
+      "No booking request/purchase/confirmation/payment/report implementation",
+      "No full 18-scenario authorization, actual screen-reader/zoom certification, process/host crash certification or customer/physical acceptance"
+    ]
   }
 }

@@ -193,3 +193,15 @@ export function inventoryRoute(path: string, method: string) {
 export async function forwardInventory(request: Request) {
 	return forwardConfigured(request, inventoryRoute);
 }
+
+export function quoteRoute(path: string, method: string) {
+	if (path === "/api/quotes") return method === "POST";
+	if (new RegExp(`^/api/quotes/${id}$`).test(path)) return method === "GET";
+	return (
+		new RegExp(`^/api/quotes/${id}/(revisions|accept)$`).test(path) &&
+		method === "POST"
+	);
+}
+export async function forwardQuotes(request: Request) {
+	return forwardConfigured(request, quoteRoute);
+}
