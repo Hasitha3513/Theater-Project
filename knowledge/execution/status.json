@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "taskId": "CN-PKG-002",
   "mode": "BOUNDED_PACKAGE_DRAFT_IMPLEMENTATION",
-  "workStatus": "IN_PROGRESS",
-  "productStage": "FOUNDATION_AUTH_UI_ROOM_AND_PACKAGE_DRAFTS_VERIFIED",
+  "workStatus": "VERIFIED",
+  "productStage": "FOUNDATION_AUTH_UI_ROOM_PACKAGE_DRAFTS_AND_INDICATIVE_PUBLICATION_VERIFIED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
@@ -12,8 +12,8 @@
   "baselineWorktree": "CLEAN",
   "currentChangeSet": "CN-PKG-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-PKG-002",
-  "nextAction": "Verify exact-source publication CI before closure; no other implementation authorized",
+  "nextRecommendedChangeSet": "CN-BOOK-001",
+  "nextAction": "Owner review of CN-BOOK-001 bounded inventory scope and OD-09/OD-21 remaining gates; no READY successor",
   "nextReadyChangeSet": null,
   "implementationEvidence": "Bounded room/catalog verified; package/booking/physical and phase/customer acceptance remain open",
   "approvedCoreDecisions": [
@@ -746,7 +746,7 @@
       "accepted": false
     },
     "planningCriteria": {
-      "checked": 10,
+      "checked": 11,
       "total": 74,
       "overallEffortPercentage": null
     },
@@ -1948,8 +1948,8 @@
     "productStage": "FOUNDATION_AUTH_UI_ROOM_AND_PACKAGE_DRAFTS_VERIFIED"
   },
   "publicationImplementation": {
-    "status": "LOCAL_VERIFIED_CI_PENDING",
-    "remoteCI": "PENDING",
+    "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
+    "remoteCI": "SUCCESS",
     "baselineHead": "61c2fd5f444a1a3ee2f5231eb34760c02a3d3a14",
     "scopeApproval": {
       "status": "OWNER_APPROVED_CN_PKG_002_ONLY",
@@ -2040,6 +2040,20 @@
         "false full purchase acceptance rejected",
         "lost bounded approval rejected"
       ]
+    },
+    "ciReceipt": {
+      "runId": 38918676186,
+      "headSha": "b8c66da85e688169c847afb0527cba8d866a2383",
+      "conclusion": "success",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38918676186",
+      "scope": "Exact corrected source: backend/PostgreSQL/architecture/startup; frontend clean install/build/type/lint/tests/audit; knowledge/whitespace"
+    },
+    "publication": {
+      "destination": "origin/main",
+      "implementationCommit": "aa01db824e1ad8e209d2a374e216a71eb17b652b",
+      "isolationCommit": "4706cb7d9e378222b1c8cfef46ecf3580a501234",
+      "correctedSourceCommit": "b8c66da85e688169c847afb0527cba8d866a2383",
+      "closureReceipt": "Final knowledge-only commit, remote SHA and its CI verified separately at closeout"
     }
   }
 }

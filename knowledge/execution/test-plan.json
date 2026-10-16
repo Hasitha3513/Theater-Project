@@ -94,7 +94,7 @@
       },
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -155,7 +155,7 @@
       },
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -610,7 +610,7 @@
       },
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -743,7 +743,7 @@
       },
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1095,7 +1095,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1118,7 +1118,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1141,7 +1141,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1194,7 +1194,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1232,7 +1232,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "publicationImplementationEvidence": {
         "taskId": "CN-PKG-002",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",

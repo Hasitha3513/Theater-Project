@@ -499,8 +499,8 @@
       "definitionOfDone": "Joint valid publication and no retroactive sold-term edits",
       "requiredApproval": "Explicit publication slice and policy choices approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROGRESS.md#publication-implementation"
       ],
@@ -512,7 +512,7 @@
         "scope": "Five-table additive V5; six admin plus two public operations; existing admin and public room UI; indicative-only; no quotes/bookings/payments/IoT/deployment"
       },
       "implementationEvidence": {
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INDICATIVE_PUBLICATION",
         "evidencePath": "PROGRESS.md#publication-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
