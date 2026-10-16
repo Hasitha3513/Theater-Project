@@ -98,6 +98,15 @@ def main():
             check(row==expected,'Unapproved publication delta '+path+'/'+row['id'])
         check(set(before)=={r['id'] for r in payload[kind]},'Publication IDs lost/added '+path)
         return original
+    workflow=state.get('localDevelopmentWorkflow',{})
+    workflow_owned=workflow.get('ownedFiles',{})
+    check(set(workflow_owned)=={'Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh','scripts/test-launchers.py','frontend/next.config.mjs','.github/workflows/foundation.yml'},'Local workflow source inventory changed')
+    for name,digest in workflow_owned.items():
+        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Local workflow source mismatch '+name)
+        if name.endswith('.sh'):check((R/name).stat().st_mode & 0o111 != 0,'Local launcher not executable '+name)
+    workflow_before=subprocess.check_output(['git','-C',str(R),'show','00164620cb03487e9dd74722e4763d12dce99ec2:.github/workflows/foundation.yml'])
+    check((R/'.github/workflows/foundation.yml').read_bytes()==workflow_before.replace(b'      - name: Knowledge and whitespace',b'      - name: Local launcher contracts\n        run: python3 scripts/test-launchers.py\n      - name: Knowledge and whitespace'),'Unrelated CI changes in local workflow')
+    check(workflow.get('baselineHead')=='00164620cb03487e9dd74722e4763d12dce99ec2' and workflow.get('checks',{}).get('launcherTests')==14,'Local workflow baseline/evidence missing')
     changes = backlog['changeSets']; reqs = coverage['requirements']; tests = tests_doc['tests']
     # Explicit bounded CN-PKG-001 successor; compare its exact authorized delta before historical checks.
     pkg_base='478198fe87fa1e8291b7cf35e5c2339e068b301b'
@@ -313,7 +322,7 @@ def main():
         path = R / name
         # Historical foundation evidence stays immutable. Only explicitly owned auth successors
         # may differ now; both their current hashes above and original source hashes are checked.
-        data = subprocess.check_output(['git', '-C', str(R), 'show', 'aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15:' + name]) if name in auth_owned or name in ui_owned or name in room_owned else path.read_bytes() if path.is_file() else b''
+        data = subprocess.check_output(['git', '-C', str(R), 'show', 'aa2bb4e13a9a7bf4e495c856a6f2c8e199c56d15:' + name]) if name in auth_owned or name in ui_owned or name in room_owned or name in {'frontend/next.config.mjs','.github/workflows/foundation.yml'} else path.read_bytes() if path.is_file() else b''
         check(path.is_file() and hashlib.sha256(data).hexdigest() == digest, 'Foundation source checksum mismatch ' + name)
     results = foundation_evidence.get('checks', [])
     check(len(results) == 7 and all(c.get('exitCode') == 0 for c in results), 'Foundation verification failure/missing checks')
@@ -656,6 +665,8 @@ def main():
         baseline_bytes = subprocess.check_output(['git', '-C', str(R), 'show', '78e4c74cf1462bcf69b384df045f019d61fafe3f:' + name])
         if name in room_owned and name not in ui_owned:
             check(historical_source_matches(name,hashlib.sha256(baseline_bytes).hexdigest()), 'Unapproved room successor of protected source ' + name)
+        elif name == 'frontend/next.config.mjs':
+            check((R/name).read_bytes()==b'const nextConfig = { poweredByHeader: false, agentRules: false };\nexport default nextConfig;\n','Local workflow changed unrelated frontend configuration')
         elif name not in ui_owned:
             check((R / name).is_file() and (R / name).read_bytes() == baseline_bytes, 'Unapproved protected source/token/dependency change ' + name)
     check('<a id="od11-approved-baseline"></a>' in (K / 'DESIGN.md').read_text() and '<a id="ui-readiness"></a>' in progress, 'UI canonical approval/readiness missing')

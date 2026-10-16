@@ -44,6 +44,8 @@ jobs:
           npm run lint
           npm test
           npm audit --audit-level=high
+      - name: Local launcher contracts
+        run: python3 scripts/test-launchers.py
       - name: Knowledge and whitespace
         run: |
           python3 knowledge/validate_design_kb.py

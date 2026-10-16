@@ -2055,5 +2055,32 @@
       "correctedSourceCommit": "b8c66da85e688169c847afb0527cba8d866a2383",
       "closureReceipt": "Final knowledge-only commit, remote SHA and its CI verified separately at closeout"
     }
+  },
+  "localDevelopmentWorkflow": {
+    "status": "VERIFIED_LOCAL_WORKFLOW",
+    "baselineHead": "00164620cb03487e9dd74722e4763d12dce99ec2",
+    "authorization": "Current owner task: Standardize CineNest local development scripts; script-only, no business implementation",
+    "evidencePath": "PROGRESS.md#local-development-maintenance",
+    "ownedFiles": {
+      "Run.sh": "1845ae6181044450ce681a4011edffc31922ec05c42b3ceedfce377e0a9b99fc",
+      "Run-backend.sh": "f75739425e00303f55c0d9868b64683df00eb623f606c952b7e52e361954d49c",
+      "Run-frontend.sh": "3b5876c92581b2da94dedac9a6c8d1f02fd560e779df9cf99ee21a1a527dcc1a",
+      "Run-verify.sh": "930c897437bc4ee2a024a08fccaf75f24a23abff2f2b708368a00dd37076add8",
+      "scripts/test-launchers.py": "ee08522e48ac541d2a159cbf37a233b16f4e0ccb27d1f731115a2ba7d8134e77",
+      "frontend/next.config.mjs": "d58f2eb552e1c03469354576eca468677fd87dab8cbb71716c238b4d18119b92",
+      ".github/workflows/foundation.yml": "f32f7a57c76a615fe74f7f1f50e20c643a1bf64e9721ea64830ae9a482100324"
+    },
+    "checks": {
+      "bashSyntax": "PASS",
+      "launcherTests": 14,
+      "frontendDevHTTP": "PASS_FROM_TMP_WEBPACK",
+      "ownedTermination": "PASS",
+      "existingBackendTests": 102,
+      "existingFrontendTests": 44,
+      "localOnlineAudit": "NOT_RUN_OFFLINE",
+      "knowledge": "PASS",
+      "ci": "PENDING_PUBLICATION"
+    },
+    "bookAuthorization": "Current owner approves preceding CN-BOOK-001 policies/scope; preserved for next separate reconciliation, not implemented or marked READY in this script-only task"
   }
 }
