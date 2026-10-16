@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PENDING_DOCUMENTATION_PUBLICATION",
+  "publicationState": "PUSHED",
   "publicationEvidence": "CN-FND-001 implementation through aa2bb4e pushed to origin/main; full remote CI 38689239097 SUCCESS at that source commit; metadata-only receipt successor resolved from Git",
-  "lastObservedHead": "78e4c74cf1462bcf69b384df045f019d61fafe3f",
+  "lastObservedHead": "f38eaa55030564993b24d52ed7f97fb5b216e931",
   "evidencePath": "PROGRESS.md#ui-readiness",
   "evidenceFreshness": "2026-10-15 foundation closeout; exact checks/versions in foundationImplementation",
   "availableTools": [
@@ -1400,7 +1400,18 @@
     "noApplicationSourceChanged": true,
     "p1C06": "OPEN",
     "d1": "NOT_READY",
-    "publication": "PENDING",
+    "publication": {
+      "status": "PUSHED_VERIFIED",
+      "primaryCommit": "f38eaa55030564993b24d52ed7f97fb5b216e931",
+      "destination": "origin/main",
+      "verifiedRemoteSha": "f38eaa55030564993b24d52ed7f97fb5b216e931",
+      "pushExitCode": 0,
+      "remoteCheckExitCode": 0,
+      "ciRunId": 38870688343,
+      "ciConclusion": "success",
+      "ciUrl": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38870688343",
+      "receiptSuccessor": "Metadata-only receipt; resolve final HEAD and remote from Git"
+    },
     "checks": {
       "designValidator": "PASS",
       "executionValidator": "PASS",

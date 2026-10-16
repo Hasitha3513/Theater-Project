@@ -22,6 +22,8 @@ Implementation remains NOT_VERIFIED; executable UI tests NOT_RUN. P1-C06 stays u
 
 Next action: implement only CN-UI-001 in a future implementation invocation using preserved tokens and existing frontend dependencies, labelled isolated fixtures and backend-enforced authorization; do not begin it in this session.
 
+Verified decision publication: primary commit `f38eaa55030564993b24d52ed7f97fb5b216e931` pushed to origin/main and independently matched. [CI run 38870688343](https://github.com/Hasitha3513/Theater-Project/actions/runs/38870688343) completed SUCCESS. This metadata-only receipt adds no application/UX acceptance; final receipt HEAD/remote state are resolved from Git.
+
 <a id="diagram-publication"></a>
 ## Owner-supplied diagram publication
 
