@@ -13,11 +13,16 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
     private final JdbcClient jdbc;
     DatabaseScopedAuthorization(JdbcClient jdbc) { this.jdbc = jdbc; }
     public boolean eligible(UUID actor) {
-        return actor!=null && jdbc.sql("SELECT count(*) FROM cinenest_identity.account WHERE account_id=:actor AND synthetic=TRUE AND eligibility='ELIGIBLE'").param("actor",actor).query(Integer.class).single()==1;
+        return eligible(actor,false);
+    }
+    public boolean eligible(UUID actor,boolean lock) {
+        if(actor==null)return false;
+        var current=jdbc.sql("SELECT eligibility FROM cinenest_identity.account WHERE account_id=:actor AND synthetic=TRUE"+(lock?" FOR UPDATE":"")).param("actor",actor).query(String.class).list();
+        return !current.isEmpty() && current.getFirst().equals("ELIGIBLE");
     }
     private String writeEquivalent(String action) {
         return switch(action) { case "room.read" -> "room.write"; case "venue.read" -> "venue.write";
-            case "package.read" -> "package.edit"; case "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
+            case "package.read" -> "package.edit"; case "inventory.read", "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
     }
     @Transactional
     public boolean permits(UUID actor, UUID venue, String action, boolean lock) {

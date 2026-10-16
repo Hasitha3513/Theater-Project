@@ -238,7 +238,15 @@
       "evidenceRequired": "Checkout/provider timing and conflict/expiry tests",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "boundedInventoryApproval": {
+        "taskId": "CN-BOOK-001",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "source": "Direct owner instruction approving proposed policies and bounded scope including 10-minute hold and V6; retained at PROGRESS.md#local-development-maintenance; current explicit reply: Implement the approved bounded slice",
+        "canonicalSpecification": "PROJECT.md#inventory-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "scope": "Configurable initial 600-second hold, min(created+TTL,session start), PostgreSQL clock after locks, terminal replay/no renewal; current/known-future Rooms minimum across session; incompatible unpaid hold invalidated with block release/audit; no silent duration/buffer rewrite; broader provider/operational policy gates remain open"
+      }
     },
     {
       "id": "OD-10",
@@ -606,6 +614,14 @@
         "scope": "Rooms current/known future effective policies authoritative; initial180 unchanged; publication/activation/catalog revalidation; persist invalidation; restoration requires new publication approval; no policy API",
         "canonicalSpecification": "PROJECT.md#publication-approved-policy",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedInventoryApproval": {
+        "taskId": "CN-BOOK-001",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "source": "Direct owner instruction approving proposed policies and bounded scope including 10-minute hold and V6; retained at PROGRESS.md#local-development-maintenance; current explicit reply: Implement the approved bounded slice",
+        "canonicalSpecification": "PROJECT.md#inventory-approved-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "scope": "Configurable initial 600-second hold, min(created+TTL,session start), PostgreSQL clock after locks, terminal replay/no renewal; current/known-future Rooms minimum across session; incompatible unpaid hold invalidated with block release/audit; no silent duration/buffer rewrite; broader provider/operational policy gates remain open"
       }
     },
     {

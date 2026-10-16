@@ -360,7 +360,7 @@ export function IndicativeCatalog({
 		<Card title="Indicative published packages">
 			<p>
 				Tax and checkout fees unresolved. Prices are not payable quotations.
-				Purchasing and live availability are unavailable.
+				Purchasing is unavailable. Inventory inquiry and temporary holds are separate from package prices.
 			</p>
 			{error ? (
 				<StateMessage kind={stateFor(error)}>

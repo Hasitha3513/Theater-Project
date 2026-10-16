@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-CN-PKG-002 is now VERIFIED/CLOSED for [bounded indicative publication](#publication-implementation). Wider commercial and customer/phase acceptance remain open; current next action is in the [handoff](#current-handoff).
+CN-BOOK-001 is IN_PROGRESS for [bounded inventory](#inventory-implementation); prior CN-PKG-002 remains VERIFIED/CLOSED for [bounded indicative publication](#publication-implementation). Wider commercial and customer/phase acceptance remain open; current next action is in the [handoff](#current-handoff).
 
 Current planning direction is S17; the maintained [MVP roadmap](#mvp-roadmap) has74 criteria across P0–P10 and 7 demos, with no software or customer acceptance inferred. The directory-layout request remains blocked before movement by destination `.git` and `knowledge/` collisions; see [inspection](#root-relocation-inspection). Current authoritative root remains nested.
 
@@ -258,7 +258,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-ROOM-001 | 2 | Catalog and scoped room configuration | CN-AUTH-001, CN-UI-001 | VERIFIED / CLOSED |
 | CN-PKG-001 | 3 | Package drafts and scoped editor | CN-ROOM-001, CN-UI-001 | VERIFIED / CLOSED |
 | CN-PKG-002 | 3 | Immutable package publication/applicability | CN-PKG-001 | VERIFIED / CLOSED |
-| CN-BOOK-001 | 3 | Shared inventory hold/conflict guard | CN-ROOM-001 | BLOCKED / BLOCKED |
+| CN-BOOK-001 | 3 | Shared inventory hold/conflict guard | CN-ROOM-001 | IN_PROGRESS / READY |
 | CN-QUOTE-001 | 3 | Exact quote and purchase snapshot contract | CN-PKG-002, CN-BOOK-001 | BLOCKED / BLOCKED |
 | CN-VERIFY-001 | 4 | Private booker evidence and eligibility review | CN-AUTH-001, CN-QUOTE-001 | BLOCKED / BLOCKED |
 | CN-PAY-GW-001 | 5 | Gateway sandbox attempt/verification slice | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
@@ -306,11 +306,11 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-PKG-002 indicative publication VERIFIED; exact-source CI SUCCESS<br/>No publication or other task authorized"]
+  G["CN-BOOK-001 inventory LOCAL_VERIFIED; exact-source CI pending<br/>No second task authorized"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
-  P3["P3 Quotes/reservations<br/>W5-6 illustrative<br/>PLANNED; NOT_ACCEPTED"]
+  P3["P3 Quotes/reservations<br/>Inventory locally verified; CI pending<br/>PARTIAL; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>W7-8 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -434,7 +434,7 @@ Goal/outcome: Give customers exact accepted quotes and nonconflicting, deadline-
 
 - [ ] **P3-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: Competing customers cannot obtain conflicting inventory. Unpaid, expired, or pending requests are never shown as confirmed.
 
-Current status: PLANNED / execution BLOCKED, implementation NOT_VERIFIED. Next: review actual dependencies and blocking policies, refine the corresponding bounded task and obtain its authority; do not start from the phase label.
+Current status: bounded inventory locally verified, exact-source CI pending; remaining quote/reservation scope BLOCKED. P3-C03/C05 await verified closure; all other criteria and phase acceptance remain open. Inventory OD-09/21 subsets are approved, broader commercial policies remain at owning tasks. Next: finish CN-BOOK-001 publication only.
 
 <a id="roadmap-p4"></a>
 #### P4. Identity Review And Bank-Deposit Booking
@@ -675,7 +675,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-ROOM-001 | P2 | CN-AUTH-001, CN-UI-001 | VERIFIED / CLOSED |
 | CN-PKG-001 | P2 | CN-ROOM-001, CN-UI-001 | VERIFIED / CLOSED |
 | CN-PKG-002 | P2 | CN-PKG-001 | VERIFIED / CLOSED |
-| CN-BOOK-001 | P3 | CN-ROOM-001 | BLOCKED / BLOCKED |
+| CN-BOOK-001 | P3 | CN-ROOM-001 | IN_PROGRESS / READY |
 | CN-QUOTE-001 | P3 | CN-PKG-002, CN-BOOK-001 | BLOCKED / BLOCKED |
 | CN-VERIFY-001 | P4 | CN-AUTH-001, CN-QUOTE-001 | BLOCKED / BLOCKED |
 | CN-PAY-GW-001 | P5 | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
@@ -961,7 +961,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: in a separate invocation, reconcile the already provided CN-BOOK-001 policy/scope approval and actual readiness.** See [local workflow maintenance](#local-development-maintenance) for retained owner authorization; do not request duplicate approval. CN-PKG-002 VERIFIED/CLOSED; feature registry remains unchanged in this script-only task. CN-QUOTE-001 also depends on CN-BOOK-001 and its own OD-17/20/22/25 policy/scope approvals. Broader commercial gates remain unresolved. D1 NOT_READY; no demo held/accepted. Stop after CN-PKG-002.
+**Exact next action: finish bounded CN-BOOK-001 verification/publication, then stop.** See [local workflow maintenance](#local-development-maintenance) for retained owner authorization; do not request duplicate approval. CN-PKG-002 VERIFIED/CLOSED; CN-BOOK-001 approval reconciled and bounded implementation IN_PROGRESS in the current invocation. CN-QUOTE-001 also depends on CN-BOOK-001 and its own OD-17/20/22/25 policy/scope approvals. Broader commercial gates remain unresolved. D1 NOT_READY; no demo held/accepted. Stop after CN-BOOK-001.
 
 <a id="publication-implementation"></a>
 ## CN-PKG-002 implementation — 2026-10-16
@@ -994,3 +994,16 @@ MVP unchanged: P0 6/8;P1 2/6;P2 3/6;P3 0/6;P4 0/8;P5 0/6;P6 0/6;P7 0/6;P8 0/7;P9
 Final local checks PASS:14 launcher tests including rapid child failure and sibling shutdown; complete Run-verify.sh --offline succeeded after the documented config exception and production type regeneration. Existing CI gains only a launcher-contract test step; all its prior commands/pins remain unchanged. Feature registry/roadmap/demo states unchanged. Publication authorized for this maintenance scope; stop after push and exact-final CI verification.
 
 Local workflow source [CI 38923682178](https://github.com/Hasitha3513/Theater-Project/actions/runs/38923682178) SUCCESS at 01db4b153d0a402fc968b385ae84c4318da15992, including the14 launcher tests, existing102 backend/44 frontend tests and online audit/knowledge/whitespace. Source pushed to origin/main. This maintenance receipt has its final commit/remote tip/CI verified separately in conversation; no feature or demo acceptance changed.
+
+<a id="inventory-implementation"></a>
+## CN-BOOK-001 bounded inventory implementation
+
+Baseline main/origin/main53d0e8ea713888d213ff85c157f73924a9b78778, zero ahead/behind. Existing frontend/next-env.d.ts development-types change is unrelated and preserved. Prior direct owner approval (retained above) covers OD-09/21 subsets, OD-10 application, five-table/five-operation inventory scope, V6/btree_gist and implementation (A–F APPROVED). Current owner reply explicitly selects implementation over attachment's reconciliation-only restriction. CN-ROOM-001 hard dependency VERIFIED/CLOSED; foundation/auth/UI/package tasks also verified. CN-BOOK-001 READY then IN_PROGRESS, no other task authorized. [Approved boundary](ARCHITECTURE.md#inventory-boundary). No completed test/phase/demo claimed yet.
+
+Implemented the approved five-table additive V6/five-operation boundary, public Rooms constraints, current locking eligibility and exact inventory.read scope, database exclusion including cleaning, durable original-command replay, terminal lifecycle, atomic audit and retryable reconciliation. Existing token/dependency values, V1–V5 and diagrams unchanged. Creation disabled without explicit server enable/rate/provenance; initial configurable TTL600. No production configuration/admission or live operations performed.
+
+Local checks:124 backend tests (17 inventory integration,4 inventory domain,6 architecture; all regressions), real isolated pinned PostgreSQL18.6 clean V1–V6/populated V5–V6/repeat, packaged startup and protected HTTP denial PASS; zero failures/skips.51 frontend tests including7 inventory/real-HTTP transport checks, production build/typecheck/lint PASS.15 inventory SYNTHETIC browser groups cover inquiry/conflict/denial, unknown-outcome same-key retry, release and7 widths320/375/640/768/1024/1280/1536; browser fixture screenshots reviewed, no real customer/physical acceptance.14 launcher contracts PASS with socket access. Initial numeric assertion and session-expiry fixture corrected; sandbox-only Docker/socket/build restrictions retried with approved access. Full host/process crash certification and screen-reader/zoom certification not claimed; service recreation and interrupted audit/worker recovery exercised.
+
+Pre-existing next-env.d.ts development type imports fail the strict foundation source validator in the untouched worktree. Production builds generate the tracked production form; verification runs against that generated form and restores the pre-existing bytes afterward. The unrelated delta is excluded from task staging; validator checks are not weakened. Final ./Run-verify.sh --offline PASS: locked clean install,124 backend/51 frontend tests, build/type/lint,14 launcher contracts, both knowledge validators and whitespace. Four in-memory negative controls reject premature closure, unauthorized quote READY, lost OD-09 approval and false full requirement verification. Local npm audit explicitly NOT_RUN in offline mode; existing CI retains online audit. Remote exact-source CI pending. Roadmap remains11/74 until exact-source CI closure; D1 NOT_READY (quote/booking purchase portion absent), all demonstrations0held/0accepted, no phase accepted.
+
+Final browser regression: existing shell19, room17, package-draft17 and publication17 SYNTHETIC groups PASS alongside15 inventory groups. Active-hold desktop/mobile screenshots visually reviewed; no new token/style/dependency or physical/customer acceptance.

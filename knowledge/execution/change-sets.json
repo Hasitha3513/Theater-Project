@@ -535,28 +535,93 @@
       "dependencies": [
         "CN-ROOM-001"
       ],
-      "blockingDecisionIds": [
-        "OD-09",
-        "OD-21"
-      ],
-      "affectedFilesModules": "Booking/database owned schema/API/UI TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Booking-owned inventory module; Rooms public inventory constraints; Identity eligibility/scoped inventory read; explicit frontend inventory transport and minimal room/admin UI; owned tests and canonical records",
+      "dbApiUiImpact": "Five Booking tables, five API operations, minimal inventory-only customer/admin presentation",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "Additive V6__inventory_holds.sql with btree_gist; V1-V5 immutable; retain history/blocks on rollback",
       "plannedChecks": "Concurrent overlapping holds/reservations/buffer/closing/idempotency tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Conflicting room ranges cannot both commit under approved semantics",
       "requiredApproval": "Inventory slice + hold/closing/minimum policy approval; migration explicitly reviewed",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": [],
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "PROGRESS.md#inventory-implementation"
+      ],
       "resolvedDecisionIds": [
-        "OD-10"
+        "OD-09",
+        "OD-10",
+        "OD-21"
       ],
       "verificationDecisionIds": [
-        "OD-10"
-      ]
+        "OD-09",
+        "OD-10",
+        "OD-21"
+      ],
+      "historicalPreApproval": {
+        "id": "CN-BOOK-001",
+        "phase": 3,
+        "priority": "P1",
+        "objective": "Shared inventory hold/conflict guard",
+        "requirementIds": [
+          "CN-C03",
+          "CN-A02",
+          "BR-01",
+          "BR-02",
+          "BR-06",
+          "BR-07"
+        ],
+        "inScope": "Bounded database-enforced intervals and gateway-hold creation/expiry slice",
+        "outOfScope": "No Redis-only authority or indefinite holds/bank deadline assumption",
+        "dependencies": [
+          "CN-ROOM-001"
+        ],
+        "blockingDecisionIds": [
+          "OD-09",
+          "OD-21"
+        ],
+        "affectedFilesModules": "Booking/database owned schema/API/UI TBD",
+        "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+        "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+        "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+        "plannedChecks": "Concurrent overlapping holds/reservations/buffer/closing/idempotency tests",
+        "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+        "definitionOfDone": "Conflicting room ranges cannot both commit under approved semantics",
+        "requiredApproval": "Inventory slice + hold/closing/minimum policy approval; migration explicitly reviewed",
+        "authorityAvailable": false,
+        "readiness": "BLOCKED",
+        "workStatus": "BLOCKED",
+        "evidencePaths": [],
+        "resolvedDecisionIds": [
+          "OD-10"
+        ],
+        "verificationDecisionIds": [
+          "OD-10"
+        ]
+      },
+      "scopeApproval": {
+        "status": "OWNER_APPROVED_CN_BOOK_001_ONLY",
+        "baselineHead": "53d0e8ea713888d213ff85c157f73924a9b78778",
+        "source": "Direct owner instruction approving proposed policies and bounded scope including 10-minute hold and V6; retained at PROGRESS.md#local-development-maintenance; current explicit reply: Implement the approved bounded slice",
+        "implementationAuthorization": "GRANTED_BOUNDED_CN_BOOK_001",
+        "canonicalSpecification": "ARCHITECTURE.md#inventory-boundary",
+        "approvalItems": {
+          "A": "APPROVED",
+          "B": "APPROVED",
+          "C": "APPROVED",
+          "D": "APPROVED",
+          "E": "APPROVED",
+          "F": "APPROVED"
+        },
+        "exclusions": "No quote, confirmed booking, payment, refund, bank deadline, access/IoT, physical readiness, production or deployment"
+      },
+      "implementationEvidence": {
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-QUOTE-001",

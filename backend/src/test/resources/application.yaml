@@ -3,3 +3,6 @@ cinenest:
   pricing:
     publication-worker:
       enabled: false
+  booking:
+    worker:
+      enabled: false

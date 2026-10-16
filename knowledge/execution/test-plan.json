@@ -205,7 +205,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "T-CN-C04",
@@ -328,7 +342,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "T-CN-A03",
@@ -748,6 +776,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      },
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
       }
     },
     {
@@ -852,7 +894,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "T-BR-02",
@@ -868,7 +924,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "T-BR-03",
@@ -929,7 +999,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "T-BR-07",
@@ -944,7 +1028,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "T-BR-08",

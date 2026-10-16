@@ -437,7 +437,21 @@
       ],
       "verificationDecisionIds": [
         "OD-10"
-      ]
+      ],
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "CN-C04",
@@ -796,7 +810,21 @@
       ],
       "verificationDecisionIds": [
         "OD-10"
-      ]
+      ],
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "CN-A03",
@@ -1811,6 +1839,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      },
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
       }
     },
     {
@@ -2111,7 +2153,21 @@
       ],
       "verificationDecisionIds": [
         "OD-10"
-      ]
+      ],
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "BR-02",
@@ -2167,7 +2223,21 @@
       ],
       "verificationDecisionIds": [
         "OD-10"
-      ]
+      ],
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "BR-03",
@@ -2356,7 +2426,21 @@
       "verificationDecisionIds": [
         "OD-04",
         "OD-10"
-      ]
+      ],
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "BR-07",
@@ -2402,7 +2486,21 @@
       ],
       "verificationDecisionIds": [
         "OD-10"
-      ]
+      ],
+      "inventoryImplementationEvidence": {
+        "taskId": "CN-BOOK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#inventory-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+          "frontend/tests/inventory.test.mjs",
+          "frontend/tests/inventory-browser.mjs"
+        ],
+        "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      }
     },
     {
       "id": "BR-08",

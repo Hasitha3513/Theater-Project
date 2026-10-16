@@ -35,6 +35,7 @@ export function Navigation({
 				["/admin/account", "Account session"],
                 ["/admin/venues", "Venues"],
                 ["/admin/rooms", "Room configuration"],
+                ["/admin/inventory", "Inventory inspection"],
                 ["/admin/settings/packages", "Package drafts"],
 			]
 		: [

@@ -120,6 +120,9 @@ async function forwardConfigured(
 		for (const key of [
 			"venueId",
 			"roomId",
+			"sessionStartLocal",
+			"durationMinutes",
+			"guests",
 			"sessionStart",
 			"sessionEnd",
 			"q",
@@ -140,17 +143,25 @@ async function forwardConfigured(
 			signal: AbortSignal.timeout(5000),
 		});
 		const out = new Headers({ "Cache-Control": "no-store" });
-		if (![200, 201, 400, 401, 403, 404, 409, 503].includes(response.status))
+		if (
+			![200, 201, 400, 401, 403, 404, 409, 429, 503].includes(response.status)
+		)
 			return new Response(null, { status: 502, headers: out });
 		if (!response.ok)
 			return Response.json(
 				{
 					message:
-						response.status === 409
-							? "Configuration changed or code already exists. Reload and compare; your draft is retained."
-							: response.status === 400
-								? "Invalid configuration. Check the fields and supported values."
-								: "Request could not be completed.",
+						allowed === inventoryRoute
+							? response.status === 409
+								? "Inventory conflict or changed configuration. Inquire again; no booking is confirmed."
+								: response.status === 429
+									? "Too many hold attempts. Wait before retrying."
+									: "Inventory request unavailable, invalid or denied. Your inputs are retained."
+							: response.status === 409
+								? "Configuration changed or code already exists. Reload and compare; your draft is retained."
+								: response.status === 400
+									? "Invalid configuration. Check the fields and supported values."
+									: "Request could not be completed.",
 				},
 				{ status: response.status, headers: out },
 			);
@@ -166,4 +177,19 @@ async function forwardConfigured(
 			headers: { "Cache-Control": "no-store" },
 		});
 	}
+}
+
+export function inventoryRoute(path: string, method: string) {
+	if (path === "/api/holds") return method === "POST";
+	if (new RegExp(`^/api/holds/${id}$`).test(path)) return method === "GET";
+	if (new RegExp(`^/api/holds/${id}/release$`).test(path))
+		return method === "POST";
+	return (
+		method === "GET" &&
+		(new RegExp(`^/api/rooms/${id}/availability$`).test(path) ||
+			new RegExp(`^/api/admin/venues/${id}/inventory$`).test(path))
+	);
+}
+export async function forwardInventory(request: Request) {
+	return forwardConfigured(request, inventoryRoute);
 }
