@@ -120,7 +120,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "roomImplementationEvidence": {
         "taskId": "CN-ROOM-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_ROOM_CATALOG",
         "evidencePath": "PROGRESS.md#room-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -316,7 +316,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "roomImplementationEvidence": {
         "taskId": "CN-ROOM-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_ROOM_CATALOG",
         "evidencePath": "PROGRESS.md#room-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -352,7 +352,7 @@
       },
       "roomImplementationEvidence": {
         "taskId": "CN-ROOM-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_ROOM_CATALOG",
         "evidencePath": "PROGRESS.md#room-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -664,7 +664,7 @@
       },
       "roomImplementationEvidence": {
         "taskId": "CN-ROOM-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_ROOM_CATALOG",
         "evidencePath": "PROGRESS.md#room-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",

@@ -327,8 +327,8 @@
       "definitionOfDone": "Room settings cannot rewrite purchases or certify safety",
       "requiredApproval": "Slice + venue/room/operating scope approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROGRESS.md#room-implementation"
       ],
@@ -412,7 +412,7 @@
         "baselineHead": "93e36a188dd245891b6f2cf089a616331a53105b"
       },
       "implementationEvidence": {
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_ROOM_CATALOG",
         "evidencePath": "PROGRESS.md#room-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }

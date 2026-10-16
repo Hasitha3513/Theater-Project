@@ -22,7 +22,7 @@ Local evidence: isolated pinned PostgreSQL18.6 harness passed 60 tests (19 room 
 
 Browser: 17 local SYNTHETIC check groups across 320/375/640/768/1024/1280/1536px, four routes, shared card/table IDs/filters, conflict draft/compare/retry, modal keyboard/Escape/focus, loading/denied/error/retry, local midnight and image fallback. Two ignored screenshots visually inspected; mobile table overflow found and corrected with an explicit regression assertion. No browser exceptions. No actual browser zoom/screen-reader certification, real photos, production identity, booking impacts, hardware/licensing/customer acceptance claimed. Self-review also required explicit grant serialization, read/write mapping and no authority from a typed operational reference.
 
-Both knowledge validators and whitespace passed; three in-memory negative controls rejected premature room closure, unauthorized package readiness and missing scope approval. Current local checks passed; exact-source remote CI PENDING, so CN-ROOM-001 remains IN_PROGRESS / READY and is not VERIFIED/CLOSED yet. P2-C01 not checked until required remote CI passes. P2-C04/C05 gain room-only evidence but package discovery/full administration and all phase acceptance remain open. P1 2/6, P0 6/8; D1 NOT_READY because package/catalog lifecycle prerequisites remain absent. Rollback: scoped history-preserving code revert, retain additive V3/data; destructive compensation needs separate approval. No customer demo held/accepted.
+Both knowledge validators and whitespace passed; three in-memory negative controls rejected premature room closure, unauthorized package readiness and missing scope approval. Exact-source [CI 38884100431](https://github.com/Hasitha3513/Theater-Project/actions/runs/38884100431) completed SUCCESS for efef591cbf36881dd36e360bf4d4c3d333c4584d: full PostgreSQL/backend/architecture/packaged startup, frontend clean install/build/type/lint/tests/audit and knowledge/whitespace. All 38 owned source hashes match that run. CN-ROOM-001 is now VERIFIED/CLOSED; P2-C01 checked for the approved room slice, retaining the no-real-photo/physical-acceptance limitations. Source commit pushed to origin/main; this knowledge-only closure receipt has its final publication SHA resolved from Git. P2-C04/C05 gain room-only evidence but package discovery/full administration and all phase acceptance remain open. P1 2/6, P0 6/8, P2 1/6; total 9/74. D1 NOT_READY because package/catalog lifecycle prerequisites remain absent. Rollback: scoped history-preserving code revert, retain additive V3/data; destructive compensation needs separate approval. No customer demo held/accepted.
 
 <a id="room-decision-scope-review"></a>
 ## OD-04/10/14 approvals and CN-ROOM-001 scope preparation — 2026-10-16
@@ -240,7 +240,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-FND-001 | 1 | Selected-stack repository skeleton and CI | CN-DEC-001 | VERIFIED / CLOSED |
 | CN-UI-001 | 2 | Shared shell and token consumers | CN-FND-001 | VERIFIED / CLOSED |
 | CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | VERIFIED / CLOSED |
-| CN-ROOM-001 | 2 | Catalog and scoped room configuration | CN-AUTH-001, CN-UI-001 | IN_PROGRESS / READY |
+| CN-ROOM-001 | 2 | Catalog and scoped room configuration | CN-AUTH-001, CN-UI-001 | VERIFIED / CLOSED |
 | CN-PKG-001 | 3 | Package drafts and scoped editor | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-002 | 3 | Immutable package publication/applicability | CN-PKG-001 | BLOCKED / BLOCKED |
 | CN-BOOK-001 | 3 | Shared inventory hold/conflict guard | CN-ROOM-001 | BLOCKED / BLOCKED |
@@ -271,7 +271,7 @@ Fresh baseline: `7ad20d42b4551ba07bd5d728a0cbc1d295e65f94`, main → origin/main
 
 Source reconciliation: HTML `CineNest_MVP_Roadmap.html` was not found in workspace, attachments, Downloads or /tmp. Preview found at `/home/hasitha-wijerathna/Downloads/CineNest_MVP_Roadmap_Preview.png`, visually inspected, not imported/changed; source hash in existing manifest. It shows illustrative weeks 1–20, workstream colors, D1–D6, no committed start date. Original HTML criterion IDs, detailed notes, browser saved entries and interactions cannot be inspected/restored without the HTML. The owner's supplied templates contain exactly 74 criteria, retained verbatim below; Pn-Cnn are local stable planning anchors derived from those template positions, not invented canonical requirement IDs or claimed original HTML IDs. Missing source stays visible; no replacement dashboard, image or runtime service created. Graphical refresh below is dated 2026-10-15 and reviewed against this baseline.
 
-Current roll-ups (distinct measures): P0 preparation 6/8; P1 criteria 2/6 (C01 and C06), C02–C05 partial; delivery phases accepted 0/10. Planning criteria 8/74 checked and 66 unchecked, not an effort percentage. Canonical scope 92 requirements and 92 test plans; 91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED and their full test plans NOT_RUN; one workflow documentation plan PASS. Scoped foundation/auth/UI evidence is separate. Existing 28 tasks: six VERIFIED/CLOSED, one authorized IN_PROGRESS/READY and 21 BLOCKED. Decision registry: 29 records, 24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; OD-01 approved subsets do not close its broader scope. Authorization remains partial, including the account-session presentation subset of scenario18; no 18/18 claim. Demos held0/7 and accepted0/7. No phase/customer acceptance or schedule/staffing approval inferred.
+Current roll-ups (distinct measures): P0 preparation 6/8; P1 criteria 2/6 (C01 and C06), C02–C05 partial; delivery phases accepted 0/10. Planning criteria 9/74 checked and 65 unchecked, not an effort percentage. Canonical scope 92 requirements and 92 test plans; 91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED and their full test plans NOT_RUN; one workflow documentation plan PASS. Scoped foundation/auth/UI evidence is separate. Existing 28 tasks: seven VERIFIED/CLOSED and 21 BLOCKED, none READY. Decision registry: 29 records, 24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; OD-01 approved subsets do not close its broader scope. Authorization remains partial, including the account-session presentation subset of scenario18; no 18/18 claim. Demos held0/7 and accepted0/7. No phase/customer acceptance or schedule/staffing approval inferred.
 
 Historical S17 roll-up (superseded by the current roll-up above): Roll-ups (distinct measures): P0 preparation DOC_VERIFIED 5/8, readiness acceptance NOT_ACCEPTED; P1–P10 accepted 0/10; planning criteria 5/74 checked (documentation preparation only), 69 unchecked; canonical scope 92 requirements and 92 test plans, including 91 product records BLOCKED/NOT_VERIFIED/NOT_ACCEPTED with 91 tests NOT_RUN plus one workflow documentation record/test PASS; existing 28 tasks (three documentation VERIFIED/CLOSED, 25 BLOCKED) ; 29 OPEN_DECISION records, with OD-01 approved initial subset distinct; 18 authorization scenarios PLANNED. Demos held0/7, scopes accepted0/7. None is an overall effort percentage. No approved deferral, schedule, staffing or accepted phase inferred.
 
@@ -291,10 +291,10 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-ROOM-001 implemented locally; exact-source CI pending<br/>No other task authorized; physical/legal gates remain"]
+  G["CN-ROOM-001 VERIFIED/CLOSED<br/>CN-PKG-001 blocked: OD-17/18/21/22 + scope authority"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
-  P2["P2 Catalog/discovery<br/>W3-4 illustrative<br/>PLANNED; NOT_ACCEPTED"]
+  P2["P2 Catalog/discovery<br/>Room slice VERIFIED; 1 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>W5-6 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>W7-8 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -341,7 +341,7 @@ flowchart TB
 |---|---|---|---|---|
 | P0 — Readiness And Owner Decisions | Before start | 6/8 DOC_VERIFIED; not software | NOT_ACCEPTED; reviewer/date unassigned | Resolve readiness and scope authority |
 | P1 — Engineering Foundation And Access Baseline | 1–2 | 2/6 complete; C02–C05 partial | NOT_ACCEPTED; reviewer/date unassigned | Complete remaining access criteria |
-| P2 — Venues, Packages And Customer Discovery | 3–4 | 0/6 implemented/verified | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
+| P2 — Venues, Packages And Customer Discovery | 3–4 | 1/6; room discovery/admin partial in C04/C05 | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
 | P3 — Quotes, Availability And Reservations | 5–6 | 0/6 implemented/verified | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
 | P4 — Identity Review And Bank-Deposit Booking | 7–8 | 0/8 implemented/verified | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
 | P5 — Online Payments And Reliable Messaging | 9–10 | 0/6 implemented/verified | NOT_ACCEPTED; reviewer/date unassigned | Prerequisites, bounded authorization and evidence |
@@ -387,23 +387,23 @@ Goal/outcome: Make a clean checkout build and start with protected identity/sess
 
 - [ ] **P1-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: A clean checkout builds and starts. Representative identity/session, ownership, and cross-venue denial tests pass with evidence.
 
-Current status: PARTIAL; CN-FND-001 and bounded CN-AUTH-001 VERIFIED/CLOSED, shared UI VERIFIED/CLOSED; P1 NOT_ACCEPTED. C01 and C06 complete (2/6); C02–C05 partial; next CN-ROOM-001 remains scope-approval/authority BLOCKED. See auth-implementation for scoped evidence and remaining scenarios.
+Current status: PARTIAL; CN-FND-001 and bounded CN-AUTH-001 VERIFIED/CLOSED, shared UI VERIFIED/CLOSED; P1 NOT_ACCEPTED. C01 and C06 complete (2/6); C02–C05 partial; CN-ROOM-001 is now VERIFIED/CLOSED for its approved slice; remaining P1 criteria stay partial. See auth-implementation for scoped evidence and remaining scenarios.
 
 <a id="roadmap-p2"></a>
 #### P2. Venues, Packages And Customer Discovery
 
-Goal/outcome: Let scoped staff publish versioned offers that customers can discover without a code release or rewritten purchases. Timing: Illustrative weeks 3–4. Depends on P1. Responsible roles: Catalog/product, engineering, QA/UI; all named owners/reviewers TBD. Presentation dependency: P1; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-17/18/19/21/22; physical capacity/licensing acceptance remains separate. OD-04/10/14 policy choices approved; CN-ROOM-001 scope approved and implementation locally checked; exact-source CI pending. OD-11 resolved and CN-UI-001 VERIFIED/CLOSED.
+Goal/outcome: Let scoped staff publish versioned offers that customers can discover without a code release or rewritten purchases. Timing: Illustrative weeks 3–4. Depends on P1. Responsible roles: Catalog/product, engineering, QA/UI; all named owners/reviewers TBD. Presentation dependency: P1; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-17/18/19/21/22; physical capacity/licensing acceptance remains separate. OD-04/10/14 policy choices approved; CN-ROOM-001 VERIFIED/CLOSED with exact-source CI success. OD-11 resolved and CN-UI-001 VERIFIED/CLOSED.
 
-- [ ] **P2-C01** Venue/room configuration, images, facilities, capacity, and operating windows implemented. — Req: CN-C01, CN-A03; tests: T-CN-A03, T-CN-C01; tasks: CN-ROOM-001. Evidence: NOT_RUN / no current acceptance evidence.
+- [x] **P2-C01** Venue/room configuration, images, facilities, capacity, and operating windows implemented. — Req: CN-C01, CN-A03; tests: T-CN-A03, T-CN-C01; tasks: CN-ROOM-001. Evidence: ROOM_SLICE_VERIFIED; room-implementation; real PostgreSQL and exact-source CI; approved-asset restriction/fallback, no physical acceptance.
 - [ ] **P2-C02** Package creation, duplication, editable durations/prices, guest allowances, and extras implemented. — Req: PR-PKG-001, CN-A12, PK-AC01, PK-AC02, PK-AC03; tests: T-CN-A12, T-PK-AC01, T-PK-AC02, T-PK-AC03, T-PR-PKG-001; tasks: CN-AMEND-001, CN-DEC-001, CN-PKG-001, CN-PKG-002, CN-QUOTE-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P2-C03** Drafts, previews, revision conflicts, publication, scheduling, and deactivation implemented. — Req: PK-AC04, PK-AC05, PK-AC06, PK-AC09, PK-AC11; tests: T-PK-AC04, T-PK-AC05, T-PK-AC06, T-PK-AC09, T-PK-AC11; tasks: CN-PKG-002. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P2-C04** Responsive customer landing and room/package discovery implemented. — Req: CN-C01, PR-UI-001; tests: T-CN-C01, T-PR-UI-001; tasks: CN-DEC-001, CN-ROOM-001, CN-UI-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P2-C05** Admin card/table views, forms, scoped search, and error/empty states implemented. — Req: CN-A04, CN-A10; tests: T-CN-A04, T-CN-A10; tasks: CN-ADMIN-001, CN-ROOM-001, CN-UI-001. Evidence: NOT_RUN / no current acceptance evidence.
+- [ ] **P2-C04** Responsive customer landing and room/package discovery implemented. — Req: CN-C01, PR-UI-001; tests: T-CN-C01, T-PR-UI-001; tasks: CN-DEC-001, CN-ROOM-001, CN-UI-001. Evidence: PARTIAL_ROOM_SLICE_VERIFIED; room-implementation; package discovery or broader administration remains NOT_VERIFIED.
+- [ ] **P2-C05** Admin card/table views, forms, scoped search, and error/empty states implemented. — Req: CN-A04, CN-A10; tests: T-CN-A04, T-CN-A10; tasks: CN-ADMIN-001, CN-ROOM-001, CN-UI-001. Evidence: PARTIAL_ROOM_SLICE_VERIFIED; room-implementation; package discovery or broader administration remains NOT_VERIFIED.
 - [ ] **P2-C06** Audit history, version preservation, and invalid capacity/duration checks verified. — Req: BR-02, PK-AC03, PK-AC04, PK-AC11; tests: T-BR-02, T-PK-AC03, T-PK-AC04, T-PK-AC11; tasks: CN-BOOK-001, CN-PKG-001, CN-PKG-002. Evidence: NOT_RUN / no current acceptance evidence.
 
 - [ ] **P2-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: An authorized administrator changes package details, duration, and price without a code release. The customer catalog shows the published result without rewriting historical purchases.
 
-Current status: PLANNED / execution BLOCKED, implementation NOT_VERIFIED. Next: review actual dependencies and blocking policies, refine the corresponding bounded task and obtain its authority; do not start from the phase label.
+Current P2 status: PARTIAL / NOT_ACCEPTED; CN-ROOM-001 VERIFIED/CLOSED, P2-C01 complete, C04/C05 partial room evidence. Package tasks remain BLOCKED; no phase or D1 acceptance.
 
 <a id="roadmap-p3"></a>
 #### P3. Quotes, Availability And Reservations
@@ -657,7 +657,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-FND-001 | P1 | CN-DEC-001 | VERIFIED / CLOSED |
 | CN-UI-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
 | CN-AUTH-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
-| CN-ROOM-001 | P2 | CN-AUTH-001, CN-UI-001 | IN_PROGRESS / READY |
+| CN-ROOM-001 | P2 | CN-AUTH-001, CN-UI-001 | VERIFIED / CLOSED |
 | CN-PKG-001 | P2 | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-002 | P2 | CN-PKG-001 | BLOCKED / BLOCKED |
 | CN-BOOK-001 | P3 | CN-ROOM-001 | BLOCKED / BLOCKED |
@@ -946,4 +946,4 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: verify exact-source CN-ROOM-001 CI and reconcile its closure; do not start another task.** Owner approved only the existing bounded room scope. D1 and phase acceptance remain open; physical/licensing gates remain. Stop after this change set.
+**Exact next action: owner reviews CN-PKG-001 OD-17/18/21/22 and separately approves its bounded implementation scope/authority. No task is READY.** CN-ROOM-001 VERIFIED/CLOSED; scope-approved room configuration does not approve packages or live operations. CN-BOOK-001 still has OD-09/21 and its own authority gate. P0 6/8, P1 2/6, P2 1/6, planning 9/74; seven tasks VERIFIED/CLOSED, 21 BLOCKED. P2 and D1 NOT_ACCEPTED/NOT_READY; no customer demo held or accepted. Stop after CN-ROOM-001.
