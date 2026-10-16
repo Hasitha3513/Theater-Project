@@ -79,6 +79,7 @@ class IdentitySecurity {
                 .requestMatchers("/oauth2/authorization/cinenest", "/login/oauth2/code/cinenest").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,
                     "/api/accounts/me", "/api/accounts/{accountId}", "/api/session/csrf").authenticated()
+                .requestMatchers("/api/admin/venues/*/packages", "/api/admin/venues/*/packages/*", "/api/admin/venues/*/packages/*/draft", "/api/admin/venues/*/packages/*/duplicate", "/api/admin/venues/*/packages/*/preview", "/api/admin/venues/*/packages/*/history", "/api/admin/venues/*/package-options").authenticated()
                 .requestMatchers("/api/admin/venues", "/api/admin/venues/*", "/api/admin/venues/*/rooms", "/api/admin/venues/*/rooms/*").authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(errors -> errors

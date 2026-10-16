@@ -10,7 +10,7 @@ class FoundationArchitectureTest {
     @Test
     void declaredFoundationModuleHasAnEncapsulatedImplementation() {
         var modules = ApplicationModules.of(CineNestApplication.class);
-        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms");
+        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing");
         modules.verify();
     }
 
@@ -36,5 +36,12 @@ class FoundationArchitectureTest {
         noClasses().that().haveSimpleName("RoomService").should().dependOnClassesThat()
             .resideInAnyPackage("org.springframework.jdbc..").check(classes);
         noClasses().that().haveSimpleName("RoomService").should().dependOnClassesThat().haveSimpleName("JdbcRoomRepository").check(classes);
+    }
+
+    @Test void pricingUsesOnlyPublicOwnerInterfacesAndItsOwnAdapter() {
+        var classes=new ClassFileImporter().importPackages("com.cinenest");
+        noClasses().that().resideInAPackage("com.cinenest.pricing..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.rooms.internal..","com.cinenest.identity.internal..").check(classes);
+        noClasses().that().haveSimpleName("DraftService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+        noClasses().that().haveSimpleName("DraftService").should().dependOnClassesThat().haveSimpleName("JdbcDraftRepository").check(classes);
     }
 }

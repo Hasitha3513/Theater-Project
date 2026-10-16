@@ -435,24 +435,40 @@
         "CN-ROOM-001",
         "CN-UI-001"
       ],
-      "blockingDecisionIds": [
-        "OD-17",
-        "OD-18",
-        "OD-21",
-        "OD-22"
-      ],
-      "affectedFilesModules": "Pricing + Settings Packages & Pricing TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Pricing module; public Rooms PackageConstraints and controlled minimum policy bootstrap; Identity package capabilities; existing admin shell and explicit transport; tests/knowledge",
+      "dbApiUiImpact": "Eight Pricing tables plus Rooms minimum_session_policy, eight scoped draft API operations and /admin/settings/packages; no sales",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "V4__package_drafts_and_minimum_policy.sql additive only; V1-V3 unchanged; no automatic production seed or destructive rollback",
       "plannedChecks": "Draft permission/stale edit/exact amount/duration/inclusions validation",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Authorized core editing demonstrated without code release; no sales yet",
       "requiredApproval": "Slice and relevant package/role/policy approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "PROGRESS.md#package-draft-implementation"
+      ],
+      "scopeApproval": {
+        "requestSha256": "d10289dd345746c7f4f0bcc4c0a72a97e033fc3d7e307b3c60ba9d0413849569",
+        "baselineHead": "478198fe87fa1e8291b7cf35e5c2339e068b301b",
+        "status": "OWNER_APPROVED_CN_PKG_001_ONLY",
+        "source": "Current owner instruction and attachment approve the preceding conversation proposal, not yet a repository specification",
+        "canonicalSpecification": "ARCHITECTURE.md#package-draft-boundary",
+        "decisionScopeApprovals": [
+          "OD-17",
+          "OD-18",
+          "OD-21",
+          "OD-22"
+        ],
+        "exclusions": "No CN-PKG-002, quote, booking, payment, amendment, IoT, production policy writes or deployment"
+      },
+      "implementationEvidence": {
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-PKG-002",

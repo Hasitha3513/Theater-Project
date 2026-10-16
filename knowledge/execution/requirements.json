@@ -179,6 +179,20 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
+      },
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
       }
     },
     {
@@ -1458,7 +1472,21 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
+      }
     },
     {
       "id": "CN-C10",
@@ -1736,6 +1764,20 @@
           "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
           "frontend/tests/rooms.test.mjs",
           "frontend/tests/rooms-browser.mjs"
+        ]
+      },
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
         ]
       }
     },
@@ -2513,7 +2555,21 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
+      }
     },
     {
       "id": "PK-AC02",
@@ -2557,7 +2613,21 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
+      }
     },
     {
       "id": "PK-AC03",
@@ -2601,7 +2671,21 @@
         "OD-21",
         "OD-22",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
+      }
     },
     {
       "id": "PK-AC04",

@@ -57,6 +57,54 @@ def main():
         print('\n'.join(errors))
         return 1
     changes = backlog['changeSets']; reqs = coverage['requirements']; tests = tests_doc['tests']
+    # Explicit bounded CN-PKG-001 successor; compare its exact authorized delta before historical checks.
+    pkg_base='478198fe87fa1e8291b7cf35e5c2339e068b301b'
+    pkg_evidence=state.get('packageImplementation',{})
+    pkg_ci=pkg_evidence.get('remoteCI')=='SUCCESS'
+    pkg_status='VERIFIED_BOUNDED_PACKAGE_DRAFTS' if pkg_ci else 'LOCAL_VERIFIED_CI_PENDING'
+    pkg_owned=pkg_evidence.get('ownedFiles',{})
+    check(set(pkg_owned)=={'frontend/app/api/admin/venues/[venueId]/packages/[packageId]/draft/route.ts', 'frontend/app/api/admin/venues/[venueId]/package-options/route.ts', 'backend/src/main/resources/db/migration/V4__package_drafts_and_minimum_policy.sql', 'backend/src/main/java/com/cinenest/rooms/internal/MinimumPolicyBootstrap.java', 'frontend/lib/packages.ts', 'backend/src/main/java/com/cinenest/pricing/internal/DraftController.java', 'backend/src/main/java/com/cinenest/rooms/PackageConstraints.java', 'backend/src/main/java/com/cinenest/pricing/package-info.java', 'frontend/app/api/admin/venues/[venueId]/packages/[packageId]/duplicate/route.ts', 'backend/src/main/java/com/cinenest/rooms/internal/RoomService.java', 'frontend/app/api/admin/venues/[venueId]/packages/route.ts', 'frontend/components/shell.tsx', 'backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java', 'backend/src/main/java/com/cinenest/pricing/internal/DraftRules.java', 'backend/src/main/java/com/cinenest/rooms/internal/RoomRepository.java', 'frontend/tests/packages.test.mjs', 'backend/src/test/java/com/cinenest/PricingIntegrationTest.java', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'frontend/components/packages.tsx', 'backend/src/main/java/com/cinenest/pricing/internal/DraftFailure.java', 'backend/src/main/java/com/cinenest/rooms/internal/JdbcRoomRepository.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/java/com/cinenest/pricing/internal/DraftService.java', 'backend/src/test/java/com/cinenest/RoomsIntegrationTest.java', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcDraftRepository.java', 'frontend/app/api/admin/venues/[venueId]/packages/[packageId]/history/route.ts', 'frontend/app/admin/settings/packages/page.tsx', 'backend/src/main/java/com/cinenest/pricing/internal/DraftRepository.java', 'frontend/package.json', 'backend/src/main/java/com/cinenest/pricing/internal/DeniedDraftAudit.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'frontend/tests/packages-browser.mjs', 'frontend/lib/room-backend.ts', 'frontend/app/api/admin/venues/[venueId]/packages/[packageId]/route.ts', 'frontend/app/api/admin/venues/[venueId]/packages/[packageId]/preview/route.ts', 'backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java', 'backend/src/main/java/com/cinenest/rooms/internal/PackageConstraintAdapter.java'},'Package source inventory changed')
+    check(pkg_evidence.get('baselineHead')==pkg_base and pkg_evidence.get('authorizationRequestSha256')=='d10289dd345746c7f4f0bcc4c0a72a97e033fc3d7e307b3c60ba9d0413849569','Package explicit owner authority missing')
+    check(pkg_evidence.get('status')==pkg_status,'Package evidence status exceeds checks')
+    for name,digest in pkg_owned.items():
+        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Package source checksum mismatch '+name)
+    for key,value in {'backendTests':82,'pricingIntegrationTests':16,'pricingDomainTests':3,'minimumBootstrapTests':2,'architectureTests':5,'backendFailures':0,'backendSkipped':0,'frontendTests':39,'frontendFailures':0,'frontendSkipped':0,'packageBrowserGroups':17,'shellBrowserGroups':19,'roomBrowserGroups':17,'browserWidths':[320,375,640,768,1024,1280,1536]}.items():
+        check(pkg_evidence.get('checks',{}).get(key)==value,'Package check evidence missing '+key)
+    if pkg_ci:
+        receipt=pkg_evidence.get('ciReceipt',{});sha=receipt.get('headSha','')
+        check(receipt.get('conclusion')=='success' and re.fullmatch('[0-9a-f]{40}',sha) is not None and isinstance(receipt.get('runId'),int),'Package exact-source CI missing')
+        if re.fullmatch('[0-9a-f]{40}',sha):
+            for name,digest in pkg_owned.items():
+                source=subprocess.check_output(['git','-C',str(R),'show',sha+':'+name])
+                check(hashlib.sha256(source).hexdigest()==digest,'Package current/CI source mismatch '+name)
+    def prior_pkg_bytes(name):
+        return subprocess.check_output(['git','-C',str(R),'show',pkg_base+':'+name]) if name in pkg_owned else (R/name).read_bytes()
+    pkg_subset={'taskId':'CN-PKG-001','status':pkg_status,'evidencePath':'PROGRESS.md#package-draft-implementation','fullRequirementVerified':False,'fullRequirementAcceptance':'NOT_ACCEPTED','actualTestPaths':['backend/src/test/java/com/cinenest/PricingIntegrationTest.java','backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java','backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java','frontend/tests/packages.test.mjs','frontend/tests/packages-browser.mjs']}
+    pkg_mapped={'PR-PKG-001','CN-A12','PK-AC01','PK-AC02','PK-AC03','CN-NFR-02'}
+    pkg_approvals={'OD-17': '644811faf745e388caa78b113ecaceabd8348c97aaa7b26dfd0994f1c472243e', 'OD-18': '874650e3a8c3ca307c5d9ebe16c41754dfceb165ae8ed47bf862e3929193089b', 'OD-21': '116551cd4333959a6c80e77ab87b19efe3bd805b76c9ccd36aa1eb8429992bb0', 'OD-22': '32eb412751bb23b8178c6d3a666e47a41e98019b8ed4c692a32369a32d590e63'}
+    def package_original_payload(payload,path):
+        original=json.loads(subprocess.check_output(['git','-C',str(R),'show',pkg_base+':knowledge/'+path],text=True))
+        kind={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
+        before={r['id']:r for r in original[kind]}
+        for row in payload[kind]:
+            old=before.get(row['id']);check(old is not None,'Unapproved package-review ID '+row['id'])
+            if old is None:continue
+            expected=json.loads(json.dumps(old))
+            if kind=='decisions' and row['id'] in pkg_approvals:
+                approval=row.get('boundedPackageApproval')
+                check(hashlib.sha256(json.dumps(approval,sort_keys=True).encode()).hexdigest()==pkg_approvals[row['id']],'Package policy/source/deferral changed '+row['id'])
+                expected['boundedPackageApproval']=approval
+            elif kind in {'requirements','tests'} and row['id'].removeprefix('T-') in pkg_mapped:
+                expected['packageImplementationEvidence']=pkg_subset
+            elif kind=='changeSets' and row['id']=='CN-PKG-001':
+                approval=row.get('scopeApproval')
+                check(hashlib.sha256(json.dumps(approval,sort_keys=True).encode()).hexdigest()=='73fc81c59911f4d1c1f7ebb92f2cca77db7d828f7ee9599526f9ecec2dc92da6','Package scope approval/provenance changed')
+                expected.update(scopeApproval=approval,blockingDecisionIds=[],authorityAvailable=True,readiness='CLOSED' if pkg_ci else 'READY',workStatus='VERIFIED' if pkg_ci else 'IN_PROGRESS',evidencePaths=['PROGRESS.md#package-draft-implementation'],implementationEvidence={'status':pkg_status,'evidencePath':'PROGRESS.md#package-draft-implementation','fullRequirementAcceptance':'NOT_ACCEPTED'},affectedFilesModules='Pricing module; public Rooms PackageConstraints and controlled minimum policy bootstrap; Identity package capabilities; existing admin shell and explicit transport; tests/knowledge',dbApiUiImpact='Eight Pricing tables plus Rooms minimum_session_policy, eight scoped draft API operations and /admin/settings/packages; no sales',migrationNeeds='V4__package_drafts_and_minimum_policy.sql additive only; V1-V3 unchanged; no automatic production seed or destructive rollback')
+            check(row==expected,'Unapproved package-review delta '+path+'/'+row['id'])
+        check(set(before)=={r['id'] for r in payload[kind]},'Package review lost/added IDs '+path)
+        return original
+    for data,path in [(backlog,'execution/change-sets.json'),(coverage,'execution/requirements.json'),(tests_doc,'execution/test-plan.json'),(json.loads((K/'decisions/cinenest-open-decisions.json').read_text()),'decisions/cinenest-open-decisions.json')]:
+        package_original_payload(data,path)
     # CN-ROOM-001 is a separately authorized successor; immutable earlier source receipts remain historical.
     room_evidence = state.get('roomImplementation', {})
     room_ci = room_evidence.get('remoteCI') == 'SUCCESS'
@@ -67,7 +115,7 @@ def main():
           and room_evidence.get('authorizationRequestSha256') == '8384de0b4ae43803b6830874132757bcc418d915e94b35ab5ed5b9ec58000f06', 'Room explicit owner authority missing')
     check(room_evidence.get('status') == room_status, 'Room status exceeds evidence')
     for name,digest in room_owned.items():
-        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest() == digest, 'Room source checksum mismatch ' + name)
+        check((R/name).is_file() and hashlib.sha256(prior_pkg_bytes(name)).hexdigest() == digest, 'Room source checksum mismatch ' + name)
     room_checks = room_evidence.get('checks', {})
     for key,value in {'backendTests':60,'roomIntegrationTests':19,'domainTests':3,'identityRegressionTests':31,'foundationIntegrationTests':3,'architectureTests':4,'backendFailures':0,'backendSkipped':0,'frontendTests':32,'frontendFailures':0,'frontendSkipped':0,'browserGroups':17,'browserWidths':[320,375,640,768,1024,1280,1536]}.items():
         check(room_checks.get(key) == value, 'Room executed check mismatch ' + key)
@@ -82,7 +130,7 @@ def main():
     def historical_source_matches(name,digest):
         path=R/name
         if not path.is_file():return False
-        current=hashlib.sha256(path.read_bytes()).hexdigest()
+        current=hashlib.sha256(prior_pkg_bytes(name)).hexdigest()
         if name not in room_owned:return current==digest
         historical=subprocess.check_output(['git','-C',str(R),'show','93e36a188dd245891b6f2cf089a616331a53105b:'+name])
         return hashlib.sha256(historical).hexdigest()==digest and current==room_owned[name]
@@ -99,6 +147,7 @@ def main():
     room_approval_hashes = {'OD-04': '269a9cf5aa93972f7cf1840eaf5f7ea4ff0eeafaeae4ea22277b5461fbe68938', 'OD-10': '0878e6831223cefff5dfb5880369896f4244aa9111247903b7c06ca25979c920', 'OD-14': '1194db8d4a74bd7d34e57777a259e4f922dab1decf4ba5fb8ee88cf42b3ba2e4'}
     room_proposal_hash = '3affc4f83c8252b4692d756f18521377ab0255b648c1e2576073f1c00960472e'
     def room_historical_payload(payload, path):
+        payload=package_original_payload(payload,path)
         historical = json.loads(subprocess.check_output(['git','-C',str(R),'show',room_base + ':knowledge/' + path], text=True))
         kind = {'execution/requirements.json':'requirements','execution/change-sets.json':'changeSets','decisions/cinenest-open-decisions.json':'decisions'}[path]
         originals = {row['id']:row for row in historical[kind]}
@@ -266,6 +315,8 @@ def main():
             check(c.get('evidencePaths') == ['PROGRESS.md#ui-implementation'] and c.get('implementationEvidence') == ui_subset and c.get('implementationAuthorization') == 'GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS', 'UI implementation evidence invented or scope missing')
         elif c['id'] == 'CN-ROOM-001':
             check(c['authorityAvailable'] is True and c['readiness']==('CLOSED' if room_ci else 'READY') and c['workStatus']==('VERIFIED' if room_ci else 'IN_PROGRESS'), 'Room state exceeds scoped evidence')
+        elif c['id']=='CN-PKG-001':
+            check(c['authorityAvailable'] is True and c['readiness']==('CLOSED' if pkg_ci else 'READY') and c['workStatus']==('VERIFIED' if pkg_ci else 'IN_PROGRESS'),'Package state exceeds scoped approval/checks')
         elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
@@ -315,10 +366,10 @@ def main():
         else:
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
-    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == ([] if room_ci else ['CN-ROOM-001']), 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-ROOM-001' and state['nextRecommendedChangeSet'] == ('CN-PKG-001' if room_ci else 'CN-ROOM-001') and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
-    check(state['workStatus'] == ('VERIFIED' if room_ci else 'IN_PROGRESS') and cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
-    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_CN_ROOM_001_ONLY', 'Unsupported stack/implementation approval')
+    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == ([] if pkg_ci else ['CN-PKG-001']), 'Unsupported READY plan')
+    check(state['taskId'] == 'CN-PKG-001' and state['nextRecommendedChangeSet'] == ('CN-PKG-002' if pkg_ci else 'CN-PKG-001') and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
+    check(state['workStatus'] == ('VERIFIED' if pkg_ci else 'IN_PROGRESS') and cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
+    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_CN_PKG_001_ONLY', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
     brief = K / 'ARCHITECTURE.md'
@@ -339,6 +390,8 @@ def main():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
                     expected_status = 'APPROVED' if id in {'OD-04','OD-10','OD-11','OD-12','OD-14'} and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    if id=='CN-PKG-001':
+                        expected_status={'workStatus':'VERIFIED' if pkg_ci else 'IN_PROGRESS','authorityAvailable':True,'readiness':'CLOSED' if pkg_ci else 'READY'}.get(key,expected_status)
                     if id == 'CN-ROOM-001':
                         expected_status={'workStatus':'VERIFIED' if room_ci else 'IN_PROGRESS','authorityAvailable':True,'readiness':'CLOSED' if room_ci else 'READY'}.get(key,expected_status)
                     if id == 'CN-UI-001':
@@ -365,6 +418,7 @@ def main():
             workflow = expected['tests'][0]
             workflow['owningChangeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['evidencePaths'].append('PROGRESS.md#current-verification')
         current_payload = json.loads((K / path).read_text())
+        if path=='execution/test-plan.json':current_payload=package_original_payload(current_payload,path)
         if path != 'execution/test-plan.json':
             current_payload = room_historical_payload(current_payload, path)
         if path in {'execution/requirements.json','execution/test-plan.json'}:
@@ -598,8 +652,8 @@ def main():
         criterion_requirements[cid] = rset
         if box == 'x':
             checked.append(cid)
-            check((number == '0' and 'DOC_VERIFIED' in evidence) or (cid == 'P1-C01' and 'LOCAL_FOUNDATION_VERIFIED' in evidence) or (cid == 'P1-C06' and ui_ci and 'UI_SHELL_VERIFIED' in evidence) or (cid == 'P2-C01' and room_ci and 'ROOM_SLICE_VERIFIED' in evidence), 'Implementation checked without actual scoped evidence ' + cid)
-    check(checked == ['P0-C01','P0-C02','P0-C03','P0-C04','P0-C05','P0-C06','P1-C01'] + (['P1-C06'] if ui_ci else []) + (['P2-C01'] if room_ci else []), 'Readiness preparation/evidence roll-up changed')
+            check((number == '0' and 'DOC_VERIFIED' in evidence) or (cid == 'P1-C01' and 'LOCAL_FOUNDATION_VERIFIED' in evidence) or (cid == 'P1-C06' and ui_ci and 'UI_SHELL_VERIFIED' in evidence) or (cid == 'P2-C01' and room_ci and 'ROOM_SLICE_VERIFIED' in evidence) or (cid=='P2-C02' and pkg_ci and 'PACKAGE_DRAFT_SLICE_VERIFIED' in evidence), 'Implementation checked without actual scoped evidence ' + cid)
+    check(checked == ['P0-C01','P0-C02','P0-C03','P0-C04','P0-C05','P0-C06','P1-C01'] + (['P1-C06'] if ui_ci else []) + (['P2-C01'] if room_ci else []) + (['P2-C02'] if pkg_ci else []), 'Readiness preparation/evidence roll-up changed')
     check(re.findall(r'^#### P(\d+)\.', roadmap, re.M) == [str(i) for i in range(11)], 'Phase definitions duplicated/missing')
     gates = re.findall(r'^- \[([ x])\] \*\*(P\d+-ACCEPT)\*\*', roadmap, re.M)
     check(gates == [(' ', 'P'+str(i)+'-ACCEPT') for i in range(11)], 'Phase accepted without reviewer/evidence/prerequisite closure')
@@ -618,7 +672,7 @@ def main():
     for tid, phase, deps, status in task_projection:
         check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == cmap[tid]['workStatus']+' / '+cmap[tid]['readiness'], 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
-    check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
+    check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':10 if pkg_ci else 9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')
     for warning in ['illustrative','UNKNOWN/TBD','NOT_HELD','NOT_ACCEPTED','NEEDS_RECHECK','CN-NOTIFY-001 (P5) depends on CN-ACCESS-001 (P7)','HTML','one venue']:
         check(warning in roadmap, 'Roadmap qualification missing ' + warning)

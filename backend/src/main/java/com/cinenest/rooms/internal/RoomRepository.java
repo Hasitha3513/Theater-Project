@@ -4,6 +4,7 @@ import java.util.*;
 
 /** Application-owned persistence port; adapters do not own authorization or policy. */
 interface RoomRepository {
+    void lockVenue(UUID venue);
     Optional<Map<String,Object>> venue(UUID id);
     Optional<Map<String,Object>> publicRoom(UUID id);
     Optional<Map<String,Object>> room(UUID venue, UUID id);

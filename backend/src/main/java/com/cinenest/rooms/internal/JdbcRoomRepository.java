@@ -10,6 +10,7 @@ class JdbcRoomRepository implements RoomRepository {
     private final JdbcClient jdbc;
     JdbcRoomRepository(JdbcClient jdbc) { this.jdbc=jdbc; }
     static final String COMPLETE="v.enabled AND v.cleaning_buffer_minutes IS NOT NULL AND EXISTS(SELECT 1 FROM cinenest_rooms.venue_operating_window w WHERE w.venue_id=v.venue_id)";
+    public void lockVenue(UUID venue){jdbc.sql("SELECT venue_id FROM cinenest_rooms.venue WHERE venue_id=:v FOR UPDATE").param("v",venue).query(UUID.class).list();}
     public Optional<Map<String,Object>> venue(UUID id) {
         return jdbc.sql("SELECT * FROM cinenest_rooms.venue WHERE venue_id=:id").param("id",id).query((rs,n)-> {
             Map<String,Object> v=new LinkedHashMap<>();v.put("venueId",rs.getObject("venue_id",UUID.class));v.put("code",rs.getString("code"));v.put("displayName",rs.getString("display_name"));v.put("timezone",rs.getString("timezone"));

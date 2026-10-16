@@ -233,7 +233,7 @@ class RoomsIntegrationTest {
             assertThat(connection.getCatalog()).isEqualTo("cinenest_test");statement.execute("CREATE DATABASE "+name);String upgraded=url.substring(0,url.lastIndexOf('/')+1)+name;
             try {Flyway.configure().dataSource(upgraded,user,password).target("2").load().migrate();
                 try(var db=DriverManager.getConnection(upgraded,user,password);var sql=db.createStatement()){sql.execute("INSERT INTO cinenest_identity.account VALUES ('00000000-0000-4000-8000-000000000001',TRUE,'ELIGIBLE',9)");}
-                var v3=Flyway.configure().dataSource(upgraded,user,password).load();assertThat(v3.migrate().migrationsExecuted).isEqualTo(1);v3.validate();assertThat(v3.migrate().migrationsExecuted).isZero();
+                var v3=Flyway.configure().dataSource(upgraded,user,password).target("3").load();assertThat(v3.migrate().migrationsExecuted).isEqualTo(1);v3.validate();assertThat(v3.migrate().migrationsExecuted).isZero();
                 try(var db=DriverManager.getConnection(upgraded,user,password);var sql=db.createStatement();var rows=sql.executeQuery("SELECT revision FROM cinenest_identity.account")){assertThat(rows.next()).isTrue();assertThat(rows.getLong(1)).isEqualTo(9);}
             }finally{statement.execute("DROP DATABASE "+name);}
         }

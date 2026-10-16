@@ -68,7 +68,7 @@ class RoomService {
         repository.saveVenue(id,d,create);repository.audit(actor,id,id,"VENUE",create?"CREATE":"UPDATE",true,create?null:((Number)d.get("expectedVersion")).longValue(),create?0L:((Number)d.get("expectedVersion")).longValue()+1);return venue(actor,id);
     }
     Map<String,Object> saveRoom(UUID actor,UUID venue,UUID id,Map<String,Object> d,boolean create) {
-        require(actor,venue,"room.write",true);repository.venue(venue).orElseThrow(()->new RoomFailure(404,"Not found"));
+        require(actor,venue,"room.write",true);repository.lockVenue(venue);repository.venue(venue).orElseThrow(()->new RoomFailure(404,"Not found"));
         ConfigurationRules.keys(d,create?new String[]{"code","name","description","capacity","enabled","facilities","images"}:new String[]{"code","name","description","capacity","enabled","facilities","images","expectedVersion"});
         if(!create){ConfigurationRules.version(d);repository.room(venue,id).orElseThrow(()->new RoomFailure(404,"Not found"));}
         d=new HashMap<>(d);d.put("code",ConfigurationRules.code(d,"code"));d.put("name",ConfigurationRules.text(d,"name",200,true));d.put("description",ConfigurationRules.text(d,"description",2000,false));ConfigurationRules.neutral(d.get("name")+" "+d.get("description"));ConfigurationRules.integer(d,"capacity",1,Integer.MAX_VALUE);d.put("enabled",ConfigurationRules.flag(d,"enabled"));

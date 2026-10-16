@@ -15,9 +15,38 @@ export function roomRoute(path: string, method: string) {
 		return ["GET", "PUT"].includes(method);
 	return false;
 }
+export function packageRoute(path: string, method: string) {
+	if (new RegExp(`^/api/admin/venues/${id}/packages$`).test(path))
+		return ["GET", "POST"].includes(method);
+	if (new RegExp(`^/api/admin/venues/${id}/package-options$`).test(path))
+		return method === "GET";
+	if (new RegExp(`^/api/admin/venues/${id}/packages/${id}$`).test(path))
+		return method === "GET";
+	if (new RegExp(`^/api/admin/venues/${id}/packages/${id}/draft$`).test(path))
+		return method === "PUT";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${id}/packages/${id}/(preview|duplicate)$`,
+		).test(path)
+	)
+		return method === "POST";
+	return (
+		new RegExp(`^/api/admin/venues/${id}/packages/${id}/history$`).test(path) &&
+		method === "GET"
+	);
+}
+export async function forwardPackages(request: Request): Promise<Response> {
+	return forwardConfigured(request, packageRoute);
+}
 export async function forwardRooms(request: Request): Promise<Response> {
+	return forwardConfigured(request, roomRoute);
+}
+async function forwardConfigured(
+	request: Request,
+	allowed: (path: string, method: string) => boolean,
+): Promise<Response> {
 	const url = new URL(request.url);
-	if (!roomRoute(url.pathname, request.method))
+	if (!allowed(url.pathname, request.method))
 		return new Response(null, { status: 404 });
 	const origin = process.env.CINENEST_AUTH_ORIGIN;
 	if (!origin) return new Response(null, { status: 503 });
@@ -93,7 +122,7 @@ export async function forwardRooms(request: Request): Promise<Response> {
 				{ status: response.status, headers: out },
 			);
 		const location = response.headers.get("location");
-		if (location && roomRoute(location, "GET")) out.set("Location", location);
+		if (location && allowed(location, "GET")) out.set("Location", location);
 		return Response.json(await response.json(), {
 			status: response.status,
 			headers: out,

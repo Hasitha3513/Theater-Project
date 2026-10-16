@@ -11,6 +11,19 @@ S16 initial-stack approval recorded under existing **CN-DEC-001** after comparis
 
 Current [foundation evidence](#foundation-implementation) records authorized CN-FND-001 local implementation/qualification, VERIFIED/CLOSED. CN-DEC-001 remains VERIFIED/CLOSED; CN-AUTH-001 is VERIFIED/CLOSED for the [bounded synthetic account/session scope](#auth-implementation), and CN-UI-001 is VERIFIED/CLOSED for the [shared shell/primitives](#ui-implementation). OD-01 broader scope remains open; full future plan NOT_APPROVED. No business feature, provider, live operation or customer acceptance is established.
 
+<a id="package-draft-implementation"></a>
+## CN-PKG-001 bounded implementation — 2026-10-16
+
+Verified start: clean nested repository/, main → origin/main at 478198fe87fa1e8291b7cf35e5c2339e068b301b. Owner explicitly approves preceding conversation proposal and attached bounded OD-17/18/21/22 policies, plus CN-PKG-001 implementation only; request hash in task.scopeApproval. Actual hard dependencies CN-ROOM-001/CN-UI-001 closed; underlying auth/foundation closed. Recorded scoped approval, reconciled READY, then implemented; no graph edge removed. Four wider decisions remain OPEN_DECISION with boundedPackageApproval, and no later task inherits implementation authority.
+
+Implemented [nine-table/V4/API boundary](ARCHITECTURE.md#package-draft-boundary) and [package UI](DESIGN.md#package-draft-ui). Eight scoped draft operations, saved preview, exact prices/duration/guests/options, immutable history, current grant/capacity/minimum checks, controlled disabled-by-default minimum bootstrap and attributable atomic audit. V1–V3, dependency versions/lock, tokens/theme/charts/images/diagrams unchanged. No publication, customer sales, quotations, booking, payment, refund, IoT or deployment. No actual production policy/actor/service record created.
+
+Local backend harness PASS: 82 tests (16 Pricing integration, 3 Pricing domain, 2 Rooms bootstrap, 19 room integration, 3 room domain, 31 Identity, 3 foundation, 5 architecture), zero failures/skips, real pinned isolated PostgreSQL18.6 and packaged-JAR startup/HTTP denial. Clean V1→V4 and populated V3→V4/repeat, PostgreSQL constraints, immutable records, draft revision concurrency, audit rollback/retry, current authority and policy/room races tested. Existing room upgrade regression explicitly remains V2→V3 via target3; no applied migration edited. Retained Identity missing-audit-table negative-test logs remain expected, not excluded failures.
+
+Frontend build/typecheck/lint PASS, 39 tests (32 regression +7 package exact-money/component/route/security/real-HTTP adapter). Browser: 17 package plus19 shell and17 room groups, seven widths 320/375/640/768/1024/1280/1536. Package checks cover precision rejection, saved-preview limitations, history/duplication, scope/read-only/denied states, missing policy, safe retry, conflict reconciliation, keyboard/Escape and responsive editor; two ignored screenshots visually inspected. Fixed async modal trigger/focus restoration found by browser test; corrected an initially ambiguous precision-error test selector. Responses are explicitly SYNTHETIC; no real provider/physical/customer or WCAG/screen-reader/actual zoom acceptance claimed.
+
+Both knowledge validators and whitespace pass; four in-memory negative controls reject premature closure, unauthorized publication readiness, false full-feature completion and lost policy approval. Final self-review added aggregate header/child locks and a different-actor stale-edit race; no same-account serialization assumption. Clean offline npm ci passed with unchanged lock and zero reported vulnerabilities. Local checks passed; exact-source remote CI PENDING. CN-PKG-001 stays IN_PROGRESS/READY until required CI succeeds; P2 remains1/6 and overall9/74 before that gate. Core draft editor portions advance P2-C02; publication C03, customer package discovery C04 and full phase/D1 acceptance remain incomplete. Full PR-PKG-001/CN-A12/PK-AC01–03/NFR02 plans retain broader NOT_VERIFIED/NOT_RUN/NOT_ACCEPTED with explicit bounded evidence rather than false end-to-end passes. Rollback retains additive V4 and drafts/history; destructive compensation needs separate approval. Stop after this change set.
+
 <a id="room-implementation"></a>
 ## CN-ROOM-001 bounded implementation — 2026-10-16
 
@@ -241,7 +254,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-UI-001 | 2 | Shared shell and token consumers | CN-FND-001 | VERIFIED / CLOSED |
 | CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | VERIFIED / CLOSED |
 | CN-ROOM-001 | 2 | Catalog and scoped room configuration | CN-AUTH-001, CN-UI-001 | VERIFIED / CLOSED |
-| CN-PKG-001 | 3 | Package drafts and scoped editor | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
+| CN-PKG-001 | 3 | Package drafts and scoped editor | CN-ROOM-001, CN-UI-001 | IN_PROGRESS / READY |
 | CN-PKG-002 | 3 | Immutable package publication/applicability | CN-PKG-001 | BLOCKED / BLOCKED |
 | CN-BOOK-001 | 3 | Shared inventory hold/conflict guard | CN-ROOM-001 | BLOCKED / BLOCKED |
 | CN-QUOTE-001 | 3 | Exact quote and purchase snapshot contract | CN-PKG-002, CN-BOOK-001 | BLOCKED / BLOCKED |
@@ -271,7 +284,7 @@ Fresh baseline: `7ad20d42b4551ba07bd5d728a0cbc1d295e65f94`, main → origin/main
 
 Source reconciliation: HTML `CineNest_MVP_Roadmap.html` was not found in workspace, attachments, Downloads or /tmp. Preview found at `/home/hasitha-wijerathna/Downloads/CineNest_MVP_Roadmap_Preview.png`, visually inspected, not imported/changed; source hash in existing manifest. It shows illustrative weeks 1–20, workstream colors, D1–D6, no committed start date. Original HTML criterion IDs, detailed notes, browser saved entries and interactions cannot be inspected/restored without the HTML. The owner's supplied templates contain exactly 74 criteria, retained verbatim below; Pn-Cnn are local stable planning anchors derived from those template positions, not invented canonical requirement IDs or claimed original HTML IDs. Missing source stays visible; no replacement dashboard, image or runtime service created. Graphical refresh below is dated 2026-10-15 and reviewed against this baseline.
 
-Current roll-ups (distinct measures): P0 preparation 6/8; P1 criteria 2/6 (C01 and C06), C02–C05 partial; delivery phases accepted 0/10. Planning criteria 9/74 checked and 65 unchecked, not an effort percentage. Canonical scope 92 requirements and 92 test plans; 91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED and their full test plans NOT_RUN; one workflow documentation plan PASS. Scoped foundation/auth/UI evidence is separate. Existing 28 tasks: seven VERIFIED/CLOSED and 21 BLOCKED, none READY. Decision registry: 29 records, 24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; OD-01 approved subsets do not close its broader scope. Authorization remains partial, including the account-session presentation subset of scenario18; no 18/18 claim. Demos held0/7 and accepted0/7. No phase/customer acceptance or schedule/staffing approval inferred.
+Current roll-ups (distinct measures): P0 preparation 6/8; P1 criteria 2/6 (C01 and C06), C02–C05 partial; delivery phases accepted 0/10. Planning criteria 9/74 checked and 65 unchecked, not an effort percentage. Canonical scope 92 requirements and 92 test plans; 91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED and their full test plans NOT_RUN; one workflow documentation plan PASS. Scoped foundation/auth/UI evidence is separate. Existing 28 tasks: seven VERIFIED/CLOSED, one IN_PROGRESS/READY and 20 BLOCKED. Decision registry: 29 records, 24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; OD-01 approved subsets do not close its broader scope. Authorization remains partial, including the account-session presentation subset of scenario18; no 18/18 claim. Demos held0/7 and accepted0/7. No phase/customer acceptance or schedule/staffing approval inferred.
 
 Historical S17 roll-up (superseded by the current roll-up above): Roll-ups (distinct measures): P0 preparation DOC_VERIFIED 5/8, readiness acceptance NOT_ACCEPTED; P1–P10 accepted 0/10; planning criteria 5/74 checked (documentation preparation only), 69 unchecked; canonical scope 92 requirements and 92 test plans, including 91 product records BLOCKED/NOT_VERIFIED/NOT_ACCEPTED with 91 tests NOT_RUN plus one workflow documentation record/test PASS; existing 28 tasks (three documentation VERIFIED/CLOSED, 25 BLOCKED) ; 29 OPEN_DECISION records, with OD-01 approved initial subset distinct; 18 authorization scenarios PLANNED. Demos held0/7, scopes accepted0/7. None is an overall effort percentage. No approved deferral, schedule, staffing or accepted phase inferred.
 
@@ -291,7 +304,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-ROOM-001 VERIFIED/CLOSED<br/>CN-PKG-001 blocked: OD-17/18/21/22 + scope authority"]
+  G["CN-PKG-001 local draft slice checked; exact-source CI pending<br/>No publication or other task authorized"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room slice VERIFIED; 1 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
@@ -658,7 +671,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-UI-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
 | CN-AUTH-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
 | CN-ROOM-001 | P2 | CN-AUTH-001, CN-UI-001 | VERIFIED / CLOSED |
-| CN-PKG-001 | P2 | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
+| CN-PKG-001 | P2 | CN-ROOM-001, CN-UI-001 | IN_PROGRESS / READY |
 | CN-PKG-002 | P2 | CN-PKG-001 | BLOCKED / BLOCKED |
 | CN-BOOK-001 | P3 | CN-ROOM-001 | BLOCKED / BLOCKED |
 | CN-QUOTE-001 | P3 | CN-PKG-002, CN-BOOK-001 | BLOCKED / BLOCKED |
@@ -946,4 +959,4 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: owner reviews CN-PKG-001 OD-17/18/21/22 and separately approves its bounded implementation scope/authority. No task is READY.** CN-ROOM-001 VERIFIED/CLOSED; scope-approved room configuration does not approve packages or live operations. CN-BOOK-001 still has OD-09/21 and its own authority gate. P0 6/8, P1 2/6, P2 1/6, planning 9/74; seven tasks VERIFIED/CLOSED, 21 BLOCKED. P2 and D1 NOT_ACCEPTED/NOT_READY; no customer demo held or accepted. Stop after CN-ROOM-001.
+**Exact next action: verify exact-source CN-PKG-001 CI and reconcile closure; do not start another task.** Broader OD-17/18/19/21/22 publication gates and CN-PKG-002 authority remain unresolved. D1 NOT_READY; no demo held/accepted. Stop after CN-PKG-001.

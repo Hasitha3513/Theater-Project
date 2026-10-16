@@ -230,7 +230,7 @@
     },
     {
       "id": "OD-09",
-      "conflict": "Temporary hold range 10–15 min is not precise",
+      "conflict": "Temporary hold range 10\u201315 min is not precise",
       "source": "S1",
       "impact": "Expiry UI, payment handoff and inventory utilization",
       "options": "Choose configurable 10 or 15 minutes (or justified value) later",
@@ -477,7 +477,18 @@
       "evidenceRequired": "Product/finance/policy decision and exact quote fixtures",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedPackageApproval": {
+        "taskId": "CN-PKG-001",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attached CN-PKG-001 authorization",
+        "requestSha256": "d10289dd345746c7f4f0bcc4c0a72a97e033fc3d7e307b3c60ba9d0413849569",
+        "scope": "LKR scale2 integer minor units, checked overflow/excess precision rejection, positive base/nonnegative supplementary charges, whole-unit extensions/no proration; unpublished price increases/decreases; tax/fees/zero-base/discount/refund/final quotations deferred",
+        "canonicalSpecification": "PROJECT.md#package-bounded-approval",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED"
+      }
     },
     {
       "id": "OD-18",
@@ -497,6 +508,17 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED",
         "scope": "Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates"
+      },
+      "boundedPackageApproval": {
+        "taskId": "CN-PKG-001",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attached CN-PKG-001 authorization",
+        "requestSha256": "d10289dd345746c7f4f0bcc4c0a72a97e033fc3d7e307b3c60ba9d0413849569",
+        "scope": "package.read/edit with edit implying scoped read/preview; one venue, no cross-venue copying or grant stitching; current eligibility, revision guards/audit; role bundles/publication authority/thresholds/two-person/deactivation deferred",
+        "canonicalSpecification": "PROJECT.md#package-bounded-approval",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED"
       }
     },
     {
@@ -533,7 +555,18 @@
       "evidenceRequired": "Source/policy review, approval rights and minimum boundary acceptance",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedPackageApproval": {
+        "taskId": "CN-PKG-001",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attached CN-PKG-001 authorization",
+        "requestSha256": "d10289dd345746c7f4f0bcc4c0a72a97e033fc3d7e307b3c60ba9d0413849569",
+        "scope": "Owner-approved initial configurable 180-minute minimum, Rooms-owned immutable effective policy revisions/provenance; no package minimum override, missing policy blocks save/preview, revalidation required; no global engine or policy-management API; no missing-PDF verification claim",
+        "canonicalSpecification": "PROJECT.md#package-bounded-approval",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED"
+      }
     },
     {
       "id": "OD-22",
@@ -545,7 +578,18 @@
       "evidenceRequired": "Pricing ownership/version resolution and included-extra fixtures",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "IMPLEMENTATION_GATE"
+      "launchBlocker": "IMPLEMENTATION_GATE",
+      "boundedPackageApproval": {
+        "taskId": "CN-PKG-001",
+        "status": "APPROVED_BOUNDED_POLICY",
+        "dateLocal": "2026-10-16",
+        "approvalSource": "Current owner instruction and attached CN-PKG-001 authorization",
+        "requestSha256": "d10289dd345746c7f4f0bcc4c0a72a97e033fc3d7e307b3c60ba9d0413849569",
+        "scope": "Pricing-owned versioned shared service/rate refs; exclusive INCLUDED/OPTIONAL, included never charged twice; fixed per-session optional unit, no package overrides/shared-master UI/fee engine; Rooms supplies configuration compatibility, no live/media-rights inference; absent approved definitions means no extras",
+        "canonicalSpecification": "PROJECT.md#package-bounded-approval",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED"
+      }
     },
     {
       "id": "OD-23",

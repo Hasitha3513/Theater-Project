@@ -77,6 +77,20 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
+      },
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
       }
     },
     {
@@ -563,7 +577,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
+      }
     },
     {
       "id": "T-CN-C10",
@@ -673,6 +701,20 @@
           "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
           "frontend/tests/rooms.test.mjs",
           "frontend/tests/rooms-browser.mjs"
+        ]
+      },
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
         ]
       }
     },
@@ -931,7 +973,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
+      }
     },
     {
       "id": "T-PK-AC02",
@@ -946,7 +1002,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
+      }
     },
     {
       "id": "T-PK-AC03",
@@ -961,7 +1031,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "packageImplementationEvidence": {
+        "taskId": "CN-PKG-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#package-draft-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/pricing/internal/DraftRulesTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/MinimumPolicyBootstrapTest.java",
+          "frontend/tests/packages.test.mjs",
+          "frontend/tests/packages-browser.mjs"
+        ]
+      }
     },
     {
       "id": "T-PK-AC04",
