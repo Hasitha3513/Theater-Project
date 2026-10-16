@@ -31,9 +31,9 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "PENDING_TASK_PUBLICATION",
+  "publicationState": "PUSHED",
   "publicationEvidence": "CN-FND-001 implementation through aa2bb4e pushed to origin/main; full remote CI 38689239097 SUCCESS at that source commit; metadata-only receipt successor resolved from Git",
-  "lastObservedHead": "f38eaa55030564993b24d52ed7f97fb5b216e931",
+  "lastObservedHead": "20fc240c877e316f37a893a101b28dc6d41bbc1f",
   "evidencePath": "PROGRESS.md#ui-implementation",
   "evidenceFreshness": "2026-10-15 foundation closeout; exact checks/versions in foundationImplementation",
   "availableTools": [
@@ -746,7 +746,7 @@
       "accepted": false
     },
     "planningCriteria": {
-      "checked": 7,
+      "checked": 8,
       "total": 74,
       "overallEffortPercentage": null
     },
@@ -1567,10 +1567,18 @@
       "Room/package/booking/payment/report/IoT workflows",
       "Customer demonstration/phase acceptance"
     ],
-    "remoteCI": "PENDING_PUBLICATION",
-    "publication": "NOT_YET_COMMITTED",
+    "remoteCI": "SUCCESS",
+    "publication": {
+      "status": "PUSHED_VERIFIED",
+      "implementationCommit": "20fc240c877e316f37a893a101b28dc6d41bbc1f",
+      "message": "feat(ui): establish shared CineNest application shell",
+      "destination": "origin/main",
+      "verifiedRemoteSha": "20fc240c877e316f37a893a101b28dc6d41bbc1f",
+      "worktreeAfterPush": "CLEAN",
+      "receiptSuccessor": "Knowledge-only receipt; final HEAD/remote/CI resolved from Git"
+    },
     "p1": "PARTIAL_NOT_ACCEPTED",
-    "p1C06": "PARTIAL_PENDING_EXACT_SOURCE_CI",
+    "p1C06": "VERIFIED_UI_SHELL_BASELINE",
     "d1": "NOT_READY",
     "nextReadyChangeSet": null,
     "nextBlockers": {
@@ -1588,6 +1596,13 @@
       "negativeControls": "Three in-memory unauthorized room READY/full room requirement verification/owner provenance controls rejected",
       "counts": "92 requirements / 92 test plans / 28 tasks unchanged",
       "preservation": "Backend/token/theme/lock/decision files unchanged; package metadata except test script unchanged"
+    },
+    "ciReceipt": {
+      "runId": 38875154823,
+      "headSha": "20fc240c877e316f37a893a101b28dc6d41bbc1f",
+      "conclusion": "success",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38875154823",
+      "scope": "Exact-source full backend/PostgreSQL/packaged smoke, qualified frontend install/build/type/lint/tests/audit, knowledge and whitespace"
     }
   },
   "previousExecutionContextBeforeUiImplementation": {
