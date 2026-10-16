@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "taskId": "CN-PKG-001",
   "mode": "BOUNDED_PACKAGE_DRAFT_IMPLEMENTATION",
-  "workStatus": "IN_PROGRESS",
-  "productStage": "FOUNDATION_AUTH_UI_AND_BOUNDED_ROOM_CATALOG_VERIFIED",
+  "workStatus": "VERIFIED",
+  "productStage": "FOUNDATION_AUTH_UI_ROOM_AND_PACKAGE_DRAFTS_VERIFIED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
@@ -12,8 +12,8 @@
   "baselineWorktree": "CLEAN",
   "currentChangeSet": "CN-PKG-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-PKG-001",
-  "nextAction": "Verify exact-source CN-PKG-001 CI before closure; do not begin another task",
+  "nextRecommendedChangeSet": "CN-PKG-002",
+  "nextAction": "Owner review of remaining CN-PKG-002 publication decisions and bounded scope; no READY task",
   "nextReadyChangeSet": null,
   "implementationEvidence": "Bounded room/catalog verified; package/booking/physical and phase/customer acceptance remain open",
   "approvedCoreDecisions": [
@@ -26,7 +26,7 @@
     "No approval for the full future implementation plan",
     "OD-15 missing original sources",
     "Affected-feature OD-02/03/04/05/06/07/14 hardware/privacy/safety/provider/rights gates",
-    "Affected-feature OD-17\u201329 package/bank policies and accountable owners"
+    "Affected-feature OD-17–29 package/bank policies and accountable owners"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
@@ -746,7 +746,7 @@
       "accepted": false
     },
     "planningCriteria": {
-      "checked": 9,
+      "checked": 10,
       "total": 74,
       "overallEffortPercentage": null
     },
@@ -1810,7 +1810,7 @@
     "implementationAuthorization": "GRANTED_CN_ROOM_001_ONLY"
   },
   "packageImplementation": {
-    "status": "LOCAL_VERIFIED_CI_PENDING",
+    "status": "VERIFIED_BOUNDED_PACKAGE_DRAFTS",
     "baselineHead": "478198fe87fa1e8291b7cf35e5c2339e068b301b",
     "authorizationRequestSha256": "d10289dd345746c7f4f0bcc4c0a72a97e033fc3d7e307b3c60ba9d0413849569",
     "ownedFiles": {
@@ -1909,7 +1909,7 @@
       "packagedStartup": "PASS",
       "frontendInstall": "PASS_OFFLINE_EXISTING_LOCK"
     },
-    "remoteCI": "PENDING",
+    "remoteCI": "SUCCESS",
     "p2": "PARTIAL_NOT_ACCEPTED",
     "d1": "NOT_READY",
     "bootstrap": "Disabled by default, explicit venue/actor/180/effective-from/provenance required; initial-only, idempotent, attributable, cannot replace existing policy; no production operation performed",
@@ -1925,6 +1925,19 @@
         "false full requirement completion rejected",
         "lost bounded policy rejected"
       ]
+    },
+    "ciReceipt": {
+      "runId": 38891026188,
+      "headSha": "cc461eb38ed3cf918b8f4fe173300d9267fcba11",
+      "conclusion": "success",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38891026188",
+      "scope": "Exact source backend/PostgreSQL/architecture/startup, frontend and knowledge CI"
+    },
+    "publication": {
+      "sourceCommit": "cc461eb38ed3cf918b8f4fe173300d9267fcba11",
+      "destination": "origin/main",
+      "verifiedRemoteSourceSha": "cc461eb38ed3cf918b8f4fe173300d9267fcba11",
+      "closureReceipt": "Final receipt commit and its CI verified separately at closeout"
     }
   }
 }

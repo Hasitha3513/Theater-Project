@@ -59,7 +59,7 @@
       "requirementIds": [
         "PR-PKG-001"
       ],
-      "acceptanceCriteria": "PK-AC01\u201313, after supporting policy decisions; core editing and bought-term protection distinct",
+      "acceptanceCriteria": "PK-AC01–13, after supporting policy decisions; core editing and bought-term protection distinct",
       "owningChangeSetIds": [
         "CN-PKG-001",
         "CN-PKG-002",
@@ -80,7 +80,7 @@
       },
       "packageImplementationEvidence": {
         "taskId": "CN-PKG-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_PACKAGE_DRAFTS",
         "evidencePath": "PROGRESS.md#package-draft-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -98,7 +98,7 @@
       "requirementIds": [
         "PR-BANK-001"
       ],
-      "acceptanceCriteria": "BP-AC01\u201313, no receipt/funds/booking/access conflation, online path retained",
+      "acceptanceCriteria": "BP-AC01–13, no receipt/funds/booking/access conflation, online path retained",
       "owningChangeSetIds": [
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002",
@@ -568,7 +568,7 @@
       "requirementIds": [
         "CN-A12"
       ],
-      "acceptanceCriteria": "PK-AC01\u201313 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
+      "acceptanceCriteria": "PK-AC01–13 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
       "owningChangeSetIds": [
         "CN-PKG-001",
         "CN-PKG-002"
@@ -580,7 +580,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "packageImplementationEvidence": {
         "taskId": "CN-PKG-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_PACKAGE_DRAFTS",
         "evidencePath": "PROGRESS.md#package-draft-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -598,7 +598,7 @@
       "requirementIds": [
         "CN-C10"
       ],
-      "acceptanceCriteria": "BP-AC01\u201313; independent bank credit and guarded one-booking result; not tests run",
+      "acceptanceCriteria": "BP-AC01–13; independent bank credit and guarded one-booking result; not tests run",
       "owningChangeSetIds": [
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002"
@@ -614,7 +614,7 @@
       "requirementIds": [
         "CN-A13"
       ],
-      "acceptanceCriteria": "BP-AC01\u201313; alert failure retains queue; approval alone no completed booking/access/refund",
+      "acceptanceCriteria": "BP-AC01–13; alert failure retains queue; approval alone no completed booking/access/refund",
       "owningChangeSetIds": [
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002",
@@ -705,7 +705,7 @@
       },
       "packageImplementationEvidence": {
         "taskId": "CN-PKG-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_PACKAGE_DRAFTS",
         "evidencePath": "PROGRESS.md#package-draft-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -976,7 +976,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "packageImplementationEvidence": {
         "taskId": "CN-PKG-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_PACKAGE_DRAFTS",
         "evidencePath": "PROGRESS.md#package-draft-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1005,7 +1005,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "packageImplementationEvidence": {
         "taskId": "CN-PKG-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_PACKAGE_DRAFTS",
         "evidencePath": "PROGRESS.md#package-draft-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1034,7 +1034,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "packageImplementationEvidence": {
         "taskId": "CN-PKG-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_PACKAGE_DRAFTS",
         "evidencePath": "PROGRESS.md#package-draft-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1202,7 +1202,7 @@
       "requirementIds": [
         "BP-AC01"
       ],
-      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility \u2192 one confirmed snapshot, separate acknowledged access",
+      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility → one confirmed snapshot, separate acknowledged access",
       "owningChangeSetIds": [
         "CN-PAY-BANK-002"
       ],
@@ -1412,7 +1412,7 @@
       "requirementIds": [
         "CN-M-ROOM-OCCUPANCY"
       ],
-      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts \u00d7 100. Zero rooms \u2192 N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts × 100. Zero rooms → N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -1457,7 +1457,7 @@
       "requirementIds": [
         "CN-M-ROOM-UTILIZATION"
       ],
-      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range \u00d7 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator \u2192 N/A; unknown/incomplete inputs \u2192 unavailable.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range × 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator → N/A; unknown/incomplete inputs → unavailable.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -1472,7 +1472,7 @@
       "requirementIds": [
         "CN-M-BOOKING-STATISTICS"
       ],
-      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -1487,7 +1487,7 @@
       "requirementIds": [
         "CN-M-FINANCIAL-KPIS"
       ],
-      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator \u2192 N/A; prior zero/missing \u2192 N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator → N/A; prior zero/missing → N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -1502,7 +1502,7 @@
       "requirementIds": [
         "CN-M-SYSTEM-IOT-STATUS"
       ],
-      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices \u00d7100, unknown included; 0 devices \u2192 N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices ×100, unknown included; 0 devices → N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -1532,7 +1532,7 @@
       "requirementIds": [
         "CN-M-BANK-PAYMENT-REVIEW-FINANCES"
       ],
-      "acceptanceCriteria": "BN-M01\u201308 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "BN-M01–08 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],

@@ -445,8 +445,8 @@
       "definitionOfDone": "Authorized core editing demonstrated without code release; no sales yet",
       "requiredApproval": "Slice and relevant package/role/policy approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROGRESS.md#package-draft-implementation"
       ],
@@ -465,7 +465,7 @@
         "exclusions": "No CN-PKG-002, quote, booking, payment, amendment, IoT, production policy writes or deployment"
       },
       "implementationEvidence": {
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_PACKAGE_DRAFTS",
         "evidencePath": "PROGRESS.md#package-draft-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
