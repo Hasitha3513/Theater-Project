@@ -16,6 +16,15 @@ ADR-001 hybrid direction is APPROVED; detailed page behavior is DOCUMENTED_DRAFT
 - [Reference Traceability](#reference-traceability)
 - [Ux Acceptance](#ux-acceptance)
 
+<a id="od11-approved-baseline"></a>
+## OD-11 approved MVP token baseline — 2026-10-16
+
+The owner explicitly approves the currently checked-in CineNest tokens and approved hybrid visual direction as the authoritative implementation baseline for CN-UI-001. This resolves OD-11's source-palette difference for the MVP shell; the alternate palette is a future review topic, not a blocker. Preserve all token JSON/CSS bytes: dark navy admin shell, light workspace, existing violet actions, typography/spacing/component conventions and defined cinematic customer direction. Historical “proposed approximation” wording below records token origin, not the current authorization status. These values are not asserted to have been recovered from the missing source pack.
+
+Use the approved frontend foundation and existing dependencies only. No Ant Design, Refine, Material UI or other component framework is selected. The existing bounded CN-UI-001 shell/token/primitives scope includes responsive behavior, loading/empty/error/denied states and session-aware presentation only where already supported. Any synthetic layout fixtures must be clearly labelled, isolated and never imply working room/package/booking/payment/report/IoT functionality. No production data, new business rules or palette selection is authorized. Backend authorization remains authoritative.
+
+Any future palette migration requires a separate explicit owner decision after rendered desktop/mobile comparison, accessibility/contrast review, canonical reference-image comparison and assessment of component/state impacts. No migration or rendered accessibility acceptance is approved now. Exact owner approval, exclusions and historical OD-11 context are retained in the existing decision registry. [Readiness/handoff](PROGRESS.md#ui-readiness) records READY/PLANNED only; this session implements no UI.
+
 <a id="design-system"></a>
 ## Design System
 
@@ -103,6 +112,8 @@ Mobile-first: <640px base; sm ≥640; md ≥768; lg ≥1024; xl ≥1280; xxl ≥
 Target WCAG 2.2 AA (project acceptance target, not a certification). Text contrast ≥4.5:1, large text ≥3:1, essential graphics/controls/focus ≥3:1. Automated token contrast checks are necessary but insufficient: test final gradients, photos, disabled states, overlays, charts, and focus against adjacent colors. Full keyboard operation, visible focus, skip link, landmarks, correct labels, logical reading order and no keyboard traps. Charts offer equivalent tables; status must not depend on hue. Respect reduced motion, avoid flashing/autoplay audio, caption content video, and give room images useful alternative text. Support password-manager/paste where applicable, no cognitive-only authentication test, accessible Google sign-in and verification fallback. Warn before timed holds expire and offer extension only if backend policy allows. PINs and ID data require intentional disclosure and accessible masking controls. Test a screen reader and keyboard in each future critical booking and live-control flow.
 
 ### Feature and source reconciliation (CN-KB-FEATURES-TECH-001)
+Historical source-palette comparison, superseded for CN-UI-001 implementation authority by [OD-11 approval](#od11-approved-baseline):
+
 Shared visual direction remains APPROVED; exact active tokens are proposed approximations and preserved byte-for-byte. S1’s claimed existing HEX palette differs; [ADR-002](ARCHITECTURE.md#adr-002) and OD-11 record the candidate conflict without silently migrating JSON/CSS. Keep the same typography, spacing, borders, shadows, responsive rules and role-adapted shared shell. [Interactions/accessibility](DESIGN.md#interactions-a11y) complements these component rules.
 
 Use [business rules](PROJECT.md#business-rules) for draft rates, capacity, session/access window and reservation buffers; [security](ARCHITECTURE.md#security-privacy) for identity/consent and evidence access; [catalog](PROJECT.md#features) for stable feature IDs. Desired status presentation is not implementation evidence. Do not turn draft rule JSON into frontend hardcoded operational data.

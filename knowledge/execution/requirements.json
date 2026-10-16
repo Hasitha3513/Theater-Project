@@ -73,8 +73,7 @@
         "CN-FND-001"
       ],
       "blockingDecisionIds": [
-        "OD-01",
-        "OD-11"
+        "OD-01"
       ],
       "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
       "testIds": [
@@ -88,7 +87,6 @@
       "acceptanceStatus": "NOT_ACCEPTED",
       "unresolvedQuestions": [
         "OD-01",
-        "OD-11",
         "Future change-set scope/authority required"
       ],
       "decisionBriefEvidence": [
@@ -101,7 +99,10 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
-      }
+      },
+      "resolvedDecisionIds": [
+        "OD-11"
+      ]
     },
     {
       "id": "PR-PKG-001",
@@ -799,7 +800,6 @@
       "blockingDecisionIds": [
         "OD-04",
         "OD-10",
-        "OD-11",
         "OD-14"
       ],
       "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
@@ -815,9 +815,11 @@
       "unresolvedQuestions": [
         "OD-04",
         "OD-10",
-        "OD-11",
         "OD-14",
         "Future change-set scope/authority required"
+      ],
+      "resolvedDecisionIds": [
+        "OD-11"
       ]
     },
     {
@@ -1504,9 +1506,7 @@
         "CN-OPS-001",
         "CN-REPORT-001"
       ],
-      "blockingDecisionIds": [
-        "OD-11"
-      ],
+      "blockingDecisionIds": [],
       "securityPrivacyIotImpact": "Least privilege/private evidence/financial integrity/independent egress as applicable; see owning KB",
       "testIds": [
         "T-CN-NFR-01"
@@ -1518,8 +1518,10 @@
       "verificationEvidence": [],
       "acceptanceStatus": "NOT_ACCEPTED",
       "unresolvedQuestions": [
-        "OD-11",
         "Future change-set scope/authority required"
+      ],
+      "resolvedDecisionIds": [
+        "OD-11"
       ]
     },
     {

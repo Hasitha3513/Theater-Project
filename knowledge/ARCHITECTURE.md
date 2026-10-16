@@ -19,6 +19,17 @@ This document owns technology proposals, module/data/API and integration design,
 - [Open Decisions](#open-decisions)
 - [Initial Stack Brief](#initial-stack-brief)
 
+<a id="od11-resolution"></a>
+## OD-11 resolution and bounded UI authority — 2026-10-16
+
+The exact question “Requested source palette differs from checked-in proposed tokens” matches the current owner decision. OD-11 is APPROVED: preserve current checked-in tokens for CN-UI-001; no alternate-palette migration or new component library. [DESIGN](DESIGN.md#od11-approved-baseline) owns the approved visual baseline and future review conditions. The existing OD-11 registry entry retains its original question/options/impact/evidence requirement as historicalContext. Original source-pack fidelity and future migration review are not falsely declared verified.
+
+CN-UI-001 keeps its original dependency CN-FND-001, recorded scope/exclusions/DoD and requirements. Foundation and bounded auth are VERIFIED/CLOSED. Owner authority is granted for the existing bounded shell/primitives unit after readiness, not room/package/booking/payment/report/IoT features, a second auth system or production operations. Existing authenticated/session presentation may consume already-supported boundaries without extending their policy. No new library, infrastructure, application source or token change in this decision session.
+
+Historical OD-11 gate row (superseded by approved baseline):
+
+| OD-11 | Requested source palette differs from checked-in proposed tokens | DESIGN_IMPLEMENTATION_GATE |
+
 <a id="auth-implemented-boundary"></a>
 ## Implemented CN-AUTH-001 boundary — 2026-10-15
 
@@ -392,7 +403,9 @@ New notes specify draft rates, capacity, schedule, buffer, admission and PIN win
 
 Old charts called captures minus refunds “recognized revenue.” Correct to net collections by financial event time; recognized revenue is a separate finance-policy-defined measure, unavailable until approved. Donut center now uses the same full scoped population as its slices (occupied / all included status rooms); a denominator limited to bookable rooms must be a separately labelled metric rather than the old ambiguous center. Booking-based status cannot certify physical occupancy. Proposed sellable minutes explicitly exclude approved non-sellable buffers/blackouts and remain finance/operations reviewed.
 
-### Palette conflict (not applied)
+### Historical palette conflict (not applied)
+
+Current owner approval is at [OD-11 resolution](#od11-resolution); the original comparison below is retained as history and does not block the preserved MVP baseline.
 The request calls the following source tokens existing; the checked-in JSON differs. Preserve current JSON/CSS bytes because these active approximations are already consistent and no source pack resolves the discrepancy. [Comparison data](decisions/cinenest-palette-comparison.json) is documentation, not an imported theme. OD-11 must be resolved by design owner with contrast/render evidence before migration. Typography, spacing, borders, shadows, shell and images remain unchanged.
 
 | Semantic role | Checked-in active approximation | S1 requested candidate |
@@ -469,7 +482,7 @@ The existing [decision registry](decisions/cinenest-open-decisions.json) owns ea
 | OD-08 | Loyalty earning, reversal, expiry/redemption and promotion stacking undefined | FEATURE_LAUNCH_BLOCKER |
 | OD-09 | Temporary hold range 10–15 min is not precise | LAUNCH_BLOCKER |
 | OD-10 | Cleaning buffer after closing not resolved | LAUNCH_BLOCKER |
-| OD-11 | Requested source palette differs from checked-in proposed tokens | DESIGN_IMPLEMENTATION_GATE |
+| OD-11 | Requested source palette differs from checked-in proposed tokens | RESOLVED_CURRENT_TOKENS_APPROVED |
 | OD-12 | Multi-venue scope is not an approved multi-tenant/subscription SaaS model | SCOPE_DEPENDENT_GATE |
 | OD-13 | Physical occupancy detection and overstay evidence unvalidated | FEATURE_LAUNCH_BLOCKER |
 | OD-14 | Commercial screening/streaming/gaming/media rights unverified | LAUNCH_BLOCKER |

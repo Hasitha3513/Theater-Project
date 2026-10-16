@@ -232,11 +232,67 @@
       "source": "S1 vs HEAD 16710dc",
       "impact": "Visual consistency and contrast",
       "options": "Preserve active tokens now; explicit future palette migration after contrast review",
-      "owner": "TBD",
+      "owner": "Project owner",
       "evidenceRequired": "Design owner reconciles source pack; rendered/token contrast evidence",
-      "decisionStatus": "OPEN_DECISION",
+      "decisionStatus": "APPROVED",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "DESIGN_IMPLEMENTATION_GATE"
+      "launchBlocker": "RESOLVED_CURRENT_TOKENS_APPROVED",
+      "historicalContext": {
+        "id": "OD-11",
+        "conflict": "Requested source palette differs from checked-in proposed tokens",
+        "source": "S1 vs HEAD 16710dc",
+        "impact": "Visual consistency and contrast",
+        "options": "Preserve active tokens now; explicit future palette migration after contrast review",
+        "owner": "TBD",
+        "evidenceRequired": "Design owner reconciles source pack; rendered/token contrast evidence",
+        "decisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED",
+        "launchBlocker": "DESIGN_IMPLEMENTATION_GATE"
+      },
+      "ownerApproval": {
+        "source": "Explicit owner conversation 2026-10-16: Resolve OD-11 and reconcile CN-UI-001 readiness",
+        "ownerStatement": "For the CineNest MVP, I approve preserving the currently checked-in CineNest design tokens and the approved hybrid visual design as the authoritative implementation baseline for CN-UI-001.",
+        "status": "APPROVED_CURRENT_TOKEN_BASELINE",
+        "date": "2026-10-16",
+        "canonicalSpecification": "DESIGN.md#od11-approved-baseline",
+        "visualDirection": [
+          "Dark navy administration shell",
+          "Light main workspace",
+          "Existing violet primary/action treatment",
+          "Existing typography, spacing and component conventions",
+          "Defined cinematic customer-facing direction"
+        ],
+        "futurePaletteMigration": {
+          "approved": false,
+          "requiredSeparateDecision": true,
+          "requiredEvidence": [
+            "Rendered desktop and mobile comparison",
+            "Accessibility/contrast review",
+            "Canonical reference image comparison",
+            "Impact on existing components and states"
+          ]
+        },
+        "dependencies": "Existing approved frontend foundation and project dependencies only; no Ant Design, Refine, Material UI or another component framework without separate approval",
+        "boundedTaskId": "CN-UI-001",
+        "scope": [
+          "Shared customer/admin shell",
+          "Existing token consumers",
+          "Required low-level shell primitives",
+          "Responsive layout",
+          "Loading, empty, error and denied states",
+          "Existing supported authenticated/session-aware presentation",
+          "Clearly labelled isolated synthetic layout fixtures"
+        ],
+        "exclusions": [
+          "Room/package/booking/payment/report/IoT implementation",
+          "Production data",
+          "New business rules",
+          "New palette selection",
+          "New component library"
+        ],
+        "implementationAuthorization": "GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS",
+        "currentSession": "DECISION_AND_READINESS_ONLY_NO_IMPLEMENTATION"
+      }
     },
     {
       "id": "OD-12",

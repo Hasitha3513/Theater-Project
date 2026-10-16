@@ -11,6 +11,17 @@ S16 initial-stack approval recorded under existing **CN-DEC-001** after comparis
 
 Current [foundation evidence](#foundation-implementation) records authorized CN-FND-001 local implementation/qualification, VERIFIED/CLOSED. CN-DEC-001 remains VERIFIED/CLOSED; CN-AUTH-001 is VERIFIED/CLOSED for the [bounded synthetic account/session scope](#auth-implementation). OD-01 broader scope remains open; full future plan NOT_APPROVED. No business feature, provider, live operation or customer acceptance is established.
 
+<a id="ui-readiness"></a>
+## OD-11 approval / CN-UI-001 readiness — 2026-10-16
+
+Verified actual nested repository root, main → origin/main, HEAD 78e4c74cf1462bcf69b384df045f019d61fafe3f, clean. Exact OD-11 question “Requested source palette differs from checked-in proposed tokens” MATCHES the owner decision. Existing decision APPROVED with historical context retained; [DESIGN](DESIGN.md#od11-approved-baseline) owns the current-token/hybrid baseline, no-library rule, fixture boundaries and separate future migration review. No new ADR, knowledge file, registry or task.
+
+CN-UI-001 **READY / PLANNED**, authority available for its existing bounded scope in a future implementation session. Its sole hard dependency CN-FND-001 is VERIFIED/CLOSED; bounded CN-AUTH-001 is also VERIFIED/CLOSED. OD-11 is removed from active blockingDecisionIds and retained as resolvedDecisionIds for this task and the three affected requirement records. All other task edges and decisions remain unchanged. Approved current dependencies suffice; actual local toolchain availability and rendered checks must be verified during implementation, without installing/replacing frameworks by inference.
+
+Implementation remains NOT_VERIFIED; executable UI tests NOT_RUN. P1-C06 stays unchecked, P1 PARTIAL/NOT_ACCEPTED, D1 NOT_READY; no phase/demo acceptance changes. The current session is decision recording/readiness only, despite the owner's bounded future implementation authorization. Existing status.uiReadinessReconciliation records source/baseline/checks/publication; application, migrations, tokens, styles, images and frontend dependencies are unchanged. Current graph and task projections show UI READY without claiming working software.
+
+Next action: implement only CN-UI-001 in a future implementation invocation using preserved tokens and existing frontend dependencies, labelled isolated fixtures and backend-enforced authorization; do not begin it in this session.
+
 <a id="diagram-publication"></a>
 ## Owner-supplied diagram publication
 
@@ -62,7 +73,7 @@ Verification: full existing harness clean verify against isolated PostgreSQL 18.
 
 Existing 18 authorization scenarios: **partial executable account-read coverage for 1–5, 11–12**; payment/booking/receipt/credential examples in those scenarios are not passed. Scenarios 6–10 and 13–18 remain NOT_RUN, as do full feature scopes for all 18. Future finance/evidence/list/export/service/device/mutation/safety/escalation/durable-work/UI endpoints are absent. Existing CN-C02/CN-A06/CN-NFR-02 and T-* records retain full-feature NOT_VERIFIED/NOT_RUN/NOT_ACCEPTED and add scoped evidence instead of falsely claiming completion. No requirement/task/test/decision IDs added or dropped.
 
-CN-AUTH-001 DoD met for the bounded unit: owner/scope guards demonstrable and administrative policy gaps explicit; VERIFIED/CLOSED. P1 remains PARTIAL/NOT_ACCEPTED: P1-C02–C05 gain scoped evidence but stay unchecked for broader boundaries/durable work/admin authentication/full authorization; P1-C06 needs shared UI. P0 remains 6/8 preparation, overall 7/74 criteria; accepted phases 0, demos held/accepted 0. D0 remains prepared DESIGN ONLY; **D1 NOT_READY** because working catalog/admin/shared shell are missing. No customer demonstration held or accepted. Colorful Mermaid source updated; missing HTML not recreated. Next candidate CN-UI-001 is BLOCKED by OD-11 and explicit slice authority, so no next READY implementation is asserted. Stop after this task.
+CN-AUTH-001 DoD met for the bounded unit: owner/scope guards demonstrable and administrative policy gaps explicit; VERIFIED/CLOSED. P1 remains PARTIAL/NOT_ACCEPTED: P1-C02–C05 gain scoped evidence but stay unchecked for broader boundaries/durable work/admin authentication/full authorization; P1-C06 needs shared UI. P0 remains 6/8 preparation, overall 7/74 criteria; accepted phases 0, demos held/accepted 0. D0 remains prepared DESIGN ONLY; **D1 NOT_READY** because working catalog/admin/shared shell are missing. No customer demonstration held or accepted. Colorful Mermaid source updated; missing HTML not recreated. Historical next action at auth closeout was blocked UI/OD-11; superseded by [current UI readiness](#ui-readiness). That implementation session stopped after auth.
 
 Verified implementation publication: `7fc0f62fa3db7b29f8be289f73b57d01809bf14a` (`feat(identity): establish scoped account sessions and reads`) pushed to origin/main; independent remote SHA matched, worktree clean. [GitHub Actions 38699715108](https://github.com/Hasitha3513/Theater-Project/actions/runs/38699715108) completed SUCCESS, including real PostgreSQL/backend tests/packaged startup, frontend verification, both knowledge validators and whitespace. This receipt successor changes only existing knowledge/status validation metadata; final receipt SHA/remote state are resolved from Git. No additional task or acceptance follows.
 
@@ -186,7 +197,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-DEC-001 | 1 | Bounded initial-stack decision brief | CN-AGENT-SETUP-001 | VERIFIED / CLOSED |
 | CN-GATE-001 | 1 | Source and accountable policy gate brief | CN-AGENT-SETUP-001 | BLOCKED / BLOCKED |
 | CN-FND-001 | 1 | Selected-stack repository skeleton and CI | CN-DEC-001 | VERIFIED / CLOSED |
-| CN-UI-001 | 2 | Shared shell and token consumers | CN-FND-001 | BLOCKED / BLOCKED |
+| CN-UI-001 | 2 | Shared shell and token consumers | CN-FND-001 | PLANNED / READY |
 | CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | VERIFIED / CLOSED |
 | CN-ROOM-001 | 2 | Catalog and scoped room configuration | CN-AUTH-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-001 | 3 | Package drafts and scoped editor | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
@@ -237,9 +248,9 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-AUTH-001 VERIFIED: synthetic/test scope only<br/>Other feature/production gates remain"]
+  G["CN-UI-001 READY: preserved tokens / bounded scope<br/>Other feature/production gates remain"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
-  P1["P1 Foundation/access<br/>Foundation + bounded auth VERIFIED; UI BLOCKED<br/>NOT_ACCEPTED"]
+  P1["P1 Foundation/access<br/>Foundation + bounded auth VERIFIED; UI READY<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>W3-4 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>W5-6 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>W7-8 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -333,12 +344,12 @@ Goal/outcome: Make a clean checkout build and start with protected identity/sess
 
 - [ ] **P1-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: A clean checkout builds and starts. Representative identity/session, ownership, and cross-venue denial tests pass with evidence.
 
-Current status: PARTIAL; CN-FND-001 and bounded CN-AUTH-001 VERIFIED/CLOSED, shared UI BLOCKED/NOT_VERIFIED; P1 NOT_ACCEPTED. Next: OD-11 and separate CN-UI-001 slice authority; no READY task. See auth-implementation for scoped evidence and remaining scenarios.
+Current status: PARTIAL; CN-FND-001 and bounded CN-AUTH-001 VERIFIED/CLOSED, shared UI READY/PLANNED but NOT_VERIFIED; P1 NOT_ACCEPTED. Next: bounded CN-UI-001 under owner authority in a future implementation session. See auth-implementation for scoped evidence and remaining scenarios.
 
 <a id="roadmap-p2"></a>
 #### P2. Venues, Packages And Customer Discovery
 
-Goal/outcome: Let scoped staff publish versioned offers that customers can discover without a code release or rewritten purchases. Timing: Illustrative weeks 3–4. Depends on P1. Responsible roles: Catalog/product, engineering, QA/UI; all named owners/reviewers TBD. Presentation dependency: P1; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-11/17/18/19/21/22; rights and physical capacity.
+Goal/outcome: Let scoped staff publish versioned offers that customers can discover without a code release or rewritten purchases. Timing: Illustrative weeks 3–4. Depends on P1. Responsible roles: Catalog/product, engineering, QA/UI; all named owners/reviewers TBD. Presentation dependency: P1; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-17/18/19/21/22; rights and physical capacity. OD-11 resolved for the preserved MVP token baseline; CN-UI-001 implementation still required.
 
 - [ ] **P2-C01** Venue/room configuration, images, facilities, capacity, and operating windows implemented. — Req: CN-C01, CN-A03; tests: T-CN-A03, T-CN-C01; tasks: CN-ROOM-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P2-C02** Package creation, duplication, editable durations/prices, guest allowances, and extras implemented. — Req: PR-PKG-001, CN-A12, PK-AC01, PK-AC02, PK-AC03; tests: T-CN-A12, T-PK-AC01, T-PK-AC02, T-PK-AC03, T-PR-PKG-001; tasks: CN-AMEND-001, CN-DEC-001, CN-PKG-001, CN-PKG-002, CN-QUOTE-001. Evidence: NOT_RUN / no current acceptance evidence.
@@ -601,7 +612,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-DEC-001 | P0 | CN-AGENT-SETUP-001 | VERIFIED / CLOSED |
 | CN-GATE-001 | P0 | CN-AGENT-SETUP-001 | BLOCKED / BLOCKED |
 | CN-FND-001 | P1 | CN-DEC-001 | VERIFIED / CLOSED |
-| CN-UI-001 | P1 | CN-FND-001 | BLOCKED / BLOCKED |
+| CN-UI-001 | P1 | CN-FND-001 | PLANNED / READY |
 | CN-AUTH-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
 | CN-ROOM-001 | P2 | CN-AUTH-001, CN-UI-001 | BLOCKED / BLOCKED |
 | CN-PKG-001 | P2 | CN-ROOM-001, CN-UI-001 | BLOCKED / BLOCKED |
@@ -890,4 +901,4 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Exact next action: resolve OD-11 and separately authorize the existing CN-UI-001 slice. No next task is READY.** CN-AUTH-001 is VERIFIED/CLOSED for its bounded synthetic scope; see [actual evidence](#auth-implementation). P1, full product requirements and D1 remain incomplete; no further implementation in this session.
+**Exact next action: implement only READY CN-UI-001 in a future implementation session under the existing bounded owner authorization and preserved token baseline.** See [decision/readiness evidence](#ui-readiness). CN-FND-001 and bounded CN-AUTH-001 remain VERIFIED/CLOSED; UI implementation NOT_VERIFIED, P1-C06 open and D1 NOT_READY. This session stops after recording readiness.

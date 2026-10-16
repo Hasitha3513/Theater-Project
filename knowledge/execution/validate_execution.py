@@ -141,6 +141,10 @@ def main():
             check(c['authorityAvailable'] is True and c['readiness'] == 'CLOSED' and c['workStatus'] == 'VERIFIED', 'Auth bounded task completion/evidence diverge')
             check(c['dependencies'] == ['CN-FND-001'] and c['blockingDecisionIds'] == [] and c.get('resolvedDecisionIds') == ['OD-12'], 'Auth prerequisite/scope dependency altered')
             check(c.get('evidencePaths') == ['PROGRESS.md#auth-implementation'] and c.get('implementationEvidence') == auth_subset, 'Auth scoped implementation evidence missing')
+        elif c['id'] == 'CN-UI-001':
+            check(c['authorityAvailable'] is True and c['readiness'] == 'READY' and c['workStatus'] == 'PLANNED', 'UI readiness promoted to implementation')
+            check(c['dependencies'] == ['CN-FND-001'] and c['blockingDecisionIds'] == [] and c.get('resolvedDecisionIds') == ['OD-11'], 'UI dependency/resolution changed')
+            check(c.get('evidencePaths') == [] and c.get('implementationAuthorization') == 'GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS', 'UI implementation evidence invented or scope missing')
         elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
@@ -190,10 +194,10 @@ def main():
         else:
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
-    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == [], 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-AUTH-001' and state['nextRecommendedChangeSet'] == 'CN-UI-001' and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
+    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] == 'CN-UI-001' and [c['id'] for c in changes if c['readiness'] == 'READY'] == ['CN-UI-001'], 'Unsupported READY plan')
+    check(state['taskId'] == 'CN-UI-001' and state['nextRecommendedChangeSet'] == 'CN-UI-001' and state.get('nextReadyChangeSet') == 'CN-UI-001', 'Unexpected next checkpoint')
     check(state['workStatus'] == cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
-    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_CN_AUTH_001_ONLY', 'Unsupported stack/implementation approval')
+    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
     brief = K / 'ARCHITECTURE.md'
@@ -213,7 +217,9 @@ def main():
         for id, old in before.items():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
-                    expected_status = 'APPROVED' if id == 'OD-12' and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    expected_status = 'APPROVED' if id in {'OD-11','OD-12'} and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    if id == 'CN-UI-001':
+                        expected_status = {'workStatus':'PLANNED','authorityAvailable':True,'readiness':'READY'}.get(key, expected_status)
                     if id == 'CN-AUTH-001':
                         expected_status = {'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status)
                     check(after.get(id, {}).get(key) == ({'workStatus':'VERIFIED','authorityAvailable':True,'readiness':'CLOSED'}.get(key, expected_status) if id == 'CN-FND-001' else expected_status), 'Baseline status changed beyond scoped foundation authority ' + id + '/' + key)
@@ -263,6 +269,14 @@ def main():
                     for field in ['blockingDecisionIds','unresolvedQuestions']:
                         check(row[field] == [value for value in original[field] if value != 'OD-12'], 'Unrelated requirement blocker changed ' + row['id'])
                         row[field] = original[field]
+        if path == 'execution/requirements.json':
+            for row in current_payload['requirements']:
+                if row['id'] in {'PR-UI-001','CN-A04','CN-NFR-01'}:
+                    original = next(x for x in expected['requirements'] if x['id'] == row['id'])
+                    check(row.pop('resolvedDecisionIds', None) == ['OD-11'], 'UI requirement resolution trace missing ' + row['id'])
+                    for field in ['blockingDecisionIds','unresolvedQuestions']:
+                        check(row[field] == [v for v in original[field] if v != 'OD-11'], 'Unrelated UI requirement gate changed ' + row['id'])
+                        row[field] = original[field]
         # S15 adds only the bounded authorization extension; preserve every prior field/criterion.
         if path == 'execution/requirements.json':
             row = next(x for x in current_payload['requirements'] if x['id'] == 'CN-NFR-02')
@@ -275,6 +289,21 @@ def main():
             row = next(x for x in current_payload['tests'] if x['id'] == 'T-CN-NFR-02')
             added = {key: row.pop(key, None) for key in ['authorizationScenarioSource', 'authorizationEvidenceNeeded']}
             check(hashlib.sha256(json.dumps(added, sort_keys=True).encode()).hexdigest() == '3c59995ce6b04b02dc2b681665eb941e3782744c0926ae741df8cde53e7ef5b8', 'Authorized test extension lost/changed')
+        if path == 'decisions/cinenest-open-decisions.json':
+            ui_decision = next(x for x in current_payload['decisions'] if x['id'] == 'OD-11')
+            original_ui_decision = next(x for x in expected['decisions'] if x['id'] == 'OD-11')
+            check(ui_decision.get('historicalContext') == original_ui_decision, 'OD-11 original question/options/history lost')
+            check(ui_decision.get('decisionStatus') == 'APPROVED' and ui_decision.get('owner') == 'Project owner'
+                  and ui_decision.get('implementationStatus') == 'NOT_VERIFIED' and ui_decision.get('launchBlocker') == 'RESOLVED_CURRENT_TOKENS_APPROVED', 'OD-11 decision promoted to implementation')
+            owner_approval = ui_decision.get('ownerApproval')
+            check(hashlib.sha256(json.dumps(owner_approval, sort_keys=True).encode()).hexdigest() == '54b3470f9bd1f950f2140dbe5864668df6e12c767ab07d8dccbb91ad2ec49396', 'OD-11 exact owner scope/exclusions/future review changed')
+            restored = dict(ui_decision)
+            for field in ['historicalContext','ownerApproval']:
+                restored.pop(field, None)
+            for field in ['decisionStatus','owner','launchBlocker']:
+                restored[field] = original_ui_decision[field]
+            check(restored == original_ui_decision, 'OD-11 unrelated fields changed')
+            current_payload['decisions'][current_payload['decisions'].index(ui_decision)] = original_ui_decision
         if path == 'decisions/cinenest-open-decisions.json':
             current_od = next(x for x in current_payload['decisions'] if x['id'] == 'OD-01')
             bounded = current_od.pop('boundedAuthPolicyApproval', None)
@@ -297,6 +326,14 @@ def main():
         check(expected == current_payload, 'Baseline requirement/test/decision content changed beyond authorized mapping ' + path)
     old_backlog = migrated(json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/execution/change-sets.json'], text=True)))
     prior_changes = json.loads(json.dumps(changes[:-1]))
+    ui_task = next(x for x in prior_changes if x['id'] == 'CN-UI-001')
+    ui_approval = ui_task.pop('readinessApproval', None)
+    check(hashlib.sha256(json.dumps(ui_approval, sort_keys=True).encode()).hexdigest() == '2ed1969a5cbfa74fdd11c72ba96f5d29562ca876b9e66bbcf806842e1d2fd22c', 'UI readiness approval/history changed')
+    check(ui_task.pop('implementationAuthorization', None) == 'GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS'
+          and ui_task.pop('resolvedDecisionIds', None) == ['OD-11'], 'UI bounded authority/resolution missing')
+    historical_ui = next(x for x in old_backlog['changeSets'] if x['id'] == 'CN-UI-001')
+    for field in ['authorityAvailable','readiness','workStatus','blockingDecisionIds']:
+        ui_task[field] = historical_ui[field]
     auth_task = next(x for x in prior_changes if x['id'] == 'CN-AUTH-001')
     check(auth_task.pop('implementationEvidence', None) == auth_subset, 'Auth historical/full scope evidence changed')
     check(auth_task['evidencePaths'] == ['PROGRESS.md#auth-implementation'], 'Auth implementation reference missing')
@@ -373,6 +410,18 @@ def main():
     approval = state.get('od12DecisionUpdate', {})
     check(approval.get('decisionId') == 'OD-12' and approval.get('status') == 'APPROVED_DECISION_ONLY' and approval.get('implementationAuthorization') == 'NOT_GRANTED_BY_THIS_DECISION', 'OD-12 approval promoted to implementation')
     check(cmap['CN-AUTH-001']['readiness'] == 'CLOSED' and cmap['CN-AUTH-001']['blockingDecisionIds'] == [], 'Auth READY does not match bounded final approval')
+    ui_reconciliation = state.get('uiReadinessReconciliation', {})
+    check(ui_reconciliation.get('baselineHead') == '78e4c74cf1462bcf69b384df045f019d61fafe3f'
+          and ui_reconciliation.get('decisionStatus') == 'APPROVED' and ui_reconciliation.get('readiness') == 'READY'
+          and ui_reconciliation.get('workStatus') == 'PLANNED' and ui_reconciliation.get('implementationStatus') == 'NOT_VERIFIED'
+          and ui_reconciliation.get('tests') == 'NOT_RUN' and ui_reconciliation.get('sessionScope') == 'DECISION_AND_READINESS_ONLY'
+          and ui_reconciliation.get('p1C06') == 'OPEN' and ui_reconciliation.get('d1') == 'NOT_READY', 'UI readiness promoted beyond owner authority/evidence')
+    # This decision session changes no implementation, token/style or frontend dependency bytes.
+    protected = subprocess.check_output(['git', '-C', str(R), 'ls-tree', '-r', '--name-only', '78e4c74cf1462bcf69b384df045f019d61fafe3f', '--', 'backend', 'frontend', 'knowledge/tokens', 'knowledge/styles'], text=True).splitlines()
+    for name in protected:
+        baseline_bytes = subprocess.check_output(['git', '-C', str(R), 'show', '78e4c74cf1462bcf69b384df045f019d61fafe3f:' + name])
+        check((R / name).is_file() and (R / name).read_bytes() == baseline_bytes, 'Decision-only UI session changed protected source/token/dependency ' + name)
+    check('<a id="od11-approved-baseline"></a>' in (K / 'DESIGN.md').read_text() and '<a id="ui-readiness"></a>' in progress, 'UI canonical approval/readiness missing')
     reconciliation = state.get('authReadinessReconciliation', {})
     check(reconciliation.get('requestSha256') == '7411e72e0db40ad99d70ac76c4d2c92876635449376bb9a3203df02a34730945' and reconciliation.get('readiness') == 'READY' and reconciliation.get('implementationStatus') == 'NOT_VERIFIED' and reconciliation.get('sessionScope') == 'DECISION_RECORDING_ONLY', 'Auth readiness reconciliation scope lost/promoted')
     check('<a id="auth-bounded-policy"></a>' in architecture and '<a id="auth-policy-readiness"></a>' in progress, 'Approved auth contract/handoff missing')
@@ -381,7 +430,7 @@ def main():
         check(phrase in project, 'Approved organization requirement missing ' + phrase)
     for number in range(1, 9):
         check(f'AG-AC{number:02d}' in progress, 'Setup acceptance history omitted')
-    check(state.get('requestedTaskId') == 'CN-AUTH-001' and state.get('stackApprovalUpdate', {}).get('sourceId') == 'S16' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
+    check(state.get('requestedTaskId') == 'CN-UI-001' and state.get('stackApprovalUpdate', {}).get('sourceId') == 'S16' and state.get('authorizationUpdate', {}).get('sourceId') == 'S15', 'Authorization documentation task/provenance lost')
     check(state.get('stackApprovalUpdate', {}).get('qualificationStatus') == 'PENDING' and state.get('stackApprovalUpdate', {}).get('implementationAuthorization') == 'NOT_GRANTED', 'Approval promoted to qualification/implementation')
     for required in ['<a id="stack-approval"></a>', 'No material incompatibility found', 'compatible, explicitly recorded npm', 'No pre-release dependencies', 'CN-FND-001 implementation **NOT_GRANTED**']:
         check(required in architecture, 'S16 canonical approval condition missing ' + required)

@@ -182,9 +182,7 @@
       "dependencies": [
         "CN-FND-001"
       ],
-      "blockingDecisionIds": [
-        "OD-11"
-      ],
+      "blockingDecisionIds": [],
       "affectedFilesModules": "Future UI components; design tokens unchanged unless authorized",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
@@ -193,10 +191,30 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Approved hybrid reproduced with usable primitives and DEMO-only fixtures",
       "requiredApproval": "Explicit UI slice approval and component/palette decisions",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "PLANNED",
+      "evidencePaths": [],
+      "resolvedDecisionIds": [
+        "OD-11"
+      ],
+      "implementationAuthorization": "GRANTED_BOUNDED_CN_UI_001_AFTER_READINESS",
+      "readinessApproval": {
+        "decisionId": "OD-11",
+        "canonicalSpecification": "DESIGN.md#od11-approved-baseline",
+        "evidencePath": "PROGRESS.md#ui-readiness",
+        "scope": "Existing recorded shell/token/primitives scope only; owner exclusions and fixture rules apply",
+        "historicalReadiness": {
+          "authorityAvailable": false,
+          "readiness": "BLOCKED",
+          "workStatus": "BLOCKED",
+          "blockingDecisionIds": [
+            "OD-11"
+          ]
+        },
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN"
+      }
     },
     {
       "id": "CN-AUTH-001",
