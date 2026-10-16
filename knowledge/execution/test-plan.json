@@ -208,7 +208,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "inventoryImplementationEvidence": {
         "taskId": "CN-BOOK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INVENTORY",
         "evidencePath": "PROGRESS.md#inventory-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -345,7 +345,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "inventoryImplementationEvidence": {
         "taskId": "CN-BOOK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INVENTORY",
         "evidencePath": "PROGRESS.md#inventory-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -779,7 +779,7 @@
       },
       "inventoryImplementationEvidence": {
         "taskId": "CN-BOOK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INVENTORY",
         "evidencePath": "PROGRESS.md#inventory-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -897,7 +897,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "inventoryImplementationEvidence": {
         "taskId": "CN-BOOK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INVENTORY",
         "evidencePath": "PROGRESS.md#inventory-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -927,7 +927,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "inventoryImplementationEvidence": {
         "taskId": "CN-BOOK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INVENTORY",
         "evidencePath": "PROGRESS.md#inventory-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1002,7 +1002,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "inventoryImplementationEvidence": {
         "taskId": "CN-BOOK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INVENTORY",
         "evidencePath": "PROGRESS.md#inventory-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1031,7 +1031,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "inventoryImplementationEvidence": {
         "taskId": "CN-BOOK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INVENTORY",
         "evidencePath": "PROGRESS.md#inventory-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",

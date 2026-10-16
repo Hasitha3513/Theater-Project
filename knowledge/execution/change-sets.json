@@ -545,8 +545,8 @@
       "definitionOfDone": "Conflicting room ranges cannot both commit under approved semantics",
       "requiredApproval": "Inventory slice + hold/closing/minimum policy approval; migration explicitly reviewed",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROGRESS.md#inventory-implementation"
       ],
@@ -618,7 +618,7 @@
         "exclusions": "No quote, confirmed booking, payment, refund, bank deadline, access/IoT, physical readiness, production or deployment"
       },
       "implementationEvidence": {
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_INVENTORY",
         "evidencePath": "PROGRESS.md#inventory-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }

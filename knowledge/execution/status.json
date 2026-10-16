@@ -2,20 +2,20 @@
   "schemaVersion": "1.0.0",
   "taskId": "CN-BOOK-001",
   "mode": "BOUNDED_INVENTORY_IMPLEMENTATION",
-  "workStatus": "IN_PROGRESS",
-  "productStage": "BOUNDED_INVENTORY_LOCAL_VERIFICATION",
+  "workStatus": "VERIFIED",
+  "productStage": "FOUNDATION_AUTH_UI_ROOM_PACKAGES_AND_BOUNDED_INVENTORY_VERIFIED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "478198fe87fa1e8291b7cf35e5c2339e068b301b",
-  "baselineWorktree": "CLEAN",
+  "baselineHead": "53d0e8ea713888d213ff85c157f73924a9b78778",
+  "baselineWorktree": "PRE_EXISTING_FRONTEND_GENERATED_TYPE_CHANGE_PRESERVED",
   "currentChangeSet": "CN-BOOK-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-QUOTE-001",
-  "nextAction": "Complete bounded inventory checks and exact-source CI; do not start a second task",
+  "nextAction": "Owner review of CN-QUOTE-001 bounded scope and remaining OD-17/20/22/25 gates; no next implementation task authorized",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "Bounded room/catalog verified; package/booking/physical and phase/customer acceptance remain open",
+  "implementationEvidence": "Bounded inventory slice VERIFIED; full quote/booking/payment/physical and customer/phase acceptance remain open",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
@@ -31,11 +31,11 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "SOURCE_READY_FOR_SCOPED_PUBLICATION",
-  "publicationEvidence": "CN-FND-001 implementation through aa2bb4e pushed to origin/main; full remote CI 38689239097 SUCCESS at that source commit; metadata-only receipt successor resolved from Git",
-  "lastObservedHead": "efef591cbf36881dd36e360bf4d4c3d333c4584d",
+  "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS_CLOSURE_RECEIPT_PENDING",
+  "publicationEvidence": "CN-BOOK-001 source cbd6f07f6bfdef5384cdf66a2d12c4b7feefaf93 pushed to origin/main and remote tip matched; exact-source CI 38934373590 SUCCESS; final documentation receipt verified separately",
+  "lastObservedHead": "cbd6f07f6bfdef5384cdf66a2d12c4b7feefaf93",
   "evidencePath": "PROGRESS.md#inventory-implementation",
-  "evidenceFreshness": "2026-10-15 foundation closeout; exact checks/versions in foundationImplementation",
+  "evidenceFreshness": "2026-10-16 CN-BOOK-001 exact-source CI and source hash receipt",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -51,13 +51,13 @@
   ],
   "omissionRegister": "execution/omissions.json",
   "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
-  "verificationScope": "Bounded synthetic identity/session and owner/venue account read; local and remote PostgreSQL/backend/frontend/KB checks; no full product, live provider, physical or customer acceptance",
+  "verificationScope": "Bounded inventory source: PostgreSQL overlap, hold lifecycle/expiry/recovery/idempotency, owner/venue/eligibility/CSRF/rate, API/UI plus existing regressions; no full commercial or physical acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
   "implementationAuthorization": "GRANTED_BOUNDED_CN_BOOK_001",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "No remaining owner-policy prerequisite for bounded synthetic/test CN-AUTH-001; deferred production/feature policies retain their existing gates"
+    "CN-QUOTE-001 scope and OD-17/20/22/25 decisions at their quote-specific boundaries; existing inventory approvals retained"
   ],
   "checks": [
     {
@@ -746,7 +746,7 @@
       "accepted": false
     },
     "planningCriteria": {
-      "checked": 11,
+      "checked": 13,
       "total": 74,
       "overallEffortPercentage": null
     },
@@ -760,7 +760,7 @@
     "previewAvailability": "EXTERNAL_PREVIEW_ONLY",
     "sourceBaseline": "7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",
     "actualProjectRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
-    "nextAction": "Owner resolves root-collision disposition; no READY implementation task; separately refine/authorize foundation after readiness",
+    "nextAction": "Owner review of CN-QUOTE-001 bounded scope and remaining OD-17/20/22/25 gates; no next implementation task authorized",
     "checks": [
       {
         "argv": [
@@ -2103,11 +2103,18 @@
     "nextAction": "In a separate invocation, reconcile the already provided CN-BOOK-001 policy/scope authorization and actual readiness; do not request duplicate approval",
     "nextRecommendedChangeSet": "CN-BOOK-001",
     "implementationAuthorization": "GRANTED_CN_PKG_001_ONLY",
-    "evidencePath": "PROGRESS.md#package-draft-implementation"
+    "evidencePath": "PROGRESS.md#package-draft-implementation",
+    "baselineHead": "478198fe87fa1e8291b7cf35e5c2339e068b301b",
+    "baselineWorktree": "CLEAN",
+    "publicationEvidence": "CN-FND-001 implementation through aa2bb4e pushed to origin/main; full remote CI 38689239097 SUCCESS at that source commit; metadata-only receipt successor resolved from Git",
+    "verificationScope": "Bounded synthetic identity/session and owner/venue account read; local and remote PostgreSQL/backend/frontend/KB checks; no full product, live provider, physical or customer acceptance",
+    "approvalQueue": [
+      "No remaining owner-policy prerequisite for bounded synthetic/test CN-AUTH-001; deferred production/feature policies retain their existing gates"
+    ]
   },
   "inventoryImplementation": {
-    "status": "LOCAL_VERIFIED_CI_PENDING",
-    "remoteCI": "NOT_RUN",
+    "status": "VERIFIED_BOUNDED_INVENTORY",
+    "remoteCI": "SUCCESS",
     "baselineHead": "53d0e8ea713888d213ff85c157f73924a9b78778",
     "scopeApproval": {
       "status": "OWNER_APPROVED_CN_BOOK_001_ONLY",
@@ -2199,6 +2206,19 @@
         "false full requirement verification rejected"
       ],
       "worktreeException": "Pre-existing frontend/next-env.d.ts development form retained; strict validator still reports that unrelated delta after build restoration"
+    },
+    "ciReceipt": {
+      "headSha": "cbd6f07f6bfdef5384cdf66a2d12c4b7feefaf93",
+      "runId": 38934373590,
+      "conclusion": "success",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38934373590",
+      "scope": "Exact-source backend/PostgreSQL/architecture/startup, frontend clean build/type/lint/test/online audit, launcher and knowledge checks"
+    },
+    "publication": {
+      "sourceCommit": "cbd6f07f6bfdef5384cdf66a2d12c4b7feefaf93",
+      "destination": "origin/main",
+      "verifiedRemoteSourceSha": "cbd6f07f6bfdef5384cdf66a2d12c4b7feefaf93",
+      "finalReceipt": "Final knowledge-only commit/remote SHA and CI verified separately at closeout"
     }
   }
 }
