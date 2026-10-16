@@ -33,9 +33,12 @@ export function Navigation({
 				["/admin", "Workspace"],
 				["/admin/components", "UI examples"],
 				["/admin/account", "Account session"],
+                ["/admin/venues", "Venues"],
+                ["/admin/rooms", "Room configuration"],
 			]
 		: [
 				["/", "Home"],
+                ["/rooms", "Explore rooms"],
 				["/account", "Account session"],
 				["/admin", "Admin shell preview"],
 			];
@@ -60,7 +63,6 @@ export function Navigation({
 					<ul>
 						{[
 							"Bookings",
-							"Rooms",
 							"Customers",
 							"Payments",
 							"Devices",

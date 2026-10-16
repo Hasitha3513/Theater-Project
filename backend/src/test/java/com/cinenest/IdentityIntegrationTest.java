@@ -298,7 +298,7 @@ class IdentityIntegrationTest {
             String upgraded=url.substring(0,url.lastIndexOf('/')+1)+name;
             try {
                 var v1=Flyway.configure().dataSource(upgraded,user,password).target("1").load();assertThat(v1.migrate().migrationsExecuted).isEqualTo(1);
-                var v2=Flyway.configure().dataSource(upgraded,user,password).load();assertThat(v2.migrate().migrationsExecuted).isEqualTo(1);v2.validate();assertThat(v2.migrate().migrationsExecuted).isZero();
+                var v2=Flyway.configure().dataSource(upgraded,user,password).target("2").load();assertThat(v2.migrate().migrationsExecuted).isEqualTo(1);v2.validate();assertThat(v2.migrate().migrationsExecuted).isZero();
             } finally { statement.execute("DROP DATABASE "+name); }
         }
     }

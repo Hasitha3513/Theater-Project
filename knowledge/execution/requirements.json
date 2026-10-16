@@ -294,7 +294,20 @@
         "OD-04",
         "OD-10",
         "OD-14"
-      ]
+      ],
+      "roomImplementationEvidence": {
+        "taskId": "CN-ROOM-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
+          "frontend/tests/rooms.test.mjs",
+          "frontend/tests/rooms-browser.mjs"
+        ]
+      }
     },
     {
       "id": "CN-C02",
@@ -798,7 +811,20 @@
         "OD-04",
         "OD-10",
         "OD-14"
-      ]
+      ],
+      "roomImplementationEvidence": {
+        "taskId": "CN-ROOM-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
+          "frontend/tests/rooms.test.mjs",
+          "frontend/tests/rooms-browser.mjs"
+        ]
+      }
     },
     {
       "id": "CN-A04",
@@ -853,7 +879,20 @@
         "OD-04",
         "OD-10",
         "OD-14"
-      ]
+      ],
+      "roomImplementationEvidence": {
+        "taskId": "CN-ROOM-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
+          "frontend/tests/rooms.test.mjs",
+          "frontend/tests/rooms-browser.mjs"
+        ]
+      }
     },
     {
       "id": "CN-A05",
@@ -1685,6 +1724,19 @@
         "evidencePath": "PROGRESS.md#auth-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "roomImplementationEvidence": {
+        "taskId": "CN-ROOM-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
+          "frontend/tests/rooms.test.mjs",
+          "frontend/tests/rooms-browser.mjs"
+        ]
       }
     },
     {

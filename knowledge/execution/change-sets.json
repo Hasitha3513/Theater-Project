@@ -318,18 +318,20 @@
         "CN-UI-001"
       ],
       "blockingDecisionIds": [],
-      "affectedFilesModules": "Venues/Rooms and catalog UI TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "affectedFilesModules": "com.cinenest.rooms; Identity ScopedAuthorization; HTTP security allowlists; frontend catalog/configuration routes, explicit transport, tests and existing knowledge records",
+      "dbApiUiImpact": "Six cinenest_rooms tables; eleven approved API endpoints; /rooms, /rooms/[roomId], /admin/venues, /admin/rooms; no package/booking/payment/device operations",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "V3__venue_room_catalog.sql additive schema/tables/constraints/indexes; existing V1/V2 unchanged; no production data seed or destructive down migration",
       "plannedChecks": "Config permission/version and catalog/empty/error/room-view parity",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Room settings cannot rewrite purchases or certify safety",
       "requiredApproval": "Slice + venue/room/operating scope approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": [],
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "PROGRESS.md#room-implementation"
+      ],
       "resolvedDecisionIds": [
         "OD-04",
         "OD-10",
@@ -400,7 +402,20 @@
         "OD-04",
         "OD-10",
         "OD-14"
-      ]
+      ],
+      "scopeApproval": {
+        "dateLocal": "2026-10-16",
+        "source": "Current owner instruction and attached CN-ROOM-001 authorization",
+        "requestSha256": "8384de0b4ae43803b6830874132757bcc418d915e94b35ab5ed5b9ec58000f06",
+        "scopeComparison": "MATCHES_RECORDED_SIX_TABLE_ELEVEN_ENDPOINT_FOUR_ROUTE_PROPOSAL",
+        "implementationAuthorization": "GRANTED_CN_ROOM_001_ONLY",
+        "baselineHead": "93e36a188dd245891b6f2cf089a616331a53105b"
+      },
+      "implementationEvidence": {
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-PKG-001",

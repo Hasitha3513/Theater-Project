@@ -46,4 +46,9 @@ class FoundationIntegrationTest {
             assertThat(response.body()).doesNotContain("password", "jdbc:");
         }
     }
+
+    @Test void publicCatalogIsReadableWhenIdentityIsDisabled() throws Exception {
+        var response=HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+environment.getRequiredProperty("local.server.port")+"/api/catalog/venues")).GET().build(),HttpResponse.BodyHandlers.ofString());
+        assertThat(response.statusCode()).isEqualTo(200);assertThat(response.body()).doesNotContain("operationalApprovalReference","jdbc:");
+    }
 }

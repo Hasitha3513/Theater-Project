@@ -117,7 +117,20 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "roomImplementationEvidence": {
+        "taskId": "CN-ROOM-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
+          "frontend/tests/rooms.test.mjs",
+          "frontend/tests/rooms-browser.mjs"
+        ]
+      }
     },
     {
       "id": "T-CN-C02",
@@ -300,7 +313,20 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "roomImplementationEvidence": {
+        "taskId": "CN-ROOM-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
+          "frontend/tests/rooms.test.mjs",
+          "frontend/tests/rooms-browser.mjs"
+        ]
+      }
     },
     {
       "id": "T-CN-A04",
@@ -323,6 +349,19 @@
         "evidencePath": "PROGRESS.md#ui-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "roomImplementationEvidence": {
+        "taskId": "CN-ROOM-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
+          "frontend/tests/rooms.test.mjs",
+          "frontend/tests/rooms-browser.mjs"
+        ]
       }
     },
     {
@@ -622,6 +661,19 @@
         "evidencePath": "PROGRESS.md#auth-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "roomImplementationEvidence": {
+        "taskId": "CN-ROOM-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#room-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/ConfigurationRulesTest.java",
+          "frontend/tests/rooms.test.mjs",
+          "frontend/tests/rooms-browser.mjs"
+        ]
       }
     },
     {

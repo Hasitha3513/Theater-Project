@@ -3,6 +3,7 @@ import { readFileSync, existsSync } from "node:fs";
 import ts from "typescript";
 registerHooks({
 	resolve(specifier, context, next) {
+        if (specifier === "next/link" || specifier === "next/image") return next(`${specifier}.js`, context);
 		if (specifier.startsWith(".") && context.parentURL) {
 			const base = new URL(specifier, context.parentURL);
 			for (const extension of [".ts", ".tsx"])

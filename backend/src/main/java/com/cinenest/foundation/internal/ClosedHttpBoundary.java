@@ -12,6 +12,6 @@ class ClosedHttpBoundary {
     @Bean
     SecurityFilterChain closedBoundary(HttpSecurity http) throws Exception {
         // No protected feature exists yet. No permissive development profile or login bypass.
-        return http.authorizeHttpRequests(requests -> requests.anyRequest().denyAll()).build();
+        return http.authorizeHttpRequests(requests -> requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/catalog/venues", "/api/catalog/rooms", "/api/catalog/rooms/*").permitAll().anyRequest().denyAll()).build();
     }
 }

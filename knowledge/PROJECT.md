@@ -533,3 +533,7 @@ Historical pre-approval wording below is retained for source provenance only; th
 
 > | BR-01 | LKR; Asia/Colombo; operating window 09:00–24:00 local | End is next-day midnight; customer session must end by closing under this draft. Cleaning beyond closing remains OD-10. |
 > `session_end = session_start + purchased_duration` and `blocked_until = session_end + cleaning_buffer`. Reservation blocking interval is **[session_start,blocked_until)**; guest access interval is **[session_start,session_end)**. Distinguish the two in APIs, calendars, UI and device scheduling. Back-to-back session beginning exactly blocked_until is permissible only when readiness is cleared. Operating checks use venue-local calendar boundaries; storage uses UTC instants with original timezone/config version. Cleaning ending after midnight needs OD-10 resolution.
+
+### Bounded room implementation evidence
+
+CN-ROOM-001 implements only the approved catalog/configuration portion of CN-C01/CN-A03/CN-A04; [technical boundary](ARCHITECTURE.md#room-implemented-boundary) and [evidence](PROGRESS.md#room-implementation). No real photography, prices, availability, reservations, package publication or physical readiness is inferred. Full existing-reservation-impact acceptance for CN-A03 remains future; no requirement or later task is dropped. OD-04/10/14 policies are unchanged; physical, operational and licensing acceptance remain separate.
