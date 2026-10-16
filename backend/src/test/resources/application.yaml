@@ -1,0 +1,5 @@
+# Tests explicitly drive transactional activation; cached contexts must not race fixtures.
+cinenest:
+  pricing:
+    publication-worker:
+      enabled: false

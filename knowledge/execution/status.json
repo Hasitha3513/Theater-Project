@@ -1990,7 +1990,8 @@
       "frontend/package.json": "324893953d9472e84d985568628dc7af282176d33fd57a2663e2f9a942ab3c8f",
       "frontend/tests/packages.test.mjs": "36e4342531a5c06f42b99d1764529b50683ddd8b1f05a5053791393ea61ee06d",
       "frontend/tests/publications-browser.mjs": "4dc6261dc9e7f3cb7ff7ec94f9dc11ee2b0646f126b47bfbe5983132e3639e0b",
-      "frontend/tests/publications.test.mjs": "7717dd858626f87c81c903e59faeb881fbb50c17f475f9c136528905553dfc0c"
+      "frontend/tests/publications.test.mjs": "7717dd858626f87c81c903e59faeb881fbb50c17f475f9c136528905553dfc0c",
+      "backend/src/test/resources/application.yaml": "022b2f91b28abf7321ce9a0c923c46b0124d773266e8ee125a82b13ee78cc998"
     },
     "checks": {
       "backendTests": 102,
@@ -2016,7 +2017,8 @@
         "Room browser generic fixture malformed new catalog response; added safe contract validation and regression",
         "Screenshot review found stale unavailable-publication copy; corrected",
         "Self-review required withdrawal capability for explicit replacement and durable command-key receipts"
-      ]
+      ],
+      "testIsolation": "Test-only YAML disables automatic polling in all cached Spring test contexts; controlled transactional activation/recovery exercised explicitly; packaged runtime default unchanged"
     },
     "evidencePath": "PROGRESS.md#publication-implementation",
     "d1": "NOT_READY",
