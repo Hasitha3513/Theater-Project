@@ -204,7 +204,7 @@
       },
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -512,7 +512,7 @@
       ],
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1884,7 +1884,7 @@
       },
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -2327,7 +2327,7 @@
       ],
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -2386,7 +2386,7 @@
       ],
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -2445,7 +2445,7 @@
       ],
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -2728,7 +2728,7 @@
       ],
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -3119,7 +3119,7 @@
       ],
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -3272,7 +3272,7 @@
       ],
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -3427,7 +3427,7 @@
       ],
       "quotationImplementationEvidence": {
         "taskId": "CN-QUOTE-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",

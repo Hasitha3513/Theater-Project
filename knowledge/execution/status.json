@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "taskId": "CN-QUOTE-001",
   "mode": "BOUNDED_SYNTHETIC_QUOTATION_IMPLEMENTATION",
-  "workStatus": "IN_PROGRESS",
-  "productStage": "BOUNDED_SYNTHETIC_QUOTATIONS_LOCALLY_VERIFIED_CI_PENDING",
+  "workStatus": "VERIFIED",
+  "productStage": "BOUNDED_SYNTHETIC_QUOTATIONS_VERIFIED_COMMERCIAL_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
@@ -13,9 +13,9 @@
   "currentChangeSet": "CN-QUOTE-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-VERIFY-001",
-  "nextAction": "Review CN-VERIFY-001 bounded evidence/admission/privacy scope and OD-03/05 gates; no next implementation authorized",
+  "nextAction": "Owner review of CN-VERIFY-001 bounded scope and OD-03/05 admission/privacy/storage decisions; no next implementation authorized",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "Synthetic-only quote snapshot/acceptance locally verified; CI pending. Commercial issuance, purchase/payment, phase/customer acceptance remain disabled/open",
+  "implementationEvidence": "Synthetic-only quotation slice VERIFIED/CLOSED; real commercial issuance/acceptance/checkout/payment/booking confirmation disabled. No phase/customer acceptance",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
@@ -31,11 +31,11 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "NOT_PUBLISHED_LOCAL_CHECKS_PENDING_FINAL_VERIFICATION",
-  "publicationEvidence": "No quotation commit or push performed yet",
-  "lastObservedHead": "13a27464a281205f897670cc6593cbddbb1f3ecd",
+  "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS_CLOSURE_RECEIPT_PENDING",
+  "publicationEvidence": "CN-QUOTE-001 source 0933a577dafc75dc485f3d8262251184a5aad6f6 pushed to origin/main and remote tip matched; exact-source CI 38949110859 SUCCESS. Final closure receipt verified separately in conversation",
+  "lastObservedHead": "0933a577dafc75dc485f3d8262251184a5aad6f6",
   "evidencePath": "PROGRESS.md#quotation-implementation",
-  "evidenceFreshness": "2026-10-16 bounded synthetic quotation local checks",
+  "evidenceFreshness": "2026-10-17 exact-source quotation CI and source hash receipt",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -62,35 +62,41 @@
   ],
   "checks": [
     {
-      "argv": [
-        "python3",
-        "knowledge/validate_design_kb.py"
-      ],
-      "atLocal": "2026-10-14T15:39:03.111643+05:30",
+      "command": "./Run-verify.sh --offline",
+      "environment": "isolated detached validation checkout; live generated file unchanged",
       "exitCode": 0,
-      "stdout": "Contrast text.primary/surface: 17.75:1 (target 4.5)\nContrast text.secondary/surface: 7.69:1 (target 4.5)\nContrast sidebar.text/sidebar.background: 15.61:1 (target 4.5)\nContrast sidebar.muted/sidebar.background: 9.62:1 (target 4.5)\nContrast cinematic.text/cinematic.background: 18.57:1 (target 4.5)\nContrast surface/brand.primary: 6.36:1 (target 4.5)\nContrast surface/brand.gradientEnd: 4.96:1 (target 4.5)\nContrast surface/brand.primaryHover: 8.39:1 (target 4.5)\nContrast border.control/surface: 4.97:1 (target 3)\nContrast focus/surface: 6.36:1 (target 3)\nContrast brand.gold/cinematic.background: 11.55:1 (target 3)\nContrast success.foreground/success.background: 5.40:1 (target 4.5)\nContrast warning.foreground/warning.background: 6.75:1 (target 4.5)\nContrast danger.foreground/danger.background: 6.05:1 (target 4.5)\nContrast info.foreground/info.background: 5.57:1 (target 4.5)\nContrast neutral.foreground/neutral.background: 9.49:1 (target 4.5)\nPASS consolidation: 34 source destinations/retained substantive content; frozen originals, complete registry payloads and anchors preserved.\nPASS: required files; JSON; palette/CSS; links; 3 image hashes; 11 admin modules/all fields; 12 customer flows; 10 chart definitions/token references; catalog/rules/statuses/package and bank requirements/traceability/manifest; breakpoints; 16 selected contrast pairs.\nLimits: structural checks only; no rendered UI, backend validation, missing-source reconciliation or Git commit verified.\n",
-      "stderr": ""
+      "backendTests": 144,
+      "frontendTests": 56,
+      "launcherContracts": 14,
+      "knowledgeValidators": "PASS",
+      "whitespace": "PASS",
+      "npmAudit": "NOT_RUN_LOCALLY_OFFLINE"
     },
     {
-      "argv": [
-        "python3",
-        "knowledge/execution/validate_execution.py"
-      ],
-      "atLocal": "2026-10-14T15:39:03.298685+05:30",
+      "command": "existing synthetic Playwright scripts: quotes/ui/rooms/packages/publications/inventory",
       "exitCode": 0,
-      "stdout": "PASS execution: instruction links; 44 reviewed baseline assets; 92 requirements/92 planned-test records; 28 acyclic change sets across 12 workstreams; approved mapping; future authority/acceptance gates; missing sources explicit.\nLimits: static evidence/range consistency, not proof of model auto-loading, product implementation, external/physical safety or business acceptance.\n",
-      "stderr": ""
+      "groups": 99,
+      "evidenceLevel": "SYNTHETIC_INTERCEPTED_BROWSER_DATA",
+      "widths": [
+        320,
+        375,
+        640,
+        768,
+        1024,
+        1280,
+        1536
+      ]
     },
     {
-      "argv": [
-        "git",
-        "diff",
-        "--check"
-      ],
-      "atLocal": "2026-10-14T15:39:03.304817+05:30",
+      "command": "six in-memory execution-validator negative controls",
       "exitCode": 0,
-      "stdout": "",
-      "stderr": ""
+      "rejected": 6
+    },
+    {
+      "command": "GitHub Actions 38949110859",
+      "headSha": "0933a577dafc75dc485f3d8262251184a5aad6f6",
+      "conclusion": "success",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38949110859"
     }
   ],
   "review": "Parent self-review; no new independent review claimed",
@@ -2223,7 +2229,7 @@
     }
   },
   "quotationImplementation": {
-    "status": "LOCAL_VERIFIED_CI_PENDING",
+    "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
     "baselineHead": "13a27464a281205f897670cc6593cbddbb1f3ecd",
     "scopeApproval": {
       "status": "OWNER_APPROVED_SYNTHETIC_CN_QUOTE_001_ONLY",
@@ -2234,7 +2240,7 @@
     },
     "commercialIssuance": "DISABLED",
     "d1": "NOT_READY",
-    "remoteCI": "NOT_RUN",
+    "remoteCI": "SUCCESS",
     "ownedFiles": {
       "backend/src/main/java/com/cinenest/booking/QuotationHolds.java": "7522aa953069af8d4c7472751e4e29a5b1a046371623c655f40517692b677916",
       "backend/src/main/java/com/cinenest/booking/internal/InventoryService.java": "526befa06205066ab5d53908103033345a3393e07a18b8becaf5721d2c112d6b",
@@ -2287,7 +2293,7 @@
       "skipped": 0,
       "postgresql": "18.6 pinned isolated real database; clean V1-V7, populated V6-V7, repeat, expiry lock wait, quote revision/idempotency/hold release races and audit rollback PASS",
       "frontend": "Isolated locked install/build/typecheck/lint/unit/HTTP transport and synthetic browser checks PASS; desktop/mobile screenshots reviewed",
-      "npmAudit": "NOT_RUN_LOCALLY_OFFLINE; existing CI retains online audit",
+      "npmAudit": "PASS_IN_EXACT_SOURCE_CI; NOT_RUN_LOCALLY_OFFLINE",
       "launcherContracts": 14,
       "fullRunVerifyOffline": "PASS_ISOLATED_CHECKOUT",
       "knowledgeValidators": "PASS_ISOLATED_CHECKOUT",
@@ -2307,6 +2313,12 @@
       "Synthetic fixtures only; no Sri Lankan tax or commercial acceptance proof",
       "No booking request/purchase/confirmation/payment/report implementation",
       "No full 18-scenario authorization, actual screen-reader/zoom certification, process/host crash certification or customer/physical acceptance"
-    ]
+    ],
+    "ciReceipt": {
+      "headSha": "0933a577dafc75dc485f3d8262251184a5aad6f6",
+      "runId": 38949110859,
+      "conclusion": "success",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/38949110859"
+    }
   }
 }

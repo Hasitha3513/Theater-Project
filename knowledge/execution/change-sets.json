@@ -655,8 +655,8 @@
       "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
       "requiredApproval": "Quote slice + price/timing/method policy approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROGRESS.md#quotation-implementation"
       ],
@@ -715,7 +715,7 @@
         "OD-25"
       ],
       "implementationEvidence": {
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS",
         "evidencePath": "PROGRESS.md#quotation-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
