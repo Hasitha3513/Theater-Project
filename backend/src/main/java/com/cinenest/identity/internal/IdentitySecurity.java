@@ -91,6 +91,8 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/verification/uploads/*/content").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bank/requests/*","/api/admin/venues/*/bank/requests","/api/admin/venues/*/bank/requests/*","/api/admin/venues/*/bank/requests/*/evidence/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bank/requests","/api/bank/requests/*/claims","/api/bank/requests/*/resubmissions","/api/bank/claims/*/uploads","/api/bank/uploads/*/complete","/api/admin/venues/*/bank/requests/*/decisions","/api/admin/venues/*/bank/requests/*/escalations").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*","/api/admin/venues/*/bank/credits","/api/admin/venues/*/bank/credits/*","/api/admin/venues/*/bank/exceptions","/api/admin/venues/*/bank/exceptions/*").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/bank/credits","/api/admin/venues/*/bank/credits/*/matches","/api/admin/venues/*/bank/requests/*/allocations","/api/admin/venues/*/bank/exceptions/*/actions","/api/admin/venues/*/bank/credits/*/corrections","/api/admin/venues/*/bank/corrections/*/decisions").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/bank/uploads/*/content").authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(errors -> errors

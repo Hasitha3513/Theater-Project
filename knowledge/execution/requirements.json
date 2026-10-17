@@ -293,6 +293,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
       }
     },
     {
@@ -1662,6 +1670,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
       }
     },
     {
@@ -1728,6 +1744,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
       }
     },
     {
@@ -1969,6 +1993,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
       }
     },
     {
@@ -3555,7 +3587,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      }
     },
     {
       "id": "BP-AC02",
@@ -3598,7 +3638,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      }
     },
     {
       "id": "BP-AC03",
@@ -3641,7 +3689,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      }
     },
     {
       "id": "BP-AC04",
@@ -3740,7 +3796,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      }
     },
     {
       "id": "BP-AC06",

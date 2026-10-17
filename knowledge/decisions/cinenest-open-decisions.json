@@ -751,6 +751,15 @@
         "requestSha256": "22fb4107bb4cc126cbc9a658a7a8a121df0f6d5acd15a269366463464824a407",
         "scope": "Synthetic-only bank requests/private receipts/durable scoped review; explicit configured timing and retention, zero CineNest-added synthetic BANK fee, no real funds/credit/allocation/confirmation/refunds/live delivery. Exact approved specification in ARCHITECTURE.md#bank-request-boundary.",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedBankLedgerApproval": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-17",
+        "approvalSource": "Owner instruction and attachment 5030b7c9-38bf-4189-9705-39caebae3640",
+        "requestSha256": "607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d",
+        "canonicalSpecification": "ARCHITECTURE.md#bank-ledger-boundary",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -815,7 +824,16 @@
       "evidenceRequired": "Bank record formats, dedupe procedure and partial/mixed-method concurrency acceptance",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedBankLedgerApproval": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-17",
+        "approvalSource": "Owner instruction and attachment 5030b7c9-38bf-4189-9705-39caebae3640",
+        "requestSha256": "607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d",
+        "canonicalSpecification": "ARCHITECTURE.md#bank-ledger-boundary",
+        "fullDecisionStatus": "OPEN_DECISION"
+      }
     },
     {
       "id": "OD-28",
@@ -844,6 +862,15 @@
         "requestSha256": "22fb4107bb4cc126cbc9a658a7a8a121df0f6d5acd15a269366463464824a407",
         "scope": "Synthetic-only bank requests/private receipts/durable scoped review; explicit configured timing and retention, zero CineNest-added synthetic BANK fee, no real funds/credit/allocation/confirmation/refunds/live delivery. Exact approved specification in ARCHITECTURE.md#bank-request-boundary.",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedBankLedgerApproval": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-17",
+        "approvalSource": "Owner instruction and attachment 5030b7c9-38bf-4189-9705-39caebae3640",
+        "requestSha256": "607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d",
+        "canonicalSpecification": "ARCHITECTURE.md#bank-ledger-boundary",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -864,6 +891,15 @@
         "approvalSource": "Owner instruction and attachment aef4fd7c-aef4-4391-8fb1-812b64a05b2a",
         "requestSha256": "22fb4107bb4cc126cbc9a658a7a8a121df0f6d5acd15a269366463464824a407",
         "scope": "Synthetic-only bank requests/private receipts/durable scoped review; explicit configured timing and retention, zero CineNest-added synthetic BANK fee, no real funds/credit/allocation/confirmation/refunds/live delivery. Exact approved specification in ARCHITECTURE.md#bank-request-boundary.",
+        "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedBankLedgerApproval": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-17",
+        "approvalSource": "Owner instruction and attachment 5030b7c9-38bf-4189-9705-39caebae3640",
+        "requestSha256": "607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d",
+        "canonicalSpecification": "ARCHITECTURE.md#bank-ledger-boundary",
         "fullDecisionStatus": "OPEN_DECISION"
       }
     }

@@ -5,6 +5,7 @@ export const bankLabels = [
 	"BOOKING NOT CONFIRMED",
 ];
 export type BankRequest = {
+	financial?: { allocatedMinor: number; outstandingMinor: number; syntheticFundingStatus: string; syntheticBookingStatus: string; bookingId?: string | null };
 	id: string;
 	venueId: string;
 	quoteId: string;

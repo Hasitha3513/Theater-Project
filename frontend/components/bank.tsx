@@ -64,7 +64,8 @@ export function BankSummary({ value: v }: { value: BankRequest }) {
 					units · received {c.receivedAt}
 				</p>
 			))}
-			<h3>Receipt evidence</h3>
+			{v.financial ? <section aria-label="Synthetic financial status"><h3>SYNTHETIC TEST — NO REAL MONEY</h3><p>{v.financial.syntheticFundingStatus} · {v.financial.syntheticBookingStatus}</p><p>Allocated LKR {v.financial.allocatedMinor} minor units · Outstanding LKR {v.financial.outstandingMinor} minor units</p><p>Commercial payment and confirmation remain disabled. Access is not provisioned.</p></section> : null}
+<h3>Receipt evidence</h3>
 			{v.evidence.length ? (
 				v.evidence.map((e) => (
 					<p key={e.id}>

@@ -56,6 +56,76 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Validate the current owner-authorized ledger delta before projecting immutable older
+    # receipts. Current source, policies, coverage and gates are checked independently;
+    # historical comparison never authorizes an unlisted successor or source deletion.
+    ledger_base='89b9cd42e693277037275641cf44d0ebd1f884c5'
+    ledger_evidence=state.get('bankLedgerImplementation',{})
+    ledger_owned=ledger_evidence.get('ownedFiles',{})
+    ledger_allowlist={'backend/src/main/java/com/cinenest/booking/SyntheticBooking.java', 'frontend/package.json', 'backend/src/main/java/com/cinenest/booking/internal/SyntheticBookingAdapter.java', 'backend/src/main/java/com/cinenest/payments/internal/JdbcLedgerRepository.java', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java', 'frontend/components/bank.tsx', 'frontend/lib/bank.ts', 'frontend/lib/bank-backend.ts', 'frontend/app/api/admin/venues/[venueId]/bank/credits/[id]/corrections/route.ts', 'frontend/app/api/admin/venues/[venueId]/bank/corrections/[id]/decisions/route.ts', 'frontend/app/api/admin/venues/[venueId]/bank/exceptions/[id]/actions/route.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/allocations/route.ts', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'frontend/app/api/bookings/[id]/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/LedgerWorker.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'frontend/app/api/admin/venues/[venueId]/bank/exceptions/[id]/route.ts', 'backend/src/main/java/com/cinenest/pricing/BankQuotation.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/resources/db/migration/V10__synthetic_credit_allocation.sql', 'frontend/app/api/admin/venues/[venueId]/bank/exceptions/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/LedgerController.java', 'frontend/app/api/admin/venues/[venueId]/bank/credits/[id]/matches/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticCreditSource.java', 'frontend/app/api/admin/venues/[venueId]/bank/credits/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/LedgerService.java', 'frontend/tests/bank-browser.mjs', 'frontend/tests/bank-finance.test.mjs', 'backend/src/main/java/com/cinenest/payments/internal/LedgerRepository.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'frontend/components/bank-finance.tsx', 'backend/src/main/java/com/cinenest/pricing/internal/BankQuotationAdapter.java', 'frontend/app/admin/bank/page.tsx', 'frontend/app/api/admin/venues/[venueId]/bank/credits/[id]/route.ts'}
+    check(set(ledger_owned)==ledger_allowlist and 'frontend/next-env.d.ts' not in ledger_owned,'Ledger source allowlist changed')
+    check(ledger_evidence.get('baselineHead')==ledger_base and ledger_evidence.get('authorizationRequestSha256')=='607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d','Ledger owner approval provenance missing')
+    for name,digest in ledger_owned.items():check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Ledger source checksum mismatch '+name)
+    ledger_baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ledger_base,'--','backend','frontend'],text=True).splitlines())
+    ledger_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    check(ledger_current_app==ledger_baseline_app|ledger_allowlist,'Ledger changed application inventory outside owner scope')
+    for migration in (R/'backend/src/main/resources/db/migration').glob('V*__*.sql'):
+        if migration.name.startswith('V10__'):continue
+        check(migration.read_bytes()==subprocess.check_output(['git','-C',str(R),'show',ledger_base+':'+migration.relative_to(R).as_posix()]),'Ledger changed historical migration '+migration.name)
+    for field,value in {'realPayments':'DISABLED','commercialConfirmation':'DISABLED','refunds':'DISABLED','liveDelivery':'DISABLED','hardware':'DISABLED','d2':'NOT_READY'}.items():check(ledger_evidence.get(field)==value,'Ledger safety boundary changed '+field)
+    ledger_ci=ledger_evidence.get('remoteCI')=='SUCCESS'
+    check(ledger_evidence.get('status')==('VERIFIED_BOUNDED_SYNTHETIC_LEDGER' if ledger_ci else 'IN_PROGRESS'),'Ledger premature verification')
+    if ledger_ci:
+        receipt=ledger_evidence.get('ciReceipt',{});sha=receipt.get('headSha','')
+        check(receipt.get('conclusion')=='success' and isinstance(receipt.get('runId'),int) and re.fullmatch(r'[0-9a-f]{40}',sha) is not None,'Ledger exact-source CI receipt missing')
+        if re.fullmatch(r'[0-9a-f]{40}',sha):
+            for name,digest in ledger_owned.items():check(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',sha+':'+name])).hexdigest()==digest,'Ledger CI/source mismatch '+name)
+        check(ledger_evidence.get('checks',{}).get('allRequiredChecks')=='PASS','Ledger required checks incomplete')
+    if ledger_ci or ledger_evidence.get('checks',{}).get('allRequiredChecks')=='PASS':
+        for field,value in {'backendTests':212,'bankIntegrationTests':32,'ledgerIntegrationTests':14,'architectureTests':10,'frontendTests':72,'ledgerFrontendTests':4,'browserGroups':190,'bankBrowserGroups':70,'ledgerBrowserGroups':35,'launcherTests':14,'negativeControls':8,'failures':0,'errors':0,'skipped':0,'allRequiredChecks':'PASS'}.items():check(ledger_evidence.get('checks',{}).get(field)==value,'Ledger required evidence missing '+field)
+    def ledger_source(name):
+        if name in ledger_allowlist and name in ledger_baseline_app:return subprocess.check_output(['git','-C',str(R),'show',ledger_base+':'+name])
+        return (R/name).read_bytes()
+    ledger_validated=set()
+    def ledger_original_payload(payload,path):
+        original=json.loads(subprocess.check_output(['git','-C',str(R),'show',ledger_base+':knowledge/'+path],text=True))
+        if path in ledger_validated and payload==original:return original
+        field={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
+        check({r['id'] for r in payload[field]}=={r['id'] for r in original[field]},'Ledger lost stable IDs '+path)
+        prior={r['id']:r for r in original[field]}
+        for row in payload[field]:
+            old=prior[row['id']];copy=json.loads(json.dumps(row))
+            if field=='changeSets' and row['id']=='CN-PAY-BANK-002':
+                check(copy.pop('historicalPreApproval',None)==old,'Ledger changed pre-approval task history')
+                approval=copy.pop('scopeApproval',{})
+                check(approval=={'status':'APPROVED_BOUNDED_SYNTHETIC_IMPLEMENTATION','approvalSource':'Owner instruction and attachment 5030b7c9-38bf-4189-9705-39caebae3640','requestSha256':'607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d','canonicalSpecification':'ARCHITECTURE.md#bank-ledger-boundary','realPayments':'DISABLED'},'Ledger scope approval changed')
+                for k,v in {'authorityAvailable':True,'readiness':'CLOSED' if ledger_ci else 'READY','workStatus':'VERIFIED' if ledger_ci else 'IN_PROGRESS','blockingDecisionIds':[],'resolvedDecisionIds':['OD-24','OD-27','OD-28','OD-29']}.items():check(copy.get(k)==v,'Ledger task gate changed '+k)
+                check(copy.pop('implementationEvidence',None)=={'status':ledger_evidence.get('status'),'evidencePath':'PROGRESS.md#bank-ledger-implementation','fullRequirementAcceptance':'NOT_ACCEPTED'},'Ledger task evidence unsupported')
+                check(copy.get('evidencePaths')==['ARCHITECTURE.md#bank-ledger-boundary','PROGRESS.md#bank-ledger-implementation'],'Ledger task evidence references missing')
+                copy['evidencePaths']=old['evidencePaths']
+                copy.pop('resolvedDecisionIds',None)
+                for k in ['authorityAvailable','readiness','workStatus','blockingDecisionIds']:copy[k]=old[k]
+            elif field=='decisions' and row['id'] in {'OD-24','OD-27','OD-28','OD-29'}:
+                approval=copy.pop('boundedBankLedgerApproval',None)
+                check(approval=={'taskId':'CN-PAY-BANK-002','status':'APPROVED_BOUNDED_SYNTHETIC_POLICY','dateLocal':'2026-10-17','approvalSource':'Owner instruction and attachment 5030b7c9-38bf-4189-9705-39caebae3640','requestSha256':'607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d','canonicalSpecification':'ARCHITECTURE.md#bank-ledger-boundary','fullDecisionStatus':'OPEN_DECISION'},'Ledger bounded policy changed '+row['id'])
+            elif field in {'requirements','tests'} and row['id'].removeprefix('T-') in {'PR-BANK-001','CN-C10','CN-A13','BP-AC01','BP-AC02','BP-AC03','BP-AC05','CN-NFR-02'}:
+                check(copy.pop('bankLedgerImplementationEvidence',None)=={'taskId':'CN-PAY-BANK-002','status':ledger_evidence.get('status'),'evidencePath':'PROGRESS.md#bank-ledger-implementation','fullRequirementVerified':False,'fullRequirementAcceptance':'NOT_ACCEPTED','deferred':'Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete'},'Ledger full acceptance overstated '+row['id'])
+            check(copy==old,'Ledger changed unapproved task/requirement/test/decision payload '+row['id'])
+        ledger_validated.add(path)
+        return original
+    # All original checks continue against the validated predecessor representation.
+    backlog=ledger_original_payload(backlog,'execution/change-sets.json')
+    coverage=ledger_original_payload(coverage,'execution/requirements.json')
+    tests_doc=ledger_original_payload(tests_doc,'execution/test-plan.json')
+    historical_state=json.loads(subprocess.check_output(['git','-C',str(R),'show',ledger_base+':knowledge/execution/status.json'],text=True))
+    ledger_state_delta={'taskId':'CN-PAY-BANK-002','requestedTaskId':'CN-PAY-BANK-002','currentChangeSet':'CN-PAY-BANK-002','workStatus':'VERIFIED' if ledger_ci else 'IN_PROGRESS','nextRecommendedChangeSet':'CN-PAY-GW-001','nextAction':'Review CN-PAY-GW-001 bounded provider-sandbox scope and OD-06/07/20; no next implementation authorized','implementationAuthorization':'GRANTED_SYNTHETIC_BANK_LEDGER_ONLY'}
+    ledger_context_fields=['mode','publicationState','publicationEvidence','publicationReceipt','lastObservedHead','baselineHead','baselineWorktree','evidencePath','verificationScope','implementationEvidence']
+    check(state.get('previousExecutionContextBeforeBankLedger')=={k:historical_state[k] for k in ledger_context_fields},'Ledger erased earlier execution/publication history')
+    receipt=ledger_evidence.get('ciReceipt',{})
+    ledger_state_delta.update({'mode':'BOUNDED_SYNTHETIC_BANK_LEDGER_IMPLEMENTATION','publicationState':'SOURCE_PUBLISHED_EXACT_CI_SUCCESS' if ledger_ci else 'NOT_PUBLISHED','publicationEvidence':('Source '+receipt.get('headSha','')+' pushed to origin/main; exact-source CI'+str(receipt.get('runId',''))+' SUCCESS; final documentation receipt verified separately') if ledger_ci else 'Pending scoped source publication and exact-source CI','publicationReceipt':receipt if ledger_ci else {'status':'PENDING_SOURCE_CI','branch':'main'},'lastObservedHead':receipt.get('headSha') if ledger_ci else ledger_base,'baselineHead':ledger_base,'baselineWorktree':'Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean','evidencePath':'PROGRESS.md#bank-ledger-implementation','verificationScope':'Bounded synthetic credit/allocation/guarded confirmation; no real financial or customer acceptance','implementationEvidence':'CN-PAY-BANK-002 VERIFIED/CLOSED for approved synthetic scope; wider acceptance incomplete' if ledger_ci else 'CN-PAY-BANK-002 IN_PROGRESS; local bounded checks PASS, exact-source CI required before closure'})
+    for k,v in ledger_state_delta.items():check(state.get(k)==v,'Ledger current status unsupported '+k)
+    check({k:v for k,v in state.items() if k not in ledger_state_delta and k not in {'bankLedgerImplementation','previousExecutionContextBeforeBankLedger'}}=={k:v for k,v in historical_state.items() if k not in ledger_state_delta},'Ledger changed unrelated status history')
+    state=historical_state
     # Owner-approved synthetic bank successor: validate current deltas before checking all
     # immutable historical receipts against their original source. No prior guard is removed.
     bank_base='f257460b156249b377c87a007480f039e542f986'
@@ -68,9 +138,9 @@ def main():
     check(set(bank_owned)=={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/test/java/com/cinenest/payments/internal/SyntheticEvidenceTest.java', 'frontend/app/bank/page.tsx', 'backend/src/main/java/com/cinenest/payments/internal/EncryptedEvidenceStore.java', 'backend/src/main/java/com/cinenest/payments/internal/ReviewerNotice.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/route.ts', 'frontend/lib/bank.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/decisions/route.ts', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/route.ts', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'frontend/app/globals.css', 'frontend/app/api/bank/requests/[id]/resubmissions/route.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/escalations/route.ts', 'backend/src/main/java/com/cinenest/verification/BankEligibility.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/evidence/[evidenceId]/route.ts', 'frontend/app/api/bank/requests/[id]/claims/route.ts', 'frontend/tests/bank.test.mjs', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticEvidenceProcessor.java', 'frontend/app/api/bank/uploads/[id]/complete/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/BankController.java', 'frontend/app/admin/bank/page.tsx', 'frontend/app/api/bank/requests/[id]/route.ts', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticFixtures.java', 'backend/src/main/java/com/cinenest/payments/package-info.java', 'backend/src/main/java/com/cinenest/payments/internal/BankFailure.java', 'backend/src/main/java/com/cinenest/payments/internal/DisabledReviewerNotice.java', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/booking/internal/BankRequestHoldAdapter.java', 'backend/src/main/java/com/cinenest/payments/internal/BankRepository.java', 'backend/src/main/java/com/cinenest/pricing/internal/BankQuotationAdapter.java', 'frontend/app/api/bank/requests/route.ts', 'frontend/app/api/bank/uploads/[id]/content/route.ts', 'frontend/components/bank.tsx', 'backend/src/test/java/com/cinenest/payments/internal/BankFaults.java', 'frontend/app/api/bank/claims/[id]/uploads/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java', 'backend/src/main/java/com/cinenest/payments/internal/JdbcBankRepository.java', 'backend/src/main/java/com/cinenest/pricing/BankQuotation.java', 'backend/src/main/resources/db/migration/V9__synthetic_bank_requests.sql', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/payments/internal/BankWorker.java', 'frontend/tests/bank-browser.mjs', 'backend/src/main/java/com/cinenest/payments/internal/BankPolicy.java', 'backend/src/main/java/com/cinenest/verification/internal/BankEligibilityAdapter.java', 'backend/src/main/java/com/cinenest/booking/BankRequestHolds.java', 'frontend/package.json', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'backend/src/main/java/com/cinenest/payments/internal/PrivateEvidenceStore.java'} and 'frontend/next-env.d.ts' not in bank_owned,'Bank source inventory exceeds owner scope')
     baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',bank_base,'--','backend','frontend'],text=True).splitlines())
     current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
-    check(current_app==baseline_app|set(bank_owned),'Bank introduced unreviewed application files or removed retained sources')
+    check(current_app-(ledger_allowlist-ledger_baseline_app)==baseline_app|set(bank_owned),'Bank introduced unreviewed application files or removed retained sources')
     for name,digest in bank_owned.items():
-        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Bank source mismatch '+name)
+        check((R/name).is_file() and hashlib.sha256(ledger_source(name)).hexdigest()==digest,'Bank source mismatch '+name)
     for migration in (R/'backend/src/main/resources/db/migration').glob('V[1-8]__*.sql'):
         check(migration.read_bytes()==subprocess.check_output(['git','-C',str(R),'show',bank_base+':'+migration.relative_to(R).as_posix()]),'Bank changed historical migration '+migration.name)
     for field,value in {'realPayments':'DISABLED','creditVerification':'NOT_IMPLEMENTED','allocation':'NOT_IMPLEMENTED','bookingConfirmation':'NOT_IMPLEMENTED','liveDelivery':'DISABLED','d2':'NOT_READY'}.items():check(bank_evidence.get(field)==value,'Bank safety boundary changed '+field)
@@ -78,8 +148,9 @@ def main():
         if name in bank_owned:
             exists=subprocess.run(['git','-C',str(R),'cat-file','-e',bank_base+':'+name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
             if exists:return subprocess.check_output(['git','-C',str(R),'show',bank_base+':'+name])
-        return (R/name).read_bytes()
+        return ledger_source(name)
     def bank_original_payload(payload,path):
+        payload=ledger_original_payload(payload,path)
         original=json.loads(subprocess.check_output(['git','-C',str(R),'show',bank_base+':knowledge/'+path],text=True))
         key={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
         prior={r['id']:r for r in original[key]}
@@ -650,7 +721,7 @@ def main():
     baseline = manifest['consolidation']['baselineRevision']
     for path, field in [('execution/requirements.json', 'requirements'), ('execution/test-plan.json', 'tests'), ('execution/change-sets.json', 'changeSets'), ('decisions/cinenest-open-decisions.json', 'decisions')]:
         prior = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/' + path], text=True))
-        current = json.loads((K / path).read_text())
+        current = ledger_original_payload(json.loads((K / path).read_text()),path)
         before = {x['id']: x for x in prior[field]}; after = {x['id']: x for x in current[field]}
         check(set(before) <= set(after), 'Baseline IDs dropped ' + path)
         for id, old in before.items():

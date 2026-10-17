@@ -69,4 +69,14 @@ class FoundationArchitectureTest {
         noClasses().that().haveSimpleName("BankService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
         noClasses().that().haveSimpleName("BankService").should().dependOnClassesThat().haveSimpleName("JdbcBankRepository").check(classes);
     }
+    @Test void ledgerCoordinatesOnlyNamedOwnerPortsWithoutSqlOrAdapterDependencies() throws Exception {
+        var classes=new ClassFileImporter().importPackages("com.cinenest");
+        noClasses().that().haveSimpleName("LedgerService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+        noClasses().that().haveSimpleName("LedgerService").should().dependOnClassesThat().haveSimpleName("JdbcLedgerRepository").check(classes);
+        noClasses().that().resideInAPackage("com.cinenest.booking..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.payments..","com.cinenest.pricing..").check(classes);
+        String service=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/payments/internal/LedgerService.java"));
+        assertThat(service).doesNotContain("SELECT ","INSERT ","UPDATE ","DELETE ");
+        String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/payments/internal/JdbcLedgerRepository.java"));
+        assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_pricing.","cinenest_identity.","cinenest_verification.");
+    }
 }

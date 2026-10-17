@@ -146,6 +146,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
       }
     },
     {
@@ -731,6 +739,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
       }
     },
     {
@@ -756,6 +772,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
       }
     },
     {
@@ -906,6 +930,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
       }
     },
     {
@@ -1594,7 +1626,15 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      }
     },
     {
       "id": "T-BP-AC02",
@@ -1609,7 +1649,15 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      }
     },
     {
       "id": "T-BP-AC03",
@@ -1624,7 +1672,15 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      }
     },
     {
       "id": "T-BP-AC04",
@@ -1662,7 +1718,15 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "bankLedgerImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-002",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      }
     },
     {
       "id": "T-BP-AC06",

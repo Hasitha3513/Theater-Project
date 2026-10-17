@@ -960,12 +960,7 @@
       "dependencies": [
         "CN-PAY-BANK-001"
       ],
-      "blockingDecisionIds": [
-        "OD-24",
-        "OD-27",
-        "OD-28",
-        "OD-29"
-      ],
+      "blockingDecisionIds": [],
       "affectedFilesModules": "Payments/Booking/review UI TBD",
       "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
@@ -974,10 +969,69 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Funds retained independently; one eligible booking; no duplicate allocation",
       "requiredApproval": "Explicit isolated-ledger slice approval and final matching/allocation controls",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "ARCHITECTURE.md#bank-ledger-boundary",
+        "PROGRESS.md#bank-ledger-implementation"
+      ],
+      "historicalPreApproval": {
+        "id": "CN-PAY-BANK-002",
+        "phase": 5,
+        "priority": "P1",
+        "objective": "Bank evidence/allocation and guarded confirmation",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-C10",
+          "CN-A13",
+          "BP-AC01",
+          "BP-AC02",
+          "BP-AC03",
+          "BP-AC05"
+        ],
+        "inScope": "One isolated/mock reconciliation ledger/allocation/booking-resolution slice",
+        "outOfScope": "No actual bank approval/money movement, forged webhook or wallet",
+        "dependencies": [
+          "CN-PAY-BANK-001"
+        ],
+        "blockingDecisionIds": [
+          "OD-24",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "affectedFilesModules": "Payments/Booking/review UI TBD",
+        "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+        "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+        "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+        "plannedChecks": "Concurrent reviewer/deduped credit/partial-excess/mixed-method/expired hold tests",
+        "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+        "definitionOfDone": "Funds retained independently; one eligible booking; no duplicate allocation",
+        "requiredApproval": "Explicit isolated-ledger slice approval and final matching/allocation controls",
+        "authorityAvailable": false,
+        "readiness": "BLOCKED",
+        "workStatus": "BLOCKED",
+        "evidencePaths": []
+      },
+      "resolvedDecisionIds": [
+        "OD-24",
+        "OD-27",
+        "OD-28",
+        "OD-29"
+      ],
+      "scopeApproval": {
+        "status": "APPROVED_BOUNDED_SYNTHETIC_IMPLEMENTATION",
+        "approvalSource": "Owner instruction and attachment 5030b7c9-38bf-4189-9705-39caebae3640",
+        "requestSha256": "607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d",
+        "canonicalSpecification": "ARCHITECTURE.md#bank-ledger-boundary",
+        "realPayments": "DISABLED"
+      },
+      "implementationEvidence": {
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#bank-ledger-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-REFUND-001",

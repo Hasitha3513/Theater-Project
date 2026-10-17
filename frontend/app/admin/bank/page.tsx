@@ -1,3 +1,4 @@
+import { BankFinance } from "../../../components/bank-finance";
 import { BankWorkspace } from "../../../components/bank";
 import { PageHeading } from "../../../components/primitives";
 export default function Page() {
@@ -10,6 +11,7 @@ export default function Page() {
 				No real payments or booking confirmation.
 			</PageHeading>
 			<BankWorkspace reviewer={true} />
+<BankFinance />
 		</>
 	);
 }
