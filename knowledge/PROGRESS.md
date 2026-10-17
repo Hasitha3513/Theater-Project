@@ -5,6 +5,8 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP, all task statuses/dependencies and acceptance counts unchanged. CN-GATE-001 and CN-PAY-GW-001 remain BLOCKED.
+
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
 CN-PAY-BANK-002 is VERIFIED/CLOSED for the owner-approved synthetic credit/allocation/guarded confirmation slice; [current evidence](#bank-ledger-implementation). Wider commercial policy, real payment and customer acceptance remain open.
@@ -310,7 +312,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Real payments DISABLED; Admin scoped reads VERIFIED; PayHere pending"]
+  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; Gate/PayHere BLOCKED; Admin reads VERIFIED"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
@@ -1141,3 +1143,26 @@ Before exact-source CI closure, the15th task was IN_PROGRESS:14 VERIFIED/CLOSED,
 Admin verified closure: exact-source ff8726c5d91a60534c4cf3915c37317ef6a804ae pushed to origin/main and independently matched; CI39024870905 SUCCESS. Final backend rerun after PERMIT mapping and denial-attribution fixes:220 tests/7 admin/11 architecture,0 failures/errors/skips; packaged migrated startup and HTTP denial PASS.75 frontend/3 new,63 admin+190 retained browser groups,14 launcher,4 negative controls, default Run-verify.sh/build/type/lint/audit0/knowledge/whitespace evidence retained. No application change after exact-source CI. Endpoint activation remains opt-in; real personal data, payments, exports and production remain disabled. Four GET operations and admin access audit only; no full authorization/customer acceptance.
 
 15 VERIFIED/CLOSED,13 BLOCKED,0 READY,0 IN_PROGRESS /28.92 requirements/92 full plans retained; full acceptance statuses unchanged. P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7=13/74;0/10 accepted delivery phases. D0 historical design prepared/document rehearsal; D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted. No further independent READY implementation exists: CN-GATE-001 needs sources/accountable owners, others retain gateway and policy dependencies. Next action: review CN-GATE-001 source/owner gaps. PayHere remains pending. Primary next-env modification preserved unstaged; final documentation commit/remote/CI verified separately in conversation. Rollback disables admin reads and retains V11/audit/history with compatible support, no destructive down migration. STOP.
+
+<a id="manual-first-phases"></a>
+## Approved five-stage development priority — manual payments first
+
+Owner authorization: current explicit 2026-10-17 instruction approves recording the previously proposed five-stage direction and scoped documentation publication only. [PROJECT owns the business direction](PROJECT.md#manual-payment-first); [ARCHITECTURE owns dependency impact](ARCHITECTURE.md#manual-first-dependency-impact). No new roadmap copy or task ID is created. Existing P0-P10, D0-D6,92 requirements,92 full test plans,28 change sets and every dependency edge remain authoritative and unchanged. This table is an execution-priority overlay, not a new acceptance denominator or an executable alternative graph.
+
+| Approved priority stage | Intended outcome | Required gates before execution/acceptance |
+|---|---|---|
+| 1. Source and accountability readiness | Reconcile original sources and record accountable owners | CN-GATE-001 remains BLOCKED: locally verified/read/reconciled S2-S4 and actual owner appointments/authority; later qualified acceptance remains external |
+| 2. Commercial manual-payment readiness | Qualify manual bank operations beyond existing synthetic software | Commercial quotation/tax/fee, real identity/privacy, approved bank instructions, independent credit evidence, financial separation/staff coverage/deadlines, retention/scanning, late-funds/refund and notification policies/evidence |
+| 3. Manual-payment booking and customer services | Coordinate eligible funded bookings, support/status, notifications and access scheduling | Existing task gates; separate task-by-task approval of any manual alternative for REFUND/ACCESS/REPORT; no automatic edge replacement, real provider or device authority |
+| 4. Physical operations and customer acceptance | Representative room qualification, customer UAT and separately authorized pilot | Actual safety/hardware/operations evidence, staffing/responders, customer reviewers and production authorization; simulations cannot substitute |
+| 5. Hosted online payment gateway integration | Add the retained hosted online path alongside manual payments | CN-PAY-GW-001 remains BLOCKED on PayHere sandbox access/qualification; existing bounded approvals retained; gateway-specific and combined-method tests and acceptance still required |
+
+Stage4 describes priority, not permission to bypass current gateway-dependent acceptance/launch edges. Until separately approved task-level alternatives exist, the current graph can block stages3/4 despite this strategic order. No new task becomes READY here. No full MVP feature, gateway obligation or physical/financial/customer acceptance is cancelled or declared complete. P0-C07/C08 remain open; this direction alone supplies neither sources/named owners nor approved pilot capacity/staffing/targets/schedule.
+
+Demonstrations remain D0 design/scope, D1 working catalog/admin, D2 synthetic bank-deposit booking, D3 commercial lifecycle/gateway sandbox, D4 actual representative hardware, D5 customer-led UAT and D6 separately authorized production pilot/handover. No renaming, held/accepted record or readiness change. D3 gateway content remains required; alternative manual-first demonstration/pilot acceptance would need separate approval.
+
+Recording baseline main/origin main at001228c35b4bdd2c2d3b55c486ae232fd2e9dc11, nested authoritative root; unrelated next-env.d.ts preserved unstaged. No application/migration/token/dependency or existing requirement/task/decision/test payload change. CN-GATE-001 and CN-PAY-GW-001 remain BLOCKED; real payments and production remain disabled. Current next action is source/owner input review for CN-GATE-001, not implementation or dependency editing. Verification/publication outcome is reported in conversation.
+
+MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;15 VERIFIED/CLOSED,13 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 full plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted and0/10 accepted delivery phases. STOP after this documentation change.
+
+Validation for this direction record: design/whitespace PASS; both knowledge validators PASS in the existing isolated checkout after baseline tracked-byte equality and synchronization of only the four owned documentation paths. Primary execution retains exactly the two pre-existing next-env.d.ts integrity findings. Existing task/decision/requirement/test/status/source registries are byte-identical to the starting HEAD, so all dependencies, counts and approvals remain intact. No application tests rerun for this documentation-only change; exact commit/remote/CI outcome reported in conversation.
