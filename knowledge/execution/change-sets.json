@@ -1209,26 +1209,79 @@
         "CN-AUTH-001",
         "CN-VERIFY-001"
       ],
-      "blockingDecisionIds": [
-        "OD-05",
-        "OD-18",
-        "OD-28"
-      ],
-      "affectedFilesModules": "Identity/Verification/Audit/UI TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Identity owned admin reads/persistence/HTTP; public ScopedAuditSource implemented by Verification; existing shell/transport/UI and checks",
+      "dbApiUiImpact": "Identity admin_read_audit; four venue-scoped GET operations; /admin/accounts; no business mutations or exports",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "V11 additive admin_read_audit; V1-V10 unchanged",
       "plannedChecks": "Scoped list/detail/export/redaction/paging tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Role-specific safe read controls and audit visibility",
       "requiredApproval": "Bounded admin slice + role/retention/export approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": [],
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "ARCHITECTURE.md#admin-read-boundary",
+        "PROGRESS.md#admin-read-implementation"
+      ],
       "resolvedDecisionIds": [
-        "OD-12"
-      ]
+        "OD-12",
+        "OD-05",
+        "OD-18",
+        "OD-28"
+      ],
+      "historicalPreApproval": {
+        "id": "CN-ADMIN-001",
+        "phase": 8,
+        "priority": "P1",
+        "objective": "Read-only scoped account/audit operations",
+        "requirementIds": [
+          "CN-A06",
+          "CN-A11",
+          "CN-A10",
+          "CN-NFR-02"
+        ],
+        "inScope": "One restricted account status/audit listing slice; mutations handled by owning prior units",
+        "outOfScope": "No unrestricted administrator, secret exposure or operational policy edits",
+        "dependencies": [
+          "CN-AUTH-001",
+          "CN-VERIFY-001"
+        ],
+        "blockingDecisionIds": [
+          "OD-05",
+          "OD-18",
+          "OD-28"
+        ],
+        "affectedFilesModules": "Identity/Verification/Audit/UI TBD",
+        "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+        "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+        "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+        "plannedChecks": "Scoped list/detail/export/redaction/paging tests",
+        "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+        "definitionOfDone": "Role-specific safe read controls and audit visibility",
+        "requiredApproval": "Bounded admin slice + role/retention/export approval",
+        "authorityAvailable": false,
+        "readiness": "BLOCKED",
+        "workStatus": "BLOCKED",
+        "evidencePaths": [],
+        "resolvedDecisionIds": [
+          "OD-12"
+        ]
+      },
+      "scopeApproval": {
+        "taskId": "CN-ADMIN-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "requestSha256": "b9432d4fe4c2c8f1ca52a49f829fe1278b9cd0bbf04d5081531906bb0ab744ef",
+        "approvalSource": "Owner instruction and attachment a05eb028-208e-4fe1-9310-1728833e5ed7",
+        "canonicalSpecification": "ARCHITECTURE.md#admin-read-boundary",
+        "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "implementationEvidence": {
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#admin-read-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-NOTIFY-001",

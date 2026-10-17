@@ -214,6 +214,14 @@
         "ocr": "DISABLED",
         "physicalAdmission": "NOT_APPROVED",
         "productionPrivacy": "UNRESOLVED"
+      },
+      "boundedAdminApproval": {
+        "taskId": "CN-ADMIN-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "requestSha256": "b9432d4fe4c2c8f1ca52a49f829fe1278b9cd0bbf04d5081531906bb0ab744ef",
+        "approvalSource": "Owner instruction and attachment a05eb028-208e-4fe1-9310-1728833e5ed7",
+        "canonicalSpecification": "ARCHITECTURE.md#admin-read-boundary",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -601,6 +609,14 @@
         "scope": "Separate venue publish/deactivate; independent exact-revision author/publisher; content/scope/dates/hash/reason bound; current authority rechecked including activation; no edit implication or grant stitching",
         "canonicalSpecification": "PROJECT.md#publication-approved-policy",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedAdminApproval": {
+        "taskId": "CN-ADMIN-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "requestSha256": "b9432d4fe4c2c8f1ca52a49f829fe1278b9cd0bbf04d5081531906bb0ab744ef",
+        "approvalSource": "Owner instruction and attachment a05eb028-208e-4fe1-9310-1728833e5ed7",
+        "canonicalSpecification": "ARCHITECTURE.md#admin-read-boundary",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -900,6 +916,14 @@
         "approvalSource": "Owner instruction and attachment 5030b7c9-38bf-4189-9705-39caebae3640",
         "requestSha256": "607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d",
         "canonicalSpecification": "ARCHITECTURE.md#bank-ledger-boundary",
+        "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedAdminApproval": {
+        "taskId": "CN-ADMIN-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "requestSha256": "b9432d4fe4c2c8f1ca52a49f829fe1278b9cd0bbf04d5081531906bb0ab744ef",
+        "approvalSource": "Owner instruction and attachment a05eb028-208e-4fe1-9310-1728833e5ed7",
+        "canonicalSpecification": "ARCHITECTURE.md#admin-read-boundary",
         "fullDecisionStatus": "OPEN_DECISION"
       }
     },

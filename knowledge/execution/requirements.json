@@ -1143,6 +1143,13 @@
           "frontend/tests/verification-browser.mjs"
         ],
         "deferred": "Real-person/OCR/physical all-guest admission, production privacy/providers/retention and full authorization scenarios remain unverified"
+      },
+      "adminReadImplementationEvidence": {
+        "taskId": "CN-ADMIN-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#admin-read-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1310,7 +1317,14 @@
       ],
       "resolvedDecisionIds": [
         "OD-12"
-      ]
+      ],
+      "adminReadImplementationEvidence": {
+        "taskId": "CN-ADMIN-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#admin-read-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-A11",
@@ -1355,7 +1369,14 @@
       ],
       "resolvedDecisionIds": [
         "OD-12"
-      ]
+      ],
+      "adminReadImplementationEvidence": {
+        "taskId": "CN-ADMIN-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#admin-read-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-O01",
@@ -2001,6 +2022,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      },
+      "adminReadImplementationEvidence": {
+        "taskId": "CN-ADMIN-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#admin-read-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {

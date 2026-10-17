@@ -79,4 +79,9 @@ class FoundationArchitectureTest {
         String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/payments/internal/JdbcLedgerRepository.java"));
         assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_pricing.","cinenest_identity.","cinenest_verification.");
     }
+    @Test void adminReadServiceUsesOwnerPortsAndOwnedPersistenceOnly(){
+        var classes=new ClassFileImporter().importPackages("com.cinenest");
+        noClasses().that().haveSimpleName("AdminService").should().dependOnClassesThat().resideInAnyPackage("org.springframework.jdbc..","com.cinenest.verification..").check(classes);
+        noClasses().that().haveSimpleName("VerificationAuditProjection").should().dependOnClassesThat().resideInAPackage("com.cinenest.identity.internal..").check(classes);
+    }
 }

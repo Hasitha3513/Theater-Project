@@ -33,6 +33,7 @@ export function Navigation({
 				["/admin", "Workspace"],
 				["/admin/components", "UI examples"],
 				["/admin/account", "Account session"],
+                ["/admin/accounts", "Synthetic accounts and audit"],
                 ["/admin/venues", "Venues"],
                 ["/admin/rooms", "Room configuration"],
                 ["/admin/inventory", "Inventory inspection"],
