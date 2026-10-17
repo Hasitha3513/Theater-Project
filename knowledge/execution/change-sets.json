@@ -746,8 +746,8 @@
       "definitionOfDone": "Restricted booker eligibility separate from on-site guest entry",
       "requiredApproval": "Slice + approved evidence/admission/privacy/storage process",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "knowledge/PROGRESS.md#verification-implementation"
       ],
@@ -801,7 +801,7 @@
         "productionPrivacy": "UNRESOLVED"
       },
       "implementationEvidence": {
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_VERIFICATION",
         "evidencePath": "PROGRESS.md#verification-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }

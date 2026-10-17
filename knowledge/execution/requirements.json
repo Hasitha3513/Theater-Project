@@ -566,7 +566,7 @@
       ],
       "verificationImplementationEvidence": {
         "taskId": "CN-VERIFY-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_VERIFICATION",
         "evidencePath": "PROGRESS.md#verification-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1116,7 +1116,7 @@
       },
       "verificationImplementationEvidence": {
         "taskId": "CN-VERIFY-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_VERIFICATION",
         "evidencePath": "PROGRESS.md#verification-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1926,7 +1926,7 @@
       },
       "verificationImplementationEvidence": {
         "taskId": "CN-VERIFY-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_VERIFICATION",
         "evidencePath": "PROGRESS.md#verification-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",

@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-CN-VERIFY-001 is IN_PROGRESS for [approved synthetic manual review](#verification-implementation), with local checks PASS and exact-source CI pending. Real IDs and OCR remain disabled. CN-QUOTE-001 is VERIFIED/CLOSED for [bounded synthetic quotations](#quotation-implementation); CN-BOOK-001 and CN-PKG-002 remain VERIFIED/CLOSED for their inventory/indicative publication scopes. Real commercial issuance, acceptance, checkout, payment and booking confirmation remain disabled. Wider commercial and customer/phase acceptance remain open; current next action is in the [handoff](#current-handoff).
+CN-VERIFY-001 is VERIFIED/CLOSED for [approved synthetic manual review](#verification-implementation) after exact-source CI SUCCESS. Real IDs and OCR remain disabled. CN-QUOTE-001 is VERIFIED/CLOSED for [bounded synthetic quotations](#quotation-implementation); CN-BOOK-001 and CN-PKG-002 remain VERIFIED/CLOSED for their inventory/indicative publication scopes. Real commercial issuance, acceptance, checkout, payment and booking confirmation remain disabled. Wider commercial and customer/phase acceptance remain open; current next action is in the [handoff](#current-handoff).
 
 Current planning direction is S17; the maintained [MVP roadmap](#mvp-roadmap) has74 criteria across P0–P10 and 7 demos, with no software or customer acceptance inferred. The directory-layout request remains blocked before movement by destination `.git` and `knowledge/` collisions; see [inspection](#root-relocation-inspection). Current authoritative root remains nested.
 
@@ -260,7 +260,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-PKG-002 | 3 | Immutable package publication/applicability | CN-PKG-001 | VERIFIED / CLOSED |
 | CN-BOOK-001 | 3 | Shared inventory hold/conflict guard | CN-ROOM-001 | VERIFIED / CLOSED |
 | CN-QUOTE-001 | 3 | Exact quote and purchase snapshot contract | CN-PKG-002, CN-BOOK-001 | VERIFIED / CLOSED |
-| CN-VERIFY-001 | 4 | Private booker evidence and eligibility review | CN-AUTH-001, CN-QUOTE-001 | IN_PROGRESS / READY |
+| CN-VERIFY-001 | 4 | Private booker evidence and eligibility review | CN-AUTH-001, CN-QUOTE-001 | VERIFIED / CLOSED |
 | CN-PAY-GW-001 | 5 | Gateway sandbox attempt/verification slice | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
 | CN-PAY-BANK-001 | 5 | Bank request/receipt and durable reviewer work | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
 | CN-PAY-BANK-002 | 5 | Bank evidence/allocation and guarded confirmation | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
@@ -286,7 +286,7 @@ Historical S17 planning baseline (preserved): `7ad20d42b4551ba07bd5d728a0cbc1d29
 
 Source reconciliation: HTML `CineNest_MVP_Roadmap.html` was not found in workspace, attachments, Downloads or /tmp. Preview found at `/home/hasitha-wijerathna/Downloads/CineNest_MVP_Roadmap_Preview.png`, visually inspected, not imported/changed; source hash in existing manifest. It shows illustrative weeks 1–20, workstream colors, D1–D6, no committed start date. Original HTML criterion IDs, detailed notes, browser saved entries and interactions cannot be inspected/restored without the HTML. The owner's supplied templates contain exactly 74 criteria, retained verbatim below; Pn-Cnn are local stable planning anchors derived from those template positions, not invented canonical requirement IDs or claimed original HTML IDs. Missing source stays visible; no replacement dashboard, image or runtime service created. Graphical refresh below is dated 2026-10-15 and reviewed against this baseline.
 
-Current roll-ups (distinct measures): P0 preparation6/8; P1 criteria2/6 (C01/C06), C02–C05 partial; P2 criteria3/6; P3 criteria2/6 (C03/C05 bounded inventory); P4–P10 criteria0. Planning criteria13/74 checked,61 unchecked; not an effort percentage. Existing28 tasks:11 VERIFIED/CLOSED,16 BLOCKED,1 READY (CN-VERIFY-001 is IN_PROGRESS),1 IN_PROGRESS. Canonical scope92 requirements/92 test plans;91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED with full plans NOT_RUN plus bounded implementation evidence; one workflow documentation plan PASS.29 decisions:24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; inventory OD-09/21 and other bounded approvals do not close broader decisions. No18/18 authorization claim. Delivery phases accepted0/10; demos held0/7, accepted0/7. D0 historically prepared/document-only rehearsed; D1–D6 preparation outlines, D1 NOT_READY. No customer acceptance, schedule/staffing approval or production authority inferred.
+Current roll-ups (distinct measures): P0 preparation6/8; P1 criteria2/6 (C01/C06), C02–C05 partial; P2 criteria3/6; P3 criteria2/6 (C03/C05 bounded inventory); P4–P10 criteria0. Planning criteria13/74 checked,61 unchecked; not an effort percentage. Existing28 tasks:12 VERIFIED/CLOSED,16 BLOCKED,0 READY,0 IN_PROGRESS. Canonical scope92 requirements/92 test plans;91 full product records remain BLOCKED/NOT_VERIFIED/NOT_ACCEPTED with full plans NOT_RUN plus bounded implementation evidence; one workflow documentation plan PASS.29 decisions:24 OPEN_DECISION and OD-04/10/11/12/14 APPROVED; inventory OD-09/21 and other bounded approvals do not close broader decisions. No18/18 authorization claim. Delivery phases accepted0/10; demos held0/7, accepted0/7. D0 historically prepared/document-only rehearsed; D1–D6 preparation outlines, D1 NOT_READY. No customer acceptance, schedule/staffing approval or production authority inferred.
 
 Historical S17 roll-up (superseded by the current roll-up above): Roll-ups (distinct measures): P0 preparation DOC_VERIFIED 5/8, readiness acceptance NOT_ACCEPTED; P1–P10 accepted 0/10; planning criteria 5/74 checked (documentation preparation only), 69 unchecked; canonical scope 92 requirements and 92 test plans, including 91 product records BLOCKED/NOT_VERIFIED/NOT_ACCEPTED with 91 tests NOT_RUN plus one workflow documentation record/test PASS; existing 28 tasks (three documentation VERIFIED/CLOSED, 25 BLOCKED) ; 29 OPEN_DECISION records, with OD-01 approved initial subset distinct; 18 authorization scenarios PLANNED. Demos held0/7, scopes accepted0/7. None is an overall effort percentage. No approved deferral, schedule, staffing or accepted phase inferred.
 
@@ -306,12 +306,12 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-VERIFY-001 synthetic manual review IN_PROGRESS<br/>Real IDs / OCR DISABLED; exact-source CI pending"]
+  G["CN-VERIFY-001 synthetic manual review VERIFIED<br/>Real IDs / OCR DISABLED; no next implementation authorized"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
-  P4["P4 Identity/bank<br/>Synthetic manual-review slice in verification<br/>0 of 8 full criteria; NOT_ACCEPTED"]
+  P4["P4 Identity/bank<br/>Synthetic manual review VERIFIED<br/>0 of 8 full criteria; NOT_ACCEPTED"]
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P7["P7 Access/hardware<br/>W13-14 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -677,7 +677,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-PKG-002 | P2 | CN-PKG-001 | VERIFIED / CLOSED |
 | CN-BOOK-001 | P3 | CN-ROOM-001 | VERIFIED / CLOSED |
 | CN-QUOTE-001 | P3 | CN-PKG-002, CN-BOOK-001 | VERIFIED / CLOSED |
-| CN-VERIFY-001 | P4 | CN-AUTH-001, CN-QUOTE-001 | IN_PROGRESS / READY |
+| CN-VERIFY-001 | P4 | CN-AUTH-001, CN-QUOTE-001 | VERIFIED / CLOSED |
 | CN-PAY-GW-001 | P5 | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
 | CN-PAY-BANK-001 | P4 | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
 | CN-PAY-BANK-002 | P4 | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
@@ -961,7 +961,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**Current change set: CN-VERIFY-001 IN_PROGRESS for approved synthetic manual review only.** Bounded OD-03/05 approved in place; broader production/physical/privacy gates remain OPEN. Exact-source CI and closure pending; no real ID/OCR/physical acceptance. Preserve unrelated next-env.d.ts and verify in isolation. After this change set, review CN-PAY-BANK-001 scope and its actual bank-policy gates; no second implementation authorized. D1 NOT_READY; no demonstration held/accepted.
+**CN-VERIFY-001 VERIFIED/CLOSED for synthetic manual review only.** Final source7f504e85d50084ccfcae3716cc2a6b771f83a1b9 exact CI39007098318 SUCCESS; [evidence](#verification-implementation). OD-03/05 bounded approvals retained; real ID/OCR/physical/provider/privacy gates remain separate. Preserve unrelated next-env.d.ts; untouched-live validator has only its two pre-existing failures, isolation/CI PASS. Next action: review CN-PAY-BANK-001 scope and OD-23/24/25/26/28/29. No next implementation authorized. D1 NOT_READY, no phase/demo acceptance.
 
 <a id="publication-implementation"></a>
 ## CN-PKG-002 implementation — 2026-10-16
@@ -1026,7 +1026,7 @@ V1–V6, tokens, dependencies/lock, reference images and diagrams unchanged. Ful
 Closure — 2026-10-17: [exact-source CI38949110859](https://github.com/Hasitha3513/Theater-Project/actions/runs/38949110859) SUCCESS at0933a577dafc75dc485f3d8262251184a5aad6f6; all27 owned source/test hashes match. Source pushed to origin/main and independently matched. CI includes backend/PostgreSQL/architecture/packaged startup, frontend build/type/lint/tests/online audit,14 launcher contracts, knowledge and whitespace. CN-QUOTE-001 VERIFIED/CLOSED only for approved synthetic quote snapshot/acceptance scope. Wider OD17/20/22/25 and full requirement/test acceptance remain open; real issuance/acceptance/checkout/payment/confirmation disabled. P3-C01 remains unchecked; P3 stays2/6 and overall13/74.11 tasks closed,17 blocked,zero READY/in progress;92 requirements/92 full plans preserved; no phase/demo held or accepted. CN-VERIFY-001 remains BLOCKED by OD-03/05 and its own scope/implementation authority; no automatic READY transition. Existing generated frontend/next-env.d.ts delta remains present/unpublished; untouched-live validator still reports exactly its two pre-existing integrity failures, while isolated checks and CI pass without weakening them. Final closure commit/remote/CI verified separately in conversation; no application bytes changed by this receipt. Stop after this change set.
 
 <a id="verification-implementation"></a>
-## CN-VERIFY-001 execution checkpoint — 2026-10-17
+## CN-VERIFY-001 synthetic manual review — VERIFIED/CLOSED
 
 Baseline main/origin/main069a3f3ec9e8713bbfa4d6e683ac8ff1747918f9 independently matched remotely. Eight prerequisite tasks VERIFIED/CLOSED; current V7, quotations synthetic-only. Owner attachment e2d7b00c-1b4f-440f-8088-8f14d876e033 matches the registered bounded task. OD-03/05 bounded approvals recorded; global real/physical/privacy decisions remain OPEN. Task reconciled READY then IN_PROGRESS for only the approved eight-table/ten-operation synthetic manual-review slice. Existing next-env.d.ts change remains untouched/unstaged; isolated validation required. No implementation, tests, CI or acceptance claimed by this checkpoint. P0–P10 and demonstrations unchanged.
 
@@ -1055,3 +1055,9 @@ Worker fencing local evidence PASS168 backend tests (14 Verification integration
 Final privacy-state review clears selected File references, upload progress and consent when protected case state is cleared, and clears the file on a new request generation. Browser regression selects an unsubmitted fixture, denies the refresh, restores the synthetic session and requires a new explicit file selection; no retained file can silently carry into another request/account presentation. Required checks rerun before publication.
 
 Latest complete ./Run-verify.sh --offline PASS on final app source:168 backend/62 frontend tests,14 launcher contracts, build/type/lint, packaged startup, PostgreSQL clean/upgrade/repeat, both knowledge validators and whitespace. Final21-group verification browser PASS includes selected-file clearing on denial/restored presentation and both-image/third-image controls; retained99 groups remain PASS on unchanged source. Six negative controls rerun against the final42-path source guard, all rejected correctly. No app changes remain planned; final source CI and documentation closure still pending.
+
+Closure — 2026-10-17: [exact final app-source CI39007098318](https://github.com/Hasitha3513/Theater-Project/actions/runs/39007098318) SUCCESS at7f504e85d50084ccfcae3716cc2a6b771f83a1b9; all42 owned application/test hashes match. Normal pushes independently matched origin/main. Includes168 backend/62 frontend tests, pinned real PostgreSQL18.6 cleanV1–V8/populatedV7–V8/repeat,8 architecture checks, packaged HTTP denial, online npm audit,14 launcher contracts and both knowledge/whitespace validators. Local browser120 groups at seven widths includes21 Verification groups and retained99 regressions; screenshots reviewed. Six final in-memory negative controls reject premature closure, lost approval, false full acceptance, unauthorized next READY, real processing and generated-file allowlist escape. One CI false-positive publication assertion failure is preserved above with its exact-field correction and successful successor receipts. No unreported failure omitted.
+
+CN-VERIFY-001 VERIFIED/CLOSED only for the approved synthetic manual-review DoD: eight V8 tables, ten operations, private encrypted namespaced evidence, current scoped human review, history/resubmission, positive configured test deadlines and retryable cleanup/attempt fencing. Real IDs/OCR/commercial booking/payment/physical admission remain disabled or outside scope. Full92 requirements/92 plans and18 authorization scenarios not promoted; production privacy/provider/region/real retention, all-guest originals/staffing/physical acceptance remain open. P4-C01/C02/C03 retain partial evidence and unchecked full criteria; P4 stays0/8, no phase acceptance.
+
+Current MVP: P0 6/8;P1 2/6;P2 3/6;P3 2/6;P4 0/8;P5 0/6;P6 0/6;P7 0/6;P8 0/7;P9 0/8;P10 0/7;13/74.12 tasks VERIFIED/CLOSED,16 BLOCKED,0 READY/IN_PROGRESS of28;92 requirements/92 full test plans. Accepted phases0/10; demos0held/0accepted of7. D0 historical design preparation/document-only rehearsal; D1 NOT_READY; D2–D6 outlines only. Next: CN-PAY-BANK-001 bounded scope and OD-23/24/25/26/28/29 review, no implementation. Unrelated next-env.d.ts bytes remain untouched/unpublished. Rollback disables commands first, retainsV8/decisions/audit/outstanding work and uses history-preserving code revert; cleanup/reconciliation remains required, no destructive down migration. Final knowledge-only receipt SHA/remote tip/CI verified separately in conversation; no application change in closure. STOP.
