@@ -285,6 +285,14 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
+      },
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
       }
     },
     {
@@ -1646,7 +1654,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      }
     },
     {
       "id": "CN-A13",
@@ -1704,7 +1720,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      }
     },
     {
       "id": "CN-NFR-01",
@@ -1937,6 +1961,14 @@
           "frontend/tests/verification-browser.mjs"
         ],
         "deferred": "Real-person/OCR/physical all-guest admission, production privacy/providers/retention and full authorization scenarios remain unverified"
+      },
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
       }
     },
     {
@@ -3657,7 +3689,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      }
     },
     {
       "id": "BP-AC05",
@@ -3748,7 +3788,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      }
     },
     {
       "id": "BP-AC07",
@@ -3796,7 +3844,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      }
     },
     {
       "id": "BP-AC08",
@@ -3844,7 +3900,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      }
     },
     {
       "id": "BP-AC09",
@@ -3892,7 +3956,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      }
     },
     {
       "id": "BP-AC10",
@@ -3940,7 +4012,15 @@
         "OD-28",
         "OD-29",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bankRequestImplementationEvidence": {
+        "taskId": "CN-PAY-BANK-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      }
     },
     {
       "id": "BP-AC11",

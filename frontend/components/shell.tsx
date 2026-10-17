@@ -37,12 +37,14 @@ export function Navigation({
                 ["/admin/rooms", "Room configuration"],
                 ["/admin/inventory", "Inventory inspection"],
                 ["/admin/verification", "Synthetic verification review"],
+                ["/admin/bank", "Synthetic bank review"],
                 ["/admin/settings/packages", "Package drafts"],
 			]
 		: [
 				["/", "Home"],
                 ["/rooms", "Explore rooms"],
                 ["/verification", "Synthetic verification"],
+                ["/bank", "Synthetic bank request"],
 				["/account", "Account session"],
 				["/admin", "Admin shell preview"],
 			];

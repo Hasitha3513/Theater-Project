@@ -89,6 +89,9 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/verification/requests/*", "/api/admin/venues/*/verification/requests", "/api/admin/venues/*/verification/requests/*", "/api/admin/venues/*/verification/requests/*/evidence/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/verification/requests", "/api/verification/requests/*/uploads", "/api/verification/uploads/*/complete", "/api/verification/requests/*/resubmissions", "/api/admin/venues/*/verification/requests/*/decisions").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/verification/uploads/*/content").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bank/requests/*","/api/admin/venues/*/bank/requests","/api/admin/venues/*/bank/requests/*","/api/admin/venues/*/bank/requests/*/evidence/*").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bank/requests","/api/bank/requests/*/claims","/api/bank/requests/*/resubmissions","/api/bank/claims/*/uploads","/api/bank/uploads/*/complete","/api/admin/venues/*/bank/requests/*/decisions","/api/admin/venues/*/bank/requests/*/escalations").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/bank/uploads/*/content").authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request, response, failure) -> {

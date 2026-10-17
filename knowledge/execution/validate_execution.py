@@ -56,6 +56,59 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Owner-approved synthetic bank successor: validate current deltas before checking all
+    # immutable historical receipts against their original source. No prior guard is removed.
+    bank_base='f257460b156249b377c87a007480f039e542f986'
+    bank_evidence=state.get('bankRequestImplementation',{})
+    bank_owned=bank_evidence.get('ownedFiles',{})
+    bank_ci=bank_evidence.get('remoteCI')=='SUCCESS'
+    bank_status='VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST' if bank_ci else 'LOCAL_VERIFIED_CI_PENDING'
+    check(bank_evidence.get('status')==bank_status,'Bank verification state unsupported')
+    check(bank_evidence.get('baselineHead')==bank_base and bank_evidence.get('authorizationRequestSha256')=='22fb4107bb4cc126cbc9a658a7a8a121df0f6d5acd15a269366463464824a407','Bank owner provenance changed')
+    check(set(bank_owned)=={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/test/java/com/cinenest/payments/internal/SyntheticEvidenceTest.java', 'frontend/app/bank/page.tsx', 'backend/src/main/java/com/cinenest/payments/internal/EncryptedEvidenceStore.java', 'backend/src/main/java/com/cinenest/payments/internal/ReviewerNotice.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/route.ts', 'frontend/lib/bank.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/decisions/route.ts', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/route.ts', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'frontend/app/globals.css', 'frontend/app/api/bank/requests/[id]/resubmissions/route.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/escalations/route.ts', 'backend/src/main/java/com/cinenest/verification/BankEligibility.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/evidence/[evidenceId]/route.ts', 'frontend/app/api/bank/requests/[id]/claims/route.ts', 'frontend/tests/bank.test.mjs', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticEvidenceProcessor.java', 'frontend/app/api/bank/uploads/[id]/complete/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/BankController.java', 'frontend/app/admin/bank/page.tsx', 'frontend/app/api/bank/requests/[id]/route.ts', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticFixtures.java', 'backend/src/main/java/com/cinenest/payments/package-info.java', 'backend/src/main/java/com/cinenest/payments/internal/BankFailure.java', 'backend/src/main/java/com/cinenest/payments/internal/DisabledReviewerNotice.java', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/booking/internal/BankRequestHoldAdapter.java', 'backend/src/main/java/com/cinenest/payments/internal/BankRepository.java', 'backend/src/main/java/com/cinenest/pricing/internal/BankQuotationAdapter.java', 'frontend/app/api/bank/requests/route.ts', 'frontend/app/api/bank/uploads/[id]/content/route.ts', 'frontend/components/bank.tsx', 'backend/src/test/java/com/cinenest/payments/internal/BankFaults.java', 'frontend/app/api/bank/claims/[id]/uploads/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java', 'backend/src/main/java/com/cinenest/payments/internal/JdbcBankRepository.java', 'backend/src/main/java/com/cinenest/pricing/BankQuotation.java', 'backend/src/main/resources/db/migration/V9__synthetic_bank_requests.sql', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/payments/internal/BankWorker.java', 'frontend/tests/bank-browser.mjs', 'backend/src/main/java/com/cinenest/payments/internal/BankPolicy.java', 'backend/src/main/java/com/cinenest/verification/internal/BankEligibilityAdapter.java', 'backend/src/main/java/com/cinenest/booking/BankRequestHolds.java', 'frontend/package.json', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'backend/src/main/java/com/cinenest/payments/internal/PrivateEvidenceStore.java'} and 'frontend/next-env.d.ts' not in bank_owned,'Bank source inventory exceeds owner scope')
+    baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',bank_base,'--','backend','frontend'],text=True).splitlines())
+    current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    check(current_app==baseline_app|set(bank_owned),'Bank introduced unreviewed application files or removed retained sources')
+    for name,digest in bank_owned.items():
+        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Bank source mismatch '+name)
+    for migration in (R/'backend/src/main/resources/db/migration').glob('V[1-8]__*.sql'):
+        check(migration.read_bytes()==subprocess.check_output(['git','-C',str(R),'show',bank_base+':'+migration.relative_to(R).as_posix()]),'Bank changed historical migration '+migration.name)
+    for field,value in {'realPayments':'DISABLED','creditVerification':'NOT_IMPLEMENTED','allocation':'NOT_IMPLEMENTED','bookingConfirmation':'NOT_IMPLEMENTED','liveDelivery':'DISABLED','d2':'NOT_READY'}.items():check(bank_evidence.get(field)==value,'Bank safety boundary changed '+field)
+    def bank_source(name):
+        if name in bank_owned:
+            exists=subprocess.run(['git','-C',str(R),'cat-file','-e',bank_base+':'+name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
+            if exists:return subprocess.check_output(['git','-C',str(R),'show',bank_base+':'+name])
+        return (R/name).read_bytes()
+    def bank_original_payload(payload,path):
+        original=json.loads(subprocess.check_output(['git','-C',str(R),'show',bank_base+':knowledge/'+path],text=True))
+        key={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
+        prior={r['id']:r for r in original[key]}
+        check(set(prior)=={r['id'] for r in payload[key]},'Bank stable IDs changed '+path)
+        normalized=json.loads(json.dumps(payload))
+        for row in normalized[key]:
+            old=prior[row['id']]
+            if key=='changeSets' and row['id']=='CN-PAY-BANK-001':
+                check(hashlib.sha256(json.dumps({k:v for k,v in row.items() if k not in {'workStatus','readiness','implementationEvidence'}},sort_keys=True).encode()).hexdigest()=='45744033a22addd238cc09c790aca79dcc72a361d04f7abcbd82968eb5f97146','Bank exact approved scope/history changed')
+                check(row.get('historicalPreApproval')==old and row.get('dependencies')==old['dependencies'],'Bank dependency/history changed')
+                check(row.get('authorityAvailable') is True and row.get('blockingDecisionIds')==[] and row.get('resolvedDecisionIds')==['OD-23','OD-24','OD-25','OD-26','OD-28','OD-29'],'Bank approval gates missing')
+                check(row.get('implementationEvidence')=={'status':bank_status,'evidencePath':'PROGRESS.md#bank-request-implementation','fullRequirementAcceptance':'NOT_ACCEPTED'},'Bank implementation evidence overstated')
+                check(row.get('scopeApproval')=={'status': 'APPROVED_BOUNDED_SYNTHETIC_IMPLEMENTATION', 'approvalSource': 'Owner instruction and attachment aef4fd7c-aef4-4391-8fb1-812b64a05b2a', 'canonicalSpecification': 'ARCHITECTURE.md#bank-request-boundary', 'realPayments': 'DISABLED'},'Bank approved scope changed')
+                check(row.get('workStatus')==('VERIFIED' if bank_ci else 'IN_PROGRESS') and row.get('readiness')==('CLOSED' if bank_ci else 'READY'),'Bank premature closure')
+                for field in ['objective','inScope','outOfScope','requirementIds','definitionOfDone','requiredApproval']:check(row.get(field)==old[field],'Bank original scope changed '+field)
+                row.clear();row.update(old)
+            elif key=='decisions' and row['id'] in {'OD-23','OD-24','OD-25','OD-26','OD-28','OD-29'}:
+                check(row.pop('boundedBankRequestApproval',None)=={'taskId': 'CN-PAY-BANK-001', 'status': 'APPROVED_BOUNDED_SYNTHETIC_POLICY', 'dateLocal': '2026-10-17', 'approvalSource': 'Owner instruction and attachment aef4fd7c-aef4-4391-8fb1-812b64a05b2a', 'requestSha256': '22fb4107bb4cc126cbc9a658a7a8a121df0f6d5acd15a269366463464824a407', 'scope': 'Synthetic-only bank requests/private receipts/durable scoped review; explicit configured timing and retention, zero CineNest-added synthetic BANK fee, no real funds/credit/allocation/confirmation/refunds/live delivery. Exact approved specification in ARCHITECTURE.md#bank-request-boundary.', 'fullDecisionStatus': 'OPEN_DECISION'},'Bank policy approval changed '+row['id'])
+            elif key in {'requirements','tests'} and row['id'].removeprefix('T-') in {'BP-AC09', 'PR-BANK-001', 'CN-A13', 'BP-AC08', 'BP-AC07', 'CN-C10', 'CN-NFR-02', 'BP-AC06', 'BP-AC04', 'BP-AC10'}:
+                check(row.pop('bankRequestImplementationEvidence',None)=={'taskId': 'CN-PAY-BANK-001', 'status': bank_status, 'evidencePath': 'PROGRESS.md#bank-request-implementation', 'fullRequirementVerified': False, 'fullRequirementAcceptance': 'NOT_ACCEPTED', 'deferred': 'Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented'},'Bank subset evidence changed '+row['id'])
+            check(row==old,'Bank unauthorized registry delta '+path+'/'+row['id'])
+        return normalized
+    for field,value in {'backendTests':197,'bankIntegrationTests':18,'bankDomainTests':10,'architectureTests':9,'frontendTests':68,'bankFrontendTests':6,'browserGroups':155,'bankBrowserGroups':35,'launcherTests':14,'failures':0,'errors':0,'skipped':0,'negativeControls':7,'allRequiredChecks':'PASS'}.items():check(bank_evidence.get('checks',{}).get(field)==value,'Bank required check missing '+field)
+    if bank_ci:
+        receipt=bank_evidence.get('ciReceipt',{});sha=receipt.get('headSha','')
+        check(receipt.get('conclusion')=='success' and re.fullmatch('[0-9a-f]{40}',sha) is not None and isinstance(receipt.get('runId'),int),'Bank exact-source CI missing')
+        if re.fullmatch('[0-9a-f]{40}',sha):
+            for name,digest in bank_owned.items():check(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',sha+':'+name])).hexdigest()==digest,'Bank CI/source mismatch '+name)
+        check(bank_evidence.get('checks',{}).get('allRequiredChecks')=='PASS','Bank closure lacks required checks')
     # Owner-authorized CN-VERIFY-001 successor. Every delta is checked before reconstructing
     # earlier immutable receipts; generated owner files and global acceptance remain protected.
     verification_base='069a3f3ec9e8713bbfa4d6e683ac8ff1747918f9'
@@ -66,7 +119,7 @@ def main():
     check(set(verification_owned)=={'backend/src/main/java/com/cinenest/verification/internal/SyntheticEvidenceProcessor.java', 'backend/src/main/java/com/cinenest/verification/internal/VerificationFailure.java', 'backend/src/main/java/com/cinenest/pricing/VerificationQuotation.java', 'frontend/app/api/verification/requests/[id]/uploads/route.ts', 'frontend/app/api/admin/venues/[venueId]/verification/requests/[id]/route.ts', 'backend/src/main/java/com/cinenest/verification/package-info.java', 'backend/src/main/java/com/cinenest/verification/internal/PrivateEvidenceStore.java', 'backend/src/main/java/com/cinenest/verification/internal/JdbcVerificationRepository.java', 'frontend/lib/verification-backend.ts', 'backend/src/main/java/com/cinenest/verification/internal/VerificationController.java', 'backend/src/test/java/com/cinenest/PublicationIntegrationTest.java', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'frontend/app/api/verification/uploads/[id]/content/route.ts', 'backend/src/main/java/com/cinenest/verification/internal/VerificationWorker.java', 'backend/src/main/java/com/cinenest/pricing/internal/VerificationQuotationAdapter.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/java/com/cinenest/verification/internal/VerificationRepository.java', 'backend/src/test/java/com/cinenest/QuoteIntegrationTest.java', 'frontend/app/admin/verification/page.tsx', 'frontend/app/api/verification/requests/route.ts', 'frontend/app/api/verification/uploads/[id]/complete/route.ts', 'frontend/tests/verification.test.mjs', 'backend/src/test/java/com/cinenest/verification/internal/VerificationFaults.java', 'backend/src/main/java/com/cinenest/verification/internal/VerificationService.java', 'frontend/package.json', 'frontend/app/verification/page.tsx', 'backend/src/main/java/com/cinenest/verification/internal/EncryptedEvidenceStore.java', 'frontend/app/api/admin/venues/[venueId]/verification/requests/[id]/decisions/route.ts', 'frontend/app/api/admin/venues/[venueId]/verification/requests/[id]/evidence/[evidenceId]/route.ts', 'backend/src/main/java/com/cinenest/verification/internal/VerificationPolicy.java', 'frontend/lib/verification.ts', 'frontend/app/api/verification/requests/[id]/route.ts', 'frontend/app/api/verification/requests/[id]/resubmissions/route.ts', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/resources/db/migration/V8__synthetic_verification.sql', 'frontend/components/verification.tsx', 'backend/src/test/java/com/cinenest/verification/internal/SyntheticEvidenceTest.java', 'backend/src/main/java/com/cinenest/verification/internal/SyntheticFixtures.java', 'frontend/app/api/admin/venues/[venueId]/verification/requests/route.ts', 'frontend/tests/verification-browser.mjs', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java'},'Verification source inventory exceeds approved slice')
     check('frontend/next-env.d.ts' not in verification_owned,'Generated owner change cannot enter verification allowlist')
     for name,digest in verification_owned.items():
-        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Verification source mismatch '+name)
+        check((R/name).is_file() and hashlib.sha256(bank_source(name)).hexdigest()==digest,'Verification source mismatch '+name)
     verification_task=next(c for c in backlog['changeSets'] if c['id']=='CN-VERIFY-001')
     check(hashlib.sha256(json.dumps({k:v for k,v in verification_task.items() if k not in {'workStatus','readiness','implementationEvidence'}},sort_keys=True).encode()).hexdigest()=='15f3b66bbf74133c2902e305d3f7378376234ad43975d5f4558e2c6402ecd648','Verification owner scope/history changed')
     check(verification_evidence.get('scopeApproval')==verification_task.get('scopeApproval') and verification_evidence.get('status')==verification_status,'Verification evidence/scope mismatch')
@@ -83,10 +136,11 @@ def main():
             for name,digest in verification_owned.items():
                 check(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',sha+':'+name])).hexdigest()==digest,'Verification CI/current source mismatch '+name)
     def verification_source(name):
-        return subprocess.check_output(['git','-C',str(R),'show',verification_base+':'+name]) if name in verification_owned else (R/name).read_bytes()
+        return subprocess.check_output(['git','-C',str(R),'show',verification_base+':'+name]) if name in verification_owned else bank_source(name)
     verification_subset={'taskId': 'CN-VERIFY-001', 'status': 'LOCAL_VERIFIED_CI_PENDING', 'evidencePath': 'PROGRESS.md#verification-implementation', 'fullRequirementVerified': False, 'fullRequirementAcceptance': 'NOT_ACCEPTED', 'actualTestPaths': ['backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'backend/src/test/java/com/cinenest/verification/internal/SyntheticEvidenceTest.java', 'frontend/tests/verification.test.mjs', 'frontend/tests/verification-browser.mjs'], 'deferred': 'Real-person/OCR/physical all-guest admission, production privacy/providers/retention and full authorization scenarios remain unverified'}
     verification_subset['status']=verification_status
     def verification_original_payload(payload,path):
+        payload=bank_original_payload(payload,path)
         original=json.loads(subprocess.check_output(['git','-C',str(R),'show',verification_base+':knowledge/'+path],text=True))
         kind={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
         before={row['id']:row for row in original[kind]}
@@ -528,6 +582,8 @@ def main():
             check(c['authorityAvailable'] is True and c['workStatus']==('VERIFIED' if verification_ci else 'IN_PROGRESS') and c['readiness']==('CLOSED' if verification_ci else 'READY'),'Verification state exceeds scoped evidence')
         elif c['id']=='CN-QUOTE-001':
             check(c['authorityAvailable'] is True and c['workStatus']==('VERIFIED' if quote_ci else 'IN_PROGRESS') and c['readiness']==('CLOSED' if quote_ci else 'READY'),'Quotation state exceeds scoped evidence')
+        elif c['id']=='CN-PAY-BANK-001':
+            check(c['authorityAvailable'] is True and c['workStatus']==('VERIFIED' if bank_ci else 'IN_PROGRESS') and c['readiness']==('CLOSED' if bank_ci else 'READY'),'Bank task state unsupported')
         elif c['id'] != 'CN-AGENT-SETUP-001':
             check(c['authorityAvailable'] is False and c['readiness'] == c['workStatus'] == 'BLOCKED', f'Unauthorized future work ready {c["id"]}')
     visiting = set(); done = set(); cmap = {c['id']: c for c in changes}
@@ -577,10 +633,10 @@ def main():
         else:
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
-    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == ([] if verification_ci else ['CN-VERIFY-001']), 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-VERIFY-001' and state['nextRecommendedChangeSet'] == 'CN-PAY-BANK-001' and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
-    check(state['workStatus'] == ('VERIFIED' if verification_ci else 'IN_PROGRESS') and cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
-    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_SYNTHETIC_CN_VERIFY_001_ONLY', 'Unsupported stack/implementation approval')
+    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == ([] if bank_ci else ['CN-PAY-BANK-001']), 'Unsupported READY plan')
+    check(state['taskId'] == 'CN-PAY-BANK-001' and state['nextRecommendedChangeSet'] == 'CN-PAY-BANK-002' and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
+    check(state['workStatus'] == ('VERIFIED' if bank_ci else 'IN_PROGRESS') and cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
+    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_SYNTHETIC_BANK_REQUEST_ONLY', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
     brief = K / 'ARCHITECTURE.md'
@@ -601,6 +657,8 @@ def main():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
                     expected_status = 'APPROVED' if id in {'OD-04','OD-10','OD-11','OD-12','OD-14'} and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    if id=='CN-PAY-BANK-001':
+                        expected_status={'workStatus':'VERIFIED' if bank_ci else 'IN_PROGRESS','authorityAvailable':True,'readiness':'CLOSED' if bank_ci else 'READY'}.get(key,expected_status)
                     if id=='CN-VERIFY-001':
                         expected_status={'workStatus':'VERIFIED' if verification_ci else 'IN_PROGRESS','authorityAvailable':True,'readiness':'CLOSED' if verification_ci else 'READY'}.get(key,expected_status)
                     if id=='CN-QUOTE-001':

@@ -862,7 +862,66 @@
         "CN-QUOTE-001",
         "CN-VERIFY-001"
       ],
-      "blockingDecisionIds": [
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Payments plus public Pricing/Booking/Verification/Identity interfaces; bounded customer/reviewer frontend",
+      "dbApiUiImpact": "Approved V9 nine tables; twelve bounded API operations; synthetic customer/reviewer UI; owner ports only",
+      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+      "migrationNeeds": "Approved additive V9; V1-V8 preserved; no down migration",
+      "plannedChecks": "Own/scoped upload/version/expiry/quarantine/failed notification tests",
+      "rollback": "Disable new bank requests/uploads/review commands before normal code revert; retain V9, request/claim/evidence/review/audit history and pending cleanup/reconciliation. No destructive down migration or genuine financial evidence deletion.",
+      "definitionOfDone": "Claim is under review, queue survives delivery failure, quotes protected",
+      "requiredApproval": "Slice + approved review/timing/fee/privacy/account/staffing controls",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "ARCHITECTURE.md#bank-request-boundary",
+        "PROGRESS.md#bank-request-implementation"
+      ],
+      "historicalPreApproval": {
+        "id": "CN-PAY-BANK-001",
+        "phase": 5,
+        "priority": "P1",
+        "objective": "Bank request/receipt and durable reviewer work",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-C10",
+          "CN-A13",
+          "BP-AC04",
+          "BP-AC06",
+          "BP-AC07",
+          "BP-AC08",
+          "BP-AC09",
+          "BP-AC10"
+        ],
+        "inScope": "One method request/shared durable hold/private receipt/status/notification queue slice",
+        "outOfScope": "No real receiving account/credit verification or indefinite review hold",
+        "dependencies": [
+          "CN-QUOTE-001",
+          "CN-VERIFY-001"
+        ],
+        "blockingDecisionIds": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-28",
+          "OD-29"
+        ],
+        "affectedFilesModules": "Payments/Booking/Notifications/customer/review UI TBD",
+        "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+        "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+        "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+        "plannedChecks": "Own/scoped upload/version/expiry/quarantine/failed notification tests",
+        "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+        "definitionOfDone": "Claim is under review, queue survives delivery failure, quotes protected",
+        "requiredApproval": "Slice + approved review/timing/fee/privacy/account/staffing controls",
+        "authorityAvailable": false,
+        "readiness": "BLOCKED",
+        "workStatus": "BLOCKED",
+        "evidencePaths": []
+      },
+      "resolvedDecisionIds": [
         "OD-23",
         "OD-24",
         "OD-25",
@@ -870,18 +929,17 @@
         "OD-28",
         "OD-29"
       ],
-      "affectedFilesModules": "Payments/Booking/Notifications/customer/review UI TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
-      "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
-      "plannedChecks": "Own/scoped upload/version/expiry/quarantine/failed notification tests",
-      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
-      "definitionOfDone": "Claim is under review, queue survives delivery failure, quotes protected",
-      "requiredApproval": "Slice + approved review/timing/fee/privacy/account/staffing controls",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "scopeApproval": {
+        "status": "APPROVED_BOUNDED_SYNTHETIC_IMPLEMENTATION",
+        "approvalSource": "Owner instruction and attachment aef4fd7c-aef4-4391-8fb1-812b64a05b2a",
+        "canonicalSpecification": "ARCHITECTURE.md#bank-request-boundary",
+        "realPayments": "DISABLED"
+      },
+      "implementationEvidence": {
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#bank-request-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-PAY-BANK-002",
