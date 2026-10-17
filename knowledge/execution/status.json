@@ -2376,7 +2376,8 @@
       "frontend/lib/verification.ts": "7b3883ee6e979eb6eda8b405ecac0fdb18afb7b68e211487973e294858b3d7ed",
       "frontend/package.json": "42703abfd1f6e94260f8797959a78c4f7d197418683bf54173d9b37c8673b100",
       "frontend/tests/verification-browser.mjs": "ee3ff586184143484bf1b6a358333a50465452b86c4ac346d5d02bc7ae2ba9f7",
-      "frontend/tests/verification.test.mjs": "066970f76e57307553b4d0ffb8c7de36ade288cf208607e451aa366b2a47b5b3"
+      "frontend/tests/verification.test.mjs": "066970f76e57307553b4d0ffb8c7de36ade288cf208607e451aa366b2a47b5b3",
+      "backend/src/test/java/com/cinenest/PublicationIntegrationTest.java": "3d994857e1f6f4f1a54a7feff7c946a8ebe749a0a5e8d9849f2bc59ac3e37283"
     },
     "remoteCI": "PENDING",
     "realIdentityProcessing": "DISABLED",
@@ -2417,6 +2418,21 @@
       "result": "PASS",
       "method": "In-memory Path.read_text fault injection; no file mutations",
       "rejected": 6
-    }
+    },
+    "ciHistory": [
+      {
+        "runId": 39005809283,
+        "headSha": "94842872486df102b4b2cdef873f2121d84a3626",
+        "conclusion": "success",
+        "scope": "Initial source; superseded by cleanup correction"
+      },
+      {
+        "runId": 39006059554,
+        "headSha": "e64e1c2b1d870c26e3cd6ec50c503d32d32e8cd8",
+        "conclusion": "failure",
+        "finding": "Pre-existing publication assertion searched whole JSON for999; random command UUID matched, actual immutable unitPriceMinor remained123",
+        "disposition": "Compare parsed snapshot base price and exact included rate; no production pricing change"
+      }
+    ]
   }
 }

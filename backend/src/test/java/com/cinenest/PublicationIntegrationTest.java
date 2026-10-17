@@ -154,7 +154,10 @@ class PublicationIntegrationTest {
         assertThat(publicResponse.statusCode()).isEqualTo(200);assertThat(publicResponse.body()).contains("12345","INDICATIVE","\"purchasable\":false","\"additionalChargeMinor\":\"0\"").doesNotContain("publisherId","authorId","reason","policyRefs","idempotencyKey");
         assertThat(write(pub,"POST",path(pkg)+"/publications",JSONObjectUtils.toJSONString(body)).body()).isEqualTo(JSONObjectUtils.toJSONString(d));
         var version=UUID.fromString(d.get("versionId").toString());assertThatThrownBy(()->jdbc.sql("UPDATE cinenest_pricing.package_version SET snapshot='{}' WHERE version_id=:id").param("id",version).update()).isInstanceOf(org.springframework.dao.DataAccessException.class);
-        jdbc.sql("INSERT INTO cinenest_pricing.service_rate_version(rate_version_id,service_id,revision,currency,unit_price_minor,pricing_basis) VALUES(:id,:s,2,'LKR',999,'PER_SESSION')").param("id",UUID.randomUUID()).param("s",SERVICE).update();assertThat(pub.get(path(pkg)+"/publications").body()).contains("12345","123").doesNotContain("999");
+        jdbc.sql("INSERT INTO cinenest_pricing.service_rate_version(rate_version_id,service_id,revision,currency,unit_price_minor,pricing_basis) VALUES(:id,:s,2,'LKR',999,'PER_SESSION')").param("id",UUID.randomUUID()).param("s",SERVICE).update();var retained=pub.get(path(pkg)+"/publications");assertThat(retained.statusCode()).isEqualTo(200);
+        var items=(java.util.List<?>)JSONObjectUtils.parse(retained.body()).get("items");assertThat(items).hasSize(1);
+        var snapshot=(Map<?,?>)((Map<?,?>)items.getFirst()).get("snapshot");assertThat(snapshot.get("basePriceMinor")).isEqualTo("12345");
+        var options=(java.util.List<?>)snapshot.get("options");assertThat(options).hasSize(1);assertThat(((Map<?,?>)options.getFirst()).get("unitPriceMinor")).isEqualTo("123");
     }
     @Test void editorCannotPublishAndPublisherCannotEditOrSelfPublish()throws Exception {
         var editor=signedIn("staff");UUID pkg=setup(editor);assertThat(write(editor,"POST",path(pkg)+"/publication-preview",JSONObjectUtils.toJSONString(request(false))).statusCode()).isEqualTo(403);
