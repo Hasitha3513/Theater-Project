@@ -1,0 +1,160 @@
+// Dedicated bounded binary transport. Existing JSON adapters remain unchanged.
+const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+export function verificationRoute(path: string, method: string) {
+	if (path === "/api/verification/requests") return method === "POST";
+	if (new RegExp(`^/api/verification/requests/${uuid}$`).test(path))
+		return method === "GET";
+	if (
+		new RegExp(
+			`^/api/verification/requests/${uuid}/(uploads|resubmissions)$`,
+		).test(path)
+	)
+		return method === "POST";
+	if (new RegExp(`^/api/verification/uploads/${uuid}/content$`).test(path))
+		return method === "PUT";
+	if (new RegExp(`^/api/verification/uploads/${uuid}/complete$`).test(path))
+		return method === "POST";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/verification/requests(/${uuid}(/evidence/${uuid})?)?$`,
+		).test(path)
+	)
+		return method === "GET";
+	return (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/verification/requests/${uuid}/decisions$`,
+		).test(path) && method === "POST"
+	);
+}
+async function bounded(
+	stream: ReadableStream<Uint8Array> | null,
+	limit: number,
+) {
+	const reader = stream?.getReader();
+	if (!reader) return new Uint8Array();
+	const parts: Uint8Array[] = [];
+	let total = 0;
+	try {
+		for (;;) {
+			const part = await reader.read();
+			if (part.done) break;
+			total += part.value.length;
+			if (total > limit) {
+				await reader.cancel();
+				throw new RangeError("Too large");
+			}
+			parts.push(part.value);
+		}
+	} finally {
+		reader.releaseLock();
+	}
+	const bytes = new Uint8Array(total);
+	let at = 0;
+	for (const part of parts) {
+		bytes.set(part, at);
+		at += part.length;
+	}
+	return bytes;
+}
+export async function forwardVerification(request: Request): Promise<Response> {
+	const headers = new Headers({
+		"Cache-Control": "no-store",
+		"X-Content-Type-Options": "nosniff",
+	});
+	try {
+		const url = new URL(request.url);
+		if (!verificationRoute(url.pathname, request.method) || url.search)
+			return new Response(null, { status: 404, headers });
+		const configured = process.env.CINENEST_AUTH_ORIGIN;
+		if (!configured) return new Response(null, { status: 503, headers });
+		const origin = new URL(configured);
+		if (
+			origin.username ||
+			origin.password ||
+			origin.pathname !== "/" ||
+			origin.search ||
+			origin.hash ||
+			!(
+				origin.protocol === "https:" ||
+				(origin.protocol === "http:" &&
+					["127.0.0.1", "localhost", "[::1]"].includes(origin.hostname))
+			)
+		)
+			return new Response(null, { status: 503, headers });
+		const upstream = new Headers();
+		const cookie = request.headers
+			.get("cookie")
+			?.split(";")
+			.map((v) => v.trim())
+			.find((v) => v.startsWith("CINENEST_SESSION="));
+		if (cookie) upstream.set("Cookie", cookie);
+		const binary = request.method === "PUT";
+		let body: Uint8Array | undefined;
+		if (request.method !== "GET") {
+			if (
+				request.headers.get("origin") !==
+					`${url.protocol}//${request.headers.get("host") ?? url.host}` ||
+				!request.headers.get("x-csrf-token")
+			)
+				return new Response(null, { status: 403, headers });
+			upstream.set("X-CSRF-TOKEN", request.headers.get("x-csrf-token") ?? "");
+			const content = request.headers.get("content-type") ?? "";
+			if (
+				binary
+					? !["image/png", "image/jpeg"].includes(content)
+					: !content.startsWith("application/json")
+			)
+				return new Response(null, { status: 415, headers });
+			upstream.set("Content-Type", binary ? content : "application/json");
+			body = await bounded(request.body, binary ? 5 * 1024 * 1024 : 65536);
+		}
+		const response = await fetch(new URL(url.pathname, origin), {
+			method: request.method,
+			headers: upstream,
+			body: body as BodyInit | undefined,
+			redirect: "manual",
+			cache: "no-store",
+			signal: AbortSignal.timeout(15000),
+		});
+		if (
+			![200, 201, 400, 401, 403, 404, 409, 413, 415, 429, 503].includes(
+				response.status,
+			)
+		)
+			return new Response(null, { status: 502, headers });
+		if (!response.ok)
+			return Response.json(
+				{
+					message:
+						response.status === 409
+							? "Verification changed or expired. Refresh current history before retrying."
+							: response.status === 413
+								? "Synthetic image exceeds 5 MiB."
+								: response.status === 415
+									? "Only approved synthetic JPEG/PNG fixtures are allowed."
+									: "Synthetic verification unavailable, invalid or denied.",
+				},
+				{ status: response.status, headers },
+			);
+		const preview = url.pathname.includes("/evidence/");
+		const bytes = await bounded(
+			response.body,
+			preview ? 5 * 1024 * 1024 : 256 * 1024,
+		);
+		if (preview) {
+			if (response.headers.get("content-type") !== "image/png")
+				throw new Error();
+			headers.set("Content-Type", "image/png");
+			headers.set("Content-Security-Policy", "default-src 'none'; sandbox");
+			return new Response(bytes, { headers });
+		}
+		return Response.json(JSON.parse(new TextDecoder().decode(bytes)), {
+			headers,
+		});
+	} catch (error) {
+		return new Response(null, {
+			status: error instanceof RangeError ? 413 : 502,
+			headers,
+		});
+	}
+}

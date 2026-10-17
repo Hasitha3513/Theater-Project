@@ -277,7 +277,21 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "verificationImplementationEvidence": {
+        "taskId": "CN-VERIFY-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#verification-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/VerificationIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/verification/internal/SyntheticEvidenceTest.java",
+          "frontend/tests/verification.test.mjs",
+          "frontend/tests/verification-browser.mjs"
+        ],
+        "deferred": "Real-person/OCR/physical all-guest admission, production privacy/providers/retention and full authorization scenarios remain unverified"
+      }
     },
     {
       "id": "T-CN-C06",
@@ -496,6 +510,20 @@
         "evidencePath": "PROGRESS.md#auth-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "verificationImplementationEvidence": {
+        "taskId": "CN-VERIFY-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#verification-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/VerificationIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/verification/internal/SyntheticEvidenceTest.java",
+          "frontend/tests/verification.test.mjs",
+          "frontend/tests/verification-browser.mjs"
+        ],
+        "deferred": "Real-person/OCR/physical all-guest admission, production privacy/providers/retention and full authorization scenarios remain unverified"
       }
     },
     {
@@ -832,6 +860,20 @@
           "frontend/tests/quotes-browser.mjs"
         ],
         "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      },
+      "verificationImplementationEvidence": {
+        "taskId": "CN-VERIFY-001",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#verification-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/VerificationIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/verification/internal/SyntheticEvidenceTest.java",
+          "frontend/tests/verification.test.mjs",
+          "frontend/tests/verification-browser.mjs"
+        ],
+        "deferred": "Real-person/OCR/physical all-guest admission, production privacy/providers/retention and full authorization scenarios remain unverified"
       }
     },
     {

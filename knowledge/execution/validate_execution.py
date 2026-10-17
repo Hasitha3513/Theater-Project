@@ -56,6 +56,55 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Owner-authorized CN-VERIFY-001 successor. Every delta is checked before reconstructing
+    # earlier immutable receipts; generated owner files and global acceptance remain protected.
+    verification_base='069a3f3ec9e8713bbfa4d6e683ac8ff1747918f9'
+    verification_evidence=state.get('verificationImplementation',{})
+    verification_owned=verification_evidence.get('ownedFiles',{})
+    verification_ci=verification_evidence.get('remoteCI')=='SUCCESS'
+    verification_status='VERIFIED_BOUNDED_SYNTHETIC_VERIFICATION' if verification_ci else 'LOCAL_VERIFIED_CI_PENDING'
+    check(set(verification_owned)=={'frontend/app/api/admin/venues/[venueId]/verification/requests/[id]/decisions/route.ts', 'backend/src/test/java/com/cinenest/verification/internal/SyntheticEvidenceTest.java', 'frontend/tests/verification-browser.mjs', 'frontend/lib/verification.ts', 'backend/src/main/java/com/cinenest/pricing/internal/VerificationQuotationAdapter.java', 'backend/src/test/java/com/cinenest/QuoteIntegrationTest.java', 'frontend/app/api/verification/requests/[id]/route.ts', 'frontend/components/verification.tsx', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'frontend/app/api/admin/venues/[venueId]/verification/requests/route.ts', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/main/java/com/cinenest/verification/internal/VerificationController.java', 'backend/src/main/java/com/cinenest/verification/internal/VerificationPolicy.java', 'frontend/lib/verification-backend.ts', 'backend/src/main/java/com/cinenest/verification/internal/PrivateEvidenceStore.java', 'backend/src/main/java/com/cinenest/verification/internal/SyntheticEvidenceProcessor.java', 'frontend/app/verification/page.tsx', 'frontend/app/admin/verification/page.tsx', 'frontend/app/api/verification/uploads/[id]/content/route.ts', 'backend/src/main/java/com/cinenest/verification/internal/VerificationService.java', 'backend/src/main/java/com/cinenest/verification/internal/JdbcVerificationRepository.java', 'frontend/app/api/verification/requests/route.ts', 'backend/src/main/resources/db/migration/V8__synthetic_verification.sql', 'backend/src/main/java/com/cinenest/pricing/VerificationQuotation.java', 'backend/src/test/java/com/cinenest/verification/internal/VerificationFaults.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/verification/package-info.java', 'frontend/app/api/admin/venues/[venueId]/verification/requests/[id]/route.ts', 'backend/src/main/java/com/cinenest/verification/internal/VerificationRepository.java', 'backend/src/main/java/com/cinenest/verification/internal/VerificationFailure.java', 'backend/src/main/java/com/cinenest/verification/internal/VerificationWorker.java', 'frontend/app/api/verification/requests/[id]/uploads/route.ts', 'frontend/package.json', 'frontend/tests/verification.test.mjs', 'backend/src/main/java/com/cinenest/verification/internal/SyntheticFixtures.java', 'frontend/app/api/verification/requests/[id]/resubmissions/route.ts', 'backend/src/main/java/com/cinenest/verification/internal/EncryptedEvidenceStore.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'frontend/components/shell.tsx', 'frontend/app/api/admin/venues/[venueId]/verification/requests/[id]/evidence/[evidenceId]/route.ts', 'frontend/app/api/verification/uploads/[id]/complete/route.ts'},'Verification source inventory exceeds approved slice')
+    check('frontend/next-env.d.ts' not in verification_owned,'Generated owner change cannot enter verification allowlist')
+    for name,digest in verification_owned.items():
+        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Verification source mismatch '+name)
+    verification_task=next(c for c in backlog['changeSets'] if c['id']=='CN-VERIFY-001')
+    check(hashlib.sha256(json.dumps({k:v for k,v in verification_task.items() if k not in {'workStatus','readiness','implementationEvidence'}},sort_keys=True).encode()).hexdigest()=='15f3b66bbf74133c2902e305d3f7378376234ad43975d5f4558e2c6402ecd648','Verification owner scope/history changed')
+    check(verification_evidence.get('scopeApproval')==verification_task.get('scopeApproval') and verification_evidence.get('status')==verification_status,'Verification evidence/scope mismatch')
+    check(verification_evidence.get('realIdentityProcessing')=='DISABLED' and verification_evidence.get('ocr')=='DISABLED' and verification_evidence.get('physicalAdmission')=='NOT_APPROVED' and verification_evidence.get('d1')=='NOT_READY','Synthetic-only boundary exceeded')
+    for key,value in {'backendTests':167,'verificationIntegrationTests':13,'verificationDomainTests':9,'architectureTests':8,'frontendTests':62,'verificationFrontendTests':6,'verificationBrowserGroups':21,'failures':0,'errors':0,'skipped':0}.items():
+        check(verification_evidence.get('checks',{}).get(key)==value,'Verification checks missing '+key)
+    check(verification_evidence.get('checks',{}).get('browserWidths')==[320,375,640,768,1024,1280,1536],'Verification responsive evidence missing')
+    for migration in (R/'backend/src/main/resources/db/migration').glob('V[1-7]__*.sql'):
+        check(migration.read_bytes()==subprocess.check_output(['git','-C',str(R),'show',verification_base+':'+migration.relative_to(R).as_posix()]),'Historical migration changed '+migration.name)
+    if verification_ci:
+        receipt=verification_evidence.get('ciReceipt',{});sha=receipt.get('headSha','')
+        check(receipt.get('conclusion')=='success' and re.fullmatch('[0-9a-f]{40}',sha) is not None and isinstance(receipt.get('runId'),int),'Verification exact-source CI missing')
+        if re.fullmatch('[0-9a-f]{40}',sha):
+            for name,digest in verification_owned.items():
+                check(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',sha+':'+name])).hexdigest()==digest,'Verification CI/current source mismatch '+name)
+    def verification_source(name):
+        return subprocess.check_output(['git','-C',str(R),'show',verification_base+':'+name]) if name in verification_owned else (R/name).read_bytes()
+    verification_subset={'taskId': 'CN-VERIFY-001', 'status': 'LOCAL_VERIFIED_CI_PENDING', 'evidencePath': 'PROGRESS.md#verification-implementation', 'fullRequirementVerified': False, 'fullRequirementAcceptance': 'NOT_ACCEPTED', 'actualTestPaths': ['backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'backend/src/test/java/com/cinenest/verification/internal/SyntheticEvidenceTest.java', 'frontend/tests/verification.test.mjs', 'frontend/tests/verification-browser.mjs'], 'deferred': 'Real-person/OCR/physical all-guest admission, production privacy/providers/retention and full authorization scenarios remain unverified'}
+    verification_subset['status']=verification_status
+    def verification_original_payload(payload,path):
+        original=json.loads(subprocess.check_output(['git','-C',str(R),'show',verification_base+':knowledge/'+path],text=True))
+        kind={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
+        before={row['id']:row for row in original[kind]}
+        check(set(before)=={row['id'] for row in payload[kind]},'Verification changed stable IDs '+path)
+        for row in payload[kind]:
+            old=before.get(row['id'],{});expected=json.loads(json.dumps(old))
+            if kind=='changeSets' and row['id']=='CN-VERIFY-001':
+                check(row.get('historicalPreApproval')==old and row.get('dependencies')==['CN-AUTH-001','CN-QUOTE-001'],'Verification prerequisites/history lost')
+                check(row.get('workStatus')==('VERIFIED' if verification_ci else 'IN_PROGRESS') and row.get('readiness')==('CLOSED' if verification_ci else 'READY'),'Verification closure exceeds checks')
+                check(row.get('authorityAvailable') is True and row.get('blockingDecisionIds')==[] and row.get('resolvedDecisionIds')==['OD-03','OD-05'],'Verification bounded gates inconsistent')
+                check(row.get('implementationEvidence')=={'status':verification_status,'evidencePath':'PROGRESS.md#verification-implementation','fullRequirementAcceptance':'NOT_ACCEPTED'},'Verification completion overstated')
+                expected=row
+            elif kind=='decisions' and row['id'] in {'OD-03','OD-05'}:
+                approval=row.get('boundedVerificationApproval');check(hashlib.sha256(json.dumps(approval,sort_keys=True).encode()).hexdigest()=='c82be8eea5dad1bfdff11e4760a1292794208ecc225cfe4036daa4926a56ca5a','Verification policy changed '+row['id']);expected['boundedVerificationApproval']=approval
+            elif kind in {'requirements','tests'} and row['id'].removeprefix('T-') in {'CN-C05','CN-A06','CN-NFR-02'}:
+                expected['verificationImplementationEvidence']=verification_subset
+            check(row==expected,'Unapproved verification delta '+path+'/'+row['id'])
+        return original
     # Explicit synthetic-only CN-QUOTE-001 successor. Validate exact authorized deltas;
     # earlier source/evidence receipts are reconstructed, never rewritten or bypassed.
     quote_base='13a27464a281205f897670cc6593cbddbb1f3ecd'
@@ -65,7 +114,7 @@ def main():
     quote_status='VERIFIED_BOUNDED_SYNTHETIC_QUOTATIONS' if quote_ci else 'LOCAL_VERIFIED_CI_PENDING'
     check(set(quote_owned)=={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'frontend/app/api/quotes/[quoteId]/route.ts', 'frontend/tests/quotes-browser.mjs', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java', 'frontend/app/api/quotes/route.ts', 'backend/src/main/java/com/cinenest/pricing/package-info.java', 'frontend/app/api/quotes/[quoteId]/accept/route.ts', 'backend/src/main/java/com/cinenest/pricing/internal/QuoteRepository.java', 'frontend/tests/quotes.test.mjs', 'backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java', 'frontend/package.json', 'backend/src/main/java/com/cinenest/pricing/internal/QuoteService.java', 'frontend/components/inventory.tsx', 'frontend/lib/room-backend.ts', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java', 'frontend/app/api/quotes/[quoteId]/revisions/route.ts', 'backend/src/test/java/com/cinenest/QuoteIntegrationTest.java', 'frontend/components/quotes.tsx', 'backend/src/main/java/com/cinenest/pricing/internal/QuoteDenialAudit.java', 'backend/src/main/java/com/cinenest/booking/QuotationHolds.java', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcQuoteRepository.java', 'backend/src/main/java/com/cinenest/pricing/internal/QuoteRules.java', 'backend/src/main/resources/db/migration/V7__synthetic_quotations.sql', 'frontend/lib/quotes.ts', 'frontend/components/rooms.tsx', 'backend/src/main/java/com/cinenest/booking/internal/InventoryService.java'},'Quotation source inventory differs from approved slice')
     for name,digest in quote_owned.items():
-        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Quotation source mismatch '+name)
+        check((R/name).is_file() and hashlib.sha256(verification_source(name)).hexdigest()==digest,'Quotation source mismatch '+name)
     quote_task=next(c for c in backlog['changeSets'] if c['id']=='CN-QUOTE-001')
     check(hashlib.sha256(json.dumps({k:v for k,v in quote_task.items() if k not in {'workStatus','readiness','implementationEvidence'}},sort_keys=True).encode()).hexdigest()=='022400a4e0cef0e41b1e37f52c6e24e6d8078fe15c0509b71b93612c5a539e03','Quotation scope/owner approval/history changed')
     check(quote_evidence.get('scopeApproval')==quote_task.get('scopeApproval') and quote_evidence.get('status')==quote_status and quote_evidence.get('commercialIssuance')=='DISABLED' and quote_evidence.get('d1')=='NOT_READY','Synthetic boundary or evidence exceeded')
@@ -82,10 +131,11 @@ def main():
             for name,digest in quote_owned.items():
                 check(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',sha+':'+name])).hexdigest()==digest,'Quotation CI/current source mismatch '+name)
     def quote_source(name):
-        return subprocess.check_output(['git','-C',str(R),'show',quote_base+':'+name]) if name in quote_owned else (R/name).read_bytes()
+        return subprocess.check_output(['git','-C',str(R),'show',quote_base+':'+name]) if name in quote_owned else verification_source(name)
     quote_subset={'taskId':'CN-QUOTE-001','status':quote_status,'evidencePath':'PROGRESS.md#quotation-implementation','fullRequirementVerified':False,'fullRequirementAcceptance':'NOT_ACCEPTED','actualTestPaths':['backend/src/test/java/com/cinenest/QuoteIntegrationTest.java','backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java','frontend/tests/quotes.test.mjs','frontend/tests/quotes-browser.mjs'],'deferred':'Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified'}
     quote_approvals={'OD-17': '861874fd3d033673e573e36d63cc1142d2e57022759176ab5cdd60136c0acef5', 'OD-20': '17ec3582298e14dbf8cb91d77e250afa6c2e68c50806345a862e56080efe486b', 'OD-22': '778ec8b3911c1e51c9723c00319d4309d34a1349c02f6cda38c550dadf024d07', 'OD-25': 'c3263e488753872c0c966de77d396c8f0bda0996c9480c5a882bfd72feacb594'}
     def quote_original_payload(payload,path):
+        payload=verification_original_payload(payload,path)
         original=json.loads(subprocess.check_output(['git','-C',str(R),'show',quote_base+':knowledge/'+path],text=True))
         kind={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
         before={row['id']:row for row in original[kind]}
@@ -474,6 +524,8 @@ def main():
             check(c['authorityAvailable'] is True and c['readiness']==('CLOSED' if pkg_ci else 'READY') and c['workStatus']==('VERIFIED' if pkg_ci else 'IN_PROGRESS'),'Package state exceeds scoped approval/checks')
         elif c['id']=='CN-BOOK-001':
             check(c['authorityAvailable'] is True and c['workStatus']==('VERIFIED' if inventory_ci else 'IN_PROGRESS') and c['readiness']==('CLOSED' if inventory_ci else 'READY'),'Inventory task state unsupported')
+        elif c['id']=='CN-VERIFY-001':
+            check(c['authorityAvailable'] is True and c['workStatus']==('VERIFIED' if verification_ci else 'IN_PROGRESS') and c['readiness']==('CLOSED' if verification_ci else 'READY'),'Verification state exceeds scoped evidence')
         elif c['id']=='CN-QUOTE-001':
             check(c['authorityAvailable'] is True and c['workStatus']==('VERIFIED' if quote_ci else 'IN_PROGRESS') and c['readiness']==('CLOSED' if quote_ci else 'READY'),'Quotation state exceeds scoped evidence')
         elif c['id'] != 'CN-AGENT-SETUP-001':
@@ -525,10 +577,10 @@ def main():
         else:
             check(x['readStatus'] == 'VISUALLY_REVIEWED', f'Visual unreviewed {x["path"]}')
     check(ledger['missingSources'] == ['S2', 'S3', 'S4'], 'Missing PDFs hidden')
-    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == ([] if quote_ci else ['CN-QUOTE-001']), 'Unsupported READY plan')
-    check(state['taskId'] == 'CN-QUOTE-001' and state['nextRecommendedChangeSet'] == 'CN-VERIFY-001' and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
-    check(state['workStatus'] == ('VERIFIED' if quote_ci else 'IN_PROGRESS') and cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
-    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_SYNTHETIC_CN_QUOTE_001_ONLY', 'Unsupported stack/implementation approval')
+    check(state['futurePlanApproval'] == 'NOT_APPROVED' and state['nextReadyChangeSet'] is None and [c['id'] for c in changes if c['readiness'] == 'READY'] == ([] if verification_ci else ['CN-VERIFY-001']), 'Unsupported READY plan')
+    check(state['taskId'] == 'CN-VERIFY-001' and state['nextRecommendedChangeSet'] == 'CN-PAY-BANK-001' and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
+    check(state['workStatus'] == ('VERIFIED' if verification_ci else 'IN_PROGRESS') and cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
+    check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_SYNTHETIC_CN_VERIFY_001_ONLY', 'Unsupported stack/implementation approval')
     od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
     brief = K / 'ARCHITECTURE.md'
@@ -549,6 +601,8 @@ def main():
             for key in ['decisionStatus', 'implementationStatus', 'acceptanceStatus', 'plannedTestStatus', 'workStatus', 'status', 'authorityAvailable', 'readiness', 'approvalStatus', 'implementationAuthorization']:
                 if key in old:
                     expected_status = 'APPROVED' if id in {'OD-04','OD-10','OD-11','OD-12','OD-14'} and key == 'decisionStatus' else 'OWNER_APPROVED_INITIAL_DIRECTION' if id == 'CN-DEC-001' and key == 'approvalStatus' else old[key]
+                    if id=='CN-VERIFY-001':
+                        expected_status={'workStatus':'VERIFIED' if verification_ci else 'IN_PROGRESS','authorityAvailable':True,'readiness':'CLOSED' if verification_ci else 'READY'}.get(key,expected_status)
                     if id=='CN-QUOTE-001':
                         expected_status={'workStatus':'VERIFIED' if quote_ci else 'IN_PROGRESS','authorityAvailable':True,'readiness':'CLOSED' if quote_ci else 'READY'}.get(key,expected_status)
                     if id=='CN-BOOK-001':

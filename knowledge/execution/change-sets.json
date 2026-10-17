@@ -736,22 +736,75 @@
         "CN-AUTH-001",
         "CN-QUOTE-001"
       ],
-      "blockingDecisionIds": [
-        "OD-03",
-        "OD-05"
-      ],
-      "affectedFilesModules": "Verification/storage/identity UI TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Verification module/private encrypted synthetic storage; Pricing public quotation context; Identity exact scoped permissions; customer/reviewer UI",
+      "dbApiUiImpact": "Exactly eight approved tables and ten operations; synthetic manual review only",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1\u2013V7",
       "plannedChecks": "Upload/private scope/retention/review/consent tests and operational gate",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Restricted booker eligibility separate from on-site guest entry",
       "requiredApproval": "Slice + approved evidence/admission/privacy/storage process",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
+      "evidencePaths": [
+        "knowledge/PROGRESS.md#verification-implementation"
+      ],
+      "historicalPreApproval": {
+        "id": "CN-VERIFY-001",
+        "phase": 4,
+        "priority": "P1",
+        "objective": "Private booker evidence and eligibility review",
+        "requirementIds": [
+          "CN-C05",
+          "CN-A06",
+          "CN-NFR-02"
+        ],
+        "inScope": "One authenticated private evidence/review/decision and explicit consent slice",
+        "outOfScope": "No OCR authenticity claim or all-guest process bypass",
+        "dependencies": [
+          "CN-AUTH-001",
+          "CN-QUOTE-001"
+        ],
+        "blockingDecisionIds": [
+          "OD-03",
+          "OD-05"
+        ],
+        "affectedFilesModules": "Verification/storage/identity UI TBD",
+        "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+        "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
+        "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+        "plannedChecks": "Upload/private scope/retention/review/consent tests and operational gate",
+        "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+        "definitionOfDone": "Restricted booker eligibility separate from on-site guest entry",
+        "requiredApproval": "Slice + approved evidence/admission/privacy/storage process",
+        "authorityAvailable": false,
+        "readiness": "BLOCKED",
+        "workStatus": "BLOCKED",
+        "evidencePaths": []
+      },
+      "resolvedDecisionIds": [
+        "OD-03",
+        "OD-05"
+      ],
+      "scopeApproval": {
+        "taskId": "CN-VERIFY-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "source": "Owner instruction and attachment e2d7b00c-1b4f-440f-8088-8f14d876e033",
+        "sourceSha256": "24998eeebcd79bae363e29e02872d00018ecb213b806f463f49176af83c6314e",
+        "date": "2026-10-17",
+        "architectureReference": "ARCHITECTURE.md#verification-boundary",
+        "realIdentityProcessing": "DISABLED",
+        "ocr": "DISABLED",
+        "physicalAdmission": "NOT_APPROVED",
+        "productionPrivacy": "UNRESOLVED"
+      },
+      "implementationEvidence": {
+        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "evidencePath": "PROGRESS.md#verification-implementation",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-PAY-GW-001",

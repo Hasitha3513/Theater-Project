@@ -132,6 +132,18 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED",
         "scope": "Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates"
+      },
+      "boundedVerificationApproval": {
+        "taskId": "CN-VERIFY-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "source": "Owner instruction and attachment e2d7b00c-1b4f-440f-8088-8f14d876e033",
+        "sourceSha256": "24998eeebcd79bae363e29e02872d00018ecb213b806f463f49176af83c6314e",
+        "date": "2026-10-17",
+        "architectureReference": "ARCHITECTURE.md#verification-boundary",
+        "realIdentityProcessing": "DISABLED",
+        "ocr": "DISABLED",
+        "physicalAdmission": "NOT_APPROVED",
+        "productionPrivacy": "UNRESOLVED"
       }
     },
     {
@@ -190,6 +202,18 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED",
         "scope": "Synthetic account/session and minimum scoped reads only; document/admission, production data/provider, finance/independent-review and provisioning policies remain deferred at their owning feature gates"
+      },
+      "boundedVerificationApproval": {
+        "taskId": "CN-VERIFY-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "source": "Owner instruction and attachment e2d7b00c-1b4f-440f-8088-8f14d876e033",
+        "sourceSha256": "24998eeebcd79bae363e29e02872d00018ecb213b806f463f49176af83c6314e",
+        "date": "2026-10-17",
+        "architectureReference": "ARCHITECTURE.md#verification-boundary",
+        "realIdentityProcessing": "DISABLED",
+        "ocr": "DISABLED",
+        "physicalAdmission": "NOT_APPROVED",
+        "productionPrivacy": "UNRESOLVED"
       }
     },
     {

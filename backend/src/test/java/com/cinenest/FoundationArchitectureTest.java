@@ -10,7 +10,7 @@ class FoundationArchitectureTest {
     @Test
     void declaredFoundationModuleHasAnEncapsulatedImplementation() {
         var modules = ApplicationModules.of(CineNestApplication.class);
-        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing", "booking");
+        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing", "booking", "verification");
         modules.verify();
     }
 
@@ -50,6 +50,12 @@ class FoundationArchitectureTest {
         var classes=new ClassFileImporter().importPackages("com.cinenest");
         noClasses().that().haveSimpleName("QuoteService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
         noClasses().that().resideInAPackage("com.cinenest.booking").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.booking.internal..","org.springframework.jdbc..").check(classes);
+    }
+    @Test void verificationUsesOnlyOwnerPortsAndItsOwnPersistence() {
+        var classes=new ClassFileImporter().importPackages("com.cinenest");
+        noClasses().that().resideInAPackage("com.cinenest.verification..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.identity.internal..","com.cinenest.pricing.internal..","com.cinenest.rooms..","com.cinenest.booking..").check(classes);
+        noClasses().that().haveSimpleName("VerificationService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+        noClasses().that().haveSimpleName("VerificationService").should().dependOnClassesThat().haveSimpleName("JdbcVerificationRepository").check(classes);
     }
     @Test void bookingUsesOwnerPortsAndItsOwnPersistenceAdapter() {
         var classes=new ClassFileImporter().importPackages("com.cinenest");

@@ -36,11 +36,13 @@ export function Navigation({
                 ["/admin/venues", "Venues"],
                 ["/admin/rooms", "Room configuration"],
                 ["/admin/inventory", "Inventory inspection"],
+                ["/admin/verification", "Synthetic verification review"],
                 ["/admin/settings/packages", "Package drafts"],
 			]
 		: [
 				["/", "Home"],
                 ["/rooms", "Explore rooms"],
+                ["/verification", "Synthetic verification"],
 				["/account", "Account session"],
 				["/admin", "Admin shell preview"],
 			];

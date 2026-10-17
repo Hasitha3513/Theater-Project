@@ -22,7 +22,7 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
     }
     private String writeEquivalent(String action) {
         return switch(action) { case "room.read" -> "room.write"; case "venue.read" -> "venue.write";
-            case "package.read" -> "package.edit"; case "inventory.read", "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
+            case "package.read" -> "package.edit"; case "verification.review", "verification.evidence.read", "inventory.read", "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
     }
     @Transactional
     public boolean permits(UUID actor, UUID venue, String action, boolean lock) {
