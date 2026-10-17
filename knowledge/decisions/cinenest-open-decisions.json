@@ -226,7 +226,17 @@
       "evidenceRequired": "Official docs and merchant confirmation; sandbox/webhook/refund evidence",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "boundedGatewayApproval": {
+        "taskId": "CN-PAY-GW-001",
+        "status": "APPROVED_BOUNDED_SANDBOX_POLICY",
+        "dateLocal": "2026-10-17",
+        "approvalSource": "Owner inline instruction and attachment 8ccb6e72-e9ec-4059-b7d1-258fad34c2eb",
+        "requestSha256": "9f2543219ae0f453fbbf5b7d5381452937386ef59da3e87970986590f1191050",
+        "canonicalSpecification": "ARCHITECTURE.md#gateway-sandbox-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED"
+      }
     },
     {
       "id": "OD-07",
@@ -238,7 +248,17 @@
       "evidenceRequired": "Finance/product/provider/legal approval and lifecycle tests",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "boundedGatewayApproval": {
+        "taskId": "CN-PAY-GW-001",
+        "status": "APPROVED_BOUNDED_SANDBOX_POLICY",
+        "dateLocal": "2026-10-17",
+        "approvalSource": "Owner inline instruction and attachment 8ccb6e72-e9ec-4059-b7d1-258fad34c2eb",
+        "requestSha256": "9f2543219ae0f453fbbf5b7d5381452937386ef59da3e87970986590f1191050",
+        "canonicalSpecification": "ARCHITECTURE.md#gateway-sandbox-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED"
+      }
     },
     {
       "id": "OD-08",
@@ -625,6 +645,16 @@
         "scope": "Versioned issuance, explicit quote-specific synthetic acceptance, immutable snapshots, expiry no later than original hold; no hold extension/latest-price substitution. Ordinary withdrawal does not rewrite snapshots; operational invalidity/expiry denies acceptance. No payment-timing rules or booking confirmation.",
         "canonicalSpecification": "PROJECT.md#quotation-approved-policy",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedGatewayApproval": {
+        "taskId": "CN-PAY-GW-001",
+        "status": "APPROVED_BOUNDED_SANDBOX_POLICY",
+        "dateLocal": "2026-10-17",
+        "approvalSource": "Owner inline instruction and attachment 8ccb6e72-e9ec-4059-b7d1-258fad34c2eb",
+        "requestSha256": "9f2543219ae0f453fbbf5b7d5381452937386ef59da3e87970986590f1191050",
+        "canonicalSpecification": "ARCHITECTURE.md#gateway-sandbox-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "implementationStatus": "NOT_VERIFIED"
       }
     },
     {

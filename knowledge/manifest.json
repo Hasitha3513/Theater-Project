@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cc10903910348d88428371c34e096239a4ab7486903a495b5bb0dcb6744e7026",
+      "sha256": "df31f97ef71328eba37a2e6156a0c0e033aaa6e76a3e0ff7f8809e9558e0ad07",
       "authority": "canonical-prose"
     },
     {
@@ -411,7 +411,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "80e3a4c4af1feb9ebecd88cc409575eaf2484bb86ad7ad6d2a258e0a38ee30b9",
+      "sha256": "da2792fb4e696cfb49033a150d9868e3ae18a1a5186a7792cd4dbae5b1c1f10b",
       "authority": "canonical-prose"
     },
     {
@@ -432,7 +432,7 @@
       "path": "decisions/cinenest-open-decisions.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "1abc243ef363323aff94f76fc4072a2c95cd857cda29bc6c817a4fba94c73fbe",
+      "sha256": "69310c9a511161c8a3672fc990d2b718afd51d6ac861b7e7cf13d9eebc721aed",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -446,7 +446,7 @@
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "d9cbc199c8acfb2e9666bd9ac121dad9c7ae66e71b7e1ff46726b3d18131e3bc",
+      "sha256": "51b13c4c3fe7a45cfabf5139e89f03b23cc876f071591f80c9300ec22e2807d4",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -537,7 +537,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6c61ad42d9fc560792f66d4ec49b4617a7a1d0a1d8ef1fa921f1582ec111afdb",
+      "sha256": "88ad9320797b27adf71fe6bde962a4635f1bfa499a44d4fff3dad2a126442186",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -551,7 +551,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "47ee468fc73b9af59cb934c48f30952dca2b23ef74bcb25eea243a3b011bd4ec",
+      "sha256": "9088da086a78d4c6dca3b62e3a9a434553b12f2f01590c08f0c18b39cbed7562",
       "authority": "structured-asset-or-evidence"
     },
     {

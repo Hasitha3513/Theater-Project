@@ -56,6 +56,37 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Bounded gateway decision successor: validate exact deltas before historical receipts.
+    gateway_base='18c4b3c6913d952d1c64bd619b695431d03bb6c6'
+    def gateway_baseline(path):
+        return json.loads(subprocess.check_output(['git','-C',str(R),'show',gateway_base+':knowledge/'+path],text=True))
+    gateway_approval={'taskId': 'CN-PAY-GW-001', 'status': 'APPROVED_BOUNDED_SANDBOX_POLICY', 'dateLocal': '2026-10-17', 'approvalSource': 'Owner inline instruction and attachment 8ccb6e72-e9ec-4059-b7d1-258fad34c2eb', 'requestSha256': '9f2543219ae0f453fbbf5b7d5381452937386ef59da3e87970986590f1191050', 'canonicalSpecification': 'ARCHITECTURE.md#gateway-sandbox-policy', 'fullDecisionStatus': 'OPEN_DECISION', 'implementationStatus': 'NOT_VERIFIED'}
+    gateway_task_approval={'status': 'APPROVED_CONDITIONAL_ON_SANDBOX_ACCESS', 'approvalSource': 'Owner inline instruction and attachment 8ccb6e72-e9ec-4059-b7d1-258fad34c2eb', 'requestSha256': '9f2543219ae0f453fbbf5b7d5381452937386ef59da3e87970986590f1191050', 'canonicalSpecification': 'ARCHITECTURE.md#gateway-sandbox-policy', 'implementationAuthorization': 'INLINE_AUTHORIZED_ONLY_IF_SANDBOX_AVAILABLE; attachment limits session to recording/qualification; no implementation while access unavailable', 'remainingGate': 'PayHere sandbox credentials, approved integrating domain/public callback and authenticated checkout/retrieval qualification unavailable', 'readiness': 'BLOCKED', 'realPayments': 'DISABLED'}
+    gateway_state={'taskId': 'CN-PAY-GW-001', 'baselineHead': '18c4b3c6913d952d1c64bd619b695431d03bb6c6', 'status': 'BLOCKED_ACCESS_UNAVAILABLE', 'approval': {'taskId': 'CN-PAY-GW-001', 'status': 'APPROVED_BOUNDED_SANDBOX_POLICY', 'dateLocal': '2026-10-17', 'approvalSource': 'Owner inline instruction and attachment 8ccb6e72-e9ec-4059-b7d1-258fad34c2eb', 'requestSha256': '9f2543219ae0f453fbbf5b7d5381452937386ef59da3e87970986590f1191050', 'canonicalSpecification': 'ARCHITECTURE.md#gateway-sandbox-policy', 'fullDecisionStatus': 'OPEN_DECISION', 'implementationStatus': 'NOT_VERIFIED'}, 'credentialsAvailable': False, 'configurationInspection': 'No PAYHERE/GATEWAY/MERCHANT environment names or matching local development env keys; values not emitted; external secret stores not assumed', 'domainCallback': 'NOT_CONFIGURED_OR_VERIFIED', 'providerDocumentation': 'DOCUMENTED_ACCESSIBLE', 'providerSandboxVerification': 'NOT_RUN', 'implementation': 'NOT_STARTED', 'migrationHead': 'V10', 'realPayments': 'DISABLED', 'evidencePath': 'PROGRESS.md#gateway-sandbox-qualification', 'scopeReference': 'ARCHITECTURE.md#gateway-sandbox-policy', 'nextAction': 'Provide PayHere sandbox access through private local configuration and a registered sandbox domain/public callback; then qualify checkout, notification and retrieval before CN-PAY-GW-001 implementation'}
+    check(state.get('gatewaySandboxQualification')==gateway_state,'Gateway qualification evidence/approval changed')
+    original_state=gateway_baseline('execution/status.json')
+    expected_state=json.loads(json.dumps(original_state));expected_state['nextAction']='Provide PayHere sandbox access through private local configuration and a registered sandbox domain/public callback; then qualify checkout, notification and retrieval before CN-PAY-GW-001 implementation';expected_state['gatewaySandboxQualification']=gateway_state
+    check(state==expected_state,'Gateway changed unrelated status or financial safety')
+    state=original_state
+    gateway_paths=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',gateway_base,'--','backend','frontend'],text=True).splitlines())
+    check(set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())==gateway_paths,'Gateway decision session changed application inventory')
+    for name in gateway_paths-{'frontend/next-env.d.ts'}:
+        check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',gateway_base+':'+name]),'Gateway decision session changed application '+name)
+    for path,field in [('execution/change-sets.json','changeSets'),('decisions/cinenest-open-decisions.json','decisions')]:
+        current=json.loads((K/path).read_text());expected=gateway_baseline(path)
+        for row in current[field]:
+            if field=='changeSets' and row['id']=='CN-PAY-GW-001':
+                check(row.pop('boundedGatewayScopeApproval',None)==gateway_task_approval,'Gateway scope approval lost/changed')
+                check(row['readiness']=='BLOCKED' and row['workStatus']=='BLOCKED' and not row['authorityAvailable'],'Gateway promoted without sandbox access')
+                check(row['evidencePaths']==['ARCHITECTURE.md#gateway-sandbox-policy','PROGRESS.md#gateway-sandbox-qualification'],'Gateway evidence references missing')
+                row['evidencePaths']=[]
+            if field=='decisions' and row['id'] in {'OD-06','OD-07','OD-20'}:
+                check(row.pop('boundedGatewayApproval',None)==gateway_approval,'Gateway bounded owner policy lost/changed '+row['id'])
+                check(row['decisionStatus']=='OPEN_DECISION','Gateway closed wider commercial decision')
+        check(current==expected,'Gateway changed unrelated task/decision/history '+path)
+    check('## CN-PAY-GW-001 — bounded gateway approval and access gate' in (K/'ARCHITECTURE.md').read_text(),'Gateway canonical policy absent')
+    check('<a id="gateway-sandbox-qualification"></a>' in (K/'PROGRESS.md').read_text(),'Gateway current outcome absent')
+    backlog=gateway_baseline('execution/change-sets.json')
     # Validate the current owner-authorized ledger delta before projecting immutable older
     # receipts. Current source, policies, coverage and gates are checked independently;
     # historical comparison never authorizes an unlisted successor or source deletion.
@@ -88,6 +119,15 @@ def main():
         return (R/name).read_bytes()
     ledger_validated=set()
     def ledger_original_payload(payload,path):
+        # Gateway additions were independently checked above, never authorize application changes.
+        payload=json.loads(json.dumps(payload))
+        if path=='decisions/cinenest-open-decisions.json':
+            for row in payload['decisions']:
+                if row['id'] in {'OD-06','OD-07','OD-20'}:row.pop('boundedGatewayApproval',None)
+        if path=='execution/change-sets.json':
+            for row in payload['changeSets']:
+                if row['id']=='CN-PAY-GW-001' and 'boundedGatewayScopeApproval' in row:
+                    row.pop('boundedGatewayScopeApproval');row['evidencePaths']=[]
         original=json.loads(subprocess.check_output(['git','-C',str(R),'show',ledger_base+':knowledge/'+path],text=True))
         if path in ledger_validated and payload==original:return original
         field={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]

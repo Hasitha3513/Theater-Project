@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-PAY-BANK-002",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-PAY-GW-001",
-  "nextAction": "Review CN-PAY-GW-001 bounded provider-sandbox scope and OD-06/07/20; no next implementation authorized",
+  "nextAction": "Provide PayHere sandbox access through private local configuration and a registered sandbox domain/public callback; then qualify checkout, notification and retrieval before CN-PAY-GW-001 implementation",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-PAY-BANK-002 VERIFIED/CLOSED for approved synthetic scope; wider acceptance incomplete",
   "approvedCoreDecisions": [
@@ -2691,5 +2691,31 @@
     "evidencePath": "PROGRESS.md#bank-request-implementation",
     "verificationScope": "Bounded synthetic bank request/private receipt/manual review; no real financial processing or customer acceptance",
     "implementationEvidence": "CN-PAY-BANK-001 VERIFIED/CLOSED for approved synthetic-only requests/private receipt review; full real commercial banking/credit/allocation/confirmation remains unverified"
+  },
+  "gatewaySandboxQualification": {
+    "taskId": "CN-PAY-GW-001",
+    "baselineHead": "18c4b3c6913d952d1c64bd619b695431d03bb6c6",
+    "status": "BLOCKED_ACCESS_UNAVAILABLE",
+    "approval": {
+      "taskId": "CN-PAY-GW-001",
+      "status": "APPROVED_BOUNDED_SANDBOX_POLICY",
+      "dateLocal": "2026-10-17",
+      "approvalSource": "Owner inline instruction and attachment 8ccb6e72-e9ec-4059-b7d1-258fad34c2eb",
+      "requestSha256": "9f2543219ae0f453fbbf5b7d5381452937386ef59da3e87970986590f1191050",
+      "canonicalSpecification": "ARCHITECTURE.md#gateway-sandbox-policy",
+      "fullDecisionStatus": "OPEN_DECISION",
+      "implementationStatus": "NOT_VERIFIED"
+    },
+    "credentialsAvailable": false,
+    "configurationInspection": "No PAYHERE/GATEWAY/MERCHANT environment names or matching local development env keys; values not emitted; external secret stores not assumed",
+    "domainCallback": "NOT_CONFIGURED_OR_VERIFIED",
+    "providerDocumentation": "DOCUMENTED_ACCESSIBLE",
+    "providerSandboxVerification": "NOT_RUN",
+    "implementation": "NOT_STARTED",
+    "migrationHead": "V10",
+    "realPayments": "DISABLED",
+    "evidencePath": "PROGRESS.md#gateway-sandbox-qualification",
+    "scopeReference": "ARCHITECTURE.md#gateway-sandbox-policy",
+    "nextAction": "Provide PayHere sandbox access through private local configuration and a registered sandbox domain/public callback; then qualify checkout, notification and retrieval before CN-PAY-GW-001 implementation"
   }
 }

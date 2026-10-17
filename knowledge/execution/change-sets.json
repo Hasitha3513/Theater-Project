@@ -838,7 +838,20 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [
+        "ARCHITECTURE.md#gateway-sandbox-policy",
+        "PROGRESS.md#gateway-sandbox-qualification"
+      ],
+      "boundedGatewayScopeApproval": {
+        "status": "APPROVED_CONDITIONAL_ON_SANDBOX_ACCESS",
+        "approvalSource": "Owner inline instruction and attachment 8ccb6e72-e9ec-4059-b7d1-258fad34c2eb",
+        "requestSha256": "9f2543219ae0f453fbbf5b7d5381452937386ef59da3e87970986590f1191050",
+        "canonicalSpecification": "ARCHITECTURE.md#gateway-sandbox-policy",
+        "implementationAuthorization": "INLINE_AUTHORIZED_ONLY_IF_SANDBOX_AVAILABLE; attachment limits session to recording/qualification; no implementation while access unavailable",
+        "remainingGate": "PayHere sandbox credentials, approved integrating domain/public callback and authenticated checkout/retrieval qualification unavailable",
+        "readiness": "BLOCKED",
+        "realPayments": "DISABLED"
+      }
     },
     {
       "id": "CN-PAY-BANK-001",
