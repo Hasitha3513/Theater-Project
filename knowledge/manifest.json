@@ -418,14 +418,14 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "0a8baeedd1469495a704b908df17fdfe9131b0dbba20d4b71ddefee57f2d9582",
+      "sha256": "4bf906606aea21c6e898f56c1551c38c30b5c4debc0b82150b655f66d1d3b475",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "9afbd1678231a7599597a23218415f7f44fcd700104bf2228a07cef1acbc065d",
+      "sha256": "e0891df6a476825d2caad531c9354d35483749eb53c8b78ede7ea6cde8d8e7c9",
       "authority": "canonical-prose"
     },
     {
@@ -634,7 +634,7 @@
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "021cc3588ce9c11df44eac033a7a35ba4839a38443d08c7bf3875df2758ebd1b",
+      "sha256": "75b263c00f5ec7b8b6d6da7ebd782efb9c5487e0f0a229fc49cc55f31590c44c",
       "authority": "structured-asset-or-evidence"
     },
     {

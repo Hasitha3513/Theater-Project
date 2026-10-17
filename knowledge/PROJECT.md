@@ -621,3 +621,21 @@ Owner conversation “CN-GATE-001 — Source Confirmation and Reconciliation” 
 | S3 p13: referral rewards | Existing loyalty requirements remain; no reward values or new task/dependency inferred. |
 
 No requirement/test-plan counts or dependency edges changed. Detailed legal claims, content licensing, staffing levels and hardware acceptance remain their existing gates. Source custody, admission/operations, privacy accountability, qualified privacy/legal review, physical safety, cleaning/maintenance and manual-payment finance still require named appointments with accepted authority/venue scope. Finance independence must be explicit. Source confirmation does not supply these appointments or close CN-GATE-001.
+
+<a id="accountability-appointments"></a>
+## CN-GATE-001 accountability acceptance — 2026-10-17
+
+Approval source: owner conversation “I’ll hold the source custody, operations, privacy accountability, cleaning/maintenance and finance owner roles. Keep qualified and independent reviewers pending.” The owner explicitly accepts these five roles; their full name, applicable venue names/IDs and detailed decision/delegation authority are not supplied. Do not infer identity from workstation/account metadata. This is accepted role intent with incomplete named appointments, not five completed venue-scoped appointments.
+
+| Role | Person / acceptance | Responsibility boundary | Authority and venue scope |
+|---|---|---|---|
+| Source custodian | Project owner, full name PENDING; role ACCEPTED | Custody of confirmed historical S2–S4 originals and provenance/reconciliation history | Detailed authority and venue applicability PENDING |
+| Admission/operations owner | Project owner, full name PENDING; role ACCEPTED | Staff-supported admission, operating procedures and escalation accountability | Detailed authority and venue scope PENDING |
+| Privacy accountable owner | Project owner, full name PENDING; role ACCEPTED | Privacy accountability and arranging qualified review | Detailed authority and venue scope PENDING; no legal qualification inferred |
+| Cleaning/maintenance owner | Project owner, full name PENDING; role ACCEPTED | Personnel-led cleaning/readiness and maintenance accountability | Detailed authority and venue scope PENDING; no physical certification inferred |
+| Manual-payment finance owner | Project owner, full name PENDING; role ACCEPTED | Manual-payment finance accountability, preserving independent verification/allocation/correction/refund controls | Detailed authority and venue scope PENDING; no real-payment authorization |
+| Qualified privacy/legal reviewer | PENDING, no appointee or acceptance | Qualified review of privacy/admission/terms and applicable legal claims | Qualifications, scope, authority and acceptance PENDING |
+| Physical-safety reviewer | PENDING, no appointee or acceptance | Qualified physical/egress/electrical/fail-mode review | Relevant competence, scope, authority and acceptance PENDING |
+| Independent finance reviewer(s) | PENDING, no appointee or acceptance | Separate applicable financial verification/review responsibilities; no self-approval where independence is required | Person(s), separation of duties, scope, authority and acceptance PENDING |
+
+Required owner clarification: full name for the five accepted roles; venue names/IDs (or explicit project-wide source-custody applicability); precise decisions permitted, delegation/escalation limits and reserved reviewer approvals for each role; confirmation of these bounded responsibilities. No financial limits or exception rights invented. Unfilled reviewers remain PENDING. CN-GATE-001 stays BLOCKED; OD-03/05/15 unresolved portions, qualified external acceptance and all dependency edges remain intact. Source approval and manual-payment-first direction retained; PayHere deferred/BLOCKED. No real payment, production, legal or physical acceptance follows.

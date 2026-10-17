@@ -1177,3 +1177,13 @@ CN-GATE-001 remains BLOCKED with unchanged OD-03/05/15 and task dependencies. Re
 Validation: primary knowledge validator PASS; primary execution validator reports only the two pre-existing next-env.d.ts protection failures. Both validators PASS in the existing isolated checkout with scoped changes and unchanged committed application files; whitespace PASS. Publication/CI result reported in conversation. Source-only rollback uses a normal reviewed revert; originals remain owner evidence, no destructive cleanup.
 
 MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;15 CLOSED,13 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 accepted delivery phases. Current handoff: appoint the seven accountable roles; no implementation authority.
+
+## CN-GATE-001 partial owner-role acceptance — 2026-10-17
+
+Baseline main/origin/main6f7864460b45a30ee6e0b93967dc88574ded62f5. [Accountability record](PROJECT.md#accountability-appointments) records the owner's explicit acceptance of five roles without inventing their name, venue or decision authority. Named/venue-scoped appointment completion remains pending. Qualified privacy/legal, physical-safety and independent finance reviewers remain PENDING. Earlier all-unassigned records are historical; accepted role intent is now recorded. Current handoff: obtain full name, venue applicability and role-specific authority/reserved-review boundaries.
+
+CN-GATE-001 BLOCKED; OD-03/05/15 unresolved portions and task/requirement/dependency/status records unchanged. Confirmed S2–S4 source records and manual-payment-first retained; PayHere BLOCKED. No application, real payments, production or acceptance change. No new knowledge file. Existing next-env.d.ts and two untracked DOCX companions preserved. Validation/publication outcome reported in conversation.
+
+MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;15 CLOSED,13 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 accepted delivery phases.
+
+Appointment-record validation: primary design/whitespace PASS; primary execution retains only the two pre-existing next-env.d.ts findings. Both validators PASS in the existing isolated checkout with scoped documentation changes. No application tests required for this record-only change.
