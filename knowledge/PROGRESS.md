@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP/dependencies and roadmap acceptance counts unchanged. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:16 CLOSED,12 BLOCKED,0 READY,0 IN_PROGRESS /28.
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 hard dependency is amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:16 CLOSED,12 BLOCKED,0 READY,0 IN_PROGRESS /28. [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; implementation authorization still missing.
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -270,7 +270,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-PAY-GW-001 | 5 | Gateway sandbox attempt/verification slice | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
 | CN-PAY-BANK-001 | 5 | Bank request/receipt and durable reviewer work | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | 5 | Bank evidence/allocation and guarded confirmation | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
-| CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
@@ -312,7 +312,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; venue/reviewers PENDING; PayHere BLOCKED; Admin reads VERIFIED"]
+  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; refund plan APPROVED/auth PENDING; venue/reviewers PENDING; PayHere BLOCKED; Admin reads VERIFIED"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
@@ -687,7 +687,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-PAY-GW-001 | P5 | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
 | CN-PAY-BANK-001 | P4 | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | P4 | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
-| CN-REFUND-001 | P6 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-REFUND-001 | P6 | CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-ACCESS-001 | P7 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-IOT-001 | P8 | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff after [CN-GATE-001 documentation closure](#gate-documentation-closure): 16 CLOSED/12 BLOCKED/0 READY; venue and specialist appointments remain PENDING, PayHere deferred. Next: read-only bank-only CN-REFUND-001 scope/dependency review for approval; no implementation or edge changes authorized. Earlier checkpoint below is historical.
+Current handoff after [CN-REFUND-001 approval/readiness reconciliation](#refund-readiness-reconciliation):16 CLOSED/12 BLOCKED/0 READY; bank-only policies/scope and its single hard-edge amendment approved, gateway full acceptance retained. Next: owner separately authorizes bounded implementation; runtime/readiness recheck before starting. Venue/specialists PENDING, PayHere deferred; no implementation in this session. Earlier checkpoint below is historical.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1224,3 +1224,16 @@ P0-C07 evaluated separately and stays unchecked: broader early policy/accountabi
 MVP: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74. Recalculated authoritative task totals16 VERIFIED/CLOSED,12 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans, no full acceptance change. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 accepted delivery phases. Source/task/appointment/governance checks, isolated validation and publication/CI results reported in conversation. Unrelated next-env.d.ts and two untracked DOCX companions preserved.
 
 Closure validation: primary knowledge/whitespace PASS; primary execution retains only the two pre-existing next-env.d.ts findings. Both validators PASS in isolated exact starting HEAD with scoped changes. Seven negative controls reject lost closure approval, invented specialist completion, production authority, dependency removal, global OD-05 approval, automatic P0-C07 acceptance and PDF hash loss. No application tests needed for documentation-only edits; final-source CI/publication verified separately in conversation.
+
+<a id="refund-readiness-reconciliation"></a>
+## CN-REFUND-001 bounded bank-only approvals/readiness — 2026-10-17
+
+Baseline main/origin/main6befd9c3da3b898fbc3f8f5bf6823580aaa54291. Owner attachment52fba128-5ee2-427a-bf2b-e14421ad555f explicitly approves [bounded OD-07/28 policy](PROJECT.md#refund-bank-only-policy), [schema/API/financial architecture](ARCHITECTURE.md#refund-bank-only-scope) and UI/test/rollback plan, selecting recording/readiness only. BANK-001/BANK-002 VERIFIED/CLOSED for synthetic scope; no genuine funds established. V11 source head; V12 planned, not created. No application/migration/dependency installation or real financial operation.
+
+Exactly one hard edge changed: REFUND removes GW from hard implementation prerequisites and retains BANK-002. The existing REFUND record preserves historical [GW,BANK-002] and deferredAcceptanceDependencies GW for gateway-refund execution/full acceptance, requirement/test IDs and NOT_IMPLEMENTED status. Full requirement dependencies/tests unchanged; no other task edge changed. Custom JSON registries support explicit scoped metadata and strict successor validation with both dependency classes; no lost source of truth/new registry required. Wider OD-07/28 remain OPEN; old bounded approvals preserved. No PayHere, gateway refund or mixed-method acceptance claimed.
+
+Readiness: hard dependency and bounded policies/scope satisfied, infrastructure plan uses existing pinned PostgreSQL/CI harness; required runtime/config preflight remains at actual execution. Current owner instruction explicitly withholds implementation authorization, required by READY governance. Therefore REFUND BLOCKED, authorityAvailable=false, no READY transition; remaining immediate gate is separate bounded synthetic implementation authorization. Real venue/specialists/commercial limits/providers remain downstream, not universal synthetic-test blockers. Full DoD unchanged; no implementation/test PASS/full requirement or phase acceptance claimed. P6-C05/C06 remain unchecked. Current next action: owner separately authorizes approved bounded implementation.
+
+MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;16 CLOSED,12 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 accepted delivery phases. Manual-payment-first retained; PayHere deferred/BLOCKED; existing next-env.d.ts/two DOCX companions preserved. Checks and publication/CI reported in conversation.
+
+Refund approval validation: primary knowledge/whitespace PASS; primary execution retains only two pre-existing next-env.d.ts findings. Both validators PASS in isolated exact baseline plus owned changes. Nine negative controls reject lost deferred gateway obligation, unrelated edge removal, premature READY, production authority, global OD-07 closure, lost full gateway coverage, false test PASS, lost historical edges and unauthorized V12. Migration control now exits with a clean FAIL diagnostic before incompatible historical replay, not a traceback. Application/launcher source and V1-V11 unchanged; no business tests marked run. Publication/final-source CI reported in conversation.

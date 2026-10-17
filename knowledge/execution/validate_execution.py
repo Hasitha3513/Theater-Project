@@ -56,6 +56,42 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Approved refund readiness-only successor: exact scoped delta, two dependency classes, no implementation.
+    refund_base = '6befd9c3da3b898fbc3f8f5bf6823580aaa54291'
+    refund_expected = {'execution/change-sets.json': 'ec04d1fd68c66d3aa8c01ea4a23dd9f4e8d0583b5c544ecceef5674c2c7d152e', 'execution/requirements.json': '3c8f750afc0696351c9bbe28fa2c7f801398ef0516156d308d7a90d1c82befc0', 'execution/test-plan.json': '8d71332b2fbcf1ba102d5b358d54064279ecef52cb4d167fccb5d3f86432cc95', 'decisions/cinenest-open-decisions.json': '9c965c8254c2095888c1fc629035bf8e1a2ed78cdf2a3fd83e9ac3598eb99671'}
+    refund_prior = {}
+    for path, digest in refund_expected.items():
+        actual = json.loads((K / path).read_text())
+        check(hashlib.sha256(json.dumps(actual, sort_keys=True).encode()).hexdigest() == digest, 'Refund readiness scope/history/requirement evidence changed '+path)
+        refund_prior[path] = json.loads(subprocess.check_output(['git','-C',str(R),'show',refund_base+':knowledge/'+path],text=True))
+    check(hashlib.sha256(json.dumps(state, sort_keys=True).encode()).hexdigest() == 'f877a7caef62600ab4691685954bed5d653ce5c7db73d55af57aaa50d3db6aa6', 'Refund readiness state/authority changed')
+    refund_actual_task = next(row for row in backlog['changeSets'] if row['id']=='CN-REFUND-001')
+    check(refund_actual_task['dependencies']==['CN-PAY-BANK-002'] and refund_actual_task['historicalImplementationDependencies']==['CN-PAY-GW-001','CN-PAY-BANK-002'] and [x['taskId'] for x in refund_actual_task['deferredAcceptanceDependencies']]==['CN-PAY-GW-001'], 'Refund hard/deferred gateway dependency missing')
+    check(refund_actual_task['readiness']=='BLOCKED' and refund_actual_task['workStatus']=='BLOCKED' and refund_actual_task['authorityAvailable'] is False, 'Readiness-only approval cannot authorize implementation')
+    prior_edges={x['id']:x['dependencies'] for x in refund_prior['execution/change-sets.json']['changeSets']}
+    for row in backlog['changeSets']:
+        check(row['dependencies']==(['CN-PAY-BANK-002'] if row['id']=='CN-REFUND-001' else prior_edges[row['id']]), 'Unapproved refund dependency amendment '+row['id'])
+    check(len(coverage['requirements'])==92 and len(tests_doc['tests'])==92, 'Refund approval lost full coverage')
+    app_delta = subprocess.check_output(['git','-C',str(R),'diff','--name-only',refund_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
+    check(set(app_delta) <= {'frontend/next-env.d.ts'}, 'Refund readiness session changed application/launcher source')
+    migration_base = subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',refund_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')} == set(migration_base), 'Readiness-only approval cannot create a migration')
+
+    if errors:
+        print('\n'.join('FAIL '+message for message in errors))
+        return 1
+    def refund_original(payload,path):
+        if path not in refund_prior: return payload
+        field={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
+        marked=any('boundedRefundScopeApproval' in row or 'boundedRefundApproval' in row or 'boundedRefundReadiness' in row for row in payload[field])
+        if marked:
+            check(hashlib.sha256(json.dumps(payload,sort_keys=True).encode()).hexdigest()==refund_expected[path], 'Refund replay encountered unapproved successor '+path)
+            return json.loads(json.dumps(refund_prior[path]))
+        return payload
+    backlog=refund_original(backlog,'execution/change-sets.json')
+    coverage=refund_original(coverage,'execution/requirements.json')
+    tests_doc=refund_original(tests_doc,'execution/test-plan.json')
+    state=json.loads(subprocess.check_output(['git','-C',str(R),'show',refund_base+':knowledge/execution/status.json'],text=True))
     # Owner-approved documentation closure: validate current evidence/gates, then replay immutable history.
     closure_base = '88d5746ed1a4cb987dee56d4579380984a876e63'
     closure = state.get('gateDocumentationClosure')
@@ -98,6 +134,7 @@ def main():
         if name in admin_allowlist-admin_added:return subprocess.check_output(['git','-C',str(R),'show',admin_base+':'+name])
         return (R/name).read_bytes()
     def admin_original(payload,path,current=False):
+        payload=refund_original(payload,path)
         original=json.loads(subprocess.check_output(['git','-C',str(R),'show',admin_base+':knowledge/'+path],text=True))
         field={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
         if path == 'execution/change-sets.json':
@@ -1071,7 +1108,7 @@ def main():
         else:
             check(expected == current, 'Omission gap/status silently changed ' + old['id'])
     progress = (K / 'PROGRESS.md').read_text()
-    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(c['dependencies']) or 'None') + ' | ' + ('VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
+    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + ('VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
     check(task_rows in progress, 'PROGRESS task projection diverges from authority')
     mapping_rows = ''.join('| ' + e['sourcePath'] + ' | [' + e['canonicalPath'] + '#' + e['anchor'] + '](' + e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] + ') | [original @ ' + e['historicalReference']['commit'][:7] + '](' + e['historicalReference']['url'] + ') |\n' for e in manifest['consolidation']['documents'])
     check(mapping_rows in progress and '<a id="consolidation"></a>' in progress, 'PROGRESS source/destination/removal mapping omitted')
@@ -1160,7 +1197,7 @@ def main():
     task_projection = re.findall(r'^\| (CN-[^|]+) \| (P\d+) \| ([^|]+) \| ([^|]+) \|$', task_section, re.M)
     check([row[0] for row in task_projection] == cids, 'Existing task roadmap coverage lost/duplicated')
     for tid, phase, deps, status in task_projection:
-        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == ('VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
+        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == ('VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
     check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':13 if inventory_ci else 11 if pub_ci else 10 if pkg_ci else 9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')

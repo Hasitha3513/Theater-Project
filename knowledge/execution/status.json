@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-GATE-001",
-  "mode": "DOCUMENTATION_GATE_CLOSURE",
-  "workStatus": "VERIFIED",
+  "taskId": "CN-REFUND-001",
+  "mode": "SYNTHETIC_BANK_REFUND_READINESS_ONLY",
+  "workStatus": "BLOCKED",
   "productStage": "BOUNDED_SYNTHETIC_BANK_REQUEST_VERIFIED_REAL_PAYMENTS_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -10,10 +10,10 @@
   "upstream": "origin/main",
   "baselineHead": "89b9cd42e693277037275641cf44d0ebd1f884c5",
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
-  "currentChangeSet": "CN-GATE-001",
+  "currentChangeSet": "CN-REFUND-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-REFUND-001",
-  "nextAction": "Review bank-only CN-REFUND-001 scope and dependency proposal; preserve existing edges until approved",
+  "nextAction": "Owner separately authorizes the approved bounded synthetic bank-only CN-REFUND-001 implementation; recheck runtime and readiness before starting",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-PAY-BANK-002 VERIFIED/CLOSED for approved synthetic scope; wider acceptance incomplete",
   "approvedCoreDecisions": [
@@ -22,11 +22,9 @@
     "PR-BANK-001"
   ],
   "blockers": [
-    "Venue assignment and venue-specific operational authority PENDING",
-    "Qualified privacy/legal, physical-safety and independent finance appointments PENDING",
-    "OD-03/05/15 unresolved downstream policy and qualified acceptance gates retained",
-    "PayHere deferred/BLOCKED; no independent READY implementation",
-    "Commercial financial/privacy/safety/production gates remain unapproved"
+    "CN-REFUND-001 separate bounded implementation authorization not granted",
+    "Gateway-refund execution/full acceptance deferred to CN-PAY-GW-001; PayHere BLOCKED",
+    "Venue/specialist appointments and wider commercial OD-07/28 policies remain pending; no real-operation authority"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
@@ -54,7 +52,7 @@
   "verificationScope": "Bounded synthetic credit/allocation/guarded confirmation; no real financial or customer acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "NOT_GRANTED",
+  "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
     "CN-PAY-BANK-002 bounded matching/allocation scope and OD-24/27/28/29; no implementation authorized",
@@ -2891,5 +2889,61 @@
       "inProgress": 0,
       "total": 28
     }
+  },
+  "refundReadinessReconciliation": {
+    "status": "VERIFIED_DOCUMENTATION_ONLY_TASK_BLOCKED",
+    "baselineHead": "6befd9c3da3b898fbc3f8f5bf6823580aaa54291",
+    "approval": {
+      "taskId": "CN-REFUND-001",
+      "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+      "date": "2026-10-17",
+      "source": "Owner attachment 52fba128-5ee2-427a-bf2b-e14421ad555f; Record these approvals and reassess readiness only",
+      "requestSha256": "1243b034b50c9883c42e79571b70ba53b574c1550fa822757bb5fb56fd63dcc3",
+      "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+      "businessPolicy": "PROJECT.md#refund-bank-only-policy",
+      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "fullDecisionStatus": "OPEN_DECISION",
+      "realMoney": "DISABLED"
+    },
+    "hardDependencies": {
+      "CN-PAY-BANK-001": "VERIFIED_CLOSED_SYNTHETIC",
+      "CN-PAY-BANK-002": "VERIFIED_CLOSED_SYNTHETIC"
+    },
+    "gateway": "DEFERRED_BLOCKED_NOT_IMPLEMENTED",
+    "originalDependencies": [
+      "CN-PAY-GW-001",
+      "CN-PAY-BANK-002"
+    ],
+    "approvedImplementationDependencies": [
+      "CN-PAY-BANK-002"
+    ],
+    "otherDependencyEdges": "UNCHANGED",
+    "deferredGatewayAcceptance": "REQUIRED_NOT_ACCEPTED",
+    "migrationHead": "V11",
+    "plannedMigration": "V12_NOT_CREATED",
+    "schemaRepresentation": "Existing task metadata plus deferredAcceptanceDependencies and unchanged full requirement/test dependencies; strict successor validator",
+    "infrastructure": "Existing pinned PostgreSQL harness and qualified CI baseline; local runtime/configuration preflight must be rechecked before separately authorized implementation; no provider access needed for synthetic scope",
+    "policyApprovals": "OD-07/28 BOUNDED_ONLY; globals OPEN_DECISION",
+    "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+    "readiness": "BLOCKED",
+    "remainingGate": "SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION",
+    "fullRequirements": "92_NOT_ACCEPTED",
+    "fullTestPlans": "92_UNCHANGED_NOT_PROMOTED",
+    "taskTotals": {
+      "closed": 16,
+      "blocked": 12,
+      "ready": 0,
+      "inProgress": 0,
+      "total": 28
+    },
+    "roadmapCriteria": {
+      "checked": 13,
+      "total": 74
+    },
+    "evidencePaths": [
+      "ARCHITECTURE.md#refund-bank-only-scope",
+      "PROJECT.md#refund-bank-only-policy",
+      "PROGRESS.md#refund-readiness-reconciliation"
+    ]
   }
 }

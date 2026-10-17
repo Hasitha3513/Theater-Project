@@ -1197,7 +1197,20 @@
         "OD-20",
         "OD-28",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "boundedRefundReadiness": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_SCOPE_NOT_IMPLEMENTED",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "hardImplementationDependencies": [
+          "CN-PAY-BANK-002"
+        ],
+        "deferredGatewayDependency": "CN-PAY-GW-001",
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
+      }
     },
     {
       "id": "CN-A08",
@@ -2029,6 +2042,19 @@
         "evidencePath": "PROGRESS.md#admin-read-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "boundedRefundReadiness": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_SCOPE_NOT_IMPLEMENTED",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "hardImplementationDependencies": [
+          "CN-PAY-BANK-002"
+        ],
+        "deferredGatewayDependency": "CN-PAY-GW-001",
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
       }
     },
     {
@@ -4196,7 +4222,20 @@
         "OD-07",
         "OD-28",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "boundedRefundReadiness": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_SCOPE_NOT_IMPLEMENTED",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "hardImplementationDependencies": [
+          "CN-PAY-BANK-002"
+        ],
+        "deferredGatewayDependency": "CN-PAY-GW-001",
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
+      }
     },
     {
       "id": "BP-AC13",

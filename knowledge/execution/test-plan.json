@@ -563,7 +563,20 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedRefundReadiness": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_SCOPE_NOT_IMPLEMENTED",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "hardImplementationDependencies": [
+          "CN-PAY-BANK-002"
+        ],
+        "deferredGatewayDependency": "CN-PAY-GW-001",
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
+      }
     },
     {
       "id": "T-CN-A08",
@@ -966,6 +979,19 @@
         "evidencePath": "PROGRESS.md#admin-read-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "boundedRefundReadiness": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_SCOPE_NOT_IMPLEMENTED",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "hardImplementationDependencies": [
+          "CN-PAY-BANK-002"
+        ],
+        "deferredGatewayDependency": "CN-PAY-GW-001",
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
       }
     },
     {
@@ -1899,7 +1925,20 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedRefundReadiness": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_SCOPE_NOT_IMPLEMENTED",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "hardImplementationDependencies": [
+          "CN-PAY-BANK-002"
+        ],
+        "deferredGatewayDependency": "CN-PAY-GW-001",
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "implementationStatus": "NOT_VERIFIED",
+        "tests": "NOT_RUN",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
+      }
     },
     {
       "id": "T-BP-AC13",

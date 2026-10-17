@@ -266,6 +266,18 @@
         "canonicalSpecification": "ARCHITECTURE.md#gateway-sandbox-policy",
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED"
+      },
+      "boundedRefundApproval": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-17",
+        "source": "Owner attachment 52fba128-5ee2-427a-bf2b-e14421ad555f; Record these approvals and reassess readiness only",
+        "requestSha256": "1243b034b50c9883c42e79571b70ba53b574c1550fa822757bb5fb56fd63dcc3",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "businessPolicy": "PROJECT.md#refund-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realMoney": "DISABLED"
       }
     },
     {
@@ -925,6 +937,18 @@
         "approvalSource": "Owner instruction and attachment a05eb028-208e-4fe1-9310-1728833e5ed7",
         "canonicalSpecification": "ARCHITECTURE.md#admin-read-boundary",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedRefundApproval": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-17",
+        "source": "Owner attachment 52fba128-5ee2-427a-bf2b-e14421ad555f; Record these approvals and reassess readiness only",
+        "requestSha256": "1243b034b50c9883c42e79571b70ba53b574c1550fa822757bb5fb56fd63dcc3",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "businessPolicy": "PROJECT.md#refund-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realMoney": "DISABLED"
       }
     },
     {

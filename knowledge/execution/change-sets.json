@@ -1072,28 +1072,70 @@
         "BP-AC12",
         "CN-NFR-02"
       ],
-      "inScope": "One simulated/sandbox refund/correction workflow with destination/evidence/status guard",
-      "outOfScope": "No real refund/card re-bill or deletion of finance history",
+      "inScope": "One approved synthetic bank-only return workflow for independently verified, controlled-matched, undisputed, unallocated and otherwise uncommitted credit; destination/review/approval/simulated outgoing evidence/reconciliation and safe UI",
+      "outOfScope": "No allocated booking refunds, commercial cancellation/no-show/tax policy, gateway refunds, arbitrary third-party destinations, real transfers, card re-billing, financial-history deletion, Booking mutations or live notifications",
       "dependencies": [
-        "CN-PAY-GW-001",
         "CN-PAY-BANK-002"
       ],
-      "blockingDecisionIds": [
-        "OD-07",
-        "OD-28"
-      ],
-      "affectedFilesModules": "Payments/UI/Audit TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Planned Payments refund domain/application/repository/store/worker/HTTP and existing customer/finance UI; Identity public scoped authorization; no cross-module repositories",
+      "dbApiUiImpact": "Approved planned additive V12 after V11: seven Payments-owned refund records; eight bank-only request/status/review/destination/decision/attempt/evidence/reconciliation APIs; customer/finance UI",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
-      "plannedChecks": "Refund balance/destination/unknown send/retry/append-only correction tests",
-      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "migrationNeeds": "V12 PLANNED ONLY; preserve V1-V11; update shared PostgreSQL credit balance protection for allocation plus refund reservations/confirmed returns; no migration created",
+      "plannedChecks": "PostgreSQL exact money/partial-excess/deduplication/limits/independence/venue/revocation/destination/outgoing evidence/unknown reconciliation/concurrent allocation-refund/audit rollback/restart; architecture/API/UI/browser regressions",
+      "rollback": "Disable new refund commands/attempts; retain additive schema, obligations, decisions, attempts, evidence, audit and unresolved work; keep compatible allocation/refund balance guards; reviewed forward fix or compatible revert, no destructive down migration",
       "definitionOfDone": "Approval distinct from outgoing completion; receipt facts preserved",
       "requiredApproval": "Slice + method refund/control approval; live money remains separately gated",
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [
+        "ARCHITECTURE.md#refund-bank-only-scope",
+        "PROJECT.md#refund-bank-only-policy",
+        "PROGRESS.md#refund-readiness-reconciliation"
+      ],
+      "resolvedDecisionIds": [
+        "OD-07",
+        "OD-28"
+      ],
+      "boundedRefundScopeApproval": {
+        "taskId": "CN-REFUND-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-17",
+        "source": "Owner attachment 52fba128-5ee2-427a-bf2b-e14421ad555f; Record these approvals and reassess readiness only",
+        "requestSha256": "1243b034b50c9883c42e79571b70ba53b574c1550fa822757bb5fb56fd63dcc3",
+        "canonicalSpecification": "ARCHITECTURE.md#refund-bank-only-scope",
+        "businessPolicy": "PROJECT.md#refund-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realMoney": "DISABLED"
+      },
+      "deferredAcceptanceDependencies": [
+        {
+          "taskId": "CN-PAY-GW-001",
+          "purpose": "Gateway-refund execution and full-refund acceptance; not a hard prerequisite for this synthetic bank-only implementation slice",
+          "status": "DEFERRED_BLOCKED_NOT_IMPLEMENTED",
+          "requirementIds": [
+            "CN-A07",
+            "BP-AC12"
+          ],
+          "testIds": [
+            "T-CN-A07",
+            "T-BP-AC12"
+          ]
+        }
+      ],
+      "historicalImplementationDependencies": [
+        "CN-PAY-GW-001",
+        "CN-PAY-BANK-002"
+      ],
+      "remainingReadinessGates": [
+        "SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION"
+      ],
+      "downstreamDecisionIds": [
+        "OD-07",
+        "OD-28"
+      ]
     },
     {
       "id": "CN-ACCESS-001",
