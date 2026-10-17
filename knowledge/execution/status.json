@@ -2796,5 +2796,35 @@
       "conclusion": "success",
       "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39024870905"
     }
+  },
+  "ownerAccountabilityApproval": {
+    "recordedDate": "2026-10-17",
+    "approvalSource": "Owner conversation: CINENEST \u2014 OWNER ACCOUNTABILITY APPROVAL",
+    "canonicalRecord": "PROJECT.md#accountability-appointments",
+    "approvedRoles": [
+      "Source Custodian",
+      "Admission and Operations Owner",
+      "Privacy-Accountable Owner",
+      "Cleaning and Maintenance Owner",
+      "Manual-Payment Finance Owner"
+    ],
+    "authorityDelegationEscalation": "APPROVED_BOUNDED_LATEST_PROPOSAL",
+    "fullName": null,
+    "fullNameStatus": "PENDING_PLACEHOLDER_NOT_IDENTITY",
+    "sourceCustodyScope": "PROJECT-WIDE",
+    "venueScope": null,
+    "venueScopeStatus": "PENDING_PLACEHOLDER_NOT_VENUE",
+    "effectiveDate": "2026-10-17",
+    "effectiveDateBasis": "DATE_OF_RECORDED_APPROVAL; not completion of named venue appointments",
+    "pendingReviewers": [
+      "Qualified Privacy/Legal Reviewer",
+      "Physical-Safety Reviewer",
+      "Independent Finance Reviewer/Allocator"
+    ],
+    "namedAppointmentStatus": "INCOMPLETE",
+    "gateReadiness": "BLOCKED",
+    "gateClosure": "NOT_SATISFIED_REQUIRED_NAMED_OWNERS",
+    "dependencyEdges": "UNCHANGED",
+    "productionAuthorization": "NOT_GRANTED"
   }
 }
