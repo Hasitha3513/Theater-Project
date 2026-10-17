@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "taskId": "CN-REFUND-001",
-  "mode": "SYNTHETIC_BANK_REFUND_READINESS_ONLY",
-  "workStatus": "BLOCKED",
+  "mode": "SYNTHETIC_BANK_REFUND_IMPLEMENTATION",
+  "workStatus": "IN_PROGRESS",
   "productStage": "BOUNDED_SYNTHETIC_BANK_REQUEST_VERIFIED_REAL_PAYMENTS_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-REFUND-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-REFUND-001",
-  "nextAction": "Owner separately authorizes the approved bounded synthetic bank-only CN-REFUND-001 implementation; recheck runtime and readiness before starting",
+  "nextAction": "Complete scoped refund checks and exact-source CI; preserve real-money/gateway gates",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-PAY-BANK-002 VERIFIED/CLOSED for approved synthetic scope; wider acceptance incomplete",
   "approvedCoreDecisions": [
@@ -52,7 +52,7 @@
   "verificationScope": "Bounded synthetic credit/allocation/guarded confirmation; no real financial or customer acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+  "implementationAuthorization": "GRANTED_BOUNDED_SYNTHETIC_BANK_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
     "CN-PAY-BANK-002 bounded matching/allocation scope and OD-24/27/28/29; no implementation authorized",
@@ -2945,5 +2945,75 @@
       "PROJECT.md#refund-bank-only-policy",
       "PROGRESS.md#refund-readiness-reconciliation"
     ]
+  },
+  "refundImplementation": {
+    "baselineHead": "d4cf681531c73ff32b586447ed6ce0b2089b4423",
+    "authority": {
+      "source": "Owner inline instruction and attachment 9cc7b569-fe73-44e6-9ca7-7052cca6fb06",
+      "requestSha256": "0204e099ec667c57aa10e8e8cfcafe4c42eaff9840ee0d5dc34dc8b054bcf9ec",
+      "scope": "APPROVED_SYNTHETIC_BANK_ONLY_IMPLEMENTATION",
+      "date": "2026-10-17",
+      "realRefunds": "DISABLED",
+      "gateway": "DEFERRED_BLOCKED"
+    },
+    "ownedFiles": {
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java": "ec23838cdd992dba5fe9db6a032b562950618589fe37ae4d7bbeeafcb1e73f71",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "c40a1f8bcb12c2075b7e69a96a8ed0a1f48f75dc312397aa1b6600f44ae9a10f",
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcLedgerRepository.java": "d5d22465700cf402fbead437fe4e6fa7f76157ced5b55b8a71a233c34c5fc29b",
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcRefundRepository.java": "b322e4cc2cb40d2560828287af19cd0b2bc74b89c7448880d834a5ca271568ff",
+      "backend/src/main/java/com/cinenest/payments/internal/LedgerRepository.java": "f63f480300db65b4fffb84f90967b5cb7fa32336776ca174b4efbfa764ab5ba6",
+      "backend/src/main/java/com/cinenest/payments/internal/LedgerService.java": "472dffbfb73fc6df71ab46f9a1bd7f7bf898420fec8e14efe0311f10c85088ac",
+      "backend/src/main/java/com/cinenest/payments/internal/RefundController.java": "780245d50f25bbbb99b86cc5b83e41accebcbc0e0aba333443a065e51801b598",
+      "backend/src/main/java/com/cinenest/payments/internal/RefundPolicy.java": "eecdc9e0b3486660583845023f64c8f81a792945bd926824aaac3223e7eb9ae9",
+      "backend/src/main/java/com/cinenest/payments/internal/RefundRepository.java": "40f893c3fadd833b20dd73dd26ef5b674a09d4f2cc0c6685aa17ea62a1de27c3",
+      "backend/src/main/java/com/cinenest/payments/internal/RefundService.java": "79312364bfb391bcc6a64165f7c1860f22f32ffbef8740592006029fc5e92e14",
+      "backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql": "e9383d0f67240bcb50bea0cfed3b20e6897489e4b9ec23e80fb22a70f1b8465f",
+      "backend/src/test/java/com/cinenest/AdminReadIntegrationTest.java": "fdf1184a81597ce781834193013b32a23bf415546b19a1e3f2d5289de99c9563",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "73d207c5ca2dda1b556323befb936e29be06bd6f69e1c70a5b5bfae7355cf204",
+      "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java": "21131ca4973a4e858d12bdf792ac0b4d6920b2a76c6769ce6167d75d59a10592",
+      "frontend/app/admin/refunds/page.tsx": "0071d0b5ca1f1d66aa197c1db9433656747bbeb975b8f22ce09e6eeef1fda5b7",
+      "frontend/app/api/admin/venues/[venueId]/refunds/[id]/attempts/[attemptId]/evidence/route.ts": "77aa36da9342b22e4d28c0cc7dd92bebb57826231e3319eff82ae590fac593c1",
+      "frontend/app/api/admin/venues/[venueId]/refunds/[id]/attempts/route.ts": "f3037ebfff329d6622da2c10ad4cbfcc6a46f078cbc546bae12962cb2865df9f",
+      "frontend/app/api/admin/venues/[venueId]/refunds/[id]/decisions/route.ts": "f3037ebfff329d6622da2c10ad4cbfcc6a46f078cbc546bae12962cb2865df9f",
+      "frontend/app/api/admin/venues/[venueId]/refunds/[id]/destination-verifications/route.ts": "f3037ebfff329d6622da2c10ad4cbfcc6a46f078cbc546bae12962cb2865df9f",
+      "frontend/app/api/admin/venues/[venueId]/refunds/[id]/reconciliations/route.ts": "f3037ebfff329d6622da2c10ad4cbfcc6a46f078cbc546bae12962cb2865df9f",
+      "frontend/app/api/admin/venues/[venueId]/refunds/route.ts": "0d0b291c825b2f0ad95a06527817dea8c081829a43e996f3a8cb553b8fb3998d",
+      "frontend/app/api/bank/requests/[id]/refunds/route.ts": "4b7c1b405106b2f853d5cd84bb2ef353c73b6b9c1d65525345907ec348c289a1",
+      "frontend/app/api/refunds/[id]/route.ts": "8ebcb2aa674f48cfa52e6de32063742d9982e9373e2d59955e25e5b0b367a247",
+      "frontend/app/refunds/page.tsx": "b5edac6871f54942389031b4598184a73eb43f794706c57f1aa26e6dbc056c1c",
+      "frontend/components/refunds.tsx": "7f73a9e55d99ef2b9334b7e756069350c28bf5305b00a1fec707ae75ef2c7e71",
+      "frontend/components/shell.tsx": "76465b1498daf12b9d3436e412ab6a6ba97aed724f7bdf6c930c1aef15bf228f",
+      "frontend/lib/bank-backend.ts": "327f11726956435e8f08a8a119f3f7fe7d19bd660688250e742121a9789a688b",
+      "frontend/package.json": "b40588b966baf904bd73707398ce320543ff0d1ef30ec7abd71dc8b23fb53468",
+      "frontend/tests/refunds-browser.mjs": "740225bbe24204592664e7b42f6db7c9c575a6d5c3e70611fce13d722e4b8c96",
+      "frontend/tests/refunds.test.mjs": "7e20355d710769c72a77055596ff04dc20b9139163c12385e98b830709ee2145"
+    },
+    "workStatus": "IN_PROGRESS",
+    "checks": {
+      "backend": "PASS",
+      "frontend": "PASS",
+      "browser": "PASS",
+      "governance": "PASS"
+    },
+    "sourceCI": "PENDING",
+    "realRefunds": "DISABLED",
+    "gateway": "DEFERRED_BLOCKED",
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "commercialRefunds": "NOT_IMPLEMENTED",
+    "evidencePath": "PROGRESS.md#refund-implementation",
+    "negativeControls": "PASS_7_ISOLATED_CONTROLS",
+    "testEvidence": {
+      "backend": 239,
+      "frontend": 80,
+      "refundBrowserGroups": 30,
+      "bankBrowserGroups": 70,
+      "adminBrowserGroups": 63,
+      "launcherContracts": 14,
+      "database": "PostgreSQL18.6 actual isolated",
+      "fullRunVerify": "PASS; final backend-only fixes independently reverified with complete PostgreSQL/backend harness",
+      "primaryExecution": "Two pre-existing next-env.d.ts integrity findings; isolated PASS",
+      "review": "SELF_REVIEW; defects corrected and affected checks rerun; no independent human acceptance",
+      "finalSourceCI": "PENDING"
+    }
   }
 }

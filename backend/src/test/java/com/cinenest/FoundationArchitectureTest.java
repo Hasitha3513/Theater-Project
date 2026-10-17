@@ -84,4 +84,12 @@ class FoundationArchitectureTest {
         noClasses().that().haveSimpleName("AdminService").should().dependOnClassesThat().resideInAnyPackage("org.springframework.jdbc..","com.cinenest.verification..").check(classes);
         noClasses().that().haveSimpleName("VerificationAuditProjection").should().dependOnClassesThat().resideInAPackage("com.cinenest.identity.internal..").check(classes);
     }
+    @Test void refundsUseOwnedPersistenceAndCurrentIdentityPortOnly() throws Exception {
+        var classes=new ClassFileImporter().importPackages("com.cinenest");
+        noClasses().that().haveSimpleName("RefundService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+        noClasses().that().haveSimpleName("RefundService").should().dependOnClassesThat().haveSimpleName("JdbcRefundRepository").check(classes);
+        String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/payments/internal/JdbcRefundRepository.java"));
+        assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_identity.","cinenest_pricing.","cinenest_verification.");
+    }
+
 }

@@ -181,7 +181,7 @@ class AdminReadIntegrationTest {
         try{
             Flyway.configure().dataSource(target,user,password).target("10").load().migrate();
             try(var connection=DriverManager.getConnection(target,user,password);var statement=connection.createStatement()){statement.execute("INSERT INTO cinenest_identity.account VALUES ('"+A+"',TRUE,'ELIGIBLE',3)");}
-            var migration=Flyway.configure().dataSource(target,user,password).load();assertThat(migration.migrate().migrationsExecuted).isEqualTo(1);assertThat(migration.migrate().migrationsExecuted).isZero();
+            var migration=Flyway.configure().dataSource(target,user,password).target("11").load();assertThat(migration.migrate().migrationsExecuted).isEqualTo(1);assertThat(migration.migrate().migrationsExecuted).isZero();
             try(var connection=DriverManager.getConnection(target,user,password);var statement=connection.createStatement();var result=statement.executeQuery("SELECT revision FROM cinenest_identity.account")){assertThat(result.next()).isTrue();assertThat(result.getLong(1)).isEqualTo(3);}
         }finally{try(var connection=DriverManager.getConnection(url,user,password);var statement=connection.createStatement()){statement.execute("DROP DATABASE "+db+" WITH (FORCE)");}}
     }

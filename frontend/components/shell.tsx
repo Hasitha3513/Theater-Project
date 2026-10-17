@@ -39,6 +39,7 @@ export function Navigation({
                 ["/admin/inventory", "Inventory inspection"],
                 ["/admin/verification", "Synthetic verification review"],
                 ["/admin/bank", "Synthetic bank review"],
+                ["/admin/refunds", "Synthetic bank-only refunds"],
                 ["/admin/settings/packages", "Package drafts"],
 			]
 		: [
@@ -46,6 +47,7 @@ export function Navigation({
                 ["/rooms", "Explore rooms"],
                 ["/verification", "Synthetic verification"],
                 ["/bank", "Synthetic bank request"],
+                ["/refunds", "Synthetic refund status"],
 				["/account", "Account session"],
 				["/admin", "Admin shell preview"],
 			];

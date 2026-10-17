@@ -22,7 +22,7 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
     }
     private String writeEquivalent(String action) {
         return switch(action) { case "room.read" -> "room.write"; case "venue.read" -> "venue.write";
-            case "package.read" -> "package.edit"; case "account.read", "audit.account.read", "audit.verification.read" -> action; case "bank.synthetic.credit.verify", "bank.synthetic.credit.read", "bank.synthetic.allocate", "bank.synthetic.resolve", "bank.synthetic.correct.request", "bank.synthetic.correct.approve", "bank.claim.review", "bank.evidence.read", "bank.claim.escalate", "verification.review", "verification.evidence.read", "inventory.read", "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
+            case "package.read" -> "package.edit"; case "account.read", "audit.account.read", "audit.verification.read" -> action; case "refund.synthetic.read", "refund.synthetic.review", "refund.synthetic.destination.verify", "refund.synthetic.approve", "refund.synthetic.execute", "refund.synthetic.reconcile", "bank.synthetic.credit.verify", "bank.synthetic.credit.read", "bank.synthetic.allocate", "bank.synthetic.resolve", "bank.synthetic.correct.request", "bank.synthetic.correct.approve", "bank.claim.review", "bank.evidence.read", "bank.claim.escalate", "verification.review", "verification.evidence.read", "inventory.read", "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
     }
     @Transactional
     public boolean permits(UUID actor, UUID venue, String action, boolean lock) {

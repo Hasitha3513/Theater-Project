@@ -9,6 +9,7 @@ class JdbcLedgerRepository implements LedgerRepository {
  private Map<String,Object> one(String sql,Map<String,?> p){var rows=query(sql,p);if(rows.isEmpty())throw new BankFailure(404,"Financial resource not found");return rows.getFirst();}
  public List<Map<String,Object>> overdueExceptions(Map<String,?> p){return query("SELECT exception_id,request_id FROM cinenest_payments.bank_financial_exception WHERE state='OPEN' AND venue_id=:v AND due_at<=clock_timestamp() ORDER BY exception_id FOR UPDATE SKIP LOCKED",p);}
  public int escalateException(Map<String,?> p){return jdbc.sql("UPDATE cinenest_payments.bank_financial_exception SET state='ESCALATED',revision=revision+1 WHERE exception_id=:id").params(p).update();}
+ public long refundCommitted(Map<String,?> p){return ((Number)one("SELECT cinenest_payments.refund_committed(:c) AS amount",p).get("amount")).longValue();}
  public long allocatedCredit(Map<String,?> p){return ((Number)one("SELECT COALESCE(sum(amount_minor),0) AS amount FROM cinenest_payments.payment_allocation WHERE credit_id=:c",p).get("amount")).longValue();}
  public long allocatedRequest(Map<String,?> p){return ((Number)one("SELECT COALESCE(sum(amount_minor),0) AS amount FROM cinenest_payments.payment_allocation WHERE request_id=:r",p).get("amount")).longValue();}
  public List<Map<String,Object>> adjustments(Map<String,?> p){return query("SELECT adjustment_id FROM cinenest_payments.bank_credit_adjustment WHERE credit_id=:c",p);}

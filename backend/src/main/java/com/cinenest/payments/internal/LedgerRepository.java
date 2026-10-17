@@ -4,6 +4,7 @@ import java.util.*;
 interface LedgerRepository {
  List<Map<String,Object>> overdueExceptions(Map<String,?> values);
  int escalateException(Map<String,?> values);
+ long refundCommitted(Map<String,?> values);
  long allocatedCredit(Map<String,?> values);
  long allocatedRequest(Map<String,?> values);
  List<Map<String,Object>> adjustments(Map<String,?> values);

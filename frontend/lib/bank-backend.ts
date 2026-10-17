@@ -1,6 +1,8 @@
 // Dedicated bounded binary transport. Existing JSON adapters remain unchanged.
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
+ if(new RegExp(`^/api/refunds/${uuid}$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds$`).test(path)) return method === "GET";
+ if(new RegExp(`^/api/bank/requests/${uuid}/refunds$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds/${uuid}/(destination-verifications|decisions|attempts|reconciliations)$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds/${uuid}/attempts/${uuid}/evidence$`).test(path)) return method === "POST";
  if(new RegExp(`^/api/bookings/${uuid}$`).test(path)) return method === "GET";
  if(new RegExp(`^/api/admin/venues/${uuid}/bank/(credits|exceptions)(/${uuid})?$`).test(path)) return method === "GET" || (method === "POST" && path.endsWith("/credits"));
  if(new RegExp(`^/api/admin/venues/${uuid}/bank/(credits/${uuid}/(matches|corrections)|requests/${uuid}/allocations|exceptions/${uuid}/actions|corrections/${uuid}/decisions)$`).test(path)) return method === "POST";
@@ -140,7 +142,7 @@ export async function forwardBank(request: Request): Promise<Response> {
 				},
 				{ status: response.status, headers },
 			);
-		const preview = url.pathname.includes("/evidence/");
+		const preview = url.pathname.includes("/bank/requests/") && url.pathname.includes("/evidence/");
 		const bytes = await bounded(
 			response.body,
 			preview ? 5 * 1024 * 1024 : 256 * 1024,

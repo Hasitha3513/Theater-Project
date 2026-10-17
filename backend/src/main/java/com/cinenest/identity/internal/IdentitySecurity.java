@@ -95,6 +95,8 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*","/api/admin/venues/*/bank/credits","/api/admin/venues/*/bank/credits/*","/api/admin/venues/*/bank/exceptions","/api/admin/venues/*/bank/exceptions/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/bank/credits","/api/admin/venues/*/bank/credits/*/matches","/api/admin/venues/*/bank/requests/*/allocations","/api/admin/venues/*/bank/exceptions/*/actions","/api/admin/venues/*/bank/credits/*/corrections","/api/admin/venues/*/bank/corrections/*/decisions").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/bank/uploads/*/content").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/refunds/*","/api/admin/venues/*/refunds").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bank/requests/*/refunds","/api/admin/venues/*/refunds/*/destination-verifications","/api/admin/venues/*/refunds/*/decisions","/api/admin/venues/*/refunds/*/attempts","/api/admin/venues/*/refunds/*/attempts/*/evidence","/api/admin/venues/*/refunds/*/reconciliations").authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request, response, failure) -> {

@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 hard dependency is amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:16 CLOSED,12 BLOCKED,0 READY,0 IN_PROGRESS /28. [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; implementation authorization still missing.
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 hard dependency is amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:16 CLOSED,11 BLOCKED,0 unstarted READY,1 IN_PROGRESS /28. [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; current bounded implementation authorization recorded and checks underway at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -270,7 +270,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-PAY-GW-001 | 5 | Gateway sandbox attempt/verification slice | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
 | CN-PAY-BANK-001 | 5 | Bank request/receipt and durable reviewer work | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | 5 | Bank evidence/allocation and guarded confirmation | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
-| CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-BANK-002 | IN_PROGRESS / READY |
 | CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
@@ -312,7 +312,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; refund plan APPROVED/auth PENDING; venue/reviewers PENDING; PayHere BLOCKED; Admin reads VERIFIED"]
+  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; synthetic refunds IN_PROGRESS / checks pending; venue/reviewers PENDING; PayHere BLOCKED; Admin reads VERIFIED"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
@@ -487,8 +487,8 @@ Goal/outcome: Support agreed changes/cancellation while protecting the prior val
 - [ ] **P6-C02** Replacement holds, additional payment, and guarded reservation replacement implemented. — Req: CN-A02, PK-AC07, PK-AC13; tests: T-CN-A02, T-PK-AC07, T-PK-AC13; tasks: CN-AMEND-001, CN-BOOK-001, CN-QUOTE-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P6-C03** Extensions enforce verified funds, current revisions, and following-booking protection. — Req: CN-A02, PK-AC12, BR-06; tests: T-BR-06, T-CN-A02, T-PK-AC12; tasks: CN-ACCESS-001, CN-AMEND-001, CN-BOOK-001, CN-OPS-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P6-C04** Cancellation preserves safe inventory and durable credential-revocation intent. — Req: CN-A02, CN-O01; tests: T-CN-A02, T-CN-O01; tasks: CN-ACCESS-001, CN-AMEND-001, CN-BOOK-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P6-C05** Source-linked refund obligations, approvals, destinations, and outgoing attempts implemented. — Req: CN-A07, BP-AC12; tests: T-BP-AC12, T-CN-A07; tasks: CN-PAY-GW-001, CN-REFUND-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P6-C06** Stale edits, duplicate refunds, mixed-method funds, and delayed access updates tested. — Req: CN-A02, CN-A07, BP-AC05, PK-AC12; tests: T-BP-AC05, T-CN-A02, T-CN-A07, T-PK-AC12; tasks: CN-ACCESS-001, CN-AMEND-001, CN-BOOK-001, CN-PAY-BANK-002, CN-PAY-GW-001, CN-REFUND-001. Evidence: NOT_RUN / no current acceptance evidence.
+- [ ] **P6-C05** Source-linked refund obligations, approvals, destinations, and outgoing attempts implemented. — Req: CN-A07, BP-AC12; tests: T-BP-AC12, T-CN-A07; tasks: CN-PAY-GW-001, CN-REFUND-001. Evidence: PARTIAL / synthetic bank-only checks at [refund implementation](#refund-implementation); full gateway/commercial/mixed-method/access acceptance remains incomplete.
+- [ ] **P6-C06** Stale edits, duplicate refunds, mixed-method funds, and delayed access updates tested. — Req: CN-A02, CN-A07, BP-AC05, PK-AC12; tests: T-BP-AC05, T-CN-A02, T-CN-A07, T-PK-AC12; tasks: CN-ACCESS-001, CN-AMEND-001, CN-BOOK-001, CN-PAY-BANK-002, CN-PAY-GW-001, CN-REFUND-001. Evidence: PARTIAL / synthetic bank-only checks at [refund implementation](#refund-implementation); full gateway/commercial/mixed-method/access acceptance remains incomplete.
 
 - [ ] **P6-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: The original booking survives until a valid amendment commits. Refund approval and verified repayment remain separate outcomes.
 
@@ -687,7 +687,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-PAY-GW-001 | P5 | CN-QUOTE-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
 | CN-PAY-BANK-001 | P4 | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | P4 | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
-| CN-REFUND-001 | P6 | CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-REFUND-001 | P6 | CN-PAY-BANK-002 | IN_PROGRESS / READY |
 | CN-ACCESS-001 | P7 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-IOT-001 | P8 | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff after [CN-REFUND-001 approval/readiness reconciliation](#refund-readiness-reconciliation):16 CLOSED/12 BLOCKED/0 READY; bank-only policies/scope and its single hard-edge amendment approved, gateway full acceptance retained. Next: owner separately authorizes bounded implementation; runtime/readiness recheck before starting. Venue/specialists PENDING, PayHere deferred; no implementation in this session. Earlier checkpoint below is historical.
+Current handoff: CN-REFUND-001 bounded synthetic implementation authorized by attachment9cc7b569-fe73-44e6-9ca7-7052cca6fb06;16 CLOSED/11 BLOCKED/1 IN_PROGRESS. Complete scoped verification and exact-source CI before closure. PayHere and commercial/venue/specialist gates remain pending. [Current evidence](#refund-implementation). Earlier checkpoint below is historical.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1237,3 +1237,16 @@ Readiness: hard dependency and bounded policies/scope satisfied, infrastructure 
 MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;16 CLOSED,12 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 accepted delivery phases. Manual-payment-first retained; PayHere deferred/BLOCKED; existing next-env.d.ts/two DOCX companions preserved. Checks and publication/CI reported in conversation.
 
 Refund approval validation: primary knowledge/whitespace PASS; primary execution retains only two pre-existing next-env.d.ts findings. Both validators PASS in isolated exact baseline plus owned changes. Nine negative controls reject lost deferred gateway obligation, unrelated edge removal, premature READY, production authority, global OD-07 closure, lost full gateway coverage, false test PASS, lost historical edges and unauthorized V12. Migration control now exits with a clean FAIL diagnostic before incompatible historical replay, not a traceback. Application/launcher source and V1-V11 unchanged; no business tests marked run. Publication/final-source CI reported in conversation.
+
+<a id="refund-implementation"></a>
+## CN-REFUND-001 synthetic bank-only implementation — 2026-10-17
+
+Starting nested root main/origin/main at d4cf681531c73ff32b586447ed6ce0b2089b4423, ahead/behind0/0. Current owner instruction/attachment9cc7b569-fe73-44e6-9ca7-7052cca6fb06 provides separate bounded implementation authority; prior policy/V12/API/UI approvals retained. BANK-002 VERIFIED/CLOSED, hard dependency satisfied; PayHere deferred/BLOCKED and deferred gateway acceptance dependency intact. No other task edge, full92 requirements/92 plans or denominator changed. Venue/specialists and commercial policies are downstream gates, not synthetic-fixture prerequisites. Authoritative task IN_PROGRESS/READY, not closed pending final checks/source CI.
+
+V12 seven Payments tables and immutable decisions/destinations/attempts/evidence/command responses; exact minor strings; source/request/owner/venue/currency binding; shared PostgreSQL allocation/refund balance guard. Customer /refunds and finance /admin/refunds reuse current tokens, primitives and bounded existing transport. Eight approved APIs, current backend owner/venue capabilities, CSRF, independence, revision/idempotency, transactional financial audit, safe errors/no-store. Approval is not repayment; unknown keeps commitment and prohibits retry/withdrawal; evidence/reconciliation is controlled simulation only. Explicit fixture payer mapping is not inferred from receiving-account identity. Real refunds, gateway, commercial cancellation, allocated funds, notifications and Booking mutation remain disabled/excluded. No dependency installation into application manifests or framework/token change.
+
+Verification: final backend239/239 PASS on pinned actual PostgreSQL18.6, including clean V1–12/repeat, populated V11→12, preserved targeted V10→11 regression, architecture, exact/partial/full/excess balances, allocation/refund and approval races, reversal freeze, immutable facts, audit rollback, two child-process restarts retaining unknown work, ownership/venue/current grants/revocation/stitching/CSRF/destination/independence and separately recorded/verified outgoing evidence. Frontend80/80 unit/transport/render tests, isolated production build/typecheck/lint PASS. Intercepted browser rehearsal30 refund desktop/mobile/keyboard/lifecycle/unknown/denied/conflict/empty groups; bank70 groups across seven widths and account/audit63 groups PASS, not real API/provider/bank/customer evidence. Run.sh check PASS from another directory using existing private local configuration (no service started); launcher14 contracts PASS. Seven isolated governance negative controls reject lost implementation authority/deferred gateway, unrelated edge change, real-money authority, premature closure, false full acceptance and source-integrity change. Primary design/whitespace PASS; primary execution retains exactly two pre-existing next-env.d.ts integrity findings; both validators PASS in exact isolated source. Run-verify PASS (including npm audit and launcher14 contracts); final backend-only corrections independently reverified with the complete PostgreSQL/backend harness239/239 and packaged startup. Exact-source CI pending before closure.
+
+Self-review corrected conflict classification and the older upgrade test's latest-version assumption; added immutable policy snapshot and explicit cross-account status denial; separated personally recorded outgoing fixture evidence from independent verification; bound the closed source fixture to its explicit original-payer account; verified rollback on command-persistence failure without leaking an internal error. Earlier passing evidence was reopened after those source changes and replaced by final scoped checks. A test-only lint warning was fixed; the sandbox-restricted initial frontend run was not counted as a pass. Node24.22.0 archive checksum checked with npm11.19.1 and Java25; no application dependency selected/changed. Source receipts/hashes retained in existing status.refundImplementation. No real destination, repayment, provider qualification or customer acceptance inferred.
+
+P6-C05/C06 retain full gateway/commercial/mixed-method/access acceptance gaps and remain unchecked; partial synthetic evidence links here. All phase criteria unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74. D0 prepared/document-rehearsed; D1/D2 NOT_READY; D3-D6 outlines,0/7 held/accepted and0/10 delivery phases accepted. No readiness inflation. Unrelated next-env.d.ts and both DOCX companions preserved unstaged. Rollback: disable refund commands/attempts; retain V12/history/work and compatible allocation guard; forward fix, no destructive down migration. Next action: complete scoped checks and final-source CI. Publication results recorded in conversation.

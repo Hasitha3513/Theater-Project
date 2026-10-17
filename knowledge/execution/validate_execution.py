@@ -56,12 +56,67 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Explicit synthetic refund implementation successor. Validate current bytes and task authority,
+    # then replay the preceding readiness-only record as immutable historical evidence.
+    impl_base = 'd4cf681531c73ff32b586447ed6ce0b2089b4423'
+    impl_allowed = {'frontend/app/api/admin/venues/[venueId]/refunds/route.ts', 'frontend/app/api/bank/requests/[id]/refunds/route.ts', 'frontend/tests/refunds-browser.mjs', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'frontend/app/admin/refunds/page.tsx', 'backend/src/main/java/com/cinenest/payments/internal/JdbcRefundRepository.java', 'frontend/components/refunds.tsx', 'backend/src/main/java/com/cinenest/payments/internal/RefundPolicy.java', 'frontend/app/refunds/page.tsx', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/payments/internal/LedgerRepository.java', 'backend/src/main/java/com/cinenest/payments/internal/JdbcLedgerRepository.java', 'frontend/app/api/admin/venues/[venueId]/refunds/[id]/attempts/[attemptId]/evidence/route.ts', 'frontend/tests/refunds.test.mjs', 'backend/src/main/java/com/cinenest/payments/internal/RefundController.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'frontend/app/api/admin/venues/[venueId]/refunds/[id]/attempts/route.ts', 'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql', 'frontend/app/api/admin/venues/[venueId]/refunds/[id]/reconciliations/route.ts', 'frontend/app/api/admin/venues/[venueId]/refunds/[id]/destination-verifications/route.ts', 'frontend/app/api/refunds/[id]/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/RefundService.java', 'backend/src/test/java/com/cinenest/AdminReadIntegrationTest.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'frontend/package.json', 'backend/src/main/java/com/cinenest/payments/internal/RefundRepository.java', 'frontend/app/api/admin/venues/[venueId]/refunds/[id]/decisions/route.ts', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/payments/internal/LedgerService.java'}
+    impl = state.get('refundImplementation', {})
+    impl_task = next(row for row in backlog['changeSets'] if row['id']=='CN-REFUND-001')
+    def impl_prior(path):
+        return json.loads(subprocess.check_output(['git','-C',str(R),'show',impl_base+':knowledge/'+path],text=True))
+    impl_state = impl_prior('execution/status.json')
+    current_state = json.loads(json.dumps(state)); current_state.pop('refundImplementation',None)
+    impl_expected_state=json.loads(json.dumps(impl_state))
+    impl_expected_state.update(mode='SYNTHETIC_BANK_REFUND_IMPLEMENTATION',workStatus=impl.get('workStatus'),implementationAuthorization='GRANTED_BOUNDED_SYNTHETIC_BANK_ONLY',nextAction='Review CN-ACCESS-001 bank-only scope and retained gateway dependency; no implementation' if impl.get('workStatus')=='VERIFIED' else 'Complete scoped refund checks and exact-source CI; preserve real-money/gateway gates')
+    check(current_state == impl_expected_state, 'Refund implementation changed unrelated execution history')
+    check(impl.get('baselineHead')==impl_base, 'Refund implementation baseline changed')
+    check(impl.get('authority') == {'source': 'Owner inline instruction and attachment 9cc7b569-fe73-44e6-9ca7-7052cca6fb06', 'requestSha256': '0204e099ec667c57aa10e8e8cfcafe4c42eaff9840ee0d5dc34dc8b054bcf9ec', 'scope': 'APPROVED_SYNTHETIC_BANK_ONLY_IMPLEMENTATION', 'date': '2026-10-17', 'realRefunds': 'DISABLED', 'gateway': 'DEFERRED_BLOCKED'}, 'Refund implementation owner authority missing/changed')
+    for field,value in {'realRefunds':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','commercialRefunds':'NOT_IMPLEMENTED','evidencePath':'PROGRESS.md#refund-implementation'}.items():
+        check(impl.get(field)==value,'Refund boundary changed '+field)
+    check(set(impl.get('ownedFiles',{}))==impl_allowed,'Refund owned source inventory changed')
+    for name,digest in impl.get('ownedFiles',{}).items():
+        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Refund source checksum mismatch '+name)
+    check(impl.get('workStatus') in ('IN_PROGRESS','VERIFIED'), 'Refund status invalid')
+    if impl.get('workStatus')=='VERIFIED':
+        check(all(value=='PASS' for value in impl.get('checks',{}).values()) and set(impl.get('checks',{}))=={'backend','frontend','browser','governance'} and impl.get('sourceCI')=='SUCCESS', 'Refund closure lacks actual checks/source CI')
+        source=impl.get('sourceCommit','')
+        check(bool(re.fullmatch('[0-9a-f]{40}',source)) and str(impl.get('sourceRun','')).startswith('https://github.com/Hasitha3513/Theater-Project/actions/runs/'), 'Refund closure source CI receipt missing')
+        if re.fullmatch('[0-9a-f]{40}',source):
+            for name,digest in impl.get('ownedFiles',{}).items():
+                result=subprocess.run(['git','-C',str(R),'show',source+':'+name],capture_output=True)
+                check(result.returncode==0 and hashlib.sha256(result.stdout).hexdigest()==digest,'Refund CI source stale '+name)
+    original_backlog=impl_prior('execution/change-sets.json')
+    expected_task=next(row for row in original_backlog['changeSets'] if row['id']=='CN-REFUND-001').copy()
+    expected_task.update(authorityAvailable=True,readiness='CLOSED' if impl.get('workStatus')=='VERIFIED' else 'READY',workStatus=impl.get('workStatus'),remainingReadinessGates=[],implementationAuthorization=impl.get('authority'))
+    expected_task.update({'affectedFilesModules': 'Payments refund application/persistence/HTTP, Identity public scoped authorization and existing customer/finance shells; no Booking mutation or foreign repository', 'dbApiUiImpact': 'V12 seven Payments-owned refund records; eight approved bank-only APIs; /refunds and /admin/refunds with existing tokens/primitives', 'migrationNeeds': 'V12__synthetic_bank_refunds.sql additive; V1-V11 unchanged; shared PostgreSQL allocation/refund commitment guard retained on rollback', 'evidencePaths': ['ARCHITECTURE.md#refund-bank-only-scope', 'PROJECT.md#refund-bank-only-policy', 'PROGRESS.md#refund-readiness-reconciliation', 'PROGRESS.md#refund-implementation']})
+    check(impl_task==expected_task,'Refund task scope/dependency/approval changed beyond implementation status')
+    for row,prior in zip(backlog['changeSets'],original_backlog['changeSets']):
+        if row['id']!='CN-REFUND-001': check(row==prior,'Refund changed unrelated task '+row['id'])
+    check(len(backlog['changeSets'])==28,'Refund task count changed')
+    for name in ('requirements.json','test-plan.json'):
+        check(read_json(name)==impl_prior('execution/'+name),'Refund changed full requirements/test acceptance '+name)
+    def impl_original(payload,path):
+        if path=='execution/change-sets.json' and any('implementationAuthorization' in row and row['id']=='CN-REFUND-001' for row in payload.get('changeSets',[])):
+            return impl_prior(path)
+        return payload
+    def impl_source(name):
+        if name in impl_allowed:
+            old=subprocess.run(['git','-C',str(R),'show',impl_base+':'+name],capture_output=True)
+            if old.returncode==0:return old.stdout
+        return (R/name).read_bytes()
+    impl_added=impl_allowed-set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',impl_base,'--','backend','frontend'],text=True).splitlines())
+    # V1-V11 are immutable; only one additive V12 is authorized.
+    old_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',impl_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
+    for name in old_migrations: check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',impl_base+':'+name]),'Refund altered historical migration '+name)
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==set(old_migrations)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'},'Refund migration scope invalid')
+    backlog=impl_original(backlog,'execution/change-sets.json')
+    state=impl_state
     # Approved refund readiness-only successor: exact scoped delta, two dependency classes, no implementation.
     refund_base = '6befd9c3da3b898fbc3f8f5bf6823580aaa54291'
     refund_expected = {'execution/change-sets.json': 'ec04d1fd68c66d3aa8c01ea4a23dd9f4e8d0583b5c544ecceef5674c2c7d152e', 'execution/requirements.json': '3c8f750afc0696351c9bbe28fa2c7f801398ef0516156d308d7a90d1c82befc0', 'execution/test-plan.json': '8d71332b2fbcf1ba102d5b358d54064279ecef52cb4d167fccb5d3f86432cc95', 'decisions/cinenest-open-decisions.json': '9c965c8254c2095888c1fc629035bf8e1a2ed78cdf2a3fd83e9ac3598eb99671'}
     refund_prior = {}
     for path, digest in refund_expected.items():
-        actual = json.loads((K / path).read_text())
+        actual = impl_original(json.loads((K / path).read_text()),path)
         check(hashlib.sha256(json.dumps(actual, sort_keys=True).encode()).hexdigest() == digest, 'Refund readiness scope/history/requirement evidence changed '+path)
         refund_prior[path] = json.loads(subprocess.check_output(['git','-C',str(R),'show',refund_base+':knowledge/'+path],text=True))
     check(hashlib.sha256(json.dumps(state, sort_keys=True).encode()).hexdigest() == 'f877a7caef62600ab4691685954bed5d653ce5c7db73d55af57aaa50d3db6aa6', 'Refund readiness state/authority changed')
@@ -73,14 +128,15 @@ def main():
         check(row['dependencies']==(['CN-PAY-BANK-002'] if row['id']=='CN-REFUND-001' else prior_edges[row['id']]), 'Unapproved refund dependency amendment '+row['id'])
     check(len(coverage['requirements'])==92 and len(tests_doc['tests'])==92, 'Refund approval lost full coverage')
     app_delta = subprocess.check_output(['git','-C',str(R),'diff','--name-only',refund_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
-    check(set(app_delta) <= {'frontend/next-env.d.ts'}, 'Refund readiness session changed application/launcher source')
+    check(set(app_delta) - impl_allowed <= {'frontend/next-env.d.ts'}, 'Refund readiness session changed application/launcher source')
     migration_base = subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',refund_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')} == set(migration_base), 'Readiness-only approval cannot create a migration')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')} == set(migration_base)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'}, 'Readiness-only approval cannot create a migration')
 
     if errors:
         print('\n'.join('FAIL '+message for message in errors))
         return 1
     def refund_original(payload,path):
+        payload=impl_original(payload,path)
         if path not in refund_prior: return payload
         field={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
         marked=any('boundedRefundScopeApproval' in row or 'boundedRefundApproval' in row or 'boundedRefundReadiness' in row for row in payload[field])
@@ -129,10 +185,10 @@ def main():
     check(admin_evidence.get('approval')=={'taskId': 'CN-ADMIN-001', 'status': 'APPROVED_BOUNDED_SYNTHETIC_POLICY', 'requestSha256': 'b9432d4fe4c2c8f1ca52a49f829fe1278b9cd0bbf04d5081531906bb0ab744ef', 'approvalSource': 'Owner instruction and attachment a05eb028-208e-4fe1-9310-1728833e5ed7', 'canonicalSpecification': 'ARCHITECTURE.md#admin-read-boundary', 'fullDecisionStatus': 'OPEN_DECISION'},'Admin owner approval lost/changed')
     check(admin_evidence.get('baselineHead')==admin_base,'Admin baseline changed')
     for field,value in {'realPayments':'DISABLED','productionPersonalData':'DISABLED','exports':'DISABLED','dependencyEdges':'UNCHANGED','gateway':'BLOCKED_ACCESS_UNAVAILABLE'}.items():check(admin_evidence.get(field)==value,'Admin boundary changed '+field)
-    for name,digest in admin_evidence.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Admin source checksum mismatch '+name)
+    for name,digest in admin_evidence.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256(impl_source(name)).hexdigest()==digest,'Admin source checksum mismatch '+name)
     def admin_source(name):
         if name in admin_allowlist-admin_added:return subprocess.check_output(['git','-C',str(R),'show',admin_base+':'+name])
-        return (R/name).read_bytes()
+        return impl_source(name)
     def admin_original(payload,path,current=False):
         payload=refund_original(payload,path)
         original=json.loads(subprocess.check_output(['git','-C',str(R),'show',admin_base+':knowledge/'+path],text=True))
@@ -194,7 +250,7 @@ def main():
     check(state==expected_state,'Gateway changed unrelated status or financial safety')
     state=original_state
     gateway_paths=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',gateway_base,'--','backend','frontend'],text=True).splitlines())
-    check(set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-admin_added==gateway_paths,'Gateway decision session changed application inventory')
+    check(set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-admin_added-impl_added==gateway_paths,'Gateway decision session changed application inventory')
     for name in gateway_paths-{'frontend/next-env.d.ts'}:
         check(admin_source(name)==subprocess.check_output(['git','-C',str(R),'show',gateway_base+':'+name]),'Gateway decision session changed application '+name)
     for path,field in [('execution/change-sets.json','changeSets'),('decisions/cinenest-open-decisions.json','decisions')]:
@@ -223,9 +279,10 @@ def main():
     check(ledger_evidence.get('baselineHead')==ledger_base and ledger_evidence.get('authorizationRequestSha256')=='607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d','Ledger owner approval provenance missing')
     for name,digest in ledger_owned.items():check((R/name).is_file() and hashlib.sha256(admin_source(name)).hexdigest()==digest,'Ledger source checksum mismatch '+name)
     ledger_baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ledger_base,'--','backend','frontend'],text=True).splitlines())
-    ledger_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    ledger_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-impl_added
     check(ledger_current_app-admin_added==ledger_baseline_app|ledger_allowlist,'Ledger changed application inventory outside owner scope')
     for migration in (R/'backend/src/main/resources/db/migration').glob('V*__*.sql'):
+        if migration.name=='V12__synthetic_bank_refunds.sql': continue # Checked independently by the implementation successor above.
         if migration.relative_to(R).as_posix() in admin_added:continue
         if migration.name.startswith('V10__'):continue
         check(migration.read_bytes()==subprocess.check_output(['git','-C',str(R),'show',ledger_base+':'+migration.relative_to(R).as_posix()]),'Ledger changed historical migration '+migration.name)
@@ -304,7 +361,7 @@ def main():
     check(bank_evidence.get('baselineHead')==bank_base and bank_evidence.get('authorizationRequestSha256')=='22fb4107bb4cc126cbc9a658a7a8a121df0f6d5acd15a269366463464824a407','Bank owner provenance changed')
     check(set(bank_owned)=={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/test/java/com/cinenest/payments/internal/SyntheticEvidenceTest.java', 'frontend/app/bank/page.tsx', 'backend/src/main/java/com/cinenest/payments/internal/EncryptedEvidenceStore.java', 'backend/src/main/java/com/cinenest/payments/internal/ReviewerNotice.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/route.ts', 'frontend/lib/bank.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/decisions/route.ts', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/route.ts', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'frontend/app/globals.css', 'frontend/app/api/bank/requests/[id]/resubmissions/route.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/escalations/route.ts', 'backend/src/main/java/com/cinenest/verification/BankEligibility.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/evidence/[evidenceId]/route.ts', 'frontend/app/api/bank/requests/[id]/claims/route.ts', 'frontend/tests/bank.test.mjs', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticEvidenceProcessor.java', 'frontend/app/api/bank/uploads/[id]/complete/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/BankController.java', 'frontend/app/admin/bank/page.tsx', 'frontend/app/api/bank/requests/[id]/route.ts', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticFixtures.java', 'backend/src/main/java/com/cinenest/payments/package-info.java', 'backend/src/main/java/com/cinenest/payments/internal/BankFailure.java', 'backend/src/main/java/com/cinenest/payments/internal/DisabledReviewerNotice.java', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/booking/internal/BankRequestHoldAdapter.java', 'backend/src/main/java/com/cinenest/payments/internal/BankRepository.java', 'backend/src/main/java/com/cinenest/pricing/internal/BankQuotationAdapter.java', 'frontend/app/api/bank/requests/route.ts', 'frontend/app/api/bank/uploads/[id]/content/route.ts', 'frontend/components/bank.tsx', 'backend/src/test/java/com/cinenest/payments/internal/BankFaults.java', 'frontend/app/api/bank/claims/[id]/uploads/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java', 'backend/src/main/java/com/cinenest/payments/internal/JdbcBankRepository.java', 'backend/src/main/java/com/cinenest/pricing/BankQuotation.java', 'backend/src/main/resources/db/migration/V9__synthetic_bank_requests.sql', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/payments/internal/BankWorker.java', 'frontend/tests/bank-browser.mjs', 'backend/src/main/java/com/cinenest/payments/internal/BankPolicy.java', 'backend/src/main/java/com/cinenest/verification/internal/BankEligibilityAdapter.java', 'backend/src/main/java/com/cinenest/booking/BankRequestHolds.java', 'frontend/package.json', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'backend/src/main/java/com/cinenest/payments/internal/PrivateEvidenceStore.java'} and 'frontend/next-env.d.ts' not in bank_owned,'Bank source inventory exceeds owner scope')
     baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',bank_base,'--','backend','frontend'],text=True).splitlines())
-    current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-impl_added
     check(current_app-admin_added-(ledger_allowlist-ledger_baseline_app)==baseline_app|set(bank_owned),'Bank introduced unreviewed application files or removed retained sources')
     for name,digest in bank_owned.items():
         check((R/name).is_file() and hashlib.sha256(ledger_source(name)).hexdigest()==digest,'Bank source mismatch '+name)
@@ -1108,7 +1165,7 @@ def main():
         else:
             check(expected == current, 'Omission gap/status silently changed ' + old['id'])
     progress = (K / 'PROGRESS.md').read_text()
-    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + ('VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
+    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + (impl_task['workStatus']+' / '+impl_task['readiness'] if c['id']=='CN-REFUND-001' else 'VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
     check(task_rows in progress, 'PROGRESS task projection diverges from authority')
     mapping_rows = ''.join('| ' + e['sourcePath'] + ' | [' + e['canonicalPath'] + '#' + e['anchor'] + '](' + e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] + ') | [original @ ' + e['historicalReference']['commit'][:7] + '](' + e['historicalReference']['url'] + ') |\n' for e in manifest['consolidation']['documents'])
     check(mapping_rows in progress and '<a id="consolidation"></a>' in progress, 'PROGRESS source/destination/removal mapping omitted')
@@ -1197,7 +1254,7 @@ def main():
     task_projection = re.findall(r'^\| (CN-[^|]+) \| (P\d+) \| ([^|]+) \| ([^|]+) \|$', task_section, re.M)
     check([row[0] for row in task_projection] == cids, 'Existing task roadmap coverage lost/duplicated')
     for tid, phase, deps, status in task_projection:
-        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == ('VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
+        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == (impl_task['workStatus']+' / '+impl_task['readiness'] if tid=='CN-REFUND-001' else 'VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
     check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':13 if inventory_ci else 11 if pub_ci else 10 if pkg_ci else 9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')

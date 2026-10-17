@@ -1078,21 +1078,22 @@
         "CN-PAY-BANK-002"
       ],
       "blockingDecisionIds": [],
-      "affectedFilesModules": "Planned Payments refund domain/application/repository/store/worker/HTTP and existing customer/finance UI; Identity public scoped authorization; no cross-module repositories",
-      "dbApiUiImpact": "Approved planned additive V12 after V11: seven Payments-owned refund records; eight bank-only request/status/review/destination/decision/attempt/evidence/reconciliation APIs; customer/finance UI",
+      "affectedFilesModules": "Payments refund application/persistence/HTTP, Identity public scoped authorization and existing customer/finance shells; no Booking mutation or foreign repository",
+      "dbApiUiImpact": "V12 seven Payments-owned refund records; eight approved bank-only APIs; /refunds and /admin/refunds with existing tokens/primitives",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "V12 PLANNED ONLY; preserve V1-V11; update shared PostgreSQL credit balance protection for allocation plus refund reservations/confirmed returns; no migration created",
+      "migrationNeeds": "V12__synthetic_bank_refunds.sql additive; V1-V11 unchanged; shared PostgreSQL allocation/refund commitment guard retained on rollback",
       "plannedChecks": "PostgreSQL exact money/partial-excess/deduplication/limits/independence/venue/revocation/destination/outgoing evidence/unknown reconciliation/concurrent allocation-refund/audit rollback/restart; architecture/API/UI/browser regressions",
       "rollback": "Disable new refund commands/attempts; retain additive schema, obligations, decisions, attempts, evidence, audit and unresolved work; keep compatible allocation/refund balance guards; reviewed forward fix or compatible revert, no destructive down migration",
       "definitionOfDone": "Approval distinct from outgoing completion; receipt facts preserved",
       "requiredApproval": "Slice + method refund/control approval; live money remains separately gated",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
       "evidencePaths": [
         "ARCHITECTURE.md#refund-bank-only-scope",
         "PROJECT.md#refund-bank-only-policy",
-        "PROGRESS.md#refund-readiness-reconciliation"
+        "PROGRESS.md#refund-readiness-reconciliation",
+        "PROGRESS.md#refund-implementation"
       ],
       "resolvedDecisionIds": [
         "OD-07",
@@ -1129,13 +1130,19 @@
         "CN-PAY-GW-001",
         "CN-PAY-BANK-002"
       ],
-      "remainingReadinessGates": [
-        "SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION"
-      ],
+      "remainingReadinessGates": [],
       "downstreamDecisionIds": [
         "OD-07",
         "OD-28"
-      ]
+      ],
+      "implementationAuthorization": {
+        "source": "Owner inline instruction and attachment 9cc7b569-fe73-44e6-9ca7-7052cca6fb06",
+        "requestSha256": "0204e099ec667c57aa10e8e8cfcafe4c42eaff9840ee0d5dc34dc8b054bcf9ec",
+        "scope": "APPROVED_SYNTHETIC_BANK_ONLY_IMPLEMENTATION",
+        "date": "2026-10-17",
+        "realRefunds": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      }
     },
     {
       "id": "CN-ACCESS-001",
