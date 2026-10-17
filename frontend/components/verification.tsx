@@ -98,6 +98,9 @@ export function VerificationWorkspace({
 		[preview],
 	);
 	function clear() {
+		setFile(undefined);
+		setProgress(undefined);
+		setConsent(false);
 		setValue(undefined);
 		setItems(undefined);
 		setPreview(undefined);
@@ -139,6 +142,10 @@ export function VerificationWorkspace({
 					body: pending.current.body,
 				}),
 			);
+			if (value?.id !== loaded.id) {
+				setFile(undefined);
+				setProgress(undefined);
+			}
 			setValue(loaded);
 			setRequestId(loaded.id);
 			setReviewed(false);

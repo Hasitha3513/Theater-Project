@@ -213,6 +213,42 @@ try {
 			exact: true,
 		})
 		.setInputFiles({
+			name: "SYNTHETIC-NOT-SUBMITTED.png",
+			mimeType: "image/png",
+			buffer: png,
+		});
+	mode = "denied";
+	await page
+		.getByRole("button", {
+			name: "Refresh current request and history",
+			exact: true,
+		})
+		.click();
+	await page
+		.getByRole("heading", { name: "Access denied", exact: true })
+		.waitFor();
+	mode = "normal";
+	await page
+		.getByRole("button", {
+			name: "Refresh current request and history",
+			exact: true,
+		})
+		.click();
+	await page.getByText(/REVIEW_REQUIRED · Revision/).waitFor();
+	assert.equal(
+		await page
+			.getByRole("button", {
+				name: "Upload and request simulated scan",
+				exact: true,
+			})
+			.isDisabled(),
+		true,
+	);
+	await page
+		.getByLabel("Approved synthetic image only (JPEG/PNG, 5 MiB, 20 MP)", {
+			exact: true,
+		})
+		.setInputFiles({
 			name: "SYNTHETIC-BACK.png",
 			mimeType: "image/png",
 			buffer: png,

@@ -65,7 +65,7 @@
       "command": "./Run-verify.sh --offline",
       "environment": "isolated /tmp/cinenest-verify-validation-069a3f3; main next-env untouched",
       "exitCode": 0,
-      "backendTests": 167,
+      "backendTests": 168,
       "frontendTests": 62,
       "launcherContracts": 14,
       "knowledgeValidators": "PASS",
@@ -2379,11 +2379,11 @@
       "frontend/app/api/verification/uploads/[id]/content/route.ts": "7796080c6294270a49fd5c1ee403aa1f02e34f5d5a0ebf62e71e1a730a56b0c6",
       "frontend/app/verification/page.tsx": "1255940a0e9253f646ed2aa8e403c401ba5d76a5047ec51ff24f9098d609c713",
       "frontend/components/shell.tsx": "22850887e92311fa604e8e6d7ca58c0ec20865e964a7d85f1646fc36a3fdcd24",
-      "frontend/components/verification.tsx": "8a84696f8d5790c4c37daabdca78bda5b47c08cb3b7544608f5e6a4673127dde",
+      "frontend/components/verification.tsx": "8a316983ec9bc42ff5071943c3da9606374e1be401a0ab3f049bcfa96e6a162d",
       "frontend/lib/verification-backend.ts": "80123cb28621e10e536d836690eecd190f4d3ebddb41d116fde86259d01ca13a",
       "frontend/lib/verification.ts": "7b3883ee6e979eb6eda8b405ecac0fdb18afb7b68e211487973e294858b3d7ed",
       "frontend/package.json": "42703abfd1f6e94260f8797959a78c4f7d197418683bf54173d9b37c8673b100",
-      "frontend/tests/verification-browser.mjs": "ee3ff586184143484bf1b6a358333a50465452b86c4ac346d5d02bc7ae2ba9f7",
+      "frontend/tests/verification-browser.mjs": "c287349cfe4ede76c580694a63576edb49af6d19cd4b26eb6bb04e28f05c05d6",
       "frontend/tests/verification.test.mjs": "066970f76e57307553b4d0ffb8c7de36ade288cf208607e451aa366b2a47b5b3",
       "backend/src/test/java/com/cinenest/PublicationIntegrationTest.java": "3d994857e1f6f4f1a54a7feff7c946a8ebe749a0a5e8d9849f2bc59ac3e37283"
     },
@@ -2425,7 +2425,8 @@
     "negativeControls": {
       "result": "PASS",
       "method": "In-memory Path.read_text fault injection; no file mutations",
-      "rejected": 6
+      "rejected": 6,
+      "executedDate": "2026-10-17"
     },
     "ciHistory": [
       {
