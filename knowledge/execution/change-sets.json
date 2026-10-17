@@ -970,8 +970,8 @@
       "definitionOfDone": "Funds retained independently; one eligible booking; no duplicate allocation",
       "requiredApproval": "Explicit isolated-ledger slice approval and final matching/allocation controls",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "ARCHITECTURE.md#bank-ledger-boundary",
         "PROGRESS.md#bank-ledger-implementation"
@@ -1028,7 +1028,7 @@
         "realPayments": "DISABLED"
       },
       "implementationEvidence": {
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }

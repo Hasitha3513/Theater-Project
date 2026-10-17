@@ -296,7 +296,7 @@
       },
       "bankLedgerImplementationEvidence": {
         "taskId": "CN-PAY-BANK-002",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1673,7 +1673,7 @@
       },
       "bankLedgerImplementationEvidence": {
         "taskId": "CN-PAY-BANK-002",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1747,7 +1747,7 @@
       },
       "bankLedgerImplementationEvidence": {
         "taskId": "CN-PAY-BANK-002",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1996,7 +1996,7 @@
       },
       "bankLedgerImplementationEvidence": {
         "taskId": "CN-PAY-BANK-002",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -3590,7 +3590,7 @@
       ],
       "bankLedgerImplementationEvidence": {
         "taskId": "CN-PAY-BANK-002",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -3641,7 +3641,7 @@
       ],
       "bankLedgerImplementationEvidence": {
         "taskId": "CN-PAY-BANK-002",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -3692,7 +3692,7 @@
       ],
       "bankLedgerImplementationEvidence": {
         "taskId": "CN-PAY-BANK-002",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -3799,7 +3799,7 @@
       ],
       "bankLedgerImplementationEvidence": {
         "taskId": "CN-PAY-BANK-002",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_LEDGER",
         "evidencePath": "PROGRESS.md#bank-ledger-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",

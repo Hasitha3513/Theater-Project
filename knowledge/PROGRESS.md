@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-CN-PAY-BANK-002 is IN_PROGRESS for the owner-approved synthetic credit/allocation/guarded confirmation slice; [current evidence](#bank-ledger-implementation). Wider commercial policy, real payment and customer acceptance remain open.
+CN-PAY-BANK-002 is VERIFIED/CLOSED for the owner-approved synthetic credit/allocation/guarded confirmation slice; [current evidence](#bank-ledger-implementation). Wider commercial policy, real payment and customer acceptance remain open.
 
 CN-PAY-BANK-001 is VERIFIED/CLOSED for [synthetic requests/private receipt review](#bank-request-implementation) after exact-source CI39014691250 SUCCESS at24c127cc234ecd4d1df3943f2821e770ac12dab8. CN-VERIFY-001 is VERIFIED/CLOSED for [approved synthetic manual review](#verification-implementation) after exact-source CI SUCCESS. Real IDs and OCR remain disabled. CN-QUOTE-001 is VERIFIED/CLOSED for [bounded synthetic quotations](#quotation-implementation); CN-BOOK-001 and CN-PKG-002 remain VERIFIED/CLOSED for their inventory/indicative publication scopes. Real commercial issuance, acceptance, checkout, payment and booking confirmation remain disabled. Wider commercial and customer/phase acceptance remain open; current next action is in the [handoff](#current-handoff).
 
@@ -308,12 +308,12 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-PAY-BANK-002 synthetic ledger IN_PROGRESS<br/>Real payments DISABLED; exact-source checks/CI pending"]
+  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Real payments DISABLED; gateway-sandbox scope review next"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
-  P4["P4 Identity/bank<br/>Synthetic identity and request/review VERIFIED; ledger IN_PROGRESS<br/>0 of 8 full criteria; NOT_ACCEPTED"]
+  P4["P4 Identity/bank<br/>Synthetic identity/request/ledger VERIFIED within bounded scopes<br/>0 of 8 full criteria; NOT_ACCEPTED"]
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P7["P7 Access/hardware<br/>W13-14 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -963,7 +963,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**CN-PAY-BANK-002 IN_PROGRESS** under the owner-approved synthetic ledger/confirmation boundary; [evidence](#bank-ledger-implementation). CN-PAY-BANK-001 remains VERIFIED/CLOSED. Preserve unrelated next-env.d.ts. Bounded OD-24/27/28/29 approvals do not close wider commercial/staffing/refund/financial policies. Real payments/commercial confirmation/live delivery remain disabled. Complete checks/review/exact-source CI before closure. D1/D2 NOT_READY; no phase/customer acceptance.
+**CN-PAY-BANK-002 VERIFIED/CLOSED** only for approved synthetic credit/allocation/guarded confirmation; [evidence](#bank-ledger-implementation). Exact source f3b0578faefc2495637b4dbcd99d39e0df4e3913, CI39018785460 SUCCESS. Preserve unrelated next-env.d.ts. Bounded OD-24/27/28/29 approvals do not close wider commercial/staffing/refund/financial policies. Real payments/commercial confirmation/refunds/live delivery/hardware remain disabled. Next: review CN-PAY-GW-001 bounded sandbox scope and OD-06/07/20; no next implementation authorized. D1/D2 NOT_READY; no phase/customer acceptance.
 
 <a id="publication-implementation"></a>
 ## CN-PKG-002 implementation — 2026-10-16
@@ -1088,7 +1088,7 @@ Current MVP: P0 6/8;P1 2/6;P2 3/6;P3 2/6;P4 0/8;P5 0/6;P6 0/6;P7 0/6;P8 0/7;P9 0
 Final knowledge-only closure receipt is verified separately in conversation; no application source changes after the successful source CI. Retain compatible maintenance worker/storage keys for pending cleanup/reconciliation before any code backout; disabling commands alone must not silently abandon evidence. Unrelated next-env.d.ts remains untouched/unpublished. STOP after this change set.
 
 <a id="bank-ledger-implementation"></a>
-## CN-PAY-BANK-002 approved synthetic ledger — IN_PROGRESS
+## CN-PAY-BANK-002 approved synthetic ledger — VERIFIED/CLOSED
 
 Owner attachment 5030b7c9-38bf-4189-9705-39caebae3640 approves reviewed OD-24/27/28/29 bounded policies/schema/API/UI/tests/rollback; original broader decision statuses/history retained. Verified baseline main/origin/main89b9cd42e693277037275641cf44d0ebd1f884c5, V9, ten prerequisites VERIFIED/CLOSED; existing next-env.d.ts delta untouched. CN-PAY-BANK-002 READY then authorized IN_PROGRESS. No implementation/tests/CI/closure claimed at this checkpoint; no real payment/commercial confirmation/live operation permitted. Scope in ARCHITECTURE bank-ledger-boundary. MVP remains13/74, no phase/demo acceptance or D2 readiness.
 
@@ -1103,3 +1103,11 @@ Release review corrected protected finance-field clearing on venue/operation cha
 Final local source evidence: backend harness PASS212, zero failures/errors/skips, including32 Bank integration/14 ledger additions and10 architecture checks, real PostgreSQL18.6 clean/upgrade/repeat, constraints, independent source and correction controls, direct API denials, concurrency, transactional audit rollback, durable worker restart and packaged HTTP denial. Final70-group Bank browser PASS includes actual denied-alert synchronization and all private field clearing; retained120 groups passed on unchanged corresponding source (190 total). Frontend72, build/type/lint, launcher14, Run.sh check, online audit0 and both isolated validators PASS. Eight final in-memory negative controls reject loss of policy/authority, premature closure, global approval, real payment enablement, requirement loss, fabricated CI and generated-file escape. Desktop/mobile screenshots inspected. All required local checks complete; source publication/exact-source CI pending; task closure withheld.
 
 MVP remains13/74 full criteria,13 VERIFIED/CLOSED,14 BLOCKED,1 IN_PROGRESS/READY of28;92 requirements/92 full test plans with full financial/access/customer acceptance incomplete. P4 remains0/8 full criteria with synthetic ledger/confirmation evidence only. No phase or demonstration held/accepted; D1/D2 NOT_READY. Rollback disables ledger commands/allocation first, retains V10/credits/allocations/corrections/booking history/audit/exceptions and compatible maintenance, no destructive down migration. Next after verified closure: review CN-PAY-GW-001 and OD-06/07/20, no next implementation authority.
+
+Closure — 2026-10-17: [exact-source CI39018785460](https://github.com/Hasitha3513/Theater-Project/actions/runs/39018785460) SUCCESS at f3b0578faefc2495637b4dbcd99d39e0df4e3913; all34 approved application/test hashes match. Source pushed normally to origin/main and independently matched. CN-PAY-BANK-002 VERIFIED/CLOSED only for approved synthetic DoD: independent retained credit evidence, capped/deduplicated partial/top-up/mixed allocations and one guarded eligible synthetic booking. Ten V10 tables, eleven new finance/Booking HTTP operations plus safe existing owner status, six exact synthetic capabilities and named owner ports. No V1–V9/token/dependency/diagram changes.
+
+Evidence:212 backend cases (32 Bank integration/14 ledger,10 architecture),72 frontend cases,190 browser groups (final70 Bank/35 new finance plus120 retained),14 launcher contracts, real PostgreSQL18.6 clean/upgrade/repeat/constraints/concurrency/audit rollback/two financial worker-process starts, packaged denial, build/type/lint, online audit0, both isolated knowledge validators and whitespace. Eight final in-memory negative controls reject unsafe approval/status/source changes. Final source rerun covers UTC/projection changes; the earlier full Run-verify.sh receipt remains accurately distinguished. Main checkout retains exactly two pre-existing next-env integrity failures; no checks weakened. Actual screen-reader/zoom/full WCAG/real bank/provider/physical/customer acceptance NOT_RUN.
+
+P0 6/8;P1 2/6;P2 3/6;P3 2/6;P4 0/8;P5 0/6;P6 0/6;P7 0/6;P8 0/7;P9 0/8;P10 0/7;13/74.14 tasks VERIFIED/CLOSED,14 BLOCKED,0 READY/IN_PROGRESS of28;92 requirements/92 full plans preserved, full acceptance incomplete. Accepted phases0/10; demos0held/0accepted of7. D0 historical design preparation/document-only rehearsal; D1/D2 NOT_READY; D3–D6 outlines only. D2 script/rehearsal and customer acceptance remain separate; no demonstration readiness inferred. Wider OD-24/27/28/29 commercial decisions remain OPEN; real payments, commercial confirmation, refunds, live delivery and hardware disabled.
+
+Rollback first disables new ledger commands/allocation, preserves V10 migration on the compatible classpath as well as schema/history/credits/allocations/corrections/bookings/audit/exceptions/outstanding work, and keeps scoped maintenance available before a history-preserving application backout. No destructive down migration or automatic financial-history cleanup. Source reversal leaves booking history intact and exposes shortfall/resolution. Final knowledge-only receipt/remote/CI verified separately in conversation; no application source change after exact-source CI. Next: review CN-PAY-GW-001 bounded provider-sandbox scope and OD-06/07/20. No next implementation authorized. STOP.
