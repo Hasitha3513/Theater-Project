@@ -68,6 +68,7 @@ def main():
     current_state = json.loads(json.dumps(state)); current_state.pop('refundImplementation',None)
     impl_expected_state=json.loads(json.dumps(impl_state))
     impl_expected_state.update(mode='SYNTHETIC_BANK_REFUND_IMPLEMENTATION',workStatus=impl.get('workStatus'),implementationAuthorization='GRANTED_BOUNDED_SYNTHETIC_BANK_ONLY',nextAction='Review CN-ACCESS-001 bank-only scope and retained gateway dependency; no implementation' if impl.get('workStatus')=='VERIFIED' else 'Complete scoped refund checks and exact-source CI; preserve real-money/gateway gates')
+    impl_expected_state['nextRecommendedChangeSet']='CN-ACCESS-001' if impl.get('workStatus')=='VERIFIED' else impl_state['nextRecommendedChangeSet']
     check(current_state == impl_expected_state, 'Refund implementation changed unrelated execution history')
     check(impl.get('baselineHead')==impl_base, 'Refund implementation baseline changed')
     check(impl.get('authority') == {'source': 'Owner inline instruction and attachment 9cc7b569-fe73-44e6-9ca7-7052cca6fb06', 'requestSha256': '0204e099ec667c57aa10e8e8cfcafe4c42eaff9840ee0d5dc34dc8b054bcf9ec', 'scope': 'APPROVED_SYNTHETIC_BANK_ONLY_IMPLEMENTATION', 'date': '2026-10-17', 'realRefunds': 'DISABLED', 'gateway': 'DEFERRED_BLOCKED'}, 'Refund implementation owner authority missing/changed')

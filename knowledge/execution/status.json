@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "taskId": "CN-REFUND-001",
   "mode": "SYNTHETIC_BANK_REFUND_IMPLEMENTATION",
-  "workStatus": "IN_PROGRESS",
+  "workStatus": "VERIFIED",
   "productStage": "BOUNDED_SYNTHETIC_BANK_REQUEST_VERIFIED_REAL_PAYMENTS_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -12,8 +12,8 @@
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
   "currentChangeSet": "CN-REFUND-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-REFUND-001",
-  "nextAction": "Complete scoped refund checks and exact-source CI; preserve real-money/gateway gates",
+  "nextRecommendedChangeSet": "CN-ACCESS-001",
+  "nextAction": "Review CN-ACCESS-001 bank-only scope and retained gateway dependency; no implementation",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-PAY-BANK-002 VERIFIED/CLOSED for approved synthetic scope; wider acceptance incomplete",
   "approvedCoreDecisions": [
@@ -2988,14 +2988,14 @@
       "frontend/tests/refunds-browser.mjs": "740225bbe24204592664e7b42f6db7c9c575a6d5c3e70611fce13d722e4b8c96",
       "frontend/tests/refunds.test.mjs": "7e20355d710769c72a77055596ff04dc20b9139163c12385e98b830709ee2145"
     },
-    "workStatus": "IN_PROGRESS",
+    "workStatus": "VERIFIED",
     "checks": {
       "backend": "PASS",
       "frontend": "PASS",
       "browser": "PASS",
       "governance": "PASS"
     },
-    "sourceCI": "PENDING",
+    "sourceCI": "SUCCESS",
     "realRefunds": "DISABLED",
     "gateway": "DEFERRED_BLOCKED",
     "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -3013,7 +3013,9 @@
       "fullRunVerify": "PASS; final backend-only fixes independently reverified with complete PostgreSQL/backend harness",
       "primaryExecution": "Two pre-existing next-env.d.ts integrity findings; isolated PASS",
       "review": "SELF_REVIEW; defects corrected and affected checks rerun; no independent human acceptance",
-      "finalSourceCI": "PENDING"
-    }
+      "finalSourceCI": "SUCCESS"
+    },
+    "sourceCommit": "6a2aa84986d8bd76621ee9eddee7f36e3eeda167",
+    "sourceRun": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39051062796"
   }
 }

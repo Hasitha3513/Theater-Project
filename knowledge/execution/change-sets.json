@@ -1087,8 +1087,8 @@
       "definitionOfDone": "Approval distinct from outgoing completion; receipt facts preserved",
       "requiredApproval": "Slice + method refund/control approval; live money remains separately gated",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "ARCHITECTURE.md#refund-bank-only-scope",
         "PROJECT.md#refund-bank-only-policy",

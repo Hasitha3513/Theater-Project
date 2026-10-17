@@ -917,7 +917,7 @@ The [owner-approved business direction](PROJECT.md#manual-payment-first) defers 
 
 | Task retaining a gateway obligation | Manual-payment alternative | Current approval boundary |
 |---|---|---|
-| CN-REFUND-001 | Approved synthetic bank-only return plan; hard dependency BANK-002 | Owner-approved scoped amendment recorded; gateway remains deferred execution/full-acceptance dependency; implementation authorization still missing |
+| CN-REFUND-001 | Approved synthetic bank-only return plan; hard dependency BANK-002 | Owner-approved scoped amendment recorded; gateway remains deferred execution/full-acceptance dependency; bounded synthetic implementation VERIFIED/CLOSED |
 | CN-ACCESS-001 | Credential scheduling after guarded manual-funded booking | Task-by-task architecture, verified funding/booking contract, access-window/revocation/safety policies and tests; preserve gateway-funded path |
 | CN-REPORT-001 | Manual collections/allocation/booking reporting | Task-by-task architecture, exact metrics/clock/asOf/export scope and tests; preserve gateway and combined-channel reconciliation requirements |
 
