@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "fd5aaffd1dd594e6a3fb73f71180fe80a56a0b66311e092b1e91fb1bd37a4f3c",
+      "sha256": "822efa8c993790f2b2e5f3caeec0822e2e874b854028160403c6215cdede79c3",
       "authority": "canonical-prose"
     },
     {
@@ -408,17 +408,24 @@
       "authority": "canonical-prose"
     },
     {
+      "path": "Mini movie theater Ruels and Conditions.pdf",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "2d4961de671a356db2a6d81a0c2f9b185d969952fb9e656d19bcb6e97da6dea2",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b87b02b9d2455edc7b606ed9741477af0cc9c1fd24c0ee1119f420b9f272156a",
+      "sha256": "0a8baeedd1469495a704b908df17fdfe9131b0dbba20d4b71ddefee57f2d9582",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6fdf8e0a66dcdf23c5f2c1df5b2caa91e5d63576e609a8084f0a025773ee6975",
+      "sha256": "9afbd1678231a7599597a23218415f7f44fcd700104bf2228a07cef1acbc065d",
       "authority": "canonical-prose"
     },
     {
@@ -426,6 +433,13 @@
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "164d2549e8941e547987dc801fbc0b1ae48aef1056e2f6badf30f21f9479cc54",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "Smart_Cinema_Platform.pdf",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "f414d822f6c5ce4f3c2e8fd9eb3558220ce9c82fa96ca3dfdab74b29da7e115f",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -551,7 +565,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "5baa9909baba97881583c0043b00b3bca8835c05109978d61dbc46d23430ab8b",
+      "sha256": "1f31a02aa37e1a3884f3b716fde9cca132e09eb7626bc9c95eabb060372c24d2",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -620,7 +634,7 @@
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b1b5a9872ac81633d12ec0ba08739553c492f2d02574cd8b2e44a7f87edc2e80",
+      "sha256": "021cc3588ce9c11df44eac033a7a35ba4839a38443d08c7bf3875df2758ebd1b",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -648,7 +662,14 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "32d77ce7996cb62be8700e0a7d4c28460b749c2a6ae521c30d65cb23fafec2bb",
+      "sha256": "cb63594a90d80d56629939343dccf9adc5137e983e6127820c4dc8305c8fd570",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
       "authority": "structured-asset-or-evidence"
     }
   ],
@@ -2709,7 +2730,10 @@
     "CineNest End-to-End Architecture Mind Map.png": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
     "CineNest_E2E_Mind_Map.md": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5"
   },
-  "unmanagedWorkspaceAssets": {},
+  "unmanagedWorkspaceAssets": {
+    "Mini movie theater Ruels and Conditions.docx": "e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf",
+    "\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1"
+  },
   "roadmapMaintenance": {
     "sourceId": "S17",
     "baselineRevision": "7ad20d42b4551ba07bd5d728a0cbc1d295e65f94",

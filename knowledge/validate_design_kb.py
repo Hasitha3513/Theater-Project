@@ -7,8 +7,8 @@ import sys
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parent
-# No remaining unmanaged artifacts: the owner now authorizes publication of the reviewed diagrams.
-UNMANAGED_WORKSPACE_ASSETS = {}
+# Explicit local-only DOCX companions remain outside this PDF publication.
+UNMANAGED_WORKSPACE_ASSETS = {'Mini movie theater Ruels and Conditions.docx': 'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf', 'නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx': '8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
 REQUIRED = [
     'CINENEST-DESIGN-SYSTEM.md', 'CINENEST-ADMIN-PAGES.md',
     'CINENEST-CUSTOMER-BOOKING-PAGES.md', 'CINENEST-CHARTS-AND-METRICS.md',

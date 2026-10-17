@@ -1001,6 +1001,16 @@ def main():
     check(prior_changes == old_backlog['changeSets'] and changes[-1]['id'] == 'CN-KB-CONSOLIDATE-001' and changes[-1].get('aliases') == ['CN-KB-CONSOLIDATION-001'] and changes[-1].get('continuationAuthorizationSource') == 'S13', 'Existing backlog content lost/altered')
     old_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
     current_sources = json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']
+    # Preserve exact historical records while validating the owner-confirmed recovery separately.
+    recovered_sources = [x for x in current_sources if x['id'] in {'S2', 'S3', 'S4'}]
+    expected_recovery = {'S2': ('2d4961de671a356db2a6d81a0c2f9b185d969952fb9e656d19bcb6e97da6dea2', 26), 'S3': ('f414d822f6c5ce4f3c2e8fd9eb3558220ce9c82fa96ca3dfdab74b29da7e115f', 14), 'S4': ('84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2', 12)}
+    for source in recovered_sources:
+        digest, pages = expected_recovery[source['id']]
+        check(source.get('availability') == 'AVAILABLE' and source.get('sha256') == digest and source.get('pageCount') == pages, 'Recovered source metadata mismatch '+source['id'])
+        check(hashlib.sha256((K/source['path']).read_bytes()).hexdigest() == digest, 'Recovered PDF bytes changed '+source['id'])
+        check(source.get('authority') == 'owner-confirmed-historical-source-not-current-policy', 'Source promoted to policy')
+    check(len(recovered_sources) == 3 and cmap['CN-GATE-001']['readiness'] == 'BLOCKED', 'Source recovery must not bypass accountability gates')
+    current_sources = [x.get('historicalMissingRecord', x) for x in current_sources]
     check(current_sources[:-6] == old_sources and [x['id'] for x in current_sources[-6:]] == ['S12', 'S13', 'S14', 'S15', 'S16', 'S17'], 'Prior source evidence lost/altered')
     removal_sources = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', manifest['consolidation']['removalBaselineRevision'] + ':knowledge/sources/cinenest-source-register.json'], text=True))['sources']
     check(current_sources[:-4] == removal_sources, 'Consolidation/editorial approval history changed')
