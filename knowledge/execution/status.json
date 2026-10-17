@@ -2809,11 +2809,11 @@
       "Manual-Payment Finance Owner"
     ],
     "authorityDelegationEscalation": "APPROVED_BOUNDED_LATEST_PROPOSAL",
-    "fullName": null,
-    "fullNameStatus": "PENDING_PLACEHOLDER_NOT_IDENTITY",
+    "fullName": "Hasitha Wijerathna",
+    "fullNameStatus": "EXPLICITLY_OWNER_CONFIRMED",
     "sourceCustodyScope": "PROJECT-WIDE",
     "venueScope": null,
-    "venueScopeStatus": "PENDING_PLACEHOLDER_NOT_VENUE",
+    "venueScopeStatus": "VENUE_ASSIGNMENT_PENDING_EXPLICITLY_CONFIRMED",
     "effectiveDate": "2026-10-17",
     "effectiveDateBasis": "DATE_OF_RECORDED_APPROVAL; not completion of named venue appointments",
     "pendingReviewers": [
@@ -2821,10 +2821,16 @@
       "Physical-Safety Reviewer",
       "Independent Finance Reviewer/Allocator"
     ],
-    "namedAppointmentStatus": "INCOMPLETE",
+    "namedAppointmentStatus": "NAMED_MANAGEMENT_ACCEPTED_VENUE_AUTHORITY_PENDING",
     "gateReadiness": "BLOCKED",
-    "gateClosure": "NOT_SATISFIED_REQUIRED_NAMED_OWNERS",
+    "gateClosure": "PENDING_SCOPE_CLARIFICATION_VENUE_AND_NAMED_SAFETY_OWNER",
     "dependencyEdges": "UNCHANGED",
-    "productionAuthorization": "NOT_GRANTED"
+    "productionAuthorization": "NOT_GRANTED",
+    "identityConfirmation": {
+      "date": "2026-10-17",
+      "source": "Owner inline instruction: I confirm my full name is Hasitha Wijerathna. Venue assignment remains pending.",
+      "priorIdentityPendingRecord": "dd25273ed47b80bfdfe8fd2eb4962e9d2a46ff89:knowledge/execution/status.json"
+    },
+    "scopeClarification": "PROJECT.md#accountability-appointments; proposed only, not approval"
   }
 }

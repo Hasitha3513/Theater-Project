@@ -58,7 +58,7 @@ def main():
         return 1
     # Validate the bounded owner-only documentation successor; preserve all prior execution history.
     accountability = state.pop('ownerAccountabilityApproval', None)
-    check(hashlib.sha256(json.dumps(accountability, sort_keys=True).encode()).hexdigest() == 'f536b33842d9506f6367eefc5845980578901d1df8d0255fd88c0987ac19b0d5', 'Owner accountability approval scope/identity/pending gates changed')
+    check(hashlib.sha256(json.dumps(accountability, sort_keys=True).encode()).hexdigest() == 'feb9b43648be08eac7c4d3961a31d21d78c6935fe89dd0b08925dbf158e4c8f9', 'Owner accountability approval scope/identity/pending gates changed')
     gate = next(row for row in backlog['changeSets'] if row['id'] == 'CN-GATE-001')
     check(gate['readiness'] == 'BLOCKED' and gate['workStatus'] == 'BLOCKED' and gate['authorityAvailable'] is False and gate['dependencies'] == ['CN-AGENT-SETUP-001'] and gate['blockingDecisionIds'] == ['OD-03', 'OD-05', 'OD-15'], 'Accountability approval must not bypass named owner/policy/dependency gates')
     # Current admin successor is independently constrained before immutable historical checks.
