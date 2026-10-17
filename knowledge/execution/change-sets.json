@@ -1219,8 +1219,8 @@
       "definitionOfDone": "Role-specific safe read controls and audit visibility",
       "requiredApproval": "Bounded admin slice + role/retention/export approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "ARCHITECTURE.md#admin-read-boundary",
         "PROGRESS.md#admin-read-implementation"
@@ -1278,7 +1278,7 @@
         "fullDecisionStatus": "OPEN_DECISION"
       },
       "implementationEvidence": {
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ADMIN_READ",
         "evidencePath": "PROGRESS.md#admin-read-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }

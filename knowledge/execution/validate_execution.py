@@ -103,6 +103,9 @@ def main():
         if re.fullmatch('[0-9a-f]{40}',sha):
             for name,digest in admin_evidence['ownedFiles'].items():check(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',sha+':'+name])).hexdigest()==digest,'Admin CI source mismatch '+name)
         check(admin_evidence.get('checks',{}).get('allRequiredChecks')=='PASS','Admin checks incomplete')
+    if closed:
+        projection=re.findall(r'^\| CN-ADMIN-001 \|.*\| ([^|]+) \|$',(K/'PROGRESS.md').read_text(),re.M)
+        check(projection==['VERIFIED / CLOSED','VERIFIED / CLOSED'],'Admin current task projections stale')
     if admin_evidence.get('checks',{}).get('allRequiredChecks')=='PASS':
         for field,value in {'backendTests':220,'adminIntegrationTests':7,'architectureTests':11,'frontendTests':75,'adminFrontendTests':3,'adminBrowserGroups':63,'regressionBrowserGroups':190,'launcherTests':14,'failures':0,'errors':0,'skipped':0,'allRequiredChecks':'PASS'}.items():check(admin_evidence['checks'].get(field)==value,'Admin required evidence missing '+field)
     backlog=admin_original(backlog,'execution/change-sets.json',True);coverage=admin_original(coverage,'execution/requirements.json',True);tests_doc=admin_original(tests_doc,'execution/test-plan.json',True)
@@ -1025,7 +1028,7 @@ def main():
         else:
             check(expected == current, 'Omission gap/status silently changed ' + old['id'])
     progress = (K / 'PROGRESS.md').read_text()
-    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(c['dependencies']) or 'None') + ' | ' + c['workStatus'] + ' / ' + c['readiness'] + ' |\n' for c in changes)
+    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(c['dependencies']) or 'None') + ' | ' + ('VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
     check(task_rows in progress, 'PROGRESS task projection diverges from authority')
     mapping_rows = ''.join('| ' + e['sourcePath'] + ' | [' + e['canonicalPath'] + '#' + e['anchor'] + '](' + e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] + ') | [original @ ' + e['historicalReference']['commit'][:7] + '](' + e['historicalReference']['url'] + ') |\n' for e in manifest['consolidation']['documents'])
     check(mapping_rows in progress and '<a id="consolidation"></a>' in progress, 'PROGRESS source/destination/removal mapping omitted')
@@ -1114,7 +1117,7 @@ def main():
     task_projection = re.findall(r'^\| (CN-[^|]+) \| (P\d+) \| ([^|]+) \| ([^|]+) \|$', task_section, re.M)
     check([row[0] for row in task_projection] == cids, 'Existing task roadmap coverage lost/duplicated')
     for tid, phase, deps, status in task_projection:
-        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == cmap[tid]['workStatus']+' / '+cmap[tid]['readiness'], 'Task dependency/status altered by roadmap ' + tid)
+        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == ('VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
     check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':13 if inventory_ci else 11 if pub_ci else 10 if pkg_ci else 9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')

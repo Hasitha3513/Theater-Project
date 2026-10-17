@@ -5,6 +5,8 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
+CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
+
 CN-PAY-BANK-002 is VERIFIED/CLOSED for the owner-approved synthetic credit/allocation/guarded confirmation slice; [current evidence](#bank-ledger-implementation). Wider commercial policy, real payment and customer acceptance remain open.
 
 CN-PAY-BANK-001 is VERIFIED/CLOSED for [synthetic requests/private receipt review](#bank-request-implementation) after exact-source CI39014691250 SUCCESS at24c127cc234ecd4d1df3943f2821e770ac12dab8. CN-VERIFY-001 is VERIFIED/CLOSED for [approved synthetic manual review](#verification-implementation) after exact-source CI SUCCESS. Real IDs and OCR remain disabled. CN-QUOTE-001 is VERIFIED/CLOSED for [bounded synthetic quotations](#quotation-implementation); CN-BOOK-001 and CN-PKG-002 remain VERIFIED/CLOSED for their inventory/indicative publication scopes. Real commercial issuance, acceptance, checkout, payment and booking confirmation remain disabled. Wider commercial and customer/phase acceptance remain open; current next action is in the [handoff](#current-handoff).
@@ -270,7 +272,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
-| CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
+| CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001 | BLOCKED / BLOCKED |
 | CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
@@ -308,7 +310,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Real payments DISABLED; Admin scoped reads LOCAL_VERIFIED_CI_PENDING; PayHere pending"]
+  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Real payments DISABLED; Admin scoped reads VERIFIED; PayHere pending"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
@@ -687,7 +689,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-ACCESS-001 | P7 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-IOT-001 | P8 | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
-| CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | BLOCKED / BLOCKED |
+| CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | P5 | CN-PAY-BANK-001, CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-CUSTOMER-001 | P3 | CN-ACCESS-001, CN-NOTIFY-001 | BLOCKED / BLOCKED |
 | CN-AMEND-001 | P6 | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
@@ -963,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
-**CN-PAY-BANK-002 VERIFIED/CLOSED** only for approved synthetic credit/allocation/guarded confirmation; [evidence](#bank-ledger-implementation). Exact source f3b0578faefc2495637b4dbcd99d39e0df4e3913, CI39018785460 SUCCESS. Preserve unrelated next-env.d.ts. Bounded OD-24/27/28/29 approvals do not close wider commercial/staffing/refund/financial policies. Real payments/commercial confirmation/refunds/live delivery/hardware remain disabled. CN-ADMIN-001 approved/IN_PROGRESS; PayHere qualification remains pending. Next after admin closure: review CN-GATE-001 sources/owners; no next implementation authority. D1/D2 NOT_READY; no phase/customer acceptance.
+**CN-PAY-BANK-002 VERIFIED/CLOSED** only for approved synthetic credit/allocation/guarded confirmation; [evidence](#bank-ledger-implementation). Exact source f3b0578faefc2495637b4dbcd99d39e0df4e3913, CI39018785460 SUCCESS. Preserve unrelated next-env.d.ts. Bounded OD-24/27/28/29 approvals do not close wider commercial/staffing/refund/financial policies. Real payments/commercial confirmation/refunds/live delivery/hardware remain disabled. CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic reads; PayHere qualification remains pending. Next after admin closure: review CN-GATE-001 sources/owners; no next implementation authority. D1/D2 NOT_READY; no phase/customer acceptance.
 
 <a id="publication-implementation"></a>
 ## CN-PKG-002 implementation — 2026-10-16
@@ -1130,8 +1132,12 @@ Validation: design validator PASS; primary execution validator reports only the 
 
 Starting e5b3d58434b3e4aa8ff41f1d813af7700d6f0d47 main/origin main,0/0, nested authoritative root. Owner approval a05eb028-208e-4fe1-9310-1728833e5ed7 recorded for bounded OD-05/18/28; [approved contract](ARCHITECTURE.md#admin-read-boundary). Prerequisites VERIFIED/CLOSED, READY then IN_PROGRESS. No dependency edge changed. PayHere remains BLOCKED/pending. Unrelated next-env.d.ts remains unstaged/unchanged.
 
-One Identity append-only read-audit table V11, four GET operations, safe Verification owner port and /admin/accounts existing-shell UI. No role/account/financial mutations, exports, real identity processing, production payments, notifications or hardware. Full requirement acceptance remains incomplete. Local checks PASS; exact-source CI pending; do not close before its receipt. P0-P10 full criteria remain13/74; P1 broader authorization and P9 acceptance not inferred. D1/D2 NOT_READY; no customer demonstration held/accepted. Next after bounded closure: CN-GATE-001 source/accountable-owner review; no next implementation authority.
+One Identity append-only read-audit table V11, four GET operations, safe Verification owner port and /admin/accounts existing-shell UI. No role/account/financial mutations, exports, real identity processing, production payments, notifications or hardware. Full requirement acceptance remains incomplete. Local checks PASS; exact-source CI verified below. P0-P10 full criteria remain13/74; P1 broader authorization and P9 acceptance not inferred. D1/D2 NOT_READY; no customer demonstration held/accepted. Next after bounded closure: CN-GATE-001 source/accountable-owner review; no next implementation authority.
 
 Admin local evidence:220 backend tests including7 admin integration and11 architecture,75 frontend tests including3 new,63 new synthetic browser groups across320/375/640/768/1024/1280/1536 plus190 existing regressions,14 launcher tests and4 in-memory negative controls. Real PostgreSQL18.6 cleanV1-V11, populatedV10-V11/repeat/append-only/audit rollback; historical bankV9-V10 test explicitly targets10 and retains its one-migration assertion. Source review corrected PERMIT-to-ALLOW projection; final backend rerun recorded separately from the earlier full Run-verify.sh pass. Build/type/lint/npm audit0, Run.sh check (no services), packaged HTTP denial, knowledge/whitespace PASS in matched isolated checkout. Primary execution retains exactly2 pre-existing next-env integrity failures; no check weakened. Introduced test helper/type/timestamp errors, test-context connection exhaustion and browser label/style issues corrected before publication. No real provider/personal-data/financial/hardware/customer or full a11y acceptance.
 
-Current15th task is IN_PROGRESS pending exact-source CI:14 VERIFIED/CLOSED,13 BLOCKED,1 IN_PROGRESS/READY /28. Full criteria remain13/74; P1-C02-C05 and P9 audit/security acceptance only advance partial evidence, no phase checkbox closed. D1/D2 remain NOT_READY; D0 design prepared/document rehearsal, D3-D6 outlines;0/7 held/accepted and0/10 delivery phases accepted. Next after admin closure: review CN-GATE-001 missing sources/accountable owners; PayHere remains pending and no next implementation authorized.
+Before exact-source CI closure, the15th task was IN_PROGRESS:14 VERIFIED/CLOSED,13 BLOCKED,1 IN_PROGRESS/READY /28. Full criteria remain13/74; P1-C02-C05 and P9 audit/security acceptance only advance partial evidence, no phase checkbox closed. D1/D2 remain NOT_READY; D0 design prepared/document rehearsal, D3-D6 outlines;0/7 held/accepted and0/10 delivery phases accepted. Next after admin closure: review CN-GATE-001 missing sources/accountable owners; PayHere remains pending and no next implementation authorized.
+
+Admin verified closure: exact-source ff8726c5d91a60534c4cf3915c37317ef6a804ae pushed to origin/main and independently matched; CI39024870905 SUCCESS. Final backend rerun after PERMIT mapping and denial-attribution fixes:220 tests/7 admin/11 architecture,0 failures/errors/skips; packaged migrated startup and HTTP denial PASS.75 frontend/3 new,63 admin+190 retained browser groups,14 launcher,4 negative controls, default Run-verify.sh/build/type/lint/audit0/knowledge/whitespace evidence retained. No application change after exact-source CI. Endpoint activation remains opt-in; real personal data, payments, exports and production remain disabled. Four GET operations and admin access audit only; no full authorization/customer acceptance.
+
+15 VERIFIED/CLOSED,13 BLOCKED,0 READY,0 IN_PROGRESS /28.92 requirements/92 full plans retained; full acceptance statuses unchanged. P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7=13/74;0/10 accepted delivery phases. D0 historical design prepared/document rehearsal; D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted. No further independent READY implementation exists: CN-GATE-001 needs sources/accountable owners, others retain gateway and policy dependencies. Next action: review CN-GATE-001 source/owner gaps. PayHere remains pending. Primary next-env modification preserved unstaged; final documentation commit/remote/CI verified separately in conversation. Rollback disables admin reads and retains V11/audit/history with compatible support, no destructive down migration. STOP.

@@ -543,7 +543,7 @@
       },
       "adminReadImplementationEvidence": {
         "taskId": "CN-ADMIN-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ADMIN_READ",
         "evidencePath": "PROGRESS.md#admin-read-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
@@ -611,7 +611,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "adminReadImplementationEvidence": {
         "taskId": "CN-ADMIN-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ADMIN_READ",
         "evidencePath": "PROGRESS.md#admin-read-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
@@ -633,7 +633,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "adminReadImplementationEvidence": {
         "taskId": "CN-ADMIN-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ADMIN_READ",
         "evidencePath": "PROGRESS.md#admin-read-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
@@ -962,7 +962,7 @@
       },
       "adminReadImplementationEvidence": {
         "taskId": "CN-ADMIN-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_ADMIN_READ",
         "evidencePath": "PROGRESS.md#admin-read-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
