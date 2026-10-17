@@ -872,8 +872,8 @@
       "definitionOfDone": "Claim is under review, queue survives delivery failure, quotes protected",
       "requiredApproval": "Slice + approved review/timing/fee/privacy/account/staffing controls",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "ARCHITECTURE.md#bank-request-boundary",
         "PROGRESS.md#bank-request-implementation"
@@ -936,7 +936,7 @@
         "realPayments": "DISABLED"
       },
       "implementationEvidence": {
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }

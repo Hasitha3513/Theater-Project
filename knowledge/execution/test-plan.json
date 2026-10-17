@@ -141,7 +141,7 @@
       },
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -726,7 +726,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -751,7 +751,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -901,7 +901,7 @@
       },
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1642,7 +1642,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1680,7 +1680,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1703,7 +1703,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1726,7 +1726,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1749,7 +1749,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
@@ -1772,7 +1772,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "bankRequestImplementationEvidence": {
         "taskId": "CN-PAY-BANK-001",
-        "status": "LOCAL_VERIFIED_CI_PENDING",
+        "status": "VERIFIED_BOUNDED_SYNTHETIC_BANK_REQUEST",
         "evidencePath": "PROGRESS.md#bank-request-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
