@@ -170,7 +170,7 @@
     "date": "2026-10-17",
     "source": "Owner conversation: CINENEST OWNER DECISION — CN-GATE-001 Source Confirmation and Reconciliation",
     "scope": "Confirmed exact historical S2-S4 hashes; in-place reconciliation/manifest registration only; later approved decisions prevail; no implementation, task dependency change or production authority",
-    "accountableAppointments": "PARTIAL_ROLE_ACCEPTANCE_DETAILS_PENDING; PROJECT.md#accountability-appointments",
-    "taskStatus": "BLOCKED"
+    "accountableAppointments": "NAMED_MANAGEMENT_CONFIRMED; venue/specialist appointments PENDING; PROJECT.md#accountability-appointments",
+    "taskStatus": "CLOSED_DOCUMENTATION_ONLY"
   }
 }

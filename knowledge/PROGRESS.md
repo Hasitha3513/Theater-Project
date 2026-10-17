@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP, all task statuses/dependencies and acceptance counts unchanged. CN-GATE-001 and CN-PAY-GW-001 remain BLOCKED.
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP/dependencies and roadmap acceptance counts unchanged. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:16 CLOSED,12 BLOCKED,0 READY,0 IN_PROGRESS /28.
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -257,7 +257,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 |---|---|---|---|---|
 | CN-AGENT-SETUP-001 | 0 | Execution workflow setup | None | VERIFIED / CLOSED |
 | CN-DEC-001 | 1 | Bounded initial-stack decision brief | CN-AGENT-SETUP-001 | VERIFIED / CLOSED |
-| CN-GATE-001 | 1 | Source and accountable policy gate brief | CN-AGENT-SETUP-001 | BLOCKED / BLOCKED |
+| CN-GATE-001 | 1 | Source and accountable policy gate brief | CN-AGENT-SETUP-001 | VERIFIED / CLOSED |
 | CN-FND-001 | 1 | Selected-stack repository skeleton and CI | CN-DEC-001 | VERIFIED / CLOSED |
 | CN-UI-001 | 2 | Shared shell and token consumers | CN-FND-001 | VERIFIED / CLOSED |
 | CN-AUTH-001 | 2 | Identity/session and resource scope skeleton | CN-FND-001 | VERIFIED / CLOSED |
@@ -312,7 +312,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 
 ```mermaid
 flowchart TB
-  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; Gate/PayHere BLOCKED; Admin reads VERIFIED"]
+  G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; venue/reviewers PENDING; PayHere BLOCKED; Admin reads VERIFIED"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
@@ -674,7 +674,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 |---|---|---|---|
 | CN-AGENT-SETUP-001 | P0 | None | VERIFIED / CLOSED |
 | CN-DEC-001 | P0 | CN-AGENT-SETUP-001 | VERIFIED / CLOSED |
-| CN-GATE-001 | P0 | CN-AGENT-SETUP-001 | BLOCKED / BLOCKED |
+| CN-GATE-001 | P0 | CN-AGENT-SETUP-001 | VERIFIED / CLOSED |
 | CN-FND-001 | P1 | CN-DEC-001 | VERIFIED / CLOSED |
 | CN-UI-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
 | CN-AUTH-001 | P1 | CN-FND-001 | VERIFIED / CLOSED |
@@ -965,6 +965,8 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
+Current handoff after [CN-GATE-001 documentation closure](#gate-documentation-closure): 16 CLOSED/12 BLOCKED/0 READY; venue and specialist appointments remain PENDING, PayHere deferred. Next: read-only bank-only CN-REFUND-001 scope/dependency review for approval; no implementation or edge changes authorized. Earlier checkpoint below is historical.
+
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
 **CN-PAY-BANK-002 VERIFIED/CLOSED** only for approved synthetic credit/allocation/guarded confirmation; [evidence](#bank-ledger-implementation). Exact source f3b0578faefc2495637b4dbcd99d39e0df4e3913, CI39018785460 SUCCESS. Preserve unrelated next-env.d.ts. Bounded OD-24/27/28/29 approvals do not close wider commercial/staffing/refund/financial policies. Real payments/commercial confirmation/refunds/live delivery/hardware remain disabled. CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic reads; PayHere qualification remains pending. Next after admin closure: review CN-GATE-001 sources/owners; no next implementation authority. D1/D2 NOT_READY; no phase/customer acceptance.
@@ -1151,7 +1153,7 @@ Owner authorization: current explicit 2026-10-17 instruction approves recording 
 
 | Approved priority stage | Intended outcome | Required gates before execution/acceptance |
 |---|---|---|
-| 1. Source and accountability readiness | Reconcile original sources and record accountable owners | CN-GATE-001 remains BLOCKED: locally verified/read/reconciled S2-S4 and actual owner appointments/authority; later qualified acceptance remains external |
+| 1. Source and accountability readiness | Reconcile original sources and record accountable owners | CN-GATE-001 documentation VERIFIED/CLOSED; verified S2-S4 and named management accountability recorded; venue/specialist appointment and qualified operational acceptance remain pending external gates |
 | 2. Commercial manual-payment readiness | Qualify manual bank operations beyond existing synthetic software | Commercial quotation/tax/fee, real identity/privacy, approved bank instructions, independent credit evidence, financial separation/staff coverage/deadlines, retention/scanning, late-funds/refund and notification policies/evidence |
 | 3. Manual-payment booking and customer services | Coordinate eligible funded bookings, support/status, notifications and access scheduling | Existing task gates; separate task-by-task approval of any manual alternative for REFUND/ACCESS/REPORT; no automatic edge replacement, real provider or device authority |
 | 4. Physical operations and customer acceptance | Representative room qualification, customer UAT and separately authorized pilot | Actual safety/hardware/operations evidence, staffing/responders, customer reviewers and production authorization; simulations cannot substitute |
@@ -1209,3 +1211,16 @@ DoD reassessment: exact documentation DoD makes sources/gates explicit, but task
 MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;15 CLOSED,13 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 accepted delivery phases. Existing unrelated next-env.d.ts and two DOCX companions preserved. Checks/publication reported in conversation.
 
 Named-registration validation: primary knowledge and whitespace PASS; primary execution retains only two pre-existing next-env.d.ts findings. Both validators PASS in isolated exact HEAD with owned changes; negative controls reject unauthorized production authority and premature READY. No application/migration change or application tests needed. Final-source CI/publication verified separately in conversation.
+
+<a id="gate-documentation-closure"></a>
+## CN-GATE-001 documentation-only closure — 2026-10-17
+
+Starting main/origin/main88d5746ed1a4cb987dee56d4579380984a876e63. Owner explicitly approves the [documentation closure interpretation](PROJECT.md#accountability-appointments), without waiving any outstanding venue, specialist, legal/privacy, physical, financial or production evidence. Existing five management roles/approved boundaries assigned to Hasitha Wijerathna; source custody PROJECT-WIDE; effective17 October2026; venue PENDING. Qualified privacy/legal, physical-safety and independent finance reviewers PENDING. No all-venue/application authority or self-review exception. S2(26 pages),S3(14),S4(12) hashes match registered original evidence; historical provenance/reconciliation and later-policy precedence retained.
+
+DoD “Missing/available sources and accountable launch gates explicit” verified: available originals plus conflict review, named management accountability, explicit downstream appointment/evidence gates, closed CN-AGENT-SETUP-001 dependency and current owner interpretation/recording authority. No remaining independent documentation gate found under that approval. Authoritative task CN-GATE-001 VERIFIED/CLOSED; approval/evidence attached. OD-03/05/15 remain OPEN with downstream unresolved portions, not automatically approved. All task dependency edges, requirement/test-plan acceptance, real ID/money/physical/production restrictions and manual-payment-first direction preserved. PayHere deferred/BLOCKED.
+
+P0-C07 evaluated separately and stays unchecked: broader early policy/accountability decisions remain incomplete; this task closure does not establish phase/pilot acceptance. P0 remains6/8, P0-C08 open and P0 NOT_ACCEPTED. No task newly READY. Existing graph/task projection refreshed without rewriting dated history. Current handoff: read-only review of bank-only CN-REFUND-001 scope and possible task-specific dependency proposal; actual edges remain until owner approval. No feature implementation authorized by this closure.
+
+MVP: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74. Recalculated authoritative task totals16 VERIFIED/CLOSED,12 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans, no full acceptance change. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 accepted delivery phases. Source/task/appointment/governance checks, isolated validation and publication/CI results reported in conversation. Unrelated next-env.d.ts and two untracked DOCX companions preserved.
+
+Closure validation: primary knowledge/whitespace PASS; primary execution retains only the two pre-existing next-env.d.ts findings. Both validators PASS in isolated exact starting HEAD with scoped changes. Seven negative controls reject lost closure approval, invented specialist completion, production authority, dependency removal, global OD-05 approval, automatic P0-C07 acceptance and PDF hash loss. No application tests needed for documentation-only edits; final-source CI/publication verified separately in conversation.

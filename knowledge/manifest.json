@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "822efa8c993790f2b2e5f3caeec0822e2e874b854028160403c6215cdede79c3",
+      "sha256": "dc167b4aadc0dfe5ae6f9f9fbe7964acfa0a4e81db281e8c8981ba044f960973",
       "authority": "canonical-prose"
     },
     {
@@ -418,14 +418,14 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "15cb93a01d37c8e9b8d3d6ab6797d5c016680709c1ec8835e237fc5458bf75f6",
+      "sha256": "561ed6447268cabaecc8e8be70c2c5820ba47dd757e1586e8f48dc8c25ee1141",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "64a445394a5bf1ce0430368a43ef2474ec4b67f276aaa580f77b07ea4a5893b0",
+      "sha256": "27e201df8c6844c3771ae113c3bc2e4555604725fc59775f9024b4d0b7852496",
       "authority": "canonical-prose"
     },
     {
@@ -460,7 +460,7 @@
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "91b7a1149d26cb3843306367fdcaa63a305cd77df099a6e8da94d13070e10b3b",
+      "sha256": "06d929bb662edf98e8fc3afd8f7e3700f989d87646d62c4575fe59cedc7adc8c",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -551,7 +551,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "f7dc4e0bdc96ab59dd276d4f397dfa7440569dbf831188367735a994076289da",
+      "sha256": "0b9e712595e2782cfe49310c76caa9a3e9ea23d4458c3e8327e4105e988e1ed6",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -565,7 +565,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ce29354f2c0f1e409769c31ab402eda67bc629990bb4fcf91c6e59018ec6419f",
+      "sha256": "246d9f47d20e9ead1386fd58de569adb0da5cdfc28d89bd00427dc24c1b47852",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -634,7 +634,7 @@
       "path": "sources/cinenest-source-register.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "75b263c00f5ec7b8b6d6da7ebd782efb9c5487e0f0a229fc49cc55f31590c44c",
+      "sha256": "4fbbc5682f1f0070a3ee1b727cf92e49e6d8b6750eea24c51055a232273461f4",
       "authority": "structured-asset-or-evidence"
     },
     {

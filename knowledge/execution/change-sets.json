@@ -111,16 +111,32 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Missing/available sources and accountable launch gates explicit",
       "requiredApproval": "User authorization + supplied sources/owners; qualified acceptance remains external",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": [],
+      "authorityAvailable": true,
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "PROJECT.md#accountability-appointments",
+        "PROGRESS.md#gate-documentation-closure",
+        "sources/cinenest-source-register.json"
+      ],
       "resolvedDecisionIds": [
         "OD-04"
       ],
       "verificationDecisionIds": [
         "OD-04"
-      ]
+      ],
+      "documentationClosureApproval": {
+        "status": "OWNER_APPROVED_DOCUMENTATION_ONLY",
+        "source": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
+        "date": "2026-10-17",
+        "canonicalSpecification": "PROJECT.md#accountability-appointments",
+        "retainedDecisionGates": [
+          "OD-03",
+          "OD-05",
+          "OD-15"
+        ],
+        "scope": "Pending venue/specialist appointments are explicit downstream acceptance gates; no real-operation approval"
+      }
     },
     {
       "id": "CN-FND-001",

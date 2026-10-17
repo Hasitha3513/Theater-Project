@@ -56,6 +56,29 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Owner-approved documentation closure: validate current evidence/gates, then replay immutable history.
+    closure_base = '88d5746ed1a4cb987dee56d4579380984a876e63'
+    closure = state.get('gateDocumentationClosure')
+    check(hashlib.sha256(json.dumps(closure, sort_keys=True).encode()).hexdigest() == '4f8db4294676ca98fca79c45d10a37fb6174f8dd6dc762edc09f5d6c26c60f5c', 'Documentation closure approval/evidence/downstream gates changed')
+    prior_state = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', closure_base + ':knowledge/execution/status.json'], text=True))
+    prior_backlog = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', closure_base + ':knowledge/execution/change-sets.json'], text=True))
+    prior_gate = next(row for row in prior_backlog['changeSets'] if row['id'] == 'CN-GATE-001')
+    current_gate = next(row for row in backlog['changeSets'] if row['id'] == 'CN-GATE-001')
+    expected_gate = dict(prior_gate)
+    expected_gate.update(authorityAvailable=True, readiness='CLOSED', workStatus='VERIFIED', evidencePaths=['PROJECT.md#accountability-appointments', 'PROGRESS.md#gate-documentation-closure', 'sources/cinenest-source-register.json'], documentationClosureApproval={'status': 'OWNER_APPROVED_DOCUMENTATION_ONLY', 'source': 'Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status', 'date': '2026-10-17', 'canonicalSpecification': 'PROJECT.md#accountability-appointments', 'retainedDecisionGates': ['OD-03', 'OD-05', 'OD-15'], 'scope': 'Pending venue/specialist appointments are explicit downstream acceptance gates; no real-operation approval'})
+    check(current_gate == expected_gate, 'Documentation closure changed task scope, dependencies or retained policies')
+    expected_state = json.loads(json.dumps(prior_state))
+    expected_state['ownerAccountabilityApproval'].update(gateReadiness='CLOSED', gateClosure='VERIFIED_DOCUMENTATION_ONLY_DOWNSTREAM_GATES_RETAINED', scopeClarification='OWNER_APPROVED_DOCUMENTATION_ONLY; PROJECT.md#accountability-appointments')
+    expected_state['gateDocumentationClosure'] = closure
+    expected_state.update({'taskId': 'CN-GATE-001', 'currentChangeSet': 'CN-GATE-001', 'mode': 'DOCUMENTATION_GATE_CLOSURE', 'workStatus': 'VERIFIED', 'nextReadyChangeSet': None, 'nextRecommendedChangeSet': 'CN-REFUND-001', 'nextAction': 'Review bank-only CN-REFUND-001 scope and dependency proposal; preserve existing edges until approved', 'implementationAuthorization': 'NOT_GRANTED', 'blockers': ['Venue assignment and venue-specific operational authority PENDING', 'Qualified privacy/legal, physical-safety and independent finance appointments PENDING', 'OD-03/05/15 unresolved downstream policy and qualified acceptance gates retained', 'PayHere deferred/BLOCKED; no independent READY implementation', 'Commercial financial/privacy/safety/production gates remain unapproved']})
+    check(state == expected_state, 'Documentation closure changed unrelated state/authority/history')
+    check(len(backlog['changeSets']) == 28 and sum(row['readiness']=='CLOSED' for row in backlog['changeSets']) == 16 and sum(row['readiness']=='BLOCKED' for row in backlog['changeSets']) == 12 and not any(row['readiness']=='READY' for row in backlog['changeSets']), 'Documentation closure task totals/readiness incorrect')
+    check({row['id']: row['dependencies'] for row in backlog['changeSets']} == {row['id']: row['dependencies'] for row in prior_backlog['changeSets']}, 'Documentation closure changed dependency edges')
+    for evidence in ['PROJECT.md#accountability-appointments', 'PROGRESS.md#gate-documentation-closure', 'sources/cinenest-source-register.json']:
+        check((K / evidence.split('#')[0]).is_file(), 'Missing documentation closure evidence '+evidence)
+    # Recovered bytes remain checked later; this comparison preserves all unrelated task/state payloads.
+    current_gate.clear(); current_gate.update(prior_gate)
+    state = prior_state
     # Validate the bounded owner-only documentation successor; preserve all prior execution history.
     accountability = state.pop('ownerAccountabilityApproval', None)
     check(hashlib.sha256(json.dumps(accountability, sort_keys=True).encode()).hexdigest() == 'feb9b43648be08eac7c4d3961a31d21d78c6935fe89dd0b08925dbf158e4c8f9', 'Owner accountability approval scope/identity/pending gates changed')
@@ -77,6 +100,11 @@ def main():
     def admin_original(payload,path,current=False):
         original=json.loads(subprocess.check_output(['git','-C',str(R),'show',admin_base+':knowledge/'+path],text=True))
         field={'execution/change-sets.json':'changeSets','execution/requirements.json':'requirements','execution/test-plan.json':'tests','decisions/cinenest-open-decisions.json':'decisions'}[path]
+        if path == 'execution/change-sets.json':
+            for row in payload[field]:
+                if row['id'] == 'CN-GATE-001' and 'documentationClosureApproval' in row:
+                    check(row == expected_gate, 'Historical replay encountered unapproved documentation closure')
+                    row.clear(); row.update(prior_gate)
         # Current raw records were checked at entry; historical projections retain their own guards.
         marked=any('boundedAdminApproval' in row or 'adminReadImplementationEvidence' in row or row.get('id')=='CN-ADMIN-001' and 'historicalPreApproval' in row for row in payload[field])
         if not marked and not current:return payload
@@ -1043,7 +1071,7 @@ def main():
         else:
             check(expected == current, 'Omission gap/status silently changed ' + old['id'])
     progress = (K / 'PROGRESS.md').read_text()
-    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(c['dependencies']) or 'None') + ' | ' + ('VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
+    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(c['dependencies']) or 'None') + ' | ' + ('VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
     check(task_rows in progress, 'PROGRESS task projection diverges from authority')
     mapping_rows = ''.join('| ' + e['sourcePath'] + ' | [' + e['canonicalPath'] + '#' + e['anchor'] + '](' + e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] + ') | [original @ ' + e['historicalReference']['commit'][:7] + '](' + e['historicalReference']['url'] + ') |\n' for e in manifest['consolidation']['documents'])
     check(mapping_rows in progress and '<a id="consolidation"></a>' in progress, 'PROGRESS source/destination/removal mapping omitted')
@@ -1132,7 +1160,7 @@ def main():
     task_projection = re.findall(r'^\| (CN-[^|]+) \| (P\d+) \| ([^|]+) \| ([^|]+) \|$', task_section, re.M)
     check([row[0] for row in task_projection] == cids, 'Existing task roadmap coverage lost/duplicated')
     for tid, phase, deps, status in task_projection:
-        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == ('VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
+        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(cmap[tid]['dependencies']) or 'None') and status == ('VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
     check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':13 if inventory_ci else 11 if pub_ci else 10 if pkg_ci else 9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')
