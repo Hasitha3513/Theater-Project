@@ -97,6 +97,14 @@
       "exitCode": 0,
       "groups": 120,
       "evidenceLevel": "SYNTHETIC_INTERCEPTED_BROWSER_DATA"
+    },
+    {
+      "command": "python3 scripts/verify-foundation.py",
+      "environment": "isolated corrected worker-fencing source; real PostgreSQL18.6",
+      "exitCode": 0,
+      "backendTests": 168,
+      "verificationIntegrationTests": 14,
+      "packagedStartup": "PASS"
     }
   ],
   "review": "Self-review of bounded source, immutable migration/history, private uploads, authorization, cleanup/recovery and evidence; no independent/customer acceptance claimed",
@@ -2341,23 +2349,23 @@
       "backend/src/main/java/com/cinenest/pricing/VerificationQuotation.java": "4c42d00c034459b4ffef8191b1388d7dedfa1958236ec6fd14f60b4e50d50f6a",
       "backend/src/main/java/com/cinenest/pricing/internal/VerificationQuotationAdapter.java": "c27daca41191cc22a931243f880ab43f2bcb49f987e404d0289c82b9bd893c5b",
       "backend/src/main/java/com/cinenest/verification/internal/EncryptedEvidenceStore.java": "979b07b466e19b64ba5abd38ce4301409ef8c4749ce37beb9b6ce2a417fa3e40",
-      "backend/src/main/java/com/cinenest/verification/internal/JdbcVerificationRepository.java": "a8b22d227c4dd836981069028e294a1aa2343225936a6ab6adfe14a91788e73f",
+      "backend/src/main/java/com/cinenest/verification/internal/JdbcVerificationRepository.java": "3b8c5c62a3dc36db5af7d2786c470c26f13cdde57ccfd5ac295febe383afbd6a",
       "backend/src/main/java/com/cinenest/verification/internal/PrivateEvidenceStore.java": "3703fa6b3094de8c6a44d0cbc3aa294a28e719913f8d41c7244a85b40401ff55",
       "backend/src/main/java/com/cinenest/verification/internal/SyntheticEvidenceProcessor.java": "1912625bb3c3658d740320f160f4381bc64aa6b41ff64acf217fc94d98447ed4",
       "backend/src/main/java/com/cinenest/verification/internal/SyntheticFixtures.java": "70308a104127ee2ad218e9494e5b87e7239fe077db93885aa8d635446e88c85d",
       "backend/src/main/java/com/cinenest/verification/internal/VerificationController.java": "0f834583555ac2924d113427ec1d36a0f2eb75cdccae7ce504a80b3635112ce3",
       "backend/src/main/java/com/cinenest/verification/internal/VerificationFailure.java": "ce6d44e36b38a0101910ead3408854239da3921a286738f915b0b2ee7ce0979a",
       "backend/src/main/java/com/cinenest/verification/internal/VerificationPolicy.java": "42057ae465186e98e763995432ec024a3be59b4169fb172616ee02c9118cf99f",
-      "backend/src/main/java/com/cinenest/verification/internal/VerificationRepository.java": "0d5895f3dfa0b2187e1cd370605d0835ccc978316dde57ea51a7d58f923cfaec",
-      "backend/src/main/java/com/cinenest/verification/internal/VerificationService.java": "b9427de0107ff8ed9811d77b1b2c4a3e7fa7c43435bd119eb8c48f4acad8859d",
+      "backend/src/main/java/com/cinenest/verification/internal/VerificationRepository.java": "191445fdc46094ec123689686f5552276e6b834283e5f87c7bf970aa53019d6a",
+      "backend/src/main/java/com/cinenest/verification/internal/VerificationService.java": "67fb78172cba8b9bd5e711350ae403c39b7cdd43c144f25ae0a7c886eec28efd",
       "backend/src/main/java/com/cinenest/verification/internal/VerificationWorker.java": "e7512d1152c9dca3e564acf7ca2cbf5df2595860aa4f6c8748ff2fd027eb5420",
       "backend/src/main/java/com/cinenest/verification/package-info.java": "60ff8a2c3fe2f8ef99e2092ff4e5a98d586c0a8533754ec00230d61ec2972ac5",
       "backend/src/main/resources/db/migration/V8__synthetic_verification.sql": "5454a1af6c2b03687d1f6ee7ac038d55685e10710812e71910f87ab1dc8db2e3",
       "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java": "2119884c484378af7bc8536d3df17ed5e4fdd297db1766a0591a946f968aa5ee",
       "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java": "99f5ef9e6a41162172279c2e8ea800c603f51c270b852f108898a71550420652",
-      "backend/src/test/java/com/cinenest/VerificationIntegrationTest.java": "d7a6bc3ab8ad1e70c005db10083cc803aac25196ce0d2402075f367dc8bf5fab",
+      "backend/src/test/java/com/cinenest/VerificationIntegrationTest.java": "e3d255ac77ac6186ab4f800730793963f92ecf299ec3cf0e69a8f80e49ffefd4",
       "backend/src/test/java/com/cinenest/verification/internal/SyntheticEvidenceTest.java": "e8feaaa607842f6c74d27678b8b5b92c0b2d289c9c7ebe2934460406fe186ca1",
-      "backend/src/test/java/com/cinenest/verification/internal/VerificationFaults.java": "229b61a43159c016a98b6f6a3e58806b7a2fef2fe282b38a199f4f1e0fc8adf8",
+      "backend/src/test/java/com/cinenest/verification/internal/VerificationFaults.java": "8b63c43924d76553772f4a1410ce93f6ba49795c9c058c1a6eba2aa676011205",
       "frontend/app/admin/verification/page.tsx": "e7bfe44ec26f8087f5f32acc3e02297febfc337f5d5d4363dd565188e6e07091",
       "frontend/app/api/admin/venues/[venueId]/verification/requests/[id]/decisions/route.ts": "a7c76d6f8181e9cec7fa4b721fd42b1bc9f3b910855d8214fcde819c730d36df",
       "frontend/app/api/admin/venues/[venueId]/verification/requests/[id]/evidence/[evidenceId]/route.ts": "fda592e45a8fb5f79b7cdbbe80d4ae18cc12ab9d69836a7ca3f38af3c87256eb",
@@ -2385,8 +2393,8 @@
     "physicalAdmission": "NOT_APPROVED",
     "d1": "NOT_READY",
     "checks": {
-      "backendTests": 167,
-      "verificationIntegrationTests": 13,
+      "backendTests": 168,
+      "verificationIntegrationTests": 14,
       "verificationDomainTests": 9,
       "architectureTests": 8,
       "frontendTests": 62,
@@ -2432,6 +2440,12 @@
         "conclusion": "failure",
         "finding": "Pre-existing publication assertion searched whole JSON for999; random command UUID matched, actual immutable unitPriceMinor remained123",
         "disposition": "Compare parsed snapshot base price and exact included rate; no production pricing change"
+      },
+      {
+        "runId": 39006382651,
+        "headSha": "021c5e450c61dc9a19d91f2ebc95174af633e31c",
+        "conclusion": "success",
+        "scope": "Exact-field publication repair; superseded by final worker fencing"
       }
     ]
   }

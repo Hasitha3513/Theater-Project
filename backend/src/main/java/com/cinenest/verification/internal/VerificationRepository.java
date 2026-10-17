@@ -23,7 +23,8 @@ interface VerificationRepository {
     void audit(UUID actor,UUID request,String action,String outcome);
     void work(UUID evidence);
     List<UUID> pending(Instant now);
-    boolean claim(UUID evidence,Instant until);
+    int claim(UUID evidence,Instant until);
+    boolean owns(UUID evidence,int attempt);
     void workState(UUID evidence,String state);
     List<Evidence> cleanup(Instant now);
     boolean referenced(UUID key);

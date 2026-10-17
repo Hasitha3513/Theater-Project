@@ -71,7 +71,7 @@ def main():
     check(hashlib.sha256(json.dumps({k:v for k,v in verification_task.items() if k not in {'workStatus','readiness','implementationEvidence'}},sort_keys=True).encode()).hexdigest()=='15f3b66bbf74133c2902e305d3f7378376234ad43975d5f4558e2c6402ecd648','Verification owner scope/history changed')
     check(verification_evidence.get('scopeApproval')==verification_task.get('scopeApproval') and verification_evidence.get('status')==verification_status,'Verification evidence/scope mismatch')
     check(verification_evidence.get('realIdentityProcessing')=='DISABLED' and verification_evidence.get('ocr')=='DISABLED' and verification_evidence.get('physicalAdmission')=='NOT_APPROVED' and verification_evidence.get('d1')=='NOT_READY','Synthetic-only boundary exceeded')
-    for key,value in {'backendTests':167,'verificationIntegrationTests':13,'verificationDomainTests':9,'architectureTests':8,'frontendTests':62,'verificationFrontendTests':6,'verificationBrowserGroups':21,'failures':0,'errors':0,'skipped':0}.items():
+    for key,value in {'backendTests':168,'verificationIntegrationTests':14,'verificationDomainTests':9,'architectureTests':8,'frontendTests':62,'verificationFrontendTests':6,'verificationBrowserGroups':21,'failures':0,'errors':0,'skipped':0}.items():
         check(verification_evidence.get('checks',{}).get(key)==value,'Verification checks missing '+key)
     check(verification_evidence.get('checks',{}).get('browserWidths')==[320,375,640,768,1024,1280,1536],'Verification responsive evidence missing')
     for migration in (R/'backend/src/main/resources/db/migration').glob('V[1-7]__*.sql'):
