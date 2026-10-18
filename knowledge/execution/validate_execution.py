@@ -1711,7 +1711,7 @@ def iot_implementation_main():
     def require(ok,message):
         if not ok:errors.append(message)
     def prior(path):return subprocess.check_output(['git','-C',str(R),'show',base+':'+path])
-    protected={'execution/change-sets.json': '85cdeecd3914b90b92e679cff4fa762767c30f179a0b0264ce15b7feba1ca20c', 'execution/status.json': '6bf81fa11096cae2e16c3189681e6585478044f2fb91a23bff83044679aff0f1', 'execution/requirements.json': '2c09c40fd2b84c1b07351410831738deb4e0b6f3ee5ad4dcbebdc0096cc8e764', 'execution/test-plan.json': '0536748b469df35b7ba641b791eafd24ad5e575b05759eb8defb846ad013fe99'}
+    protected={'execution/change-sets.json': '22368be24c1546b975f8fe0b5f9d5f57ed349e7ec0158f61b3735f0bb8a9be37', 'execution/status.json': '57b6b85504ca11185d0c21cc65debe8d5f0487f32bc7de6a62df46585e384a8c', 'execution/requirements.json': '0611d1d9726946ce2fe32825d41de299c564411339f6dcdfb261603bcae51af6', 'execution/test-plan.json': 'a654fdac7b65e358e9a4683dc14fc5aa023b60df1cbd393f7d6190330fc34790'}
     actual={p:json.loads((K/p).read_text()) for p in protected}
     for p,h in protected.items():require(hashlib.sha256(json.dumps(actual[p],sort_keys=True).encode()).hexdigest()==h,'IoT implementation registry/history changed '+p)
     task=next(x for x in actual['execution/change-sets.json']['changeSets'] if x['id']=='CN-IOT-001')

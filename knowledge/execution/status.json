@@ -2,8 +2,8 @@
   "schemaVersion": "1.0.0",
   "taskId": "CN-IOT-001",
   "mode": "SYNTHETIC_IOT_IMPLEMENTATION",
-  "workStatus": "IN_PROGRESS",
-  "productStage": "BOUNDED_SYNTHETIC_AMENDMENT_REAL_OPERATIONS_DISABLED",
+  "workStatus": "VERIFIED",
+  "productStage": "BOUNDED_SYNTHETIC_IOT_REAL_EQUIPMENT_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
@@ -12,27 +12,27 @@
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
   "currentChangeSet": "CN-IOT-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-IOT-001",
-  "nextAction": "Publish reviewed IoT source,verify exact-source CI,then assess bounded DoD",
+  "nextRecommendedChangeSet": "CN-OPS-001",
+  "nextAction": "Review CN-OPS-001 bounded readiness/incident scope and OD-13/29 gates;read-only",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "CN-IOT-001 bounded synthetic lighting local checks PASS;exact-source CI pending;full physical/commercial acceptance NOT_ACCEPTED",
+  "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
     "PR-BANK-001"
   ],
   "blockers": [
-    "CN-IOT-001 requires completed checks and exact-source CI before bounded closure",
-    "Downstream only: PayHere deferred/BLOCKED; venue/specialist and wider commercial/privacy/physical gates pending"
+    "CN-OPS-001 retains its own OD-13/29 scope/policy/implementation-authority gates",
+    "PayHere deferred/BLOCKED;venue/specialist and wider commercial/privacy/physical gates pending"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "CURRENT_TASK_SOURCE_NOT_YET_PUBLISHED",
-  "publicationEvidence": "CN-AMEND-001 source 659fbd4dc18f38810e9e83a6143ea77de090c7ed pushed to origin/main; exact-source CI39147723761 SUCCESS; final closure receipt publication/CI verified separately",
-  "lastObservedHead": "659fbd4dc18f38810e9e83a6143ea77de090c7ed",
+  "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS",
+  "publicationEvidence": "CN-IOT-001 source 88f50c53bcdb0844b65758d2d221580349255f90 pushed to origin/main;exact-source CI39155271379 SUCCESS;final closure receipt publication/CI verified separately",
+  "lastObservedHead": "88f50c53bcdb0844b65758d2d221580349255f90",
   "evidencePath": "PROGRESS.md#iot-implementation",
-  "evidenceFreshness": "2026-10-19 bounded IoT local checks;30 owned source hashes;CI pending",
+  "evidenceFreshness": "2026-10-19 exact-source IoT CI verified;30 owned source hashes",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -54,6 +54,7 @@
   "implementationAuthorization": "GRANTED_BOUNDED_SYNTHETIC_LIGHTING",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
+    "CN-OPS-001 bounded scope and applicable OD-13/29 review;no implementation authorized",
     "Commercial/venue/specialist/provider/physical acceptance remains separately gated"
   ],
   "checks": [
@@ -3505,7 +3506,7 @@
       "realEquipmentControl": "DISABLED",
       "gateway": "DEFERRED_BLOCKED"
     },
-    "workStatus": "IN_PROGRESS",
+    "workStatus": "VERIFIED",
     "checks": {
       "backend": "PASS",
       "frontend": "PASS",
@@ -3550,7 +3551,7 @@
       "frontend/tests/iot-browser.mjs": "711076d64c4e00e00ea2bc36b6c4e965f6f747fa76408f5eae0c5db9239e83a7",
       "frontend/tests/iot.test.mjs": "19109bb6b4749a5dc04ae264039f6ec135dca26006950ec7d8e69be8a089e622"
     },
-    "sourceCI": "PENDING",
+    "sourceCI": "SUCCESS",
     "primaryExecutionValidation": "PRE_EXISTING_NEXT_ENV_ONLY",
     "isolatedExecutionValidation": "PASS",
     "evidenceCounts": {
@@ -3568,6 +3569,10 @@
       "errors": 0,
       "skipped": 0
     },
-    "verifiedDateLocal": "2026-10-19"
+    "verifiedDateLocal": "2026-10-19",
+    "sourceCommit": "88f50c53bcdb0844b65758d2d221580349255f90",
+    "sourceRun": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39155271379",
+    "physicalAcceptance": "NOT_VERIFIED",
+    "physicalOccupancy": "UNKNOWN"
   }
 }

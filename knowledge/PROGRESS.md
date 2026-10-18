@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001, CN-ACCESS-001 and CN-CUSTOMER-001 task-specific hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:21 CLOSED,6 BLOCKED,0 idle READY,1 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001, CN-ACCESS-001 and CN-CUSTOMER-001 task-specific hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:22 CLOSED,6 BLOCKED,0 READY,0 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -272,7 +272,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-PAY-BANK-002 | 5 | Bank evidence/allocation and guarded confirmation | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
 | CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-BANK-002 | VERIFIED / CLOSED |
 | CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-BANK-002 | VERIFIED / CLOSED |
-| CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | IN_PROGRESS / READY |
+| CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | VERIFIED / CLOSED |
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
@@ -689,7 +689,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-PAY-BANK-002 | P4 | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
 | CN-REFUND-001 | P6 | CN-PAY-BANK-002 | VERIFIED / CLOSED |
 | CN-ACCESS-001 | P7 | CN-PAY-BANK-002 | VERIFIED / CLOSED |
-| CN-IOT-001 | P8 | CN-ACCESS-001 | IN_PROGRESS / READY |
+| CN-IOT-001 | P8 | CN-ACCESS-001 | VERIFIED / CLOSED |
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | P5 | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-IOT-001 IN_PROGRESS for approved synthetic lighting; all local gates PASS,exact-source CI pending.21 CLOSED/6 BLOCKED/0 idle READY/1 IN_PROGRESS /28;13/74 unchanged. [Evidence](#iot-implementation). No real equipment control,PayHere deferred/BLOCKED; dependency edges unchanged. Next action: publish reviewed source,verify exact-source CI,then assess bounded DoD.
+Current handoff: CN-IOT-001 VERIFIED/CLOSED only for the approved synthetic lighting slice. All30 owned application/check hashes match exact-source88f50c53bcdb0844b65758d2d221580349255f90,[CI39155271379 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39155271379). [Evidence](#iot-implementation).22 CLOSED/6 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. Next action: read-only review CN-OPS-001 bounded readiness/incident scope and OD-13/29 gates;no implementation. PayHere deferred/BLOCKED;real equipment/venue/specialist/full acceptance gates retained.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1426,3 +1426,7 @@ Qualified frontend build/typecheck/lint and109 tests PASS.49 new intercepted syn
 Initial JDBC optional-row API/UI required-prop/permission-vocabulary and rate-fixture findings corrected;old V14→V15 amendment upgrade now explicitly targets15 while the new IoT upgrade tests16. Review also distinguishes expired dispatch from UNKNOWN result lookup,and requires current read authority before mutations that return device history. V1–V15,dependencies/toolchain/lock,tokens/images/diagrams/source PDFs unchanged. Unrelated next-env.d.ts restored byte-for-byte after build generation;both DOCX companions untouched and unstaged.
 
 CN-IOT-001 remains IN_PROGRESS until exact-source CI SUCCESS and bounded DoD review. P8-C01/C02/C03/C06 gain partial synthetic evidence only;all P8 checkboxes/full acceptance stay open and graphical roadmap is PARTIAL/NOT_ACCEPTED. All phase counts remain13/74;92 full requirements/92 full plans retain actual status. D0 prepared/document-rehearsed(refresh before reuse),D1/D2 NOT_READY,D3-D6 outlines,0/7 held/accepted,0/10 delivery phases accepted. Rollback disables new commands and retains V16,assignments,desired/observed/attempt/UNKNOWN/reconciliation/audit history;compatible code rollback or reviewed forward fix only. No next implementation automatically authorized. PayHere deferred/BLOCKED;global OD-01/02/13,venue/specialist/provider/privacy/physical/production gates remain open.
+
+Bounded DoD closure: “Unknown never OFF/available; simulator evidence qualified” is satisfied by346 PostgreSQL/backend tests(150 Bank integration,20 IoT,15 architecture),109 frontend tests,49 new IoT plus96 affected customer/Access browser groups,14 launcher contracts,16 governance negative controls and exact-source [CI39155271379 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39155271379) at88f50c53bcdb0844b65758d2d221580349255f90. All30 owned source hashes match. Prior IN_PROGRESS checkpoints remain historical. CN-IOT-001 VERIFIED/CLOSED only for synthetic software;all full physical/device/occupancy/production requirements and full test plans remain unaccepted. Unknown outcomes never become inferred OFF/available/ready;acknowledgement never sets observed state;no physical equipment or egress control exists.
+
+Current MVP: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74.22 VERIFIED/CLOSED,6 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 full test plans retained. P8-C01/C02/C03/C06 remain partial/unchecked and graphical roadmap NOT_ACCEPTED;no phase acceptance. D0 prepared/document-rehearsed(refresh before reuse),D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 accepted delivery phases. Global OD-01/02/13 remain OPEN;venue/qualified specialists,physical occupancy/egress/device compatibility,privacy/legal/commercial/provider/production evidence remain separate gates. Manual-payment-first and PayHere deferred/BLOCKED unchanged. Existing edges unchanged;CN-OPS-001 remains BLOCKED on its own scope/OD-13/29/authority. No next task automatically READY. Unrelated next-env.d.ts and both DOCX companions preserved unstaged. Exactly one next action: read-only review CN-OPS-001 bounded readiness/incident scope and OD-13/29 gates. Final receipt SHA/remote/CI reported in conversation;no further implementation authorized.

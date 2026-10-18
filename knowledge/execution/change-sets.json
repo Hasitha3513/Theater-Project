@@ -1257,8 +1257,8 @@
       "definitionOfDone": "Unknown never OFF/available; simulator evidence qualified",
       "requiredApproval": "Simulator slice + protocol/capability approval, physical work separate",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROJECT.md#iot-synthetic-policy",
         "ARCHITECTURE.md#iot-synthetic-scope",
