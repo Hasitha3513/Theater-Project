@@ -5,6 +5,7 @@ import java.util.*;
 /** Payments-owned persistence port; application code never supplies SQL. */
 interface RefundRepository {
  Map<String,Object> refund(UUID id,boolean lock);
+ List<UUID> owned(UUID request,UUID owner,UUID venue,int offset,int limit);
  List<UUID> queue(UUID venue);
  Optional<Map<String,Object>> replay(UUID actor,UUID key,String hash);
  void command(UUID actor,UUID key,String hash,Map<String,Object> result);

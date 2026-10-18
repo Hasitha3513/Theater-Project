@@ -127,7 +127,7 @@
       ],
       "documentationClosureApproval": {
         "status": "OWNER_APPROVED_DOCUMENTATION_ONLY",
-        "source": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
+        "source": "Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status",
         "date": "2026-10-17",
         "canonicalSpecification": "PROJECT.md#accountability-appointments",
         "retainedDecisionGates": [
@@ -665,7 +665,7 @@
       "affectedFilesModules": "Pricing quotation domain/application/persistence/HTTP; public Booking hold port; Identity explicit route security; frontend quote transport/UI/tests; existing knowledge",
       "dbApiUiImpact": "Seven Pricing quotation tables; POST /api/quotes, GET /api/quotes/{quoteId}, POST /api/quotes/{quoteId}/revisions, POST /api/quotes/{quoteId}/accept; synthetic-only itemized review/acceptance",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1\u2013V6; no production seed/down migration",
+      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1–V6; no production seed/down migration",
       "plannedChecks": "Exact unit/guest/included-extra/quote-expiry/snapshot fixture tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
@@ -756,7 +756,7 @@
       "affectedFilesModules": "Verification module/private encrypted synthetic storage; Pricing public quotation context; Identity exact scoped permissions; customer/reviewer UI",
       "dbApiUiImpact": "Exactly eight approved tables and ten operations; synthetic manual review only",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1\u2013V7",
+      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1–V7",
       "plannedChecks": "Upload/private scope/retention/review/consent tests and operational gate",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Restricted booker eligibility separate from on-site guest entry",
@@ -1494,22 +1494,23 @@
         "CN-REFUND-001"
       ],
       "blockingDecisionIds": [],
-      "affectedFilesModules": "Approved design only: Booking-owned history queries, Payments-owned request/funding/refund projections, existing Identity eligibility/ownership, frontend composition through authorized APIs; existing Access and Notifications workspaces",
-      "dbApiUiImpact": "Approved three GET additions and /bookings plus /bookings/[id]; reuse detail APIs; no application implementation",
+      "affectedFilesModules": "Booking-owned typed purchased history; Payments-owned typed request/funding/refund reads; Identity route authentication; existing frontend shell and owner-composed customer pages",
+      "dbApiUiImpact": "Three GET APIs and /bookings plus /bookings/[id]; no migration or new mutation",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
       "migrationNeeds": "No migration approved or required; preserve V1-V14; no duplicate customer-history database",
       "plannedChecks": "Owner denial/snapshot/pending review/access/refund/error tests",
-      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "rollback": "Disable customer routes or compatible code revert; retain V1-V14 and all immutable purchase/financial/evidence history; no down migration or financial compensation",
       "definitionOfDone": "Historical purchase shown; unresolved state never false success",
       "requiredApproval": "Slice + support/contact/privacy policy approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
       "evidencePaths": [
         "PROJECT.md#customer-bank-only-policy",
         "ARCHITECTURE.md#customer-bank-only-scope",
         "DESIGN.md#customer-bank-only-ui",
-        "PROGRESS.md#customer-readiness-reconciliation"
+        "PROGRESS.md#customer-readiness-reconciliation",
+        "PROGRESS.md#customer-implementation"
       ],
       "historicalImplementationDependencies": [
         "CN-ACCESS-001",
@@ -1550,9 +1551,15 @@
         "realPayments": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
       },
-      "remainingReadinessGates": [
-        "Separate bounded synthetic CN-CUSTOMER-001 implementation authorization"
-      ]
+      "remainingReadinessGates": [],
+      "implementationAuthorization": {
+        "source": "Owner inline instruction and attachment 5c0c34f5-bf45-4f67-9f68-7687f547a88f",
+        "requestSha256": "c125f698b4faa3f6f52ff919fcb904933724b15c39e008f53034dd13e0ad6544",
+        "scope": "GRANTED_BOUNDED_SYNTHETIC_CUSTOMER",
+        "date": "2026-10-18",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      }
     },
     {
       "id": "CN-AMEND-001",

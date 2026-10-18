@@ -276,7 +276,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
-| CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | BLOCKED / BLOCKED |
+| CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | IN_PROGRESS / READY |
 | CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-ENG-001 | 10 | Engagement scope/rule decision brief | CN-REPORT-001 | BLOCKED / BLOCKED |
@@ -316,7 +316,7 @@ flowchart TB
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
   P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
-  P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
+  P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; customer history IN_PROGRESS; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>Synthetic identity/request/ledger VERIFIED within bounded scopes<br/>0 of 8 full criteria; NOT_ACCEPTED"]
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PARTIAL synthetic notifications; NOT_ACCEPTED"]
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PARTIAL SYNTHETIC ONLY; NOT_ACCEPTED"]
@@ -436,7 +436,7 @@ Goal/outcome: Give customers exact accepted quotes and nonconflicting, deadline-
 - [x] **P3-C03** Durable holds and authoritative concurrent-inventory protection implemented. — Req: CN-C03, BR-07; tests: T-BR-07, T-CN-C03; tasks: CN-BOOK-001. Evidence: INVENTORY_SLICE_VERIFIED / PROGRESS inventory-implementation;124 backend/51 frontend tests; exact-source CI SUCCESS; no commercial/customer acceptance.
 - [ ] **P3-C04** Reservation requests, guest parties, and purchased revisions modeled with distinct states. — Req: CN-C03, CN-A02, BR-10; tests: T-BR-10, T-CN-A02, T-CN-C03; tasks: CN-AMEND-001, CN-BOOK-001, CN-QUOTE-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [x] **P3-C05** Hold expiry, abandonment, idempotency, and visible deadlines implemented. — Req: CN-C03, BR-07; tests: T-BR-07, T-CN-C03; tasks: CN-BOOK-001. Evidence: INVENTORY_SLICE_VERIFIED / PROGRESS inventory-implementation;124 backend/51 frontend tests; exact-source CI SUCCESS; no commercial/customer acceptance.
-- [ ] **P3-C06** Own-booking views, competing-booking tests, and cross-customer denial verified. — Req: CN-C08, CN-C03, CN-NFR-02; tests: T-CN-C03, T-CN-C08, T-CN-NFR-02; tasks: CN-ACCEPT-001, CN-ADMIN-001, CN-AMEND-001, CN-AUTH-001, CN-BOOK-001, CN-CUSTOMER-001, CN-GATE-001, CN-VERIFY-001. Evidence: NOT_RUN / no current acceptance evidence.
+- [ ] **P3-C06** Own-booking views, competing-booking tests, and cross-customer denial verified. — Req: CN-C08, CN-C03, CN-NFR-02; tests: T-CN-C03, T-CN-C08, T-CN-NFR-02; tasks: CN-ACCEPT-001, CN-ADMIN-001, CN-AMEND-001, CN-AUTH-001, CN-BOOK-001, CN-CUSTOMER-001, CN-GATE-001, CN-VERIFY-001. Evidence: PARTIAL_SYNTHETIC_CUSTOMER_VERIFICATION; [bounded owner-read checks](#customer-implementation); complete amendments/commercial/full authorization acceptance remains open.
 
 - [ ] **P3-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: Competing customers cannot obtain conflicting inventory. Unpaid, expired, or pending requests are never shown as confirmed.
 
@@ -693,7 +693,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | P5 | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
-| CN-CUSTOMER-001 | P3 | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | BLOCKED / BLOCKED |
+| CN-CUSTOMER-001 | P3 | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | IN_PROGRESS / READY |
 | CN-AMEND-001 | P6 | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-REPORT-001 | P9 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-ENG-001 | P9 | CN-REPORT-001 | BLOCKED / BLOCKED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-CUSTOMER-001 bounded synthetic policy/API/UI/support scope approved; exact task amendment adds only CN-REFUND-001 to existing ACCESS/NOTIFY prerequisites. Owner explicitly selected recording/readiness only after inline/attachment conflict. All three prerequisites CLOSED; CN-CUSTOMER-001 remains BLOCKED solely on separate bounded implementation authorization.19 CLOSED/9 BLOCKED/0 READY/0 IN_PROGRESS /28; no application/API/page/migration change. PayHere deferred/BLOCKED, real operations disabled and venue/specialist/full acceptance gates preserved. [Current reconciliation](#customer-readiness-reconciliation). Earlier checkpoints below are historical.
+Current handoff: CN-CUSTOMER-001 separately authorized by owner attachment5c0c34f5-bf45-4f67-9f68-7687f547a88f. Three VERIFIED/CLOSED prerequisites and recorded bounded OD-07/20/28 approvals verified. Implemented bounded synthetic owner reads/pages; IN_PROGRESS pending final checks and exact-source CI. No dependency change, migration, live operation or full acceptance. [Current evidence](#customer-implementation). Earlier checkpoints below are historical.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1341,3 +1341,20 @@ CN-CUSTOMER-001 stays BLOCKED because the repository READY rule also requires im
 MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;19 CLOSED,9 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 full test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted and0/10 delivery phases accepted. Manual-payment-first retained; PayHere deferred/BLOCKED. Venue/specialist appointments and all synthetic-only restrictions remain. Next action: obtain separate bounded CN-CUSTOMER-001 implementation authorization.
 
 Validation for this approval-only successor: design/knowledge and execution validators PASS in the approved isolated snapshot with committed next-env.d.ts; four negative controls reject implementation authority, premature READY, removed refund dependency and altered historical scope. Primary execution retains only the two pre-existing next-env.d.ts integrity findings; unrelated file preserved. Git whitespace PASS. Application tests not run for this documentation-only session; final-source CI/publication result reported in conversation.
+
+<a id="customer-implementation"></a>
+## CN-CUSTOMER-001 bounded synthetic implementation — 2026-10-18
+
+Separate owner attachment5c0c34f5-bf45-4f67-9f68-7687f547a88f explicitly authorizes the approved slice; no repeated policy approval. Baseline9b1a361870f24f5f2611d0e1e14179bd101d4076,main/origin/main,0/0,V14. ACCESS/NOTIFY/REFUND VERIFIED/CLOSED, bounded OD-07/20/28 approvals and original DoD retained. READY prerequisites verified, then IN_PROGRESS. Historical recording-only authority remains accurate for its earlier session.
+
+Implemented GET /api/bookings, GET /api/bank/requests and GET /api/bank/requests/{id}/refunds, /bookings and /bookings/[id]. Booking owns typed redacted purchased history; Payments owns request/credit/allocation/refund projections; current Identity eligibility/ownership enforced at each boundary. Existing scoped staff detail remains intact without widening customer lists. No new table/migration, financial mutation, shared datastore, dependencies, live support or provider/device operation. V1–V14 unchanged. Pending request/receipt review/verified synthetic credit/allocated funds/simulated confirmation/refund/Access/Notifications remain distinct. Backend computes money/status; browser only formats exact minor strings and display groups using source observation time.
+
+Full CN-C08/CN-SUP-01 and T-CN-NFR-02 acceptance stays outstanding. No cancellation/amendment/commercial policy inferred. Source-derived support reasons/status and safe protected workspace navigation do not file a ticket, promise staffing/SLA or imply delivery, issue/reveal or physical admission. Compatible code/route rollback retains all purchased/financial history; no destructive down migration. Manual-payment-first retained; PayHere deferred/BLOCKED, real payments/refunds/ID/live messaging/doors/production disabled, venue/specialists pending. Checks/publication evidence appended after execution; no phase or demonstration accepted.
+
+Final local source verification:297/297 backend tests PASS,102 PostgreSQL BankIntegration tests including9 new customer cases,14 architecture checks;0 failures/errors/skips. Pinned PostgreSQL18.6, clean/repeat V1→V14 compatibility and existing populated-upgrade regressions, exact owned queries/pagination/tie ordering/forged owner or venue/no staff-directory expansion, current session/logout/suspension/direct API denial, purchased snapshot immutability/revision1, independently verified matched credit versus receipt/allocation, refund approval/unknown/no-real-repayment, parent ownership and concurrent independent approval reads all PASS. Financial history unchanged by reads; real HTTP packaged startup denial PASS. Earlier failures exposed missing route authentication wiring and old unimplemented-route assertions; corrected to current disabled-capability401/unconfigured503 semantics while preserving unsupported-action denial, then reran the full suite. No skipped or placeholder PASS claims.
+
+Qualified Node24.22.0/npm11.19.1 clean install, production build, typecheck, strict lint and95 frontend tests PASS in the approved isolated snapshot preserving primary next-env.d.ts. Initial system npm9 engine mismatch failed closed; qualified local toolchain rerun passed, no versions/dependencies changed. npm audit0 vulnerabilities.32 customer intercepted browser groups at1440/768/390/320 plus223 existing Notifications/Access/Refund/Bank/Admin groups PASS; keyboard, exact purchased amount/venue-local window, separate unconfirmed requests, refund approval/unknown/simulated completion, pagination/loading/empty/denied, protected links/no mutations, no persistent browser storage and late-response clearing after session change verified. Mobile render inspected; presentation interception is not a live finance/provider/customer acceptance claim.14 launcher contracts PASS.
+
+Primary design/whitespace PASS; primary execution has exactly the two pre-existing next-env integrity findings. Both knowledge validators PASS in isolated task source with committed next-env bytes.12 governance negative controls reject missing authority, removed/unrelated dependencies, false closure, enabled real money, missing owned source receipts, lost full requirements/test plans, global OD-07 closure, application integrity drift, historical V14 modification and unauthorized V15. Exact originals restored after negative checks; no validation control removed. Full92 requirements/92 test plans unchanged; bounded test mappings recorded in existing status.customerImplementation, not full test-plan PASS.
+
+P3-C06 gains partial synthetic history/denial evidence only and remains unchecked; all phase criteria remain13/74.19 CLOSED,8 BLOCKED,0 idle READY,1 IN_PROGRESS /28 pending exact-source CI. D0 stays prepared/document-rehearsed (refresh before reuse); D1/D2 NOT_READY; D3–D6 outlines,0/7 held/accepted,0/10 accepted delivery phases. No demonstration prerequisites automatically satisfied by this software slice. CN-AMEND-001 retains its own policy/scope gates and unchanged dependencies; no next task automatically READY. Publish this reviewed source IN_PROGRESS, verify exact-source CI, then assess bounded DoD “Historical purchase shown; unresolved state never false success”. Unrelated next-env.d.ts and both DOCX companions remain untouched and unstaged.

@@ -24,6 +24,7 @@ class BankController {
     @PostMapping("/api/bank/claims/{id}/uploads") ResponseEntity<?> allocate(Principal p,@PathVariable UUID id,@RequestBody Map<String,Object>b){return ok(service.allocate(actor(p),id,b));}
     @PutMapping("/api/bank/uploads/{id}/content") ResponseEntity<?> upload(Principal p,@PathVariable UUID id,HttpServletRequest request)throws IOException{service.upload(actor(p),id,Objects.toString(request.getContentType(),""),request.getInputStream());return ok(Map.of("state","QUARANTINED","labels",BankPolicy.LABELS));}
     @PostMapping("/api/bank/uploads/{id}/complete") ResponseEntity<?> complete(Principal p,@PathVariable UUID id,@RequestBody Map<String,Object>b){return ok(service.complete(actor(p),id,b));}
+    @GetMapping("/api/bank/requests") ResponseEntity<?> owned(Principal p,@RequestParam(defaultValue="0")int page,@RequestParam(defaultValue="10")int size){return ok(service.ownedList(actor(p),page,size));}
     @GetMapping("/api/bank/requests/{id}") ResponseEntity<?> read(Principal p,@PathVariable UUID id){return ok(service.read(actor(p),id,null));}
     @PostMapping("/api/bank/requests/{id}/resubmissions") ResponseEntity<?> resubmit(Principal p,@PathVariable UUID id,@RequestBody Map<String,Object>b){return ok(service.command(actor(p),id,null,"RESUBMIT",b));}
     @GetMapping("/api/admin/venues/{venue}/bank/requests") ResponseEntity<?> queue(Principal p,@PathVariable UUID venue){return ok(service.queue(actor(p),venue));}

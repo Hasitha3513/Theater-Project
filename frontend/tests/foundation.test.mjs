@@ -4,7 +4,7 @@ import { spawn } from "node:child_process";
 import { createServer } from "node:net";
 import { once } from "node:events";
 
-test("packaged frontend serves an honest foundation and no booking API", {
+test("packaged frontend serves an honest foundation and unconfigured synthetic booking API", {
 	timeout: 30000,
 }, async () => {
 	const reservation = createServer();
@@ -68,7 +68,7 @@ test("packaged frontend serves an honest foundation and no booking API", {
 		assert.equal(response.headers.get("x-powered-by"), null);
 		assert.equal(
 			(await fetch(`http://127.0.0.1:${port}/api/bookings`)).status,
-			404,
+			503,
 		);
 	} finally {
 		const stopped = once(child, "exit");

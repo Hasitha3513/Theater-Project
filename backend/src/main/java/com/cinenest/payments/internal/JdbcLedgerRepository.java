@@ -4,6 +4,9 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 @Repository
 class JdbcLedgerRepository implements LedgerRepository {
+ public long customerVerifiedCredit(UUID request){return jdbc.sql("SELECT COALESCE(sum(c.amount_minor),0) FROM cinenest_payments.incoming_payment_credit c JOIN cinenest_payments.bank_credit_verification v USING(credit_id) WHERE c.source_kind='SYNTHETIC_BANK' AND v.status='SIMULATED_VERIFIED' AND EXISTS(SELECT 1 FROM cinenest_payments.bank_credit_match m JOIN cinenest_payments.bank_payment_request r USING(request_id) WHERE m.credit_id=c.credit_id AND r.request_id=? AND r.venue_id=c.venue_id AND r.currency=c.currency)").param(request).query(Long.class).single();}
+ public java.util.List<CustomerReads.Resolution> customerResolutions(UUID request){return jdbc.sql("SELECT kind,state FROM cinenest_payments.bank_financial_exception WHERE request_id=? ORDER BY recorded_at,exception_id LIMIT 25").param(request).query((r,i)->new CustomerReads.Resolution(r.getString(1),r.getString(2))).list();}
+
  private final JdbcClient jdbc;JdbcLedgerRepository(JdbcClient jdbc){this.jdbc=jdbc;}
  private List<Map<String,Object>> query(String sql,Map<String,?> p){return jdbc.sql(sql).params(p).query().listOfRows();}
  private Map<String,Object> one(String sql,Map<String,?> p){var rows=query(sql,p);if(rows.isEmpty())throw new BankFailure(404,"Financial resource not found");return rows.getFirst();}

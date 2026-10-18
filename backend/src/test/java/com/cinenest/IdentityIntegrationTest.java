@@ -279,7 +279,8 @@ class IdentityIntegrationTest {
     }
     @Test void nonAuthRoutesAndUnsupportedMethodsRemainDenied() throws Exception {
         var browser=signedIn("customer-a");
-        for(String path:new String[]{"/api/bookings","/api/accounts","/admin","/login","/api/grants"})assertThat(browser.get(path).statusCode()).isEqualTo(403);
+        assertThat(browser.get("/api/bookings").statusCode()).isEqualTo(401); // Authenticated route, disabled synthetic ledger: no data exposed.
+        for(String path:new String[]{"/api/accounts","/admin","/login","/api/grants"})assertThat(browser.get(path).statusCode()).isEqualTo(403);
         assertThat(browser.call("POST","/api/accounts/me",Map.of()).statusCode()).isEqualTo(403);
     }
     @Test void databaseConstraintsRejectDuplicateIdentityMissingScopesAndInvalidGrants() {

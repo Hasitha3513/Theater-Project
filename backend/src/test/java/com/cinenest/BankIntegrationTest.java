@@ -508,4 +508,52 @@ class BankIntegrationTest {
     @Test void notificationOwnershipAndVenueConstraintsRejectMalformedIntent()throws Exception{var c=signedIn("customer-a");var n=noticeFixture(c);assertThatThrownBy(()->jdbc.sql("UPDATE cinenest_notifications.notification_intent SET recipient_id=:b WHERE intent_id=:id").param("b",B).param("id",n.get("id")).update()).isInstanceOf(DataIntegrityViolationException.class);assertThatThrownBy(()->jdbc.sql("UPDATE cinenest_notifications.notification_intent SET venue_id=:v WHERE intent_id=:id").param("v",VB).param("id",n.get("id")).update()).isInstanceOf(DataIntegrityViolationException.class);}
 
     @Test void notificationDeliveryFailureCannotDeleteCompletedReviewOrAlterMoney()throws Exception{notificationGrants();var c=signedIn("customer-a");var staff=signedIn("staff");bankGrants();var r=bankReady(c);r=json(write(staff,"POST",financePath(r)+"/decisions",JSONObjectUtils.toJSONString(outcome(r,"REVIEWED"))));noticeResolve();UUID intent=jdbc.sql("SELECT i.intent_id FROM cinenest_notifications.notification_intent i JOIN cinenest_notifications.notification_event e USING(event_id) WHERE e.kind='BANK_REVIEW_COMPLETED' AND i.recipient_id=:a").param("a",A).query(UUID.class).single();var d=json(staff.get(noticeAdmin(intent)));var b=noticeBody(d);b.put("fixture","FAILED");assertThat(write(staff,"POST",noticeAdmin(intent)+"/simulations",JSONObjectUtils.toJSONString(b)).statusCode()).isEqualTo(200);noticeTick();assertThat(json(staff.get(noticeAdmin(intent))).get("state")).isEqualTo("DELIVERY_FAILED");assertThat(json(c.get(bankPath(r))).get("reviewState")).isEqualTo("REVIEWED");assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_review_decision").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking").query(Integer.class).single()).isZero();}
+
+    @SuppressWarnings("unchecked") java.util.List<Map<String,Object>> customerItems(HttpResponse<String> response)throws Exception{return (java.util.List<Map<String,Object>>)json(response).get("items");}
+    @Test void customerHistoryOwnsImmutablePurchasedTermsAndNeverBroadensStaffDirectory()throws Exception{
+      var c=accessCase();String path="/api/bookings/"+c.booking();var original=json(c.customer().get(path));var list=c.customer().get("/api/bookings?page=0&size=1");assertThat(list.statusCode()).isEqualTo(200);assertThat(list.headers().firstValue("Cache-Control").orElse("")).contains("no-store");var item=customerItems(list).getFirst();assertThat(item.get("id")).isEqualTo(c.booking().toString());assertThat(item.get("revision")).isEqualTo(1L);assertThat(item.get("state")).isEqualTo("SIMULATED_CONFIRMED");assertThat(item.get("purchase")).isEqualTo(original.get("purchase"));assertThat(customerItems(c.staff().get("/api/bookings"))).isEmpty();assertThat(customerItems(c.allocator().get("/api/bookings"))).isEmpty();assertThat(c.staff().get(path).statusCode()).isEqualTo(200);assertThat(list.body()).doesNotContain("owner_id","actor_id","quote_hash","token","destinationReference");
+      assertThatThrownBy(()->jdbc.sql("UPDATE cinenest_booking.booking_revision SET amount_minor=1").update()).isInstanceOf(DataAccessException.class);assertThat(json(c.customer().get(path)).get("purchase")).isEqualTo(original.get("purchase"));assertThat(customerItems(c.customer().get("/api/bookings")).getFirst().get("purchase")).isEqualTo(original.get("purchase"));
+    }
+    @Test void customerPendingRequestDiscoveryNeverInventsBookingOrCredit()throws Exception{
+      var a=signedIn("customer-a");var r=bank(a);var list=a.get("/api/bank/requests");var item=customerItems(list).getFirst();assertThat(item.get("id")).isEqualTo(r.get("id"));assertThat(item.get("claimSubmitted")).isEqualTo(false);assertThat(item.get("reviewState")).isEqualTo("PENDING");assertThat(item.get("funding").toString()).contains("NOT_CONFIRMED","UNFUNDED");assertThat(customerItems(a.get("/api/bookings"))).isEmpty();assertThat(customerItems(signedIn("staff").get("/api/bank/requests"))).isEmpty();assertThat(list.body()).doesNotContain("declared_reference","object_key","preview_key","actor_id","destinationReference","bank_account");
+    }
+    @Test void customerListsEnforceBoundsAndMalformedInput()throws Exception{
+      var a=signedIn("customer-a");var request=bank(a);
+      for(String path:java.util.List.of("/api/bookings","/api/bank/requests",bankPath(request)+"/refunds")){
+        for(String query:java.util.List.of("?page=-1","?size=0","?size=26","?page=10001","?page=x","?size=999999999999"))assertThat(a.get(path+query).statusCode()).as(path+query).isEqualTo(400);
+        assertThat(a.get(path+"?page=10000&size=25").statusCode()).isEqualTo(200);
+      }
+    }
+    @Test void customerReadSessionAndSuspensionCannotBeBypassedByDirectGet()throws Exception{
+      var c=accessCase();var paths=java.util.List.of("/api/bookings","/api/bank/requests",bankPath(c.request())+"/refunds","/api/bookings/"+c.booking());
+      var anonymous=new Browser();for(String path:paths)assertThat(anonymous.get(path).statusCode()).isIn(401,403);
+      jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();for(String path:paths)assertThat(c.customer().get(path).statusCode()).isIn(403,404);
+      jdbc.sql("UPDATE cinenest_identity.account SET eligibility='ELIGIBLE' WHERE account_id=:a").param("a",A).update();c.customer().logout();for(String path:paths)assertThat(c.customer().get(path).statusCode()).isIn(401,403);
+    }
+    @Test void customerRefundDiscoveryRequiresParentOwnershipEvenWithFinanceGrants()throws Exception{
+      var c=refundCase(100);String path=bankPath(c.request())+"/refunds";var page=c.customer().get(path);var item=customerItems(page).getFirst();assertThat(item.get("state")).isEqualTo("REQUESTED");assertThat(item.get("realRepayment")).isEqualTo(false);assertThat(c.reviewer().get(path).statusCode()).isEqualTo(404);assertThat(c.executor().get(path).statusCode()).isEqualTo(404);assertThat(c.customer().get("/api/bank/requests/"+UUID.randomUUID()+"/refunds").statusCode()).isEqualTo(404);assertThat(page.body()).doesNotContain("destination","creditId","executor","fixture","approver","manifest","audit");
+      var approved=approveRefund(c);assertThat(customerItems(c.customer().get(path)).getFirst().get("state")).isEqualTo("APPROVED");assertThat(customerItems(c.customer().get(path)).getFirst().get("realRepayment")).isEqualTo(false);
+      outgoing(c,refundWrite(c.executor(),approved,"/attempts",Map.of()),"SYNTHETIC-UNKNOWN");assertThat(customerItems(c.customer().get(path)).getFirst().get("state")).isEqualTo("UNKNOWN_RECONCILIATION_REQUIRED");
+    }
+    @Test void customerRequestPagesHaveStableOrderingAndReadsDoNotChangeFinancialHistory()throws Exception{
+      var c=accessCase();var original=c.customer().get("/api/bank/requests?page=0&size=1");var first=customerItems(original);assertThat(customerItems(c.customer().get("/api/bank/requests?page=0&size=1"))).isEqualTo(first);assertThat(customerItems(c.customer().get("/api/bank/requests?page=1&size=1"))).isEmpty();
+      long allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Long.class).single();long revisions=jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_revision").query(Long.class).single();
+      for(int i=0;i<3;i++){c.customer().get("/api/bookings");c.customer().get("/api/bank/requests");c.customer().get(bankPath(c.request())+"/refunds");}
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Long.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_revision").query(Long.class).single()).isEqualTo(revisions);
+    }
+    @Test void customerRefundReadsStayConsistentDuringIndependentApproval()throws Exception{
+      var c=refundCase(100);String path=bankPath(c.request())+"/refunds";try(var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+       var approval=pool.submit(()->approveRefund(c));var read=pool.submit(()->c.customer().get(path));var rows=customerItems(read.get());assertThat(rows.getFirst().get("state")).isIn("REQUESTED","UNDER_REVIEW","APPROVED");assertThat(rows.getFirst().get("realRepayment")).isEqualTo(false);approval.get();
+      }assertThat(customerItems(c.customer().get(path)).getFirst().get("state")).isEqualTo("APPROVED");
+    }
+
+    @Test void customerRequestPaginationUsesUniqueStableTieBreakAndIgnoresForgedScope()throws Exception{
+      var a=signedIn("customer-a");var r=bank(a);var ids=new java.util.ArrayList<String>();ids.add(r.get("id").toString());
+      for(int index=1;index<=2;index++){UUID id=UUID.randomUUID();ids.add(id.toString());jdbc.sql("INSERT INTO cinenest_payments.bank_payment_request SELECT (jsonb_populate_record(NULL::cinenest_payments.bank_payment_request,to_jsonb(r)||jsonb_build_object('request_id',CAST(:id AS text),'quote_id',CAST(:q AS text),'hold_id',CAST(:h AS text)))).* FROM cinenest_payments.bank_payment_request r WHERE request_id=:r").param("id",id.toString()).param("q",UUID.randomUUID().toString()).param("h",UUID.randomUUID().toString()).param("r",UUID.fromString(r.get("id").toString())).update();}
+      ids.sort(java.util.Comparator.reverseOrder());var actual=new java.util.ArrayList<String>();for(int page=0;page<3;page++){var response=a.get("/api/bank/requests?page="+page+"&size=1");actual.add(customerItems(response).getFirst().get("id").toString());assertThat(customerItems(a.get("/api/bank/requests?page="+page+"&size=1"))).isEqualTo(customerItems(response));assertThat(json(response).get("hasNext")).isEqualTo(page<2);}
+      assertThat(actual).containsExactlyElementsOf(ids);assertThat(customerItems(a.get("/api/bank/requests?ownerId="+B+"&venueId="+VB))).hasSize(3);assertThat(customerItems(signedIn("staff").get("/api/bank/requests?ownerId="+A+"&venueId="+VA))).isEmpty();
+    }
+    @Test void customerCreditProjectionIsVerifiedMatchedSourceNotReceiptOrSpendableBalance()throws Exception{
+      var c=refundCase(100);var r=customerItems(c.customer().get("/api/bank/requests")).getFirst();var funding=(Map<?,?>)r.get("funding");assertThat(funding.get("verifiedMatchedMinor")).isEqualTo("50000");assertThat(funding.get("allocatedMinor")).isEqualTo("0");assertThat(funding.get("realPayment")).isEqualTo(false);assertThat(funding.get("bookingStatus")).isEqualTo("NOT_CONFIRMED");
+    }
 }

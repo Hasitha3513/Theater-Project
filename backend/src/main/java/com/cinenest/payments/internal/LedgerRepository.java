@@ -6,6 +6,8 @@ interface LedgerRepository {
  int escalateException(Map<String,?> values);
  long refundCommitted(Map<String,?> values);
  long allocatedCredit(Map<String,?> values);
+ long customerVerifiedCredit(UUID request);
+ java.util.List<CustomerReads.Resolution> customerResolutions(UUID request);
  long allocatedRequest(Map<String,?> values);
  List<Map<String,Object>> adjustments(Map<String,?> values);
  List<Map<String,Object>> correctionHistory(Map<String,?> values);

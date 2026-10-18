@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
   "taskId": "CN-CUSTOMER-001",
-  "mode": "CUSTOMER_SCOPE_APPROVAL_READINESS_ONLY",
-  "workStatus": "BLOCKED",
+  "mode": "SYNTHETIC_CUSTOMER_IMPLEMENTATION",
+  "workStatus": "IN_PROGRESS",
   "productStage": "BOUNDED_SYNTHETIC_ACCESS_VERIFIED_REAL_DOOR_CONTROL_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -13,18 +13,16 @@
   "currentChangeSet": "CN-CUSTOMER-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-CUSTOMER-001",
-  "nextAction": "Obtain separate bounded synthetic CN-CUSTOMER-001 implementation authorization; do not implement",
+  "nextAction": "Complete bounded customer checks and exact-source CI",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "CN-CUSTOMER-001 NOT_IMPLEMENTED; approved policy/API/UI/support scope and single refund dependency amendment only",
+  "implementationEvidence": "CN-CUSTOMER-001 bounded synthetic implementation; full customer/support acceptance remains pending",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
     "PR-BANK-001"
   ],
   "blockers": [
-    "CN-CUSTOMER-001: separate bounded implementation authorization expressly withheld in this recording-only session",
-    "Downstream only: PayHere deferred/BLOCKED; no direct customer hard edge",
-    "Downstream only: venue/specialists and wider commercial/privacy/support/physical acceptance remain pending"
+    "Downstream only: PayHere deferred/BLOCKED; venue/specialists and wider commercial/privacy/support/physical acceptance pending"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
@@ -32,7 +30,7 @@
   "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS",
   "publicationEvidence": "Source 05ad25908d320b0d4a90a9c5cf7ae3da10183131 pushed to origin/main; exact-source CI39111005350 SUCCESS; final documentation receipt verified separately",
   "lastObservedHead": "05ad25908d320b0d4a90a9c5cf7ae3da10183131",
-  "evidencePath": "PROGRESS.md#customer-readiness-reconciliation",
+  "evidencePath": "PROGRESS.md#customer-implementation",
   "evidenceFreshness": "2026-10-18 exact Access source CI39111005350 SUCCESS;39 owned source hash receipt",
   "availableTools": [
     "exec/file reads/edits",
@@ -49,13 +47,12 @@
   ],
   "omissionRegister": "execution/omissions.json",
   "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
-  "verificationScope": "Approval/readiness documentation only; no customer implementation or application acceptance",
+  "verificationScope": "Bounded synthetic software only; no commercial/provider/physical/customer acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+  "implementationAuthorization": "GRANTED_BOUNDED_SYNTHETIC_CUSTOMER",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "Separate bounded synthetic CN-CUSTOMER-001 implementation authorization",
     "Commercial/support/venue/specialist/provider/production approvals remain separate downstream gates"
   ],
   "checks": [
@@ -3267,5 +3264,86 @@
     "fullRequirementAcceptance": "NOT_ACCEPTED",
     "checks": "PASS isolated knowledge/execution validators and four negative controls; primary execution retains only pre-existing next-env integrity findings; whitespace PASS",
     "evidencePath": "PROGRESS.md#customer-readiness-reconciliation"
+  },
+  "customerImplementation": {
+    "baselineHead": "9b1a361870f24f5f2611d0e1e14179bd101d4076",
+    "authority": {
+      "source": "Owner inline instruction and attachment 5c0c34f5-bf45-4f67-9f68-7687f547a88f",
+      "requestSha256": "c125f698b4faa3f6f52ff919fcb904933724b15c39e008f53034dd13e0ad6544",
+      "scope": "GRANTED_BOUNDED_SYNTHETIC_CUSTOMER",
+      "date": "2026-10-18",
+      "realPayments": "DISABLED",
+      "gateway": "DEFERRED_BLOCKED"
+    },
+    "workStatus": "IN_PROGRESS",
+    "checks": {
+      "backend": "PASS",
+      "frontend": "PASS",
+      "browser": "PASS",
+      "governance": "PASS",
+      "launchers": "PASS"
+    },
+    "sourceCI": "PENDING",
+    "realPayments": "DISABLED",
+    "gateway": "DEFERRED_BLOCKED",
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "ownedFiles": {
+      "backend/src/main/java/com/cinenest/booking/SyntheticBooking.java": "3a5150faa872ef6f465015319db13e3576a59cb765ec8ece36724c2bc693925a",
+      "backend/src/main/java/com/cinenest/booking/internal/SyntheticBookingAdapter.java": "d58d7e1c99f0a6ebb6a10a6721fe85b4b2a23569f20cdea952db35a24487314c",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "9352f692e51a4b52e809709a00643d6dbc21ca4d11637ce77f47c5bf72775974",
+      "backend/src/main/java/com/cinenest/payments/internal/BankController.java": "1630f0b3f1f61daf7f6a586781beeee636536770e23f3f0e394f209511c44c21",
+      "backend/src/main/java/com/cinenest/payments/internal/BankRepository.java": "e7f751e9ba08cf6658395a0ef0bb1fdc6275154527e480c9c062e0c5cbacebbb",
+      "backend/src/main/java/com/cinenest/payments/internal/BankService.java": "e10cb3e84b264b908a81cade09d60d4abc5ea9022cc92c681b33c8fecdf10414",
+      "backend/src/main/java/com/cinenest/payments/internal/CustomerReads.java": "169c881d738ebaad23497d7d52c4aeb329cd8eaf2fa3219f2d0080dc4ff3ab26",
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcBankRepository.java": "2e078d6ef81d4fda7c1558f8a1d54a3baec49a32c9eafc15ddb977d1398f171e",
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcLedgerRepository.java": "84df621f41e194f9c72950f8165f7666033f0cabb46072e397e2a60cbbc14d1b",
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcRefundRepository.java": "31e77b4346e3e6301af9b406f07eb84a3aa07e3506b26b9066954e4754ce97a5",
+      "backend/src/main/java/com/cinenest/payments/internal/LedgerController.java": "86b75747ba76657999351e9ecc983badac3b31789949ae1875c28b05d1317950",
+      "backend/src/main/java/com/cinenest/payments/internal/LedgerRepository.java": "d02b8cde1d430d5834abcf56a599831d4745c891221e39ce6ad7693de79e9d98",
+      "backend/src/main/java/com/cinenest/payments/internal/LedgerService.java": "4228c0fedfb5179f15bde170eb2be9526074f78e3e01cd653d9089c94d106df2",
+      "backend/src/main/java/com/cinenest/payments/internal/RefundController.java": "d642765b3a86c87c73a8aa52d53b90d79de0d9ff9f7480020a612ef117030b52",
+      "backend/src/main/java/com/cinenest/payments/internal/RefundRepository.java": "228a86d15931faf36ee7240dab1e6d022226725d618f5e073294f684a16841c2",
+      "backend/src/main/java/com/cinenest/payments/internal/RefundService.java": "169189c48beea490aa6b18fb29c5216c8e4bbed2e426059ef5468a3fa783e990",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "ddb79989695b6be81936aad5646085d4de2fda1c2121f9675625b8907e495844",
+      "backend/src/test/java/com/cinenest/IdentityIntegrationTest.java": "4ce4ec8bacc201ab2a56783b17eb9889d1b532c27550bda72b258552b4719a3e",
+      "backend/src/test/java/com/cinenest/VerificationIntegrationTest.java": "0cf3e29d0167b28cbe758074bda32aff3d8dfc04e42f8d20adff5d5e5fdca481",
+      "frontend/app/api/bank/requests/[id]/refunds/route.ts": "6dad8891ed69dbb0fd11af665a64b03db9eb0d5f30484554c1de7e19ee5e486c",
+      "frontend/app/api/bank/requests/route.ts": "ed0ca5040c45147696b04781f1ab05b20f92e3fda1096d3012af387e49520c23",
+      "frontend/app/api/bookings/route.ts": "40e026e670cab27a08401b8f2d20d6e0b1410a7382b6e9d789dc8c843365668c",
+      "frontend/app/bookings/[id]/page.tsx": "298ef7b87ef539c8389afc1f38d645cd5867ecc123b4c36bf2748c32c9528d1c",
+      "frontend/app/bookings/page.tsx": "8330bbcea8dde3c9d0f20af5705e7779930b6fea2082f0719439d2ed928ef187",
+      "frontend/app/globals.css": "a737c731e3bfad1af9696ee3773c23c2aa60fc8bb43b5baf1c41bd78495b57c5",
+      "frontend/components/customer-bookings.tsx": "e15b409312992718e5ac10e866dab60534aa6b2027329521f85b635199c2b76f",
+      "frontend/components/shell.tsx": "a654f9cb8f4e79f57b7f69f2969084afdcf0cc9c09756324fcd128cc10bf5617",
+      "frontend/lib/bank-backend.ts": "192fd6ed1819da8f26cfcf9efd4807d4d09a1f915185a8f5f925d1a35258afbd",
+      "frontend/package.json": "bfc65a60ea9d1ac1157fe2cb5b91de9066a8a0e8270c6e7bace899b6c9b62ca3",
+      "frontend/tests/customer-bookings-browser.mjs": "9a24b2cb3574fbf3894f9d258f1cc5d8d19c33599ba7964ac70c00b2bff7c1e8",
+      "frontend/tests/customer-bookings.test.mjs": "1b7f0a3c5d6435ec8208b6b503b80588fb32a07010ec7ba259f68c449ea20bbc",
+      "frontend/tests/foundation.test.mjs": "bd8542c88df3cf2ecc12307eea0be2433bd443844a513566994e7dff109bac8c",
+      "frontend/tests/transport.test.mjs": "acb8940538de0dd2bba3c1ce1724d002421647dcc29eb6feb95a61ba71f86eed"
+    },
+    "evidencePath": "PROGRESS.md#customer-implementation",
+    "mappedTestPlans": {
+      "T-CN-C08": "Bounded synthetic owned history only; full acceptance NOT_ACCEPTED",
+      "T-CN-SUP-01": "Recorded status/reasons/navigation only; full support acceptance NOT_ACCEPTED",
+      "T-CN-NFR-02": "Implemented read-boundary cases only; no 18/18 claim"
+    },
+    "evidenceCounts": {
+      "backendTests": 297,
+      "bankIntegrationTests": 102,
+      "architectureTests": 14,
+      "frontendTests": 95,
+      "customerBrowserGroups": 32,
+      "notificationBrowserGroups": 28,
+      "accessBrowserGroups": 32,
+      "refundBrowserGroups": 30,
+      "bankBrowserGroups": 70,
+      "adminBrowserGroups": 63,
+      "launcherTests": 14,
+      "governanceNegativeControls": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
   }
 }

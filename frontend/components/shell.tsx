@@ -49,6 +49,7 @@ export function Navigation({
                 ["/rooms", "Explore rooms"],
                 ["/verification", "Synthetic verification"],
                 ["/bank", "Synthetic bank request"],
+                ["/bookings", "My synthetic bookings"],
                 ["/refunds", "Synthetic refund status"],
                 ["/access", "Synthetic access status"],
                 ["/notifications", "Synthetic notifications"],

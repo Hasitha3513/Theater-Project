@@ -12,6 +12,7 @@ class RefundController {
  RefundController(RefundService service,BankRepository bank,PlatformTransactionManager manager){this.service=service;this.bank=bank;tx=new TransactionTemplate(manager);}
  private UUID actor(Principal p){if(p==null)throw new BankFailure(401,"Sign-in required");return BankService.id(p.getName());}
  private ResponseEntity<?> ok(Object v){return ResponseEntity.ok().header("Cache-Control","no-store").body(v);}
+ @GetMapping("/api/bank/requests/{id}/refunds") ResponseEntity<?> owned(Principal p,@PathVariable UUID id,@RequestParam(defaultValue="0")int page,@RequestParam(defaultValue="10")int size){return ok(service.ownedList(actor(p),id,page,size));}
  @PostMapping("/api/bank/requests/{id}/refunds") ResponseEntity<?> request(Principal p,@PathVariable UUID id,@RequestBody Map<String,Object>b){return ok(service.request(actor(p),id,b));}
  @GetMapping("/api/refunds/{id}") ResponseEntity<?> read(Principal p,@PathVariable UUID id){return ok(service.read(actor(p),null,id));}
  @GetMapping("/api/admin/venues/{v}/refunds") ResponseEntity<?> queue(Principal p,@PathVariable UUID v){return ok(service.read(actor(p),v,null));}

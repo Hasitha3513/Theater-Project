@@ -7,12 +7,13 @@ export function bankRoute(path: string, method: string) {
  if(new RegExp(`^/api/bookings/${uuid}/access/(credentials|simulated-attempts)$`).test(path)||new RegExp(`^/api/bookings/${uuid}/access/credentials/${uuid}/reveal$`).test(path)||new RegExp(`^/api/admin/venues/${uuid}/access/credentials/${uuid}/(revocations|simulations)$`).test(path))return method === "POST";
 
  if(new RegExp(`^/api/refunds/${uuid}$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds$`).test(path)) return method === "GET";
- if(new RegExp(`^/api/bank/requests/${uuid}/refunds$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds/${uuid}/(destination-verifications|decisions|attempts|reconciliations)$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds/${uuid}/attempts/${uuid}/evidence$`).test(path)) return method === "POST";
- if(new RegExp(`^/api/bookings/${uuid}$`).test(path)) return method === "GET";
+ if(new RegExp(`^/api/bank/requests/${uuid}/refunds$`).test(path)) return method === "GET" || method === "POST";
+ if( new RegExp(`^/api/admin/venues/${uuid}/refunds/${uuid}/(destination-verifications|decisions|attempts|reconciliations)$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds/${uuid}/attempts/${uuid}/evidence$`).test(path)) return method === "POST";
+ if(path === "/api/bookings" || new RegExp(`^/api/bookings/${uuid}$`).test(path)) return method === "GET";
  if(new RegExp(`^/api/admin/venues/${uuid}/bank/(credits|exceptions)(/${uuid})?$`).test(path)) return method === "GET" || (method === "POST" && path.endsWith("/credits"));
  if(new RegExp(`^/api/admin/venues/${uuid}/bank/(credits/${uuid}/(matches|corrections)|requests/${uuid}/allocations|exceptions/${uuid}/actions|corrections/${uuid}/decisions)$`).test(path)) return method === "POST";
 
-	if (path === "/api/bank/requests") return method === "POST";
+	if (path === "/api/bank/requests") return method === "POST" || method === "GET";
 	if (new RegExp(`^/api/bank/requests/${uuid}$`).test(path))
 		return method === "GET";
 	if (
@@ -74,7 +75,7 @@ export async function forwardBank(request: Request): Promise<Response> {
 	});
 	try {
 		const url = new URL(request.url);
-		const accessPage=(new RegExp(`^/api/admin/venues/${uuid}/access/credentials$`).test(url.pathname)||new RegExp(`^/api/admin/venues/${uuid}/notifications$`).test(url.pathname)||url.pathname==="/api/notifications")&&request.method==="GET"&&[...url.searchParams.keys()].every(k=>["page","size"].includes(k))&&[...url.searchParams.values()].every(v=>/^\d{1,5}$/.test(v));
+		const accessPage=(new RegExp(`^/api/admin/venues/${uuid}/access/credentials$`).test(url.pathname)||new RegExp(`^/api/admin/venues/${uuid}/notifications$`).test(url.pathname)||url.pathname==="/api/notifications"||url.pathname==="/api/bookings"||url.pathname==="/api/bank/requests"||new RegExp(`^/api/bank/requests/${uuid}/refunds$`).test(url.pathname))&&request.method==="GET"&&[...url.searchParams.keys()].every(k=>["page","size"].includes(k))&&[...url.searchParams.values()].every(v=>/^\d{1,5}$/.test(v));
         if (!bankRoute(url.pathname, request.method) || (url.search&&!accessPage))
 			return new Response(null, { status: 404, headers });
 		const configured = process.env.CINENEST_AUTH_ORIGIN;

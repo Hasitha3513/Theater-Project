@@ -6,6 +6,7 @@ interface BankRepository {
  record Claim(UUID id,UUID request,int generation,Instant submitted){}
  record Evidence(UUID id,UUID request,UUID claim,UUID object,UUID preview,String state,Instant expires,Instant retain,String mime){}
  Map<String,Object> policy(UUID id);Instant now();Optional<Request> request(UUID id,boolean lock);Optional<Claim> claim(UUID id);Optional<Claim> latest(UUID request);
+ List<Request> owned(UUID owner,int offset,int limit);
  List<Request> queue(UUID venue,UUID actor);List<Evidence> evidence(UUID claim);Optional<Evidence> upload(UUID id,boolean lock);
  void create(UUID id,com.cinenest.pricing.BankQuotation.Facts q,BankPolicy.Policy p,Map<String,Instant> times);
  void claim(UUID id,UUID request,int generation,long amount,Instant paid,String reference);

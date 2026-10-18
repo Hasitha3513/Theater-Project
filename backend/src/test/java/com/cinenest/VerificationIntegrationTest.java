@@ -208,7 +208,7 @@ class VerificationIntegrationTest {
         var customer=signedIn("customer-a");var reviewer=signedIn("staff");reviewerGrants();var r=ready(customer);assertThat(r.get("state")).isEqualTo("REVIEW_REQUIRED");assertThat(r.get("physicalAdmission")).isEqualTo(false);
         var body=decision(r,"VERIFIED");var response=write(reviewer,"POST",reviewPath(r)+"/decisions",JSONObjectUtils.toJSONString(body));var decided=json(response);assertThat(decided.get("state")).isEqualTo("VERIFIED");assertThat(json(write(reviewer,"POST",reviewPath(r)+"/decisions",JSONObjectUtils.toJSONString(body))).get("revision")).isEqualTo(decided.get("revision"));
         assertThat(jdbc.sql("SELECT eligibility FROM cinenest_identity.account WHERE account_id=:id").param("id",A).query(String.class).single()).isEqualTo("ELIGIBLE");assertThat(jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_decision").query(Integer.class).single()).isEqualTo(1);
-        assertThat(customer.get("/api/bookings").statusCode()).isEqualTo(403);
+        assertThat(customer.get("/api/bookings").statusCode()).isEqualTo(401); // Booking read capability disabled in this verification-only context.
     }
     @Test void ownerVenueSelfReviewRevocationAndStitchingAreDenied()throws Exception{
         var a=signedIn("customer-a");var b=signedIn("customer-b");var staff=signedIn("staff");var r=ready(a);

@@ -24,11 +24,23 @@ class SyntheticBookingAdapter implements SyntheticBooking {
   if(jdbc.sql("UPDATE cinenest_booking.inventory_block SET kind='CONFIRMED',revision=revision+1 WHERE block_id=(SELECT block_id FROM cinenest_booking.reservation_hold WHERE hold_id=:h) AND blocking AND kind='HOLD'").param("h",f.hold()).update()!=1)throw new BankRequestHolds.Rejected();
   jdbc.sql("INSERT INTO cinenest_booking.booking_command(request_id,command_key,booking_id) VALUES(:r,:k,:id)").param("r",f.request()).param("k",f.command()).param("id",id).update();inventory.audit(f.actor(),f.hold(),"SYNTHETIC_CONFIRM","ACTIVE","CONSUMED");return id;
  }
+ public CustomerPage ownedHistory(UUID actor,int page,int size){
+  if(page<0||page>10000||size<1||size>25)throw new IllegalArgumentException("Invalid customer page");
+  if(!auth.eligible(actor,true))throw new SecurityException("Current eligible account required");
+  var rows=jdbc.sql("SELECT b.booking_id,b.request_id,b.venue_id,b.state,b.confirmed_at,r.revision,r.amount_minor,r.currency,r.snapshot FROM cinenest_booking.booking b JOIN cinenest_booking.booking_revision r USING(booking_id) WHERE b.owner_id=:a ORDER BY b.confirmed_at DESC,b.booking_id DESC LIMIT :limit OFFSET :offset").param("a",actor).param("limit",size+1).param("offset",page*size).query().listOfRows();
+  var items=rows.stream().limit(size).map(row->new CustomerItem((UUID)row.get("booking_id"),(UUID)row.get("request_id"),(UUID)row.get("venue_id"),row.get("state").toString(),((Number)row.get("revision")).longValue(),((java.sql.Timestamp)row.get("confirmed_at")).toInstant().toString(),purchase(parse(row.get("snapshot").toString()),row.get("amount_minor").toString(),row.get("currency").toString()),true,false)).toList();
+  return new CustomerPage(items,page,size,rows.size()>size,inventory.now().toString(),true);
+ }
+ @SuppressWarnings("unchecked")
+ private static Purchase purchase(Map<String,Object> s,String amount,String currency){
+  var pkg=(Map<String,Object>)s.get("package");var lines=((List<Map<String,Object>>)s.get("lines")).stream().map(l->new Line(l.get("lineId").toString(),l.get("kind").toString(),l.get("label").toString(),l.get("quantity").toString(),l.get("amountMinor").toString())).toList();
+  return new Purchase(pkg.get("name").toString(),Objects.toString(pkg.get("description"),""),s.get("packageVersionId").toString(),s.get("sessionStart").toString(),s.get("sessionEnd").toString(),s.get("timezone").toString(),s.get("roomId").toString(),amount,currency,lines);
+ }
  public Optional<Map<String,Object>> read(UUID actor,UUID id){
   if(!auth.eligible(actor,true))return Optional.empty();
   var rows=jdbc.sql("SELECT b.owner_id,b.venue_id,b.request_id,b.state,b.confirmed_at,r.snapshot FROM cinenest_booking.booking b JOIN cinenest_booking.booking_revision r USING(booking_id) WHERE booking_id=:id").param("id",id).query().listOfRows();
   if(rows.isEmpty())return Optional.empty();var row=rows.getFirst();if(!row.get("owner_id").equals(actor)&&!auth.permits(actor,(UUID)row.get("venue_id"),"bank.synthetic.credit.read",true))return Optional.empty();
-  return Optional.of(Map.of("id",id,"requestId",row.get("request_id"),"syntheticBookingStatus",row.get("state"),"synthetic",true,"bookingConfirmed",false,"confirmedAt",((java.sql.Timestamp)row.get("confirmed_at")).toInstant().toString(),"snapshot",parse(row.get("snapshot").toString())));
+  var result=new LinkedHashMap<String,Object>(Map.of("id",id,"requestId",row.get("request_id"),"syntheticBookingStatus",row.get("state"),"synthetic",true,"bookingConfirmed",false,"confirmedAt",((java.sql.Timestamp)row.get("confirmed_at")).toInstant().toString(),"snapshot",parse(row.get("snapshot").toString())));var snapshot=parse(row.get("snapshot").toString());result.put("revision",1);result.put("observedAt",inventory.now().toString());result.put("venueId",row.get("venue_id"));result.put("purchase",purchase(snapshot,snapshot.get("totalMinor").toString(),snapshot.get("currency").toString()));return Optional.of(result);
  }
  private static Map<String,Object> parse(String s){try{return com.nimbusds.jose.util.JSONObjectUtils.parse(s);}catch(java.text.ParseException e){throw new IllegalStateException(e);}}
 }

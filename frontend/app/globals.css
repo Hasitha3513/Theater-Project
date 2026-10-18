@@ -596,3 +596,5 @@ button.button { display: inline-grid; }
 .desktop-customer-nav nav ul { flex-wrap:wrap; }
 .notification-workspace { min-width:0; overflow-wrap:anywhere; }
 .notification-workspace .button { max-width:100%; white-space:normal; }
+
+.customer-bookings { min-width: 0; overflow-wrap: anywhere; }

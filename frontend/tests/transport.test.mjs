@@ -8,6 +8,7 @@ test("packaged session adapter forwards only existing routes/cookie and preserve
  const id="00000000-0000-4000-8000-000000000001";const calls=[];
  const backend=createServer((req,res)=>{
   calls.push({url:req.url,cookie:req.headers.cookie,authorization:req.headers.authorization,csrf:req.headers["x-csrf-token"]});
+  if(req.url==="/api/bookings"){res.writeHead(401);res.end();return;}
   if(req.url==="/api/session/logout"){res.writeHead(req.headers["x-csrf-token"]==="synthetic-csrf"?204:403);res.end();return;}
   res.setHeader("Content-Type","application/json");
   if(req.url==="/api/session/csrf")res.end(JSON.stringify({token:"synthetic-csrf",headerName:"X-CSRF-TOKEN"}));
@@ -27,6 +28,6 @@ test("packaged session adapter forwards only existing routes/cookie and preserve
   const csrf=await(await fetch(`${base}/api/session/csrf`)).json();
   assert.equal((await fetch(`${base}/api/session/logout`,{method:"POST",headers:{Origin:base,[csrf.headerName]:csrf.token}})).status,204);
   assert.equal(calls.at(-1).csrf,"synthetic-csrf");
-  assert.equal((await fetch(`${base}/api/bookings`)).status,404);
+  assert.equal((await fetch(`${base}/api/bookings`)).status,401);
  }finally{const stopped=once(child,"exit");child.kill("SIGTERM");await stopped;await new Promise(r=>backend.close(r));}
 });
