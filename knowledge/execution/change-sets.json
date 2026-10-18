@@ -1503,8 +1503,8 @@
       "definitionOfDone": "Historical purchase shown; unresolved state never false success",
       "requiredApproval": "Slice + support/contact/privacy policy approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROJECT.md#customer-bank-only-policy",
         "ARCHITECTURE.md#customer-bank-only-scope",
