@@ -2,7 +2,7 @@
   "schemaVersion": "1.0.0",
   "taskId": "CN-AMEND-001",
   "mode": "SYNTHETIC_AMENDMENT_IMPLEMENTATION",
-  "workStatus": "IN_PROGRESS",
+  "workStatus": "VERIFIED",
   "productStage": "BOUNDED_SYNTHETIC_AMENDMENT_REAL_OPERATIONS_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -12,8 +12,8 @@
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
   "currentChangeSet": "CN-AMEND-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-AMEND-001",
-  "nextAction": "Complete bounded amendment verification and exact-source CI",
+  "nextRecommendedChangeSet": "CN-IOT-001",
+  "nextAction": "Review CN-IOT-001 bounded simulator scope and OD-01/02/13 gates; read-only",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-AMEND-001 bounded synthetic implementation; actual checks at PROGRESS.md#amend-implementation; full commercial amendment acceptance remains pending",
   "approvedCoreDecisions": [
@@ -22,17 +22,16 @@
     "PR-BANK-001"
   ],
   "blockers": [
-    "Current bounded closure requires completed checks and exact-source CI",
     "Downstream only: PayHere deferred/BLOCKED; venue/specialist and wider commercial/privacy/physical gates pending"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "CURRENT_TASK_SOURCE_NOT_YET_PUBLISHED",
-  "publicationEvidence": "Source 05ad25908d320b0d4a90a9c5cf7ae3da10183131 pushed to origin/main; exact-source CI39111005350 SUCCESS; final documentation receipt verified separately",
-  "lastObservedHead": "05ad25908d320b0d4a90a9c5cf7ae3da10183131",
+  "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS",
+  "publicationEvidence": "CN-AMEND-001 source 659fbd4dc18f38810e9e83a6143ea77de090c7ed pushed to origin/main; exact-source CI39147723761 SUCCESS; final closure receipt publication/CI verified separately",
+  "lastObservedHead": "659fbd4dc18f38810e9e83a6143ea77de090c7ed",
   "evidencePath": "PROGRESS.md#amend-implementation",
-  "evidenceFreshness": "2026-10-18 bounded amendment local evidence; exact-source CI pending",
+  "evidenceFreshness": "2026-10-18 exact amendment source CI verified;32 owned source hashes",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -3396,7 +3395,7 @@
       "gateway": "DEFERRED_BLOCKED"
     },
     "baselineHead": "94acd3fe0e434cd85db152ba16a9c1b1f0f65892",
-    "workStatus": "IN_PROGRESS",
+    "workStatus": "VERIFIED",
     "checks": {
       "backend": "PASS",
       "frontend": "PASS",
@@ -3461,6 +3460,10 @@
       "skipped": 0
     },
     "primaryExecutionValidation": "PRE_EXISTING_NEXT_ENV_ONLY",
-    "isolatedExecutionValidation": "PASS"
+    "isolatedExecutionValidation": "PASS",
+    "sourceCI": "SUCCESS",
+    "sourceCommit": "659fbd4dc18f38810e9e83a6143ea77de090c7ed",
+    "sourceRun": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39147723761",
+    "definitionOfDoneEvidence": "Original immutable revision1 retained; safe accepted revision2, atomic inventory replacement, original funding binding, issuance guard, durable handoff and actual tests/CI verified"
   }
 }

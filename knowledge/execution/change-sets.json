@@ -1589,8 +1589,8 @@
       "definitionOfDone": "Original purchase history retained with safe accepted revision",
       "requiredApproval": "Amendment slice and agreed policy/payment method approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROJECT.md#amend-synthetic-policy",
         "ARCHITECTURE.md#amend-synthetic-scope",

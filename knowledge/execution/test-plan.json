@@ -358,7 +358,7 @@
       "boundedAmendmentImplementationEvidence": {
         "changeSetId": "CN-AMEND-001",
         "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
@@ -425,7 +425,7 @@
       "boundedAmendmentImplementationEvidence": {
         "changeSetId": "CN-AMEND-001",
         "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
@@ -1010,7 +1010,7 @@
       "boundedAmendmentImplementationEvidence": {
         "changeSetId": "CN-AMEND-001",
         "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
@@ -1371,7 +1371,7 @@
       "boundedAmendmentImplementationEvidence": {
         "changeSetId": "CN-AMEND-001",
         "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
@@ -1676,7 +1676,7 @@
       "boundedAmendmentImplementationEvidence": {
         "changeSetId": "CN-AMEND-001",
         "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
