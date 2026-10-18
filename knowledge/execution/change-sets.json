@@ -1579,16 +1579,11 @@
         "CN-QUOTE-001",
         "CN-REFUND-001"
       ],
-      "blockingDecisionIds": [
-        "OD-07",
-        "OD-20",
-        "OD-21",
-        "OD-24"
-      ],
-      "affectedFilesModules": "Booking/Pricing/Payments/Access/UI TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Approved design only: Booking-owned amendment/revisions/inventory, owner-supplied Pricing/Payments/Access guards and one typed Notifications event; existing customer detail UI",
+      "dbApiUiImpact": "Approved design only: four amendment APIs, customer booking-detail extension and additive migration after V14; no implementation",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "V15 only if V14 remains current at authorized implementation; Booking amendment lifecycle/command/audit and immutable revision-2 support; narrow Notifications source/kind/destination extension; V1-V14 unchanged; no Payments datastore",
       "plannedChecks": "Conflict/buffer/consent/partial payment/access recovery tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Original purchase history retained with safe accepted revision",
@@ -1596,7 +1591,56 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [
+        "PROJECT.md#amend-synthetic-policy",
+        "ARCHITECTURE.md#amend-synthetic-scope",
+        "DESIGN.md#amend-synthetic-ui",
+        "PROGRESS.md#amend-readiness-reconciliation"
+      ],
+      "downstreamDecisionIds": [
+        "OD-07",
+        "OD-20",
+        "OD-21",
+        "OD-24"
+      ],
+      "decisionScopeApprovals": [
+        {
+          "decisionId": "OD-07",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        },
+        {
+          "decisionId": "OD-20",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        },
+        {
+          "decisionId": "OD-21",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        },
+        {
+          "decisionId": "OD-24",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        }
+      ],
+      "boundedAmendmentScopeApproval": {
+        "taskId": "CN-AMEND-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_RESCHEDULING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 031b3bde-78b5-47cb-8d37-bc7163711434; Record approvals and reassess readiness only",
+        "requestSha256": "58de05e3751caf14ace3eb7081192e4da2b90e7a45435063389697dadb16e82d",
+        "canonicalSpecification": "ARCHITECTURE.md#amend-synthetic-scope",
+        "businessPolicy": "PROJECT.md#amend-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      },
+      "remainingReadinessGates": [
+        "Separate bounded synthetic CN-AMEND-001 implementation authorization"
+      ]
     },
     {
       "id": "CN-REPORT-001",

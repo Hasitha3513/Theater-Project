@@ -329,6 +329,19 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "realPayments": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedAmendmentApproval": {
+        "taskId": "CN-AMEND-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_RESCHEDULING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 031b3bde-78b5-47cb-8d37-bc7163711434; Record approvals and reassess readiness only",
+        "requestSha256": "58de05e3751caf14ace3eb7081192e4da2b90e7a45435063389697dadb16e82d",
+        "canonicalSpecification": "ARCHITECTURE.md#amend-synthetic-scope",
+        "businessPolicy": "PROJECT.md#amend-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {
@@ -747,6 +760,19 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "realPayments": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedAmendmentApproval": {
+        "taskId": "CN-AMEND-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_RESCHEDULING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 031b3bde-78b5-47cb-8d37-bc7163711434; Record approvals and reassess readiness only",
+        "requestSha256": "58de05e3751caf14ace3eb7081192e4da2b90e7a45435063389697dadb16e82d",
+        "canonicalSpecification": "ARCHITECTURE.md#amend-synthetic-scope",
+        "businessPolicy": "PROJECT.md#amend-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {
@@ -788,6 +814,19 @@
         "canonicalSpecification": "PROJECT.md#inventory-approved-policy",
         "fullDecisionStatus": "OPEN_DECISION",
         "scope": "Configurable initial 600-second hold, min(created+TTL,session start), PostgreSQL clock after locks, terminal replay/no renewal; current/known-future Rooms minimum across session; incompatible unpaid hold invalidated with block release/audit; no silent duration/buffer rewrite; broader provider/operational policy gates remain open"
+      },
+      "boundedAmendmentApproval": {
+        "taskId": "CN-AMEND-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_RESCHEDULING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 031b3bde-78b5-47cb-8d37-bc7163711434; Record approvals and reassess readiness only",
+        "requestSha256": "58de05e3751caf14ace3eb7081192e4da2b90e7a45435063389697dadb16e82d",
+        "canonicalSpecification": "ARCHITECTURE.md#amend-synthetic-scope",
+        "businessPolicy": "PROJECT.md#amend-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {
@@ -882,6 +921,19 @@
         "requestSha256": "607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d",
         "canonicalSpecification": "ARCHITECTURE.md#bank-ledger-boundary",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedAmendmentApproval": {
+        "taskId": "CN-AMEND-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_RESCHEDULING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 031b3bde-78b5-47cb-8d37-bc7163711434; Record approvals and reassess readiness only",
+        "requestSha256": "58de05e3751caf14ace3eb7081192e4da2b90e7a45435063389697dadb16e82d",
+        "canonicalSpecification": "ARCHITECTURE.md#amend-synthetic-scope",
+        "businessPolicy": "PROJECT.md#amend-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {

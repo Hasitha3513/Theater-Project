@@ -1636,7 +1636,15 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedAmendmentEvidenceAssociation": {
+        "changeSetId": "CN-AMEND-001",
+        "scope": "Bounded pre-credential synthetic zero-difference rescheduling evidence only",
+        "status": "APPROVED_SCOPE_NOT_IMPLEMENTED",
+        "tests": "NOT_RUN",
+        "fullAcceptance": "NOT_ACCEPTED",
+        "evidencePath": "PROGRESS.md#amend-readiness-reconciliation"
+      }
     },
     {
       "id": "T-PK-AC13",

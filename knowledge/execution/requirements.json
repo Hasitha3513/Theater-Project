@@ -3540,7 +3540,15 @@
       ],
       "verificationDecisionIds": [
         "OD-04"
-      ]
+      ],
+      "boundedAmendmentEvidenceAssociation": {
+        "changeSetId": "CN-AMEND-001",
+        "scope": "Bounded pre-credential synthetic zero-difference rescheduling evidence only",
+        "status": "APPROVED_SCOPE_NOT_IMPLEMENTED",
+        "tests": "NOT_RUN",
+        "fullAcceptance": "NOT_ACCEPTED",
+        "evidencePath": "PROGRESS.md#amend-readiness-reconciliation"
+      }
     },
     {
       "id": "PK-AC13",
