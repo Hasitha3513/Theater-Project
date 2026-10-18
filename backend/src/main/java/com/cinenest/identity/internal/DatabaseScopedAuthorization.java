@@ -20,8 +20,13 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
         var current=jdbc.sql("SELECT eligibility FROM cinenest_identity.account WHERE account_id=:actor AND synthetic=TRUE"+(lock?" FOR UPDATE":"")).param("actor",actor).query(String.class).list();
         return !current.isEmpty() && current.getFirst().equals("ELIGIBLE");
     }
+    public boolean permitsSelf(UUID actor,String action,boolean lock){
+        if(!Set.of("access.synthetic.read","access.synthetic.issue","access.synthetic.reveal","access.synthetic.attempt").contains(action)||!eligible(actor,lock))return false;
+        if(lock)jdbc.sql("SELECT grant_id FROM cinenest_identity.access_grant WHERE account_id=:a AND permission=:p AND scope_kind='SELF' ORDER BY grant_id FOR UPDATE").param("a",actor).param("p",action).query(UUID.class).list();
+        return jdbc.sql("SELECT count(*) FROM cinenest_identity.access_grant WHERE account_id=:a AND permission=:p AND scope_kind='SELF' AND venue_id IS NULL AND state='ACTIVE' AND valid_from<=clock_timestamp() AND valid_until>clock_timestamp()").param("a",actor).param("p",action).query(Integer.class).single()>0;
+    }
     private String writeEquivalent(String action) {
-        return switch(action) { case "room.read" -> "room.write"; case "venue.read" -> "venue.write";
+        return switch(action) { case "access.synthetic.review", "access.synthetic.revoke", "access.synthetic.simulate" -> action; case "room.read" -> "room.write"; case "venue.read" -> "venue.write";
             case "package.read" -> "package.edit"; case "account.read", "audit.account.read", "audit.verification.read" -> action; case "refund.synthetic.read", "refund.synthetic.review", "refund.synthetic.destination.verify", "refund.synthetic.approve", "refund.synthetic.execute", "refund.synthetic.reconcile", "bank.synthetic.credit.verify", "bank.synthetic.credit.read", "bank.synthetic.allocate", "bank.synthetic.resolve", "bank.synthetic.correct.request", "bank.synthetic.correct.approve", "bank.claim.review", "bank.evidence.read", "bank.claim.escalate", "verification.review", "verification.evidence.read", "inventory.read", "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
     }
     @Transactional

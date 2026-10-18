@@ -10,7 +10,7 @@ class FoundationArchitectureTest {
     @Test
     void declaredFoundationModuleHasAnEncapsulatedImplementation() {
         var modules = ApplicationModules.of(CineNestApplication.class);
-        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing", "booking", "verification", "payments");
+        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing", "booking", "verification", "payments", "access");
         modules.verify();
     }
 
@@ -92,4 +92,12 @@ class FoundationArchitectureTest {
         assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_identity.","cinenest_pricing.","cinenest_verification.");
     }
 
+    @Test void accessUsesPublicOwnerPortsAndOwnedPersistenceOnly()throws Exception{
+      var classes=new ClassFileImporter().importPackages("com.cinenest");
+      noClasses().that().resideInAPackage("com.cinenest.access..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.identity.internal..","com.cinenest.booking.internal..","com.cinenest.payments.internal..","com.cinenest.verification.internal..").check(classes);
+      noClasses().that().haveSimpleName("AccessService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+      noClasses().that().haveSimpleName("AccessService").should().dependOnClassesThat().haveSimpleName("JdbcAccessRepository").check(classes);
+      String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/access/internal/JdbcAccessRepository.java"));assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_payments.","cinenest_identity.","cinenest_verification.");
+      noClasses().that().resideInAPackage("com.cinenest.access..").should().dependOnClassesThat().resideInAnyPackage("java.net..","java.net.http..").check(classes);
+    }
 }

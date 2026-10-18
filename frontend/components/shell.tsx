@@ -40,6 +40,7 @@ export function Navigation({
                 ["/admin/verification", "Synthetic verification review"],
                 ["/admin/bank", "Synthetic bank review"],
                 ["/admin/refunds", "Synthetic bank-only refunds"],
+                ["/admin/access", "Synthetic access simulation"],
                 ["/admin/settings/packages", "Package drafts"],
 			]
 		: [
@@ -48,6 +49,7 @@ export function Navigation({
                 ["/verification", "Synthetic verification"],
                 ["/bank", "Synthetic bank request"],
                 ["/refunds", "Synthetic refund status"],
+                ["/access", "Synthetic access status"],
 				["/account", "Account session"],
 				["/admin", "Admin shell preview"],
 			];

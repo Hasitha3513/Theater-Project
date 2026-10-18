@@ -1169,9 +1169,9 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Software behavior verified only with simulator; physical gate remains open",
       "requiredApproval": "Simulation slice and access-window/process approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
       "evidencePaths": [
         "PROJECT.md#access-bank-only-policy",
         "ARCHITECTURE.md#access-bank-only-scope",
@@ -1222,9 +1222,15 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "realDoorControl": "DISABLED"
       },
-      "remainingReadinessGates": [
-        "Separate bounded synthetic CN-ACCESS-001 implementation authorization"
-      ]
+      "remainingReadinessGates": [],
+      "implementationAuthorization": {
+        "source": "Owner inline instruction and attachment fafad47b-3401-4902-af63-7ca426db46f1",
+        "requestSha256": "f41c4764914a753dae9f123de55b3630db6ed342c335a0c41fbeebc21a05dd2c",
+        "scope": "GRANTED_BOUNDED_SYNTHETIC_BANK_ONLY_ACCESS",
+        "date": "2026-10-18",
+        "realDoorControl": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      }
     },
     {
       "id": "CN-IOT-001",

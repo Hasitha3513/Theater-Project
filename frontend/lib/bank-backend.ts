@@ -1,6 +1,9 @@
 // Dedicated bounded binary transport. Existing JSON adapters remain unchanged.
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
+ if(new RegExp(`^/api/bookings/${uuid}/access$`).test(path)||new RegExp(`^/api/admin/venues/${uuid}/access/credentials(/${uuid})?$`).test(path))return method === "GET";
+ if(new RegExp(`^/api/bookings/${uuid}/access/(credentials|simulated-attempts)$`).test(path)||new RegExp(`^/api/bookings/${uuid}/access/credentials/${uuid}/reveal$`).test(path)||new RegExp(`^/api/admin/venues/${uuid}/access/credentials/${uuid}/(revocations|simulations)$`).test(path))return method === "POST";
+
  if(new RegExp(`^/api/refunds/${uuid}$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds$`).test(path)) return method === "GET";
  if(new RegExp(`^/api/bank/requests/${uuid}/refunds$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds/${uuid}/(destination-verifications|decisions|attempts|reconciliations)$`).test(path) || new RegExp(`^/api/admin/venues/${uuid}/refunds/${uuid}/attempts/${uuid}/evidence$`).test(path)) return method === "POST";
  if(new RegExp(`^/api/bookings/${uuid}$`).test(path)) return method === "GET";
@@ -69,7 +72,8 @@ export async function forwardBank(request: Request): Promise<Response> {
 	});
 	try {
 		const url = new URL(request.url);
-		if (!bankRoute(url.pathname, request.method) || url.search)
+		const accessPage=new RegExp(`^/api/admin/venues/${uuid}/access/credentials$`).test(url.pathname)&&request.method==="GET"&&[...url.searchParams.keys()].every(k=>["page","size"].includes(k))&&[...url.searchParams.values()].every(v=>/^\d{1,5}$/.test(v));
+        if (!bankRoute(url.pathname, request.method) || (url.search&&!accessPage))
 			return new Response(null, { status: 404, headers });
 		const configured = process.env.CINENEST_AUTH_ORIGIN;
 		if (!configured) return new Response(null, { status: 503, headers });
@@ -114,7 +118,7 @@ export async function forwardBank(request: Request): Promise<Response> {
 			upstream.set("Content-Type", binary ? content : "application/json");
 			body = await bounded(request.body, binary ? 5 * 1024 * 1024 : 65536);
 		}
-		const response = await fetch(new URL(url.pathname, origin), {
+		const response = await fetch(new URL(url.pathname+url.search, origin), {
 			method: request.method,
 			headers: upstream,
 			body: body as BodyInit | undefined,

@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 and CN-ACCESS-001 hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:17 CLOSED,11 BLOCKED,0 READY,0 IN_PROGRESS /28. [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 and CN-ACCESS-001 hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:17 CLOSED,10 BLOCKED,1 READY (IN_PROGRESS) /28; closure awaits checks/exact-source CI. [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -271,7 +271,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-PAY-BANK-001 | 5 | Bank request/receipt and durable reviewer work | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | 5 | Bank evidence/allocation and guarded confirmation | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
 | CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-BANK-002 | VERIFIED / CLOSED |
-| CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-BANK-002 | IN_PROGRESS / READY |
 | CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
@@ -320,7 +320,7 @@ flowchart TB
   P4["P4 Identity/bank<br/>Synthetic identity/request/ledger VERIFIED within bounded scopes<br/>0 of 8 full criteria; NOT_ACCEPTED"]
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PARTIAL SYNTHETIC ONLY; NOT_ACCEPTED"]
-  P7["P7 Access/hardware<br/>W13-14 illustrative<br/>PLANNED; NOT_ACCEPTED"]
+  P7["P7 Access/hardware<br/>W13-14 illustrative<br/>SYNTHETIC PARTIAL; NOT_ACCEPTED"]
   P8["P8 Automation/readiness<br/>W15-16 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P9["P9 Reports/UAT<br/>W17-18 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P10["P10 Pilot/handover<br/>W19-20 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -500,9 +500,9 @@ Current status: PLANNED / execution BLOCKED, implementation NOT_VERIFIED. Next: 
 Goal/outcome: Permit eligible guests into the intended room during the purchased window while preserving independent emergency exit. Timing: Illustrative weeks 13–14. Depends on P6. Responsible roles: Qualified hardware/installer, safety/operations and access engineering; all named owners/reviewers TBD. Presentation dependency: P6; actual task dependencies below override phase-number assumptions. Blocking decisions: OD-02/03/04/13; qualified installation/check-in/offline/egress.
 
 - [ ] **P7-C01** Lock/controller capabilities and installation responsibilities qualified. — Req: CN-O01, CN-NFR-05; tests: T-CN-NFR-05, T-CN-O01; tasks: CN-ACCEPT-001, CN-ACCESS-001, CN-GATE-001, CN-LAUNCH-001, CN-OPS-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P7-C02** Smart-lock ports, controlled test adapters, and selected live adapter implemented. — Req: CN-O01, CN-O04; tests: T-CN-O01, T-CN-O04; tasks: CN-ACCESS-001, CN-IOT-001, CN-OPS-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P7-C03** Room/revision-bound PINs, protected secrets, and purchased validity windows implemented. — Req: CN-C07, BR-09, PK-AC12; tests: T-BR-09, T-CN-C07, T-PK-AC12; tasks: CN-ACCESS-001, CN-NOTIFY-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P7-C04** Provisioning evidence, pending/unknown/failure states, retries, and reconciliation implemented. — Req: CN-O01, BP-AC11; tests: T-BP-AC11, T-CN-O01; tasks: CN-ACCESS-001. Evidence: NOT_RUN / no current acceptance evidence.
+- [ ] **P7-C02** Smart-lock ports, controlled test adapters, and selected live adapter implemented. — Req: CN-O01, CN-O04; tests: T-CN-O01, T-CN-O04; tasks: CN-ACCESS-001, CN-IOT-001, CN-OPS-001. Evidence: PARTIAL / bounded synthetic Access implementation at [access evidence](#access-implementation); full physical/gateway/amendment/delivery acceptance remains incomplete.
+- [ ] **P7-C03** Room/revision-bound PINs, protected secrets, and purchased validity windows implemented. — Req: CN-C07, BR-09, PK-AC12; tests: T-BR-09, T-CN-C07, T-PK-AC12; tasks: CN-ACCESS-001, CN-NOTIFY-001. Evidence: PARTIAL / bounded synthetic Access implementation at [access evidence](#access-implementation); full physical/gateway/amendment/delivery acceptance remains incomplete.
+- [ ] **P7-C04** Provisioning evidence, pending/unknown/failure states, retries, and reconciliation implemented. — Req: CN-O01, BP-AC11; tests: T-BP-AC11, T-CN-O01; tasks: CN-ACCESS-001. Evidence: PARTIAL / bounded synthetic Access implementation at [access evidence](#access-implementation); full physical/gateway/amendment/delivery acceptance remains incomplete.
 - [ ] **P7-C05** Approved physically enforced guest-check-in gate implemented. — Req: BR-08, CN-NFR-05; tests: T-BR-08, T-CN-NFR-05; tasks: CN-ACCEPT-001, CN-GATE-001, CN-LAUNCH-001, CN-OPS-001, CN-VERIFY-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P7-C06** Actual entry, re-entry, expiry, revocation, reboot/offline behavior, and emergency egress verified. — Req: CN-O01, CN-O04, CN-NFR-05; tests: T-CN-NFR-05, T-CN-O01, T-CN-O04; tasks: CN-ACCEPT-001, CN-ACCESS-001, CN-GATE-001, CN-IOT-001, CN-LAUNCH-001, CN-OPS-001. Evidence: NOT_RUN / no current acceptance evidence.
 
@@ -510,7 +510,7 @@ Goal/outcome: Permit eligible guests into the intended room during the purchased
 
 Physical guest-check-in, offline/reboot/revocation and independent emergency-egress acceptance requires qualified actual installed hardware; simulation never closes this gate.
 
-Current status: PLANNED / execution BLOCKED, implementation NOT_VERIFIED. Next: review actual dependencies and blocking policies, refine the corresponding bounded task and obtain its authority; do not start from the phase label.
+Current status: PARTIAL synthetic Access implementation;0/6 full criteria, P7 NOT_ACCEPTED. Qualified hardware/check-in/offline/egress, notification/amendment and gateway acceptance remain open. No phase or demo accepted.
 
 <a id="roadmap-p8"></a>
 #### P8. Room Automation, Maintenance And Incidents
@@ -688,7 +688,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-PAY-BANK-001 | P4 | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | P4 | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
 | CN-REFUND-001 | P6 | CN-PAY-BANK-002 | VERIFIED / CLOSED |
-| CN-ACCESS-001 | P7 | CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-ACCESS-001 | P7 | CN-PAY-BANK-002 | IN_PROGRESS / READY |
 | CN-IOT-001 | P8 | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-ACCESS-001 bounded synthetic bank-only policy/design and one hard dependency amendment approved; implementation explicitly withheld by owner clarification. Task BLOCKED only on separate bounded implementation authorization.17 CLOSED/11 BLOCKED/0 READY/0 IN_PROGRESS. PayHere deferred/BLOCKED, venue/specialists and full physical/commercial acceptance remain pending. [Current reconciliation](#access-readiness-reconciliation). Earlier checkpoints below are historical.
+Current handoff: CN-ACCESS-001 separately authorized synthetic bank-only implementation IN_PROGRESS; required checks/exact-source CI gate closure.17 CLOSED/10 BLOCKED/1 READY and IN_PROGRESS /28 (READY is readiness; IN_PROGRESS is work status of the same task). No downstream implementation authorized. PayHere, venue/specialists and physical/commercial acceptance remain pending. [Current implementation evidence](#access-implementation). Earlier checkpoints below are historical.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1265,3 +1265,26 @@ Readiness: BANK-002 hard dependency satisfied; bounded OD-02 policies and five-r
 MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;17 CLOSED,11 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 delivery phases accepted. Manual-payment-first, PayHere deferred/BLOCKED, pending venue/specialists and unrelated next-env.d.ts/two DOCX companions preserved. Current next action: obtain separate bounded CN-ACCESS-001 implementation authorization. Validation and publication receipts reported in conversation.
 
 Access approval validation: primary knowledge and whitespace PASS; primary execution retains exactly the two pre-existing next-env.d.ts integrity findings. Both validators PASS in an isolated exact committed-source snapshot overlaid only with task-owned knowledge changes; all other tracked source bytes matched the primary except intentionally retained committed next-env.d.ts. Nine negative controls rejected lost deferred gateway obligation, unrelated dependency removal, premature READY, lost historical edges, global OD-02 closure, lost full requirement coverage, false full-test PASS, real door authority and unauthorized V13. No application tests required or marked run for this documentation-only session. Publication and exact-source CI results are reported separately in conversation.
+
+<a id="access-implementation"></a>
+## CN-ACCESS-001 synthetic bank-only implementation — 2026-10-18
+
+Starting nested root main/origin/main23512e5502ebdfbf29cf7e0a66c532b8bd214cb8. Separate owner inline authorization/attachment fafad47b-3401-4902-af63-7ca426db46f1 resolves the sole immediate implementation authority gate. BANK-002 VERIFIED/CLOSED, hard dependency satisfied; approved scope/OD-02 and deferred gateway-backed execution/full acceptance retained. Task READY for bounded execution, IN_PROGRESS until actual checks and exact-source CI qualify closure. No other task edges changed, no unrelated policy resolved, no live financial/device/production authority.
+
+Access owns additive V13 access_credential/command/attempt/work/audit. BookingAccess provides purchased context; AccessFunding provides allocated synthetic-bank eligibility, Identity current SELF/venue grants and Verification current synthetic evidence. Eight approved backend operations, corresponding bounded frontend routes, /access and /admin/access; explicit 32-byte opaque single-use tokens with authenticated versioned encryption/hash, one-time owner disclosure, redacted idempotency/audit, current eligibility, authoritative window, version/revision locking, database attempts/rate bounds, simulator evidence and controlled unknown reconciliation. No hardware/provider network path. Existing dependencies/tokens and V1–V12 retained.
+
+Verification evidence is recorded below after actual execution. PostgreSQL tests use disposable isolated18.6, not development/production data. Controlled test-only clock adapter exercises start-inclusive/end-exclusive and cleanup boundaries; production time remains PostgreSQL clock_timestamp. Intercepted UI rehearsals are labelled presentation evidence, separate from real HTTP/DB integration. Earlier failing runs were reopened: fixed test-only clock restoration, repeated ACTIVE revision writes and credential-version concurrency binding; no failing run is counted as PASS. Existing unrelated next-env.d.ts and two DOCX companions remain unstaged.
+
+Full T-CN-C07/T-CN-O01/T-BP-AC11/T-PK-AC12 remain NOT_RUN for complete future scope; code tests map only the executed synthetic subset. No cancellation/amendment, notification delivery, actual hardware/re-entry/offline/clocks/power/egress, real admission, provider or production acceptance. OD-02 globally OPEN and physical-safety reviewer PENDING. Unrelated excess returns preserve funded-booking access; a consumed confirmed hold is not treated as unconverted expiry. Durable unknown work requires explicit reconciliation before retry/reissue.
+
+P7-C02/C03/C04 have partial synthetic evidence only; all P7 criteria remain unchecked because selected live adapter, complete delivery/amendments and physical proof remain absent. D1/D2 NOT_READY; D3 lacks provider sandbox and full lifecycle; D4 requires actual hardware; D5/D6 retain their separate gates. No demonstration held/accepted or downstream task automatically READY. MVP criteria unchanged P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;92 requirements/92 plans. Manual-payment-first and deferred PayHere retained.
+
+Rollback: disable Access commands/worker, retain all V13 history/work/revocations and required key versions, compatible revert or reviewed forward fix only. No destructive down migration or real-device compensation claim. Publication and exact final-source CI reported in conversation; no deployment.
+
+Final reviewed application checks:264/264 backend PASS,72 BankIntegration tests,13 architecture tests and2 AccessPolicy tests;0 failures/errors/skips. Pinned PostgreSQL18.6 clean V1→V13/repeat, populated V12→V13 with data retention, historical V11→V12 regression, constraints, current eligibility/owner/venue/grants, independently verified allocations, unallocated excess return, single-use/old-token rejection, concurrent issue/reissue/consume, version conflicts, unknown reconciliation, two fresh application processes preserving durable unknown work, audit rollback, bounded attempts/rates/config denial, server-window boundaries and private retention all PASS. JDK secure-random1000-token uniqueness/32-byte decoding, AES-GCM binding, redacted secret/audit/command/log checks PASS; not an independent cryptographic/security certification. Packaged application startup and real HTTP denial PASS.
+
+Frontend85/85 tests, isolated production build/typecheck/lint PASS;32 intercepted Access groups across1440/768/390/320 widths,30 refund,70 bank and63 admin browser regression groups PASS. Keyboard reveal/hide, one-time private display, responsive wrapping, consumed/reissued/unknown/reconcile/revoke and denied/conflict/empty scenarios exercised. These are intercepted presentation rehearsals; real application boundary assertions are the separate HTTP/PostgreSQL suite.14 launcher contracts PASS outside sandbox socket restrictions; npm audit0 vulnerabilities. Initial sandbox-only subprocess/socket failures were rerun under approved isolation, not counted as passes. A wrong admin browser script filename was corrected to the existing admin-browser.mjs and the actual63-group regression passed.
+
+Self-review added explicit expectedVersion alongside expectedRevision for every mutation, prevented UNKNOWN reissue bypass, preserved redacted simulator outcome history, and added direct funding-port insufficiency/scope/currency and old-secret rejection checks. Test assertion-overload/expired-hold fixture errors were corrected before the final264-test PASS; earlier262-test evidence was superseded by this full reviewed run. No later application source changes are authorized by these receipts without reopening evidence.
+
+Governance closeout checks: primary knowledge/whitespace PASS; primary execution retains exactly the two pre-existing next-env.d.ts protection findings. Both validators PASS in an exact isolated committed-source snapshot overlaid with all owned changes; tracked source bytes and all39 owned application hashes match, excluding the unrelated next-env.d.ts committed-byte isolation. Ten negative controls reject lost implementation authority, unrelated dependency removal, lost deferred gateway obligation, real-door authority, premature closure without exact CI, false full-test PASS, global OD-02 closure, historical V12 modification, owned-source integrity change and unauthorized V14. Scoped source publication remains IN_PROGRESS until exact-source CI SUCCESS; source/closeout receipts are reported in conversation.

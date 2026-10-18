@@ -567,6 +567,7 @@ fieldset.view-switch {
 button.button { display: inline-grid; }
 .button-label, .button-busy { grid-area: 1 / 1; }
 .button-busy { visibility: hidden; }
+.access-workspace .button-label { min-width:0; overflow-wrap:anywhere; }
 .button[aria-busy="true"] .button-label { visibility: hidden; }
 .button[aria-busy="true"] .button-busy { visibility: visible; }
 
@@ -584,3 +585,8 @@ button.button { display: inline-grid; }
 
 /* Authenticated raster preview; no shared image optimization or public URL. */
 .private-evidence-preview { display: block; max-width: 100%; height: auto; }
+
+/* Synthetic access uses shared tokens and wraps private identifiers on narrow screens. */
+.access-workspace { min-width:0; overflow-wrap:anywhere; }
+.access-workspace .button { max-width:100%; white-space:normal; }
+.access-workspace dd { margin-inline-start:0; }
