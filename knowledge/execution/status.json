@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-REFUND-001",
-  "mode": "SYNTHETIC_BANK_REFUND_IMPLEMENTATION",
-  "workStatus": "VERIFIED",
+  "taskId": "CN-ACCESS-001",
+  "mode": "ACCESS_BANK_ONLY_READINESS_RECONCILIATION",
+  "workStatus": "BLOCKED",
   "productStage": "BOUNDED_SYNTHETIC_BANK_REQUEST_VERIFIED_REAL_PAYMENTS_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -10,10 +10,10 @@
   "upstream": "origin/main",
   "baselineHead": "89b9cd42e693277037275641cf44d0ebd1f884c5",
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
-  "currentChangeSet": "CN-REFUND-001",
+  "currentChangeSet": "CN-ACCESS-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-ACCESS-001",
-  "nextAction": "Review CN-ACCESS-001 bank-only scope and retained gateway dependency; no implementation",
+  "nextAction": "Obtain separate bounded synthetic CN-ACCESS-001 implementation authorization",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-PAY-BANK-002 VERIFIED/CLOSED for approved synthetic scope; wider acceptance incomplete",
   "approvedCoreDecisions": [
@@ -22,9 +22,9 @@
     "PR-BANK-001"
   ],
   "blockers": [
-    "CN-REFUND-001 separate bounded implementation authorization not granted",
-    "Gateway-refund execution/full acceptance deferred to CN-PAY-GW-001; PayHere BLOCKED",
-    "Venue/specialist appointments and wider commercial OD-07/28 policies remain pending; no real-operation authority"
+    "CN-ACCESS-001 separate bounded implementation authorization not granted",
+    "PayHere deferred/BLOCKED; gateway-backed execution/full acceptance retained",
+    "Venue/specialist and commercial/physical acceptance gates remain pending"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
@@ -52,7 +52,7 @@
   "verificationScope": "Bounded synthetic credit/allocation/guarded confirmation; no real financial or customer acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "GRANTED_BOUNDED_SYNTHETIC_BANK_ONLY",
+  "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
     "CN-PAY-BANK-002 bounded matching/allocation scope and OD-24/27/28/29; no implementation authorized",
@@ -3017,5 +3017,24 @@
     },
     "sourceCommit": "6a2aa84986d8bd76621ee9eddee7f36e3eeda167",
     "sourceRun": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39051062796"
+  },
+  "accessReadiness": {
+    "baselineHead": "ced1ee7d16215315927f28a996e3dccac96cd2bb",
+    "approval": {
+      "taskId": "CN-ACCESS-001",
+      "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+      "date": "2026-10-18",
+      "source": "Owner attachment a4b10ac1-ca52-4cb3-9189-beac04e0fb0c and explicit scope clarification: Record approvals and reassess readiness only",
+      "requestSha256": "ff989f2206996dc6dd4471c3472d547811436b4aff920725f459f4a6111ace28",
+      "canonicalSpecification": "ARCHITECTURE.md#access-bank-only-scope",
+      "businessPolicy": "PROJECT.md#access-bank-only-policy",
+      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "fullDecisionStatus": "OPEN_DECISION",
+      "realDoorControl": "DISABLED"
+    },
+    "readiness": "BLOCKED",
+    "implementation": "NOT_IMPLEMENTED",
+    "checks": "Documentation evidence only; application tests NOT_RUN",
+    "evidencePath": "PROGRESS.md#access-readiness-reconciliation"
   }
 }

@@ -112,7 +112,19 @@
       "evidenceRequired": "Physical model/firmware/API/outage/egress evidence",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "LAUNCH_BLOCKER"
+      "launchBlocker": "LAUNCH_BLOCKER",
+      "boundedAccessApproval": {
+        "taskId": "CN-ACCESS-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-18",
+        "source": "Owner attachment a4b10ac1-ca52-4cb3-9189-beac04e0fb0c and explicit scope clarification: Record approvals and reassess readiness only",
+        "requestSha256": "ff989f2206996dc6dd4471c3472d547811436b4aff920725f459f4a6111ace28",
+        "canonicalSpecification": "ARCHITECTURE.md#access-bank-only-scope",
+        "businessPolicy": "PROJECT.md#access-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realDoorControl": "DISABLED"
+      }
     },
     {
       "id": "OD-03",

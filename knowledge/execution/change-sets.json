@@ -1158,16 +1158,13 @@
       "inScope": "One explicitly simulated credential lifecycle/status/retry slice using purchased window",
       "outOfScope": "No physical certification/unlock/cloud request; no release for unverified payment",
       "dependencies": [
-        "CN-PAY-GW-001",
         "CN-PAY-BANK-002"
       ],
-      "blockingDecisionIds": [
-        "OD-02"
-      ],
-      "affectedFilesModules": "Access/Booking/Notifications/UI and simulator TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Planned Access Control module; typed public Booking access context and Payments funding eligibility; Identity scoped authorization; Verification synthetic eligibility; existing UI and simulator",
+      "dbApiUiImpact": "Approved design only: five Access-owned V13 records and eight operations at ARCHITECTURE.md#access-bank-only-scope; no implementation",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "V13 design approved only; do not create in readiness session; V1-V12 immutable",
       "plannedChecks": "Paid-confirmed-provisioned distinction/expiry/revoke/unknown/retry tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Software behavior verified only with simulator; physical gate remains open",
@@ -1175,12 +1172,58 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": [],
+      "evidencePaths": [
+        "PROJECT.md#access-bank-only-policy",
+        "ARCHITECTURE.md#access-bank-only-scope",
+        "DESIGN.md#access-simulation-ui",
+        "PROGRESS.md#access-readiness-reconciliation"
+      ],
       "resolvedDecisionIds": [
         "OD-04"
       ],
       "verificationDecisionIds": [
         "OD-04"
+      ],
+      "historicalImplementationDependencies": [
+        "CN-PAY-GW-001",
+        "CN-PAY-BANK-002"
+      ],
+      "deferredAcceptanceDependencies": [
+        {
+          "taskId": "CN-PAY-GW-001",
+          "purpose": "Gateway-backed access execution and full acceptance; not a hard prerequisite for the synthetic bank-only slice",
+          "status": "DEFERRED_BLOCKED_NOT_IMPLEMENTED",
+          "requirementIds": [
+            "CN-C07",
+            "CN-O01",
+            "BP-AC11",
+            "PK-AC12"
+          ],
+          "testIds": [
+            "T-CN-C07",
+            "T-CN-O01",
+            "T-BP-AC11",
+            "T-PK-AC12"
+          ]
+        }
+      ],
+      "downstreamDecisionIds": [
+        "OD-02"
+      ],
+      "boundedAccessScopeApproval": {
+        "taskId": "CN-ACCESS-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-18",
+        "source": "Owner attachment a4b10ac1-ca52-4cb3-9189-beac04e0fb0c and explicit scope clarification: Record approvals and reassess readiness only",
+        "requestSha256": "ff989f2206996dc6dd4471c3472d547811436b4aff920725f459f4a6111ace28",
+        "canonicalSpecification": "ARCHITECTURE.md#access-bank-only-scope",
+        "businessPolicy": "PROJECT.md#access-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realDoorControl": "DISABLED"
+      },
+      "remainingReadinessGates": [
+        "Separate bounded synthetic CN-ACCESS-001 implementation authorization"
       ]
     },
     {

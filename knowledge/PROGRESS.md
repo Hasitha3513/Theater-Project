@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 hard dependency is amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:17 CLOSED,11 BLOCKED,0 READY,0 IN_PROGRESS /28. [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 and CN-ACCESS-001 hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:17 CLOSED,11 BLOCKED,0 READY,0 IN_PROGRESS /28. [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -271,7 +271,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-PAY-BANK-001 | 5 | Bank request/receipt and durable reviewer work | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | 5 | Bank evidence/allocation and guarded confirmation | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
 | CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-BANK-002 | VERIFIED / CLOSED |
-| CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
@@ -688,7 +688,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-PAY-BANK-001 | P4 | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | P4 | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
 | CN-REFUND-001 | P6 | CN-PAY-BANK-002 | VERIFIED / CLOSED |
-| CN-ACCESS-001 | P7 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-ACCESS-001 | P7 | CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-IOT-001 | P8 | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-REFUND-001 VERIFIED/CLOSED only for the approved synthetic bank-only scope after exact-source CI SUCCESS at 6a2aa84986d8bd76621ee9eddee7f36e3eeda167.17 CLOSED/11 BLOCKED/0 READY/0 IN_PROGRESS. Next: read-only review of CN-ACCESS-001 bank-only scope and retained gateway dependency; no implementation or edge amendment authorized. PayHere, venue/specialists and full commercial/physical/financial acceptance remain pending. [Current evidence](#refund-implementation). Earlier checkpoints below are historical.
+Current handoff: CN-ACCESS-001 bounded synthetic bank-only policy/design and one hard dependency amendment approved; implementation explicitly withheld by owner clarification. Task BLOCKED only on separate bounded implementation authorization.17 CLOSED/11 BLOCKED/0 READY/0 IN_PROGRESS. PayHere deferred/BLOCKED, venue/specialists and full physical/commercial acceptance remain pending. [Current reconciliation](#access-readiness-reconciliation). Earlier checkpoints below are historical.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1252,3 +1252,16 @@ Self-review corrected conflict classification and the older upgrade test's lates
 P6-C05/C06 retain full gateway/commercial/mixed-method/access acceptance gaps and remain unchecked; partial synthetic evidence links here. All phase criteria unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74. D0 prepared/document-rehearsed; D1/D2 NOT_READY; D3-D6 outlines,0/7 held/accepted and0/10 delivery phases accepted. No readiness inflation. Unrelated next-env.d.ts and both DOCX companions preserved unstaged. Rollback: disable refund commands/attempts; retain V12/history/work and compatible allocation guard; forward fix, no destructive down migration. Recalculated current task totals:17 VERIFIED/CLOSED,11 BLOCKED,0 READY,0 IN_PROGRESS /28. No independently READY successor arises from this closure; ACCESS retains GW and AMEND retains CUSTOMER prerequisites. Next action: read-only review of CN-ACCESS-001 bank-only scope and retained gateway dependency. Publication/final documentation CI verified in conversation.
 
 Bounded DoD evaluation: “Approval distinct from outgoing completion; receipt facts preserved” is satisfied by independently authorized approval/reservation, personally recorded outgoing fixture then separate independent verification, retained unknown commitments/recovery, immutable source credit/allocation/audit and no receipt-to-payment inference. Closure is synthetic software evidence only. Commercial cancellation/allocated-booking refunds, real disbursement/destination qualification, PayHere/gateway and full P6 remain open; no production authorization. Source publication6a2aa84986d8bd76621ee9eddee7f36e3eeda167 verified at origin/main; closing documentation publication and exact final-source CI are reported separately in conversation.
+
+<a id="access-readiness-reconciliation"></a>
+## CN-ACCESS-001 bounded approvals/readiness — 2026-10-18
+
+Starting nested root main/origin/main ced1ee7d16215315927f28a996e3dccac96cd2bb, ahead/behind0/0. Owner attachment a4b10ac1-ca52-4cb3-9189-beac04e0fb0c approves bounded policy/schema/API/UI and task-specific dependency amendment. Inline implementation wording conflicted; owner explicitly clarified **Record approvals and reassess readiness only**. No implementation authority, feature code, V13, dependency installation or live operation. [Policy](PROJECT.md#access-bank-only-policy), [architecture](ARCHITECTURE.md#access-bank-only-scope), [UI](DESIGN.md#access-simulation-ui) own the approved design.
+
+AUTH, BOOK, QUOTE, VERIFY, BANK-001/BANK-002 and REFUND remain VERIFIED/CLOSED only for their bounded synthetic scopes and existing exact-source evidence. BANK-002 owns independently verified synthetic allocations and guarded confirmation; real funds/admission not established. Current Flyway head V12. CN-ACCESS-001 objective, in/out scope, four requirement mappings and DoD preserved. Only hard GW edge removed for this bank-only slice, with exact historical dependencies and explicit deferred gateway-backed execution/full-acceptance obligation. Full92 requirements/92 test plans and all unrelated edges unchanged. OD-02 remains globally OPEN with bounded approval, physical compatibility/outage/re-entry/revocation/clocks/power/egress and reviewer gates retained.
+
+Readiness: BANK-002 hard dependency satisfied; bounded OD-02 policies and five-record V13/eight API/UI/test/rollback specification approved. Separate implementation authorization is the sole immediate remaining start gate. Task authorityAvailable=false, readiness/workStatus=BLOCKED; no software tests marked passed, no full requirement or phase acceptance. Venue, specialist, physical/provider and commercial evidence remain downstream gates rather than universal simulator prerequisites.
+
+MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;17 CLOSED,11 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted,0/10 delivery phases accepted. Manual-payment-first, PayHere deferred/BLOCKED, pending venue/specialists and unrelated next-env.d.ts/two DOCX companions preserved. Current next action: obtain separate bounded CN-ACCESS-001 implementation authorization. Validation and publication receipts reported in conversation.
+
+Access approval validation: primary knowledge and whitespace PASS; primary execution retains exactly the two pre-existing next-env.d.ts integrity findings. Both validators PASS in an isolated exact committed-source snapshot overlaid only with task-owned knowledge changes; all other tracked source bytes matched the primary except intentionally retained committed next-env.d.ts. Nine negative controls rejected lost deferred gateway obligation, unrelated dependency removal, premature READY, lost historical edges, global OD-02 closure, lost full requirement coverage, false full-test PASS, real door authority and unauthorized V13. No application tests required or marked run for this documentation-only session. Publication and exact-source CI results are reported separately in conversation.

@@ -966,3 +966,33 @@ Required planned tests: exact/overflow/currency/limit/partial/excess/duplicate b
 Rollback plan: disable new commands/attempts; retain additive schema/obligations/decisions/evidence/audit/unresolved work and compatible balance guards; forward fix or compatible scoped revert, no destructive down migration/history deletion. Older application must not allocate reserved/returned money. Real transfers need separate qualified manual disbursement procedure.
 
 Readiness: BANK-001/BANK-002 closed synthetic foundations and required hard dependency satisfied; bounded policies and plan approved; existing qualified PostgreSQL/CI harness available as evidence, runtime/config preflight still required before execution. READY rule also requires implementation authorization. Current instruction expressly withholds it, so CN-REFUND-001 remains BLOCKED solely on separate bounded implementation authorization. No provider account or real venue/reviewer appointment is required to run approved synthetic fixtures; those remain commercial/physical gates, not invented universal prerequisites.
+
+<a id="access-bank-only-scope"></a>
+## CN-ACCESS-001 approved design, implementation withheld — 2026-10-18
+
+[Bounded policy](PROJECT.md#access-bank-only-policy) is owner-approved; this session records readiness only. Use one Access Control module in the current modular monolith. Booking exposes a typed immutable access context (booking/revision, owner, venue, room, purchased window/timezone, synthetic-confirmed state); Payments exposes typed current allocated-funding eligibility; Identity provides ScopedAuthorization and Verification current synthetic eligibility. Access must not read foreign repositories. Eligibility and issue/reissue/attempt state changes need a documented consistent transaction/locking order, version checks and concurrent revalidation through public contracts. Do not reuse the ACTIVE hold check after confirmation consumed the hold. Payments must distinguish allocated-credit reversals/disputes from unrelated unallocated excess returns. No speculative Redis, Kafka, microservice or cloud-lock integration.
+
+Approved **design only** for additive V13: access_credential (booking/revision, owner/venue/room, protected verifier and recoverable secret, protection-key version, window, credential version/state/revocation); access_command (logical command/idempotency and safe response metadata); access_attempt (attributable single-use attempt/outcome); access_work (durable provisioning, retry/reconciliation and matching simulator evidence); access_audit (append-only scoped events without raw credentials). UUID references, purchased window constraints, one active version per booking, transactional idempotency and locking prevent double issuance/consumption. V1–V12 immutable; V13 not created now.
+
+Use versioned explicit private Access secret protection, hashed verifier and encrypted recoverable provisioning/disclosure material; no key default or borrowing another module's secret. Persist safe references rather than raw tokens in command responses. Owner-only deliberate disclosure follows matching simulator evidence and current eligibility; remove recoverable material after disclosure or terminal transition. Lost response recovery uses safe status/reference plus explicit authorized reissue, not plaintext replay. Single-use consumption and reissue are atomic. Simulator installed is separate from scheduled/active/consumed/expired/revoked/superseded lifecycle. Unknown work cannot be blindly resent. Explicit positive test-only configuration fails closed when absent.
+
+Approved proposed operations (none implemented):
+
+| Method | Path | Contract |
+|---|---|---|
+| GET | /api/bookings/{id}/access | Owner-safe status; no raw credential |
+| POST | /api/bookings/{id}/access/credentials | Issue/reissue using expected booking/credential revisions and idempotency key |
+| POST | /api/bookings/{id}/access/credentials/{credentialId}/reveal | Deliberate eligible owner-only protected disclosure; no-store |
+| POST | /api/bookings/{id}/access/simulated-attempts | Single-use simulation; server-side window and eligibility checks |
+| GET | /api/admin/venues/{venueId}/access/credentials | Scoped paged redacted status list |
+| GET | /api/admin/venues/{venueId}/access/credentials/{credentialId} | Scoped redacted detail |
+| POST | /api/admin/venues/{venueId}/access/credentials/{credentialId}/revocations | Separate current revocation grant, reason, revision/idempotency |
+| POST | /api/admin/venues/{venueId}/access/credentials/{credentialId}/simulations | Separate simulation grant; bounded install/failure/unknown/reconcile controls |
+
+Mutation contracts require session authentication/CSRF, authoritative server attributes, UUID/revision/window validation, safe conflict/denied responses, no-store secrets, attributable audit, and no permission/venue stitching. Backend owns business eligibility. Existing [UI](DESIGN.md#access-simulation-ui) and dependencies are retained. No notification delivery, hardware, cancellation or booking amendment is included.
+
+Planned verification: unit window boundaries and state transitions; real isolated PostgreSQL clean/repeat/V12→V13 migrations, idempotency, concurrent issue/reissue/consume/revoke, funding/reversal races, audit rollback, unknown-work restart/reconciliation and secret redaction; direct API owner/venue/current grants/expiry/suspension/stale revision/CSRF and missing-config denial; architecture module/SQL ownership; frontend transport/render, desktop/mobile/keyboard/loading/empty/error/denied/status rehearsal. Full T-CN-C07/T-CN-O01/T-BP-AC11/T-PK-AC12 remain NOT_RUN; physical and purchased-amendment/notification/gateway cases require future endpoints and qualified evidence. No new test PASS is claimed.
+
+Rollback design: disable issue/reveal/attempt/work execution, retain credentials/revocations/commands/work/audit and protection-key versions required for recovery; use compatible revert or reviewed forward fix, no destructive down migration or dropping unresolved work. Future implementation DoD requires actual simulator software tests plus exact-source CI while explicitly retaining physical/gateway/full requirement gates.
+
+Approved task-specific amendment: CN-ACCESS-001 hard dependencies become **[CN-PAY-BANK-002]** from historical **[CN-PAY-GW-001, CN-PAY-BANK-002]**. CN-PAY-GW-001 remains an explicit deferred gateway-backed execution/full-acceptance dependency in the same task record. Full requirement/test dependencies are unchanged. No REFUND hard edge added and no unrelated edge changed. OD-02 globally OPEN; bounded policy resolved only for this simulation. Separate implementation authority remains absent, so task stays BLOCKED.
