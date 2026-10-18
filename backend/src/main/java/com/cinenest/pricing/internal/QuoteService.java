@@ -84,6 +84,20 @@ class QuoteService {
             store.append(q,revision);store.audit(actor,id,revision.revision(),"REVISE");store.command(actor,key,action,requestHash,id,revision.revision());return view(owned(actor,id,false),revision,h);
         });
     }
+    com.cinenest.booking.AmendmentGuards.Quote amendment(UUID actor,UUID original,UUID target,UUID quote,long revision,String hash,boolean accept){
+        configured();eligible(actor);var purchase=owned(actor,original,false);var q=owned(actor,quote,false);
+        if(!purchase.pkg().equals(q.pkg())||!q.hold().equals(target)||!purchase.venue().equals(q.venue())||!purchase.room().equals(q.room()))throw new com.cinenest.booking.AmendmentGuards.Rejected();
+        publications.lock(q.venue(),q.pkg());var h=ownedHold(actor,target,true);q=owned(actor,quote,true);active(h);
+        var originalRevision=store.accepted(original).orElseThrow(com.cinenest.booking.AmendmentGuards.Rejected::new);
+        var old=store.revision(original,originalRevision);var proposed=store.revision(quote,q.revision());
+        if(q.revision()!=revision||!proposed.hash().equals(hash)||!proposed.version().equals(old.version())||h.revision()!=proposed.holdRevision()||!store.now().isBefore(proposed.expires())||store.accepted(quote).isPresent())throw new com.cinenest.booking.AmendmentGuards.Rejected();
+        published(h,q.pkg(),old.version());compatible(h,PublicationService.object(old.snapshot(),"package"));
+        for(String key:List.of("package","packageVersionId","guests","optionalServiceIds","lines","totalMinor","currency","paymentMethod"))if(!Objects.equals(old.snapshot().get(key),proposed.snapshot().get(key)))throw new com.cinenest.booking.AmendmentGuards.Rejected();
+        active(h);if(!store.now().isBefore(proposed.expires()))throw new com.cinenest.booking.AmendmentGuards.Rejected();
+        if(accept){store.accept(q,actor,proposed.hash());store.audit(actor,quote,revision,"AMENDMENT_ACCEPT");}
+        return new com.cinenest.booking.AmendmentGuards.Quote(quote,revision,proposed.hash(),proposed.snapshot(),q.pkg());
+    }
+    UUID amendmentPackage(UUID actor,UUID original){eligible(actor);return owned(actor,original,false).pkg();}
     private String method(Map<String,Object> input){String method=DraftRules.text(input,"paymentMethod",8,true);if(!Set.of("BANK","GATEWAY").contains(method))throw DraftRules.invalid("approved method fee required");return method;}
     private Map<String,Object> create(UUID actor,Map<String,Object> input,UUID key,String hash){
         DraftRules.keys(input,"holdId","packageId","packageVersionId","expectedHoldRevision","optionalServiceIds","paymentMethod","idempotencyKey");

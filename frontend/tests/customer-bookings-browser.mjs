@@ -44,7 +44,11 @@ try {
 		let denied = false,
 			empty = false,
 			delay = false,
-			refundState = "APPROVED";
+			refundState = "APPROVED",
+			amendMode = false,
+			amendConflict = false,
+			amendDelay = false,
+			amendmentState = "PROPOSED";
 		const calls = [];
 		const purchase = {
 			name: "Historical synthetic package",
@@ -79,6 +83,33 @@ try {
 			confirmedAt: "2026-10-18T09:00:00Z",
 			observedAt: "2026-10-18T11:00:00Z",
 		};
+		const original = {
+			...purchase,
+			package: { name: purchase.name },
+			guests: 4,
+			optionalServiceIds: [],
+			paymentMethod: "BANK",
+			totalMinor: "30007",
+		};
+		const proposed = {
+			...original,
+			sessionStart: "2026-10-20T08:30:00Z",
+			sessionEnd: "2026-10-20T11:30:00Z",
+		};
+		const amendment = () => ({
+			id: other,
+			bookingId: id,
+			revision: amendmentState === "PROPOSED" ? 0 : 1,
+			state: amendmentState,
+			proposalHash: "a".repeat(64),
+			expiresAt: "2026-10-18T16:00:00Z",
+			original,
+			proposed,
+			differenceMinor: "0",
+			synthetic: true,
+			realOperations: false,
+			serverNow: "2026-10-18T15:55:00Z",
+		});
 		const funding = {
 			allocatedMinor: "30007",
 			outstandingMinor: "0",
@@ -106,6 +137,44 @@ try {
 				observedAt: booking.observedAt,
 				synthetic: true,
 			});
+
+			if (amendMode) {
+				if (u.pathname === "/api/session/csrf")
+					return json({ token: "SYNTHETIC-CSRF", headerName: "X-CSRF-TOKEN" });
+				if (u.pathname.includes("/availability"))
+					return json({ available: true, configuration: "SYNTHETIC" });
+				if (u.pathname === "/api/holds")
+					return json({ holdId: other, revision: 0 });
+				if (u.pathname === "/api/quotes")
+					return json({
+						quoteId: other,
+						revision: 1,
+						contentHash: "b".repeat(64),
+					});
+				if (u.pathname.startsWith(`/api/bookings/${id}/amendments`)) {
+					if (amendDelay) await new Promise((r) => setTimeout(r, 400));
+					if (amendConflict && u.pathname.endsWith("/confirm"))
+						return json(
+							{
+								message:
+									"Credential history or stale proposal denies confirmation",
+							},
+							409,
+						);
+					if (u.pathname.endsWith("/confirm")) {
+						amendmentState = "CONFIRMED";
+						booking.revision = 2;
+						booking.latestAmendmentId = other;
+						booking.purchase = {
+							...purchase,
+							sessionStart: proposed.sessionStart,
+							sessionEnd: proposed.sessionEnd,
+						};
+					}
+					if (u.pathname.endsWith("/withdrawals")) amendmentState = "WITHDRAWN";
+					return json(amendment());
+				}
+			}
 			if (u.pathname === "/api/bookings") return json(envelope([booking]));
 			if (u.pathname === `/api/bookings/${id}`) return json(booking);
 			if (u.pathname === "/api/bank/requests")
@@ -294,6 +363,125 @@ try {
 			await page.evaluate(
 				() => localStorage.length === 0 && sessionStorage.length === 0,
 			),
+		);
+		groups++;
+
+		// New amendment UI uses only intercepted synthetic contracts; no backend/financial proof.
+		delay = false;
+		amendMode = true;
+		booking.amendmentPlanning = {
+			packageId: id,
+			guests: 4,
+			optionalServiceIds: [],
+			paymentMethod: "BANK",
+		};
+		await page.goto(`${base}/bookings/${id}`);
+		await page.getByRole("button", { name: "Refresh booking history" }).click();
+		await page
+			.getByLabel("Replacement session start (venue local)")
+			.fill("2026-10-20T14:00");
+		await page
+			.getByRole("button", { name: "Prepare synthetic proposal" })
+			.click();
+		await page.getByText("PROPOSED", { exact: true }).waitFor();
+		assert.ok(
+			await page
+				.getByText("Financial difference: LKR 0.00.", { exact: false })
+				.isVisible(),
+		);
+		assert.ok(
+			await page
+				.getByRole("button", { name: "Confirm synthetic reschedule" })
+				.isDisabled(),
+		);
+		groups++;
+		await page
+			.getByRole("checkbox", {
+				name: "I accept this exact replacement interval and unchanged purchased terms.",
+			})
+			.check();
+		amendConflict = true;
+		await page
+			.getByRole("button", { name: "Confirm synthetic reschedule" })
+			.click();
+		await page
+			.getByRole("alert")
+			.filter({ hasText: "Credential history or stale" })
+			.waitFor();
+		assert.equal(booking.revision, 1);
+		assert.equal(amendmentState, "PROPOSED");
+		groups++;
+		amendConflict = false;
+		await page.getByRole("button", { name: "Withdraw proposal" }).click();
+		await page.getByText("WITHDRAWN", { exact: true }).waitFor();
+		assert.equal(booking.revision, 1);
+		groups++;
+		amendmentState = "EXPIRED";
+		await page.getByRole("button", { name: "Refresh amendment" }).click();
+		await page.getByText("EXPIRED", { exact: true }).waitFor();
+		assert.equal(
+			await page
+				.getByRole("button", { name: "Confirm synthetic reschedule" })
+				.count(),
+			0,
+		);
+		groups++;
+		amendmentState = "PROPOSED";
+		await page.getByRole("button", { name: "Refresh amendment" }).click();
+		await page.getByText("PROPOSED", { exact: true }).waitFor();
+		await page
+			.getByRole("checkbox", {
+				name: "I accept this exact replacement interval and unchanged purchased terms.",
+			})
+			.check();
+		await page
+			.getByRole("button", { name: "Confirm synthetic reschedule" })
+			.click();
+		await page
+			.getByText("History: retained immutable revision 2", { exact: false })
+			.waitFor();
+		groups++;
+		await page.getByRole("button", { name: "Refresh amendment" }).click();
+		await page.getByText("CONFIRMED", { exact: true }).waitFor();
+		assert.ok(
+			await page
+				.getByText("Backend confirmed revision 2", { exact: false })
+				.isVisible(),
+		);
+		assert.ok(
+			await page
+				.getByRole("link", { name: "Protected Access workspace" })
+				.isVisible(),
+		);
+		groups++;
+		assert.ok(
+			await page.evaluate(
+				() => document.documentElement.scrollWidth <= innerWidth,
+			),
+		);
+		await page.getByRole("button", { name: "Refresh amendment" }).focus();
+		assert.ok(
+			await page
+				.getByRole("button", { name: "Refresh amendment" })
+				.evaluate((e) => e === document.activeElement),
+		);
+		groups++;
+		if (width === 390)
+			await page.screenshot({
+				path: "/tmp/cinenest-amend-mobile.png",
+				fullPage: true,
+			});
+		amendDelay = true;
+		await page.getByRole("button", { name: "Refresh amendment" }).click();
+		await page.evaluate(() =>
+			window.dispatchEvent(new Event("cinenest-session-change")),
+		);
+		await page.waitForTimeout(650);
+		assert.equal(
+			await page
+				.getByText("Backend confirmed revision 2", { exact: false })
+				.count(),
+			0,
 		);
 		groups++;
 		await page.close();

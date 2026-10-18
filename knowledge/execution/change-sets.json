@@ -1580,22 +1580,23 @@
         "CN-REFUND-001"
       ],
       "blockingDecisionIds": [],
-      "affectedFilesModules": "Approved design only: Booking-owned amendment/revisions/inventory, owner-supplied Pricing/Payments/Access guards and one typed Notifications event; existing customer detail UI",
-      "dbApiUiImpact": "Approved design only: four amendment APIs, customer booking-detail extension and additive migration after V14; no implementation",
+      "affectedFilesModules": "Booking-owned amendment/revisions/inventory; Pricing/Payments/Access public guards; one typed Notifications event; existing customer detail composition",
+      "dbApiUiImpact": "Additive V15; four amendment APIs; current purchased revision/history reads and booking-detail UI",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
       "migrationNeeds": "V15 only if V14 remains current at authorized implementation; Booking amendment lifecycle/command/audit and immutable revision-2 support; narrow Notifications source/kind/destination extension; V1-V14 unchanged; no Payments datastore",
       "plannedChecks": "Conflict/buffer/consent/partial payment/access recovery tests",
-      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "rollback": "Disable new amendment writes; retain V15, pending/confirmed proposals, immutable purchase/financial/access/notification history; compatible code rollback or reviewed forward fix only, never revision-1-only rollback after revision2 exists",
       "definitionOfDone": "Original purchase history retained with safe accepted revision",
       "requiredApproval": "Amendment slice and agreed policy/payment method approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
       "evidencePaths": [
         "PROJECT.md#amend-synthetic-policy",
         "ARCHITECTURE.md#amend-synthetic-scope",
         "DESIGN.md#amend-synthetic-ui",
-        "PROGRESS.md#amend-readiness-reconciliation"
+        "PROGRESS.md#amend-readiness-reconciliation",
+        "PROGRESS.md#amend-implementation"
       ],
       "downstreamDecisionIds": [
         "OD-07",
@@ -1638,9 +1639,15 @@
         "realPayments": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
       },
-      "remainingReadinessGates": [
-        "Separate bounded synthetic CN-AMEND-001 implementation authorization"
-      ]
+      "remainingReadinessGates": [],
+      "implementationAuthorization": {
+        "source": "Owner inline instruction and attachment bdf9e9b5-02cc-40c7-a5d0-b37a97eecb7e",
+        "requestSha256": "4449a1fba53cfc34bd8be7966c7c37d9734a2194e676cdc1b616b6f80aa87df0",
+        "scope": "GRANTED_BOUNDED_SYNTHETIC_AMENDMENT",
+        "date": "2026-10-18",
+        "realOperations": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      }
     },
     {
       "id": "CN-REPORT-001",

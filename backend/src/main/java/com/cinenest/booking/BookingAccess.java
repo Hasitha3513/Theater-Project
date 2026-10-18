@@ -4,4 +4,5 @@ import java.time.Instant;import java.util.*;
 public interface BookingAccess {
  record Context(UUID booking,UUID request,UUID owner,UUID venue,UUID room,UUID quote,long revision,long amount,String currency,Instant start,Instant end,String timezone){}
  Optional<Context> lock(UUID booking);
+ boolean amendmentPending(UUID booking);
 }

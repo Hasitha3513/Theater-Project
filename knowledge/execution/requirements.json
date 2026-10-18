@@ -738,7 +738,14 @@
         "OD-24",
         "OD-28",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "boundedAmendmentImplementationEvidence": {
+        "changeSetId": "CN-AMEND-001",
+        "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#amend-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-C09",
@@ -882,6 +889,13 @@
           "frontend/tests/inventory-browser.mjs"
         ],
         "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      },
+      "boundedAmendmentImplementationEvidence": {
+        "changeSetId": "CN-AMEND-001",
+        "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#amend-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2899,6 +2913,13 @@
           "frontend/tests/quotes-browser.mjs"
         ],
         "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      },
+      "boundedAmendmentImplementationEvidence": {
+        "changeSetId": "CN-AMEND-001",
+        "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#amend-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -3548,6 +3569,13 @@
         "tests": "NOT_RUN",
         "fullAcceptance": "NOT_ACCEPTED",
         "evidencePath": "PROGRESS.md#amend-readiness-reconciliation"
+      },
+      "boundedAmendmentImplementationEvidence": {
+        "changeSetId": "CN-AMEND-001",
+        "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#amend-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {

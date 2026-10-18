@@ -56,7 +56,7 @@ test("historical data and half-open display groups never create a completed stat
 test("reject non-synthetic purchase and invented revision/state/timezone", () => {
 	for (const change of [
 		{ synthetic: false },
-		{ revision: 2 },
+		{ revision: 3 },
 		{ state: "COMPLETED" },
 		{ id: "x" },
 		{ purchase: { ...row.purchase, timezone: "Invalid/Zone" } },

@@ -1,2 +1,2 @@
-@org.springframework.modulith.ApplicationModule(allowedDependencies = {"identity", "rooms"})
+@org.springframework.modulith.ApplicationModule(allowedDependencies = {"identity", "rooms", "notifications"})
 package com.cinenest.booking;

@@ -5,6 +5,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 @Component
 class BookingAccessAdapter implements BookingAccess {
  private final JdbcClient jdbc;BookingAccessAdapter(JdbcClient jdbc){this.jdbc=jdbc;}
+ public boolean amendmentPending(UUID booking){return jdbc.sql("SELECT EXISTS(SELECT 1 FROM cinenest_booking.booking_amendment WHERE booking_id=:b AND state='PROPOSED' AND expires_at>clock_timestamp())").param("b",booking).query(Boolean.class).single();}
  public Optional<Context> lock(UUID id){
   if(!TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Caller transaction required");
   var rows=jdbc.sql("SELECT b.*,r.revision,r.quote_id,r.amount_minor,r.currency,r.snapshot FROM cinenest_booking.booking b JOIN cinenest_booking.booking_revision r USING(booking_id) WHERE booking_id=:id AND b.synthetic AND b.state='SIMULATED_CONFIRMED' ORDER BY r.revision DESC LIMIT 1 FOR UPDATE OF b").param("id",id).query().listOfRows();

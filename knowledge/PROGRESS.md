@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001, CN-ACCESS-001 and CN-CUSTOMER-001 task-specific hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:20 CLOSED,8 BLOCKED,0 READY,0 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001, CN-ACCESS-001 and CN-CUSTOMER-001 task-specific hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:20 CLOSED,7 BLOCKED,0 idle READY,1 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -277,7 +277,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
 | CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | VERIFIED / CLOSED |
-| CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
+| CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | IN_PROGRESS / READY |
 | CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-ENG-001 | 10 | Engagement scope/rule decision brief | CN-REPORT-001 | BLOCKED / BLOCKED |
 | CN-ACCEPT-001 | 11 | Integrated evidence and recovery gate | CN-AMEND-001, CN-REPORT-001, CN-OPS-001 | BLOCKED / BLOCKED |
@@ -319,7 +319,7 @@ flowchart TB
   P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; bounded synthetic customer history VERIFIED; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>Synthetic identity/request/ledger VERIFIED within bounded scopes<br/>0 of 8 full criteria; NOT_ACCEPTED"]
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PARTIAL synthetic notifications; NOT_ACCEPTED"]
-  P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PARTIAL SYNTHETIC ONLY; amendment design approved, implementation BLOCKED; NOT_ACCEPTED"]
+  P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PARTIAL SYNTHETIC ONLY; bounded amendment implementation IN_PROGRESS; NOT_ACCEPTED"]
   P7["P7 Access/hardware<br/>W13-14 illustrative<br/>SYNTHETIC PARTIAL; NOT_ACCEPTED"]
   P8["P8 Automation/readiness<br/>W15-16 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P9["P9 Reports/UAT<br/>W17-18 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -694,7 +694,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | P5 | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
 | CN-CUSTOMER-001 | P3 | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | VERIFIED / CLOSED |
-| CN-AMEND-001 | P6 | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
+| CN-AMEND-001 | P6 | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | IN_PROGRESS / READY |
 | CN-REPORT-001 | P9 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-ENG-001 | P9 | CN-REPORT-001 | BLOCKED / BLOCKED |
 | CN-ACCEPT-001 | P9 | CN-AMEND-001, CN-REPORT-001, CN-OPS-001 | BLOCKED / BLOCKED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-AMEND-001 bounded synthetic zero-difference pre-credential rescheduling,OD-07/20/21/24,schema/API/UI/tests and scoped PK-AC12 association approved by attachment031b3bde-78b5-47cb-8d37-bc7163711434. Three hard dependencies CLOSED,all edges unchanged. Owner selects recording/readiness only; task BLOCKED solely on separate bounded implementation authorization.20 CLOSED/8 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. No application/migration created. [Reconciliation](#amend-readiness-reconciliation); PayHere deferred/BLOCKED and venue/specialist/full acceptance gates retained.
+Current handoff: separate owner attachmentbdf9e9b5-02cc-40c7-a5d0-b37a97eecb7e authorizes the approved bounded synthetic CN-AMEND-001 implementation. Verified dependencies CLOSED and V14 current at94acd3fe0e434cd85db152ba16a9c1b1f0f65892. READY prerequisites reconciled, now IN_PROGRESS; [actual work/checks](#amend-implementation). Edges unchanged.20 CLOSED/7 BLOCKED/0 idle READY/1 IN_PROGRESS /28;13/74 unchanged. Complete verification and exact-source CI before bounded closure. PayHere deferred/BLOCKED; real operations disabled.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1375,3 +1375,25 @@ Hard dependencies remain exactly [CN-CUSTOMER-001,CN-QUOTE-001,CN-REFUND-001],ea
 Current MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;20 VERIFIED/CLOSED,8 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 full test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3–D6 outlines;0/7 held/accepted and0/10 accepted delivery phases. Manual-payment-first retained,PayHere deferred/BLOCKED; venue/specialists and real operations remain gated. Next action: obtain separate bounded synthetic CN-AMEND-001 implementation authorization. Validation/publication/exact-source CI reported after execution.
 
 Approval validation: primary design/whitespace PASS; primary execution retains exactly the two pre-existing next-env.d.ts integrity findings. Both validators PASS in an existing isolated snapshot verified byte-for-byte against starting committed HEAD before overlay of exactly11 reviewed KB paths.14 governance negative controls reject premature READY,implementation authority,removed/unrelated dependency edges,global OD-07 closure,lost bounded OD-20 or historical OD-21 approval,lost Access full ownership,false full test PASS,lost scoped mapping,real payments enablement,application edits,historical V14 drift and unauthorized V15. Snapshot originals restored after each negative check. No application test run or implementation PASS claimed in this governance-only session. Full requirement/test/decision/task counts and all dependency arrays preserved; no application/migration/token/dependency changes or new knowledge files. Final task-owned publication and exact final-source CI results reported in conversation.
+
+
+<a id="amend-implementation"></a>
+## CN-AMEND-001 bounded synthetic implementation — 2026-10-18
+
+Separate owner implementation authorization attachmentbdf9e9b5-02cc-40c7-a5d0-b37a97eecb7e, SHA2564449a1fba53cfc34bd8be7966c7c37d9734a2194e676cdc1b616b6f80aa87df0. Baseline94acd3fe0e434cd85db152ba16a9c1b1f0f65892,main/origin/main,0/0,V14. Three hard predecessors VERIFIED/CLOSED, bounded policy/scope approval retained; no repeated approval or edge changes. READY gates reconciled then IN_PROGRESS. Earlier recording-only statements describe that historical session.
+
+Implementation and tests are in progress; no verified closure, CI or demonstration claimed. [Approved business limits](PROJECT.md#amend-synthetic-policy), [technical boundary](ARCHITECTURE.md#amend-synthetic-scope) and [UI](DESIGN.md#amend-synthetic-ui) retained. Real payments/refunds/door control/live messaging/production disabled; PayHere deferred/BLOCKED. Existing next-env.d.ts and two unmanaged DOCX companions untouched/unstaged.
+
+MVP criteria unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74.20 CLOSED,7 BLOCKED,0 idle READY,1 IN_PROGRESS /28;92 requirements/92 full test plans, full acceptance NOT_ACCEPTED. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted and0/10 accepted delivery phases. Next action: complete bounded amendment verification and exact-source CI.
+
+
+Implementation evidence checkpoint: V15 is additive, V1–V14 byte-identical. Booking owns three amendment tables and revision2; deferred constraints reject incomplete inventory replacement. One same-owner/venue/room/duration/version/selection zero-difference operation only. Original booking/funding/verification association retained; replacement quote separate. Access-owned never-issued guard shares the existing booking lock with issuance. Payments guard checks original independent allocation/current verification and disputes, preserving excess-credit refund commitments. One AMENDMENT_CONFIRMED durable source event participates in the commit; Notifications owns later intent resolution and delivery. Four approved APIs and existing booking-detail extension implemented, disabled by default and synthetic-profile-only.
+
+Executed local backend evidence:325 tests,130 BankIntegration tests including28 new amendment cases and14 architecture checks, zero failures/errors/skips. Real PostgreSQL18.6 clean V1→V15, populated V14→V15/repeat migration and packaged startup/HTTP denial passed. Covers1→2 atomic replacement/current detail-list-Access reads, one-success maximum, idempotent concurrent creation/confirmation, issuance race, seven prior credential states, owner/CSRF/forged scope, stale/hash/payload conflict, expiry/withdrawal, audit-fault rollback/retry, fresh-process pending/confirmed recovery, disqualifying funding, unverified receipt, nonzero guest/line change, immutable allocations/refund reservation, current minimum and withdrawn version, notification dedupe/delivery-failure isolation and deferred partial-commit denial. Existing inventory races and bank/refund/Access/Notifications regressions retained. Synthetic fixtures and local browser interception prove software behavior only.
+
+Frontend build/typecheck/lint and105 tests passed in the approved isolated copy with committed next-env.d.ts.64 customer/amendment intercepted browser groups passed at1440/768/390/320px, including32 amendment-specific groups and32 retained customer groups; this is presentation rehearsal, not live integration. Mobile screenshot /tmp/cinenest-amend-mobile.png visually inspected. No browser zoom/screen-reader certification claimed.14 launcher contracts passed. Primary execution validator retains exactly the two pre-existing next-env.d.ts integrity findings; isolated exact-source validation and governance negatives are required before publication. Final browser regression, governance and exact-source CI receipts follow only after execution. No closure claimed by this checkpoint.
+
+
+Reviewed final-source local checkpoint:325 backend tests/130 BankIntegration/28 amendment cases/14 architecture checks,105 frontend tests plus production build/typecheck/lint,287 intercepted browser groups(64 customer/amendment,28 Notifications,32 Access,30 refund,70 bank,63 admin),14 launcher contracts and16 governance negative controls PASS. Browser runner initially referenced an absent admin-reads-browser.mjs; the verified existing admin-browser.mjs was run successfully separately; no skipped administration evidence. Two early new-test fixture/compile issues and the earlier upgrade target-count issue were corrected, then the complete final-source backend suite passed. Whitespace clean. Primary next-env.d.ts SHA256 remains0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc; its two existing execution-integrity findings remain visible. Isolated verification uses committed next-env.d.ts and exact owned source bytes. No validator relaxed: unauthorized source,extra migration/API/dependency,history/global-policy/full-acceptance drift and premature closure are rejected before historical replay. Both unmanaged DOCX hashes unchanged.
+
+All local gates satisfied for scoped source publication; CN-AMEND-001 remains IN_PROGRESS pending exact-source CI and bounded DoD closure. No phase criterion or demonstration promoted;13/74,92 requirements/92 full test plans and existing edges retained. Full OD-07/20/21/24,commercial/venue/specialist/physical/privacy/production acceptance remain separate. PayHere deferred/BLOCKED. Next action: publish reviewed source, verify exact-source CI, then assess only the bounded registered DoD.

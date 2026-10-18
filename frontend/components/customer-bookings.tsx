@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { roomRequest } from "../lib/rooms";
 import { readSession } from "../lib/session";
+import { BookingAmendment } from "./booking-amendment";
 import { Badge, Button, Card } from "./primitives";
 export const CUSTOMER_LABEL = "SYNTHETIC BANK PAYMENT — NO REAL MONEY";
 const UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/;
@@ -24,6 +25,14 @@ type Purchase = {
 	}[];
 };
 type Booking = {
+	amendmentPlanning?: {
+		packageId: string;
+		guests: number;
+		optionalServiceIds: string[];
+		paymentMethod: string;
+	};
+	latestAmendmentId?: string;
+	originalSnapshot?: Record<string, unknown>;
 	id: string;
 	requestId: string;
 	venueId: string;
@@ -103,7 +112,7 @@ export function bookingRecord(value: unknown): Booking {
 		!UUID.test(b.id) ||
 		!UUID.test(b.requestId) ||
 		!UUID.test(b.venueId) ||
-		b.revision !== 1 ||
+		![1, 2].includes(b.revision) ||
 		(b.state ?? b.syntheticBookingStatus) !== "SIMULATED_CONFIRMED" ||
 		!p ||
 		!UUID.test(p.roomId) ||
@@ -353,8 +362,8 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 				<Badge tone="warning">{CUSTOMER_LABEL}</Badge>
 			</p>
 			<p>
-				Read-only synthetic history. No real payment, refund, admission or
-				support ticket is created.
+				Synthetic purchased history and bounded rescheduling. No real payment,
+				refund, admission or support ticket is created.
 			</p>
 			<Button busy={busy} onClick={() => void load()}>
 				Refresh booking history
@@ -473,10 +482,13 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 						</p>
 						<p>
 							History: retained immutable revision {detail.revision},
-							SIMULATED_CONFIRMED. No amendment/cancellation history exists in
-							this slice.
+							SIMULATED_CONFIRMED. Original purchased history is retained.
 						</p>
 					</Card>
+					<BookingAmendment
+						booking={detail}
+						onCommitted={() => void load(0, 0)}
+					/>
 					<Card title="Payment and support status">
 						<p>
 							Independently verified matched synthetic credit:{" "}

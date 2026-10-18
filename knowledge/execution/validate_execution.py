@@ -56,12 +56,77 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Separately authorized bounded amendment successor. Validate actual inputs before historical replay.
+    mi_base='94acd3fe0e434cd85db152ba16a9c1b1f0f65892'
+    mi_allowed={'backend/src/main/java/com/cinenest/payments/internal/AmendmentFundingAdapter.java', 'frontend/tests/customer-bookings.test.mjs', 'backend/src/main/java/com/cinenest/pricing/internal/AmendmentPricingAdapter.java', 'frontend/app/api/bookings/[id]/amendments/route.ts', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationService.java', 'backend/src/main/resources/db/migration/V15__synthetic_booking_amendments.sql', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/booking/AmendmentGuards.java', 'frontend/app/api/bookings/[id]/amendments/[amendmentId]/route.ts', 'frontend/components/notifications.tsx', 'backend/src/main/java/com/cinenest/booking/internal/InventoryWorker.java', 'backend/src/main/java/com/cinenest/notifications/NotificationFacts.java', 'backend/src/main/java/com/cinenest/access/internal/AccessService.java', 'backend/src/main/java/com/cinenest/booking/internal/SyntheticBookingAdapter.java', 'backend/src/main/java/com/cinenest/booking/internal/AmendmentService.java', 'backend/src/main/java/com/cinenest/booking/internal/BookingAccessAdapter.java', 'backend/src/main/java/com/cinenest/booking/BookingAccess.java', 'frontend/tests/customer-bookings-browser.mjs', 'backend/src/main/java/com/cinenest/booking/package-info.java', 'backend/src/main/java/com/cinenest/pricing/internal/QuoteService.java', 'frontend/components/booking-amendment.tsx', 'backend/src/main/java/com/cinenest/notifications/internal/JdbcNotificationRepository.java', 'backend/src/main/java/com/cinenest/booking/internal/AmendmentNotificationContext.java', 'frontend/package.json', 'frontend/tests/amendments.test.mjs', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/booking/internal/AmendmentController.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'frontend/app/api/bookings/[id]/amendments/[amendmentId]/confirm/route.ts', 'backend/src/main/java/com/cinenest/access/internal/AmendmentAccessAdapter.java', 'frontend/app/api/bookings/[id]/amendments/[amendmentId]/withdrawals/route.ts', 'frontend/components/customer-bookings.tsx'}
+    def mi_prior(path):return json.loads(subprocess.check_output(['git','-C',str(R),'show',mi_base+':knowledge/'+path],text=True))
+    mi=state.get('amendImplementation',{})
+    mi_authority={'source':'Owner inline instruction and attachment bdf9e9b5-02cc-40c7-a5d0-b37a97eecb7e','requestSha256':'4449a1fba53cfc34bd8be7966c7c37d9734a2194e676cdc1b616b6f80aa87df0','scope':'GRANTED_BOUNDED_SYNTHETIC_AMENDMENT','date':'2026-10-18','realOperations':'DISABLED','gateway':'DEFERRED_BLOCKED'}
+    check(mi.get('authority')==mi_authority and mi.get('baselineHead')==mi_base,'Amendment implementation authority/baseline invalid')
+    check(mi.get('workStatus') in ('IN_PROGRESS','VERIFIED'),'Amendment implementation work status invalid')
+    mi_closed=mi.get('workStatus')=='VERIFIED'
+    mi_expected=mi_prior('execution/change-sets.json')
+    mi_task=next(t for t in mi_expected['changeSets'] if t['id']=='CN-AMEND-001')
+    mi_task.update({'affectedFilesModules': 'Booking-owned amendment/revisions/inventory; Pricing/Payments/Access public guards; one typed Notifications event; existing customer detail composition', 'dbApiUiImpact': 'Additive V15; four amendment APIs; current purchased revision/history reads and booking-detail UI', 'rollback': 'Disable new amendment writes; retain V15, pending/confirmed proposals, immutable purchase/financial/access/notification history; compatible code rollback or reviewed forward fix only, never revision-1-only rollback after revision2 exists'})
+    mi_task['evidencePaths'].append('PROGRESS.md#amend-implementation')
+    mi_task.update(authorityAvailable=True,readiness='CLOSED' if mi_closed else 'READY',workStatus=mi.get('workStatus'),remainingReadinessGates=[],implementationAuthorization=mi_authority)
+    check(backlog==mi_expected,'Amendment changed scope/DoD/dependency edges or unrelated task')
+    mi_expected_state=mi_prior('execution/status.json')
+    mi_expected_state.update(mode='SYNTHETIC_AMENDMENT_IMPLEMENTATION',workStatus=mi.get('workStatus'),implementationAuthorization=mi_authority['scope'],nextAction='Review the next independently eligible task and its own approval gates; no implementation' if mi_closed else 'Complete bounded amendment verification and exact-source CI',evidencePath='PROGRESS.md#amend-implementation',amendImplementation=mi)
+    mi_expected_state.update({'productStage': 'BOUNDED_SYNTHETIC_AMENDMENT_REAL_OPERATIONS_DISABLED', 'implementationEvidence': 'CN-AMEND-001 bounded synthetic implementation; actual checks at PROGRESS.md#amend-implementation; full commercial amendment acceptance remains pending', 'blockers': ['Current bounded closure requires completed checks and exact-source CI', 'Downstream only: PayHere deferred/BLOCKED; venue/specialist and wider commercial/privacy/physical gates pending'], 'approvalQueue': ['Commercial/venue/specialist/provider/physical acceptance remains separately gated'], 'verificationScope': 'Bounded synthetic software only; no commercial/provider/physical/customer acceptance', 'publicationState': 'CURRENT_TASK_SOURCE_NOT_YET_PUBLISHED', 'evidenceFreshness': '2026-10-18 bounded amendment local evidence; exact-source CI pending'})
+    if mi_closed:
+        mi_expected_state.update(nextRecommendedChangeSet='CN-IOT-001',nextAction='Review CN-IOT-001 bounded simulator scope and OD-01/02/13 gates; read-only',blockers=['Downstream only: PayHere deferred/BLOCKED; venue/specialist and wider commercial/privacy/physical gates pending'],publicationState='SOURCE_PUBLISHED_EXACT_CI_SUCCESS',evidenceFreshness='2026-10-18 exact amendment source CI verified;32 owned source hashes')
+    check(state==mi_expected_state,'Amendment changed unrelated status/history')
+    for k,v in {'realOperations':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','evidencePath':'PROGRESS.md#amend-implementation'}.items():check(mi.get(k)==v,'Amendment safety boundary invalid '+k)
+    mi_mapping={'changeSetId':'CN-AMEND-001','scope':'One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance','status':mi.get('workStatus'),'evidencePath':'PROGRESS.md#amend-implementation','fullAcceptance':'NOT_ACCEPTED'}
+    for path,key,ids in [('execution/requirements.json','requirements',{'CN-C08','CN-A02','PK-AC12','BR-10'}),('execution/test-plan.json','tests',{'T-CN-C08','T-CN-A02','T-PK-AC12','T-BR-10','T-CN-NFR-02'})]:
+        doc=json.loads((K/path).read_text())
+        for row in doc[key]:
+            receipt=row.pop('boundedAmendmentImplementationEvidence',None)
+            check(receipt==(mi_mapping if row['id'] in ids else None),'Amendment bounded mapping invalid '+row['id'])
+        check(doc==mi_prior(path),'Amendment altered full requirement/test history '+path)
+    for path in ('decisions/cinenest-open-decisions.json','execution/source-ledger.json','sources/cinenest-source-register.json'):
+        check(json.loads((K/path).read_text())==mi_prior(path),'Amendment altered decisions/source evidence '+path)
+    package=json.loads((R/'frontend/package.json').read_text());original_package=json.loads(subprocess.check_output(['git','-C',str(R),'show',mi_base+':frontend/package.json'],text=True));original_package['scripts']['test']+=' && node --import ./tests/tsx-loader.mjs tests/amendments.test.mjs'
+    check(package==original_package,'Amendment changed dependencies/toolchain or unrelated frontend scripts')
+    migration=(R/'backend/src/main/resources/db/migration/V15__synthetic_booking_amendments.sql').read_text()
+    check(set(re.findall(r'CREATE TABLE ([a-z_]+[.][a-z_]+)',migration))=={'cinenest_booking.booking_amendment','cinenest_booking.booking_amendment_command','cinenest_booking.booking_amendment_audit'} and 'cinenest_payments.' not in migration,'Amendment V15 changed datastore ownership/scope')
+    controller=(R/'backend/src/main/java/com/cinenest/booking/internal/AmendmentController.java').read_text()
+    check(set(re.findall(r'@(Get|Post)Mapping[(]"([^"]+)"[)]',controller))=={('Post','/api/bookings/{booking}/amendments'),('Get','/api/bookings/{booking}/amendments/{amendment}'),('Post','/api/bookings/{booking}/amendments/{amendment}/confirm'),('Post','/api/bookings/{booking}/amendments/{amendment}/withdrawals')},'Amendment API boundary invalid')
+    check(set(mi.get('ownedFiles',{}))==mi_allowed,'Amendment source allowlist invalid')
+    for name,digest in mi.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Amendment owned source checksum mismatch '+name)
+    mi_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',mi_base,'--','backend','frontend'],text=True).splitlines());mi_added=mi_allowed-mi_app
+    mi_current=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    check(mi_current==mi_app|mi_added,'Amendment changed unrelated application inventory')
+    mi_delta=set(subprocess.check_output(['git','-C',str(R),'diff','--name-only',mi_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh','knowledge/tokens','knowledge/styles'],text=True).splitlines())
+    check(mi_delta-mi_allowed<={'frontend/next-env.d.ts'},'Amendment changed unrelated source/tokens/launchers')
+    mi_migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',mi_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==mi_migrations|{'backend/src/main/resources/db/migration/V15__synthetic_booking_amendments.sql'},'Amendment V15 scope invalid')
+    for name in mi_migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',mi_base+':'+name]),'Amendment altered historical migration '+name)
+    if mi.get('checks'):
+        check(mi.get('evidenceCounts')=={'backendTests': 325, 'bankIntegrationTests': 130, 'amendmentIntegrationCases': 28, 'architectureTests': 14, 'frontendTests': 105, 'customerAmendmentBrowserGroups': 64, 'notificationBrowserGroups': 28, 'accessBrowserGroups': 32, 'refundBrowserGroups': 30, 'bankBrowserGroups': 70, 'adminBrowserGroups': 63, 'launcherTests': 14, 'governanceNegativeControls': 16, 'failures': 0, 'errors': 0, 'skipped': 0},'Amendment executed evidence counts invalid')
+        check(mi.get('primaryExecutionValidation')=='PRE_EXISTING_NEXT_ENV_ONLY' and mi.get('isolatedExecutionValidation')=='PASS','Amendment validation isolation boundary invalid')
+    if mi_closed:
+        check(mi.get('checks')=={'backend':'PASS','frontend':'PASS','browser':'PASS','governance':'PASS','launchers':'PASS'} and mi.get('sourceCI')=='SUCCESS','Amendment closure lacks executed evidence/exact-source CI')
+        commit=mi.get('sourceCommit','');check(bool(re.fullmatch('[0-9a-f]{40}',commit)) and str(mi.get('sourceRun','')).startswith('https://github.com/Hasitha3513/Theater-Project/actions/runs/'),'Amendment CI receipt invalid')
+        if re.fullmatch('[0-9a-f]{40}',commit):
+            for name,digest in mi.get('ownedFiles',{}).items():
+                original=subprocess.run(['git','-C',str(R),'show',commit+':'+name],capture_output=True);check(original.returncode==0 and hashlib.sha256(original.stdout).hexdigest()==digest,'Amendment exact-source CI stale '+name)
+    if errors:
+        print('\n'.join('FAIL '+m for m in errors));return 1
+    def mi_original(payload,path):
+        if path in ('execution/change-sets.json','execution/status.json','execution/requirements.json','execution/test-plan.json'):return mi_prior(path)
+        return payload
+    def mi_source(name):
+        if name in mi_allowed-mi_added:return subprocess.check_output(['git','-C',str(R),'show',mi_base+':'+name])
+        return (R/name).read_bytes()
+    backlog=mi_original(backlog,'execution/change-sets.json');state=mi_original(state,'execution/status.json')
     # Explicit owner-approved amendment design/readiness only; no code or migration authority.
     am_base='b07ef7d2dd4a8182853d6fc1532d772eb1e2a98a'
     am_expected={'execution/change-sets.json': 'a20b155f5c39bd1087092e36587855584e6f47a9dcad48a1dc0e5333031e078e', 'execution/status.json': 'c0d4e3893e284837ff7f0c970843e2f1f3477e9397fc8eb6691456c8be99fd21', 'decisions/cinenest-open-decisions.json': '5c45c2f1bb1cdfe23f0a76117dcf06eb6a339f81896d8479c343b718e5f12b5e', 'execution/requirements.json': '0e32ea1f4e26006005cb230a1e72926aaeb54380c8a0e4bc0c95cea23045edd4', 'execution/test-plan.json': '2e59ca63f49ae66e64c736e4125b601b2be4576598cf850307a9e5adb802af38'}
     am_prior={}
     for path,digest in am_expected.items():
-        actual=json.loads((K/path).read_text())
+        actual=mi_original(json.loads((K/path).read_text()),path)
         check(hashlib.sha256(json.dumps(actual,sort_keys=True).encode()).hexdigest()==digest,'Amendment bounded approval/history changed '+path)
         am_prior[path]=json.loads(subprocess.check_output(['git','-C',str(R),'show',am_base+':knowledge/'+path],text=True))
     am_task=next(t for t in backlog['changeSets'] if t['id']=='CN-AMEND-001')
@@ -85,7 +150,7 @@ def main():
         if row['id'] in ('OD-07','OD-20','OD-21','OD-24'):check(approval==am_task['boundedAmendmentScopeApproval'] and row['decisionStatus']=='OPEN_DECISION','Amendment global decision closure invalid '+row['id'])
         else:check(approval is None,'Amendment approved unrelated decision '+row['id'])
     for path,key,rid in [('execution/requirements.json','requirements','PK-AC12'),('execution/test-plan.json','tests','T-PK-AC12')]:
-        doc=json.loads((K/path).read_text());row=next(x for x in doc[key] if x['id']==rid);association=row.pop('boundedAmendmentEvidenceAssociation',None)
+        doc=mi_original(json.loads((K/path).read_text()),path);row=next(x for x in doc[key] if x['id']==rid);association=row.pop('boundedAmendmentEvidenceAssociation',None)
         check(association==state['amendReadiness']['mappingCorrection'] and association['changeSetId']=='CN-AMEND-001' and association['tests']=='NOT_RUN' and association['fullAcceptance']=='NOT_ACCEPTED','Amendment evidence association invalid '+rid)
         check(doc==am_prior[path],'Amendment changed full requirement/test coverage '+path)
     stripped=json.loads(json.dumps(state));stripped.pop('amendReadiness',None)
@@ -94,15 +159,16 @@ def main():
     check(state['amendReadiness']['approval']==am_task['boundedAmendmentScopeApproval'] and state['amendReadiness']['approval']['implementationAuthorization']=='NOT_GRANTED_READINESS_ONLY' and state['amendReadiness']['tests']=='NOT_RUN','Amendment approval promoted to implementation/test evidence')
     am_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',am_base,'--','backend','frontend'],text=True).splitlines())
     am_current=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
-    check(am_current==am_app,'Amendment approval changed application inventory')
+    check(am_current-mi_added==am_app,'Amendment approval changed application inventory')
     am_delta=set(subprocess.check_output(['git','-C',str(R),'diff','--name-only',am_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh','knowledge/tokens','knowledge/styles'],text=True).splitlines())
-    check(am_delta<={'frontend/next-env.d.ts'},'Amendment recording-only approval changed application/tokens/launchers')
+    check(am_delta-mi_allowed-mi_allowed<={'frontend/next-env.d.ts'},'Amendment recording-only approval changed application/tokens/launchers')
     am_migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',am_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==am_migrations,'Amendment recording-only approval added migration')
-    for name in am_migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',am_base+':'+name]),'Amendment altered historical migration '+name)
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added==am_migrations,'Amendment recording-only approval added migration')
+    for name in am_migrations:check(mi_source(name)==subprocess.check_output(['git','-C',str(R),'show',am_base+':'+name]),'Amendment altered historical migration '+name)
     if errors:
         print('\n'.join('FAIL '+message for message in errors));return 1
     def am_original(payload,path):
+        payload=mi_original(payload,path)
         if path in am_expected and hashlib.sha256(json.dumps(payload,sort_keys=True).encode()).hexdigest()==am_expected[path]:return json.loads(json.dumps(am_prior[path]))
         return payload
     def am_bytes(path):
@@ -138,15 +204,15 @@ def main():
     for path in ('decisions/cinenest-open-decisions.json','execution/source-ledger.json','sources/cinenest-source-register.json'):
         check(am_original(json.loads((K/path).read_text()),path)==cu_prior(path),'Customer changed decisions/source evidence '+path)
     check(set(cu.get('ownedFiles',{}))==cu_allowed,'Customer owned source inventory invalid')
-    for name,digest in cu.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Customer source checksum mismatch '+name)
-    cu_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',cu_base,'--','backend','frontend'],text=True).splitlines());cu_added=cu_allowed-cu_app
+    for name,digest in cu.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256(mi_source(name)).hexdigest()==digest,'Customer source checksum mismatch '+name)
+    cu_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',cu_base,'--','backend','frontend'],text=True).splitlines());cu_added=(cu_allowed-cu_app)|mi_added
     cu_inventory=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
     check(cu_inventory==cu_app|cu_added,'Customer changed unrelated application inventory')
     cu_delta=set(subprocess.check_output(['git','-C',str(R),'diff','--name-only',cu_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines())
-    check(cu_delta-cu_allowed<={'frontend/next-env.d.ts'},'Customer changed unrelated source/launcher')
+    check(cu_delta-cu_allowed-mi_allowed<={'frontend/next-env.d.ts'},'Customer changed unrelated source/launcher')
     cu_migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',cu_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==cu_migrations,'Customer added unapproved migration')
-    for name in cu_migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',cu_base+':'+name]),'Customer altered historical migration '+name)
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added==cu_migrations,'Customer added unapproved migration')
+    for name in cu_migrations:check(mi_source(name)==subprocess.check_output(['git','-C',str(R),'show',cu_base+':'+name]),'Customer altered historical migration '+name)
     if cu.get('checks'):
         check(cu.get('evidenceCounts')=={'backendTests': 297, 'bankIntegrationTests': 102, 'architectureTests': 14, 'frontendTests': 95, 'customerBrowserGroups': 32, 'notificationBrowserGroups': 28, 'accessBrowserGroups': 32, 'refundBrowserGroups': 30, 'bankBrowserGroups': 70, 'adminBrowserGroups': 63, 'launcherTests': 14, 'governanceNegativeControls': 12, 'failures': 0, 'errors': 0, 'skipped': 0},'Customer executed evidence counts invalid')
     if cu_closed:
@@ -163,7 +229,7 @@ def main():
         return payload
     def cu_source(name):
         if name in cu_allowed-cu_added:return subprocess.check_output(['git','-C',str(R),'show',cu_base+':'+name])
-        return (R/name).read_bytes()
+        return mi_source(name)
     backlog=cu_original(backlog,'execution/change-sets.json');state=cu_original(state,'execution/status.json')
     # Explicit owner-approved customer policy/readiness successor. Implementation remains withheld.
     customer_base='de213bfe67a48075c2aa8d668bab5b8c53c35476'
@@ -209,10 +275,10 @@ def main():
     current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
     check(current_app-cu_added==baseline_app,'Customer approval changed application inventory')
     delta=set(subprocess.check_output(['git','-C',str(R),'diff','--name-only',customer_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines())
-    check(delta-cu_allowed<={'frontend/next-env.d.ts'},'Customer readiness-only approval changed application/launcher source')
+    check(delta-cu_allowed-mi_allowed<={'frontend/next-env.d.ts'},'Customer readiness-only approval changed application/launcher source')
     migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',customer_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==migrations,'Customer readiness-only approval created migration')
-    for name in migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',customer_base+':'+name]),'Customer altered historical migration '+name)
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added==migrations,'Customer readiness-only approval created migration')
+    for name in migrations:check(mi_source(name)==subprocess.check_output(['git','-C',str(R),'show',customer_base+':'+name]),'Customer altered historical migration '+name)
     if errors:
         print('\n'.join('FAIL '+message for message in errors));return 1
     def customer_original(payload,path):
@@ -250,10 +316,10 @@ def main():
     current_inventory=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
     check(current_inventory-cu_added==ni_app|ni_added,'Notifications changed unrelated application inventory')
     delta=set(subprocess.check_output(['git','-C',str(R),'diff','--name-only',ni_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines())
-    check(delta-ni_allowed-cu_allowed<={'frontend/next-env.d.ts'},'Notifications changed unrelated application or launchers')
+    check(delta-ni_allowed-cu_allowed-mi_allowed<={'frontend/next-env.d.ts'},'Notifications changed unrelated application or launchers')
     migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ni_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==migrations|{'backend/src/main/resources/db/migration/V14__synthetic_notifications.sql'},'Notifications migration scope invalid')
-    for name in migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',ni_base+':'+name]),'Notifications altered historical migration '+name)
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added==migrations|{'backend/src/main/resources/db/migration/V14__synthetic_notifications.sql'},'Notifications migration scope invalid')
+    for name in migrations:check(mi_source(name)==subprocess.check_output(['git','-C',str(R),'show',ni_base+':'+name]),'Notifications altered historical migration '+name)
     if ni.get('checks'):
         check(ni.get('evidenceCounts')=={'backendTests': 288, 'bankIntegrationTests': 93, 'architectureTests': 14, 'notificationPolicyTests': 2, 'frontendTests': 89, 'notificationBrowserGroups': 28, 'accessBrowserGroups': 32, 'refundBrowserGroups': 30, 'bankBrowserGroups': 70, 'adminBrowserGroups': 63, 'launcherTests': 14, 'governanceNegativeControls': 11, 'failures': 0, 'errors': 0, 'skipped': 0},'Notifications executed evidence counts invalid')
     if ni_closed:
@@ -293,9 +359,9 @@ def main():
     current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
     check(current_app-ni_added-cu_added==notify_app,'Readiness-only notification approval changed application inventory')
     app_delta=subprocess.check_output(['git','-C',str(R),'diff','--name-only',notify_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
-    check(set(app_delta)-ni_allowed-cu_allowed<={'frontend/next-env.d.ts'},'Readiness-only notification approval changed application/launcher source')
+    check(set(app_delta)-ni_allowed-cu_allowed-mi_allowed<={'frontend/next-env.d.ts'},'Readiness-only notification approval changed application/launcher source')
     notify_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',notify_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ni_added-cu_added==set(notify_migrations),'Readiness-only notification approval created migration')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added-ni_added-cu_added==set(notify_migrations),'Readiness-only notification approval created migration')
     if errors:
         print('\n'.join('FAIL '+message for message in errors));return 1
     def notify_original(payload,path):
@@ -332,8 +398,8 @@ def main():
     for path in ('execution/requirements.json','execution/test-plan.json','decisions/cinenest-open-decisions.json'):
         check(notify_original(am_original(json.loads((K/path).read_text()),path),path)==ai_prior(path),'Access changed full requirement/test/decision history '+path)
     ai_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ai_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    for name in ai_migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',ai_base+':'+name]),'Access altered historical migration '+name)
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ni_added-cu_added==set(ai_migrations)|{'backend/src/main/resources/db/migration/V13__synthetic_access.sql'},'Access migration scope invalid')
+    for name in ai_migrations:check(mi_source(name)==subprocess.check_output(['git','-C',str(R),'show',ai_base+':'+name]),'Access altered historical migration '+name)
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added-ni_added-cu_added==set(ai_migrations)|{'backend/src/main/resources/db/migration/V13__synthetic_access.sql'},'Access migration scope invalid')
     if ai.get('checks',{}).get('backend')=='PASS':
         check(ai.get('evidenceCounts')=={'backendTests': 264, 'bankIntegrationTests': 72, 'architectureTests': 13, 'accessPolicyTests': 2, 'frontendTests': 85, 'accessBrowserGroups': 32, 'refundBrowserGroups': 30, 'bankBrowserGroups': 70, 'adminBrowserGroups': 63, 'launcherTests': 14, 'failures': 0, 'errors': 0, 'skipped': 0},'Access executed evidence counts changed/missing')
     if ai_closed:
@@ -370,9 +436,9 @@ def main():
     for path in ('execution/requirements.json','execution/test-plan.json'):
         check(am_bytes(path)==subprocess.check_output(['git','-C',str(R),'show',access_base+':knowledge/'+path]),'Access changed full requirement/test coverage '+path)
     app_delta=subprocess.check_output(['git','-C',str(R),'diff','--name-only',access_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
-    check(set(app_delta)-ai_allowed-ni_allowed-cu_allowed<={'frontend/next-env.d.ts'},'Readiness-only Access session changed application/launcher source')
+    check(set(app_delta)-ai_allowed-ni_allowed-cu_allowed-mi_allowed<={'frontend/next-env.d.ts'},'Readiness-only Access session changed application/launcher source')
     old_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',access_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added-ni_added-cu_added==set(old_migrations),'Readiness-only Access session created migration')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added-ai_added-ni_added-cu_added==set(old_migrations),'Readiness-only Access session created migration')
     if errors:
         print('\n'.join('FAIL '+message for message in errors)); return 1
     def access_original(payload,path):
@@ -434,8 +500,8 @@ def main():
     impl_added=impl_allowed-set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',impl_base,'--','backend','frontend'],text=True).splitlines())
     # V1-V11 are immutable; only one additive V12 is authorized.
     old_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',impl_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    for name in old_migrations: check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',impl_base+':'+name]),'Refund altered historical migration '+name)
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added-ni_added-cu_added==set(old_migrations)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'},'Refund migration scope invalid')
+    for name in old_migrations: check(mi_source(name)==subprocess.check_output(['git','-C',str(R),'show',impl_base+':'+name]),'Refund altered historical migration '+name)
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added-ai_added-ni_added-cu_added==set(old_migrations)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'},'Refund migration scope invalid')
     backlog=impl_original(backlog,'execution/change-sets.json')
     state=impl_state
     # Approved refund readiness-only successor: exact scoped delta, two dependency classes, no implementation.
@@ -455,9 +521,9 @@ def main():
         check(row['dependencies']==(['CN-PAY-BANK-002'] if row['id']=='CN-REFUND-001' else prior_edges[row['id']]), 'Unapproved refund dependency amendment '+row['id'])
     check(len(coverage['requirements'])==92 and len(tests_doc['tests'])==92, 'Refund approval lost full coverage')
     app_delta = subprocess.check_output(['git','-C',str(R),'diff','--name-only',refund_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
-    check(set(app_delta) - impl_allowed - ai_allowed - ni_allowed - cu_allowed <= {'frontend/next-env.d.ts'}, 'Refund readiness session changed application/launcher source')
+    check(set(app_delta) - impl_allowed - ai_allowed - ni_allowed - cu_allowed -mi_allowed<= {'frontend/next-env.d.ts'}, 'Refund readiness session changed application/launcher source')
     migration_base = subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',refund_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added-ni_added-cu_added == set(migration_base)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'}, 'Readiness-only approval cannot create a migration')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added-ai_added-ni_added-cu_added == set(migration_base)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'}, 'Readiness-only approval cannot create a migration')
 
     if errors:
         print('\n'.join('FAIL '+message for message in errors))
@@ -609,7 +675,7 @@ def main():
     ledger_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-impl_added-ai_added-ni_added-cu_added
     check(ledger_current_app-admin_added==ledger_baseline_app|ledger_allowlist,'Ledger changed application inventory outside owner scope')
     for migration in (R/'backend/src/main/resources/db/migration').glob('V*__*.sql'):
-        if migration.relative_to(R).as_posix() in ai_added|ni_added:continue # Independently validated Access successor.
+        if migration.relative_to(R).as_posix() in mi_added|ai_added|ni_added:continue # Independently validated Access successor.
         if migration.name=='V12__synthetic_bank_refunds.sql': continue # Checked independently by the implementation successor above.
         if migration.relative_to(R).as_posix() in admin_added:continue
         if migration.name.startswith('V10__'):continue
@@ -924,7 +990,7 @@ def main():
     workflow_owned=workflow.get('ownedFiles',{})
     check(set(workflow_owned)=={'Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh','scripts/test-launchers.py','frontend/next.config.mjs','.github/workflows/foundation.yml'},'Local workflow source inventory changed')
     for name,digest in workflow_owned.items():
-        check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Local workflow source mismatch '+name)
+        check((R/name).is_file() and hashlib.sha256(mi_source(name)).hexdigest()==digest,'Local workflow source mismatch '+name)
         if name.endswith('.sh'):check((R/name).stat().st_mode & 0o111 != 0,'Local launcher not executable '+name)
     workflow_before=subprocess.check_output(['git','-C',str(R),'show','00164620cb03487e9dd74722e4763d12dce99ec2:.github/workflows/foundation.yml'])
     check((R/'.github/workflows/foundation.yml').read_bytes()==workflow_before.replace(b'      - name: Knowledge and whitespace',b'      - name: Local launcher contracts\n        run: python3 scripts/test-launchers.py\n      - name: Knowledge and whitespace'),'Unrelated CI changes in local workflow')
@@ -1493,7 +1559,7 @@ def main():
         else:
             check(expected == current, 'Omission gap/status silently changed ' + old['id'])
     progress = (K / 'PROGRESS.md').read_text()
-    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(customer_task['dependencies'] if c['id']=='CN-CUSTOMER-001' else access_task['dependencies'] if c['id']=='CN-ACCESS-001' else refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + (cu_task['workStatus']+' / '+cu_task['readiness'] if c['id']=='CN-CUSTOMER-001' else ni_task['workStatus']+' / '+ni_task['readiness'] if c['id']=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if c['id']=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if c['id']=='CN-REFUND-001' else 'VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
+    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(customer_task['dependencies'] if c['id']=='CN-CUSTOMER-001' else access_task['dependencies'] if c['id']=='CN-ACCESS-001' else refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + (mi_task['workStatus']+' / '+mi_task['readiness'] if c['id']=='CN-AMEND-001' else cu_task['workStatus']+' / '+cu_task['readiness'] if c['id']=='CN-CUSTOMER-001' else ni_task['workStatus']+' / '+ni_task['readiness'] if c['id']=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if c['id']=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if c['id']=='CN-REFUND-001' else 'VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
     check(task_rows in progress, 'PROGRESS task projection diverges from authority')
     mapping_rows = ''.join('| ' + e['sourcePath'] + ' | [' + e['canonicalPath'] + '#' + e['anchor'] + '](' + e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] + ') | [original @ ' + e['historicalReference']['commit'][:7] + '](' + e['historicalReference']['url'] + ') |\n' for e in manifest['consolidation']['documents'])
     check(mapping_rows in progress and '<a id="consolidation"></a>' in progress, 'PROGRESS source/destination/removal mapping omitted')
@@ -1520,7 +1586,7 @@ def main():
         if name in room_owned and name not in ui_owned:
             check(historical_source_matches(name,hashlib.sha256(baseline_bytes).hexdigest()), 'Unapproved room successor of protected source ' + name)
         elif name == 'frontend/next.config.mjs':
-            check((R/name).read_bytes()==b'const nextConfig = { poweredByHeader: false, agentRules: false };\nexport default nextConfig;\n','Local workflow changed unrelated frontend configuration')
+            check(mi_source(name)==b'const nextConfig = { poweredByHeader: false, agentRules: false };\nexport default nextConfig;\n','Local workflow changed unrelated frontend configuration')
         elif name not in ui_owned:
             check((R / name).is_file() and inventory_source(name) == baseline_bytes, 'Unapproved protected source/token/dependency change ' + name)
     check('<a id="od11-approved-baseline"></a>' in (K / 'DESIGN.md').read_text() and '<a id="ui-readiness"></a>' in progress, 'UI canonical approval/readiness missing')
@@ -1582,7 +1648,7 @@ def main():
     task_projection = re.findall(r'^\| (CN-[^|]+) \| (P\d+) \| ([^|]+) \| ([^|]+) \|$', task_section, re.M)
     check([row[0] for row in task_projection] == cids, 'Existing task roadmap coverage lost/duplicated')
     for tid, phase, deps, status in task_projection:
-        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(customer_task['dependencies'] if tid=='CN-CUSTOMER-001' else access_task['dependencies'] if tid=='CN-ACCESS-001' else refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == (cu_task['workStatus']+' / '+cu_task['readiness'] if tid=='CN-CUSTOMER-001' else ni_task['workStatus']+' / '+ni_task['readiness'] if tid=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if tid=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if tid=='CN-REFUND-001' else 'VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
+        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(customer_task['dependencies'] if tid=='CN-CUSTOMER-001' else access_task['dependencies'] if tid=='CN-ACCESS-001' else refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == (mi_task['workStatus']+' / '+mi_task['readiness'] if tid=='CN-AMEND-001' else cu_task['workStatus']+' / '+cu_task['readiness'] if tid=='CN-CUSTOMER-001' else ni_task['workStatus']+' / '+ni_task['readiness'] if tid=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if tid=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if tid=='CN-REFUND-001' else 'VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
     check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':13 if inventory_ci else 11 if pub_ci else 10 if pkg_ci else 9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')

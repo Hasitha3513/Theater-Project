@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Badge, Button, Card, Field, SelectField } from "./primitives";
 import { roomRequest } from "../lib/rooms";
+import { Badge, Button, Card, Field, SelectField } from "./primitives";
 export const NOTIFICATION_LABEL =
 	"SYNTHETIC NOTIFICATION TEST — NO REAL DELIVERY";
 type Notice = {
@@ -61,7 +61,7 @@ export function notificationRecord(value: unknown): Notice {
 			"SUPPRESSED",
 		].includes(r.state) ||
 		(r.destination !== undefined &&
-			!["/bank", "/access"].includes(r.destination))
+			!["/bank", "/access", "/bookings"].includes(r.destination))
 	)
 		throw new Error("Invalid synthetic notification");
 	return r;
@@ -281,9 +281,9 @@ export function NotificationWorkspace({ admin = false }: { admin?: boolean }) {
 					{!admin && (
 						<>
 							<p>{detail.message}</p>
-							{["/bank", "/access"].includes(detail.destination ?? "") && (
-								<a href={detail.destination}>Open protected workspace</a>
-							)}
+							{["/bank", "/access", "/bookings"].includes(
+								detail.destination ?? "",
+							) && <a href={detail.destination}>Open protected workspace</a>}
 							<Button
 								disabled={busy || !!detail.read_at}
 								onClick={() => void load(page, detail.id, "read")}
