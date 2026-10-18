@@ -1170,8 +1170,8 @@
       "definitionOfDone": "Software behavior verified only with simulator; physical gate remains open",
       "requiredApproval": "Simulation slice and access-window/process approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROJECT.md#access-bank-only-policy",
         "ARCHITECTURE.md#access-bank-only-scope",

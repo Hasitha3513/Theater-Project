@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 and CN-ACCESS-001 hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:17 CLOSED,10 BLOCKED,1 READY (IN_PROGRESS) /28; closure awaits checks/exact-source CI. [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 and CN-ACCESS-001 hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:18 CLOSED,10 BLOCKED,0 READY,0 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -271,7 +271,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-PAY-BANK-001 | 5 | Bank request/receipt and durable reviewer work | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | 5 | Bank evidence/allocation and guarded confirmation | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
 | CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-BANK-002 | VERIFIED / CLOSED |
-| CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-BANK-002 | IN_PROGRESS / READY |
+| CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-BANK-002 | VERIFIED / CLOSED |
 | CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
@@ -688,7 +688,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-PAY-BANK-001 | P4 | CN-QUOTE-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-PAY-BANK-002 | P4 | CN-PAY-BANK-001 | BLOCKED / BLOCKED |
 | CN-REFUND-001 | P6 | CN-PAY-BANK-002 | VERIFIED / CLOSED |
-| CN-ACCESS-001 | P7 | CN-PAY-BANK-002 | IN_PROGRESS / READY |
+| CN-ACCESS-001 | P7 | CN-PAY-BANK-002 | VERIFIED / CLOSED |
 | CN-IOT-001 | P8 | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-ACCESS-001 separately authorized synthetic bank-only implementation IN_PROGRESS; required checks/exact-source CI gate closure.17 CLOSED/10 BLOCKED/1 READY and IN_PROGRESS /28 (READY is readiness; IN_PROGRESS is work status of the same task). No downstream implementation authorized. PayHere, venue/specialists and physical/commercial acceptance remain pending. [Current implementation evidence](#access-implementation). Earlier checkpoints below are historical.
+Current handoff: CN-ACCESS-001 VERIFIED/CLOSED only for approved synthetic bank-only software after exact-source CI39111005350 SUCCESS at05ad25908d320b0d4a90a9c5cf7ae3da10183131.18 CLOSED/10 BLOCKED/0 READY/0 IN_PROGRESS. Next: read-only review CN-NOTIFY-001 bounded channel/privacy scope and OD-01/05/29 gates; no implementation authorized. PayHere, venue/specialists and full hardware/commercial acceptance remain pending. [Current evidence](#access-implementation). Earlier checkpoints below are historical.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1288,3 +1288,7 @@ Frontend85/85 tests, isolated production build/typecheck/lint PASS;32 intercepte
 Self-review added explicit expectedVersion alongside expectedRevision for every mutation, prevented UNKNOWN reissue bypass, preserved redacted simulator outcome history, and added direct funding-port insufficiency/scope/currency and old-secret rejection checks. Test assertion-overload/expired-hold fixture errors were corrected before the final264-test PASS; earlier262-test evidence was superseded by this full reviewed run. No later application source changes are authorized by these receipts without reopening evidence.
 
 Governance closeout checks: primary knowledge/whitespace PASS; primary execution retains exactly the two pre-existing next-env.d.ts protection findings. Both validators PASS in an exact isolated committed-source snapshot overlaid with all owned changes; tracked source bytes and all39 owned application hashes match, excluding the unrelated next-env.d.ts committed-byte isolation. Ten negative controls reject lost implementation authority, unrelated dependency removal, lost deferred gateway obligation, real-door authority, premature closure without exact CI, false full-test PASS, global OD-02 closure, historical V12 modification, owned-source integrity change and unauthorized V14. Scoped source publication remains IN_PROGRESS until exact-source CI SUCCESS; source/closeout receipts are reported in conversation.
+
+Bounded DoD closure: “Software behavior verified only with simulator; physical gate remains open” is satisfied by the actual264-test PostgreSQL/backend suite,85 frontend tests,195 intercepted browser groups(32 Access/30 refund/70 bank/63 admin),14 launcher contracts,10 governance negative controls and exact-source CI SUCCESS for05ad25908d320b0d4a90a9c5cf7ae3da10183131: [run39111005350](https://github.com/Hasitha3513/Theater-Project/actions/runs/39111005350). The prior IN_PROGRESS checkpoint is superseded only for this bounded software task. CN-ACCESS-001 VERIFIED/CLOSED,18 CLOSED/10 BLOCKED/0 READY/0 IN_PROGRESS /28. All39 owned application hashes match that CI source. No full requirement/test acceptance or P7 criterion promoted;13/74 remains unchanged and0/7 demonstrations held/accepted. No downstream task automatically READY: IOT retains OD-01/02/13 and its own simulator scope authority; NOTIFY retains OD-01/05/29 channel/privacy approval and authority; CUSTOMER retains NOTIFY and its own decisions. Next action: read-only review of CN-NOTIFY-001 bounded channel/privacy scope and its recorded OD-01/05/29 gates. No task implementation follows this closeout. PayHere deferred/BLOCKED, venue and qualified privacy/legal/physical-safety/independent finance appointments PENDING. Source S2–S4/history and existing dependencies retained.
+
+Closure-record validation uses the same source hashes and unchanged application files. The source CI above verifies the actual implementation; final documentation CI/publication receipts are reported separately in conversation. Unrelated next-env.d.ts and both DOCX companions remain untouched and unstaged.
