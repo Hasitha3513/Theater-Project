@@ -127,7 +127,7 @@
       ],
       "documentationClosureApproval": {
         "status": "OWNER_APPROVED_DOCUMENTATION_ONLY",
-        "source": "Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status",
+        "source": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
         "date": "2026-10-17",
         "canonicalSpecification": "PROJECT.md#accountability-appointments",
         "retainedDecisionGates": [
@@ -665,7 +665,7 @@
       "affectedFilesModules": "Pricing quotation domain/application/persistence/HTTP; public Booking hold port; Identity explicit route security; frontend quote transport/UI/tests; existing knowledge",
       "dbApiUiImpact": "Seven Pricing quotation tables; POST /api/quotes, GET /api/quotes/{quoteId}, POST /api/quotes/{quoteId}/revisions, POST /api/quotes/{quoteId}/accept; synthetic-only itemized review/acceptance",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1–V6; no production seed/down migration",
+      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1\u2013V6; no production seed/down migration",
       "plannedChecks": "Exact unit/guest/included-extra/quote-expiry/snapshot fixture tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
@@ -756,7 +756,7 @@
       "affectedFilesModules": "Verification module/private encrypted synthetic storage; Pricing public quotation context; Identity exact scoped permissions; customer/reviewer UI",
       "dbApiUiImpact": "Exactly eight approved tables and ten operations; synthetic manual review only",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1–V7",
+      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1\u2013V7",
       "plannedChecks": "Upload/private scope/retention/review/consent tests and operational gate",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Restricted booker eligibility separate from on-site guest entry",
@@ -1247,23 +1247,62 @@
       "dependencies": [
         "CN-ACCESS-001"
       ],
-      "blockingDecisionIds": [
-        "OD-01",
-        "OD-02",
-        "OD-13"
-      ],
-      "affectedFilesModules": "IoT/adapters/operator UI TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "IoT-owned simulator/persistence/operator UI; narrow public Booking/Access/Identity interfaces; no foreign repositories",
+      "dbApiUiImpact": "Approved additive IoT-owned design; five scoped staff APIs and existing-token staff UI; no implementation",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "Additive successor to V15, candidate V16 only after separate implementation authorization; V1-V15 unchanged",
       "plannedChecks": "TTL/ACL/reconnect/out-of-order/no-stale-actuation tests",
-      "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
+      "rollback": "Disable new simulator commands; retain assignments,desired states,attempts,observations,unknown/reconciliation/audit history; compatible code rollback or reviewed forward remediation; no destructive migration",
       "definitionOfDone": "Unknown never OFF/available; simulator evidence qualified",
       "requiredApproval": "Simulator slice + protocol/capability approval, physical work separate",
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [
+        "PROJECT.md#iot-synthetic-policy",
+        "ARCHITECTURE.md#iot-synthetic-scope",
+        "DESIGN.md#iot-synthetic-ui",
+        "PROGRESS.md#iot-readiness-reconciliation"
+      ],
+      "downstreamDecisionIds": [
+        "OD-01",
+        "OD-02",
+        "OD-13"
+      ],
+      "decisionScopeApprovals": [
+        {
+          "decisionId": "OD-01",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        },
+        {
+          "decisionId": "OD-02",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        },
+        {
+          "decisionId": "OD-13",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        }
+      ],
+      "boundedIotScopeApproval": {
+        "taskId": "CN-IOT-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_LIGHTING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 9a452227-ca2d-4d1c-af01-7e74489141d2; Record approvals and reassess readiness only",
+        "requestSha256": "f241a9011f46227cc88b53f0bbb1967ea531d6503db2aed8475e36d2fbc82f07",
+        "canonicalSpecification": "ARCHITECTURE.md#iot-synthetic-scope",
+        "businessPolicy": "PROJECT.md#iot-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realEquipmentControl": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      },
+      "remainingReadinessGates": [
+        "Separate bounded synthetic CN-IOT-001 implementation authorization"
+      ]
     },
     {
       "id": "CN-OPS-001",

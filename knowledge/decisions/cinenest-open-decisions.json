@@ -113,6 +113,19 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "liveMessaging": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedIotApproval": {
+        "taskId": "CN-IOT-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_LIGHTING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 9a452227-ca2d-4d1c-af01-7e74489141d2; Record approvals and reassess readiness only",
+        "requestSha256": "f241a9011f46227cc88b53f0bbb1967ea531d6503db2aed8475e36d2fbc82f07",
+        "canonicalSpecification": "ARCHITECTURE.md#iot-synthetic-scope",
+        "businessPolicy": "PROJECT.md#iot-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realEquipmentControl": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {
@@ -137,6 +150,19 @@
         "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
         "fullDecisionStatus": "OPEN_DECISION",
         "realDoorControl": "DISABLED"
+      },
+      "boundedIotApproval": {
+        "taskId": "CN-IOT-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_LIGHTING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 9a452227-ca2d-4d1c-af01-7e74489141d2; Record approvals and reassess readiness only",
+        "requestSha256": "f241a9011f46227cc88b53f0bbb1967ea531d6503db2aed8475e36d2fbc82f07",
+        "canonicalSpecification": "ARCHITECTURE.md#iot-synthetic-scope",
+        "businessPolicy": "PROJECT.md#iot-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realEquipmentControl": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {
@@ -539,7 +565,20 @@
       "evidenceRequired": "Hardware/privacy accuracy and safety review",
       "decisionStatus": "OPEN_DECISION",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "boundedIotApproval": {
+        "taskId": "CN-IOT-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_LIGHTING",
+        "date": "2026-10-18",
+        "source": "Owner inline instruction and attachment 9a452227-ca2d-4d1c-af01-7e74489141d2; Record approvals and reassess readiness only",
+        "requestSha256": "f241a9011f46227cc88b53f0bbb1967ea531d6503db2aed8475e36d2fbc82f07",
+        "canonicalSpecification": "ARCHITECTURE.md#iot-synthetic-scope",
+        "businessPolicy": "PROJECT.md#iot-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realEquipmentControl": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      }
     },
     {
       "id": "OD-14",

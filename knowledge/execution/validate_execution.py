@@ -16,9 +16,28 @@ def main():
     def check(ok, message):
         if not ok:
             errors.append(message)
+    # Owner-approved IoT readiness-only delta; exact input validation precedes unchanged historical replay.
+    iot_base='104d84c2ebea166d974c0e6775ffa976310d246e'
+    iot_expected={'execution/change-sets.json': 'c916a1e643c324d9f39e1766ad7e2179a02c73d766bc4111ff97c356a996359b', 'execution/status.json': '8edb6a9070369f6ba0fbdaf9c9748524bddf6ce6325d1129934b4bf18a100685', 'decisions/cinenest-open-decisions.json': 'e0bb99a81a31b2296ea4bd65fddd5e4f661f53e44c32fd9dc9a6d5b2427f1f5e'}
+    def iot_historical(path):
+        if path in iot_expected:
+            return json.loads(subprocess.check_output(['git','-C',str(R),'show',iot_base+':knowledge/'+path],text=True))
+        return json.loads((K/path).read_text())
+    for path,digest in iot_expected.items():
+        current=json.loads((K/path).read_text())
+        check(hashlib.sha256(json.dumps(current,sort_keys=True).encode()).hexdigest()==digest,'IoT readiness approval/status/history changed '+path)
+    iot_actual=json.loads((E/'change-sets.json').read_text())
+    iot_task=next(x for x in iot_actual['changeSets'] if x['id']=='CN-IOT-001')
+    check(iot_task['dependencies']==['CN-ACCESS-001'] and not iot_task['authorityAvailable'] and iot_task['readiness']==iot_task['workStatus']=='BLOCKED','IoT readiness cannot authorize implementation or change dependencies')
+    check(iot_task['definitionOfDone']=='Unknown never OFF/available; simulator evidence qualified' and iot_task['remainingReadinessGates']==['Separate bounded synthetic CN-IOT-001 implementation authorization'],'IoT DoD or remaining authority gate changed')
+    for path in ('execution/requirements.json','execution/test-plan.json','execution/source-ledger.json','sources/cinenest-source-register.json'):
+        check(json.loads((K/path).read_text())==json.loads(subprocess.check_output(['git','-C',str(R),'show',iot_base+':knowledge/'+path],text=True)),'IoT altered full coverage/source evidence '+path)
+    for decision in json.loads((K/'decisions/cinenest-open-decisions.json').read_text())['decisions']:
+        if decision['id'] in ('OD-01','OD-02','OD-13'):
+            check(decision['decisionStatus']=='OPEN_DECISION' and decision['boundedIotApproval']==iot_task['boundedIotScopeApproval'],'IoT globally closed decision or lost bounded approval')
     def read_json(name):
         try:
-            return json.loads((E / name).read_text())
+            return iot_historical('execution/'+name)
         except (OSError, ValueError) as exc:
             check(False, f'{name}: {exc}')
             return {}
@@ -80,13 +99,13 @@ def main():
     for k,v in {'realOperations':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','evidencePath':'PROGRESS.md#amend-implementation'}.items():check(mi.get(k)==v,'Amendment safety boundary invalid '+k)
     mi_mapping={'changeSetId':'CN-AMEND-001','scope':'One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance','status':mi.get('workStatus'),'evidencePath':'PROGRESS.md#amend-implementation','fullAcceptance':'NOT_ACCEPTED'}
     for path,key,ids in [('execution/requirements.json','requirements',{'CN-C08','CN-A02','PK-AC12','BR-10'}),('execution/test-plan.json','tests',{'T-CN-C08','T-CN-A02','T-PK-AC12','T-BR-10','T-CN-NFR-02'})]:
-        doc=json.loads((K/path).read_text())
+        doc=iot_historical(path)
         for row in doc[key]:
             receipt=row.pop('boundedAmendmentImplementationEvidence',None)
             check(receipt==(mi_mapping if row['id'] in ids else None),'Amendment bounded mapping invalid '+row['id'])
         check(doc==mi_prior(path),'Amendment altered full requirement/test history '+path)
     for path in ('decisions/cinenest-open-decisions.json','execution/source-ledger.json','sources/cinenest-source-register.json'):
-        check(json.loads((K/path).read_text())==mi_prior(path),'Amendment altered decisions/source evidence '+path)
+        check(iot_historical(path)==mi_prior(path),'Amendment altered decisions/source evidence '+path)
     package=json.loads((R/'frontend/package.json').read_text());original_package=json.loads(subprocess.check_output(['git','-C',str(R),'show',mi_base+':frontend/package.json'],text=True));original_package['scripts']['test']+=' && node --import ./tests/tsx-loader.mjs tests/amendments.test.mjs'
     check(package==original_package,'Amendment changed dependencies/toolchain or unrelated frontend scripts')
     migration=(R/'backend/src/main/resources/db/migration/V15__synthetic_booking_amendments.sql').read_text()
@@ -126,7 +145,7 @@ def main():
     am_expected={'execution/change-sets.json': 'a20b155f5c39bd1087092e36587855584e6f47a9dcad48a1dc0e5333031e078e', 'execution/status.json': 'c0d4e3893e284837ff7f0c970843e2f1f3477e9397fc8eb6691456c8be99fd21', 'decisions/cinenest-open-decisions.json': '5c45c2f1bb1cdfe23f0a76117dcf06eb6a339f81896d8479c343b718e5f12b5e', 'execution/requirements.json': '0e32ea1f4e26006005cb230a1e72926aaeb54380c8a0e4bc0c95cea23045edd4', 'execution/test-plan.json': '2e59ca63f49ae66e64c736e4125b601b2be4576598cf850307a9e5adb802af38'}
     am_prior={}
     for path,digest in am_expected.items():
-        actual=mi_original(json.loads((K/path).read_text()),path)
+        actual=mi_original(iot_historical(path),path)
         check(hashlib.sha256(json.dumps(actual,sort_keys=True).encode()).hexdigest()==digest,'Amendment bounded approval/history changed '+path)
         am_prior[path]=json.loads(subprocess.check_output(['git','-C',str(R),'show',am_base+':knowledge/'+path],text=True))
     am_task=next(t for t in backlog['changeSets'] if t['id']=='CN-AMEND-001')
@@ -143,14 +162,14 @@ def main():
     for dependency in am_task['dependencies']:
         row=next(t for t in backlog['changeSets'] if t['id']==dependency)
         check(row['readiness']=='CLOSED' and row['workStatus']=='VERIFIED','Amendment prerequisite not verified '+dependency)
-    decisions=json.loads((K/'decisions/cinenest-open-decisions.json').read_text())
+    decisions=iot_historical('decisions/cinenest-open-decisions.json')
     for row,old in zip(decisions['decisions'],am_prior['decisions/cinenest-open-decisions.json']['decisions']):
         stripped=json.loads(json.dumps(row));approval=stripped.pop('boundedAmendmentApproval',None)
         check(stripped==old,'Amendment changed global/unrelated decision '+row['id'])
         if row['id'] in ('OD-07','OD-20','OD-21','OD-24'):check(approval==am_task['boundedAmendmentScopeApproval'] and row['decisionStatus']=='OPEN_DECISION','Amendment global decision closure invalid '+row['id'])
         else:check(approval is None,'Amendment approved unrelated decision '+row['id'])
     for path,key,rid in [('execution/requirements.json','requirements','PK-AC12'),('execution/test-plan.json','tests','T-PK-AC12')]:
-        doc=mi_original(json.loads((K/path).read_text()),path);row=next(x for x in doc[key] if x['id']==rid);association=row.pop('boundedAmendmentEvidenceAssociation',None)
+        doc=mi_original(iot_historical(path),path);row=next(x for x in doc[key] if x['id']==rid);association=row.pop('boundedAmendmentEvidenceAssociation',None)
         check(association==state['amendReadiness']['mappingCorrection'] and association['changeSetId']=='CN-AMEND-001' and association['tests']=='NOT_RUN' and association['fullAcceptance']=='NOT_ACCEPTED','Amendment evidence association invalid '+rid)
         check(doc==am_prior[path],'Amendment changed full requirement/test coverage '+path)
     stripped=json.loads(json.dumps(state));stripped.pop('amendReadiness',None)
@@ -200,9 +219,9 @@ def main():
     for key,value in {'realPayments':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','evidencePath':'PROGRESS.md#customer-implementation'}.items():check(cu.get(key)==value,'Customer safety/full acceptance boundary invalid '+key)
     cu_coverage_paths={'execution/requirements.json':{'CN-C08','CN-SUP-01'},'execution/test-plan.json':{'T-CN-C08','T-CN-SUP-01','T-CN-NFR-02'}}
     for path in cu_coverage_paths:
-        check(am_original(json.loads((K/path).read_text()),path)==cu_prior(path),'Customer changed full requirement/test history '+path)
+        check(am_original(iot_historical(path),path)==cu_prior(path),'Customer changed full requirement/test history '+path)
     for path in ('decisions/cinenest-open-decisions.json','execution/source-ledger.json','sources/cinenest-source-register.json'):
-        check(am_original(json.loads((K/path).read_text()),path)==cu_prior(path),'Customer changed decisions/source evidence '+path)
+        check(am_original(iot_historical(path),path)==cu_prior(path),'Customer changed decisions/source evidence '+path)
     check(set(cu.get('ownedFiles',{}))==cu_allowed,'Customer owned source inventory invalid')
     for name,digest in cu.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256(mi_source(name)).hexdigest()==digest,'Customer source checksum mismatch '+name)
     cu_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',cu_base,'--','backend','frontend'],text=True).splitlines());cu_added=(cu_allowed-cu_app)|mi_added
@@ -236,7 +255,7 @@ def main():
     customer_expected={'execution/change-sets.json': '3321b57791ceda412dd061f687ae6ed2d2497e0e6d25f20981c1e94f255da4f8', 'execution/status.json': 'ae8491c6eec5bd7379fe80055d09a8d21da5bd3c996900607ee611a68e31bdf3', 'decisions/cinenest-open-decisions.json': 'ed414321fb63c8e0cff712abb9d0861513f46d9c7a0904f2bb247e6abbfae7ea'}
     customer_prior={}
     for path,digest in customer_expected.items():
-        actual=cu_original(am_original(json.loads((K/path).read_text()),path),path)
+        actual=cu_original(am_original(iot_historical(path),path),path)
         check(hashlib.sha256(json.dumps(actual,sort_keys=True).encode()).hexdigest()==digest,'Customer bounded approval/scope/history changed '+path)
         customer_prior[path]=json.loads(subprocess.check_output(['git','-C',str(R),'show',customer_base+':knowledge/'+path],text=True))
     customer_task=next(row for row in backlog['changeSets'] if row['id']=='CN-CUSTOMER-001')
@@ -259,8 +278,8 @@ def main():
         return all(d in graph and customer_acyclic(d,seen|{node}) for d in graph[node])
     check(all(customer_acyclic(node,set()) for node in graph),'Customer dependency graph cyclic/invalid')
     for path in ('execution/requirements.json','execution/test-plan.json','execution/source-ledger.json','sources/cinenest-source-register.json'):
-        check(cu_original(am_original(json.loads((K/path).read_text()),path),path)==json.loads(subprocess.check_output(['git','-C',str(R),'show',customer_base+':knowledge/'+path],text=True)),'Customer changed full coverage/source history '+path)
-    decisions=am_original(json.loads((K/'decisions/cinenest-open-decisions.json').read_text()),'decisions/cinenest-open-decisions.json')
+        check(cu_original(am_original(iot_historical(path),path),path)==json.loads(subprocess.check_output(['git','-C',str(R),'show',customer_base+':knowledge/'+path],text=True)),'Customer changed full coverage/source history '+path)
+    decisions=am_original(iot_historical('decisions/cinenest-open-decisions.json'),'decisions/cinenest-open-decisions.json')
     for row,old in zip(decisions['decisions'],customer_prior['decisions/cinenest-open-decisions.json']['decisions']):
         stripped=json.loads(json.dumps(row));bounded=stripped.pop('boundedCustomerApproval',None)
         check(stripped==old,'Customer changed global/other decision '+row['id'])
@@ -309,7 +328,7 @@ def main():
     check(state==expected_state,'Notifications changed unrelated execution history')
     for key,value in {'liveMessaging':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','evidencePath':'PROGRESS.md#notification-implementation'}.items():check(ni.get(key)==value,'Notifications safety boundary changed '+key)
     for path in ('execution/requirements.json','execution/test-plan.json','decisions/cinenest-open-decisions.json','sources/cinenest-source-register.json'):
-        check(customer_original(am_original(json.loads((K/path).read_text()),path),path)==ni_prior(path),'Notifications changed full coverage/decisions/sources '+path)
+        check(customer_original(am_original(iot_historical(path),path),path)==ni_prior(path),'Notifications changed full coverage/decisions/sources '+path)
     check(set(ni.get('ownedFiles',{}))==ni_allowed,'Notifications owned file inventory invalid')
     for name,digest in ni.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256(cu_source(name)).hexdigest()==digest,'Notifications source checksum mismatch '+name)
     ni_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ni_base,'--','backend','frontend'],text=True).splitlines());ni_added=ni_allowed-ni_app
@@ -344,7 +363,7 @@ def main():
     notify_expected={'execution/change-sets.json': 'a146ba085cff5db6434c5270236f65e1fb96bd2b496fc34ffb95151f87325d3b', 'execution/status.json': 'c2c2f83b61e2f591c379d03de07a723d9843671169d036cca0c6873589c6aca0', 'decisions/cinenest-open-decisions.json': 'b5f351badda1f9da99aeefe03019aa82d600e45cb9c3f938c25b2ea6ea51cb2f'}
     notify_prior={}
     for path,digest in notify_expected.items():
-        current=ni_original(am_original(json.loads((K/path).read_text()),path),path)
+        current=ni_original(am_original(iot_historical(path),path),path)
         check(hashlib.sha256(json.dumps(current,sort_keys=True).encode()).hexdigest()==digest,'Notification readiness scope/authority/history changed '+path)
         notify_prior[path]=json.loads(subprocess.check_output(['git','-C',str(R),'show',notify_base+':knowledge/'+path],text=True))
     notify_task=next(row for row in backlog['changeSets'] if row['id']=='CN-NOTIFY-001')
@@ -396,7 +415,7 @@ def main():
     ai_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
     check(ai_current_app-ni_added-cu_added==ai_baseline_app|ai_added,'Access changed unrelated application inventory')
     for path in ('execution/requirements.json','execution/test-plan.json','decisions/cinenest-open-decisions.json'):
-        check(notify_original(am_original(json.loads((K/path).read_text()),path),path)==ai_prior(path),'Access changed full requirement/test/decision history '+path)
+        check(notify_original(am_original(iot_historical(path),path),path)==ai_prior(path),'Access changed full requirement/test/decision history '+path)
     ai_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ai_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
     for name in ai_migrations:check(mi_source(name)==subprocess.check_output(['git','-C',str(R),'show',ai_base+':'+name]),'Access altered historical migration '+name)
     check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-mi_added-ni_added-cu_added==set(ai_migrations)|{'backend/src/main/resources/db/migration/V13__synthetic_access.sql'},'Access migration scope invalid')
@@ -424,7 +443,7 @@ def main():
     access_expected = {'execution/change-sets.json': 'deb69bca1c3a15e92a1f5fdb7b470b64dafc5f7c79fa83641431242df873a0b9', 'execution/status.json': '4ff7c501a87ca1702c9c374aafc41f926d0ee6d7dc703aeafe64275d5c1e0239', 'decisions/cinenest-open-decisions.json': 'cc173d926e3e2f4528817737fcec8aa886951678801b8b649fd97695079eea07'}
     access_prior = {}
     for path, digest in access_expected.items():
-        actual = ai_original(am_original(json.loads((K/path).read_text()),path),path)
+        actual = ai_original(am_original(iot_historical(path),path),path)
         check(hashlib.sha256(json.dumps(actual,sort_keys=True).encode()).hexdigest()==digest, 'Access readiness scope/authority/history changed '+path)
         access_prior[path] = json.loads(subprocess.check_output(['git','-C',str(R),'show',access_base+':knowledge/'+path],text=True))
     access_task = next(row for row in backlog['changeSets'] if row['id']=='CN-ACCESS-001')
@@ -509,7 +528,7 @@ def main():
     refund_expected = {'execution/change-sets.json': 'ec04d1fd68c66d3aa8c01ea4a23dd9f4e8d0583b5c544ecceef5674c2c7d152e', 'execution/requirements.json': '3c8f750afc0696351c9bbe28fa2c7f801398ef0516156d308d7a90d1c82befc0', 'execution/test-plan.json': '8d71332b2fbcf1ba102d5b358d54064279ecef52cb4d167fccb5d3f86432cc95', 'decisions/cinenest-open-decisions.json': '9c965c8254c2095888c1fc629035bf8e1a2ed78cdf2a3fd83e9ac3598eb99671'}
     refund_prior = {}
     for path, digest in refund_expected.items():
-        actual = impl_original(am_original(json.loads((K / path).read_text()),path),path)
+        actual = impl_original(am_original(iot_historical(path),path),path)
         check(hashlib.sha256(json.dumps(actual, sort_keys=True).encode()).hexdigest() == digest, 'Refund readiness scope/history/requirement evidence changed '+path)
         refund_prior[path] = json.loads(subprocess.check_output(['git','-C',str(R),'show',refund_base+':knowledge/'+path],text=True))
     check(hashlib.sha256(json.dumps(state, sort_keys=True).encode()).hexdigest() == 'f877a7caef62600ab4691685954bed5d653ce5c7db73d55af57aaa50d3db6aa6', 'Refund readiness state/authority changed')
@@ -628,7 +647,7 @@ def main():
     if admin_evidence.get('checks',{}).get('allRequiredChecks')=='PASS':
         for field,value in {'backendTests':220,'adminIntegrationTests':7,'architectureTests':11,'frontendTests':75,'adminFrontendTests':3,'adminBrowserGroups':63,'regressionBrowserGroups':190,'launcherTests':14,'failures':0,'errors':0,'skipped':0,'allRequiredChecks':'PASS'}.items():check(admin_evidence['checks'].get(field)==value,'Admin required evidence missing '+field)
     backlog=admin_original(backlog,'execution/change-sets.json',True);coverage=admin_original(coverage,'execution/requirements.json',True);tests_doc=admin_original(tests_doc,'execution/test-plan.json',True)
-    admin_original(json.loads((K/'decisions/cinenest-open-decisions.json').read_text()),'decisions/cinenest-open-decisions.json',True)
+    admin_original(iot_historical('decisions/cinenest-open-decisions.json'),'decisions/cinenest-open-decisions.json',True)
     state=original_state
     # Bounded gateway decision successor: validate exact deltas before historical receipts.
     gateway_base='18c4b3c6913d952d1c64bd619b695431d03bb6c6'
@@ -647,7 +666,7 @@ def main():
     for name in gateway_paths-{'frontend/next-env.d.ts'}:
         check(admin_source(name)==subprocess.check_output(['git','-C',str(R),'show',gateway_base+':'+name]),'Gateway decision session changed application '+name)
     for path,field in [('execution/change-sets.json','changeSets'),('decisions/cinenest-open-decisions.json','decisions')]:
-        current=admin_original(am_original(json.loads((K/path).read_text()),path),path);expected=gateway_baseline(path)
+        current=admin_original(am_original(iot_historical(path),path),path);expected=gateway_baseline(path)
         for row in current[field]:
             if field=='changeSets' and row['id']=='CN-PAY-GW-001':
                 check(row.pop('boundedGatewayScopeApproval',None)==gateway_task_approval,'Gateway scope approval lost/changed')
@@ -1049,7 +1068,7 @@ def main():
             check(row==expected,'Unapproved package-review delta '+path+'/'+row['id'])
         check(set(before)=={r['id'] for r in payload[kind]},'Package review lost/added IDs '+path)
         return original
-    for data,path in [(backlog,'execution/change-sets.json'),(coverage,'execution/requirements.json'),(tests_doc,'execution/test-plan.json'),(json.loads((K/'decisions/cinenest-open-decisions.json').read_text()),'decisions/cinenest-open-decisions.json')]:
+    for data,path in [(backlog,'execution/change-sets.json'),(coverage,'execution/requirements.json'),(tests_doc,'execution/test-plan.json'),(iot_historical('decisions/cinenest-open-decisions.json'),'decisions/cinenest-open-decisions.json')]:
         package_original_payload(data,path)
     # CN-ROOM-001 is a separately authorized successor; immutable earlier source receipts remain historical.
     room_evidence = state.get('roomImplementation', {})
@@ -1227,7 +1246,7 @@ def main():
     cids = [x['id'] for x in changes]; rids = [x['id'] for x in reqs]; tids = [x['id'] for x in tests]
     for label, ids in [('changes', cids), ('requirements', rids), ('tests', tids)]:
         check(len(ids) == len(set(ids)), f'Duplicate {label} IDs')
-    decisions = {d['id'] for d in json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']}
+    decisions = {d['id'] for d in iot_historical('decisions/cinenest-open-decisions.json')['decisions']}
     sources = {s['id'] for s in json.loads((K / 'sources/cinenest-source-register.json').read_text())['sources']}
     check(backlog['futurePlanApproval'] == 'NOT_APPROVED', 'Future plan silently approved')
     for c in changes:
@@ -1326,7 +1345,7 @@ def main():
     check(state['taskId'] == 'CN-PAY-BANK-001' and state['nextRecommendedChangeSet'] == 'CN-PAY-BANK-002' and state.get('nextReadyChangeSet') is None, 'Unexpected next checkpoint')
     check(state['workStatus'] == ('VERIFIED' if bank_ci else 'IN_PROGRESS') and cmap['CN-KB-CONSOLIDATE-001']['workStatus'] == 'VERIFIED' and cmap['CN-FND-001']['workStatus'] == 'VERIFIED' and state.get('authorizationUpdate', {}).get('status') == 'VERIFIED_DOCUMENTATION_ONLY', 'Documentation and implementation status conflated')
     check(state.get('stackApproval') == 'OWNER_APPROVED_INITIAL_DIRECTION' and state.get('implementationAuthorization') == 'GRANTED_SYNTHETIC_BANK_REQUEST_ONLY', 'Unsupported stack/implementation approval')
-    od = json.loads((K / 'decisions/cinenest-open-decisions.json').read_text())['decisions']
+    od = iot_historical('decisions/cinenest-open-decisions.json')['decisions']
     check(next(x for x in od if x['id'] == 'OD-01')['decisionStatus'] == 'OPEN_DECISION', 'OD-01 silently accepted')
     brief = K / 'ARCHITECTURE.md'
     check(brief.is_file() and 'OWNER_APPROVED_INITIAL_DIRECTION / QUALIFICATION_PENDING' in brief.read_text(), 'Missing proposed decision brief')
@@ -1339,7 +1358,7 @@ def main():
     baseline = manifest['consolidation']['baselineRevision']
     for path, field in [('execution/requirements.json', 'requirements'), ('execution/test-plan.json', 'tests'), ('execution/change-sets.json', 'changeSets'), ('decisions/cinenest-open-decisions.json', 'decisions')]:
         prior = json.loads(subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':knowledge/' + path], text=True))
-        current = ledger_original_payload(am_original(json.loads((K / path).read_text()),path),path)
+        current = ledger_original_payload(am_original(iot_historical(path),path),path)
         before = {x['id']: x for x in prior[field]}; after = {x['id']: x for x in current[field]}
         check(set(before) <= set(after), 'Baseline IDs dropped ' + path)
         for id, old in before.items():
@@ -1383,7 +1402,7 @@ def main():
         if path == 'execution/test-plan.json':
             workflow = expected['tests'][0]
             workflow['owningChangeSetIds'].append('CN-KB-CONSOLIDATE-001'); workflow['evidencePaths'].append('PROGRESS.md#current-verification')
-        current_payload = am_original(json.loads((K / path).read_text()),path)
+        current_payload = am_original(iot_historical(path),path)
         if path=='execution/test-plan.json':current_payload=package_original_payload(current_payload,path)
         if path != 'execution/test-plan.json':
             current_payload = room_historical_payload(current_payload, path)

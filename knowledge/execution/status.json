@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-AMEND-001",
-  "mode": "SYNTHETIC_AMENDMENT_IMPLEMENTATION",
-  "workStatus": "VERIFIED",
+  "taskId": "CN-IOT-001",
+  "mode": "IOT_APPROVAL_READINESS_ONLY",
+  "workStatus": "BLOCKED",
   "productStage": "BOUNDED_SYNTHETIC_AMENDMENT_REAL_OPERATIONS_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -10,10 +10,10 @@
   "upstream": "origin/main",
   "baselineHead": "89b9cd42e693277037275641cf44d0ebd1f884c5",
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
-  "currentChangeSet": "CN-AMEND-001",
+  "currentChangeSet": "CN-IOT-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-IOT-001",
-  "nextAction": "Review CN-IOT-001 bounded simulator scope and OD-01/02/13 gates; read-only",
+  "nextAction": "Obtain separate bounded synthetic CN-IOT-001 implementation authorization",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-AMEND-001 bounded synthetic implementation; actual checks at PROGRESS.md#amend-implementation; full commercial amendment acceptance remains pending",
   "approvedCoreDecisions": [
@@ -30,7 +30,7 @@
   "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS",
   "publicationEvidence": "CN-AMEND-001 source 659fbd4dc18f38810e9e83a6143ea77de090c7ed pushed to origin/main; exact-source CI39147723761 SUCCESS; final closure receipt publication/CI verified separately",
   "lastObservedHead": "659fbd4dc18f38810e9e83a6143ea77de090c7ed",
-  "evidencePath": "PROGRESS.md#amend-implementation",
+  "evidencePath": "PROGRESS.md#iot-readiness-reconciliation",
   "evidenceFreshness": "2026-10-18 exact amendment source CI verified;32 owned source hashes",
   "availableTools": [
     "exec/file reads/edits",
@@ -50,7 +50,7 @@
   "verificationScope": "Bounded synthetic software only; no commercial/provider/physical/customer acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "GRANTED_BOUNDED_SYNTHETIC_AMENDMENT",
+  "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
     "Commercial/venue/specialist/provider/physical acceptance remains separately gated"
@@ -2502,7 +2502,7 @@
       "failures": 0,
       "errors": 0,
       "skipped": 0,
-      "postgresql": "18.6 real clean V1–V9, populated V8–V9 upgrade, repeat startup and constraints PASS",
+      "postgresql": "18.6 real clean V1\u2013V9, populated V8\u2013V9 upgrade, repeat startup and constraints PASS",
       "workerProcessRestart": "PASS two fresh isolated worker processes; durable intent retained; live delivery DISABLED",
       "holdConversionRollback": "PASS mandatory request-audit failure rolls back Booking conversion and permits safe retry",
       "lockFreshness": "PASS eligibility expiry during real PostgreSQL row-lock wait denies subsequent handoff",
@@ -2794,7 +2794,7 @@
   },
   "ownerAccountabilityApproval": {
     "recordedDate": "2026-10-17",
-    "approvalSource": "Owner conversation: CINENEST — OWNER ACCOUNTABILITY APPROVAL",
+    "approvalSource": "Owner conversation: CINENEST \u2014 OWNER ACCOUNTABILITY APPROVAL",
     "canonicalRecord": "PROJECT.md#accountability-appointments",
     "approvedRoles": [
       "Source Custodian",
@@ -2831,7 +2831,7 @@
   "gateDocumentationClosure": {
     "status": "VERIFIED_DOCUMENTATION_ONLY",
     "approvalDate": "2026-10-17",
-    "approvalSource": "Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status",
+    "approvalSource": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
     "interpretation": "Verified original sources and named management accountability may satisfy this documentation task when all outstanding venue-specific and qualified specialist appointments are explicitly recorded as downstream acceptance gates. This does not waive, complete or remove any appointment, review or acceptance evidence.",
     "baselineHead": "88d5746ed1a4cb987dee56d4579380984a876e63",
     "managementOwner": "Hasitha Wijerathna",
@@ -3465,5 +3465,33 @@
     "sourceCommit": "659fbd4dc18f38810e9e83a6143ea77de090c7ed",
     "sourceRun": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39147723761",
     "definitionOfDoneEvidence": "Original immutable revision1 retained; safe accepted revision2, atomic inventory replacement, original funding binding, issuance guard, durable handoff and actual tests/CI verified"
+  },
+  "iotReadiness": {
+    "baselineHead": "104d84c2ebea166d974c0e6775ffa976310d246e",
+    "approval": {
+      "taskId": "CN-IOT-001",
+      "status": "APPROVED_BOUNDED_SYNTHETIC_LIGHTING",
+      "date": "2026-10-18",
+      "source": "Owner inline instruction and attachment 9a452227-ca2d-4d1c-af01-7e74489141d2; Record approvals and reassess readiness only",
+      "requestSha256": "f241a9011f46227cc88b53f0bbb1967ea531d6503db2aed8475e36d2fbc82f07",
+      "canonicalSpecification": "ARCHITECTURE.md#iot-synthetic-scope",
+      "businessPolicy": "PROJECT.md#iot-synthetic-policy",
+      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "fullDecisionStatus": "OPEN_DECISION",
+      "realEquipmentControl": "DISABLED",
+      "gateway": "DEFERRED_BLOCKED"
+    },
+    "status": "BLOCKED",
+    "satisfiedPrerequisites": [
+      "CN-ACCESS-001"
+    ],
+    "dependenciesUnchanged": true,
+    "remainingGate": "Separate bounded synthetic CN-IOT-001 implementation authorization",
+    "migrationStatus": "APPROVED_DESIGN_NOT_CREATED",
+    "tests": "NOT_RUN",
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "realEquipmentControl": "DISABLED",
+    "gateway": "DEFERRED_BLOCKED",
+    "evidencePath": "PROGRESS.md#iot-readiness-reconciliation"
   }
 }
