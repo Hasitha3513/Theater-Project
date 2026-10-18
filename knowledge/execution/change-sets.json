@@ -1423,8 +1423,8 @@
       "definitionOfDone": "Delivery failure does not delete review or change payment truth",
       "requiredApproval": "Channel/sandbox scope and notification/privacy approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
       "evidencePaths": [
         "PROJECT.md#notification-synthetic-policy",
         "ARCHITECTURE.md#notification-synthetic-scope",

@@ -75,6 +75,7 @@ def main():
     for row,old in zip(backlog['changeSets'],ni_backlog['changeSets']):
         if row['id']!='CN-NOTIFY-001':check(row==old,'Notifications changed unrelated task '+row['id'])
     expected_state=json.loads(json.dumps(ni_state));expected_state.update(mode='SYNTHETIC_NOTIFICATION_IMPLEMENTATION',workStatus=ni.get('workStatus'),implementationAuthorization='GRANTED_BOUNDED_SYNTHETIC_NOTIFICATIONS',nextAction='Review CN-CUSTOMER-001 scope and its own decision gates; no implementation' if ni_closed else 'Complete bounded notification checks and exact-source CI; no live messaging',notificationImplementation=ni)
+    if ni_closed:expected_state['nextRecommendedChangeSet']='CN-CUSTOMER-001'
     check(state==expected_state,'Notifications changed unrelated execution history')
     for key,value in {'liveMessaging':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','evidencePath':'PROGRESS.md#notification-implementation'}.items():check(ni.get(key)==value,'Notifications safety boundary changed '+key)
     for path in ('execution/requirements.json','execution/test-plan.json','decisions/cinenest-open-decisions.json','sources/cinenest-source-register.json'):
