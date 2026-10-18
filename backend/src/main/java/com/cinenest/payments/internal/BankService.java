@@ -12,8 +12,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 class BankService {
  final LedgerService ledger;final BankRepository repo;final ScopedAuthorization auth;final BankQuotation quotes;final BankRequestHolds holds;final BankEligibility verification;
- final ReviewerNotice notice;final BankPolicy policy;final PrivateEvidenceStore storage;final SyntheticEvidenceProcessor scanner;final TransactionTemplate tx;
- BankService(LedgerService ledger,BankRepository repo,ScopedAuthorization auth,BankQuotation quotes,BankRequestHolds holds,BankEligibility verification,BankPolicy policy,PrivateEvidenceStore storage,SyntheticEvidenceProcessor scanner,ReviewerNotice notice,PlatformTransactionManager manager){this.ledger=ledger;this.notice=notice;this.repo=repo;this.auth=auth;this.quotes=quotes;this.holds=holds;this.verification=verification;this.policy=policy;this.storage=storage;this.scanner=scanner;tx=new TransactionTemplate(manager);}
+ final com.cinenest.notifications.NotificationFacts notifications;final ReviewerNotice notice;final BankPolicy policy;final PrivateEvidenceStore storage;final SyntheticEvidenceProcessor scanner;final TransactionTemplate tx;
+ BankService(LedgerService ledger,BankRepository repo,ScopedAuthorization auth,BankQuotation quotes,BankRequestHolds holds,BankEligibility verification,BankPolicy policy,PrivateEvidenceStore storage,SyntheticEvidenceProcessor scanner,ReviewerNotice notice,com.cinenest.notifications.NotificationFacts notifications,PlatformTransactionManager manager){this.notifications=notifications;this.ledger=ledger;this.notice=notice;this.repo=repo;this.auth=auth;this.quotes=quotes;this.holds=holds;this.verification=verification;this.policy=policy;this.storage=storage;this.scanner=scanner;tx=new TransactionTemplate(manager);}
  static UUID id(Object v){try{return UUID.fromString(String.valueOf(v));}catch(RuntimeException e){throw new BankFailure(400,"Valid identifier required");}}
  static long number(Object v){try{if(v==null||!v.toString().matches("[0-9]{1,19}"))throw new IllegalArgumentException();return Long.parseLong(v.toString());}catch(RuntimeException e){throw new BankFailure(400,"Exact nonnegative integer required");}}
  static void keys(Map<String,Object> b,String... allowed){if(!Set.of(allowed).containsAll(b.keySet()))throw new BankFailure(400,"Unexpected request fields");}
@@ -53,6 +53,11 @@ class BankService {
      UUID handover=verdict.equals("HANDOVER")?id(b.get("handoverTo")):null;if(handover!=null&&(handover.equals(a)||handover.equals(r.owner())||!auth.permits(handover,r.venue(),"bank.claim.review",false)||!auth.permits(handover,r.venue(),"bank.evidence.read",false)))throw new BankFailure(403,"Handover requires another currently eligible scoped reviewer");
      repo.decision(r,claim.id(),a,verdict,reason,handover);repo.transition(r.id(),r.expires().isAfter(repo.now())?(verdict.equals("REVIEWED")?"REVIEWED":r.state()):"EXPIRED",action.equals("DECIDE")?verdict:r.review());repo.work(r.id(),null,"NOTIFY",repo.now());
     }else throw new BankFailure(400,"Unsupported command");
+   }
+   if(Set.of("CLAIM","RESUBMIT","DECIDE","ESCALATE").contains(action)){
+    var current=repo.request(r.id(),true).orElseThrow();String kind=action.equals("CLAIM")||action.equals("RESUBMIT")?"BANK_CLAIM_RECEIVED":action.equals("ESCALATE")?"SYNTHETIC_OPERATION_EXCEPTION":switch(Objects.toString(b.get("action"),"")){case "REVIEWED"->"BANK_REVIEW_COMPLETED";case "NEEDS_INFORMATION"->"BANK_REVIEW_NEEDS_INFORMATION";default->"BANK_REVIEW_REJECTED";};
+    UUID event=UUID.nameUUIDFromBytes(("BANK:"+a+":"+key).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    notifications.record(new com.cinenest.notifications.NotificationFacts.Fact(event,"PAYMENTS",current.id(),current.revision(),current.owner(),current.venue(),com.cinenest.notifications.NotificationFacts.Kind.valueOf(kind),action.equals("CLAIM")||action.equals("RESUBMIT")||action.equals("ESCALATE")));
    }
    repo.audit(a,r.id(),action,"PERMIT_NOT_PAYMENT");var result=view(repo.request(r.id(),true).orElseThrow());repo.command(a,key,hash,result);return result;
   });

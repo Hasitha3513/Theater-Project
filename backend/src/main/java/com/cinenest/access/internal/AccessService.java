@@ -4,8 +4,8 @@ import java.util.*;import java.time.*;import java.security.MessageDigest;
 import org.springframework.stereotype.Service;import org.springframework.transaction.annotation.Transactional;
 @Service
 class AccessService {
- private final AccessRepository repo;private final AccessPolicy policy;private final BookingAccess bookings;private final AccessFunding funding;private final ScopedAuthorization auth;private final BankEligibility verification;private final AccessSimulator simulator;
- AccessService(AccessRepository repo,AccessPolicy policy,BookingAccess bookings,AccessFunding funding,ScopedAuthorization auth,BankEligibility verification,AccessSimulator simulator){this.repo=repo;this.policy=policy;this.bookings=bookings;this.funding=funding;this.auth=auth;this.verification=verification;this.simulator=simulator;}
+ private final com.cinenest.notifications.NotificationFacts notifications;private final AccessRepository repo;private final AccessPolicy policy;private final BookingAccess bookings;private final AccessFunding funding;private final ScopedAuthorization auth;private final BankEligibility verification;private final AccessSimulator simulator;
+ AccessService(AccessRepository repo,AccessPolicy policy,BookingAccess bookings,AccessFunding funding,ScopedAuthorization auth,BankEligibility verification,AccessSimulator simulator,com.cinenest.notifications.NotificationFacts notifications){this.notifications=notifications;this.repo=repo;this.policy=policy;this.bookings=bookings;this.funding=funding;this.auth=auth;this.verification=verification;this.simulator=simulator;}
  private static UUID id(Map<String,Object> r,String key){return (UUID)r.get(key);}
  private static long n(Map<String,Object> r,String key){return ((Number)r.get(key)).longValue();}
  private static Instant instant(Map<String,Object> r,String key){Object v=r.get(key);return v instanceof java.sql.Timestamp t?t.toInstant():((OffsetDateTime)v).toInstant();}
@@ -20,9 +20,13 @@ class AccessService {
   if(!auth.eligible(b.owner(),false))throw new AccessFailure(403);
   Instant now=repo.now();if(!now.isBefore(b.end())||(active&&now.isBefore(b.start())))throw new AccessFailure(409);
  }
+ private void notify(Map<String,Object> r,String kind){
+  UUID event=UUID.nameUUIDFromBytes(("ACCESS:"+id(r,"credential_id")+":"+n(r,"revision")+":"+kind).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+  notifications.record(new com.cinenest.notifications.NotificationFacts.Fact(event,"ACCESS",id(r,"credential_id"),n(r,"revision"),id(r,"owner_id"),id(r,"venue_id"),com.cinenest.notifications.NotificationFacts.Kind.valueOf(kind),false));
+ }
  private Map<String,Object> normalize(Map<String,Object> r){
   var now=repo.now();String state=r.get("state").toString();boolean expired=!now.isBefore(instant(r,"ends_at"));
-  if((state.equals("SCHEDULED")||state.equals("ACTIVE"))&&(expired||state.equals("SCHEDULED")&&!now.isBefore(instant(r,"starts_at")))){r.put("state",expired?"EXPIRED":"ACTIVE");if(expired)r.put("protected_secret",null);repo.save(r);}
+  if((state.equals("SCHEDULED")||state.equals("ACTIVE"))&&(expired||state.equals("SCHEDULED")&&!now.isBefore(instant(r,"starts_at")))){r.put("state",expired?"EXPIRED":"ACTIVE");if(expired)r.put("protected_secret",null);repo.save(r);if(expired)notify(r,"SYNTHETIC_ACCESS_EXPIRED");}
   if(r.get("protected_secret")!=null&&!now.isBefore(instant(r,"retain_until"))){r.put("protected_secret",null);repo.save(r);}
   return r;
  }
@@ -59,7 +63,7 @@ class AccessService {
   }else{
    if(credential==null)credential=uuid(body,"credentialId");r=repo.credential(credential).orElseThrow(()->new AccessFailure(404));if(!booking.equals(r.get("booking_id")))throw new AccessFailure(403);
    normalize(r);binding(b,r,expectedBooking);if(expected!=n(r,"revision")||expectedVersion!=n(r,"version"))throw new AccessFailure(409);
-   if(kind.equals("REVOKE")){r.put("state","REVOKED");r.put("protected_secret",null);repo.save(r);repo.workState(credential,"REVOKED",false,false);}
+   if(kind.equals("REVOKE")){r.put("state","REVOKED");r.put("protected_secret",null);repo.save(r);repo.workState(credential,"REVOKED",false,false);notify(r,"SYNTHETIC_ACCESS_REVOKED");}
    else{
     qualified(b,actor,self,action,kind.equals("REVEAL")||kind.equals("ATTEMPT"));
     if(!Set.of("SCHEDULED","ACTIVE").contains(r.get("state")))throw new AccessFailure(409);
@@ -68,7 +72,7 @@ class AccessService {
      String ws=w.get("state").toString();boolean reconcile=Boolean.TRUE.equals(body.get("reconcile"));
      if(reconcile&&!Set.of("UNKNOWN","RECONCILIATION_REQUIRED").contains(ws)||!reconcile&&!Set.of("PENDING_SIMULATION","FAILED").contains(ws))throw new AccessFailure(409);
      if(!reconcile&&n(w,"attempts")>=policy.positive("retry-limit"))throw new AccessFailure(429);
-     String state=simulator.apply(id(w,"operation_id"),n(r,"version"),Objects.toString(body.get("fixture"),""),reconcile);repo.workState(credential,state,state.equals("SIMULATOR_INSTALLED"),!reconcile);repo.save(r);repo.audit(actor,credential,booking,b.venue(),reconcile?"RECONCILE_EVIDENCE":"SIMULATOR_EVIDENCE",state);
+     String state=simulator.apply(id(w,"operation_id"),n(r,"version"),Objects.toString(body.get("fixture"),""),reconcile);repo.workState(credential,state,state.equals("SIMULATOR_INSTALLED"),!reconcile);repo.save(r);notify(r,state.equals("SIMULATOR_INSTALLED")?"SYNTHETIC_ACCESS_READY":"SYNTHETIC_OPERATION_EXCEPTION");repo.audit(actor,credential,booking,b.venue(),reconcile?"RECONCILE_EVIDENCE":"SIMULATOR_EVIDENCE",state);
     }else if(kind.equals("REVEAL")){
      if(!installed(r)||r.get("protected_secret")==null||r.get("disclosed_at")!=null||repo.disclosures(credential)>=policy.positive("disclosure-limit"))throw new AccessFailure(409);
      String token=policy.reveal((byte[])r.get("protected_secret"),r.get("key_version").toString(),credential);r.put("protected_secret",null);r.put("disclosed_at",java.sql.Timestamp.from(repo.now()));repo.save(r);repo.command(actor,key,booking,credential,kind,hash);repo.audit(actor,credential,booking,b.venue(),kind,"ALLOW");var result=view(actor,r,false);result.put("token",token);return result;

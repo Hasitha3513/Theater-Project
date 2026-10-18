@@ -56,12 +56,63 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Explicitly authorized Notifications implementation successor. Validate it before immutable historical replay.
+    ni_base='f285607b37c5f6da4c409442f4ec2e8781ae786e'
+    ni_allowed={'backend/src/test/java/com/cinenest/notifications/internal/NotificationTestDriver.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/java/com/cinenest/notifications/NotificationContext.java', 'frontend/app/globals.css', 'backend/src/main/java/com/cinenest/payments/package-info.java', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java', 'frontend/app/api/notifications/[id]/route.ts', 'backend/src/main/java/com/cinenest/notifications/internal/LocalNotificationCapture.java', 'frontend/package.json', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationController.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationWorker.java', 'frontend/app/api/notifications/[id]/read/route.ts', 'frontend/app/notifications/page.tsx', 'backend/src/main/resources/db/migration/V14__synthetic_notifications.sql', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationPolicy.java', 'frontend/app/api/admin/venues/[venueId]/notifications/[id]/reconciliations/route.ts', 'backend/src/main/java/com/cinenest/notifications/NotificationFacts.java', 'backend/src/main/java/com/cinenest/access/package-info.java', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/notifications/package-info.java', 'backend/src/main/java/com/cinenest/access/internal/AccessNotificationContext.java', 'frontend/app/api/admin/venues/[venueId]/notifications/[id]/route.ts', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseNotificationRecipients.java', 'frontend/components/notifications.tsx', 'frontend/app/api/notifications/route.ts', 'frontend/tests/notifications-browser.mjs', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationService.java', 'backend/src/test/java/com/cinenest/notifications/internal/NotificationPolicyTest.java', 'backend/src/main/java/com/cinenest/payments/internal/BankNotificationContext.java', 'backend/src/main/java/com/cinenest/notifications/internal/JdbcNotificationRepository.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationFailure.java', 'frontend/app/api/admin/venues/[venueId]/notifications/[id]/retries/route.ts', 'frontend/app/admin/notifications/page.tsx', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationRepository.java', 'frontend/app/api/admin/venues/[venueId]/notifications/[id]/simulations/route.ts', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationCapture.java', 'frontend/tests/notifications.test.mjs', 'backend/src/main/java/com/cinenest/access/internal/AccessService.java', 'backend/src/main/java/com/cinenest/identity/NotificationRecipients.java', 'frontend/app/api/admin/venues/[venueId]/notifications/route.ts'}
+    def ni_prior(path):return json.loads(subprocess.check_output(['git','-C',str(R),'show',ni_base+':knowledge/'+path],text=True))
+    ni=state.get('notificationImplementation',{})
+    ni_task=next(row for row in backlog['changeSets'] if row['id']=='CN-NOTIFY-001')
+    ni_authority={'source': 'Owner inline instruction and attachment 32fb5987-00ae-45c8-b370-048f03b37017', 'requestSha256': 'db63f19f03efc988f12565b6d39798b6b7711bea4b325adc082d06a218b384b9', 'scope': 'GRANTED_BOUNDED_SYNTHETIC_NOTIFICATIONS', 'date': '2026-10-18', 'liveMessaging': 'DISABLED', 'gateway': 'DEFERRED_BLOCKED'}
+    check(ni.get('authority')==ni_authority and ni.get('baselineHead')==ni_base,'Notifications authority/baseline invalid')
+    check(ni.get('workStatus') in ('IN_PROGRESS','VERIFIED'),'Notifications implementation status invalid')
+    ni_closed=ni.get('workStatus')=='VERIFIED'
+    ni_backlog=ni_prior('execution/change-sets.json');ni_state=ni_prior('execution/status.json')
+    ni_expected_task=next(row for row in ni_backlog['changeSets'] if row['id']=='CN-NOTIFY-001').copy()
+    ni_expected_task.update(**{'affectedFilesModules': 'Notifications-owned capability; narrow typed Payments/Access facts and Identity recipient resolution; existing customer/admin shell; no foreign repository access', 'dbApiUiImpact': 'Implemented bounded synthetic V14 six Notifications-owned tables, eight operations and inbox/admin UI; validation evidence at PROGRESS.md#notification-implementation', 'migrationNeeds': 'Additive V14 synthetic notifications; V1-V13 immutable; no destructive down migration', 'evidencePaths': ['PROJECT.md#notification-synthetic-policy', 'ARCHITECTURE.md#notification-synthetic-scope', 'DESIGN.md#notification-synthetic-ui', 'PROGRESS.md#notification-readiness-reconciliation', 'PROGRESS.md#notification-implementation']})
+    ni_expected_task.update(authorityAvailable=True,readiness='CLOSED' if ni_closed else 'READY',workStatus=ni.get('workStatus'),remainingReadinessGates=[],implementationAuthorization=ni_authority)
+    check(ni_task==ni_expected_task,'Notifications approved task/scope/dependency changed')
+    check(len(backlog['changeSets'])==28,'Notifications changed task count')
+    for row,old in zip(backlog['changeSets'],ni_backlog['changeSets']):
+        if row['id']!='CN-NOTIFY-001':check(row==old,'Notifications changed unrelated task '+row['id'])
+    expected_state=json.loads(json.dumps(ni_state));expected_state.update(mode='SYNTHETIC_NOTIFICATION_IMPLEMENTATION',workStatus=ni.get('workStatus'),implementationAuthorization='GRANTED_BOUNDED_SYNTHETIC_NOTIFICATIONS',nextAction='Review CN-CUSTOMER-001 scope and its own decision gates; no implementation' if ni_closed else 'Complete bounded notification checks and exact-source CI; no live messaging',notificationImplementation=ni)
+    check(state==expected_state,'Notifications changed unrelated execution history')
+    for key,value in {'liveMessaging':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','evidencePath':'PROGRESS.md#notification-implementation'}.items():check(ni.get(key)==value,'Notifications safety boundary changed '+key)
+    for path in ('execution/requirements.json','execution/test-plan.json','decisions/cinenest-open-decisions.json','sources/cinenest-source-register.json'):
+        check(json.loads((K/path).read_text())==ni_prior(path),'Notifications changed full coverage/decisions/sources '+path)
+    check(set(ni.get('ownedFiles',{}))==ni_allowed,'Notifications owned file inventory invalid')
+    for name,digest in ni.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Notifications source checksum mismatch '+name)
+    ni_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ni_base,'--','backend','frontend'],text=True).splitlines());ni_added=ni_allowed-ni_app
+    current_inventory=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    check(current_inventory==ni_app|ni_added,'Notifications changed unrelated application inventory')
+    delta=set(subprocess.check_output(['git','-C',str(R),'diff','--name-only',ni_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines())
+    check(delta-ni_allowed<={'frontend/next-env.d.ts'},'Notifications changed unrelated application or launchers')
+    migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ni_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==migrations|{'backend/src/main/resources/db/migration/V14__synthetic_notifications.sql'},'Notifications migration scope invalid')
+    for name in migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',ni_base+':'+name]),'Notifications altered historical migration '+name)
+    if ni.get('checks'):
+        check(ni.get('evidenceCounts')=={'backendTests': 288, 'bankIntegrationTests': 93, 'architectureTests': 14, 'notificationPolicyTests': 2, 'frontendTests': 89, 'notificationBrowserGroups': 28, 'accessBrowserGroups': 32, 'refundBrowserGroups': 30, 'bankBrowserGroups': 70, 'adminBrowserGroups': 63, 'launcherTests': 14, 'governanceNegativeControls': 11, 'failures': 0, 'errors': 0, 'skipped': 0},'Notifications executed evidence counts invalid')
+    if ni_closed:
+        check(set(ni.get('checks',{}))=={'backend','frontend','browser','governance','launchers'} and all(v=='PASS' for v in ni.get('checks',{}).values()) and ni.get('sourceCI')=='SUCCESS','Notifications closure lacks executed checks/CI')
+        source=ni.get('sourceCommit','');check(bool(re.fullmatch('[0-9a-f]{40}',source)) and str(ni.get('sourceRun','')).startswith('https://github.com/Hasitha3513/Theater-Project/actions/runs/'),'Notifications exact-source CI receipt missing')
+        if re.fullmatch('[0-9a-f]{40}',source):
+            for name,digest in ni.get('ownedFiles',{}).items():
+                actual=subprocess.run(['git','-C',str(R),'show',source+':'+name],capture_output=True);check(actual.returncode==0 and hashlib.sha256(actual.stdout).hexdigest()==digest,'Notifications CI source stale '+name)
+    if errors:
+        print('\n'.join('FAIL '+message for message in errors));return 1
+    def ni_original(payload,path):
+        if path=='execution/status.json' and 'notificationImplementation' in payload:return ni_prior(path)
+        if path=='execution/change-sets.json' and any(row['id']=='CN-NOTIFY-001' and 'implementationAuthorization' in row for row in payload.get('changeSets',[])):return ni_prior(path)
+        return payload
+    def ni_source(name):
+        if name in ni_allowed-ni_added:return subprocess.check_output(['git','-C',str(R),'show',ni_base+':'+name])
+        return (R/name).read_bytes()
+    backlog=ni_original(backlog,'execution/change-sets.json');state=ni_original(state,'execution/status.json')
     # Owner-approved notification readiness-only successor; no implementation, new edges or acceptance.
     notify_base='96a2eb0ebcec784aac9e62b13a0fa3404a798a3b'
     notify_expected={'execution/change-sets.json': 'a146ba085cff5db6434c5270236f65e1fb96bd2b496fc34ffb95151f87325d3b', 'execution/status.json': 'c2c2f83b61e2f591c379d03de07a723d9843671169d036cca0c6873589c6aca0', 'decisions/cinenest-open-decisions.json': 'b5f351badda1f9da99aeefe03019aa82d600e45cb9c3f938c25b2ea6ea51cb2f'}
     notify_prior={}
     for path,digest in notify_expected.items():
-        current=json.loads((K/path).read_text())
+        current=ni_original(json.loads((K/path).read_text()),path)
         check(hashlib.sha256(json.dumps(current,sort_keys=True).encode()).hexdigest()==digest,'Notification readiness scope/authority/history changed '+path)
         notify_prior[path]=json.loads(subprocess.check_output(['git','-C',str(R),'show',notify_base+':knowledge/'+path],text=True))
     notify_task=next(row for row in backlog['changeSets'] if row['id']=='CN-NOTIFY-001')
@@ -74,14 +125,15 @@ def main():
         check((K/path).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',notify_base+':knowledge/'+path]),'Notification approval changed full requirement/test coverage '+path)
     notify_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',notify_base,'--','backend','frontend'],text=True).splitlines())
     current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
-    check(current_app==notify_app,'Readiness-only notification approval changed application inventory')
+    check(current_app-ni_added==notify_app,'Readiness-only notification approval changed application inventory')
     app_delta=subprocess.check_output(['git','-C',str(R),'diff','--name-only',notify_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
-    check(set(app_delta)<={'frontend/next-env.d.ts'},'Readiness-only notification approval changed application/launcher source')
+    check(set(app_delta)-ni_allowed<={'frontend/next-env.d.ts'},'Readiness-only notification approval changed application/launcher source')
     notify_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',notify_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==set(notify_migrations),'Readiness-only notification approval created migration')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ni_added==set(notify_migrations),'Readiness-only notification approval created migration')
     if errors:
         print('\n'.join('FAIL '+message for message in errors));return 1
     def notify_original(payload,path):
+        payload=ni_original(payload,path)
         if path in notify_expected and hashlib.sha256(json.dumps(payload,sort_keys=True).encode()).hexdigest()==notify_expected[path]:return json.loads(json.dumps(notify_prior[path]))
         return payload
     backlog=notify_original(backlog,'execution/change-sets.json');state=notify_original(state,'execution/status.json')
@@ -106,16 +158,16 @@ def main():
     check(state==expected_state,'Access implementation changed unrelated execution history')
     for key,value in {'realDoorControl':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','evidencePath':'PROGRESS.md#access-implementation'}.items():check(ai.get(key)==value,'Access implementation boundary changed '+key)
     check(set(ai.get('ownedFiles',{}))==ai_allowed,'Access owned source inventory changed')
-    for name,digest in ai.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Access source checksum mismatch '+name)
+    for name,digest in ai.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256(ni_source(name)).hexdigest()==digest,'Access source checksum mismatch '+name)
     ai_baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ai_base,'--','backend','frontend'],text=True).splitlines())
     ai_added=ai_allowed-ai_baseline_app
     ai_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
-    check(ai_current_app==ai_baseline_app|ai_added,'Access changed unrelated application inventory')
+    check(ai_current_app-ni_added==ai_baseline_app|ai_added,'Access changed unrelated application inventory')
     for path in ('execution/requirements.json','execution/test-plan.json','decisions/cinenest-open-decisions.json'):
         check(notify_original(json.loads((K/path).read_text()),path)==ai_prior(path),'Access changed full requirement/test/decision history '+path)
     ai_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ai_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
     for name in ai_migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',ai_base+':'+name]),'Access altered historical migration '+name)
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==set(ai_migrations)|{'backend/src/main/resources/db/migration/V13__synthetic_access.sql'},'Access migration scope invalid')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ni_added==set(ai_migrations)|{'backend/src/main/resources/db/migration/V13__synthetic_access.sql'},'Access migration scope invalid')
     if ai.get('checks',{}).get('backend')=='PASS':
         check(ai.get('evidenceCounts')=={'backendTests': 264, 'bankIntegrationTests': 72, 'architectureTests': 13, 'accessPolicyTests': 2, 'frontendTests': 85, 'accessBrowserGroups': 32, 'refundBrowserGroups': 30, 'bankBrowserGroups': 70, 'adminBrowserGroups': 63, 'launcherTests': 14, 'failures': 0, 'errors': 0, 'skipped': 0},'Access executed evidence counts changed/missing')
     if ai_closed:
@@ -133,7 +185,7 @@ def main():
         return payload
     def ai_source(name):
         if name in ai_allowed-ai_added:return subprocess.check_output(['git','-C',str(R),'show',ai_base+':'+name])
-        return (R/name).read_bytes()
+        return ni_source(name)
     backlog=ai_original(backlog,'execution/change-sets.json');state=ai_state
     # Readiness-only Access successor: validate exact owner-approved records before historical replay.
     access_base = 'ced1ee7d16215315927f28a996e3dccac96cd2bb'
@@ -152,9 +204,9 @@ def main():
     for path in ('execution/requirements.json','execution/test-plan.json'):
         check((K/path).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',access_base+':knowledge/'+path]),'Access changed full requirement/test coverage '+path)
     app_delta=subprocess.check_output(['git','-C',str(R),'diff','--name-only',access_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
-    check(set(app_delta)-ai_allowed<={'frontend/next-env.d.ts'},'Readiness-only Access session changed application/launcher source')
+    check(set(app_delta)-ai_allowed-ni_allowed<={'frontend/next-env.d.ts'},'Readiness-only Access session changed application/launcher source')
     old_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',access_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added==set(old_migrations),'Readiness-only Access session created migration')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added-ni_added==set(old_migrations),'Readiness-only Access session created migration')
     if errors:
         print('\n'.join('FAIL '+message for message in errors)); return 1
     def access_original(payload,path):
@@ -217,7 +269,7 @@ def main():
     # V1-V11 are immutable; only one additive V12 is authorized.
     old_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',impl_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
     for name in old_migrations: check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',impl_base+':'+name]),'Refund altered historical migration '+name)
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added==set(old_migrations)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'},'Refund migration scope invalid')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added-ni_added==set(old_migrations)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'},'Refund migration scope invalid')
     backlog=impl_original(backlog,'execution/change-sets.json')
     state=impl_state
     # Approved refund readiness-only successor: exact scoped delta, two dependency classes, no implementation.
@@ -237,9 +289,9 @@ def main():
         check(row['dependencies']==(['CN-PAY-BANK-002'] if row['id']=='CN-REFUND-001' else prior_edges[row['id']]), 'Unapproved refund dependency amendment '+row['id'])
     check(len(coverage['requirements'])==92 and len(tests_doc['tests'])==92, 'Refund approval lost full coverage')
     app_delta = subprocess.check_output(['git','-C',str(R),'diff','--name-only',refund_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
-    check(set(app_delta) - impl_allowed - ai_allowed <= {'frontend/next-env.d.ts'}, 'Refund readiness session changed application/launcher source')
+    check(set(app_delta) - impl_allowed - ai_allowed - ni_allowed <= {'frontend/next-env.d.ts'}, 'Refund readiness session changed application/launcher source')
     migration_base = subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',refund_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
-    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added == set(migration_base)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'}, 'Readiness-only approval cannot create a migration')
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}-ai_added-ni_added == set(migration_base)|{'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql'}, 'Readiness-only approval cannot create a migration')
 
     if errors:
         print('\n'.join('FAIL '+message for message in errors))
@@ -359,7 +411,7 @@ def main():
     check(state==expected_state,'Gateway changed unrelated status or financial safety')
     state=original_state
     gateway_paths=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',gateway_base,'--','backend','frontend'],text=True).splitlines())
-    check(set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-admin_added-impl_added-ai_added==gateway_paths,'Gateway decision session changed application inventory')
+    check(set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-admin_added-impl_added-ai_added-ni_added==gateway_paths,'Gateway decision session changed application inventory')
     for name in gateway_paths-{'frontend/next-env.d.ts'}:
         check(admin_source(name)==subprocess.check_output(['git','-C',str(R),'show',gateway_base+':'+name]),'Gateway decision session changed application '+name)
     for path,field in [('execution/change-sets.json','changeSets'),('decisions/cinenest-open-decisions.json','decisions')]:
@@ -388,10 +440,10 @@ def main():
     check(ledger_evidence.get('baselineHead')==ledger_base and ledger_evidence.get('authorizationRequestSha256')=='607271b7d93cc9c232e3ea197e906196edddcf8b2057f89fd7650bf105d7d48d','Ledger owner approval provenance missing')
     for name,digest in ledger_owned.items():check((R/name).is_file() and hashlib.sha256(admin_source(name)).hexdigest()==digest,'Ledger source checksum mismatch '+name)
     ledger_baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ledger_base,'--','backend','frontend'],text=True).splitlines())
-    ledger_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-impl_added-ai_added
+    ledger_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-impl_added-ai_added-ni_added
     check(ledger_current_app-admin_added==ledger_baseline_app|ledger_allowlist,'Ledger changed application inventory outside owner scope')
     for migration in (R/'backend/src/main/resources/db/migration').glob('V*__*.sql'):
-        if migration.relative_to(R).as_posix() in ai_added:continue # Independently validated Access successor.
+        if migration.relative_to(R).as_posix() in ai_added|ni_added:continue # Independently validated Access successor.
         if migration.name=='V12__synthetic_bank_refunds.sql': continue # Checked independently by the implementation successor above.
         if migration.relative_to(R).as_posix() in admin_added:continue
         if migration.name.startswith('V10__'):continue
@@ -471,7 +523,7 @@ def main():
     check(bank_evidence.get('baselineHead')==bank_base and bank_evidence.get('authorizationRequestSha256')=='22fb4107bb4cc126cbc9a658a7a8a121df0f6d5acd15a269366463464824a407','Bank owner provenance changed')
     check(set(bank_owned)=={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/test/java/com/cinenest/payments/internal/SyntheticEvidenceTest.java', 'frontend/app/bank/page.tsx', 'backend/src/main/java/com/cinenest/payments/internal/EncryptedEvidenceStore.java', 'backend/src/main/java/com/cinenest/payments/internal/ReviewerNotice.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/route.ts', 'frontend/lib/bank.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/decisions/route.ts', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/route.ts', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'frontend/app/globals.css', 'frontend/app/api/bank/requests/[id]/resubmissions/route.ts', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/escalations/route.ts', 'backend/src/main/java/com/cinenest/verification/BankEligibility.java', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/evidence/[evidenceId]/route.ts', 'frontend/app/api/bank/requests/[id]/claims/route.ts', 'frontend/tests/bank.test.mjs', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticEvidenceProcessor.java', 'frontend/app/api/bank/uploads/[id]/complete/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/BankController.java', 'frontend/app/admin/bank/page.tsx', 'frontend/app/api/bank/requests/[id]/route.ts', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticFixtures.java', 'backend/src/main/java/com/cinenest/payments/package-info.java', 'backend/src/main/java/com/cinenest/payments/internal/BankFailure.java', 'backend/src/main/java/com/cinenest/payments/internal/DisabledReviewerNotice.java', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/booking/internal/BankRequestHoldAdapter.java', 'backend/src/main/java/com/cinenest/payments/internal/BankRepository.java', 'backend/src/main/java/com/cinenest/pricing/internal/BankQuotationAdapter.java', 'frontend/app/api/bank/requests/route.ts', 'frontend/app/api/bank/uploads/[id]/content/route.ts', 'frontend/components/bank.tsx', 'backend/src/test/java/com/cinenest/payments/internal/BankFaults.java', 'frontend/app/api/bank/claims/[id]/uploads/route.ts', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java', 'backend/src/main/java/com/cinenest/payments/internal/JdbcBankRepository.java', 'backend/src/main/java/com/cinenest/pricing/BankQuotation.java', 'backend/src/main/resources/db/migration/V9__synthetic_bank_requests.sql', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/payments/internal/BankWorker.java', 'frontend/tests/bank-browser.mjs', 'backend/src/main/java/com/cinenest/payments/internal/BankPolicy.java', 'backend/src/main/java/com/cinenest/verification/internal/BankEligibilityAdapter.java', 'backend/src/main/java/com/cinenest/booking/BankRequestHolds.java', 'frontend/package.json', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'backend/src/main/java/com/cinenest/payments/internal/PrivateEvidenceStore.java'} and 'frontend/next-env.d.ts' not in bank_owned,'Bank source inventory exceeds owner scope')
     baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',bank_base,'--','backend','frontend'],text=True).splitlines())
-    current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-impl_added-ai_added
+    current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())-impl_added-ai_added-ni_added
     check(current_app-admin_added-(ledger_allowlist-ledger_baseline_app)==baseline_app|set(bank_owned),'Bank introduced unreviewed application files or removed retained sources')
     for name,digest in bank_owned.items():
         check((R/name).is_file() and hashlib.sha256(ledger_source(name)).hexdigest()==digest,'Bank source mismatch '+name)
@@ -1275,7 +1327,7 @@ def main():
         else:
             check(expected == current, 'Omission gap/status silently changed ' + old['id'])
     progress = (K / 'PROGRESS.md').read_text()
-    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(access_task['dependencies'] if c['id']=='CN-ACCESS-001' else refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + (ai_task['workStatus']+' / '+ai_task['readiness'] if c['id']=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if c['id']=='CN-REFUND-001' else 'VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
+    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(access_task['dependencies'] if c['id']=='CN-ACCESS-001' else refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + (ni_task['workStatus']+' / '+ni_task['readiness'] if c['id']=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if c['id']=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if c['id']=='CN-REFUND-001' else 'VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
     check(task_rows in progress, 'PROGRESS task projection diverges from authority')
     mapping_rows = ''.join('| ' + e['sourcePath'] + ' | [' + e['canonicalPath'] + '#' + e['anchor'] + '](' + e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] + ') | [original @ ' + e['historicalReference']['commit'][:7] + '](' + e['historicalReference']['url'] + ') |\n' for e in manifest['consolidation']['documents'])
     check(mapping_rows in progress and '<a id="consolidation"></a>' in progress, 'PROGRESS source/destination/removal mapping omitted')
@@ -1364,7 +1416,7 @@ def main():
     task_projection = re.findall(r'^\| (CN-[^|]+) \| (P\d+) \| ([^|]+) \| ([^|]+) \|$', task_section, re.M)
     check([row[0] for row in task_projection] == cids, 'Existing task roadmap coverage lost/duplicated')
     for tid, phase, deps, status in task_projection:
-        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(access_task['dependencies'] if tid=='CN-ACCESS-001' else refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == (ai_task['workStatus']+' / '+ai_task['readiness'] if tid=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if tid=='CN-REFUND-001' else 'VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
+        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(access_task['dependencies'] if tid=='CN-ACCESS-001' else refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == (ni_task['workStatus']+' / '+ni_task['readiness'] if tid=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if tid=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if tid=='CN-REFUND-001' else 'VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
     check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':13 if inventory_ci else 11 if pub_ci else 10 if pkg_ci else 9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')

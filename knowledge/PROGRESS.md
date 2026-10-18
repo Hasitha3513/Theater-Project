@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 and CN-ACCESS-001 hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:18 CLOSED,10 BLOCKED,0 READY,0 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 and CN-ACCESS-001 hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:18 CLOSED,9 BLOCKED,0 READY-to-start,1 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -275,7 +275,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
-| CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | BLOCKED / BLOCKED |
+| CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | IN_PROGRESS / READY |
 | CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001 | BLOCKED / BLOCKED |
 | CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
@@ -318,7 +318,7 @@ flowchart TB
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; 3 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P4["P4 Identity/bank<br/>Synthetic identity/request/ledger VERIFIED within bounded scopes<br/>0 of 8 full criteria; NOT_ACCEPTED"]
-  P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PLANNED; NOT_ACCEPTED"]
+  P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PARTIAL synthetic notifications; NOT_ACCEPTED"]
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PARTIAL SYNTHETIC ONLY; NOT_ACCEPTED"]
   P7["P7 Access/hardware<br/>W13-14 illustrative<br/>SYNTHETIC PARTIAL; NOT_ACCEPTED"]
   P8["P8 Automation/readiness<br/>W15-16 illustrative<br/>PLANNED; NOT_ACCEPTED"]
@@ -471,7 +471,7 @@ Goal/outcome: Make gateway payment and messaging outcomes recoverable without du
 - [ ] **P5-C02** Authenticated provider results, amount/currency checks, and callback deduplication implemented. — Req: CN-C06, PK-AC08; tests: T-CN-C06, T-PK-AC08; tasks: CN-PAY-GW-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P5-C03** Pending, unknown, failed, and late outcomes reconciled against accepted requests. — Req: CN-C06, PK-AC08; tests: T-CN-C06, T-PK-AC08; tasks: CN-PAY-GW-001. Evidence: NOT_RUN / no current acceptance evidence.
 - [ ] **P5-C04** Bank-plus-gateway duplicate payments resolved without a second reservation. — Req: BP-AC05, CN-C06; tests: T-BP-AC05, T-CN-C06; tasks: CN-PAY-BANK-002, CN-PAY-GW-001. Evidence: NOT_RUN / no current acceptance evidence.
-- [ ] **P5-C05** Approved email/SMS delivery, recipient scope, retries, and delivery states implemented. — Req: CN-C07, CN-SUP-01; tests: T-CN-C07, T-CN-SUP-01; tasks: CN-ACCESS-001, CN-CUSTOMER-001, CN-NOTIFY-001, CN-OPS-001. Evidence: NOT_RUN / no current acceptance evidence.
+- [ ] **P5-C05** Approved email/SMS delivery, recipient scope, retries, and delivery states implemented. — Req: CN-C07, CN-SUP-01; tests: T-CN-C07, T-CN-SUP-01; tasks: CN-ACCESS-001, CN-CUSTOMER-001, CN-NOTIFY-001, CN-OPS-001. Evidence: PARTIAL / bounded in-app synthetic/local capture checks at [notification evidence](#notification-implementation); external email/SMS/provider and full acceptance remain unverified.
 - [ ] **P5-C06** Customer receipts, finance views, and restart recovery verified. — Req: CN-A07, CN-C08, CN-NFR-03; tests: T-CN-A07, T-CN-C08, T-CN-NFR-03; tasks: CN-ACCEPT-001, CN-AMEND-001, CN-CUSTOMER-001, CN-FND-001, CN-PAY-GW-001, CN-REFUND-001, CN-REPORT-001. Evidence: NOT_RUN / no current acceptance evidence.
 
 - [ ] **P5-ACCEPT** Phase gate accepted; reviewer/date/build/environment/evidence not assigned. Gate: The supported gateway sandbox succeeds on valid payments and safely handles forged, duplicate, late, and uncertain outcomes. Messaging failures do not erase committed business state.
@@ -692,7 +692,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-IOT-001 | P8 | CN-ACCESS-001 | BLOCKED / BLOCKED |
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
-| CN-NOTIFY-001 | P5 | CN-PAY-BANK-001, CN-ACCESS-001 | BLOCKED / BLOCKED |
+| CN-NOTIFY-001 | P5 | CN-PAY-BANK-001, CN-ACCESS-001 | IN_PROGRESS / READY |
 | CN-CUSTOMER-001 | P3 | CN-ACCESS-001, CN-NOTIFY-001 | BLOCKED / BLOCKED |
 | CN-AMEND-001 | P6 | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-REPORT-001 | P9 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-NOTIFY-001 bounded synthetic scope and OD-01/05/29 policy/schema/API/UI approvals recorded; owner explicitly selected recording/readiness only after inline/attachment conflict. Task remains BLOCKED solely on separate bounded implementation authorization.18 CLOSED/10 BLOCKED/0 READY/0 IN_PROGRESS. No V14 or application change. PayHere, venue/specialists and full provider/privacy/staffing/physical acceptance remain pending. [Current reconciliation](#notification-readiness-reconciliation). Earlier checkpoints below are historical.
+Current handoff: separate owner implementation authorization received for CN-NOTIFY-001; prerequisites satisfied for the approved synthetic slice. Task IN_PROGRESS / READY;18 CLOSED/9 BLOCKED/0 READY-to-start/1 IN_PROGRESS,28 tasks total. V14/Notifications bounded local checks PASS; exact-source CI pending; no task/phase acceptance claimed. Live messaging disabled; PayHere and venue/specialist/provider/physical gates remain pending. [Current evidence](#notification-implementation). Earlier checkpoints below are historical.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1307,3 +1307,18 @@ Readiness: bounded decisions and six-record V14/eight API/UI/test/rollback speci
 MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;18 CLOSED,10 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted and0/10 accepted delivery phases. Manual-payment-first retained; PayHere deferred/BLOCKED. Unrelated next-env.d.ts and two untracked DOCX companions preserved. Current next action: obtain separate bounded CN-NOTIFY-001 implementation authorization. Validation/publication and exact-source CI reported in conversation.
 
 Notification approval validation: primary knowledge/whitespace PASS; primary execution retains exactly the two pre-existing next-env.d.ts protection findings. Both validators PASS in the safely reused isolated committed-source snapshot, verified byte-for-byte against starting HEAD before overlay and then against all current tracked bytes except the unrelated next-env.d.ts committed-byte isolation. Ten governance negative controls reject premature READY, lost bounded approval, dependency removal, unrelated task change, live messaging enablement, global OD-05 closure, false full notification test PASS, lost gateway requirement coverage, application source modification and unauthorized V14. No notification application tests were run or marked passed. Existing application/migrations/tokens/dependencies and both DOCX companions remain unchanged; final publication/exact-source CI results reported in conversation.
+
+<a id="notification-implementation"></a>
+## CN-NOTIFY-001 bounded synthetic implementation — 2026-10-18
+
+Separate owner attachment32fb5987-00ae-45c8-b370-048f03b37017 authorizes the previously approved scope. Baseline f285607b37c5f6da4c409442f4ec2e8781ae786e, main/origin/main,0/0; V13. Both direct dependencies VERIFIED/CLOSED; bounded OD-01/05/29 approvals retained. Historical readiness-only approval remains accurate for that earlier session. Authority now granted; task IN_PROGRESS, checks and exact-source CI pending. No dependency changes, production transports, real data/payments/devices or customer/phase acceptance authorized.
+
+Implementation adds Notifications-owned V14 records, typed source-transaction handoff from Payments and Access, Identity recipient resolution, local capture queue/recovery and protected synthetic inbox/admin views. Existing eight operation contracts at [architecture](ARCHITECTURE.md#notification-synthetic-scope) remain the boundary. Fixed versioned messages never contain receipt/identity evidence, bank details or credentials; metadata admin access does not expose private bodies. Check results will be recorded only after execution. Rollback disables worker/control, retains history/unresolved work/source facts; compatible revert or forward fix, no destructive down migration or blind resend.
+
+Full MVP criteria remain13/74;92 requirements/92 full test plans remain unaccepted. Demonstrations0/7 held/accepted; D0 prepared/document rehearsed, D1/D2 NOT_READY, D3-D6 outlines. Manual-payment-first retained; PayHere deferred/BLOCKED. Unrelated next-env.d.ts and both DOCX files preserved. Next action: complete bounded checks and exact-source CI.
+
+Local verification completed for the reviewed44-file application receipt:288 backend tests (93 Bank/Access/notification PostgreSQL integration,14 architecture,2 notification-policy),0 failures/errors/skips; clean V1→V14, populated V13→V14 and repeat migration/startup, actual notification-enabled worker process restart, atomic source handoff/rollback, ownership/venue/grant-stitching/revocation/CSRF/rate/revision/idempotency, duplicate events, lease fencing/unknown reconciliation, expiry and source supersession, immutable evidence and completed-review failure isolation. Test-only PostgreSQL18.6 container disposed by the approved verifier; packaged real HTTP denial PASS. First-run test fixture/signature defects were corrected, then final regression completed; no mock delivery claim.
+
+Frontend clean install with qualified Node24.22.0/npm11.19.1, production build, typecheck, strict lint,89 tests and npm audit (0 vulnerabilities) PASS in an isolated snapshot preserving the primary next-env change.223 intercepted browser groups PASS:28 Notifications at1440/768/390/320,32 Access,30 Refund,70 Bank at seven widths,63 Admin. Browser coverage includes keyboard, layout/detail wrapping, safe link/read/count/paging, redacted admin controls, unknown/retry/reconcile, context clearing, denial/conflict/empty and no browser persistent data. Adding navigation exposed a1024px header overflow; wrapped shared navigation fixes it, verified by existing Bank regression. Presentation fixtures are not genuine provider or physical evidence.
+
+Both knowledge validators PASS in the isolated task-source snapshot using committed next-env; primary design and whitespace PASS, primary execution retains exactly the two pre-existing next-env integrity findings.11 governance negative controls reject lost authority/dependencies/task/requirements/tests, live transport, missing owned receipts, false closure, historical migration drift and unapproved V15.14 launcher contracts PASS. Existing source/decision/requirement/test/dependency histories retained and no validation protection removed. Current source reviewed locally; publish IN_PROGRESS, verify exact-source CI, then consider bounded task closure. No phase criterion or demonstration automatically accepted. Unassigned recipients remain redacted unresolved work; expired/superseded notices suppressed; unknowns without durable capture evidence cannot be blindly retried. Production transport/privacy/retention/staffing/venue/specialist acceptance remains separate.

@@ -1414,22 +1414,23 @@
         "CN-ACCESS-001"
       ],
       "blockingDecisionIds": [],
-      "affectedFilesModules": "Planned Notifications-owned capability; narrow typed Payments/Access facts and Identity recipient authorization; existing customer/admin shell; no foreign repository access",
-      "dbApiUiImpact": "Approved design only: six Notifications-owned V14 records, eight operations and synthetic inbox/admin UI at ARCHITECTURE.md#notification-synthetic-scope; no implementation",
+      "affectedFilesModules": "Notifications-owned capability; narrow typed Payments/Access facts and Identity recipient resolution; existing customer/admin shell; no foreign repository access",
+      "dbApiUiImpact": "Implemented bounded synthetic V14 six Notifications-owned tables, eight operations and inbox/admin UI; validation evidence at PROGRESS.md#notification-implementation",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "V14 design approved only; do not create in readiness session; V1-V13 immutable",
+      "migrationNeeds": "Additive V14 synthetic notifications; V1-V13 immutable; no destructive down migration",
       "plannedChecks": "Dedupe/retry/bounce/failed-alert queue and privacy tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Delivery failure does not delete review or change payment truth",
       "requiredApproval": "Channel/sandbox scope and notification/privacy approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
       "evidencePaths": [
         "PROJECT.md#notification-synthetic-policy",
         "ARCHITECTURE.md#notification-synthetic-scope",
         "DESIGN.md#notification-synthetic-ui",
-        "PROGRESS.md#notification-readiness-reconciliation"
+        "PROGRESS.md#notification-readiness-reconciliation",
+        "PROGRESS.md#notification-implementation"
       ],
       "downstreamDecisionIds": [
         "OD-01",
@@ -1466,9 +1467,15 @@
         "liveMessaging": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
       },
-      "remainingReadinessGates": [
-        "Separate bounded synthetic CN-NOTIFY-001 implementation authorization"
-      ]
+      "remainingReadinessGates": [],
+      "implementationAuthorization": {
+        "source": "Owner inline instruction and attachment 32fb5987-00ae-45c8-b370-048f03b37017",
+        "requestSha256": "db63f19f03efc988f12565b6d39798b6b7711bea4b325adc082d06a218b384b9",
+        "scope": "GRANTED_BOUNDED_SYNTHETIC_NOTIFICATIONS",
+        "date": "2026-10-18",
+        "liveMessaging": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      }
     },
     {
       "id": "CN-CUSTOMER-001",

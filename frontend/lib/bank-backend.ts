@@ -1,6 +1,8 @@
 // Dedicated bounded binary transport. Existing JSON adapters remain unchanged.
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
+ if(new RegExp(`^/api/notifications(/${uuid})?$`).test(path)||new RegExp(`^/api/admin/venues/${uuid}/notifications(/${uuid})?$`).test(path))return method === "GET";
+ if(new RegExp(`^/api/notifications/${uuid}/read$`).test(path)||new RegExp(`^/api/admin/venues/${uuid}/notifications/${uuid}/(retries|reconciliations|simulations)$`).test(path))return method === "POST";
  if(new RegExp(`^/api/bookings/${uuid}/access$`).test(path)||new RegExp(`^/api/admin/venues/${uuid}/access/credentials(/${uuid})?$`).test(path))return method === "GET";
  if(new RegExp(`^/api/bookings/${uuid}/access/(credentials|simulated-attempts)$`).test(path)||new RegExp(`^/api/bookings/${uuid}/access/credentials/${uuid}/reveal$`).test(path)||new RegExp(`^/api/admin/venues/${uuid}/access/credentials/${uuid}/(revocations|simulations)$`).test(path))return method === "POST";
 
@@ -72,7 +74,7 @@ export async function forwardBank(request: Request): Promise<Response> {
 	});
 	try {
 		const url = new URL(request.url);
-		const accessPage=new RegExp(`^/api/admin/venues/${uuid}/access/credentials$`).test(url.pathname)&&request.method==="GET"&&[...url.searchParams.keys()].every(k=>["page","size"].includes(k))&&[...url.searchParams.values()].every(v=>/^\d{1,5}$/.test(v));
+		const accessPage=(new RegExp(`^/api/admin/venues/${uuid}/access/credentials$`).test(url.pathname)||new RegExp(`^/api/admin/venues/${uuid}/notifications$`).test(url.pathname)||url.pathname==="/api/notifications")&&request.method==="GET"&&[...url.searchParams.keys()].every(k=>["page","size"].includes(k))&&[...url.searchParams.values()].every(v=>/^\d{1,5}$/.test(v));
         if (!bankRoute(url.pathname, request.method) || (url.search&&!accessPage))
 			return new Response(null, { status: 404, headers });
 		const configured = process.env.CINENEST_AUTH_ORIGIN;

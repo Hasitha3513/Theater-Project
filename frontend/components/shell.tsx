@@ -41,6 +41,7 @@ export function Navigation({
                 ["/admin/bank", "Synthetic bank review"],
                 ["/admin/refunds", "Synthetic bank-only refunds"],
                 ["/admin/access", "Synthetic access simulation"],
+                ["/admin/notifications", "Synthetic notification queue"],
                 ["/admin/settings/packages", "Package drafts"],
 			]
 		: [
@@ -50,6 +51,7 @@ export function Navigation({
                 ["/bank", "Synthetic bank request"],
                 ["/refunds", "Synthetic refund status"],
                 ["/access", "Synthetic access status"],
+                ["/notifications", "Synthetic notifications"],
 				["/account", "Account session"],
 				["/admin", "Admin shell preview"],
 			];
