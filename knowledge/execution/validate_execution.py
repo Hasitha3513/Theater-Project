@@ -56,6 +56,60 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Explicit owner-approved customer policy/readiness successor. Implementation remains withheld.
+    customer_base='de213bfe67a48075c2aa8d668bab5b8c53c35476'
+    customer_expected={'execution/change-sets.json': '3321b57791ceda412dd061f687ae6ed2d2497e0e6d25f20981c1e94f255da4f8', 'execution/status.json': 'ae8491c6eec5bd7379fe80055d09a8d21da5bd3c996900607ee611a68e31bdf3', 'decisions/cinenest-open-decisions.json': 'ed414321fb63c8e0cff712abb9d0861513f46d9c7a0904f2bb247e6abbfae7ea'}
+    customer_prior={}
+    for path,digest in customer_expected.items():
+        actual=json.loads((K/path).read_text())
+        check(hashlib.sha256(json.dumps(actual,sort_keys=True).encode()).hexdigest()==digest,'Customer bounded approval/scope/history changed '+path)
+        customer_prior[path]=json.loads(subprocess.check_output(['git','-C',str(R),'show',customer_base+':knowledge/'+path],text=True))
+    customer_task=next(row for row in backlog['changeSets'] if row['id']=='CN-CUSTOMER-001')
+    check(customer_task['readiness']=='BLOCKED' and customer_task['workStatus']=='BLOCKED' and not customer_task['authorityAvailable'],'Customer recording-only approval cannot authorize implementation')
+    check(customer_task['dependencies']==['CN-ACCESS-001','CN-NOTIFY-001','CN-REFUND-001'] and customer_task['historicalImplementationDependencies']==['CN-ACCESS-001','CN-NOTIFY-001'],'Customer dependency amendment outside approved scope')
+    check(customer_task['blockingDecisionIds']==[] and customer_task['remainingReadinessGates']==['Separate bounded synthetic CN-CUSTOMER-001 implementation authorization'],'Customer remaining gate changed')
+    for dependency in customer_task['dependencies']:
+        row=next(t for t in backlog['changeSets'] if t['id']==dependency)
+        check(row['workStatus']=='VERIFIED' and row['readiness']=='CLOSED','Customer prerequisite not verified '+dependency)
+    old_tasks=customer_prior['execution/change-sets.json']['changeSets']
+    check(len(backlog['changeSets'])==28,'Customer changed task count')
+    for row,old in zip(backlog['changeSets'],old_tasks):
+        if row['id']!='CN-CUSTOMER-001':check(row==old,'Customer changed unrelated task '+row['id'])
+        else:
+            for key in ('id','objective','inScope','outOfScope','definitionOfDone','requirementIds','plannedChecks','rollback','requiredApproval'):
+                check(row[key]==old[key],'Customer altered registered scope/DoD '+key)
+    graph={r['id']:r['dependencies'] for r in backlog['changeSets']}
+    def customer_acyclic(node,seen):
+        if node in seen:return False
+        return all(d in graph and customer_acyclic(d,seen|{node}) for d in graph[node])
+    check(all(customer_acyclic(node,set()) for node in graph),'Customer dependency graph cyclic/invalid')
+    for path in ('execution/requirements.json','execution/test-plan.json','execution/source-ledger.json','sources/cinenest-source-register.json'):
+        check((K/path).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',customer_base+':knowledge/'+path]),'Customer changed full coverage/source history '+path)
+    decisions=json.loads((K/'decisions/cinenest-open-decisions.json').read_text())
+    for row,old in zip(decisions['decisions'],customer_prior['decisions/cinenest-open-decisions.json']['decisions']):
+        stripped=json.loads(json.dumps(row));bounded=stripped.pop('boundedCustomerApproval',None)
+        check(stripped==old,'Customer changed global/other decision '+row['id'])
+        if row['id'] in ('OD-07','OD-20','OD-28'):
+            check(bounded==customer_task['boundedCustomerScopeApproval'] and row['decisionStatus']=='OPEN_DECISION','Customer bounded decision approval/global boundary invalid '+row['id'])
+        else:check(bounded is None,'Customer approved unrelated decision '+row['id'])
+    allowed_state=json.loads(json.dumps(state));allowed_state.pop('customerReadiness',None)
+    for key in ('taskId','currentChangeSet','mode','workStatus','implementationAuthorization','nextAction','implementationEvidence','approvalQueue','blockers','evidencePath','verificationScope'):allowed_state[key]=customer_prior['execution/status.json'][key]
+    check(allowed_state==customer_prior['execution/status.json'],'Customer changed unrelated execution evidence')
+    check(state['customerReadiness']['approval']['implementationAuthorization']=='NOT_GRANTED_READINESS_ONLY' and state['customerReadiness']['fullRequirementAcceptance']=='NOT_ACCEPTED','Customer approval promoted to implementation/full acceptance')
+    baseline_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',customer_base,'--','backend','frontend'],text=True).splitlines())
+    current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    check(current_app==baseline_app,'Customer approval changed application inventory')
+    delta=set(subprocess.check_output(['git','-C',str(R),'diff','--name-only',customer_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines())
+    check(delta<={'frontend/next-env.d.ts'},'Customer readiness-only approval changed application/launcher source')
+    migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',customer_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==migrations,'Customer readiness-only approval created migration')
+    for name in migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',customer_base+':'+name]),'Customer altered historical migration '+name)
+    if errors:
+        print('\n'.join('FAIL '+message for message in errors));return 1
+    def customer_original(payload,path):
+        if path in customer_expected and hashlib.sha256(json.dumps(payload,sort_keys=True).encode()).hexdigest()==customer_expected[path]:return json.loads(json.dumps(customer_prior[path]))
+        return payload
+    backlog=customer_original(backlog,'execution/change-sets.json');state=customer_original(state,'execution/status.json')
     # Explicitly authorized Notifications implementation successor. Validate it before immutable historical replay.
     ni_base='f285607b37c5f6da4c409442f4ec2e8781ae786e'
     ni_allowed={'backend/src/test/java/com/cinenest/notifications/internal/NotificationTestDriver.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/java/com/cinenest/notifications/NotificationContext.java', 'frontend/app/globals.css', 'backend/src/main/java/com/cinenest/payments/package-info.java', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java', 'frontend/app/api/notifications/[id]/route.ts', 'backend/src/main/java/com/cinenest/notifications/internal/LocalNotificationCapture.java', 'frontend/package.json', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationController.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationWorker.java', 'frontend/app/api/notifications/[id]/read/route.ts', 'frontend/app/notifications/page.tsx', 'backend/src/main/resources/db/migration/V14__synthetic_notifications.sql', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationPolicy.java', 'frontend/app/api/admin/venues/[venueId]/notifications/[id]/reconciliations/route.ts', 'backend/src/main/java/com/cinenest/notifications/NotificationFacts.java', 'backend/src/main/java/com/cinenest/access/package-info.java', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/notifications/package-info.java', 'backend/src/main/java/com/cinenest/access/internal/AccessNotificationContext.java', 'frontend/app/api/admin/venues/[venueId]/notifications/[id]/route.ts', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseNotificationRecipients.java', 'frontend/components/notifications.tsx', 'frontend/app/api/notifications/route.ts', 'frontend/tests/notifications-browser.mjs', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationService.java', 'backend/src/test/java/com/cinenest/notifications/internal/NotificationPolicyTest.java', 'backend/src/main/java/com/cinenest/payments/internal/BankNotificationContext.java', 'backend/src/main/java/com/cinenest/notifications/internal/JdbcNotificationRepository.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationFailure.java', 'frontend/app/api/admin/venues/[venueId]/notifications/[id]/retries/route.ts', 'frontend/app/admin/notifications/page.tsx', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationRepository.java', 'frontend/app/api/admin/venues/[venueId]/notifications/[id]/simulations/route.ts', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationCapture.java', 'frontend/tests/notifications.test.mjs', 'backend/src/main/java/com/cinenest/access/internal/AccessService.java', 'backend/src/main/java/com/cinenest/identity/NotificationRecipients.java', 'frontend/app/api/admin/venues/[venueId]/notifications/route.ts'}
@@ -79,7 +133,7 @@ def main():
     check(state==expected_state,'Notifications changed unrelated execution history')
     for key,value in {'liveMessaging':'DISABLED','gateway':'DEFERRED_BLOCKED','fullRequirementAcceptance':'NOT_ACCEPTED','evidencePath':'PROGRESS.md#notification-implementation'}.items():check(ni.get(key)==value,'Notifications safety boundary changed '+key)
     for path in ('execution/requirements.json','execution/test-plan.json','decisions/cinenest-open-decisions.json','sources/cinenest-source-register.json'):
-        check(json.loads((K/path).read_text())==ni_prior(path),'Notifications changed full coverage/decisions/sources '+path)
+        check(customer_original(json.loads((K/path).read_text()),path)==ni_prior(path),'Notifications changed full coverage/decisions/sources '+path)
     check(set(ni.get('ownedFiles',{}))==ni_allowed,'Notifications owned file inventory invalid')
     for name,digest in ni.get('ownedFiles',{}).items():check((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Notifications source checksum mismatch '+name)
     ni_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ni_base,'--','backend','frontend'],text=True).splitlines());ni_added=ni_allowed-ni_app
@@ -101,6 +155,7 @@ def main():
     if errors:
         print('\n'.join('FAIL '+message for message in errors));return 1
     def ni_original(payload,path):
+        payload=customer_original(payload,path)
         if path=='execution/status.json' and 'notificationImplementation' in payload:return ni_prior(path)
         if path=='execution/change-sets.json' and any(row['id']=='CN-NOTIFY-001' and 'implementationAuthorization' in row for row in payload.get('changeSets',[])):return ni_prior(path)
         return payload
@@ -1328,7 +1383,7 @@ def main():
         else:
             check(expected == current, 'Omission gap/status silently changed ' + old['id'])
     progress = (K / 'PROGRESS.md').read_text()
-    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(access_task['dependencies'] if c['id']=='CN-ACCESS-001' else refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + (ni_task['workStatus']+' / '+ni_task['readiness'] if c['id']=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if c['id']=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if c['id']=='CN-REFUND-001' else 'VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
+    task_rows = ''.join('| ' + c['id'] + ' | ' + str(c['phase']) + ' | ' + c['objective'] + ' | ' + (', '.join(customer_task['dependencies'] if c['id']=='CN-CUSTOMER-001' else access_task['dependencies'] if c['id']=='CN-ACCESS-001' else refund_actual_task['dependencies'] if c['id']=='CN-REFUND-001' else c['dependencies']) or 'None') + ' | ' + (ni_task['workStatus']+' / '+ni_task['readiness'] if c['id']=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if c['id']=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if c['id']=='CN-REFUND-001' else 'VERIFIED / CLOSED' if c['id']=='CN-GATE-001' else 'VERIFIED / CLOSED' if c['id']=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else c['workStatus'] + ' / ' + c['readiness']) + ' |\n' for c in changes)
     check(task_rows in progress, 'PROGRESS task projection diverges from authority')
     mapping_rows = ''.join('| ' + e['sourcePath'] + ' | [' + e['canonicalPath'] + '#' + e['anchor'] + '](' + e['canonicalPath'].removeprefix('knowledge/') + '#' + e['anchor'] + ') | [original @ ' + e['historicalReference']['commit'][:7] + '](' + e['historicalReference']['url'] + ') |\n' for e in manifest['consolidation']['documents'])
     check(mapping_rows in progress and '<a id="consolidation"></a>' in progress, 'PROGRESS source/destination/removal mapping omitted')
@@ -1417,7 +1472,7 @@ def main():
     task_projection = re.findall(r'^\| (CN-[^|]+) \| (P\d+) \| ([^|]+) \| ([^|]+) \|$', task_section, re.M)
     check([row[0] for row in task_projection] == cids, 'Existing task roadmap coverage lost/duplicated')
     for tid, phase, deps, status in task_projection:
-        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(access_task['dependencies'] if tid=='CN-ACCESS-001' else refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == (ni_task['workStatus']+' / '+ni_task['readiness'] if tid=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if tid=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if tid=='CN-REFUND-001' else 'VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
+        check(phase in roadmap_meta['phaseIds'] and deps == (', '.join(customer_task['dependencies'] if tid=='CN-CUSTOMER-001' else access_task['dependencies'] if tid=='CN-ACCESS-001' else refund_actual_task['dependencies'] if tid=='CN-REFUND-001' else cmap[tid]['dependencies']) or 'None') and status == (ni_task['workStatus']+' / '+ni_task['readiness'] if tid=='CN-NOTIFY-001' else ai_task['workStatus']+' / '+ai_task['readiness'] if tid=='CN-ACCESS-001' else impl_task['workStatus']+' / '+impl_task['readiness'] if tid=='CN-REFUND-001' else 'VERIFIED / CLOSED' if tid=='CN-GATE-001' else 'VERIFIED / CLOSED' if tid=='CN-ADMIN-001' and admin_evidence.get('remoteCI')=='SUCCESS' else cmap[tid]['workStatus']+' / '+cmap[tid]['readiness']), 'Task dependency/status altered by roadmap ' + tid)
     state_roadmap = state.get('roadmapMaintenance', {})
     check(state_roadmap.get('readinessCriteria') == {'checked':6,'total':8,'evidenceClass':'DOCUMENTATION_AND_SCOPED_AUTHORITY','accepted':False} and state_roadmap.get('planningCriteria') == {'checked':13 if inventory_ci else 11 if pub_ci else 10 if pkg_ci else 9 if room_ci else 8 if ui_ci else 7,'total':74,'overallEffortPercentage':None}, 'Roadmap ratio conflates readiness with effort')
     check(state_roadmap.get('acceptedDeliveryPhases') == state_roadmap.get('demonstrationsHeld') == state_roadmap.get('demonstrationScopesAccepted') == 0 and state_roadmap.get('implementationAuthorization') == 'NOT_GRANTED', 'Unsupported phase/demo/implementation acceptance')

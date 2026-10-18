@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001 and CN-ACCESS-001 hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:19 CLOSED,9 BLOCKED,0 READY,0 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001, CN-ACCESS-001 and CN-CUSTOMER-001 task-specific hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:19 CLOSED,9 BLOCKED,0 READY,0 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -276,7 +276,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
-| CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001 | BLOCKED / BLOCKED |
+| CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-ENG-001 | 10 | Engagement scope/rule decision brief | CN-REPORT-001 | BLOCKED / BLOCKED |
@@ -693,7 +693,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-OPS-001 | P8 | CN-IOT-001 | BLOCKED / BLOCKED |
 | CN-ADMIN-001 | P9 | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | P5 | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
-| CN-CUSTOMER-001 | P3 | CN-ACCESS-001, CN-NOTIFY-001 | BLOCKED / BLOCKED |
+| CN-CUSTOMER-001 | P3 | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-AMEND-001 | P6 | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-REPORT-001 | P9 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
 | CN-ENG-001 | P9 | CN-REPORT-001 | BLOCKED / BLOCKED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-NOTIFY-001 VERIFIED/CLOSED for the approved synthetic in-app/local-capture slice; exact44-file source CI SUCCESS at aefc4629d50fb19429c608ea9bbd44bd43432d62.19 CLOSED/9 BLOCKED/0 READY/0 IN_PROGRESS /28. Live messaging disabled; PayHere deferred/BLOCKED; venue and specialists remain pending. Full requirements/phases/customer acceptance unchanged. [Current evidence](#notification-implementation). Next action: read-only review of CN-CUSTOMER-001 bounded scope and its OD-07/20/28 gates; no implementation. Earlier checkpoints below are historical.
+Current handoff: CN-CUSTOMER-001 bounded synthetic policy/API/UI/support scope approved; exact task amendment adds only CN-REFUND-001 to existing ACCESS/NOTIFY prerequisites. Owner explicitly selected recording/readiness only after inline/attachment conflict. All three prerequisites CLOSED; CN-CUSTOMER-001 remains BLOCKED solely on separate bounded implementation authorization.19 CLOSED/9 BLOCKED/0 READY/0 IN_PROGRESS /28; no application/API/page/migration change. PayHere deferred/BLOCKED, real operations disabled and venue/specialist/full acceptance gates preserved. [Current reconciliation](#customer-readiness-reconciliation). Earlier checkpoints below are historical.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1326,3 +1326,18 @@ Both knowledge validators PASS in the isolated task-source snapshot using commit
 Bounded closure: registered DoD “Delivery failure does not delete review or change payment truth” is satisfied by the actual completed-review failure-isolation and immutable/source-transaction/recovery tests above, local checks and exact-source [CI39118432048 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39118432048) at aefc4629d50fb19429c608ea9bbd44bd43432d62. All44 owned application hashes match that CI source. CN-NOTIFY-001 VERIFIED/CLOSED only for the authorized synthetic slice; preceding IN_PROGRESS checkpoint is historical. No dependency edge changed and no downstream task automatically READY: CN-CUSTOMER-001 retains its own OD-07/20/28 and scope/authority gates. Final documentation-source CI is verified separately after publishing this receipt; no deployment.
 
 Current MVP: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;19 CLOSED,9 BLOCKED,0 READY,0 IN_PROGRESS /28.92 full requirements/92 full test plans remain unaccepted;0/10 delivery phases accepted. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 demonstrations held/accepted. Global OD-01/05/29, live provider delivery/privacy/retention/staffing qualification, venue/specialists/physical/commercial gates remain pending. Manual-payment-first retained and PayHere deferred/BLOCKED. Unrelated next-env.d.ts and two untracked DOCX companions preserved. Exactly one next action: read-only CN-CUSTOMER-001 scope/decision review; no further implementation authorized by this invocation.
+
+<a id="customer-readiness-reconciliation"></a>
+## CN-CUSTOMER-001 bounded approvals/readiness — 2026-10-18
+
+Verified nested repository main/origin/main at de213bfe67a48075c2aa8d668bab5b8c53c35476, tracking ahead/behind0/0, Flyway V14; unrelated next-env.d.ts and two untracked DOCX companions retained. Owner attachmentcec635bf-b205-4ca9-a861-6947a88d9ddd approves the latest bounded review and expressly selects recording/readiness only; inline implementation wording conflicted. Owner clarified **Record approvals and reassess readiness only**. Policy/scope/dependency approvals retained, implementation NOT_GRANTED; no application/API/UI/migration/infrastructure authorized in this session.
+
+[Business policy](PROJECT.md#customer-bank-only-policy), [architecture/contracts/tests/rollback](ARCHITECTURE.md#customer-bank-only-scope) and [UI](DESIGN.md#customer-bank-only-ui) own the approved facts. Existing registered objective/scope/exclusion/requirements/DoD retained: “Historical purchase shown; unresolved state never false success”. Bounded OD-07/20/28 and support/privacy interpretation satisfied without closing the global decisions or full support acceptance. Upcoming/current/past remain display groups; pending requests never become bookings; receipt review/verified funding/confirmation/refund/Access/notification states remain separate.
+
+Approved dependency change is exactly [CN-ACCESS-001,CN-NOTIFY-001] → [CN-ACCESS-001,CN-NOTIFY-001,CN-REFUND-001], all three VERIFIED/CLOSED for bounded synthetic capabilities. Original task edges preserved in historicalImplementationDependencies; no other edge changed, no PayHere prerequisite added and no requirement/test dependency removed. CN-AMEND-001 retains its own policy/scope/dependency gates. Full CN-C08/CN-SUP-01, OD-29 support staffing/escalation and wider OD-07/20/28 remain unaccepted. No new task IDs, sources of truth or knowledge files.
+
+CN-CUSTOMER-001 stays BLOCKED because the repository READY rule also requires implementation authorization, expressly withheld by the clarified current instruction. Remaining gate: **Separate bounded synthetic CN-CUSTOMER-001 implementation authorization**. No application tests executed or planned tests marked passed. Existing completed upstream evidence remains historical technical verification, not commercial/customer/provider/physical acceptance. Readiness/validation/publication evidence recorded in existing registries and conversation.
+
+MVP unchanged: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74;19 CLOSED,9 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 full test plans. D0 prepared/document-rehearsed,D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted and0/10 delivery phases accepted. Manual-payment-first retained; PayHere deferred/BLOCKED. Venue/specialist appointments and all synthetic-only restrictions remain. Next action: obtain separate bounded CN-CUSTOMER-001 implementation authorization.
+
+Validation for this approval-only successor: design/knowledge and execution validators PASS in the approved isolated snapshot with committed next-env.d.ts; four negative controls reject implementation authority, premature READY, removed refund dependency and altered historical scope. Primary execution retains only the two pre-existing next-env.d.ts integrity findings; unrelated file preserved. Git whitespace PASS. Application tests not run for this documentation-only session; final-source CI/publication result reported in conversation.

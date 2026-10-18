@@ -1490,17 +1490,14 @@
       "outOfScope": "No amendment policy guessed; amendment later refined task under package/payment owners",
       "dependencies": [
         "CN-ACCESS-001",
-        "CN-NOTIFY-001"
+        "CN-NOTIFY-001",
+        "CN-REFUND-001"
       ],
-      "blockingDecisionIds": [
-        "OD-07",
-        "OD-20",
-        "OD-28"
-      ],
-      "affectedFilesModules": "Booking/customer UI/support TBD",
-      "dbApiUiImpact": "None for setup/decision briefs; later proposed owned schema/API/UI must be specified and approved before READY",
+      "blockingDecisionIds": [],
+      "affectedFilesModules": "Approved design only: Booking-owned history queries, Payments-owned request/funding/refund projections, existing Identity eligibility/ownership, frontend composition through authorized APIs; existing Access and Notifications workspaces",
+      "dbApiUiImpact": "Approved three GET additions and /bookings plus /bookings/[id]; reuse detail APIs; no application implementation",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "None for setup/briefs; later TBD after approved stack/schema; never implicit migration permission",
+      "migrationNeeds": "No migration approved or required; preserve V1-V14; no duplicate customer-history database",
       "plannedChecks": "Owner denial/snapshot/pending review/access/refund/error tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Historical purchase shown; unresolved state never false success",
@@ -1508,7 +1505,54 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [
+        "PROJECT.md#customer-bank-only-policy",
+        "ARCHITECTURE.md#customer-bank-only-scope",
+        "DESIGN.md#customer-bank-only-ui",
+        "PROGRESS.md#customer-readiness-reconciliation"
+      ],
+      "historicalImplementationDependencies": [
+        "CN-ACCESS-001",
+        "CN-NOTIFY-001"
+      ],
+      "downstreamDecisionIds": [
+        "OD-07",
+        "OD-20",
+        "OD-28"
+      ],
+      "decisionScopeApprovals": [
+        {
+          "decisionId": "OD-07",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        },
+        {
+          "decisionId": "OD-20",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        },
+        {
+          "decisionId": "OD-28",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION"
+        }
+      ],
+      "boundedCustomerScopeApproval": {
+        "taskId": "CN-CUSTOMER-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-18",
+        "source": "Owner attachment cec635bf-b205-4ca9-a861-6947a88d9ddd and explicit scope clarification: Record approvals and reassess readiness only",
+        "requestSha256": "a67a3f6e70ca1bbeca1f7a700b6c9d29327e8691680f216765a3209c5997b46c",
+        "canonicalSpecification": "ARCHITECTURE.md#customer-bank-only-scope",
+        "businessPolicy": "PROJECT.md#customer-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      },
+      "remainingReadinessGates": [
+        "Separate bounded synthetic CN-CUSTOMER-001 implementation authorization"
+      ]
     },
     {
       "id": "CN-AMEND-001",

@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-NOTIFY-001",
-  "mode": "SYNTHETIC_NOTIFICATION_IMPLEMENTATION",
-  "workStatus": "VERIFIED",
+  "taskId": "CN-CUSTOMER-001",
+  "mode": "CUSTOMER_SCOPE_APPROVAL_READINESS_ONLY",
+  "workStatus": "BLOCKED",
   "productStage": "BOUNDED_SYNTHETIC_ACCESS_VERIFIED_REAL_DOOR_CONTROL_DISABLED",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
@@ -10,21 +10,21 @@
   "upstream": "origin/main",
   "baselineHead": "89b9cd42e693277037275641cf44d0ebd1f884c5",
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
-  "currentChangeSet": "CN-NOTIFY-001",
+  "currentChangeSet": "CN-CUSTOMER-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-CUSTOMER-001",
-  "nextAction": "Review CN-CUSTOMER-001 scope and its own decision gates; no implementation",
+  "nextAction": "Obtain separate bounded synthetic CN-CUSTOMER-001 implementation authorization; do not implement",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "CN-NOTIFY-001 NOT_IMPLEMENTED; BANK-001 and ACCESS VERIFIED/CLOSED for their bounded synthetic scopes",
+  "implementationEvidence": "CN-CUSTOMER-001 NOT_IMPLEMENTED; approved policy/API/UI/support scope and single refund dependency amendment only",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
     "PR-BANK-001"
   ],
   "blockers": [
-    "CN-NOTIFY-001 separate bounded implementation authorization not granted",
-    "Live messaging disabled; PayHere deferred/BLOCKED and full delivery/gateway acceptance retained",
-    "Venue/specialist and production privacy/staffing/commercial gates remain downstream and unresolved"
+    "CN-CUSTOMER-001: separate bounded implementation authorization expressly withheld in this recording-only session",
+    "Downstream only: PayHere deferred/BLOCKED; no direct customer hard edge",
+    "Downstream only: venue/specialists and wider commercial/privacy/support/physical acceptance remain pending"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
@@ -32,7 +32,7 @@
   "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS",
   "publicationEvidence": "Source 05ad25908d320b0d4a90a9c5cf7ae3da10183131 pushed to origin/main; exact-source CI39111005350 SUCCESS; final documentation receipt verified separately",
   "lastObservedHead": "05ad25908d320b0d4a90a9c5cf7ae3da10183131",
-  "evidencePath": "PROGRESS.md#notification-readiness-reconciliation",
+  "evidencePath": "PROGRESS.md#customer-readiness-reconciliation",
   "evidenceFreshness": "2026-10-18 exact Access source CI39111005350 SUCCESS;39 owned source hash receipt",
   "availableTools": [
     "exec/file reads/edits",
@@ -49,14 +49,14 @@
   ],
   "omissionRegister": "execution/omissions.json",
   "oneWriter": "parent agent; reviewers read-only; no atomic task-claim guarantee",
-  "verificationScope": "Documentation approval and readiness reconciliation only; notification application tests NOT_RUN",
+  "verificationScope": "Approval/readiness documentation only; no customer implementation or application acceptance",
   "productAcceptance": "NOT_ACCEPTED",
   "stackApproval": "OWNER_APPROVED_INITIAL_DIRECTION",
-  "implementationAuthorization": "GRANTED_BOUNDED_SYNTHETIC_NOTIFICATIONS",
+  "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
   "instructionUse": "MANUALLY_READ",
   "approvalQueue": [
-    "CN-NOTIFY-001 separate bounded synthetic implementation authorization",
-    "Real commercial banking/fee/privacy/staffing/provider/production approvals remain separate"
+    "Separate bounded synthetic CN-CUSTOMER-001 implementation authorization",
+    "Commercial/support/venue/specialist/provider/production approvals remain separate downstream gates"
   ],
   "checks": [
     {
@@ -2505,7 +2505,7 @@
       "failures": 0,
       "errors": 0,
       "skipped": 0,
-      "postgresql": "18.6 real clean V1\u2013V9, populated V8\u2013V9 upgrade, repeat startup and constraints PASS",
+      "postgresql": "18.6 real clean V1–V9, populated V8–V9 upgrade, repeat startup and constraints PASS",
       "workerProcessRestart": "PASS two fresh isolated worker processes; durable intent retained; live delivery DISABLED",
       "holdConversionRollback": "PASS mandatory request-audit failure rolls back Booking conversion and permits safe retry",
       "lockFreshness": "PASS eligibility expiry during real PostgreSQL row-lock wait denies subsequent handoff",
@@ -2797,7 +2797,7 @@
   },
   "ownerAccountabilityApproval": {
     "recordedDate": "2026-10-17",
-    "approvalSource": "Owner conversation: CINENEST \u2014 OWNER ACCOUNTABILITY APPROVAL",
+    "approvalSource": "Owner conversation: CINENEST — OWNER ACCOUNTABILITY APPROVAL",
     "canonicalRecord": "PROJECT.md#accountability-appointments",
     "approvedRoles": [
       "Source Custodian",
@@ -2834,7 +2834,7 @@
   "gateDocumentationClosure": {
     "status": "VERIFIED_DOCUMENTATION_ONLY",
     "approvalDate": "2026-10-17",
-    "approvalSource": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
+    "approvalSource": "Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status",
     "interpretation": "Verified original sources and named management accountability may satisfy this documentation task when all outstanding venue-specific and qualified specialist appointments are explicitly recorded as downstream acceptance gates. This does not waive, complete or remove any appointment, review or acceptance evidence.",
     "baselineHead": "88d5746ed1a4cb987dee56d4579380984a876e63",
     "managementOwner": "Hasitha Wijerathna",
@@ -3228,5 +3228,44 @@
     "validationNotes": "Primary design/whitespace PASS; primary execution retains exactly two pre-existing next-env.d.ts findings. Isolated task-owned source with committed next-env: both knowledge validators PASS;11 negative controls rejected; no protections weakened.",
     "sourceCommit": "aefc4629d50fb19429c608ea9bbd44bd43432d62",
     "sourceRun": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39118432048"
+  },
+  "customerReadiness": {
+    "baselineHead": "de213bfe67a48075c2aa8d668bab5b8c53c35476",
+    "approval": {
+      "taskId": "CN-CUSTOMER-001",
+      "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+      "date": "2026-10-18",
+      "source": "Owner attachment cec635bf-b205-4ca9-a861-6947a88d9ddd and explicit scope clarification: Record approvals and reassess readiness only",
+      "requestSha256": "a67a3f6e70ca1bbeca1f7a700b6c9d29327e8691680f216765a3209c5997b46c",
+      "canonicalSpecification": "ARCHITECTURE.md#customer-bank-only-scope",
+      "businessPolicy": "PROJECT.md#customer-bank-only-policy",
+      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "fullDecisionStatus": "OPEN_DECISION",
+      "realPayments": "DISABLED",
+      "gateway": "DEFERRED_BLOCKED"
+    },
+    "status": "BLOCKED",
+    "remainingGate": "Separate bounded synthetic CN-CUSTOMER-001 implementation authorization",
+    "dependencyAmendment": {
+      "taskId": "CN-CUSTOMER-001",
+      "before": [
+        "CN-ACCESS-001",
+        "CN-NOTIFY-001"
+      ],
+      "after": [
+        "CN-ACCESS-001",
+        "CN-NOTIFY-001",
+        "CN-REFUND-001"
+      ],
+      "source": "Explicit owner attachment cec635bf-b205-4ca9-a861-6947a88d9ddd; only add CN-REFUND-001"
+    },
+    "satisfiedPrerequisites": [
+      "CN-ACCESS-001",
+      "CN-NOTIFY-001",
+      "CN-REFUND-001"
+    ],
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "checks": "PASS isolated knowledge/execution validators and four negative controls; primary execution retains only pre-existing next-env integrity findings; whitespace PASS",
+    "evidencePath": "PROGRESS.md#customer-readiness-reconciliation"
   }
 }

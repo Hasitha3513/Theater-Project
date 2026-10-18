@@ -316,6 +316,19 @@
         "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
         "fullDecisionStatus": "OPEN_DECISION",
         "realMoney": "DISABLED"
+      },
+      "boundedCustomerApproval": {
+        "taskId": "CN-CUSTOMER-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-18",
+        "source": "Owner attachment cec635bf-b205-4ca9-a861-6947a88d9ddd and explicit scope clarification: Record approvals and reassess readiness only",
+        "requestSha256": "a67a3f6e70ca1bbeca1f7a700b6c9d29327e8691680f216765a3209c5997b46c",
+        "canonicalSpecification": "ARCHITECTURE.md#customer-bank-only-scope",
+        "businessPolicy": "PROJECT.md#customer-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {
@@ -721,6 +734,19 @@
         "canonicalSpecification": "ARCHITECTURE.md#gateway-sandbox-policy",
         "fullDecisionStatus": "OPEN_DECISION",
         "implementationStatus": "NOT_VERIFIED"
+      },
+      "boundedCustomerApproval": {
+        "taskId": "CN-CUSTOMER-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-18",
+        "source": "Owner attachment cec635bf-b205-4ca9-a861-6947a88d9ddd and explicit scope clarification: Record approvals and reassess readiness only",
+        "requestSha256": "a67a3f6e70ca1bbeca1f7a700b6c9d29327e8691680f216765a3209c5997b46c",
+        "canonicalSpecification": "ARCHITECTURE.md#customer-bank-only-scope",
+        "businessPolicy": "PROJECT.md#customer-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {
@@ -987,6 +1013,19 @@
         "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
         "fullDecisionStatus": "OPEN_DECISION",
         "realMoney": "DISABLED"
+      },
+      "boundedCustomerApproval": {
+        "taskId": "CN-CUSTOMER-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_BANK_ONLY",
+        "date": "2026-10-18",
+        "source": "Owner attachment cec635bf-b205-4ca9-a861-6947a88d9ddd and explicit scope clarification: Record approvals and reassess readiness only",
+        "requestSha256": "a67a3f6e70ca1bbeca1f7a700b6c9d29327e8691680f216765a3209c5997b46c",
+        "canonicalSpecification": "ARCHITECTURE.md#customer-bank-only-scope",
+        "businessPolicy": "PROJECT.md#customer-bank-only-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realPayments": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
       }
     },
     {
