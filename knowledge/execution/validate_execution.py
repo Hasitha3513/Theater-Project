@@ -11,7 +11,7 @@ K = E.parent
 R = K.parent
 
 
-def main():
+def historical_main():
     errors = []
     def check(ok, message):
         if not ok:
@@ -1702,5 +1702,79 @@ def main():
     return 0
 
 
+def iot_implementation_main():
+    """Validate the actual authorized successor before in-memory historical receipt replay. No disk writes."""
+    import io
+    from unittest.mock import patch
+    base='cb4f7bbca657fac6eff362b6b22f57c437b9689a'
+    errors=[]
+    def require(ok,message):
+        if not ok:errors.append(message)
+    def prior(path):return subprocess.check_output(['git','-C',str(R),'show',base+':'+path])
+    protected={'execution/change-sets.json': '85cdeecd3914b90b92e679cff4fa762767c30f179a0b0264ce15b7feba1ca20c', 'execution/status.json': '6bf81fa11096cae2e16c3189681e6585478044f2fb91a23bff83044679aff0f1', 'execution/requirements.json': '2c09c40fd2b84c1b07351410831738deb4e0b6f3ee5ad4dcbebdc0096cc8e764', 'execution/test-plan.json': '0536748b469df35b7ba641b791eafd24ad5e575b05759eb8defb846ad013fe99'}
+    actual={p:json.loads((K/p).read_text()) for p in protected}
+    for p,h in protected.items():require(hashlib.sha256(json.dumps(actual[p],sort_keys=True).encode()).hexdigest()==h,'IoT implementation registry/history changed '+p)
+    task=next(x for x in actual['execution/change-sets.json']['changeSets'] if x['id']=='CN-IOT-001')
+    evidence=actual['execution/status.json']['iotImplementation'];owned={'backend/src/main/java/com/cinenest/iot/internal/JdbcIotRepository.java', 'frontend/lib/bank-backend.ts', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/iot/internal/IotService.java', 'frontend/app/api/admin/venues/[venueId]/iot/devices/[device]/commands/[command]/reconciliations/route.ts', 'backend/src/main/java/com/cinenest/access/internal/DeviceAccessAdapter.java', 'frontend/app/admin/iot/page.tsx', 'frontend/app/api/admin/venues/[venueId]/iot/devices/[device]/commands/route.ts', 'frontend/app/api/admin/venues/[venueId]/iot/devices/[device]/commands/[command]/simulations/route.ts', 'frontend/tests/iot.test.mjs', 'backend/src/main/java/com/cinenest/iot/internal/IotBootstrap.java', 'frontend/components/iot.tsx', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'frontend/app/api/admin/venues/[venueId]/iot/devices/route.ts', 'backend/src/main/java/com/cinenest/iot/package-info.java', 'backend/src/main/java/com/cinenest/iot/internal/IotController.java', 'backend/src/test/java/com/cinenest/iot/internal/IotFaults.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/main/java/com/cinenest/access/DeviceAccess.java', 'backend/src/main/resources/db/migration/V16__synthetic_lighting.sql', 'backend/src/main/java/com/cinenest/iot/internal/IotPolicy.java', 'frontend/package.json', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'frontend/tests/iot-browser.mjs', 'backend/src/main/java/com/cinenest/iot/internal/IotWorker.java', 'backend/src/main/java/com/cinenest/iot/internal/IotRepository.java', 'backend/src/main/java/com/cinenest/iot/internal/IotFailure.java', 'frontend/app/api/admin/venues/[venueId]/iot/devices/[device]/route.ts', 'backend/src/main/java/com/cinenest/iot/internal/LightingSimulator.java'}
+    require(set(evidence['ownedFiles'])==owned,'IoT source allowlist changed')
+    for p,h in evidence['ownedFiles'].items():require((R/p).is_file() and hashlib.sha256((R/p).read_bytes()).hexdigest()==h,'IoT owned source checksum mismatch '+p)
+    before=json.loads(prior('knowledge/execution/change-sets.json'))['changeSets']
+    require([(x['id'],x['dependencies']) for x in actual['execution/change-sets.json']['changeSets']]==[(x['id'],x['dependencies']) for x in before],'IoT dependency graph changed')
+    require(task['dependencies']==['CN-ACCESS-001'] and task['authorityAvailable'] and task['remainingReadinessGates']==[] and task['implementationAuthorization']==evidence['authority'],'IoT implementation authority invalid')
+    require(task['definitionOfDone']=='Unknown never OFF/available; simulator evidence qualified','IoT DoD changed')
+    require(evidence['authority']['scope']=='GRANTED_BOUNDED_SYNTHETIC_LIGHTING' and evidence['authority']['requestSha256']=='76f47b3160debd0e8005090cc48aeac44230fb675f95476104e080c3e1f3f3e2','IoT owner authority lost')
+    require(evidence['realEquipmentControl']=='DISABLED' and evidence['gateway']=='DEFERRED_BLOCKED' and evidence['fullRequirementAcceptance']=='NOT_ACCEPTED','IoT safety boundary changed')
+    for path,key,ids in [('execution/requirements.json','requirements',{'CN-O02','CN-O04','CN-A05'}),('execution/test-plan.json','tests',{'T-CN-O02','T-CN-O04','T-CN-A05','T-CN-NFR-02'})]:
+        doc=json.loads(json.dumps(actual[path]));old=json.loads(prior('knowledge/'+path))
+        for row in doc[key]:
+            receipt=row.pop('boundedIotImplementationEvidence',None)
+            require((receipt is not None)==(row['id'] in ids),'IoT bounded coverage missing '+row['id'])
+            if receipt:require(receipt['fullAcceptance']=='NOT_ACCEPTED' and receipt['status']==evidence['workStatus'],'IoT full acceptance/test promotion '+row['id'])
+        require(doc==old,'IoT altered full requirement/test history '+path)
+    for path in ['knowledge/decisions/cinenest-open-decisions.json','knowledge/execution/source-ledger.json','knowledge/sources/cinenest-source-register.json']:
+        require(json.loads((R/path).read_text())==json.loads(prior(path)),'IoT changed prior decisions/source evidence '+path)
+    baseline=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',base,'--','backend','frontend'],text=True).splitlines());added=owned-baseline
+    inventory=set(subprocess.check_output(['git','-C',str(R),'-c','core.quotePath=false','ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    require(inventory==baseline|added,'IoT unrelated application inventory changed')
+    for path in baseline-owned-{'frontend/next-env.d.ts'}:require((R/path).read_bytes()==prior(path),'IoT unrelated application changed '+path)
+    require({p.name for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}=={Path(p).name for p in baseline if '/db/migration/' in p}|{'V16__synthetic_lighting.sql'},'IoT migration inventory changed')
+    sql=(R/'backend/src/main/resources/db/migration/V16__synthetic_lighting.sql').read_text()
+    require(set(re.findall(r'CREATE TABLE ([a-z_]+[.][a-z_]+)',sql))=={'cinenest_iot.'+x for x in ['device','assignment','command','receipt','attempt','audit']},'IoT datastore ownership changed')
+    require(all(x not in sql for x in ['cinenest_access.','cinenest_payments.','cinenest_booking.']),'IoT foreign datastore mutation')
+    controller=(R/'backend/src/main/java/com/cinenest/iot/internal/IotController.java').read_text()
+    require(set(re.findall(r'@(Get|Post)Mapping[(]"([^"]+)"[)]',controller))=={('Get','/api/admin/venues/{v}/iot/devices'),('Get','/api/admin/venues/{v}/iot/devices/{d}'),('Post','/api/admin/venues/{v}/iot/devices/{d}/commands'),('Post','/api/admin/venues/{v}/iot/devices/{d}/commands/{c}/simulations'),('Post','/api/admin/venues/{v}/iot/devices/{d}/commands/{c}/reconciliations')},'IoT API surface changed')
+    progress=(K/'PROGRESS.md').read_text();old_progress=prior('knowledge/PROGRESS.md').decode()
+    require(re.findall(r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))',progress,re.M)==re.findall(r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))',old_progress,re.M),'IoT promoted phase/demo criteria')
+    require('SYNTHETIC IOT TEST — NO REAL EQUIPMENT CONTROL' in (R/'frontend/components/iot.tsx').read_text(),'IoT simulation label lost')
+    closed=evidence['workStatus']=='VERIFIED'
+    require(task['workStatus']==evidence['workStatus'] and task['readiness']==('CLOSED' if closed else 'READY'),'IoT status mismatched')
+    require('| CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | '+task['workStatus']+' / '+task['readiness']+' |' in progress,'IoT current task projection stale')
+    if closed:
+        require(evidence.get('checks')=={'backend':'PASS','frontend':'PASS','browser':'PASS','architecture':'PASS','launchers':'PASS','governance':'PASS'} and evidence.get('sourceCI')=='SUCCESS','IoT closure lacks required checks/CI')
+        source=evidence.get('sourceCommit','');require(bool(re.fullmatch('[0-9a-f]{40}',source)),'IoT exact-source receipt invalid')
+        if re.fullmatch('[0-9a-f]{40}',source):
+            for p,h in evidence['ownedFiles'].items():require(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',source+':'+p])).hexdigest()==h,'IoT CI source stale '+p)
+    if errors:
+        print('\n'.join('FAIL '+x for x in errors));return 1
+    # Actual new inputs passed above. Replay frozen earlier receipts without disguising unexpected source changes.
+    replacements={R/p:prior(p) for p in owned&baseline}
+    replacements.update({K/p:prior('knowledge/'+p) for p in protected})
+    replacements[K/'PROGRESS.md']=prior('knowledge/PROGRESS.md')
+    original_read=Path.read_bytes;original_text=Path.read_text;original_glob=Path.glob;original_output=subprocess.check_output
+    def read_bytes(path,*a,**kw):return replacements[path] if path in replacements else original_read(path,*a,**kw)
+    def read_text(path,*a,**kw):return replacements[path].decode() if path in replacements else original_text(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in original_glob(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(args,*a,**kw):
+        value=original_output(args,*a,**kw)
+        if args[0]=='git' and (('diff' in args and '--name-only' in args) or 'ls-files' in args):
+            text=value if isinstance(value,str) else value.decode();removed=owned if 'diff' in args else added
+            text=''.join(line+'\n' for line in text.splitlines() if line not in removed);return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',read_bytes),patch.object(Path,'read_text',read_text),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):
+        result=historical_main()
+    if result==0:print('PASS IoT successor: exact authority/source/API/schema,unchanged dependencies/full coverage,qualified acceptance and historical receipts')
+    return result
+
+
 if __name__ == '__main__':
-    raise SystemExit(main())
+    raise SystemExit(iot_implementation_main())

@@ -1075,7 +1075,14 @@
       "verificationDecisionIds": [
         "OD-04",
         "OD-10"
-      ]
+      ],
+      "boundedIotImplementationEvidence": {
+        "changeSetId": "CN-IOT-001",
+        "scope": "Bounded synthetic lighting command/observation only; no full physical or production acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#iot-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-A06",
@@ -1488,7 +1495,14 @@
         "OD-02",
         "OD-13",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "boundedIotImplementationEvidence": {
+        "changeSetId": "CN-IOT-001",
+        "scope": "Bounded synthetic lighting command/observation only; no full physical or production acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#iot-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-O03",
@@ -1588,7 +1602,14 @@
       "verificationDecisionIds": [
         "OD-04",
         "OD-10"
-      ]
+      ],
+      "boundedIotImplementationEvidence": {
+        "changeSetId": "CN-IOT-001",
+        "scope": "Bounded synthetic lighting command/observation only; no full physical or production acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#iot-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-A12",

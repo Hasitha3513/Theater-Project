@@ -10,7 +10,7 @@ class FoundationArchitectureTest {
     @Test
     void declaredFoundationModuleHasAnEncapsulatedImplementation() {
         var modules = ApplicationModules.of(CineNestApplication.class);
-        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing", "booking", "verification", "payments", "access", "notifications");
+        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing", "booking", "verification", "payments", "access", "notifications", "iot");
         modules.verify();
     }
 
@@ -107,4 +107,11 @@ class FoundationArchitectureTest {
       String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/access/internal/JdbcAccessRepository.java"));assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_payments.","cinenest_identity.","cinenest_verification.");
       noClasses().that().resideInAPackage("com.cinenest.access..").should().dependOnClassesThat().resideInAnyPackage("java.net..","java.net.http..").check(classes);
     }
+    @Test void iotUsesPublicPortsAndHasNoNetworkOrForeignPersistence() throws Exception {
+ var classes=new ClassFileImporter().importPackages("com.cinenest");
+ noClasses().that().resideInAPackage("com.cinenest.iot..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.access.internal..","com.cinenest.booking.internal..","com.cinenest.identity.internal..","com.cinenest.rooms.internal..","java.net..","java.net.http..").check(classes);
+ noClasses().that().haveSimpleName("IotService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+ noClasses().that().haveSimpleName("IotService").should().dependOnClassesThat().haveSimpleName("JdbcIotRepository").check(classes);
+ String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/iot/internal/JdbcIotRepository.java"));assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_access.","cinenest_identity.","cinenest_rooms.");
+ }
 }

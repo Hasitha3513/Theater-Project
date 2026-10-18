@@ -508,7 +508,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedIotImplementationEvidence": {
+        "changeSetId": "CN-IOT-001",
+        "scope": "Bounded synthetic lighting command/observation only; no full physical or production acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#iot-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-A06",
@@ -694,7 +701,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedIotImplementationEvidence": {
+        "changeSetId": "CN-IOT-001",
+        "scope": "Bounded synthetic lighting command/observation only; no full physical or production acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#iot-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-O03",
@@ -725,7 +739,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedIotImplementationEvidence": {
+        "changeSetId": "CN-IOT-001",
+        "scope": "Bounded synthetic lighting command/observation only; no full physical or production acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#iot-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-A12",
@@ -1012,6 +1033,13 @@
         "scope": "One pre-credential synthetic zero-difference reschedule; no full commercial or physical acceptance",
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "boundedIotImplementationEvidence": {
+        "changeSetId": "CN-IOT-001",
+        "scope": "Bounded synthetic lighting command/observation only; no full physical or production acceptance",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#iot-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
     },

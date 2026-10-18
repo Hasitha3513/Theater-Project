@@ -1248,22 +1248,23 @@
         "CN-ACCESS-001"
       ],
       "blockingDecisionIds": [],
-      "affectedFilesModules": "IoT-owned simulator/persistence/operator UI; narrow public Booking/Access/Identity interfaces; no foreign repositories",
-      "dbApiUiImpact": "Approved additive IoT-owned design; five scoped staff APIs and existing-token staff UI; no implementation",
+      "affectedFilesModules": "IoT persistence port/JDBC adapter/in-process simulator/controller/bootstrap/expiry worker; public Access DeviceAccess; Identity vocabulary/HTTP; existing staff shell/transport/UI and tests",
+      "dbApiUiImpact": "Additive V16 six IoT-owned tables; five scoped staff APIs; /admin/iot",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "Additive successor to V15, candidate V16 only after separate implementation authorization; V1-V15 unchanged",
+      "migrationNeeds": "V16__synthetic_lighting.sql additive; V1-V15 unchanged; no production inventory or destructive migration",
       "plannedChecks": "TTL/ACL/reconnect/out-of-order/no-stale-actuation tests",
       "rollback": "Disable new simulator commands; retain assignments,desired states,attempts,observations,unknown/reconciliation/audit history; compatible code rollback or reviewed forward remediation; no destructive migration",
       "definitionOfDone": "Unknown never OFF/available; simulator evidence qualified",
       "requiredApproval": "Simulator slice + protocol/capability approval, physical work separate",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
       "evidencePaths": [
         "PROJECT.md#iot-synthetic-policy",
         "ARCHITECTURE.md#iot-synthetic-scope",
         "DESIGN.md#iot-synthetic-ui",
-        "PROGRESS.md#iot-readiness-reconciliation"
+        "PROGRESS.md#iot-readiness-reconciliation",
+        "PROGRESS.md#iot-implementation"
       ],
       "downstreamDecisionIds": [
         "OD-01",
@@ -1300,9 +1301,15 @@
         "realEquipmentControl": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
       },
-      "remainingReadinessGates": [
-        "Separate bounded synthetic CN-IOT-001 implementation authorization"
-      ]
+      "remainingReadinessGates": [],
+      "implementationAuthorization": {
+        "source": "Owner inline instruction and attachment fbeb2cd0-09c6-4160-b862-583cd0e6a1c0",
+        "requestSha256": "76f47b3160debd0e8005090cc48aeac44230fb675f95476104e080c3e1f3f3e2",
+        "scope": "GRANTED_BOUNDED_SYNTHETIC_LIGHTING",
+        "date": "2026-10-18",
+        "realEquipmentControl": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      }
     },
     {
       "id": "CN-OPS-001",
