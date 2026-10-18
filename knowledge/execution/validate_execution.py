@@ -56,6 +56,35 @@ def main():
     if not all([backlog, coverage, tests_doc, ledger, state]):
         print('\n'.join(errors))
         return 1
+    # Owner-approved notification readiness-only successor; no implementation, new edges or acceptance.
+    notify_base='96a2eb0ebcec784aac9e62b13a0fa3404a798a3b'
+    notify_expected={'execution/change-sets.json': 'a146ba085cff5db6434c5270236f65e1fb96bd2b496fc34ffb95151f87325d3b', 'execution/status.json': 'c2c2f83b61e2f591c379d03de07a723d9843671169d036cca0c6873589c6aca0', 'decisions/cinenest-open-decisions.json': 'b5f351badda1f9da99aeefe03019aa82d600e45cb9c3f938c25b2ea6ea51cb2f'}
+    notify_prior={}
+    for path,digest in notify_expected.items():
+        current=json.loads((K/path).read_text())
+        check(hashlib.sha256(json.dumps(current,sort_keys=True).encode()).hexdigest()==digest,'Notification readiness scope/authority/history changed '+path)
+        notify_prior[path]=json.loads(subprocess.check_output(['git','-C',str(R),'show',notify_base+':knowledge/'+path],text=True))
+    notify_task=next(row for row in backlog['changeSets'] if row['id']=='CN-NOTIFY-001')
+    check(not notify_task['authorityAvailable'] and notify_task['readiness']=='BLOCKED' and notify_task['workStatus']=='BLOCKED','Readiness-only notification approval cannot authorize implementation')
+    old_tasks=notify_prior['execution/change-sets.json']['changeSets']
+    check(len(backlog['changeSets'])==28 and {x['id']:x['dependencies'] for x in backlog['changeSets']}=={x['id']:x['dependencies'] for x in old_tasks},'Notification approval changed dependency edges/count')
+    for row,old in zip(backlog['changeSets'],old_tasks):
+        if row['id']!='CN-NOTIFY-001':check(row==old,'Notification approval changed unrelated task '+row['id'])
+    for path in ('execution/requirements.json','execution/test-plan.json'):
+        check((K/path).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',notify_base+':knowledge/'+path]),'Notification approval changed full requirement/test coverage '+path)
+    notify_app=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',notify_base,'--','backend','frontend'],text=True).splitlines())
+    current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
+    check(current_app==notify_app,'Readiness-only notification approval changed application inventory')
+    app_delta=subprocess.check_output(['git','-C',str(R),'diff','--name-only',notify_base,'--','backend','frontend','scripts','Run.sh','Run-backend.sh','Run-frontend.sh','Run-verify.sh'],text=True).splitlines()
+    check(set(app_delta)<={'frontend/next-env.d.ts'},'Readiness-only notification approval changed application/launcher source')
+    notify_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',notify_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
+    check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==set(notify_migrations),'Readiness-only notification approval created migration')
+    if errors:
+        print('\n'.join('FAIL '+message for message in errors));return 1
+    def notify_original(payload,path):
+        if path in notify_expected and hashlib.sha256(json.dumps(payload,sort_keys=True).encode()).hexdigest()==notify_expected[path]:return json.loads(json.dumps(notify_prior[path]))
+        return payload
+    backlog=notify_original(backlog,'execution/change-sets.json');state=notify_original(state,'execution/status.json')
     # Authorized Access implementation successor: current source is validated before historical replay.
     ai_base = '23512e5502ebdfbf29cf7e0a66c532b8bd214cb8'
     ai_allowed = {'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/test/java/com/cinenest/access/internal/AccessFaults.java', 'backend/src/main/java/com/cinenest/access/internal/AccessFailure.java', 'backend/src/main/java/com/cinenest/access/internal/LocalAccessSimulator.java', 'frontend/app/api/bookings/[id]/access/simulated-attempts/route.ts', 'backend/src/main/java/com/cinenest/access/internal/AccessSimulator.java', 'frontend/components/shell.tsx', 'frontend/app/api/bookings/[id]/access/credentials/route.ts', 'backend/src/main/java/com/cinenest/access/internal/JdbcAccessRepository.java', 'frontend/package.json', 'frontend/app/globals.css', 'frontend/app/api/admin/venues/[venueId]/access/credentials/[id]/route.ts', 'backend/src/main/java/com/cinenest/access/internal/AccessController.java', 'frontend/app/api/bookings/[id]/access/route.ts', 'backend/src/main/java/com/cinenest/payments/AccessFunding.java', 'backend/src/main/java/com/cinenest/access/internal/AccessRepository.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'frontend/app/api/admin/venues/[venueId]/access/credentials/route.ts', 'frontend/tests/access-browser.mjs', 'frontend/app/api/bookings/[id]/access/credentials/[credential]/reveal/route.ts', 'frontend/app/api/admin/venues/[venueId]/access/credentials/[id]/simulations/route.ts', 'backend/src/test/java/com/cinenest/access/internal/AccessPolicyTest.java', 'frontend/tests/access.test.mjs', 'frontend/app/admin/access/page.tsx', 'frontend/app/api/admin/venues/[venueId]/access/credentials/[id]/revocations/route.ts', 'backend/src/main/java/com/cinenest/access/internal/AccessService.java', 'backend/src/main/java/com/cinenest/booking/BookingAccess.java', 'backend/src/main/java/com/cinenest/access/internal/AccessWorker.java', 'frontend/components/access.tsx', 'frontend/app/access/page.tsx', 'backend/src/main/resources/db/migration/V13__synthetic_access.sql', 'frontend/lib/bank-backend.ts', 'backend/src/main/java/com/cinenest/booking/internal/BookingAccessAdapter.java', 'backend/src/main/java/com/cinenest/access/internal/AccessPolicy.java', 'backend/src/main/java/com/cinenest/identity/ScopedAuthorization.java', 'backend/src/main/java/com/cinenest/payments/internal/AccessFundingAdapter.java', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/main/java/com/cinenest/access/package-info.java'}
@@ -83,7 +112,7 @@ def main():
     ai_current_app=set(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines())
     check(ai_current_app==ai_baseline_app|ai_added,'Access changed unrelated application inventory')
     for path in ('execution/requirements.json','execution/test-plan.json','decisions/cinenest-open-decisions.json'):
-        check(json.loads((K/path).read_text())==ai_prior(path),'Access changed full requirement/test/decision history '+path)
+        check(notify_original(json.loads((K/path).read_text()),path)==ai_prior(path),'Access changed full requirement/test/decision history '+path)
     ai_migrations=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',ai_base,'--','backend/src/main/resources/db/migration'],text=True).splitlines()
     for name in ai_migrations:check((R/name).read_bytes()==subprocess.check_output(['git','-C',str(R),'show',ai_base+':'+name]),'Access altered historical migration '+name)
     check({p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}==set(ai_migrations)|{'backend/src/main/resources/db/migration/V13__synthetic_access.sql'},'Access migration scope invalid')
@@ -98,6 +127,7 @@ def main():
     if errors:
         print('\n'.join('FAIL '+message for message in errors));return 1
     def ai_original(payload,path):
+        payload=notify_original(payload,path)
         if path=='execution/status.json' and 'accessImplementation' in payload:return ai_prior(path)
         if path=='execution/change-sets.json' and any(row['id']=='CN-ACCESS-001' and 'implementationAuthorization' in row for row in payload.get('changeSets',[])):return ai_prior(path)
         return payload

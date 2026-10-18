@@ -1008,3 +1008,48 @@ GET status derives expiry even if the optional worker is delayed; scheduled/acti
 Configuration is private environment/Spring configuration only; no tracked secret defaults. Required cinenest.access.enabled=true and mode=SYNTHETIC_BANK_ONLY, key-version and keys.<version> (private base64 32-byte AES key), explicit positive attempt-limit, retry-limit, rate-count, rate-seconds, disclosure-limit and retention-seconds. Missing/invalid configuration fails closed. Retain historical key versions until protected material is retired; old version decryption fails closed if unavailable. Optional worker-enabled=true requires explicit positive worker-delay-ms. All values used by tests are synthetic fixtures, never production policy. GET admin queue supports page≥0 and size1–50; browser pages25 and stops after an empty page. All responses no-store; ordinary status/list/audit/idempotency records contain no credential. Denied token attempts persist before returning403; database-backed attempt/rate limits survive restart.
 
 Actual tests/source hashes and exact-source CI receipts belong to [PROGRESS](PROGRESS.md#access-implementation) and existing status.accessImplementation. Full hardware/offline/amendment/gateway/delivery acceptance remains separate; OD-02 globally OPEN. Rollback disables Access endpoints/work, retains V13 evidence and key versions, and uses a compatible normal revert or forward fix; no down migration or historical deletion.
+
+<a id="notification-synthetic-scope"></a>
+## CN-NOTIFY-001 approved design — implementation withheld
+
+[Owner-approved bounded policy](PROJECT.md#notification-synthetic-policy); dated2026-10-18. Proposed Notifications capability in the current modular monolith owns templates, recipient intents, durable work/attempts, inbox/read state and notification audit. Payments and Access remain owners of their source facts and submit narrow typed versioned notification envelopes through public interfaces. Current Payments internal ReviewerNotice returns DELIVERY_DISABLED and existing NOTIFY work is not delivered-message evidence. There is no Notifications module/shared event contract/inbox implementation yet; these are approved implementation design, not existing interfaces.
+
+Durable handoff must have no loss window between authoritative source state and notification intent. Record the minimal handoff in the source business transaction; dispatch/render/recipient resolution occurs after commit. A failed source transaction cannot emit a success notice; delivery failures never delete a review or rewrite financial/booking/access truth. Source command/idempotency/version references bind the fact; no generic client enqueue/recipient/template-body API. The implementation must explicitly test transaction rollback and independence of already-committed source facts. No event bus or persisted Spring Modulith publication registry is assumed configured; existing PostgreSQL durable work patterns suffice without new dependencies. No cross-module repository or foreign-table access.
+
+Use Identity-owned public recipient resolution/current grant checks and narrow owning-module context/authorization interfaces, not client roles/venue IDs or raw account directory access. Customer inbox/detail/count/read require current eligible synthetic principal, recipient ownership and applicable permissions. Staff resolution and reads must match the same venue/resource purpose and current owning-module authority; unrelated grants cannot broaden scope. Separate self inbox/read-state permissions and venue-scoped administration/status/retry/reconciliation/simulation permissions are required; no unrestricted admin/customer-body access or new role-provisioning UI. Recheck recipient eligibility, current permissions and source version at dispatch and read; suppress expired/superseded notices instead of announcing stale readiness. Failed verification/funding is not automatically a reason to hide a permitted generic support/status notice. Notifications never decides business eligibility.
+
+Approve design for additive **V14**, six Notifications-owned records:
+
+| Record | Bounded purpose |
+|---|---|
+| notification_event | Stable trusted source event/kind, resource/revision and minimal source envelope; deduplicate source identity |
+| notification_intent | Notification identity, recipient, venue, IN_APP_SYNTHETIC channel, fixed template/version, protected relative route, expiry/retention, inbox availability/read timestamps and revision |
+| notification_work | Durable operation identity, due/next attempt, independent processing state, leases/fencing, retries and unresolved/unassigned recovery |
+| notification_attempt | Append-only dispatch/capture/reconciliation evidence, stable operation/attempt identity, redacted failure code and timestamps |
+| notification_command | Actor/key/payload-hash and safe command result metadata for idempotent read/retry/reconcile/simulation; no sensitive body |
+| notification_audit | Append-only attributable source/recipient/work/read/control events without credentials or private evidence |
+
+Unique source-event identity and source/recipient/channel intent combination, UUIDs, scope association, positive version/revision/lease checks, safe keyset/page bounds and concurrent read-state guards required. Intent owns inbox state; no duplicate inbox table/business entity. Fixed escaped allowlisted templates initially; no template editor/publication feature. Test-only expiry/content retention/audit handling must be explicit; cleanup must not delete authoritative Payments/Booking/Access facts or falsely implement unresolved production erasure/legal-hold law. V1–V13 immutable; no V14 created in this session.
+
+Approved eight future operations (none implemented):
+
+| Method | Path | Contract |
+|---|---|---|
+| GET | /api/notifications | Current recipient inbox, authorized unread count, bounded pagination/filtering |
+| GET | /api/notifications/{id} | Current recipient-only detail and protected relative destination |
+| POST | /api/notifications/{id}/read | Explicit USER_MARKED_READ, ownership/eligibility, revision/idempotency/CSRF |
+| GET | /api/admin/venues/{venueId}/notifications | Scope-limited redacted delivery queue, no unrelated customer bodies |
+| GET | /api/admin/venues/{venueId}/notifications/{id} | Scoped attempts/audit/template metadata and recovery status |
+| POST | /api/admin/venues/{venueId}/notifications/{id}/retries | Separate current permission, bounded safe retry; reject unknown pending reconciliation |
+| POST | /api/admin/venues/{venueId}/notifications/{id}/reconciliations | Match durable operation/version and authoritative simulator evidence |
+| POST | /api/admin/venues/{venueId}/notifications/{id}/simulations | Test-only controlled capture/failure/unknown outcome, never live delivery |
+
+Mutations require server-derived principal/venue/resource checks, expected revision and durable idempotency key/hash, safe errors, CSRF and attributable audit; reads/counts are no-store and authorization-filtered. Allowlisted relative destinations use existing protected workspaces such as /bank and /access; no bearer credential/token in links, no arbitrary external redirects. Notification visibility cannot authorize the destination. Production transports/configuration remain disabled; fixture values and limits are not commercial defaults.
+
+Model independent dimensions instead of an invalid single state chain: source EVENT_OBSERVED; intent INTENT_CREATED/RECIPIENT_RESOLVED or explicit UNASSIGNED; delivery DELIVERY_ATTEMPTED then SIMULATOR_ACCEPTED/DELIVERY_FAILED/DELIVERY_UNKNOWN; inbox INBOX_AVAILABLE; read USER_MARKED_READ only by explicit authorized user command. Intent != attempted != simulator acceptance != availability != user mark. None proves external customer receipt or human comprehension. Durable operation identities, dedupe, bounded leases/fencing, restart recovery and authoritative reconciliation precede any retry of unknown results. No exactly-once external-delivery promise.
+
+Required planned tests: correct recipient/ownership/venue, grant stitching/current revocation/suspension and admin-body separation; duplicate event/command and changed payload; source transaction rollback and delivery-failure independence; restart/lease recovery, unknown outcomes and safe retry; template escaping/allowlist, sensitive-data/token leakage; expiry/supersession/retention; paging/count authorization and concurrent read-state writes; PostgreSQL clean V1→V14/populated V13→V14/repeat/constraints/audit rollback; module/public-interface ownership; frontend keyboard/responsive/loading/empty/denied/conflict/browser regressions; actual synthetic Bank claim/review and Access lifecycle integration. Broader Booking/Refund/Ledger/provider/physical tests remain deferred, not PASS.
+
+Rollback design for future implementation: disable new dispatch/control/worker execution, retain intents/attempts/audit/unresolved work and source review/business facts; safe compatible normal revert or forward fix, no destructive down migration or blind resend. Reconcile durable unknowns before resuming.
+
+Hard dependencies remain exactly **[CN-PAY-BANK-001, CN-ACCESS-001]**, both VERIFIED/CLOSED for synthetic scopes. No amendment needed or approved; full requirement/test dependencies and gateway/full SMS/email obligations preserved. BANK-002/REFUND integration is excluded here, so no speculative hard edges added. Bounded OD-01/05/29 policy/schema/API/UI approval is satisfied; global decisions remain OPEN. Separate implementation authorization is absent; CN-NOTIFY-001 stays BLOCKED.
