@@ -782,7 +782,8 @@
       "unresolvedQuestions": [
         "OD-08",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "executionDeferralEvidence": "PROJECT.md#engagement-execution-deferral"
     },
     {
       "id": "CN-A01",
@@ -1320,7 +1321,8 @@
       "unresolvedQuestions": [
         "OD-08",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "executionDeferralEvidence": "PROJECT.md#engagement-execution-deferral"
     },
     {
       "id": "CN-A10",

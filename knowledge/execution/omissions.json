@@ -79,10 +79,11 @@
     },
     {
       "id": "OM-08",
-      "gap": "Optional engagement scope/rates undeclared; no approved defer",
+      "gap": "Engagement execution explicitly deferred for initial commercial release; future commercial rules and implementation remain unapproved",
       "linkedDecisionOrTask": "OD-08",
-      "status": "BLOCKED",
-      "recovery": "Retain CN-C09/CN-A09 denominator; explicit scope/rule/deferral decision required"
+      "status": "OPEN",
+      "recovery": "Explicit reactivation, versioned rules, abuse/reversal/privacy controls, separate implementation authority and acceptance; CN-C09/CN-A09 retained",
+      "deferralEvidence": "PROJECT.md#engagement-execution-deferral"
     },
     {
       "id": "OM-09",

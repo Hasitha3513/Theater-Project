@@ -488,7 +488,7 @@ The existing [decision registry](decisions/cinenest-open-decisions.json) owns ea
 | OD-05 | Privacy, storage provider, regional processing and retention undecided | LAUNCH_BLOCKER |
 | OD-06 | Payment providers/merchant product/country support unverified | LAUNCH_BLOCKER |
 | OD-07 | Refund fees/taxes/cancellation and card re-billing not finalized | LAUNCH_BLOCKER |
-| OD-08 | Loyalty earning, reversal, expiry/redemption and promotion stacking undefined | FEATURE_LAUNCH_BLOCKER |
+| OD-08 | Initial-release execution deferral APPROVED; future earning/reversal/expiry/redemption/stacking rules unapproved; [decision](PROJECT.md#engagement-execution-deferral) | FEATURE_LAUNCH_BLOCKER on reactivation |
 | OD-09 | Temporary hold range 10–15 min is not precise | LAUNCH_BLOCKER |
 | OD-10 | Cleaning buffer after closing not resolved | LAUNCH_BLOCKER |
 | OD-11 | Requested source palette differs from checked-in proposed tokens | RESOLVED_CURRENT_TOKENS_APPROVED |
@@ -1225,3 +1225,8 @@ Business options and all unselected policies belong to [PROJECT](PROJECT.md#enga
 Future feasibility questions: source-event stability and ordering, unique causal IDs/revisions, transactional earn/redemption and reservation semantics, rule-version binding, failure replay/outbox design, reconciliation/reversal when spend already occurred, data minimization and deletion vs audit retention. No event schema or monetary/point representation is selected by this brief. Financial/reward facts remain owned by their source module; an authorization permit cannot bypass business invariants. Venue scope is not SaaS tenancy. No new provider/infrastructure is needed for documentation preparation; PayHere is not a hard or transitive CN-ENG-001 dependency under the current graph.
 
 Future implementation scope must enumerate exact owned schema/API/UI, migration/upgrade tests, current-authority checks, concurrency/recovery tests and compensation-aware rollback before authorization. A code revert cannot erase earned obligations; preserve ledger/purchase/audit history and require an explicit data/external compensation plan. Production financial/privacy acceptance remains separate. Documentation rollback is a scoped history-preserving revert only.
+
+
+## OD-08 approved execution deferral — 2026-10-19
+
+[Owner decision](PROJECT.md#engagement-execution-deferral) selects the registered OD-08 option “Defer feature” separately for loyalty, referrals and promotions. OD-08 is APPROVED only for initial-commercial-release execution deferral; implementationStatus remains NOT_VERIFIED and future reward/discount policies remain unapproved. Original question, evidence requirements and feature-launch blocker are preserved: reactivation still requires product/finance rules and abuse/reversal evidence. No engagement module/schema/API/UI or provider is introduced. CN-ENG-001 closes its decision brief only; no operational acceptance follows. Existing dependency edges are unchanged. [Closure evidence](PROGRESS.md#engagement-decision-closure).

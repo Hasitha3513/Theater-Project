@@ -376,11 +376,21 @@
       "source": "S1 proposed scope",
       "impact": "Engagement ledger and discount consistency",
       "options": "Defer feature or approve versioned eligibility/rates/caps",
-      "owner": "TBD",
+      "owner": "Hasitha Wijerathna (project owner)",
       "evidenceRequired": "Product/finance rules and abuse/reversal tests",
-      "decisionStatus": "OPEN_DECISION",
+      "decisionStatus": "APPROVED",
       "implementationStatus": "NOT_VERIFIED",
-      "launchBlocker": "FEATURE_LAUNCH_BLOCKER"
+      "launchBlocker": "FEATURE_LAUNCH_BLOCKER",
+      "deferredExecution": {
+        "scope": "INITIAL_COMMERCIAL_RELEASE_ONLY",
+        "loyalty": "DEFER_EXECUTION",
+        "referrals": "DEFER_EXECUTION",
+        "promotions": "DEFER_EXECUTION",
+        "policyValues": "UNAPPROVED",
+        "fullScope": "PRESERVED",
+        "approvalSource": "Current owner instruction: CN-ENG-001 \u2014 Record Owner Engagement Feature Decisions",
+        "evidencePath": "PROJECT.md#engagement-execution-deferral"
+      }
     },
     {
       "id": "OD-09",

@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001, CN-ACCESS-001 and CN-CUSTOMER-001 task-specific hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:24 CLOSED,4 BLOCKED,0 READY,0 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
+Owner-approved manual-payment-first five-stage development priority recorded on 2026-10-17; [direction](PROJECT.md#manual-payment-first), [phases and gates](#manual-first-phases). Full MVP and roadmap acceptance counts unchanged; only the approved synthetic bank-only CN-REFUND-001, CN-ACCESS-001 and CN-CUSTOMER-001 task-specific hard dependencies are amended. CN-GATE-001 documentation-only VERIFIED/CLOSED under [approved closure](#gate-documentation-closure); venue/specialist gates remain pending and CN-PAY-GW-001 remains BLOCKED. Current tasks:25 CLOSED,3 BLOCKED,0 READY,0 IN_PROGRESS /28; bounded synthetic Access closure verified at [access evidence](#access-implementation). [CN-REFUND-001 bank-only plan/dependency approval](#refund-readiness-reconciliation) recorded; bounded implementation VERIFIED/CLOSED for synthetic bank-only scope at [refund implementation](#refund-implementation).
 
 CN-ADMIN-001 VERIFIED/CLOSED for bounded synthetic account/audit reads; exact-source CI39024870905 SUCCESS at ff8726c5d91a60534c4cf3915c37317ef6a804ae. [Evidence](#admin-read-implementation). PayHere pending; no dependency edges changed.
 
@@ -279,7 +279,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | VERIFIED / CLOSED |
 | CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | VERIFIED / CLOSED |
 | CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-BANK-002, CN-REFUND-001 | VERIFIED / CLOSED |
-| CN-ENG-001 | 10 | Engagement scope/rule decision brief | CN-REPORT-001 | BLOCKED / BLOCKED |
+| CN-ENG-001 | 10 | Engagement scope/rule decision brief | CN-REPORT-001 | VERIFIED / CLOSED |
 | CN-ACCEPT-001 | 11 | Integrated evidence and recovery gate | CN-AMEND-001, CN-REPORT-001, CN-OPS-001 | BLOCKED / BLOCKED |
 | CN-LAUNCH-001 | 12 | Authorized controlled launch/handover | CN-ACCEPT-001 | BLOCKED / BLOCKED |
 | CN-KB-CONSOLIDATE-001 | 0 | Owner-authorized four-document consolidation | CN-DEC-001 | VERIFIED / CLOSED |
@@ -566,7 +566,7 @@ Current status: PLANNED / execution BLOCKED, implementation NOT_VERIFIED. Next: 
 
 ### One delivery home for every retained requirement
 
-The stated home is a delivery/closure criterion; preparation-only mentions do not close product scope. Shared criteria support several phases without double-counting. This 92-row projection uses the existing92 requirement/test definitions, not a second requirements registry. CN-C09/CN-A09 engagement scope is UNDECIDED (OD-08); CN-ENG-001 is a decision brief only. No approved-deferred feature recorded; nothing dropped to improve totals. Other product entries remain desired MVP targets at their actual approved/draft/recommended status, not new blanket approvals.
+The stated home is a delivery/closure criterion; preparation-only mentions do not close product scope. Shared criteria support several phases without double-counting. This 92-row projection uses the existing92 requirement/test definitions, not a second requirements registry. CN-C09/CN-A09 execution is explicitly deferred for initial commercial release under OD-08; CN-ENG-001 closes its decision brief only. Full requirements remain; nothing dropped to improve totals. Other product entries remain desired MVP targets at their actual approved/draft/recommended status, not new blanket approvals.
 
 <!-- roadmap:coverage -->
 | Requirement | Delivery home criterion | Existing tests | Existing task ownership | Existing evidence/status |
@@ -696,7 +696,7 @@ Backlog integers 1–12 remain original workstream metadata; the P0–P10 presen
 | CN-CUSTOMER-001 | P3 | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | VERIFIED / CLOSED |
 | CN-AMEND-001 | P6 | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | VERIFIED / CLOSED |
 | CN-REPORT-001 | P9 | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
-| CN-ENG-001 | P9 | CN-REPORT-001 | BLOCKED / BLOCKED |
+| CN-ENG-001 | P9 | CN-REPORT-001 | VERIFIED / CLOSED |
 | CN-ACCEPT-001 | P9 | CN-AMEND-001, CN-REPORT-001, CN-OPS-001 | BLOCKED / BLOCKED |
 | CN-LAUNCH-001 | P10 | CN-ACCEPT-001 | BLOCKED / BLOCKED |
 | CN-KB-CONSOLIDATE-001 | P0 | CN-DEC-001 | VERIFIED / CLOSED |
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-REPORT-001 VERIFIED/CLOSED only for synthetic bank-credit balance snapshot reporting after exact-source [CI39204444484 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39204444484) at0bf4bb38c9ffbdbe8a92afa7d8dde6aa54f451bb. [Evidence](#report-bank-implementation).24 CLOSED/4 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. No downstream task automatically READY. Next action: owner selects engagement approve/defer choices from [prepared brief](#engagement-brief-preparation). Exports/full charts/recognition/OM-06 wider mapping and production finance remain open;PayHere deferred/BLOCKED.
+Current handoff: CN-ENG-001 documentation brief VERIFIED/CLOSED under [owner deferral](#engagement-decision-closure);25 CLOSED/3 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. No feature acceptance or automatic READY. Next: read-only CN-ACCEPT-001 gate review. Prior reporting handoff (historical): CN-REPORT-001 VERIFIED/CLOSED only for synthetic bank-credit balance snapshot reporting after exact-source [CI39204444484 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39204444484) at0bf4bb38c9ffbdbe8a92afa7d8dde6aa54f451bb. [Evidence](#report-bank-implementation).24 CLOSED/4 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. No downstream task automatically READY. Next action: read-only CN-ACCEPT-001 gate review after [engagement documentation closure](#engagement-decision-closure). Exports/full charts/recognition/OM-06 wider mapping and production finance remain open;PayHere deferred/BLOCKED.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1494,3 +1494,17 @@ Counts remain24 VERIFIED/CLOSED,4 BLOCKED,0 READY,0 IN_PROGRESS /28;13/74 criter
 Next action: owner selects DEFER EXECUTION or completes APPROVE RULES schedule independently for loyalty, referrals and promotions. Final validation/publication receipts follow here after actual checks; publication is not approval.
 
 Validation: design/knowledge and isolated committed-next-env execution/status validators PASS; whitespace PASS. Three isolated governance negative controls reject premature CN-ENG closure, removal of its reporting dependency and unapproved OD-08 approval. Task/requirement/test registries remain byte-identical; no planned product test passed. Primary execution retains the two pre-existing next-env checksum/protected-source failures. Isolated checkout excludes unrelated DOCX and preserves committed application bytes; no validator weakened. No application tests rerun for this documentation-only change. Commit/remote/final-source CI receipts are reported in conversation after publication.
+
+
+<a id="engagement-decision-closure"></a>
+## CN-ENG-001 owner decision and bounded documentation closure — 2026-10-19
+
+Starting ca7f70edc984a9c109b4d1d7cfe70f0fb4cfcabd, nested repository/,main→origin/main,0 ahead/behind;V17 unchanged. Current owner instruction explicitly approves DEFER EXECUTION separately for loyalty rewards,customer referral rewards,promotional discounts in initial commercial release. [Business authority](PROJECT.md#engagement-execution-deferral); [prior brief](#engagement-brief-preparation) retained as historical preparation, including its then-pending statuses. OD-08's “Defer feature or approve versioned eligibility/rates/caps” permits this choice; APPROVED for deferral only, NOT_VERIFIED implementation, future policies unapproved.
+
+Exact CN-ENG-001 DoD “Explicit approve/defer decision remains required” now satisfied by three explicit owner decisions and the prepared option/abuse/reversal/acceptance proposal. CN-REPORT-001 prerequisite VERIFIED/CLOSED; no other mandatory brief gate identified. CN-ENG-001 VERIFIED/CLOSED for documentation decision brief only, no earning/feature implementation. CN-C09/CN-A09 remain NOT_VERIFIED/NOT_ACCEPTED with full plans NOT_RUN. OM-08 now OPEN for future reactivation/rules/implementation, preserving its prior missing-deferral history in Git. No task edge changed; no task automatically READY. P9-C01 and all phase/demo checkboxes stay open at their existing state. Full release acceptance cannot silently exclude engagement: any release waiver needs separate approval.
+
+Counts:25 VERIFIED/CLOSED,3 BLOCKED(CN-PAY-GW-001,CN-ACCEPT-001,CN-LAUNCH-001),0 READY,0 IN_PROGRESS /28;92 requirements/92 plans retained. P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7=13/74. D0 prepared/document-rehearsed(refresh before reuse),D1/D2 NOT_READY,D3–D6 outlines;0/7 held/accepted. No production,policy,venue,specialist,financial or physical acceptance implied. Manual-payment-first preserved;PayHere deferred/BLOCKED. Unrelated next-env and two DOCX preserved/unpublished. No application source,migration,dependency,token or feature changed.
+
+Next action: read-only review of CN-ACCEPT-001 prerequisites and remaining acceptance gates; PayHere deferred/BLOCKED. Validation and publication evidence reported after actual checks; no product test promoted.
+
+Verification: knowledge/design validator PASS; isolated committed-next-env execution validator PASS; seven governance negative controls reject removed dependencies,false feature implementation,unapproved reward policy status,accepted requirement,passed planned test,application mutation and premature phase acceptance. Registry traceability/count/acyclic checks and whitespace PASS; all92 plans retained unchanged. Primary execution retains only the two pre-existing next-env integrity findings. No validator weakened: exact allowed successor is checked before replay of historical receipts. Publication and final-source CI reported in conversation.

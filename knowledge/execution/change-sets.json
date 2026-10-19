@@ -1842,10 +1842,13 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Explicit approve/defer decision remains required",
       "requiredApproval": "User authorizes brief; optional feature scope/rules separately approved",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "authorityAvailable": true,
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "PROJECT.md#engagement-execution-deferral",
+        "PROGRESS.md#engagement-decision-closure"
+      ]
     },
     {
       "id": "CN-ACCEPT-001",

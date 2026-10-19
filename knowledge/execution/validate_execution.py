@@ -1960,5 +1960,53 @@ def report_implementation_main():
     if result==0:print('PASS report implementation: qualified exact source/authority/snapshot ownership, unchanged schema/dependencies/full acceptance and historical receipts')
     return result
 
+
+def engagement_decision_main():
+    """Validate the exact owner-approved documentation transition, then replay prior receipts."""
+    from unittest.mock import patch
+    base='ca7f70edc984a9c109b4d1d7cfe70f0fb4cfcabd'
+    errors=[]
+    def require(ok,message):
+        if not ok: errors.append(message)
+    def prior(name): return subprocess.check_output(['git','-C',str(R),'show',base+':knowledge/'+name])
+    transitions={'execution/change-sets.json': {'changeSets': {'CN-ENG-001': {'authorityAvailable': True, 'readiness': 'CLOSED', 'workStatus': 'VERIFIED', 'evidencePaths': ['PROJECT.md#engagement-execution-deferral', 'PROGRESS.md#engagement-decision-closure']}}}, 'decisions/cinenest-open-decisions.json': {'decisions': {'OD-08': {'decisionStatus': 'APPROVED', 'owner': 'Hasitha Wijerathna (project owner)', 'deferredExecution': {'scope': 'INITIAL_COMMERCIAL_RELEASE_ONLY', 'loyalty': 'DEFER_EXECUTION', 'referrals': 'DEFER_EXECUTION', 'promotions': 'DEFER_EXECUTION', 'policyValues': 'UNAPPROVED', 'fullScope': 'PRESERVED', 'approvalSource': 'Current owner instruction: CN-ENG-001 — Record Owner Engagement Feature Decisions', 'evidencePath': 'PROJECT.md#engagement-execution-deferral'}}}}, 'execution/requirements.json': {'requirements': {'CN-C09': {'executionDeferralEvidence': 'PROJECT.md#engagement-execution-deferral'}, 'CN-A09': {'executionDeferralEvidence': 'PROJECT.md#engagement-execution-deferral'}}}, 'execution/omissions.json': {'omissions': {'OM-08': {'gap': 'Engagement execution explicitly deferred for initial commercial release; future commercial rules and implementation remain unapproved', 'status': 'OPEN', 'recovery': 'Explicit reactivation, versioned rules, abuse/reversal/privacy controls, separate implementation authority and acceptance; CN-C09/CN-A09 retained', 'deferralEvidence': 'PROJECT.md#engagement-execution-deferral'}}}}
+    replacements={}
+    for name,groups in transitions.items():
+        old=json.loads(prior(name));actual=json.loads((K/name).read_text())
+        for group,rows in groups.items():
+            for ident,fields in rows.items():
+                next(x for x in old[group] if x['id']==ident).update(fields)
+        require(actual==old,'Engagement unauthorized registry/status/dependency/acceptance transition '+name)
+        replacements[K/name]=prior(name)
+    name='execution/status.json';old=json.loads(prior(name))
+    old['nextAction']='Read-only review of CN-ACCEPT-001 prerequisites and remaining acceptance gates; PayHere deferred/BLOCKED'
+    old['engagementDecisionClosure']={'taskId':'CN-ENG-001','scope':'DOCUMENTATION_ONLY','workStatus':'VERIFIED','featuresImplemented':False,'fullAcceptance':'NOT_ACCEPTED','policyValues':'UNAPPROVED','dependencies':'UNCHANGED','evidencePath':'PROGRESS.md#engagement-decision-closure','baselineHead':base}
+    require(json.loads((K/name).read_text())==old,'Engagement execution evidence/history changed')
+    replacements[K/name]=prior(name)
+    require((K/'execution/test-plan.json').read_bytes()==prior('execution/test-plan.json'),'Engagement planned tests changed/promoted')
+    progress=(K/'PROGRESS.md').read_text();previous=prior('PROGRESS.md').decode()
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    require(re.findall(pattern,progress,re.M)==re.findall(pattern,previous,re.M),'Engagement phase/demo acceptance changed')
+    require('| CN-ENG-001 | 10 | Engagement scope/rule decision brief | CN-REPORT-001 | VERIFIED / CLOSED |' in progress,'Engagement task projection stale')
+    require('25 CLOSED,3 BLOCKED,0 READY,0 IN_PROGRESS /28' in progress,'Engagement task count stale')
+    require('<a id="engagement-execution-deferral"></a>' in (K/'PROJECT.md').read_text(),'Engagement authority reference missing')
+    allowed={'knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','knowledge/execution/change-sets.json','knowledge/execution/status.json','knowledge/execution/requirements.json','knowledge/execution/omissions.json','knowledge/decisions/cinenest-open-decisions.json','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',base,'--name-only'],text=True).splitlines())
+    require(changed<=allowed,'Engagement changed unrelated files: '+str(changed-allowed))
+    # Application inventory/content checks remain enforced by the prior implementation validator.
+    if errors:
+        print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements[K/'PROGRESS.md']=prior('PROGRESS.md')
+    require('| OD-08 | Initial-release execution deferral APPROVED; future earning/reversal/expiry/redemption/stacking rules unapproved; [decision](PROJECT.md#engagement-execution-deferral) | FEATURE_LAUNCH_BLOCKER on reactivation |' in (K/'ARCHITECTURE.md').read_text(),'Engagement decision projection stale')
+    if errors:
+        print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements[K/'ARCHITECTURE.md']=prior('ARCHITECTURE.md')
+    rb0=Path.read_bytes;rt0=Path.read_text
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt):result=report_implementation_main()
+    if result==0: print('PASS engagement decision: exact owner deferral, brief-only closure, unchanged dependencies/full acceptance/test plans, historical receipts retained')
+    return result
+
 if __name__ == '__main__':
-    raise SystemExit(report_implementation_main())
+    raise SystemExit(engagement_decision_main())

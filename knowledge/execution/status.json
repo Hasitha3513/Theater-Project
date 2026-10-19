@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-IOT-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-OPS-001",
-  "nextAction": "Read-only review CN-ENG-001 bounded scope and OD-08 gates",
+  "nextAction": "Read-only review of CN-ACCEPT-001 prerequisites and remaining acceptance gates; PayHere deferred/BLOCKED",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
   "approvedCoreDecisions": [
@@ -3785,5 +3785,16 @@
     },
     "sourceCommit": "0bf4bb38c9ffbdbe8a92afa7d8dde6aa54f451bb",
     "sourceCiUrl": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39204444484"
+  },
+  "engagementDecisionClosure": {
+    "taskId": "CN-ENG-001",
+    "scope": "DOCUMENTATION_ONLY",
+    "workStatus": "VERIFIED",
+    "featuresImplemented": false,
+    "fullAcceptance": "NOT_ACCEPTED",
+    "policyValues": "UNAPPROVED",
+    "dependencies": "UNCHANGED",
+    "evidencePath": "PROGRESS.md#engagement-decision-closure",
+    "baselineHead": "ca7f70edc984a9c109b4d1d7cfe70f0fb4cfcabd"
   }
 }
