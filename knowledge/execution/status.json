@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-IOT-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-OPS-001",
-  "nextAction": "Read-only review CN-REPORT-001 bounded bank-only scope, OD-16 and required gateway dependency amendment",
+  "nextAction": "Obtain separate bounded synthetic CN-REPORT-001 implementation authorization",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
   "approvedCoreDecisions": [
@@ -3675,5 +3675,40 @@
     },
     "sourceCommit": "4d5b98e7561f6397ab7a167b67ed9151b8b382d7",
     "sourceCiUrl": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39197922110"
+  },
+  "reportReadiness": {
+    "baselineHead": "d09586acc402bc19f6548c132364a127ea4c3b49",
+    "approval": {
+      "taskId": "CN-REPORT-001",
+      "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+      "date": "2026-10-19",
+      "source": "Owner inline approval and attachment 9a0a5ae3-8e0f-4b87-ad64-c26728c3c9de; Record approvals and reassess readiness only",
+      "requestSha256": "108690a5bcc5830462165c8bcd5f24fd35d55bc276ebff2cddedf7597166644e",
+      "canonicalSpecification": "ARCHITECTURE.md#report-bank-synthetic-scope",
+      "businessPolicy": "PROJECT.md#report-bank-synthetic-policy",
+      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "fullDecisionStatus": "OPEN_DECISION",
+      "realFinancialReporting": "DISABLED",
+      "exports": "DEFERRED_NOT_IMPLEMENTED",
+      "gateway": "DEFERRED_BLOCKED"
+    },
+    "readiness": "BLOCKED",
+    "remainingGates": [
+      "Separate owner implementation authorization"
+    ],
+    "hardDependencies": [
+      "CN-PAY-BANK-002 VERIFIED/CLOSED",
+      "CN-REFUND-001 VERIFIED/CLOSED"
+    ],
+    "historicalHardDependencies": [
+      "CN-PAY-GW-001",
+      "CN-PAY-BANK-002"
+    ],
+    "deferredAcceptanceDependency": "CN-PAY-GW-001",
+    "implementation": "NOT_STARTED",
+    "migrationHead": "V17",
+    "migrationAuthorization": "NONE",
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "evidencePath": "PROGRESS.md#report-bank-readiness"
   }
 }

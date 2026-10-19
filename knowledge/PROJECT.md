@@ -757,3 +757,12 @@ Bounded OD-29: explicit synthetic case creation, venue-scoped assignment, UNASSI
 Current CN-OPS-001 implementation authority: owner attachment2cf3fc9d-4024-46f8-9e8e-71dd7b326ce8 grants only the approved synthetic turnover slice. Historical recording-only restrictions remain historical. Synthetic actor assignment is never a real venue appointment. All required checklist codes are explicit synthetic configuration and recorded assertions, not a physical inspection standard. [Actual evidence](PROGRESS.md#ops-implementation); full OD-13/29 and physical/commercial acceptance remain open.
 
 Current CN-OPS-001 bounded status: VERIFIED/CLOSED for synthetic software only; [exact-source CI and acceptance limits](PROGRESS.md#ops-implementation). No physical, operational, inventory or production acceptance follows.
+
+<a id="report-bank-synthetic-policy"></a>
+## CN-REPORT-001 approved synthetic bank reporting policy — 2026-10-19
+
+Owner attachment9a0a5ae3-8e0f-4b87-ad64-c26728c3c9de and inline approval authorize recording/readiness only; implementation NOT_GRANTED. One synthetic bank-credit balance reconciliation report: complete-population summary and redacted paginated credit rows, scoped venue/currency, allocations/returns/reservations/residuals/disputes/exceptions and protected source drilldowns. No totals from frontend page sums.
+
+Bounded OD-16 approves only synthetic credit balances and authoritative allocation/refund effects. No recognized commercial revenue, profit, real bank balance/cash flow, taxes, sellable-minute utilization, occupancy percentage or production performance. OD-16 globally OPEN. Claims/receipts/review/allocations are not additional incoming money. UNKNOWN outgoing outcomes remain reserved. Disputed/reversed credits are not allocatable. No currency conversion, silent negative-to-zero fallback, financial writes or real-money acceptance. Manual-payment-first and PayHere deferred/BLOCKED retained.
+
+Explicitly defer export, booking purchases/package/customer/Operations/IoT aggregates, utilization/recognition/production accounting and gateway/mixed-channel reporting from this slice. All22 mapped reporting requirements/test plans and full92/92 remain intact and unaccepted at their actual status; no silent requirement cancellation or downstream readiness. [Definitions/contracts](ARCHITECTURE.md#report-bank-synthetic-scope); [readiness](PROGRESS.md#report-bank-readiness).

@@ -278,7 +278,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
 | CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | VERIFIED / CLOSED |
 | CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | VERIFIED / CLOSED |
-| CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-GW-001, CN-PAY-BANK-002 | BLOCKED / BLOCKED |
+| CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-BANK-002, CN-REFUND-001 | BLOCKED / BLOCKED |
 | CN-ENG-001 | 10 | Engagement scope/rule decision brief | CN-REPORT-001 | BLOCKED / BLOCKED |
 | CN-ACCEPT-001 | 11 | Integrated evidence and recovery gate | CN-AMEND-001, CN-REPORT-001, CN-OPS-001 | BLOCKED / BLOCKED |
 | CN-LAUNCH-001 | 12 | Authorized controlled launch/handover | CN-ACCEPT-001 | BLOCKED / BLOCKED |
@@ -322,7 +322,7 @@ flowchart TB
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PARTIAL SYNTHETIC ONLY; bounded synthetic amendment VERIFIED; full commercial/physical scope pending; NOT_ACCEPTED"]
   P7["P7 Access/hardware<br/>W13-14 illustrative<br/>SYNTHETIC PARTIAL; NOT_ACCEPTED"]
   P8["P8 Automation/readiness<br/>W15-16 illustrative<br/>PARTIAL synthetic lighting/turnover; physical readiness pending; NOT_ACCEPTED"]
-  P9["P9 Reports/UAT<br/>W17-18 illustrative<br/>PLANNED; NOT_ACCEPTED"]
+  P9["P9 Reports/UAT<br/>W17-18 illustrative<br/>Bounded bank report approved; implementation BLOCKED; NOT_ACCEPTED"]
   P10["P10 Pilot/handover<br/>W19-20 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   G -.-> P0
   P0 --> P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7 --> P8 --> P9 --> P10
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-OPS-001 VERIFIED/CLOSED only for approved synthetic turnover/checklist/linked exceptions after exact-source [CI39197922110 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39197922110) at4d5b98e7561f6397ab7a167b67ed9151b8b382d7. [Evidence](#ops-implementation).23 CLOSED/5 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. No downstream task automatically READY. Next action: read-only review CN-REPORT-001 bounded bank-only scope, OD-16 and required gateway dependency amendment. Real operations, venue/specialists and physical acceptance remain pending; PayHere deferred/BLOCKED.
+Current handoff: CN-REPORT-001 bounded synthetic bank reporting approvals and exact dependency amendment recorded; [readiness](#report-bank-readiness). BLOCKED solely on separate implementation authorization; no source/migration implementation.23 CLOSED/5 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. Next action: obtain separate bounded synthetic CN-REPORT-001 implementation authorization. PayHere deferred/BLOCKED;full reporting/export/production acceptance and venue/specialist gates preserved.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1454,3 +1454,14 @@ Local verification PASS:366 backend tests,0 failures/errors/skips including Room
 Bounded closure: CN-OPS-001 VERIFIED/CLOSED after exact-source [CI39197922110 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39197922110) at4d5b98e7561f6397ab7a167b67ed9151b8b382d7;all23 owned source/test hashes match.366 backend,112 frontend,112 combined browser groups,14 launcher contracts and11 governance negative controls passed; no full test plan or product/physical acceptance promoted. Historical IN_PROGRESS checkpoints above retained. Original DoD and owner-approved synthetic closure interpretation preserved: actual physical clearance still needs identified venue, authorized venue staff, qualified review, inspection evidence and approved procedures. Occupancy UNKNOWN/readiness UNVERIFIED; no inventory/device/credential/financial/live-message mutation.
 
 Current MVP: P0 6/8,P1 2/6,P2 3/6,P3 2/6,P4 0/8,P5 0/6,P6 0/6,P7 0/6,P8 0/7,P9 0/8,P10 0/7 =13/74.23 VERIFIED/CLOSED,5 BLOCKED,0 READY,0 IN_PROGRESS /28;92 requirements/92 full test plans retained. P7/P8 evidence remains partial/unchecked;0 accepted delivery phases. D0 prepared/document-rehearsed(refresh before reuse),D1/D2 NOT_READY,D3-D6 outlines,0/7 held/accepted;simulated operations do not qualify D4 hardware. OD-13/29 globally OPEN,venue/qualified specialists/legal/privacy/physical/commercial/production gates remain separate. Manual-payment-first and PayHere deferred/BLOCKED unchanged. Primary next-env integrity findings and two untracked DOCX companions preserved. Final closure commit/remote/CI receipt reported in conversation. Next action: read-only review CN-REPORT-001 bounded bank-only scope, OD-16 and required gateway dependency amendment.
+
+<a id="report-bank-readiness"></a>
+## CN-REPORT-001 bounded approval/readiness — 2026-10-19
+
+Start main/origin/main d09586acc402bc19f6548c132364a127ea4c3b49,0 ahead/behind,V17; unrelated next-env/two DOCX preserved. Owner attachment9a0a5ae3-8e0f-4b87-ad64-c26728c3c9de explicitly approves recording/readiness only. [Policy](PROJECT.md#report-bank-synthetic-policy), [scope/metrics/OM-06/dependency design](ARCHITECTURE.md#report-bank-synthetic-scope), [UI](DESIGN.md#report-bank-synthetic-ui). Bounded OD-16 approved, globally OPEN; OM-06 bounded V12 mapping approved/not implemented, wider gap OPEN.
+
+Only CN-REPORT-001 hard edges amended: [CN-PAY-GW-001,CN-PAY-BANK-002] → [CN-PAY-BANK-002,CN-REFUND-001]. Both VERIFIED/CLOSED; historical edges preserved and gateway explicitly deferred for execution/full acceptance. Full requirement/test dependencies retained. CN-ENG-001/CN-ACCEPT-001 and all unrelated edges/statuses unchanged. CN-REPORT-001 remains BLOCKED solely on separate implementation authorization NOT_GRANTED; no task automatically READY. Original DoD retained with approved bounded metric definitions and explicit remaining-chart/export exclusions.
+
+No application/API/UI source or V1–V17 migration/token/dependency package changed, no new knowledge file, no financial operation. Full92 requirements/92 plans and all22 reporting mappings retained; no planned test passed, no acceptance promoted. Counts23 CLOSED/5 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. D0 prepared/document-rehearsed(refresh before reuse),D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted. Manual-payment-first,PayHere deferred/BLOCKED and venue/specialist/real-financial/physical/production gates retained. Next action: obtain separate bounded synthetic CN-REPORT-001 implementation authorization. Publication receipt/final-source CI reported in conversation.
+
+Verified this approval invocation: design/knowledge validator PASS; isolated committed-next-env execution/status validator PASS;12 governance negative controls rejected unauthorized READY/authority,missing Refund/deferred gateway/history,unrelated edges,global OD-16/OM-06 closure,migration/acceptance/source/phase promotion. Current hard graph acyclic with both prerequisites VERIFIED; source/application/migration/dependency-package/token files and92 requirement/92 test-plan bytes unchanged. Git whitespace PASS. Primary execution retains exactly two known unrelated next-env integrity failures; original next-env and both DOCX hashes preserved. No application checks or feature execution claimed.

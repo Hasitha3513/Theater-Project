@@ -1866,5 +1866,45 @@ def ops_implementation_main():
     if result==0:print('PASS operations implementation: exact authority/owned source, unchanged dependency/full coverage, synthetic-only safety and historical receipts')
     return result
 
+def report_readiness_main():
+    """Validate exact approved report policy/edge delta, then replay frozen prior receipts in memory."""
+    from unittest.mock import patch
+    base='d09586acc402bc19f6548c132364a127ea4c3b49'
+    expected={'decisions/cinenest-open-decisions.json': '8c5609386c21141b487f97760ef31521d74be94822f97dd00e92199752df69c8', 'execution/omissions.json': '90d2872f68b3520b6f10ae063a51cb7ddc61de97eed8493fcb9ceff5c2db0c3c', 'execution/change-sets.json': '093817fe9e614266a0688c6a5d58d61ed13fb0ca56a900c6d4f2646e3ed34a1e', 'execution/status.json': 'b3f3dab081346d2469cf96dc4cad8fd8a1fe7994056c031a4a4274f6d210dfa5'}
+    errors=[]
+    def require(ok,message):
+        if not ok:errors.append(message)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',base+':'+name])
+    actual={name:json.loads((K/name).read_text()) for name in expected}
+    for name,digest in expected.items():require(hashlib.sha256(json.dumps(actual[name],sort_keys=True).encode()).hexdigest()==digest,'Reporting approved registry/history changed '+name)
+    tasks=actual['execution/change-sets.json'];old=json.loads(prior('knowledge/execution/change-sets.json'));task=next(t for t in tasks['changeSets'] if t['id']=='CN-REPORT-001');original=next(t for t in old['changeSets'] if t['id']=='CN-REPORT-001')
+    require(task['dependencies']==['CN-PAY-BANK-002','CN-REFUND-001'] and task['historicalImplementationDependencies']==['CN-PAY-GW-001','CN-PAY-BANK-002'],'Reporting exact owner-approved dependency amendment lost')
+    require(task['deferredAcceptanceDependencies'][0]['taskId']=='CN-PAY-GW-001' and task['deferredAcceptanceDependencies'][0]['status']=='DEFERRED_BLOCKED_NOT_IMPLEMENTED','Reporting gateway acceptance obligation lost')
+    normalized=json.loads(json.dumps(tasks));row=next(t for t in normalized['changeSets'] if t['id']=='CN-REPORT-001');row['dependencies']=original['dependencies']
+    for key in set(row)-set(original):row.pop(key)
+    require(normalized==old,'Reporting changed unrelated task/status/edge/original scope')
+    require(task['workStatus']=='BLOCKED' and task['readiness']=='BLOCKED' and task['authorityAvailable'] is False and task['implementationAuthorization']=='NOT_GRANTED_READINESS_ONLY' and task['remainingReadinessGates']==['Separate owner implementation authorization'],'Reporting authorization/status promoted')
+    require(all(next(t for t in tasks['changeSets'] if t['id']==dep)['workStatus']=='VERIFIED' for dep in task['dependencies']),'Reporting hard dependency not verified')
+    decisions=json.loads(json.dumps(actual['decisions/cinenest-open-decisions.json']));decision=next(x for x in decisions['decisions'] if x['id']=='OD-16');approval=decision.pop('boundedBankReportingApproval',None)
+    require(decisions==json.loads(prior('knowledge/decisions/cinenest-open-decisions.json')) and decision['decisionStatus']=='OPEN_DECISION','Reporting globally closed/altered decision')
+    require(approval==task['boundedScopeApproval'] and approval['implementationAuthorization']=='NOT_GRANTED_READINESS_ONLY','Reporting bounded approval/source mismatched')
+    omissions=json.loads(json.dumps(actual['execution/omissions.json']));om=next(x for x in omissions['omissions'] if x['id']=='OM-06');mapping=om.pop('boundedBankReportingMapping',None)
+    require(omissions==json.loads(prior('knowledge/execution/omissions.json')) and om['status']=='OPEN' and mapping['status']=='APPROVED_MAPPING_NOT_IMPLEMENTED','Reporting OM-06 wider requirements/status changed')
+    status=json.loads(json.dumps(actual['execution/status.json']));receipt=status.pop('reportReadiness',None);previous=json.loads(prior('knowledge/execution/status.json'));status['nextAction']=previous['nextAction'];require(status==previous and receipt['approval']==approval and receipt['migrationAuthorization']=='NONE','Reporting changed prior execution history/migration authority')
+    for name in ['execution/requirements.json','execution/test-plan.json','execution/source-ledger.json','sources/cinenest-source-register.json']:require((K/name).read_bytes()==prior('knowledge/'+name),'Reporting altered full requirement/test/source record '+name)
+    baseline=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',base,'--','backend','frontend'],text=True).splitlines())
+    inventory=set(subprocess.check_output(['git','-C',str(R),'-c','core.quotePath=false','ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines());require(inventory==baseline,'Reporting approval created application files')
+    for name in baseline-{'frontend/next-env.d.ts'}:require((R/name).read_bytes()==prior(name),'Reporting approval altered application '+name)
+    progress=(K/'PROGRESS.md').read_text();require(re.findall(r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))',progress,re.M)==re.findall(r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))',prior('knowledge/PROGRESS.md').decode(),re.M),'Reporting approval promoted roadmap/demo criteria')
+    require('| CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-BANK-002, CN-REFUND-001 | BLOCKED / BLOCKED |' in progress,'Reporting active task projection stale')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements={K/name:prior('knowledge/'+name) for name in expected};replacements[K/'PROGRESS.md']=prior('knowledge/PROGRESS.md')
+    rb0=Path.read_bytes;rt0=Path.read_text
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt):result=ops_implementation_main()
+    if result==0:print('PASS report readiness: exact bounded approval/dependency amendment, deferred gateway/full coverage retained, no implementation authority/application change; historical receipts preserved')
+    return result
+
 if __name__ == '__main__':
-    raise SystemExit(ops_implementation_main())
+    raise SystemExit(report_readiness_main())

@@ -1734,8 +1734,8 @@
       "inScope": "One collections/booking/channel report with matched export/scopes and snapshot times",
       "outOfScope": "No certified accounting profit or fabricated room attribution",
       "dependencies": [
-        "CN-PAY-GW-001",
-        "CN-PAY-BANK-002"
+        "CN-PAY-BANK-002",
+        "CN-REFUND-001"
       ],
       "blockingDecisionIds": [
         "OD-16"
@@ -1751,7 +1751,66 @@
       "authorityAvailable": false,
       "readiness": "BLOCKED",
       "workStatus": "BLOCKED",
-      "evidencePaths": []
+      "evidencePaths": [],
+      "historicalImplementationDependencies": [
+        "CN-PAY-GW-001",
+        "CN-PAY-BANK-002"
+      ],
+      "deferredAcceptanceDependencies": [
+        {
+          "taskId": "CN-PAY-GW-001",
+          "purpose": "Deferred gateway/mixed-channel execution and full reporting acceptance; not a prerequisite for the approved synthetic bank-credit balance slice",
+          "status": "DEFERRED_BLOCKED_NOT_IMPLEMENTED",
+          "requirementIds": [
+            "CN-A01",
+            "CN-A08",
+            "BP-AC13",
+            "CN-M-REVENUE-BOOKINGS",
+            "CN-M-REVENUE-TREND",
+            "CN-M-FINANCIAL-KPIS",
+            "BN-M08"
+          ],
+          "testIds": [
+            "T-CN-A01",
+            "T-CN-A08",
+            "T-BP-AC13",
+            "T-CN-M-REVENUE-BOOKINGS",
+            "T-CN-M-REVENUE-TREND",
+            "T-CN-M-FINANCIAL-KPIS",
+            "T-BN-M08"
+          ]
+        }
+      ],
+      "boundedScopeApproval": {
+        "taskId": "CN-REPORT-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "date": "2026-10-19",
+        "source": "Owner inline approval and attachment 9a0a5ae3-8e0f-4b87-ad64-c26728c3c9de; Record approvals and reassess readiness only",
+        "requestSha256": "108690a5bcc5830462165c8bcd5f24fd35d55bc276ebff2cddedf7597166644e",
+        "canonicalSpecification": "ARCHITECTURE.md#report-bank-synthetic-scope",
+        "businessPolicy": "PROJECT.md#report-bank-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realFinancialReporting": "DISABLED",
+        "exports": "DEFERRED_NOT_IMPLEMENTED",
+        "gateway": "DEFERRED_BLOCKED"
+      },
+      "approvedSpecification": "ARCHITECTURE.md#report-bank-synthetic-scope",
+      "boundedDecisionGateStatus": {
+        "OD-16": "SATISFIED_BOUNDED_GLOBAL_OPEN",
+        "OM-06": "APPROVED_BOUNDED_MAPPING_WIDER_OPEN"
+      },
+      "remainingReadinessGates": [
+        "Separate owner implementation authorization"
+      ],
+      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "boundedExclusions": [
+        "Export",
+        "Booking/package/customer/Operations/IoT aggregates",
+        "Utilization and recognition-based revenue",
+        "Production accounting",
+        "Gateway/mixed-channel reporting"
+      ]
     },
     {
       "id": "CN-ENG-001",

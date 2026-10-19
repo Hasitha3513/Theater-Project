@@ -42,7 +42,27 @@
       "gap": "Chart generic population/unit fields and legacy refundedMinor/confirmedRefundMinor mapping",
       "linkedDecisionOrTask": "OD-16",
       "status": "OPEN",
-      "recovery": "Resolve precise source/DTO mapping before CN-REPORT-001; do not rewrite charts during agent setup"
+      "recovery": "Resolve precise source/DTO mapping before CN-REPORT-001; do not rewrite charts during agent setup",
+      "boundedBankReportingMapping": {
+        "approval": {
+          "taskId": "CN-REPORT-001",
+          "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+          "date": "2026-10-19",
+          "source": "Owner inline approval and attachment 9a0a5ae3-8e0f-4b87-ad64-c26728c3c9de; Record approvals and reassess readiness only",
+          "requestSha256": "108690a5bcc5830462165c8bcd5f24fd35d55bc276ebff2cddedf7597166644e",
+          "canonicalSpecification": "ARCHITECTURE.md#report-bank-synthetic-scope",
+          "businessPolicy": "PROJECT.md#report-bank-synthetic-policy",
+          "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+          "fullDecisionStatus": "OPEN_DECISION",
+          "realFinancialReporting": "DISABLED",
+          "exports": "DEFERRED_NOT_IMPLEMENTED",
+          "gateway": "DEFERRED_BLOCKED"
+        },
+        "status": "APPROVED_MAPPING_NOT_IMPLEMENTED",
+        "scope": "V12 commitment/confirmed synthetic return/residual/availability mapping only",
+        "widerStatus": "OPEN",
+        "mapping": "ARCHITECTURE.md#report-bank-synthetic-scope"
+      }
     },
     {
       "id": "OM-07",
