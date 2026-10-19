@@ -42,6 +42,7 @@ export function Navigation({
                 ["/admin/refunds", "Synthetic bank-only refunds"],
                 ["/admin/access", "Synthetic access simulation"],
                 ["/admin/iot", "Synthetic lighting simulator"],
+                ["/admin/operations", "Synthetic staff operations"],
                 ["/admin/notifications", "Synthetic notification queue"],
                 ["/admin/settings/packages", "Package drafts"],
 			]

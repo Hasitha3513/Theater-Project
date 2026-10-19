@@ -273,7 +273,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-REFUND-001 | 5 | Evidence-based refunds and corrections | CN-PAY-BANK-002 | VERIFIED / CLOSED |
 | CN-ACCESS-001 | 6 | Simulated credential scheduling/recovery | CN-PAY-BANK-002 | VERIFIED / CLOSED |
 | CN-IOT-001 | 7 | Simulated device command/observation slice | CN-ACCESS-001 | VERIFIED / CLOSED |
-| CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | BLOCKED / BLOCKED |
+| CN-OPS-001 | 7 | Room readiness/incident software slice | CN-IOT-001 | IN_PROGRESS / READY |
 | CN-ADMIN-001 | 8 | Read-only scoped account/audit operations | CN-AUTH-001, CN-VERIFY-001 | VERIFIED / CLOSED |
 | CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
 | CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | VERIFIED / CLOSED |
@@ -321,7 +321,7 @@ flowchart TB
   P5["P5 Gateway/messaging<br/>W9-10 illustrative<br/>PARTIAL synthetic notifications; NOT_ACCEPTED"]
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PARTIAL SYNTHETIC ONLY; bounded synthetic amendment VERIFIED; full commercial/physical scope pending; NOT_ACCEPTED"]
   P7["P7 Access/hardware<br/>W13-14 illustrative<br/>SYNTHETIC PARTIAL; NOT_ACCEPTED"]
-  P8["P8 Automation/readiness<br/>W15-16 illustrative<br/>PARTIAL synthetic lighting; physical readiness pending; NOT_ACCEPTED"]
+  P8["P8 Automation/readiness<br/>W15-16 illustrative<br/>PARTIAL synthetic lighting/turnover; physical readiness pending; NOT_ACCEPTED"]
   P9["P9 Reports/UAT<br/>W17-18 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   P10["P10 Pilot/handover<br/>W19-20 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   G -.-> P0
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-IOT-001 VERIFIED/CLOSED only for the approved synthetic lighting slice. All30 owned application/check hashes match exact-source88f50c53bcdb0844b65758d2d221580349255f90,[CI39155271379 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39155271379). [Evidence](#iot-implementation).22 CLOSED/6 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. Next action: obtain separate bounded CN-OPS-001 implementation authorization; [approved readiness](#ops-readiness-reconciliation). No implementation in this session. PayHere deferred/BLOCKED;real equipment/venue/specialist/full acceptance gates retained.
+Current handoff: CN-OPS-001 IN_PROGRESS for separately authorized synthetic turnover/checklist/linked exceptions; [evidence](#ops-implementation). Dependency CN-IOT-001 VERIFIED/CLOSED; no edge changes. Next action: finish required verification and exact-source CI before bounded closure. Real operations, venue/specialists and physical acceptance remain pending; PayHere deferred/BLOCKED.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1439,3 +1439,14 @@ Start main/origin/main8b5bb2467e034a52efb21946abfab59aeef70a7b,0 ahead/behind,V1
 Original DoD preserved with explicit owner-approved synthetic documentation/software interpretation; actual venue/staff/qualified safety/physical inspection/procedures remain downstream acceptance gates. Hasitha's management boundaries, pending venue/specialists, manual-payment-first and deferred/BLOCKED PayHere preserved. Requirements/test plans92/92 unchanged; task counts22 CLOSED/6 BLOCKED/0 READY/0 IN_PROGRESS /28; criteria13/74 and demonstrations unchanged. Validation: knowledge and isolated committed-next-env execution checks required; primary next-env integrity findings remain unrelated and preserved. Actual publication/CI receipt reported in conversation. Next action: obtain separate bounded CN-OPS-001 implementation authorization.
 
 Verified this invocation: design/knowledge validation PASS; isolated committed-next-env execution/status validation PASS including unchanged graph/92 requirements/92 tests/source/application checks; three negative controls rejected unauthorized authority, dependency and READY promotion. Primary execution retains exactly two pre-existing next-env integrity failures. Git whitespace PASS. No application checks run because no application changed. No new knowledge file created.
+
+<a id="ops-implementation"></a>
+## CN-OPS-001 bounded synthetic implementation — 2026-10-19
+
+Start main/origin/main cdf93324800e366e207e67c82a8b3a068dd28d5d,0 ahead/behind,V16; unrelated next-env and two DOCX preserved. Owner attachment2cf3fc9d-4024-46f8-9e8e-71dd7b326ce8 grants approved scope only. Sole dependency CN-IOT-001 VERIFIED/CLOSED; scoped OD-13/29/closure approvals preserved. Task reconciled READY then IN_PROGRESS; no dependency changed. [Implemented contracts](ARCHITECTURE.md#ops-synthetic-scope), [policy](PROJECT.md#ops-synthetic-policy), [UI](DESIGN.md#ops-synthetic-ui).
+
+Additive V17, four Rooms-owned records, public consumer-owned fact read adapters, explicit versioned synthetic checklist, attributed staff lifecycle, unresolved exceptions, command replay/fingerprint/version guards and immutable audit. No physical/inventory/credential/device/payment/notification mutation or production operation. Unknown occupancy and unverified physical readiness persist after case resolution. Disable new mutations for rollback; retain read access/evidence and forward-remediate, never destructive data rollback.
+
+Verification in progress; exact-source receipts required before closure. Current task23rd unit IN_PROGRESS,22 CLOSED/5 BLOCKED/1 IN_PROGRESS/0 READY /28;13/74 unchanged. P8 operational criteria have only partial synthetic evidence and remain unchecked, all full requirements/test plans unaccepted; D0 needs refresh before reuse,D1/D2 NOT_READY,D3-D6 outlines,0/7 held/accepted. Venue/staff/qualified review/physical inspection/operating procedures remain downstream gates; manual-payment-first/PayHere deferred remain unchanged. No demonstration held or accepted by this work.
+
+Local verification PASS:366 backend tests,0 failures/errors/skips including Rooms turnover unit tests, BankIntegrationTest operations tests and FoundationArchitectureTest owner/port checks. Real PostgreSQL18.6 cleanV1–V17,populatedV16–V17/repeat,actual-process restart,concurrent replay/stale decisions,immutable evidence/checklist version binding/composite venue-room constraints,audit rollback,CSRF,scoped denial/suspension/revocation/grant stitching,valid/invalid Booking/IoT source references.112 frontend tests,typecheck,lint,production build PASS.63 operations browser groups across7 widths plus49 affected IoT regression groups PASS(intercepted synthetic API fixtures,not hardware).14 launcher contracts PASS;isolated committed-next-env execution PASS and11 governance negative controls rejected unauthorized authority/dependency/DoD/safety/acceptance/source changes. Design validator and whitespace PASS. Primary next-env findings preserved; no screen-reader/full WCAG/physical/customer acceptance claimed. Mobile375 and desktop1280 screenshots inspected,ignored cache only. Exact-source CI pending; keep task IN_PROGRESS until actual CI receipt.

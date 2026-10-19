@@ -114,4 +114,11 @@ class FoundationArchitectureTest {
  noClasses().that().haveSimpleName("IotService").should().dependOnClassesThat().haveSimpleName("JdbcIotRepository").check(classes);
  String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/iot/internal/JdbcIotRepository.java"));assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_access.","cinenest_identity.","cinenest_rooms.");
  }
+
+ @Test void turnoverStaysInRoomsAndUsesConsumerOwnedReadPorts() throws Exception {
+ var classes=new ClassFileImporter().importPackages("com.cinenest");
+ noClasses().that().resideInAPackage("com.cinenest.rooms..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.booking..","com.cinenest.access..","com.cinenest.iot..","com.cinenest.notifications..").check(classes);
+ noClasses().that().haveSimpleName("TurnoverService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+ String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/rooms/internal/JdbcTurnoverRepository.java"));assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_iot.","cinenest_access.","cinenest_payments.");
+ }
 }

@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-IOT-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-OPS-001",
-  "nextAction": "Obtain separate bounded CN-OPS-001 implementation authorization",
+  "nextAction": "Finish CN-OPS-001 verification and exact-source CI before bounded closure",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
   "approvedCoreDecisions": [
@@ -3601,5 +3601,77 @@
     "migrationHead": "V16",
     "dependencyEdges": "UNCHANGED",
     "fullRequirementAcceptance": "NOT_ACCEPTED"
+  },
+  "opsImplementation": {
+    "baselineHead": "cdf93324800e366e207e67c82a8b3a068dd28d5d",
+    "authority": {
+      "date": "2026-10-19",
+      "source": "Owner inline authorization and attachment 2cf3fc9d-4024-46f8-9e8e-71dd7b326ce8",
+      "requestSha256": "37a415aef1afc807e560e327072c007ade759da881c8de863710be2788a6f2d3",
+      "scope": "GRANTED_BOUNDED_SYNTHETIC_TURNOVER"
+    },
+    "workStatus": "IN_PROGRESS",
+    "physicalOccupancy": "UNKNOWN",
+    "physicalReadiness": "UNVERIFIED",
+    "realOperations": "DISABLED",
+    "gateway": "DEFERRED_BLOCKED",
+    "evidencePath": "PROGRESS.md#ops-implementation",
+    "ownedFiles": {
+      "backend/src/main/java/com/cinenest/booking/internal/TurnoverBookingEvidence.java": "8106f4c57fe6df922add8b1f1d394c4c8b7cde1b5ac449d5081aac0553d1fd48",
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java": "cebea09ad4cbf77ad417e6a4f5c75306153f738d232d459fbe5ff041f6ad2c9e",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "a42057b4d7bfbfb731bb1749f5b1c1c190d5dc860dc4f6c180c98261fb49fc86",
+      "backend/src/main/java/com/cinenest/iot/internal/TurnoverIotEvidence.java": "76300daafbaac3dcd81e3e7a522db1950d81fe101212084101b1e22a9d08c48b",
+      "backend/src/main/java/com/cinenest/rooms/OperationsEvidence.java": "2de673c2467c5912d5873eb9bd6e64adb3990470c8b9b40e0db6773608b8b316",
+      "backend/src/main/java/com/cinenest/rooms/internal/JdbcTurnoverRepository.java": "cd4fa40da09ca2a5b9eae8f396d21bbd043e5f2f4cbd905c2e4a2c3eb30c05a7",
+      "backend/src/main/java/com/cinenest/rooms/internal/TurnoverController.java": "49e84390970742679f482c965d3a3bcffab60482336a0554cd79e16de0fadce8",
+      "backend/src/main/java/com/cinenest/rooms/internal/TurnoverRepository.java": "53b34552ae3833a64be418cd5e0ae0b1f87065d882f9ba2aa4610f2bb5345bad",
+      "backend/src/main/java/com/cinenest/rooms/internal/TurnoverService.java": "e29368ab252f1d3708505c0460f8923d95fd5290388ed988566aed1b423c971c",
+      "backend/src/main/resources/db/migration/V17__synthetic_room_turnover.sql": "d353b1e7258aed6cb1bb647cb3124dfdfd874e030a43fdcd028b25a995894ea3",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "0ac414d38eb01a04929c0fd55664140fe585e2f3677b6426bec3f33dfbd275d0",
+      "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java": "0f9c3e49746767984c6d0b8df16e9435c0384796fd489fc3e3d330b733125bba",
+      "backend/src/test/java/com/cinenest/rooms/internal/TurnoverServiceTest.java": "0b480a8f5df23647f4deeda7b2939fcc969eda2c3faf7a2a8511adb645a00236",
+      "frontend/app/admin/operations/page.tsx": "d99331af754435f247f1405ae5eb2ca9bea192be45d60d7bc84440f383c8a351",
+      "frontend/app/api/admin/venues/[venueId]/operations/cases/[id]/[action]/route.ts": "e7c08b238b9c18529ad79bcdb104659466a9475ca140722ce5db526df4a3b361",
+      "frontend/app/api/admin/venues/[venueId]/operations/cases/[id]/route.ts": "be10bb7cea6f974cf54c7c960655674208c13049f5429999bfad15fd88f76640",
+      "frontend/app/api/admin/venues/[venueId]/operations/cases/route.ts": "42eb50e341639e1984ac1afa866ad3b8cb4afa67954334786d76cac21193023e",
+      "frontend/components/operations.tsx": "a80cdc0a07d9094b340cf8addf03021ac2187efa6fa229d3d711e17613ea3876",
+      "frontend/components/shell.tsx": "0e9f9bd60d4f99b93e6604ee326305c42b669e32b207d5e63e8871976168f911",
+      "frontend/lib/bank-backend.ts": "3811c8682472a7408ec815aa8e4f1518a53650d3e11c5579b7b01edb1c59153a",
+      "frontend/package.json": "c761126c98aa098a7c49b2a49e3e531e79a45ef5c80e03d64c4c74325fc4488d",
+      "frontend/tests/operations-browser.mjs": "b24c52a1398a4a6e2cf30182639ba616951622970737ddb532262d93a3b9ffa5",
+      "frontend/tests/operations.test.mjs": "662d6e5cbec530f75bc16182266d79ac321f40b567e3add975845dcb396a3230"
+    },
+    "migration": "V17__synthetic_room_turnover.sql",
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "checks": {
+      "backend": "PASS",
+      "frontend": "PASS",
+      "browser": "PASS",
+      "architecture": "PASS",
+      "launchers": "PASS",
+      "governance": "PASS"
+    },
+    "sourceCI": "PENDING",
+    "localEvidence": {
+      "backendTests": 366,
+      "postgresql": "18.6 clean V1–V17, populated V16–V17, repeat, HTTP and actual process restart",
+      "frontendTests": 112,
+      "operationsBrowserGroups": 63,
+      "iotRegressionBrowserGroups": 49,
+      "browserWidths": [
+        320,
+        375,
+        640,
+        768,
+        1024,
+        1280,
+        1536
+      ],
+      "launcherContracts": 14,
+      "governanceNegativeControls": 11,
+      "primaryExecution": "Two known unrelated next-env integrity findings",
+      "isolatedExecution": "PASS",
+      "limitations": "Synthetic only; no physical/customer/production acceptance; no screen-reader or WCAG certification"
+    }
   }
 }

@@ -1339,9 +1339,9 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Physical readiness requires accountable evidence and staff",
       "requiredApproval": "Slice + staffing/readiness/escalation policy approval",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
       "evidencePaths": [],
       "resolvedDecisionIds": [
         "OD-04",
@@ -1365,10 +1365,13 @@
         "physicalReadiness": "UNVERIFIED",
         "gateway": "DEFERRED_BLOCKED"
       },
-      "remainingReadinessGates": [
-        "Separate owner implementation authorization"
-      ],
-      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "remainingReadinessGates": [],
+      "implementationAuthorization": {
+        "date": "2026-10-19",
+        "source": "Owner inline authorization and attachment 2cf3fc9d-4024-46f8-9e8e-71dd7b326ce8",
+        "requestSha256": "37a415aef1afc807e560e327072c007ade759da881c8de863710be2788a6f2d3",
+        "scope": "GRANTED_BOUNDED_SYNTHETIC_TURNOVER"
+      },
       "approvedSpecification": "ARCHITECTURE.md#ops-synthetic-scope",
       "closureInterpretation": "Verified synthetic staff workflow, attributed checklist evidence and enforced readiness limitations satisfy only bounded documentation/software scope. Original DoD retained; actual physical clearance requires identified venue, authorized staff, qualified safety review, physical inspection evidence and approved procedures."
     },

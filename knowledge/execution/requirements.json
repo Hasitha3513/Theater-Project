@@ -1082,6 +1082,13 @@
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#iot-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "boundedOperationsImplementationEvidence": {
+        "changeSetId": "CN-OPS-001",
+        "scope": "Synthetic turnover/checklist/linked exceptions only; physical readiness UNVERIFIED, occupancy UNKNOWN, inventory unchanged",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#ops-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1549,7 +1556,14 @@
       "verificationDecisionIds": [
         "OD-04",
         "OD-10"
-      ]
+      ],
+      "boundedOperationsImplementationEvidence": {
+        "changeSetId": "CN-OPS-001",
+        "scope": "Synthetic turnover/checklist/linked exceptions only; physical readiness UNVERIFIED, occupancy UNKNOWN, inventory unchanged",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#ops-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-O04",
@@ -1608,6 +1622,13 @@
         "scope": "Bounded synthetic lighting command/observation only; no full physical or production acceptance",
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#iot-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "boundedOperationsImplementationEvidence": {
+        "changeSetId": "CN-OPS-001",
+        "scope": "Synthetic turnover/checklist/linked exceptions only; physical readiness UNVERIFIED, occupancy UNKNOWN, inventory unchanged",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
     },
@@ -2245,7 +2266,14 @@
         "OD-04",
         "OD-10",
         "OD-14"
-      ]
+      ],
+      "boundedOperationsImplementationEvidence": {
+        "changeSetId": "CN-OPS-001",
+        "scope": "Synthetic turnover/checklist/linked exceptions only; physical readiness UNVERIFIED, occupancy UNKNOWN, inventory unchanged",
+        "status": "IN_PROGRESS",
+        "evidencePath": "PROGRESS.md#ops-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-NFR-06",

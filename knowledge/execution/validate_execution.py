@@ -1806,5 +1806,61 @@ def ops_readiness_main():
     if result==0:print('PASS operations readiness: exact owner approval, unchanged task states/dependencies/coverage/source/application; no implementation authority')
     return result
 
+def ops_implementation_main():
+    """Validate authorized implementation delta before replaying frozen readiness receipts."""
+    from unittest.mock import patch
+    base='cdf93324800e366e207e67c82a8b3a068dd28d5d'
+    errors=[]
+    def require(ok,message):
+        if not ok:errors.append(message)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',base+':'+name])
+    path='execution/change-sets.json';actual=json.loads((K/path).read_text());old=json.loads(prior('knowledge/'+path));tasks=actual['changeSets'];task=next(t for t in tasks if t['id']=='CN-OPS-001');expected=next(t for t in old['changeSets'] if t['id']=='CN-OPS-001')
+    allowed={'implementationAuthorization','authorityAvailable','remainingReadinessGates','readiness','workStatus','evidencePaths'}
+    for key in allowed:
+        if key in task:expected[key]=task[key]
+    require(actual==old,'Operations altered unrelated task/history/dependency/scope')
+    evidence=json.loads((K/'execution/status.json').read_text())['opsImplementation']
+    authority=task['implementationAuthorization']
+    require(isinstance(authority,dict) and authority.get('scope')=='GRANTED_BOUNDED_SYNTHETIC_TURNOVER' and authority.get('requestSha256')=='37a415aef1afc807e560e327072c007ade759da881c8de863710be2788a6f2d3','Operations implementation authority invalid')
+    require(task['authorityAvailable'] and task['remainingReadinessGates']==[] and authority==evidence['authority'],'Operations readiness gates mismatched')
+    require(evidence['physicalOccupancy']=='UNKNOWN' and evidence['physicalReadiness']=='UNVERIFIED' and evidence['realOperations']=='DISABLED' and evidence['gateway']=='DEFERRED_BLOCKED' and evidence['fullRequirementAcceptance']=='NOT_ACCEPTED','Operations safety boundary changed')
+    state=evidence['workStatus'];require(task['workStatus']==state and task['readiness']==('CLOSED' if state=='VERIFIED' else 'READY'),'Operations task status mismatched')
+    owned=evidence['ownedFiles'];require(set(owned)=={'backend/src/main/java/com/cinenest/rooms/internal/TurnoverRepository.java', 'backend/src/main/java/com/cinenest/rooms/internal/TurnoverService.java', 'frontend/components/operations.tsx', 'frontend/package.json', 'backend/src/main/java/com/cinenest/rooms/internal/TurnoverController.java', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/main/resources/db/migration/V17__synthetic_room_turnover.sql', 'frontend/tests/operations-browser.mjs', 'frontend/app/api/admin/venues/[venueId]/operations/cases/[id]/route.ts', 'frontend/app/api/admin/venues/[venueId]/operations/cases/[id]/[action]/route.ts', 'backend/src/main/java/com/cinenest/rooms/OperationsEvidence.java', 'backend/src/main/java/com/cinenest/iot/internal/TurnoverIotEvidence.java', 'frontend/app/api/admin/venues/[venueId]/operations/cases/route.ts', 'frontend/lib/bank-backend.ts', 'frontend/tests/operations.test.mjs', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'frontend/app/admin/operations/page.tsx', 'backend/src/main/java/com/cinenest/rooms/internal/JdbcTurnoverRepository.java', 'backend/src/main/java/com/cinenest/booking/internal/TurnoverBookingEvidence.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/test/java/com/cinenest/rooms/internal/TurnoverServiceTest.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'frontend/components/shell.tsx'},'Operations source allowlist changed')
+    for name,digest in owned.items():require((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Operations owned source mismatch '+name)
+    baseline=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',base,'--','backend','frontend'],text=True).splitlines());added=set(owned)-baseline
+    inventory=set(subprocess.check_output(['git','-C',str(R),'-c','core.quotePath=false','ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines());require(inventory==baseline|added,'Operations unrelated application inventory changed')
+    for name in baseline-set(owned)-{'frontend/next-env.d.ts'}:require((R/name).read_bytes()==prior(name),'Operations altered unrelated source '+name)
+    for name in ['decisions/cinenest-open-decisions.json','execution/source-ledger.json','sources/cinenest-source-register.json']:require((K/name).read_bytes()==prior('knowledge/'+name),'Operations altered prior decision/source '+name)
+    for name,key,ids in [('execution/requirements.json','requirements',{'CN-O03','CN-O04','CN-A05','CN-NFR-05'}),('execution/test-plan.json','tests',{'T-CN-O03','T-CN-O04','T-CN-A05','T-CN-NFR-05'})]:
+        doc=json.loads((K/name).read_text())
+        for row in doc[key]:
+            receipt=row.pop('boundedOperationsImplementationEvidence',None)
+            require((receipt is not None)==(row['id'] in ids),'Operations coverage mismatch '+row['id'])
+            if receipt:require(receipt['fullAcceptance']=='NOT_ACCEPTED' and receipt['status']==state,'Operations full acceptance promoted '+row['id'])
+        require(doc==json.loads(prior('knowledge/'+name)),'Operations changed full requirement/test history '+name)
+    progress=(K/'PROGRESS.md').read_text();require(re.findall(r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))',progress,re.M)==re.findall(r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))',prior('knowledge/PROGRESS.md').decode(),re.M),'Operations promoted phase/demo criteria')
+    sql=(R/'backend/src/main/resources/db/migration/V17__synthetic_room_turnover.sql').read_text();require(set(re.findall(r'CREATE TABLE ([a-z_]+[.][a-z_]+)',sql))=={'cinenest_rooms.turnover_'+x for x in ['case','entry','receipt','audit']},'Operations datastore scope changed')
+    require(all(x not in sql for x in ['cinenest_booking.','cinenest_access.','cinenest_iot.','cinenest_payments.']),'Operations foreign datastore mutation')
+    if state=='VERIFIED':
+        require(all(evidence['checks'].get(x)=='PASS' for x in ['backend','frontend','browser','architecture','launchers','governance']) and evidence['sourceCI']=='SUCCESS','Operations closure lacks checks/CI')
+        source=evidence.get('sourceCommit','');require(bool(re.fullmatch('[0-9a-f]{40}',source)),'Operations source receipt invalid')
+        if re.fullmatch('[0-9a-f]{40}',source):
+            for name,digest in owned.items():require(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',source+':'+name])).hexdigest()==digest,'Operations CI source stale '+name)
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    replacements={R/name:prior(name) for name in set(owned)&baseline}
+    for name in ['execution/change-sets.json','execution/status.json','execution/requirements.json','execution/test-plan.json','PROGRESS.md']:replacements[K/name]=prior('knowledge/'+name)
+    rb0=Path.read_bytes;rt0=Path.read_text;g0=Path.glob;o0=subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(args,*a,**kw):
+        result=o0(args,*a,**kw)
+        if args[0]=='git' and (('diff' in args and '--name-only' in args) or 'ls-files' in args):
+            text=result if isinstance(result,str) else result.decode();removed=set(owned) if 'diff' in args else added;text=''.join(line+'\n' for line in text.splitlines() if line not in removed);return text if isinstance(result,str) else text.encode()
+        return result
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ops_readiness_main()
+    if result==0:print('PASS operations implementation: exact authority/owned source, unchanged dependency/full coverage, synthetic-only safety and historical receipts')
+    return result
+
 if __name__ == '__main__':
-    raise SystemExit(ops_readiness_main())
+    raise SystemExit(ops_implementation_main())

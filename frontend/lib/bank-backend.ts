@@ -1,8 +1,30 @@
 // Dedicated bounded binary transport. Existing JSON adapters remain unchanged.
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
- if(new RegExp(`^/api/admin/venues/${uuid}/iot/devices(/${uuid})?$`).test(path))return method==="GET";
- if(new RegExp(`^/api/admin/venues/${uuid}/iot/devices/${uuid}/commands(/${uuid}/(simulations|reconciliations))?$`).test(path))return method==="POST";
+	if (new RegExp(`^/api/admin/venues/${uuid}/operations/cases$`).test(path))
+		return ["GET", "POST"].includes(method);
+	if (
+		new RegExp(`^/api/admin/venues/${uuid}/operations/cases/${uuid}$`).test(
+			path,
+		)
+	)
+		return method === "GET";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/operations/cases/${uuid}/(assignments|acknowledgements|checklist|completion-assertions|exceptions|exception-resolutions|reviews)$`,
+		).test(path)
+	)
+		return method === "POST";
+	if (
+		new RegExp(`^/api/admin/venues/${uuid}/iot/devices(/${uuid})?$`).test(path)
+	)
+		return method === "GET";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/iot/devices/${uuid}/commands(/${uuid}/(simulations|reconciliations))?$`,
+		).test(path)
+	)
+		return method === "POST";
 
 	if (new RegExp(`^/api/bookings/${uuid}/amendments$`).test(path))
 		return method === "POST";
