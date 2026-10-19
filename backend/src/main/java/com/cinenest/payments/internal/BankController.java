@@ -19,6 +19,7 @@ class BankController {
     BankController(BankService service,BankRepository repository,PlatformTransactionManager manager){this.service=service;this.repository=repository;denial=new TransactionTemplate(manager);denial.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);}
     UUID actor(Principal p){if(p==null)throw new BankFailure(401,"Sign-in required");return BankService.id(p.getName());}
     ResponseEntity<?> ok(Object value){return ResponseEntity.ok().header("Cache-Control","no-store").body(value);}
+    @GetMapping("/api/bank/requests/readiness") ResponseEntity<?> readiness(Principal p,@RequestParam String quote){return ResponseEntity.ok().header("Cache-Control","private, no-store").body(service.readiness(actor(p),BankService.id(quote)));}
     @PostMapping("/api/bank/requests") ResponseEntity<?> create(Principal p,@RequestBody Map<String,Object>b){return ok(service.command(actor(p),null,null,"CREATE",b));}
     @PostMapping("/api/bank/requests/{id}/claims") ResponseEntity<?> claim(Principal p,@PathVariable UUID id,@RequestBody Map<String,Object>b){return ok(service.command(actor(p),id,null,"CLAIM",b));}
     @PostMapping("/api/bank/claims/{id}/uploads") ResponseEntity<?> allocate(Principal p,@PathVariable UUID id,@RequestBody Map<String,Object>b){return ok(service.allocate(actor(p),id,b));}
@@ -36,7 +37,7 @@ class BankController {
     @ExceptionHandler(BankFailure.class) ResponseEntity<?> failure(BankFailure failure,Principal p){try{denial.executeWithoutResult(s->repository.audit(p==null?null:actor(p),null,"HTTP_DENIAL","DENIED"));}catch(DataAccessException unavailable){return error(503,"Synthetic bank review unavailable");}return error(failure.status,failure.getMessage());}
     @ExceptionHandler(DataIntegrityViolationException.class) ResponseEntity<?> conflict(){return error(409,"Bank conflict; refresh authoritative history");}
     @ExceptionHandler(DataAccessException.class) ResponseEntity<?> unavailable(){return error(503,"Synthetic bank review unavailable");}
-    @ExceptionHandler({org.springframework.http.converter.HttpMessageNotReadableException.class,org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class}) ResponseEntity<?> invalid(){return error(400,"Malformed verification request");}
+    @ExceptionHandler({org.springframework.http.converter.HttpMessageNotReadableException.class,org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class,org.springframework.web.bind.MissingServletRequestParameterException.class}) ResponseEntity<?> invalid(){return error(400,"Malformed verification request");}
     @ExceptionHandler(IOException.class) ResponseEntity<?> interrupted(){return error(503,"Upload interrupted; refresh before retrying");}
     ResponseEntity<?> error(int status,String message){return ResponseEntity.status(status).header("Cache-Control","no-store").body(Map.of("message",message,"labels",BankPolicy.LABELS));}
 }

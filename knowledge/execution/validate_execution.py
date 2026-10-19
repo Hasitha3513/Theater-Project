@@ -2107,7 +2107,7 @@ def backend_handoff_main():
     return result
 
 
-def inert_ci_main():
+def ui_flow_main():
     """Validate the exact frontend successor, then replay immutable backend/CI receipts."""
     from unittest.mock import patch
     baseline='7f64e34cd790b8dbcfc3a77b93cc0ad229158986'
@@ -2143,6 +2143,50 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=backend_handoff_main()
     if result==0:print('PASS UI flow successor: exact frontend ownership/authority; unchanged backend, dependencies, full requirements and acceptance; historical receipts retained')
+    return result
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized bank readiness sources before historical replay.
+
+    No application inventory exemption applies until source hashes and scope,
+    unchanged registries and preserved acceptance gates have all been checked.
+    """
+    from unittest.mock import patch
+    baseline='1c1cc57ced53d3e2ed469148ec107ed84c88d4fa'
+    owned={'backend/src/main/java/com/cinenest/booking/BankRequestHolds.java': 'f41100b11f22fb65622d4bd61ce8e1db3d6e59b6fe0c0e910f31d236cbeafa63', 'backend/src/main/java/com/cinenest/booking/QuotationHolds.java': 'e98d09f2890f4a68549766c7a61f0a293e5348a67cc3de001efa06f56d8e30df', 'backend/src/main/java/com/cinenest/booking/internal/BankRequestHoldAdapter.java': '5d32b0797cb91e828c5b4fdfa673492f3d94b3c977f9291aa2dbd4c1ee9bdb89', 'backend/src/main/java/com/cinenest/booking/internal/InventoryService.java': 'a5b08443b1ef0ae9a5840b53c5e3be2ef1bceab44b02e31b1e8dd21a0b9c6eee', 'backend/src/main/java/com/cinenest/payments/internal/BankController.java': 'acc657c0cde6828aec998529b04813660fa584452fb1a8c6f1a5d17a49eb21b8', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java': 'fd81940fd0aef0967bb911096373ae2a45b3e5c3ec0e4089bc225878e9b26a1f', 'backend/src/main/java/com/cinenest/pricing/BankQuotation.java': '95041bffbb97b94e4b951782b95d4e88179f68f094caa9f1d17ba425da6cd9d7', 'backend/src/main/java/com/cinenest/pricing/internal/BankQuotationAdapter.java': '81153dea26bcef7ee3c1b14a6ef394f6d78747a4a786b77e20f0714f3c60a387', 'backend/src/main/java/com/cinenest/rooms/InventoryConstraints.java': '4b0e18583014b690fb74024b44454c512ce42b2f50cc8d8fa174769dc450303c', 'backend/src/main/java/com/cinenest/rooms/internal/InventoryConstraintAdapter.java': '10c04bb631bf1bc60fb07a2cfdce730ea280d18ae92f36db322c5fbcb021dc1d', 'backend/src/main/java/com/cinenest/verification/BankEligibility.java': 'e64ce20f958626a814e006527f508276467c6e772a66d51ac73277b99edc30d9', 'backend/src/main/java/com/cinenest/verification/internal/BankEligibilityAdapter.java': 'ccfadb918ee5e985568324cd72858e3edb75ef8566dce361226cc4dd26e32db8', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '9ad44211086ebbaebedd3489e641deafce09215dcdc170d9b82f9abdb1f9c592', 'backend/src/main/java/com/cinenest/payments/internal/BankCreationRules.java': '93664bcb2712b55f053d1953bbbb0cf989eca53b09efae9440f081b651c5dd59', 'backend/src/test/java/com/cinenest/payments/internal/BankCreationRulesTest.java': '02af46f57d3d8a13f45508f822dd91298e8ef796f8d393b567f0df1e3a88c680', 'backend/src/test/java/com/cinenest/payments/internal/BankReadinessTest.java': 'b2a3ec50a934de49102cc46edf749f41a03b173ee5578672c0128aa387a4d227', 'backend/src/test/java/com/cinenest/booking/internal/BankConversionRulesTest.java': 'd24ec350a3b3e52949be3fbbca4e1da50d840cdf6d3eaed17a3a590762894886', 'backend/src/test/java/com/cinenest/pricing/internal/BankQuotationObservationTest.java': 'faef7574daf84043449bebf2b3d2c5e3622585c21b81bf5d31823ce34952db55'}
+    added={'backend/src/test/java/com/cinenest/booking/internal/BankConversionRulesTest.java', 'backend/src/test/java/com/cinenest/payments/internal/BankCreationRulesTest.java', 'backend/src/main/java/com/cinenest/payments/internal/BankCreationRules.java', 'backend/src/test/java/com/cinenest/pricing/internal/BankQuotationObservationTest.java', 'backend/src/test/java/com/cinenest/payments/internal/BankReadinessTest.java'}
+    errors=[]
+    for name,digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('Bank readiness source mismatch '+name)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name in ['execution/change-sets.json','execution/requirements.json','execution/test-plan.json','execution/status.json','execution/omissions.json','decisions/cinenest-open-decisions.json']:
+        if (K/name).read_bytes()!=prior('knowledge/'+name):errors.append('Bank readiness changed dependencies/requirements/acceptance '+name)
+    architecture=(K/'ARCHITECTURE.md').read_text();progress=(K/'PROGRESS.md').read_text()
+    if not architecture.startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Bank readiness rewrote prior architecture authority')
+    if '<a id="bank-request-readiness"></a>' not in architecture or 'd3cb6a54-0bea-4e7d-8cf0-264c0df6a609' not in architecture:errors.append('Bank readiness owner approval missing')
+    if '<a id="bank-handoff-implementation"></a>' not in progress or 'CI39297920501 COMPLETED/SUCCESS' not in progress:errors.append('Bank readiness prerequisite/evidence missing')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Bank readiness promoted phase/demo acceptance')
+    allowed=set(owned)|{'knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Bank readiness unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements={R/name:prior(name) for name in set(owned)-added}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|{'knowledge/ARCHITECTURE.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_main()
+    if result==0:print('PASS bank readiness successor: exact owned sources/authority; unchanged dependencies, full requirements and phase/demo acceptance; historical integrity retained')
     return result
 
 

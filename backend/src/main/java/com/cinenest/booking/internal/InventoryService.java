@@ -121,15 +121,25 @@ class InventoryService implements com.cinenest.booking.QuotationHolds {
         rooms.lock(h.get().venue());reconcileLocked(h.get().venue());
         return repository.hold(hold).map(InventoryService::quotationFacts);
     }
+    private boolean currentValid(InventoryRepository.Hold h,boolean observation) {
+        try {
+            var f=(observation?rooms.observe(h.room()):rooms.inspect(h.room())).orElseThrow(InventoryRules::invalid);
+            var c=InventoryRules.candidate(f,h.start(),Math.toIntExact(Duration.between(h.start(),h.end()).toMinutes()),h.guests());
+            return f.timezone().equals(h.timezone())&&c.blockedUntil().equals(h.until());
+        }catch(InventoryFailure invalid){return false;}
+    }
+    public Optional<com.cinenest.booking.QuotationHolds.Facts> observe(UUID actor,UUID hold) {
+        return repository.hold(hold).filter(h->h.owner().equals(actor)).map(h->{
+            String state=h.state();
+            if(state.equals("ACTIVE"))state=!repository.now().isBefore(h.expires())?"EXPIRED":!currentValid(h,true)?"INVALIDATED":"ACTIVE";
+            var f=quotationFacts(h);
+            return new com.cinenest.booking.QuotationHolds.Facts(f.id(),f.owner(),f.venue(),f.room(),f.start(),f.end(),f.expires(),state,f.revision(),f.guests(),f.timezone(),f.bufferMinutes(),f.blockedUntil(),f.configuration());
+        });
+    }
     private void reconcileLocked(UUID venue) {
         for(var h:repository.active(venue)) {
             if(!repository.now().isBefore(h.expires())) {repository.transition(h,"EXPIRED",null);continue;}
-            boolean valid=false;
-            try {
-                var f=rooms.inspect(h.room()).orElseThrow(InventoryRules::invalid);
-                var c=InventoryRules.candidate(f,h.start(),Math.toIntExact(Duration.between(h.start(),h.end()).toMinutes()),h.guests());
-                valid=f.timezone().equals(h.timezone()) && c.blockedUntil().equals(h.until());
-            } catch(InventoryFailure invalid) { /* Persist invalidation, never silently rewrite the interval. */ }
+            boolean valid=currentValid(h,false);
             if(!valid)repository.transition(h,"INVALIDATED",null);
         }
     }

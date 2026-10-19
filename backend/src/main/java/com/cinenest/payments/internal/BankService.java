@@ -12,8 +12,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 class BankService {
  final LedgerService ledger;final BankRepository repo;final ScopedAuthorization auth;final BankQuotation quotes;final BankRequestHolds holds;final BankEligibility verification;
- final com.cinenest.notifications.NotificationFacts notifications;final ReviewerNotice notice;final BankPolicy policy;final PrivateEvidenceStore storage;final SyntheticEvidenceProcessor scanner;final TransactionTemplate tx;
- BankService(LedgerService ledger,BankRepository repo,ScopedAuthorization auth,BankQuotation quotes,BankRequestHolds holds,BankEligibility verification,BankPolicy policy,PrivateEvidenceStore storage,SyntheticEvidenceProcessor scanner,ReviewerNotice notice,com.cinenest.notifications.NotificationFacts notifications,PlatformTransactionManager manager){this.notifications=notifications;this.ledger=ledger;this.notice=notice;this.repo=repo;this.auth=auth;this.quotes=quotes;this.holds=holds;this.verification=verification;this.policy=policy;this.storage=storage;this.scanner=scanner;tx=new TransactionTemplate(manager);}
+ final com.cinenest.notifications.NotificationFacts notifications;final ReviewerNotice notice;final BankPolicy policy;final PrivateEvidenceStore storage;final SyntheticEvidenceProcessor scanner;final TransactionTemplate tx,readTx;
+ BankService(LedgerService ledger,BankRepository repo,ScopedAuthorization auth,BankQuotation quotes,BankRequestHolds holds,BankEligibility verification,BankPolicy policy,PrivateEvidenceStore storage,SyntheticEvidenceProcessor scanner,ReviewerNotice notice,com.cinenest.notifications.NotificationFacts notifications,PlatformTransactionManager manager){this.notifications=notifications;this.ledger=ledger;this.notice=notice;this.repo=repo;this.auth=auth;this.quotes=quotes;this.holds=holds;this.verification=verification;this.policy=policy;this.storage=storage;this.scanner=scanner;tx=new TransactionTemplate(manager);readTx=new TransactionTemplate(manager);readTx.setReadOnly(true);readTx.setIsolationLevel(org.springframework.transaction.TransactionDefinition.ISOLATION_REPEATABLE_READ);}
  static UUID id(Object v){try{return UUID.fromString(String.valueOf(v));}catch(RuntimeException e){throw new BankFailure(400,"Valid identifier required");}}
  static long number(Object v){try{if(v==null||!v.toString().matches("[0-9]{1,19}"))throw new IllegalArgumentException();return Long.parseLong(v.toString());}catch(RuntimeException e){throw new BankFailure(400,"Exact nonnegative integer required");}}
  static void keys(Map<String,Object> b,String... allowed){if(!Set.of(allowed).containsAll(b.keySet()))throw new BankFailure(400,"Unexpected request fields");}
@@ -29,16 +29,37 @@ class BankService {
  Map<String,Object> read(UUID a,UUID id,UUID venue){policy.current();return tx.execute(s->{eligible(a);if(venue!=null)reviewer(a,venue,"READ");var r=owned(a,id,venue);repo.audit(a,id,"STATUS","PERMIT");return view(r);});}
  CustomerReads.Page<CustomerReads.Request> ownedList(UUID actor,int page,int size){policy.current();CustomerReads.bounds(page,size);return tx.execute(s->{eligible(actor);var rows=repo.owned(actor,page*size,size+1);var items=rows.stream().limit(size).map(item->repo.request(item.id(),true).orElseThrow()).map(r->new CustomerReads.Request(r.id(),r.venue(),r.revision(),r.state(),r.review(),repo.latest(r.id()).isPresent(),r.amount(),r.currency(),r.timezone(),r.initiate().toString(),r.submit().toString(),r.reviewBy().toString(),r.expires().toString(),CustomerReads.Funding.from(ledger.customerStatus(r.id())),ledger.customerResolutions(r.id()),true)).toList();repo.audit(actor,null,"CUSTOMER_REQUESTS_READ","OWNED_SYNTHETIC_ONLY");return new CustomerReads.Page<>(items,page,size,rows.size()>size,repo.now().toString(),true);});}
  List<Map<String,Object>> queue(UUID a,UUID venue){policy.current();return tx.execute(s->{eligible(a);reviewer(a,venue,"READ");repo.audit(a,null,"QUEUE","PERMIT");return repo.queue(venue,a).stream().map(this::view).toList();});}
+ record Admission(String reason,boolean verificationEligible,Instant now,Map<String,Instant> times){}
+ private Admission prerequisites(UUID actor,BankQuotation.Facts facts,BankPolicy.Policy p,boolean observation){
+  boolean verified=observation?verification.observe(actor,facts.quote(),facts.venue()):verification.eligible(actor,facts.quote(),facts.venue());
+  Instant now=repo.now();var times=BankCreationRules.times(p,now);
+  String reason=BankQuotation.unexpired(facts.expires(),now)?BankCreationRules.refusal(p,facts.snapshot(),now,verified):"QUOTE_EXPIRED";
+  if(reason.equals("ELIGIBLE"))reason=holds.conversionRefusal(actor,facts.hold(),facts.holdRevision(),times.get("hold"),!observation);
+  return new Admission(reason,verified,now,times);
+ }
+ Map<String,Object> readiness(UUID actor,UUID quote){
+  var p=policy.current();return readTx.execute(s->{
+   if(!auth.eligible(actor,false))throw new BankFailure(403,"Current synthetic eligible account required");
+   var observed=quotes.observe(actor,quote).orElseThrow(()->new BankFailure(404,"Quotation not found"));
+   var facts=observed.facts();String reason=observed.reason(),verificationReadiness="NOT_EVALUATED";
+   Instant now=repo.now();
+   if(reason.equals("ELIGIBLE")){var admission=prerequisites(actor,facts,p,true);reason=admission.reason();now=admission.now();verificationReadiness=admission.verificationEligible()?"ELIGIBLE":"REQUIRED";}
+   // Only this owner-authorized existing POST input and an allowlisted summary leave Payments.
+   var summary=new LinkedHashMap<String,Object>();
+   for(String key:List.of("currency","totalMinor","paymentMethod","sessionStart","sessionEnd","timezone"))summary.put(key,facts.snapshot().get(key));
+   Object pack=facts.snapshot().get("package");summary.put("packageName",pack instanceof Map<?,?> value?value.get("name"):null);
+   var result=new LinkedHashMap<String,Object>();result.put("quoteId",facts.quote().toString());result.put("quoteRevision",facts.revision());result.put("contentHash",facts.hash());result.put("quoteExpiresAt",facts.expires().toString());result.put("quoteSummary",summary);
+   result.put("verificationReadiness",verificationReadiness);result.put("eligible",reason.equals("ELIGIBLE"));result.put("reason",reason);result.put("serverNow",now.toString());result.put("synthetic",true);result.put("paymentVerified",false);result.put("bookingConfirmed",false);result.put("labels",BankPolicy.LABELS);return result;
+  });
+ }
  Map<String,Object> command(UUID a,UUID target,UUID venue,String action,Map<String,Object>b){
   var p=policy.current();switch(action){case "CREATE"->keys(b,"quoteId","quoteRevision","contentHash","commandKey");case "CLAIM","RESUBMIT"->keys(b,"revision","commandKey","declaredAmountMinor","declaredPaidAt","declaredReference");case "DECIDE"->keys(b,"revision","commandKey","action","reason");case "ESCALATE"->keys(b,"revision","commandKey","action","reason","handoverTo");default->throw new BankFailure(400,"Unsupported command");}UUID key=id(b.get("commandKey"));String hash=BankPolicy.commandHash(action+":"+target+":"+venue,b);
   return tx.execute(s->{eligible(a);if(venue!=null)reviewer(a,venue,action);var r=target==null?null:owned(a,target,venue);var replay=repo.command(a,key,hash);if(replay.isPresent())return replay.get();
    if(action.equals("CREATE")){
     UUID q=id(b.get("quoteId"));var facts=quotes.accepted(a,q,number(b.get("quoteRevision")),Objects.toString(b.get("contentHash"),"")).orElseThrow(()->new BankFailure(409,"Current accepted synthetic BANK quotation required"));
-    if(!verification.eligible(a,q,facts.venue()))throw new BankFailure(409,"Current synthetic verification required");
-    if(!Boolean.TRUE.equals(facts.snapshot().get("synthetic"))||!Boolean.FALSE.equals(facts.snapshot().get("commercialIssuance"))||!"LKR".equals(facts.snapshot().get("currency")))throw new BankFailure(409,"Synthetic terms required");
-    Instant now=repo.now(),start=Instant.parse(facts.snapshot().get("sessionStart").toString());if(!start.isAfter(now.plus(p.lead()))||!start.isAfter(now.plus(p.hold()))||!start.isAfter(now.plus(p.request())))throw new BankFailure(409,"Configured synthetic lead/deadlines exceed session start");
-    LocalTime local=now.atZone(ZoneId.of(facts.snapshot().get("timezone").toString())).toLocalTime();if(local.isBefore(p.opens())||!local.isBefore(p.closes()))throw new BankFailure(409,"Outside configured synthetic review window");
-    UUID next=UUID.randomUUID();var times=Map.of("expires",now.plus(p.request()),"initiate",now.plus(p.initiation()),"submit",now.plus(p.submission()),"review",now.plus(p.review()),"escalate",now.plus(p.escalation()),"hold",now.plus(p.hold()));
+    var admission=prerequisites(a,facts,p,false);
+    if(!admission.reason().equals("ELIGIBLE"))throw new BankFailure(409,"Bank request unavailable: "+admission.reason());
+    UUID next=UUID.randomUUID();var times=admission.times();
     holds.convert(a,facts.hold(),facts.holdRevision(),next,times.get("hold"));repo.create(next,facts,p,times);repo.work(next,null,"EXPIRY",times.get("expires"));if(times.get("hold").isBefore(times.get("expires")))repo.work(next,null,"EXPIRY",times.get("hold"));repo.work(next,null,"ESCALATION",times.get("escalate"));r=repo.request(next,true).orElseThrow();
    }else{
     revision(r,b);if(!r.policy().equals(p.id()))throw new BankFailure(409,"Policy changed; original request retained for resolution");

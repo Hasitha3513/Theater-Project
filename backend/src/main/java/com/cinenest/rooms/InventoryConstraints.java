@@ -13,4 +13,6 @@ public interface InventoryConstraints {
     Optional<UUID> venue(UUID room);
     void lock(UUID venue);
     Optional<Facts> inspect(UUID room);
+    /** Non-mutating configuration observation in the caller's read-only repeatable-read snapshot. */
+    Optional<Facts> observe(UUID room);
 }

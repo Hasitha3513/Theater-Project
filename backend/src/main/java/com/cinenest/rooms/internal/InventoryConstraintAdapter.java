@@ -15,6 +15,12 @@ class InventoryConstraintAdapter implements InventoryConstraints {
     public void lock(UUID venue) {
         jdbc.sql("SELECT venue_id FROM cinenest_rooms.venue WHERE venue_id=:v FOR UPDATE").param("v",venue).query(UUID.class).list();
     }
+    public Optional<Facts> observe(UUID room) {
+        if(!org.springframework.transaction.support.TransactionSynchronizationManager.isCurrentTransactionReadOnly()
+            ||!java.util.Objects.equals(org.springframework.transaction.support.TransactionSynchronizationManager.getCurrentTransactionIsolationLevel(),java.sql.Connection.TRANSACTION_REPEATABLE_READ))
+            throw new IllegalStateException("Observation requires a read-only repeatable-read snapshot");
+        return inspect(room);
+    }
     public Optional<Facts> inspect(UUID room) {
         return jdbc.sql("""
             SELECT r.venue_id,r.room_id,v.timezone,(r.enabled AND v.enabled) enabled,r.capacity,

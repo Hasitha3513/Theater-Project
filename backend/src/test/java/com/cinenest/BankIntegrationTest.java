@@ -236,6 +236,99 @@ class BankIntegrationTest {
     }
     Map<String,Object> bank(Browser a)throws Exception{return json(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(bankBody(a))));}
     String bankPath(Map<String,Object> r){return "/api/bank/requests/"+r.get("id");}
+    String readinessPath(Object quote){return "/api/bank/requests/readiness?quote="+quote;}
+    // Persisted domain snapshots exclude Identity's normal session/security bookkeeping.
+    Map<String,String> businessSnapshot(){
+      var result=new java.util.TreeMap<String,String>();
+      var tables=jdbc.sql("SELECT schemaname||'.'||tablename FROM pg_tables WHERE schemaname IN ('cinenest_pricing','cinenest_verification','cinenest_booking','cinenest_payments','cinenest_notifications','cinenest_access','cinenest_iot','cinenest_rooms') ORDER BY 1").query(String.class).list();
+      for(String table:tables)result.put(table,jdbc.sql("SELECT coalesce(jsonb_agg(row_data ORDER BY row_data::text),'[]'::jsonb)::text FROM (SELECT to_jsonb(t) AS row_data FROM "+table+" t) s").query(String.class).single());
+      return result;
+    }
+    Map<String,Object> unchangedReadiness(Browser customer,Object quote,String reason)throws Exception{
+      var before=businessSnapshot();var response=customer.get(readinessPath(quote));var result=json(response);
+      assertThat(response.headers().firstValue("Cache-Control").orElse("")).contains("private","no-store");
+      assertThat(result).containsEntry("reason",reason).containsEntry("eligible",reason.equals("ELIGIBLE")).containsEntry("paymentVerified",false).containsEntry("bookingConfirmed",false);
+      assertThat(businessSnapshot()).isEqualTo(before);return result;
+    }
+    @Test void bankReadinessIsOwnerScopedNonCreatingAndPostReplayRemainsAuthoritative()throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);var result=unchangedReadiness(a,body.get("quoteId"),"ELIGIBLE");
+      assertThat(result).containsEntry("quoteRevision",body.get("quoteRevision")).containsEntry("contentHash",body.get("contentHash")).containsEntry("verificationReadiness","ELIGIBLE");
+      assertThat(result.keySet()).containsExactlyInAnyOrder("quoteId","quoteRevision","contentHash","quoteExpiresAt","quoteSummary","verificationReadiness","eligible","reason","serverNow","synthetic","paymentVerified","bookingConfirmed","labels");
+      assertThat(result.toString()).doesNotContain("uploadId","object_id","identity_evidence","access_grant","encryption-key");
+      var created=json(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)));
+      assertThat(json(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)))).isEqualTo(created);
+      unchangedReadiness(a,body.get("quoteId"),"HOLD_ALREADY_CONVERTED");
+      body.put("commandKey",UUID.randomUUID().toString());assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)).statusCode()).isEqualTo(409);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Integer.class).single()).isEqualTo(1);
+    }
+    @ParameterizedTest @ValueSource(strings={"MISSING","PENDING","REJECTED"})
+    void bankReadinessCannotSubstituteForCurrentVerification(String state)throws Exception{
+      var a=signedIn("customer-a");Object quote;
+      if(state.equals("MISSING")){var h=held(a,request(a,local()));var q=quote(a,issueRequest(a,h));json(write(a,"POST",quotePath(q)+"/accept",JSONObjectUtils.toJSONString(Map.of("expectedRevision",q.get("revision"),"contentHash",q.get("contentHash"),"disclosures",q.get("disclosures"),"idempotencyKey",UUID.randomUUID().toString()))));quote=q.get("quoteId");}
+      else if(state.equals("PENDING"))quote=createCase(a).get("quoteId");
+      else{var r=ready(a);reviewerGrants();json(write(signedIn("staff"),"POST",reviewPath(r)+"/decisions",JSONObjectUtils.toJSONString(decision(r,"REJECTED"))));quote=r.get("quoteId");}
+      var result=unchangedReadiness(a,quote,"VERIFICATION_REQUIRED");assertThat(result.get("verificationReadiness")).isEqualTo("REQUIRED");
+      var q=json(a.get("/api/quotes/"+quote));assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(Map.of("quoteId",quote,"quoteRevision",q.get("revision"),"contentHash",q.get("contentHash"),"commandKey",UUID.randomUUID().toString()))).statusCode()).isEqualTo(409);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Integer.class).single()).isZero();
+    }
+    @Test void bankReadinessHidesForeignQuoteAndRequiresAuthenticationAndValidReference()throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);var b=signedIn("customer-b");
+      var unknown=b.get(readinessPath(UUID.randomUUID()));var foreign=b.get(readinessPath(body.get("quoteId")));
+      assertThat(foreign.statusCode()).isEqualTo(404);assertThat(foreign.body()).isEqualTo(unknown.body()).doesNotContain(body.get("contentHash").toString());
+      assertThat(client.send(HttpRequest.newBuilder(URI.create(base()+readinessPath(body.get("quoteId")))).GET().build(),HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(401);
+      assertThat(a.get(readinessPath("malformed")).statusCode()).isEqualTo(400);assertThat(a.get("/api/bank/requests/readiness").statusCode()).isEqualTo(400);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Integer.class).single()).isZero();
+    }
+    @Test void bankReadinessLoadsCurrentRevisionButNeverAcceptsIssuedQuote()throws Exception{
+      var a=signedIn("customer-a");var h=held(a,request(a,local()));var q=quote(a,issueRequest(a,h));
+      var changed=json(write(a,"POST",quotePath(q)+"/revisions",JSONObjectUtils.toJSONString(Map.of("expectedRevision",q.get("revision"),"optionalServiceIds",java.util.List.of(),"paymentMethod","BANK","idempotencyKey",UUID.randomUUID().toString()))));
+      var read=unchangedReadiness(a,q.get("quoteId"),"QUOTE_NOT_ACCEPTED");assertThat(read).containsEntry("quoteRevision",changed.get("revision")).containsEntry("contentHash",changed.get("contentHash"));
+      assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(Map.of("quoteId",q.get("quoteId"),"quoteRevision",q.get("revision"),"contentHash",q.get("contentHash"),"commandKey",UUID.randomUUID().toString()))).statusCode()).isEqualTo(409);
+    }
+    @Test void bankReadinessFailsClosedWhenSyntheticPolicyIsUnavailable()throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);var env=(org.springframework.core.env.ConfigurableEnvironment)environment;env.getPropertySources().addFirst(new org.springframework.core.env.MapPropertySource("readiness-policy-unavailable",Map.of("cinenest.bank.request-seconds","0")));
+      try{var response=a.get(readinessPath(body.get("quoteId")));assertThat(response.statusCode()).isEqualTo(503);assertThat(response.body()).doesNotContain(body.get("contentHash").toString());}finally{env.getPropertySources().remove("readiness-policy-unavailable");}
+    }
+    @Test void bankReadinessDoesNotReconcileExpiredOrOperationallyInvalidHolds()throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);UUID hold=jdbc.sql("SELECT hold_id FROM cinenest_pricing.quotation WHERE quote_id=:id").param("id",UUID.fromString(body.get("quoteId").toString())).query(UUID.class).single();
+      jdbc.sql("UPDATE cinenest_rooms.room SET enabled=FALSE,version=version+1 WHERE room_id=:id").param("id",RID).update();unchangedReadiness(a,body.get("quoteId"),"HOLD_INELIGIBLE");
+      jdbc.sql("UPDATE cinenest_rooms.room SET enabled=TRUE,version=version+1 WHERE room_id=:id").param("id",RID).update();expire(Map.of("holdId",hold));unchangedReadiness(a,body.get("quoteId"),"HOLD_EXPIRED");
+      assertThat(jdbc.sql("SELECT state FROM cinenest_booking.reservation_hold WHERE hold_id=:id").param("id",hold).query(String.class).single()).isEqualTo("ACTIVE");
+      assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)).statusCode()).isEqualTo(409);
+    }
+    @Test void bankPostRejectsStaleRevisionHashAndVerificationChangedAfterReadiness()throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);unchangedReadiness(a,body.get("quoteId"),"ELIGIBLE");
+      var stale=new HashMap<>(body);stale.put("quoteRevision",((Number)body.get("quoteRevision")).longValue()+1);assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(stale)).statusCode()).isEqualTo(409);
+      stale=new HashMap<>(body);stale.put("contentHash","0".repeat(64));assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(stale)).statusCode()).isEqualTo(409);
+      jdbc.sql("UPDATE cinenest_verification.verification_request SET state='REVOKED',revision=revision+1 WHERE quote_id=:q").param("q",UUID.fromString(body.get("quoteId").toString())).update();unchangedReadiness(a,body.get("quoteId"),"VERIFICATION_REQUIRED");
+      assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)).statusCode()).isEqualTo(409);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_bank_request_hold").query(Integer.class).single()).isZero();
+    }
+    @ParameterizedTest @ValueSource(strings={"LEAD_TIME_REQUIRED","DEADLINES_EXCEED_SESSION_START","REVIEW_WINDOW_CLOSED"})
+    void bankReadinessAndCreationShareConfiguredTimingRules(String reason)throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);Map<String,Object> overrides=switch(reason){case "LEAD_TIME_REQUIRED"->Map.of("cinenest.bank.lead-seconds","1000000");case "DEADLINES_EXCEED_SESSION_START"->Map.of("cinenest.bank.request-seconds","1000000");default->{var local=java.time.LocalTime.now(java.time.ZoneId.of("Asia/Colombo"));yield local.isBefore(java.time.LocalTime.NOON)?Map.of("cinenest.bank.review-opens","12:00","cinenest.bank.review-closes","13:00"):Map.of("cinenest.bank.review-opens","00:00","cinenest.bank.review-closes","01:00");}};
+      var env=(org.springframework.core.env.ConfigurableEnvironment)environment;env.getPropertySources().addFirst(new org.springframework.core.env.MapPropertySource("bank-readiness-timing",overrides));
+      try{unchangedReadiness(a,body.get("quoteId"),reason);assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)).statusCode()).isEqualTo(409);}finally{env.getPropertySources().remove("bank-readiness-timing");}
+    }
+    @Test void bankReadinessDoesNotPermitPostAfterAccountSuspension()throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);unchangedReadiness(a,body.get("quoteId"),"ELIGIBLE");jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:id").param("id",A).update();
+      assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)).statusCode()).isIn(401,403);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Integer.class).single()).isZero();
+    }
+    @Test void bankReadinessDoesNotWaitForVerificationRowLock()throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);
+      try(var connection=DriverManager.getConnection(System.getenv("CINENEST_DB_URL"),System.getenv("CINENEST_DB_USER"),System.getenv("CINENEST_DB_PASSWORD"));var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+        connection.setAutoCommit(false);try(var statement=connection.prepareStatement("SELECT request_id FROM cinenest_verification.verification_request WHERE quote_id=? FOR UPDATE")){statement.setObject(1,UUID.fromString(body.get("quoteId").toString()));statement.executeQuery().close();}
+        var read=pool.submit(()->json(a.get(readinessPath(body.get("quoteId")))));
+        try{assertThat(read.get(5,java.util.concurrent.TimeUnit.SECONDS)).containsEntry("eligible",true);}finally{connection.rollback();}
+      }
+    }
+    @Test void concurrentBankCommandsAfterReadinessProduceOnlyOneConversion()throws Exception{
+      var a=signedIn("customer-a");var body=bankBody(a);unchangedReadiness(a,body.get("quoteId"),"ELIGIBLE");var other=new HashMap<>(body);other.put("commandKey",UUID.randomUUID().toString());
+      try(var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+        var first=pool.submit(()->write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)));var second=pool.submit(()->write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(other)));
+        assertThat(java.util.List.of(first.get(10,java.util.concurrent.TimeUnit.SECONDS).statusCode(),second.get(10,java.util.concurrent.TimeUnit.SECONDS).statusCode())).containsExactlyInAnyOrder(200,409);
+      }
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_bank_request_hold").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Integer.class).single()).isEqualTo(1);
+    }
     String financePath(Map<String,Object> r){return "/api/admin/venues/"+VA+"/bank/requests/"+r.get("id");}
     void bankGrants(){grant("bank.claim.review","VENUE",VA);grant("bank.evidence.read","VENUE",VA);grant("bank.claim.escalate","VENUE",VA);}
     Map<String,Object> claimBody(Map<String,Object> r){var b=cmd(((Number)r.get("revision")).longValue());b.put("declaredPaidAt",java.time.Instant.now().toString());b.put("declaredAmountMinor","1");b.put("declaredReference","SYNTHETIC-NOT-A-BANK-REFERENCE");return b;}

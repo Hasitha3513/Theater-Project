@@ -10,5 +10,7 @@ public interface QuotationHolds {
     record Facts(UUID id, UUID owner, UUID venue, UUID room, Instant start, Instant end,
         Instant expires, String state, long revision, int guests, String timezone, int bufferMinutes, Instant blockedUntil, String configuration) {}
     Optional<Facts> locate(UUID hold);
+    /** Derived current state only: no reconciliation, audit, row locks or writes. */
+    Optional<Facts> observe(UUID actor,UUID hold);
     Optional<Facts> lockAndInspect(UUID actor, UUID hold);
 }
