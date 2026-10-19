@@ -1205,3 +1205,23 @@ GET `/api/admin/venues/{venue}/reports/synthetic-bank-balances` accepts explicit
 Default disabled; explicit `cinenest.reporting.synthetic-bank.enabled=true` and positive `cinenest.reporting.synthetic-bank.maximum-days` required. Synthetic test maximum366 days is not a commercial policy/default. Rollback disables route/UI via configuration/code while preserving sources/audit/grants. V1–V17,dependency edges/tokens/package dependencies unchanged; no V18. [Evidence](PROGRESS.md#report-bank-implementation).
 
 Current CN-REPORT-001 bounded status: VERIFIED/CLOSED for synthetic current bank-credit balance report only; [exact-source evidence and acceptance limits](PROGRESS.md#report-bank-implementation). No real financial/export/gateway/commercial acceptance follows.
+
+
+<a id="engagement-feasibility"></a>
+## CN-ENG-001 feasibility — proposed only
+
+Business options and all unselected policies belong to [PROJECT](PROJECT.md#engagement-decision-brief). This brief introduces no module, table, migration, endpoint, dependency, deployment or frontend behavior. Existing architecture identifies Customer Engagement as the proposed owner of rule versions/reward ledger; establishing that module and concrete contracts requires separate approval. No cross-module table access or direct Payments mutation is proposed.
+
+| Existing public boundary | Potential future use | Present limitation / required new contract |
+|---|---|---|
+| Identity AccountView, ScopedAuthorization | Stable local identity, eligibility, applicable owner/venue grant checks | No engagement permission vocabulary, new-customer classification, referral consent or privacy lifecycle contract yet; define only after policy approval |
+| Booking BookingAccess, SyntheticBooking, AmendmentGuards | Trusted owner/venue/purchase revision and amendment context | Synthetic confirmation is not completed attendance/service use; new minimal qualifying lifecycle/reversal evidence contract needed |
+| Pricing BankQuotation, VerificationQuotation; Rooms PackageConstraints | Immutable accepted synthetic terms, package applicability facts | No promotion eligibility/discount/redemption port; future Pricing owns exact totals and immutable quote snapshots; Engagement must not recalculate sold quotes |
+| Payments AccessFunding, BankBalanceReport | Existing narrow funding eligibility and redacted synthetic balance facts | Neither is a reward accrual feed or commercial revenue recognition. Define minimal verified qualifying allocation/refund/correction event queries through Payments-owned interfaces; never derive rewards from report totals |
+| Refund implementation inside Payments | Owns synthetic return obligations/evidence | No engagement reversal feed or commercial cancellation settlement policy; approved minimal refund state/causal-reference contract needed |
+| Notifications NotificationFacts, NotificationContext | Typed durable handoff/minimal synthetic routing | Existing enum has no engagement event family; new typed events/consent/template scope would need approval; no live delivery |
+| Reporting bank snapshot interface | Reconciliation reference only | No loyalty balances, campaign attribution, reward liability or engagement metrics; separately define owner-controlled projections if approved |
+
+Future feasibility questions: source-event stability and ordering, unique causal IDs/revisions, transactional earn/redemption and reservation semantics, rule-version binding, failure replay/outbox design, reconciliation/reversal when spend already occurred, data minimization and deletion vs audit retention. No event schema or monetary/point representation is selected by this brief. Financial/reward facts remain owned by their source module; an authorization permit cannot bypass business invariants. Venue scope is not SaaS tenancy. No new provider/infrastructure is needed for documentation preparation; PayHere is not a hard or transitive CN-ENG-001 dependency under the current graph.
+
+Future implementation scope must enumerate exact owned schema/API/UI, migration/upgrade tests, current-authority checks, concurrency/recovery tests and compensation-aware rollback before authorization. A code revert cannot erase earned obligations; preserve ledger/purchase/audit history and require an explicit data/external compensation plan. Production financial/privacy acceptance remains separate. Documentation rollback is a scoped history-preserving revert only.

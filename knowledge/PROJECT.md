@@ -770,3 +770,61 @@ Explicitly defer export, booking purchases/package/customer/Operations/IoT aggre
 Current CN-REPORT-001 implementation authorization: owner attachment9fa5036c-0274-4825-9591-d16ceb075448 supersedes historical readiness-only authority for this slice only. Source credits,allocations,refund commitments/confirmed synthetic returns remain distinct; no financial command or policy changed. [Current implementation evidence](PROGRESS.md#report-bank-implementation) owns bounded status; OD-16 wider recognition,OM-06 wider mapping,exports/gateway/production qualification remain open.
 
 Current CN-REPORT-001 bounded status: VERIFIED/CLOSED for synthetic current bank-credit balance report only; [exact-source evidence and acceptance limits](PROGRESS.md#report-bank-implementation). No real financial/export/gateway/commercial acceptance follows.
+
+
+<a id="engagement-decision-brief"></a>
+## CN-ENG-001 engagement owner choices — prepared 2026-10-19
+
+**PROPOSED OPTIONS, NOT SELECTED POLICY.** Owner authorized documentation-only preparation in the current conversation and attached CN-ENG-001 Customer Engagement Decision Brief. This is engagement, not engineering hardening. OD-08 remains OPEN_DECISION: “Loyalty earning, reversal, expiry/redemption and promotion stacking undefined.” No rate, amount, cap, date, expiry, feature deferral or retroactive change is approved here. CN-C09/CN-A09 and their full test/acceptance obligations remain unchanged. Manual-payment-first and deferred/BLOCKED PayHere remain unchanged; synthetic booking, funds, access or reporting facts cannot establish commercial reward eligibility or attendance.
+
+### Owner decision matrix
+
+Choose independently for **LOYALTY**, **REFERRALS** and **PROMOTIONS**:
+
+| Choice | Exact proposed owner wording | Consequence |
+|---|---|---|
+| DEFER EXECUTION | “I defer execution of [FEATURE]. Preserve CN-C09/CN-A09, their test plans and full product acceptance obligations. Keep this feature unavailable and unadvertised until explicit reactivation and implementation approval.” | No scope removal, passed test, implemented feature or automatic phase acceptance; future reactivation requires approved rules/contracts. |
+| APPROVE RULES | “I select [FEATURE OPTION] for [eligible customers and venues], subject to the complete rule schedule below. Only explicitly completed values are approved; unspecified choices remain blocked. This does not authorize implementation or production rewards.” | Complete the shared schedule plus feature-specific fields; separate schema/API/UI/security/test scope and implementation authorization follow. |
+
+Shared rule schedule for each APPROVE RULES selection: eligible account states/customer groups and named venue scope; qualifying event and authoritative evidence; earn/activation timing and any attendance requirement; reward/discount unit and value/rate; calculation basis, exclusions, rounding and currency; per-event/account/campaign caps and budget behavior; effective start/end and venue-local timezone; expiry or explicit no-expiry decision, clock and boundary semantics; redemption threshold, conversion, eligible purchases, partial use and remainder; stacking precedence/exclusivity across all three features; cancellation, partial/full refund, charge correction, no-show and amendment treatment; reversal timing, rounding and already-spent/negative-balance recovery; correction/appeal process; abuse controls and review/dispute workflow; scoped administrative permissions, independent review and adjustment limits; privacy notices, retention/deletion and investigation access. Mark genuinely inapplicable fields explicitly with rationale, never silently omit them. Values/durations/limits and named approvers remain UNSELECTED.
+
+### Loyalty alternatives
+
+| Option | Eligibility and qualifying evidence | Earn, attendance and reversal choices | Expiry/redemption and abuse | Accounting, authority, complexity and proposed tests |
+|---|---|---|---|---|
+| A. No loyalty in initial release | No earning/redemption eligibility; explicit deferral only | No earn event; retain future obligations | No balance/earn CTA; no phantom rewards | No reward liability created; verify unavailable/not advertised and preserved requirements; lowest complexity |
+| B. Booking-based points | Choose eligible owners/venues and qualifying paid booking facts; hold/receipt/confirmation alone insufficient | Choose verified allocation vs completed service as trigger, maturity and attendance proof; define cancellation/refund proportional reversal | Specify points basis, rounding, expiry, redemption and caps; unique source event/rule/customer prevents duplicate credit | Finance reviews point liability and reconciliation; scoped adjustment/review authority; medium/high complexity; test rounding, duplicate events, races, expiry and spent-reward reversal |
+| C. Fixed reward for qualifying purchase | Define qualifying purchase/version, minimum criteria and repeat eligibility | Choose activation event and attendance requirement; define revoked purchase/partial-return handling | Specify fixed benefit, validity, redemption restrictions and duplicate purchase limits | Finance approves benefit cost/treatment; scoped audited issue/reverse; medium complexity; test qualification boundaries, refunds, double issue/use and correction |
+| D. Tier membership benefits | Define eligible customers, tier qualification basis/window, thresholds and venue portability | Choose qualifying events/attendance evidence and upgrade/downgrade timing; define refund impact | Define benefit validity, tier expiry/grace and redemption/stacking | Highest complexity: status history plus liabilities/benefits; restricted versioned administration; test threshold races, downgrade, window boundaries, historical protection and abuse |
+
+No option B–D is selected. Recommendation for review: avoid tier implementation before simpler qualification and finance rules exist; this is advice, not deferral approval.
+
+### Referral alternatives
+
+| Option | Benefit recipient | Required choices and risk/test impact |
+|---|---|---|
+| A. Defer rewards | None | Explicit defer decision; retain requirements and hide active referral/reward claims |
+| B. Referrer only | Referring customer | Define new-customer proof, attribution window/conflict priority, reward type/value, qualifying purchase and maturity; incentivized account farming remains a risk |
+| C. Referred customer only | New customer | Define first-use eligibility and attribution; test repeated signup/claim and shared-account abuse without assuming shared device/address proves fraud |
+| D. Both customers | Both | Separate eligibility, issue and reversal records for each side; higher cost, coordinated farming and partial-reversal complexity |
+
+For B–D: define trusted account-based referral identity, self-referral denial, duplicate-account investigation, per-account/campaign rate limits and retention; no raw identity-document processing or new invasive tracking is authorized. Define consent/intentional sharing, minimal attribution disclosure, new-customer classification, competing referrers, cancellation/refund reversal and appeals. Bind each issue to unique qualifying event/recipient/rule version; define concurrent claims, replay, suspension and failed-review recovery. Do not expose the referred person's booking/payment/contact details to the referrer. Audit actor and basis without secrets; retained investigation evidence needs approved privacy scope. No codes, links, live messages or amounts are created by this brief.
+
+### Promotion alternatives
+
+| Option | Choices required before approval | Principal risk and proposed tests |
+|---|---|---|
+| A. Defer | Explicit defer wording | No active campaign CTA; requirements retained |
+| B. Fixed-value discount | Exact value/currency, eligible price base, floor, usage/budget caps | Underflow, currency mismatch, rounding and concurrent last redemption |
+| C. Percentage discount | Exact percentage, calculation base, rounding, maximum discount and floor | Precision/order and cap boundaries |
+| D. Package-specific | Package/version applicability plus B/C benefit mechanics or separately specified benefit | Never mutate published/sold versions; test compatible/incompatible revisions |
+| E. Venue-specific | Exact venue scope plus approved benefit mechanics | Wrong-venue denial; no stitching of unrelated grants |
+| F. Time-limited campaign | Explicit validity/timezone/boundaries plus approved benefit mechanics | Local-time/DST boundaries, expired quotes and concurrency |
+
+D–F constrain a campaign; they do not themselves specify a discount. Owner must select permitted combinations and stacking order/exclusions with loyalty/referrals, limits per customer/booking/campaign and conflict priority. Future backend pricing must snapshot applied campaign/rule versions and re-quote changed terms; no automatic repricing of accepted purchases. Define quote-honor, cancellation/partial refund allocation, exhausted budgets, disabled campaign behavior and reversible administrative correction. Effective dates and discounts remain unselected.
+
+### Proposed controls and acceptance questions
+
+Proposed implementation controls require separate scope approval: immutable effective policy versions; eligibility/evidence snapshots; append-only earn/redeem/reverse/adjust history with causal reference; idempotent source processing; atomic balance/cap reservation and concurrent-claim control; independent review of privileged adjustments with scoped authority, reason and audit; explicit retention/privacy and investigation access. Never silently recalculate previously earned rewards under a newer rule. Administrative roles do not imply finance bypass. Reversal/correction must preserve purchased terms and original evidence, with separately approved debt/compensation treatment where rewards were already spent.
+
+T-CN-C09/T-CN-A09 remain NOT_RUN. Future tests must cover permitted/denied owner and venue access, revoked authority and grant stitching, no rewards from receipts/synthetic facts, eligibility and caps, duplicate/replayed/out-of-order events, concurrent final redemption, partial/full refund and amendment reversals, expiry/timezones, spent-reward corrections, failure rollback/retry, privacy-limited referral disclosure and immutable history. Approving rules does not mark these tests passed or permit real commercial operation. [Technical feasibility](ARCHITECTURE.md#engagement-feasibility); [UI safeguards](DESIGN.md#engagement-presentation-boundary); [preparation status](PROGRESS.md#engagement-brief-preparation).
