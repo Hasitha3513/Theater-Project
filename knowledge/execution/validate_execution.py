@@ -1776,5 +1776,35 @@ def iot_implementation_main():
     return result
 
 
+def ops_readiness_main():
+    """Check exact approved successor, then replay immutable historical receipts in memory."""
+    from unittest.mock import patch
+    base='8b5bb2467e034a52efb21946abfab59aeef70a7b'
+    expected={'decisions/cinenest-open-decisions.json': '55382ebe16e0c79ab4883f8a26448842153518acb5273a0f476904b85fc70626', 'execution/change-sets.json': '0bba3ccaf7a224467196c195714f010f2b0874037d05cf796c7828abcd522adc', 'execution/status.json': '81d9cb8feead09999ff15b60fc908eb0b5d0c3017aef65faa77e01f9c9b21889'}
+    replacements={}
+    for name,digest in expected.items():
+        if hashlib.sha256((K/name).read_bytes()).hexdigest()!=digest:
+            print('FAIL operations approved registry changed '+name);return 1
+        replacements[K/name]=subprocess.check_output(['git','-C',str(R),'show',base+':knowledge/'+name])
+    tasks=json.loads((K/'execution/change-sets.json').read_text())['changeSets']
+    previous=json.loads(replacements[K/'execution/change-sets.json'])['changeSets']
+    if [(x['id'],x['dependencies'],x['workStatus'],x['readiness']) for x in tasks]!=[(x['id'],x['dependencies'],x['workStatus'],x['readiness']) for x in previous]:
+        print('FAIL operations changed dependency/status');return 1
+    task=next(x for x in tasks if x['id']=='CN-OPS-001')
+    if task['authorityAvailable'] or task['implementationAuthorization']!='NOT_GRANTED_READINESS_ONLY' or task['definitionOfDone']!='Physical readiness requires accountable evidence and staff':
+        print('FAIL operations authority/DoD changed');return 1
+    for name in ['execution/requirements.json','execution/test-plan.json','sources/cinenest-source-register.json','execution/source-ledger.json']:
+        if (K/name).read_bytes()!=subprocess.check_output(['git','-C',str(R),'show',base+':knowledge/'+name]):
+            print('FAIL operations altered coverage/source '+name);return 1
+    for name in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',base,'--','backend','frontend'],text=True).splitlines():
+        if name!='frontend/next-env.d.ts' and (R/name).read_bytes()!=subprocess.check_output(['git','-C',str(R),'show',base+':'+name]):
+            print('FAIL operations altered application '+name);return 1
+    original_bytes=Path.read_bytes;original_text=Path.read_text
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else original_bytes(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else original_text(path,*a,**kw)
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt):result=iot_implementation_main()
+    if result==0:print('PASS operations readiness: exact owner approval, unchanged task states/dependencies/coverage/source/application; no implementation authority')
+    return result
+
 if __name__ == '__main__':
-    raise SystemExit(iot_implementation_main())
+    raise SystemExit(ops_readiness_main())

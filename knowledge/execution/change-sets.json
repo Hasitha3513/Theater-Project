@@ -127,7 +127,7 @@
       ],
       "documentationClosureApproval": {
         "status": "OWNER_APPROVED_DOCUMENTATION_ONLY",
-        "source": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
+        "source": "Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status",
         "date": "2026-10-17",
         "canonicalSpecification": "PROJECT.md#accountability-appointments",
         "retainedDecisionGates": [
@@ -665,7 +665,7 @@
       "affectedFilesModules": "Pricing quotation domain/application/persistence/HTTP; public Booking hold port; Identity explicit route security; frontend quote transport/UI/tests; existing knowledge",
       "dbApiUiImpact": "Seven Pricing quotation tables; POST /api/quotes, GET /api/quotes/{quoteId}, POST /api/quotes/{quoteId}/revisions, POST /api/quotes/{quoteId}/accept; synthetic-only itemized review/acceptance",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1\u2013V6; no production seed/down migration",
+      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1–V6; no production seed/down migration",
       "plannedChecks": "Exact unit/guest/included-extra/quote-expiry/snapshot fixture tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
@@ -756,7 +756,7 @@
       "affectedFilesModules": "Verification module/private encrypted synthetic storage; Pricing public quotation context; Identity exact scoped permissions; customer/reviewer UI",
       "dbApiUiImpact": "Exactly eight approved tables and ten operations; synthetic manual review only",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1\u2013V7",
+      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1–V7",
       "plannedChecks": "Upload/private scope/retention/review/consent tests and operational gate",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Restricted booker eligibility separate from on-site guest entry",
@@ -1350,7 +1350,27 @@
       "verificationDecisionIds": [
         "OD-04",
         "OD-10"
-      ]
+      ],
+      "boundedScopeApproval": {
+        "taskId": "CN-OPS-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "date": "2026-10-19",
+        "source": "Owner inline approval and attachment 234b31a6-28fa-487a-8609-fb6d88620901; Record approvals and reassess readiness only",
+        "requestSha256": "9a7409a035801b5f5b9e7a9c16478df5057bfaa3b1b02500a06d4b6ad7015908",
+        "canonicalSpecification": "ARCHITECTURE.md#ops-synthetic-scope",
+        "businessPolicy": "PROJECT.md#ops-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "physicalOccupancy": "UNKNOWN",
+        "physicalReadiness": "UNVERIFIED",
+        "gateway": "DEFERRED_BLOCKED"
+      },
+      "remainingReadinessGates": [
+        "Separate owner implementation authorization"
+      ],
+      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "approvedSpecification": "ARCHITECTURE.md#ops-synthetic-scope",
+      "closureInterpretation": "Verified synthetic staff workflow, attributed checklist evidence and enforced readiness limitations satisfy only bounded documentation/software scope. Original DoD retained; actual physical clearance requires identified venue, authorized staff, qualified safety review, physical inspection evidence and approved procedures."
     },
     {
       "id": "CN-ADMIN-001",

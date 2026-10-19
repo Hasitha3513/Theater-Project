@@ -384,7 +384,7 @@
     },
     {
       "id": "OD-09",
-      "conflict": "Temporary hold range 10\u201315 min is not precise",
+      "conflict": "Temporary hold range 10–15 min is not precise",
       "source": "S1",
       "impact": "Expiry UI, payment handoff and inventory utilization",
       "options": "Choose configurable 10 or 15 minutes (or justified value) later",
@@ -577,6 +577,20 @@
         "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
         "fullDecisionStatus": "OPEN_DECISION",
         "realEquipmentControl": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedOperationsApproval": {
+        "taskId": "CN-OPS-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "date": "2026-10-19",
+        "source": "Owner inline approval and attachment 234b31a6-28fa-487a-8609-fb6d88620901; Record approvals and reassess readiness only",
+        "requestSha256": "9a7409a035801b5f5b9e7a9c16478df5057bfaa3b1b02500a06d4b6ad7015908",
+        "canonicalSpecification": "ARCHITECTURE.md#ops-synthetic-scope",
+        "businessPolicy": "PROJECT.md#ops-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "physicalOccupancy": "UNKNOWN",
+        "physicalReadiness": "UNVERIFIED",
         "gateway": "DEFERRED_BLOCKED"
       }
     },
@@ -1159,6 +1173,20 @@
         "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
         "fullDecisionStatus": "OPEN_DECISION",
         "liveMessaging": "DISABLED",
+        "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedOperationsApproval": {
+        "taskId": "CN-OPS-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "date": "2026-10-19",
+        "source": "Owner inline approval and attachment 234b31a6-28fa-487a-8609-fb6d88620901; Record approvals and reassess readiness only",
+        "requestSha256": "9a7409a035801b5f5b9e7a9c16478df5057bfaa3b1b02500a06d4b6ad7015908",
+        "canonicalSpecification": "ARCHITECTURE.md#ops-synthetic-scope",
+        "businessPolicy": "PROJECT.md#ops-synthetic-policy",
+        "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "physicalOccupancy": "UNKNOWN",
+        "physicalReadiness": "UNVERIFIED",
         "gateway": "DEFERRED_BLOCKED"
       }
     }
