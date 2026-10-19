@@ -1926,7 +1926,9 @@ def report_implementation_main():
     inventory=set(subprocess.check_output(['git','-C',str(R),'-c','core.quotePath=false','ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines());require(inventory==baseline|added,'Report unrelated application inventory changed')
     for name in baseline-set(owned)-{'frontend/next-env.d.ts'}:require((R/name).read_bytes()==prior(name),'Report changed unrelated application '+name)
     require({p.name for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}=={Path(n).name for n in baseline if '/db/migration/' in n},'Report created a migration')
-    for name in ['decisions/cinenest-open-decisions.json','execution/omissions.json','execution/source-ledger.json','sources/cinenest-source-register.json']:require((K/name).read_bytes()==prior('knowledge/'+name),'Report altered prior approval/source '+name)
+    omissions=json.loads((K/'execution/omissions.json').read_text());om=next(x for x in omissions['omissions'] if x['id']=='OM-06');mapping=om.pop('boundedBankReportImplementationEvidence',None)
+    require(omissions==json.loads(prior('knowledge/execution/omissions.json')) and om['status']=='OPEN' and (mapping is None if state!='VERIFIED' else mapping is not None and mapping['status']=='VERIFIED' and mapping['taskId']=='CN-REPORT-001' and mapping['evidencePath']=='PROGRESS.md#report-bank-implementation'),'Report bounded mapping/wider omission status changed')
+    for name in ['decisions/cinenest-open-decisions.json','execution/source-ledger.json','sources/cinenest-source-register.json']:require((K/name).read_bytes()==prior('knowledge/'+name),'Report altered prior approval/source '+name)
     for name,key,ids in [('execution/requirements.json','requirements',{'CN-A01','CN-NFR-03','BP-AC13','BN-M06'}),('execution/test-plan.json','tests',{'T-CN-A01','T-CN-NFR-03','T-BP-AC13','T-BN-M06'})]:
         doc=json.loads((K/name).read_text())
         for row in doc[key]:
@@ -1944,7 +1946,7 @@ def report_implementation_main():
             for name,digest in owned.items():require(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',source+':'+name])).hexdigest()==digest,'Report CI source stale '+name)
     if errors:print('\n'.join('FAIL '+x for x in errors));return 1
     replacements={R/name:prior(name) for name in set(owned)&baseline}
-    for name in ['execution/change-sets.json','execution/status.json','execution/requirements.json','execution/test-plan.json','PROGRESS.md']:replacements[K/name]=prior('knowledge/'+name)
+    for name in ['execution/change-sets.json','execution/status.json','execution/requirements.json','execution/test-plan.json','execution/omissions.json','PROGRESS.md']:replacements[K/name]=prior('knowledge/'+name)
     rb0=Path.read_bytes;rt0=Path.read_text;g0=Path.glob;o0=subprocess.check_output
     def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
     def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)

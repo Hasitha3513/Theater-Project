@@ -394,7 +394,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "boundedBankReportImplementationEvidence": {
         "changeSetId": "CN-REPORT-001",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
         "evidencePath": "PROGRESS.md#report-bank-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
@@ -1095,7 +1095,7 @@
       },
       "boundedBankReportImplementationEvidence": {
         "changeSetId": "CN-REPORT-001",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
         "evidencePath": "PROGRESS.md#report-bank-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
@@ -2069,7 +2069,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "boundedBankReportImplementationEvidence": {
         "changeSetId": "CN-REPORT-001",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
         "evidencePath": "PROGRESS.md#report-bank-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
@@ -2316,7 +2316,7 @@
       "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
       "boundedBankReportImplementationEvidence": {
         "changeSetId": "CN-REPORT-001",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
         "evidencePath": "PROGRESS.md#report-bank-implementation",
         "fullAcceptance": "NOT_ACCEPTED"

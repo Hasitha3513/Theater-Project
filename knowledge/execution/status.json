@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-IOT-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-OPS-001",
-  "nextAction": "Complete CN-REPORT-001 required verification and exact-source CI before bounded closure",
+  "nextAction": "Read-only review CN-ENG-001 bounded scope and OD-08 gates",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
   "approvedCoreDecisions": [
@@ -3719,7 +3719,7 @@
       "requestSha256": "6bdc8a350a30d4731a784291f3d7392b9dc3e2f9cb1256355c4b353451ac6121",
       "scope": "GRANTED_BOUNDED_SYNTHETIC_BANK_REPORT"
     },
-    "workStatus": "IN_PROGRESS",
+    "workStatus": "VERIFIED",
     "realFinancialReporting": "DISABLED",
     "exports": "DISABLED",
     "gateway": "DEFERRED_BLOCKED",
@@ -3761,7 +3761,7 @@
       "launchers": "PASS",
       "governance": "PASS"
     },
-    "sourceCI": "PENDING",
+    "sourceCI": "SUCCESS",
     "localEvidence": {
       "backendTests": 391,
       "newReportingChecks": 25,
@@ -3782,6 +3782,8 @@
       "primaryExecution": "Two pre-existing next-env integrity failures preserved",
       "isolatedExecution": "PASS",
       "limitations": "Synthetic fixtures only; no banking/financial/customer/production acceptance or formal screen-reader/WCAG certification"
-    }
+    },
+    "sourceCommit": "0bf4bb38c9ffbdbe8a92afa7d8dde6aa54f451bb",
+    "sourceCiUrl": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39204444484"
   }
 }

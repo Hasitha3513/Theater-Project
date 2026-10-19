@@ -62,6 +62,12 @@
         "scope": "V12 commitment/confirmed synthetic return/residual/availability mapping only",
         "widerStatus": "OPEN",
         "mapping": "ARCHITECTURE.md#report-bank-synthetic-scope"
+      },
+      "boundedBankReportImplementationEvidence": {
+        "taskId": "CN-REPORT-001",
+        "status": "VERIFIED",
+        "scope": "V12 synthetic commitments/confirmed return/residual/availability mapping only; wider OM-06 OPEN",
+        "evidencePath": "PROGRESS.md#report-bank-implementation"
       }
     },
     {

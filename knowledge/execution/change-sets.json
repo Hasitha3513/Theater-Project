@@ -1749,9 +1749,11 @@
       "definitionOfDone": "Only authoritative safe metrics, further charts refined before READY",
       "requiredApproval": "Report slice + approved metric definition/recognition exclusions",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
-      "evidencePaths": [],
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "PROGRESS.md#report-bank-implementation"
+      ],
       "historicalImplementationDependencies": [
         "CN-PAY-GW-001",
         "CN-PAY-BANK-002"
