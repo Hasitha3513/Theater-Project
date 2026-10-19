@@ -1,6 +1,12 @@
-import { VerificationWorkspace } from "../../components/verification";
 import { PageHeading } from "../../components/primitives";
-export default function Page() {
+import { VerificationWorkspace } from "../../components/verification";
+export default async function Page({
+	searchParams,
+}: {
+	searchParams: Promise<{ quote?: string | string[] }>;
+}) {
+	const query = await searchParams;
+	const quoteId = typeof query.quote === "string" ? query.quote : "";
 	return (
 		<>
 			<PageHeading
@@ -9,7 +15,11 @@ export default function Page() {
 			>
 				Private synthetic evidence; no physical admission approval.
 			</PageHeading>
-			<VerificationWorkspace reviewer={false} />
+			<VerificationWorkspace
+				key={quoteId}
+				reviewer={false}
+				initialQuoteId={quoteId}
+			/>
 		</>
 	);
 }

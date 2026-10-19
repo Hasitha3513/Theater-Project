@@ -8,6 +8,7 @@ import type { Quote } from "../lib/quotes";
 import { quoteDisclosures, validateQuote } from "../lib/quotes";
 import { RoomRequestError, roomRequest, stateFor } from "../lib/rooms";
 import { Button, Card, Field, SelectField, StateMessage } from "./primitives";
+import { QuoteContinuation } from "./quote-handoff";
 
 type Choice = {
 	packageId: string;
@@ -285,6 +286,12 @@ export function SyntheticQuotation({
 			{quote && (
 				<>
 					<QuoteSummary quote={quote} />
+					{quote.state === "ACCEPTED" && !busy && !pending.current && (
+						<QuoteContinuation
+							reference={quote.quoteId}
+							onDenied={() => setQuote(undefined)}
+						/>
+					)}
 					<Button disabled={busy || !!pending.current} onClick={refresh}>
 						Refresh quotation state
 					</Button>

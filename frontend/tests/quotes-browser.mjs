@@ -69,12 +69,15 @@ let mode = "normal",
 	checks = 0,
 	browser;
 const commands = [];
+const traffic = [];
+let slowRelease;
 let quoteMode = "normal";
 let quote = {
 	quoteId: id,
 	revision: 1,
 	contentHash: "a".repeat(64),
 	state: "ISSUED",
+	verificationHandoff: { eligible: false, reason: "QUOTE_NOT_ACCEPTED" },
 	currency: "LKR",
 	totalMinor: "250007",
 	paymentMethod: "BANK",
@@ -132,6 +135,7 @@ try {
 	await page.route("**/api/**", async (route) => {
 		const req = route.request(),
 			p = new URL(req.url()).pathname;
+		traffic.push({ path: p, method: req.method() });
 		let status = 200,
 			body = {};
 		if (p === `/api/catalog/rooms/${id}`) body = room;
@@ -186,12 +190,47 @@ try {
 			body = quote;
 		} else if (p.endsWith("/accept")) {
 			if (quoteMode === "conflict") status = 409;
-			else quote = { ...quote, state: "ACCEPTED" };
+			else
+				quote = {
+					...quote,
+					state: "ACCEPTED",
+					verificationHandoff: {
+						eligible: quote.paymentMethod === "BANK",
+						reason:
+							quote.paymentMethod === "BANK"
+								? "ELIGIBLE"
+								: "BANK_METHOD_REQUIRED",
+					},
+				};
 			body = quote;
 		} else if (p === `/api/quotes/${id}`) {
+			if (quoteMode === "slow")
+				await new Promise((resolve) => {
+					slowRelease = resolve;
+				});
+			if (quoteMode === "network") return route.abort();
 			if (quoteMode === "denied") status = 403;
-			else if (quoteMode === "expired") quote = { ...quote, state: "EXPIRED" };
-			body = quote;
+			if (quoteMode === "missing") status = 404;
+			if (quoteMode === "session") status = 401;
+			if (quoteMode === "unavailable") status = 503;
+			body =
+				quoteMode === "expired"
+					? {
+							...quote,
+							verificationHandoff: { eligible: false, reason: "QUOTE_EXPIRED" },
+						}
+					: quoteMode === "withdrawn"
+						? {
+								...quote,
+								verificationHandoff: {
+									eligible: false,
+									reason: "PACKAGE_INCOMPATIBLE",
+								},
+							}
+						: quoteMode === "stale"
+							? { ...quote, quoteId: "00000000-0000-4000-8000-000000000002" }
+							: quote;
+			if (status !== 200) body = { message: "Synthetic unavailable" };
 		} else if (p.endsWith("/inventory")) {
 			if (mode === "denied") status = 403;
 			body = { items: [], page: 0, size: 24 };
@@ -289,6 +328,15 @@ try {
 	pass("conflict never claims accepted or confirmed");
 	quoteMode = "normal";
 	await page
+		.getByLabel("Intended method (no payment)", { exact: true })
+		.selectOption("BANK");
+	await page
+		.getByRole("button", {
+			name: "Review new revision for changed selections/method",
+		})
+		.click();
+	await page.getByText(/Revision 3/).waitFor();
+	await page
 		.getByLabel(
 			"I reviewed this exact synthetic revision and all three disclosures",
 		)
@@ -296,7 +344,7 @@ try {
 	await page
 		.getByRole("button", { name: "Accept synthetic revision only" })
 		.click();
-	await page.getByText(/Revision 2 · ACCEPTED/).waitFor();
+	await page.getByText(/Revision 3 · ACCEPTED/).waitFor();
 	assert.equal(
 		await page
 			.getByRole("button", { name: "Accept synthetic revision only" })
@@ -320,22 +368,216 @@ try {
 				fullPage: true,
 			});
 	}
-	quoteMode = "denied";
-	await page.getByRole("button", { name: "Refresh quotation state" }).click();
+	const continuation = page.getByRole("link", {
+		name: "Continue to Verification",
+		exact: true,
+	});
+	await continuation.waitFor();
+	assert.equal(
+		await continuation.evaluate((element) => getComputedStyle(element).color),
+		await page
+			.getByRole("button", {
+				name: "Reload verification eligibility",
+				exact: true,
+			})
+			.evaluate((element) => getComputedStyle(element).color),
+	);
+	assert.equal(
+		await continuation.getAttribute("href"),
+		`/verification?quote=${id}`,
+	);
+	await continuation.focus();
+	await page.keyboard.press("Enter");
+	await page.waitForURL(`${base}/verification?quote=${id}`);
 	await page
-		.getByRole("heading", { name: "Access denied", exact: true })
+		.getByRole("region", { name: "Synthetic quotation summary" })
 		.waitFor();
+	assert.equal(
+		await page
+			.getByLabel("Owned synthetic quotation ID", { exact: true })
+			.inputValue(),
+		id,
+	);
+	assert.equal(
+		await page
+			.getByLabel("Owned synthetic quotation ID", { exact: true })
+			.getAttribute("readonly"),
+		"",
+	);
+	assert.equal(
+		await page
+			.getByLabel(
+				"I consent to this versioned synthetic test processing; no real documents",
+			)
+			.isChecked(),
+		false,
+	);
+	assert.equal(
+		await page
+			.getByRole("button", { name: "Start synthetic request", exact: true })
+			.isEnabled(),
+		false,
+	);
+	assert.deepEqual([...new URL(page.url()).searchParams], [["quote", id]]);
+	assert.ok(
+		traffic.some(
+			(item) => item.path === `/api/quotes/${id}` && item.method === "GET",
+		),
+	);
+	pass(
+		"keyboard opaque navigation, authenticated reload, correct summary and unchecked consent",
+	);
+	for (const width of [375, 1280]) {
+		await page.setViewportSize({ width, height: 900 });
+		assert.equal(
+			await page.evaluate(
+				() => document.documentElement.scrollWidth <= window.innerWidth,
+			),
+			true,
+		);
+		await page.screenshot({
+			path: `../.cache/quote-browser/handoff-${width}.png`,
+			fullPage: true,
+		});
+		pass(`verification handoff responsive ${width}`);
+	}
+
+	await page
+		.getByLabel("Operator-provided synthetic policy version")
+		.fill("SYNTHETIC-V1");
+	await page
+		.getByLabel(
+			"I consent to this versioned synthetic test processing; no real documents",
+		)
+		.check();
+	quoteMode = "expired";
+	await page
+		.getByRole("button", { name: "Reload quotation context", exact: true })
+		.click();
+	await page.getByText(/The quotation expired/).waitFor();
+	assert.equal(
+		await page
+			.getByLabel(
+				"I consent to this versioned synthetic test processing; no real documents",
+			)
+			.isChecked(),
+		false,
+	);
+	assert.equal(
+		await page
+			.getByRole("button", { name: "Start synthetic request", exact: true })
+			.isEnabled(),
+		false,
+	);
+	pass("server refusal after earlier eligibility resets explicit consent");
+	for (const testMode of [
+		"withdrawn",
+		"missing",
+		"denied",
+		"session",
+		"unavailable",
+		"network",
+		"stale",
+	]) {
+		quoteMode = testMode;
+		await page.goto(`${base}/verification?quote=${id}`);
+		if (testMode === "withdrawn")
+			await page
+				.getByText(/room or package configuration is no longer applicable/)
+				.waitFor();
+		else
+			await page.getByText(/Quotation unavailable or inaccessible/).waitFor();
+		if (testMode !== "withdrawn")
+			assert.equal(
+				await page
+					.getByRole("region", { name: "Synthetic quotation summary" })
+					.count(),
+				0,
+			);
+		assert.equal(
+			await page
+				.getByRole("button", { name: "Start synthetic request", exact: true })
+				.isEnabled(),
+			false,
+		);
+		pass(`protected handoff refusal ${testMode}`);
+	}
+	quoteMode = "normal";
+	// Ordinary publication withdrawal can remain eligible: the UI follows the server,
+	// and does not infer a new policy from catalog visibility or historical dates.
+	await page.goto(`${base}/verification?quote=${id}`);
+	await page
+		.getByRole("region", { name: "Synthetic quotation summary" })
+		.waitFor();
+	pass(
+		"server-honored frozen quotation remains usable without frontend date/catalog policy",
+	);
+	for (const suffix of ["", "?quote=malformed", `?quote=${id}&quote=${id}`]) {
+		await page.goto(`${base}/verification${suffix}`);
+		await page
+			.getByText(/Quotation reference is missing or malformed/)
+			.waitFor();
+		assert.equal(
+			await page
+				.getByRole("region", { name: "Synthetic quotation summary" })
+				.count(),
+			0,
+		);
+		pass(`missing or malformed navigation ${suffix || "no reference"}`);
+	}
+	quoteMode = "slow";
+	await page.goto(`${base}/verification?quote=${id}`);
+	await page.getByText("Reloading protected quotation context.").waitFor();
 	assert.equal(
 		await page
 			.getByRole("region", { name: "Synthetic quotation summary" })
 			.count(),
 		0,
 	);
-	pass("eligibility denial clears private quote");
+	while (!slowRelease) await new Promise((resolve) => setTimeout(resolve, 10));
+	slowRelease();
+	quoteMode = "normal";
+	await page
+		.getByRole("region", { name: "Synthetic quotation summary" })
+		.waitFor();
+	await page
+		.getByLabel(
+			"I consent to this versioned synthetic test processing; no real documents",
+		)
+		.check();
+	quoteMode = "session";
+	await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+	await page.getByText(/Quotation unavailable or inaccessible/).waitFor();
+	assert.equal(
+		await page
+			.getByRole("region", { name: "Synthetic quotation summary" })
+			.count(),
+		0,
+	);
+	assert.equal(
+		await page
+			.getByLabel(
+				"I consent to this versioned synthetic test processing; no real documents",
+			)
+			.isChecked(),
+		false,
+	);
+	pass(
+		"loading and stale-browser focus revalidation do not retain protected context",
+	);
+	assert.equal(
+		traffic.filter(
+			(item) =>
+				item.method !== "GET" &&
+				/verification|bank|bookings|checkout/.test(item.path),
+		).length,
+		0,
+	);
+	pass("no automatic verification, evidence, bank request or booking commands");
 	assert.deepEqual(errors, []);
-	pass("no runtime errors");
+	pass("no runtime errors across handoff states");
 	console.log(
-		`PASS ${checks} SYNTHETIC quotation browser groups; intercepted data only, no commercial acceptance`,
+		`PASS ${checks} SYNTHETIC quotation/handoff browser groups; intercepted API fixtures only, no backend or customer acceptance`,
 	);
 } finally {
 	await browser?.close();

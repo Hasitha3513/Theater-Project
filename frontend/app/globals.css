@@ -598,3 +598,8 @@ button.button { display: inline-grid; }
 .notification-workspace .button { max-width:100%; white-space:normal; }
 
 .customer-bookings { min-width: 0; overflow-wrap: anywhere; }
+
+/* Handoff action retains the primary-button foreground inside cinematic link styling. */
+.customer-shell .card a.verification-continue {
+    color: var(--cn-color-surface);
+}

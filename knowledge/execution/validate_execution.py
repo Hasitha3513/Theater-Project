@@ -2062,7 +2062,7 @@ def historical_inert_ci_main():
     return result
 
 
-def inert_ci_main():
+def backend_handoff_main():
     """Qualify the exact owner-authorized handoff successor before historical replay.
 
     Existing receipts keep their original bytes. Only hash-qualified task sources
@@ -2104,6 +2104,45 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=historical_inert_ci_main()
     if result==0:print('PASS handoff successor: exact owned source/owner approval; unchanged requirements, dependencies, phase/demo gates; historical integrity retained')
+    return result
+
+
+def inert_ci_main():
+    """Validate the exact frontend successor, then replay immutable backend/CI receipts."""
+    from unittest.mock import patch
+    baseline='7f64e34cd790b8dbcfc3a77b93cc0ad229158986'
+    owned={'frontend/app/globals.css': '7b579873b6e7470cae3792045198e1554071968657d61f68ea6345c6084d53d6', 'frontend/app/verification/page.tsx': 'c0c98d0d8a8eebf752e5110de25f892578b902c919bfc6091c841cd0121f6aa7', 'frontend/components/quotes.tsx': 'e04f28304eb90c960d8b9218f97beb170897e16b688d2f6c95903c8a2ddd2aa3', 'frontend/components/verification.tsx': '2f97a5e134bf360b4ebc3d7ed9ccee52a489eb3c179f24b622f6f3697ce6b6a3', 'frontend/tests/quotes-browser.mjs': 'b7aac6ee7b03491e39fdab9749c3eabdf26ba36b4ed1da7bff85b5b67e4be8d6', 'frontend/tests/quotes.test.mjs': '425178682a75d22695ac531574c684ddd593fa5741bb3f016bd37d4565738d19', 'frontend/tests/verification-browser.mjs': '5f31fbaa3bda3d1acfdc7bea6cbfe8fb5a8285c1fd7d3f11cde29611c1e7e658', 'frontend/lib/quote-handoff.ts': '5c9d6b8f1fcf9e3b2a41b91548f7ca9350a4e93d68964d74b449afeda0ee6ca7', 'frontend/components/quote-handoff.tsx': 'b892c533bde067c14f14e77c85800eb653dd28aef1437cfbe22b8eeea3c2796b'}
+    errors=[]
+    for name,digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('UI flow successor source mismatch '+name)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name in ['execution/change-sets.json','execution/requirements.json','execution/test-plan.json','execution/status.json','execution/omissions.json','decisions/cinenest-open-decisions.json']:
+        if (K/name).read_bytes()!=prior('knowledge/'+name):errors.append('UI flow changed dependency/requirement/approval history '+name)
+    design=(K/'DESIGN.md').read_text();progress=(K/'PROGRESS.md').read_text()
+    if not design.startswith(prior('knowledge/DESIGN.md').decode()):errors.append('UI flow rewrote prior design authority')
+    if '<a id="quote-verification-handoff"></a>' not in design or '3af434ff-9b75-4285-93c1-90d7db5ef3dc' not in design:errors.append('UI flow owner authority missing')
+    if '<a id="ui-flow-001-implementation"></a>' not in progress or '39286392998 COMPLETED/SUCCESS' not in progress:errors.append('UI flow prerequisite/evidence missing')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('UI flow promoted phase/demo acceptance')
+    added={'frontend/lib/quote-handoff.ts','frontend/components/quote-handoff.tsx'}
+    allowed=set(owned)|{'knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('UI flow unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements={R/name:prior(name) for name in set(owned)-added}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|{'knowledge/DESIGN.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=backend_handoff_main()
+    if result==0:print('PASS UI flow successor: exact frontend ownership/authority; unchanged backend, dependencies, full requirements and acceptance; historical receipts retained')
     return result
 
 

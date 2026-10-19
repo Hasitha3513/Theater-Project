@@ -138,3 +138,112 @@ test("transport rejects cross-origin writes and preserves scoped cookie CSRF and
 		await new Promise((r) => server.close(r));
 	}
 });
+
+// CN-UI-FLOW-001: server-owned eligibility, never a frontend clock policy.
+const {
+	validateHandoffQuote,
+	verificationHref,
+	loadHandoffQuote,
+	handoffReasons,
+} = await import("../lib/quote-handoff.ts");
+const eligible = {
+	...q,
+	state: "ACCEPTED",
+	verificationHandoff: { eligible: true, reason: "ELIGIBLE" },
+};
+test("accepted BANK handoff requires the current authoritative response", () => {
+	assert.equal(validateHandoffQuote(eligible, id), eligible);
+	for (const bad of [
+		q,
+		{ ...eligible, quoteId: "another-owner-reference" },
+		{ ...eligible, state: "ISSUED" },
+		{ ...eligible, paymentMethod: "GATEWAY" },
+		{
+			...eligible,
+			verificationHandoff: { eligible: true, reason: "QUOTE_EXPIRED" },
+		},
+		{
+			...eligible,
+			verificationHandoff: { eligible: false, reason: "invented-policy" },
+		},
+	])
+		assert.throws(() => validateHandoffQuote(bad, id));
+});
+test("every stable server refusal remains ineligible with a recovery explanation", () => {
+	for (const reason of Object.keys(handoffReasons).filter(
+		(reason) => reason !== "ELIGIBLE",
+	)) {
+		const value = {
+			...eligible,
+			verificationHandoff: { eligible: false, reason },
+		};
+		assert.equal(
+			validateHandoffQuote(value, id).verificationHandoff.eligible,
+			false,
+		);
+		assert.ok(handoffReasons[reason].length > 20);
+	}
+});
+test("frontend does not reinterpret dates or ordinary catalog withdrawal as eligibility", () => {
+	// Deliberately historical fixture timestamps: only the server decision controls handoff.
+	assert.equal(
+		validateHandoffQuote(eligible, id).verificationHandoff.eligible,
+		true,
+	);
+	assert.throws(() =>
+		validateHandoffQuote({ ...eligible, state: "WITHDRAWN" }, id),
+	);
+});
+test("navigation contains only one opaque quote reference and no secret fields", () => {
+	const url = new URL(verificationHref(id), "https://synthetic.invalid");
+	assert.equal(url.pathname, "/verification");
+	assert.deepEqual([...url.searchParams], [["quote", id]]);
+	assert.equal(url.hash, "");
+	assert.doesNotMatch(url.href, /contentHash|consent|token|evidence|grant/);
+	for (const bad of [
+		"",
+		"../private",
+		`${id}&token=secret`,
+		"https://evil.invalid",
+	])
+		assert.throws(() => verificationHref(bad));
+});
+test("context reload uses the existing same-origin authenticated no-store GET, never writes", async () => {
+	const before = globalThis.fetch;
+	const requests = [];
+	globalThis.fetch = async (path, init) => {
+		requests.push({ path, init });
+		return Response.json(eligible);
+	};
+	try {
+		assert.equal((await loadHandoffQuote(id)).quoteId, id);
+		assert.equal(requests.length, 1);
+		assert.equal(requests[0].path, `/api/quotes/${id}`);
+		assert.equal(requests[0].init.cache, "no-store");
+		assert.equal(requests[0].init.method, undefined);
+		await assert.rejects(() => loadHandoffQuote(""));
+		await assert.rejects(() => loadHandoffQuote("malformed"));
+		assert.equal(requests.length, 1);
+	} finally {
+		globalThis.fetch = before;
+	}
+});
+test("session, denied, wrong-owner/missing and backend failures return no quote context", async () => {
+	const before = globalThis.fetch;
+	try {
+		for (const status of [401, 403, 404, 409, 503]) {
+			globalThis.fetch = async () =>
+				Response.json({ message: "Synthetic unavailable" }, { status });
+			await assert.rejects(
+				() => loadHandoffQuote(id),
+				(error) => error.status === status,
+			);
+		}
+		globalThis.fetch = async () => {
+			throw new TypeError("Synthetic network failure");
+		};
+		await assert.rejects(() => loadHandoffQuote(id));
+	} finally {
+		globalThis.fetch = before;
+	}
+});

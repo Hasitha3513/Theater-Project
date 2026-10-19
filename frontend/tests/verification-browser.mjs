@@ -5,6 +5,7 @@ import { once } from "node:events";
 import { mkdir } from "node:fs/promises";
 import { createServer } from "node:net";
 import { pathToFileURL } from "node:url";
+
 const { chromium } = await import(
 	pathToFileURL(`${process.env.PLAYWRIGHT_MODULE_PATH}/index.mjs`).href
 );
@@ -58,6 +59,41 @@ let value = {
 	evidence: [],
 	history: [],
 };
+const handoffQuote = {
+	quoteId: id,
+	revision: 1,
+	contentHash: "a".repeat(64),
+	state: "ACCEPTED",
+	currency: "LKR",
+	totalMinor: "7",
+	paymentMethod: "BANK",
+	synthetic: true,
+	commercialIssuance: false,
+	checkoutEnabled: false,
+	bookingConfirmed: false,
+	expiresAt: "2026-10-20T00:10:00Z",
+	holdExpiresAt: "2026-10-20T00:10:00Z",
+	serverNow: "2026-10-20T00:01:00Z",
+	timezone: "Asia/Colombo",
+	disclosures: [
+		"TEST / SYNTHETIC QUOTATION",
+		"NOT A COMMERCIAL OFFER",
+		"NO PAYMENT OR BOOKING CONFIRMATION",
+	],
+	optionalServiceIds: [],
+	package: { name: "SYNTHETIC package" },
+	lines: [
+		{
+			lineId: "BASE",
+			kind: "BASE",
+			label: "SYNTHETIC base",
+			quantity: 1,
+			unitMinor: "7",
+			amountMinor: "7",
+		},
+	],
+	verificationHandoff: { eligible: true, reason: "ELIGIBLE" },
+};
 let mode = "normal",
 	groups = 0,
 	browser;
@@ -83,6 +119,8 @@ try {
 				status: 403,
 				json: { message: "Synthetic denied" },
 			});
+		if (path === `/api/quotes/${id}`)
+			return route.fulfill({ json: handoffQuote });
 		if (path.includes("/evidence/"))
 			return route.fulfill({ contentType: "image/png", body: png });
 		if (request.method() === "POST") {

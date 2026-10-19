@@ -1,13 +1,16 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { roomRequest, RoomRequestError, stateFor } from "../lib/rooms";
+import { RoomRequestError, roomRequest, stateFor } from "../lib/rooms";
 import {
+	uploadSynthetic,
 	type Verification,
 	validateVerification,
 	verificationLabels,
-	uploadSynthetic,
 } from "../lib/verification";
 import { Button, Card, Field, SelectField, StateMessage } from "./primitives";
+import { HandoffStatus, useQuoteHandoff } from "./quote-handoff";
+import { QuoteSummary } from "./quotes";
 export function VerificationNotice() {
 	return (
 		<>
@@ -70,12 +73,21 @@ export function VerificationSummary({ value }: { value: Verification }) {
 }
 export function VerificationWorkspace({
 	reviewer = false,
+	initialQuoteId = "",
 }: {
 	reviewer?: boolean;
+	initialQuoteId?: string;
 }) {
-	const [quote, setQuote] = useState("");
+	const [quote, setQuote] = useState(initialQuoteId);
+	const context = useQuoteHandoff(quote, !reviewer);
+	const canStart =
+		context.quote?.verificationHandoff.eligible === true && !context.loading;
 	const [policy, setPolicy] = useState("");
-	const [consent, setConsent] = useState(false);
+	const [consentEpoch, setConsentEpoch] = useState<number>();
+	const consent = consentEpoch === context.epoch;
+	function setConsent(checked: boolean) {
+		setConsentEpoch(checked ? context.epoch : undefined);
+	}
 	const [venue, setVenue] = useState("");
 	const [requestId, setRequestId] = useState("");
 	const [type, setType] = useState("NIC");
@@ -107,6 +119,14 @@ export function VerificationWorkspace({
 		setReviewed(false);
 		generation.current++;
 	}
+	useEffect(() => {
+		if (!reviewer && context.error !== undefined) {
+			setValue(undefined);
+			setFile(undefined);
+			setPreview(undefined);
+			setReviewed(false);
+		}
+	}, [reviewer, context.error]);
 	const prefix = reviewer
 		? `/api/admin/venues/${venue}/verification/requests`
 		: "/api/verification/requests";
@@ -117,15 +137,30 @@ export function VerificationWorkspace({
 			await operation();
 		} catch (e) {
 			setError(e);
-			if (e instanceof RoomRequestError && [401, 403, 404].includes(e.status))
+			if (e instanceof RoomRequestError && [401, 403, 404].includes(e.status)) {
 				clear();
+				if (!reviewer) void context.reload();
+			}
 		} finally {
 			setBusy(false);
 		}
 	}
 	async function refresh(id = requestId) {
 		const loaded = validateVerification(await roomRequest(`${prefix}/${id}`));
+		if (
+			!reviewer &&
+			initialQuoteId &&
+			loaded.quoteId.toLowerCase() !== initialQuoteId.toLowerCase()
+		)
+			throw new Error(
+				"This request belongs to another quotation. Open its matching quotation context.",
+			);
 		clear();
+		if (!reviewer) {
+			setQuote(loaded.quoteId);
+			if (loaded.quoteId.toLowerCase() === quote.toLowerCase())
+				await context.reload();
+		}
 		setValue(loaded);
 		setRequestId(loaded.id);
 	}
@@ -244,12 +279,31 @@ export function VerificationWorkspace({
 				</>
 			) : (
 				<>
+					<HandoffStatus {...context} />
+					{context.quote && !context.loading && (
+						<QuoteSummary quote={context.quote} />
+					)}
+					<Button
+						disabled={context.loading || busy || !!pending.current}
+						onClick={() => void context.reload()}
+					>
+						Reload quotation context
+					</Button>
+					<p>
+						<Link href="/rooms">
+							Return to room selection and quotation review
+						</Link>
+					</p>
 					<Field
 						id="verification-quote"
 						label="Owned synthetic quotation ID"
+						readOnly={!!initialQuoteId}
 						value={quote}
 						disabled={busy || !!pending.current}
-						onChange={(e) => setQuote(e.target.value)}
+						onChange={(e) => {
+							clear();
+							setQuote(e.target.value);
+						}}
 					/>
 					<Field
 						id="verification-policy"
@@ -266,15 +320,35 @@ export function VerificationWorkspace({
 						type="checkbox"
 						label="I consent to this versioned synthetic test processing; no real documents"
 						checked={consent}
-						disabled={busy || !!pending.current}
+						disabled={!canStart || busy || !!pending.current}
 						onChange={(e) => setConsent(e.target.checked)}
 					/>
 					<Button
 						disabled={
-							!quote || !policy || !consent || busy || !!pending.current
+							!canStart ||
+							!quote ||
+							!policy ||
+							!consent ||
+							busy ||
+							!!pending.current
 						}
 						onClick={() =>
 							run(async () => {
+								const current = await context.reload();
+								// Revalidation invalidates consent; this explicit click applies only
+								// to the exact context that the customer just reviewed.
+								if (
+									!current?.verificationHandoff.eligible ||
+									current.revision !== context.quote?.revision ||
+									current.contentHash !== context.quote?.contentHash
+								) {
+									setError(
+										new Error(
+											"Quotation context changed. Review the refreshed quotation and consent again.",
+										),
+									);
+									return;
+								}
 								await command("/api/verification/requests", {
 									quoteId: quote,
 									policyVersion: policy,
@@ -304,7 +378,7 @@ export function VerificationWorkspace({
 				Refresh current request and history
 			</Button>
 			{busy && <StateMessage kind="loading" />}
-			{error !== undefined && (
+			{error !== undefined && (reviewer || context.error === undefined) && (
 				<StateMessage kind={stateFor(error)}>
 					<p>
 						{error instanceof Error
@@ -338,7 +412,7 @@ export function VerificationWorkspace({
 								id="verification-type"
 								label="Synthetic document type"
 								value={type}
-								disabled={busy || !!pending.current}
+								disabled={!canStart || busy || !!pending.current}
 								onChange={(e) => setType(e.target.value)}
 							>
 								<option>NIC</option>
@@ -349,11 +423,12 @@ export function VerificationWorkspace({
 								label="Approved synthetic image only (JPEG/PNG, 5 MiB, 20 MP)"
 								type="file"
 								accept="image/jpeg,image/png"
-								disabled={busy || !!pending.current}
+								disabled={!canStart || busy || !!pending.current}
 								onChange={(e) => setFile(e.target.files?.[0])}
 							/>
 							<Button
 								disabled={
+									!canStart ||
 									!file ||
 									busy ||
 									!!pending.current ||
@@ -373,7 +448,9 @@ export function VerificationWorkspace({
 								</p>
 							)}
 							<Button
-								disabled={!consent || !policy || busy || !!pending.current}
+								disabled={
+									!canStart || !consent || !policy || busy || !!pending.current
+								}
 								onClick={() =>
 									run(async () => {
 										await command(
