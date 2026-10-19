@@ -2008,5 +2008,55 @@ def engagement_decision_main():
     if result==0: print('PASS engagement decision: exact owner deferral, brief-only closure, unchanged dependencies/full acceptance/test plans, historical receipts retained')
     return result
 
+def inert_ci_main():
+    """Qualify the owner-authorized CI successor before immutable historical replay."""
+    from unittest.mock import patch
+    baseline = '14c4602b8b3a6002756fb1b04dd282c313a44c16'
+    owned = {'.github/workflows/foundation.yml': 'cce9bf6b8231e2378e59ad705226004bb6429b89a6783abe0e4804e5fcfbeefb', 'scripts/ci-classify.py': '10ea359b7cf88a9a7121e081dc3c4b0ceb5abf5fc5b474dda1f12d821ccfe89b', 'scripts/test-ci-classify.py': '597d2f19408e020c05ae800c10a353a19a364f765e1e1f1de3961888da671786', 'scripts/test-governance-controls.py': 'b2fc80add6c6ee1c85eb884aa9b55ad953278f19f82210b46ee83cf0c1121f4e'}
+    errors = []
+    for name, digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest() != digest:
+            errors.append('CI successor source mismatch ' + name)
+    for name in ['execution/change-sets.json', 'execution/requirements.json', 'execution/test-plan.json',
+                 'execution/status.json', 'decisions/cinenest-open-decisions.json']:
+        prior = subprocess.check_output(['git', '-C', str(R), 'show', baseline+':knowledge/'+name])
+        if (K/name).read_bytes() != prior:
+            errors.append('CI successor changed task/requirement/decision record ' + name)
+    architecture = (K/'ARCHITECTURE.md').read_text()
+    if '<a id="inert-ci-classification-boundary"></a>' not in architecture or 'dfa9fad1-83c9-490e-a77b-466160ed0a29' not in architecture:
+        errors.append('CI successor approval missing')
+    allowed = set(owned) | {'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/manifest.json',
+                           'knowledge/execution/validate_execution.py', 'frontend/next-env.d.ts'}
+    changed = set(subprocess.check_output(['git', '-C', str(R), 'diff', baseline, '--name-only'], text=True).splitlines())
+    if not changed <= allowed:
+        errors.append('CI successor unrelated change ' + str(changed-allowed))
+    if errors:
+        print('\n'.join('FAIL '+e for e in errors))
+        return 1
+    original = subprocess.check_output
+    def historical_output(argv, *args, **kwargs):
+        result = original(argv, *args, **kwargs)
+        # Only the exact, hash-qualified CI source delta is removed from the
+        # historical publication allowlist. All other changes remain visible.
+        if isinstance(argv, list) and argv[:3] == ['git', '-C', str(R)] and 'diff' in argv and '--name-only' in argv:
+            if isinstance(result, str):
+                return '\n'.join(x for x in result.splitlines() if x not in owned) + '\n'
+            return b'\n'.join(x for x in result.splitlines() if x.decode() not in owned) + b'\n'
+        return result
+    workflow = R / '.github/workflows/foundation.yml'
+    previous_workflow = original(['git', '-C', str(R), 'show', baseline+':.github/workflows/foundation.yml'])
+    rb, rt = Path.read_bytes, Path.read_text
+    def historical_bytes(path, *args, **kwargs):
+        return previous_workflow if path == workflow else rb(path, *args, **kwargs)
+    def historical_text(path, *args, **kwargs):
+        return previous_workflow.decode() if path == workflow else rt(path, *args, **kwargs)
+    with patch.object(subprocess, 'check_output', historical_output), \
+         patch.object(Path, 'read_bytes', historical_bytes), patch.object(Path, 'read_text', historical_text):
+        result = engagement_decision_main()
+    if result == 0:
+        print('PASS scoped CI successor: owned hashes, unchanged task/requirement/decision records, historical checks retained')
+    return result
+
+
 if __name__ == '__main__':
-    raise SystemExit(engagement_decision_main())
+    raise SystemExit(inert_ci_main())

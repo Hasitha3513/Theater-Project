@@ -14,26 +14,62 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0 # Existing knowledge validators verify immutable historical commits
+          persist-credentials: false
+      - name: Classify exact diff using comparison-base policy
+        id: classify
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_PATH: ${{ github.event_path }}
+          HEAD_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          CATEGORY=UNKNOWN
+          BASE=$(python3 -c 'import json,os; e=json.load(open(os.environ["EVENT_PATH"])); print(e.get("pull_request",{}).get("base",{}).get("sha","") if os.environ["EVENT_NAME"]=="pull_request" else e.get("before","") if os.environ["EVENT_NAME"]=="push" else "")') || BASE=""
+          if [[ "$BASE" =~ ^[0-9a-f]{40}$ && "$HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            POLICY="$RUNNER_TEMP/cinenest-base-ci-classify.py"
+            if git cat-file -e "$BASE^{commit}" && git show "$BASE:scripts/ci-classify.py" > "$POLICY"; then
+              RESULT=$(python3 -B "$POLICY" --repo "$GITHUB_WORKSPACE" --base "$BASE" --head "$HEAD_SHA") || RESULT=UNKNOWN
+              case "$RESULT" in
+                INERT_ONLY|APPLICATION|MIXED|UNKNOWN|CI_OR_GOVERNANCE) CATEGORY="$RESULT" ;;
+              esac
+            fi
+          fi
+          echo "category=$CATEGORY" >> "$GITHUB_OUTPUT"
+          echo "CI classification: $CATEGORY"
+      - name: Classification and workflow regression contracts
+        run: python3 -B scripts/test-ci-classify.py
+      - name: Focused inert checks
+        if: steps.classify.outputs.category == 'INERT_ONLY' || hashFiles('scripts/verify-recovery.py', 'scripts/test-recovery.py') != ''
+        run: |
+          test -f scripts/verify-recovery.py
+          test -f scripts/test-recovery.py
+          python3 -B scripts/test-recovery.py
       - name: Fetch exact Temurin archive (setup-java v5 cannot parse four-part patch strings)
+        if: steps.classify.outputs.category != 'INERT_ONLY'
         run: |
           curl --fail --location --retry 3 'https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_linux_hotspot_25.0.4.1_1.tar.gz' --output "$RUNNER_TEMP/cinenest-jdk.tar.gz"
           echo 'dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e  '"$RUNNER_TEMP/cinenest-jdk.tar.gz" | sha256sum --check --strict
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        if: steps.classify.outputs.category != 'INERT_ONLY'
         with:
           distribution: jdkfile
           java-version: '25' # Cache label only: archive URL/checksum pins 25.0.4.1+1 exactly
           jdkFile: ${{ runner.temp }}/cinenest-jdk.tar.gz
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        if: steps.classify.outputs.category != 'INERT_ONLY'
         with:
           node-version-file: frontend/.node-version
       - name: Verify toolchain
+        if: steps.classify.outputs.category != 'INERT_ONLY'
         run: |
           java -version
           node --version
           test "$(npm --version)" = "11.19.1"
       - name: Backend build, isolated PostgreSQL, architecture, HTTP denial and packaged startup
+        if: steps.classify.outputs.category != 'INERT_ONLY'
         run: python3 scripts/verify-foundation.py
       - name: Frontend clean install and verification
+        if: steps.classify.outputs.category != 'INERT_ONLY'
         working-directory: frontend
         env:
           NEXT_TELEMETRY_DISABLED: '1'
@@ -45,9 +81,11 @@ jobs:
           npm test
           npm audit --audit-level=high
       - name: Local launcher contracts
+        if: steps.classify.outputs.category != 'INERT_ONLY'
         run: python3 scripts/test-launchers.py
       - name: Knowledge and whitespace
         run: |
           python3 knowledge/validate_design_kb.py
           python3 knowledge/execution/validate_execution.py
+          python3 -B scripts/test-governance-controls.py
           git diff --check
