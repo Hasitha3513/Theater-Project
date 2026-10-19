@@ -278,7 +278,7 @@ Automatic task-owned Git commit/push authority persists after checks/review, res
 | CN-NOTIFY-001 | 9 | One notification channel and durable delivery | CN-PAY-BANK-001, CN-ACCESS-001 | VERIFIED / CLOSED |
 | CN-CUSTOMER-001 | 9 | Owned history and support status | CN-ACCESS-001, CN-NOTIFY-001, CN-REFUND-001 | VERIFIED / CLOSED |
 | CN-AMEND-001 | 9 | One purchased booking change/extension slice | CN-CUSTOMER-001, CN-QUOTE-001, CN-REFUND-001 | VERIFIED / CLOSED |
-| CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-BANK-002, CN-REFUND-001 | BLOCKED / BLOCKED |
+| CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-BANK-002, CN-REFUND-001 | IN_PROGRESS / READY |
 | CN-ENG-001 | 10 | Engagement scope/rule decision brief | CN-REPORT-001 | BLOCKED / BLOCKED |
 | CN-ACCEPT-001 | 11 | Integrated evidence and recovery gate | CN-AMEND-001, CN-REPORT-001, CN-OPS-001 | BLOCKED / BLOCKED |
 | CN-LAUNCH-001 | 12 | Authorized controlled launch/handover | CN-ACCEPT-001 | BLOCKED / BLOCKED |
@@ -322,7 +322,7 @@ flowchart TB
   P6["P6 Amend/cancel/refund<br/>W11-12 illustrative<br/>PARTIAL SYNTHETIC ONLY; bounded synthetic amendment VERIFIED; full commercial/physical scope pending; NOT_ACCEPTED"]
   P7["P7 Access/hardware<br/>W13-14 illustrative<br/>SYNTHETIC PARTIAL; NOT_ACCEPTED"]
   P8["P8 Automation/readiness<br/>W15-16 illustrative<br/>PARTIAL synthetic lighting/turnover; physical readiness pending; NOT_ACCEPTED"]
-  P9["P9 Reports/UAT<br/>W17-18 illustrative<br/>Bounded bank report approved; implementation BLOCKED; NOT_ACCEPTED"]
+  P9["P9 Reports/UAT<br/>W17-18 illustrative<br/>PARTIAL synthetic bank report; verification pending; NOT_ACCEPTED"]
   P10["P10 Pilot/handover<br/>W19-20 illustrative<br/>PLANNED; NOT_ACCEPTED"]
   G -.-> P0
   P0 --> P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7 --> P8 --> P9 --> P10
@@ -965,7 +965,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff: CN-REPORT-001 bounded synthetic bank reporting approvals and exact dependency amendment recorded; [readiness](#report-bank-readiness). BLOCKED solely on separate implementation authorization; no source/migration implementation.23 CLOSED/5 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. Next action: obtain separate bounded synthetic CN-REPORT-001 implementation authorization. PayHere deferred/BLOCKED;full reporting/export/production acceptance and venue/specialist gates preserved.
+Current handoff: CN-REPORT-001 IN_PROGRESS for authorized synthetic bank-credit snapshot report; [evidence](#report-bank-implementation). No dependency/migration/financial command change; PayHere deferred/BLOCKED. Next action: finish required verification and exact-source CI before bounded closure.
 
 Read AGENTS and current sections of the four canonical files plus relevant existing registries; reconcile actual Git/worktree and owner response. Update facts at their assigned owner, link elsewhere and regenerate projections/checks when machine records change. Do not create routine feature/decision/task/session/prompt/report files. Legitimate application source/tests/migrations remain possible only under separate implementation authorization.
 
@@ -1465,3 +1465,14 @@ Only CN-REPORT-001 hard edges amended: [CN-PAY-GW-001,CN-PAY-BANK-002] → [CN-P
 No application/API/UI source or V1–V17 migration/token/dependency package changed, no new knowledge file, no financial operation. Full92 requirements/92 plans and all22 reporting mappings retained; no planned test passed, no acceptance promoted. Counts23 CLOSED/5 BLOCKED/0 READY/0 IN_PROGRESS /28;13/74 unchanged. D0 prepared/document-rehearsed(refresh before reuse),D1/D2 NOT_READY,D3-D6 outlines;0/7 held/accepted. Manual-payment-first,PayHere deferred/BLOCKED and venue/specialist/real-financial/physical/production gates retained. Next action: obtain separate bounded synthetic CN-REPORT-001 implementation authorization. Publication receipt/final-source CI reported in conversation.
 
 Verified this approval invocation: design/knowledge validator PASS; isolated committed-next-env execution/status validator PASS;12 governance negative controls rejected unauthorized READY/authority,missing Refund/deferred gateway/history,unrelated edges,global OD-16/OM-06 closure,migration/acceptance/source/phase promotion. Current hard graph acyclic with both prerequisites VERIFIED; source/application/migration/dependency-package/token files and92 requirement/92 test-plan bytes unchanged. Git whitespace PASS. Primary execution retains exactly two known unrelated next-env integrity failures; original next-env and both DOCX hashes preserved. No application checks or feature execution claimed.
+
+<a id="report-bank-implementation"></a>
+## CN-REPORT-001 synthetic bank reconciliation implementation — 2026-10-19
+
+Start main/origin/main8d669e72c45748c43f5405f076886c54af7d605e,0 ahead/behind,V17. Owner attachment9fa5036c-0274-4825-9591-d16ceb075448 grants only approved bounded implementation. CN-PAY-BANK-002/CN-REFUND-001 VERIFIED/CLOSED; deferred gateway acceptance and prior amendment preserved. Task reconciled READY then IN_PROGRESS; no dependency changed. [Implemented contract/metrics](ARCHITECTURE.md#report-bank-synthetic-scope), [policy](PROJECT.md#report-bank-synthetic-policy), [UI](DESIGN.md#report-bank-synthetic-ui).
+
+Payments owns financial query/math; Reporting composes public owner ports; source records unchanged except governed GENERATED/DENIED audit in existing bank_audit. No migration,V1–V17 unchanged. Complete-population summary and rows share REPEATABLE_READ snapshot; exact minor-unit strings,null unavailable allocation,protected drilldown,current scope checks before/after snapshot. No export,recognition,utilization,gateway,real financial operation or financial-command change.
+
+Verification in progress; exact-source CI required before bounded closure.23 CLOSED/4 BLOCKED/1 IN_PROGRESS/0 READY /28;13/74 unchanged. P9 report criteria partial synthetic evidence only,all unchecked/full charts,exports and acceptance retained.92 requirements/92 plans preserved; no full planned test passed. D0 prepared/document-rehearsed(refresh before reuse),D1/D2 NOT_READY,D3-D6 outlines,0/7 held/accepted. Production finance/venue/specialist/OD-16/wider OM-06/gateway acceptance remain separate. Preserve unrelated next-env/two DOCX. Next action: finish required verification and exact-source CI before bounded closure.
+
+Local verification PASS:391 backend tests(186 Bank integration,17 architecture,3 exact-money unit,2 report-controller/DST/config tests;25 new reporting checks),0 failures/errors/skips. Real PostgreSQL18.6,clean/repeat V1–V17 and retained prior upgrade checks,real HTTP/packaged startup; controlled allocation/refund commits between summary and row queries preserve one snapshot; next requests see new effects; report permission revocation committed during snapshot prevents response. Verified duplicate movements,partial/confirmed/UNKNOWN/failed refund commitments,missing verification/negative invariants,dispute eligibility,date/currency/pagination,redaction,denied/access audit/audit failure,no financial mutation or export.116 frontend tests,build,typecheck,lint PASS;70 intercepted synthetic browser groups across7 widths PASS;375/1280 screenshots inspected.14 launcher contracts PASS;knowledge and isolated committed-next-env execution PASS;12 governance negative controls rejected authority/dependency/safety/full acceptance/source/schema drift. Primary execution retains exactly two unrelated next-env integrity findings;original bytes/two DOCX preserved. An initial malformed denied-command fixture was corrected to exercise valid-command authorization;final suite passed. Browser fixtures are not banking/customer acceptance;no formal screen-reader/WCAG qualification. Exact-source CI pending;keep IN_PROGRESS until actual receipt.

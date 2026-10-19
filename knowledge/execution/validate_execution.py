@@ -1906,5 +1906,57 @@ def report_readiness_main():
     if result==0:print('PASS report readiness: exact bounded approval/dependency amendment, deferred gateway/full coverage retained, no implementation authority/application change; historical receipts preserved')
     return result
 
+def report_implementation_main():
+    """Qualify the authorized source successor before immutable historical receipt replay."""
+    from unittest.mock import patch
+    base='8d669e72c45748c43f5405f076886c54af7d605e';errors=[]
+    def require(ok,message):
+        if not ok:errors.append(message)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',base+':'+name])
+    tasks=json.loads((K/'execution/change-sets.json').read_text());old=json.loads(prior('knowledge/execution/change-sets.json'));task=next(t for t in tasks['changeSets'] if t['id']=='CN-REPORT-001');expected=next(t for t in old['changeSets'] if t['id']=='CN-REPORT-001')
+    for key in ['authorityAvailable','implementationAuthorization','remainingReadinessGates','readiness','workStatus','evidencePaths']:expected[key]=task[key]
+    require(tasks==old,'Report changed dependency/scope/unrelated task/history')
+    status=json.loads((K/'execution/status.json').read_text());evidence=status.pop('reportImplementation');previous=json.loads(prior('knowledge/execution/status.json'));status['nextAction']=previous['nextAction'];require(status==previous,'Report changed prior execution history')
+    authority=task['implementationAuthorization'];require(authority==evidence['authority'] and authority.get('scope')=='GRANTED_BOUNDED_SYNTHETIC_BANK_REPORT' and authority.get('requestSha256')=='6bdc8a350a30d4731a784291f3d7392b9dc3e2f9cb1256355c4b353451ac6121' and task['authorityAvailable'] and task['remainingReadinessGates']==[],'Report implementation authority invalid')
+    state=evidence['workStatus'];require(task['workStatus']==state and task['readiness']==('CLOSED' if state=='VERIFIED' else 'READY'),'Report status mismatched')
+    for key,value in {'realFinancialReporting':'DISABLED','exports':'DISABLED','gateway':'DEFERRED_BLOCKED','migration':'NONE_V17_UNCHANGED','fullRequirementAcceptance':'NOT_ACCEPTED'}.items():require(evidence[key]==value,'Report safety boundary changed '+key)
+    owned=evidence['ownedFiles'];require(set(owned)=={'backend/src/main/java/com/cinenest/payments/BankBalanceReport.java', 'backend/src/main/java/com/cinenest/payments/internal/BankReportRepository.java', 'backend/src/main/java/com/cinenest/payments/internal/BankReportMath.java', 'backend/src/main/java/com/cinenest/payments/internal/JdbcBankReportRepository.java', 'backend/src/main/java/com/cinenest/payments/internal/ReportInvariant.java', 'backend/src/main/java/com/cinenest/rooms/internal/ReportingClockAdapter.java', 'backend/src/test/java/com/cinenest/payments/internal/ReportFaults.java', 'frontend/components/shell.tsx', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'frontend/tests/bank-report-browser.mjs', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/reporting/internal/BankReportControllerTest.java', 'frontend/app/api/admin/venues/[venueId]/reports/synthetic-bank-balances/route.ts', 'frontend/components/bank-report.tsx', 'backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java', 'frontend/lib/bank-backend.ts', 'frontend/tests/bank-report.test.mjs', 'backend/src/main/java/com/cinenest/reporting/package-info.java', 'backend/src/main/java/com/cinenest/rooms/VenueReportingClock.java', 'frontend/package.json', 'frontend/app/admin/reports/bank/page.tsx', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/test/java/com/cinenest/payments/internal/BankReportMathTest.java', 'backend/src/main/java/com/cinenest/payments/internal/BankReportAdapter.java'},'Report source allowlist changed')
+    for name,digest in owned.items():require((R/name).is_file() and hashlib.sha256((R/name).read_bytes()).hexdigest()==digest,'Report owned source mismatch '+name)
+    baseline=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',base,'--','backend','frontend'],text=True).splitlines());added=set(owned)-baseline
+    inventory=set(subprocess.check_output(['git','-C',str(R),'-c','core.quotePath=false','ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True).splitlines());require(inventory==baseline|added,'Report unrelated application inventory changed')
+    for name in baseline-set(owned)-{'frontend/next-env.d.ts'}:require((R/name).read_bytes()==prior(name),'Report changed unrelated application '+name)
+    require({p.name for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}=={Path(n).name for n in baseline if '/db/migration/' in n},'Report created a migration')
+    for name in ['decisions/cinenest-open-decisions.json','execution/omissions.json','execution/source-ledger.json','sources/cinenest-source-register.json']:require((K/name).read_bytes()==prior('knowledge/'+name),'Report altered prior approval/source '+name)
+    for name,key,ids in [('execution/requirements.json','requirements',{'CN-A01','CN-NFR-03','BP-AC13','BN-M06'}),('execution/test-plan.json','tests',{'T-CN-A01','T-CN-NFR-03','T-BP-AC13','T-BN-M06'})]:
+        doc=json.loads((K/name).read_text())
+        for row in doc[key]:
+            receipt=row.pop('boundedBankReportImplementationEvidence',None);require((receipt is not None)==(row['id'] in ids),'Report bounded coverage mismatch '+row['id'])
+            if receipt:require(receipt['fullAcceptance']=='NOT_ACCEPTED' and receipt['status']==state,'Report full acceptance promoted '+row['id'])
+        require(doc==json.loads(prior('knowledge/'+name)),'Report altered full requirement/test history '+name)
+    progress=(K/'PROGRESS.md').read_text();require(re.findall(r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))',progress,re.M)==re.findall(r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))',prior('knowledge/PROGRESS.md').decode(),re.M),'Report promoted phase/demo criteria')
+    require('| CN-REPORT-001 | 9 | Core authorized money/booking projection | CN-PAY-BANK-002, CN-REFUND-001 | '+state+' / '+task['readiness']+' |' in progress,'Report active task projection stale')
+    sql=(R/'backend/src/main/java/com/cinenest/payments/internal/JdbcBankReportRepository.java').read_text();require("c.source_kind='SYNTHETIC_BANK'" in sql and all(x not in sql for x in ['UPDATE ','DELETE ','cinenest_booking.','cinenest_rooms.']),'Report source/query ownership changed')
+    require('ISOLATION_REPEATABLE_READ' in (R/'backend/src/main/java/com/cinenest/payments/internal/BankReportAdapter.java').read_text(),'Report snapshot isolation lost')
+    if state=='VERIFIED':
+        require(all(evidence['checks'].get(k)=='PASS' for k in ['backend','frontend','browser','architecture','launchers','governance']) and evidence['sourceCI']=='SUCCESS','Report closure lacks checks/CI')
+        source=evidence.get('sourceCommit','');require(bool(re.fullmatch('[0-9a-f]{40}',source)),'Report CI source receipt invalid')
+        if re.fullmatch('[0-9a-f]{40}',source):
+            for name,digest in owned.items():require(hashlib.sha256(subprocess.check_output(['git','-C',str(R),'show',source+':'+name])).hexdigest()==digest,'Report CI source stale '+name)
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    replacements={R/name:prior(name) for name in set(owned)&baseline}
+    for name in ['execution/change-sets.json','execution/status.json','execution/requirements.json','execution/test-plan.json','PROGRESS.md']:replacements[K/name]=prior('knowledge/'+name)
+    rb0=Path.read_bytes;rt0=Path.read_text;g0=Path.glob;o0=subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(args,*a,**kw):
+        result=o0(args,*a,**kw)
+        if args[0]=='git' and (('diff' in args and '--name-only' in args) or 'ls-files' in args):
+            text=result if isinstance(result,str) else result.decode();removed=set(owned) if 'diff' in args else added;text=''.join(line+'\n' for line in text.splitlines() if line not in removed);return text if isinstance(result,str) else text.encode()
+        return result
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=report_readiness_main()
+    if result==0:print('PASS report implementation: qualified exact source/authority/snapshot ownership, unchanged schema/dependencies/full acceptance and historical receipts')
+    return result
+
 if __name__ == '__main__':
-    raise SystemExit(report_readiness_main())
+    raise SystemExit(report_implementation_main())

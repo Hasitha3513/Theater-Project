@@ -820,7 +820,14 @@
       "unresolvedQuestions": [
         "OD-16",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "boundedBankReportImplementationEvidence": {
+        "changeSetId": "CN-REPORT-001",
+        "status": "IN_PROGRESS",
+        "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
+        "evidencePath": "PROGRESS.md#report-bank-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-A02",
@@ -2164,6 +2171,13 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
+      },
+      "boundedBankReportImplementationEvidence": {
+        "changeSetId": "CN-REPORT-001",
+        "status": "IN_PROGRESS",
+        "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
+        "evidencePath": "PROGRESS.md#report-bank-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -4358,7 +4372,14 @@
       "unresolvedQuestions": [
         "OD-16",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "boundedBankReportImplementationEvidence": {
+        "changeSetId": "CN-REPORT-001",
+        "status": "IN_PROGRESS",
+        "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
+        "evidencePath": "PROGRESS.md#report-bank-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-M-REVENUE-BOOKINGS",
@@ -5006,7 +5027,14 @@
         "OD-24",
         "OD-27",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "boundedBankReportImplementationEvidence": {
+        "changeSetId": "CN-REPORT-001",
+        "status": "IN_PROGRESS",
+        "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
+        "evidencePath": "PROGRESS.md#report-bank-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "BN-M07",

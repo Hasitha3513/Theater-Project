@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-IOT-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-OPS-001",
-  "nextAction": "Obtain separate bounded synthetic CN-REPORT-001 implementation authorization",
+  "nextAction": "Complete CN-REPORT-001 required verification and exact-source CI before bounded closure",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
   "approvedCoreDecisions": [
@@ -3710,5 +3710,78 @@
     "migrationAuthorization": "NONE",
     "fullRequirementAcceptance": "NOT_ACCEPTED",
     "evidencePath": "PROGRESS.md#report-bank-readiness"
+  },
+  "reportImplementation": {
+    "baselineHead": "8d669e72c45748c43f5405f076886c54af7d605e",
+    "authority": {
+      "date": "2026-10-19",
+      "source": "Owner inline authorization and attachment 9fa5036c-0274-4825-9591-d16ceb075448",
+      "requestSha256": "6bdc8a350a30d4731a784291f3d7392b9dc3e2f9cb1256355c4b353451ac6121",
+      "scope": "GRANTED_BOUNDED_SYNTHETIC_BANK_REPORT"
+    },
+    "workStatus": "IN_PROGRESS",
+    "realFinancialReporting": "DISABLED",
+    "exports": "DISABLED",
+    "gateway": "DEFERRED_BLOCKED",
+    "migration": "NONE_V17_UNCHANGED",
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "evidencePath": "PROGRESS.md#report-bank-implementation",
+    "ownedFiles": {
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java": "67e68200c6f14d0e14392d1608294340d2818cfd1beb012e387a7486ce8fd534",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "d128f56373e1997ba8b575f4ea9d0be34798c7f59ae46904c3b8cac8dd6c6e92",
+      "backend/src/main/java/com/cinenest/payments/BankBalanceReport.java": "2ecea88389b283d9729effb33f1da09bef3e1054a82bdf24dbddd6a57b0c2308",
+      "backend/src/main/java/com/cinenest/payments/internal/BankReportAdapter.java": "b50653bd8e4cb4a652ad30745e95d4574c7ff10724bdd27bbf4c1014f4178576",
+      "backend/src/main/java/com/cinenest/payments/internal/BankReportMath.java": "5c602b4f133de24b37b29e6cc73ddd610cc2496a520c6cbb0c978c8445011c85",
+      "backend/src/main/java/com/cinenest/payments/internal/BankReportRepository.java": "0013456fe8acbac0d89afbc15dbebcedcf46ec309fabfc5d9eeef01cff192b79",
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcBankReportRepository.java": "80b529f4a9f4c42da6dc77a57bfa09d5d7487b0ca373a129188efbc07b764986",
+      "backend/src/main/java/com/cinenest/payments/internal/ReportInvariant.java": "fbb9136654947d669bef10acc039b5e2f7d2bbb3f3ec5e4054caf62f93a3007a",
+      "backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java": "8b114e4cafaeb17b418212f4269de92d5fdf174c6112d7de66c018a406ced2b6",
+      "backend/src/main/java/com/cinenest/reporting/package-info.java": "532471f803131dca71a11d9e7d1256c5caf062e0864e0288bd977fdc38c08692",
+      "backend/src/main/java/com/cinenest/rooms/VenueReportingClock.java": "69cae3d2a42d29b7bd1744a78f3cc2e4854816ed9f58bb16934fee66d9e4713e",
+      "backend/src/main/java/com/cinenest/rooms/internal/ReportingClockAdapter.java": "5b9e9f7564c805ed8ace21de00fdcdd17bac9c04d0b7295c05d3694eb473a006",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "823645bb4801d2c371d427c3c2f4149fcc9776536738a7c5a14319f5c07a4fb7",
+      "backend/src/test/java/com/cinenest/FoundationArchitectureTest.java": "a6e8f39da6483f79e316dac4dcfbbaac7ed598a348e6f93050e361bb5039e158",
+      "backend/src/test/java/com/cinenest/payments/internal/BankReportMathTest.java": "f4c046b36f5c89afad3be631574a8f00667f9c238c8a3e2f833aa30708073869",
+      "backend/src/test/java/com/cinenest/payments/internal/ReportFaults.java": "1f5cdfe7f82f4a49894140518e1a57f1174c292f96938e884905d1b475e1f3e8",
+      "backend/src/test/java/com/cinenest/reporting/internal/BankReportControllerTest.java": "5a0a71b957b6c445cf3029a37f15964862056aec750b5d0c4992b14980f43b42",
+      "frontend/app/admin/reports/bank/page.tsx": "57dfa3390a0bd560a163985a61111e19b6d5c47cf419d68f46edfd8fe19e5b6e",
+      "frontend/app/api/admin/venues/[venueId]/reports/synthetic-bank-balances/route.ts": "6daf571c6e38edd76b75a0891852391272c632cd31e6cd1851f897983ad2ff79",
+      "frontend/components/bank-report.tsx": "732377e6f6f526531e0ca5a2da5389fa12f78f5eaa7c0f44e8417c7adb94ac01",
+      "frontend/components/shell.tsx": "d5cd9dcada30ca0cab32b0d9d3c413fad04a53f4af6314dadebf15f7f72280ec",
+      "frontend/lib/bank-backend.ts": "16bf1e0b40bcca8c67d7f2c3e18db99843228341e3c170f44f167e9b6fef31a0",
+      "frontend/package.json": "c2163e76a00e8d4cd8b900f82e2aa90a48e50f458fbb416e18966384a43749de",
+      "frontend/tests/bank-report-browser.mjs": "ce95bdec5e6c073d5be7ab507ff68dda965c0e03de88d5e7eee184ba6847919b",
+      "frontend/tests/bank-report.test.mjs": "35aa6b3efad1af7f637e8b4abe6b1129a32b55b108ad9d7347e60c8510eba936"
+    },
+    "checks": {
+      "backend": "PASS",
+      "frontend": "PASS",
+      "browser": "PASS",
+      "architecture": "PASS",
+      "launchers": "PASS",
+      "governance": "PASS"
+    },
+    "sourceCI": "PENDING",
+    "localEvidence": {
+      "backendTests": 391,
+      "newReportingChecks": 25,
+      "postgresql": "18.6; V1-V17 unchanged; real HTTP, consistent concurrent allocation/refund snapshot and committed mid-read revocation",
+      "frontendTests": 116,
+      "browserGroups": 70,
+      "browserWidths": [
+        320,
+        375,
+        640,
+        768,
+        1024,
+        1280,
+        1536
+      ],
+      "launcherContracts": 14,
+      "governanceNegativeControls": 12,
+      "primaryExecution": "Two pre-existing next-env integrity failures preserved",
+      "isolatedExecution": "PASS",
+      "limitations": "Synthetic fixtures only; no banking/financial/customer/production acceptance or formal screen-reader/WCAG certification"
+    }
   }
 }

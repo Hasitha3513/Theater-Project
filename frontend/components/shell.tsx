@@ -43,6 +43,7 @@ export function Navigation({
                 ["/admin/access", "Synthetic access simulation"],
                 ["/admin/iot", "Synthetic lighting simulator"],
                 ["/admin/operations", "Synthetic staff operations"],
+                ["/admin/reports/bank", "Synthetic bank report"],
                 ["/admin/notifications", "Synthetic notification queue"],
                 ["/admin/settings/packages", "Package drafts"],
 			]

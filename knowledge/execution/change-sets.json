@@ -1748,9 +1748,9 @@
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Only authoritative safe metrics, further charts refined before READY",
       "requiredApproval": "Report slice + approved metric definition/recognition exclusions",
-      "authorityAvailable": false,
-      "readiness": "BLOCKED",
-      "workStatus": "BLOCKED",
+      "authorityAvailable": true,
+      "readiness": "READY",
+      "workStatus": "IN_PROGRESS",
       "evidencePaths": [],
       "historicalImplementationDependencies": [
         "CN-PAY-GW-001",
@@ -1800,10 +1800,13 @@
         "OD-16": "SATISFIED_BOUNDED_GLOBAL_OPEN",
         "OM-06": "APPROVED_BOUNDED_MAPPING_WIDER_OPEN"
       },
-      "remainingReadinessGates": [
-        "Separate owner implementation authorization"
-      ],
-      "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY",
+      "remainingReadinessGates": [],
+      "implementationAuthorization": {
+        "date": "2026-10-19",
+        "source": "Owner inline authorization and attachment 9fa5036c-0274-4825-9591-d16ceb075448",
+        "requestSha256": "6bdc8a350a30d4731a784291f3d7392b9dc3e2f9cb1256355c4b353451ac6121",
+        "scope": "GRANTED_BOUNDED_SYNTHETIC_BANK_REPORT"
+      },
       "boundedExclusions": [
         "Export",
         "Booking/package/customer/Operations/IoT aggregates",

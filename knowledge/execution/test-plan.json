@@ -391,7 +391,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedBankReportImplementationEvidence": {
+        "changeSetId": "CN-REPORT-001",
+        "status": "IN_PROGRESS",
+        "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
+        "evidencePath": "PROGRESS.md#report-bank-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-A02",
@@ -1085,6 +1092,13 @@
         "evidencePath": "PROGRESS.md#foundation-implementation",
         "status": "FOUNDATION_SUBSET_ONLY",
         "fullRequirementVerified": false
+      },
+      "boundedBankReportImplementationEvidence": {
+        "changeSetId": "CN-REPORT-001",
+        "status": "IN_PROGRESS",
+        "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
+        "evidencePath": "PROGRESS.md#report-bank-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2052,7 +2066,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedBankReportImplementationEvidence": {
+        "changeSetId": "CN-REPORT-001",
+        "status": "IN_PROGRESS",
+        "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
+        "evidencePath": "PROGRESS.md#report-bank-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-M-REVENUE-BOOKINGS",
@@ -2292,7 +2313,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "boundedBankReportImplementationEvidence": {
+        "changeSetId": "CN-REPORT-001",
+        "status": "IN_PROGRESS",
+        "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
+        "evidencePath": "PROGRESS.md#report-bank-implementation",
+        "fullAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-BN-M07",

@@ -10,7 +10,7 @@ class FoundationArchitectureTest {
     @Test
     void declaredFoundationModuleHasAnEncapsulatedImplementation() {
         var modules = ApplicationModules.of(CineNestApplication.class);
-        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing", "booking", "verification", "payments", "access", "notifications", "iot");
+        assertThat(modules.stream().map(module -> module.getIdentifier().toString())).containsExactlyInAnyOrder("foundation", "identity", "rooms", "pricing", "booking", "verification", "payments", "access", "notifications", "iot", "reporting");
         modules.verify();
     }
 
@@ -120,5 +120,11 @@ class FoundationArchitectureTest {
  noClasses().that().resideInAPackage("com.cinenest.rooms..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.booking..","com.cinenest.access..","com.cinenest.iot..","com.cinenest.notifications..").check(classes);
  noClasses().that().haveSimpleName("TurnoverService").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
  String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/rooms/internal/JdbcTurnoverRepository.java"));assertThat(adapter).doesNotContain("cinenest_booking.","cinenest_iot.","cinenest_access.","cinenest_payments.");
+ }
+
+ @Test void reportingNeverReadsForeignRepositoriesOrFinancialTables() throws Exception {
+ var classes=new ClassFileImporter().importPackages("com.cinenest");
+ noClasses().that().resideInAPackage("com.cinenest.reporting..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.payments.internal..","com.cinenest.rooms.internal..","com.cinenest.identity.internal..","org.springframework.jdbc..").check(classes);
+ String query=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/payments/internal/JdbcBankReportRepository.java"));assertThat(query).doesNotContain("cinenest_booking.","cinenest_rooms.","UPDATE ","DELETE ");
  }
 }
