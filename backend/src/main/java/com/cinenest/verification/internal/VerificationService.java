@@ -20,6 +20,9 @@ class VerificationService {
     static UUID id(Object value){try{return UUID.fromString(String.valueOf(value));}catch(RuntimeException invalid){throw new VerificationFailure(400,"Valid identifier required");}}
     static long revision(Map<String,Object> body){Object v=body.get("revision");if(!(v instanceof Number n)||n.longValue()<0||n.doubleValue()!=n.longValue())throw new VerificationFailure(400,"Exact revision required");return n.longValue();}
     void eligible(UUID actor){if(!authorization.eligible(actor,true))throw new VerificationFailure(403,"Current eligible account required");}
+    VerificationQuotation.Context handoff(UUID actor,UUID quote){
+        return quotations.ownedSynthetic(actor,quote).orElseThrow(()->new VerificationFailure(409,"VERIFICATION_HANDOFF_UNAVAILABLE"));
+    }
     void reviewer(UUID actor,UUID venue){if(!authorization.permits(actor,venue,"verification.review",true)||!authorization.permits(actor,venue,"verification.evidence.read",true))throw new VerificationFailure(403,"Current venue review and evidence permissions required");}
     VerificationRepository.Request request(UUID actor,UUID id,UUID venue){
         var r=repository.request(id,true).orElseThrow(()->new VerificationFailure(404,"Verification request not found"));
@@ -41,11 +44,15 @@ class VerificationService {
         return tx.execute(status->{eligible(actor);if(venue!=null)reviewer(actor,venue);
             // Re-authorize target even for a persisted replay; no stale authority cache.
             var r=target==null?null:request(actor,target,venue);
+            // Admission is revalidated even on original-key replay. Reviewer decisions retain
+            // their existing independent evidence lifecycle; historical reads stay available.
+            if(action.equals("CREATE")||action.equals("RESUBMIT"))handoff(actor,id(body.get("quoteId")));
+            else if(action.equals("ALLOCATE"))handoff(actor,r.quote());
             var replay=repository.command(actor,key,hash);if(replay.isPresent())return replay.get();
             Map<String,Object> result;
             if(action.equals("CREATE")||action.equals("RESUBMIT")){
                 if(!Boolean.TRUE.equals(body.get("consent"))||!policy.version().equals(body.get("policyVersion")))throw new VerificationFailure(400,"Explicit current synthetic consent required");
-                UUID quote=id(body.get("quoteId"));var context=quotations.ownedSynthetic(actor,quote).orElseThrow(()->new VerificationFailure(403,"Owned synthetic quotation required"));
+                UUID quote=id(body.get("quoteId"));var context=handoff(actor,quote);
                 if(r!=null){current(r,revision(body));if(!r.quote().equals(quote))throw new VerificationFailure(409,"Resubmission must retain its original quotation owner");repository.supersede(r.id());}
                 repository.policy(policy);UUID next=UUID.randomUUID();repository.create(new VerificationRepository.Request(next,actor,context.venue(),quote,policy.id(),r==null?null:r.id(),r==null?1:r.generation()+1,0,"NOT_SUBMITTED",false,null));
                 r=repository.request(next,true).orElseThrow();result=view(r);
@@ -80,7 +87,7 @@ class VerificationService {
         storage.put(initial.object(),bytes);
         tx.executeWithoutResult(s->{eligible(actor);var r=request(actor,initial.request(),null);var e=repository.evidence(upload,true).orElseThrow();if(r.superseded()||!e.state().equals("UPLOADING")||!e.expires().isAfter(repository.now()))throw new VerificationFailure(409,"Upload changed; refresh authoritative state");repository.uploaded(upload,VerificationPolicy.hash(bytes),mime,bytes.length);repository.audit(actor,r.id(),"UPLOAD_QUARANTINED","PERMIT");});
     }
-    Map<String,Object> complete(UUID actor,UUID upload,Map<String,Object> body){var policy=policies.current();UUID key=id(body.get("commandKey"));String hash=VerificationPolicy.hash("COMPLETE"+upload+new TreeMap<>(body));return tx.execute(s->{eligible(actor);var e=repository.evidence(upload,false).orElseThrow(()->new VerificationFailure(404,"Upload not found"));var r=request(actor,e.request(),null);var replay=repository.command(actor,key,hash);if(replay.isPresent())return replay.get();current(r,revision(body));if(!e.state().equals("QUARANTINED")||!e.expires().isAfter(repository.now())||!r.policy().equals(policy.id()))throw new VerificationFailure(409,"Current quarantined upload required");repository.work(upload);repository.transition(r.id(),"PROCESSING",null);repository.audit(actor,r.id(),"SIMULATED_SCAN_REQUESTED","PERMIT");var result=view(repository.request(r.id(),true).orElseThrow());repository.command(actor,key,hash,result);return result;});}
+    Map<String,Object> complete(UUID actor,UUID upload,Map<String,Object> body){var policy=policies.current();UUID key=id(body.get("commandKey"));String hash=VerificationPolicy.hash("COMPLETE"+upload+new TreeMap<>(body));return tx.execute(s->{eligible(actor);var e=repository.evidence(upload,false).orElseThrow(()->new VerificationFailure(404,"Upload not found"));var r=request(actor,e.request(),null);handoff(actor,r.quote());var replay=repository.command(actor,key,hash);if(replay.isPresent())return replay.get();current(r,revision(body));if(!e.state().equals("QUARANTINED")||!e.expires().isAfter(repository.now())||!r.policy().equals(policy.id()))throw new VerificationFailure(409,"Current quarantined upload required");repository.work(upload);repository.transition(r.id(),"PROCESSING",null);repository.audit(actor,r.id(),"SIMULATED_SCAN_REQUESTED","PERMIT");var result=view(repository.request(r.id(),true).orElseThrow());repository.command(actor,key,hash,result);return result;});}
     byte[] preview(UUID actor,UUID venue,UUID request,UUID evidence){policies.current();return tx.execute(s->{eligible(actor);reviewer(actor,venue);var r=request(actor,request,venue);var e=repository.evidence(evidence,true).filter(v->v.request().equals(r.id())).orElseThrow(()->new VerificationFailure(404,"Evidence not found"));if(r.superseded()||!e.state().equals("READY")||!e.retain().isAfter(repository.now()))throw new VerificationFailure(409,"Evidence is unavailable");repository.audit(actor,r.id(),"PRIVATE_PREVIEW","PERMIT");return storage.get(e.preview());});}
     private record ProcessingClaim(VerificationRepository.Evidence evidence,int attempt){}
     void reconcile(){

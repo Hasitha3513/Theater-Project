@@ -211,6 +211,7 @@ class BankIntegrationTest {
 
     Map<String,Object> createCase(Browser customer)throws Exception{
         var h=held(customer,request(customer,local()));var q=quote(customer,issueRequest(customer,h));
+        json(write(customer,"POST",quotePath(q)+"/accept",JSONObjectUtils.toJSONString(Map.of("expectedRevision",q.get("revision"),"contentHash",q.get("contentHash"),"disclosures",q.get("disclosures"),"idempotencyKey",UUID.randomUUID().toString()))));
         return json(write(customer,"POST","/api/verification/requests",JSONObjectUtils.toJSONString(Map.of("commandKey",UUID.randomUUID().toString(),"quoteId",q.get("quoteId"),"policyVersion","SYNTHETIC-V1","consent",true))));
     }
     Map<String,Object> json(HttpResponse<String> response)throws Exception{assertThat(response.statusCode()).as(response.body()).isEqualTo(200);return JSONObjectUtils.parse(response.body());}
@@ -230,7 +231,7 @@ class BankIntegrationTest {
     Map<String,Object> bankBody(Browser a)throws Exception{
       var staff=signedIn("staff");reviewerGrants();var r=ready(a);json(write(staff,"POST",reviewPath(r)+"/decisions",JSONObjectUtils.toJSONString(decision(r,"VERIFIED"))));
       var q=json(a.get("/api/quotes/"+r.get("quoteId")));
-      json(write(a,"POST","/api/quotes/"+r.get("quoteId")+"/accept",JSONObjectUtils.toJSONString(Map.of("expectedRevision",q.get("revision"),"contentHash",q.get("contentHash"),"disclosures",q.get("disclosures"),"idempotencyKey",UUID.randomUUID().toString()))));
+      assertThat(q.get("state")).isEqualTo("ACCEPTED"); // Verification already required exact explicit acceptance.
       return new HashMap<>(Map.of("quoteId",q.get("quoteId"),"quoteRevision",q.get("revision"),"contentHash",q.get("contentHash"),"commandKey",UUID.randomUUID().toString()));
     }
     Map<String,Object> bank(Browser a)throws Exception{return json(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(bankBody(a))));}

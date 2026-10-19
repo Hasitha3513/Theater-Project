@@ -112,10 +112,43 @@ class QuoteService {
         active(h);store.create(q);store.append(q,revision);store.audit(actor,q.id(),1L,"CREATE");store.command(actor,key,"CREATE",hash,q.id(),1);return view(q,revision,h);
     }
     private Map<String,Object> context(QuotationHolds.Facts h){var facts=new LinkedHashMap<String,Object>();facts.put("bufferMinutes",h.bufferMinutes());facts.put("blockedUntil",h.blockedUntil().toString());facts.put("configuration",h.configuration());facts.putAll(Map.of("holdId",h.id().toString(),"roomId",h.room().toString(),"venueId",h.venue().toString(),"sessionStart",h.start().toString(),"sessionEnd",h.end().toString(),"holdExpiresAt",h.expires().toString(),"timezone",h.timezone(),"guests",h.guests()));return facts;}
-    Map<String,Object> read(UUID actor,UUID id){configured();return tx.execute(status->{eligible(actor);var q=owned(actor,id,false);publications.lock(q.venue(),q.pkg());var h=ownedHold(actor,q.hold(),true);q=owned(actor,id,true);return view(q,store.revision(id,q.revision()),h);});}
+    // Pricing owns the single handoff decision. Caller holds Identity/package/Rooms guards.
+    private String verificationRefusal(QuoteRepository.Quote q,QuoteRepository.Revision r,QuotationHolds.Facts h){
+        var accepted=store.accepted(q.id());
+        if(accepted.isEmpty())return "QUOTE_NOT_ACCEPTED";
+        if(accepted.get()!=q.revision()||r.revision()!=q.revision())return "QUOTE_REVISION_CHANGED";
+        if(!r.method().equals("BANK"))return "BANK_METHOD_REQUIRED";
+        if(h==null)return "HOLD_UNAVAILABLE";
+        if(!h.owner().equals(q.owner())||!h.id().equals(q.hold()))return "HOLD_UNAVAILABLE";
+        if(!store.now().isBefore(r.expires()))return "QUOTE_EXPIRED";
+        if(!store.now().isBefore(h.expires()))return "HOLD_EXPIRED";
+        if(!h.state().equals("ACTIVE"))return "HOLD_INELIGIBLE";
+        if(h.revision()!=r.holdRevision())return "HOLD_CHANGED";
+        try{compatible(h,PublicationService.object(r.snapshot(),"package"));}
+        catch(DraftFailure invalid){return "PACKAGE_INCOMPATIBLE";}
+        // Compatibility may wait on database locks; evaluate the deadline again afterward.
+        if(!store.now().isBefore(r.expires()))return "QUOTE_EXPIRED";
+        if(!store.now().isBefore(h.expires()))return "HOLD_EXPIRED";
+        return "ELIGIBLE";
+    }
+    Optional<com.cinenest.pricing.VerificationQuotation.Context> verificationContext(UUID actor,UUID id){
+        configured();return tx.execute(status->{
+            eligible(actor);
+            var found=store.quote(id,false).filter(q->q.owner().equals(actor));
+            if(found.isEmpty())return Optional.empty();
+            var q=found.get();publications.lock(q.venue(),q.pkg());
+            var h=holds.lockAndInspect(actor,q.hold()).orElse(null);q=owned(actor,id,true);
+            var r=store.revision(id,q.revision());
+            if(!verificationRefusal(q,r,h).equals("ELIGIBLE"))return Optional.empty();
+            return Optional.of(new com.cinenest.pricing.VerificationQuotation.Context(q.id(),q.owner(),q.venue()));
+        });
+    }
+    Map<String,Object> read(UUID actor,UUID id){configured();return tx.execute(status->{eligible(actor);var q=owned(actor,id,false);publications.lock(q.venue(),q.pkg());var h=holds.lockAndInspect(actor,q.hold()).orElse(null);q=owned(actor,id,true);return view(q,store.revision(id,q.revision()),h);});}
     private Map<String,Object> view(QuoteRepository.Quote q,QuoteRepository.Revision r,QuotationHolds.Facts h){
-        Instant now=store.now();String state=store.accepted(q.id()).filter(v->v==r.revision()).isPresent()?"ACCEPTED":!now.isBefore(r.expires())?"EXPIRED":!h.state().equals("ACTIVE")||h.revision()!=r.holdRevision()?"INVALIDATED":"ISSUED";
+        Instant now=store.now();String state=store.accepted(q.id()).filter(v->v==r.revision()).isPresent()?"ACCEPTED":!now.isBefore(r.expires())?"EXPIRED":h==null||!h.state().equals("ACTIVE")||h.revision()!=r.holdRevision()?"INVALIDATED":"ISSUED";
         if(state.equals("ISSUED"))try{compatible(h,PublicationService.object(r.snapshot(),"package"));}catch(DraftFailure invalid){state="INVALIDATED";}
-        var result=new LinkedHashMap<String,Object>(r.snapshot());result.put("quoteId",q.id());result.put("revision",r.revision());result.put("packageVersionId",r.version());result.put("expiresAt",r.expires());result.put("contentHash",r.hash());result.put("serverNow",now);result.put("state",state);return result;
+        String refusal=verificationRefusal(q,r,h);
+        var result=new LinkedHashMap<String,Object>(r.snapshot());result.put("quoteId",q.id());result.put("revision",r.revision());result.put("packageVersionId",r.version());result.put("expiresAt",r.expires());result.put("contentHash",r.hash());result.put("serverNow",store.now());result.put("state",state);
+        result.put("verificationHandoff",Map.of("eligible",refusal.equals("ELIGIBLE"),"reason",refusal));return result;
     }
 }

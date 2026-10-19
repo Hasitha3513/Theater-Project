@@ -2008,7 +2008,7 @@ def engagement_decision_main():
     if result==0: print('PASS engagement decision: exact owner deferral, brief-only closure, unchanged dependencies/full acceptance/test plans, historical receipts retained')
     return result
 
-def inert_ci_main():
+def historical_inert_ci_main():
     """Qualify the owner-authorized CI successor before immutable historical replay."""
     from unittest.mock import patch
     baseline = '14c4602b8b3a6002756fb1b04dd282c313a44c16'
@@ -2059,6 +2059,51 @@ def inert_ci_main():
         result = engagement_decision_main()
     if result == 0:
         print('PASS scoped CI successor: owned hashes, unchanged task/requirement/decision records, historical checks retained')
+    return result
+
+
+def inert_ci_main():
+    """Qualify the exact owner-authorized handoff successor before historical replay.
+
+    Existing receipts keep their original bytes. Only hash-qualified task sources
+    are projected back during replay; all other application/acceptance checks stay live.
+    """
+    from unittest.mock import patch
+    baseline = 'f3275e14b12d1818b151dab9b02a7d31a63dd967'
+    owned = {'backend/src/main/java/com/cinenest/pricing/VerificationQuotation.java': '7da4723f417d0d233a823602e693d58d5f7a06715ae1d374883b135893beb044', 'backend/src/main/java/com/cinenest/pricing/internal/QuoteService.java': '0515df8644d1a8497915c19b5f72143597a251d1ac7a8c583eaae58989c7f399', 'backend/src/main/java/com/cinenest/pricing/internal/VerificationQuotationAdapter.java': '05df3d34219778383dad05f39ee2cd1405817895779a26674dc8f38672d2fc75', 'backend/src/main/java/com/cinenest/verification/internal/VerificationService.java': '32c879d64cdd4f36dd26848a5c25d62545a3fae387dc140601260f9b4f1721c5', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '026c23634f32c2d7524dc2f2707f9fac6606cee9d9c87210f6b269b161232782', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java': 'fb12a6be7f35777a1419191bdad1f6fe514e04214bc299303c1043e060f95f13', 'backend/src/test/java/com/cinenest/pricing/internal/VerificationHandoffTest.java': '1e233dc625230abcf825bc8fc580ba81fb60835fae28b63579fb8fa25adeeece'}
+    errors=[]
+    for name,digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('Handoff successor source mismatch '+name)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name in ['execution/change-sets.json','execution/requirements.json','execution/test-plan.json','execution/status.json','execution/omissions.json','decisions/cinenest-open-decisions.json']:
+        if (K/name).read_bytes()!=prior('knowledge/'+name):errors.append('Handoff changed task/dependency/acceptance history '+name)
+    architecture=(K/'ARCHITECTURE.md').read_text()
+    if '<a id="verification-handoff-eligibility"></a>' not in architecture or '25561861-2c12-43de-a23d-de4f3e89c746' not in architecture:errors.append('Handoff owner authority missing')
+    progress=(K/'PROGRESS.md').read_text()
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Handoff promoted phase/demo acceptance')
+    if '<a id="verification-handoff-implementation"></a>' not in progress:errors.append('Handoff evidence missing')
+    added={'backend/src/test/java/com/cinenest/pricing/internal/VerificationHandoffTest.java'}
+    allowed=set(owned)|{'knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Handoff unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements={R/name:prior(name) for name in set(owned)-added}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode()
+            text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=historical_inert_ci_main()
+    if result==0:print('PASS handoff successor: exact owned source/owner approval; unchanged requirements, dependencies, phase/demo gates; historical integrity retained')
     return result
 
 

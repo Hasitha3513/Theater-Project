@@ -187,8 +187,99 @@ class VerificationIntegrationTest {
     String quotePath(Map<String,Object> q){return "/api/quotes/"+q.get("quoteId");}
 
 
+    Map<String,Object> acceptedQuote(Browser a)throws Exception{
+        var q=quote(a,issueRequest(a,held(a,request(a,local()))));
+        return json(write(a,"POST",quotePath(q)+"/accept",JSONObjectUtils.toJSONString(Map.of("expectedRevision",q.get("revision"),"contentHash",q.get("contentHash"),"disclosures",q.get("disclosures"),"idempotencyKey",UUID.randomUUID().toString()))));
+    }
+    String verificationBody(Map<String,Object> q){return JSONObjectUtils.toJSONString(Map.of("commandKey",UUID.randomUUID().toString(),"quoteId",q.get("quoteId"),"policyVersion","SYNTHETIC-V1","consent",true));}
+    @SuppressWarnings("unchecked") Map<String,Object> handoff(Browser a,Map<String,Object> q)throws Exception{return (Map<String,Object>)json(a.get(quotePath(q))).get("verificationHandoff");}
+    @Test void currentHandoffReadCannotAuthorizeLaterExpiredCommandOrReplay()throws Exception{
+        var a=signedIn("customer-a");var q=acceptedQuote(a);String body=verificationBody(q);
+        assertThat(handoff(a,q)).containsEntry("eligible",true);
+        var first=json(write(a,"POST","/api/verification/requests",body));
+        assertThat(json(write(a,"POST","/api/verification/requests",body))).isEqualTo(first);
+        expire(Map.of("holdId",q.get("holdId")));
+        assertThat(handoff(a,q)).containsEntry("eligible",false).containsEntry("reason","HOLD_EXPIRED");
+        assertThat(write(a,"POST","/api/verification/requests",body).statusCode()).isEqualTo(409);
+        assertThat(write(a,"POST",casePath(first)+"/uploads",JSONObjectUtils.toJSONString(Map.of("revision",0,"commandKey",UUID.randomUUID().toString(),"documentType","NIC"))).statusCode()).isEqualTo(409);
+        assertThat(json(a.get(quotePath(q))).get("state")).isEqualTo("ACCEPTED");
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_request").query(Integer.class).single()).isEqualTo(1);
+    }
+    @Test void issuedQuoteDirectSubmissionAndForeignOwnerAndMissingAreDenied()throws Exception{
+        var a=signedIn("customer-a");var b=signedIn("customer-b");var q=quote(a,issueRequest(a,held(a,request(a,local()))));
+        assertThat(handoff(a,q)).containsEntry("reason","QUOTE_NOT_ACCEPTED");
+        assertThat(write(a,"POST","/api/verification/requests",verificationBody(q)).statusCode()).isEqualTo(409);
+        var foreign=write(b,"POST","/api/verification/requests",verificationBody(q));
+        var absent=write(b,"POST","/api/verification/requests",verificationBody(Map.of("quoteId",UUID.randomUUID().toString())));
+        assertThat(foreign.statusCode()).isEqualTo(absent.statusCode()).isEqualTo(409);assertThat(foreign.body()).isEqualTo(absent.body()).doesNotContain(q.get("quoteId").toString());
+        assertThat(b.get(quotePath(q)).statusCode()).isEqualTo(404);assertThat(new Browser().get(quotePath(q)).statusCode()).isIn(401,403);
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_request").query(Integer.class).single()).isZero();
+    }
+    @Test void invalidationAfterReadPreventsCreateAndSuspensionDeniesRead()throws Exception{
+        var a=signedIn("customer-a");var q=acceptedQuote(a);assertThat(handoff(a,q)).containsEntry("eligible",true);
+        jdbc.sql("UPDATE cinenest_rooms.room SET enabled=FALSE WHERE room_id=:id").param("id",RID).update();
+        assertThat(handoff(a,q)).containsEntry("eligible",false);
+        assertThat(write(a,"POST","/api/verification/requests",verificationBody(q)).statusCode()).isEqualTo(409);
+        assertThat(json(a.get(quotePath(q))).get("state")).isEqualTo("ACCEPTED");
+        jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:id").param("id",A).update();
+        assertThat(a.get(quotePath(q)).statusCode()).isEqualTo(403);
+    }
+    @Test void ordinaryPublicationWithdrawalHonorsAcceptedFrozenQuote()throws Exception{
+        var a=signedIn("customer-a");var q=acceptedQuote(a);
+        var publication=jdbc.sql("SELECT publication_id,package_id,revision FROM cinenest_pricing.package_publication WHERE version_id=:id").param("id",UUID.fromString(q.get("packageVersionId").toString())).query().singleRow();
+        grantTo(B,VA,"package.deactivate");var publisher=signedIn("customer-b");
+        json(write(publisher,"POST",collection()+"/"+publication.get("package_id")+"/publications/"+publication.get("publication_id")+"/deactivate",JSONObjectUtils.toJSONString(Map.of("expectedRevision",publication.get("revision"),"reason","SYNTHETIC ordinary withdrawal","idempotencyKey",UUID.randomUUID().toString()))));
+        assertThat(handoff(a,q)).containsEntry("eligible",true);
+        assertThat(json(a.get(quotePath(q))).get("totalMinor")).isEqualTo(q.get("totalMinor"));
+        assertThat(write(a,"POST","/api/verification/requests",verificationBody(q)).statusCode()).isEqualTo(200);
+    }
+    @Test void completionCannotBypassInvalidationOrReplayWithStaleQuote()throws Exception{
+        var a=signedIn("customer-a");var r=allocate(a,createCase(a));
+        assertThat(upload(a,r.get("uploadId").toString(),IMAGE,"image/png").statusCode()).isEqualTo(200);
+        var q=json(a.get("/api/quotes/"+r.get("quoteId")));expire(Map.of("holdId",q.get("holdId")));
+        assertThat(write(a,"POST","/api/verification/uploads/"+r.get("uploadId")+"/complete",JSONObjectUtils.toJSONString(cmd(((Number)r.get("revision")).longValue()))).statusCode()).isEqualTo(409);
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_work").query(Integer.class).single()).isZero();
+    }
+    @Test void eligibilityWaitsForVenueMutationAndSeesCommittedInvalidation()throws Exception{
+        var a=signedIn("customer-a");var q=acceptedQuote(a);
+        try(var connection=DriverManager.getConnection(System.getenv("CINENEST_DB_URL"),System.getenv("CINENEST_DB_USER"),System.getenv("CINENEST_DB_PASSWORD"));var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+            connection.setAutoCommit(false);
+            try(var guard=connection.prepareStatement("SELECT venue_id FROM cinenest_rooms.venue WHERE venue_id=? FOR UPDATE")){guard.setObject(1,VA);guard.executeQuery().close();}
+            try(var change=connection.prepareStatement("UPDATE cinenest_rooms.room SET enabled=FALSE WHERE room_id=?")){change.setObject(1,RID);change.executeUpdate();}
+            var read=pool.submit(()->a.get(quotePath(q)));
+            // Observe a real database lock wait rather than assuming a sleep proves overlap.
+            boolean blocked=false;
+            for(int n=0;n<100;n++){
+                if(jdbc.sql("SELECT count(*) FROM pg_stat_activity WHERE pid<>pg_backend_pid() AND wait_event_type='Lock' AND query LIKE '%cinenest_rooms.venue%' ").query(Integer.class).single()>0){blocked=true;break;}
+                Thread.sleep(20);
+            }
+            connection.commit();
+            assertThat(blocked).isTrue();
+            @SuppressWarnings("unchecked") var eligibility=(Map<String,Object>)json(read.get(5,java.util.concurrent.TimeUnit.SECONDS)).get("verificationHandoff");
+            assertThat(eligibility).containsEntry("eligible",false);
+        }
+        assertThat(write(a,"POST","/api/verification/requests",verificationBody(q)).statusCode()).isEqualTo(409);
+    }
+    @Test void concurrentOriginalKeyCreatesOneCaseWithoutPaymentOrBookingSideEffects()throws Exception{
+        var a=signedIn("customer-a");var q=acceptedQuote(a);String body=verificationBody(q);
+        long commands=jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation_command").query(Long.class).single();
+        long bankRequests=jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Long.class).single();
+        long bookings=jdbc.sql("SELECT count(*) FROM cinenest_booking.booking").query(Long.class).single();
+        try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+            var first=pool.submit(()->write(a,"POST","/api/verification/requests",body));var second=pool.submit(()->write(a,"POST","/api/verification/requests",body));
+            assertThat(json(first.get()).get("id")).isEqualTo(json(second.get()).get("id"));
+        }
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_request").query(Integer.class).single()).isEqualTo(1);
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation_command").query(Long.class).single()).isEqualTo(commands);
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Long.class).single()).isEqualTo(bankRequests);
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking").query(Long.class).single()).isEqualTo(bookings);
+        assertThat(handoff(a,q)).containsEntry("eligible",true);
+        assertThat(json(a.get(quotePath(q)))).containsEntry("bookingConfirmed",false).containsEntry("checkoutEnabled",false);
+    }
+
     Map<String,Object> createCase(Browser customer)throws Exception{
         var h=held(customer,request(customer,local()));var q=quote(customer,issueRequest(customer,h));
+        json(write(customer,"POST",quotePath(q)+"/accept",JSONObjectUtils.toJSONString(Map.of("expectedRevision",q.get("revision"),"contentHash",q.get("contentHash"),"disclosures",q.get("disclosures"),"idempotencyKey",UUID.randomUUID().toString()))));
         return json(write(customer,"POST","/api/verification/requests",JSONObjectUtils.toJSONString(Map.of("commandKey",UUID.randomUUID().toString(),"quoteId",q.get("quoteId"),"policyVersion","SYNTHETIC-V1","consent",true))));
     }
     Map<String,Object> json(HttpResponse<String> response)throws Exception{assertThat(response.statusCode()).as(response.body()).isEqualTo(200);return JSONObjectUtils.parse(response.body());}
