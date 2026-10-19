@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "55dc3ae50e05605746725e56c188639c239acba73b947a51a38d3e2166b4e776",
+      "sha256": "a80192afda4ae53a80253053c7e89f95c9772ad4e660dca182e6ac211612a841",
       "authority": "canonical-prose"
     },
     {
@@ -418,7 +418,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "4fcbe2bf916e46e9ef956f087ed2ad09356583e8af64b3e00e87b0e47585e42f",
+      "sha256": "ea0c1d93f71678f825d40461eb362d6f64abbe01e007b0f394021b11d83a84bf",
       "authority": "canonical-prose"
     },
     {
@@ -565,7 +565,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "f0b537ee5910214ddb67c2c07d81e524feb769bb228515ced95ad9eb2f2539c3",
+      "sha256": "77a19969b0419cba2e0ce5724dc6b7a13e7f9f78d243cbebae84ac2c9d6339ec",
       "authority": "structured-asset-or-evidence"
     },
     {

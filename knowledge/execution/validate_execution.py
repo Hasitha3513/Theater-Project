@@ -2013,6 +2013,8 @@ def inert_ci_main():
     from unittest.mock import patch
     baseline = '14c4602b8b3a6002756fb1b04dd282c313a44c16'
     owned = {'.github/workflows/foundation.yml': 'cce9bf6b8231e2378e59ad705226004bb6429b89a6783abe0e4804e5fcfbeefb', 'scripts/ci-classify.py': '10ea359b7cf88a9a7121e081dc3c4b0ceb5abf5fc5b474dda1f12d821ccfe89b', 'scripts/test-ci-classify.py': '597d2f19408e020c05ae800c10a353a19a364f765e1e1f1de3961888da671786', 'scripts/test-governance-controls.py': 'b2fc80add6c6ee1c85eb884aa9b55ad953278f19f82210b46ee83cf0c1121f4e'}
+    # Owner-authorized inert successor; operational requirements remain blocked.
+    owned.update({'scripts/verify-recovery.py': '8637602691226a537ed25dc474038a5aac5b847d111b7ca788f6e087e9d23356', 'scripts/test-recovery.py': '0d25534a0d02f4b51552c1599973f24e2e88589cd73f4a238f761417b7ab1922'})
     errors = []
     for name, digest in owned.items():
         if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest() != digest:
@@ -2025,6 +2027,8 @@ def inert_ci_main():
     architecture = (K/'ARCHITECTURE.md').read_text()
     if '<a id="inert-ci-classification-boundary"></a>' not in architecture or 'dfa9fad1-83c9-490e-a77b-466160ed0a29' not in architecture:
         errors.append('CI successor approval missing')
+    if '<a id="inert-controller-implementation"></a>' not in architecture or '1c8b4f41-9c1e-4ea2-a923-94b2a6afdc71' not in architecture:
+        errors.append('Inert controller implementation authority missing')
     allowed = set(owned) | {'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/manifest.json',
                            'knowledge/execution/validate_execution.py', 'frontend/next-env.d.ts'}
     changed = set(subprocess.check_output(['git', '-C', str(R), 'diff', baseline, '--name-only'], text=True).splitlines())
