@@ -1820,6 +1820,10 @@ def ops_implementation_main():
         if key in task:expected[key]=task[key]
     require(actual==old,'Operations altered unrelated task/history/dependency/scope')
     evidence=json.loads((K/'execution/status.json').read_text())['opsImplementation']
+    current_status=json.loads((K/'execution/status.json').read_text());prior_status=json.loads(prior('knowledge/execution/status.json'))
+    current_status.pop('opsImplementation',None)
+    current_status['nextAction']=prior_status['nextAction']
+    require(current_status==prior_status,'Operations altered unrelated execution history/status')
     authority=task['implementationAuthorization']
     require(isinstance(authority,dict) and authority.get('scope')=='GRANTED_BOUNDED_SYNTHETIC_TURNOVER' and authority.get('requestSha256')=='37a415aef1afc807e560e327072c007ade759da881c8de863710be2788a6f2d3','Operations implementation authority invalid')
     require(task['authorityAvailable'] and task['remainingReadinessGates']==[] and authority==evidence['authority'],'Operations readiness gates mismatched')

@@ -519,7 +519,7 @@
       "boundedOperationsImplementationEvidence": {
         "changeSetId": "CN-OPS-001",
         "scope": "Synthetic turnover/checklist/linked exceptions only; physical readiness UNVERIFIED, occupancy UNKNOWN, inventory unchanged",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
@@ -734,7 +734,7 @@
       "boundedOperationsImplementationEvidence": {
         "changeSetId": "CN-OPS-001",
         "scope": "Synthetic turnover/checklist/linked exceptions only; physical readiness UNVERIFIED, occupancy UNKNOWN, inventory unchanged",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
@@ -764,7 +764,7 @@
       "boundedOperationsImplementationEvidence": {
         "changeSetId": "CN-OPS-001",
         "scope": "Synthetic turnover/checklist/linked exceptions only; physical readiness UNVERIFIED, occupancy UNKNOWN, inventory unchanged",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }
@@ -1122,7 +1122,7 @@
       "boundedOperationsImplementationEvidence": {
         "changeSetId": "CN-OPS-001",
         "scope": "Synthetic turnover/checklist/linked exceptions only; physical readiness UNVERIFIED, occupancy UNKNOWN, inventory unchanged",
-        "status": "IN_PROGRESS",
+        "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
       }

@@ -13,7 +13,7 @@
   "currentChangeSet": "CN-IOT-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-OPS-001",
-  "nextAction": "Finish CN-OPS-001 verification and exact-source CI before bounded closure",
+  "nextAction": "Read-only review CN-REPORT-001 bounded bank-only scope, OD-16 and required gateway dependency amendment",
   "nextReadyChangeSet": null,
   "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
   "approvedCoreDecisions": [
@@ -3610,7 +3610,7 @@
       "requestSha256": "37a415aef1afc807e560e327072c007ade759da881c8de863710be2788a6f2d3",
       "scope": "GRANTED_BOUNDED_SYNTHETIC_TURNOVER"
     },
-    "workStatus": "IN_PROGRESS",
+    "workStatus": "VERIFIED",
     "physicalOccupancy": "UNKNOWN",
     "physicalReadiness": "UNVERIFIED",
     "realOperations": "DISABLED",
@@ -3651,7 +3651,7 @@
       "launchers": "PASS",
       "governance": "PASS"
     },
-    "sourceCI": "PENDING",
+    "sourceCI": "SUCCESS",
     "localEvidence": {
       "backendTests": 366,
       "postgresql": "18.6 clean V1–V17, populated V16–V17, repeat, HTTP and actual process restart",
@@ -3672,6 +3672,8 @@
       "primaryExecution": "Two known unrelated next-env integrity findings",
       "isolatedExecution": "PASS",
       "limitations": "Synthetic only; no physical/customer/production acceptance; no screen-reader or WCAG certification"
-    }
+    },
+    "sourceCommit": "4d5b98e7561f6397ab7a167b67ed9151b8b382d7",
+    "sourceCiUrl": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39197922110"
   }
 }

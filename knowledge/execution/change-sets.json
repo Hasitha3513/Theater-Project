@@ -1340,9 +1340,11 @@
       "definitionOfDone": "Physical readiness requires accountable evidence and staff",
       "requiredApproval": "Slice + staffing/readiness/escalation policy approval",
       "authorityAvailable": true,
-      "readiness": "READY",
-      "workStatus": "IN_PROGRESS",
-      "evidencePaths": [],
+      "readiness": "CLOSED",
+      "workStatus": "VERIFIED",
+      "evidencePaths": [
+        "PROGRESS.md#ops-implementation"
+      ],
       "resolvedDecisionIds": [
         "OD-04",
         "OD-10"
