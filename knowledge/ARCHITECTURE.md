@@ -1232,9 +1232,26 @@ Future implementation scope must enumerate exact owned schema/API/UI, migration/
 [Owner decision](PROJECT.md#engagement-execution-deferral) selects the registered OD-08 option “Defer feature” separately for loyalty, referrals and promotions. OD-08 is APPROVED only for initial-commercial-release execution deferral; implementationStatus remains NOT_VERIFIED and future reward/discount policies remain unapproved. Original question, evidence requirements and feature-launch blocker are preserved: reactivation still requires product/finance rules and abuse/reversal evidence. No engagement module/schema/API/UI or provider is introduced. CN-ENG-001 closes its decision brief only; no operational acceptance follows. Existing dependency edges are unchanged. [Closure evidence](PROGRESS.md#engagement-decision-closure).
 
 <a id="synthetic-recovery-qualification-plan"></a>
-## CN-NFR-04 synthetic recovery qualification plan — PROPOSED, 2026-10-19
+## CN-NFR-04 synthetic recovery qualification plan — SCOPE APPROVED, EXECUTION NOT AUTHORIZED
 
 Owner authorizes documentation preparation only under existing CN-ACCEPT-001. No backup, restore, container provisioning, fixture mutation, recovery script creation/execution or application startup is authorized here. No production provider, policy, retention period or numerical RPO/RTO is selected. CN-NFR-04 remains BLOCKED / NOT_VERIFIED / NOT_ACCEPTED; T-CN-NFR-04 NOT_RUN; CN-ACCEPT-001 BLOCKED. Exact requirement: “Defined recovery objectives and actual isolated restore/failover evidence, not backup existence alone.” [Preparation/evidence status](PROGRESS.md#synthetic-recovery-preparation). PROJECT continues to own business, finance and privacy rules; this proposal cannot supersede them.
+
+### Owner scope approval and readiness boundary — 2026-10-19
+
+Superseding authority: current owner attachment “CN-ACCEPT-001 — CN-NFR-04 Synthetic Backup/Restore Qualification Scope Approval and Readiness Reconciliation”, SHA-256 550d1cfea92f8227be77ec31d3a1c839b06330313ad679b231d671b8100c8ac3. Owner explicitly selects “Record approvals and reassess readiness only.” The preceding preparation-only statement is retained as history; this approval covers the existing test specification,isolated synthetic source/target controls,logical archive method,coordinated database/evidence/key coverage,financial/domain reconciliation,16-case matrix,evidence and safety/cleanup design only. It grants no tooling implementation,container/database creation,backup/restore execution or production operation. [Execution reconciliation](PROGRESS.md#synthetic-recovery-scope-approval).
+
+Approved data coverage: Identity,Rooms/Pricing packages,Booking,Verification,Payments-owned refunds,Access,Notifications,IoT and Rooms-owned Operations,including protected evidence,immutable histories,idempotency,durable work/audit and ownership. The approved arithmetic check is uncommitted synthetic balance F=C−A−T−R with source eligibility/disputes still restricting availability. No duplicate allocations/returns,blind UNKNOWN retries,uncertain-to-success conversion or audit deletion. Booking recovery includes purchased revisions1/2,amendments,holds/expiry and venue/room binding; Access expiry/revocation/UNKNOWN/provisioning history must not reveal/regenerate secrets. Notification inbox/read/replay,IoT assignment/TTL/stale/desired-ACK-observed distinctions and operational checklist/exception/audit checks remain mandatory. No physical occupancy/readiness determination or real bank/ID/notification/device behavior is approved. The matrix below is APPROVED AS TEST DESIGN ONLY; all16 cases NOT_RUN.
+
+| Stage | Current status / evidence boundary |
+|---|---|
+| A Scope/method/test design approved | APPROVED by this owner instruction; includes logical archive for the bounded synthetic test only |
+| B Tooling implementation authorized | NOT_GRANTED; no recovery script/tool implementation |
+| C Backup/restore execution authorized | NOT_GRANTED; no source/target database/container creation,backup,restore or destructive commands |
+| D Tests executed | NOT_RUN for all proposed recovery scenarios |
+| E Recovery evidence reviewed | NOT_AVAILABLE; document consistency checks are not recovery results |
+| F Full requirement accepted | NOT_VERIFIED / NOT_ACCEPTED;T-CN-NFR-04 NOT_RUN;CN-ACCEPT-001 BLOCKED |
+
+Concrete prerequisites still pending: reviewed synthetic fixture identities and expected state manifest; exact disposable run resource boundaries and identity/provenance refusal checks; restricted bootstrap/backup/restore/runtime role/grant specification; test-key generation/separation/recovery/disposal custody; approved evidence location/redaction and named technical reviewer/authority; exact ownership-checked cleanup and failure custody authorization; separate explicit tooling implementation and backup/restore execution authorization. Approval of their design is not approval of unspecified actual resources,permissions or cleanup targets. No task edge is amended or registered task marked READY. Numerical recovery targets are not required merely to prepare the scope; any future exploratory measurement needs its own authority and cannot establish full recovery acceptance.
 
 ### Existing capability assessment
 
@@ -1273,13 +1290,13 @@ Use one whole synthetic database snapshot, including schema/data, sequences, con
 
 The future fixture must exercise real existing transitions with synthetic facts rather than disabling integrity triggers to manufacture passing data. Preserve causal IDs, revisions, timestamps, audits, immutable history and command results. Record outstanding work/leases before the cut. Freeze all synthetic writers/workers while capturing the database, encrypted objects and a canonical per-object/table manifest at one agreed cut; database snapshot consistency alone does not make filesystem contents consistent. Cross-reference every live evidence object/preview and hash; missing or mismatched blobs fail qualification. Exercise the actual configured Access protection/key requirements discovered from its implementation. Generate ephemeral test keys; keep key material separate from archives/logs/Git, with only opaque test key references in evidence. Loss/wrong key must fail closed. Restoring the database alone is not full-fixture recovery.
 
-### Isolated environment and backup choices — proposed only
+### Isolated environment and backup choices — approved bounded design; concrete run details pending
 
 Future execution requires explicit approval of a run-specific resource allowlist: independent source/target containers and local database names cinenest_recovery_source_<run-id> and cinenest_recovery_target_<run-id> (templates, not existing or production names), image/client digests, isolated network, encrypted-evidence roots, archive path and generated credentials. Reuse the qualified PostgreSQL18.6 line/digest initially; this is not an upgrade. Record source/target container IDs, labels, database identity, server identity and distinct addresses; reject any target/source identity collision. Names, localhost or a “synthetic” flag alone do not prove isolation. Accept only resources created/attested for this run; reject inherited development/production DSNs, credentials, provider tokens and external endpoints. No shared volumes, workstation-wide exposure or real outbound connectivity. Controlled local synthetic identity simulator only if specifically included in execution approval.
 
 | Approach | Qualification choice / limitation |
 |---|---|
-| Whole-database logical archive | Recommended candidate for this bounded fixture, not approved execution or production strategy: PostgreSQL18 pg_dump custom archive, complete schema/data and explicit snapshot identity; no selective omission. Roles/tablespaces are not captured as cluster globals by a single-database dump. See [official pg_dump](https://www.postgresql.org/docs/18/app-pgdump.html). |
+| Whole-database logical archive | Owner-approved logical archive method for this bounded synthetic test design; execution and production strategy NOT APPROVED: PostgreSQL18 pg_dump custom archive, complete schema/data and explicit snapshot identity; no selective omission. Roles/tablespaces are not captured as cluster globals by a single-database dump. See [official pg_dump](https://www.postgresql.org/docs/18/app-pgdump.html). |
 | Filesystem/physical base backup | Alternative for separate operational qualification; cannot copy arbitrary live database files as a valid backup. Cluster/version/storage requirements and startup recovery need their own reviewed procedure. |
 | Base backup plus WAL/PITR | Future production option if approved recovery objectives require it; WAL continuity, storage, keys, target time and external effects reconciliation are separate qualifications. Not established by a logical archive test. See [PostgreSQL backup approaches](https://www.postgresql.org/docs/18/backup.html). |
 
@@ -1287,7 +1304,7 @@ For the candidate logical test, compare exact server/client versions, encoding/l
 
 Compression is not encryption. Candidate archive and companion evidence need restricted permissions, encryption at rest/in transit as applicable, separate key custody, authenticated identity/provenance and a cryptographic checksum. Inspect trusted archive contents as well as metadata: restoring a dump executes source-controlled code. Archive file creation, checksum or table-of-contents inspection alone does not establish completeness/restorability. Proposed [pg_restore](https://www.postgresql.org/docs/18/app-pgrestore.html) single-transaction/exit-on-error behavior should be evaluated for the small isolated fixture; no clean/create/drop against an existing shared database, no trigger disabling or error-ignore shortcut. Encryption mechanism, production storage provider, retention and production role model remain unselected.
 
-### Proposed procedure — NOT EXECUTED
+### Approved procedure design — NOT AUTHORIZED FOR EXECUTION
 
 1. Obtain separate bounded execution authority and the run resource/configuration allowlist; attest synthetic source provenance. Inventory exact migration/application hashes, roles/extensions and external evidence/key requirements. Sanitize inherited environment; no real data or credentials.
 2. Create only approved disposable resources; source/target identities must differ from each other and all active environments. Build the reviewed synthetic fixture; disable dispatch/automatic workers and all real integrations before capture. Quiesce writers, define recovery cut and inventory pending work.
@@ -1312,7 +1329,7 @@ Booking: same immutable purchased snapshots/current accepted revision, amendment
 
 Notifications: retain event/intent/inbox ownership/read state, unique command/work/attempt identities; completed items must not redeliver and uncertain attempts must follow existing reconciliation semantics, never invented provider success. IoT: preserve assignments/command/receipt/observation history; expired/stale revision commands cannot execute, UNKNOWN stays uncertain, ACK differs from observation. Operations: checklist/case/entry/receipt/audit and assignments/exceptions survive; restored assertions never establish occupancy, readiness or physical acceptance. Preserve domain ownership; recovery checks may compare existing trusted source facts but do not introduce cross-module operational writes.
 
-### Proposed failure matrix — ALL NOT_RUN
+### Approved failure-test design matrix — ALL NOT_RUN
 
 Shared setup S: approved isolated whole-domain synthetic fixture at the captured cut, manifest/key references, empty disposable target, exact build/image/client versions and outbound effects disabled. Evidence E: redacted commands/results, pre/post hashes/counts/keyed assertions, timestamps, failure reason, reviewer and resource IDs; never dump rows/secrets. Cleanup C: quarantine failure, stop only run-owned resources, retain permitted evidence and apply reviewed disposal rules. Each row inherits S/E/C; its delta is explicit below.
 
@@ -1353,4 +1370,19 @@ Record run ID/authority, exact source commit/application and image/client versio
 | Ownership | Name recovery operator, evidence custodian, technical reviewer and applicable finance/privacy reviewers with accepted authority; existing management roles alone do not fill specialist gaps. |
 | Evidence acceptance | Agree fixture/run matrix, reconciliation tolerances (no unexplained financial difference), duration boundary, reviewer and pass/fail rules; full requirement acceptance remains independent. |
 
-Next execution gate: explicit approval of this bounded method, resource/fixture/configuration/role/key/cleanup scope and separate permission to create/run recovery tooling and execute synthetic backup/restore. Numerical commercial RPO/RTO, provider/storage/retention and privacy decisions remain separate; if unselected, any authorized exploratory run reports observations only and cannot pass full T-CN-NFR-04. Do not mark the whole CN-ACCEPT-001 READY: its three hard dependencies are VERIFIED/CLOSED, but OD-02/03/05/15 and qualified physical/business/legal/integrated-test gates remain. CN-NFR-04 also references OD-01/05. D0 reviewer/scheduling and PayHere do not block preparing this plan; their acceptance obligations and all graph edges are preserved. Full failover/PITR, production backup security, external-effect reconciliation, specialist/venue/customer and launch evidence remain unqualified.
+Next execution gate: this bounded method/test design is approved; concrete resource/fixture/configuration/role/key/evidence/reviewer/cleanup specifications still need approval,followed by separate permission to implement recovery tooling and execute synthetic backup/restore. Numerical commercial RPO/RTO, provider/storage/retention and privacy decisions remain separate; if unselected, any authorized exploratory run reports observations only and cannot pass full T-CN-NFR-04. Do not mark the whole CN-ACCEPT-001 READY: its three hard dependencies are VERIFIED/CLOSED, but OD-02/03/05/15 and qualified physical/business/legal/integrated-test gates remain. CN-NFR-04 also references OD-01/05. D0 reviewer/scheduling and PayHere do not block preparing this plan; their acceptance obligations and all graph edges are preserved. Full failover/PITR, production backup security, external-effect reconciliation, specialist/venue/customer and launch evidence remain unqualified.
+
+
+### Exact owner questions still unanswered for recovery objectives
+
+These questions request future decisions; none is answered or approved by scope approval:
+
+1. What committed-data loss is acceptable (RPO),measured from which recovery cut,for which data classes,and how must post-cut financial/authorization obligations be reconciled?
+2. What end-to-end recovery time (RTO) is acceptable,starting at which incident/declaration point and ending at which secure,reconciled service-readiness criteria? Should restore-only duration also be reported separately?
+3. What backup frequency,allowed operating window,verification cadence and missed-backup escalation should apply?
+4. What retention/generation policy,deletion/legal-hold handling and encryption-key recovery lifetime is approved,subject to qualified privacy/finance review?
+5. Which recovery/storage environment,provider/region,access/custody and encryption controls are approved for later staging/production? No production storage choice is supplied now.
+6. Who accepts recovery operator,evidence-custodian,technical-reviewer and applicable specialist responsibilities,and what review/pass/fail authority does each hold?
+7. What production recovery limits,external-effect reconciliation and commercial failover requirements apply,and which physical/WAL/PITR qualifications would be required separately?
+
+Measured synthetic restore duration may later be recorded as an observation only; it must never become an approved production RTO by implication.
