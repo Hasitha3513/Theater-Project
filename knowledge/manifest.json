@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "735d0538fe03456316de5ff99620933da921f4481c0f977998c4891e79d97db1",
+      "sha256": "f47053c78ddf7e1487ab95151ccbfde1427937bf0cf82248f374312e55fa7ce4",
       "authority": "canonical-prose"
     },
     {
@@ -418,7 +418,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "3989414d536647c88f7e0bb3189d3e5da3ec5db766f9e422f95a1785024155ff",
+      "sha256": "141e53e35d2cbe56ba143b1ce299504817295b459aef229bbd7129af9d5c5bb0",
       "authority": "canonical-prose"
     },
     {
