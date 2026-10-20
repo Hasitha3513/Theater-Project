@@ -11,6 +11,7 @@ import {
 import { Button, Card, Field, SelectField, StateMessage } from "./primitives";
 import { HandoffStatus, useQuoteHandoff } from "./quote-handoff";
 import { QuoteSummary } from "./quotes";
+import { BankContinuation } from "./bank-handoff";
 export function VerificationNotice() {
 	return (
 		<>
@@ -406,6 +407,12 @@ export function VerificationWorkspace({
 			{value && (
 				<>
 					<VerificationSummary value={value} />
+					{!reviewer && !busy && (
+						<BankContinuation
+							key={`${value.quoteId}:${value.revision}`}
+							reference={value.quoteId}
+						/>
+					)}
 					{!reviewer && !value.superseded && (
 						<>
 							<SelectField

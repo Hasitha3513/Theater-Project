@@ -1,6 +1,7 @@
 // Dedicated bounded binary transport. Existing JSON adapters remain unchanged.
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
+	if (path === "/api/bank/requests/readiness") return method === "GET";
 	if (
 		new RegExp(
 			`^/api/admin/venues/${uuid}/reports/synthetic-bank-balances$`,
@@ -173,6 +174,16 @@ export async function forwardBank(request: Request): Promise<Response> {
 	});
 	try {
 		const url = new URL(request.url);
+		const readiness = url.pathname === "/api/bank/requests/readiness";
+		const validReadiness =
+			readiness &&
+			request.method === "GET" &&
+			[...url.searchParams.keys()].length === 1 &&
+			url.searchParams.getAll("quote").length === 1 &&
+			new RegExp(`^${uuid}$`, "i").test(url.searchParams.get("quote") ?? "");
+		if (readiness && !validReadiness)
+			return new Response(null, { status: 400, headers });
+		if (readiness) headers.set("Cache-Control", "private, no-store");
 		const accessPage =
 			(new RegExp(`^/api/admin/venues/${uuid}/access/credentials$`).test(
 				url.pathname,
@@ -189,7 +200,10 @@ export async function forwardBank(request: Request): Promise<Response> {
 			request.method === "GET" &&
 			[...url.searchParams.keys()].every((k) => ["page", "size"].includes(k)) &&
 			[...url.searchParams.values()].every((v) => /^\d{1,5}$/.test(v));
-		if (!bankRoute(url.pathname, request.method) || (url.search && !accessPage))
+		if (
+			!bankRoute(url.pathname, request.method) ||
+			(url.search && !accessPage && !validReadiness)
+		)
 			return new Response(null, { status: 404, headers });
 		const configured = process.env.CINENEST_AUTH_ORIGIN;
 		if (!configured) return new Response(null, { status: 503, headers });

@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { bankLabels, type BankRequest, validateBank } from "../lib/bank";
 import { roomRequest, RoomRequestError } from "../lib/rooms";
 import { Button, Card, Field, SelectField } from "./primitives";
+import { BankRequestCreation } from "./bank-handoff";
 export function BankNotice() {
 	return (
 		<aside aria-label="Synthetic bank safety">
@@ -64,8 +65,24 @@ export function BankSummary({ value: v }: { value: BankRequest }) {
 					units · received {c.receivedAt}
 				</p>
 			))}
-			{v.financial ? <section aria-label="Synthetic financial status"><h3>SYNTHETIC TEST — NO REAL MONEY</h3><p>{v.financial.syntheticFundingStatus} · {v.financial.syntheticBookingStatus}</p><p>Allocated LKR {v.financial.allocatedMinor} minor units · Outstanding LKR {v.financial.outstandingMinor} minor units</p><p>Commercial payment and confirmation remain disabled. Access is not provisioned.</p></section> : null}
-<h3>Receipt evidence</h3>
+			{v.financial ? (
+				<section aria-label="Synthetic financial status">
+					<h3>SYNTHETIC TEST — NO REAL MONEY</h3>
+					<p>
+						{v.financial.syntheticFundingStatus} ·{" "}
+						{v.financial.syntheticBookingStatus}
+					</p>
+					<p>
+						Allocated LKR {v.financial.allocatedMinor} minor units · Outstanding
+						LKR {v.financial.outstandingMinor} minor units
+					</p>
+					<p>
+						Commercial payment and confirmation remain disabled. Access is not
+						provisioned.
+					</p>
+				</section>
+			) : null}
+			<h3>Receipt evidence</h3>
 			{v.evidence.length ? (
 				v.evidence.map((e) => (
 					<p key={e.id}>
@@ -94,13 +111,16 @@ export function BankSummary({ value: v }: { value: BankRequest }) {
 		</>
 	);
 }
-export function BankWorkspace({ reviewer = false }: { reviewer?: boolean }) {
+export function BankWorkspace({
+	reviewer = false,
+	initialQuoteId = "",
+}: {
+	reviewer?: boolean;
+	initialQuoteId?: string;
+}) {
 	const [handoverTo, setHandoverTo] = useState("");
 	const [venue, setVenue] = useState(""),
 		[requestId, setRequestId] = useState(""),
-		[quote, setQuote] = useState(""),
-		[quoteRevision, setQuoteRevision] = useState(""),
-		[hash, setHash] = useState(""),
 		[amount, setAmount] = useState(""),
 		[paid, setPaid] = useState(""),
 		[reference, setReference] = useState(""),
@@ -123,7 +143,7 @@ export function BankWorkspace({ reviewer = false }: { reviewer?: boolean }) {
 		},
 		[preview],
 	);
-	function clear() {
+	const clear = useCallback(() => {
 		epoch.current++;
 		setValue(undefined);
 		setItems(undefined);
@@ -131,7 +151,15 @@ export function BankWorkspace({ reviewer = false }: { reviewer?: boolean }) {
 		setPreview(undefined);
 		pending.current = undefined;
 		if (input.current) input.current.value = "";
-	}
+	}, []);
+	const created = useCallback(
+		(result: BankRequest) => {
+			clear();
+			setValue(result);
+			setRequestId(result.id);
+		},
+		[clear],
+	);
 	const prefix = reviewer
 		? `/api/admin/venues/${venue}/bank/requests`
 		: "/api/bank/requests";
@@ -279,49 +307,12 @@ export function BankWorkspace({ reviewer = false }: { reviewer?: boolean }) {
 						))}
 					</>
 				) : (
-					<>
-						<Field
-							id="bank-quote"
-							label="Accepted synthetic BANK quote ID"
-							value={quote}
-							onChange={(e) => {
-								clear();
-								setQuote(e.target.value);
-							}}
-						/>
-						<Field
-							id="bank-quote-revision"
-							label="Accepted quote revision"
-							value={quoteRevision}
-							onChange={(e) => {
-								clear();
-								setQuoteRevision(e.target.value);
-							}}
-						/>
-						<Field
-							id="bank-hash"
-							label="Accepted content hash"
-							value={hash}
-							onChange={(e) => {
-								clear();
-								setHash(e.target.value);
-							}}
-						/>
-						<Button
-							busy={busy}
-							onClick={() =>
-								run(async () => {
-									await command(prefix, {
-										quoteId: quote,
-										quoteRevision,
-										contentHash: hash,
-									});
-								})
-							}
-						>
-							Create synthetic request
-						</Button>
-					</>
+					<BankRequestCreation
+						key={initialQuoteId}
+						reference={initialQuoteId}
+						onCreated={created}
+						onDenied={clear}
+					/>
 				)}
 				<Field
 					id="bank-request"

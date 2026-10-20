@@ -111,6 +111,37 @@ try {
 	await page.route("**/api/**", async (route) => {
 		const request = route.request(),
 			path = new URL(request.url()).pathname;
+		if (path === "/api/bank/requests/readiness")
+			return route.fulfill({
+				json: {
+					quoteId: id,
+					quoteRevision: 1,
+					contentHash: "a".repeat(64),
+					quoteExpiresAt: "2026-10-20T10:00:00Z",
+					quoteSummary: {
+						currency: "LKR",
+						totalMinor: "7",
+						paymentMethod: "BANK",
+						sessionStart: "2026-10-21T04:30:00Z",
+						sessionEnd: "2026-10-21T07:30:00Z",
+						timezone: "Asia/Colombo",
+						packageName: "SYNTHETIC",
+					},
+					verificationReadiness: "REQUIRED",
+					eligible: false,
+					reason: "VERIFICATION_REQUIRED",
+					serverNow: "2026-10-20T04:30:00Z",
+					synthetic: true,
+					paymentVerified: false,
+					bookingConfirmed: false,
+					labels: [
+						"SYNTHETIC BANK-PAYMENT TEST",
+						"DO NOT TRANSFER REAL MONEY",
+						"PAYMENT NOT VERIFIED",
+						"BOOKING NOT CONFIRMED",
+					],
+				},
+			});
 		let result = value;
 		if (path === "/api/session/csrf")
 			return route.fulfill({ json: { token: "SYNTHETIC-CSRF" } });

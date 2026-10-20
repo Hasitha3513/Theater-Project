@@ -173,3 +173,269 @@ test("same-origin CSRF and accepted image MIME are required before forwarding", 
 		else delete process.env.CINENEST_AUTH_ORIGIN;
 	}
 });
+
+// CN-UI-FLOW-002: protected-context transport contracts, not real-bank acceptance.
+import {
+	bankHref,
+	bankReadinessReasons,
+	validateBankContext,
+	loadBankContext,
+	bankCreationBody,
+	bankCreationResult,
+} from "../lib/bank-handoff.ts";
+import {
+	BankContextSummary,
+	BankRequestCreation,
+} from "../components/bank-handoff.tsx";
+const readiness = () => ({
+	quoteId: id,
+	quoteRevision: 3,
+	contentHash: "a".repeat(64),
+	quoteExpiresAt: "2026-10-20T10:00:00Z",
+	quoteSummary: {
+		currency: "LKR",
+		totalMinor: "12352",
+		paymentMethod: "BANK",
+		sessionStart: "2026-10-21T04:30:00Z",
+		sessionEnd: "2026-10-21T07:30:00Z",
+		timezone: "Asia/Colombo",
+		packageName: "SYNTHETIC package",
+	},
+	verificationReadiness: "ELIGIBLE",
+	eligible: true,
+	reason: "ELIGIBLE",
+	serverNow: "2026-10-20T04:30:00Z",
+	synthetic: true,
+	paymentVerified: false,
+	bookingConfirmed: false,
+	labels: bankLabels,
+});
+test("bank context validates exact server binding, known refusal and synthetic truth", () => {
+	const v = readiness();
+	assert.equal(validateBankContext(v, id), v);
+	for (const reason of Object.keys(bankReadinessReasons))
+		assert.equal(
+			validateBankContext(
+				{
+					...v,
+					reason,
+					eligible: reason === "ELIGIBLE",
+					verificationReadiness:
+						reason === "VERIFICATION_REQUIRED" ? "REQUIRED" : "ELIGIBLE",
+				},
+				id,
+			).reason,
+			reason,
+		);
+	for (const change of [
+		{ quoteId: crypto.randomUUID() },
+		{ quoteRevision: -1 },
+		{ contentHash: "invalid" },
+		{ eligible: false },
+		{ reason: "UNKNOWN" },
+		{ verificationReadiness: "REQUIRED" },
+		{ synthetic: false },
+		{ bookingConfirmed: true },
+		{ paymentVerified: true },
+		{ labels: [] },
+		{ quoteSummary: { ...v.quoteSummary, currency: "USD" } },
+	])
+		assert.throws(() => validateBankContext({ ...v, ...change }, id));
+});
+test("bank navigation contains only an opaque reference and rendered context has no editable hash", () => {
+	const v = readiness();
+	const url = new URL(bankHref(id), "https://example.test");
+	assert.deepEqual([...url.searchParams.keys()], ["quote"]);
+	assert.equal(url.pathname, "/bank");
+	assert.throws(() => bankHref("invalid"));
+	const html = render(
+		h(BankContextSummary, { value: { ...v, venueId: id, roomId: id } }),
+	);
+	assert.match(html, /SYNTHETIC package/);
+	assert.match(html, /123.52/);
+	assert.doesNotMatch(html, /a{64}|contentHash|identity evidence/);
+	const shell = render(
+		h(BankRequestCreation, {
+			reference: id,
+			onCreated: () => {},
+			onDenied: () => {},
+		}),
+	);
+	assert.doesNotMatch(
+		shell,
+		/bank-hash|bank-quote-revision|Pay now|Confirm booking/,
+	);
+});
+test("readiness proxy forwards only one UUID lookup, one session cookie and no client authority", async () => {
+	const prior = process.env.CINENEST_AUTH_ORIGIN,
+		original = globalThis.fetch;
+	process.env.CINENEST_AUTH_ORIGIN = "https://backend.example.test";
+	let seen;
+	globalThis.fetch = async (url, init) => {
+		seen = { url: String(url), init };
+		return Response.json(readiness());
+	};
+	try {
+		const response = await forwardBank(
+			new Request(
+				`https://frontend.example.test/api/bank/requests/readiness?quote=${id}`,
+				{
+					headers: {
+						cookie: "CINENEST_SESSION=SYNTHETIC; other=PRIVATE",
+						authorization: "DO_NOT_FORWARD",
+					},
+				},
+			),
+		);
+		assert.equal(response.status, 200);
+		assert.match(response.headers.get("cache-control"), /private.*no-store/);
+		assert.equal(
+			seen.url,
+			`https://backend.example.test/api/bank/requests/readiness?quote=${id}`,
+		);
+		assert.equal(seen.init.headers.get("cookie"), "CINENEST_SESSION=SYNTHETIC");
+		assert.equal(seen.init.headers.get("authorization"), null);
+		assert.equal(seen.init.method, "GET");
+		for (const suffix of [
+			"",
+			`?quote=bad`,
+			`?quote=${id}&quote=${id}`,
+			`?quote=${id}&eligible=true`,
+			`?quote=${id}&contentHash=SECRET`,
+		])
+			assert.equal(
+				(
+					await forwardBank(
+						new Request(
+							`https://frontend.example.test/api/bank/requests/readiness${suffix}`,
+						),
+					)
+				).status,
+				400,
+			);
+		assert.equal(bankRoute("/api/bank/requests/readiness", "POST"), false);
+	} finally {
+		globalThis.fetch = original;
+		if (prior) process.env.CINENEST_AUTH_ORIGIN = prior;
+		else delete process.env.CINENEST_AUTH_ORIGIN;
+	}
+});
+test("authoritative readiness supplies POST revision/hash without automatic submission", async () => {
+	const original = globalThis.fetch;
+	const calls = [];
+	globalThis.fetch = async (path, init) => {
+		calls.push({ path, init });
+		return Response.json(readiness());
+	};
+	try {
+		const loaded = await loadBankContext(id, false);
+		assert.equal(calls.length, 1);
+		assert.match(calls[0].path, /readiness\?quote=/);
+		assert.equal(calls[0].init.cache, "no-store");
+		assert.equal(calls[0].init.method, undefined);
+		const body = bankCreationBody(loaded, id);
+		assert.equal(body.quoteRevision, 3);
+		assert.equal(body.contentHash, "a".repeat(64));
+		assert.deepEqual(Object.keys(body), [
+			"quoteId",
+			"quoteRevision",
+			"contentHash",
+			"commandKey",
+		]);
+		assert.throws(() => bankCreationBody({ ...loaded, eligible: false }, id));
+		assert.throws(() =>
+			bankCreationResult({ ...value, quoteId: crypto.randomUUID() }, id),
+		);
+		assert.equal(calls.length, 1);
+		for (const invalid of ["", "bad", `${id}&hash=SECRET`])
+			await assert.rejects(() => loadBankContext(invalid));
+		assert.equal(calls.length, 1);
+	} finally {
+		globalThis.fetch = original;
+	}
+});
+test("readiness access/session/server failures cannot become eligible context", async () => {
+	const original = globalThis.fetch;
+	try {
+		for (const status of [401, 403, 404, 409, 503]) {
+			globalThis.fetch = async () =>
+				Response.json({ message: "safe denial" }, { status });
+			await assert.rejects(
+				() => loadBankContext(id, false),
+				(e) => e.status === status,
+			);
+		}
+		globalThis.fetch = async () => {
+			throw new Error("network timeout");
+		};
+		await assert.rejects(() => loadBankContext(id, false));
+	} finally {
+		globalThis.fetch = original;
+	}
+});
+
+test("bank arrival cross-checks protected quotation identity and current revision/hash", async () => {
+	const original = globalThis.fetch;
+	let mutation = {};
+	const r = readiness();
+	const quote = () => ({
+		...r,
+		quoteId: id,
+		venueId: id,
+		roomId: id,
+		revision: 3,
+		state: "ACCEPTED",
+		currency: "LKR",
+		totalMinor: "12352",
+		paymentMethod: "BANK",
+		synthetic: true,
+		commercialIssuance: false,
+		checkoutEnabled: false,
+		bookingConfirmed: false,
+		expiresAt: r.quoteExpiresAt,
+		holdExpiresAt: r.quoteExpiresAt,
+		serverNow: r.serverNow,
+		timezone: "Asia/Colombo",
+		disclosures: [
+			"TEST / SYNTHETIC QUOTATION",
+			"NOT A COMMERCIAL OFFER",
+			"NO PAYMENT OR BOOKING CONFIRMATION",
+		],
+		optionalServiceIds: [],
+		package: { name: "SYNTHETIC package" },
+		lines: [
+			{
+				lineId: "BASE",
+				kind: "BASE",
+				label: "SYNTHETIC",
+				quantity: 1,
+				unitMinor: "12352",
+				amountMinor: "12352",
+			},
+		],
+		...mutation,
+	});
+	const calls = [];
+	globalThis.fetch = async (path) => {
+		calls.push(path);
+		return Response.json(path.includes("readiness") ? r : quote());
+	};
+	try {
+		assert.equal((await loadBankContext(id)).venueId, id);
+		assert.equal(calls.length, 2);
+		for (const change of [
+			{ revision: 2 },
+			{ contentHash: "b".repeat(64) },
+			{ quoteId: crypto.randomUUID() },
+			{ roomId: undefined },
+		]) {
+			mutation = change;
+			await assert.rejects(
+				() => loadBankContext(id),
+				(e) => e.status === 409,
+			);
+		}
+	} finally {
+		globalThis.fetch = original;
+	}
+});

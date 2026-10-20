@@ -603,3 +603,6 @@ button.button { display: inline-grid; }
 .customer-shell .card a.verification-continue {
     color: var(--cn-color-surface);
 }
+
+/* Protected bank context keeps opaque resource references readable on narrow screens. */
+.bank-context-summary { min-width: 0; overflow-wrap: anywhere; }

@@ -54,6 +54,65 @@ const initial = () => ({
 	evidence: [],
 	history: [],
 });
+const readiness = () => ({
+	quoteId: id,
+	quoteRevision: 1,
+	contentHash: "a".repeat(64),
+	quoteExpiresAt: "2026-10-20T10:00:00Z",
+	quoteSummary: {
+		currency: "LKR",
+		totalMinor: "12352",
+		paymentMethod: "BANK",
+		sessionStart: "2026-10-21T04:30:00Z",
+		sessionEnd: "2026-10-21T07:30:00Z",
+		timezone: "Asia/Colombo",
+		packageName: "SYNTHETIC package",
+	},
+	verificationReadiness: "ELIGIBLE",
+	eligible: true,
+	reason: "ELIGIBLE",
+	serverNow: "2026-10-20T04:30:00Z",
+	synthetic: true,
+	paymentVerified: false,
+	bookingConfirmed: false,
+	labels,
+});
+const quoteContext = () => ({
+	quoteId: id,
+	venueId: id,
+	roomId: id,
+	revision: 1,
+	contentHash: "a".repeat(64),
+	state: "ACCEPTED",
+	currency: "LKR",
+	totalMinor: "12352",
+	paymentMethod: "BANK",
+	synthetic: true,
+	commercialIssuance: false,
+	checkoutEnabled: false,
+	bookingConfirmed: false,
+	expiresAt: "2026-10-20T10:00:00Z",
+	holdExpiresAt: "2026-10-20T10:00:00Z",
+	serverNow: "2026-10-20T04:30:00Z",
+	timezone: "Asia/Colombo",
+	disclosures: [
+		"TEST / SYNTHETIC QUOTATION",
+		"NOT A COMMERCIAL OFFER",
+		"NO PAYMENT OR BOOKING CONFIRMATION",
+	],
+	optionalServiceIds: [],
+	package: { name: "SYNTHETIC package" },
+	lines: [
+		{
+			lineId: "BASE",
+			kind: "BASE",
+			label: "SYNTHETIC",
+			quantity: 1,
+			unitMinor: "12352",
+			amountMinor: "12352",
+		},
+	],
+});
 const child = spawn(
 	process.execPath,
 	[
@@ -87,6 +146,10 @@ try {
 			mode = "normal";
 		await page.route("**/api/**", async (route) => {
 			const path = new URL(route.request().url()).pathname;
+			if (path === `/api/quotes/${id}`)
+				return route.fulfill({ json: quoteContext() });
+			if (path === "/api/bank/requests/readiness")
+				return route.fulfill({ json: readiness() });
 			if (path === "/api/session/csrf")
 				return route.fulfill({
 					json: { token: "SYNTHETIC", headerName: "X-CSRF-TOKEN" },
@@ -101,8 +164,33 @@ try {
 					status: 409,
 					json: { message: "Request changed; refresh history" },
 				});
-            if(path.includes("/bank/credits") || path.includes("/bank/exceptions")) return route.fulfill({json:mode==="empty"?[]:{id,synthetic:true,paymentVerified:false,syntheticFundingStatus:"SIMULATED_VERIFIED",amountMinor:50000,availableMinor:50000,currency:"LKR",fixtureKey:"SYNTHETIC-BANK-50000"}});
-            if(path.endsWith("/allocations"))return route.fulfill({json:{synthetic:true,paymentVerified:false,bookingConfirmed:false,syntheticFundingStatus:"SIMULATED_ALLOCATED",syntheticBookingStatus:"SIMULATED_CONFIRMED",outstandingMinor:0}});
+			if (path.includes("/bank/credits") || path.includes("/bank/exceptions"))
+				return route.fulfill({
+					json:
+						mode === "empty"
+							? []
+							: {
+									id,
+									synthetic: true,
+									paymentVerified: false,
+									syntheticFundingStatus: "SIMULATED_VERIFIED",
+									amountMinor: 50000,
+									availableMinor: 50000,
+									currency: "LKR",
+									fixtureKey: "SYNTHETIC-BANK-50000",
+								},
+				});
+			if (path.endsWith("/allocations"))
+				return route.fulfill({
+					json: {
+						synthetic: true,
+						paymentVerified: false,
+						bookingConfirmed: false,
+						syntheticFundingStatus: "SIMULATED_ALLOCATED",
+						syntheticBookingStatus: "SIMULATED_CONFIRMED",
+						outstandingMinor: 0,
+					},
+				});
 			if (path.endsWith("/claims") || path.endsWith("/resubmissions"))
 				value = {
 					...value,
@@ -163,12 +251,12 @@ try {
 				return route.fulfill({ json: [value] });
 			return route.fulfill({ json: value });
 		});
-		await page.goto(`${base}/bank`);
+		await page.goto(`${base}/bank?quote=${id}`);
 		for (const label of labels)
 			await page.getByText(label, { exact: true }).waitFor();
-		await page.getByLabel("Accepted synthetic BANK quote ID").fill(id);
-		await page.getByLabel("Accepted quote revision").fill("1");
-		await page.getByLabel("Accepted content hash").fill("a".repeat(64));
+		await page
+			.getByLabel("I reviewed this synthetic quotation", { exact: false })
+			.check();
 		await page
 			.getByRole("button", { name: "Create synthetic request", exact: true })
 			.click();
@@ -303,30 +391,122 @@ try {
 			fullPage: true,
 		});
 		groups++;
-        mode="normal";
-        await page.getByLabel("Finance venue ID",{exact:true}).fill(id);
-        await page.getByLabel("Financial review reason",{exact:true}).fill("SYNTHETIC independent test");
-        await page.getByLabel("Financial operation",{exact:true}).selectOption("Verify fixture");
-        await page.getByLabel("Financial review reason",{exact:true}).fill("SYNTHETIC independent test");
-        await page.getByLabel("Independent synthetic source fixture",{exact:true}).selectOption("SYNTHETIC-BANK-50000");
-        await page.getByRole("button",{name:"Run selected synthetic operation",exact:true}).click();
-        await page.getByText("SIMULATED_VERIFIED",{exact:true}).waitFor();groups++;
-        await page.getByLabel("Financial operation",{exact:true}).selectOption("Allocate funds");
-        await page.getByLabel("Financial review reason",{exact:true}).fill("SYNTHETIC independent test");
-        await page.getByLabel("Target credit, request, exception or correction ID",{exact:true}).fill(id);
-        await page.getByLabel("Verified credit ID",{exact:true}).fill(id);
-        await page.getByLabel("Allocation LKR minor units",{exact:true}).fill("100");
-        await page.getByRole("button",{name:"Run selected synthetic operation",exact:true}).click();
-        await page.getByText("SIMULATED_CONFIRMED",{exact:true}).waitFor();groups++;
-        assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
-        await page.getByLabel("Financial operation",{exact:true}).focus();await page.keyboard.press("Tab");assert.equal(await page.getByLabel("Target credit, request, exception or correction ID",{exact:true}).evaluate(el=>el===document.activeElement),true);
-        await page.screenshot({path:`../.cache/bank-browser/finance-${width}.png`,fullPage:true});groups++;
-        mode="denied";await page.getByRole("button",{name:"Run selected synthetic operation",exact:true}).click();
-        await page.getByText("No financial result loaded.",{exact:true}).waitFor();assert.equal(await page.getByText("SIMULATED_CONFIRMED",{exact:true}).count(),0);groups++;
-        await page.getByRole("heading",{name:"Synthetic credit and reconciliation",exact:true}).locator("..").getByRole("alert").waitFor();
-        assert.equal(await page.getByLabel("Verified credit ID",{exact:true}).inputValue(),"");
-        mode="empty";await page.getByLabel("Financial operation",{exact:true}).selectOption("Inspect exceptions");await page.getByLabel("Finance venue ID",{exact:true}).fill(id);await page.getByLabel("Financial review reason",{exact:true}).fill("SYNTHETIC queue review");await page.getByRole("button",{name:"Run selected synthetic operation",exact:true}).click();await page.getByText("No matching financial records.",{exact:true}).waitFor();
-        await page.getByRole("button",{name:"Clear private context",exact:true}).click();await page.getByText("No financial result loaded.",{exact:true}).waitFor();groups++;
+		mode = "normal";
+		await page.getByLabel("Finance venue ID", { exact: true }).fill(id);
+		await page
+			.getByLabel("Financial review reason", { exact: true })
+			.fill("SYNTHETIC independent test");
+		await page
+			.getByLabel("Financial operation", { exact: true })
+			.selectOption("Verify fixture");
+		await page
+			.getByLabel("Financial review reason", { exact: true })
+			.fill("SYNTHETIC independent test");
+		await page
+			.getByLabel("Independent synthetic source fixture", { exact: true })
+			.selectOption("SYNTHETIC-BANK-50000");
+		await page
+			.getByRole("button", {
+				name: "Run selected synthetic operation",
+				exact: true,
+			})
+			.click();
+		await page.getByText("SIMULATED_VERIFIED", { exact: true }).waitFor();
+		groups++;
+		await page
+			.getByLabel("Financial operation", { exact: true })
+			.selectOption("Allocate funds");
+		await page
+			.getByLabel("Financial review reason", { exact: true })
+			.fill("SYNTHETIC independent test");
+		await page
+			.getByLabel("Target credit, request, exception or correction ID", {
+				exact: true,
+			})
+			.fill(id);
+		await page.getByLabel("Verified credit ID", { exact: true }).fill(id);
+		await page
+			.getByLabel("Allocation LKR minor units", { exact: true })
+			.fill("100");
+		await page
+			.getByRole("button", {
+				name: "Run selected synthetic operation",
+				exact: true,
+			})
+			.click();
+		await page.getByText("SIMULATED_CONFIRMED", { exact: true }).waitFor();
+		groups++;
+		assert.ok(
+			await page.evaluate(
+				() => document.documentElement.scrollWidth <= innerWidth + 1,
+			),
+		);
+		await page.getByLabel("Financial operation", { exact: true }).focus();
+		await page.keyboard.press("Tab");
+		assert.equal(
+			await page
+				.getByLabel("Target credit, request, exception or correction ID", {
+					exact: true,
+				})
+				.evaluate((el) => el === document.activeElement),
+			true,
+		);
+		await page.screenshot({
+			path: `../.cache/bank-browser/finance-${width}.png`,
+			fullPage: true,
+		});
+		groups++;
+		mode = "denied";
+		await page
+			.getByRole("button", {
+				name: "Run selected synthetic operation",
+				exact: true,
+			})
+			.click();
+		await page
+			.getByText("No financial result loaded.", { exact: true })
+			.waitFor();
+		assert.equal(
+			await page.getByText("SIMULATED_CONFIRMED", { exact: true }).count(),
+			0,
+		);
+		groups++;
+		await page
+			.getByRole("heading", {
+				name: "Synthetic credit and reconciliation",
+				exact: true,
+			})
+			.locator("..")
+			.getByRole("alert")
+			.waitFor();
+		assert.equal(
+			await page.getByLabel("Verified credit ID", { exact: true }).inputValue(),
+			"",
+		);
+		mode = "empty";
+		await page
+			.getByLabel("Financial operation", { exact: true })
+			.selectOption("Inspect exceptions");
+		await page.getByLabel("Finance venue ID", { exact: true }).fill(id);
+		await page
+			.getByLabel("Financial review reason", { exact: true })
+			.fill("SYNTHETIC queue review");
+		await page
+			.getByRole("button", {
+				name: "Run selected synthetic operation",
+				exact: true,
+			})
+			.click();
+		await page
+			.getByText("No matching financial records.", { exact: true })
+			.waitFor();
+		await page
+			.getByRole("button", { name: "Clear private context", exact: true })
+			.click();
+		await page
+			.getByText("No financial result loaded.", { exact: true })
+			.waitFor();
+		groups++;
 		await page.close();
 	}
 	console.log(

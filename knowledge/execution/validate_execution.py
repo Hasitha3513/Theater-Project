@@ -2146,7 +2146,7 @@ def ui_flow_main():
     return result
 
 
-def inert_ci_main():
+def bank_readiness_main():
     """Qualify exact owner-authorized bank readiness sources before historical replay.
 
     No application inventory exemption applies until source hashes and scope,
@@ -2187,6 +2187,46 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_main()
     if result==0:print('PASS bank readiness successor: exact owned sources/authority; unchanged dependencies, full requirements and phase/demo acceptance; historical integrity retained')
+    return result
+
+
+def inert_ci_main():
+    """Validate the exact authorized UI-flow-002 successor before historical replay."""
+    from unittest.mock import patch
+    baseline='7a52544e8fc1400afeacfb9f5c357178bb05f66f'
+    owned={'frontend/app/bank/page.tsx': 'db7369e89cade948d45a5592f96f29116bff1dbe0b85cf1c0db7c4da959b3768', 'frontend/app/globals.css': '668ea3cf836029f3b682111c9df431a2fc88c1ae02b528c44ed593d6b78f4341', 'frontend/components/bank.tsx': 'ea46f0bd707ec1ff6a67910a116cf6dc3be997b1fa28709a91eb7cac6328dc8f', 'frontend/components/verification.tsx': '9250cf27d7e877425bb584868b2cc8fc8b4eddb93d981b470f3a9ac3b8c5e3c5', 'frontend/lib/bank-backend.ts': 'acf9f0818103ccb0ac6ff483c1476eceeb72f30847a99e7bb8cdbf1a5cf9da63', 'frontend/tests/bank-browser.mjs': '3c4109561cb3aa4a17dcb8f593409bd53eec5e9b6a95096d67fc67a6e2b81f0b', 'frontend/tests/bank.test.mjs': 'a7dbdbe029b6b6565b79721bab0292c639b4b9c0fb1b167b28fa29b2b6a875e0', 'frontend/tests/verification-browser.mjs': 'f0049e55f579781a0c3a6b0287e328b82ca7218cc33e41570f9d95df1ed87868', 'frontend/components/bank-handoff.tsx': 'ea0b8d3f395c40d72b328c498551864b752319310f10f6c7fc9fd3d33e98d151', 'frontend/lib/bank-handoff.ts': 'b753a78c1b22ae3705b3d23946821a22a7e55452c25aa7e00153bb7e9f58f38f', 'frontend/app/api/bank/requests/readiness/route.ts': '4251601820fa102dfc138984712694a6c35ff57844b46dff2e4d8f3bc42dba3d', 'frontend/tests/bank-handoff-browser.mjs': '5333cd282a45726f469e9196e83876b8b3b3ba80dd128bc209832fe8f358cc52'}
+    added={'frontend/tests/bank-handoff-browser.mjs', 'frontend/lib/bank-handoff.ts', 'frontend/components/bank-handoff.tsx', 'frontend/app/api/bank/requests/readiness/route.ts'}
+    errors=[]
+    for name,digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Bank UI handoff source mismatch '+name)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name in ['execution/change-sets.json','execution/requirements.json','execution/test-plan.json','execution/status.json','execution/omissions.json','decisions/cinenest-open-decisions.json']:
+        if (K/name).read_bytes()!=prior('knowledge/'+name):errors.append('Bank UI handoff changed registered dependency/requirement/acceptance '+name)
+    design=(K/'DESIGN.md').read_text();progress=(K/'PROGRESS.md').read_text()
+    if not design.startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Bank UI handoff rewrote prior design authority')
+    if '<a id="verification-bank-handoff"></a>' not in design or 'fce98c5d-edb5-4021-8e92-3f21deb154b8' not in design:errors.append('Bank UI handoff owner authority missing')
+    if '<a id="ui-flow-002-implementation"></a>' not in progress or 'CI39301592319 COMPLETED/SUCCESS' not in progress:errors.append('Bank UI handoff prerequisite/evidence missing')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Bank UI handoff promoted phase/demo acceptance')
+    allowed=set(owned)|{'knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Bank UI handoff unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact source/authority qualification precedes projection of these paths only.
+    replacements={R/name:prior(name) for name in set(owned)-added}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|{'knowledge/DESIGN.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=bank_readiness_main()
+    if result==0:print('PASS bank UI handoff: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
     return result
 
 
