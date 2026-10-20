@@ -13,7 +13,7 @@ export default async function Page({
 	return (
 		<>
 			<PageHeading
-				eyebrow="Synthetic development only"
+				eyebrow="Synthetic staff workspace"
 				title="Manual verification review"
 			>
 				Private synthetic evidence; no physical admission approval.

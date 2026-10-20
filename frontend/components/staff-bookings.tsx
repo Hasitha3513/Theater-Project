@@ -1,4 +1,5 @@
 "use client";
+import { StaffVenueContext } from "./staff-venue-context";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { stateFor } from "../lib/rooms";
@@ -208,6 +209,7 @@ export function StaffBookingList({ query = "" }: { query?: string }) {
 	return (
 		<>
 			<Notice />
+			<StaffVenueContext venue={fields.venue} />
 			<ReadState loading={state.loading} error={state.error} />
 			<Card title="Venue-scoped booking search">
 				<p>

@@ -4,7 +4,12 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import tokens from "../../knowledge/tokens/cinenest-design-tokens.json";
 
-import { isActive } from "../lib/navigation";
+import {
+	isActive,
+	adminNavigation,
+	adminSection,
+	adminRouteContext,
+} from "../lib/navigation";
 export { isActive } from "../lib/navigation";
 function Brand() {
 	return (
@@ -28,25 +33,7 @@ export function Navigation({
 	onNavigate?: () => void;
 }) {
 	const links = admin
-		? [
-				["/admin", "Workspace"],
-				["/admin/components", "UI examples"],
-				["/admin/account", "My account"],
-				["/admin/accounts", "Accounts and audit"],
-				["/admin/venues", "Venues"],
-				["/admin/rooms", "Room configuration"],
-				["/admin/inventory", "Inventory inspection"],
-				["/admin/bookings", "Bookings"],
-				["/admin/verification", "Verification review"],
-				["/admin/bank", "Bank review"],
-				["/admin/refunds", "Refund review"],
-				["/admin/access", "Access simulator"],
-				["/admin/iot", "Lighting simulator"],
-				["/admin/operations", "Room operations"],
-				["/admin/reports/bank", "Bank report"],
-				["/admin/notifications", "Notification queue"],
-				["/admin/settings/packages", "Package drafts"],
-			]
+		? adminNavigation
 		: [
 				["/", "Home"],
 				["/rooms", "Rooms"],
@@ -93,6 +80,44 @@ export function Navigation({
 		</nav>
 	);
 }
+
+export function AdminBreadcrumb({ path }: { path: string }) {
+	const context = adminRouteContext(path);
+	if (!context) return null;
+	return (
+		<nav className="admin-breadcrumb" aria-label="Administration breadcrumbs">
+			<ol>
+				<li>
+					<Link href="/admin" prefetch={false}>
+						Administration
+					</Link>
+				</li>
+				{context.section[0] !== "/admin" && (
+					<li>
+						{context.detail ? (
+							<Link href={context.href} prefetch={false}>
+								{context.section[1]}
+							</Link>
+						) : (
+							<span aria-current="page">{context.section[1]}</span>
+						)}
+					</li>
+				)}
+				{context.detail && (
+					<li>
+						<span aria-current="page">Details</span>
+					</li>
+				)}
+			</ol>
+			{context.venue && (
+				<p>
+					Route venue: <span>{context.venue}</span> · Selection only; current
+					server permission is required.
+				</p>
+			)}
+		</nav>
+	);
+}
 export function ShellFrame({
 	admin,
 	path,
@@ -128,7 +153,9 @@ export function ShellFrame({
 				<header className="topbar">
 					{menu}
 					{admin ? (
-						<span className="context-label">CineNest workspace</span>
+						<span className="context-label">
+							{adminSection(path)?.[1] ?? "CineNest workspace"}
+						</span>
 					) : (
 						<Link href="/" className="brand-link" aria-label="CineNest home">
 							<Brand />
@@ -137,13 +164,10 @@ export function ShellFrame({
 					<div className="desktop-customer-nav">
 						{!admin && <Navigation admin={false} path={path} />}
 					</div>
-					<span
-						className="preview-label"
-					>
-						Synthetic environment
-					</span>
+					<span className="preview-label">Synthetic environment</span>
 				</header>
 				<main id="main-content" tabIndex={-1} className="page-content">
+					{admin && <AdminBreadcrumb path={path} />}
 					{children}
 				</main>
 				<footer className="shell-footer">
@@ -157,7 +181,7 @@ export function ShellFrame({
 }
 export function ApplicationShell({ children }: { children: ReactNode }) {
 	const path = usePathname();
-	const admin = path.startsWith("/admin");
+	const admin = path === "/admin" || path.startsWith("/admin/");
 	const dialog = useRef<HTMLDialogElement>(null);
 	const trigger = useRef<HTMLButtonElement>(null);
 	const [open, setOpen] = useState(false);

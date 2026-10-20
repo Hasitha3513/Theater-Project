@@ -136,7 +136,7 @@ try {
 	for (const kind of ["verification", "bank"]) {
 		const queue = `${base}/admin/${kind}?venue=${other}`,
 			detail = `${base}/admin/${kind}/venues/${other}/requests/${id}`;
-		for (const width of [320, 1280]) {
+		for (const width of [320, 375, 768, 1280]) {
 			const { page, state } = await harness(kind, width);
 			await page.goto(queue);
 			await page
@@ -156,6 +156,37 @@ try {
 			await page
 				.getByRole("region", { name: "Server-authoritative review context" })
 				.waitFor();
+
+			const crumbs = page.getByRole("navigation", {
+				name: "Administration breadcrumbs",
+			});
+			assert.equal(await crumbs.count(), 1);
+			assert.equal(await page.locator("h1").count(), 1);
+			assert.equal(
+				await crumbs
+					.getByRole("link", {
+						name: kind === "bank" ? "Bank review" : "Verification review",
+						exact: true,
+					})
+					.getAttribute("href"),
+				`/admin/${kind}?venue=${other}`,
+			);
+			assert.match(await crumbs.innerText(), new RegExp(other));
+			if (width < 1024) {
+				await page
+					.getByRole("button", { name: "Open navigation", exact: true })
+					.click();
+			}
+			const parent = page
+				.getByRole("navigation", { name: "Administration navigation" })
+				.getByRole("link", {
+					name: kind === "bank" ? "Bank review" : "Verification review",
+					exact: true,
+				});
+			assert.equal(await parent.getAttribute("aria-current"), "location");
+			if (width < 1024) await page.keyboard.press("Escape");
+			assert.equal(state.writes.length, 0);
+			groups++;
 			assert.equal(page.url(), detail);
 			assert.ok(state.reads > 0);
 			assert.equal(state.writes.length, 0);

@@ -149,6 +149,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
+      },
+      "adminExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001H",
+        "status": "LOCALLY_VERIFIED_BOUNDED_ADMIN_NAVIGATION_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001h",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
       }
     },
     {
@@ -1169,6 +1177,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Shared presentation and error classification only;existing responses,sanitized proxies,authorization,money/identity/device behavior unchanged."
+      },
+      "adminExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001H",
+        "status": "LOCALLY_VERIFIED_BOUNDED_ADMIN_NAVIGATION_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001h",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
       }
     },
     {
@@ -1471,6 +1487,14 @@
           "frontend/tests/staff-review-browser.mjs"
         ],
         "limits": "Read-only protected staff detail navigation only; intercepted browser responses are not backend authorization or full E2E evidence."
+      },
+      "adminExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001H",
+        "status": "LOCALLY_VERIFIED_BOUNDED_ADMIN_NAVIGATION_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001h",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
       }
     },
     {
@@ -2201,6 +2225,14 @@
           "frontend/tests/staff-review-browser.mjs"
         ],
         "limits": "Read-only protected staff detail navigation only; intercepted browser responses are not backend authorization or full E2E evidence."
+      },
+      "adminExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001H",
+        "status": "LOCALLY_VERIFIED_BOUNDED_ADMIN_NAVIGATION_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001h",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
       }
     },
     {
@@ -2576,6 +2608,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer owned history/detail/purchased terms and existing roster/action presentation only;backend authority,protected transports,CSRF,sessions,capacity,explicit commands and immutable terms unchanged."
+      },
+      "adminExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001H",
+        "status": "LOCALLY_VERIFIED_BOUNDED_ADMIN_NAVIGATION_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001h",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
       }
     },
     {

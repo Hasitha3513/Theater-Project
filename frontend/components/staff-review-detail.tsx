@@ -93,12 +93,14 @@ export function StaffReviewDetail({
 				decision, verifies no funds and confirms no booking. Use the existing
 				queue workspace for explicit authorized review actions.
 			</p>
-			<Link href={queue} prefetch={false}>
-				Return to review queue
-			</Link>
-			<Button disabled={busy} onClick={() => void reload()}>
-				Reload protected review details
-			</Button>
+			<div className="toolbar staff-detail-actions">
+				<Link href={queue} prefetch={false}>
+					Return to review queue
+				</Link>
+				<Button disabled={busy} onClick={() => void reload()}>
+					Reload protected review details
+				</Button>
+			</div>
 			{busy && (
 				<StateMessage kind="loading">
 					<p>Loading current protected review context.</p>
@@ -120,6 +122,39 @@ export function StaffReviewDetail({
 					aria-label="Server-authoritative review context"
 					style={{ overflowWrap: "anywhere" }}
 				>
+					<section
+						className="staff-review-status"
+						aria-label="Current server review status"
+					>
+						<h3>Current review status</h3>
+						{kind === "verification" ? (
+							<p>
+								Digital test status: {(value as Verification).state} ·{" "}
+								{(value as Verification).superseded
+									? "SUPERSEDED"
+									: "Current request generation"}
+							</p>
+						) : (
+							<dl className="account-summary">
+								<div>
+									<dt>Request</dt>
+									<dd>{(value as BankRequest).requestState}</dd>
+								</div>
+								<div>
+									<dt>Receipt review</dt>
+									<dd>{(value as BankRequest).reviewState}</dd>
+								</div>
+								<div>
+									<dt>Inventory</dt>
+									<dd>{(value as BankRequest).inventoryState}</dd>
+								</div>
+							</dl>
+						)}
+						<p>
+							Server venue: {value.venueId}. A status observation is not
+							permission to decide, verify funds or confirm a booking.
+						</p>
+					</section>
 					<p>Request reference: {value.id}</p>
 					<p>Venue reference: {value.venueId}</p>
 					<p>Current server revision: {value.revision}</p>

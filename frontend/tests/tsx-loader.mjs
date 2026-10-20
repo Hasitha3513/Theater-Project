@@ -3,7 +3,11 @@ import { readFileSync, existsSync } from "node:fs";
 import ts from "typescript";
 registerHooks({
 	resolve(specifier, context, next) {
-		if (specifier === "next/link" || specifier === "next/image")
+		if (
+			specifier === "next/link" ||
+			specifier === "next/image" ||
+			specifier === "next/navigation"
+		)
 			return next(`${specifier}.js`, context);
 		if (specifier.startsWith(".") && context.parentURL) {
 			const base = new URL(specifier, context.parentURL);
@@ -23,6 +27,13 @@ registerHooks({
 					'import imageModule from "./dist/shared/lib/image-external.js"; export default imageModule.default; export const getImageProps = imageModule.getImageProps;',
 			};
 
+		// Load the actual approved JSON tokens for shell SSR tests; no synthetic theme.
+		if (url.endsWith("/knowledge/tokens/cinenest-design-tokens.json"))
+			return {
+				format: "module",
+				shortCircuit: true,
+				source: `export default ${JSON.stringify(JSON.parse(readFileSync(new URL(url), "utf8")))};`,
+			};
 		if (/\.tsx?$/.test(url))
 			return {
 				format: "module",

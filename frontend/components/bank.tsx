@@ -1,4 +1,5 @@
 "use client";
+import { StaffVenueContext } from "./staff-venue-context";
 import Link from "next/link";
 import { reviewHref } from "../lib/staff-review";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -525,6 +526,7 @@ export function BankWorkspace({
 			className={reviewer ? undefined : "bank-experience"}
 		>
 			<BankNotice />
+			{reviewer && <StaffVenueContext venue={venue} />}
 			<Card
 				title={
 					reviewer ? "Scoped bank review queue" : "Your bank request & receipt"
@@ -561,7 +563,11 @@ export function BankWorkspace({
 						{items?.length === 0 && <p>No requests in this permitted queue.</p>}
 						{items?.map((v) => (
 							<p key={v.id}>
-								<Link prefetch={false} href={reviewHref("bank", venue, v.id)}>
+								<Link
+									prefetch={false}
+									className="staff-detail-link"
+									href={reviewHref("bank", venue, v.id)}
+								>
 									Open exact bank review details
 								</Link>
 

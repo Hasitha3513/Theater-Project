@@ -14,7 +14,7 @@ export default async function Page({
 	return (
 		<>
 			<PageHeading
-				eyebrow="Internal synthetic dry run"
+				eyebrow="Synthetic staff workspace"
 				title="Bank receipt review"
 			>
 				No real payments or booking confirmation.

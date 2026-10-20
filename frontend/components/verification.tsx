@@ -1,4 +1,5 @@
 "use client";
+import { StaffVenueContext } from "./staff-venue-context";
 import Link from "next/link";
 import { reviewHref } from "../lib/staff-review";
 import { useEffect, useRef, useState } from "react";
@@ -252,6 +253,7 @@ export function VerificationWorkspace({
 				</div>
 				{reviewer ? (
 					<>
+						<StaffVenueContext venue={venue} />
 						<Field
 							id="verification-venue"
 							label="Authorized venue ID"
@@ -283,6 +285,7 @@ export function VerificationWorkspace({
 							<p key={item.id}>
 								<Link
 									prefetch={false}
+									className="staff-detail-link"
 									href={reviewHref("verification", venue, item.id)}
 								>
 									Open exact verification review details

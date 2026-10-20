@@ -971,3 +971,19 @@ button.button { display: inline-grid; }
 .booking-history-pager { display: flex; flex-wrap: wrap; gap: var(--cn-spacing-2); align-items: center; }
 .customer-shell .booking-history-experience .card .booking-history-pager > p { flex-basis: 100%; }
 .customer-shell .booking-history-experience .card a.button-primary { color: var(--cn-color-surface); }
+
+/* One shell-owned breadcrumb; workflow-owned return links retain validated context. */
+.admin-breadcrumb { margin-bottom: var(--cn-spacing-6); border-bottom: 1px solid var(--cn-color-border); padding-bottom: var(--cn-spacing-3); }
+.admin-breadcrumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cn-spacing-2); padding: 0; margin: 0; list-style: none; }
+.admin-breadcrumb li + li::before { content: "/"; padding-inline-end: var(--cn-spacing-2); color: var(--cn-color-text-secondary); }
+.admin-shell .shell-body .page-content .admin-breadcrumb a, .admin-shell .shell-body .page-content .admin-breadcrumb li > span { display: inline-flex; align-items: center; min-height: var(--cn-layout-touchtarget); }
+.admin-shell .shell-body .page-content .admin-breadcrumb a { color: var(--cn-color-brand-primary); }
+.admin-shell .shell-body .page-content .admin-breadcrumb p { font-size: var(--cn-font-size-small); color: var(--cn-color-text-secondary); margin-block: var(--cn-spacing-2); overflow-wrap: anywhere; }
+.staff-review-status { padding: var(--cn-spacing-4); border: 1px solid var(--cn-color-border); border-inline-start: 4px solid var(--cn-color-brand-primary); border-radius: var(--cn-radius-card); margin-block: var(--cn-spacing-4); background: var(--cn-color-surface-subtle); }
+.admin-shell .shell-body .page-content .staff-review-status p { overflow-wrap: anywhere; }
+.admin-shell .page-content > .card, .admin-shell .page-content > section > .card { margin-block: var(--cn-spacing-4); }
+@media(min-width:1024px) { .staff-review-status .account-summary { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--cn-spacing-4); } }
+.staff-venue-context { padding: var(--cn-spacing-3) var(--cn-spacing-4); background: var(--cn-color-info-background); color: var(--cn-color-info-foreground); border-radius: var(--cn-radius-control); margin-block: var(--cn-spacing-4); }
+.admin-shell .shell-body .page-content .staff-venue-context p { margin-block: var(--cn-spacing-2); overflow-wrap: anywhere; }
+.admin-shell .staff-detail-link { display: inline-flex; align-items: center; min-height: var(--cn-layout-touchtarget); padding: var(--cn-spacing-2) var(--cn-spacing-3); margin-block: var(--cn-spacing-2); border: 1px solid var(--cn-color-brand-primary); border-radius: var(--cn-radius-control); color: var(--cn-color-brand-primary); }
+.staff-detail-actions { margin-block: var(--cn-spacing-4); }

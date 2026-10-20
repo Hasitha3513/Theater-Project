@@ -3106,7 +3106,7 @@ def banking_experience_main():
 
 
 
-def inert_ci_main():
+def booking_history_experience_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='efef8156fe8f158750460c5cfb2f6d8265346916'
@@ -3162,6 +3162,66 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=banking_experience_main()
     if result==0:print('PASS exact bounded booking history experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='6ff6cc3ff805a3e9d962924cffe22b781e59af79'
+    owned={'frontend/components/staff-bookings.tsx', 'frontend/app/admin/bank/venues/[venueId]/requests/[id]/page.tsx', 'frontend/components/bank.tsx', 'frontend/tests/tsx-loader.mjs', 'frontend/components/staff-review-detail.tsx', 'frontend/tests/staff-review-browser.mjs', 'frontend/components/staff-venue-context.tsx', 'frontend/components/verification.tsx', 'frontend/app/globals.css', 'frontend/tests/admin-experience.test.mjs', 'frontend/app/admin/verification/venues/[venueId]/requests/[id]/page.tsx', 'frontend/app/admin/verification/page.tsx', 'frontend/components/shell.tsx', 'frontend/lib/navigation.ts', 'frontend/app/admin/bank/page.tsx', 'frontend/package.json'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/requirements.json', 'knowledge/execution/status.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md'}
+    added={'frontend/tests/admin-experience.test.mjs', 'frontend/components/staff-venue-context.tsx'}
+    hashes={'frontend/app/globals.css': '86a0207adbba263d89b0467d920758b858fb013e4da55c3fcc7ac82788dc7858', 'frontend/lib/navigation.ts': '94d22fea1d633ec69e922f45d15da93c88791bb258ea43ffdab666a3825c6b01', 'frontend/components/shell.tsx': '68512f237fe2d5a3ad47013382e224b5c6615109b518920ce937f384e09b55c1', 'frontend/components/staff-venue-context.tsx': 'c400f84e51753ff696987fa345001501ceb0ce1b21b596b3bb2521482e1fc1c7', 'frontend/components/staff-review-detail.tsx': 'b5dc3bcc5a6f265424105d7f953f8a9d0a5902c3d7c404c564636e121c0f2c6e', 'frontend/components/staff-bookings.tsx': 'a65c151d5fe6f6a0b82f381eeb0528c6d5b98606be0a2487eef00f685591323d', 'frontend/components/bank.tsx': '0dbb3b4c8f11ee433853d636fbdf0467fa87cf4d10d4a1439b425a406c9b917b', 'frontend/components/verification.tsx': '1e53cb18ae726ba7ef3565e2dc61a8d6e990d3bd1588364c667e903e4a15be74', 'frontend/app/admin/verification/page.tsx': '43084755fa389e8af92adf882295213fb2f460e522bdc7764786b5ed105cd437', 'frontend/app/admin/bank/page.tsx': 'bcb412e70c4d8c51e93ac67903a3ac9da560b8df524e0b9d13279f51ebc05ab0', 'frontend/app/admin/verification/venues/[venueId]/requests/[id]/page.tsx': '1df5dcb1e507c0ce5fb1ef6985ad09a6a4200b4bae449bc14c54bc780b833cdb', 'frontend/app/admin/bank/venues/[venueId]/requests/[id]/page.tsx': '3ef9f6f436b81abe0f5335665d9a622c55e7aefbe9b986ad62eb33018814f852', 'frontend/package.json': '5fb8358a048bf40a9c726c3af44627c70d7831095e7f2290d54e77efd4a900cc', 'frontend/tests/tsx-loader.mjs': '4bd8e19114fcf61d6897eb3b915ccd2dfe9b221a15e3a18c732bb9933aad0779', 'frontend/tests/admin-experience.test.mjs': 'cc5efe059e885625579f67976799232e39bd55805fb501810276594b53caca52', 'frontend/tests/staff-review-browser.mjs': '97a0192bdfd4a7c698a4323f3bbc6c5d29d651b72844a1e516c3982338032fb1', 'knowledge/execution/requirements.json': 'abe11a018016798b5ef4f154208a12fc4ba9b2b843b84fae763ae7cd4653eb50', 'knowledge/execution/test-plan.json': '524a8c51f0c12ae319e35baf899f613efb119f3ae8acc3c29fb1a9d0f5b4f446', 'knowledge/execution/status.json': '8d5cd83f473352ff40e7875dc7e906eeb8403fdf3b213ca6963c26dc89465f3c', 'knowledge/ARCHITECTURE.md': '386ce45aa3329b3a5de77067329e4d326184e93a075e6c366bdf1e661b9fdee8', 'knowledge/DESIGN.md': '3b0d599cfd609b018f9f09db1f6c8997a28d9ea0d8d4ef14147d57a5b19929c2', 'knowledge/PROGRESS.md': '1d8008f0847f15053d3b01bedb7c6d0ae7f1bcc351410ed60d1409c23f9393b4'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Admin experience exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('adminExperienceEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Admin experience changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('adminExperienceImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Admin experience changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Admin experience changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Admin experience rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/admin-experience.test.mjs':errors.append('Admin experience lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Admin experience changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Admin experience rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Admin experience promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Admin experience unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Admin experience changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=booking_history_experience_main()
+    if result==0:print('PASS exact bounded admin experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':
