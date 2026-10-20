@@ -109,6 +109,14 @@
         "evidencePath": "PROGRESS.md#ui-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "frontendExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001A",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001a",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Shell/navigation/landing/admin-home/metadata wording and presentation only; no backend/policy/contracted disclosure/token changes."
       }
     },
     {
@@ -374,6 +382,14 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "frontendExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001A",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001a",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Shell/navigation/landing/admin-home/metadata wording and presentation only; no backend/policy/contracted disclosure/token changes."
       }
     },
     {
@@ -901,6 +917,14 @@
         "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
         "evidencePath": "PROGRESS.md#report-bank-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "frontendExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001A",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001a",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Shell/navigation/landing/admin-home/metadata wording and presentation only; no backend/policy/contracted disclosure/token changes."
       }
     },
     {
@@ -2336,6 +2360,14 @@
           "frontend/tests/staff-bookings-browser.mjs"
         ],
         "limits": "Frontend read-only proxy/list/detail integration; intercepted browser APIs are presentation evidence, not real backend/E2E or formal acceptance."
+      },
+      "frontendExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001A",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001a",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Shell/navigation/landing/admin-home/metadata wording and presentation only; no backend/policy/contracted disclosure/token changes."
       }
     },
     {

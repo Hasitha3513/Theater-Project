@@ -124,6 +124,8 @@ h3 {
 	color: var(--cn-color-sidebar-muted);
 	font-size: var(--cn-font-size-caption);
 }
+/* Compact customer navigation follows the reference header hierarchy. */
+:where(.desktop-customer-nav) nav a { padding-inline: var(--cn-spacing-2); font-size: var(--cn-font-size-small); }
 nav ul {
 	padding: 0;
 	margin: 0;
@@ -140,7 +142,8 @@ nav a {
 :where(.sidebar nav a, .nav-dialog nav a) {
 	color: var(--cn-color-sidebar-text);
 }
-nav a[aria-current="page"] {
+nav a[aria-current="page"],
+nav a[aria-current="location"] {
 	background: var(--cn-gradient-primary);
 	color: var(--cn-color-surface);
 	font-weight: var(--cn-font-weight-semibold);

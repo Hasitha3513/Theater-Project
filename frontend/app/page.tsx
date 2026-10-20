@@ -7,17 +7,16 @@ export default function CustomerHome() {
 				<div>
 					<PageHeading
 						eyebrow="YOUR MOVIES. YOUR SPACE."
-						title="A little more cinema."
+						title="Private cinema. Your way."
 					>
 						Discover your room. Find a package. Plan your cinema experience.
 					</PageHeading>
 					<p>
-						<strong>Development preview · Synthetic bookings only</strong>
+						<strong>Synthetic bookings only</strong>
 					</p>
 					<p>
-						Explore configured cinema rooms and indicative packages, then try
-						the existing synthetic booking journey. Catalog content depends on
-						the configured venue and room.
+						Find a room, compare indicative packages and plan your session.
+						Explore the synthetic booking journey using the available catalog.
 					</p>
 					<div className="button-row">
 						<Link
@@ -47,7 +46,7 @@ export default function CustomerHome() {
 					</div>
 					<p id="discovery-entry-note">
 						All three paths start with room selection. Open Room details to view
-						that room’s applicable packages and begin an inventory inquiry.
+						that room’s applicable packages and begin an availability check.
 						Starting here does not reserve a room or confirm a booking.
 					</p>
 				</div>
@@ -77,9 +76,9 @@ export default function CustomerHome() {
 				</Card>
 				<Card title="3. Plan a synthetic booking">
 					<p>
-						Use the existing room inventory and quotation flow. Protected
-						actions require an eligible account and server authorization.
-						Nothing is submitted merely by following these links.
+						Check availability and review your quotation. Continuing requires an
+						eligible account and server approval. Nothing is submitted merely by
+						following these links.
 					</p>
 				</Card>
 				<Card title="Know the current limits">

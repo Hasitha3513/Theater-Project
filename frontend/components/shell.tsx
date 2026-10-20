@@ -4,9 +4,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import tokens from "../../knowledge/tokens/cinenest-design-tokens.json";
 
-export function isActive(path: string, href: string) {
-	return path === href;
-}
+import { isActive } from "../lib/navigation";
+export { isActive } from "../lib/navigation";
 function Brand() {
 	return (
 		<span className="brand">
@@ -32,42 +31,50 @@ export function Navigation({
 		? [
 				["/admin", "Workspace"],
 				["/admin/components", "UI examples"],
-				["/admin/account", "Account session"],
-                ["/admin/accounts", "Synthetic accounts and audit"],
-                ["/admin/venues", "Venues"],
-                ["/admin/rooms", "Room configuration"],
-                ["/admin/inventory", "Inventory inspection"],
-                ["/admin/bookings", "Synthetic booking administration"],
-                ["/admin/verification", "Synthetic verification review"],
-                ["/admin/bank", "Synthetic bank review"],
-                ["/admin/refunds", "Synthetic bank-only refunds"],
-                ["/admin/access", "Synthetic access simulation"],
-                ["/admin/iot", "Synthetic lighting simulator"],
-                ["/admin/operations", "Synthetic staff operations"],
-                ["/admin/reports/bank", "Synthetic bank report"],
-                ["/admin/notifications", "Synthetic notification queue"],
-                ["/admin/settings/packages", "Package drafts"],
+				["/admin/account", "My account"],
+				["/admin/accounts", "Accounts and audit"],
+				["/admin/venues", "Venues"],
+				["/admin/rooms", "Room configuration"],
+				["/admin/inventory", "Inventory inspection"],
+				["/admin/bookings", "Bookings"],
+				["/admin/verification", "Verification review"],
+				["/admin/bank", "Bank review"],
+				["/admin/refunds", "Refund review"],
+				["/admin/access", "Access simulator"],
+				["/admin/iot", "Lighting simulator"],
+				["/admin/operations", "Room operations"],
+				["/admin/reports/bank", "Bank report"],
+				["/admin/notifications", "Notification queue"],
+				["/admin/settings/packages", "Package drafts"],
 			]
 		: [
 				["/", "Home"],
-                ["/rooms", "Explore rooms"],
-                ["/verification", "Synthetic verification"],
-                ["/bank", "Synthetic bank request"],
-                ["/bookings", "My synthetic bookings"],
-                ["/refunds", "Synthetic refund status"],
-                ["/access", "Synthetic access status"],
-                ["/notifications", "Synthetic notifications"],
-				["/account", "Account session"],
-				["/admin", "Admin shell preview"],
+				["/rooms", "Rooms"],
+				["/verification", "Verify"],
+				["/bank", "Bank request"],
+				["/bookings", "My bookings"],
+				["/refunds", "Refunds"],
+				["/access", "Access simulator"],
+				["/notifications", "Inbox"],
+				["/account", "Account"],
+				["/admin", "Staff"],
 			];
 	return (
-		<nav aria-label={admin ? "Administration preview" : "Customer navigation"}>
+		<nav
+			aria-label={admin ? "Administration navigation" : "Customer navigation"}
+		>
 			<ul>
 				{links.map(([href, label]) => (
 					<li key={href}>
 						<Link
 							href={href}
-							aria-current={isActive(path, href) ? "page" : undefined}
+							aria-current={
+								isActive(path, href)
+									? path === href
+										? "page"
+										: "location"
+									: undefined
+							}
 							onClick={onNavigate}
 						>
 							{label}
@@ -77,23 +84,10 @@ export function Navigation({
 			</ul>
 			{admin && (
 				<div className="planned-nav">
-					<p>Future modules</p>
-					<ul>
-						{[
-							"Customers",
-							"Payments",
-							"Devices",
-							"Reports",
-							"Promotions",
-							"Settings",
-							"Audit logs",
-						].map((label) => (
-							<li key={label}>
-								<span>{label}</span>
-								<small>Planned</small>
-							</li>
-						))}
-					</ul>
+					<p>Release limits</p>
+					<small>
+						Online payments and rewards are deferred. Tools remain synthetic.
+					</small>
 				</div>
 			)}
 		</nav>
@@ -123,10 +117,10 @@ export function ShellFrame({
 					<Link href="/" className="brand-link" aria-label="CineNest home">
 						<Brand />
 					</Link>
-					<p className="sidebar-label">Administration · shell preview</p>
+					<p className="sidebar-label">Administration</p>
 					<Navigation admin path={path} />
 					<Link className="sidebar-home" href="/">
-						← Customer shell
+						← Customer home
 					</Link>
 				</aside>
 			)}
@@ -143,14 +137,19 @@ export function ShellFrame({
 					<div className="desktop-customer-nav">
 						{!admin && <Navigation admin={false} path={path} />}
 					</div>
-					<span className="preview-label">Development preview</span>
+					<span
+						className="preview-label"
+					>
+						Synthetic environment
+					</span>
 				</header>
 				<main id="main-content" tabIndex={-1} className="page-content">
 					{children}
 				</main>
 				<footer className="shell-footer">
-					CineNest · Development preview. Booking flows are synthetic; real
-					payments and physical controls are not enabled.
+					CineNest · Synthetic bookings and test identity verification only.
+					Real payments, physical access and equipment controls are not enabled.
+					Production operations are not authorized.
 				</footer>
 			</div>
 		</div>
@@ -208,13 +207,23 @@ export function ApplicationShell({ children }: { children: ReactNode }) {
 				className="nav-dialog"
 				ref={dialog}
 				aria-labelledby="navigation-title"
-                onKeyDown={(event) => {
-                    if (event.key !== "Tab") return;
-                    const controls = Array.from(event.currentTarget.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"));
-                    const first = controls[0]; const last = controls.at(-1);
-                    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
-                    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
-                }}
+				onKeyDown={(event) => {
+					if (event.key !== "Tab") return;
+					const controls = Array.from(
+						event.currentTarget.querySelectorAll<HTMLElement>(
+							"a[href], button:not([disabled])",
+						),
+					);
+					const first = controls[0];
+					const last = controls.at(-1);
+					if (event.shiftKey && document.activeElement === first) {
+						event.preventDefault();
+						last?.focus();
+					} else if (!event.shiftKey && document.activeElement === last) {
+						event.preventDefault();
+						first?.focus();
+					}
+				}}
 				onClose={() => {
 					setOpen(false);
 					trigger.current?.focus();

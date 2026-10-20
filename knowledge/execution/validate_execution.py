@@ -2620,7 +2620,7 @@ def staff_booking_backend_main():
 
 
 
-def inert_ci_main():
+def staff_booking_frontend_main():
     """Qualify exact frontend-only staff booking successor before historical replay."""
     from unittest.mock import patch
     baseline='99e825ec8991fc62335d420896f3a50ea527d28d'
@@ -2674,6 +2674,67 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=staff_booking_backend_main()
     if result==0:print('PASS exact staff booking frontend; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact frontend-only staff booking successor before historical replay."""
+    from unittest.mock import patch
+    baseline='a4f808907a1616a5bb3a75386a2e09c23c6f1ba5'
+    owned={'frontend/app/layout.tsx', 'frontend/package.json', 'frontend/app/page.tsx', 'frontend/app/admin/page.tsx', 'frontend/components/shell.tsx', 'frontend/tests/foundation.test.mjs', 'frontend/tests/experience-browser.mjs', 'frontend/tests/experience.test.mjs', 'frontend/lib/navigation.ts', 'frontend/app/globals.css'}
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/status.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/DESIGN.md', 'knowledge/PROGRESS.md', 'knowledge/ARCHITECTURE.md'}
+    added={'frontend/tests/experience-browser.mjs', 'frontend/tests/experience.test.mjs', 'frontend/lib/navigation.ts'}
+    hashes={'frontend/components/shell.tsx': 'bc522d2103fb1d315a22766c58bf0d1870c62c38bd7b03800e9fc802e57b3021', 'frontend/lib/navigation.ts': '8ea6769b3e5a96499525583d26f298b914db54443f3e2bfc74dd7b0fc39845e8', 'frontend/app/page.tsx': '6b0b94d18fcf22a5d89beb558d7580d9dae8a737454cb3fd6b5332b990bb8932', 'frontend/app/admin/page.tsx': '52d37b69232b65db761508fe2ddc79c17e09fd5d409e9b904dc8cce7a16434b3', 'frontend/app/layout.tsx': '9e42f36210ff68aa345b010969e01ff15f780ce67fd6077e7ed755850dfc3d3b', 'frontend/app/globals.css': 'b03cf3be422f8068155fa4084817bc53f59c3ee1a67800518f5673b335fd295b', 'frontend/package.json': '4f722ff171d3c9ee45a650c887815c85b01939a1009e39620715095426a262fa', 'frontend/tests/foundation.test.mjs': 'b58ac8425d96a26a86566b156948be37e2ca577858126022877b7cebe520d551', 'frontend/tests/experience.test.mjs': 'c200b6ce2f96e5b164ddd2c23ebd6f009d47ad00d52232aa680d9078acd87cfc', 'frontend/tests/experience-browser.mjs': 'e6ee2309a96b1040154a70775d168374a30219ba6e274fc658381a5fd92118f1', 'knowledge/execution/requirements.json': 'd7ae697df7c2d24db640b0e3bacf571c7ad3f15845ca2e5fbb10d48fea6c20c3', 'knowledge/execution/test-plan.json': 'b89ee160fad6bbba254fe4f5330814bc2f0e31c3fc51aaacd12f04832f183cb3', 'knowledge/execution/status.json': 'b265f4f84d591ba7c3d060bf05798ae8e53ea29548211a40cd4d59536d9ee7de', 'knowledge/ARCHITECTURE.md': '087dd327cd7c021746f093b97b6257237cee01b2f8a86c5b83fc6a78368899e0', 'knowledge/DESIGN.md': 'a9c5c84b352cf5ba7c53a66943bf0330ed45d7bfc647c76a29ee0b223c4dc81f', 'knowledge/PROGRESS.md': 'c767c0b2d96e965108b99343be4ebaad59aabf48c07d3489fceb6fdd0b751ab8'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Frontend experience exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('frontendExperienceEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Frontend experience changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('frontendExperienceImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Frontend experience changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Frontend experience changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Frontend experience rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/experience.test.mjs':errors.append('Frontend experience lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Frontend experience changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Frontend experience rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Frontend experience promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Frontend experience unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Frontend experience changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=staff_booking_frontend_main()
+    if result==0:print('PASS exact bounded frontend experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

@@ -46,7 +46,9 @@ test("packaged frontend serves an honest foundation and unconfigured synthetic b
 		assert.equal(response.status, 200);
 		const html = await response.text();
 		assert.match(html, /<html lang="en"/);
-		assert.match(html, /Development preview/);
+		assert.match(html, /Synthetic environment/);
+        assert.match(html, /Production operations are not authorized/);
+        assert.doesNotMatch(html, /Development preview/);
 		for (const action of [
 			"Explore Cinema Rooms",
 			"View Available Packages",

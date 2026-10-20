@@ -4,21 +4,26 @@ export default function AdminHome() {
 	return (
 		<>
 			<PageHeading
-				eyebrow="CINENEST · ADMINISTRATION PREVIEW"
-				title="A clear space to manage."
+				eyebrow="CINENEST · ADMINISTRATION"
+				title="Your cinema workspace"
 			>
-				The shared interface foundation. Business modules are not connected.
+				Find bookings, review requests and manage venue configuration with your
+				assigned permissions.
 			</PageHeading>
 			<div className="workspace-banner">
 				<div>
-					<Badge tone="info">Shell preview</Badge>
-					<h2>Built for the next chapter.</h2>
+					<Badge tone="info">Synthetic operations only</Badge>
+					<h2>Start with your bookings</h2>
 					<p>
-						Consistent navigation, accessible controls and clear states — ready
-						for approved feature work.
+						Open the existing venue-scoped booking list. Staff access is checked
+						by the server; opening a tool does not grant permission.
 					</p>
-					<Link className="button button-primary" href="/admin/components">
-						Explore UI examples
+					<Link
+						className="button button-primary"
+						href="/admin/bookings"
+						prefetch={false}
+					>
+						View bookings
 					</Link>
 				</div>
 				<span className="banner-mark" aria-hidden="true">
@@ -26,27 +31,47 @@ export default function AdminHome() {
 				</span>
 			</div>
 			<div className="content-grid">
-				<Card title="One visual language">
+				<Card title="Rooms and packages">
 					<p>
-						Navy navigation, a light workspace and existing violet actions.
-						Shared tokens keep the customer and administration experiences
-						consistent.
+						Manage venue and room configuration, package drafts and indicative
+						publications.
 					</p>
-					<Link href="/admin/components">View reusable primitives →</Link>
+					<div className="button-row">
+						<Link href="/admin/rooms">Room configuration →</Link>
+						<Link href="/admin/settings/packages">Package drafts →</Link>
+					</div>
 				</Card>
-				<Card title="Access stays with the server">
+				<Card title="Review requests">
 					<p>
-						This public shell preview does not establish a role, venue grant or
-						permission. Future modules remain unavailable.
+						Review synthetic identity evidence and bank claims. Receipt review
+						does not establish verified funds or booking confirmation.
 					</p>
-					<Link href="/admin/account">Check your account session →</Link>
+					<div className="button-row">
+						<Link href="/admin/verification">Verification review →</Link>
+						<Link href="/admin/bank">Bank review →</Link>
+					</div>
+				</Card>
+				<Card title="Room operations">
+					<p>
+						Inspect synthetic turnover cases and simulator records. Physical
+						readiness, admission and real equipment control remain unqualified.
+					</p>
+					<Link href="/admin/operations">Room operations →</Link>
+				</Card>
+				<Card title="Account and access">
+					<p>
+						Check your session. Venue permissions and independent
+						financial-review restrictions still apply to each protected action.
+					</p>
+					<Link href="/admin/account">My account →</Link>
 				</Card>
 			</div>
-			<Card title="Operational information">
+			<Card title="Operational reporting">
 				<p className="muted">
-					No operational metrics are available. No generated screenshot
-					statistics, customer records or live device statuses are shown.
+					Live dashboard metrics are not available. The existing bank report
+					contains synthetic financial data only.
 				</p>
+				<Link href="/admin/reports/bank">Open synthetic bank report →</Link>
 			</Card>
 		</>
 	);

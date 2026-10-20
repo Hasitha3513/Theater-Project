@@ -5,9 +5,9 @@ import "../styles/breakpoints.css";
 import { ApplicationShell } from "../components/shell";
 
 export const metadata: Metadata = {
-	title: "CineNest · Shared foundation",
+	title: "CineNest · Private cinema",
 	description:
-		"CineNest development foundation. Customer services are not available.",
+		"Explore cinema rooms and indicative packages with CineNest. Synthetic booking environment; real payments and physical access are not enabled.",
 	robots: { index: false, follow: false },
 };
 
