@@ -258,3 +258,28 @@ test("responsive stylesheet is generated from existing canonical breakpoints", (
 		generated,
 	);
 });
+
+test("landing discovery actions reuse room selection without production claims or mutations", async () => {
+	const { default: CustomerHome } = await import("../app/page.tsx");
+	const html = render(h(CustomerHome));
+	for (const label of [
+		"Explore Cinema Rooms",
+		"View Available Packages",
+		"Start Booking",
+	])
+		assert.ok(html.includes(label));
+	assert.equal((html.match(/href="\/rooms"/g) || []).length, 3);
+	assert.ok(html.includes('id="discovery-entry-note"'));
+	assert.ok(html.includes("All three paths start with room selection"));
+	assert.match(html, /Synthetic bookings only/);
+	assert.match(html, /prices are indicative/);
+	assert.match(html, /production booking is not authorized/);
+	assert.doesNotMatch(
+		html,
+		/<form|<input|Pay now|Claim reward|Confirm booking/,
+	);
+	assert.doesNotMatch(
+		html,
+		/Room discovery, reservations|room controls are not/,
+	);
+});

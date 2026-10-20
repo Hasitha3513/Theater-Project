@@ -46,8 +46,19 @@ test("packaged frontend serves an honest foundation and unconfigured synthetic b
 		assert.equal(response.status, 200);
 		const html = await response.text();
 		assert.match(html, /<html lang="en"/);
-		assert.match(html, /Development foundation/);
-		assert.match(html, /Booking, payment and room controls are not available/);
+		assert.match(html, /Development preview/);
+		for (const action of [
+			"Explore Cinema Rooms",
+			"View Available Packages",
+			"Start Booking",
+		])
+			assert.ok(html.includes(action));
+		assert.match(html, /Synthetic bookings only/);
+		assert.match(html, /Do not transfer real money/);
+		assert.doesNotMatch(
+			html,
+			/Room discovery, reservations and payments will arrive/,
+		);
 		assert.doesNotMatch(html, /<form/);
 		for (const path of [
 			"/admin",

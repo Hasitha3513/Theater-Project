@@ -606,3 +606,8 @@ button.button { display: inline-grid; }
 
 /* Protected bank context keeps opaque resource references readable on narrow screens. */
 .bank-context-summary { min-width: 0; overflow-wrap: anywhere; }
+
+/* Preserve the approved primary foreground inside the cinematic landing hero. */
+.customer-shell .cinema-hero .button-primary {
+ color: var(--cn-color-surface);
+}

@@ -2270,7 +2270,7 @@ def ui_flow_003_main():
     return result
 
 
-def inert_ci_main():
+def ui_flow_004_main():
     """Validate the exact authorized UI-flow-004 successor before historical replay."""
     from unittest.mock import patch
     baseline='61a9685e08f73e46a499cd914af842ad5d8a3b53'
@@ -2307,6 +2307,46 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_003_main()
     if result==0:print('PASS simulated booking navigation: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
+    return result
+
+
+def inert_ci_main():
+    """Validate the exact authorized UI-flow-005 successor before historical replay."""
+    from unittest.mock import patch
+    baseline='d850793cddf54e213384b1286ef30cf4d69bc143'
+    owned={'frontend/app/page.tsx': 'aa58ace78d8b369ae1fd4a7f20166cc0ce59ba1cd99e8adb683899753034721e', 'frontend/app/globals.css': '77b21547292c12cda5bd45848f17f9fab41b4ed52301e668394f7d96d2e8b0cb', 'frontend/components/shell.tsx': '6e39fbec1a7849b40cf6f5c7baf6c7c1d33abdf23b2d3aebd0dee80831202d4f', 'frontend/tests/foundation.test.mjs': 'a463635c8d9731d80d2b940f99919c576c2da69cdb25f99ee56d50e981241281', 'frontend/tests/ui.test.mjs': '150c92dda17df4e97c7951c6fdeb796ad1f5e1b969b3cf7f5c54b0b8bb0cd959', 'frontend/tests/landing-browser.mjs': '483f73bd678a066ae9008cc9ee0c567e7c709e8ddca1f726381ce12fbe1c3d61'}
+    added={'frontend/tests/landing-browser.mjs'}
+    errors=[]
+    for name,digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Landing catalog integration source mismatch '+name)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name in ['execution/change-sets.json','execution/requirements.json','execution/test-plan.json','execution/status.json','execution/omissions.json','decisions/cinenest-open-decisions.json']:
+        if (K/name).read_bytes()!=prior('knowledge/'+name):errors.append('Landing catalog integration changed registered dependency/requirement/acceptance '+name)
+    design=(K/'DESIGN.md').read_text();progress=(K/'PROGRESS.md').read_text()
+    if not design.startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Landing catalog integration rewrote prior design authority')
+    if '<a id="landing-catalog-integration"></a>' not in design or 'Owner instruction CN-UI-FLOW-005' not in design:errors.append('Landing catalog integration owner authority missing')
+    if '<a id="ui-flow-005-implementation"></a>' not in progress or 'CI39374052483 COMPLETED/SUCCESS' not in progress:errors.append('Landing catalog integration prerequisite/evidence missing')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Landing catalog integration promoted phase/demo acceptance')
+    allowed=set(owned)|{'knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Landing catalog integration unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact source/authority qualification precedes projection of these paths only.
+    replacements={R/name:prior(name) for name in set(owned)-added}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|{'knowledge/DESIGN.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_004_main()
+    if result==0:print('PASS landing catalog integration: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
     return result
 
 

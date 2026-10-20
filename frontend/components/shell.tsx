@@ -149,8 +149,8 @@ export function ShellFrame({
 					{children}
 				</main>
 				<footer className="shell-footer">
-					CineNest · UI foundation. Booking, payment and room controls are not
-					available.
+					CineNest · Development preview. Booking flows are synthetic; real
+					payments and physical controls are not enabled.
 				</footer>
 			</div>
 		</div>
