@@ -3046,7 +3046,7 @@ def verification_experience_main():
 
 
 
-def inert_ci_main():
+def banking_experience_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='95c987c561f7298179cc8de114cdb8cf61c36534'
@@ -3102,6 +3102,66 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=verification_experience_main()
     if result==0:print('PASS exact bounded banking experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='efef8156fe8f158750460c5cfb2f6d8265346916'
+    owned={'frontend/tests/booking-history-experience.test.mjs', 'frontend/components/guest-roster.tsx', 'frontend/tests/customer-bookings-browser.mjs', 'frontend/app/globals.css', 'frontend/package.json', 'frontend/components/customer-bookings.tsx'}
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/status.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/DESIGN.md'}
+    added={'frontend/tests/booking-history-experience.test.mjs'}
+    hashes={'frontend/app/globals.css': '8030698a2d26aeb54ff2d0c1404a4c4d03eb409535ea9aea728279adef1be860', 'frontend/components/customer-bookings.tsx': 'd114bba86c4ff41d13f10cb0c936503143cb7c5238b56dad4224fb88c92f7f6f', 'frontend/components/guest-roster.tsx': '15422307d58dfc52bc509f4bdccdf4ddcb1900e8b2a6e59abdffebf9b1976bd8', 'frontend/package.json': '4ec5d0d6c30305b89750921b56eb104692e0dcef98feae841370f4a451a616ec', 'frontend/tests/booking-history-experience.test.mjs': 'a6e46f3b98c9659d257d32cc334712f8b2e3154c17eedef838aa84a7c27c7163', 'frontend/tests/customer-bookings-browser.mjs': '73a78eea9e5f5c617141597b1ae8359b9ce310a3c41a80ac0513b100f96c39b1', 'knowledge/execution/requirements.json': 'f8aab8b78b59b4ea8d6e6363e1edcf82e8d6ba38f496bbf27225b0ddcf05536f', 'knowledge/execution/test-plan.json': '2888c73845e9000b0ce431f9f5727012d62d48e7fef51840453f84a6777d787b', 'knowledge/execution/status.json': 'f4b69ac188ee650ad8cf42afe3849d6364ad926f7fd28cd78678f95ff0dc92e4', 'knowledge/ARCHITECTURE.md': 'fc691172f30d51d99b58860eec4a8a9cf6f9d043c1b53f2f72c344929ccbc14a', 'knowledge/DESIGN.md': 'dcab170aaad2ff034ebf669a144418c6fa78fc99b63133b11dda7c9a1ff63204', 'knowledge/PROGRESS.md': 'adc240352dd50b967d221f939d4a5a65d6359af8175556f89f9a204eb369373d'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Booking history experience exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('bookingHistoryExperienceEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Booking history experience changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('bookingHistoryExperienceImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Booking history experience changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Booking history experience changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Booking history experience rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/booking-history-experience.test.mjs':errors.append('Booking history experience lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Booking history experience changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Booking history experience rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Booking history experience promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Booking history experience unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Booking history experience changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=banking_experience_main()
+    if result==0:print('PASS exact bounded booking history experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

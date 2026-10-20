@@ -190,7 +190,7 @@ export function GuestRoster({ bookingId }: { bookingId: string }) {
 		}
 	}
 	return (
-		<Card title="Synthetic guest roster">
+		<Card title="Synthetic guest roster" className="guest-roster-panel">
 			<p>
 				UNVERIFIED / SYNTHETIC. No real names, contact details, documents or age
 				declarations. Registration grants no admission, identity approval or
@@ -215,7 +215,7 @@ export function GuestRoster({ bookingId }: { bookingId: string }) {
 			)}
 			{value && (
 				<>
-					<p>
+					<p className="guest-roster-capacity">
 						Purchased guest limit: {value.purchasedLimit}. Current room
 						capacity: {value.roomCapacity}. Roster count: {value.count}.
 						Remaining capacity: {value.remaining}.

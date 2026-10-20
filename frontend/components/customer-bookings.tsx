@@ -6,6 +6,7 @@ import { readSession } from "../lib/session";
 import { GuestRoster } from "./guest-roster";
 import { BookingAmendment } from "./booking-amendment";
 import { Badge, Button, Card } from "./primitives";
+import { CinemaIllustration } from "./cinema-imagery";
 export const CUSTOMER_LABEL = "SYNTHETIC BANK PAYMENT — NO REAL MONEY";
 const UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/;
 type Purchase = {
@@ -197,7 +198,12 @@ function requestRecord(r: RequestSummary) {
 	money(r.amountMinor, r.currency);
 	return r;
 }
-function Purchased({ b }: { b: Booking }) {
+export function requestBookingLabel(status: string) {
+	return status === "SIMULATED_CONFIRMED"
+		? "Linked synthetic booking"
+		: "Pending/unconfirmed request — not a booking";
+}
+export function Purchased({ b }: { b: Booking }) {
 	const p = b.purchase;
 	const date = (v: string) =>
 		new Intl.DateTimeFormat("en-GB", {
@@ -206,29 +212,63 @@ function Purchased({ b }: { b: Booking }) {
 			timeZone: p.timezone,
 		}).format(new Date(v));
 	return (
-		<>
-			<h3>{p.name}</h3>
-			<p>{p.description}</p>
-			<p>
-				Venue: {b.venueId} · Room: {p.roomId}
-			</p>
-			<p>
-				{date(p.sessionStart)} – {date(p.sessionEnd)} ({p.timezone})
-			</p>
-			<p>
-				Original purchase: {money(p.amountMinor, p.currency)} · Revision{" "}
-				{b.revision}
-			</p>
-			<p>Package version: {p.packageVersionId}</p>
-			<ul>
-				{p.lines.map((l) => (
-					<li key={l.lineId}>
-						{l.label} × {l.quantity}: {money(l.amountMinor, p.currency)}
-					</li>
-				))}
-			</ul>
-			<p>SIMULATED BOOKING CONFIRMED. Elapsed time does not mean completed.</p>
-		</>
+		<article className="purchased-summary">
+			<div className="purchased-illustration">
+				<CinemaIllustration asset="blue" roomFallback />
+			</div>
+			<div className="purchased-main">
+				<p className="eyebrow">Your purchased cinema session</p>
+				<h3>{p.name}</h3>
+				<p>{p.description}</p>
+				<dl className="account-summary">
+					<div>
+						<dt>Scheduled session</dt>
+						<dd>
+							{date(p.sessionStart)} – {date(p.sessionEnd)} ({p.timezone})
+						</dd>
+					</div>
+					<div>
+						<dt>Purchased amount</dt>
+						<dd className="purchased-amount">
+							Original purchase: {money(p.amountMinor, p.currency)}
+						</dd>
+					</div>
+					<div>
+						<dt>Server booking status</dt>
+						<dd>{b.state ?? b.syntheticBookingStatus}</dd>
+					</div>
+					<div>
+						<dt>Purchased guest count</dt>
+						<dd>
+							{Number.isSafeInteger(b.amendmentPlanning?.guests) &&
+							(b.amendmentPlanning?.guests ?? 0) > 0
+								? b.amendmentPlanning?.guests
+								: "Not included in this summary; consult the protected booking detail and roster."}
+						</dd>
+					</div>
+				</dl>
+				<p>
+					SIMULATED BOOKING CONFIRMED. Elapsed time does not mean completed.
+				</p>
+				<details className="purchased-references">
+					<summary>Purchased references and line items</summary>
+					<p>
+						Venue: {b.venueId} · Room: {p.roomId}
+					</p>
+					<p>
+						Booking reference: {b.id} · Revision {b.revision}
+					</p>
+					<p>Package version: {p.packageVersionId}</p>
+					<ul>
+						{p.lines.map((l) => (
+							<li key={l.lineId}>
+								{l.label} × {l.quantity}: {money(l.amountMinor, p.currency)}
+							</li>
+						))}
+					</ul>
+				</details>
+			</div>
+		</article>
 	);
 }
 function Pager({
@@ -243,7 +283,7 @@ function Pager({
 	load: (n: number) => void;
 }) {
 	return (
-		<div>
+		<div className="booking-history-pager">
 			<p>Page {page + 1}</p>
 			<Button
 				variant="secondary"
@@ -374,7 +414,10 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 		};
 	}, [bookingId, load]);
 	return (
-		<div className="customer-bookings">
+		<div
+			className="customer-bookings booking-history-experience"
+			data-cn-theme="booking-panel"
+		>
 			<h1>{bookingId ? "Booking detail" : "My bookings"}</h1>
 			{bookingId && (
 				<p>
@@ -406,7 +449,7 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 						["Upcoming", "Current", "Past"].map((group) => (
 							<section key={group}>
 								<h2>{group}</h2>
-								<ul>
+								<ul className="purchased-booking-list">
 									{bookings.items
 										.filter(
 											(b) => bookingGroup(b, bookings.observedAt) === group,
@@ -414,7 +457,12 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 										.map((b) => (
 											<li key={b.id}>
 												<Purchased b={b} />
-												<a href={`/bookings/${b.id}`}>View booking {b.id}</a>
+												<a
+													className="button button-primary"
+													href={`/bookings/${b.id}`}
+												>
+													View booking details
+												</a>
 											</li>
 										))}
 								</ul>
@@ -438,12 +486,9 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 						<ul>
 							{requests.items.map((r) => (
 								<li key={r.id}>
-									<h3>Request {r.id}</h3>
-									<p>
-										{r.funding.bookingStatus === "NOT_CONFIRMED"
-											? "Pending/unconfirmed request — not a booking"
-											: "Linked synthetic booking"}
-									</p>
+									<h3>Bank request · synthetic</h3>
+									<p>Server booking outcome: {r.funding.bookingStatus}</p>
+									<p>{requestBookingLabel(r.funding.bookingStatus)}</p>
 									<p>
 										Claim:{" "}
 										{r.claimSubmitted
@@ -465,13 +510,21 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 										Support status: {r.reviewState}; {r.funding.status}. No
 										ticket or response time promised.
 									</p>
-									<ul aria-label="Recorded resolutions">
-										{r.resolutions.map((x) => (
-											<li key={`${x.kind}-${x.state}`}>
-												{x.kind}: {x.state}
-											</li>
-										))}
-									</ul>
+									<details>
+										<summary>
+											Request references and recorded resolutions
+										</summary>
+										<p>
+											Request {r.id} · Revision {r.revision}
+										</p>
+										<ul aria-label="Recorded resolutions">
+											{r.resolutions.map((x) => (
+												<li key={`${x.kind}-${x.state}`}>
+													{x.kind}: {x.state}
+												</li>
+											))}
+										</ul>
+									</details>
 									<p>
 										Independently verified matched synthetic credit:{" "}
 										{money(r.funding.verifiedMatchedMinor, r.currency)}. This is
@@ -519,53 +572,76 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 							SIMULATED_CONFIRMED. Original purchased history is retained.
 						</p>
 					</Card>
-					<GuestRoster key={detail.id} bookingId={detail.id} />
-					<BookingAmendment
-						booking={detail}
-						onCommitted={() => void load(0, 0)}
-					/>
-					<Card title="Payment and support status">
-						<p>
-							Independently verified matched synthetic credit:{" "}
-							{money(
-								payment.financial.verifiedMatchedMinor,
-								detail.purchase.currency,
-							)}{" "}
-							— not an available balance or real payment.
-						</p>
-						<ul aria-label="Recorded review reasons">
-							{payment.history.map((h) => (
-								<li key={`${h.action}-${h.at}`}>
-									{h.action}: {h.reason} {h.at}
-								</li>
-							))}
-						</ul>
-						<p>
-							Receipt review: {payment.reviewState}; request{" "}
-							{payment.requestState}, revision {payment.revision}.
-						</p>
-						<p>
-							Synthetic funding: {payment.financial.syntheticFundingStatus}.
-							allocated{" "}
-							{money(
-								String(payment.financial.allocatedMinor),
-								detail.purchase.currency,
-							)}
-							; outstanding{" "}
-							{money(
-								String(payment.financial.outstandingMinor),
-								detail.purchase.currency,
-							)}
-							.
-						</p>
-						<p>
-							Support status is derived from the recorded review and funding
-							states above. Unresolved states remain unresolved; use the
-							protected workspaces to inspect permitted next actions. No support
-							ticket, contact, allocation or repayment is implied.
-						</p>
-						<a href={bankRequestHref(payment.id)}>View Bank Request</a>
-					</Card>
+					<nav
+						className="booking-next-actions"
+						aria-label="Booking detail sections"
+					>
+						<a href="#booking-payment">Payment and request status</a>
+						<a href="#booking-guests">Guest roster</a>
+						<a href="#booking-amendment">Review rescheduling</a>
+					</nav>
+					<section id="booking-guests" aria-label="Guest roster section">
+						<GuestRoster key={detail.id} bookingId={detail.id} />
+					</section>
+					<section
+						id="booking-payment"
+						aria-label="Payment and request section"
+					>
+						<Card title="Payment and support status">
+							<p>
+								Independently verified matched synthetic credit:{" "}
+								{money(
+									payment.financial.verifiedMatchedMinor,
+									detail.purchase.currency,
+								)}{" "}
+								— not an available balance or real payment.
+							</p>
+							<details>
+								<summary>Recorded review history</summary>
+								<ul aria-label="Recorded review reasons">
+									{payment.history.map((h) => (
+										<li key={`${h.action}-${h.at}`}>
+											{h.action}: {h.reason} {h.at}
+										</li>
+									))}
+								</ul>
+							</details>
+							<p>
+								Receipt review: {payment.reviewState}; request{" "}
+								{payment.requestState}, revision {payment.revision}.
+							</p>
+							<p>
+								Synthetic funding: {payment.financial.syntheticFundingStatus}.
+								allocated{" "}
+								{money(
+									String(payment.financial.allocatedMinor),
+									detail.purchase.currency,
+								)}
+								; outstanding{" "}
+								{money(
+									String(payment.financial.outstandingMinor),
+									detail.purchase.currency,
+								)}
+								.
+							</p>
+							<p>
+								Support status is derived from the recorded review and funding
+								states above. Unresolved states remain unresolved; use the
+								protected workspaces to inspect permitted next actions. No
+								support ticket, contact, allocation or repayment is implied.
+							</p>
+							<a href={bankRequestHref(payment.id)}>View Bank Request</a>
+						</Card>
+					</section>
+					<section
+						id="booking-amendment"
+						aria-label="Explicit rescheduling section"
+					>
+						<BookingAmendment
+							booking={detail}
+							onCommitted={() => void load(0, 0)}
+						/>
+					</section>
 					<Card title="Synthetic refund status">
 						<p>
 							APPROVED is not repayment. SIMULATED_CONFIRMED means no real money

@@ -945,3 +945,29 @@ button.button { display: inline-grid; }
 .bank-experience .bank-context-summary dd { margin: 0; overflow-wrap: anywhere; }
 .bank-experience .bank-context-summary dt { font-weight: var(--cn-font-weight-semibold); }
 @media(max-width:639px) { .bank-experience .bank-context-summary dl { grid-template-columns: minmax(0,1fr); } }
+
+/* Retained customer purchases: illustrative cinema imagery is never a room photo. */
+.purchased-summary { display: grid; gap: var(--cn-spacing-4); min-width: 0; }
+.purchased-illustration { min-width: 0; }
+.booking-history-experience .purchased-illustration .cinema-illustration { margin: 0; }
+.purchased-main { min-width: 0; }
+.purchased-references { margin-block: var(--cn-spacing-4); }
+.purchased-booking-list { list-style: none; padding: 0; }
+.purchased-booking-list > li { border: 1px solid var(--cn-color-border); border-radius: var(--cn-radius-card); padding: var(--cn-spacing-4); margin-block: var(--cn-spacing-4); }
+.purchased-amount { font-size: var(--cn-font-size-h3); font-weight: var(--cn-font-weight-bold); color: var(--cn-color-info-foreground); }
+.customer-shell .booking-history-experience { --cn-card-background: var(--cn-color-surface); }
+.customer-shell .booking-history-experience .card { background: var(--cn-color-surface); color: var(--cn-color-text-primary); }
+.customer-shell .booking-history-experience .card .eyebrow { color: var(--cn-color-brand-primary); }
+.customer-shell .booking-history-experience .card .muted { color: var(--cn-color-text-secondary); }
+.customer-shell .booking-history-experience .card a:not(.button) { color: var(--cn-color-brand-primary); }
+.booking-history-experience .card summary { min-height: var(--cn-layout-touchtarget); cursor: pointer; font-weight: var(--cn-font-weight-semibold); }
+.customer-shell .customer-bookings.booking-history-experience .card p, .customer-shell .customer-bookings.booking-history-experience .card dd { overflow-wrap: anywhere; }
+.booking-next-actions { display: flex; flex-wrap: wrap; gap: var(--cn-spacing-3); margin-block: var(--cn-spacing-4); }
+.customer-shell .customer-bookings.booking-history-experience .booking-next-actions a { display: inline-flex; align-items: center; min-height: var(--cn-layout-touchtarget); padding: var(--cn-spacing-3); border-radius: var(--cn-radius-control); color: var(--cn-color-sidebar-text); background: var(--cn-color-cinematic-surface); border: 1px solid var(--cn-color-sidebar-muted); }
+.booking-history-experience > section[id] { scroll-margin-top: var(--cn-spacing-6); }
+@media(min-width:1024px) { .purchased-summary { grid-template-columns: minmax(0,0.7fr) minmax(0,1.3fr); align-items: start; } }
+.guest-roster-capacity { padding: var(--cn-spacing-4); border-radius: var(--cn-radius-control); background: var(--cn-color-info-background); color: var(--cn-color-info-foreground); font-weight: var(--cn-font-weight-semibold); }
+.customer-shell .booking-history-experience .card { margin-block: var(--cn-spacing-4); }
+.booking-history-pager { display: flex; flex-wrap: wrap; gap: var(--cn-spacing-2); align-items: center; }
+.customer-shell .booking-history-experience .card .booking-history-pager > p { flex-basis: 100%; }
+.customer-shell .booking-history-experience .card a.button-primary { color: var(--cn-color-surface); }

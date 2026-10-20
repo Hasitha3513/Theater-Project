@@ -4555,5 +4555,57 @@
     },
     "exactSourceCi": "PENDING_PUBLICATION",
     "acceptanceUnchanged": true
+  },
+  "bookingHistoryExperienceImplementation": {
+    "taskId": "CN-FE-EXPERIENCE-001G",
+    "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_HISTORY_PRESENTATION",
+    "evidencePath": "PROGRESS.md#frontend-experience-001g",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Customer owned history/detail/purchased terms and existing roster/action presentation only;backend authority,protected transports,CSRF,sessions,capacity,explicit commands and immutable terms unchanged.",
+    "baselineHead": "efef8156fe8f158750460c5cfb2f6d8265346916",
+    "ownerAuthority": "Explicit owner CN-FE-EXPERIENCE-001G instruction2026-10-20 authorizes one CI-gated frontend presentation slice and scoped publication;no financial/business/acceptance changes.",
+    "prerequisiteCi": {
+      "runId": 39455363053,
+      "sha": "efef8156fe8f158750460c5cfb2f6d8265346916",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "checks": "Full backend PostgreSQL,frontend,launcher and governance PASS"
+    },
+    "checks": {
+      "frontendTotal": 222,
+      "focusedUnitTests": 6,
+      "customerHistoryAmendmentBrowserGroups": 108,
+      "protectedBookingHandoffBrowserGroups": 27,
+      "guestRosterBrowserGroups": 8,
+      "browserTotal": 143,
+      "typecheckLintProductionBuild": "PASS",
+      "architecture": 17,
+      "ciClassifierRegressions": 8,
+      "governance": {
+        "knowledge": "PASS",
+        "executionPrimary": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_INTEGRITY_FINDINGS",
+        "executionIsolatedCommittedNextEnv": "PASS",
+        "negativeControls": 55,
+        "whitespace": "PASS",
+        "traceabilityDependenciesAcceptance": "UNCHANGED"
+      }
+    },
+    "localVisualEvidence": {
+      ".cache/experience-001g/after/detail-1280.png": "cf099e7d58b39ce9caf55f6d1f0748d789cd3100bf71242843e3638369f7b3af",
+      ".cache/experience-001g/after/detail-375.png": "232205b04140121b195cb6bb70a7cdd6e34053524286692e7223115322a0428c",
+      ".cache/experience-001g/after/detail-768.png": "9d4831f78a7677daa64e456979f0871199a913acedff18399491f29d4efd169f",
+      ".cache/experience-001g/after/history-1280.png": "cd5716e7dd707c701f991b3c449a7c645d4c6ef682f5ef632c28ba08eef5a325",
+      ".cache/experience-001g/after/history-375.png": "904f8f47ac5e3370ed3a831326ea927cc2d92cc110c74fa627e3b07673d7f2e6",
+      ".cache/experience-001g/after/history-768.png": "24a496ffe34029ed11ed1b84a187303eada56ef07fa750d2abb828a10158cdab",
+      ".cache/experience-001g/before/detail-1280.png": "374b8d7bfe2201bbc4a6ab74472fc543c286e0e885fd57a3da0df53f62eaa08f",
+      ".cache/experience-001g/before/detail-375.png": "c96769c70ea3962ea9f96fdf96490f97a6263c55032e215a1fca94385e79da71",
+      ".cache/experience-001g/before/detail-768.png": "fba4ffe8168420ae791c4d455b0072c029a921c60d215588aa1ab8691128d30a",
+      ".cache/experience-001g/before/history-1280.png": "a164d9e2bdb56b5b0fe884c6dd1385626ffdc88ef6242b1c4d61cdf031e3843d",
+      ".cache/experience-001g/before/history-375.png": "4d5eb15d5bafe7167efafad343d08056b79b63dcdb46e861d879cd497d8dd9ae",
+      ".cache/experience-001g/before/history-768.png": "dd26b3435488347618ea71579725fa6a5ae02986d0eedee2dc0ddeba8d4f9b28"
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "acceptanceUnchanged": true
   }
 }

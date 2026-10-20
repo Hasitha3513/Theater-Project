@@ -485,6 +485,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Presentation of existing protected quote,explicit consent,synthetic uploads and review only;server authority,ownership,private evidence and all command handlers unchanged."
+      },
+      "bookingHistoryExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001G",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_HISTORY_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001g",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer owned history/detail/purchased terms and existing roster/action presentation only;backend authority,protected transports,CSRF,sessions,capacity,explicit commands and immutable terms unchanged."
       }
     },
     {
@@ -570,6 +578,14 @@
           "frontend/tests/staff-bookings-browser.mjs"
         ],
         "limits": "Frontend read-only proxy/list/detail integration; intercepted browser APIs are presentation evidence, not real backend/E2E or formal acceptance."
+      },
+      "bookingHistoryExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001G",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_HISTORY_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001g",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer owned history/detail/purchased terms and existing roster/action presentation only;backend authority,protected transports,CSRF,sessions,capacity,explicit commands and immutable terms unchanged."
       }
     },
     {
@@ -1501,6 +1517,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer bank/readiness/claim/receipt presentation only;existing financial policies,protected APIs,ownership,CSRF,quote binding,command identities and upload recovery unchanged."
+      },
+      "bookingHistoryExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001G",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_HISTORY_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001g",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer owned history/detail/purchased terms and existing roster/action presentation only;backend authority,protected transports,CSRF,sessions,capacity,explicit commands and immutable terms unchanged."
       }
     },
     {

@@ -39,7 +39,7 @@ try {
 	}
 	browser = await chromium.launch({ headless: true });
 	let groups = 0;
-	for (const width of [1440, 768, 390, 320]) {
+	for (const width of [1440, 768, 390, 320, 375, 1280]) {
 		const page = await browser.newPage({ viewport: { width, height: 1000 } });
 		let denied = false,
 			empty = false,
@@ -260,6 +260,22 @@ try {
 				.isVisible(),
 		);
 		groups++;
+		assert.equal(
+			await page
+				.getByAltText(
+					"AI-generated concept of an empty private cinema with blue ceiling lighting and dark recliners.",
+				)
+				.count(),
+			1,
+		);
+		const references = page.getByText("Purchased references and line items", {
+			exact: true,
+		});
+		await references.focus();
+		await page.keyboard.press("Enter");
+		await page.getByText(/Package version:/).waitFor();
+		assert.ok(calls.every((c) => c[1] === "GET"));
+		groups++;
 		await page
 			.getByRole("button", { name: "Next", exact: true })
 			.first()
@@ -270,11 +286,22 @@ try {
 		await page.goto(`${base}/bookings/${id}`);
 		await page.getByRole("button", { name: "Refresh booking history" }).click();
 		await page.getByRole("heading", { name: "Purchased snapshot" }).waitFor();
+		const guestSection = page
+			.getByRole("navigation", { name: "Booking detail sections" })
+			.getByRole("link", { name: "Guest roster", exact: true });
+		await guestSection.focus();
+		await page.keyboard.press("Enter");
+		assert.match(page.url(), /#booking-guests$/);
+		assert.equal(await page.locator("#booking-guests").count(), 1);
+		assert.ok(calls.every((c) => c[1] === "GET"));
+		groups++;
+
 		assert.ok(
 			await page
 				.getByText("Original purchase: LKR 300.07", { exact: false })
 				.isVisible(),
 		);
+		await page.getByText("Recorded review history", { exact: true }).click();
 		assert.ok(
 			await page
 				.getByText("Recorded synthetic review only", { exact: false })
@@ -488,7 +515,7 @@ try {
 		await page.close();
 	}
 	console.log(
-		`PASS ${groups} intercepted customer browser groups at 1440/768/390/320; synthetic presentation only`,
+		`PASS ${groups} intercepted customer browser groups at 1440/1280/768/390/375/320; synthetic presentation only`,
 	);
 } finally {
 	await browser?.close();
