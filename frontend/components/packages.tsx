@@ -10,6 +10,7 @@ import {
 	stateFor,
 } from "../lib/packages";
 import { Button, Card, Field, PageHeading, StateMessage } from "./primitives";
+import { ConfigurationSummary } from "./configuration-summary";
 import { PublicationAdministration } from "./publications";
 
 type PackagePage = {
@@ -710,7 +711,11 @@ function DraftEditor({
 				{comparison && (
 					<section>
 						<h3>Latest revision {comparison.revision}</h3>
-						<pre>{JSON.stringify(comparison, null, 2)}</pre>
+						<ConfigurationSummary
+							kind="package"
+							value={comparison}
+							previous={initial}
+						/>
 						<Button
 							onClick={() => {
 								setRevision(comparison.revision);
@@ -808,7 +813,7 @@ function HistoryView({ base }: { base: string }) {
 				<StateMessage kind="loading" />
 			) : (
 				<>
-					{data.items.map((h) => (
+					{data.items.map((h, index) => (
 						<Card key={h.revision} title={`Revision ${h.revision}`}>
 							<p>
 								{h.snapshot.name} · {h.occurredAt}
@@ -820,8 +825,13 @@ function HistoryView({ base }: { base: string }) {
 							</p>
 							<p>{h.snapshot.description}</p>
 							<details>
-								<summary>Saved configuration references</summary>
-								<pre>{JSON.stringify(h.snapshot, null, 2)}</pre>
+								<summary>Saved package fields and comparison</summary>
+								<ConfigurationSummary
+									kind="package"
+									value={h.snapshot}
+									historical
+									previous={data.items[index + 1]?.snapshot}
+								/>
 							</details>
 						</Card>
 					))}

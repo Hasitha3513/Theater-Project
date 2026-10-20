@@ -108,6 +108,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
+      },
+      "configurationExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001J",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PACKAGE_ROOM_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001j",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
       }
     },
     {
@@ -169,6 +177,14 @@
           "frontend/tests/quotes-browser.mjs"
         ],
         "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      },
+      "configurationExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001J",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PACKAGE_ROOM_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001j",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
       }
     },
     {
@@ -752,6 +768,14 @@
           "frontend/tests/rooms.test.mjs",
           "frontend/tests/rooms-browser.mjs"
         ]
+      },
+      "configurationExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001J",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PACKAGE_ROOM_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001j",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
       }
     },
     {
@@ -1183,6 +1207,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      },
+      "configurationExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001J",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PACKAGE_ROOM_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001j",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
       }
     },
     {
@@ -1314,6 +1346,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
+      },
+      "configurationExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001J",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PACKAGE_ROOM_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001j",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
       }
     },
     {
@@ -1605,6 +1645,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
+      },
+      "configurationExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001J",
+        "status": "LOCALLY_VERIFIED_BOUNDED_PACKAGE_ROOM_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001j",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
       }
     },
     {

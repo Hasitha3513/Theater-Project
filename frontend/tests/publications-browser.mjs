@@ -214,7 +214,9 @@ try {
 	}
 	for (const key of ["salesFrom", "salesTo", "sessionFrom", "sessionTo"])
 		await page
-			.getByLabel(`${key} — venue local`)
+			.getByLabel(
+				`${{ salesFrom: "Sales start", salesTo: "Sales end (exclusive)", sessionFrom: "Session validity start", sessionTo: "Session validity end (exclusive)" }[key]} — venue local`,
+			)
 			.fill(key.endsWith("From") ? "2026-10-17T09:00" : "2026-11-17T09:00");
 	await page
 		.getByLabel("Publication reason", { exact: true })

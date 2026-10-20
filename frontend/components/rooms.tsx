@@ -1,4 +1,5 @@
 "use client";
+import { ConfigurationSummary } from "./configuration-summary";
 import { CinemaIllustration, CinemaConceptGallery } from "./cinema-imagery";
 import { InventoryHold } from "./inventory";
 import { IndicativeCatalog } from "./publications";
@@ -102,11 +103,22 @@ export function RoomSummary({
 			</section>
 		);
 	return (
-		<Card title={room.name}>
+		<Card title={room.name} className="admin-room-card">
 			<RoomPhoto room={room} />
-			<p>
-				{room.code} · Capacity {room.capacity}
-			</p>
+			<dl className="configuration-overview">
+				<div>
+					<dt>Room code</dt>
+					<dd>{room.code}</dd>
+				</div>
+				<div>
+					<dt>Capacity</dt>
+					<dd>{room.capacity} guests</dd>
+				</div>
+				<div>
+					<dt>Configuration version</dt>
+					<dd>{room.version ?? "Not supplied"}</dd>
+				</div>
+			</dl>
 			<p>{room.description}</p>
 			<p>
 				{room.facilities.map((f) => f.label).join(" · ") ||
@@ -1028,7 +1040,11 @@ function ConfigurationEditor({
 				{comparison && (
 					<section className="state">
 						<h3>Latest saved configuration · version {comparison.version}</h3>
-						<pre>{JSON.stringify(comparison, null, 2)}</pre>
+						<ConfigurationSummary
+							kind={kind}
+							value={comparison}
+							previous={initial}
+						/>
 						<Button
 							variant="secondary"
 							onClick={() => {

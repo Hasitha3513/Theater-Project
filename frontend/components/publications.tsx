@@ -157,7 +157,10 @@ export function PublicationAdministration({ draft }: { draft: Draft }) {
 				Publications {draft.code}
 			</Button>
 			{open && (
-				<Card title="Indicative publication and history">
+				<Card
+					title="Indicative publication and history"
+					className="publication-workspace"
+				>
 					<p>
 						Independent publisher required. Tax and checkout fees unresolved. No
 						checkout, booking or availability is enabled.
@@ -199,7 +202,7 @@ export function PublicationAdministration({ draft }: { draft: Draft }) {
 									key={k}
 									id={`${draft.packageId}-${k}`}
 									name={`${k}Local`}
-									label={`${k} — venue local`}
+									label={`${({ salesFrom: "Sales start", salesTo: "Sales end (exclusive)", sessionFrom: "Session validity start", sessionTo: "Session validity end (exclusive)" } as Record<string, string>)[k]} — venue local`}
 									type="datetime-local"
 									required
 								/>
@@ -236,7 +239,11 @@ export function PublicationAdministration({ draft }: { draft: Draft }) {
 						</form>
 					)}
 					{review && (
-						<section aria-label="Publication review">
+						<section
+							className="publication-review"
+							aria-label="Publication review"
+						>
+							<h3>Confirm the reviewed publication</h3>
 							<p>{review.timezone} · INDICATIVE ONLY</p>
 							<p>
 								{review.salesFrom} → {review.salesTo} (sales UTC)

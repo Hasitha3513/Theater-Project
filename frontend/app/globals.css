@@ -1011,3 +1011,22 @@ button.button { display: inline-grid; }
 .shell-body .page-content .field.field-checkbox > label { grid-column: 2; grid-row: 1; display: flex; align-items: center; min-height: var(--cn-layout-touchtarget); }
 .shell-body .page-content .field.field-checkbox > input[type="checkbox"] { grid-column: 1; grid-row: 1; width: 24px; height: 24px; min-height: 24px; padding: 0; margin: 0; justify-self: center; accent-color: var(--cn-color-brand-primary); }
 .shell-body .page-content .field.field-checkbox > p { grid-column: 2; }
+
+/* Read-only, allowlisted saved configuration views; no business-state inference. */
+.app-shell.admin-shell .shell-body .page-content .configuration-summary { min-width: 0; margin-block: var(--cn-spacing-4); overflow-wrap: anywhere; }
+.app-shell.admin-shell .shell-body .page-content .configuration-summary dl, .app-shell.admin-shell .shell-body .page-content .configuration-overview { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,240px),1fr)); gap: var(--cn-spacing-4); }
+.app-shell.admin-shell .shell-body .page-content .configuration-summary .configuration-field, .app-shell.admin-shell .shell-body .page-content .configuration-overview > div { min-width: 0; padding: var(--cn-spacing-3); border: 1px solid var(--cn-color-border-control); border-radius: var(--cn-radius-control); }
+.app-shell.admin-shell .shell-body .page-content .configuration-summary .is-changed { border-inline-start: 4px solid var(--cn-color-brand-primary); background: var(--cn-color-surface-subtle); }
+.app-shell.admin-shell .shell-body .page-content .configuration-summary dt, .app-shell.admin-shell .shell-body .page-content .configuration-overview dt { font-weight: var(--cn-font-weight-semibold); }
+.app-shell.admin-shell .shell-body .page-content .configuration-summary dd, .app-shell.admin-shell .shell-body .page-content .configuration-overview dd { margin-inline-start: 0; font-variant-numeric: tabular-nums; }
+.app-shell.admin-shell .shell-body .page-content .configuration-summary dd > span { display: block; margin-top: var(--cn-spacing-2); }
+.app-shell.admin-shell .shell-body .page-content .configuration-summary .configuration-before { color: var(--cn-color-text-secondary); }
+.app-shell.admin-shell .shell-body .page-content .configuration-summary .configuration-change { display: inline-block; margin-inline-start: var(--cn-spacing-2); color: var(--cn-color-brand-primary); font-size: var(--cn-font-size-small); }
+.app-shell.admin-shell .shell-body .page-content .admin-shell .page-content .publication-workspace, .app-shell.admin-shell .shell-body .page-content .admin-shell .page-content .admin-room-card { margin-block: var(--cn-spacing-4); overflow-wrap: anywhere; }
+.app-shell.admin-shell .shell-body .page-content .admin-shell .page-content .publication-review { border-inline-start: 4px solid var(--cn-color-brand-primary); padding: var(--cn-spacing-4); margin-block: var(--cn-spacing-4); background: var(--cn-color-surface-subtle); }
+.app-shell.admin-shell .shell-body .page-content .configuration-dialog .configuration-summary { font-size: var(--cn-font-size-small); }
+.app-shell.admin-shell .shell-body .page-content .configuration-dialog > form > fieldset { min-width: 0; margin-block: var(--cn-spacing-4); border: 1px solid var(--cn-color-border-control); border-radius: var(--cn-radius-control); padding: var(--cn-spacing-4); }
+.app-shell.admin-shell .shell-body .page-content .configuration-dialog label:has(> input[type="checkbox"]) { display: flex; align-items: center; gap: var(--cn-spacing-3); min-height: var(--cn-layout-touchtarget); }
+.app-shell.admin-shell .shell-body .page-content .configuration-dialog label > input[type="checkbox"] { width: 24px; height: 24px; flex-shrink: 0; accent-color: var(--cn-color-brand-primary); }
+
+.app-shell.admin-shell .shell-body .page-content .configuration-dialog { margin: auto; }
