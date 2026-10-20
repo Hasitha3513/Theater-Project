@@ -3940,5 +3940,48 @@
     "frontendImplementation": "NOT_IMPLEMENTED_THIS_SLICE",
     "acceptanceUnchanged": true,
     "syntheticE2e": "14 PASS / 1 FAIL / 9 NOT_RUN; OPEN, not rerun"
+  },
+  "staffBookingFrontendImplementation": {
+    "taskId": "CN-BOOKING-ADMIN-FE-001",
+    "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_READ_UI",
+    "evidencePath": "PROGRESS.md#staff-booking-frontend-implementation",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "actualTestPaths": [
+      "frontend/tests/staff-bookings.test.mjs",
+      "frontend/tests/staff-bookings-browser.mjs"
+    ],
+    "limits": "Frontend read-only proxy/list/detail integration; intercepted browser APIs are presentation evidence, not real backend/E2E or formal acceptance.",
+    "baselineHead": "99e825ec8991fc62335d420896f3a50ea527d28d",
+    "ownerAuthority": {
+      "source": "Owner attachment 927d802f-bd72-49c4-9be1-10ade241c574",
+      "sha256": "f2ded109132e630786c5c01f3a915af8dacffb536f1ccc269f8e342edeafc203",
+      "scope": "One CI-gated frontend-only venue-scoped booking read UI using existing APIs; no backend/migration/policy/mutation/financial operation"
+    },
+    "prerequisiteCi": {
+      "runId": 39408237721,
+      "sha": "99e825ec8991fc62335d420896f3a50ea527d28d",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "checks": "Backend/PostgreSQL,frontend,governance PASS"
+    },
+    "checks": {
+      "focusedFrontend": 12,
+      "frontendTotal": 164,
+      "typecheckLintProductionBuild": "PASS",
+      "architecture": 17,
+      "ciClassifierRegressions": 8,
+      "interceptedBrowserGroups": 30,
+      "responsiveWidths": [
+        320,
+        768,
+        1280
+      ],
+      "mobileScreenshot": "320px visually reviewed; synthetic presentation only",
+      "knowledgeExecutionGovernance": "PASS design/traceability/dependency validation; approved committed-next-env in-memory execution validation and 22 negative controls. Primary worktree retains exactly two pre-existing next-env integrity findings."
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "acceptanceUnchanged": true,
+    "syntheticE2e": "14 PASS / 1 FAIL / 9 NOT_RUN; OPEN,not rerun"
   }
 }

@@ -2561,7 +2561,7 @@ def staff_review_context_main():
 
 
 
-def inert_ci_main():
+def staff_booking_backend_main():
     """Qualify owner-approved Booking staff reads/V19 before replaying prior controls."""
     from unittest.mock import patch
     baseline='01c73d27037a5973b0eeb3951361f2dcd71ea4fe'
@@ -2613,6 +2613,67 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=staff_review_context_main()
     if result==0:print('PASS exact Booking staff read/V19/owner decisions; frontend/business/full acceptance/graph unchanged; historical controls retained')
+    return result
+
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact frontend-only staff booking successor before historical replay."""
+    from unittest.mock import patch
+    baseline='99e825ec8991fc62335d420896f3a50ea527d28d'
+    owned={'frontend/tests/staff-bookings-browser.mjs', 'frontend/lib/admin-backend.ts', 'frontend/app/admin/bookings/venues/[venueId]/[booking]/page.tsx', 'frontend/app/admin/bookings/page.tsx', 'frontend/lib/staff-bookings.ts', 'frontend/tests/staff-bookings.test.mjs', 'frontend/package.json', 'frontend/components/shell.tsx', 'frontend/components/staff-bookings.tsx', 'frontend/tests/staff-bookings-fixtures.mjs', 'frontend/app/api/admin/venues/[venueId]/bookings/route.ts', 'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/route.ts'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md'}
+    added={'frontend/tests/staff-bookings-browser.mjs', 'frontend/app/admin/bookings/venues/[venueId]/[booking]/page.tsx', 'frontend/app/admin/bookings/page.tsx', 'frontend/lib/staff-bookings.ts', 'frontend/tests/staff-bookings.test.mjs', 'frontend/components/staff-bookings.tsx', 'frontend/tests/staff-bookings-fixtures.mjs', 'frontend/app/api/admin/venues/[venueId]/bookings/route.ts', 'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/route.ts'}
+    hashes={'frontend/lib/staff-bookings.ts': '342b76a17b005315471c9d7aab6881d1b6bcdc98e6327c3d22fa1d0eec00c8d5', 'frontend/components/staff-bookings.tsx': '0cb970f43553ea7b91314cd4a1f29cecdf31ee5ae8ffe09e5e13224673c51cea', 'frontend/app/admin/bookings/page.tsx': 'd95ed454d731bed5dd8168c464753936ccbb6a4e20cef12dbe4515390bd9ecf8', 'frontend/app/admin/bookings/venues/[venueId]/[booking]/page.tsx': '12e82b912265993d1b0618011dc7228f621fa0ef1f1c43851ee95db5de4e299d', 'frontend/app/api/admin/venues/[venueId]/bookings/route.ts': '34de03915815a15fd96a681ffded768ca1d719c80b9269d9c2cc8fa41ac53c12', 'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/route.ts': '86aa820508536b75f7d7adb4fee5f79c0177f248f61e84aa8fec5867a919344f', 'frontend/tests/staff-bookings-fixtures.mjs': '838937c2495aeb5f5b6887c1f0ae3371843ec20552e3312a19a38150e4338a39', 'frontend/tests/staff-bookings.test.mjs': 'ad344066f978bf32d9d52364a4b0ce0a99ae831c3ced3a4b4ad083c27a64a66c', 'frontend/tests/staff-bookings-browser.mjs': '84c9183bc33a3aa19c9057d548615926c4aeffbd85e3d37ba5416de3ff3711ce', 'frontend/lib/admin-backend.ts': '13fe11c66a4972ae783a62bd40e84020618bba3c7e7c8aa737b50fca32533acf', 'frontend/components/shell.tsx': '0f0eb1a3c70c3daa5d82bc5e9d29556c7377c3caeaf3d3f299331d121fd06b09', 'frontend/package.json': '8b079c081c89ade1c89213be8008c32d6c4d5303c706d157d37c10e3a787765e', 'knowledge/execution/requirements.json': 'baf9f2e9c00d4a98876062866dbd2f25cb021845f3051416f84c9a1f3d298e47', 'knowledge/execution/test-plan.json': 'f1210871328a0a5d3f1c5ac064496848627e90e319cdf2983b39268e3e12da55', 'knowledge/execution/status.json': 'ef7a7d82d28a51585070778dc868ad90e29e65c935cd4745d281265c01a470a1', 'knowledge/ARCHITECTURE.md': 'd086f9e6c154fc8f2e977c40c70978737162f72106ee7799695206484314bdbe', 'knowledge/DESIGN.md': 'c85f4635f08f012caff3d68160abfba28baebe89da34e532174e5aa9c055d63a', 'knowledge/PROGRESS.md': '57418f5fdf5dc83272962c6797afe030a75739ed539effd3765dc158d9d145ff'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Staff booking frontend exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('staffBookingFrontendEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Staff booking frontend changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('staffBookingFrontendImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Staff booking frontend changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Staff booking frontend changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Staff booking frontend rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/staff-bookings.test.mjs':errors.append('Staff booking frontend lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Staff booking frontend changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Staff booking frontend rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Staff booking frontend promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Staff booking frontend unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=staff_booking_backend_main()
+    if result==0:print('PASS exact staff booking frontend; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

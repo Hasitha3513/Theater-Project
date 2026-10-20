@@ -37,6 +37,7 @@ export function Navigation({
                 ["/admin/venues", "Venues"],
                 ["/admin/rooms", "Room configuration"],
                 ["/admin/inventory", "Inventory inspection"],
+                ["/admin/bookings", "Synthetic booking administration"],
                 ["/admin/verification", "Synthetic verification review"],
                 ["/admin/bank", "Synthetic bank review"],
                 ["/admin/refunds", "Synthetic bank-only refunds"],
@@ -79,7 +80,6 @@ export function Navigation({
 					<p>Future modules</p>
 					<ul>
 						{[
-							"Bookings",
 							"Customers",
 							"Payments",
 							"Devices",

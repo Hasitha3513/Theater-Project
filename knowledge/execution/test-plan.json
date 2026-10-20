@@ -422,6 +422,18 @@
           "backend/src/test/java/com/cinenest/booking/internal/StaffBookingReadRulesTest.java"
         ],
         "scope": "Booking-owned synthetic staff list/detail only; no frontend or booking/financial mutation. Audit evidence intentionally persists."
+      },
+      "staffBookingFrontendEvidence": {
+        "taskId": "CN-BOOKING-ADMIN-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_READ_UI",
+        "evidencePath": "PROGRESS.md#staff-booking-frontend-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "frontend/tests/staff-bookings.test.mjs",
+          "frontend/tests/staff-bookings-browser.mjs"
+        ],
+        "limits": "Frontend read-only proxy/list/detail integration; intercepted browser APIs are presentation evidence, not real backend/E2E or formal acceptance."
       }
     },
     {
@@ -508,6 +520,18 @@
           "backend/src/test/java/com/cinenest/booking/internal/StaffBookingReadRulesTest.java"
         ],
         "scope": "Booking-owned synthetic staff list/detail only; no frontend or booking/financial mutation. Audit evidence intentionally persists."
+      },
+      "staffBookingFrontendEvidence": {
+        "taskId": "CN-BOOKING-ADMIN-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_READ_UI",
+        "evidencePath": "PROGRESS.md#staff-booking-frontend-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "frontend/tests/staff-bookings.test.mjs",
+          "frontend/tests/staff-bookings-browser.mjs"
+        ],
+        "limits": "Frontend read-only proxy/list/detail integration; intercepted browser APIs are presentation evidence, not real backend/E2E or formal acceptance."
       }
     },
     {
@@ -782,6 +806,18 @@
           "backend/src/test/java/com/cinenest/booking/internal/StaffBookingReadRulesTest.java"
         ],
         "scope": "Booking-owned synthetic staff list/detail only; no frontend or booking/financial mutation. Audit evidence intentionally persists."
+      },
+      "staffBookingFrontendEvidence": {
+        "taskId": "CN-BOOKING-ADMIN-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_READ_UI",
+        "evidencePath": "PROGRESS.md#staff-booking-frontend-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "frontend/tests/staff-bookings.test.mjs",
+          "frontend/tests/staff-bookings-browser.mjs"
+        ],
+        "limits": "Frontend read-only proxy/list/detail integration; intercepted browser APIs are presentation evidence, not real backend/E2E or formal acceptance."
       }
     },
     {
@@ -1237,6 +1273,18 @@
           "backend/src/test/java/com/cinenest/booking/internal/StaffBookingReadRulesTest.java"
         ],
         "scope": "Booking-owned synthetic staff list/detail only; no frontend or booking/financial mutation. Audit evidence intentionally persists."
+      },
+      "staffBookingFrontendEvidence": {
+        "taskId": "CN-BOOKING-ADMIN-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_READ_UI",
+        "evidencePath": "PROGRESS.md#staff-booking-frontend-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "frontend/tests/staff-bookings.test.mjs",
+          "frontend/tests/staff-bookings-browser.mjs"
+        ],
+        "limits": "Frontend read-only proxy/list/detail integration; intercepted browser APIs are presentation evidence, not real backend/E2E or formal acceptance."
       }
     },
     {

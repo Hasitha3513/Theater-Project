@@ -5,13 +5,45 @@ export function adminRoute(path: string) {
 	).test(path);
 }
 export async function forwardAdmin(request: Request): Promise<Response> {
+	return forwardAdminRead(request, adminRoute);
+}
+export function staffBookingRoute(path: string) {
+	return new RegExp(`^/api/admin/venues/${uuid}/bookings(/${uuid})?$`).test(
+		path,
+	);
+}
+export async function forwardStaffBookings(
+	request: Request,
+): Promise<Response> {
+	const url = new URL(request.url),
+		headers = { "Cache-Control": "private, no-store" };
+	if (request.method !== "GET" || !staffBookingRoute(url.pathname))
+		return new Response(null, { status: 404, headers });
+	const list = url.pathname.endsWith("/bookings");
+	if (
+		(!list && url.search) ||
+		[...url.searchParams.keys()].some(
+			(k) =>
+				!["reference", "from", "to", "page", "size"].includes(k) ||
+				url.searchParams.getAll(k).length !== 1,
+		) ||
+		[...url.searchParams.values()].some((v) => !v || v.length > 40)
+	)
+		return new Response(null, { status: 400, headers });
+	return forwardAdminRead(request, staffBookingRoute, true);
+}
+async function forwardAdminRead(
+	request: Request,
+	allowed: (path: string) => boolean,
+	privateRead = false,
+): Promise<Response> {
 	const headers = new Headers({
-		"Cache-Control": "no-store",
+		"Cache-Control": privateRead ? "private, no-store" : "no-store",
 		"X-Content-Type-Options": "nosniff",
 	});
 	try {
 		const url = new URL(request.url);
-		if (request.method !== "GET" || !adminRoute(url.pathname))
+		if (request.method !== "GET" || !allowed(url.pathname))
 			return new Response(null, { status: 404, headers });
 		const value = process.env.CINENEST_AUTH_ORIGIN;
 		if (!value) return new Response(null, { status: 503, headers });
@@ -42,6 +74,13 @@ export async function forwardAdmin(request: Request): Promise<Response> {
 			redirect: "manual",
 			signal: AbortSignal.timeout(5000),
 		});
+		const correlation = response.headers.get("X-Correlation-ID");
+		if (
+			privateRead &&
+			correlation &&
+			new RegExp(`^${uuid}$`, "i").test(correlation)
+		)
+			headers.set("X-Correlation-ID", correlation);
 		if (!response.ok)
 			return new Response(null, {
 				status: [400, 401, 403, 404, 503].includes(response.status)
