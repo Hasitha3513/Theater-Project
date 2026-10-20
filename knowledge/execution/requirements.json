@@ -755,6 +755,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
+      },
+      "verificationExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001E",
+        "status": "LOCALLY_VERIFIED_BOUNDED_VERIFICATION_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation of existing protected quote,explicit consent,synthetic uploads and review only;server authority,ownership,private evidence and all command handlers unchanged."
       }
     },
     {
@@ -2512,6 +2520,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
+      },
+      "verificationExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001E",
+        "status": "LOCALLY_VERIFIED_BOUNDED_VERIFICATION_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation of existing protected quote,explicit consent,synthetic uploads and review only;server authority,ownership,private evidence and all command handlers unchanged."
       }
     },
     {

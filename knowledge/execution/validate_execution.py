@@ -2924,7 +2924,7 @@ def cinema_image_assets_main():
 
 
 
-def inert_ci_main():
+def booking_experience_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='75762034452591903de60af59aa0ab240502f79d'
@@ -2980,6 +2980,68 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=cinema_image_assets_main()
     if result==0:print('PASS exact bounded booking section experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='54ec3eb9cdfd46fa70750c7400b4d4efe97e84b5'
+    owned={'frontend/components/verification-stages.tsx', 'frontend/tests/verification-experience-browser.mjs', 'frontend/components/verification.tsx', 'frontend/package.json', 'frontend/app/globals.css', 'frontend/tests/verification-experience.test.mjs', 'frontend/app/verification/page.tsx'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/requirements.json', 'knowledge/execution/status.json'}
+    canonical={'knowledge/PROGRESS.md', 'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md'}
+    added={'frontend/tests/verification-experience.test.mjs', 'frontend/components/verification-stages.tsx', 'frontend/tests/verification-experience-browser.mjs'}
+    hashes={'frontend/app/globals.css': '428b81e8cd36584f481fe803ddcce2e2e964cd102202384b70c68d6c0612e3b0', 'frontend/app/verification/page.tsx': 'ac2f0ed4559224b3b2db6b6d21df16970954e9f7053d865a556b4eb3d0ee8c5e', 'frontend/components/verification.tsx': 'd38eb1d711955ce8110c3471197dc3c567b9a8637f9be12f0d47eb02d0b073de', 'frontend/components/verification-stages.tsx': '24c2039eb4bc3d0ff43cb9bfee56a66572785c5f98307d23e267a50be37c062d', 'frontend/package.json': '8d5dd4a5b130cc32fb0f1e0504db23ca1b798c16d6581065317706327c1fe631', 'frontend/tests/verification-experience.test.mjs': 'fdc76d67cc683ba81bcee656aca60944a7d4e87dc069c4a5e2663ec45fbda3be', 'frontend/tests/verification-experience-browser.mjs': '55efccbe847161e9c0371076d7e415720992c279dcd50b6786d8e2ea4775af0a', 'knowledge/execution/requirements.json': '77bd4ff623c32dc641a5c8cf3c5ebeda5cf517445afcf24df8ccb96b37ce176c', 'knowledge/execution/test-plan.json': 'a701d2fcef209d7d4541bd030d522564e7cc92238cb20b518b25b4e23ead1d7e', 'knowledge/execution/status.json': '8bdc4962d01cb12fe7b7e1347974cf16eb0a8db9eddd7a26ef2915dbf46aafe3', 'knowledge/ARCHITECTURE.md': 'ac934ad823bc103b78aa668ba166000083ae8dfe4c8c1fb0732b548c6caa0e8f', 'knowledge/DESIGN.md': '6fea33bab36f369f0362ac9ecd9c918f2d85d8f7edd67e4c575f38ba31d705e9', 'knowledge/PROGRESS.md': '69ff578964dc3d27f27c705fd8c5288b2984a4b3d57def9dc6b53770e21912e5'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Verification experience exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('verificationExperienceEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Verification experience changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('verificationExperienceImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Verification experience changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Verification experience changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Verification experience rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/verification-experience.test.mjs':errors.append('Verification experience lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Verification experience changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Verification experience rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Verification experience promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Verification experience unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Verification experience changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=booking_experience_main()
+    if result==0:print('PASS exact bounded verification experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

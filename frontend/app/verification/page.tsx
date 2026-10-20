@@ -10,10 +10,11 @@ export default async function Page({
 	return (
 		<>
 			<PageHeading
-				eyebrow="Synthetic development only"
-				title="Booker verification test"
+				eyebrow="Your cinema journey · Synthetic identity test"
+				title="Identity verification"
 			>
-				Private synthetic evidence; no physical admission approval.
+				Review your quotation, give explicit consent and submit only approved
+				synthetic evidence. This test does not approve physical admission.
 			</PageHeading>
 			<VerificationWorkspace
 				key={quoteId}

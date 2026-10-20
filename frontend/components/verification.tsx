@@ -13,6 +13,10 @@ import { Button, Card, Field, SelectField, StateMessage } from "./primitives";
 import { HandoffStatus, useQuoteHandoff } from "./quote-handoff";
 import { QuoteSummary } from "./quotes";
 import { BankContinuation } from "./bank-handoff";
+import {
+	VerificationStages,
+	VerificationReviewGuidance,
+} from "./verification-stages";
 export function VerificationNotice() {
 	return (
 		<>
@@ -233,358 +237,442 @@ export function VerificationWorkspace({
 		if (current === generation.current) setPreview(URL.createObjectURL(blob));
 	}
 	return (
-		<Card
-			title={
-				reviewer
-					? "Synthetic manual review queue"
-					: "Synthetic booker verification"
-			}
-		>
-			<VerificationNotice />
-			{reviewer ? (
-				<>
-					<Field
-						id="verification-venue"
-						label="Authorized venue ID"
-						value={venue}
-						disabled={busy || !!pending.current}
-						onChange={(e) => {
-							setVenue(e.target.value);
-							clear();
-						}}
-					/>
-					<Button
-						disabled={busy || !venue || !!pending.current}
-						onClick={() =>
-							run(async () => {
-								clear();
-								const response = await roomRequest<unknown[]>(prefix);
-								setItems(response.map(validateVerification));
-							})
-						}
-					>
-						Load venue review queue
-					</Button>
-					{items?.length === 0 && (
-						<StateMessage kind="empty">
-							<p>No review cases returned for this venue.</p>
-						</StateMessage>
-					)}
-					{items?.map((item) => (
-						<p key={item.id}>
-							<Link
-								prefetch={false}
-								href={reviewHref("verification", venue, item.id)}
-							>
-								Open exact verification review details
-							</Link>
-
-							<Button
-								disabled={busy || !!pending.current}
-								onClick={() => run(() => refresh(item.id))}
-							>
-								{item.state} · {item.id}
-							</Button>
-						</p>
-					))}
-				</>
-			) : (
-				<>
-					<HandoffStatus {...context} />
-					{context.quote && !context.loading && (
-						<QuoteSummary quote={context.quote} />
-					)}
-					<Button
-						disabled={context.loading || busy || !!pending.current}
-						onClick={() => void context.reload()}
-					>
-						Reload quotation context
-					</Button>
-					<p>
-						<Link href="/rooms">
-							Return to room selection and quotation review
-						</Link>
-					</p>
-					<Field
-						id="verification-quote"
-						label="Owned synthetic quotation ID"
-						readOnly={!!initialQuoteId}
-						value={quote}
-						disabled={busy || !!pending.current}
-						onChange={(e) => {
-							clear();
-							setQuote(e.target.value);
-						}}
-					/>
-					<Field
-						id="verification-policy"
-						label="Operator-provided synthetic policy version"
-						value={policy}
-						disabled={busy || !!pending.current}
-						onChange={(e) => {
-							setPolicy(e.target.value);
-							setConsent(false);
-						}}
-					/>
-					<Field
-						id="verification-consent"
-						type="checkbox"
-						label="I consent to this versioned synthetic test processing; no real documents"
-						checked={consent}
-						disabled={!canStart || busy || !!pending.current}
-						onChange={(e) => setConsent(e.target.checked)}
-					/>
-					<Button
-						disabled={
-							!canStart ||
-							!quote ||
-							!policy ||
-							!consent ||
-							busy ||
-							!!pending.current
-						}
-						onClick={() =>
-							run(async () => {
-								const current = await context.reload();
-								// Revalidation invalidates consent; this explicit click applies only
-								// to the exact context that the customer just reviewed.
-								if (
-									!current?.verificationHandoff.eligible ||
-									current.revision !== context.quote?.revision ||
-									current.contentHash !== context.quote?.contentHash
-								) {
-									setError(
-										new Error(
-											"Quotation context changed. Review the refreshed quotation and consent again.",
-										),
-									);
-									return;
-								}
-								await command("/api/verification/requests", {
-									quoteId: quote,
-									policyVersion: policy,
-									consent: true,
-								});
-							})
-						}
-					>
-						Start synthetic request
-					</Button>
-				</>
-			)}
-			<Field
-				id="verification-request"
-				label="Existing request ID"
-				value={requestId}
-				disabled={busy || !!pending.current}
-				onChange={(e) => {
-					clear();
-					setRequestId(e.target.value);
-				}}
-			/>
-			<Button
-				disabled={!requestId || busy || !!pending.current}
-				onClick={() => run(() => refresh())}
+		<div data-cn-theme={reviewer ? undefined : "booking-panel"}>
+			<Card
+				className={reviewer ? "" : "verification-workspace"}
+				title={
+					reviewer
+						? "Synthetic manual review queue"
+						: "Verify your booking identity"
+				}
 			>
-				Refresh current request and history
-			</Button>
-			{busy && <StateMessage kind="loading" />}
-			{error !== undefined && (reviewer || context.error === undefined) && (
-				<StateMessage kind={stateFor(error)}>
-					<p>
-						{error instanceof Error
-							? error.message
-							: "Synthetic verification unavailable"}
-						. Refresh after conflicts. An interrupted upload expires and can be
-						replaced by a new submission generation.
-					</p>
-				</StateMessage>
-			)}
-			{!!pending.current && !busy && (
-				<>
-					<p>Outcome unknown. Retry the identical command before editing.</p>
-					<Button
-						onClick={() =>
-							run(async () => {
-								if (pending.current) await command(pending.current.path, {});
-							})
-						}
-					>
-						Retry original verification command
-					</Button>
-				</>
-			)}
-			{value && (
-				<>
-					<VerificationSummary value={value} />
-					{!reviewer && !busy && (
-						<BankContinuation
-							key={`${value.quoteId}:${value.revision}`}
-							reference={value.quoteId}
+				{!reviewer && <VerificationStages />}
+				<div className={reviewer ? undefined : "verification-notice"}>
+					<VerificationNotice />
+				</div>
+				{reviewer ? (
+					<>
+						<Field
+							id="verification-venue"
+							label="Authorized venue ID"
+							value={venue}
+							disabled={busy || !!pending.current}
+							onChange={(e) => {
+								setVenue(e.target.value);
+								clear();
+							}}
 						/>
-					)}
-					{!reviewer && !value.superseded && (
-						<>
-							<SelectField
-								id="verification-type"
-								label="Synthetic document type"
-								value={type}
-								disabled={!canStart || busy || !!pending.current}
-								onChange={(e) => setType(e.target.value)}
+						<Button
+							disabled={busy || !venue || !!pending.current}
+							onClick={() =>
+								run(async () => {
+									clear();
+									const response = await roomRequest<unknown[]>(prefix);
+									setItems(response.map(validateVerification));
+								})
+							}
+						>
+							Load venue review queue
+						</Button>
+						{items?.length === 0 && (
+							<StateMessage kind="empty">
+								<p>No review cases returned for this venue.</p>
+							</StateMessage>
+						)}
+						{items?.map((item) => (
+							<p key={item.id}>
+								<Link
+									prefetch={false}
+									href={reviewHref("verification", venue, item.id)}
+								>
+									Open exact verification review details
+								</Link>
+
+								<Button
+									disabled={busy || !!pending.current}
+									onClick={() => run(() => refresh(item.id))}
+								>
+									{item.state} · {item.id}
+								</Button>
+							</p>
+						))}
+					</>
+				) : (
+					<>
+						<section
+							id="verification-context"
+							className="verification-panel verification-context"
+							aria-labelledby="verification-context-heading"
+						>
+							<p className="eyebrow">01 · Protected quotation</p>
+							<h3 id="verification-context-heading">Review your quotation</h3>
+							<HandoffStatus {...context} />
+							{context.quote && !context.loading && (
+								<QuoteSummary quote={context.quote} />
+							)}
+							<Button
+								disabled={context.loading || busy || !!pending.current}
+								onClick={() => void context.reload()}
 							>
-								<option>NIC</option>
-								<option>PASSPORT</option>
-							</SelectField>
+								Reload quotation context
+							</Button>
+							<p>
+								<Link href="/rooms">
+									Return to room selection and quotation review
+								</Link>
+							</p>
 							<Field
-								id="verification-file"
-								label="Approved synthetic image only (JPEG/PNG, 5 MiB, 20 MP)"
-								type="file"
-								accept="image/jpeg,image/png"
+								id="verification-quote"
+								label="Owned synthetic quotation ID"
+								readOnly={!!initialQuoteId}
+								value={quote}
+								disabled={busy || !!pending.current}
+								onChange={(e) => {
+									clear();
+									setQuote(e.target.value);
+								}}
+							/>
+						</section>
+						<section
+							id="verification-permission"
+							className="verification-panel"
+							aria-labelledby="verification-permission-heading"
+						>
+							<p className="eyebrow">02 · Your permission</p>
+							<h3 id="verification-permission-heading">
+								Consent before you continue
+							</h3>
+							<p>
+								Use the policy version provided by the operator for this
+								synthetic test. Consent starts unchecked and must be given again
+								when the quotation or policy changes.
+							</p>
+							<Field
+								id="verification-policy"
+								label="Operator-provided synthetic policy version"
+								value={policy}
+								disabled={busy || !!pending.current}
+								onChange={(e) => {
+									setPolicy(e.target.value);
+									setConsent(false);
+								}}
+							/>
+							<Field
+								id="verification-consent"
+								hint="Choosing a file or reviewing this page does not submit a request."
+								type="checkbox"
+								label="I consent to this versioned synthetic test processing; no real documents"
+								checked={consent}
 								disabled={!canStart || busy || !!pending.current}
-								onChange={(e) => setFile(e.target.files?.[0])}
+								onChange={(e) => setConsent(e.target.checked)}
 							/>
 							<Button
 								disabled={
 									!canStart ||
-									!file ||
+									!quote ||
+									!policy ||
+									!consent ||
 									busy ||
-									!!pending.current ||
-									!["NOT_SUBMITTED", "SUBMITTED", "REVIEW_REQUIRED"].includes(
-										value.state,
-									) ||
-									value.evidence.length >= 2
-								}
-								onClick={() => run(submit)}
-							>
-								Upload and request simulated scan
-							</Button>
-							{progress !== undefined && (
-								<p role="status">
-									Upload progress {progress}% — transfer is not identity
-									approval.
-								</p>
-							)}
-							<Button
-								disabled={
-									!canStart || !consent || !policy || busy || !!pending.current
+									!!pending.current
 								}
 								onClick={() =>
 									run(async () => {
-										await command(
-											`/api/verification/requests/${value.id}/resubmissions`,
-											{
-												quoteId: value.quoteId,
-												revision: value.revision,
-												policyVersion: policy,
-												consent: true,
-											},
-										);
-									})
-								}
-							>
-								Create correction generation with current consent
-							</Button>
-						</>
-					)}
-					{reviewer && (
-						<>
-							{value.evidence
-								.filter((e) => e.state === "READY")
-								.map((e) => (
-									<Button
-										key={e.id}
-										disabled={busy || !!pending.current}
-										onClick={() => run(() => showPreview(e.id))}
-									>
-										Open private {e.type} preview
-									</Button>
-								))}
-							{preview && (
-								<>
-									{/* biome-ignore lint/performance/noImgElement: Private ephemeral blob must never enter shared image optimization/cache. */}
-									<img
-										src={preview}
-										alt="Private explicitly synthetic fixture for current manual review"
-										width="280"
-									/>
-									<Button onClick={() => setPreview(undefined)}>
-										Close private preview
-									</Button>
-								</>
-							)}
-							<SelectField
-								id="verification-verdict"
-								label="Manual digital test decision"
-								value={verdict}
-								disabled={busy || !!pending.current}
-								onChange={(e) => {
-									setVerdict(e.target.value);
-									setReason(
-										e.target.value === "VERIFIED"
-											? "SYNTHETIC_MATCH_18_PLUS"
-											: e.target.value === "REVOKED"
-												? "WITHDRAWN"
-												: "CORRECTION_REQUIRED",
-									);
-									setReviewed(false);
-								}}
-							>
-								<option>VERIFIED</option>
-								<option>REJECTED</option>
-								<option>REVOKED</option>
-							</SelectField>
-							<SelectField
-								id="verification-reason"
-								label="Attributable decision reason"
-								value={reason}
-								disabled={busy || !!pending.current}
-								onChange={(e) => {
-									setReason(e.target.value);
-									setReviewed(false);
-								}}
-							>
-								{(verdict === "VERIFIED"
-									? ["SYNTHETIC_MATCH_18_PLUS"]
-									: [
-											"INCONSISTENT",
-											"UNREADABLE",
-											"EXPIRED_EVIDENCE",
-											"CORRECTION_REQUIRED",
-											"WITHDRAWN",
-										]
-								).map((r) => (
-									<option key={r}>{r}</option>
-								))}
-							</SelectField>
-							<Field
-								id="verification-reviewed"
-								type="checkbox"
-								label="I manually reviewed the current synthetic evidence, booker match and 18+ policy; this does not approve admission"
-								checked={reviewed}
-								disabled={busy || !!pending.current}
-								onChange={(e) => setReviewed(e.target.checked)}
-							/>
-							<Button
-								disabled={
-									!reviewed || busy || !!pending.current || value.superseded
-								}
-								onClick={() =>
-									run(async () => {
-										setPreview(undefined);
-										await command(`${prefix}/${value.id}/decisions`, {
-											revision: value.revision,
-											verdict,
-											reason,
+										const current = await context.reload();
+										// Revalidation invalidates consent; this explicit click applies only
+										// to the exact context that the customer just reviewed.
+										if (
+											!current?.verificationHandoff.eligible ||
+											current.revision !== context.quote?.revision ||
+											current.contentHash !== context.quote?.contentHash
+										) {
+											setError(
+												new Error(
+													"Quotation context changed. Review the refreshed quotation and consent again.",
+												),
+											);
+											return;
+										}
+										await command("/api/verification/requests", {
+											quoteId: quote,
+											policyVersion: policy,
+											consent: true,
 										});
 									})
 								}
 							>
-								Record exact-revision manual decision
+								Start synthetic request
 							</Button>
+						</section>
+					</>
+				)}
+				<section
+					className={
+						reviewer ? undefined : "verification-panel verification-recovery"
+					}
+					aria-label="Load an existing verification request"
+				>
+					{!reviewer && (
+						<>
+							<h3>Returning to a request?</h3>
+							<p>
+								Enter your existing request reference to reload its protected
+								status and history. This does not create a new request.
+							</p>
 						</>
 					)}
-				</>
-			)}
-		</Card>
+					<Field
+						id="verification-request"
+						label="Existing request ID"
+						value={requestId}
+						disabled={busy || !!pending.current}
+						onChange={(e) => {
+							clear();
+							setRequestId(e.target.value);
+						}}
+					/>
+					<Button
+						disabled={!requestId || busy || !!pending.current}
+						onClick={() => run(() => refresh())}
+					>
+						Refresh current request and history
+					</Button>
+				</section>
+				{busy && <StateMessage kind="loading" />}
+				{error !== undefined && (reviewer || context.error === undefined) && (
+					<StateMessage kind={stateFor(error)}>
+						<p>
+							{error instanceof Error
+								? error.message
+								: "Synthetic verification unavailable"}
+							. Refresh after conflicts. An interrupted upload expires and can
+							be replaced by a new submission generation.
+						</p>
+					</StateMessage>
+				)}
+				{!!pending.current && !busy && (
+					<>
+						<p>Outcome unknown. Retry the identical command before editing.</p>
+						<Button
+							onClick={() =>
+								run(async () => {
+									if (pending.current) await command(pending.current.path, {});
+								})
+							}
+						>
+							Retry original verification command
+						</Button>
+					</>
+				)}
+				{value && (
+					<>
+						{!reviewer && !value.superseded && (
+							<section
+								id="verification-evidence"
+								className="verification-panel verification-evidence"
+								aria-labelledby="verification-evidence-heading"
+							>
+								<p className="eyebrow">03 · Synthetic evidence</p>
+								<h3 id="verification-evidence-heading">
+									Choose your test image
+								</h3>
+								<p>
+									Only operator-approved synthetic NIC or passport fixtures.
+									Never select a real identity document. Selecting a file does
+									not upload it.
+								</p>
+								<SelectField
+									id="verification-type"
+									label="Synthetic document type"
+									value={type}
+									disabled={!canStart || busy || !!pending.current}
+									onChange={(e) => setType(e.target.value)}
+								>
+									<option>NIC</option>
+									<option>PASSPORT</option>
+								</SelectField>
+								<Field
+									id="verification-file"
+									hint="JPEG or PNG only · Up to 5 MiB and 20 megapixels · At most two evidence images per generation. The server validates every upload."
+									label="Approved synthetic image only (JPEG/PNG, 5 MiB, 20 MP)"
+									type="file"
+									accept="image/jpeg,image/png"
+									disabled={!canStart || busy || !!pending.current}
+									onChange={(e) => setFile(e.target.files?.[0])}
+								/>
+								<Button
+									disabled={
+										!canStart ||
+										!file ||
+										busy ||
+										!!pending.current ||
+										!["NOT_SUBMITTED", "SUBMITTED", "REVIEW_REQUIRED"].includes(
+											value.state,
+										) ||
+										value.evidence.length >= 2
+									}
+									onClick={() => run(submit)}
+								>
+									Upload and request simulated scan
+								</Button>
+								{progress !== undefined && (
+									<p role="status">
+										Upload progress {progress}% — transfer is not identity
+										approval.
+									</p>
+								)}
+								<Button
+									disabled={
+										!canStart ||
+										!consent ||
+										!policy ||
+										busy ||
+										!!pending.current
+									}
+									onClick={() =>
+										run(async () => {
+											await command(
+												`/api/verification/requests/${value.id}/resubmissions`,
+												{
+													quoteId: value.quoteId,
+													revision: value.revision,
+													policyVersion: policy,
+													consent: true,
+												},
+											);
+										})
+									}
+								>
+									Create correction generation with current consent
+								</Button>
+							</section>
+						)}
+						<section
+							className={
+								reviewer ? undefined : "verification-panel verification-review"
+							}
+						>
+							{!reviewer && (
+								<section
+									id="verification-review"
+									className="verification-panel"
+									aria-labelledby="verification-review-heading"
+								>
+									<p className="eyebrow">04 · Review status</p>
+									<h3 id="verification-review-heading">Your current review</h3>
+									<VerificationReviewGuidance
+										state={value.state}
+										superseded={value.superseded}
+									/>
+								</section>
+							)}
+							<VerificationSummary value={value} />
+							{!reviewer && !busy && (
+								<BankContinuation
+									key={`${value.quoteId}:${value.revision}`}
+									reference={value.quoteId}
+								/>
+							)}
+						</section>
+						{reviewer && (
+							<>
+								{value.evidence
+									.filter((e) => e.state === "READY")
+									.map((e) => (
+										<Button
+											key={e.id}
+											disabled={busy || !!pending.current}
+											onClick={() => run(() => showPreview(e.id))}
+										>
+											Open private {e.type} preview
+										</Button>
+									))}
+								{preview && (
+									<>
+										{/* biome-ignore lint/performance/noImgElement: Private ephemeral blob must never enter shared image optimization/cache. */}
+										<img
+											src={preview}
+											alt="Private explicitly synthetic fixture for current manual review"
+											width="280"
+										/>
+										<Button onClick={() => setPreview(undefined)}>
+											Close private preview
+										</Button>
+									</>
+								)}
+								<SelectField
+									id="verification-verdict"
+									label="Manual digital test decision"
+									value={verdict}
+									disabled={busy || !!pending.current}
+									onChange={(e) => {
+										setVerdict(e.target.value);
+										setReason(
+											e.target.value === "VERIFIED"
+												? "SYNTHETIC_MATCH_18_PLUS"
+												: e.target.value === "REVOKED"
+													? "WITHDRAWN"
+													: "CORRECTION_REQUIRED",
+										);
+										setReviewed(false);
+									}}
+								>
+									<option>VERIFIED</option>
+									<option>REJECTED</option>
+									<option>REVOKED</option>
+								</SelectField>
+								<SelectField
+									id="verification-reason"
+									label="Attributable decision reason"
+									value={reason}
+									disabled={busy || !!pending.current}
+									onChange={(e) => {
+										setReason(e.target.value);
+										setReviewed(false);
+									}}
+								>
+									{(verdict === "VERIFIED"
+										? ["SYNTHETIC_MATCH_18_PLUS"]
+										: [
+												"INCONSISTENT",
+												"UNREADABLE",
+												"EXPIRED_EVIDENCE",
+												"CORRECTION_REQUIRED",
+												"WITHDRAWN",
+											]
+									).map((r) => (
+										<option key={r}>{r}</option>
+									))}
+								</SelectField>
+								<Field
+									id="verification-reviewed"
+									type="checkbox"
+									label="I manually reviewed the current synthetic evidence, booker match and 18+ policy; this does not approve admission"
+									checked={reviewed}
+									disabled={busy || !!pending.current}
+									onChange={(e) => setReviewed(e.target.checked)}
+								/>
+								<Button
+									disabled={
+										!reviewed || busy || !!pending.current || value.superseded
+									}
+									onClick={() =>
+										run(async () => {
+											setPreview(undefined);
+											await command(`${prefix}/${value.id}/decisions`, {
+												revision: value.revision,
+												verdict,
+												reason,
+											});
+										})
+									}
+								>
+									Record exact-revision manual decision
+								</Button>
+							</>
+						)}
+					</>
+				)}
+			</Card>
+		</div>
 	);
 }

@@ -791,3 +791,130 @@ button.button { display: inline-grid; }
 .booking-review-grid .field:has(input[type="checkbox"]) { grid-template-columns: var(--cn-layout-touchtarget) minmax(0,1fr); gap: var(--cn-spacing-3); align-items: start; margin-block: var(--cn-spacing-4); }
 .booking-review-grid .field:has(input[type="checkbox"]) label { grid-column: 2; grid-row: 1; min-height: var(--cn-layout-touchtarget); display: flex; align-items: center; }
 .booking-review-grid .field input[type="checkbox"] { grid-column: 1; grid-row: 1; width: var(--cn-layout-touchtarget); height: var(--cn-layout-touchtarget); margin: 0; accent-color: var(--cn-color-brand-primary); }
+
+/* Identity panels reuse the approved booking tokens; no evidence preview is public. */
+.verification-workspace {
+	display: grid;
+	gap: var(--cn-spacing-4);
+}
+.customer-shell .verification-workspace {
+	--cn-background: var(--cn-color-surface);
+	--cn-foreground: var(--cn-color-text-primary);
+	--cn-card-background: var(--cn-color-surface);
+	background: var(--cn-color-surface);
+	color: var(--cn-color-text-primary);
+}
+
+.verification-stages ol {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	list-style: none;
+	padding: 0;
+	gap: var(--cn-spacing-3);
+}
+.customer-shell .verification-workspace .verification-stages li > a,
+.verification-stages li > span {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--cn-spacing-2);
+	min-height: 44px;
+	text-align: center;
+}
+.verification-stages li > a > span,
+.verification-stages li > span > span {
+	display: grid;
+	place-items: center;
+	border: 1px solid var(--cn-color-border);
+	border-radius: 50%;
+	width: 2rem;
+	height: 2rem;
+}
+.verification-panel,
+.verification-notice {
+	border: 1px solid var(--cn-color-border);
+	border-radius: var(--cn-radius-card);
+	padding: var(--cn-spacing-4);
+	min-width: 0;
+	scroll-margin-top: var(--cn-spacing-6);
+}
+.verification-panel {
+	background: var(--cn-color-surface);
+}
+.verification-notice {
+	border-inline-start: 4px solid var(--cn-color-warning-foreground);
+}
+.verification-notice p {
+	margin-block: var(--cn-spacing-2);
+}
+.verification-workspace .field:has(input[type="checkbox"]) {
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr);
+	align-items: center;
+}
+.verification-workspace .field:has(input[type="checkbox"]) input {
+	grid-column: 1;
+	grid-row: 1;
+	width: 24px;
+	min-height: 44px;
+}
+.verification-workspace .field:has(input[type="checkbox"]) label {
+	grid-column: 2;
+	grid-row: 1;
+}
+.verification-workspace .field:has(input[type="checkbox"]) p {
+	grid-column: 2;
+}
+.verification-evidence input[type="file"] {
+	width: 100%;
+	max-width: 100%;
+	padding-block: var(--cn-spacing-4);
+	border-style: dashed;
+}
+@media (min-width: 1024px) {
+	.verification-workspace {
+		grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+	}
+	.verification-workspace > h2,
+	.verification-workspace > .verification-stages,
+	.verification-workspace > .verification-notice,
+	.verification-workspace > .state,
+	.verification-workspace > .account-summary {
+		grid-column: 1 / -1;
+	}
+}
+@media (max-width: 639px) {
+	.verification-stages ol {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+.customer-shell .verification-workspace .eyebrow {
+	color: var(--cn-color-brand-primary);
+}
+.customer-shell .verification-workspace .muted {
+	color: var(--cn-color-text-secondary);
+}
+.customer-shell .verification-workspace a:not(.button) {
+	color: var(--cn-color-brand-primary);
+}
+.verification-review-guidance {
+	padding: var(--cn-spacing-3);
+	background: var(--cn-color-info-background);
+	color: var(--cn-color-info-foreground);
+	border-radius: var(--cn-radius-control);
+}
+.verification-workspace .verification-review {
+	min-width: 0;
+}
+.verification-workspace .verification-review > section {
+	border: 0;
+	padding: 0;
+}
+.verification-workspace .account-summary dd {
+	overflow-wrap: anywhere;
+}
+@media (min-width: 1024px) {
+ .verification-workspace { align-items: start; }
+ .verification-workspace > .verification-recovery { grid-column: 1 / -1; }
+}
