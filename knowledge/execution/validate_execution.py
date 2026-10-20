@@ -2679,7 +2679,7 @@ def staff_booking_frontend_main():
 
 
 
-def inert_ci_main():
+def frontend_experience_a_main():
     """Qualify exact frontend-only staff booking successor before historical replay."""
     from unittest.mock import patch
     baseline='a4f808907a1616a5bb3a75386a2e09c23c6f1ba5'
@@ -2735,6 +2735,67 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=staff_booking_frontend_main()
     if result==0:print('PASS exact bounded frontend experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact frontend-only staff booking successor before historical replay."""
+    from unittest.mock import patch
+    baseline='417666a5090bc00ea906ae5571a75cfe248c6055'
+    owned={'frontend/tests/inventory-browser.mjs', 'frontend/tests/packages-browser.mjs', 'frontend/components/primitives.tsx', 'frontend/tests/rooms-browser.mjs', 'frontend/components/examples.tsx', 'frontend/components/staff-bookings.tsx', 'frontend/lib/state-presentation.ts', 'frontend/tests/states-browser.mjs', 'frontend/lib/rooms.ts', 'frontend/tests/ui-browser.mjs', 'frontend/tests/experience-browser.mjs', 'frontend/components/rooms.tsx', 'frontend/components/staff-review-detail.tsx', 'frontend/app/globals.css', 'frontend/tests/states.test.mjs', 'frontend/package.json'}
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/status.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md'}
+    added={'frontend/lib/state-presentation.ts', 'frontend/tests/states.test.mjs', 'frontend/tests/states-browser.mjs'}
+    hashes={'frontend/app/globals.css': 'f24432b89c8d1828af16919de41ecd948e8203e3c7dbb2395ef7a65957e6b0f2', 'frontend/components/examples.tsx': '865cd5877badbe743fc850e15e146a85c9ef7f061168132aa3b6228f7be1f970', 'frontend/components/primitives.tsx': 'ff7508010cd090195037e17551c0f4af5f61754fd882508c64f68bb963733d60', 'frontend/components/rooms.tsx': '588f662156f8cf8e2f728e2c6593e39cedb7248ab7ae0a860c3459dd0e7a1401', 'frontend/components/staff-bookings.tsx': 'b852a4ee41a3210fc960f653b5eca6fdb2bc39f8210424b67bdf1d0a9f74b89f', 'frontend/components/staff-review-detail.tsx': '16fe8fc0211d8e0388b371e0bb3a366a8cceeb8181242130ad6a1f2d703bc662', 'frontend/lib/rooms.ts': 'd88570372b4ff4a3a789bfe3233037e8cf0acb69e70403695c54d6274ecc67f8', 'frontend/lib/state-presentation.ts': '51686bf9bee362fc08b86ea6fd256fcaf5a1245a3456456d8f853e84bfca105f', 'frontend/package.json': '333dd9bc56b467da97a0eb1a9026b7d982774383cd38290ed7ae1f03de01b4de', 'frontend/tests/ui-browser.mjs': 'a22f2fd82eeeeee83b0b09e3ef8bf894c5425874ef7eacb4fb209f0aad55f38f', 'frontend/tests/experience-browser.mjs': '2b9918b26c77fa81fe815f9c198039a43f5b67da6c6ff64dbda76871941fa8d5', 'frontend/tests/packages-browser.mjs': '64e57234429ca01eb19bec87320b0dea6844f2a62e3369204dc8e4b257c565f4', 'frontend/tests/rooms-browser.mjs': '70645abed2230e82ae8b19a008b666856d5cecd50c6f805fa9cdd1dcbd2486f4', 'frontend/tests/inventory-browser.mjs': '487520e0c24cbe57a3bbdefc69b3f2a1a9f0181268d95835c0aac278300cb0b8', 'frontend/tests/states.test.mjs': 'b54bff4fabbffc2925b3a66c881a0a61200c16fe2fec745ddf5969e1007d4665', 'frontend/tests/states-browser.mjs': '6ed87b81ae99b9fe297d57b110bdba1bf3351467bf48e389fcfdce89ab6be79d', 'knowledge/execution/requirements.json': '55645ea16a88732e68b9237fb13eab73df4f50f865fb0b168a2c50e14d107af0', 'knowledge/execution/test-plan.json': 'ec646ce94eac1f942448b7e24b57594cb7b763869bf4ad1ef410f0444b6f81d2', 'knowledge/execution/status.json': '8479016cd036439a5968ad07e6a3b58a45f04c9a1e27b2b2fe62c0e6887c0aa7', 'knowledge/ARCHITECTURE.md': '722ab003afd083856a6a6b8de2c1dea11227855535020b494b659d7ddd4e493f', 'knowledge/DESIGN.md': '5bd5b0ea3a4b47a68edc336c7f92173c947156c89b944da2880e0629bddcece5', 'knowledge/PROGRESS.md': '10e8b5976048a8d2e37a3586bee1ea54261e26e38adbd9df1e56293bb340fee0'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Shared state experience exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('frontendSharedStatesEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Shared state experience changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('frontendSharedStatesImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Shared state experience changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Shared state experience changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Shared state experience rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/states.test.mjs':errors.append('Shared state experience lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Shared state experience changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Shared state experience rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Shared state experience promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Shared state experience unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Shared state experience changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=frontend_experience_a_main()
+    if result==0:print('PASS exact bounded shared state experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

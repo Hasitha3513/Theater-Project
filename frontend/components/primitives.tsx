@@ -1,3 +1,5 @@
+import { statePresentation, type StateKind } from "../lib/state-presentation";
+export type { StateKind } from "../lib/state-presentation";
 import type {
 	ButtonHTMLAttributes,
 	InputHTMLAttributes,
@@ -23,8 +25,12 @@ export function Button({
 			disabled={disabled || busy}
 			aria-busy={busy || undefined}
 		>
-			<span className="button-label" aria-hidden={busy || undefined}>{children}</span>
-            <span className="button-busy" aria-hidden={!busy}>Please wait…</span>
+			<span className="button-label" aria-hidden={busy || undefined}>
+				{children}
+			</span>
+			<span className="button-busy" aria-hidden={!busy}>
+				Please wait…
+			</span>
 		</button>
 	);
 }
@@ -114,53 +120,33 @@ export function PageHeading({
 		</header>
 	);
 }
-export type StateKind =
-	| "loading"
-	| "empty"
-	| "error"
-	| "unauthenticated"
-	| "denied"
-	| "unconfigured";
-const states: Record<StateKind, [string, string]> = {
-	loading: ["Loading", "Waiting for a response. No result has been confirmed."],
-	empty: [
-		"Nothing here yet",
-		"There are no matching examples. Try a different filter.",
-	],
-	error: [
-		"Unable to connect",
-		"The request could not be completed. Try again when the service is available.",
-	],
-	unauthenticated: [
-		"Sign-in required",
-		"No active session was found. An expired session also returns this state.",
-	],
-	denied: [
-		"Access denied",
-		"The server did not permit this request. No protected account data is displayed.",
-	],
-	unconfigured: [
-		"Session service not configured",
-		"This shell does not create accounts or simulate sign-in. A configured backend connection is required.",
-	],
-};
 export function StateMessage({
 	kind,
 	children,
+	recovery,
 }: {
 	kind: StateKind;
 	children?: ReactNode;
+	recovery?: ReactNode;
 }) {
-	const [title, message] = states[kind];
+	const { title, message, symbol, urgent } = statePresentation[kind];
 	return (
 		<section
 			className={`state state-${kind}`}
-			role={kind === "error" || kind === "denied" ? "alert" : "status"}
+			role={urgent ? "alert" : "status"}
+			aria-label={title}
+			aria-atomic="true"
 			aria-busy={kind === "loading" || undefined}
 		>
-			<h2>{title}</h2>
+			<div className="state-heading">
+				<span className="state-symbol" aria-hidden="true">
+					{symbol}
+				</span>
+				<h2>{title}</h2>
+			</div>
 			<p>{message}</p>
 			{children}
+			{recovery && <div className="state-actions">{recovery}</div>}
 		</section>
 	);
 }

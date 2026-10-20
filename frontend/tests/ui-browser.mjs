@@ -134,7 +134,7 @@ try {
 	await page.goto(`${base}/admin/account`);
 	await page.getByRole("button", { name: "Check session" }).click();
 	await page
-		.getByRole("heading", { name: "Session service not configured" })
+		.getByRole("heading", { name: "Connection unavailable" })
 		.waitFor();
 	pass("unconfigured real adapter reports honestly");
 	const account = {
@@ -144,7 +144,7 @@ try {
 	for (const [status, title] of [
 		[401, "Sign-in required"],
 		[403, "Access denied"],
-		[500, "Unable to connect"],
+		[500, "Request not completed"],
 	]) {
 		await page.route("**/api/accounts/me", (r) =>
 			r.fulfill({ status, body: "" }),

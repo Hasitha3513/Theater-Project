@@ -129,6 +129,10 @@ export function Examples() {
 							"unauthenticated",
 							"denied",
 							"unconfigured",
+							"validation",
+							"not-found",
+							"conflict",
+							"unavailable",
 						].map((value) => (
 							<option key={value} value={value}>
 								{value}

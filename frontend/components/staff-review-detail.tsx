@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { BankRequest } from "../lib/bank";
 import type { Verification } from "../lib/verification";
-import { RoomRequestError } from "../lib/rooms";
+import { stateFor } from "../lib/rooms";
 import {
 	loadStaffReview,
 	reviewQueueHref,
@@ -11,7 +11,7 @@ import {
 } from "../lib/staff-review";
 import { BankNotice, BankSummary } from "./bank";
 import { VerificationNotice, VerificationSummary } from "./verification";
-import { Button, Card, StateMessage } from "./primitives";
+import { Button, Card, StateMessage, type StateKind } from "./primitives";
 export function StaffReviewDetail({
 	kind,
 	venue,
@@ -23,7 +23,7 @@ export function StaffReviewDetail({
 }) {
 	const [value, setValue] = useState<Verification | BankRequest>();
 	const [busy, setBusy] = useState(true);
-	const [error, setError] = useState<"denied" | "unauthenticated" | "error">();
+	const [error, setError] = useState<StateKind>();
 	const generation = useRef(0);
 	const controller = useRef<AbortController | undefined>(undefined);
 	const clear = useCallback(() => {
@@ -42,14 +42,7 @@ export function StaffReviewDetail({
 			const current = await loadStaffReview(kind, venue, request, read.signal);
 			if (epoch === generation.current) setValue(current);
 		} catch (e) {
-			if (epoch === generation.current)
-				setError(
-					e instanceof RoomRequestError && e.status === 401
-						? "unauthenticated"
-						: e instanceof RoomRequestError && e.status === 403
-							? "denied"
-							: "error",
-				);
+			if (epoch === generation.current) setError(stateFor(e));
 		} finally {
 			if (epoch === generation.current) setBusy(false);
 		}

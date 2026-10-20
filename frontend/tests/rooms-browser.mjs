@@ -227,7 +227,7 @@ try {
 	pass("denied state hides protected records");
 	mode = "error";
 	await page.goto(`${base}/rooms`);
-	await page.getByRole("heading", { name: "Unable to connect" }).waitFor();
+	await page.getByRole("heading", { name: "Service unavailable" }).waitFor();
 	mode = "normal";
 	await page.getByRole("button", { name: "Retry" }).click();
 	await page

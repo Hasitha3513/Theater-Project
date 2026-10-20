@@ -614,3 +614,12 @@ button.button { display: inline-grid; }
 .customer-shell .cinema-hero .button-primary {
  color: var(--cn-color-surface);
 }
+
+/* Shared state hierarchy: token-based surfaces, readable symbols and explicit actions. */
+.state { background: var(--cn-card-background); overflow-wrap: anywhere; }
+.state-heading { display: flex; align-items: center; gap: var(--cn-spacing-3); margin-bottom: var(--cn-spacing-3); }
+.state-heading h2 { margin: 0; }
+.state-symbol { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: var(--cn-layout-touchtarget); height: var(--cn-layout-touchtarget); border-radius: var(--cn-radius-pill); color: var(--cn-color-info-foreground); background: var(--cn-color-info-background); font-weight: var(--cn-font-weight-bold); }
+.state[role="alert"] .state-symbol { color: var(--cn-color-warning-foreground); background: var(--cn-color-warning-background); }
+.state-actions { display: flex; flex-wrap: wrap; gap: var(--cn-spacing-3); margin-top: var(--cn-spacing-4); }
+.state-actions .button { max-width: 100%; white-space: normal; }

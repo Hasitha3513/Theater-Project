@@ -214,7 +214,7 @@ try {
 		.getByRole("button", { name: "Inspect inventory", exact: true })
 		.click();
 	await page
-		.getByRole("heading", { name: "Nothing here yet", exact: true })
+		.getByRole("heading", { name: "No results", exact: true })
 		.waitFor();
 	pass("staff empty inventory");
 	mode = "denied";

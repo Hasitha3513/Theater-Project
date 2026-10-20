@@ -1,3 +1,4 @@
+import { stateForStatus } from "./state-presentation";
 export type WindowConfig = {
 	weekday: number;
 	openingMinute: number;
@@ -100,9 +101,11 @@ export function queryRooms(
 	return query.toString();
 }
 export function stateFor(error: unknown) {
-	return error instanceof RoomRequestError && error.status === 401
-		? "unauthenticated"
-		: error instanceof RoomRequestError && error.status === 403
-			? "denied"
-			: "error";
+	if (error instanceof RoomRequestError) return stateForStatus(error.status);
+	if (
+		error instanceof TypeError ||
+		(error instanceof DOMException && error.name === "TimeoutError")
+	)
+		return "unavailable";
+	return "error";
 }

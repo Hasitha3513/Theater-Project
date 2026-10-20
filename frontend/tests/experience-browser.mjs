@@ -175,7 +175,7 @@ try {
 	await page.getByRole("button", { name: "Check session" }).click();
 	await page.getByRole("heading", { name: "Loading", exact: true }).waitFor();
 	await page
-		.getByRole("heading", { name: "Session service not configured" })
+		.getByRole("heading", { name: "Connection unavailable" })
 		.waitFor();
 	await page.unroute("**/api/accounts/me");
 	await page.getByRole("button", { name: "Check session" }).click();

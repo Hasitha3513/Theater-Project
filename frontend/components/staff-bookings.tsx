@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { RoomRequestError } from "../lib/rooms";
+import { stateFor } from "../lib/rooms";
 import {
 	type BookingFilters,
 	type StaffBooking,
@@ -51,14 +51,7 @@ function useProtectedRead<T>(
 			);
 			if (epoch.current === token) setValue(next);
 		} catch (e) {
-			if (epoch.current === token)
-				setError(
-					e instanceof RoomRequestError && e.status === 401
-						? "unauthenticated"
-						: e instanceof RoomRequestError && e.status === 403
-							? "denied"
-							: "error",
-				);
+			if (epoch.current === token) setError(stateFor(e));
 		} finally {
 			if (epoch.current === token) setLoading(false);
 		}
@@ -215,6 +208,7 @@ export function StaffBookingList({ query = "" }: { query?: string }) {
 	return (
 		<>
 			<Notice />
+			<ReadState loading={state.loading} error={state.error} />
 			<Card title="Venue-scoped booking search">
 				<p>
 					Enter your assigned venue reference. Selection is not authorization;
@@ -300,7 +294,6 @@ export function StaffBookingList({ query = "" }: { query?: string }) {
 			>
 				Reload authorized bookings
 			</Button>
-			<ReadState loading={state.loading} error={state.error} />
 			{state.value && !dirty && (
 				<>
 					<p>

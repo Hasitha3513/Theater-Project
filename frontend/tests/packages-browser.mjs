@@ -342,7 +342,7 @@ try {
 	await page.getByRole("heading", { name: "Access denied" }).waitFor();
 	mode = "error";
 	await page.getByRole("button", { name: "Retry", exact: true }).click();
-	await page.getByRole("heading", { name: "Unable to connect" }).waitFor();
+	await page.getByRole("heading", { name: "Service unavailable" }).waitFor();
 	mode = "normal";
 	await page.getByLabel("Package name or code").fill("");
 	await page

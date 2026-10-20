@@ -254,11 +254,14 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 			)}
 			{loading && <StateMessage kind="loading" />}
 			{error !== undefined && (
-				<StateMessage kind={stateFor(error)}>
-					<Button onClick={() => setReload(new AbortController())}>
-						Retry
-					</Button>
-				</StateMessage>
+				<StateMessage
+					kind={stateFor(error)}
+					recovery={
+						<Button onClick={() => setReload(new AbortController())}>
+							Retry
+						</Button>
+					}
+				/>
 			)}
 			{admin && !venue && !error && (
 				<p role="status">Select an assigned venue to view its configuration.</p>
@@ -385,15 +388,19 @@ export function RoomDetail({ id }: { id: string }) {
 				{boundary}
 			</PageHeading>
 			{error ? (
-				<StateMessage kind={stateFor(error)}>
+				<StateMessage
+					kind={stateFor(error)}
+					recovery={
+						<Button onClick={() => setReload(new AbortController())}>
+							Retry
+						</Button>
+					}
+				>
 					<p>
 						{error instanceof RoomRequestError && error.status === 404
 							? "This room is not in the public catalog."
 							: "Retry when the service is available."}
 					</p>
-					<Button onClick={() => setReload(new AbortController())}>
-						Retry
-					</Button>
 				</StateMessage>
 			) : !room ? (
 				<StateMessage kind="loading" />
@@ -401,7 +408,11 @@ export function RoomDetail({ id }: { id: string }) {
 				<>
 					<RoomSummary room={room} admin={false} />
 					<IndicativeCatalog venueId={room.venueId} roomId={room.roomId} />
-					<InventoryHold venueId={room.venueId} roomId={room.roomId} timezone={room.venue?.timezone ?? "Unconfigured"} />
+					<InventoryHold
+						venueId={room.venueId}
+						roomId={room.roomId}
+						timezone={room.venue?.timezone ?? "Unconfigured"}
+					/>
 					<Card title="Customer operating windows">
 						<p>
 							{room.venue?.displayName} · {room.venue?.timezone}
@@ -461,11 +472,14 @@ export function VenueConfiguration() {
 			</Button>
 			{loading && <StateMessage kind="loading" />}
 			{error ? (
-				<StateMessage kind={stateFor(error)}>
-					<Button onClick={() => setReload(new AbortController())}>
-						Retry
-					</Button>
-				</StateMessage>
+				<StateMessage
+					kind={stateFor(error)}
+					recovery={
+						<Button onClick={() => setReload(new AbortController())}>
+							Retry
+						</Button>
+					}
+				/>
 			) : (
 				!loading && (
 					<>
