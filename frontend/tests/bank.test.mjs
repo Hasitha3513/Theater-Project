@@ -439,3 +439,53 @@ test("bank arrival cross-checks protected quotation identity and current revisio
 		globalThis.fetch = original;
 	}
 });
+
+test("exact owned request navigation contains only an opaque reference", async () => {
+	const { bankRequestHref, loadBankRequest } = await import(
+		"../lib/bank-request.ts"
+	);
+	assert.equal(bankRequestHref(id), `/bank?request=${id}`);
+	for (const ref of ["", "../other", `${id}&hash=secret`, "not-an-id"]) {
+		assert.throws(() => bankRequestHref(ref));
+		await assert.rejects(loadBankRequest(ref));
+	}
+	const { BankRequestDetail } = await import(
+		"../components/bank-request-detail.tsx"
+	);
+	const html = render(h(BankRequestDetail, { reference: id }));
+	assert.match(html, /Return to customer history/);
+	assert.doesNotMatch(
+		html,
+		/type="file"|Submit claim|Create synthetic request/,
+	);
+});
+test("exact request reload is GET-only, no-store and rejects a mismatched response", async () => {
+	const { loadBankRequest } = await import("../lib/bank-request.ts");
+	const old = globalThis.fetch;
+	const calls = [];
+	try {
+		globalThis.fetch = async (path, init) => {
+			calls.push({ path, init });
+			return Response.json(value);
+		};
+		assert.equal((await loadBankRequest(id)).id, id);
+		assert.equal(calls.length, 1);
+		assert.equal(calls[0].path, `/api/bank/requests/${id}`);
+		assert.equal(calls[0].init.cache, "no-store");
+		assert.equal(calls[0].init.method, undefined);
+		globalThis.fetch = async () =>
+			Response.json({ ...value, id: "00000000-0000-4000-8000-000000000002" });
+		await assert.rejects(loadBankRequest(id), /mismatch/);
+		for (const status of [401, 403, 404, 409, 500, 503]) {
+			globalThis.fetch = async () =>
+				Response.json({ message: "refused" }, { status });
+			await assert.rejects(loadBankRequest(id), (e) => e.status === status);
+		}
+		globalThis.fetch = async () => {
+			throw Error("network timeout");
+		};
+		await assert.rejects(loadBankRequest(id), /network timeout/);
+	} finally {
+		globalThis.fetch = old;
+	}
+});

@@ -1,9 +1,13 @@
+import { BankRequestDetail } from "../../components/bank-request-detail";
 import { BankWorkspace } from "../../components/bank";
 import { PageHeading } from "../../components/primitives";
 export default async function Page({
 	searchParams,
 }: {
-	searchParams: Promise<{ quote?: string | string[] }>;
+	searchParams: Promise<{
+		quote?: string | string[];
+		request?: string | string[];
+	}>;
 }) {
 	const query = await searchParams;
 	const quoteId = typeof query.quote === "string" ? query.quote : "";
@@ -15,7 +19,18 @@ export default async function Page({
 			>
 				No real payments or booking confirmation.
 			</PageHeading>
-			<BankWorkspace reviewer={false} initialQuoteId={quoteId} />
+			{"request" in query ? (
+				<BankRequestDetail
+					key={String(query.request)}
+					reference={
+						typeof query.request === "string" && !query.quote
+							? query.request
+							: ""
+					}
+				/>
+			) : (
+				<BankWorkspace reviewer={false} initialQuoteId={quoteId} />
+			)}
 		</>
 	);
 }

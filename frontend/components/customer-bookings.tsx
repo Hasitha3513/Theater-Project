@@ -1,4 +1,5 @@
 "use client";
+import { bankRequestHref } from "../lib/bank-request";
 import { useEffect, useRef, useState } from "react";
 import { roomRequest } from "../lib/rooms";
 import { readSession } from "../lib/session";
@@ -453,7 +454,7 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 										{money(r.funding.verifiedMatchedMinor, r.currency)}. This is
 										not an available balance or real payment.
 									</p>
-									<a href="/bank">Open protected bank workspace</a>
+									<a href={bankRequestHref(r.id)}>View Bank Request</a>
 									{r.funding.bookingId && UUID.test(r.funding.bookingId) && (
 										<p>
 											<a href={`/bookings/${r.funding.bookingId}`}>
@@ -529,7 +530,7 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 							protected workspaces to inspect permitted next actions. No support
 							ticket, contact, allocation or repayment is implied.
 						</p>
-						<a href="/bank">Open protected bank workspace</a>
+						<a href={bankRequestHref(payment.id)}>View Bank Request</a>
 					</Card>
 					<Card title="Synthetic refund status">
 						<p>

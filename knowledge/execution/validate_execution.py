@@ -2190,7 +2190,7 @@ def bank_readiness_main():
     return result
 
 
-def inert_ci_main():
+def ui_flow_002_main():
     """Validate the exact authorized UI-flow-002 successor before historical replay."""
     from unittest.mock import patch
     baseline='7a52544e8fc1400afeacfb9f5c357178bb05f66f'
@@ -2227,6 +2227,46 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=bank_readiness_main()
     if result==0:print('PASS bank UI handoff: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
+    return result
+
+
+def inert_ci_main():
+    """Validate the exact authorized UI-flow-003 successor before historical replay."""
+    from unittest.mock import patch
+    baseline='6e9d833070d0cbba1ab37068ec44ad6027af221b'
+    owned={'frontend/app/bank/page.tsx': '672023f12c549e6cb9fdaede693ec1d8a160990dcdfe6b9a2908af0284a8d304', 'frontend/components/customer-bookings.tsx': '5c44fffc681aa0ce24962a0053560103dd80788805b9ddc521c5be46bc89b845', 'frontend/tests/bank.test.mjs': '727f8cb387c796dad9d985fb881c9d94971086492d482388284ffb5efa37c6d8', 'frontend/lib/bank-request.ts': '9fa523f5a0867fe728fa92c8dceea21b3aa0737c9a62fce4d9e9d1e7074c9804', 'frontend/components/bank-request-detail.tsx': 'aaddbe77aede0588a32b2a2a01b4674ee09a93f8cfb9cdaf3a95ff643997d8b0', 'frontend/tests/bank-request-browser.mjs': 'fda578d5c71d27487612182bf2f4e20eeab8f655f3a322d3d565c850cc2da3c8'}
+    added={'frontend/components/bank-request-detail.tsx', 'frontend/tests/bank-request-browser.mjs', 'frontend/lib/bank-request.ts'}
+    errors=[]
+    for name,digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Exact request navigation source mismatch '+name)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name in ['execution/change-sets.json','execution/requirements.json','execution/test-plan.json','execution/status.json','execution/omissions.json','decisions/cinenest-open-decisions.json']:
+        if (K/name).read_bytes()!=prior('knowledge/'+name):errors.append('Exact request navigation changed registered dependency/requirement/acceptance '+name)
+    design=(K/'DESIGN.md').read_text();progress=(K/'PROGRESS.md').read_text()
+    if not design.startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Exact request navigation rewrote prior design authority')
+    if '<a id="history-bank-request"></a>' not in design or 'e5ad9cd8-87bd-43ff-99e9-20e9dd5c4c9c' not in design:errors.append('Exact request navigation owner authority missing')
+    if '<a id="ui-flow-003-implementation"></a>' not in progress or 'CI39369656169 COMPLETED/SUCCESS' not in progress:errors.append('Exact request navigation prerequisite/evidence missing')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Exact request navigation promoted phase/demo acceptance')
+    allowed=set(owned)|{'knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Exact request navigation unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact source/authority qualification precedes projection of these paths only.
+    replacements={R/name:prior(name) for name in set(owned)-added}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|{'knowledge/DESIGN.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_002_main()
+    if result==0:print('PASS exact request navigation: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
     return result
 
 
