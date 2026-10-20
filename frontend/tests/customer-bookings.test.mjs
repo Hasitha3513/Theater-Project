@@ -117,3 +117,20 @@ test("read transport rejects injected owner and secret query context", async () 
 		assert.equal(r.headers.get("cache-control"), "no-store");
 	}
 });
+
+test("conflicting confirmation fields cannot establish a purchased booking", () => {
+	assert.throws(() =>
+		bookingRecord({
+			...row,
+			state: "SIMULATED_CONFIRMED",
+			syntheticBookingStatus: "NOT_CONFIRMED",
+		}),
+	);
+	assert.throws(() =>
+		bookingRecord({
+			...row,
+			state: "UNKNOWN",
+			syntheticBookingStatus: "SIMULATED_CONFIRMED",
+		}),
+	);
+});

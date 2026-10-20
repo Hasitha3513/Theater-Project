@@ -489,3 +489,52 @@ test("exact request reload is GET-only, no-store and rejects a mismatched respon
 		globalThis.fetch = old;
 	}
 });
+
+test("only an explicit simulated booking state with an opaque identity offers customer navigation", async () => {
+	const { confirmedBookingHref } = await import("../lib/bank-request.ts");
+	assert.equal(
+		confirmedBookingHref("SIMULATED_CONFIRMED", id),
+		`/bookings/${id}`,
+	);
+	for (const status of [
+		undefined,
+		"NOT_CONFIRMED",
+		"PENDING",
+		"PARTIAL",
+		"UNKNOWN",
+		"REVIEWED",
+		"SIMULATED_ALLOCATED",
+	])
+		assert.equal(confirmedBookingHref(status, id), null);
+	for (const ref of [null, "", `${id}?hash=secret`, "../other"])
+		assert.equal(confirmedBookingHref("SIMULATED_CONFIRMED", ref), null);
+	const financial = {
+		allocatedMinor: 12352,
+		outstandingMinor: 0,
+		syntheticFundingStatus: "SIMULATED_ALLOCATED",
+		syntheticBookingStatus: "SIMULATED_CONFIRMED",
+		bookingId: id,
+	};
+	const html = render(
+		h(BankSummary, { value: { ...value, financial }, customer: true }),
+	);
+	assert.ok(html.includes(`href="/bookings/${id}"`));
+	assert.ok(html.includes("View simulated booking details"));
+	for (const state of ["NOT_CONFIRMED", "UNKNOWN"]) {
+		const denied = render(
+			h(BankSummary, {
+				value: {
+					...value,
+					reviewState: "REVIEWED",
+					financial: { ...financial, syntheticBookingStatus: state },
+				},
+				customer: true,
+			}),
+		);
+		assert.doesNotMatch(denied, /View simulated booking details/);
+	}
+	assert.doesNotMatch(
+		render(h(BankSummary, { value: { ...value, financial } })),
+		/View simulated booking details/,
+	);
+});

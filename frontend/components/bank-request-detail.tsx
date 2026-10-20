@@ -100,7 +100,7 @@ export function BankRequestDetail({ reference }: { reference: string }) {
 									? "Receipt review recorded; independent credit verification and allocation are separate."
 									: "Consult the current request, review and financial states below; no financial success is inferred."}
 						</p>
-						<BankSummary value={value} />
+						<BankSummary value={value} customer />
 						{!value.financial && (
 							<p>
 								Financial outcome is unavailable or unresolved. Do not infer

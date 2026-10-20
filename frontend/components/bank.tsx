@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { bankLabels, type BankRequest, validateBank } from "../lib/bank";
 import { roomRequest, RoomRequestError } from "../lib/rooms";
 import { Button, Card, Field, SelectField } from "./primitives";
+import { confirmedBookingHref } from "../lib/bank-request";
 import { BankRequestCreation } from "./bank-handoff";
 export function BankNotice() {
 	return (
@@ -15,7 +16,17 @@ export function BankNotice() {
 		</aside>
 	);
 }
-export function BankSummary({ value: v }: { value: BankRequest }) {
+export function BankSummary({
+	value: v,
+	customer = false,
+}: {
+	value: BankRequest;
+	customer?: boolean;
+}) {
+	const bookingHref = confirmedBookingHref(
+		v.financial?.syntheticBookingStatus,
+		v.financial?.bookingId,
+	);
 	return (
 		<>
 			<dl className="account-summary">
@@ -82,6 +93,11 @@ export function BankSummary({ value: v }: { value: BankRequest }) {
 					</p>
 				</section>
 			) : null}
+			{customer && bookingHref && (
+				<p>
+					<a href={bookingHref}>View simulated booking details</a>
+				</p>
+			)}
 			<h3>Receipt evidence</h3>
 			{v.evidence.length ? (
 				v.evidence.map((e) => (
@@ -331,7 +347,7 @@ export function BankWorkspace({
 				{!value && !busy && <p>Select or create a synthetic request.</p>}
 				{value && (
 					<>
-						<BankSummary value={value} />
+						<BankSummary value={value} customer={!reviewer} />
 						{reviewer ? (
 							<>
 								<Field

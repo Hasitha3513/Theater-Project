@@ -2230,7 +2230,7 @@ def ui_flow_002_main():
     return result
 
 
-def inert_ci_main():
+def ui_flow_003_main():
     """Validate the exact authorized UI-flow-003 successor before historical replay."""
     from unittest.mock import patch
     baseline='6e9d833070d0cbba1ab37068ec44ad6027af221b'
@@ -2267,6 +2267,46 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_002_main()
     if result==0:print('PASS exact request navigation: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
+    return result
+
+
+def inert_ci_main():
+    """Validate the exact authorized UI-flow-004 successor before historical replay."""
+    from unittest.mock import patch
+    baseline='61a9685e08f73e46a499cd914af842ad5d8a3b53'
+    owned={'frontend/components/bank.tsx': '2aab1b0481efd9b7164f68a533ebf511f2883557a5c19ea8243ef91cab915188', 'frontend/components/bank-request-detail.tsx': '27158f7c2e9ba828bc4e99f109f5e9485f84810e1d45a490d437a520f6e5ca72', 'frontend/components/customer-bookings.tsx': 'f982d35595290755aaad48ec206d195441e42f41ec819c80a6e6af866f63310b', 'frontend/lib/bank-request.ts': 'bc8587173822eb68650b6ac4740357a35bb9035c42c51d1a8e751cfcd3505297', 'frontend/tests/bank.test.mjs': '9a0e65982366975b9f7e208a85afbbb397aaa977b2def3ceaa5ea65a43c625e7', 'frontend/tests/customer-bookings.test.mjs': '0ef318a3cd79972e51e137839991b739644beb0ca59cd2aacfc05c7e28189e91', 'frontend/tests/customer-bookings-browser.mjs': '8972717cbe17cdb65c56383ba8a226e2500a74f22e7a41901e616389acd13447', 'frontend/tests/booking-handoff-browser.mjs': '43fae245e27f3d441f70a133c42c5f6a55b58686cf89de98b309aec88f7de7a6'}
+    added={'frontend/tests/booking-handoff-browser.mjs'}
+    errors=[]
+    for name,digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Simulated booking navigation source mismatch '+name)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name in ['execution/change-sets.json','execution/requirements.json','execution/test-plan.json','execution/status.json','execution/omissions.json','decisions/cinenest-open-decisions.json']:
+        if (K/name).read_bytes()!=prior('knowledge/'+name):errors.append('Simulated booking navigation changed registered dependency/requirement/acceptance '+name)
+    design=(K/'DESIGN.md').read_text();progress=(K/'PROGRESS.md').read_text()
+    if not design.startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Simulated booking navigation rewrote prior design authority')
+    if '<a id="simulated-confirmation-booking"></a>' not in design or 'Owner instruction CN-UI-FLOW-004' not in design:errors.append('Simulated booking navigation owner authority missing')
+    if '<a id="ui-flow-004-implementation"></a>' not in progress or 'CI39371866547 COMPLETED/SUCCESS' not in progress:errors.append('Simulated booking navigation prerequisite/evidence missing')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Simulated booking navigation promoted phase/demo acceptance')
+    allowed=set(owned)|{'knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Simulated booking navigation unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact source/authority qualification precedes projection of these paths only.
+    replacements={R/name:prior(name) for name in set(owned)-added}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|{'knowledge/DESIGN.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_003_main()
+    if result==0:print('PASS simulated booking navigation: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
     return result
 
 

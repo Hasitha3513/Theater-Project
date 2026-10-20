@@ -210,6 +210,7 @@ try {
 					reviewState: "REVIEWED",
 					financial: {
 						syntheticFundingStatus: "SIMULATED_ALLOCATED",
+						syntheticBookingStatus: "SIMULATED_CONFIRMED",
 						verifiedMatchedMinor: "50000",
 						allocatedMinor: 30007,
 						outstandingMinor: 0,

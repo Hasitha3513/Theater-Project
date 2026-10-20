@@ -1,6 +1,6 @@
 "use client";
-import { bankRequestHref } from "../lib/bank-request";
-import { useEffect, useRef, useState } from "react";
+import { bankRequestHref, confirmedBookingHref } from "../lib/bank-request";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { roomRequest } from "../lib/rooms";
 import { readSession } from "../lib/session";
 import { BookingAmendment } from "./booking-amendment";
@@ -115,6 +115,9 @@ export function bookingRecord(value: unknown): Booking {
 		!UUID.test(b.venueId) ||
 		![1, 2].includes(b.revision) ||
 		(b.state ?? b.syntheticBookingStatus) !== "SIMULATED_CONFIRMED" ||
+		(b.state !== undefined && b.state !== "SIMULATED_CONFIRMED") ||
+		(b.syntheticBookingStatus !== undefined &&
+			b.syntheticBookingStatus !== "SIMULATED_CONFIRMED") ||
 		!p ||
 		!UUID.test(p.roomId) ||
 		!/^\d+$/.test(p.amountMinor) ||
@@ -267,6 +270,73 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 		[error, setError] = useState(""),
 		[busy, setBusy] = useState(false);
 	const generation = useRef(0);
+	const load = useCallback(
+		async (bookingPage = 0, requestPage = 0, refundPage = 0) => {
+			const epoch = ++generation.current;
+			setBookings(null);
+			setRequests(null);
+			setDetail(null);
+			setPayment(null);
+			setRefunds(null);
+			setError("");
+			setBusy(true);
+			try {
+				const session = await readSession();
+				if (session.kind !== "authenticated") throw Error();
+				if (bookingId && !UUID.test(bookingId)) throw Error();
+				if (bookingId) {
+					const b = bookingRecord(
+						await roomRequest<Booking>(`/api/bookings/${bookingId}`),
+					);
+					if (b.id !== bookingId) throw Error();
+					const [p, f] = await Promise.all([
+						roomRequest<RequestDetail>(`/api/bank/requests/${b.requestId}`),
+						roomRequest<Page<Refund>>(
+							`/api/bank/requests/${b.requestId}/refunds?page=${refundPage}&size=10`,
+						),
+					]);
+					if (
+						p.id !== b.requestId ||
+						p.financial.bookingId !== b.id ||
+						p.financial.syntheticBookingStatus !== "SIMULATED_CONFIRMED" ||
+						!Number.isSafeInteger(p.revision)
+					)
+						throw Error();
+					const safe = pageRecord(f);
+					safe.items = safe.items.map(refundRecord);
+					if (epoch !== generation.current) return;
+					setDetail(b);
+					setPayment(p);
+					setRefunds(safe);
+				} else {
+					const [b, r] = await Promise.all([
+						roomRequest<Page<Booking>>(
+							`/api/bookings?page=${bookingPage}&size=10`,
+						),
+						roomRequest<Page<RequestSummary>>(
+							`/api/bank/requests?page=${requestPage}&size=10`,
+						),
+					]);
+					const bs = pageRecord(b),
+						rs = pageRecord(r);
+					bs.items = bs.items.map(bookingRecord);
+					rs.items = rs.items.map(requestRecord);
+					if (epoch !== generation.current) return;
+					setBookings(bs);
+					setRequests(rs);
+				}
+			} catch {
+				if (epoch === generation.current) {
+					setError(
+						"Unavailable, signed out, denied or changed. Refresh your current account context; no success is inferred.",
+					);
+				}
+			} finally {
+				if (epoch === generation.current) setBusy(false);
+			}
+		},
+		[bookingId],
+	);
 	useEffect(() => {
 		function clear() {
 			generation.current++;
@@ -278,87 +348,39 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 			setError("");
 			setBusy(false);
 		}
+		function refresh() {
+			if (bookingId) void load();
+		}
+		const visibility = () =>
+			document.visibilityState === "hidden" ? clear() : refresh();
 		clear();
-		if (bookingId && !UUID.test(bookingId))
-			setError("Invalid booking reference.");
-		const hidden = () => {
-			if (document.visibilityState === "hidden") clear();
-		};
+		if (bookingId) {
+			if (UUID.test(bookingId)) refresh();
+			else setError("Invalid booking reference.");
+		}
 		window.addEventListener("cinenest-session-change", clear);
 		window.addEventListener("pagehide", clear);
-		document.addEventListener("visibilitychange", hidden);
+		window.addEventListener("pageshow", refresh);
+		window.addEventListener("focus", refresh);
+		document.addEventListener("visibilitychange", visibility);
 		return () => {
 			generation.current++;
 			window.removeEventListener("cinenest-session-change", clear);
 			window.removeEventListener("pagehide", clear);
-			document.removeEventListener("visibilitychange", hidden);
+			window.removeEventListener("pageshow", refresh);
+			window.removeEventListener("focus", refresh);
+			document.removeEventListener("visibilitychange", visibility);
 		};
-	}, [bookingId]);
-	async function load(bookingPage = 0, requestPage = 0, refundPage = 0) {
-		const epoch = ++generation.current;
-		setBookings(null);
-		setRequests(null);
-		setDetail(null);
-		setPayment(null);
-		setRefunds(null);
-		setError("");
-		setBusy(true);
-		try {
-			const session = await readSession();
-			if (session.kind !== "authenticated") throw Error();
-			if (bookingId && !UUID.test(bookingId)) throw Error();
-			if (bookingId) {
-				const b = bookingRecord(
-					await roomRequest<Booking>(`/api/bookings/${bookingId}`),
-				);
-				const [p, f] = await Promise.all([
-					roomRequest<RequestDetail>(`/api/bank/requests/${b.requestId}`),
-					roomRequest<Page<Refund>>(
-						`/api/bank/requests/${b.requestId}/refunds?page=${refundPage}&size=10`,
-					),
-				]);
-				if (
-					p.id !== b.requestId ||
-					p.financial.bookingId !== b.id ||
-					!Number.isSafeInteger(p.revision)
-				)
-					throw Error();
-				const safe = pageRecord(f);
-				safe.items = safe.items.map(refundRecord);
-				if (epoch !== generation.current) return;
-				setDetail(b);
-				setPayment(p);
-				setRefunds(safe);
-			} else {
-				const [b, r] = await Promise.all([
-					roomRequest<Page<Booking>>(
-						`/api/bookings?page=${bookingPage}&size=10`,
-					),
-					roomRequest<Page<RequestSummary>>(
-						`/api/bank/requests?page=${requestPage}&size=10`,
-					),
-				]);
-				const bs = pageRecord(b),
-					rs = pageRecord(r);
-				bs.items = bs.items.map(bookingRecord);
-				rs.items = rs.items.map(requestRecord);
-				if (epoch !== generation.current) return;
-				setBookings(bs);
-				setRequests(rs);
-			}
-		} catch {
-			if (epoch === generation.current) {
-				setError(
-					"Unavailable, signed out, denied or changed. Refresh your current account context; no success is inferred.",
-				);
-			}
-		} finally {
-			if (epoch === generation.current) setBusy(false);
-		}
-	}
+	}, [bookingId, load]);
 	return (
 		<div className="customer-bookings">
 			<h1>{bookingId ? "Booking detail" : "My bookings"}</h1>
+			{bookingId && (
+				<p>
+					<a href="/bookings">Return to customer history</a> ·{" "}
+					<a href="/account">Account and session</a>
+				</p>
+			)}
 			<p>
 				<Badge tone="warning">{CUSTOMER_LABEL}</Badge>
 			</p>
@@ -455,9 +477,19 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 										not an available balance or real payment.
 									</p>
 									<a href={bankRequestHref(r.id)}>View Bank Request</a>
-									{r.funding.bookingId && UUID.test(r.funding.bookingId) && (
+									{confirmedBookingHref(
+										r.funding.bookingStatus,
+										r.funding.bookingId,
+									) && (
 										<p>
-											<a href={`/bookings/${r.funding.bookingId}`}>
+											<a
+												href={
+													confirmedBookingHref(
+														r.funding.bookingStatus,
+														r.funding.bookingId,
+													) ?? "/bookings"
+												}
+											>
 												Open linked booking
 											</a>
 										</p>
@@ -474,7 +506,7 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 					/>
 				</Card>
 			)}
-			{detail && payment && refunds && (
+			{detail && detail.id === bookingId && payment && refunds && (
 				<>
 					<Card title="Purchased snapshot">
 						<Purchased b={detail} />
