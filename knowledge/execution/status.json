@@ -4385,5 +4385,71 @@
     },
     "exactSourceCi": "PENDING_PUBLICATION",
     "acceptanceUnchanged": true
+  },
+  "bookingExperienceImplementation": {
+    "taskId": "CN-FE-EXPERIENCE-001D",
+    "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_PRESENTATION",
+    "evidencePath": "PROGRESS.md#frontend-experience-001d",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged.",
+    "baselineHead": "75762034452591903de60af59aa0ab240502f79d",
+    "ownerAuthority": "Explicit owner CN-FE-EXPERIENCE-001D instruction2026-10-20;one frontend booking presentation slice and scoped publication after exact prerequisite CI success.",
+    "prerequisiteCi": {
+      "runId": 39435985106,
+      "sha": "75762034452591903de60af59aa0ab240502f79d",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "checks": "Full backend/PostgreSQL,frontend,launcher,governance PASS"
+    },
+    "checks": {
+      "frontendTotal": 206,
+      "focusedBookingTests": 5,
+      "focusedBrowserGroups": 14,
+      "browserRegressions": {
+        "inventory": 15,
+        "quotesAndVerificationHandoff": 30,
+        "landing": 20,
+        "discovery": 14,
+        "total": 79,
+        "status": "PASS"
+      },
+      "typecheckLintProductionBuild": "PASS",
+      "architecture": 17,
+      "ciClassifierRegressions": 8,
+      "governance": {
+        "knowledge": "PASS",
+        "executionPrimary": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_INTEGRITY_FINDINGS",
+        "executionIsolatedCommittedNextEnv": "PASS",
+        "negativeControls": 43,
+        "whitespace": "PASS",
+        "traceabilityDependenciesAcceptance": "UNCHANGED"
+      }
+    },
+    "localVisualEvidence": {
+      ".cache/experience-001d/after/date-1280.png": "ad28749290c17aa18ef43b5557f0e9efd369c7d7a7f7116cdc2d8b9b1774d1b2",
+      ".cache/experience-001d/after/date-375.png": "d07a8fb9543a963624e4a1a3078d10fd084d7e43a9418aef0e50d07eead32dc1",
+      ".cache/experience-001d/after/date-768.png": "81a4c415ddee7cb48c1835172d813133a0855b7d1312c88ffd3fea4c510261c8",
+      ".cache/experience-001d/after/hold-1280.png": "40689632807fdba5b6e9b61f5a31c96530917812bf1ef122918bcd5528ca8c4e",
+      ".cache/experience-001d/after/hold-375.png": "2e049b6da4500ef4da183bedc06c34149423236121643f051b3cd34b12112070",
+      ".cache/experience-001d/after/hold-768.png": "557d71f13b5791eff3de989a57e5f169aed0aa0b8b6101e66a8beb1988a99f9f",
+      ".cache/experience-001d/after/quote-1280.png": "9f3ffd8ad3ee9f7696b816e6661366a8dbf0115b31162c828950822c80afb00e",
+      ".cache/experience-001d/after/quote-375.png": "6eb416b3ef0b17287545436c77e9c822a4423680ca52af3e459ebefff804bcd4",
+      ".cache/experience-001d/after/quote-768.png": "e9fd2bdee168930360e9c801bf80d657ca0b234b24ff161112604f8509d17356",
+      ".cache/experience-001d/after/review-panel-1280.png": "6e4056a0292c970a49b1588ca3cbb240f21a732d991a1de13f054b01d353fb65",
+      ".cache/experience-001d/after/review-panel-375.png": "2f7281c98a88688af2876b44aff9762265961330bd2396632d1f8c1ab8d38178",
+      ".cache/experience-001d/after/review-panel-768.png": "c94e2d53d21a814ee894c74c62ca63339f29792b594ac1c57074a5127d6d09c1",
+      ".cache/experience-001d/before/date-1280.png": "2063e17d76e1365e5d09f97356e069409a9776d5f76c88194b4bbdb2ece0e1a4",
+      ".cache/experience-001d/before/date-375.png": "c32d4633f331843184244dc690f8296f1460db4b07964bf300388df192207c14",
+      ".cache/experience-001d/before/date-768.png": "3ab86edf756ef3fbc5aac3486fbfa5493975cf80baf539b602fbe8ea9c1e321f",
+      ".cache/experience-001d/before/hold-1280.png": "540801756feb5e150d84cb8b2273f7049972d7a50d53cae8fdb357c5b8d64665",
+      ".cache/experience-001d/before/hold-375.png": "2390e2322ec26355034bf0a09c9de036479f44b3e02c4cdd068ee9ba27d30733",
+      ".cache/experience-001d/before/hold-768.png": "26d67b0a15159e645977c573028b800e685f8fa89d37f7e8c22f01f570655982",
+      ".cache/experience-001d/before/quote-1280.png": "77957158162248dd338e75b22e2273c0d01d020acabcdcaebcf2b355e0929484",
+      ".cache/experience-001d/before/quote-375.png": "7e1d95604a9b3537c6e121e58fbd9cf65e5ead68c26baf8fcf22400e8779549d",
+      ".cache/experience-001d/before/quote-768.png": "a2a124beb018969bdb809dd4760ecce05e6628f830ab67c957c5dd00328f5dc5"
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "acceptanceUnchanged": true
   }
 }

@@ -18,7 +18,10 @@ type Choice = {
 };
 export function QuoteSummary({ quote }: { quote: Quote }) {
 	return (
-		<section aria-label="Synthetic quotation summary">
+		<section
+			className="booking-quote-summary"
+			aria-label="Synthetic quotation summary"
+		>
 			{quoteDisclosures.map((label) => (
 				<p key={label}>
 					<strong>{label}</strong>
@@ -40,7 +43,9 @@ export function QuoteSummary({ quote }: { quote: Quote }) {
 					</div>
 				))}
 			</dl>
-			<p>Total: LKR {displayMoney(quote.totalMinor)}</p>
+			<p className="booking-quote-total">
+				Total: LKR {displayMoney(quote.totalMinor)}
+			</p>
 			<p>
 				Tax is an explicit synthetic fixture, not approved Sri Lankan tax
 				policy. Zero CineNest-added method surcharge does not represent external
@@ -181,83 +186,94 @@ export function SyntheticQuotation({
 		}
 	}
 	return (
-		<Card title="Synthetic quotation laboratory">
-			{quoteDisclosures.map((label) => (
-				<p key={label}>
-					<strong>{label}</strong>
+		<Card title="Package choices & quotation" className="booking-quotation">
+			<section id="booking-packages">
+				<h3>Choose a package & supported add-ons</h3>
+				{quoteDisclosures.map((label) => (
+					<p key={label}>
+						<strong>{label}</strong>
+					</p>
+				))}
+				<p>
+					Explicitly configured nonproduction test environments and associated
+					synthetic accounts only. Commercial checkout is disabled.
 				</p>
-			))}
-			<p>
-				Explicitly configured nonproduction test environments and associated
-				synthetic accounts only. Commercial checkout is disabled.
-			</p>
-			{!quote && (
-				<Button disabled={busy || !!pending.current} onClick={load}>
-					Load applicable synthetic package choices
-				</Button>
-			)}
-			{choices?.length === 0 && (
-				<StateMessage kind="empty">
-					<p>No applicable published package. No quotation issued.</p>
-				</StateMessage>
-			)}
-			{choices && choices.length > 0 && (
-				<div className="filter-grid">
-					<SelectField
-						id={`quote-package-${hold.holdId}`}
-						label="Published package"
-						value={selection}
-						disabled={busy || !!pending.current || !!quote}
-						onChange={(e) => {
-							setSelection(e.target.value);
-							setOptional([]);
-							setReviewed(false);
-						}}
-					>
-						<option value="">Select package</option>
-						{choices.map((c) => (
-							<option key={c.versionId} value={c.versionId}>
-								{c.name}
+				{!quote && (
+					<Button disabled={busy || !!pending.current} onClick={load}>
+						Load applicable synthetic package choices
+					</Button>
+				)}
+				{choices?.length === 0 && (
+					<StateMessage kind="empty">
+						<p>No applicable published package. No quotation issued.</p>
+					</StateMessage>
+				)}
+				{choices && choices.length > 0 && (
+					<div className="filter-grid">
+						<SelectField
+							id={`quote-package-${hold.holdId}`}
+							label="Published package"
+							value={selection}
+							disabled={busy || !!pending.current || !!quote}
+							onChange={(e) => {
+								setSelection(e.target.value);
+								setOptional([]);
+								setReviewed(false);
+							}}
+						>
+							<option value="">Select package</option>
+							{choices.map((c) => (
+								<option key={c.versionId} value={c.versionId}>
+									{c.name}
+								</option>
+							))}
+						</SelectField>
+						<SelectField
+							id={`quote-method-${hold.holdId}`}
+							label="Intended method (no payment)"
+							value={method}
+							disabled={
+								busy || !!pending.current || quote?.state === "ACCEPTED"
+							}
+							onChange={(e) => {
+								setMethod(e.target.value);
+								setReviewed(false);
+							}}
+						>
+							<option value="BANK">Bank transfer/deposit (synthetic)</option>
+							<option value="GATEWAY">
+								Gateway (synthetic; integration deferred)
 							</option>
-						))}
-					</SelectField>
-					<SelectField
-						id={`quote-method-${hold.holdId}`}
-						label="Intended method (no payment)"
-						value={method}
-						disabled={busy || !!pending.current || quote?.state === "ACCEPTED"}
-						onChange={(e) => {
-							setMethod(e.target.value);
-							setReviewed(false);
-						}}
-					>
-						<option value="BANK">BANK</option>
-						<option value="GATEWAY">GATEWAY</option>
-					</SelectField>
-					{selected?.options
-						.filter((o) => o.mode === "OPTIONAL")
-						.map((o) => (
-							<label key={o.serviceId}>
-								<input
-									type="checkbox"
-									checked={optional.includes(o.serviceId)}
-									disabled={
-										busy || !!pending.current || quote?.state === "ACCEPTED"
-									}
-									onChange={(e) => {
-										setOptional(
-											e.target.checked
-												? [...optional, o.serviceId]
-												: optional.filter((id) => id !== o.serviceId),
-										);
-										setReviewed(false);
-									}}
-								/>
-								{o.label}
-							</label>
-						))}
-				</div>
-			)}
+						</SelectField>
+						{selected?.options
+							.filter((o) => o.mode === "OPTIONAL")
+							.map((o) => (
+								<label key={o.serviceId}>
+									<input
+										type="checkbox"
+										checked={optional.includes(o.serviceId)}
+										disabled={
+											busy || !!pending.current || quote?.state === "ACCEPTED"
+										}
+										onChange={(e) => {
+											setOptional(
+												e.target.checked
+													? [...optional, o.serviceId]
+													: optional.filter((id) => id !== o.serviceId),
+											);
+											setReviewed(false);
+										}}
+									/>
+									{o.label}
+								</label>
+							))}
+					</div>
+				)}
+				{selected &&
+					!selected.options.some((option) => option.mode === "OPTIONAL") && (
+						<p>No optional add-ons are listed for this package.</p>
+					)}
+			</section>
 			{!quote && selected && (
 				<Button
 					disabled={busy || !!pending.current}
@@ -283,51 +299,84 @@ export function SyntheticQuotation({
 					</Button>
 				</>
 			)}
+			{!quote && (
+				<div className="booking-review-grid">
+					<section id="booking-review">
+						<h3>Review your quotation</h3>
+						<p>
+							Select an applicable package and calculate a quotation to see its
+							exact server-priced terms.
+						</p>
+					</section>
+					<section id="booking-accept">
+						<h3>Accept this revision</h3>
+						<p>
+							Acceptance requires an issued revision and your explicit review.
+							No payment or booking is confirmed here.
+						</p>
+					</section>
+				</div>
+			)}
 			{quote && (
-				<>
-					<QuoteSummary quote={quote} />
-					{quote.state === "ACCEPTED" && !busy && !pending.current && (
-						<QuoteContinuation
-							reference={quote.quoteId}
-							onDenied={() => setQuote(undefined)}
-						/>
-					)}
-					<Button disabled={busy || !!pending.current} onClick={refresh}>
-						Refresh quotation state
-					</Button>
-					{quote.state === "ISSUED" && (
-						<>
-							<Button
-								disabled={busy || !!pending.current}
-								onClick={() => command("revise")}
-							>
-								Review new revision for changed selections/method
-							</Button>
-							<Field
-								id={`quote-reviewed-${hold.holdId}`}
-								label="I reviewed this exact synthetic revision and all three disclosures"
-								type="checkbox"
-								checked={reviewed}
-								disabled={busy || !!pending.current || changed}
-								onChange={(e) => setReviewed(e.target.checked)}
+				<div className="booking-review-grid">
+					<section id="booking-review">
+						<h3>Review your quotation</h3>
+						<QuoteSummary quote={quote} />
+
+						<Button disabled={busy || !!pending.current} onClick={refresh}>
+							Refresh quotation state
+						</Button>
+					</section>
+					<section id="booking-accept">
+						<h3>Accept this revision</h3>
+						{changed && (
+							<StateMessage kind="conflict">
+								<p>
+									Your selections differ from this quotation. Request a new
+									revision, then review its terms again.
+								</p>
+							</StateMessage>
+						)}
+						{quote.state === "ISSUED" && (
+							<>
+								<Button
+									disabled={busy || !!pending.current}
+									onClick={() => command("revise")}
+								>
+									Review new revision for changed selections/method
+								</Button>
+								<Field
+									id={`quote-reviewed-${hold.holdId}`}
+									label="I reviewed this exact synthetic revision and all three disclosures"
+									type="checkbox"
+									checked={reviewed}
+									disabled={busy || !!pending.current || changed}
+									onChange={(e) => setReviewed(e.target.checked)}
+								/>
+								<Button
+									disabled={!reviewed || busy || !!pending.current || changed}
+									onClick={() => command("accept")}
+								>
+									Accept synthetic revision only
+								</Button>
+							</>
+						)}
+						{["EXPIRED", "INVALIDATED"].includes(quote.state) && (
+							<StateMessage kind="error">
+								<p>
+									Quotation cannot be accepted. Return to inventory and obtain a
+									new applicable hold.
+								</p>
+							</StateMessage>
+						)}
+						{quote.state === "ACCEPTED" && !busy && !pending.current && (
+							<QuoteContinuation
+								reference={quote.quoteId}
+								onDenied={() => setQuote(undefined)}
 							/>
-							<Button
-								disabled={!reviewed || busy || !!pending.current || changed}
-								onClick={() => command("accept")}
-							>
-								Accept synthetic revision only
-							</Button>
-						</>
-					)}
-					{["EXPIRED", "INVALIDATED"].includes(quote.state) && (
-						<StateMessage kind="error">
-							<p>
-								Quotation cannot be accepted. Return to inventory and obtain a
-								new applicable hold.
-							</p>
-						</StateMessage>
-					)}
-				</>
+						)}
+					</section>
+				</div>
 			)}
 		</Card>
 	);

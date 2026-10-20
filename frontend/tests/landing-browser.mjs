@@ -191,7 +191,7 @@ try {
 				.waitFor();
 			await page
 				.getByRole("heading", {
-					name: "Check inventory and hold temporarily",
+					name: "Plan your cinema session",
 					exact: true,
 				})
 				.waitFor();

@@ -2863,7 +2863,7 @@ def customer_discovery_main():
 
 
 
-def inert_ci_main():
+def cinema_image_assets_main():
     """Qualify exact owner-authorized cinema image source before historical replay."""
     from unittest.mock import patch
     baseline='4890a0013ca9497a0a566ebd32b17e13a02cd029'
@@ -2919,6 +2919,67 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=customer_discovery_main()
     if result==0:print('PASS exact bounded cinema image assets; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='75762034452591903de60af59aa0ab240502f79d'
+    owned={'frontend/components/inventory.tsx', 'frontend/components/booking-steps.tsx', 'frontend/package.json', 'frontend/tests/quotes-browser.mjs', 'frontend/tests/booking-steps-browser.mjs', 'frontend/app/globals.css', 'frontend/components/quotes.tsx', 'frontend/tests/landing-browser.mjs', 'frontend/tests/booking-steps.test.mjs'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/PROGRESS.md', 'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md'}
+    added={'frontend/tests/booking-steps-browser.mjs', 'frontend/components/booking-steps.tsx', 'frontend/tests/booking-steps.test.mjs'}
+    hashes={'frontend/app/globals.css': '2ca95caa37e7c54cd908bb941de89dd1ffb1c9e5d4c0dde3f2cba9958ffe6172', 'frontend/components/inventory.tsx': 'a2714ddefe4d80dc956bbd14e60861c8af70ede682a88324fd02f8b22af4e964', 'frontend/components/quotes.tsx': '8e9cdea8ab2296d1354c67b0bed2a8cc40fe269a4427935b0a45bc19e24ffdde', 'frontend/components/booking-steps.tsx': '10739c93ea3941e07f654f3bc6d492f0de29cee28aba61259ccb9aac4eef5725', 'frontend/package.json': '21b8298f8e0e11a99fb7a2341dfa91ccffe2455d2aa5b1b5b6fe3dfe108c58b4', 'frontend/tests/landing-browser.mjs': 'f29c336bac5d01ded01302ae715609fc803ffc6adadcfd33066c9157a02bf8cd', 'frontend/tests/quotes-browser.mjs': 'de0dcd08d67eca71631a22b35e1d152f62e15b0d1abc130b7dba68562555ee1c', 'frontend/tests/booking-steps.test.mjs': '413d4a2dde99d7bb56e7c3b2071618229e96fa0d76f2b92e816e666d0d732e88', 'frontend/tests/booking-steps-browser.mjs': '45c6dc0a85d32208b1b6654b5754bea733c5af680110461b018b8b1c838ce55d', 'knowledge/execution/requirements.json': 'c47b0b8ae2b05b556fc3810d5f2f7a05d44e9f0edff0c6b2d72193740945d915', 'knowledge/execution/test-plan.json': 'fd0c8d560a99164ea9a0e52323419f1433d3a6affbd1ba45ff294f4919832e85', 'knowledge/execution/status.json': '06de3c784c64eb22564e53f5b6fdb25a144c4d5395321febfbc2a5821f7e27c3', 'knowledge/ARCHITECTURE.md': '04edb2e049a83777746cee912f73950a7b7c92ebb0007a9c3d5f13ce46d9c5e9', 'knowledge/DESIGN.md': '05bff84c8b458c21984f2a0df5151279ab48bf8a6d4d74af3486f20034290107', 'knowledge/PROGRESS.md': 'dff40114147bf5a40a8d76de974a0a22936701f1db7071ef37c5c9c59e3aed09'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Booking section experience exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('bookingExperienceEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Booking section experience changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('bookingExperienceImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Booking section experience changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Booking section experience changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Booking section experience rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/booking-steps.test.mjs':errors.append('Booking section experience lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Booking section experience changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Booking section experience rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Booking section experience promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Booking section experience unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Booking section experience changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=cinema_image_assets_main()
+    if result==0:print('PASS exact bounded booking section experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

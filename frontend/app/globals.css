@@ -766,3 +766,28 @@ button.button { display: inline-grid; }
 .cinema-illustration picture { display: block; width: 100%; height: 100%; }
 .cinema-concept-controls { margin: 0; border: 0; min-width: 0; }
 .cinema-concept-controls legend { padding-top: var(--cn-spacing-3); color: var(--cn-color-text-secondary); font-size: var(--cn-font-size-small); }
+
+/* Booking sections are navigation aids, never proof of completed business steps. */
+.booking-step-guide { padding: var(--cn-spacing-4); margin-block: var(--cn-spacing-6); border: 1px solid var(--cn-color-border); border-radius: var(--cn-radius-card); background: var(--cn-color-surface); }
+.booking-step-guide ol { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--cn-spacing-3); margin: 0 0 var(--cn-spacing-4); padding: 0; list-style: none; }
+.customer-shell .customer-discovery .booking-step-guide a { padding: var(--cn-spacing-2) 0; display: flex; align-items: center; gap: var(--cn-spacing-2); min-height: var(--cn-layout-touchtarget); text-decoration: none; font-size: var(--cn-font-size-small); font-weight: var(--cn-font-weight-semibold); }
+.booking-step-number { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: var(--cn-layout-touchtarget); height: var(--cn-layout-touchtarget); border: 1px solid var(--cn-color-brand-primary); border-radius: var(--cn-radius-pill); }
+.booking-step-guide p { margin: 0; color: var(--cn-color-text-secondary); font-size: var(--cn-font-size-small); }
+.booking-planning-grid { display: grid; gap: var(--cn-spacing-6); margin-block: var(--cn-spacing-6); }
+.booking-planning-grid > section { min-width: 0; padding: var(--cn-spacing-4); background: var(--cn-color-surface-subtle); border: 1px solid var(--cn-color-border); border-radius: var(--cn-radius-card); }
+.booking-hold-status { border-left: var(--cn-spacing-1) solid var(--cn-color-brand-primary); padding-left: var(--cn-spacing-4); }
+.booking-quotation > section { margin-block: var(--cn-spacing-6); }
+.booking-quote-summary .account-summary { border-block: 1px solid var(--cn-color-border); padding-block: var(--cn-spacing-4); }
+.booking-quote-total { padding: var(--cn-spacing-4); border-radius: var(--cn-radius-control); background: var(--cn-color-info-background); color: var(--cn-color-info-foreground); font-size: var(--cn-font-size-h2); font-weight: var(--cn-font-weight-bold); }
+@media (min-width: 768px) { .booking-step-guide ol { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media (min-width: 1024px) { .booking-planning-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+
+.booking-review-grid { display: grid; gap: var(--cn-spacing-6); margin-top: var(--cn-spacing-6); }
+.booking-review-grid > section { min-width: 0; }
+.booking-review-grid .button { max-width: 100%; white-space: normal; }
+@media (min-width: 1024px) { .booking-review-grid { grid-template-columns: minmax(0,2fr) minmax(0,1fr); } }
+
+@media (min-width: 1024px) { .booking-step-guide ol { grid-template-columns: repeat(6,minmax(0,1fr)); } }
+.booking-review-grid .field:has(input[type="checkbox"]) { grid-template-columns: var(--cn-layout-touchtarget) minmax(0,1fr); gap: var(--cn-spacing-3); align-items: start; margin-block: var(--cn-spacing-4); }
+.booking-review-grid .field:has(input[type="checkbox"]) label { grid-column: 2; grid-row: 1; min-height: var(--cn-layout-touchtarget); display: flex; align-items: center; }
+.booking-review-grid .field input[type="checkbox"] { grid-column: 1; grid-row: 1; width: var(--cn-layout-touchtarget); height: var(--cn-layout-touchtarget); margin: 0; accent-color: var(--cn-color-brand-primary); }

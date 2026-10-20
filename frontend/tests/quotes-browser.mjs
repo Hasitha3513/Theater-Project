@@ -266,7 +266,7 @@ try {
 		.click();
 	await page
 		.getByRole("heading", {
-			name: "Synthetic quotation laboratory",
+			name: "Package choices & quotation",
 			exact: true,
 		})
 		.waitFor();

@@ -84,6 +84,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "AI-generated concept interiors,not verified venue photographs;frontend assets/presentation only,no room records or operational authority."
+      },
+      "bookingExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001D",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001d",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
       }
     },
     {
@@ -350,6 +358,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
+      },
+      "bookingExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001D",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001d",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
       }
     },
     {
@@ -394,6 +410,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
+      },
+      "bookingExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001D",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001d",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
       }
     },
     {
@@ -437,6 +461,14 @@
         "evidencePath": "PROGRESS.md#guest-roster-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001D",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001d",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
       }
     },
     {
@@ -1421,6 +1453,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
+      },
+      "bookingExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001D",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BOOKING_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001d",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
       }
     },
     {

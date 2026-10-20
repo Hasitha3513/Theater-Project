@@ -1,4 +1,5 @@
 "use client";
+import { BookingStepGuide, AwaitingBookingQuote } from "./booking-steps";
 import { SyntheticQuotation } from "./quotes";
 import type { FormEvent } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -16,7 +17,7 @@ export function HoldStatus({
 }) {
 	const left = remainingSeconds(hold, elapsedMs);
 	return (
-		<section aria-label="Inventory hold status">
+		<section className="booking-hold-status" aria-label="Inventory hold status">
 			<p role="status">
 				{hold.state === "ACTIVE"
 					? left > 0
@@ -146,125 +147,148 @@ export function InventoryHold({
 		}
 	}
 	return (
-		<Card title="Check inventory and hold temporarily">
-			<p>
-				Associated eligible test accounts only. Venue timezone: {timezone}.
-				Inventory is separate from booking and physical readiness.
-			</p>
-			<form onSubmit={inquire} onChange={() => setCandidate(undefined)}>
-				<div className="filter-grid">
-					<Field
-						id={`inventory-start-${roomId}`}
-						label="Customer start in venue local time"
-						type="datetime-local"
-						required
-						value={local}
-						disabled={busy || !!pending.current}
-						onChange={(e) => setLocal(e.target.value)}
-					/>
-					<Field
-						id={`inventory-duration-${roomId}`}
-						label="Customer duration (minutes)"
-						type="number"
-						min="1"
-						required
-						value={duration}
-						disabled={busy || !!pending.current}
-						onChange={(e) => setDuration(e.target.value)}
-					/>
-					<Field
-						id={`inventory-guests-${roomId}`}
-						label="Guests"
-						type="number"
-						min="1"
-						required
-						value={guests}
-						disabled={busy || !!pending.current}
-						onChange={(e) => setGuests(e.target.value)}
-					/>
-				</div>
-				<Button type="submit" disabled={busy || !!pending.current}>
-					Check inventory (no hold)
-				</Button>
-			</form>
-			{busy && <StateMessage kind="loading" />}
-			{error !== undefined && (
-				<StateMessage kind={stateFor(error)}>
-					<p>
-						{error instanceof Error
-							? error.message
-							: "Inventory request failed"}
-					</p>
-				</StateMessage>
-			)}
-			{pending.current && !busy && (
-				<>
-					<p>
-						Outcome unresolved. Retry the same command; do not create another
-						request.
-					</p>
-					<Button onClick={() => command("", {})}>
-						Retry original command
-					</Button>
-				</>
-			)}
-			{candidate && (
-				<>
-					<p role="status">
-						{candidate.available
-							? "Candidate inventory is currently free; inquiry reserves nothing."
-							: "Inventory conflict; choose another interval."}
-					</p>
-					<p>
-						Customer end: {venueTime(candidate.sessionEnd, candidate.timezone)}{" "}
-						· cleaning {candidate.bufferMinutes} minutes; blocked until{" "}
-						{venueTime(candidate.blockedUntil, candidate.timezone)}.
-					</p>
-					{candidate.available && (
-						<Button
-							disabled={busy || !!pending.current}
-							onClick={() =>
-								command("/api/holds", {
-									roomId,
-									sessionStartLocal: local,
-									durationMinutes: Number(duration),
-									guests: Number(guests),
-									expectedConfiguration: candidate.configuration,
-									idempotencyKey: crypto.randomUUID(),
-								})
-							}
-						>
-							Create temporary inventory hold
-						</Button>
-					)}
-				</>
-			)}
-			{hold && (
-				<>
-					<HoldStatus hold={hold} elapsedMs={elapsed} />
-					{hold.state === "ACTIVE" && <SyntheticQuotation key={hold.holdId} hold={hold} venueId={venueId} />}
-					<div className="toolbar">
-						<Button disabled={busy} onClick={refresh}>
-							Refresh hold state
-						</Button>
-						{hold.state === "ACTIVE" && (
-							<Button
-								disabled={busy || !!pending.current}
-								variant="secondary"
-								onClick={() =>
-									command(`/api/holds/${hold.holdId}/release`, {
-										expectedRevision: hold.revision,
-										idempotencyKey: crypto.randomUUID(),
-									})
-								}
-							>
-								Release hold
+		<section className="booking-workflow">
+			<BookingStepGuide />
+			<Card title="Plan your cinema session">
+				<p>
+					Associated eligible test accounts only. Venue timezone: {timezone}.
+					Inventory is separate from booking and physical readiness.
+				</p>
+				<div className="booking-planning-grid">
+					<section id="booking-date" aria-labelledby="booking-date-title">
+						<h3 id="booking-date-title">Choose date & time</h3>
+						<form onSubmit={inquire} onChange={() => setCandidate(undefined)}>
+							<div className="filter-grid">
+								<Field
+									id={`inventory-start-${roomId}`}
+									label="Customer start in venue local time"
+									type="datetime-local"
+									required
+									value={local}
+									disabled={busy || !!pending.current}
+									onChange={(e) => setLocal(e.target.value)}
+								/>
+								<Field
+									id={`inventory-duration-${roomId}`}
+									label="Customer duration (minutes)"
+									type="number"
+									min="1"
+									required
+									value={duration}
+									disabled={busy || !!pending.current}
+									onChange={(e) => setDuration(e.target.value)}
+								/>
+								<Field
+									id={`inventory-guests-${roomId}`}
+									label="Guests"
+									type="number"
+									min="1"
+									required
+									value={guests}
+									disabled={busy || !!pending.current}
+									onChange={(e) => setGuests(e.target.value)}
+								/>
+							</div>
+							<Button type="submit" disabled={busy || !!pending.current}>
+								Check inventory (no hold)
 							</Button>
+						</form>
+					</section>
+					<section id="booking-hold" aria-labelledby="booking-hold-title">
+						<h3 id="booking-hold-title">Availability & reservation hold</h3>
+						{!candidate && !hold && !busy && !error && (
+							<p>
+								Choose your date, duration and guest count, then check the
+								interval. An availability inquiry does not reserve it.
+							</p>
 						)}
-					</div>
-				</>
-			)}
-		</Card>
+						{busy && <StateMessage kind="loading" />}
+						{error !== undefined && (
+							<StateMessage kind={stateFor(error)}>
+								<p>
+									{error instanceof Error
+										? error.message
+										: "Inventory request failed"}
+								</p>
+							</StateMessage>
+						)}
+						{pending.current && !busy && (
+							<>
+								<p>
+									Outcome unresolved. Retry the same command; do not create
+									another request.
+								</p>
+								<Button onClick={() => command("", {})}>
+									Retry original command
+								</Button>
+							</>
+						)}
+						{candidate && (
+							<>
+								<p role="status">
+									{candidate.available
+										? "Candidate inventory is currently free; inquiry reserves nothing."
+										: "Inventory conflict; choose another interval."}
+								</p>
+								<p>
+									Customer end:{" "}
+									{venueTime(candidate.sessionEnd, candidate.timezone)} ·
+									cleaning {candidate.bufferMinutes} minutes; blocked until{" "}
+									{venueTime(candidate.blockedUntil, candidate.timezone)}.
+								</p>
+								{candidate.available && (
+									<Button
+										disabled={busy || !!pending.current}
+										onClick={() =>
+											command("/api/holds", {
+												roomId,
+												sessionStartLocal: local,
+												durationMinutes: Number(duration),
+												guests: Number(guests),
+												expectedConfiguration: candidate.configuration,
+												idempotencyKey: crypto.randomUUID(),
+											})
+										}
+									>
+										Create temporary inventory hold
+									</Button>
+								)}
+							</>
+						)}
+						{hold && (
+							<>
+								<HoldStatus hold={hold} elapsedMs={elapsed} />
+
+								<div className="toolbar">
+									<Button disabled={busy} onClick={refresh}>
+										Refresh hold state
+									</Button>
+									{hold.state === "ACTIVE" && (
+										<Button
+											disabled={busy || !!pending.current}
+											variant="secondary"
+											onClick={() =>
+												command(`/api/holds/${hold.holdId}/release`, {
+													expectedRevision: hold.revision,
+													idempotencyKey: crypto.randomUUID(),
+												})
+											}
+										>
+											Release hold
+										</Button>
+									)}
+								</div>
+							</>
+						)}
+					</section>
+				</div>
+				{hold?.state === "ACTIVE" ? (
+					<SyntheticQuotation key={hold.holdId} hold={hold} venueId={venueId} />
+				) : (
+					<AwaitingBookingQuote />
+				)}
+			</Card>
+		</section>
 	);
 }
 
