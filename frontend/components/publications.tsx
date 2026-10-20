@@ -360,7 +360,8 @@ export function IndicativeCatalog({
 		<Card title="Indicative published packages">
 			<p>
 				Tax and checkout fees unresolved. Prices are not payable quotations.
-				Purchasing is unavailable. Inventory inquiry and temporary holds are separate from package prices.
+				Purchasing is unavailable. Inventory inquiry and temporary holds are
+				separate from package prices.
 			</p>
 			{error ? (
 				<StateMessage kind={stateFor(error)}>
@@ -383,34 +384,36 @@ export function IndicativeCatalog({
 					No eligible published package for this room.
 				</StateMessage>
 			) : (
-				items.map((p) => (
-					<Card key={p.versionId} title={p.name}>
-						<p>
-							LKR {displayMoney(p.basePriceMinor)} base · {p.includedMinutes}{" "}
-							minutes · {p.includedGuests} included guests
-						</p>
-						<Button
-							variant="secondary"
-							onClick={() => void inspect(p.packageId)}
-						>
-							Package details {p.name}
-						</Button>
-						{detail === p.versionId && (
-							<section>
-								<p>{p.description}</p>
-								{p.options.map((o) => (
-									<p key={o.label}>
-										{o.label} · {o.mode} ·{" "}
-										{o.mode === "INCLUDED"
-											? "No additional charge"
-											: `Optional LKR ${displayMoney(o.additionalChargeMinor)} per session`}
-									</p>
-								))}
-								<p>Indicative only · purchasable=false</p>
-							</section>
-						)}
-					</Card>
-				))
+				<div className="discovery-packages">
+					{items.map((p) => (
+						<Card key={p.versionId} title={p.name}>
+							<p>
+								LKR {displayMoney(p.basePriceMinor)} base · {p.includedMinutes}{" "}
+								minutes · {p.includedGuests} included guests
+							</p>
+							<Button
+								variant="secondary"
+								onClick={() => void inspect(p.packageId)}
+							>
+								Package details {p.name}
+							</Button>
+							{detail === p.versionId && (
+								<section>
+									<p>{p.description}</p>
+									{p.options.map((o) => (
+										<p key={o.label}>
+											{o.label} · {o.mode} ·{" "}
+											{o.mode === "INCLUDED"
+												? "No additional charge"
+												: `Optional LKR ${displayMoney(o.additionalChargeMinor)} per session`}
+										</p>
+									))}
+									<p>Indicative only · Purchasing is unavailable.</p>
+								</section>
+							)}
+						</Card>
+					))}
+				</div>
 			)}
 		</Card>
 	);

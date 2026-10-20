@@ -4093,5 +4093,71 @@
     },
     "exactSourceCi": "PENDING_PUBLICATION",
     "acceptanceUnchanged": true
+  },
+  "customerDiscoveryImplementation": {
+    "taskId": "CN-FE-EXPERIENCE-001C",
+    "status": "LOCALLY_VERIFIED_BOUNDED_CUSTOMER_DISCOVERY",
+    "evidencePath": "PROGRESS.md#frontend-experience-001c",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed.",
+    "baselineHead": "31fe5fc1f3897426a24df4dbd373c6b3587df2b6",
+    "ownerAuthority": "Explicit owner CN-FE-EXPERIENCE-001C instruction2026-10-20;one CI-gated customer discovery presentation slice and task-scoped publication.",
+    "prerequisiteCi": {
+      "runId": 39417619259,
+      "sha": "31fe5fc1f3897426a24df4dbd373c6b3587df2b6",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "checks": "Full backend/PostgreSQL,frontend,launcher,governance PASS"
+    },
+    "checks": {
+      "frontendTotal": 196,
+      "focusedFrontend": 7,
+      "typecheckLintProductionBuild": "PASS",
+      "architecture": 17,
+      "ciClassifierRegressions": 8,
+      "focusedBrowserGroups": 14,
+      "browserRegressions": {
+        "rooms": 17,
+        "landing": 20,
+        "publications": 17,
+        "inventory": 15,
+        "sharedStates": 25,
+        "shellExperience": 10,
+        "total": 104,
+        "status": "PASS"
+      },
+      "governance": {
+        "knowledge": "PASS",
+        "executionPrimary": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_INTEGRITY_FINDINGS",
+        "executionIsolatedCommittedNextEnv": "PASS",
+        "negativeControls": 34,
+        "traceabilityDependenciesAcceptance": "UNCHANGED",
+        "whitespace": "PASS"
+      }
+    },
+    "referenceImages": {
+      "knowledge/CineNest Cinema Admin Dashboard Mockup-1.png": "52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f",
+      "knowledge/CineNest Cinema Dashboard Showcase-2.png": "27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7",
+      "knowledge/CineNest Private Cinema Booking UI.png": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852"
+    },
+    "localVisualEvidence": {
+      ".cache/experience-001c/after/catalog-1280.png": "07b1c0f14db0eba50fee1356dbd22a6088dbef17f4a271bb25b27cf709771283",
+      ".cache/experience-001c/after/catalog-375.png": "779fb15b7dcda20d81f012013ce936f5cba7f42ebab7d1e5d8338c34e7725550",
+      ".cache/experience-001c/after/catalog-768.png": "ff2da141f2c216b7b8d5a381fe3986ee5dfb3bf79335c5d47d7eae02ec5d363c",
+      ".cache/experience-001c/after/detail-1280.png": "ebd005f5fbbc862306b385cabf7000f90be9d63f761416985c0eb60b0ee37bd2",
+      ".cache/experience-001c/after/detail-375.png": "43c1d9afa273cc509aad603905b9c5c57c572a20fe1580ffe7ca5ddc7c7131fd",
+      ".cache/experience-001c/after/detail-768.png": "0f66b621bdb2e736acce223937ba62b2b0eb6bb0f772ae5cbea4c607953ac7d2",
+      ".cache/experience-001c/after/measurements.json": "a1ebbbe93900599fac7526db48a70e9faa10e0f017565d140987828b367a2c33",
+      ".cache/experience-001c/before/catalog-1280.png": "7778a307b9db88ec8e6d977eeed5fb236dfc313fb883520468b1322858f367e7",
+      ".cache/experience-001c/before/catalog-375.png": "42d25edeec2acff188dccf70ea81363b117ade1d60158d543d2f23159f9a37c5",
+      ".cache/experience-001c/before/catalog-768.png": "1c8aa8ccdcdb14b7fefe6d850ab6332e693c626d365b1a5a58508a6d947e5cf8",
+      ".cache/experience-001c/before/detail-1280.png": "181eb57f019521e155d7ab53f8ac15665daeb8da5d6c7fe7580852e7ddb843fd",
+      ".cache/experience-001c/before/detail-375.png": "999c26788bb9bddfcfa1d6740027987b596f43fdf31a0945bc30ecd81340ea1c",
+      ".cache/experience-001c/before/detail-768.png": "ef35e0767a43ff4c01a56ec0a30c3e71e71f66f9fddc9afe224ac2ca26616d28",
+      ".cache/experience-001c/before/measurements.json": "4d32b23a9ed69e299c2ee57f473d4d4d88e4d3a8803f74c46e9957094a1b510e"
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "acceptanceUnchanged": true
   }
 }

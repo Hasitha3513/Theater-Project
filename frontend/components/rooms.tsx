@@ -39,15 +39,63 @@ export function RoomPhoto({ room }: { room: Room }) {
 		<p className="photo-fallback">Room photograph unavailable</p>
 	);
 }
+export function observedFacilities(rooms: Room[]): Facility[] {
+	return [
+		...new Map(
+			rooms
+				.flatMap((room) => room.facilities)
+				.map((facility) => [facility.code, facility]),
+		).values(),
+	].sort((a, b) => a.label.localeCompare(b.label));
+}
 export function RoomSummary({
 	room,
 	admin,
 	edit,
+	detail = false,
 }: {
 	room: Room;
 	admin: boolean;
 	edit?: () => void;
+	detail?: boolean;
 }) {
+	if (!admin)
+		return (
+			<section className="card discovery-room">
+				<RoomPhoto room={room} />
+				<div className="discovery-room-body">
+					<p className="eyebrow">
+						Private cinema · Up to {room.capacity} guests
+					</p>
+					<h2>{room.name}</h2>
+					<p>{room.description}</p>
+					<ul className="facility-list" aria-label="Room facilities">
+						{room.facilities.length ? (
+							room.facilities.map((facility) => (
+								<li key={facility.code}>{facility.label}</li>
+							))
+						) : (
+							<li>No facilities recorded</li>
+						)}
+					</ul>
+					{detail ? (
+						<div className="toolbar">
+							<a className="button button-primary" href="#booking-entry">
+								Check availability
+							</a>
+							<a href="#room-packages">Explore packages</a>
+						</div>
+					) : (
+						<Link
+							className="button button-primary"
+							href={`/rooms/${room.roomId}`}
+						>
+							Room details<span className="sr-only">: {room.name}</span>
+						</Link>
+					)}
+				</div>
+			</section>
+		);
 	return (
 		<Card title={room.name}>
 			<RoomPhoto room={room} />
@@ -83,6 +131,7 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 	const [q, setQ] = useState("");
 	const [minimum, setMinimum] = useState("");
 	const [facility, setFacility] = useState("");
+	const [facilities, setFacilities] = useState<Facility[]>([]);
 	const [enabled, setEnabled] = useState("");
 	const [page, setPage] = useState(0);
 	const [data, setData] = useState<Page>();
@@ -117,7 +166,10 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 			{ signal: reload.signal },
 		)
 			.then((v) => {
-				if (current) setData(v);
+				if (current) {
+					setData(v);
+					if (!admin && !facility) setFacilities(observedFacilities(v.items));
+				}
 			})
 			.catch((e) => {
 				if (current) setError(e);
@@ -129,7 +181,7 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 			current = false;
 		};
 	}, [admin, venue, q, minimum, facility, page, enabled, reload]);
-	return (
+	const content = (
 		<>
 			<PageHeading
 				eyebrow={admin ? "Administration" : "Discover CineNest"}
@@ -144,6 +196,10 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 					value={venue}
 					onChange={(e) => {
 						setVenue(e.target.value);
+						if (!admin) {
+							setFacility("");
+							setFacilities([]);
+						}
 						setPage(0);
 					}}
 				>
@@ -188,15 +244,34 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 						setPage(0);
 					}}
 				/>
-				<Field
-					id="room-facility"
-					label="Facility code"
-					value={facility}
-					onChange={(e) => {
-						setFacility(e.target.value);
-						setPage(0);
-					}}
-				/>
+				{admin ? (
+					<Field
+						id="room-facility"
+						label="Facility code"
+						value={facility}
+						onChange={(e) => {
+							setFacility(e.target.value);
+							setPage(0);
+						}}
+					/>
+				) : (
+					<SelectField
+						id="room-facility"
+						label="Facility"
+						value={facility}
+						onChange={(e) => {
+							setFacility(e.target.value);
+							setPage(0);
+						}}
+					>
+						<option value="">All facilities</option>
+						{facilities.map((item) => (
+							<option key={item.code} value={item.code}>
+								{item.label}
+							</option>
+						))}
+					</SelectField>
+				)}
 				{admin && (
 					<SelectField
 						id="room-enabled"
@@ -213,6 +288,12 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 					</SelectField>
 				)}
 			</div>
+			{!admin && (
+				<p className="muted discovery-filter-note">
+					Facility choices reflect the rooms in your loaded results. Open a room
+					to explore its packages and check availability.
+				</p>
+			)}
 			<div className="toolbar">
 				<Button
 					variant="secondary"
@@ -357,6 +438,13 @@ export function RoomCatalog({ admin = false }: { admin?: boolean }) {
 			)}
 		</>
 	);
+	return admin ? (
+		content
+	) : (
+		<div className="customer-discovery" data-cn-theme="booking-panel">
+			{content}
+		</div>
+	);
 }
 export function RoomDetail({ id }: { id: string }) {
 	const [room, setRoom] = useState<Room>();
@@ -380,7 +468,10 @@ export function RoomDetail({ id }: { id: string }) {
 		};
 	}, [id, reload]);
 	return (
-		<>
+		<div className="customer-discovery" data-cn-theme="booking-panel">
+			<Link className="discovery-back" href="/rooms">
+				Back to rooms
+			</Link>
 			<PageHeading
 				eyebrow="Room discovery"
 				title={room?.name ?? "Room details"}
@@ -406,32 +497,45 @@ export function RoomDetail({ id }: { id: string }) {
 				<StateMessage kind="loading" />
 			) : (
 				<>
-					<RoomSummary room={room} admin={false} />
-					<IndicativeCatalog venueId={room.venueId} roomId={room.roomId} />
-					<InventoryHold
-						venueId={room.venueId}
-						roomId={room.roomId}
-						timezone={room.venue?.timezone ?? "Unconfigured"}
-					/>
-					<Card title="Customer operating windows">
-						<p>
-							{room.venue?.displayName} · {room.venue?.timezone}
-						</p>
-						{room.venue?.windows.map((w) => (
-							<p key={w.weekday}>
-								{days[w.weekday]} {clock(w.openingMinute)}–
-								{clock(w.closingMinute)}
+					<nav className="discovery-sections" aria-label="Room sections">
+						<a href="#room-overview">Room overview</a>
+						<a href="#room-packages">Packages</a>
+						<a href="#booking-entry">Check availability</a>
+					</nav>
+					<div className="room-overview-grid" id="room-overview">
+						<RoomSummary room={room} admin={false} detail />
+						<Card title="Customer operating windows">
+							<p>
+								{room.venue?.displayName} · {room.venue?.timezone}
 							</p>
-						))}
-						<p>
-							Missing days are closed. Special-day policies are not available.
-							Hours do not establish live availability.
-						</p>
-					</Card>
+							{room.venue?.windows.map((w) => (
+								<p key={w.weekday}>
+									{days[w.weekday]} {clock(w.openingMinute)}–
+									{clock(w.closingMinute)}
+								</p>
+							))}
+							<p>
+								Missing days are closed. Special-day policies are not available.
+								Hours do not establish live availability.
+							</p>
+						</Card>
+					</div>
+					<section id="room-packages" aria-label="Room packages">
+						<IndicativeCatalog venueId={room.venueId} roomId={room.roomId} />
+					</section>
+					<section
+						id="booking-entry"
+						aria-label="Availability and booking entry"
+					>
+						<InventoryHold
+							venueId={room.venueId}
+							roomId={room.roomId}
+							timezone={room.venue?.timezone ?? "Unconfigured"}
+						/>
+					</section>
 				</>
 			)}
-			<Link href="/rooms">Back to rooms</Link>
-		</>
+		</div>
 	);
 }
 export function VenueConfiguration() {

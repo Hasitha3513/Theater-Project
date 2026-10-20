@@ -2740,7 +2740,7 @@ def frontend_experience_a_main():
 
 
 
-def inert_ci_main():
+def frontend_experience_b_main():
     """Qualify exact frontend-only staff booking successor before historical replay."""
     from unittest.mock import patch
     baseline='417666a5090bc00ea906ae5571a75cfe248c6055'
@@ -2796,6 +2796,67 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=frontend_experience_a_main()
     if result==0:print('PASS exact bounded shared state experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized customer discovery source before historical replay."""
+    from unittest.mock import patch
+    baseline='31fe5fc1f3897426a24df4dbd373c6b3587df2b6'
+    owned={'frontend/components/publications.tsx', 'frontend/tests/discovery.test.mjs', 'frontend/app/globals.css', 'frontend/tests/landing-browser.mjs', 'frontend/tests/publications-browser.mjs', 'frontend/tests/discovery-browser.mjs', 'frontend/components/rooms.tsx', 'frontend/package.json'}
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json', 'knowledge/execution/status.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/DESIGN.md'}
+    added={'frontend/tests/discovery-browser.mjs', 'frontend/tests/discovery.test.mjs'}
+    hashes={'frontend/app/globals.css': '13ad9c8e6c618c7105883bfe4170c551ece9fde7c39c11b4ca2ab2efde01da20', 'frontend/components/rooms.tsx': '9a33742f7993e34454ba4e41067ce24ee63495c1c26c9569c046b4a91fe568d3', 'frontend/components/publications.tsx': '90f39de835b51f0c359a9631d873195fe44a180e59b13f2c0022f41191dc6108', 'frontend/package.json': 'a4073899c83bf1fb77ac23a27eb7e50b2a6f60518f5c7aabb3a768e4487acf49', 'frontend/tests/landing-browser.mjs': 'bcd649936d61c8fd4c008bb4cd1399df3e7dd8b575a89abbbedcd679e1c07591', 'frontend/tests/publications-browser.mjs': '11ee90ca446ae9ff5caec78f49cebe56fd62b6b05babaddfdbfa8f56ea194555', 'frontend/tests/discovery.test.mjs': 'eb2f6bb6e0c781b7ffab3ef8eae074e644fbcd5ffa3018fc71a684b97af2fbce', 'frontend/tests/discovery-browser.mjs': '977470afe6013183adb4c5fe34fb6b17f4315651e2083ccd33339b94692d5b92', 'knowledge/execution/requirements.json': 'ce0f9e41e42f2f87138fa3bfde4d02a6e66285774b49caab8fcb73057ca4e7f9', 'knowledge/execution/test-plan.json': 'c80ba5d8737428ddcf19bef1a76b1114640b5ca5dcd1efd070b5c6504252a42f', 'knowledge/execution/status.json': 'dad360650d6203b87536548f8189fad8527ac7394c1926e39732fa711709dcde', 'knowledge/ARCHITECTURE.md': '2334248d258a0b5b6d4589e0c3ad6c1abce9ab53b9b2c7d2820c2e3a86e0960c', 'knowledge/DESIGN.md': 'f14519d9433b478be79f3c78e6e0fb321052e79e8162535acbdfa668345c210c', 'knowledge/PROGRESS.md': '7a83d932821bd132f36e494217afc8253d8ebf1e55661bb29a337685f072f4a6'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Customer discovery exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('customerDiscoveryEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Customer discovery changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('customerDiscoveryImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Customer discovery changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Customer discovery changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Customer discovery rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/discovery.test.mjs':errors.append('Customer discovery lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Customer discovery changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Customer discovery rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Customer discovery promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Customer discovery unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Customer discovery changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=frontend_experience_b_main()
+    if result==0:print('PASS exact bounded customer discovery; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

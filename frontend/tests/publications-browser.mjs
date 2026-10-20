@@ -268,7 +268,7 @@ try {
 		})
 		.click();
 	await page
-		.getByText("Indicative only · purchasable=false", { exact: true })
+		.getByText("Indicative only · Purchasing is unavailable.", { exact: true })
 		.waitFor();
 	assert.equal(
 		await page
@@ -324,7 +324,9 @@ try {
 	await page
 		.getByRole("button", { name: "Publications SYNTHETIC", exact: true })
 		.click();
-	await page.getByText("Service unavailable", { exact: true }).waitFor();
+	await page
+		.getByRole("heading", { name: "Service unavailable", exact: true })
+		.waitFor();
 	mode = "normal";
 	await page
 		.getByRole("button", { name: "Reload publications", exact: true })

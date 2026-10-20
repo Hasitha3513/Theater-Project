@@ -125,6 +125,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Shared presentation and error classification only;existing responses,sanitized proxies,authorization,money/identity/device behavior unchanged."
+      },
+      "customerDiscoveryEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001C",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CUSTOMER_DISCOVERY",
+        "evidencePath": "PROGRESS.md#frontend-experience-001c",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
       }
     },
     {
@@ -406,6 +414,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Shared presentation and error classification only;existing responses,sanitized proxies,authorization,money/identity/device behavior unchanged."
+      },
+      "customerDiscoveryEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001C",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CUSTOMER_DISCOVERY",
+        "evidencePath": "PROGRESS.md#frontend-experience-001c",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
       }
     },
     {
@@ -542,6 +558,14 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "customerDiscoveryEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001C",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CUSTOMER_DISCOVERY",
+        "evidencePath": "PROGRESS.md#frontend-experience-001c",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
       }
     },
     {
@@ -607,6 +631,14 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "customerDiscoveryEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001C",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CUSTOMER_DISCOVERY",
+        "evidencePath": "PROGRESS.md#frontend-experience-001c",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
       }
     },
     {
@@ -2408,6 +2440,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Shared presentation and error classification only;existing responses,sanitized proxies,authorization,money/identity/device behavior unchanged."
+      },
+      "customerDiscoveryEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001C",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CUSTOMER_DISCOVERY",
+        "evidencePath": "PROGRESS.md#frontend-experience-001c",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
       }
     },
     {

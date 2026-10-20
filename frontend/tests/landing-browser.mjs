@@ -179,9 +179,7 @@ try {
 			await page
 				.getByRole("heading", { name: room.name, exact: true })
 				.waitFor();
-			await page
-				.getByRole("link", { name: "Room details", exact: true })
-				.click();
+			await page.getByRole("link", { name: /^Room details/ }).click();
 			await page
 				.getByRole("heading", {
 					name: "Indicative published packages",
@@ -245,7 +243,7 @@ try {
 		await page
 			.getByRole("link", { name: "View Available Packages", exact: true })
 			.click();
-		await page.getByRole("link", { name: "Room details", exact: true }).click();
+		await page.getByRole("link", { name: /^Room details/ }).click();
 		await page
 			.getByText("Package catalog unavailable.", { exact: true })
 			.waitFor();

@@ -623,3 +623,122 @@ button.button { display: inline-grid; }
 .state[role="alert"] .state-symbol { color: var(--cn-color-warning-foreground); background: var(--cn-color-warning-background); }
 .state-actions { display: flex; flex-wrap: wrap; gap: var(--cn-spacing-3); margin-top: var(--cn-spacing-4); }
 .state-actions .button { max-width: 100%; white-space: normal; }
+
+/* Customer discovery: light booking panels inside the cinematic shell. */
+.customer-discovery {
+	padding: var(--cn-spacing-6);
+	border-radius: var(--cn-radius-card);
+	background: var(--cn-background);
+	color: var(--cn-foreground);
+}
+.customer-shell .customer-discovery .card {
+	background: var(--cn-card-background);
+	border-color: var(--cn-color-border);
+}
+.customer-shell .customer-discovery .muted {
+	color: var(--cn-color-text-secondary);
+}
+.customer-shell .customer-discovery .eyebrow {
+	color: var(--cn-color-brand-primary);
+}
+.customer-shell .customer-discovery a {
+	color: var(--cn-color-brand-primary);
+}
+.customer-shell .customer-discovery a.button-primary {
+	color: var(--cn-color-surface);
+}
+.customer-discovery .room-grid {
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+}
+.customer-discovery .discovery-room {
+	padding: 0;
+	overflow: hidden;
+	height: 100%;
+}
+.discovery-room-body {
+	padding: var(--cn-spacing-6);
+}
+.discovery-room-body h2 {
+	margin-top: var(--cn-spacing-2);
+}
+.customer-discovery .room-photo,
+.customer-discovery .photo-fallback {
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+}
+.customer-discovery .photo-fallback {
+	display: grid;
+	place-items: center;
+	padding: var(--cn-spacing-4);
+	background: var(--cn-color-surface-subtle);
+	color: var(--cn-color-text-secondary);
+}
+.facility-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cn-spacing-2);
+	padding: 0;
+	list-style: none;
+}
+.facility-list li {
+	padding: var(--cn-spacing-2) var(--cn-spacing-3);
+	border: 1px solid var(--cn-color-border);
+	border-radius: var(--cn-radius-control);
+	font-size: var(--cn-font-size-small);
+}
+.discovery-filter-note {
+	font-size: var(--cn-font-size-small);
+}
+.discovery-back {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--cn-layout-touchtarget);
+	margin-bottom: var(--cn-spacing-4);
+}
+.discovery-sections {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cn-spacing-4);
+	border-bottom: 1px solid var(--cn-color-border);
+	margin-bottom: var(--cn-spacing-6);
+}
+.customer-shell .customer-discovery .discovery-sections a {
+	min-height: var(--cn-layout-touchtarget);
+	display: inline-flex;
+	align-items: center;
+	font-weight: var(--cn-font-weight-semibold);
+}
+.customer-discovery [id] {
+	scroll-margin-top: var(--cn-spacing-6);
+}
+.room-overview-grid,
+.discovery-packages {
+	display: grid;
+	gap: var(--cn-spacing-6);
+}
+.discovery-packages {
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+@media (min-width: 1024px) {
+	.room-overview-grid {
+		grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+		align-items: start;
+	}
+}
+@media (max-width: 639px) {
+	.customer-discovery {
+		padding: var(--cn-spacing-4);
+	}
+	.discovery-room-body {
+		padding: var(--cn-spacing-4);
+	}
+}
+
+.customer-discovery > * + * {
+	margin-top: var(--cn-spacing-6);
+}
+
+.facility-list { margin-block: var(--cn-spacing-4); }
