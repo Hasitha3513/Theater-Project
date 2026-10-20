@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { roomRequest, RoomRequestError } from "../lib/rooms";
-import { Button, Card, Field, SelectField } from "./primitives";
+import { Button, Card, Field, SelectField, PageHeading } from "./primitives";
 export const OPERATIONS_LABEL = "SYNTHETIC OPERATIONAL TEST";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 type Entry = {
@@ -203,21 +203,32 @@ export function OperationsWorkspace() {
 				),
 		) ?? [];
 	return (
-		<main className="workspace">
-			<h1>Staff operations</h1>
-			<p>{OPERATIONS_LABEL}</p>
+		<div className="staff-workspace operations-workspace">
+			<PageHeading eyebrow="Synthetic staff workspace" title="Room operations">
+				Manage synthetic turnover cases, assignments and recorded attestations.
+				Physical room readiness requires separate verification.
+			</PageHeading>
+			<p className="fixture-notice">{OPERATIONS_LABEL}</p>
 			<p>PHYSICAL READINESS NOT VERIFIED</p>
 			<p>
 				Occupancy UNKNOWN. Case outcomes do not change inventory or authorize
 				admission.
 			</p>
-			<p ref={status} tabIndex={-1} role="status">
+			<p
+				className="workspace-status"
+				ref={status}
+				tabIndex={-1}
+				role="status"
+				aria-atomic="true"
+				aria-busy={busy || undefined}
+			>
 				{busy ? "Loading…" : message}
 			</p>
-			<Card title="Authorized queue">
+			<Card title="Turnover queue">
 				<Field
 					id="operations-venue"
 					label="Venue ID"
+					hint="Enter a venue covered by your current server-authorized grant."
 					value={venue}
 					onChange={(e) => scope(e.target.value)}
 				/>
@@ -430,6 +441,6 @@ export function OperationsWorkspace() {
 					</ol>
 				</Card>
 			)}
-		</main>
+		</div>
 	);
 }

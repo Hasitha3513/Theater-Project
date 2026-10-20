@@ -361,6 +361,7 @@ nav a[aria-current="location"] {
 input[aria-invalid="true"] {
 	border-color: var(--cn-color-danger-foreground);
 }
+
 .controls {
 	display: flex;
 	align-items: end;
@@ -987,3 +988,26 @@ button.button { display: inline-grid; }
 .admin-shell .shell-body .page-content .staff-venue-context p { margin-block: var(--cn-spacing-2); overflow-wrap: anywhere; }
 .admin-shell .staff-detail-link { display: inline-flex; align-items: center; min-height: var(--cn-layout-touchtarget); padding: var(--cn-spacing-2) var(--cn-spacing-3); margin-block: var(--cn-spacing-2); border: 1px solid var(--cn-color-brand-primary); border-radius: var(--cn-radius-control); color: var(--cn-color-brand-primary); }
 .staff-detail-actions { margin-block: var(--cn-spacing-4); }
+
+/* Shared native checkbox and scoped staff operations/report presentation. */
+.admin-shell .shell-body .page-content .staff-workspace { min-width: 0; display: grid; gap: var(--cn-spacing-6); overflow-wrap: anywhere; }
+.admin-shell .shell-body .page-content .staff-workspace > .page-heading,
+.admin-shell .shell-body .page-content .staff-workspace > p { margin-block: 0; }
+.admin-shell .shell-body .page-content .staff-workspace .card { min-width: 0; }
+.admin-shell .shell-body .page-content .staff-workspace .workspace-status { border-inline-start: 3px solid var(--cn-color-brand-primary); padding: var(--cn-spacing-4); background: var(--cn-color-surface); border-radius: var(--cn-radius-control); }
+.admin-shell .shell-body .page-content .staff-workspace .button { max-width: 100%; white-space: normal; overflow-wrap: anywhere; margin-block: var(--cn-spacing-2); margin-inline-end: var(--cn-spacing-2); }
+.admin-shell .shell-body .page-content .staff-workspace ul,
+.admin-shell .shell-body .page-content .staff-workspace ol { padding-inline-start: var(--cn-spacing-6); }
+.admin-shell .shell-body .page-content .staff-workspace li { margin-block: var(--cn-spacing-3); }
+.admin-shell .shell-body .page-content .staff-workspace .report-amounts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: var(--cn-spacing-4); }
+.admin-shell .shell-body .page-content .staff-workspace .report-amounts > div { padding: var(--cn-spacing-3); border: 1px solid var(--cn-color-border-control); border-radius: var(--cn-radius-control); }
+.admin-shell .shell-body .page-content .staff-workspace .report-amounts dd { margin-inline-start: 0; font-weight: var(--cn-font-weight-semibold); font-variant-numeric: tabular-nums; }
+@media (min-width: 768px) {
+ .admin-shell .shell-body .page-content .staff-workspace .report-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--cn-spacing-6); }
+ .admin-shell .shell-body .page-content .staff-workspace .report-filters > h2 { grid-column: 1 / -1; }
+}
+
+.shell-body .page-content .field.field-checkbox { grid-template-columns: var(--cn-layout-touchtarget) minmax(0, 1fr); align-items: center; gap: var(--cn-spacing-3); }
+.shell-body .page-content .field.field-checkbox > label { grid-column: 2; grid-row: 1; display: flex; align-items: center; min-height: var(--cn-layout-touchtarget); }
+.shell-body .page-content .field.field-checkbox > input[type="checkbox"] { grid-column: 1; grid-row: 1; width: 24px; height: 24px; min-height: 24px; padding: 0; margin: 0; justify-self: center; accent-color: var(--cn-color-brand-primary); }
+.shell-body .page-content .field.field-checkbox > p { grid-column: 2; }

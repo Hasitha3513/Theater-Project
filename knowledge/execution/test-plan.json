@@ -100,6 +100,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
+      },
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
       }
     },
     {
@@ -935,7 +943,15 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
+      }
     },
     {
       "id": "T-CN-A09",
@@ -1091,6 +1107,14 @@
         "evidencePath": "PROGRESS.md#guest-roster-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
       }
     },
     {
@@ -1282,6 +1306,14 @@
         "evidencePath": "PROGRESS.md#ui-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
       }
     },
     {
@@ -1565,6 +1597,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
+      },
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
       }
     },
     {

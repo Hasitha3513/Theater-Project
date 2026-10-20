@@ -157,6 +157,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
+      },
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
       }
     },
     {
@@ -1593,7 +1601,15 @@
       "unresolvedQuestions": [
         "OD-16",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
+      }
     },
     {
       "id": "CN-A09",
@@ -1919,6 +1935,14 @@
         "evidencePath": "PROGRESS.md#guest-roster-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
       }
     },
     {
@@ -2282,6 +2306,14 @@
         "evidencePath": "PROGRESS.md#ui-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
       }
     },
     {
@@ -2616,6 +2648,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
+      },
+      "operationsExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001I",
+        "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001i",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
       }
     },
     {

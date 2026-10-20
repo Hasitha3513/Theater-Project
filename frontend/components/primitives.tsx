@@ -72,7 +72,9 @@ export function Field({
 	error?: string;
 }) {
 	return (
-		<div className="field">
+		<div
+			className={`field${props.type === "checkbox" ? " field-checkbox" : ""}`}
+		>
 			<label htmlFor={id}>{label}</label>
 			<input
 				{...props}

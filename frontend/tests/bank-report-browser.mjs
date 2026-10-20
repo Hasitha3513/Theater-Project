@@ -116,6 +116,15 @@ try {
 		await page
 			.getByText("SYNTHETIC FINANCIAL REPORT — NO REAL MONEY", { exact: true })
 			.waitFor();
+		assert.equal(await page.getByRole("main").count(), 1);
+		assert.equal(await page.getByRole("heading", { level: 1 }).count(), 1);
+		assert.equal(calls.length, 0);
+		await page.getByLabel("Venue ID", { exact: true }).focus();
+		assert(
+			await page
+				.getByLabel("Venue ID", { exact: true })
+				.evaluate((e) => e === document.activeElement),
+		);
 		await page.getByLabel("Venue ID", { exact: true }).fill(id);
 		await page
 			.getByRole("button", { name: "Load current report", exact: true })

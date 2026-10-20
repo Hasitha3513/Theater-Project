@@ -4683,5 +4683,56 @@
     },
     "exactSourceCi": "PENDING_PUBLICATION",
     "acceptanceUnchanged": true
+  },
+  "operationsExperienceImplementation": {
+    "taskId": "CN-FE-EXPERIENCE-001I",
+    "status": "LOCALLY_VERIFIED_BOUNDED_OPERATIONS_REPORT_FORMS_PRESENTATION",
+    "evidencePath": "PROGRESS.md#frontend-experience-001i",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged.",
+    "baselineHead": "0dfaba067e3f75ba67348cb48a66a16011e8d3cc",
+    "ownerAuthority": "Explicit owner2026-10-20 CN-FE-EXPERIENCE-001I instruction;one bounded frontend presentation change and scoped publication only.",
+    "prerequisiteCi": {
+      "runId": 39469106635,
+      "sha": "0dfaba067e3f75ba67348cb48a66a16011e8d3cc",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    "checks": {
+      "frontendTotal": 233,
+      "focusedTests": 5,
+      "operationsBrowserGroups": 63,
+      "reportBrowserGroups": 70,
+      "checkboxBrowserGroups": 3,
+      "browserTotal": 136,
+      "typecheckLintProductionBuild": "PASS",
+      "architecture": 17,
+      "ciClassifierRegressions": 8,
+      "governance": {
+        "knowledge": "PASS",
+        "executionPrimary": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_INTEGRITY_FINDINGS",
+        "executionIsolatedCommittedNextEnv": "PASS",
+        "negativeControls": 63,
+        "whitespace": "PASS",
+        "traceabilityDependenciesAcceptance": "UNCHANGED"
+      }
+    },
+    "localVisualEvidence": {
+      ".cache/experience-001i/after/bank-report-1280.png": "a023072986c085214239f61dc1035f5e3ebcc2aadcb60e7d4a718a9a029d4f0a",
+      ".cache/experience-001i/after/bank-report-375.png": "35745d6976f57fed29f7ac615cdc6d89f48be9220d47d3ea2b393aa7924c169c",
+      ".cache/experience-001i/after/bank-report-768.png": "e7227876f0f71308a4ab51183b04c48bb1c80582f0eccf5b7b94211ff10f5dcf",
+      ".cache/experience-001i/after/operations-1280.png": "66d36f0bbf5e888490ab060febd50ea44c0e197a39063352a28b34fdfb26a6f6",
+      ".cache/experience-001i/after/operations-375.png": "3c63f14539000cc4e261d5f8caed1a7f30cb72d68b0ccab100ecc4c3742e53b4",
+      ".cache/experience-001i/after/operations-768.png": "bcdbf19764fd680b6080a5533fa96982427c18fe1683d5a6263fa57a3b4d7913",
+      ".cache/experience-001i/before/bank-report-1280.png": "0d7aa1d15d14abb05451fb27d14564541b837e372a2ebcb26f6e4c4f6fc97365",
+      ".cache/experience-001i/before/bank-report-375.png": "4e6a97d896d7629aaf8e21fd4430b077f0edca4609c0c7f1d3b192ae54763187",
+      ".cache/experience-001i/before/bank-report-768.png": "674f87076046e5f8861acf35bb83bff8ccad9a68371ce9449703a08d6e9cdba6",
+      ".cache/experience-001i/before/operations-1280.png": "9c2f3abff18dc722256fbfcb0b8eabbea00fcc1ed774489efbb4502c87c222e2",
+      ".cache/experience-001i/before/operations-375.png": "9296a3db17ba39cf65ad0ae06968caed5efcc6a3439fd4573f799abd35711312",
+      ".cache/experience-001i/before/operations-768.png": "bdc296116518d4a8e843b726eda5917c2627fc882e6c35c2d25ba29b8fe29573"
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "acceptanceUnchanged": true
   }
 }

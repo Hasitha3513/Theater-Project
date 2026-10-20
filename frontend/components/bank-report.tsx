@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { roomRequest, RoomRequestError } from "../lib/rooms";
-import { Button, Card, Field } from "./primitives";
+import { Button, Card, Field, PageHeading } from "./primitives";
 export const REPORT_LABEL = "SYNTHETIC FINANCIAL REPORT — NO REAL MONEY";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 type Amounts = {
@@ -170,20 +170,34 @@ export function BankReportWorkspace() {
 		unavailable: "Restricted free balance",
 	};
 	return (
-		<main className="workspace">
-			<h1>Synthetic bank reconciliation</h1>
-			<p>{REPORT_LABEL}</p>
+		<div className="staff-workspace bank-report-workspace">
+			<PageHeading
+				eyebrow="Synthetic staff workspace"
+				title="Bank reconciliation"
+			>
+				Inspect authorized synthetic bank-credit balances and their current
+				source records. No real banking or financial action is enabled.
+			</PageHeading>
+			<p className="fixture-notice">{REPORT_LABEL}</p>
 			<p>
 				Receipt review is not credit. Allocation is not new incoming money.
 				UNKNOWN outgoing results remain reserved.
 			</p>
-			<p ref={status} tabIndex={-1} role="status">
+			<p
+				className="workspace-status"
+				ref={status}
+				tabIndex={-1}
+				role="status"
+				aria-atomic="true"
+				aria-busy={busy || undefined}
+			>
 				{busy ? "Loading current snapshot…" : message}
 			</p>
-			<Card title="Report scope">
+			<Card title="Report scope" className="report-filters">
 				<Field
 					id="report-venue"
 					label="Venue ID"
+					hint="Enter a venue covered by your current server-authorized grant."
 					value={venue}
 					onChange={(e) => change(setVenue, e.target.value)}
 				/>
@@ -218,7 +232,7 @@ export function BankReportWorkspace() {
 			</Card>
 			{report && (
 				<>
-					<Card title="Complete-population summary">
+					<Card title="Complete-population summary" className="report-summary">
 						<p>
 							Venue {report.venueId}; currency {report.currency}; timezone{" "}
 							{report.timezone}
@@ -233,7 +247,7 @@ export function BankReportWorkspace() {
 								current snapshots.
 							</p>
 						)}
-						<dl>
+						<dl className="report-amounts">
 							{Object.entries(labels).map(([key, label]) => (
 								<div key={key}>
 									<dt>{label}</dt>
@@ -251,7 +265,7 @@ export function BankReportWorkspace() {
 							complete filtered population, not this page.
 						</p>
 					</Card>
-					<Card title="Redacted credit details">
+					<Card title="Redacted credit details" className="report-details">
 						{!report.snapshot.rows.length && (
 							<p>No synthetic credits in this scope.</p>
 						)}
@@ -263,7 +277,7 @@ export function BankReportWorkspace() {
 										{row.eligibility}; credited {row.creditedAt}; verified{" "}
 										{row.verifiedAt}
 									</p>
-									<dl>
+									<dl className="report-amounts">
 										{Object.entries(labels).map(([key, label]) => (
 											<div key={key}>
 												<dt>{label}</dt>
@@ -315,6 +329,6 @@ export function BankReportWorkspace() {
 					</Card>
 				</>
 			)}
-		</main>
+		</div>
 	);
 }
