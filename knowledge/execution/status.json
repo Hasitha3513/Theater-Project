@@ -3832,5 +3832,27 @@
     "cleanup": "Owned systemd service exited; owned PostgreSQL stopped/absent; run storage removed; owner next-env restored to independently recorded SHA256 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
     "acceptance": "NO_FULL_REQUIREMENT_TEST_PLAN_PHASE_OR_DEMONSTRATION_ACCEPTANCE",
     "ciIntegration": "NOT_ADDED_WORKFLOW_UNCHANGED"
+  },
+  "guestRosterImplementation": {
+    "taskId": "CN-GUEST-REGISTRATION-001",
+    "authoritySha256": "050d078fe9785025bf7f36f58b9fcbf8de29b45d90542fc7a128dcd12c54f149",
+    "baseline": "cbeff875c8d68fa2d8dd0cf1c4924131a6350bab",
+    "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_ONLY",
+    "evidencePath": "PROGRESS.md#guest-roster-implementation",
+    "registeredTaskCountUnchanged": 28,
+    "requirementAcceptance": "NOT_ACCEPTED",
+    "existingE2e": "OPEN_14_PASS_1_FAIL_9_NOT_RUN",
+    "payHere": "DEFERRED_BLOCKED",
+    "checks": {
+      "backend": 472,
+      "backendFailures": 0,
+      "architecture": 17,
+      "frontend": 142,
+      "interceptedBrowserGroups": 8,
+      "ciClassifier": 8,
+      "physicalAcceptance": false,
+      "exactSourceCi": "PENDING_PUBLICATION"
+    },
+    "fullRequirementVerified": false
   }
 }

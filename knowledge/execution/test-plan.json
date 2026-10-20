@@ -342,6 +342,13 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -742,7 +749,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-CN-O02",
@@ -786,6 +800,13 @@
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1125,6 +1146,13 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1448,7 +1476,14 @@
       "plannedMethod": "Documentation links/hash/coverage/read-only discovery for setup; future isolated software/auth/failure/UI checks plus external/physical evidence where applicable",
       "actualTestPaths": [],
       "evidencePaths": [],
-      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence"
+      "reasonNotRun": "Future feature not implemented/approved; no application manifests, external sandbox or hardware evidence",
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "T-BR-09",

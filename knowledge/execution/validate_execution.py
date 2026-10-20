@@ -2391,7 +2391,7 @@ def bank_evidence_context_main():
 
 
 
-def inert_ci_main():
+def synthetic_e2e_main():
     """Qualify exact opt-in test-only successor, then retain every historical control."""
     from unittest.mock import patch
     baseline='b21e80a1a1d0ae63d79a5b41867d11264203a665'
@@ -2441,6 +2441,66 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=bank_evidence_context_main()
     if result==0:print('PASS synthetic E2E exact test source,partial failed evidence,no production/workflow/dependency/acceptance changes; historical controls retained')
+    return result
+
+
+def inert_ci_main():
+    """Qualify owner-approved guest source/schema/evidence before historical replay."""
+    from unittest.mock import patch
+    baseline='cbeff875c8d68fa2d8dd0cf1c4924131a6350bab'
+    owned={'backend/src/main/java/com/cinenest/booking/internal/GuestRosterController.java': 'fa3a231365b558aa556b1b6a5cad65f7c9f17aa0f4a4ec49a846c9d265fd4a48', 'backend/src/main/java/com/cinenest/booking/internal/GuestRosterService.java': '229ca39b26b07f336267711dcb6397dfee83c266a9895bc93dc7ec07015da37e', 'backend/src/main/java/com/cinenest/booking/internal/GuestRosterStore.java': 'eef0d750bd473a9ac01d956f426bc764625a40794f020ead565cc22345a46bf2', 'backend/src/main/java/com/cinenest/booking/internal/GuestRules.java': '914210dee3ac8462f4fb247ce2eab567d38074234facf65d9fdf0545e9bdfe7a', 'backend/src/main/java/com/cinenest/booking/internal/JdbcGuestRosterAdapter.java': '5f28d719ca4d54e39354702a239293415993db047876b8eb621f24d0334f3030', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '251d94726dbacd474efc483bbb84e20244f4643425685d99de9fa8f4275a1cb6', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '7c0ed63f25a1fcc0c6fbe9e413127da9c821de770218eb5475f64376f214b076', 'backend/src/main/resources/db/migration/V18__synthetic_guest_roster.sql': '9f5a2b064f382a8e22f9bd58d8c4ff69972ed7f21a7edd2d882507abb74af29c', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '568c9ae9b1e6f11f71b7393511df744b83d5b4d52485433ef101e130571c022a', 'backend/src/test/java/com/cinenest/booking/internal/GuestRosterFaults.java': 'a4c7d45c8a954e60b10c458e55b21ea182d38454e62827555cecf9d1073deb58', 'backend/src/test/java/com/cinenest/booking/internal/GuestRulesTest.java': '17f6a6d2bf88c4bb1b30ae1657913dae827d2930bcd800f90cace19f90589c44', 'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-roster/route.ts': 'be10bb7cea6f974cf54c7c960655674208c13049f5429999bfad15fd88f76640', 'frontend/app/api/bookings/[id]/guest-roster/companions/route.ts': '4b7c1b405106b2f853d5cd84bb2ef353c73b6b9c1d65525345907ec348c289a1', 'frontend/app/api/bookings/[id]/guest-roster/route.ts': 'd562c025e5e6e4a9b230d383da23df53c102872a45213b84237d0b43f50ea28b', 'frontend/components/customer-bookings.tsx': '631ba7e05913bec94de9c0eb3d09255d6e9b287e3c0e43d8e192e7bdf052c098', 'frontend/components/guest-roster.tsx': 'c98c6991b1b2809e51fe10394681d084bd0734a967931cd1bf07fbfa9cee6e9a', 'frontend/lib/bank-backend.ts': '3b54efceeb72fef7ba817e1932754c79a4424127bbd4d637923e43496f5fe30f', 'frontend/package.json': 'e07666a3657009c2171957caa814ac3181aa4d375278ff737195641d826d795b', 'frontend/tests/guest-roster-browser.mjs': '7d2a38fa623e877cc5bf701237ac7be8c7baab724f8f204c6ac1eee8e1d2cf9a', 'frontend/tests/guest-roster.test.mjs': '12f92c572379518ebe084fa22a53e34b1b62147dd2829a8ec1b043a7218ede1f'}
+    registries={'knowledge/execution/status.json': '38368375a8f2014f645d8d8228c5b15590c8a2855b5bb1688575be1093edf9f9', 'knowledge/execution/requirements.json': 'b7ae1388782e909d8fdaa6360405c32f764a4f813c5ae22e576b47a3d7b19e45', 'knowledge/execution/test-plan.json': '84ac1b8e92a3ec429e5584512ed5f317f2701458e65baac2de8b6a137608d2de', 'knowledge/decisions/cinenest-open-decisions.json': '31f6427c94419b841eecfcf883b22d9693ca32ed7e97336bf36539d737211191'}
+    added={'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-roster/route.ts', 'backend/src/main/java/com/cinenest/booking/internal/JdbcGuestRosterAdapter.java', 'backend/src/test/java/com/cinenest/booking/internal/GuestRosterFaults.java', 'frontend/tests/guest-roster.test.mjs', 'frontend/components/guest-roster.tsx', 'frontend/app/api/bookings/[id]/guest-roster/companions/route.ts', 'backend/src/main/java/com/cinenest/booking/internal/GuestRules.java', 'backend/src/main/java/com/cinenest/booking/internal/GuestRosterController.java', 'backend/src/main/java/com/cinenest/booking/internal/GuestRosterService.java', 'backend/src/main/java/com/cinenest/booking/internal/GuestRosterStore.java', 'frontend/tests/guest-roster-browser.mjs', 'frontend/app/api/bookings/[id]/guest-roster/route.ts', 'backend/src/test/java/com/cinenest/booking/internal/GuestRulesTest.java', 'backend/src/main/resources/db/migration/V18__synthetic_guest_roster.sql'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in {**owned,**registries}.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Guest roster source/authority mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('guestRosterImplementationEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Guest roster changed full requirement/test authority '+name)
+    state=json.loads((K/'execution/status.json').read_text());state.pop('guestRosterImplementation',None)
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Guest roster changed unrelated execution state')
+    decisions=json.loads((K/'decisions/cinenest-open-decisions.json').read_text())
+    for decision in decisions['decisions']:decision.pop('boundedGuestRosterApproval',None)
+    if decisions!=json.loads(prior('knowledge/decisions/cinenest-open-decisions.json')):errors.append('Guest roster changed unrelated/global decision')
+    for name in ['knowledge/execution/change-sets.json','knowledge/execution/omissions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Guest roster changed dependency/workflow '+name)
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/guest-roster.test.mjs':errors.append('Guest roster lost existing frontend tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Guest roster changed frontend dependencies/toolchain')
+    migrations={p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}
+    old=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',baseline,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
+    if migrations!=old|{'backend/src/main/resources/db/migration/V18__synthetic_guest_roster.sql'}:errors.append('Guest roster migration scope drift')
+    for name in ['PROJECT.md','ARCHITECTURE.md','DESIGN.md']:
+        if not (K/name).read_text().startswith(prior('knowledge/'+name).decode()):errors.append('Guest roster rewrote existing authority '+name)
+    progress=(K/'PROGRESS.md').read_text();pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Guest roster promoted phase/demo acceptance')
+    if '<a id="guest-roster-implementation"></a>' not in progress:errors.append('Guest roster evidence absent')
+    allowed=set(owned)|set(registries)|{'knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Guest roster unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if name in registries:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|{'knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=synthetic_e2e_main()
+    if result==0:print('PASS guest roster exact source/V18/bounded authority; unchanged full requirements/dependencies/acceptance and historical controls')
     return result
 
 if __name__ == '__main__':

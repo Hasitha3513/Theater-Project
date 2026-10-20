@@ -85,6 +85,8 @@ class IdentitySecurity {
                 .requestMatchers("/api/admin/venues", "/api/admin/venues/*", "/api/admin/venues/*/rooms", "/api/admin/venues/*/rooms/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/rooms/*/availability", "/api/holds/*", "/api/admin/venues/*/inventory").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/holds", "/api/holds/*/release").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/guest-roster","/api/admin/venues/*/bookings/*/guest-roster").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/guest-roster","/api/bookings/*/guest-roster/companions").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/quotes/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/quotes", "/api/quotes/*/revisions", "/api/quotes/*/accept").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/verification/requests/*", "/api/admin/venues/*/verification/requests", "/api/admin/venues/*/verification/requests/*", "/api/admin/venues/*/verification/requests/*/evidence/*").authenticated()

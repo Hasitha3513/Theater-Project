@@ -195,6 +195,16 @@
         "ocr": "DISABLED",
         "physicalAdmission": "NOT_APPROVED",
         "productionPrivacy": "UNRESOLVED"
+      },
+      "boundedGuestRosterApproval": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "status": "APPROVED_SYNTHETIC_ONLY",
+        "source": "Owner attachment 4e2016aa-ece7-4c9a-a1eb-ca886fda8fd4",
+        "sourceSha256": "050d078fe9785025bf7f36f58b9fcbf8de29b45d90542fc7a128dcd12c54f149",
+        "canonicalSpecification": "PROJECT.md#synthetic-guest-roster-policy",
+        "physicalAdmission": "NOT_QUALIFIED",
+        "realIdentityEvidence": "NOT_AUTHORIZED",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -286,6 +296,16 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "liveMessaging": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedGuestRosterApproval": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "status": "APPROVED_SYNTHETIC_ONLY",
+        "source": "Owner attachment 4e2016aa-ece7-4c9a-a1eb-ca886fda8fd4",
+        "sourceSha256": "050d078fe9785025bf7f36f58b9fcbf8de29b45d90542fc7a128dcd12c54f149",
+        "canonicalSpecification": "PROJECT.md#synthetic-guest-roster-policy",
+        "physicalAdmission": "NOT_QUALIFIED",
+        "realIdentityEvidence": "NOT_AUTHORIZED",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -394,7 +414,7 @@
     },
     {
       "id": "OD-09",
-      "conflict": "Temporary hold range 10–15 min is not precise",
+      "conflict": "Temporary hold range 10\u201315 min is not precise",
       "source": "S1",
       "impact": "Expiry UI, payment handoff and inventory utilization",
       "options": "Choose configurable 10 or 15 minutes (or justified value) later",

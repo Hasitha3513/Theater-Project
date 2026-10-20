@@ -1,6 +1,16 @@
 // Dedicated bounded binary transport. Existing JSON adapters remain unchanged.
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
+	if (new RegExp(`^/api/bookings/${uuid}/guest-roster$`).test(path))
+		return ["GET", "POST"].includes(method);
+	if (new RegExp(`^/api/bookings/${uuid}/guest-roster/companions$`).test(path))
+		return method === "POST";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/bookings/${uuid}/guest-roster$`,
+		).test(path)
+	)
+		return method === "GET";
 	if (path === "/api/bank/requests/readiness") return method === "GET";
 	if (
 		new RegExp(

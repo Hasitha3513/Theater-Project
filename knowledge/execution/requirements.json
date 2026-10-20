@@ -628,6 +628,13 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1512,7 +1519,14 @@
       ],
       "verificationDecisionIds": [
         "OD-04"
-      ]
+      ],
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "CN-O02",
@@ -1614,6 +1628,13 @@
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2174,6 +2195,13 @@
         "taskId": "CN-SYNTHETIC-E2E-001",
         "status": "PARTIAL_FAILED_JOURNEY",
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
@@ -2920,7 +2948,14 @@
         "OD-03",
         "OD-05",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "guestRosterImplementationEvidence": {
+        "taskId": "CN-GUEST-REGISTRATION-001",
+        "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
+        "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      }
     },
     {
       "id": "BR-09",

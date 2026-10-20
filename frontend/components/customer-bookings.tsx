@@ -3,6 +3,7 @@ import { bankRequestHref, confirmedBookingHref } from "../lib/bank-request";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { roomRequest } from "../lib/rooms";
 import { readSession } from "../lib/session";
+import { GuestRoster } from "./guest-roster";
 import { BookingAmendment } from "./booking-amendment";
 import { Badge, Button, Card } from "./primitives";
 export const CUSTOMER_LABEL = "SYNTHETIC BANK PAYMENT — NO REAL MONEY";
@@ -518,6 +519,7 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 							SIMULATED_CONFIRMED. Original purchased history is retained.
 						</p>
 					</Card>
+					<GuestRoster key={detail.id} bookingId={detail.id} />
 					<BookingAmendment
 						booking={detail}
 						onCommitted={() => void load(0, 0)}
