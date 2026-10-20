@@ -742,3 +742,27 @@ button.button { display: inline-grid; }
 }
 
 .facility-list { margin-block: var(--cn-spacing-4); }
+
+/* Original generated concepts are visually separate from verified room records. */
+.cinema-illustration {
+ position: relative;
+ margin: 0;
+ width: 100%;
+ aspect-ratio: 1672 / 941;
+ overflow: hidden;
+ border-radius: var(--cn-radius-card);
+ background: var(--cn-color-cinematic-surface);
+ color: var(--cn-color-cinematic-text);
+}
+.cinema-illustration img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.cinema-illustration figcaption { position: absolute; inset: auto 0 0; padding: var(--cn-spacing-2) var(--cn-spacing-3); background: var(--cn-color-sidebar-background); color: var(--cn-color-cinematic-text); font-size: var(--cn-font-size-caption); line-height: var(--cn-font-lineheight-body); }
+.cinema-image-fallback { display: grid; place-items: center; height: 100%; padding: var(--cn-spacing-6); margin: 0; }
+.cinema-concept-controls { display: flex; flex-wrap: wrap; gap: var(--cn-spacing-2); padding: var(--cn-spacing-3); background: var(--cn-color-surface); }
+.cinema-concept-controls .button { font-size: var(--cn-font-size-small); }
+.admin-shell .cinema-illustration { max-width: 30rem; margin-bottom: var(--cn-spacing-4); }
+.customer-discovery .discovery-room > .cinema-illustration, .customer-discovery .cinema-concept-gallery .cinema-illustration { border-radius: 0; }
+.cinema-illustration-hero { box-shadow: var(--cn-shadow-overlay); border: 1px solid var(--cn-color-sidebar-muted); }
+
+.cinema-illustration picture { display: block; width: 100%; height: 100%; }
+.cinema-concept-controls { margin: 0; border: 0; min-width: 0; }
+.cinema-concept-controls legend { padding-top: var(--cn-spacing-3); color: var(--cn-color-text-secondary); font-size: var(--cn-font-size-small); }

@@ -76,6 +76,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
+      },
+      "cinemaImageAssetsEvidence": {
+        "scope": "OWNER-AUTHORIZED PREMIUM CINEMA IMAGE ASSETS",
+        "status": "LOCALLY_VERIFIED_ILLUSTRATIVE_ASSETS",
+        "evidencePath": "PROGRESS.md#premium-cinema-assets",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "AI-generated concept interiors,not verified venue photographs;frontend assets/presentation only,no room records or operational authority."
       }
     },
     {
@@ -245,6 +253,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer catalog/detail presentation and existing GET/filter/anchor integration only;no business policies,financial mutations,availability authority or physical acceptance changed."
+      },
+      "cinemaImageAssetsEvidence": {
+        "scope": "OWNER-AUTHORIZED PREMIUM CINEMA IMAGE ASSETS",
+        "status": "LOCALLY_VERIFIED_ILLUSTRATIVE_ASSETS",
+        "evidencePath": "PROGRESS.md#premium-cinema-assets",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "AI-generated concept interiors,not verified venue photographs;frontend assets/presentation only,no room records or operational authority."
       }
     },
     {
@@ -684,6 +700,14 @@
           "frontend/tests/rooms.test.mjs",
           "frontend/tests/rooms-browser.mjs"
         ]
+      },
+      "cinemaImageAssetsEvidence": {
+        "scope": "OWNER-AUTHORIZED PREMIUM CINEMA IMAGE ASSETS",
+        "status": "LOCALLY_VERIFIED_ILLUSTRATIVE_ASSETS",
+        "evidencePath": "PROGRESS.md#premium-cinema-assets",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "AI-generated concept interiors,not verified venue photographs;frontend assets/presentation only,no room records or operational authority."
       }
     },
     {

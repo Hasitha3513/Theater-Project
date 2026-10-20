@@ -1,4 +1,5 @@
 "use client";
+import { CinemaIllustration, CinemaConceptGallery } from "./cinema-imagery";
 import { InventoryHold } from "./inventory";
 import { IndicativeCatalog } from "./publications";
 import Link from "next/link";
@@ -36,7 +37,7 @@ export function RoomPhoto({ room }: { room: Room }) {
 			onError={() => setFailed(true)}
 		/>
 	) : (
-		<p className="photo-fallback">Room photograph unavailable</p>
+		<CinemaIllustration asset="violet" roomFallback />
 	);
 }
 export function observedFacilities(rooms: Room[]): Facility[] {
@@ -62,7 +63,11 @@ export function RoomSummary({
 	if (!admin)
 		return (
 			<section className="card discovery-room">
-				<RoomPhoto room={room} />
+				{detail && !room.images.length ? (
+					<CinemaConceptGallery />
+				) : (
+					<RoomPhoto room={room} />
+				)}
 				<div className="discovery-room-body">
 					<p className="eyebrow">
 						Private cinema · Up to {room.capacity} guests

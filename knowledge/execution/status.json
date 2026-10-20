@@ -4159,5 +4159,231 @@
     },
     "exactSourceCi": "PENDING_PUBLICATION",
     "acceptanceUnchanged": true
+  },
+  "cinemaImageAssetsImplementation": {
+    "scope": "OWNER-AUTHORIZED PREMIUM CINEMA IMAGE ASSETS",
+    "status": "LOCALLY_VERIFIED_ILLUSTRATIVE_ASSETS",
+    "evidencePath": "PROGRESS.md#premium-cinema-assets",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "AI-generated concept interiors,not verified venue photographs;frontend assets/presentation only,no room records or operational authority.",
+    "baselineHead": "4890a0013ca9497a0a566ebd32b17e13a02cd029",
+    "ownerAuthority": "Explicit owner PREMIUM CINEMA IMAGE ASSETS IMPLEMENTATION request2026-10-20;one bounded asset/frontend slice and scoped publication.",
+    "provenance": {
+      "mode": "BUILT_IN_GENERATION",
+      "references": "All three approved PNGs visually inspected as design direction;not cropped or supplied as edit inputs.",
+      "licenseStatement": "Generated outputs;no stock license,photographer ownership or third-party licensing clearance inferred.",
+      "optimization": "Existing installed sharp0.35.5;WebP quality82 effort6,width480/960/1672,withoutEnlargement;original returned PNGs preserved byte-for-byte.",
+      "assets": [
+        {
+          "name": "hero",
+          "generationTool": "Built-in image_gen.imagegen",
+          "generationDate": "2026-10-20",
+          "sourceToolOutput": "/home/hasitha-wijerathna/.codex/generated_images/01a13636-6f85-7641-8c8e-37d742ab4815/exec-83e31063-c717-48fd-8396-756667a82487.png",
+          "promptSummary": "Photorealistic original high-resolution landscape private-cinema architectural interior;no people,text,logos,watermarks,UI,controls or signage;illustrative concept,no real venue association;original landscape imagery on the screen,not recognizable film content. Premium private cinema hero:deep navy acoustic walls,black leather recliners,violet ceiling cove and amber aisle light,rear-corner wide view,original blue/violet atmospheric mountain landscape on screen.",
+          "promptRequestedResolution": "2560x1440 or higher",
+          "actualReturnedSourceDimensions": [
+            1672,
+            941
+          ],
+          "upscaled": false,
+          "sourcePath": "frontend/public/cinema/sources/hero.png",
+          "sourceSha256": "8ed7d3efa4b14db41bf385cfc0d895072b65c85df3b8778b02674e38dcaabfc3",
+          "variants": [
+            {
+              "path": "frontend/public/cinema/hero-480.webp",
+              "sha256": "cc2a87f880578cfa79d0f4f7491b47a941e4c1a286286fa73cda86048b56c2b4",
+              "bytes": 15416
+            },
+            {
+              "path": "frontend/public/cinema/hero-960.webp",
+              "sha256": "079fd9168cda6d270f477dfca1f94938e64474b8946bab70b5a8d311bc6cd069",
+              "bytes": 46918
+            },
+            {
+              "path": "frontend/public/cinema/hero-1672.webp",
+              "sha256": "7c469a62ea469b5e89c48bba29d1d1fdd523356952ced7c4a6732375a482b81e",
+              "bytes": 113666
+            }
+          ]
+        },
+        {
+          "name": "violet",
+          "generationTool": "Built-in image_gen.imagegen",
+          "generationDate": "2026-10-20",
+          "sourceToolOutput": "/home/hasitha-wijerathna/.codex/generated_images/01a13636-6f85-7641-8c8e-37d742ab4815/exec-73a4491d-4984-45b6-967c-4e24df026114.png",
+          "promptSummary": "Photorealistic original high-resolution landscape private-cinema architectural interior;no people,text,logos,watermarks,UI,controls or signage;illustrative concept,no real venue association;original landscape imagery on the screen,not recognizable film content. Luxury private cinema:restrained violet cove lighting,navy acoustic panels and subtle wood detailing,black plush leather recliners,original violet-blue mountain scene,rear-side architectural view.",
+          "promptRequestedResolution": "2560x1440 or higher",
+          "actualReturnedSourceDimensions": [
+            1672,
+            941
+          ],
+          "upscaled": false,
+          "sourcePath": "frontend/public/cinema/sources/violet.png",
+          "sourceSha256": "84ba620fcae4ef8b8e57e20a973b73b9a152c94b9fdf6d3d6b23af3848b5f87d",
+          "variants": [
+            {
+              "path": "frontend/public/cinema/violet-480.webp",
+              "sha256": "30fe26cc3e7a8520d1e703aae67db9ecbdf9b46589d681c38ff7d236aff7e9db",
+              "bytes": 16540
+            },
+            {
+              "path": "frontend/public/cinema/violet-960.webp",
+              "sha256": "f009496a5fb02907bf554c5e9706b6be3f222f5e7595c788b48aa010ea919879",
+              "bytes": 49736
+            },
+            {
+              "path": "frontend/public/cinema/violet-1672.webp",
+              "sha256": "1057d71005123db60407bdcf9a866d090d799e084298117b49d7e13c706ea3ce",
+              "bytes": 117652
+            }
+          ]
+        },
+        {
+          "name": "blue",
+          "generationTool": "Built-in image_gen.imagegen",
+          "generationDate": "2026-10-20",
+          "sourceToolOutput": "/home/hasitha-wijerathna/.codex/generated_images/01a13636-6f85-7641-8c8e-37d742ab4815/exec-cd94d5af-3957-4762-9c6e-16f4741b28d7.png",
+          "promptSummary": "Photorealistic original high-resolution landscape private-cinema architectural interior;no people,text,logos,watermarks,UI,controls or signage;illustrative concept,no real venue association;original landscape imagery on the screen,not recognizable film content. Premium intimate private cinema:cool blue recessed ceiling,navy acoustic panels,dark leather recliners,amber aisle strips,original blue mountain-and-lake vista,wide rear-side view.",
+          "promptRequestedResolution": "2560x1440 or higher",
+          "actualReturnedSourceDimensions": [
+            1672,
+            941
+          ],
+          "upscaled": false,
+          "sourcePath": "frontend/public/cinema/sources/blue.png",
+          "sourceSha256": "0056446937b887bda6a4a7c833ef071489684a56382572e0bc853e9026fb7da4",
+          "variants": [
+            {
+              "path": "frontend/public/cinema/blue-480.webp",
+              "sha256": "e4baa6c9beec17521d2b20a534669c6d7ca7c7107b21c7df74f47a204df740c5",
+              "bytes": 19390
+            },
+            {
+              "path": "frontend/public/cinema/blue-960.webp",
+              "sha256": "5515c0fcf888360dcee04c78aea4043b54421e68abaf84dbd9d966db314394c8",
+              "bytes": 63922
+            },
+            {
+              "path": "frontend/public/cinema/blue-1672.webp",
+              "sha256": "f8e57258e33961528b9c3a039d234400e8312e1a587d2d4d4b90486c9c487d54",
+              "bytes": 159346
+            }
+          ]
+        },
+        {
+          "name": "amber",
+          "generationTool": "Built-in image_gen.imagegen",
+          "generationDate": "2026-10-20",
+          "sourceToolOutput": "/home/hasitha-wijerathna/.codex/generated_images/01a13636-6f85-7641-8c8e-37d742ab4815/exec-c0462573-73a2-431d-a237-107c084c8c0c.png",
+          "promptSummary": "Photorealistic original high-resolution landscape private-cinema architectural interior;no people,text,logos,watermarks,UI,controls or signage;illustrative concept,no real venue association;original landscape imagery on the screen,not recognizable film content. Warm amber luxury cinema:charcoal reclining chairs,bronze wood slat acoustic panels,amber ceiling coves and aisle strips,original warm dusk mountain silhouette,rear three-quarter view.",
+          "promptRequestedResolution": "2560x1440 or higher",
+          "actualReturnedSourceDimensions": [
+            1672,
+            941
+          ],
+          "upscaled": false,
+          "sourcePath": "frontend/public/cinema/sources/amber.png",
+          "sourceSha256": "79d0c6d28d6e68e21d10172e1b36ecc8c10949d2419048800023bdbc03c9de0f",
+          "variants": [
+            {
+              "path": "frontend/public/cinema/amber-480.webp",
+              "sha256": "0c6a207972027288a266f3bc70c4973c6ff4a2010a6690237a96f90f3db46bd5",
+              "bytes": 17952
+            },
+            {
+              "path": "frontend/public/cinema/amber-960.webp",
+              "sha256": "3083d63321771b841370e4cdbdbe238c1454fc6b057f143cd81e28db5dd8f15f",
+              "bytes": 57028
+            },
+            {
+              "path": "frontend/public/cinema/amber-1672.webp",
+              "sha256": "e1f33de83b49cbc093bba3fc2852a2e7dc3a39b2f0f18e4c82c19c201f4e859e",
+              "bytes": 141060
+            }
+          ]
+        },
+        {
+          "name": "recliners",
+          "generationTool": "Built-in image_gen.imagegen",
+          "generationDate": "2026-10-20",
+          "sourceToolOutput": "/home/hasitha-wijerathna/.codex/generated_images/01a13636-6f85-7641-8c8e-37d742ab4815/exec-993cc075-bc88-4c85-bbdd-d9f71a39c6fe.png",
+          "promptSummary": "Photorealistic original high-resolution landscape private-cinema architectural interior;no people,text,logos,watermarks,UI,controls or signage;illustrative concept,no real venue association;original landscape imagery on the screen,not recognizable film content. Modern private cinema:close three-quarter view of luxurious black leather recliners,navy panels,violet cove and gold accent light,original blue dusk landscape in background.",
+          "promptRequestedResolution": "2560x1440 or higher",
+          "actualReturnedSourceDimensions": [
+            1672,
+            941
+          ],
+          "upscaled": false,
+          "sourcePath": "frontend/public/cinema/sources/recliners.png",
+          "sourceSha256": "fc52ec556fcd4285af13d4c93b4b37d4a2135099f8807e393a94c0c127e6862e",
+          "variants": [
+            {
+              "path": "frontend/public/cinema/recliners-480.webp",
+              "sha256": "9e51a01c0baec37edabc17b589987f0bc83b684bb3b545303d2fdbb76377c24e",
+              "bytes": 19524
+            },
+            {
+              "path": "frontend/public/cinema/recliners-960.webp",
+              "sha256": "66f73b4dfe80e35eef4e39d7a510b289b9597fd0da4a48a9c7762b1510a5d131",
+              "bytes": 63154
+            },
+            {
+              "path": "frontend/public/cinema/recliners-1672.webp",
+              "sha256": "4c0919c7a1cab0562ef988a50c76e29ec58d9afaaf00e7586609064953657951",
+              "bytes": 145890
+            }
+          ]
+        }
+      ]
+    },
+    "checks": {
+      "frontendTotal": 201,
+      "focusedAssetTests": 5,
+      "focusedImageBrowserGroups": 7,
+      "regressionBrowserGroups": 61,
+      "typecheckLintProductionBuild": "PASS",
+      "architecture": 17,
+      "classifier": 8,
+      "governance": {
+        "knowledge": "PASS",
+        "executionPrimary": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_INTEGRITY_FINDINGS",
+        "executionIsolatedCommittedNextEnv": "PASS",
+        "negativeControls": 39,
+        "whitespace": "PASS",
+        "traceabilityDependenciesAcceptance": "UNCHANGED"
+      },
+      "renderedCaptionContrast": "PASS >=4.5:1 on all measured screen/width combinations"
+    },
+    "localVisualEvidence": {
+      ".cache/premium-assets/after/admin-1280.png": "415af9de5ba0fbc430e055a0332aa459fc3863c02b3703909bf5cc368e0e449d",
+      ".cache/premium-assets/after/admin-375.png": "536c07b9d1db91e563fcfd233b38948b4255d69170d3946d0ca5ccd9f7dde7e8",
+      ".cache/premium-assets/after/admin-768.png": "575942960f23c4f97569d62114c47c5026369bca4e6c2eddc6bef0255454e9a9",
+      ".cache/premium-assets/after/catalog-1280.png": "10b3e4e3c3a7e5502bd1ceed389839af842a371a5c878f53aaf4a965d63ed64f",
+      ".cache/premium-assets/after/catalog-375.png": "589b5afed0ec6c1d60e8c6b514fedcd31dde411851f2c04a1b307687a97a2707",
+      ".cache/premium-assets/after/catalog-768.png": "19617a14558b79bc7b6ac5dc310db55027d714b084ff74af98aebf711beb10ba",
+      ".cache/premium-assets/after/detail-1280.png": "53598ad8f3d7037b23b2b3077e892657fe5bcfa2df95c92f7ba6707cd53dbed4",
+      ".cache/premium-assets/after/detail-375.png": "c95b6b200ebf3ec9d1e357ce90617fafa6b4c14d255ad39ae1a92b4f5682b0ea",
+      ".cache/premium-assets/after/detail-768.png": "bd70d8272d0eb5dc9dc52fead50932913f44c6b332f043420c190c24ea73016d",
+      ".cache/premium-assets/after/landing-1280.png": "766e4b217b42c0b8c94aee89806b3b1bb5f45519c667fb7b89fe88f9a60dbed6",
+      ".cache/premium-assets/after/landing-375.png": "eb4e719dc69361a8fa3f42cb3c7dcac365ac671e90e0a54b081564f48f2e77ff",
+      ".cache/premium-assets/after/landing-768.png": "29e40accd6d0681336a5ca8e97553072bb971cfcb08db1d6a8f0871eeeb8a5e6",
+      ".cache/premium-assets/after/measurements.json": "55cc8a82fbf9930c253e0b936b6b379968e07dae5bc1f472e12fb78ddaeeb704",
+      ".cache/premium-assets/before/admin-1280.png": "0b3a72c427a57cd9fac15c4ad61ace244e16eb19b8521e43bc85fee4e4ce26e4",
+      ".cache/premium-assets/before/admin-375.png": "c7bb2cd554bff5e00064b95b2c0c434691d307801cc0a5c0f3d8c42e267c673f",
+      ".cache/premium-assets/before/admin-768.png": "923882e61683600b21e427a8c616c1e7c9a7b668db732ed641bc19877b20536c",
+      ".cache/premium-assets/before/catalog-1280.png": "07b1c0f14db0eba50fee1356dbd22a6088dbef17f4a271bb25b27cf709771283",
+      ".cache/premium-assets/before/catalog-375.png": "779fb15b7dcda20d81f012013ce936f5cba7f42ebab7d1e5d8338c34e7725550",
+      ".cache/premium-assets/before/catalog-768.png": "ff2da141f2c216b7b8d5a381fe3986ee5dfb3bf79335c5d47d7eae02ec5d363c",
+      ".cache/premium-assets/before/detail-1280.png": "ebd005f5fbbc862306b385cabf7000f90be9d63f761416985c0eb60b0ee37bd2",
+      ".cache/premium-assets/before/detail-375.png": "43c1d9afa273cc509aad603905b9c5c57c572a20fe1580ffe7ca5ddc7c7131fd",
+      ".cache/premium-assets/before/detail-768.png": "0f66b621bdb2e736acce223937ba62b2b0eb6bb0f772ae5cbea4c607953ac7d2",
+      ".cache/premium-assets/before/landing-1280.png": "da379689b0f37a99b519e98e19ce61c77ff4b98bfdfe900ea90cfb6ad2502f34",
+      ".cache/premium-assets/before/landing-375.png": "2d13ebd72081efcf6f9470cc8387b0675b375562d00f66d81fd810edc44cfb2e",
+      ".cache/premium-assets/before/landing-768.png": "2ce058e737b43042e1ec482dee2fba96a1848be571552ed1589348cdb9004873",
+      ".cache/premium-assets/before/measurements.json": "5111ea9c4a4c1da2091b266bbb10cb41a1b0b3c565ece02570f102a492242bd0"
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "acceptanceUnchanged": true
   }
 }

@@ -27,7 +27,7 @@ test("detail actions are section navigation, never financial or hold submission"
 	const html = render(h(RoomSummary, { room, admin: false, detail: true }));
 	assert.match(html, /href="#booking-entry"/);
 	assert.match(html, /href="#room-packages"/);
-	assert.doesNotMatch(html, /href="\/rooms\/|<form|<button/);
+	assert.doesNotMatch(html, /href="\/rooms\/|<form/);
 });
 test("missing photos and facilities remain missing, never generated benefits", () => {
 	const html = render(
@@ -35,7 +35,9 @@ test("missing photos and facilities remain missing, never generated benefits", (
 	);
 	assert.match(html, /Room photograph unavailable/);
 	assert.match(html, /No facilities recorded/);
-	assert.doesNotMatch(html, /<img|Netflix|4K|Popcorn/);
+	assert.match(html, /AI-generated illustration/);
+	assert.match(html, /Not a photograph of this venue or room/);
+	assert.doesNotMatch(html, /Netflix|4K|Popcorn/);
 });
 test("backend facility labels are deduplicated and sorted without inventing a facet inventory", () => {
 	assert.deepEqual(

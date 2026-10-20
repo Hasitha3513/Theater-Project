@@ -126,7 +126,7 @@ try {
 	assert.equal(await page.locator(".customer-discovery").count(), 1);
 	assert.equal(
 		await page
-			.getByText("Room photograph unavailable", { exact: true })
+			.getByText("Room photograph unavailable ·", { exact: true })
 			.count(),
 		1,
 	);
@@ -205,7 +205,8 @@ try {
 		);
 		assert.ok(
 			await page
-				.locator(".photo-fallback")
+				.locator(".cinema-illustration")
+				.first()
 				.evaluate((e) => e.getBoundingClientRect().height > 100),
 		);
 	}

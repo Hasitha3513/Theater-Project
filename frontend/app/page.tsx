@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CinemaIllustration } from "../components/cinema-imagery";
 import { Card, PageHeading } from "../components/primitives";
 export default function CustomerHome() {
 	return (
@@ -50,14 +51,7 @@ export default function CustomerHome() {
 						Starting here does not reserve a room or confirm a booking.
 					</p>
 				</div>
-				<div className="cinema-art" aria-hidden="true">
-					<span>
-						YOUR NEXT
-						<br />
-						GREAT ESCAPE.
-					</span>
-					<div className="cinema-seats">▰ ▰ ▰ ▰</div>
-				</div>
+				<CinemaIllustration asset="hero" hero />
 			</div>
 			<div className="content-grid">
 				<Card title="1. Explore your room">

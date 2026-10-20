@@ -2801,7 +2801,7 @@ def frontend_experience_b_main():
 
 
 
-def inert_ci_main():
+def customer_discovery_main():
     """Qualify exact owner-authorized customer discovery source before historical replay."""
     from unittest.mock import patch
     baseline='31fe5fc1f3897426a24df4dbd373c6b3587df2b6'
@@ -2857,6 +2857,68 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=frontend_experience_b_main()
     if result==0:print('PASS exact bounded customer discovery; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized cinema image source before historical replay."""
+    from unittest.mock import patch
+    baseline='4890a0013ca9497a0a566ebd32b17e13a02cd029'
+    owned={'frontend/public/cinema/amber-1672.webp', 'frontend/public/cinema/blue-960.webp', 'frontend/components/cinema-imagery.tsx', 'frontend/public/cinema/sources/amber.png', 'frontend/public/cinema/amber-480.webp', 'frontend/public/cinema/sources/hero.png', 'frontend/components/rooms.tsx', 'frontend/tests/tsx-loader.mjs', 'frontend/public/cinema/hero-960.webp', 'frontend/public/cinema/sources/blue.png', 'frontend/public/cinema/hero-480.webp', 'frontend/public/cinema/blue-480.webp', 'frontend/tests/cinema-imagery-browser.mjs', 'frontend/public/cinema/hero-1672.webp', 'frontend/public/cinema/blue-1672.webp', 'frontend/public/cinema/violet-1672.webp', 'frontend/package.json', 'frontend/public/cinema/recliners-1672.webp', 'frontend/public/cinema/recliners-960.webp', 'frontend/public/cinema/recliners-480.webp', 'frontend/tests/discovery-browser.mjs', 'frontend/app/globals.css', 'frontend/app/page.tsx', 'frontend/tests/discovery.test.mjs', 'frontend/public/cinema/violet-960.webp', 'frontend/tests/cinema-imagery.test.mjs', 'frontend/public/cinema/sources/violet.png', 'frontend/public/cinema/violet-480.webp', 'frontend/public/cinema/amber-960.webp', 'frontend/public/cinema/sources/recliners.png'}
+    registries={'knowledge/execution/status.json', 'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/DESIGN.md', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added={'frontend/public/cinema/amber-1672.webp', 'frontend/public/cinema/blue-960.webp', 'frontend/components/cinema-imagery.tsx', 'frontend/public/cinema/sources/amber.png', 'frontend/public/cinema/amber-480.webp', 'frontend/public/cinema/sources/hero.png', 'frontend/public/cinema/hero-960.webp', 'frontend/public/cinema/sources/blue.png', 'frontend/public/cinema/hero-480.webp', 'frontend/public/cinema/blue-480.webp', 'frontend/tests/cinema-imagery-browser.mjs', 'frontend/public/cinema/hero-1672.webp', 'frontend/public/cinema/blue-1672.webp', 'frontend/public/cinema/violet-1672.webp', 'frontend/public/cinema/recliners-1672.webp', 'frontend/public/cinema/recliners-960.webp', 'frontend/public/cinema/recliners-480.webp', 'frontend/public/cinema/violet-960.webp', 'frontend/tests/cinema-imagery.test.mjs', 'frontend/public/cinema/sources/violet.png', 'frontend/public/cinema/violet-480.webp', 'frontend/public/cinema/amber-960.webp', 'frontend/public/cinema/sources/recliners.png'}
+    hashes={'frontend/app/globals.css': '0dfbca40071b613a405f8a58d98dce4e00a1fb8d5068fef37fd7ebd553751f00', 'frontend/app/page.tsx': '8768849c6ee868f6f477fedadc94113321ac1c2ec21c060fb3b5c917fdcbdd80', 'frontend/components/rooms.tsx': 'd30f8716f81729848c9049ef7e15aa29482def8b8d016a79d993ccb81c6d5295', 'frontend/components/cinema-imagery.tsx': 'a8b5478566c3eb1bf1214795324efd1affa0a00e4a2fd9a9eed6e04b3bcdec21', 'frontend/package.json': '3c09e4a0dbadf7fa5fddb3775782fc1908bf6fc38bd0a7a26f019ef92c17d941', 'frontend/tests/discovery.test.mjs': '2de856e95998cd839e588a6ddd5887f6198b500e8f7e6c0892c734418cccd452', 'frontend/tests/discovery-browser.mjs': 'b122e21d88cc1a9b253d08bb817e60e6474907bc98f973248495d160a80a20bf', 'frontend/tests/tsx-loader.mjs': '5649d736b0ae92fa2b321816574df8bf359cbc713ea8bcbb6be678d31224059c', 'frontend/tests/cinema-imagery.test.mjs': '00f8f94477431b873610381950d02e010433c636a9581a3f13f8ee3f31178bb5', 'frontend/tests/cinema-imagery-browser.mjs': 'ba840e1a1a47a40375e42061300cd1a1cb77b141a58fe8c15b48e48f00001216', 'frontend/public/cinema/amber-1672.webp': 'e1f33de83b49cbc093bba3fc2852a2e7dc3a39b2f0f18e4c82c19c201f4e859e', 'frontend/public/cinema/amber-480.webp': '0c6a207972027288a266f3bc70c4973c6ff4a2010a6690237a96f90f3db46bd5', 'frontend/public/cinema/amber-960.webp': '3083d63321771b841370e4cdbdbe238c1454fc6b057f143cd81e28db5dd8f15f', 'frontend/public/cinema/blue-1672.webp': 'f8e57258e33961528b9c3a039d234400e8312e1a587d2d4d4b90486c9c487d54', 'frontend/public/cinema/blue-480.webp': 'e4baa6c9beec17521d2b20a534669c6d7ca7c7107b21c7df74f47a204df740c5', 'frontend/public/cinema/blue-960.webp': '5515c0fcf888360dcee04c78aea4043b54421e68abaf84dbd9d966db314394c8', 'frontend/public/cinema/hero-1672.webp': '7c469a62ea469b5e89c48bba29d1d1fdd523356952ced7c4a6732375a482b81e', 'frontend/public/cinema/hero-480.webp': 'cc2a87f880578cfa79d0f4f7491b47a941e4c1a286286fa73cda86048b56c2b4', 'frontend/public/cinema/hero-960.webp': '079fd9168cda6d270f477dfca1f94938e64474b8946bab70b5a8d311bc6cd069', 'frontend/public/cinema/recliners-1672.webp': '4c0919c7a1cab0562ef988a50c76e29ec58d9afaaf00e7586609064953657951', 'frontend/public/cinema/recliners-480.webp': '9e51a01c0baec37edabc17b589987f0bc83b684bb3b545303d2fdbb76377c24e', 'frontend/public/cinema/recliners-960.webp': '66f73b4dfe80e35eef4e39d7a510b289b9597fd0da4a48a9c7762b1510a5d131', 'frontend/public/cinema/sources/amber.png': '79d0c6d28d6e68e21d10172e1b36ecc8c10949d2419048800023bdbc03c9de0f', 'frontend/public/cinema/sources/blue.png': '0056446937b887bda6a4a7c833ef071489684a56382572e0bc853e9026fb7da4', 'frontend/public/cinema/sources/hero.png': '8ed7d3efa4b14db41bf385cfc0d895072b65c85df3b8778b02674e38dcaabfc3', 'frontend/public/cinema/sources/recliners.png': 'fc52ec556fcd4285af13d4c93b4b37d4a2135099f8807e393a94c0c127e6862e', 'frontend/public/cinema/sources/violet.png': '84ba620fcae4ef8b8e57e20a973b73b9a152c94b9fdf6d3d6b23af3848b5f87d', 'frontend/public/cinema/violet-1672.webp': '1057d71005123db60407bdcf9a866d090d799e084298117b49d7e13c706ea3ce', 'frontend/public/cinema/violet-480.webp': '30fe26cc3e7a8520d1e703aae67db9ecbdf9b46589d681c38ff7d236aff7e9db', 'frontend/public/cinema/violet-960.webp': 'f009496a5fb02907bf554c5e9706b6be3f222f5e7595c788b48aa010ea919879', 'knowledge/execution/requirements.json': 'e3a0996f45770d2ffad3c05d7103d1071ae5ae900dfa86d89bcef4ce93783e55', 'knowledge/execution/test-plan.json': 'fee0ccd036278a1710ccb24b12a2c9b743e7d943d1d35225d12251035e6c3d6e', 'knowledge/execution/status.json': '115b848ceac99964c2ebb14dc37afd4024710924d8d0617697f2a93b8c31188c', 'knowledge/ARCHITECTURE.md': '48d9c1a0e583c0129f21b2d9c21f0343d8e94edc77333d16d6069861919c7ebd', 'knowledge/DESIGN.md': '8896a574ef9884fac6c057726a8e1db067f5623e9b69d8b3ae6c2c1118019feb', 'knowledge/PROGRESS.md': '07366a39d894b1f5c49a4d2e6fd2c079d98f80bb475fd99f2ea79e81d29c9a19'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Cinema image assets exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('cinemaImageAssetsEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Cinema image assets changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('cinemaImageAssetsImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Cinema image assets changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Cinema image assets changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Cinema image assets rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/cinema-imagery.test.mjs':errors.append('Cinema image assets lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Cinema image assets changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Cinema image assets rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Cinema image assets promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Cinema image assets unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Cinema image assets changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=customer_discovery_main()
+    if result==0:print('PASS exact bounded cinema image assets; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':
