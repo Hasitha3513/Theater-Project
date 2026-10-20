@@ -538,3 +538,23 @@ test("only an explicit simulated booking state with an opaque identity offers cu
 		/View simulated booking details/,
 	);
 });
+
+test("contextual evidence links contain only an opaque request and render no automatic submission", async () => {
+	const { bankEvidenceHref } = await import("../lib/bank-request.ts");
+	assert.equal(bankEvidenceHref(id), `/bank?evidence=${id}`);
+	for (const invalid of [
+		"",
+		"../claim",
+		`${id}&amount=100`,
+		`${id}?hash=secret`,
+	])
+		assert.throws(() => bankEvidenceHref(invalid));
+	const html = render(h(BankWorkspace, { evidenceRequest: id }));
+	for (const label of bankLabels) assert.ok(html.includes(label));
+	assert.doesNotMatch(
+		html,
+		/id="bank-request"|Create synthetic request|quote-context/,
+	);
+	assert.match(html, /Opening this view submits nothing/);
+	assert.match(html, /Return to customer history/);
+});

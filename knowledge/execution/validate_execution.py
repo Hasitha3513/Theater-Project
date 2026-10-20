@@ -2310,7 +2310,7 @@ def ui_flow_004_main():
     return result
 
 
-def inert_ci_main():
+def ui_flow_005_main():
     """Validate the exact authorized UI-flow-005 successor before historical replay."""
     from unittest.mock import patch
     baseline='d850793cddf54e213384b1286ef30cf4d69bc143'
@@ -2347,6 +2347,46 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_004_main()
     if result==0:print('PASS landing catalog integration: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
+    return result
+
+
+def inert_ci_main():
+    """Validate the exact authorized bank evidence context successor before historical replay."""
+    from unittest.mock import patch
+    baseline='e55450a1a3e66030f34947455cd9dc6928ca484f'
+    owned={'frontend/app/bank/page.tsx': '56279ae6f2a7a11d7b27d15a7036c0381c28538d5e486717835e258b968c950b', 'frontend/components/bank.tsx': 'b3059ee8b241bc550ab8ab2e4716b769d14b22af5ae7d30cd5d32d4d75373ff2', 'frontend/components/bank-request-detail.tsx': '7a1054e596fb8433b2eea12ef2ee64af12c9745598c7a0e64224ddd04180328a', 'frontend/lib/bank-request.ts': '2d19880bdd18f70a8bdbbc36c73738e0f69f6d164ce74658881e4568dc600d8f', 'frontend/tests/bank.test.mjs': 'f052f092432dda07cffde35777d38f1d46f52c920083ebc4266891fd279cbe4b', 'frontend/tests/bank-evidence-browser.mjs': '72eb65cfb01c62cbdbf2bbd9f3df8ece3f1afdcfa1a7d86e764792ef1bf6fe67'}
+    added={'frontend/tests/bank-evidence-browser.mjs'}
+    errors=[]
+    for name,digest in owned.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Bank evidence context source mismatch '+name)
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name in ['execution/change-sets.json','execution/requirements.json','execution/test-plan.json','execution/status.json','execution/omissions.json','decisions/cinenest-open-decisions.json']:
+        if (K/name).read_bytes()!=prior('knowledge/'+name):errors.append('Bank evidence context changed registered dependency/requirement/acceptance '+name)
+    design=(K/'DESIGN.md').read_text();progress=(K/'PROGRESS.md').read_text()
+    if not design.startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Bank evidence context rewrote prior design authority')
+    if '<a id="bank-evidence-context"></a>' not in design or 'Owner instruction CN-BANK-EVIDENCE-CONTEXT-001' not in design:errors.append('Bank evidence context owner authority missing')
+    if '<a id="bank-evidence-context-implementation"></a>' not in progress or 'CI39376769458 COMPLETED/SUCCESS' not in progress:errors.append('Bank evidence context prerequisite/evidence missing')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Bank evidence context promoted phase/demo acceptance')
+    allowed=set(owned)|{'knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Bank evidence context unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact source/authority qualification precedes projection of these paths only.
+    replacements={R/name:prior(name) for name in set(owned)-added}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|{'knowledge/DESIGN.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ui_flow_005_main()
+    if result==0:print('PASS bank evidence context: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
     return result
 
 

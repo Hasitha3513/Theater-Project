@@ -3,7 +3,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { bankLabels, type BankRequest, validateBank } from "../lib/bank";
 import { roomRequest, RoomRequestError } from "../lib/rooms";
 import { Button, Card, Field, SelectField } from "./primitives";
-import { confirmedBookingHref } from "../lib/bank-request";
+import {
+	bankRequestHref,
+	loadBankRequest,
+	confirmedBookingHref,
+} from "../lib/bank-request";
+import { quoteReference } from "../lib/bank-handoff";
 import { BankRequestCreation } from "./bank-handoff";
 export function BankNotice() {
 	return (
@@ -130,10 +135,17 @@ export function BankSummary({
 export function BankWorkspace({
 	reviewer = false,
 	initialQuoteId = "",
+	evidenceRequest,
 }: {
 	reviewer?: boolean;
 	initialQuoteId?: string;
+	evidenceRequest?: string;
 }) {
+	const contextual = !reviewer && evidenceRequest !== undefined;
+	const uploadFlow = useRef<
+		{ id: string; revision: number; claim: string } | undefined
+	>(undefined);
+	const contextRead = useRef<AbortController | undefined>(undefined);
 	const [handoverTo, setHandoverTo] = useState("");
 	const [venue, setVenue] = useState(""),
 		[requestId, setRequestId] = useState(""),
@@ -161,13 +173,76 @@ export function BankWorkspace({
 	);
 	const clear = useCallback(() => {
 		epoch.current++;
+		contextRead.current?.abort();
+		uploadFlow.current = undefined;
 		setValue(undefined);
 		setItems(undefined);
 		setFile(undefined);
 		setPreview(undefined);
+		setAmount("");
+		setPaid("");
+		setReference("");
+		setBusy(false);
 		pending.current = undefined;
 		if (input.current) input.current.value = "";
 	}, []);
+
+	const reloadContext = useCallback(async () => {
+		if (evidenceRequest === undefined || reviewer) return;
+		clear();
+		setAmount("");
+		setPaid("");
+		setReference("");
+		setError("");
+		setBusy(true);
+		const token = epoch.current;
+		const controller = new AbortController();
+		contextRead.current = controller;
+		try {
+			const next = await loadBankRequest(evidenceRequest, controller.signal);
+			if (token === epoch.current) {
+				setValue(next);
+				setRequestId(next.id);
+			}
+		} catch {
+			if (token === epoch.current)
+				setError(
+					"Request unavailable, signed out, denied or changed. Return to history or reload; no submission is confirmed.",
+				);
+		} finally {
+			if (token === epoch.current) setBusy(false);
+		}
+	}, [evidenceRequest, reviewer, clear]);
+	useEffect(() => {
+		if (!contextual) return;
+		void reloadContext();
+		const refresh = () => {
+			void reloadContext();
+		};
+		const hide = () => {
+			clear();
+			setAmount("");
+			setPaid("");
+			setReference("");
+			setBusy(false);
+		};
+		const visibility = () =>
+			document.visibilityState === "hidden" ? hide() : refresh();
+		window.addEventListener("focus", refresh);
+		window.addEventListener("pageshow", refresh);
+		window.addEventListener("pagehide", hide);
+		window.addEventListener("cinenest-session-change", hide);
+		document.addEventListener("visibilitychange", visibility);
+		return () => {
+			epoch.current++;
+			contextRead.current?.abort();
+			window.removeEventListener("focus", refresh);
+			window.removeEventListener("pageshow", refresh);
+			window.removeEventListener("pagehide", hide);
+			window.removeEventListener("cinenest-session-change", hide);
+			document.removeEventListener("visibilitychange", visibility);
+		};
+	}, [contextual, clear, reloadContext]);
 	const created = useCallback(
 		(result: BankRequest) => {
 			clear();
@@ -180,21 +255,56 @@ export function BankWorkspace({
 		? `/api/admin/venues/${venue}/bank/requests`
 		: "/api/bank/requests";
 	async function run(f: () => Promise<void>) {
+		const token = epoch.current;
 		setBusy(true);
 		setError("");
 		try {
 			await f();
 		} catch (e) {
-			setError(e instanceof Error ? e.message : "Request failed");
-			if (e instanceof RoomRequestError && [401, 403, 404].includes(e.status))
+			if (contextual && token !== epoch.current) return;
+			setError(
+				contextual
+					? e instanceof RoomRequestError && [401, 403, 404].includes(e.status)
+						? "Current session or owned request is unavailable. Return to account or history; no submission is confirmed."
+						: e instanceof RoomRequestError &&
+								[400, 409, 413].includes(e.status)
+							? "Request or evidence changed, or input was refused. Reload current state and review before another submission."
+							: "Submission outcome is not confirmed. Retry only the unchanged pending operation, or reload authoritative state. An unresolved upload must not be resent blindly."
+					: e instanceof Error
+						? e.message
+						: "Request failed",
+			);
+			if (
+				contextual &&
+				e instanceof RoomRequestError &&
+				[400, 409, 413].includes(e.status)
+			)
 				clear();
+			if (e instanceof RoomRequestError && [401, 403, 404].includes(e.status)) {
+				clear();
+				if (contextual) {
+					setAmount("");
+					setPaid("");
+					setReference("");
+				}
+			}
 		} finally {
-			setBusy(false);
+			if (!contextual || token === epoch.current) setBusy(false);
 		}
 	}
 	async function command(path: string, body: object) {
 		const token = epoch.current;
 		const encoded = JSON.stringify(body);
+		if (contextual && !pending.current) {
+			const current = await loadBankRequest(evidenceRequest ?? "");
+			if (token !== epoch.current) throw new Error("Context invalidated");
+			if (
+				!value ||
+				current.revision !== Number((body as { revision?: number }).revision) ||
+				current.claimId !== (uploadFlow.current?.claim ?? value.claimId)
+			)
+				throw new RoomRequestError(409, "Current request changed");
+		}
 		if (!pending.current)
 			pending.current = {
 				path,
@@ -214,10 +324,17 @@ export function BankWorkspace({
 				body: pending.current.body,
 			}),
 		);
+		if (contextual && v.id !== evidenceRequest)
+			throw new Error("Request response mismatch");
 		if (epoch.current === token) {
 			setValue(v);
 			setRequestId(v.id);
 			pending.current = undefined;
+			if (contextual && /\/(claims|resubmissions)$/.test(path)) {
+				uploadFlow.current = undefined;
+				setFile(undefined);
+				if (input.current) input.current.value = "";
+			}
 		}
 		return v;
 	}
@@ -232,7 +349,134 @@ export function BankWorkspace({
 			if (input.current) input.current.value = "";
 		}
 	}
+
+	async function uploadContext() {
+		const token = epoch.current;
+		if (!value?.claimId) throw new Error("Submit a claim first");
+		let flow = uploadFlow.current;
+		// An ambiguous completion is replayed with its original command identity/body.
+		if (
+			flow &&
+			pending.current?.path === `/api/bank/uploads/${flow.id}/complete`
+		) {
+			await command(pending.current.path, { revision: flow.revision });
+			if (token !== epoch.current) return;
+			const current = await loadBankRequest(evidenceRequest ?? "");
+			if (token === epoch.current) {
+				setValue(current);
+				uploadFlow.current = undefined;
+				setFile(undefined);
+				if (input.current) input.current.value = "";
+			}
+			return;
+		}
+		if (
+			!flow &&
+			pending.current?.path === `/api/bank/claims/${value.claimId}/uploads`
+		) {
+			const replay = await command(pending.current.path, {
+				revision: JSON.parse(pending.current.body).revision,
+			});
+			if (token !== epoch.current) return;
+			if (!replay.uploadId || !quoteReference.test(replay.uploadId))
+				throw new Error("Upload allocation unavailable");
+			flow = {
+				id: replay.uploadId,
+				revision: replay.revision,
+				claim: value.claimId,
+			};
+			uploadFlow.current = flow;
+		}
+		const current = await loadBankRequest(evidenceRequest ?? "");
+		if (token !== epoch.current) return;
+		if (
+			current.claimId !== value.claimId ||
+			(!pending.current &&
+				current.revision !== (flow?.revision ?? value.revision))
+		)
+			throw new RoomRequestError(409, "Claim changed");
+		const incomplete = current.evidence.find((e) =>
+			["ALLOCATED", "UPLOADING", "QUARANTINED"].includes(e.state),
+		);
+		if (!flow && incomplete)
+			flow = {
+				id: incomplete.id,
+				revision: current.revision,
+				claim: current.claimId ?? "",
+			};
+		if (
+			flow &&
+			(!quoteReference.test(flow.id) || flow.claim !== current.claimId)
+		)
+			throw new RoomRequestError(409, "Claim changed");
+		let evidence = flow
+			? current.evidence.find((e) => e.id === flow?.id)
+			: undefined;
+		if (flow && !evidence)
+			throw new RoomRequestError(409, "Evidence no longer current");
+		if (evidence?.state === "UPLOADING")
+			throw new Error("Upload unresolved; no byte retry permitted");
+		if (evidence?.state === "READY") {
+			setValue(current);
+			uploadFlow.current = undefined;
+			setFile(undefined);
+			return;
+		}
+		if (evidence && !["ALLOCATED", "QUARANTINED"].includes(evidence.state))
+			throw new RoomRequestError(409, "Evidence changed");
+		if (
+			evidence?.state !== "QUARANTINED" &&
+			(!file ||
+				!["image/png", "image/jpeg"].includes(file.type) ||
+				file.size === 0 ||
+				file.size > 5242880)
+		)
+			throw new RoomRequestError(400, "Synthetic JPEG/PNG up to 5 MiB only");
+		if (!flow) {
+			const allocated = await command(
+				`/api/bank/claims/${value.claimId}/uploads`,
+				{ revision: value.revision },
+			);
+			if (token !== epoch.current) return;
+			if (!allocated.uploadId || !quoteReference.test(allocated.uploadId))
+				throw new Error("Upload allocation unavailable");
+			flow = {
+				id: allocated.uploadId,
+				revision: allocated.revision,
+				claim: value.claimId,
+			};
+			evidence = allocated.evidence.find((e) => e.id === flow?.id);
+			if (evidence?.state !== "ALLOCATED")
+				throw new Error("Allocation state unavailable");
+		}
+		uploadFlow.current = flow;
+		if (evidence?.state !== "QUARANTINED") {
+			const csrf = await roomRequest<{ token: string }>("/api/session/csrf");
+			if (token !== epoch.current) return;
+			const response = await fetch(`/api/bank/uploads/${flow.id}/content`, {
+				method: "PUT",
+				cache: "no-store",
+				headers: {
+					"Content-Type": file?.type ?? "",
+					"X-CSRF-TOKEN": csrf.token,
+				},
+				body: file,
+			});
+			if (!response.ok)
+				throw new Error("Upload outcome unresolved; reload current state");
+			if (token !== epoch.current) return;
+		}
+		await command(`/api/bank/uploads/${flow.id}/complete`, {
+			revision: flow.revision,
+		});
+		if (token === epoch.current) {
+			uploadFlow.current = undefined;
+			setFile(undefined);
+			if (input.current) input.current.value = "";
+		}
+	}
 	async function upload() {
+		if (contextual) return uploadContext();
 		if (!value?.claimId || !file)
 			throw new Error("Create a claim and choose a synthetic fixture first");
 		if (
@@ -322,31 +566,69 @@ export function BankWorkspace({
 							</p>
 						))}
 					</>
-				) : (
+				) : !contextual ? (
 					<BankRequestCreation
 						key={initialQuoteId}
 						reference={initialQuoteId}
 						onCreated={created}
 						onDenied={clear}
 					/>
+				) : (
+					<p>
+						Exact owned request context. Claims remain unverified declarations;
+						rejected or late requests retain their recorded status and do not
+						renew inventory. Opening this view submits nothing.
+					</p>
 				)}
-				<Field
-					id="bank-request"
-					label="Request ID"
-					value={requestId}
-					onChange={(e) => {
-						clear();
-						setRequestId(e.target.value);
-					}}
-				/>
-				<Button busy={busy} variant="secondary" onClick={() => run(load)}>
+				{!contextual && (
+					<Field
+						id="bank-request"
+						label="Request ID"
+						value={requestId}
+						onChange={(e) => {
+							clear();
+							setRequestId(e.target.value);
+						}}
+					/>
+				)}
+				<Button
+					busy={busy}
+					variant="secondary"
+					onClick={() => (contextual ? void reloadContext() : run(load))}
+				>
 					Refresh request and recover current state
 				</Button>
 				{error && <p role="alert">{error}</p>}
 				{busy && <p role="status">Working; success is not yet confirmed.</p>}
-				{!value && !busy && <p>Select or create a synthetic request.</p>}
-				{value && (
+				{!value && !busy && (
+					<p>
+						{contextual
+							? "Reload the owned request or return to customer history."
+							: "Select or create a synthetic request."}
+					</p>
+				)}
+				{contextual && (
+					<p>
+						<a href="/bookings">Return to customer history</a> ·{" "}
+						<a href="/account">Account and session</a>
+						{value && (
+							<>
+								{" "}
+								·{" "}
+								<a href={bankRequestHref(value.id)}>
+									Return to request details
+								</a>
+							</>
+						)}
+					</p>
+				)}
+				{value && (!contextual || value.id === evidenceRequest) && (
 					<>
+						{contextual && (
+							<p className="bank-context-summary">
+								Request {value.id} · Revision {value.revision}
+							</p>
+						)}
 						<BankSummary value={value} customer={!reviewer} />
 						{reviewer ? (
 							<>
@@ -460,18 +742,21 @@ export function BankWorkspace({
 								<Field
 									id="bank-declared-amount"
 									label="Declared amount in minor units (not proof of funds)"
+									disabled={contextual && busy}
 									value={amount}
 									onChange={(e) => setAmount(e.target.value)}
 								/>
 								<Field
 									id="bank-declared-time"
 									label="Declared payment time (ISO UTC, unverified)"
+									disabled={contextual && busy}
 									value={paid}
 									onChange={(e) => setPaid(e.target.value)}
 								/>
 								<Field
 									id="bank-reference"
 									label="Synthetic declared reference"
+									disabled={contextual && busy}
 									value={reference}
 									onChange={(e) => setReference(e.target.value)}
 								/>
@@ -495,6 +780,16 @@ export function BankWorkspace({
 										? "Append corrected claim"
 										: "Submit synthetic claim"}
 								</Button>
+								{contextual && (
+									<p>
+										Use only approved watermarked synthetic JPEG/PNG fixtures,
+										up to 5 MiB each and two per claim. No real receipts or PDF.
+										Upload/scan status is not proof of funds. If a prior upload
+										is UPLOADING, its outcome remains unresolved; do not
+										allocate a replacement blindly. A quarantined upload may be
+										explicitly finalized without resending bytes.
+									</p>
+								)}
 								<div className="field">
 									<label htmlFor="bank-file">
 										Approved synthetic JPEG/PNG fixture
@@ -504,6 +799,7 @@ export function BankWorkspace({
 										id="bank-file"
 										type="file"
 										accept="image/png,image/jpeg"
+										disabled={busy}
 										onChange={(e) => setFile(e.target.files?.[0])}
 									/>
 								</div>

@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { BankRequest } from "../lib/bank";
-import { loadBankRequest } from "../lib/bank-request";
+import { bankEvidenceHref, loadBankRequest } from "../lib/bank-request";
 import { quoteReference } from "../lib/bank-handoff";
 import { RoomRequestError } from "../lib/rooms";
 import { BankNotice, BankSummary } from "./bank";
@@ -101,6 +101,15 @@ export function BankRequestDetail({ reference }: { reference: string }) {
 									: "Consult the current request, review and financial states below; no financial success is inferred."}
 						</p>
 						<BankSummary value={value} customer />
+						<p>
+							<a href={bankEvidenceHref(value.id)}>
+								Open synthetic claim and receipt workflow
+							</a>
+						</p>
+						<p>
+							Submission remains a separate explicit action. Server checks
+							determine whether current claims or corrections are permitted.
+						</p>
 						{!value.financial && (
 							<p>
 								Financial outcome is unavailable or unresolved. Do not infer

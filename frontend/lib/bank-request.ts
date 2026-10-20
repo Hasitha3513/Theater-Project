@@ -29,3 +29,9 @@ export function confirmedBookingHref(status: unknown, reference: unknown) {
 		return null;
 	return `/bookings/${reference}`;
 }
+
+export function bankEvidenceHref(reference: string) {
+	if (!quoteReference.test(reference))
+		throw new Error("Invalid request reference");
+	return `/bank?evidence=${reference}`;
+}

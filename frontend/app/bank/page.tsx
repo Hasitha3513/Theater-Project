@@ -7,6 +7,7 @@ export default async function Page({
 	searchParams: Promise<{
 		quote?: string | string[];
 		request?: string | string[];
+		evidence?: string | string[];
 	}>;
 }) {
 	const query = await searchParams;
@@ -19,7 +20,18 @@ export default async function Page({
 			>
 				No real payments or booking confirmation.
 			</PageHeading>
-			{"request" in query ? (
+			{"evidence" in query ? (
+				<BankWorkspace
+					key={String(query.evidence)}
+					evidenceRequest={
+						typeof query.evidence === "string" &&
+						!("quote" in query) &&
+						!("request" in query)
+							? query.evidence
+							: ""
+					}
+				/>
+			) : "request" in query ? (
 				<BankRequestDetail
 					key={String(query.request)}
 					reference={
