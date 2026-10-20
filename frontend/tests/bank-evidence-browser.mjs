@@ -203,6 +203,60 @@ try {
 			buffer: fixturePng,
 		});
 	}
+
+	// Focused CN-FE-EXPERIENCE-001F presentation checks; business APIs remain intercepted.
+	for (const width of [375, 768, 1280]) {
+		const { page, state } = await harness(width);
+		await page.goto(`${base}/bank?evidence=${id}`);
+		await submit(page).waitFor();
+		await page
+			.getByRole("heading", { name: "Request overview", exact: true })
+			.waitFor();
+		assert.equal(
+			await page.getByText("LKR 123.52", { exact: true }).count(),
+			1,
+		);
+		const timings = page.getByText("Timing and technical references", {
+			exact: true,
+		});
+		await timings.focus();
+		await page.keyboard.press("Enter");
+		await page
+			.getByText("20 Oct 2026, 10:00 UTC", { exact: true })
+			.first()
+			.waitFor();
+		const amount = page.getByLabel(
+			"Declared amount in minor units (not proof of funds)",
+		);
+		assert.match(
+			await page.locator("#bank-declared-amount-help").innerText(),
+			/100 minor units = LKR 1.00/,
+		);
+		await amount.focus();
+		await page.keyboard.press("Tab");
+		await page.keyboard.press("Shift+Tab");
+		assert.notEqual(
+			await amount.evaluate((el) => getComputedStyle(el).outlineStyle),
+			"none",
+		);
+		assert.equal(
+			await page
+				.getByLabel("Approved synthetic JPEG/PNG fixture")
+				.getAttribute("aria-describedby"),
+			"bank-file-help",
+		);
+		assert.equal(state.posts.length, 0);
+		assert.equal(state.puts.length, 0);
+		assert.equal(new URL(page.url()).search, `?evidence=${id}`);
+		assert.equal(
+			await page.evaluate(
+				() => document.documentElement.scrollWidth > innerWidth,
+			),
+			false,
+		);
+		await page.close();
+		groups++;
+	}
 	for (const width of [320, 768, 1280]) {
 		const { page, state } = await harness(width);
 		await page.goto(`${base}/bank?request=${id}`);
@@ -337,7 +391,10 @@ try {
 		await fill(page);
 		await correction.click();
 		await page
-			.getByText("REVIEW_PENDING / PENDING / ACTIVE", { exact: true })
+			.getByRole("region", { name: "Request and review status", exact: true })
+			.filter({ has: page.getByText("PENDING", { exact: true }) })
+			.filter({ has: page.getByText("ACTIVE", { exact: true }) })
+			.getByText("REVIEW_PENDING", { exact: true })
 			.waitFor();
 		assert.ok(state.posts[0].path.endsWith("/resubmissions"));
 		await page.close();

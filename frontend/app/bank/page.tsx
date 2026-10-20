@@ -15,10 +15,12 @@ export default async function Page({
 	return (
 		<>
 			<PageHeading
-				eyebrow="Internal synthetic dry run"
-				title="Synthetic bank request"
+				eyebrow="Your cinema journey · Synthetic bank workflow"
+				title="Bank request & receipt"
 			>
-				No real payments or booking confirmation.
+				Review your request, declare a synthetic claim and add private test
+				evidence through separate explicit actions. No real payments or booking
+				confirmation.
 			</PageHeading>
 			{"evidence" in query ? (
 				<BankWorkspace

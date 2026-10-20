@@ -918,3 +918,30 @@ button.button { display: inline-grid; }
  .verification-workspace { align-items: start; }
  .verification-workspace > .verification-recovery { grid-column: 1 / -1; }
 }
+
+/* Customer bank context uses the same approved light booking panels. */
+.bank-ux-panel { border: 1px solid var(--cn-color-border); border-radius: var(--cn-radius-card); padding: var(--cn-spacing-4); min-width: 0; }
+.bank-ux-summary, .bank-ux-actions { display: grid; gap: var(--cn-spacing-4); margin-block: var(--cn-spacing-4); align-items: start; }
+.bank-ux-sections ol { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: var(--cn-spacing-3); padding: 0; list-style: none; }
+.bank-ux-sections li { display: flex; align-items: center; flex-direction: column; gap: var(--cn-spacing-2); text-align: center; }
+.customer-shell .bank-experience .bank-ux-sections li > span { display: grid; place-items: center; border: 1px solid var(--cn-color-border); border-radius: var(--cn-radius-pill); width: 2rem; height: 2rem; color: var(--cn-color-brand-primary); }
+.customer-shell .bank-experience { color: var(--cn-color-text-primary); --cn-card-background: var(--cn-color-surface); --cn-foreground: var(--cn-color-text-primary); }
+.customer-shell .bank-experience .card { background: var(--cn-color-surface); color: var(--cn-color-text-primary); }
+.customer-shell .bank-experience .card a:not(.button) { color: var(--cn-color-brand-primary); }
+.customer-shell .bank-experience .muted { color: var(--cn-color-text-secondary); }
+.bank-experience aside[aria-label="Synthetic bank safety"] { border-inline-start: 4px solid var(--cn-color-warning-foreground); padding: var(--cn-spacing-4); border-radius: var(--cn-radius-card); background: var(--cn-color-warning-background); color: var(--cn-color-warning-foreground); }
+.customer-shell .bank-experience aside[aria-label="Synthetic bank safety"] p { margin-block: var(--cn-spacing-2); }
+.bank-ux-instructions { background: var(--cn-color-surface-subtle); }
+.bank-ux-total { font-size: var(--cn-font-size-h2); font-weight: var(--cn-font-weight-bold); color: var(--cn-color-info-foreground); }
+.bank-experience .account-summary dd { overflow-wrap: anywhere; }
+.bank-experience summary { cursor: pointer; min-height: var(--cn-layout-touchtarget); font-weight: var(--cn-font-weight-semibold); }
+.bank-experience input[type="file"] { width: 100%; max-width: 100%; border-style: dashed; padding-block: var(--cn-spacing-4); }
+.bank-experience .field:has(input[type="checkbox"]) { display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: center; }
+.bank-experience .field:has(input[type="checkbox"]) label { grid-column: 2; grid-row: 1; }
+.bank-experience .field:has(input[type="checkbox"]) input { grid-column: 1; grid-row: 1; min-height: 44px; width: 24px; }
+@media(min-width:1024px) { .bank-ux-summary, .bank-ux-actions { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media(max-width:639px) { .bank-ux-sections ol { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+.bank-experience .bank-context-summary dl { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,2fr); gap: var(--cn-spacing-2) var(--cn-spacing-4); }
+.bank-experience .bank-context-summary dd { margin: 0; overflow-wrap: anywhere; }
+.bank-experience .bank-context-summary dt { font-weight: var(--cn-font-weight-semibold); }
+@media(max-width:639px) { .bank-experience .bank-context-summary dl { grid-template-columns: minmax(0,1fr); } }

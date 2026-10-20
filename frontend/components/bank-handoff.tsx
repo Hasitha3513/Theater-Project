@@ -301,7 +301,15 @@ export function BankRequestCreation({
 		}
 	}
 	return (
-		<section aria-label="Create bank request from verification">
+		<section
+			className="bank-ux-panel bank-ux-creation"
+			aria-label="Create bank request from verification"
+		>
+			<h3>Review quotation & request readiness</h3>
+			<p>
+				Check the current server context before explicitly creating a synthetic
+				bank request. Readiness is not a payment result.
+			</p>
 			<BankContextStatus {...context} />
 			{context.value && !context.loading && (
 				<BankContextSummary value={context.value} />

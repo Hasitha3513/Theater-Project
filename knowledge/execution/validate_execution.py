@@ -2986,7 +2986,7 @@ def booking_experience_main():
 
 
 
-def inert_ci_main():
+def verification_experience_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='54ec3eb9cdfd46fa70750c7400b4d4efe97e84b5'
@@ -3042,6 +3042,66 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=booking_experience_main()
     if result==0:print('PASS exact bounded verification experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='95c987c561f7298179cc8de114cdb8cf61c36534'
+    owned={'frontend/components/bank-handoff.tsx', 'frontend/components/bank-request-detail.tsx', 'frontend/components/bank.tsx', 'frontend/app/bank/page.tsx', 'frontend/tests/bank-evidence-browser.mjs', 'frontend/app/globals.css', 'frontend/tests/bank-handoff-browser.mjs', 'frontend/package.json', 'frontend/tests/bank-experience.test.mjs', 'frontend/components/bank-experience.tsx', 'frontend/tests/bank-browser.mjs'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md'}
+    added={'frontend/components/bank-experience.tsx', 'frontend/tests/bank-experience.test.mjs'}
+    hashes={'frontend/app/globals.css': '7085278b600cd4753b968c64c2ed22d77d346ad309cd4c2fb072b1ea259b08e6', 'frontend/app/bank/page.tsx': '1e4d14e51c308bc0cb9a77fdfa576468fa3bfe842ccdfe85ec1ebe330ae8fd37', 'frontend/components/bank.tsx': '63cabf46f2d053a5c4ca364ea31fc84ed105d1526406f79bb69980adf6f00b37', 'frontend/components/bank-experience.tsx': '334a38fe610fea209eb3ce81fe356b3ee1b1c65bae2b644bf8efc72d3f17e202', 'frontend/components/bank-handoff.tsx': '4f3805b0e2d3973e188dd4ebf1081ed50cdee102f7214f97e0e58653124b0957', 'frontend/components/bank-request-detail.tsx': 'eebd4c528b8666ff619a8550607831db9112da8e942508b479284492ad2bfbcb', 'frontend/package.json': '647be9c5e97b121c961c819a1f84ff842aaac65c2eefee1732cf5073e100b315', 'frontend/tests/bank-experience.test.mjs': '8c0e2446f0641aafe4b9f3597a822ba490472c96c1b2ad32b4f0eb6de3d35162', 'frontend/tests/bank-evidence-browser.mjs': '1ec325784a887111e56fb3e74c23685841003d9fd6602adeb8d61103a174bfc8', 'frontend/tests/bank-handoff-browser.mjs': '65b1cb50bade550a78559342e1ac1e253326a8f63de11168b80af450c308ac2d', 'frontend/tests/bank-browser.mjs': '8419fe45ffb2a05355224801dbf173a4f7c60069ce82b56e74989ca9ffeed7cc', 'knowledge/execution/requirements.json': 'd80e74c30f21c6d75ddd8e52f811cf1c70b21d368db57fb90ae39178e9ceebeb', 'knowledge/execution/test-plan.json': '3fbd6671cd23e7b24685e6e56369782c55560c023f61be5ba7e81733df06c3e7', 'knowledge/execution/status.json': 'c65726519da9163a48bfbb53aedc21d6435bb6785d666d9542bb4e4afe911a14', 'knowledge/ARCHITECTURE.md': 'c8f52eac349b6172b3a6d3078afa7bb48bb33ab423b9fe685a89b6421fd395e6', 'knowledge/DESIGN.md': 'e3eaa9c90cf0c736ce9942d0b617ac34e41dd92b16105026a3d4fb38d84d2eaa', 'knowledge/PROGRESS.md': '6010dbdb2781defdb551f3fc4edd8080617c4bf7606fe362a8e9059a20ef07ad'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Banking experience exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('bankingExperienceEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Banking experience changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('bankingExperienceImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Banking experience changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Banking experience changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Banking experience rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/bank-experience.test.mjs':errors.append('Banking experience lost existing tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Banking experience changed dependencies')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Banking experience rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Banking experience promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Banking experience unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Banking experience changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=verification_experience_main()
+    if result==0:print('PASS exact bounded banking experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

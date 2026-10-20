@@ -12,6 +12,7 @@ import {
 } from "../lib/bank-request";
 import { quoteReference } from "../lib/bank-handoff";
 import { BankRequestCreation } from "./bank-handoff";
+import { BankSections, CustomerBankSummary } from "./bank-experience";
 export function BankNotice() {
 	return (
 		<aside aria-label="Synthetic bank safety">
@@ -34,6 +35,7 @@ export function BankSummary({
 		v.financial?.syntheticBookingStatus,
 		v.financial?.bookingId,
 	);
+	if (customer) return <CustomerBankSummary value={v} />;
 	return (
 		<>
 			<dl className="account-summary">
@@ -518,15 +520,17 @@ export function BankWorkspace({
 		if (input.current) input.current.value = "";
 	}
 	return (
-		<>
+		<div
+			data-cn-theme={reviewer ? undefined : "booking-panel"}
+			className={reviewer ? undefined : "bank-experience"}
+		>
 			<BankNotice />
 			<Card
 				title={
-					reviewer
-						? "Scoped bank review queue"
-						: "Synthetic request and receipt"
+					reviewer ? "Scoped bank review queue" : "Your bank request & receipt"
 				}
 			>
+				{!reviewer && <BankSections />}
 				<p>
 					Manual review only. Upload does not establish money received. Scanning
 					is simulated. No real bank account is configured.
@@ -746,79 +750,111 @@ export function BankWorkspace({
 								)}
 							</>
 						) : (
-							<>
-								<Field
-									id="bank-declared-amount"
-									label="Declared amount in minor units (not proof of funds)"
-									disabled={contextual && busy}
-									value={amount}
-									onChange={(e) => setAmount(e.target.value)}
-								/>
-								<Field
-									id="bank-declared-time"
-									label="Declared payment time (ISO UTC, unverified)"
-									disabled={contextual && busy}
-									value={paid}
-									onChange={(e) => setPaid(e.target.value)}
-								/>
-								<Field
-									id="bank-reference"
-									label="Synthetic declared reference"
-									disabled={contextual && busy}
-									value={reference}
-									onChange={(e) => setReference(e.target.value)}
-								/>
-								<Button
-									busy={busy}
-									onClick={() =>
-										run(async () => {
-											await command(
-												`${prefix}/${value.id}/${value.claimId ? "resubmissions" : "claims"}`,
-												{
-													revision: value.revision,
-													declaredAmountMinor: amount,
-													declaredPaidAt: paid,
-													declaredReference: reference,
-												},
-											);
-										})
-									}
+							<div className="bank-ux-actions">
+								<section
+									className="bank-ux-panel"
+									aria-labelledby="bank-claim-heading"
 								>
-									{value.claimId
-										? "Append corrected claim"
-										: "Submit synthetic claim"}
-								</Button>
-								{contextual && (
+									<h3 id="bank-claim-heading">
+										Declare your synthetic payment claim
+									</h3>
 									<p>
-										Use only approved watermarked synthetic JPEG/PNG fixtures,
-										up to 5 MiB each and two per claim. No real receipts or PDF.
-										Upload/scan status is not proof of funds. If a prior upload
-										is UPLOADING, its outcome remains unresolved; do not
-										allocate a replacement blindly. A quarantined upload may be
-										explicitly finalized without resending bytes.
+										This is your declaration, not proof that funds arrived.
+										Submit only when you explicitly intend to create or correct
+										a claim.
 									</p>
-								)}
-								<div className="field">
-									<label htmlFor="bank-file">
-										Approved synthetic JPEG/PNG fixture
-									</label>
-									<input
-										ref={input}
-										id="bank-file"
-										type="file"
-										accept="image/png,image/jpeg"
-										disabled={busy}
-										onChange={(e) => setFile(e.target.files?.[0])}
+									<Field
+										id="bank-declared-amount"
+										hint="Enter the exact amount in LKR minor units: 100 minor units = LKR 1.00. This field does not verify bank credit."
+										label="Declared amount in minor units (not proof of funds)"
+										disabled={contextual && busy}
+										value={amount}
+										onChange={(e) => setAmount(e.target.value)}
 									/>
-								</div>
-								<Button busy={busy} onClick={() => run(upload)}>
-									Upload private synthetic receipt
-								</Button>
-							</>
+									<Field
+										id="bank-declared-time"
+										hint="Use the existing ISO UTC format, including Z. This declaration does not change the server deadlines."
+										label="Declared payment time (ISO UTC, unverified)"
+										disabled={contextual && busy}
+										value={paid}
+										onChange={(e) => setPaid(e.target.value)}
+									/>
+									<Field
+										id="bank-reference"
+										label="Synthetic declared reference"
+										disabled={contextual && busy}
+										value={reference}
+										onChange={(e) => setReference(e.target.value)}
+									/>
+									<Button
+										busy={busy}
+										onClick={() =>
+											run(async () => {
+												await command(
+													`${prefix}/${value.id}/${value.claimId ? "resubmissions" : "claims"}`,
+													{
+														revision: value.revision,
+														declaredAmountMinor: amount,
+														declaredPaidAt: paid,
+														declaredReference: reference,
+													},
+												);
+											})
+										}
+									>
+										{value.claimId
+											? "Append corrected claim"
+											: "Submit synthetic claim"}
+									</Button>
+								</section>
+								<section
+									className="bank-ux-panel"
+									aria-labelledby="bank-receipt-heading"
+								>
+									<h3 id="bank-receipt-heading">
+										Add private synthetic receipt evidence
+									</h3>
+									<p>
+										Selecting a file does not upload it. Use the separate upload
+										action when ready.
+									</p>
+									{contextual && (
+										<p>
+											Use only approved watermarked synthetic JPEG/PNG fixtures,
+											up to 5 MiB each and two per claim. No real receipts or
+											PDF. Upload/scan status is not proof of funds. If a prior
+											upload is UPLOADING, its outcome remains unresolved; do
+											not allocate a replacement blindly. A quarantined upload
+											may be explicitly finalized without resending bytes.
+										</p>
+									)}
+									<div className="field">
+										<label htmlFor="bank-file">
+											Approved synthetic JPEG/PNG fixture
+										</label>
+										<input
+											ref={input}
+											id="bank-file"
+											aria-describedby="bank-file-help"
+											type="file"
+											accept="image/png,image/jpeg"
+											disabled={busy}
+											onChange={(e) => setFile(e.target.files?.[0])}
+										/>
+									</div>
+									<Button busy={busy} onClick={() => run(upload)}>
+										Upload private synthetic receipt
+									</Button>
+									<p id="bank-file-help">
+										Select a file, then use the separate upload action. Unknown
+										outcomes require current-state recovery before repeating.
+									</p>
+								</section>
+							</div>
 						)}
 					</>
 				)}
 			</Card>
-		</>
+		</div>
 	);
 }

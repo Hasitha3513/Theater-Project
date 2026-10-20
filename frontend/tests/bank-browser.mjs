@@ -260,7 +260,12 @@ try {
 		await page
 			.getByRole("button", { name: "Create synthetic request", exact: true })
 			.click();
-		await page.getByText("OPEN / PENDING / ACTIVE", { exact: true }).waitFor();
+		await page
+			.getByRole("region", { name: "Request and review status", exact: true })
+			.filter({ has: page.getByText("PENDING", { exact: true }) })
+			.filter({ has: page.getByText("ACTIVE", { exact: true }) })
+			.getByText("OPEN", { exact: true })
+			.waitFor();
 		await page
 			.getByLabel("Declared amount in minor units (not proof of funds)")
 			.fill("1");
@@ -272,7 +277,10 @@ try {
 			.getByRole("button", { name: "Submit synthetic claim", exact: true })
 			.click();
 		await page
-			.getByText("REVIEW_PENDING / PENDING / ACTIVE", { exact: true })
+			.getByRole("region", { name: "Request and review status", exact: true })
+			.filter({ has: page.getByText("PENDING", { exact: true }) })
+			.filter({ has: page.getByText("ACTIVE", { exact: true }) })
+			.getByText("REVIEW_PENDING", { exact: true })
 			.waitFor();
 		await page.getByLabel("Approved synthetic JPEG/PNG fixture").setInputFiles({
 			name: "SYNTHETIC.png",

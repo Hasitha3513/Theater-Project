@@ -77,7 +77,8 @@ export function BankRequestDetail({ reference }: { reference: string }) {
 		<section
 			aria-label="Owned bank request detail"
 			aria-live="polite"
-			className="bank-context-summary"
+			className="bank-context-summary bank-experience"
+			data-cn-theme="booking-panel"
 		>
 			<BankNotice />
 			<Card title="Bank request details">

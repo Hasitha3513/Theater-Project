@@ -4502,5 +4502,58 @@
     },
     "exactSourceCi": "PENDING_PUBLICATION",
     "acceptanceUnchanged": true
+  },
+  "bankingExperienceImplementation": {
+    "taskId": "CN-FE-EXPERIENCE-001F",
+    "status": "LOCALLY_VERIFIED_BOUNDED_BANKING_PRESENTATION",
+    "evidencePath": "PROGRESS.md#frontend-experience-001f",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Customer bank/readiness/claim/receipt presentation only;existing financial policies,protected APIs,ownership,CSRF,quote binding,command identities and upload recovery unchanged.",
+    "baselineHead": "95c987c561f7298179cc8de114cdb8cf61c36534",
+    "ownerAuthority": "Owner attachment e47e864d-e758-4c03-a7ec-0c56b1238d26 authorizes one CI-gated CN-FE-EXPERIENCE-001F frontend slice and scoped commit/push;no financial operations or acceptance.",
+    "prerequisiteCi": {
+      "runId": 39451744279,
+      "sha": "95c987c561f7298179cc8de114cdb8cf61c36534",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "checks": "Full backend PostgreSQL,frontend,launcher and governance PASS"
+    },
+    "checks": {
+      "frontendTotal": 216,
+      "focusedUnitTests": 5,
+      "bankEvidenceBrowserGroups": 26,
+      "bankRequestBrowserGroups": 30,
+      "bankHandoffBrowserGroups": 31,
+      "bankBrowserGroups": 70,
+      "browserTotal": 157,
+      "typecheckLintProductionBuild": "PASS",
+      "architecture": 17,
+      "ciClassifierRegressions": 8,
+      "governance": {
+        "knowledge": "PASS",
+        "executionPrimary": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_INTEGRITY_FINDINGS",
+        "executionIsolatedCommittedNextEnv": "PASS",
+        "negativeControls": 51,
+        "whitespace": "PASS",
+        "traceabilityDependenciesAcceptance": "UNCHANGED"
+      }
+    },
+    "localVisualEvidence": {
+      ".cache/experience-001f/after/detail-1280.png": "853923f06dd0957b4c9a7b2b0dbcb73583e8b429f25b47bdc9d1cb3fcfa24099",
+      ".cache/experience-001f/after/detail-375.png": "1b44b76cc3e78a8f8fda4e8df3e91d4caf369ccebd0bc104f0ba26dac8c3c5d3",
+      ".cache/experience-001f/after/detail-768.png": "1e2a5dd770722b43733030f19ea7ae64100dd6c74aff1bdf811bd8a17c1b81e0",
+      ".cache/experience-001f/after/evidence-1280.png": "ab211565f000cbadcc67167d99a05548315e5c6d91700a7e81e1a12d672ceaee",
+      ".cache/experience-001f/after/evidence-375.png": "238d9695c9bfba90a3083ada9412bd39db6d399545b522e28576bdb7c2b44e33",
+      ".cache/experience-001f/after/evidence-768.png": "56affa88bc21cfc0161affa9d656808c21cfb5368326ed3c5f42a969d35a8ccd",
+      ".cache/experience-001f/before/detail-1280.png": "8622eed280539f8e4a117264855f57782bb5d90a5deb242d2d8a61dec9f871ec",
+      ".cache/experience-001f/before/detail-375.png": "68d5121769dbc1fe75d73f6bf22c824bb38e52188c1bf6df98f4f31f4bd6e090",
+      ".cache/experience-001f/before/detail-768.png": "00bd6e63bd55224c078b1ea47ad26f46f408a147a24326ca81cbfdf27f785fc0",
+      ".cache/experience-001f/before/evidence-1280.png": "aff814ae8e297892d1632c98ffbe62648ec873753086da9d429f9cdb4c3c41f7",
+      ".cache/experience-001f/before/evidence-375.png": "d07e72abeaabaa9cdf11023cdce3a87fb1e389b9a86fd555fe94021ed0af2f0d",
+      ".cache/experience-001f/before/evidence-768.png": "2a97a34fc71c2bdb508fcc2f0fcab26f78643d8ccc06244b9014144614997c3c"
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "acceptanceUnchanged": true
   }
 }

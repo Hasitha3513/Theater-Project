@@ -272,7 +272,12 @@ try {
 		await page.keyboard.press("Space");
 		await create(page).focus();
 		await page.keyboard.press("Enter");
-		await page.getByText("OPEN / PENDING / ACTIVE", { exact: true }).waitFor();
+		await page
+			.getByRole("region", { name: "Request and review status", exact: true })
+			.filter({ has: page.getByText("PENDING", { exact: true }) })
+			.filter({ has: page.getByText("ACTIVE", { exact: true }) })
+			.getByText("OPEN", { exact: true })
+			.waitFor();
 		assert.equal(state.posts.length, 1);
 		assert.deepEqual(
 			Object.keys(state.posts[0].body).sort(),
@@ -393,7 +398,12 @@ try {
 		assert.equal(await confirm(page).isChecked(), false);
 		await confirm(page).check();
 		await create(page).click();
-		await page.getByText("OPEN / PENDING / ACTIVE", { exact: true }).waitFor();
+		await page
+			.getByRole("region", { name: "Request and review status", exact: true })
+			.filter({ has: page.getByText("PENDING", { exact: true }) })
+			.filter({ has: page.getByText("ACTIVE", { exact: true }) })
+			.getByText("OPEN", { exact: true })
+			.waitFor();
 		assert.equal(state.posts[0].body.quoteRevision, 2);
 		assert.equal(state.posts[0].body.contentHash, "b".repeat(64));
 		await page.close();
@@ -411,7 +421,12 @@ try {
 			.filter({ hasText: "server did not create" })
 			.waitFor();
 		assert.equal(
-			await page.getByText("OPEN / PENDING / ACTIVE", { exact: true }).count(),
+			await page
+				.getByRole("region", { name: "Request and review status", exact: true })
+				.filter({ has: page.getByText("PENDING", { exact: true }) })
+				.filter({ has: page.getByText("ACTIVE", { exact: true }) })
+				.getByText("OPEN", { exact: true })
+				.count(),
 			0,
 		);
 		assert.equal(state.posts.length, 1);
@@ -434,7 +449,12 @@ try {
 		await page
 			.getByRole("button", { name: "Retry original bank request", exact: true })
 			.click();
-		await page.getByText("OPEN / PENDING / ACTIVE", { exact: true }).waitFor();
+		await page
+			.getByRole("region", { name: "Request and review status", exact: true })
+			.filter({ has: page.getByText("PENDING", { exact: true }) })
+			.filter({ has: page.getByText("ACTIVE", { exact: true }) })
+			.getByText("OPEN", { exact: true })
+			.waitFor();
 		assert.equal(state.posts.length, 2);
 		assert.deepEqual(state.posts[1].body, original);
 		await page.close();

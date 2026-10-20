@@ -194,6 +194,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      },
+      "bankingExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001F",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BANKING_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001f",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer bank/readiness/claim/receipt presentation only;existing financial policies,protected APIs,ownership,CSRF,quote binding,command identities and upload recovery unchanged."
       }
     },
     {
@@ -1150,6 +1158,14 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bankingExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001F",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BANKING_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001f",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer bank/readiness/claim/receipt presentation only;existing financial policies,protected APIs,ownership,CSRF,quote binding,command identities and upload recovery unchanged."
       }
     },
     {
@@ -1477,6 +1493,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Presentation of existing protected quote,explicit consent,synthetic uploads and review only;server authority,ownership,private evidence and all command handlers unchanged."
+      },
+      "bankingExperienceEvidence": {
+        "taskId": "CN-FE-EXPERIENCE-001F",
+        "status": "LOCALLY_VERIFIED_BOUNDED_BANKING_PRESENTATION",
+        "evidencePath": "PROGRESS.md#frontend-experience-001f",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Customer bank/readiness/claim/receipt presentation only;existing financial policies,protected APIs,ownership,CSRF,quote binding,command identities and upload recovery unchanged."
       }
     },
     {
