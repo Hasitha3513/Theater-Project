@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+import { reviewHref } from "../lib/staff-review";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { bankLabels, type BankRequest, validateBank } from "../lib/bank";
 import { roomRequest, RoomRequestError } from "../lib/rooms";
@@ -135,10 +137,12 @@ export function BankSummary({
 export function BankWorkspace({
 	reviewer = false,
 	initialQuoteId = "",
+	initialVenueId = "",
 	evidenceRequest,
 }: {
 	reviewer?: boolean;
 	initialQuoteId?: string;
+	initialVenueId?: string;
 	evidenceRequest?: string;
 }) {
 	const contextual = !reviewer && evidenceRequest !== undefined;
@@ -147,7 +151,7 @@ export function BankWorkspace({
 	>(undefined);
 	const contextRead = useRef<AbortController | undefined>(undefined);
 	const [handoverTo, setHandoverTo] = useState("");
-	const [venue, setVenue] = useState(""),
+	const [venue, setVenue] = useState(initialVenueId),
 		[requestId, setRequestId] = useState(""),
 		[amount, setAmount] = useState(""),
 		[paid, setPaid] = useState(""),
@@ -553,6 +557,10 @@ export function BankWorkspace({
 						{items?.length === 0 && <p>No requests in this permitted queue.</p>}
 						{items?.map((v) => (
 							<p key={v.id}>
+								<Link prefetch={false} href={reviewHref("bank", venue, v.id)}>
+									Open exact bank review details
+								</Link>
+
 								<Button
 									variant="secondary"
 									onClick={() => {

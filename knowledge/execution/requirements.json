@@ -1235,6 +1235,18 @@
         "evidencePath": "PROGRESS.md#admin-read-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "adminReviewContextEvidence": {
+        "taskId": "CN-ADMIN-REVIEW-CONTEXT-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_NAVIGATION",
+        "evidencePath": "PROGRESS.md#admin-review-context-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "frontend/tests/staff-review.test.mjs",
+          "frontend/tests/staff-review-browser.mjs"
+        ],
+        "limits": "Read-only protected staff detail navigation only; intercepted browser responses are not backend authorization or full E2E evidence."
       }
     },
     {
@@ -1921,6 +1933,18 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      },
+      "adminReviewContextEvidence": {
+        "taskId": "CN-ADMIN-REVIEW-CONTEXT-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_NAVIGATION",
+        "evidencePath": "PROGRESS.md#admin-review-context-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "frontend/tests/staff-review.test.mjs",
+          "frontend/tests/staff-review-browser.mjs"
+        ],
+        "limits": "Read-only protected staff detail navigation only; intercepted browser responses are not backend authorization or full E2E evidence."
       }
     },
     {
@@ -2204,6 +2228,18 @@
         "evidencePath": "PROGRESS.md#guest-roster-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "adminReviewContextEvidence": {
+        "taskId": "CN-ADMIN-REVIEW-CONTEXT-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_NAVIGATION",
+        "evidencePath": "PROGRESS.md#admin-review-context-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "frontend/tests/staff-review.test.mjs",
+          "frontend/tests/staff-review-browser.mjs"
+        ],
+        "limits": "Read-only protected staff detail navigation only; intercepted browser responses are not backend authorization or full E2E evidence."
       }
     },
     {
@@ -4006,6 +4042,18 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "adminReviewContextEvidence": {
+        "taskId": "CN-ADMIN-REVIEW-CONTEXT-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_NAVIGATION",
+        "evidencePath": "PROGRESS.md#admin-review-context-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "actualTestPaths": [
+          "frontend/tests/staff-review.test.mjs",
+          "frontend/tests/staff-review-browser.mjs"
+        ],
+        "limits": "Read-only protected staff detail navigation only; intercepted browser responses are not backend authorization or full E2E evidence."
       }
     },
     {

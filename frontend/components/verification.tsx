@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { reviewHref } from "../lib/staff-review";
 import { useEffect, useRef, useState } from "react";
 import { RoomRequestError, roomRequest, stateFor } from "../lib/rooms";
 import {
@@ -75,9 +76,11 @@ export function VerificationSummary({ value }: { value: Verification }) {
 export function VerificationWorkspace({
 	reviewer = false,
 	initialQuoteId = "",
+	initialVenueId = "",
 }: {
 	reviewer?: boolean;
 	initialQuoteId?: string;
+	initialVenueId?: string;
 }) {
 	const [quote, setQuote] = useState(initialQuoteId);
 	const context = useQuoteHandoff(quote, !reviewer);
@@ -89,7 +92,7 @@ export function VerificationWorkspace({
 	function setConsent(checked: boolean) {
 		setConsentEpoch(checked ? context.epoch : undefined);
 	}
-	const [venue, setVenue] = useState("");
+	const [venue, setVenue] = useState(initialVenueId);
 	const [requestId, setRequestId] = useState("");
 	const [type, setType] = useState("NIC");
 	const [file, setFile] = useState<File>();
@@ -269,6 +272,13 @@ export function VerificationWorkspace({
 					)}
 					{items?.map((item) => (
 						<p key={item.id}>
+							<Link
+								prefetch={false}
+								href={reviewHref("verification", venue, item.id)}
+							>
+								Open exact verification review details
+							</Link>
+
 							<Button
 								disabled={busy || !!pending.current}
 								onClick={() => run(() => refresh(item.id))}

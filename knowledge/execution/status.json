@@ -3854,5 +3854,45 @@
       "exactSourceCi": "PENDING_PUBLICATION"
     },
     "fullRequirementVerified": false
+  },
+  "adminReviewContextImplementation": {
+    "taskId": "CN-ADMIN-REVIEW-CONTEXT-001",
+    "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_NAVIGATION",
+    "evidencePath": "PROGRESS.md#admin-review-context-implementation",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "actualTestPaths": [
+      "frontend/tests/staff-review.test.mjs",
+      "frontend/tests/staff-review-browser.mjs"
+    ],
+    "limits": "Read-only protected staff detail navigation only; intercepted browser responses are not backend authorization or full E2E evidence.",
+    "baselineHead": "bfde74c980452f2a92670f8995d449b605b7a301",
+    "ownerAuthority": {
+      "source": "Owner attachment 10d60fad-3dc0-4168-89a2-b064df8732df",
+      "sha256": "5eaf9d27bc3bb0a0c859166f364cd6d0130f583763d46c9971aed00879d8ddec",
+      "scope": "One bounded staff queue-to-exact-detail frontend implementation using existing protected contracts; no policy/backend/migration/workflow changes"
+    },
+    "prerequisiteCi": {
+      "runId": 39397596158,
+      "sha": "bfde74c980452f2a92670f8995d449b605b7a301",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    "checks": {
+      "frontendFocused": 10,
+      "frontendFull": 152,
+      "interceptedBrowserGroups": 24,
+      "backendRegression": 472,
+      "architecture": 17,
+      "ciClassifierRegressions": 8,
+      "knowledge": "PASS",
+      "execution": "PASS with read-only committed-next-env projection; 2 pre-existing primary findings",
+      "governanceNegativeControls": 14,
+      "whitespace": "PASS",
+      "launcherContracts": 14
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "acceptanceUnchanged": true,
+    "syntheticE2e": "14 PASS / 1 FAIL / 9 NOT_RUN; OPEN, not rerun"
   }
 }

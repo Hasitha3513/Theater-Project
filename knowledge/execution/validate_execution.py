@@ -2444,7 +2444,7 @@ def synthetic_e2e_main():
     return result
 
 
-def inert_ci_main():
+def guest_roster_main():
     """Qualify owner-approved guest source/schema/evidence before historical replay."""
     from unittest.mock import patch
     baseline='cbeff875c8d68fa2d8dd0cf1c4924131a6350bab'
@@ -2501,6 +2501,62 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=synthetic_e2e_main()
     if result==0:print('PASS guest roster exact source/V18/bounded authority; unchanged full requirements/dependencies/acceptance and historical controls')
+    return result
+
+
+
+def inert_ci_main():
+    """Qualify the exact bounded staff-navigation successor, then replay all prior controls."""
+    from unittest.mock import patch
+    baseline='bfde74c980452f2a92670f8995d449b605b7a301'
+    hashes={'frontend/lib/staff-review.ts': '325495b9c2481490c5e4a02eba08cd540cc1cb1e8d232894781bba5fbb75b701', 'frontend/components/staff-review-detail.tsx': '9af3c9404bf08f0530a0a7af7a3e68b774d70efe30c503ce58a69a374995e4f1', 'frontend/components/verification.tsx': '2b8f5f26937b40d9d96cc9de52ccaf743cd5b073df912068562783b9144dc7b2', 'frontend/components/bank.tsx': '21813bb86082f6784b96e0986cec8832024b111963a62e52e2a86aa401be1b4e', 'frontend/app/admin/verification/page.tsx': '9cd7f5bc1be2f0bc87740389e8a3f58c59a95a5af5703d7ff2b7e62faa864d4d', 'frontend/app/admin/bank/page.tsx': 'b5b716262088b519e40e3e1688a95ed178cbcaec6630e7cac40bf4572ba26d4b', 'frontend/app/admin/verification/venues/[venueId]/requests/[id]/page.tsx': 'bb9f70630c148bddfa5ab2b6504ff624d662f5e4b497ec2064c4d77c748ad75d', 'frontend/app/admin/bank/venues/[venueId]/requests/[id]/page.tsx': '6b43456146d540856782d458cc33783176c4621207ff05ecf0f8df1c21ff902d', 'frontend/tests/staff-review.test.mjs': '8f3b90765d35a428297c09f6e3114ff3c627c46dd8e379bd687401c7032449a2', 'frontend/tests/staff-review-browser.mjs': 'db8593f3c6fd32238f8800877eb7f59d20cb62edaff4dbeb631f8a6ee5f0ae64', 'frontend/package.json': 'f1fcbd65a5468947155b13af352fa0720f06ab5ddbc71e01061bb92ddb2ec435', 'knowledge/execution/status.json': 'd82bfcd774dac83c399c917d1d5781db555a4a18119a214228bdb58df2c5dc08', 'knowledge/execution/requirements.json': '34a806627775fd9d92cd321526327ee2f43bbfdfe48dca1b76c3eb34c9e8fd7e', 'knowledge/execution/test-plan.json': '2df6a83937ab7e8a695a96b2e7bc2a67a5e1b68eaf138519261c2d1f4bc783f5', 'knowledge/ARCHITECTURE.md': '1d9413904a15f9a6126727d13aae087064e0c719da13369ea6909bf29737e90e', 'knowledge/DESIGN.md': '338d66d2e0307a47af0924f794c036ddf03124bed89c10284e9e891d2088fc42', 'knowledge/PROGRESS.md': 'dfce5272eebbdf279ec0f3c972fcad61a0d4757a80b643b329a07556c71ac266'}
+    owned={'frontend/app/admin/verification/page.tsx', 'frontend/components/verification.tsx', 'frontend/app/admin/bank/venues/[venueId]/requests/[id]/page.tsx', 'frontend/tests/staff-review.test.mjs', 'frontend/tests/staff-review-browser.mjs', 'frontend/components/staff-review-detail.tsx', 'frontend/components/bank.tsx', 'frontend/lib/staff-review.ts', 'frontend/app/admin/bank/page.tsx', 'frontend/app/admin/verification/venues/[venueId]/requests/[id]/page.tsx', 'frontend/package.json'}
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/status.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/DESIGN.md'}
+    added={'frontend/app/admin/bank/venues/[venueId]/requests/[id]/page.tsx', 'frontend/tests/staff-review-browser.mjs', 'frontend/components/staff-review-detail.tsx', 'frontend/lib/staff-review.ts', 'frontend/tests/staff-review.test.mjs', 'frontend/app/admin/verification/venues/[venueId]/requests/[id]/page.tsx'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Staff review exact source/evidence mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('adminReviewContextEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Staff review changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('adminReviewContextImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Staff review changed unrelated execution state')
+    package=json.loads((R/'frontend/package.json').read_text());previous=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=previous['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/staff-review.test.mjs':errors.append('Staff review lost existing frontend tests')
+    package['scripts']['test']=previous['scripts']['test']
+    if package!=previous:errors.append('Staff review changed dependencies/toolchain')
+    for name in ['knowledge/ARCHITECTURE.md','knowledge/DESIGN.md']:
+        if not (R/name).read_text().startswith(prior(name).decode()):errors.append('Staff review rewrote existing canonical authority '+name)
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Staff review promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Staff review unrelated source/dependency/policy/workflow delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Only exact independently checked successor bytes may be projected away;
+    # prior requirements, graph, source-integrity and acceptance checks still execute.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if name in replacements or R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=guest_roster_main()
+    if result==0:print('PASS exact staff review navigation; backend/graph/policy/acceptance unchanged; full historical governance retained')
     return result
 
 if __name__ == '__main__':
