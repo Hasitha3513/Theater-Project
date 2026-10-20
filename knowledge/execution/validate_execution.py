@@ -2505,7 +2505,7 @@ def guest_roster_main():
 
 
 
-def inert_ci_main():
+def staff_review_context_main():
     """Qualify the exact bounded staff-navigation successor, then replay all prior controls."""
     from unittest.mock import patch
     baseline='bfde74c980452f2a92670f8995d449b605b7a301'
@@ -2557,6 +2557,62 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=guest_roster_main()
     if result==0:print('PASS exact staff review navigation; backend/graph/policy/acceptance unchanged; full historical governance retained')
+    return result
+
+
+
+def inert_ci_main():
+    """Qualify owner-approved Booking staff reads/V19 before replaying prior controls."""
+    from unittest.mock import patch
+    baseline='01c73d27037a5973b0eeb3951361f2dcd71ea4fe'
+    owned={'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadRules.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadAudit.java', 'backend/src/test/java/com/cinenest/booking/internal/StaffBookingReadRulesTest.java', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadController.java', 'backend/src/main/resources/db/migration/V19__staff_booking_read_audit.sql', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadService.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/java/com/cinenest/booking/internal/JdbcStaffBookingReadStore.java', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadStore.java'}
+    registries={'knowledge/execution/status.json', 'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added={'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadRules.java', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadAudit.java', 'backend/src/test/java/com/cinenest/booking/internal/StaffBookingReadRulesTest.java', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadController.java', 'backend/src/main/resources/db/migration/V19__staff_booking_read_audit.sql', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadService.java', 'backend/src/main/java/com/cinenest/booking/internal/JdbcStaffBookingReadStore.java', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadStore.java'}
+    hashes={'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadStore.java': 'cc95d8652bfd9c1b6d7edf82c3dbf527424774b4d60efd092f7e1233a78c7cc7', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadRules.java': 'bdfd052877e3c7e7e435e8e6f2dc7719e6192f881697c4cbe56b390fba7b4012', 'backend/src/main/java/com/cinenest/booking/internal/JdbcStaffBookingReadStore.java': 'a69a4e95e884716ce37e833e548e65617761490c1f13295bf2a1370e87791431', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadAudit.java': 'a20f9176729c60bc93641cc863b91d2480431294c7ddd09a3d76a330a3eb5dae', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadService.java': 'e6a01d95536d2a8bee8b0de9aa3b68e619dbe21ef8af066980560fec28966b47', 'backend/src/main/java/com/cinenest/booking/internal/StaffBookingReadController.java': 'fc3779fe6917d197e6a7e832cd4f598e15865d4860699b05a78daad5b1230823', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': 'fe1242224c4bcca18963101ae2e75b661680d4f5fe971300879bf87f6b2a59f0', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'f8c5bbc8b2aa8a6a2d053fb0c58282b8ba4283a0a565c91fb8694448e8903b6e', 'backend/src/main/resources/db/migration/V19__staff_booking_read_audit.sql': '67064d3b6939dc717b8c2d9d4d99f3b740004e6c4ee731841108c7a8acd02df6', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'f95936443e0cad4eb3770e332a15ba62614401e6da2d46ee71bd9b61fb3809fc', 'backend/src/test/java/com/cinenest/booking/internal/StaffBookingReadRulesTest.java': 'efadef17266e5514dd6fad040865743279d097a097a9e6be2b6b30657a4f71a8', 'knowledge/execution/requirements.json': '5dea0276bab1311cc93e006498ad2757ab64e610d800fce75aa3dad5a33a3abd', 'knowledge/execution/test-plan.json': 'dba7b40cfae17698468d71b93556aa426573e2c9a75846a9aa8e492a3a794f01', 'knowledge/execution/status.json': '11aef56db66977d57e519a454db2970b3d35837b8f8d8fd28c7252e85f95f223', 'knowledge/ARCHITECTURE.md': '86026bd6badb14a96c65e7ef449160651acaaf0306dfe24a524d5f51e0eb0787', 'knowledge/PROGRESS.md': 'd95a4e98f7a0a95493a2e1d4f0be7808a82278248a55bb5ad9ea19b8f3bd014f'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Staff booking read exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('staffBookingReadEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Staff booking read changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('staffBookingReadImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Staff booking read changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package.json','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Staff booking read changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Staff booking read rewrote prior architecture')
+    migrations={p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('*.sql')}
+    old=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',baseline,'--','backend/src/main/resources/db/migration'],text=True).splitlines())
+    if migrations!=old|{'backend/src/main/resources/db/migration/V19__staff_booking_read_audit.sql'}:errors.append('Staff booking read migration scope drift')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Staff booking read promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Staff booking read unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=staff_review_context_main()
+    if result==0:print('PASS exact Booking staff read/V19/owner decisions; frontend/business/full acceptance/graph unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

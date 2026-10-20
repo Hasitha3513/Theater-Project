@@ -3894,5 +3894,51 @@
     "exactSourceCi": "PENDING_PUBLICATION",
     "acceptanceUnchanged": true,
     "syntheticE2e": "14 PASS / 1 FAIL / 9 NOT_RUN; OPEN, not rerun"
+  },
+  "staffBookingReadImplementation": {
+    "taskId": "CN-BOOKING-ADMIN-BE-001",
+    "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_READS",
+    "evidencePath": "PROGRESS.md#staff-booking-read-implementation",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "actualTestPaths": [
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/booking/internal/StaffBookingReadRulesTest.java"
+    ],
+    "scope": "Booking-owned synthetic staff list/detail only; no frontend or booking/financial mutation. Audit evidence intentionally persists.",
+    "baselineHead": "01c73d27037a5973b0eeb3951361f2dcd71ea4fe",
+    "ownerAuthority": {
+      "source": "Owner attachment 0bed0039-6389-4086-b46c-5aae62e158f8",
+      "sha256": "2077b73ff29cbdefd255a9eacb84ea4edd8880e8a547de7c271d89b2e40f92b5",
+      "approvedDateFilter": "Scheduled start >= from and < to; paired offset-aware timestamps; <=31 elapsed days; no implicit omitted range",
+      "approvedMigration": "V19__staff_booking_read_audit.sql only; no grant seeds or unrelated schema changes",
+      "approvedPermission": "booking.synthetic.read; no role/account assignment"
+    },
+    "prerequisiteCi": {
+      "runId": 39402115512,
+      "sha": "01c73d27037a5973b0eeb3951361f2dcd71ea4fe",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    "checks": {
+      "backend": 513,
+      "focusedIntegration": 30,
+      "focusedRules": 11,
+      "architecture": 17,
+      "postgresql": "18.6; clean/repeat V1-V19 and populated V18-V19 preservation PASS",
+      "packagedStartupAndHttpDenial": "PASS",
+      "ciClassifierRegressions": 8,
+      "governance": {
+        "knowledge": "PASS",
+        "executionTraceabilityAndDependencies": "PASS using read-only committed-next-env projection; exactly2 pre-existing primary next-env findings retained",
+        "negativeControls": 18,
+        "whitespace": "PASS"
+      },
+      "frontendLocal": "NOT_RUN_UNCHANGED; full application CI retained"
+    },
+    "exactSourceCi": "PENDING_PUBLICATION",
+    "frontendImplementation": "NOT_IMPLEMENTED_THIS_SLICE",
+    "acceptanceUnchanged": true,
+    "syntheticE2e": "14 PASS / 1 FAIL / 9 NOT_RUN; OPEN, not rerun"
   }
 }
