@@ -2504,7 +2504,7 @@
       "failures": 0,
       "errors": 0,
       "skipped": 0,
-      "postgresql": "18.6 real clean V1–V9, populated V8–V9 upgrade, repeat startup and constraints PASS",
+      "postgresql": "18.6 real clean V1\u2013V9, populated V8\u2013V9 upgrade, repeat startup and constraints PASS",
       "workerProcessRestart": "PASS two fresh isolated worker processes; durable intent retained; live delivery DISABLED",
       "holdConversionRollback": "PASS mandatory request-audit failure rolls back Booking conversion and permits safe retry",
       "lockFreshness": "PASS eligibility expiry during real PostgreSQL row-lock wait denies subsequent handoff",
@@ -2796,7 +2796,7 @@
   },
   "ownerAccountabilityApproval": {
     "recordedDate": "2026-10-17",
-    "approvalSource": "Owner conversation: CINENEST — OWNER ACCOUNTABILITY APPROVAL",
+    "approvalSource": "Owner conversation: CINENEST \u2014 OWNER ACCOUNTABILITY APPROVAL",
     "canonicalRecord": "PROJECT.md#accountability-appointments",
     "approvedRoles": [
       "Source Custodian",
@@ -2833,7 +2833,7 @@
   "gateDocumentationClosure": {
     "status": "VERIFIED_DOCUMENTATION_ONLY",
     "approvalDate": "2026-10-17",
-    "approvalSource": "Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status",
+    "approvalSource": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
     "interpretation": "Verified original sources and named management accountability may satisfy this documentation task when all outstanding venue-specific and qualified specialist appointments are explicitly recorded as downstream acceptance gates. This does not waive, complete or remove any appointment, review or acceptance evidence.",
     "baselineHead": "88d5746ed1a4cb987dee56d4579380984a876e63",
     "managementOwner": "Hasitha Wijerathna",
@@ -3654,7 +3654,7 @@
     "sourceCI": "SUCCESS",
     "localEvidence": {
       "backendTests": 366,
-      "postgresql": "18.6 clean V1–V17, populated V16–V17, repeat, HTTP and actual process restart",
+      "postgresql": "18.6 clean V1\u2013V17, populated V16\u2013V17, repeat, HTTP and actual process restart",
       "frontendTests": 112,
       "operationsBrowserGroups": 63,
       "iotRegressionBrowserGroups": 49,
@@ -3796,5 +3796,41 @@
     "dependencies": "UNCHANGED",
     "evidencePath": "PROGRESS.md#engagement-decision-closure",
     "baselineHead": "ca7f70edc984a9c109b4d1d7cfe70f0fb4cfcabd"
+  },
+  "syntheticE2eImplementation": {
+    "taskId": "CN-SYNTHETIC-E2E-001",
+    "authority": "Owner attachment f8d97777-ee7f-4818-b825-21c1345b5cbb: bounded harness implementation and one conditional synthetic execution",
+    "authoritySha256": "cb1695d35be5133268bf9b0284e1bc64730d55bb01ce237b74757b6ecd4c6e2d",
+    "baseline": "b21e80a1a1d0ae63d79a5b41867d11264203a665",
+    "prerequisiteCi": {
+      "run": 39382223512,
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "classification": "CI_OR_GOVERNANCE"
+    },
+    "status": "IMPLEMENTED_PARTIAL_EXECUTION_FAILED",
+    "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+    "runId": "cinenest-e2e-r7d4k30y",
+    "systemdInvocationId": "3bf6abbe3065498bbce39904be38ad03",
+    "attempts": 1,
+    "passedGroups": 14,
+    "failedGroups": 1,
+    "notRunGroups": 9,
+    "failure": "simulated-confirmation-api-support: after booking detail navigation; root cause NOT_ESTABLISHED",
+    "notRun": [
+      "C-wrong-owner",
+      "D-wrong-venue-grant",
+      "O-malformed-reference",
+      "P-safe-URLs",
+      "G-expired-session",
+      "A-expired-quote",
+      "B-invalid-expired-hold",
+      "F-rejected-verification",
+      "N-uncertain-upload"
+    ],
+    "sourceQualification": "Executed uncommitted harness at baseline; later cleanup/reporting hardening statically tested only, not E2E re-executed",
+    "cleanup": "Owned systemd service exited; owned PostgreSQL stopped/absent; run storage removed; owner next-env restored to independently recorded SHA256 0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+    "acceptance": "NO_FULL_REQUIREMENT_TEST_PLAN_PHASE_OR_DEMONSTRATION_ACCEPTANCE",
+    "ciIntegration": "NOT_ADDED_WORKFLOW_UNCHANGED"
   }
 }

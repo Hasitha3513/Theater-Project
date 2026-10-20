@@ -367,6 +367,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Actual purchase, accepted quote honor, reservation/payment/receipt/report preservation require owning future endpoints; no full test-plan pass"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -420,6 +427,13 @@
         "taskId": "CN-AUTH-001",
         "status": "VERIFIED_BOUNDED_SYNTHETIC_ACCOUNT_READ",
         "evidencePath": "PROGRESS.md#auth-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
@@ -481,6 +495,13 @@
           "frontend/tests/inventory-browser.mjs"
         ],
         "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -539,6 +560,13 @@
           "frontend/tests/quotes-browser.mjs"
         ],
         "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -593,6 +621,13 @@
           "frontend/tests/verification-browser.mjs"
         ],
         "deferred": "Real-person/OCR/physical all-guest admission, production privacy/providers/retention and full authorization scenarios remain unverified"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -745,6 +780,13 @@
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1777,6 +1819,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2120,6 +2169,13 @@
         "implementationStatus": "NOT_VERIFIED",
         "tests": "NOT_RUN",
         "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -3908,6 +3964,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -4015,6 +4078,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "syntheticE2eEvidence": {
+        "taskId": "CN-SYNTHETIC-E2E-001",
+        "status": "PARTIAL_FAILED_JOURNEY",
+        "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {

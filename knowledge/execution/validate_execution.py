@@ -2350,7 +2350,7 @@ def ui_flow_005_main():
     return result
 
 
-def inert_ci_main():
+def bank_evidence_context_main():
     """Validate the exact authorized bank evidence context successor before historical replay."""
     from unittest.mock import patch
     baseline='e55450a1a3e66030f34947455cd9dc6928ca484f'
@@ -2389,6 +2389,59 @@ def inert_ci_main():
     if result==0:print('PASS bank evidence context: exact frontend source/owner authority, unchanged backend/dependencies/full acceptance, historical integrity retained')
     return result
 
+
+
+def inert_ci_main():
+    """Qualify exact opt-in test-only successor, then retain every historical control."""
+    from unittest.mock import patch
+    baseline='b21e80a1a1d0ae63d79a5b41867d11264203a665'
+    owned={'scripts/verify-synthetic-e2e.py': 'a94d902ae9bc4be169d353a154bb08f13d016d95c59f0c41c8004ffe813d6f11', 'scripts/test-synthetic-e2e.py': '38f2cab4212362007e2c1093f023e1aa0378202e5ba62a97a85d37f959f6b07c', 'frontend/tests/synthetic-e2e.mjs': '27cf8f1bc102b39396c472a748f001af156175ec6938647f9a8cadd1aa34a7f0', 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '448ddfc57f66851880d3dc7798f4653181f5a8326c0b8b6a81418053cf390bb1', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'a7aeb1d91ed8726458d3d80294628b7c2801f395aea9de6aedc614d8080a13f5'}
+    registries={'knowledge/execution/status.json': '9d36cb807c5fc3e4376c3b987809109f6b3ba9dcdda59db06f9d8fd2da52444a', 'knowledge/execution/requirements.json': 'e48dbe60f95ebc296532c27531fed9d33558d1f6b8e9646cc6e0594e4a250a16', 'knowledge/execution/test-plan.json': 'b90885e2c20a1e8b3ec494925acd29539a53ac5d6d445eb53fb2128cd76555a4'}
+    added=set(owned)-{'backend/src/test/java/com/cinenest/BankIntegrationTest.java'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in {**owned,**registries}.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Synthetic E2E exact source/record mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text());previous=json.loads(prior(name))
+        for row in current[key]:row.pop('syntheticE2eEvidence',None)
+        if current!=previous:errors.append('Synthetic E2E changed full requirement/test-plan authority '+name)
+    state=json.loads((K/'execution/status.json').read_text());state.pop('syntheticE2eImplementation',None)
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Synthetic E2E changed unrelated execution status')
+    for name in ['knowledge/execution/change-sets.json','knowledge/execution/omissions.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','backend/pom.xml','frontend/package.json','frontend/package-lock.json']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Synthetic E2E changed dependencies/policy/workflow '+name)
+    progress=(K/'PROGRESS.md').read_text();architecture=(K/'ARCHITECTURE.md').read_text()
+    if not architecture.startswith(prior('knowledge/ARCHITECTURE.md').decode()) or '<a id="synthetic-e2e-harness"></a>' not in architecture:errors.append('Synthetic E2E architecture authority missing/rewritten')
+    if '<a id="synthetic-e2e-implementation"></a>' not in progress or '14 groups PASS' not in progress or '9 NOT_RUN' not in progress:errors.append('Synthetic E2E partial failure ledger absent')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,progress,re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Synthetic E2E promoted acceptance')
+    allowed=set(owned)|set(registries)|{'knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Synthetic E2E unrelated delta '+str(changed-allowed))
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # New source and bounded evidence have passed exact checks. Replay prior invariants
+    # against their prior source, not an unvalidated inventory exemption.
+    replacements={R/'backend/src/test/java/com/cinenest/BankIntegrationTest.java':prior('backend/src/test/java/com/cinenest/BankIntegrationTest.java')}
+    replacements.update({R/name:prior(name) for name in registries})
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if name in registries:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|{'knowledge/ARCHITECTURE.md'} if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=bank_evidence_context_main()
+    if result==0:print('PASS synthetic E2E exact test source,partial failed evidence,no production/workflow/dependency/acceptance changes; historical controls retained')
+    return result
 
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
