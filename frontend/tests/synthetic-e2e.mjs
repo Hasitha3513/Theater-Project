@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { createServer } from "node:net";
-import { readFile, writeFile, rename, unlink } from "node:fs/promises";
-import { pathToFileURL } from "node:url";
+import { readFile, writeFile, rename, unlink, mkdir, chmod } from "node:fs/promises";
+import { pathToFileURL, fileURLToPath } from "node:url";
 
 const run = process.env.CINENEST_E2E_RUN;
 assert.match(run ?? "", /^\/tmp\/cinenest-e2e-[^/]+$/);
@@ -17,6 +17,12 @@ let stage = "startup",
 	browser,
 	frontend;
 const requests = [];
+const observations = [];
+let financeObservation, assertionFailure, activePage, activeContext;
+// Private traces can contain synthetic session material. Never publish this ignored directory.
+const diagnostics = new URL(`../../.cache/e2e-booking-diagnosis/${run.split("/").at(-1)}/`, import.meta.url);
+await mkdir(diagnostics,{recursive:true,mode:0o700});
+await chmod(diagnostics,0o700);
 const planned = [
 	"startup",
 	"customer-discovery-auth",
@@ -192,7 +198,11 @@ try {
 	const context = await browser.newContext({
 		viewport: { width: 1280, height: 900 },
 	});
+	activeContext=context;
+	await context.tracing.start({screenshots:false,snapshots:false,sources:false});
 	const page = await context.newPage();
+	activePage=page;
+	context.on("response",response=>{const url=new URL(response.url());if(url.pathname.startsWith("/api/"))observations.push({method:response.request().method(),path:url.pathname.replace(/[0-9a-f]{8}-[0-9a-f-]{27,}/gi,"{reference}"),status:response.status()});});
 	page.setDefaultTimeout(12000);
 	context.on("request", (request) => {
 		const url = new URL(request.url());
@@ -462,6 +472,7 @@ try {
 	});
 	await scenario("simulated-confirmation-api-support", async () => {
 		const result = await control({ op: "finance", id: bank.id });
+		financeObservation={bookingId:result.bookingId,syntheticBookingStatus:result.syntheticBookingStatus,bookingConfirmed:result.bookingConfirmed,persistence:result.diagnosticBooking};
 		assert.equal(result.syntheticBookingStatus, "SIMULATED_CONFIRMED");
 		assert.equal(result.bookingConfirmed, false);
 		await page.goto(base + "/bank?request=" + bank.id);
@@ -476,11 +487,18 @@ try {
 			(await json(page, "/api/bookings/" + result.bookingId)).id,
 			result.bookingId,
 		);
+		await page.getByRole("heading",{name:"Purchased snapshot",exact:true}).waitFor({state:"visible"});
+		await page.screenshot({path:fileURLToPath(new URL("booking-detail.png",diagnostics)),fullPage:true});
+		const historyResponse = page.waitForResponse(r=>new URL(r.url()).pathname === "/api/bookings" && r.request().method() === "GET");
 		await page.goto(base + "/bookings");
+		await page.getByRole("button",{name:"Refresh booking history",exact:true}).click();
+		assert.equal((await historyResponse).status(),200,"owned booking history must load successfully");
+		await page.locator(`a[href="/bookings/${result.bookingId}"]`).first().waitFor({state:"visible"});
 		assert.ok(
 			(await page.locator(`a[href="/bookings/${result.bookingId}"]`).count()) >
 				0,
 		);
+		await page.screenshot({path:fileURLToPath(new URL("booking-history.png",diagnostics)),fullPage:true});
 	});
 	await scenario("C-wrong-owner", async () => {
 		const other = await browser.newContext();
@@ -548,13 +566,16 @@ try {
 		"N-uncertain-upload",
 		"No safely qualified connection-failure transport; no fabricated responses",
 	);
-} catch {
+} catch (failure) {
+	assertionFailure={name:failure.name,message:String(failure.message).slice(0,2500),stack:String(failure.stack).split("\n").filter(line=>line.includes("synthetic-e2e.mjs:")).slice(0,4)};
 	results.push({
 		id: stage,
 		status: "FAIL",
 		reason:
 			"Real harness assertion/startup failure; raw private diagnostics not published",
 		apiFailure,
+		assertionFailure,
+		financeObservation,
 	});
 	process.exitCode = 1;
 } finally {
@@ -564,6 +585,9 @@ try {
 				id,
 				"Stopped after failure or missing independent safe scenario control",
 			);
+	if(activePage){await activePage.screenshot({path:fileURLToPath(new URL("final.png",diagnostics)),fullPage:true}).catch(()=>{});}
+	if(activeContext)await activeContext.tracing.stop({path:fileURLToPath(new URL("private-trace.zip",diagnostics))});
+	await writeFile(new URL("observations.json",diagnostics),JSON.stringify({stage,assertionFailure,financeObservation,observations,finalPath:activePage?new URL(activePage.url()).pathname:undefined}),{mode:0o600});
 	if (browser) await browser.close();
 	if (frontend && frontend.exitCode === null) {
 		frontend.kill("SIGTERM");

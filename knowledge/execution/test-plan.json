@@ -618,6 +618,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer owned history/detail/purchased terms and existing roster/action presentation only;backend authority,protected transports,CSRF,sessions,capacity,explicit commands and immutable terms unchanged."
+      },
+      "e2eBookingRemediationEvidence": {
+        "taskId": "CN-E2E-BOOKING-FAILURE-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_STILL_FAILED",
+        "evidencePath": "PROGRESS.md#e2e-booking-failure-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Test harness explicit history refresh and read/render synchronization only;actual browser/Next/proxy/Boot/PostgreSQL,no business interception;P-safe-URLs remains FAIL,5 scenarios NOT_RUN."
       }
     },
     {
@@ -1262,6 +1270,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer bank/readiness/claim/receipt presentation only;existing financial policies,protected APIs,ownership,CSRF,quote binding,command identities and upload recovery unchanged."
+      },
+      "e2eBookingRemediationEvidence": {
+        "taskId": "CN-E2E-BOOKING-FAILURE-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_STILL_FAILED",
+        "evidencePath": "PROGRESS.md#e2e-booking-failure-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Test harness explicit history refresh and read/render synchronization only;actual browser/Next/proxy/Boot/PostgreSQL,no business interception;P-safe-URLs remains FAIL,5 scenarios NOT_RUN."
       }
     },
     {
@@ -1653,6 +1669,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
+      },
+      "e2eBookingRemediationEvidence": {
+        "taskId": "CN-E2E-BOOKING-FAILURE-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_STILL_FAILED",
+        "evidencePath": "PROGRESS.md#e2e-booking-failure-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Test harness explicit history refresh and read/render synchronization only;actual browser/Next/proxy/Boot/PostgreSQL,no business interception;P-safe-URLs remains FAIL,5 scenarios NOT_RUN."
       }
     },
     {
@@ -2533,6 +2557,14 @@
         "evidencePath": "PROGRESS.md#synthetic-e2e-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "e2eBookingRemediationEvidence": {
+        "taskId": "CN-E2E-BOOKING-FAILURE-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_STILL_FAILED",
+        "evidencePath": "PROGRESS.md#e2e-booking-failure-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Test harness explicit history refresh and read/render synchronization only;actual browser/Next/proxy/Boot/PostgreSQL,no business interception;P-safe-URLs remains FAIL,5 scenarios NOT_RUN."
       }
     },
     {

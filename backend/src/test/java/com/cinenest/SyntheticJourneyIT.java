@@ -63,6 +63,7 @@ class SyntheticJourneyIT {
                             var c=fixture.credit(staff,"SYNTHETIC-BANK-50000");r=fixture.match(allocator,r,c);
                             response=fixture.json(fixture.allocateCredit(allocator,r,c,Long.parseLong(r.get("amountMinor").toString())));
                             assertThat(response.get("syntheticBookingStatus")).isEqualTo("SIMULATED_CONFIRMED");
+                            response.put("diagnosticBooking",fixture.jdbc.sql("SELECT state,synthetic FROM cinenest_booking.booking WHERE request_id=:id").param("id",UUID.fromString(body.get("id").toString())).query().singleRow());
                         }else if(op.equals("subject")){
                             String subject=body.get("subject").toString();
                             if(!List.of("customer-a","customer-b","staff").contains(subject))throw new IllegalArgumentException();

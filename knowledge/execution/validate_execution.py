@@ -3289,7 +3289,7 @@ def operations_experience_main():
 
 
 
-def inert_ci_main():
+def configuration_experience_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='f795c7b66cb0adf3a3dbbbbdfc4f0cbe34e8b42d'
@@ -3345,6 +3345,64 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=operations_experience_main()
     if result==0:print('PASS exact bounded configuration experience; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='cc4595329d4ea0a21877a2d4924e3843c36ae6c1'
+    owned={'frontend/tests/synthetic-e2e.mjs', 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java'}
+    registries={'knowledge/execution/status.json', 'knowledge/execution/test-plan.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added=set()
+    hashes={'knowledge/execution/test-plan.json': '8f672e25ffecdbcbae03616984f093a4529a575afbf445e4c5238b4d78e68de0', 'knowledge/ARCHITECTURE.md': '7dd01c24f99c3bebc2786f7e1411a2fe88d6160ee5b4cc6f57fc827ff7d21271', 'knowledge/PROGRESS.md': '2532ad6fd7dc783a6a84217ab7b295fbd8d5e60cd58607f2717db4ff691f5aab', 'knowledge/execution/requirements.json': 'c5548e452be493eee26c20b37110689a3b897d1957f1cd33b91e593d1a548652', 'frontend/tests/synthetic-e2e.mjs': '682bb7a8b228417313e670921a335995299708b1034a6d8add7602c47bfd0292', 'knowledge/execution/status.json': '39c6df3c7fe3e0ce575c984629be0cd93b732b9f920db425c876f18492a900e3', 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '665dbe70d3551026296579444a66cd1316fbf0a502b4e2bb08c9e21819fd21b9'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Booking E2E remediation exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('e2eBookingRemediationEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Booking E2E remediation changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('e2eBookingRemediation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Booking E2E remediation changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Booking E2E remediation changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Booking E2E remediation rewrote prior architecture')
+    if (R/'frontend/package.json').read_bytes()!=prior('frontend/package.json'):errors.append('Booking E2E remediation changed frontend dependencies/tests')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Booking E2E remediation rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Booking E2E remediation promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Booking E2E remediation unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Booking E2E remediation changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=configuration_experience_main()
+    if result==0:print('PASS exact bounded booking E2E remediation; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':
