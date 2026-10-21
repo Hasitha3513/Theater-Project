@@ -6560,5 +6560,363 @@
       "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
     },
     "acceptance": "NO_FULL_CAMPAIGN_REQUIREMENT_PHASE_OR_DEMONSTRATION_ACCEPTANCE"
+  },
+  "e2eInvalidHoldVerification": {
+    "taskId": "CN-E2E-INVALID-HOLD-001",
+    "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+    "evidencePath": "PROGRESS.md#e2e-invalid-hold-verification",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN.",
+    "baseline": "babe7254ea8de86d5f864a4885da81ad785b045e",
+    "ownerAuthority": "Explicit CN-E2E-INVALID-HOLD-001 bounded CI-gated hold scenario execution/remediation only;rejected verification and uncertain upload excluded",
+    "prerequisiteCi": {
+      "runId": 39549885010,
+      "sha": "babe7254ea8de86d5f864a4885da81ad785b045e",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "requiredSteps": "ALL_SUCCESS"
+    },
+    "toolchain": {
+      "node": "24.22.0",
+      "npm": "11.19.1",
+      "bin": "$HOME/.local/toolchains/node-v24.22.0-linux-x64/bin",
+      "admission": "TOOLS_PRESENT_AND_EXECUTION_LIMITS_VERIFIED",
+      "integrity": "Owned non-group/world-writable resolved Node/npm targets;local SHA256 receipts,not upstream signature verification",
+      "nodeSha256": "67ca5783febb8bf85736c79fcdd92c8d6d465a0eb2a082672bcdfa76a506751c"
+    },
+    "contract": {
+      "holdCreation": "POST /api/holds,eligible authenticated owner,server-derived venue/room,configuration binding,inventory and one-active-hold checks,idempotency",
+      "read": "GET /api/holds/{opaque}:missing404,wrong-owner403;expired owned hold200 with EXPIRED,not a permission to purchase",
+      "quoteCreation": "POST /api/quotes:malformed hold400,missing/wrong-owner404,expired409;client room/venue overrides unsupported400",
+      "acceptance": "Direct missing/wrong-owner quote acceptance404;no target quote ever issued",
+      "expiry": "Existing InventoryRepository database clock and locked reconciliation;no browser clock authority",
+      "scope": "Linked inventory_block room/venue and original hold scope unchanged;unsupported override rejection only,no separate two-venue package fixture claimed"
+    },
+    "fixture": "Independent normal customer-b browser context creates a real held session after A frees its14:00 interval;test-only controller validates B/VenueA/room/new unquoted hold then applies existing Inventory/QuoteIntegrationTest.expire pattern(created20minutes ago,expired1minute ago);no real-time wait or immutable quote mutation",
+    "attempts": {
+      "first": {
+        "run": "cinenest-e2e-a6zd27x1",
+        "counts": {
+          "PASS": 22,
+          "FAIL": 0,
+          "NOT_RUN": 2
+        },
+        "results": [
+          {
+            "id": "startup",
+            "status": "PASS"
+          },
+          {
+            "id": "customer-discovery-auth",
+            "status": "PASS"
+          },
+          {
+            "id": "hold-quote-accept",
+            "status": "PASS"
+          },
+          {
+            "id": "verification-explicit-consent",
+            "status": "PASS"
+          },
+          {
+            "id": "E-pending-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "independent-verification-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "explicit-bank-request",
+            "status": "PASS"
+          },
+          {
+            "id": "H-missing-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "I-invalid-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "J-cross-origin",
+            "status": "PASS"
+          },
+          {
+            "id": "L-idempotent-replay",
+            "status": "PASS"
+          },
+          {
+            "id": "M-changed-body-key",
+            "status": "PASS"
+          },
+          {
+            "id": "K-stale-readiness",
+            "status": "PASS"
+          },
+          {
+            "id": "claim-receipt-explicit",
+            "status": "PASS"
+          },
+          {
+            "id": "simulated-confirmation-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "C-wrong-owner",
+            "status": "PASS"
+          },
+          {
+            "id": "D-wrong-venue-grant",
+            "status": "PASS"
+          },
+          {
+            "id": "O-malformed-reference",
+            "status": "PASS"
+          },
+          {
+            "id": "P-safe-URLs",
+            "status": "PASS"
+          },
+          {
+            "id": "A-expired-quote",
+            "status": "PASS"
+          },
+          {
+            "id": "B-invalid-expired-hold",
+            "status": "PASS"
+          },
+          {
+            "id": "G-expired-session",
+            "status": "PASS"
+          },
+          {
+            "id": "F-rejected-verification",
+            "status": "NOT_RUN",
+            "reason": "Independent case/reset needed; positive review cannot be rewritten"
+          },
+          {
+            "id": "N-uncertain-upload",
+            "status": "NOT_RUN",
+            "reason": "No safely qualified connection-failure transport; no fabricated responses"
+          }
+        ],
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-a6zd27x1"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-a6zd27x1/observations.json",
+        "traceSha256": "c99655027dca4585d6fd41d23e6c15b7b1ebb3c2786b12ece8a35df495525cbe",
+        "invalidHoldObservation": {
+          "scopeAndFinancialStateUnchanged": true,
+          "serverExpired": true,
+          "controlOk": true,
+          "requests": 0,
+          "bookings": 0,
+          "holdState": "EXPIRED",
+          "acceptances": 0,
+          "quotes": 0,
+          "statuses": {
+            "missingRead": 404,
+            "malformedIdentity": 400,
+            "missingQuoteHold": 404,
+            "wrongOwnerRead": 403,
+            "wrongOwnerRelease": 403,
+            "wrongOwnerQuote": 404,
+            "venueOverride": 400,
+            "roomOverride": 400,
+            "expiredQuote": 409,
+            "expiredRead": 200
+          },
+          "recovery": "EXPLICIT_INQUIRY_ONLY_NO_NEW_HOLD"
+        },
+        "assertionFailure": null
+      },
+      "final": {
+        "run": "cinenest-e2e-vhsktjl8",
+        "counts": {
+          "PASS": 22,
+          "FAIL": 0,
+          "NOT_RUN": 2
+        },
+        "results": [
+          {
+            "id": "startup",
+            "status": "PASS"
+          },
+          {
+            "id": "customer-discovery-auth",
+            "status": "PASS"
+          },
+          {
+            "id": "hold-quote-accept",
+            "status": "PASS"
+          },
+          {
+            "id": "verification-explicit-consent",
+            "status": "PASS"
+          },
+          {
+            "id": "E-pending-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "independent-verification-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "explicit-bank-request",
+            "status": "PASS"
+          },
+          {
+            "id": "H-missing-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "I-invalid-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "J-cross-origin",
+            "status": "PASS"
+          },
+          {
+            "id": "L-idempotent-replay",
+            "status": "PASS"
+          },
+          {
+            "id": "M-changed-body-key",
+            "status": "PASS"
+          },
+          {
+            "id": "K-stale-readiness",
+            "status": "PASS"
+          },
+          {
+            "id": "claim-receipt-explicit",
+            "status": "PASS"
+          },
+          {
+            "id": "simulated-confirmation-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "C-wrong-owner",
+            "status": "PASS"
+          },
+          {
+            "id": "D-wrong-venue-grant",
+            "status": "PASS"
+          },
+          {
+            "id": "O-malformed-reference",
+            "status": "PASS"
+          },
+          {
+            "id": "P-safe-URLs",
+            "status": "PASS"
+          },
+          {
+            "id": "A-expired-quote",
+            "status": "PASS"
+          },
+          {
+            "id": "B-invalid-expired-hold",
+            "status": "PASS"
+          },
+          {
+            "id": "G-expired-session",
+            "status": "PASS"
+          },
+          {
+            "id": "F-rejected-verification",
+            "status": "NOT_RUN",
+            "reason": "Independent case/reset needed; positive review cannot be rewritten"
+          },
+          {
+            "id": "N-uncertain-upload",
+            "status": "NOT_RUN",
+            "reason": "No safely qualified connection-failure transport; no fabricated responses"
+          }
+        ],
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-vhsktjl8"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-vhsktjl8/observations.json",
+        "traceSha256": "f4c4374f14526bbb05d9832d5c079b331e0ce500cf88d12ff566e5d004395788",
+        "invalidHoldObservation": {
+          "scopeAndFinancialStateUnchanged": true,
+          "serverExpired": true,
+          "controlOk": true,
+          "requests": 0,
+          "bookings": 0,
+          "holdState": "EXPIRED",
+          "acceptances": 0,
+          "quotes": 0,
+          "statuses": {
+            "missingRead": 404,
+            "malformedIdentity": 400,
+            "missingQuoteHold": 404,
+            "wrongOwnerRead": 403,
+            "wrongOwnerRelease": 403,
+            "wrongOwnerQuote": 404,
+            "venueOverride": 400,
+            "roomOverride": 400,
+            "missingQuoteAcceptance": 404,
+            "wrongOwnerAcceptance": 404,
+            "expiredQuote": 409,
+            "expiredRead": 200
+          },
+          "recovery": "EXPLICIT_INQUIRY_ONLY_NO_NEW_HOLD"
+        },
+        "assertionFailure": null
+      }
+    },
+    "currentCounts": {
+      "PASS": 22,
+      "FAIL": 0,
+      "NOT_RUN": 2
+    },
+    "targetScenario": "B-invalid-expired-hold PASS",
+    "notRun": [
+      "F-rejected-verification",
+      "N-uncertain-upload"
+    ],
+    "rootCause": "NO_FAILURE_OBSERVED;existing application contracts pass;test-only missing scenario implementation",
+    "checks": {
+      "inertHarnessAdmission": 10,
+      "ciClassifier": 8,
+      "realE2e": "22 PASS / 0 FAIL / 2 NOT_RUN",
+      "backend": 513,
+      "frontend": 248,
+      "typecheckLintBuild": "PASS",
+      "knowledge": "PASS",
+      "isolatedExecutionTraceabilityDependency": "PASS",
+      "governanceNegativeControls": 10,
+      "whitespace": "PASS",
+      "exactSourceCi": "PENDING_PUBLICATION",
+      "bankIntegration": 251,
+      "quotationIntegration": 13,
+      "inventoryIntegration": 17,
+      "architecture": 17,
+      "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
+    },
+    "acceptance": "NO_FULL_CAMPAIGN_REQUIREMENT_PHASE_OR_DEMONSTRATION_ACCEPTANCE"
   }
 }

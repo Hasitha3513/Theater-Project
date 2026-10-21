@@ -646,6 +646,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance."
+      },
+      "e2eInvalidHoldEvidence": {
+        "taskId": "CN-E2E-INVALID-HOLD-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-invalid-hold-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN."
       }
     },
     {
@@ -735,6 +743,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance."
+      },
+      "e2eInvalidHoldEvidence": {
+        "taskId": "CN-E2E-INVALID-HOLD-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-invalid-hold-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN."
       }
     },
     {
@@ -2776,6 +2792,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance."
+      },
+      "e2eInvalidHoldEvidence": {
+        "taskId": "CN-E2E-INVALID-HOLD-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-invalid-hold-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN."
       }
     },
     {
@@ -4047,6 +4071,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance."
+      },
+      "e2eInvalidHoldEvidence": {
+        "taskId": "CN-E2E-INVALID-HOLD-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-invalid-hold-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN."
       }
     },
     {

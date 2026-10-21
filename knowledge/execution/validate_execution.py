@@ -3471,7 +3471,7 @@ def safe_urls_e2e_main():
 
 
 
-def inert_ci_main():
+def expired_quote_e2e_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='f901f8f715855a81a1f4e20f49466dcf9d7bfae8'
@@ -3524,6 +3524,64 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=safe_urls_e2e_main()
     if result==0:print('PASS exact bounded expired quote E2E verification; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='babe7254ea8de86d5f864a4885da81ad785b045e'
+    owned={'frontend/tests/synthetic-e2e.mjs', 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java'}
+    registries={'knowledge/execution/status.json', 'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added=set()
+    hashes={'knowledge/PROGRESS.md': 'b318fe54ef07f5c7ce83f29964dacd557304a310eeb9ba4a9167e09de9507233', 'knowledge/execution/test-plan.json': '0c234d269d3e47a4e5c30b733931c89270cae808045852cf170a33524d37d45b', 'frontend/tests/synthetic-e2e.mjs': '9d4d9ae912de85f15da3bb5fa3fb72b898bc72a8c6c6edc532d46042835cb23f', 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '6c0ca7ebb8f62831e6e54c6fcc16d19cec0d37e2608b9422a5ae70187775ae2b', 'knowledge/ARCHITECTURE.md': '318e22efe2ef328ef8d88395cd1134e6a66f046f4a9c1e55a30afeb6af17d000', 'knowledge/execution/requirements.json': 'ada8b53f523c1e745ace14d6553dd2393d8408025c22f2a90bbaa510b2e49697', 'knowledge/execution/status.json': 'd66910d34311cabbc583899babb0daa64f6ca0fc2496708eb1492b95a902830f'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Invalid hold E2E verification exact source/approval mismatch '+name)
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('e2eInvalidHoldEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Invalid hold E2E verification changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('e2eInvalidHoldVerification',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Invalid hold E2E verification changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Invalid hold E2E verification changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Invalid hold E2E verification rewrote prior architecture')
+    if (R/'frontend/package.json').read_bytes()!=prior('frontend/package.json'):errors.append('Expired quote E2E changed frontend dependencies/tests')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Invalid hold E2E verification rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Invalid hold E2E verification promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Invalid hold E2E verification unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Invalid hold E2E verification changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=expired_quote_e2e_main()
+    if result==0:print('PASS exact bounded invalid hold E2E verification; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

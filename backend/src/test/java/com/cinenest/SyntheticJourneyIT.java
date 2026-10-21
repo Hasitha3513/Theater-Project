@@ -41,7 +41,8 @@ class SyntheticJourneyIT {
         Files.writeString(run.resolve("config.json"),JSONObjectUtils.toJSONString(config));
         Process browser=null;
         UUID expiringHold=null,expiringQuote=null;
-        Map<String,Object> expiryBaseline=null;
+        Map<String,Object> expiryBaseline=null,invalidHoldBaseline=null;
+        UUID invalidHold=null;
         try {
             var builder=new ProcessBuilder("node",Path.of("../frontend/tests/synthetic-e2e.mjs").toAbsolutePath().toString());
             builder.redirectErrorStream(true);builder.redirectOutput(run.resolve("private-browser.log").toFile());
@@ -84,6 +85,17 @@ class SyntheticJourneyIT {
                             var actual=expiryState(fixture,expiringQuote,expiringHold);assertThat(actual.equals(expiryBaseline)).as("Expired quote snapshot and financial state unchanged").isTrue();
                             response.put("serverExpired",true);response.put("snapshotAndFinancialStateUnchanged",true);
                             response.put("quoteAcceptances",actual.get("acceptances"));response.put("quoteAcceptCommands",actual.get("commands"));response.put("quoteBankRequests",actual.get("requests"));response.put("holdBookings",actual.get("bookings"));
+                        }else if(op.equals("prepare-invalid-hold")){
+                            if(invalidHold!=null)throw new IllegalArgumentException("One invalid hold fixture only");
+                            UUID id=UUID.fromString(body.get("holdId").toString());
+                            int changed=fixture.jdbc.sql("UPDATE cinenest_booking.reservation_hold h SET created_at=clock_timestamp()-INTERVAL '20 minutes',expires_at=clock_timestamp()-INTERVAL '1 minute' WHERE hold_id=:h AND owner_id=:a AND state='ACTIVE' AND expires_at>clock_timestamp() AND EXISTS(SELECT 1 FROM cinenest_booking.inventory_block b WHERE b.block_id=h.block_id AND b.venue_id=:v AND b.room_id=:r) AND NOT EXISTS(SELECT 1 FROM cinenest_pricing.quotation q WHERE q.hold_id=h.hold_id)").param("h",id).param("a",BankIntegrationTest.B).param("v",BankIntegrationTest.VA).param("r",BankIntegrationTest.RID).update();
+                            assertThat(changed).isEqualTo(1);invalidHold=id;invalidHoldBaseline=invalidHoldState(fixture,id);response.put("serverExpired",true);
+                        }else if(op.equals("inspect-invalid-hold")){
+                            assertThat(invalidHoldBaseline).isNotNull();var actual=invalidHoldState(fixture,invalidHold);
+                            assertThat(actual.equals(invalidHoldBaseline)).as("Invalid hold left protected state unchanged").isTrue();
+                            assertThat(fixture.jdbc.sql("SELECT h.state='EXPIRED' AND h.expires_at<=clock_timestamp() AND NOT b.blocking AND h.owner_id=:a AND b.venue_id=:v AND b.room_id=:r FROM cinenest_booking.reservation_hold h JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id WHERE h.hold_id=:h").param("h",invalidHold).param("a",BankIntegrationTest.B).param("v",BankIntegrationTest.VA).param("r",BankIntegrationTest.RID).query(Boolean.class).single()).isTrue();
+                            response.put("serverExpired",true);response.put("holdState","EXPIRED");response.put("scopeAndFinancialStateUnchanged",true);
+                            for(String key:List.of("quotes","acceptances","requests","bookings"))response.put(key,actual.get(key));
                         }else if(op.equals("subject")){
                             String subject=body.get("subject").toString();
                             if(!List.of("customer-a","customer-b","staff").contains(subject))throw new IllegalArgumentException();
@@ -117,6 +129,19 @@ class SyntheticJourneyIT {
         state.put("revision",fixture.jdbc.sql("SELECT to_jsonb(r)::text FROM cinenest_pricing.quotation_revision r WHERE quote_id=:q AND revision=1").param("q",quote).query(String.class).single());
         // Test-only equality fingerprints stay in memory; never put ledger rows in evidence/logs.
         for(String table:List.of("cinenest_payments.incoming_payment_credit","cinenest_payments.bank_credit_verification","cinenest_payments.payment_allocation","cinenest_booking.booking"))
+            state.put(table,fixture.jdbc.sql("SELECT md5(COALESCE(string_agg(to_jsonb(t)::text,'' ORDER BY to_jsonb(t)::text),'')) FROM "+table+" t").query(String.class).single());
+        return state;
+    }
+
+    private static Map<String,Object> invalidHoldState(BankIntegrationTest fixture,UUID hold){
+        Map<String,Object> state=new HashMap<>();
+        state.put("quotes",fixture.jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation WHERE hold_id=:h").param("h",hold).query(Long.class).single());
+        state.put("acceptances",fixture.jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation_acceptance a JOIN cinenest_pricing.quotation q ON q.quote_id=a.quote_id WHERE q.hold_id=:h").param("h",hold).query(Long.class).single());
+        state.put("requests",fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request WHERE hold_id=:h").param("h",hold).query(Long.class).single());
+        state.put("bookings",fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking WHERE hold_id=:h").param("h",hold).query(Long.class).single());
+        assertThat(state.values()).allMatch(v->v.equals(0L));
+        state.put("scope",fixture.jdbc.sql("SELECT jsonb_build_array(h.owner_id,h.block_id,h.configuration,h.guests,h.created_at,h.expires_at,b.venue_id,b.room_id,b.session_start,b.session_end,b.blocked_until)::text FROM cinenest_booking.reservation_hold h JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id WHERE h.hold_id=:h").param("h",hold).query(String.class).single());
+        for(String table:List.of("cinenest_payments.incoming_payment_credit","cinenest_payments.bank_credit_verification","cinenest_payments.payment_allocation","cinenest_booking.booking","cinenest_pricing.quotation_acceptance","cinenest_pricing.quotation_revision"))
             state.put(table,fixture.jdbc.sql("SELECT md5(COALESCE(string_agg(to_jsonb(t)::text,'' ORDER BY to_jsonb(t)::text),'')) FROM "+table+" t").query(String.class).single());
         return state;
     }

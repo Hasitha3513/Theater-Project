@@ -26,7 +26,11 @@ let stage = "startup",
 	frontend;
 const requests = [];
 const observations = [];
-let financeObservation, expiryObservation, assertionFailure, activePage;
+let financeObservation,
+	expiryObservation,
+	invalidHoldObservation,
+	assertionFailure,
+	activePage;
 const navigations = [];
 // Sanitized logical browser trace only: never retain cookies, headers, bodies or query values.
 const diagnostics = new URL(
@@ -765,14 +769,237 @@ try {
 			recoveryPath: "/rooms",
 		};
 	});
+	await scenario("B-invalid-expired-hold", async () => {
+		const other = await browser.newContext();
+		const p = await other.newPage();
+		const statuses = {};
+		invalidHoldObservation = { statuses };
+		other.on("request", (request) =>
+			assert.ok(
+				["127.0.0.1", "localhost"].includes(new URL(request.url()).hostname),
+				"external request prohibited",
+			),
+		);
+		other.on("response", (response) => {
+			const u = new URL(response.url());
+			if (u.pathname.startsWith("/api/"))
+				observations.push({
+					stage: "B-invalid-expired-hold",
+					method: response.request().method(),
+					path: u.pathname.replace(
+						/[0-9a-f]{8}-[0-9a-f-]{27,}/gi,
+						"{reference}",
+					),
+					status: response.status(),
+				});
+		});
+		try {
+			await login(p, "customer-b");
+			await p.goto(base + "/rooms/" + config.room);
+			await p
+				.getByLabel("Customer start in venue local time")
+				.fill(config.local.replace(/T\d\d:\d\d/, "T14:00"));
+			await p.getByLabel("Customer duration (minutes)").fill("180");
+			await p.getByLabel("Guests", { exact: true }).fill("4");
+			await p
+				.getByRole("button", { name: "Check inventory (no hold)", exact: true })
+				.click();
+			const hold = await clickResponse(
+				p,
+				"Create temporary inventory hold",
+				"/api/holds",
+			);
+			assert.equal(hold.state, "ACTIVE");
+			assert.equal(hold.roomId, config.room);
+			await p
+				.getByRole("button", {
+					name: "Load applicable synthetic package choices",
+					exact: true,
+				})
+				.click();
+			await p.getByLabel("Published package").selectOption({ index: 1 });
+			await p.getByLabel("Intended method (no payment)").selectOption("BANK");
+			const catalog = await json(
+				p,
+				`/api/venues/${config.venue}/packages?roomId=${config.room}&sessionStart=${encodeURIComponent(hold.sessionStart)}&sessionEnd=${encodeURIComponent(hold.sessionEnd)}`,
+			);
+			const selected = catalog.items[0];
+			assert.ok(selected?.packageId && selected?.versionId);
+			assert.equal(
+				selected.versionId,
+				await p.getByLabel("Published package").inputValue(),
+			);
+			const missing = "00000000-0000-4000-8000-000000000099";
+			const create = {
+				holdId: hold.holdId,
+				expectedHoldRevision: hold.revision,
+				packageId: selected.packageId,
+				packageVersionId: selected.versionId,
+				optionalServiceIds: [],
+				paymentMethod: "BANK",
+			};
+			const quoteAttempt = (actor, extra) =>
+				api(actor, "/api/quotes", "POST", {
+					...create,
+					...extra,
+					idempotencyKey: crypto.randomUUID(),
+				});
+			statuses.missingRead = (await api(p, `/api/holds/${missing}`)).status;
+			assert.equal(statuses.missingRead, 404);
+			statuses.malformedIdentity = (
+				await quoteAttempt(p, { holdId: "malformed" })
+			).status;
+			assert.equal(statuses.malformedIdentity, 400);
+			statuses.missingQuoteHold = (
+				await quoteAttempt(p, { holdId: missing })
+			).status;
+			assert.equal(statuses.missingQuoteHold, 404);
+			statuses.wrongOwnerRead = (
+				await api(page, `/api/holds/${hold.holdId}`)
+			).status;
+			assert.equal(statuses.wrongOwnerRead, 403);
+			statuses.wrongOwnerRelease = (
+				await api(page, `/api/holds/${hold.holdId}/release`, "POST", {
+					expectedRevision: hold.revision,
+					idempotencyKey: crypto.randomUUID(),
+				})
+			).status;
+			assert.equal(statuses.wrongOwnerRelease, 403);
+			statuses.wrongOwnerQuote = (await quoteAttempt(page, {})).status;
+			assert.equal(statuses.wrongOwnerQuote, 404);
+			statuses.venueOverride = (
+				await quoteAttempt(p, { venueId: config.otherVenue })
+			).status;
+			assert.equal(statuses.venueOverride, 400);
+			statuses.roomOverride = (
+				await quoteAttempt(p, { roomId: missing })
+			).status;
+			assert.equal(statuses.roomOverride, 400);
+			const acceptBody = () => ({
+				expectedRevision: quote.revision,
+				contentHash: quote.contentHash,
+				disclosures: quote.disclosures,
+				idempotencyKey: crypto.randomUUID(),
+			});
+			statuses.missingQuoteAcceptance = (
+				await api(p, `/api/quotes/${missing}/accept`, "POST", acceptBody())
+			).status;
+			assert.equal(statuses.missingQuoteAcceptance, 404);
+			statuses.wrongOwnerAcceptance = (
+				await api(
+					p,
+					`/api/quotes/${quote.quoteId}/accept`,
+					"POST",
+					acceptBody(),
+				)
+			).status;
+			assert.equal(statuses.wrongOwnerAcceptance, 404);
+
+			assert.equal(
+				(await control({ op: "prepare-invalid-hold", holdId: hold.holdId }))
+					.serverExpired,
+				true,
+			);
+			const rejection = p.waitForResponse(
+				(r) =>
+					new URL(r.url()).pathname === "/api/quotes" &&
+					r.request().method() === "POST",
+			);
+			await p
+				.getByRole("button", {
+					name: "Calculate synthetic quotation",
+					exact: true,
+				})
+				.click();
+			const denied = await rejection;
+			statuses.expiredQuote = denied.status();
+			assert.equal(denied.status(), 409);
+			assert.equal(
+				(await denied.json()).message,
+				"Configuration changed or code already exists. Reload and compare; your draft is retained.",
+			);
+			await p
+				.getByText(
+					/Configuration changed or code already exists. Reload and compare; your draft is retained./,
+				)
+				.waitFor({ state: "visible" });
+			const reload = p.waitForResponse(
+				(r) =>
+					new URL(r.url()).pathname === `/api/holds/${hold.holdId}` &&
+					r.request().method() === "GET",
+			);
+			await p
+				.getByRole("button", { name: "Refresh hold state", exact: true })
+				.click();
+			const refreshed = await reload;
+			statuses.expiredRead = refreshed.status();
+			assert.equal(refreshed.status(), 200);
+			const current = await refreshed.json();
+			assert.equal(current.state, "EXPIRED");
+			assert.ok(Date.parse(current.serverNow) >= Date.parse(current.expiresAt));
+			await p
+				.getByText("Hold expired", { exact: true })
+				.waitFor({ state: "visible" });
+			assert.equal(
+				await p
+					.getByRole("button", {
+						name: "Calculate synthetic quotation",
+						exact: true,
+					})
+					.count(),
+				0,
+			);
+			assert.equal(
+				await p
+					.getByRole("button", {
+						name: "Accept synthetic revision only",
+						exact: true,
+					})
+					.count(),
+				0,
+			);
+			const inquiry = p.waitForResponse(
+				(r) =>
+					new URL(r.url()).pathname ===
+						`/api/rooms/${config.room}/availability` &&
+					r.request().method() === "GET",
+			);
+			await p
+				.getByRole("button", { name: "Check inventory (no hold)", exact: true })
+				.click();
+			const recovered = await inquiry;
+			assert.equal(recovered.status(), 200);
+			assert.equal((await recovered.json()).available, true);
+			assert.equal(
+				await p
+					.getByRole("button", {
+						name: "Create temporary inventory hold",
+						exact: true,
+					})
+					.isEnabled(),
+				true,
+			);
+			invalidHoldObservation = await control({ op: "inspect-invalid-hold" });
+			assert.equal(
+				invalidHoldObservation.scopeAndFinancialStateUnchanged,
+				true,
+			);
+			for (const key of ["quotes", "acceptances", "requests", "bookings"])
+				assert.equal(invalidHoldObservation[key], 0);
+			assert.equal(safeCustomerNavigation(p.url(), base), true);
+			invalidHoldObservation = {
+				...invalidHoldObservation,
+				statuses,
+				recovery: "EXPLICIT_INQUIRY_ONLY_NO_NEW_HOLD",
+			};
+		} finally {
+			await other.close();
+		}
+	});
 	await scenario("G-expired-session", async () => {
 		await control({ op: "expire-session" });
 		assert.equal((await api(page, "/api/accounts/me")).status, 401);
 	});
-	notRun(
-		"B-invalid-expired-hold",
-		"Independent case/reset needed to avoid corrupting positive journey",
-	);
 	notRun(
 		"F-rejected-verification",
 		"Independent case/reset needed; positive review cannot be rewritten",
@@ -802,6 +1029,7 @@ try {
 		assertionFailure,
 		financeObservation,
 		expiryObservation,
+		invalidHoldObservation,
 	});
 	process.exitCode = 1;
 } finally {
@@ -818,6 +1046,7 @@ try {
 			assertionFailure,
 			financeObservation,
 			expiryObservation,
+			invalidHoldObservation,
 			observations,
 			navigations,
 			finalPath: activePage
