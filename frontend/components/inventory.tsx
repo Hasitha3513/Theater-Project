@@ -1,4 +1,5 @@
 "use client";
+import { CustomerAvailabilityCalendar } from "./customer-calendar";
 import { BookingStepGuide, AwaitingBookingQuote } from "./booking-steps";
 import { SyntheticQuotation } from "./quotes";
 import type { FormEvent } from "react";
@@ -154,6 +155,21 @@ export function InventoryHold({
 					Associated eligible test accounts only. Venue timezone: {timezone}.
 					Inventory is separate from booking and physical readiness.
 				</p>
+				<CustomerAvailabilityCalendar
+					key={`${roomId}:${venueId}:${timezone}`}
+					roomId={roomId}
+					venueId={venueId}
+					timezone={timezone}
+					disabled={busy || !!pending.current}
+					onChoose={(value) => {
+						setCandidate(undefined);
+						setLocal(value?.local ?? "");
+						if (value) {
+							setDuration(value.duration);
+							setGuests(value.guests);
+						}
+					}}
+				/>
 				<div className="booking-planning-grid">
 					<section id="booking-date" aria-labelledby="booking-date-title">
 						<h3 id="booking-date-title">Choose date & time</h3>

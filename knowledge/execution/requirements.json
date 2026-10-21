@@ -670,6 +670,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
+      },
+      "customerCalendarUiEvidence": {
+        "taskId": "CN-CUSTOMER-AVAILABILITY-CALENDAR-UI-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CALENDAR_UI",
+        "evidencePath": "PROGRESS.md#customer-availability-calendar-ui",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
       }
     },
     {
@@ -3229,6 +3237,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
+      },
+      "customerCalendarUiEvidence": {
+        "taskId": "CN-CUSTOMER-AVAILABILITY-CALENDAR-UI-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CALENDAR_UI",
+        "evidencePath": "PROGRESS.md#customer-availability-calendar-ui",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
       }
     },
     {
@@ -3573,6 +3589,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
+      },
+      "customerCalendarUiEvidence": {
+        "taskId": "CN-CUSTOMER-AVAILABILITY-CALENDAR-UI-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CALENDAR_UI",
+        "evidencePath": "PROGRESS.md#customer-availability-calendar-ui",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
       }
     },
     {
@@ -3659,6 +3683,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
+      },
+      "customerCalendarUiEvidence": {
+        "taskId": "CN-CUSTOMER-AVAILABILITY-CALENDAR-UI-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CALENDAR_UI",
+        "evidencePath": "PROGRESS.md#customer-availability-calendar-ui",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
       }
     },
     {
@@ -3920,6 +3952,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
+      },
+      "customerCalendarUiEvidence": {
+        "taskId": "CN-CUSTOMER-AVAILABILITY-CALENDAR-UI-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_CALENDAR_UI",
+        "evidencePath": "PROGRESS.md#customer-availability-calendar-ui",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
       }
     },
     {

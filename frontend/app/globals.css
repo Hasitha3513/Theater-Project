@@ -1043,3 +1043,10 @@ button.button { display: inline-grid; }
 
 /* Exact booking-linked read disclosure; existing shell and tokens retained. */
 .booking-operations #booking-operations-results { margin-top: var(--cn-spacing-3); }
+
+/* Existing booking-panel tokens; native date/time controls preserve minute precision. */
+.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar{border:1px solid var(--cn-color-border);border-radius:16px;padding:clamp(16px,3vw,28px);margin:24px 0;background:var(--cn-color-surface);min-width:0}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar fieldset{border:0;padding:0;margin:20px 0;min-width:0}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar legend{font-weight:600;margin-bottom:16px}.calendar-heading{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.calendar-heading h3{margin-top:4px}.calendar-results{border-top:1px solid var(--cn-color-border);padding-top:20px}.calendar-legend{font-size:.875rem;line-height:1.7}.calendar-selection{margin:20px 0}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar select{max-width:100%;min-width:0}.calendar-reasons{padding-left:20px}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar .toolbar{gap:12px;flex-wrap:wrap}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar dd{overflow-wrap:anywhere}
+
+.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar .filter-grid{align-items:start}
+.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar .calendar-selection{display:grid;gap:var(--cn-spacing-4)}
+@media(min-width:1024px){.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar .calendar-selection{grid-template-columns:repeat(3,minmax(0,1fr))}}

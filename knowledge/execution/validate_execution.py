@@ -4202,7 +4202,7 @@ def operations_queue_pagination_main():
 
 
 
-def inert_ci_main():
+def calendar_backend_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='7ac199b7c3a5aac5cc8b694560c7cb94c8ed29e2'
@@ -4260,6 +4260,70 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=operations_queue_pagination_main()
     if result==0:print('PASS exact bounded Read-only availability calendar; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='c49e51e0d3365b11bc57d7ade3791ff4841243d7'
+    owned={'frontend/package.json', 'frontend/app/globals.css', 'frontend/components/customer-calendar.tsx', 'frontend/tests/customer-calendar-browser.mjs', 'frontend/components/inventory.tsx', 'frontend/tests/customer-calendar.test.mjs', 'frontend/lib/customer-calendar.ts'}
+    registries={'knowledge/execution/status.json', 'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/PROGRESS.md', 'knowledge/DESIGN.md', 'knowledge/ARCHITECTURE.md'}
+    added={'frontend/tests/customer-calendar.test.mjs', 'frontend/tests/customer-calendar-browser.mjs', 'frontend/components/customer-calendar.tsx', 'frontend/lib/customer-calendar.ts'}
+    hashes={'knowledge/PROGRESS.md': 'c680fb5fbf22a792fc2f0d771356dd348012afabd4bb3b83b57a096247fcc5a2', 'frontend/app/globals.css': 'b2d6c81eb91e556d607d6fc34ab2b6c98c24879adb17192bce2dbc05f89b9bae', 'frontend/tests/customer-calendar-browser.mjs': '67952e56d052353fa1b6c8c3b9d382cc022c6bbba62f17cf6406b4e7287f5a89', 'knowledge/execution/status.json': 'e6c5ab27e6fd44b32add295ca81517c2ab14aca114aeffb63224f50ae541fb74', 'knowledge/DESIGN.md': 'd1ca0b8fd65a75404f8300a0958cfa8729fb80c2a181bff26d1cd0798737d2a5', 'knowledge/execution/test-plan.json': 'f578d9a0b05d449adbfa82d66c7c5e769c0be62037f47f181f336f2bafc248d1', 'frontend/package.json': '947716297057b5c892ded651bc5944f2c4c0a00cf719c4499512448b64e947fe', 'frontend/components/customer-calendar.tsx': 'b997a371078f64a49f6b59595a00c6efb0c3de5629ba0cb8611c8b59128c3923', 'knowledge/execution/requirements.json': '1b6eb3e7aebcf1ab3339b893fd3ba27e76bca22db0d47f46fed9693eec5e6733', 'knowledge/ARCHITECTURE.md': '1c707ee88ca6a0738a31d9eea6e2b367ea1e3bb30170e130158ee8340050ea99', 'frontend/components/inventory.tsx': '21d33c0d307e7105a80d7cb0c8a89109fff44b3ea4fbc3bab76486e844a9f128', 'frontend/tests/customer-calendar.test.mjs': 'acbd302ebdfb4bd2d75edde2abfa02b4f98fa3c4b950d332e68c1bf74914b22f', 'frontend/lib/customer-calendar.ts': 'f1dc85b66e9c0c417a32cf50ac7c52c81e5de25ad440094cd5112aeda95eef17'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Customer availability calendar UI exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('customerCalendarUiEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Customer availability calendar UI changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('customerCalendarUiImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Customer availability calendar UI changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Customer availability calendar UI changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Customer availability calendar UI rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=original['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/customer-calendar.test.mjs':errors.append('Customer availability calendar UI changed existing frontend coverage')
+    package['scripts']['test']=original['scripts']['test']
+    if package!=original:errors.append('Customer availability calendar UI changed dependency/toolchain authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Customer availability calendar UI rewrote prior design')
+    if not (R/'frontend/app/globals.css').read_text().startswith(prior('frontend/app/globals.css').decode()):errors.append('Customer availability calendar UI rewrote prior global styles')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Customer availability calendar UI promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Customer availability calendar UI unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Customer availability calendar UI changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=calendar_backend_main()
+    if result==0:print('PASS exact bounded Customer availability calendar UI; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

@@ -8013,5 +8013,68 @@
     "queryBudgetEvidence": "Mockito spy over real PostgreSQL JdbcClient verifies exactly2 Booking calendar statements for1440 positions;fixed Rooms facts queries and2 separate eligibility checks;no per-cell SQL. Existing GiST index present,actual EXPLAIN includes bounded Limit;no schema/index changes",
     "completenessEvidence": "1440 complete starts,1001 overlapping blocks fail503;exact512KiB UTF8 unit succeeds,one-byte excess and multibyte excess fail503;proxy stream512KiB overflow fails503;no truncated success",
     "validation": "Knowledge/design+approved in-memory committed-source execution/status PASS;ordinary execution exactly2 pre-existing next-env integrity findings;22 governance negative controls,92/92 traceability,28-task acyclic graph and whitespace PASS"
+  },
+  "customerCalendarUiImplementation": {
+    "taskId": "CN-CUSTOMER-AVAILABILITY-CALENDAR-UI-001",
+    "status": "LOCALLY_VERIFIED_BOUNDED_CALENDAR_UI",
+    "evidencePath": "PROGRESS.md#customer-availability-calendar-ui",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance",
+    "changeSetId": "CN-CUSTOMER-AVAILABILITY-CALENDAR-UI-001",
+    "ownerAuthority": "Explicit owner implementation attachment49fd968b-e4dc-48ea-84b0-27b072782964;frontend-only scope",
+    "ownerRequestSha256": "5787898d409a5223ce1643027b3bd4414ca5d49bcb56918f916e28052419d6b5",
+    "baselineHead": "c49e51e0d3365b11bc57d7ade3791ff4841243d7",
+    "prerequisiteCI": "39646527411 COMPLETED/SUCCESS exact source",
+    "tests": "299 frontend;TypeScript/lint/build;607 backend/isolated PostgreSQL/architecture;11 new and46 existing intercepted browser groups;8 classifier and10 admission PASS",
+    "safety": "GET-only calendar;tri-state and reason allowlist;server timezone;context/session/visibility abort+epoch;explicit prepare,existing explicit inquiry/hold;zero automatic mutations",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "rollback": "Source revert only;retain calendar backend,hold commands,all data/history and acceptance gates",
+    "validation": "Knowledge/design and approved in-memory committed-source execution PASS;ordinary execution retains2 pre-existing next-env findings;15 governance negative controls,92/92 traceability,28-task acyclic graph and whitespace PASS",
+    "screenshots": [
+      {
+        "path": ".cache/customer-calendar/before-375.png",
+        "width": 375,
+        "height": 3923,
+        "sha256": "f6db4c3a5cedb277cb415734269c9b0abe5c4f28abb2bddeb98f02d7ee04affd",
+        "kind": "INTERCEPTED_SYNTHETIC_PRESENTATION_NOT_BACKEND_E2E"
+      },
+      {
+        "path": ".cache/customer-calendar/before-768.png",
+        "width": 768,
+        "height": 3323,
+        "sha256": "fd30c087524c762f02713fe7ca79a75a63152946f80038b1e1ad35033dc52aea",
+        "kind": "INTERCEPTED_SYNTHETIC_PRESENTATION_NOT_BACKEND_E2E"
+      },
+      {
+        "path": ".cache/customer-calendar/before-1280.png",
+        "width": 1280,
+        "height": 2795,
+        "sha256": "e3a4673bb08af379c616a1fff04425a4c1ea0730197adb5c8540cb1fb6856d42",
+        "kind": "INTERCEPTED_SYNTHETIC_PRESENTATION_NOT_BACKEND_E2E"
+      },
+      {
+        "path": ".cache/customer-calendar/after-375.png",
+        "width": 375,
+        "height": 5893,
+        "sha256": "43d8cddded2eeb413f072f1c1340044b46e021c9a45df27d6b84e668b10371f6",
+        "kind": "INTERCEPTED_SYNTHETIC_PRESENTATION_NOT_BACKEND_E2E"
+      },
+      {
+        "path": ".cache/customer-calendar/after-768.png",
+        "width": 768,
+        "height": 4710,
+        "sha256": "fbf9302d727935a411bcdd2e7ee3f0953a465a13120fd155f82f039212d75828",
+        "kind": "INTERCEPTED_SYNTHETIC_PRESENTATION_NOT_BACKEND_E2E"
+      },
+      {
+        "path": ".cache/customer-calendar/after-1280.png",
+        "width": 1280,
+        "height": 3773,
+        "sha256": "0544d671593d71d2171424ab0c9dfa2a03e1aa678348d46d10e05df6df318f83",
+        "kind": "INTERCEPTED_SYNTHETIC_PRESENTATION_NOT_BACKEND_E2E"
+      }
+    ],
+    "visualComparison": "All3 approved references and6 actual before/after screens visually inspected;3/2/1 input columns,3-column desktop selected summary,light rounded panels,violet44px controls,one main,no horizontal overflow. Existing longer detail layout retained;native browser date format differs from ISO storage. Fixed skip-link appears in some tall-page automated captures;existing shell not changed or hidden to improve screenshots."
   }
 }
