@@ -4139,7 +4139,7 @@ def booking_operations_context_main():
 
 
 
-def inert_ci_main():
+def operations_queue_pagination_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='692f69cbeb99243799c9e17b33a62b23c29099c5'
@@ -4197,6 +4197,69 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=booking_operations_context_main()
     if result==0:print('PASS exact bounded Operations queue pagination correction; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='7ac199b7c3a5aac5cc8b694560c7cb94c8ed29e2'
+    owned={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'frontend/app/api/rooms/[roomId]/availability/calendar/route.ts', 'backend/src/test/java/com/cinenest/CalendarSnapshotSupport.java', 'frontend/tests/calendar.test.mjs', 'frontend/package.json', 'backend/src/main/java/com/cinenest/booking/internal/InventoryCalendarController.java', 'backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java', 'frontend/lib/calendar-backend.ts', 'backend/src/test/java/com/cinenest/booking/internal/InventoryCalendarTest.java', 'backend/src/main/java/com/cinenest/booking/internal/InventoryRules.java', 'backend/src/main/java/com/cinenest/booking/internal/InventoryFailure.java'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/PROGRESS.md', 'knowledge/ARCHITECTURE.md'}
+    added={'frontend/app/api/rooms/[roomId]/availability/calendar/route.ts', 'frontend/tests/calendar.test.mjs', 'backend/src/test/java/com/cinenest/CalendarSnapshotSupport.java', 'frontend/lib/calendar-backend.ts', 'backend/src/main/java/com/cinenest/booking/internal/InventoryCalendarController.java', 'backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java', 'backend/src/test/java/com/cinenest/booking/internal/InventoryCalendarTest.java'}
+    hashes={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '46504854d4b310c521535724f9baf4b98075155234b3eed570173c5c048a2841', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'e10feffde803bcccd31442e65f7b69935a4ad93321e12f81cfa01ae8192171e6', 'frontend/app/api/rooms/[roomId]/availability/calendar/route.ts': 'c8b2a4b6833fb83842ec6219b03cc78b32ebda9cfe1a78958189a4aae7415b4c', 'knowledge/execution/status.json': 'ab66c5c7827effab68272a8977506bd95130c18395fe45fdae5620057c0182b9', 'backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java': 'fc0c7ae130ac1ac847ac5df0c07bd6beacf3eb2c8f2f8b5583014310a6cc5cbd', 'knowledge/PROGRESS.md': '598f7be95afd8da079ebcbf59b65cb46d29ab5aca000667982d3b6771c21966b', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java': '917e4da274829297e9c2f5afcd29237930de99ae8cd562040528888a8ecefba6', 'knowledge/ARCHITECTURE.md': 'cae09640e1b4a56e7828d105db56d3a38fcf2981e133d9bae61158c206255257', 'frontend/lib/calendar-backend.ts': 'b52ab04ec0957b8ad4ada24c40ef18260ad82a180cdfa44a34d20855553e0628', 'knowledge/execution/requirements.json': '9eb35a73776d8358047a2e4f3f40428cc122fab0ecc456c094f43d837988ac98', 'backend/src/test/java/com/cinenest/booking/internal/InventoryCalendarTest.java': 'b3ed9f383d5ee8b762f88d70b363cbe567b0f498febcc1ba08af32e9b3804737', 'knowledge/execution/test-plan.json': 'a6e6b42b33341e59df4c6a6fe2599ac8a403080808d19049287f08cbcd802ce9', 'frontend/tests/calendar.test.mjs': '820a21d69e12e01c46125a66d4c8320b474a9550cfc1073dc981bfdf53d3e089', 'backend/src/test/java/com/cinenest/CalendarSnapshotSupport.java': '510fd52781a799e755bf16c3e7c0d09f9101e8d3e1692dcb5a63880a24b52ad2', 'frontend/package.json': '2674732fb5742225d96d90ba9fe04ef68b7810c59e4f51a9ca0fbd3ad45a541a', 'backend/src/main/java/com/cinenest/booking/internal/InventoryCalendarController.java': '42e7ff12c14d113058f0a38325f96702bacba1fb37500d383ffce46caddee6f3', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java': 'e65e696af3fb36ad87dfc7a36c237acaad549df21dcfff3c9f3e9e8782037383', 'backend/src/main/java/com/cinenest/booking/internal/InventoryRules.java': 'c4f326170196e2cc43eb418fc406fe5175a33cbb3aef0f2ab1b335b53d93b882', 'backend/src/main/java/com/cinenest/booking/internal/InventoryFailure.java': '60644454cfb56b9e785944e209217f4ae69629bdfba12d4dcf73bacbaaee2ce8'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Read-only availability calendar exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('calendarAvailabilityEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Read-only availability calendar changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('calendarAvailabilityImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Read-only availability calendar changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Read-only availability calendar changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Read-only availability calendar rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=original['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/calendar.test.mjs':errors.append('Read-only availability calendar changed existing frontend coverage')
+    package['scripts']['test']=original['scripts']['test']
+    if package!=original:errors.append('Read-only availability calendar changed dependency/toolchain authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Read-only availability calendar rewrote prior design')
+    if not (R/'frontend/app/globals.css').read_text().startswith(prior('frontend/app/globals.css').decode()):errors.append('Read-only availability calendar rewrote prior global styles')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Read-only availability calendar promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Read-only availability calendar unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Read-only availability calendar changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=operations_queue_pagination_main()
+    if result==0:print('PASS exact bounded Read-only availability calendar; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

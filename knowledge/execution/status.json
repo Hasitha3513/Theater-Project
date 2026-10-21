@@ -7978,5 +7978,40 @@
     "rollback": "Normal scoped proxy/test revert restores prior restriction;no data/schema rollback",
     "validation": "Knowledge/design+approved in-memory committed-source execution/status PASS;ordinary execution retains2 pre-existing next-env checksum findings;14 in-memory governance negative controls,92/92 traceability,28-task acyclic dependency graph and whitespace PASS",
     "backendEvidence": "Direct protected queue page0/1/100000,26 unique rows,fixed25,no hasNext,current same-venue independent permission,missing/substitute/other venue/revoked grant,absent/expired session and unchanged complete case-row snapshots PASS"
+  },
+  "calendarAvailabilityImplementation": {
+    "changeSetId": "CN-AVAILABILITY-CALENDAR-BE-001",
+    "ownerAuthority": "Owner inline implementation authorization plus explicit approved conservative PENDING_RECONCILIATION semantics on2026-10-21",
+    "baselineHead": "7ac199b7c3a5aac5cc8b694560c7cb94c8ed29e2",
+    "prerequisiteCI": "39634047781 COMPLETED/SUCCESS exact baseline",
+    "status": "LOCALLY_VERIFIED_BOUNDED_READ_ONLY_CALENDAR",
+    "evidencePath": "PROGRESS.md#availability-calendar-backend",
+    "endpoint": "GET /api/rooms/{roomId}/availability/calendar?date=YYYY-MM-DD&durationMinutes=positive&guests=positive",
+    "scope": "One room/date/requested duration/guest count;stored venue IANA timezone;1440 minute starts;no horizon/increment/price or calendar UI",
+    "readArchitecture": "Booking-owned JDBC and InventoryRules;Rooms InventoryConstraints.observe in read-only REPEATABLE_READ;no foreign SQL/repositories/locks/reconciliation;fresh account eligibility before and after snapshot",
+    "pendingReconciliationApproval": "Persisted blocking HOLD expired or invalidatable => available null/PENDING_RECONCILIATION unless another trustworthy cause independently establishes unavailable;no transition/audit writes",
+    "response": "Explicit header/item allowlists;available true/false/null;INVENTORY_ONLY;complete means exhaustive starts,not certainty or reservation;no owner/hold/booking/block/evidence/financial/device data",
+    "reasons": [
+      "INVALID_LOCAL_TIME",
+      "OUTSIDE_OPERATING_HOURS",
+      "MINIMUM_DURATION",
+      "PAST_START",
+      "PENDING_RECONCILIATION",
+      "MAINTENANCE_BLOCK",
+      "UNAVAILABLE",
+      "TEMPORARILY_HELD"
+    ],
+    "limits": "1440 starts,1000 overlapping persisted blocking rows via LIMIT1001,512KiB exact UTF8 serialized body;fail503,no truncation;10s snapshot transaction,15s proxy timeout",
+    "tests": "607 backend tests PASS,zero failures/errors/skips(27 InventoryIntegrationTest including10 calendar cases,295 BankIntegrationTest including2 calendar snapshot races,19 architecture,1 exact UTF8-ceiling unit);PostgreSQL18.6,V1-V19 clean/repeat/retained upgrade,packaged startup/HTTP denial PASS;294 frontend tests,TypeScript,strict lint,production build PASS;8 classifier+10 harness admission regressions PASS",
+    "remainingGap": "Customer calendar UI not implemented;advisory inventory only,explicit hold and all commercial/physical/production gates retained",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "rollback": "Normal scoped source revert removes calendar read/proxy;retain all schema,holds/blocks/history and existing point/reconciliation/allocation/audit behavior",
+    "auditHazardEvidence": "Actual PostgreSQL audit trigger forces reconciliation failure;hold remains ACTIVE/blocking;calendar overlapping item null/PENDING_RECONCILIATION and complete inventory/hold/audit snapshots unchanged;remove fault,existing reconcile releases block,calendar/point parity restored",
+    "concurrencyEvidence": "Real PostgreSQL snapshot pinned after Rooms observations;concurrent HTTP hold create/release,confirmation and amendment commit;calendar retains coherent before image,next read sees after image;account suspension after snapshot denied by fresh eligibility query",
+    "queryBudgetEvidence": "Mockito spy over real PostgreSQL JdbcClient verifies exactly2 Booking calendar statements for1440 positions;fixed Rooms facts queries and2 separate eligibility checks;no per-cell SQL. Existing GiST index present,actual EXPLAIN includes bounded Limit;no schema/index changes",
+    "completenessEvidence": "1440 complete starts,1001 overlapping blocks fail503;exact512KiB UTF8 unit succeeds,one-byte excess and multibyte excess fail503;proxy stream512KiB overflow fails503;no truncated success",
+    "validation": "Knowledge/design+approved in-memory committed-source execution/status PASS;ordinary execution exactly2 pre-existing next-env integrity findings;22 governance negative controls,92/92 traceability,28-task acyclic graph and whitespace PASS"
   }
 }

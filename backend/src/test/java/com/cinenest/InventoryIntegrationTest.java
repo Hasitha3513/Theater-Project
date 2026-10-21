@@ -156,6 +156,65 @@ class InventoryIntegrationTest {
     String holdPath(Map<String,Object> h){return "/api/holds/"+h.get("holdId");}
     void reconcile(){org.springframework.test.util.ReflectionTestUtils.invokeMethod(context.getBean("inventoryService"),"reconcile",VA);}
     void expire(Map<String,Object> h){jdbc.sql("UPDATE cinenest_booking.reservation_hold SET created_at=clock_timestamp()-INTERVAL '20 minutes',expires_at=clock_timestamp()-INTERVAL '1 minute' WHERE hold_id=:id").param("id",UUID.fromString(h.get("holdId").toString())).update();}
+    String calendarPath(String date,int duration,int guests){return "/api/rooms/"+RID+"/availability/calendar?date="+date+"&durationMinutes="+duration+"&guests="+guests;}
+    Map<String,Object> calendar(Browser b,String date,int duration,int guests)throws Exception{var r=b.get(calendarPath(date,duration,guests));assertThat(r.statusCode()).as(r.body()).isEqualTo(200);assertThat(r.body().getBytes(java.nio.charset.StandardCharsets.UTF_8).length).isLessThanOrEqualTo(512*1024);return JSONObjectUtils.parse(r.body());}
+    @SuppressWarnings("unchecked") Map<String,Object> calendarItem(Map<String,Object> d,int minute){return (Map<String,Object>)((java.util.List<?>)d.get("items")).get(minute);}
+    String calendarDate(){return java.time.LocalDateTime.parse(local()).toLocalDate().toString();}
+    java.util.List<String> inventoryRows(){return jdbc.sql("SELECT row_to_json(x)::text FROM (SELECT * FROM cinenest_booking.inventory_block ORDER BY block_id) x UNION ALL SELECT row_to_json(x)::text FROM (SELECT * FROM cinenest_booking.reservation_hold ORDER BY hold_id) x UNION ALL SELECT row_to_json(x)::text FROM (SELECT * FROM cinenest_booking.inventory_audit ORDER BY event_id) x").query(String.class).list();}
+    @Test void calendarCompletePrivateReadAndFullyReconciledParity()throws Exception{
+        var a=signedIn("customer-a");var before=inventoryRows();var d=calendar(a,calendarDate(),180,4);
+        assertThat(d.keySet()).containsExactlyInAnyOrder("roomId","venueId","date","timezone","durationMinutes","guests","configuration","observedAt","evidenceLevel","complete","items");
+        assertThat((java.util.List<?>)d.get("items")).hasSize(1440);assertThat(d.get("complete")).isEqualTo(true);
+        for(int minute:new int[]{0,600,1200}){var item=calendarItem(d,minute);assertThat(item.keySet()).containsExactlyInAnyOrder("startLocal","sessionStart","sessionEnd","blockedUntil","available","reasons");assertThat(item.get("available")).isEqualTo(inquiry(a,item.get("startLocal").toString(),180,4).get("available"));}
+        assertThat(inventoryRows()).isEqualTo(before);var h=held(a,request(a,local()));var blocked=calendar(a,calendarDate(),180,4);assertThat(calendarItem(blocked,600).get("available")).isEqualTo(false);assertThat(calendarItem(blocked,600).get("reasons").toString()).contains("TEMPORARILY_HELD");
+        assertThat(JSONObjectUtils.toJSONString(blocked)).doesNotContain(h.get("holdId").toString(),A.toString(),B.toString(),"owner_id","expiresAt","block_id");
+    }
+    @Test void calendarAuditFailureLeavesPendingUnknownUntilCommittedReconciliation()throws Exception{
+        var a=signedIn("customer-a");var h=held(a,request(a,local()));
+        jdbc.sql("CREATE FUNCTION public.calendar_audit_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'SYNTHETIC audit fault'; END $$").update();jdbc.sql("CREATE TRIGGER calendar_audit_fault BEFORE INSERT ON cinenest_booking.inventory_audit FOR EACH ROW EXECUTE FUNCTION public.calendar_audit_fault()").update();
+        try{expire(h);assertThatThrownBy(this::reconcile).isInstanceOf(DataAccessException.class);var before=inventoryRows();var d=calendar(a,calendarDate(),180,4);var item=calendarItem(d,600);assertThat(item.get("available")).isNull();assertThat(item.get("reasons").toString()).contains("PENDING_RECONCILIATION");assertThat(inventoryRows()).isEqualTo(before);assertThat(jdbc.sql("SELECT state FROM cinenest_booking.reservation_hold").query(String.class).single()).isEqualTo("ACTIVE");assertThat(jdbc.sql("SELECT blocking FROM cinenest_booking.inventory_block").query(Boolean.class).single()).isTrue();}
+        finally{jdbc.sql("DROP TRIGGER calendar_audit_fault ON cinenest_booking.inventory_audit").update();jdbc.sql("DROP FUNCTION public.calendar_audit_fault()").update();}
+        reconcile();assertThat(jdbc.sql("SELECT blocking FROM cinenest_booking.inventory_block").query(Boolean.class).single()).isFalse();assertThat(calendarItem(calendar(a,calendarDate(),180,4),600).get("available")).isEqualTo(inquiry(a,local(),180,4).get("available"));
+    }
+    @Test void calendarInvalidatableAndReleasedHoldsDoNotBecomeFalseAvailability()throws Exception{
+        var a=signedIn("customer-a");held(a,request(a,local()));jdbc.sql("UPDATE cinenest_rooms.venue SET cleaning_buffer_minutes=8,version=version+1 WHERE venue_id=:v").param("v",VA).update();var before=inventoryRows();assertThat(calendarItem(calendar(a,calendarDate(),180,4),600).get("reasons").toString()).contains("PENDING_RECONCILIATION");assertThat(inventoryRows()).isEqualTo(before);reconcile();assertThat(jdbc.sql("SELECT state FROM cinenest_booking.reservation_hold").query(String.class).single()).isEqualTo("INVALIDATED");assertThat(calendarItem(calendar(a,calendarDate(),180,4),600).get("available")).isEqualTo(true);
+    }
+    @Test void calendarConfirmedAndMaintenanceAndBufferAdjacencyPreserved()throws Exception{
+        var a=signedIn("customer-a");held(a,request(a,local()));jdbc.sql("UPDATE cinenest_booking.inventory_block SET kind='CONFIRMED'").update();expire(Map.of("holdId",jdbc.sql("SELECT hold_id FROM cinenest_booking.reservation_hold").query(UUID.class).single()));var before=inventoryRows();var d=calendar(a,calendarDate(),180,4);assertThat(calendarItem(d,600).get("available")).isEqualTo(false);assertThat(calendarItem(d,780).get("available")).isEqualTo(false);assertThat(calendarItem(d,787).get("available")).isEqualTo(true);assertThat(inventoryRows()).isEqualTo(before);
+        jdbc.sql("UPDATE cinenest_booking.inventory_block SET kind='MAINTENANCE'").update();assertThat(calendarItem(calendar(a,calendarDate(),180,4),600).get("reasons").toString()).contains("MAINTENANCE_BLOCK");
+    }
+    @Test void calendarParameterEligibilityAndDiscoveryFailuresAreSanitized()throws Exception{
+        var a=signedIn("customer-a");String path=calendarPath(calendarDate(),180,4);assertThat(new Browser().get(path).statusCode()).isEqualTo(401);
+        for(String q:new String[]{path+"&date="+calendarDate(),path+"&ownerId=secret",path.replace("durationMinutes=180","durationMinutes=0"),path.replace("guests=4","guests=6"),path.replace(calendarDate(),"2027-02-30"),path.replace("&guests=4",""),path.replace(RID.toString(),"bad")})assertThat(a.get(q).statusCode()).as(q).isEqualTo(400);
+        jdbc.sql("UPDATE cinenest_rooms.room SET enabled=false").update();assertThat(a.get(path).statusCode()).isEqualTo(404);jdbc.sql("UPDATE cinenest_rooms.room SET enabled=true").update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();assertThat(a.get(path).statusCode()).isEqualTo(403);
+    }
+    @Test void calendarMinimumClosingMidnightAndKnownFuturePolicyApply()throws Exception{
+        var a=signedIn("customer-a");var d=calendar(a,calendarDate(),180,4);assertThat(calendarItem(d,1261).get("available")).isEqualTo(false);assertThat(calendarItem(d,1260).get("reasons").toString()).contains("OUTSIDE_OPERATING_HOURS");assertThat(calendarItem(calendar(a,calendarDate(),179,4),600).get("reasons").toString()).contains("MINIMUM_DURATION");
+        jdbc.sql("UPDATE cinenest_rooms.venue SET post_close_cleaning_approved=true,operational_approval_reference='SYNTHETIC approval'").update();assertThat(calendarItem(calendar(a,calendarDate(),180,4),1260).get("available")).isEqualTo(true);
+        jdbc.sql("INSERT INTO cinenest_rooms.minimum_session_policy VALUES(:id,:v,2,240,CAST(:time AS timestamptz),'SYNTHETIC future',:a,clock_timestamp())").param("id",UUID.randomUUID()).param("v",VA).param("time",java.time.LocalDateTime.parse(local()).atZone(java.time.ZoneId.of("Asia/Colombo")).toInstant().plusSeconds(3600).toString()).param("a",STAFF).update();assertThat(calendarItem(calendar(a,calendarDate(),180,4),600).get("available")).isEqualTo(false);
+    }
+    @Test void calendarDstGapFoldAndTimezoneVersionRemainAuthoritative()throws Exception{
+        var a=signedIn("customer-a");jdbc.sql("UPDATE cinenest_rooms.venue SET timezone='America/New_York',version=version+1").update();
+        var gap=calendar(a,"2027-03-14",180,4);assertThat(calendarItem(gap,150).get("available")).isNull();assertThat(calendarItem(gap,150).get("sessionStart")).isNull();assertThat(calendarItem(gap,150).get("reasons").toString()).contains("INVALID_LOCAL_TIME");
+        var fold=calendar(a,"2027-11-07",180,4);assertThat(calendarItem(fold,90).get("available")).isNull();assertThat(fold.get("timezone")).isEqualTo("America/New_York");assertThat((java.util.List<?>)fold.get("items")).hasSize(1440);
+    }
+    @Test void calendarResourceLimitAndQueryPlanFailClosedWithoutTruncation()throws Exception{
+        var a=signedIn("customer-a");String day=calendarDate();jdbc.sql("INSERT INTO cinenest_booking.inventory_block SELECT gen_random_uuid(),:v,:r,CAST(:start AS timestamptz)+n*INTERVAL '1 second',CAST(:start AS timestamptz)+(n+1)*INTERVAL '1 second',0,CAST(:start AS timestamptz)+(n+1)*INTERVAL '1 second',true,'MAINTENANCE',0 FROM generate_series(0,1000)n").param("v",VA).param("r",RID).param("start",java.time.LocalDate.parse(day).atStartOfDay(java.time.ZoneId.of("Asia/Colombo")).toInstant().toString()).update();
+        assertThat(a.get(calendarPath(day,180,4)).statusCode()).isEqualTo(503);
+        var plan=jdbc.sql("EXPLAIN SELECT block_id FROM cinenest_booking.inventory_block WHERE room_id=:r AND blocking AND tstzrange(session_start,blocked_until,'[)') && tstzrange(CAST(:s AS timestamptz),CAST(:e AS timestamptz),'[)') LIMIT 1001").param("r",RID).param("s",day+"T00:00:00Z").param("e",day+"T23:59:00Z").query(String.class).list();assertThat(String.join(" ",plan)).contains("Limit");
+        assertThat(jdbc.sql("SELECT count(*) FROM pg_indexes WHERE schemaname='cinenest_booking' AND indexdef LIKE '%USING gist%'").query(Integer.class).single()).isPositive();
+    }
+    @Test void calendarSnapshotConcurrentCreateAndReleaseAndConstantQueryBudget()throws Exception{
+        var a=signedIn("customer-a");var req=request(a,local());var created=new java.util.concurrent.atomic.AtomicReference<Map<String,Object>>();var spy=org.mockito.Mockito.spy(jdbc);
+        byte[] old=CalendarSnapshotSupport.read(context,spy,transactions,A,RID,java.time.LocalDate.parse(calendarDate()),()->{try{created.set(held(a,req));}catch(Exception e){throw new RuntimeException(e);}});
+        assertThat(calendarItem(JSONObjectUtils.parse(new String(old,java.nio.charset.StandardCharsets.UTF_8)),600).get("available")).isEqualTo(true);assertThat(calendarItem(calendar(a,calendarDate(),180,4),600).get("available")).isEqualTo(false);org.mockito.Mockito.verify(spy,org.mockito.Mockito.times(2)).sql(org.mockito.ArgumentMatchers.anyString());
+        var h=created.get();byte[] beforeRelease=CalendarSnapshotSupport.read(context,jdbc,transactions,A,RID,java.time.LocalDate.parse(calendarDate()),()->{try{var body=Map.of("expectedRevision",h.get("revision"),"idempotencyKey",UUID.randomUUID().toString());assertThat(write(a,"POST",holdPath(h)+"/release",JSONObjectUtils.toJSONString(body)).statusCode()).isEqualTo(200);}catch(Exception e){throw new RuntimeException(e);}});
+        assertThat(calendarItem(JSONObjectUtils.parse(new String(beforeRelease,java.nio.charset.StandardCharsets.UTF_8)),600).get("available")).isEqualTo(false);assertThat(calendarItem(calendar(a,calendarDate(),180,4),600).get("available")).isEqualTo(true);
+    }
+    @Test void calendarRechecksEligibilityOutsideItsReadSnapshot()throws Exception{
+        signedIn("customer-a");var fresh=new org.springframework.transaction.support.TransactionTemplate(transactions);fresh.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        assertThatThrownBy(()->CalendarSnapshotSupport.read(context,jdbc,transactions,A,RID,java.time.LocalDate.parse(calendarDate()),()->fresh.executeWithoutResult(t->jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update()))).hasMessageContaining("Access denied");
+    }
     @Test void intervalExpiryPolicyAndReadPrivacyAreAuthoritative()throws Exception {
         var b=signedIn("customer-a");var req=request(b,local());var h=held(b,req);
         assertThat(h).containsEntry("state","ACTIVE").containsEntry("bufferMinutes",7L).containsEntry("evidenceLevel","INVENTORY_ONLY");

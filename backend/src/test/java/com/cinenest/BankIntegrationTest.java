@@ -777,6 +777,19 @@ class BankIntegrationTest {
       return new HashMap<>(Map.of("targetHoldId",h.get("holdId"),"quoteId",q.get("quoteId"),"quoteRevision",q.get("revision"),"quoteHash",q.get("contentHash"),"expectedBookingRevision",1,"expectedAmendmentRevision",0,"commandKey",UUID.randomUUID().toString(),"reason","SYNTHETIC reschedule test"));
     }
     Map<String,Object> amendmentCommand(Map<String,Object> a){return new HashMap<>(Map.of("expectedBookingRevision",1,"expectedAmendmentRevision",a.get("revision"),"proposalHash",a.get("proposalHash"),"commandKey",UUID.randomUUID().toString(),"reason","SYNTHETIC exact proposal acceptance"));}
+    @SuppressWarnings("unchecked") Map<String,Object> calendarMinute(Map<String,Object> d,int minute){return (Map<String,Object>)((java.util.List<?>)d.get("items")).get(minute);}
+    @Test void calendarSnapshotSeesAtomicAmendmentReplacementAndConsumedBookingBlocks()throws Exception{
+      var c=accessCase();var a=proposedAmendment(c);var date=scheduled(c).atZone(java.time.ZoneId.of("Asia/Colombo")).toLocalDate();
+      byte[] bytes=CalendarSnapshotSupport.read(context,jdbc,transactions,A,RID,date,()->{try{json(write(c.customer(),"POST",amendments(c)+"/"+a.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(a))));}catch(Exception e){throw new RuntimeException(e);}});
+      var before=JSONObjectUtils.parse(new String(bytes,java.nio.charset.StandardCharsets.UTF_8));assertThat(calendarMinute(before,600).get("reasons").toString()).contains("UNAVAILABLE");assertThat(calendarMinute(before,840).get("reasons").toString()).contains("TEMPORARILY_HELD");
+      var after=json(c.customer().get("/api/rooms/"+RID+"/availability/calendar?date="+date+"&durationMinutes=180&guests=4"));assertThat(calendarMinute(after,600).get("available")).isEqualTo(true);assertThat(calendarMinute(after,840).get("reasons").toString()).contains("UNAVAILABLE");
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.reservation_hold WHERE state='CONSUMED'").query(Integer.class).single()).isEqualTo(2);
+    }
+    @Test void calendarSnapshotSeesConfirmationKindTransitionCoherently()throws Exception{
+      financeGrants();var customer=signedIn("customer-a");var staff=signedIn("staff");var allocator=signedIn("customer-b");var r=bank(customer);var credit=credit(staff,"SYNTHETIC-BANK-50000");r=match(allocator,r,credit);final var request=r;var date=java.time.LocalDateTime.parse(local()).toLocalDate();
+      byte[] bytes=CalendarSnapshotSupport.read(context,jdbc,transactions,A,RID,date,()->{try{json(allocateCredit(allocator,request,credit,Long.parseLong(request.get("amountMinor").toString())));}catch(Exception e){throw new RuntimeException(e);}});
+      assertThat(calendarMinute(JSONObjectUtils.parse(new String(bytes,java.nio.charset.StandardCharsets.UTF_8)),600).get("reasons").toString()).contains("TEMPORARILY_HELD");var after=json(customer.get("/api/rooms/"+RID+"/availability/calendar?date="+date+"&durationMinutes=180&guests=4"));assertThat(calendarMinute(after,600).get("reasons").toString()).contains("UNAVAILABLE");
+    }
     @Test void amendmentCommitsOnlySecondRevisionAndAtomicallyReplacesInventory()throws Exception{
       var c=accessCase();var body=amendmentBody(c);var a=json(write(c.customer(),"POST",amendments(c),JSONObjectUtils.toJSONString(body)));
       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_block WHERE blocking").query(Integer.class).single()).isEqualTo(2);

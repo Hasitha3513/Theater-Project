@@ -134,4 +134,8 @@ class FoundationArchitectureTest {
   String query=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/rooms/internal/StaffBookingOperationsQuery.java"));assertThat(query).doesNotContain(".command(",".create(",".update(",".evidence(",".audit(",".lock(");
  }
 
+ @org.junit.jupiter.api.Test void calendarIsBookingOwnedReadOnlyAndDoesNotUseForeignSqlOrCommands()throws Exception{
+  String source=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/booking/internal/InventoryCalendar.java"));
+  org.assertj.core.api.Assertions.assertThat(source).contains("setReadOnly(true)","ISOLATION_REPEATABLE_READ","rooms.observe","LIMIT 1001").doesNotContain("reconcileLocked","cinenest_rooms.","cinenest_payments.","cinenest_iot.","cinenest_notifications.","FOR UPDATE","INSERT ","UPDATE ","DELETE ");
+ }
 }

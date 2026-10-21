@@ -654,6 +654,22 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN."
+      },
+      "calendarAvailabilityEvidence": {
+        "changeSetId": "CN-AVAILABILITY-CALENDAR-BE-001",
+        "scope": "One-room one-local-day read-only calendar with conservative PENDING_RECONCILIATION;no customer calendar UI",
+        "evidencePath": "PROGRESS.md#availability-calendar-backend",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java",
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendarController.java",
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "frontend/lib/calendar-backend.ts",
+          "frontend/tests/calendar.test.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
       }
     },
     {
@@ -3197,6 +3213,22 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Local synthetic HTTP upstream/browser is not Spring/PostgreSQL E2E;backend authorization separately tested with real isolated PostgreSQL"
+      },
+      "calendarAvailabilityEvidence": {
+        "changeSetId": "CN-AVAILABILITY-CALENDAR-BE-001",
+        "scope": "One-room one-local-day read-only calendar with conservative PENDING_RECONCILIATION;no customer calendar UI",
+        "evidencePath": "PROGRESS.md#availability-calendar-backend",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java",
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendarController.java",
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "frontend/lib/calendar-backend.ts",
+          "frontend/tests/calendar.test.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
       }
     },
     {
@@ -3525,6 +3557,22 @@
           "frontend/tests/inventory-browser.mjs"
         ],
         "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      },
+      "calendarAvailabilityEvidence": {
+        "changeSetId": "CN-AVAILABILITY-CALENDAR-BE-001",
+        "scope": "One-room one-local-day read-only calendar with conservative PENDING_RECONCILIATION;no customer calendar UI",
+        "evidencePath": "PROGRESS.md#availability-calendar-backend",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java",
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendarController.java",
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "frontend/lib/calendar-backend.ts",
+          "frontend/tests/calendar.test.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
       }
     },
     {
@@ -3595,6 +3643,22 @@
           "frontend/tests/inventory-browser.mjs"
         ],
         "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      },
+      "calendarAvailabilityEvidence": {
+        "changeSetId": "CN-AVAILABILITY-CALENDAR-BE-001",
+        "scope": "One-room one-local-day read-only calendar with conservative PENDING_RECONCILIATION;no customer calendar UI",
+        "evidencePath": "PROGRESS.md#availability-calendar-backend",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java",
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendarController.java",
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "frontend/lib/calendar-backend.ts",
+          "frontend/tests/calendar.test.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
       }
     },
     {
@@ -3840,6 +3904,22 @@
           "frontend/tests/inventory-browser.mjs"
         ],
         "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      },
+      "calendarAvailabilityEvidence": {
+        "changeSetId": "CN-AVAILABILITY-CALENDAR-BE-001",
+        "scope": "One-room one-local-day read-only calendar with conservative PENDING_RECONCILIATION;no customer calendar UI",
+        "evidencePath": "PROGRESS.md#availability-calendar-backend",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java",
+          "backend/src/main/java/com/cinenest/booking/internal/InventoryCalendarController.java",
+          "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "frontend/lib/calendar-backend.ts",
+          "frontend/tests/calendar.test.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Backend/proxy only;calendar UI,full customer/physical/commercial acceptance remain outstanding"
       }
     },
     {
