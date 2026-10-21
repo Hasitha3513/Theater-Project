@@ -6918,5 +6918,292 @@
       "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
     },
     "acceptance": "NO_FULL_CAMPAIGN_REQUIREMENT_PHASE_OR_DEMONSTRATION_ACCEPTANCE"
+  },
+  "e2eRejectedVerification": {
+    "taskId": "CN-E2E-REJECTED-VERIFICATION-001",
+    "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+    "evidencePath": "PROGRESS.md#e2e-rejected-verification",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN.",
+    "baseline": "57e7383252b5c980954e0196f816b07e02adff59",
+    "ownerAuthority": "Explicit CI-gated CN-E2E-REJECTED-VERIFICATION-001 execution/narrow remediation only;uncertain upload excluded",
+    "prerequisiteCi": {
+      "runId": 39552646449,
+      "sha": "57e7383252b5c980954e0196f816b07e02adff59",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "requiredSteps": "ALL_SUCCESS"
+    },
+    "toolchain": {
+      "node": "24.22.0",
+      "npm": "11.19.1",
+      "bin": "$HOME/.local/toolchains/node-v24.22.0-linux-x64/bin",
+      "admission": "TOOLS_PRESENT_AND_EXECUTION_LIMITS_VERIFIED",
+      "integrity": "Owned non-group/world-writable resolved Node/npm targets;local SHA256 receipts,not upstream signature verification",
+      "nodeSha256": "67ca5783febb8bf85736c79fcdd92c8d6d465a0eb2a082672bcdfa76a506751c"
+    },
+    "contract": {
+      "lifecycle": "Owned accepted active BANK quote,explicit current synthetic consent,allocated/quarantined image,simulated scan to READY/REVIEW_REQUIRED,explicit staff DECIDE REJECTED/CORRECTION_REQUIRED",
+      "authorization": "Current verification.review and verification.evidence.read at stored venue;no self-review;exact request revision/command key;private evidence behind backend checks",
+      "rejection": "Persisted REJECTED with one attributable rejection and zero VERIFIED decisions;retained READY evidence does not confer approval",
+      "banking": "Protected readiness200 false/VERIFICATION_REQUIRED/REQUIRED;direct bank request409;zero request or booking for target quote",
+      "recovery": "Existing correction generation displayed,disabled after explicit consent uncheck;not submitted;no automatic approval or replacement"
+    },
+    "rootCause": "TEST HARNESS resource guard treated a same-origin in-memory blob preview as external because blob URL hostname is empty;event callback assertion terminated browser before result receipt",
+    "correction": "Test-only safeLoopbackResource admits opaque UUID blob owned by exact frontend origin plus existing loopback HTTP(S);rejects foreign blob,external host,credentials,unsupported schemes. Business navigation validator/backend permissions unchanged. Focused old predicate7 PASS/1 FAIL;corrected8 PASS. Safe abnormal-process metadata records static error classes and source locations only.",
+    "attempts": {
+      "initial": {
+        "run": "cinenest-e2e-7t7joxws",
+        "status": "ABORTED_NO_CAMPAIGN_RESULT",
+        "counts": null,
+        "results": null,
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-7t7joxws"
+        },
+        "cleanupVerified": true,
+        "tracePath": null,
+        "traceSha256": null,
+        "safeProcessFailure": null,
+        "rejectionObservation": null
+      },
+      "diagnostic": {
+        "run": "cinenest-e2e-0d356qpz",
+        "status": "ABORTED_NO_CAMPAIGN_RESULT",
+        "counts": null,
+        "results": null,
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-0d356qpz"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-0d356qpz/observations.json",
+        "traceSha256": "2fdb2b72ff3ef102e516f9b42cd76006048af00e323e0c61ebcd1bb0de3011d9",
+        "safeProcessFailure": {
+          "operations": [],
+          "errorClasses": [
+            "AssertionError"
+          ],
+          "browserExitedBeforeResult": true,
+          "sourceLocations": [
+            "1009:12"
+          ]
+        },
+        "rejectionObservation": null
+      },
+      "uncorrectedRepeat": {
+        "run": "cinenest-e2e-b2a6qv6e",
+        "status": "ABORTED_NO_CAMPAIGN_RESULT",
+        "counts": null,
+        "results": null,
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-b2a6qv6e"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-b2a6qv6e/observations.json",
+        "traceSha256": "2fdb2b72ff3ef102e516f9b42cd76006048af00e323e0c61ebcd1bb0de3011d9",
+        "safeProcessFailure": {
+          "operations": [],
+          "errorClasses": [
+            "AssertionError"
+          ],
+          "browserExitedBeforeResult": true,
+          "sourceLocations": [
+            "1009:12"
+          ]
+        },
+        "rejectionObservation": null
+      },
+      "final": {
+        "run": "cinenest-e2e-p5m0wu6o",
+        "status": "COMPLETED",
+        "counts": {
+          "PASS": 23,
+          "FAIL": 0,
+          "NOT_RUN": 1
+        },
+        "results": [
+          {
+            "id": "startup",
+            "status": "PASS"
+          },
+          {
+            "id": "customer-discovery-auth",
+            "status": "PASS"
+          },
+          {
+            "id": "hold-quote-accept",
+            "status": "PASS"
+          },
+          {
+            "id": "verification-explicit-consent",
+            "status": "PASS"
+          },
+          {
+            "id": "E-pending-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "independent-verification-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "explicit-bank-request",
+            "status": "PASS"
+          },
+          {
+            "id": "H-missing-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "I-invalid-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "J-cross-origin",
+            "status": "PASS"
+          },
+          {
+            "id": "L-idempotent-replay",
+            "status": "PASS"
+          },
+          {
+            "id": "M-changed-body-key",
+            "status": "PASS"
+          },
+          {
+            "id": "K-stale-readiness",
+            "status": "PASS"
+          },
+          {
+            "id": "claim-receipt-explicit",
+            "status": "PASS"
+          },
+          {
+            "id": "simulated-confirmation-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "C-wrong-owner",
+            "status": "PASS"
+          },
+          {
+            "id": "D-wrong-venue-grant",
+            "status": "PASS"
+          },
+          {
+            "id": "O-malformed-reference",
+            "status": "PASS"
+          },
+          {
+            "id": "P-safe-URLs",
+            "status": "PASS"
+          },
+          {
+            "id": "A-expired-quote",
+            "status": "PASS"
+          },
+          {
+            "id": "B-invalid-expired-hold",
+            "status": "PASS"
+          },
+          {
+            "id": "F-rejected-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "G-expired-session",
+            "status": "PASS"
+          },
+          {
+            "id": "N-uncertain-upload",
+            "status": "NOT_RUN",
+            "reason": "No safely qualified connection-failure transport; no fabricated responses"
+          }
+        ],
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-p5m0wu6o"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-p5m0wu6o/observations.json",
+        "traceSha256": "24085fae1c506f495d1f3ec9e16ecef76f1b7df1e145b123905b019d74ce39ef",
+        "safeProcessFailure": null,
+        "rejectionObservation": {
+          "protectedStateUnchanged": true,
+          "rejectedDecisions": 1,
+          "controlOk": true,
+          "state": "REJECTED",
+          "bankRequests": 0,
+          "bookings": 0,
+          "verifiedDecisions": 0,
+          "bankEligible": false,
+          "statuses": {
+            "unprivilegedDecision": 403,
+            "customerEvidence": 403,
+            "wrongOwnerRead": 404,
+            "wrongVenueDecision": 403,
+            "privatePreview": 200,
+            "explicitDecision": 200,
+            "bankBypass": 409
+          },
+          "customerState": "REJECTED",
+          "recovery": "CORRECTION_DISPLAYED_FRESH_CONSENT_REQUIRED_NOT_SUBMITTED"
+        }
+      }
+    },
+    "currentCounts": {
+      "PASS": 23,
+      "FAIL": 0,
+      "NOT_RUN": 1
+    },
+    "targetScenario": "F-rejected-verification PASS",
+    "notRun": [
+      "N-uncertain-upload"
+    ],
+    "checks": {
+      "inertHarnessAdmission": 10,
+      "ciClassifier": 8,
+      "focusedResourceRegression": 8,
+      "realE2e": "23 PASS / 0 FAIL / 1 NOT_RUN",
+      "backend": 513,
+      "frontend": 249,
+      "typecheckLintBuild": "PASS",
+      "knowledge": "PASS",
+      "isolatedExecutionTraceabilityDependency": "PASS",
+      "governanceNegativeControls": 12,
+      "whitespace": "PASS",
+      "exactSourceCi": "PENDING_PUBLICATION",
+      "bankIntegration": 251,
+      "architecture": 17,
+      "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
+    },
+    "acceptance": "NO_FULL_CAMPAIGN_REQUIREMENT_PHASE_OR_DEMONSTRATION_ACCEPTANCE"
   }
 }

@@ -1,6 +1,9 @@
 // Opt-in REAL backend journey. No page.route, route.fulfill, session injection or business stubs.
 import assert from "node:assert/strict";
-import { safeCustomerNavigation } from "./safe-navigation.mjs";
+import {
+	safeCustomerNavigation,
+	safeLoopbackResource,
+} from "./safe-navigation.mjs";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { createServer } from "node:net";
@@ -29,6 +32,7 @@ const observations = [];
 let financeObservation,
 	expiryObservation,
 	invalidHoldObservation,
+	rejectionObservation,
 	assertionFailure,
 	activePage;
 const navigations = [];
@@ -996,14 +1000,285 @@ try {
 			await other.close();
 		}
 	});
+	await scenario("F-rejected-verification", async () => {
+		const customer = await browser.newContext(),
+			reviewer = await browser.newContext();
+		const p = await customer.newPage(),
+			staffPage = await reviewer.newPage();
+		const statuses = {};
+		rejectionObservation = { statuses };
+		for (const context of [customer, reviewer]) {
+			context.on("request", (r) =>
+				assert.ok(
+					safeLoopbackResource(r.url(), base),
+					"external or non-owned preview resource prohibited",
+				),
+			);
+			context.on("response", (r) => {
+				const u = new URL(r.url());
+				if (u.pathname.startsWith("/api/"))
+					observations.push({
+						stage: "F-rejected-verification",
+						method: r.request().method(),
+						path: u.pathname.replace(
+							/[0-9a-f]{8}-[0-9a-f-]{27,}/gi,
+							"{reference}",
+						),
+						status: r.status(),
+					});
+			});
+		}
+		try {
+			await login(p, "customer-b");
+			await p.goto(base + "/rooms/" + config.room);
+			await p
+				.getByLabel("Customer start in venue local time")
+				.fill(config.local.replace(/T\d\d:\d\d/, "T14:00"));
+			await p.getByLabel("Customer duration (minutes)").fill("180");
+			await p.getByLabel("Guests", { exact: true }).fill("4");
+			await p
+				.getByRole("button", { name: "Check inventory (no hold)", exact: true })
+				.click();
+			await clickResponse(p, "Create temporary inventory hold", "/api/holds");
+			await p
+				.getByRole("button", {
+					name: "Load applicable synthetic package choices",
+					exact: true,
+				})
+				.click();
+			await p.getByLabel("Published package").selectOption({ index: 1 });
+			await p.getByLabel("Intended method (no payment)").selectOption("BANK");
+			const q = await clickResponse(
+				p,
+				"Calculate synthetic quotation",
+				"/api/quotes",
+			);
+			await p
+				.getByLabel(
+					"I reviewed this exact synthetic revision and all three disclosures",
+				)
+				.check();
+			await clickResponse(
+				p,
+				"Accept synthetic revision only",
+				`/api/quotes/${q.quoteId}/accept`,
+			);
+			await p
+				.getByRole("link", { name: "Continue to Verification", exact: true })
+				.click();
+			await p.waitForURL(base + "/verification?quote=" + q.quoteId);
+			const consent = p.getByLabel(
+				"I consent to this versioned synthetic test processing; no real documents",
+			);
+			assert.equal(await consent.isChecked(), false);
+			await p
+				.getByLabel("Operator-provided synthetic policy version")
+				.fill("SYNTHETIC-V1");
+			await consent.check();
+			const r = await clickResponse(
+				p,
+				"Start synthetic request",
+				"/api/verification/requests",
+			);
+			await p
+				.getByLabel("Approved synthetic image only (JPEG/PNG, 5 MiB, 20 MP)")
+				.setInputFiles(`${run}/identity.png`);
+			const complete = p.waitForResponse(
+				(r) =>
+					/\/api\/verification\/uploads\/[^/]+\/complete$/.test(
+						new URL(r.url()).pathname,
+					) && r.request().method() === "POST",
+			);
+			await p
+				.getByRole("button", {
+					name: "Upload and request simulated scan",
+					exact: true,
+				})
+				.click();
+			assert.equal((await complete).status(), 200);
+			await p
+				.getByRole("button", {
+					name: "Upload and request simulated scan",
+					exact: true,
+				})
+				.waitFor();
+			assert.equal(
+				(await control({ op: "prepare-rejection-review", id: r.id })).state,
+				"REVIEW_REQUIRED",
+			);
+			const pending = await json(p, `/api/verification/requests/${r.id}`);
+			assert.equal(pending.state, "REVIEW_REQUIRED");
+			assert.equal(pending.history.length, 0);
+			assert.equal(pending.evidence[0].state, "READY");
+			const path = `/api/admin/venues/${config.venue}/verification/requests/${r.id}`;
+			const decision = {
+				revision: pending.revision,
+				verdict: "REJECTED",
+				reason: "CORRECTION_REQUIRED",
+				commandKey: crypto.randomUUID(),
+			};
+			statuses.unprivilegedDecision = (
+				await api(p, path + "/decisions", "POST", decision)
+			).status;
+			assert.equal(statuses.unprivilegedDecision, 403);
+			statuses.customerEvidence = (
+				await api(p, path + "/evidence/" + pending.evidence[0].id)
+			).status;
+			assert.equal(statuses.customerEvidence, 403);
+			statuses.wrongOwnerRead = (
+				await api(page, `/api/verification/requests/${r.id}`)
+			).status;
+			assert.equal(statuses.wrongOwnerRead, 404);
+			await login(staffPage, "staff");
+			statuses.wrongVenueDecision = (
+				await api(
+					staffPage,
+					`/api/admin/venues/${config.otherVenue}/verification/requests/${r.id}/decisions`,
+					"POST",
+					{ ...decision, commandKey: crypto.randomUUID() },
+				)
+			).status;
+			assert.equal(statuses.wrongVenueDecision, 403);
+			await staffPage.goto(base + "/admin/verification?venue=" + config.venue);
+			await staffPage.getByLabel("Existing request ID").fill(r.id);
+			await clickResponse(
+				staffPage,
+				"Refresh current request and history",
+				path,
+				"GET",
+			);
+			const record = staffPage.getByRole("button", {
+				name: "Record exact-revision manual decision",
+				exact: true,
+			});
+			assert.equal(await record.isDisabled(), true);
+			assert.equal(
+				(await json(p, `/api/verification/requests/${r.id}`)).history.length,
+				0,
+			);
+			const preview = staffPage.waitForResponse(
+				(v) =>
+					new URL(v.url()).pathname ===
+					path + "/evidence/" + pending.evidence[0].id,
+			);
+			await staffPage
+				.getByRole("button", { name: "Open private NIC preview", exact: true })
+				.click();
+			const image = await preview;
+			assert.equal(image.status(), 200);
+			assert.match(image.headers()["content-type"], /image\/png/);
+			assert.equal(image.headers()["cache-control"], "no-store");
+			await staffPage
+				.getByRole("img", {
+					name: "Private explicitly synthetic fixture for current manual review",
+					exact: true,
+				})
+				.waitFor({ state: "visible" });
+			const previewSource = new URL(
+				await staffPage
+					.getByRole("img", {
+						name: "Private explicitly synthetic fixture for current manual review",
+						exact: true,
+					})
+					.getAttribute("src"),
+			);
+			assert.equal(previewSource.protocol, "blob:");
+			assert.equal(previewSource.origin, base);
+			statuses.privatePreview = 200;
+			await staffPage
+				.getByRole("button", { name: "Close private preview", exact: true })
+				.click();
+			await staffPage
+				.getByLabel("Manual digital test decision")
+				.selectOption("REJECTED");
+			await staffPage
+				.getByLabel("Attributable decision reason")
+				.selectOption("CORRECTION_REQUIRED");
+			const reviewed = staffPage.getByLabel(
+				"I manually reviewed the current synthetic evidence, booker match and 18+ policy; this does not approve admission",
+			);
+			assert.equal(await reviewed.isChecked(), false);
+			await reviewed.check();
+			const rejected = await clickResponse(
+				staffPage,
+				"Record exact-revision manual decision",
+				path + "/decisions",
+			);
+			statuses.explicitDecision = 200;
+			assert.equal(rejected.state, "REJECTED");
+			assert.equal(rejected.history.length, 1);
+			assert.equal(rejected.history[0].verdict, "REJECTED");
+			await p.getByLabel("Existing request ID").fill(r.id);
+			await clickResponse(
+				p,
+				"Refresh current request and history",
+				`/api/verification/requests/${r.id}`,
+				"GET",
+			);
+			await p
+				.getByText("Server status: REJECTED", { exact: true })
+				.waitFor({ state: "visible" });
+			await p
+				.getByText(
+					"The server reports a rejected test decision. Review the recorded decision history. A correction needs the current quotation, policy and fresh consent.",
+					{ exact: true },
+				)
+				.waitFor({ state: "visible" });
+			const readiness = await json(
+				p,
+				`/api/bank/requests/readiness?quote=${q.quoteId}`,
+			);
+			assert.equal(readiness.eligible, false);
+			assert.equal(readiness.reason, "VERIFICATION_REQUIRED");
+			assert.equal(readiness.verificationReadiness, "REQUIRED");
+			statuses.bankBypass = (
+				await api(p, "/api/bank/requests", "POST", {
+					quoteId: q.quoteId,
+					quoteRevision: q.revision,
+					contentHash: q.contentHash,
+					commandKey: crypto.randomUUID(),
+				})
+			).status;
+			assert.equal(statuses.bankBypass, 409);
+			assert.equal(
+				await p
+					.getByRole("link", { name: "Continue to Bank Request", exact: true })
+					.count(),
+				0,
+			);
+			await consent.uncheck();
+			assert.equal(
+				await p
+					.getByRole("button", {
+						name: "Create correction generation with current consent",
+						exact: true,
+					})
+					.isDisabled(),
+				true,
+			);
+			rejectionObservation = await control({ op: "inspect-rejection" });
+			assert.equal(rejectionObservation.state, "REJECTED");
+			assert.equal(rejectionObservation.bankEligible, false);
+			assert.equal(rejectionObservation.protectedStateUnchanged, true);
+			assert.equal(rejectionObservation.bankRequests, 0);
+			assert.equal(rejectionObservation.bookings, 0);
+			assert.equal(safeCustomerNavigation(p.url(), base), true);
+			assert.ok(!p.url().includes(q.contentHash));
+			rejectionObservation = {
+				...rejectionObservation,
+				statuses,
+				customerState: "REJECTED",
+				recovery: "CORRECTION_DISPLAYED_FRESH_CONSENT_REQUIRED_NOT_SUBMITTED",
+			};
+		} finally {
+			await customer.close();
+			await reviewer.close();
+		}
+	});
 	await scenario("G-expired-session", async () => {
 		await control({ op: "expire-session" });
 		assert.equal((await api(page, "/api/accounts/me")).status, 401);
 	});
-	notRun(
-		"F-rejected-verification",
-		"Independent case/reset needed; positive review cannot be rewritten",
-	);
 	notRun(
 		"N-uncertain-upload",
 		"No safely qualified connection-failure transport; no fabricated responses",
@@ -1030,6 +1305,7 @@ try {
 		financeObservation,
 		expiryObservation,
 		invalidHoldObservation,
+		rejectionObservation,
 	});
 	process.exitCode = 1;
 } finally {
@@ -1047,6 +1323,7 @@ try {
 			financeObservation,
 			expiryObservation,
 			invalidHoldObservation,
+			rejectionObservation,
 			observations,
 			navigations,
 			finalPath: activePage

@@ -33,3 +33,23 @@ export function safeCustomerNavigation(value, origin) {
 		return false;
 	}
 }
+
+// Test-only resource guard; this does not authorize business navigation or evidence reads.
+export function safeLoopbackResource(value, frontendOrigin) {
+	try {
+		const url = new URL(value);
+		if (url.username || url.password) return false;
+		if (url.protocol === "blob:")
+			return (
+				url.origin === frontendOrigin &&
+				url.pathname.startsWith(frontendOrigin + "/") &&
+				reference.test(url.pathname.slice(frontendOrigin.length + 1))
+			);
+		return (
+			["http:", "https:"].includes(url.protocol) &&
+			["127.0.0.1", "localhost"].includes(url.hostname)
+		);
+	} catch {
+		return false;
+	}
+}

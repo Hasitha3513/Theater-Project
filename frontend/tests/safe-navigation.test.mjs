@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { safeCustomerNavigation } from "./safe-navigation.mjs";
+import {
+	safeCustomerNavigation,
+	safeLoopbackResource,
+} from "./safe-navigation.mjs";
 const origin = "http://127.0.0.1:3000";
 const id = "11111111-1111-4111-8111-111111111111";
 test("existing evidence navigation carries only an opaque request reference", () => {
@@ -74,4 +77,24 @@ test("external redirects, URL credentials, fragments and unknown paths are rejec
 		"http://[",
 	])
 		assert.equal(safeCustomerNavigation(path, origin), false);
+});
+
+test("private preview permits only same-frontend opaque blob resources, preserving network restrictions", () => {
+	assert.equal(safeLoopbackResource(`blob:${origin}/${id}`, origin), true);
+	for (const value of [
+		`${origin}/api/accounts/me`,
+		`http://localhost:8080/api/session`,
+	])
+		assert.equal(safeLoopbackResource(value, origin), true);
+	for (const value of [
+		`blob:https://example.test/${id}`,
+		`blob:http://127.0.0.1:9999/${id}`,
+		`blob:${origin}/not-a-reference`,
+		"data:image/png;base64,synthetic",
+		"file:///tmp/synthetic",
+		"https://example.test/api",
+		"http://user:pass@localhost/api",
+		"malformed",
+	])
+		assert.equal(safeLoopbackResource(value, origin), false);
 });

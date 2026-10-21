@@ -557,6 +557,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer owned history/detail/purchased terms and existing roster/action presentation only;backend authority,protected transports,CSRF,sessions,capacity,explicit commands and immutable terms unchanged."
+      },
+      "e2eRejectedVerificationEvidence": {
+        "taskId": "CN-E2E-REJECTED-VERIFICATION-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-rejected-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN."
       }
     },
     {
@@ -971,6 +979,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
+      },
+      "e2eRejectedVerificationEvidence": {
+        "taskId": "CN-E2E-REJECTED-VERIFICATION-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-rejected-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN."
       }
     },
     {
@@ -1326,6 +1342,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Test-only customer navigation allowlist and scenario isolation;real browser/Next/proxy/Boot/PostgreSQL;20 PASS/0 FAIL/4 NOT_RUN,not full acceptance."
+      },
+      "e2eRejectedVerificationEvidence": {
+        "taskId": "CN-E2E-REJECTED-VERIFICATION-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-rejected-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN."
       }
     },
     {
@@ -1749,6 +1773,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN."
+      },
+      "e2eRejectedVerificationEvidence": {
+        "taskId": "CN-E2E-REJECTED-VERIFICATION-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-rejected-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN."
       }
     },
     {
@@ -2661,6 +2693,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Test-only customer navigation allowlist and scenario isolation;real browser/Next/proxy/Boot/PostgreSQL;20 PASS/0 FAIL/4 NOT_RUN,not full acceptance."
+      },
+      "e2eRejectedVerificationEvidence": {
+        "taskId": "CN-E2E-REJECTED-VERIFICATION-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-rejected-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN."
       }
     },
     {

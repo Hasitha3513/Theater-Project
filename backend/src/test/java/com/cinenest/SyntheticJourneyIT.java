@@ -42,7 +42,8 @@ class SyntheticJourneyIT {
         Process browser=null;
         UUID expiringHold=null,expiringQuote=null;
         Map<String,Object> expiryBaseline=null,invalidHoldBaseline=null;
-        UUID invalidHold=null;
+        UUID invalidHold=null,rejectedRequest=null;
+        Map<String,Object> rejectionBaseline=null;
         try {
             var builder=new ProcessBuilder("node",Path.of("../frontend/tests/synthetic-e2e.mjs").toAbsolutePath().toString());
             builder.redirectErrorStream(true);builder.redirectOutput(run.resolve("private-browser.log").toFile());
@@ -96,6 +97,19 @@ class SyntheticJourneyIT {
                             assertThat(fixture.jdbc.sql("SELECT h.state='EXPIRED' AND h.expires_at<=clock_timestamp() AND NOT b.blocking AND h.owner_id=:a AND b.venue_id=:v AND b.room_id=:r FROM cinenest_booking.reservation_hold h JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id WHERE h.hold_id=:h").param("h",invalidHold).param("a",BankIntegrationTest.B).param("v",BankIntegrationTest.VA).param("r",BankIntegrationTest.RID).query(Boolean.class).single()).isTrue();
                             response.put("serverExpired",true);response.put("holdState","EXPIRED");response.put("scopeAndFinancialStateUnchanged",true);
                             for(String key:List.of("quotes","acceptances","requests","bookings"))response.put(key,actual.get(key));
+                        }else if(op.equals("prepare-rejection-review")){
+                            if(rejectedRequest!=null)throw new IllegalArgumentException("One rejection fixture only");
+                            UUID id=UUID.fromString(body.get("id").toString());fixture.work();fixture.reviewerGrants();
+                            assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_request WHERE request_id=:r AND owner_id=:a AND venue_id=:v AND state='REVIEW_REQUIRED' AND NOT superseded").param("r",id).param("a",BankIntegrationTest.B).param("v",BankIntegrationTest.VA).query(Long.class).single()).isEqualTo(1);
+                            rejectedRequest=id;rejectionBaseline=rejectionState(fixture,id);response.put("state","REVIEW_REQUIRED");
+                        }else if(op.equals("inspect-rejection")){
+                            assertThat(rejectionBaseline).isNotNull();var actual=rejectionState(fixture,rejectedRequest);assertThat(actual.equals(rejectionBaseline)).as("Rejection preserved protected financial/snapshot/evidence state").isTrue();
+                            assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_request WHERE request_id=:r AND owner_id=:a AND venue_id=:v AND state='REJECTED' AND NOT superseded").param("r",rejectedRequest).param("a",BankIntegrationTest.B).param("v",BankIntegrationTest.VA).query(Long.class).single()).isEqualTo(1);
+                            assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_decision WHERE request_id=:r AND actor_id=:a AND verdict='REJECTED' AND reason_code='CORRECTION_REQUIRED'").param("r",rejectedRequest).param("a",BankIntegrationTest.STAFF).query(Long.class).single()).isEqualTo(1);
+                            assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_verification.verification_decision WHERE request_id=:r").param("r",rejectedRequest).query(Long.class).single()).isEqualTo(1);
+                            var quote=fixture.jdbc.sql("SELECT quote_id FROM cinenest_verification.verification_request WHERE request_id=:r").param("r",rejectedRequest).query(UUID.class).single();
+                            assertThat(context.getBean(com.cinenest.verification.BankEligibility.class).observe(BankIntegrationTest.B,quote,BankIntegrationTest.VA)).isFalse();
+                            response.put("state","REJECTED");response.put("rejectedDecisions",1);response.put("verifiedDecisions",0);response.put("bankEligible",false);response.put("bankRequests",actual.get("requests"));response.put("bookings",actual.get("bookings"));response.put("protectedStateUnchanged",true);
                         }else if(op.equals("subject")){
                             String subject=body.get("subject").toString();
                             if(!List.of("customer-a","customer-b","staff").contains(subject))throw new IllegalArgumentException();
@@ -110,6 +124,15 @@ class SyntheticJourneyIT {
                 Thread.sleep(25);
             }
             assertThat(browser.waitFor(1,java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+            if(browser.exitValue()!=0){
+                Path diagnostic=Path.of("../.cache/e2e-booking-diagnosis",run.getFileName().toString(),"observations.json");
+                if(!Files.exists(diagnostic)){
+                    String raw=Files.readString(run.resolve("private-browser.log"));
+                    var locations=new ArrayList<String>();var matcher=java.util.regex.Pattern.compile("synthetic-e2e\\.mjs:(\\d+):(\\d+)").matcher(raw);while(matcher.find())locations.add(matcher.group(1)+":"+matcher.group(2));
+                    Map<String,Object> safe=Map.of("browserExitedBeforeResult",true,"sourceLocations",locations.stream().distinct().limit(8).toList(),"errorClasses",List.of("TimeoutError","ReferenceError","TypeError","SyntaxError","AssertionError","TargetClosedError").stream().filter(raw::contains).toList(),"operations",List.of("page.waitForResponse","locator.click","locator.fill","locator.selectOption","context.close").stream().filter(raw::contains).toList());
+                    Files.writeString(diagnostic,JSONObjectUtils.toJSONString(safe),StandardOpenOption.CREATE_NEW);Files.setPosixFilePermissions(diagnostic,java.nio.file.attribute.PosixFilePermissions.fromString("rw-------"));
+                }
+            }
             assertThat(browser.exitValue()).isZero();
         }finally{
             if(browser!=null&&browser.isAlive()){browser.destroy();if(!browser.waitFor(3,java.util.concurrent.TimeUnit.SECONDS)){browser.destroyForcibly();browser.waitFor();}}
@@ -141,6 +164,19 @@ class SyntheticJourneyIT {
         state.put("bookings",fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking WHERE hold_id=:h").param("h",hold).query(Long.class).single());
         assertThat(state.values()).allMatch(v->v.equals(0L));
         state.put("scope",fixture.jdbc.sql("SELECT jsonb_build_array(h.owner_id,h.block_id,h.configuration,h.guests,h.created_at,h.expires_at,b.venue_id,b.room_id,b.session_start,b.session_end,b.blocked_until)::text FROM cinenest_booking.reservation_hold h JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id WHERE h.hold_id=:h").param("h",hold).query(String.class).single());
+        for(String table:List.of("cinenest_payments.incoming_payment_credit","cinenest_payments.bank_credit_verification","cinenest_payments.payment_allocation","cinenest_booking.booking","cinenest_pricing.quotation_acceptance","cinenest_pricing.quotation_revision"))
+            state.put(table,fixture.jdbc.sql("SELECT md5(COALESCE(string_agg(to_jsonb(t)::text,'' ORDER BY to_jsonb(t)::text),'')) FROM "+table+" t").query(String.class).single());
+        return state;
+    }
+
+    private static Map<String,Object> rejectionState(BankIntegrationTest fixture,UUID request){
+        Map<String,Object> state=new HashMap<>();
+        state.put("requests",fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request b JOIN cinenest_verification.verification_request v ON v.quote_id=b.quote_id WHERE v.request_id=:r").param("r",request).query(Long.class).single());
+        state.put("bookings",fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_revision b JOIN cinenest_verification.verification_request v ON v.quote_id=b.quote_id WHERE v.request_id=:r").param("r",request).query(Long.class).single());
+        assertThat(state.values()).allMatch(v->v.equals(0L));
+        state.put("scope",fixture.jdbc.sql("SELECT jsonb_build_array(owner_id,venue_id,quote_id,policy_id,generation)::text FROM cinenest_verification.verification_request WHERE request_id=:r").param("r",request).query(String.class).single());
+        state.put("evidence",fixture.jdbc.sql("SELECT md5(string_agg(to_jsonb(e)::text,'' ORDER BY e.evidence_id)) FROM cinenest_verification.identity_evidence e WHERE request_id=:r").param("r",request).query(String.class).single());
+        assertThat(fixture.jdbc.sql("SELECT count(*)>0 AND bool_and(state='READY') FROM cinenest_verification.identity_evidence WHERE request_id=:r").param("r",request).query(Boolean.class).single()).isTrue();
         for(String table:List.of("cinenest_payments.incoming_payment_credit","cinenest_payments.bank_credit_verification","cinenest_payments.payment_allocation","cinenest_booking.booking","cinenest_pricing.quotation_acceptance","cinenest_pricing.quotation_revision"))
             state.put(table,fixture.jdbc.sql("SELECT md5(COALESCE(string_agg(to_jsonb(t)::text,'' ORDER BY to_jsonb(t)::text),'')) FROM "+table+" t").query(String.class).single());
         return state;
