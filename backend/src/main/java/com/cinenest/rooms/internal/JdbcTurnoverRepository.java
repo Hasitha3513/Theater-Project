@@ -6,6 +6,27 @@ import org.springframework.jdbc.core.simple.JdbcClient;import org.springframewor
 class JdbcTurnoverRepository implements TurnoverRepository {
  private final JdbcClient jdbc;JdbcTurnoverRepository(JdbcClient jdbc){this.jdbc=jdbc;}
  private JdbcClient.StatementSpec sql(String s,Object... args){var q=jdbc.sql(s);for(int i=0;i<args.length;i+=2)q.param(args[i].toString(),args[i+1],args[i+1]==null?Types.OTHER:Types.OTHER);return q;}
+ /** One READ COMMITTED statement snapshot covers case headers and exception categories,
+     including the empty-page timestamp. Do not add case/identity locks: assignment commands
+     may inspect assignee authority after locking a case. */
+ public BookingObservation bookingCases(UUID booking,int page){
+  var rows=jdbc.sql("""
+   WITH selected AS (
+    SELECT case_id,venue_id,room_id,booking_id,booking_revision,revision,state,
+           CASE WHEN assignee_id IS NULL THEN 'UNASSIGNED' ELSE 'ASSIGNED' END AS assignment,
+           created_at,updated_at
+    FROM cinenest_rooms.turnover_case WHERE booking_id=:b
+    ORDER BY created_at DESC,case_id LIMIT 26 OFFSET :offset
+   )
+   SELECT statement_timestamp() AS observed_at,c.*,
+    COALESCE((SELECT jsonb_agg(DISTINCT e.data->>'category' ORDER BY e.data->>'category')
+      FROM cinenest_rooms.turnover_entry e WHERE e.case_id=c.case_id AND e.kind='EXCEPTION'),'[]'::jsonb)::text AS categories
+   FROM (SELECT 1) observation LEFT JOIN selected c ON true
+   ORDER BY c.created_at DESC,c.case_id
+   """).param("b",booking).param("offset",page*25).query().listOfRows();
+  var at=((java.sql.Timestamp)rows.getFirst().get("observed_at")).toInstant();
+  return new BookingObservation(at,rows.stream().filter(r->r.get("case_id")!=null).toList());
+ }
  public void lock(UUID actor){jdbc.sql("SELECT pg_advisory_xact_lock(hashtextextended(:id,17017))").param("id",actor.toString()).query(Object.class).list();}
  public Optional<Map<String,Object>> receipt(UUID actor,UUID key){return sql("SELECT * FROM cinenest_rooms.turnover_receipt WHERE actor_id=:a AND command_key=:k","a",actor,"k",key).query().listOfRows().stream().findFirst();}
  public Map<String,Object> find(UUID venue,UUID id,boolean lock){return sql("SELECT * FROM cinenest_rooms.turnover_case WHERE case_id=:id AND venue_id=:v"+(lock?" FOR UPDATE":""),"id",id,"v",venue).query().listOfRows().stream().findFirst().orElseThrow(()->new RoomFailure(404,"Case not found"));}

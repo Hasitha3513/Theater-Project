@@ -1,6 +1,8 @@
 package com.cinenest.rooms.internal;
 import java.util.*;
 interface TurnoverRepository {
+ record BookingObservation(java.time.Instant observedAt,List<Map<String,Object>> cases){}
+ BookingObservation bookingCases(UUID booking,int page);
  void lock(UUID actor);
  Optional<Map<String,Object>> receipt(UUID actor,UUID key);
  Map<String,Object> find(UUID venue,UUID id,boolean lock);

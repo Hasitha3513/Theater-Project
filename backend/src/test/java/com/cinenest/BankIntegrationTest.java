@@ -1219,4 +1219,105 @@ class BankIntegrationTest {
       jdbc.sql("UPDATE cinenest_identity.http_session SET expiry_time=0,last_access_time=0").update();var response=c.staff().get(bookingRefunds(c));assertThat(response.statusCode()).isEqualTo(401);assertThat(response.body()).doesNotContain(c.booking().toString());
     }
 
+    String bookingOperations(AccessCase c){return "/api/admin/venues/"+VA+"/bookings/"+c.booking()+"/operations/cases";}
+    Map<String,Object> bookingOperationsCase(AccessCase c)throws Exception{var b=opsBody(Map.of());b.put("roomId",RID.toString());b.put("bookingId",c.booking().toString());return json(write(c.staff(),"POST",ops(),JSONObjectUtils.toJSONString(b)));}
+    @Test void bookingOperationsReadNeedsIndependentCurrentVenueGrant()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"booking.synthetic.read");assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"refund.synthetic.read");assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"operations.synthetic.read");var response=c.staff().get(bookingOperations(c));var d=json(response);assertThat(response.headers().firstValue("Cache-Control").orElseThrow()).contains("no-store");
+      assertThat(d.get("bookingId")).isEqualTo(c.booking().toString());assertThat(d.get("currentBookingRevision")).isEqualTo(1L);assertThat(d.get("occupancy")).isEqualTo("UNKNOWN");assertThat(d.get("readiness")).isEqualTo("UNVERIFIED");assertThat(d.get("inventoryChanged")).isEqualTo(false);assertThat(customerItems(response)).isEmpty();
+    }
+    @Test void bookingOperationsAccessOnlyOtherVenueSelfAndStitchedGrantsDenied()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"access.synthetic.review");assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VB,"operations.synthetic.read");grantTo(STAFF,VA,"operations.synthetic.record");assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(403);
+      assertThat(c.staff().get(bookingOperations(c).replace(VA.toString(),VB.toString())).statusCode()).isEqualTo(404);assertThat(c.customer().get(bookingOperations(c)).statusCode()).isEqualTo(403);
+    }
+    @Test void bookingOperationsRevokedExpiredSuspendedAndMissingSessionFailClosed()throws Exception{
+      var c=accessCase();UUID g=grantTo(STAFF,VA,"operations.synthetic.read");json(c.staff().get(bookingOperations(c)));
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update();assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(403);
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='ACTIVE',valid_from=clock_timestamp()-INTERVAL '1 hour',valid_until=clock_timestamp()-INTERVAL '1 second' WHERE grant_id=:g").param("g",g).update();assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"operations.synthetic.read");jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(403);
+      assertThat(new Browser().get(bookingOperations(c)).statusCode()).isEqualTo(401);
+    }
+    @Test void bookingOperationsExpiredSessionHidesContext()throws Exception{var c=accessCase();grantTo(STAFF,VA,"operations.synthetic.read");json(c.staff().get(bookingOperations(c)));jdbc.sql("UPDATE cinenest_identity.http_session SET expiry_time=0,last_access_time=0").update();assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(401);}
+    @Test void bookingOperationsMissingMalformedAndInvalidPagesAreSanitized()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"operations.synthetic.read");assertThat(c.staff().get(bookingOperations(c).replace(c.booking().toString(),UUID.randomUUID().toString())).statusCode()).isEqualTo(404);
+      assertThat(c.staff().get(bookingOperations(c).replace(c.booking().toString(),"bad")).statusCode()).isEqualTo(400);
+      for(String query:java.util.List.of("?page=-1","?page=100001","?page=x"))assertThat(c.staff().get(bookingOperations(c)+query).statusCode()).isEqualTo(400);
+      assertThat(customerItems(c.staff().get(bookingOperations(c)+"?page=100000"))).isEmpty();
+    }
+    @Test void bookingOperationsExactAssociationAndCompletePaginationBeyond100()throws Exception{
+      var c=accessCase();opsGrants();var first=bookingOperationsCase(c);opsCreate(c.staff());
+      for(int i=0;i<105;i++)jdbc.sql("INSERT INTO cinenest_rooms.turnover_case(case_id,venue_id,room_id,booking_id,booking_revision,state,checklist_version,checklist,created_by) SELECT :id,venue_id,room_id,booking_id,booking_revision,'OPEN',checklist_version,checklist,created_by FROM cinenest_rooms.turnover_case WHERE case_id=:source").param("id",UUID.randomUUID()).param("source",UUID.fromString(first.get("case_id").toString())).update();
+      jdbc.sql("INSERT INTO cinenest_rooms.turnover_case(case_id,venue_id,room_id,booking_id,booking_revision,state,checklist_version,checklist,created_by) SELECT :id,venue_id,room_id,:other,booking_revision,'OPEN',checklist_version,checklist,created_by FROM cinenest_rooms.turnover_case WHERE case_id=:source").param("id",UUID.randomUUID()).param("other",UUID.randomUUID()).param("source",UUID.fromString(first.get("case_id").toString())).update();
+      var seen=new java.util.HashSet<String>();for(int page=0;page<5;page++){var response=c.staff().get(bookingOperations(c)+"?page="+page);for(var row:customerItems(response))assertThat(seen.add(row.get("caseId").toString())).isTrue();var d=json(response);assertThat(d.get("pageSize")).isEqualTo(25L);assertThat(d.get("hasNext")).isEqualTo(page<4);}
+      assertThat(seen).hasSize(106);assertThat(customerItems(c.staff().get(bookingOperations(c)+"?page=5"))).isEmpty();
+    }
+    @Test void bookingOperationsTimestampOverlapAndRoomEqualityNeverCreateAssociation()throws Exception{
+      var c=accessCase();opsGrants();var unlinked=opsCreate(c.staff());
+      jdbc.sql("INSERT INTO cinenest_rooms.turnover_case(case_id,venue_id,room_id,state,checklist_version,checklist,created_by,created_at,updated_at) SELECT :id,venue_id,room_id,'OPEN',checklist_version,checklist,created_by,:at,:at FROM cinenest_rooms.turnover_case WHERE case_id=:source").param("id",UUID.randomUUID()).param("at",scheduled(c).atOffset(java.time.ZoneOffset.UTC)).param("source",UUID.fromString(unlinked.get("case_id").toString())).update();
+      var d=json(c.customer().get("/api/bookings/"+c.booking()));assertThat(customerItems(c.staff().get(bookingOperations(c)))).isEmpty();assertThat(unlinked.get("room_id")).isEqualTo(RID.toString());assertThat(d.get("revision")).isEqualTo(1L);
+    }
+    @Test void bookingOperationsHistoricalWindowRetainsOriginalPurchasedRevision()throws Exception{
+      var c=accessCase();opsGrants();bookingOperationsCase(c);var before=customerItems(c.staff().get(bookingOperations(c))).getFirst();var a=proposedAmendment(c);
+      json(write(c.customer(),"POST",amendments(c)+"/"+a.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(a))));
+      var response=c.staff().get(bookingOperations(c));var d=json(response);var row=customerItems(response).getFirst();assertThat(d.get("currentBookingRevision")).isEqualTo(2L);assertThat(row.get("capturedBookingRevision")).isEqualTo(1L);assertThat(row.get("capturedSessionStart")).isEqualTo(before.get("capturedSessionStart"));assertThat(row.get("capturedSessionStart")).isNotEqualTo(d.get("currentSessionStart"));
+    }
+    @Test void bookingOperationsPrivacyAndAllDomainsRemainUnchanged()throws Exception{
+      var c=accessCase();opsGrants();var linked=bookingOperationsCase(c);opsCommand(c.staff(),linked,"exceptions",Map.of("category","MAINTENANCE"));
+      var tables=java.util.List.of("cinenest_rooms.turnover_case","cinenest_rooms.turnover_entry","cinenest_rooms.turnover_audit","cinenest_rooms.turnover_receipt","cinenest_booking.booking","cinenest_booking.booking_revision","cinenest_booking.inventory_block","cinenest_access.access_credential","cinenest_iot.command","cinenest_notifications.notification_intent");
+      var snapshots=new HashMap<String,String>();for(String table:tables)snapshots.put(table,jdbc.sql("SELECT COALESCE(jsonb_agg(to_jsonb(r))::text,'[]') FROM "+table+" r").query(String.class).single());
+      var response=c.staff().get(bookingOperations(c));var row=customerItems(response).getFirst();assertThat(row.keySet()).containsExactlyInAnyOrder("caseId","roomId","capturedBookingRevision","capturedSessionStart","capturedSessionEnd","caseRevision","existingCaseState","assignmentStatus","createdAt","updatedAt","recordedExceptionCategories");assertThat(row.get("recordedExceptionCategories")).isEqualTo(java.util.List.of("MAINTENANCE"));assertThat(response.body()).doesNotContain("actor","assignee_id","created_by","checklist","permittedActions","referenceId","data","secret","credential");
+      for(String table:tables)assertThat(jdbc.sql("SELECT COALESCE(jsonb_agg(to_jsonb(r))::text,'[]') FROM "+table+" r").query(String.class).single()).as(table).isEqualTo(snapshots.get(table));
+      assertThat(write(c.staff(),"POST",bookingOperations(c),"{}").statusCode()).isEqualTo(403);
+    }
+    @Test void bookingOperationsMandatoryDeniedAuditFailureIsUnavailable()throws Exception{
+      var c=accessCase();jdbc.sql("ALTER TABLE cinenest_rooms.configuration_audit ADD CONSTRAINT test_ops_read_denial CHECK(action<>'DENIED')").update();
+      try{var r=c.staff().get(bookingOperations(c));assertThat(r.statusCode()).isEqualTo(503);assertThat(r.body()).doesNotContain(c.booking().toString());assertThat(jdbc.sql("SELECT count(*) FROM cinenest_rooms.configuration_audit WHERE action='DENIED'").query(Integer.class).single()).isZero();}
+      finally{jdbc.sql("ALTER TABLE cinenest_rooms.configuration_audit DROP CONSTRAINT test_ops_read_denial").update();}
+    }
+    @Test void bookingOperationsConcurrentInsertAndUpdateAreCoherent()throws Exception{
+      var c=accessCase();opsGrants();var linked=bookingOperationsCase(c);
+      try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+       var read=pool.submit(()->c.staff().get(bookingOperations(c)));var update=pool.submit(()->opsCommand(c.staff(),linked,"exceptions",Map.of("category","CLEANING")));
+       var observed=read.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(observed.statusCode()).isEqualTo(200);var row=customerItems(observed).getFirst();long rev=((Number)row.get("caseRevision")).longValue();assertThat(row.get("recordedExceptionCategories")).isEqualTo(rev==0?java.util.List.of():java.util.List.of("CLEANING"));update.get(15,java.util.concurrent.TimeUnit.SECONDS);
+       var again=pool.submit(()->c.staff().get(bookingOperations(c)));var insert=pool.submit(()->bookingOperationsCase(c));assertThat(customerItems(again.get(15,java.util.concurrent.TimeUnit.SECONDS)).size()).isIn(1,2);insert.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(customerItems(c.staff().get(bookingOperations(c)))).hasSize(2);
+      }
+    }
+    @Test void bookingOperationsConcurrentExceptionResolutionPreservesRecordedCategory()throws Exception{
+      var c=accessCase();opsGrants();var linked=opsCommand(c.staff(),bookingOperationsCase(c),"exceptions",Map.of("category","UNKNOWN_DEVICE"));var entry=(Map<?,?>)((java.util.List<?>)linked.get("entries")).getLast();
+      try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+       var read=pool.submit(()->c.staff().get(bookingOperations(c)));var resolve=pool.submit(()->opsCommand(c.staff(),linked,"exception-resolutions",Map.of("entryId",entry.get("entry_id"))));
+       var row=customerItems(read.get(15,java.util.concurrent.TimeUnit.SECONDS)).getFirst();assertThat(row.get("recordedExceptionCategories")).isEqualTo(java.util.List.of("UNKNOWN_DEVICE"));assertThat(row.get("caseRevision")).isIn(1L,2L);resolve.get(15,java.util.concurrent.TimeUnit.SECONDS);
+      }
+    }
+    @Test void bookingOperationsConcurrentAmendmentReturnsOldNewOrConflict()throws Exception{
+      var c=accessCase();opsGrants();bookingOperationsCase(c);var a=proposedAmendment(c);
+      try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+       var read=pool.submit(()->c.staff().get(bookingOperations(c)));var amend=pool.submit(()->write(c.customer(),"POST",amendments(c)+"/"+a.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(a))));
+       var observed=read.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(observed.statusCode()).isIn(200,409);if(observed.statusCode()==200){var d=json(observed);assertThat(d.get("currentBookingRevision")).isIn(1L,2L);assertThat(customerItems(observed).getFirst().get("capturedBookingRevision")).isEqualTo(1L);}assertThat(amend.get(15,java.util.concurrent.TimeUnit.SECONDS).statusCode()).isEqualTo(200);
+      }
+    }
+    @Test void bookingOperationsRevocationDuringQueryWaitIsRechecked()throws Exception{
+      var c=accessCase();opsGrants();bookingOperationsCase(c);
+      try(var connection=DriverManager.getConnection(System.getenv("CINENEST_DB_URL"),System.getenv("CINENEST_DB_USER"),System.getenv("CINENEST_DB_PASSWORD"));var pool=java.util.concurrent.Executors.newSingleThreadExecutor()){
+       connection.setAutoCommit(false);try(var statement=connection.createStatement()){statement.execute("LOCK TABLE cinenest_rooms.turnover_case IN ACCESS EXCLUSIVE MODE");}
+       var read=pool.submit(()->c.staff().get(bookingOperations(c)));boolean waiting=false;long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(5);
+       while(System.nanoTime()<deadline){waiting=jdbc.sql("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE wait_event_type='Lock' AND query LIKE '%WITH selected AS%' AND pid<>pg_backend_pid())").query(Boolean.class).single();if(waiting)break;Thread.sleep(10);}
+       try{assertThat(waiting).isTrue();jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE account_id=:a AND permission='operations.synthetic.read'").param("a",STAFF).update();connection.commit();assertThat(read.get(15,java.util.concurrent.TimeUnit.SECONDS).statusCode()).isEqualTo(403);}finally{connection.rollback();}
+      }
+    }
+
+    @Test void bookingOperationsPersistedWrongRoomBindingFailsClosed()throws Exception{
+      var c=accessCase();opsGrants();UUID wrongRoom=UUID.randomUUID();
+      jdbc.sql("INSERT INTO cinenest_rooms.room(room_id,venue_id,code,name,capacity,enabled) VALUES(:r,:v,'CORRUPT-FIXTURE','Synthetic binding fault',5,TRUE)").param("r",wrongRoom).param("v",VA).update();
+      jdbc.sql("INSERT INTO cinenest_rooms.turnover_case(case_id,venue_id,room_id,booking_id,booking_revision,state,checklist_version,checklist,created_by) VALUES(:id,:v,:r,:b,1,'OPEN','SYNTHETIC_V1','[\"SURFACES\",\"FLOOR\"]',:a)").param("id",UUID.randomUUID()).param("v",VA).param("r",wrongRoom).param("b",c.booking()).param("a",STAFF).update();
+      var response=c.staff().get(bookingOperations(c));assertThat(response.statusCode()).isEqualTo(409);assertThat(response.body()).doesNotContain(wrongRoom.toString(),c.booking().toString());
+    }
+    @Test void bookingOperationsPersistedMissingCapturedRevisionFailsClosed()throws Exception{
+      var c=accessCase();opsGrants();
+      jdbc.sql("INSERT INTO cinenest_rooms.turnover_case(case_id,venue_id,room_id,booking_id,booking_revision,state,checklist_version,checklist,created_by) VALUES(:id,:v,:r,:b,999,'OPEN','SYNTHETIC_V1','[\"SURFACES\",\"FLOOR\"]',:a)").param("id",UUID.randomUUID()).param("v",VA).param("r",RID).param("b",c.booking()).param("a",STAFF).update();
+      assertThat(c.staff().get(bookingOperations(c)).statusCode()).isEqualTo(409);
+    }
+
 }

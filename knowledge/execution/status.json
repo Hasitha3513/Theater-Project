@@ -7868,5 +7868,32 @@
     "visualComparison": "All3 reference images visually inspected;Admin references primary. Navy240px desktop sidebar/light review card/violet action tokens retained;3-column refund summaries at1280 vs1 at375/768. Corrected12px disclosure/reload gap. No horizontal overflow,one main,visible keyboard focus/native details. Heights2498/2169/1947 before vs4810/3968/3516 after for375/768/1280 with2 illustrative obligations;added truthful financial context. Reference compactness/global sidebar density outside slice;no invented metrics/actions.",
     "validation": "Knowledge+isolated committed-source execution PASS;ordinary execution retains exactly2 pre-existing next-env findings;18 governance negative controls,92/92 traceability,28-task acyclic graph and whitespace PASS",
     "limitations": "Intercepted browser fixtures are not backend authorization or full E2E evidence. Existing backend tests independently verify authorization. Historical24/24 synthetic campaign not rerun. No acceptance promoted."
+  },
+  "staffBookingOperationsReadImplementation": {
+    "changeSetId": "CN-STAFF-BOOKING-OPERATIONS-CONTRACT-001",
+    "ownerAuthority": "Owner attachment19c24bf6-8c75-4a8b-b1fa-6da1190b81be approves bounded backend implementation only",
+    "baselineHead": "27261b64d95b92672e617b5a1caa77cd04e7a4c4",
+    "prerequisiteCI": "39614108913 COMPLETED/SUCCESS exact baseline",
+    "scope": "Rooms-owned exact-booking synthetic case read via consumer-owned nonlocking Booking history port; no physical readiness or commands",
+    "evidencePath": "PROGRESS.md#staff-booking-operations-contract",
+    "status": "LOCALLY_VERIFIED_BOUNDED_BACKEND_READ",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/operations/cases?page=0",
+    "port": "Rooms-owned OperationsBookingContext implemented by Booking-owned adapter;nonlocking current/revision-specific purchased context;unchanged module graph",
+    "permission": "Independent current VENUE operations.synthetic.read;no substitute booking/access/refund/admin/SELF/other-venue grants",
+    "consistency": "Explicit READ_COMMITTED;one statement snapshot includes case headers,categories and observedAt even empty;no new case/identity locks;fresh authorization and current purchased context checks before return",
+    "pagination": "Existing fixed25,page0..100000;26-row query for hasNext;exact persisted booking_id only;per-page observation,not cross-page snapshot",
+    "history": "Captured revision resolved from immutable Booking purchase history;case room must match captured purchase;no current-room/time inference;current amendment remains same-room only",
+    "privacy": "Explicit DTO excludes actors,assignees,raw entries/checklist/descriptions,device/customer secrets and command permissions",
+    "physicalTruth": "synthetic=true;occupancy UNKNOWN;readiness UNVERIFIED;inventoryChanged=false;empty means no explicitly booking-linked cases only",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "remainingGaps": "No frontend integration or existing queue page-query404 correction;no actual room-change amendment feature (existing same-room restriction);no new full E2E campaign,physical readiness or acceptance",
+    "tests": "591 backend tests PASS,zero failures/errors/skips(291 BankIntegrationTest including16 new PostgreSQL cases,12 new query unit tests,18 architecture tests);real isolated PostgreSQL18.6,V1-V19 clean/repeat/retained upgrades,packaged startup/HTTP denial PASS;275 frontend tests,typecheck,lint,build PASS;8 classifier+10 inert admission checks PASS",
+    "concurrencyEvidence": "PostgreSQL case insert/update,exception resolution,Booking amendment and revoked grant during observed query-lock wait PASS;single statement snapshot consistent case revision/category observation",
+    "historyEvidence": "Real PostgreSQL same-room amendment retains captured revision1 session while header revision2 shows current session;typed unit fixture preserves historical room distinct from current without authorizing room-change amendments",
+    "negativeEvidence": "PostgreSQL persisted wrong-room and nonexistent captured revision fail409;mandatory existing DENIED audit failure returns503 and rolls back audit;full domain snapshots unchanged",
+    "validation": "Knowledge+approved in-memory committed-source execution PASS;ordinary execution exactly2 pre-existing next-env integrity findings;18 governance negative controls,92/92 traceability,28-task acyclic dependencies and whitespace PASS",
+    "testCorrections": "Initial run one failure/one error in new fixtures:blocked REQUEST resource type instead of actual DENIED audit action;Mockito reset invoked injected throwing stub. Corrected fixtures,retained strict expected503/409 and reran full suite successfully."
   }
 }

@@ -127,4 +127,11 @@ class FoundationArchitectureTest {
  noClasses().that().resideInAPackage("com.cinenest.reporting..").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.payments.internal..","com.cinenest.rooms.internal..","com.cinenest.identity.internal..","org.springframework.jdbc..").check(classes);
  String query=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/payments/internal/JdbcBankReportRepository.java"));assertThat(query).doesNotContain("cinenest_booking.","cinenest_rooms.","UPDATE ","DELETE ");
  }
+ @Test void staffBookingOperationsReadPreservesConsumerOwnershipAndNoCommands()throws Exception{
+  var classes=new ClassFileImporter().importPackages("com.cinenest");
+  noClasses().that().haveSimpleName("StaffBookingOperationsQuery").should().dependOnClassesThat().resideInAnyPackage("com.cinenest.booking..","com.cinenest.iot..","org.springframework.jdbc..").check(classes);
+  String adapter=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/booking/internal/OperationsBookingContextAdapter.java"));assertThat(adapter).contains("cinenest_booking.booking_revision").doesNotContain("FOR UPDATE","pg_advisory","cinenest_rooms.","cinenest_iot.","UPDATE ","INSERT ");
+  String query=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/rooms/internal/StaffBookingOperationsQuery.java"));assertThat(query).doesNotContain(".command(",".create(",".update(",".evidence(",".audit(",".lock(");
+ }
+
 }

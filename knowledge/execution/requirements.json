@@ -1543,6 +1543,18 @@
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "staffBookingOperationsReadEvidence": {
+        "changeSetId": "CN-STAFF-BOOKING-OPERATIONS-CONTRACT-001",
+        "scope": "Rooms-owned exact-booking synthetic case read via consumer-owned nonlocking Booking history port; no physical readiness or commands",
+        "evidencePath": "PROGRESS.md#staff-booking-operations-contract",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/rooms/internal/StaffBookingOperationsQuery.java",
+          "backend/src/main/java/com/cinenest/rooms/OperationsBookingContext.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/StaffBookingOperationsQueryTest.java"
+        ],
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2149,6 +2161,18 @@
         "scope": "Existing separately venue-authorized GET,strict context/DTO projection,read-only staff detail roster;no admission/identity/physical/financial action",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "staffBookingOperationsReadEvidence": {
+        "changeSetId": "CN-STAFF-BOOKING-OPERATIONS-CONTRACT-001",
+        "scope": "Rooms-owned exact-booking synthetic case read via consumer-owned nonlocking Booking history port; no physical readiness or commands",
+        "evidencePath": "PROGRESS.md#staff-booking-operations-contract",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/rooms/internal/StaffBookingOperationsQuery.java",
+          "backend/src/main/java/com/cinenest/rooms/OperationsBookingContext.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/StaffBookingOperationsQueryTest.java"
+        ],
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2216,6 +2240,18 @@
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#ops-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "staffBookingOperationsReadEvidence": {
+        "changeSetId": "CN-STAFF-BOOKING-OPERATIONS-CONTRACT-001",
+        "scope": "Rooms-owned exact-booking synthetic case read via consumer-owned nonlocking Booking history port; no physical readiness or commands",
+        "evidencePath": "PROGRESS.md#staff-booking-operations-contract",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/rooms/internal/StaffBookingOperationsQuery.java",
+          "backend/src/main/java/com/cinenest/rooms/OperationsBookingContext.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/StaffBookingOperationsQueryTest.java"
+        ],
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -3021,6 +3057,18 @@
           "frontend/lib/staff-booking-refunds.ts",
           "frontend/tests/staff-booking-refunds.test.mjs",
           "frontend/tests/staff-booking-refunds-browser.mjs"
+        ],
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "staffBookingOperationsReadEvidence": {
+        "changeSetId": "CN-STAFF-BOOKING-OPERATIONS-CONTRACT-001",
+        "scope": "Rooms-owned exact-booking synthetic case read via consumer-owned nonlocking Booking history port; no physical readiness or commands",
+        "evidencePath": "PROGRESS.md#staff-booking-operations-contract",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/rooms/internal/StaffBookingOperationsQuery.java",
+          "backend/src/main/java/com/cinenest/rooms/OperationsBookingContext.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/rooms/internal/StaffBookingOperationsQueryTest.java"
         ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
