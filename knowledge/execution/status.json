@@ -7539,5 +7539,110 @@
     },
     "limits": "Existing3CPU/7GiB application+1CPU/1GiB PostgreSQL,600s run/60s scenario;one ephemeral loopback listener in existing controller,no new process;owned port/DB/file cleanup",
     "acceptance": "24 synthetic groups pass,not full92-requirement,phase,customer,physical,financial,recovery or production acceptance"
+  },
+  "staffGuestRosterImplementation": {
+    "taskId": "CN-STAFF-GUEST-ROSTER-001",
+    "status": "BOUNDED_IMPLEMENTATION_VERIFIED",
+    "baseline": "2ea73dec2152dc6979813137278f6352e200582b",
+    "ownerAuthority": {
+      "attachment": "aba85ac5-e2a9-4655-ba61-62d4e27b329f/Pasted text.txt",
+      "sha256": "adb4ff14d8f448d2d929d846f31ad4e643ba9c7e3826babc9867ca2e58d0aa49",
+      "scope": "One CI-gated venue-scoped read-only staff roster implementation and task-owned publication"
+    },
+    "prerequisiteCi": {
+      "runId": 39560986487,
+      "sha": "2ea73dec2152dc6979813137278f6352e200582b",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    "contract": "GET /api/admin/venues/{venue}/bookings/{booking}/guest-roster via existing authenticated forwardBank proxy",
+    "permissions": "Current separate guest.synthetic.read at stored venue;booking.synthetic.read alone never supplies guest authority;normal backend eligible/session/venue controls unchanged",
+    "contextValidation": "Exact booking/venue/revision/purchased limit/session instant,valid server time,synthetic/unverified/no-admission/no-age/no-access/empty-actions contract;unknown fields projected away",
+    "stateLifecycle": "Existing protected read hook,abort/epoch clearing,on reload/session/page hide/focus revalidation;parent context guard and keyed child;revocation observed on next protected request,not claimed push invalidation",
+    "checks": {
+      "frontend": 258,
+      "focusedRoster": 7,
+      "browser": "17_PASS_INTERCEPTED_SYNTHETIC_NOT_REAL_BACKEND",
+      "beforeVisual": 3,
+      "backend": 514,
+      "bankIntegration": 252,
+      "architecture": 17,
+      "typecheckLintBuild": "PASS",
+      "ciClassifier": 8,
+      "harnessAdmission": 10,
+      "knowledge": "PASS",
+      "isolatedExecutionTraceabilityDependency": "PASS",
+      "governanceNegativeControls": 15,
+      "retainedStaffBrowser": "30_PASS_INTERCEPTED_NOT_BACKEND_E2E",
+      "whitespace": "PASS",
+      "exactSourceCi": "PENDING_PUBLICATION",
+      "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
+    },
+    "visualEvidence": [
+      {
+        "phase": "before",
+        "viewportWidth": 375,
+        "path": ".cache/staff-guest-roster/before/375.png",
+        "dimensions": [
+          375,
+          1595
+        ],
+        "sha256": "7577c7b88e5642ceff8cf0d3f84cc99e57f5c0f26b4e9a7d84351bbee355e68f"
+      },
+      {
+        "phase": "before",
+        "viewportWidth": 768,
+        "path": ".cache/staff-guest-roster/before/768.png",
+        "dimensions": [
+          768,
+          1423
+        ],
+        "sha256": "03547ce4c84f522edec3b6e53cd72071ac04614a44d017d33835521e446742fe"
+      },
+      {
+        "phase": "before",
+        "viewportWidth": 1280,
+        "path": ".cache/staff-guest-roster/before/1280.png",
+        "dimensions": [
+          1280,
+          1371
+        ],
+        "sha256": "a658428643c03d7f01c3a674183f3ffc2bafa53fc8e1f309fcb35379c51a4674"
+      },
+      {
+        "phase": "after",
+        "viewportWidth": 375,
+        "path": ".cache/staff-guest-roster/after/375.png",
+        "dimensions": [
+          375,
+          2454
+        ],
+        "sha256": "7129123fbc10630772d3b852785414dfaa1f7ecd406d24aebd682d47e4fc2521"
+      },
+      {
+        "phase": "after",
+        "viewportWidth": 768,
+        "path": ".cache/staff-guest-roster/after/768.png",
+        "dimensions": [
+          768,
+          2125
+        ],
+        "sha256": "eea1aeb3b254bb477befea600872c21604ec2498e1aabc4dbc112fa043ef95b3"
+      },
+      {
+        "phase": "after",
+        "viewportWidth": 1280,
+        "path": ".cache/staff-guest-roster/after/1280.png",
+        "dimensions": [
+          1280,
+          1903
+        ],
+        "sha256": "5b9a6c2d68ea5a5e8cdc711152120c2316aeee09d7baab6cdae388fd8d36196b"
+      }
+    ],
+    "visualComparison": "All3 approved PNGs opened;admin refs primary. Shared navy sidebar/light workspace/violet action retained;one additional roster card/two-column table/3 desktop count columns vs stacked mobile/tablet;375/768/1280 no horizontal overflow,one main;page heights1595/1423/1371\u21922454/2125/1903 due actual roster and mandatory warnings,not pixel-perfect reference reproduction",
+    "corrections": "Lint required semantic section for table region. Initial browser keyboard assertion exposed focus loss from disabling reload;aria-disabled plus guarded handler preserves focus without duplicate loading action. Capture scroll reset removes fixed offscreen skip-link artifact,not application shell change.",
+    "backendChange": "One authorization regression test only;no application source,endpoint,permission,migration or dependency changed",
+    "acceptance": "No full requirement/phase/demo/physical/production acceptance;prior24/0/0 campaign historical and not rerun for this frontend change"
   }
 }

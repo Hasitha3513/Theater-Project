@@ -3646,7 +3646,7 @@ def rejected_verification_e2e_main():
 
 
 
-def inert_ci_main():
+def uncertain_upload_e2e_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='4fccf4daafa13fa06a7d85ffcf87b6f75298beec'
@@ -3703,6 +3703,69 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=rejected_verification_e2e_main()
     if result==0:print('PASS exact bounded uncertain upload E2E verification; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='2ea73dec2152dc6979813137278f6352e200582b'
+    owned={'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'frontend/tests/staff-guest-roster-fixtures.mjs', 'frontend/components/staff-guest-roster.tsx', 'frontend/tests/staff-guest-roster.test.mjs', 'frontend/tests/staff-guest-roster-browser.mjs', 'frontend/components/staff-bookings.tsx', 'frontend/package.json'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/requirements.json', 'knowledge/execution/status.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/DESIGN.md'}
+    added={'frontend/tests/staff-guest-roster-fixtures.mjs', 'frontend/components/staff-guest-roster.tsx', 'frontend/tests/staff-guest-roster.test.mjs', 'frontend/tests/staff-guest-roster-browser.mjs'}
+    hashes={'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '4c25f07b6d360b021b48db645c92f024e94241ea94ad37f934b782ba076937b9', 'frontend/components/staff-guest-roster.tsx': '7285507f745a282e4f08ce9254cd70a58a37124465d0fda65d5d001a588dd260', 'knowledge/execution/requirements.json': '599f079e15fadb80770595a5724ae64ec54d6689a7bdd64947c743cdb35aefd7', 'frontend/tests/staff-guest-roster-browser.mjs': '03b26b75891026bf3d2fcf31f8b9d51542340369ea87184ca4c855b4348ac64f', 'knowledge/execution/status.json': 'feed740c5c9241b3b174bd3be0de78da3149c8fef7d5e7cdb45b9984c0985538', 'knowledge/ARCHITECTURE.md': '4f2a10e271d5365a362c6ea17220ba3eb2bf0cb402d21def5235f7c1c7519c2c', 'frontend/tests/staff-guest-roster-fixtures.mjs': '2fb47ad19374f76f3e2aebb421082ac84954d8c0c5aaa73d931d9e6c85548f62', 'knowledge/PROGRESS.md': '2633828e9ae7731a4c3ba669da2fdb4348bb3222010931cf14ee210d026aeafb', 'frontend/tests/staff-guest-roster.test.mjs': '8068f5b8a6c3943c3eb25cab5dcb8eb2c941ad09cc4beee7bd702f11621416ef', 'knowledge/DESIGN.md': 'f5ae350c8d6bb20ed2c1f51367eea08771b38d5110acc1b72fd27d8f8e1d1cba', 'frontend/components/staff-bookings.tsx': '718df8b8811c994ad24f19d3c8d60fda1593a0424a9bab1a21dcd95ec2c3bc49', 'knowledge/execution/test-plan.json': '714090814a1ada867e15cc2f6a30b76946c724476eb880fb828bc162936d6430', 'frontend/package.json': '8218c376f3ba1ad80e4978ce25ac166abfeb7b7030148d49babda73b9a7d9c89'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Staff roster integration exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('staffGuestRosterEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Staff roster integration changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('staffGuestRosterImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Staff roster integration changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Staff roster integration changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Staff roster integration rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=original['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/staff-guest-roster.test.mjs':errors.append('Staff roster integration changed existing frontend test coverage')
+    package['scripts']['test']=original['scripts']['test']
+    if package!=original:errors.append('Staff roster integration changed frontend dependency/toolchain authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Staff roster integration rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Staff roster integration promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Staff roster integration unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Staff roster integration changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=uncertain_upload_e2e_main()
+    if result==0:print('PASS exact bounded staff roster read integration; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

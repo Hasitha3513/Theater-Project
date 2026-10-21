@@ -906,6 +906,17 @@ class BankIntegrationTest {
       grantTo(STAFF,VA,"guest.synthetic.read");var r=json(c.staff().get(path));assertThat((java.util.List<?>)r.get("permittedActions")).isEmpty();assertThat(r.toString()).doesNotContain("booker_account_id",A.toString());
       jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE permission='guest.synthetic.read'").update();assertThat(c.staff().get(path).statusCode()).isEqualTo(403);
     }
+    @Test void staffBookingPermissionNeverSubstitutesSeparateGuestRead()throws Exception{
+      var c=accessCase();rosterInit(c);String booking="/api/admin/venues/"+VA+"/bookings/"+c.booking(),path=booking+"/guest-roster";
+      grantTo(STAFF,VA,"booking.synthetic.read");assertThat(c.staff().get(booking).statusCode()).isEqualTo(200);
+      assertThat(c.staff().get(path).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VB,"guest.synthetic.read");assertThat(c.staff().get(path).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"guest.synthetic.read");var result=json(c.staff().get(path));assertThat(result.get("venueId")).isEqualTo(VA.toString());assertThat(result.get("bookingId")).isEqualTo(c.booking().toString());assertThat((java.util.List<?>)result.get("permittedActions")).isEmpty();
+      assertThat(c.staff().get(path.replace(VA.toString(),VB.toString())).statusCode()).isEqualTo(403);
+      assertThat(c.staff().get(path.replace(c.booking().toString(),UUID.randomUUID().toString())).statusCode()).isEqualTo(404);
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE account_id=:a AND permission='guest.synthetic.read'").param("a",STAFF).update();
+      assertThat(c.staff().get(path).statusCode()).isEqualTo(403);assertThat(c.staff().get(booking).statusCode()).isEqualTo(200);
+    }
     @Test void guestSessionStartBlocksNewWritesButPreservesReads()throws Exception{
       var c=accessCase();rosterInit(c);Object previous=com.cinenest.booking.internal.GuestRosterFaults.at(context,java.time.Instant.now().plus(java.time.Duration.ofDays(4)));
       try{assertThat(guestAdd(c,companion(0,"SYNTHETIC-1")).statusCode()).isEqualTo(409);assertThat((java.util.List<?>)json(c.customer().get(roster(c.booking()))).get("permittedActions")).isEmpty();}finally{com.cinenest.booking.internal.GuestRosterFaults.restore(context,previous);}

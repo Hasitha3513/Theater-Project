@@ -1265,6 +1265,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Single-shell navigation/breadcrumbs,selected venue and existing staff booking/review presentation only;backend RBAC/ABAC,protected reads,retries and all staff decision handlers unchanged."
+      },
+      "staffGuestRosterEvidence": {
+        "taskId": "CN-STAFF-GUEST-ROSTER-001",
+        "status": "BOUNDED_SOFTWARE_VERIFIED",
+        "evidencePath": "PROGRESS.md#staff-guest-roster-implementation",
+        "scope": "Existing separately venue-authorized GET,strict context/DTO projection,read-only staff detail roster;no admission/identity/physical/financial action",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2031,6 +2039,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
+      },
+      "staffGuestRosterEvidence": {
+        "taskId": "CN-STAFF-GUEST-ROSTER-001",
+        "status": "BOUNDED_SOFTWARE_VERIFIED",
+        "evidencePath": "PROGRESS.md#staff-guest-roster-implementation",
+        "scope": "Existing separately venue-authorized GET,strict context/DTO projection,read-only staff detail roster;no admission/identity/physical/financial action",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2856,6 +2872,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/authenticated proxy/Boot/PostgreSQL payment-receipt lost acknowledgement,QUARANTINED reload and explicit same-allocation completion without byte resend;24 PASS/0 FAIL/0 NOT_RUN. Bounded synthetic campaign only,not full requirement acceptance."
+      },
+      "staffGuestRosterEvidence": {
+        "taskId": "CN-STAFF-GUEST-ROSTER-001",
+        "status": "BOUNDED_SOFTWARE_VERIFIED",
+        "evidencePath": "PROGRESS.md#staff-guest-roster-implementation",
+        "scope": "Existing separately venue-authorized GET,strict context/DTO projection,read-only staff detail roster;no admission/identity/physical/financial action",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -3605,6 +3629,14 @@
         "taskId": "CN-GUEST-REGISTRATION-001",
         "scope": "SYNTHETIC_ROSTER_ONLY_NO_ADMISSION_OR_IDENTITY_APPROVAL",
         "evidencePath": "PROGRESS.md#guest-roster-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "staffGuestRosterEvidence": {
+        "taskId": "CN-STAFF-GUEST-ROSTER-001",
+        "status": "BOUNDED_SOFTWARE_VERIFIED",
+        "evidencePath": "PROGRESS.md#staff-guest-roster-implementation",
+        "scope": "Existing separately venue-authorized GET,strict context/DTO projection,read-only staff detail roster;no admission/identity/physical/financial action",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }

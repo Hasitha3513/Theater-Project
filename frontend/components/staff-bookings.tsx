@@ -1,4 +1,5 @@
 "use client";
+import { loadStaffRoster, StaffRosterSummary } from "./staff-guest-roster";
 import { StaffVenueContext } from "./staff-venue-context";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -353,6 +354,56 @@ export function StaffBookingList({ query = "" }: { query?: string }) {
 		</>
 	);
 }
+function StaffGuestRoster({ booking }: { booking: StaffBooking }) {
+	const read = useCallback(
+		(signal: AbortSignal) => loadStaffRoster(booking, signal),
+		[booking],
+	);
+	const state = useProtectedRead(read, true);
+	return (
+		<section aria-label="Staff guest roster">
+			<Card title="Registered guest roster" className="staff-review-status">
+				<p>
+					<strong>
+						SYNTHETIC GUEST REGISTRATION — NOT PHYSICAL ADMISSION.
+					</strong>{" "}
+					Entries are unverified declarations. Registration is not identity
+					verification, age approval or permission to enter. No access
+					credential is shown or issued.
+				</p>
+				<p>
+					Guest-roster access requires separate current venue-scoped authority;
+					booking-read permission alone is insufficient.
+				</p>
+				<Button
+					aria-disabled={state.loading}
+					onClick={() => {
+						if (!state.loading) void state.reload();
+					}}
+				>
+					Reload guest roster
+				</Button>
+				{state.loading && (
+					<StateMessage kind="loading">
+						<p>Loading current authorized guest roster.</p>
+					</StateMessage>
+				)}
+				{state.error && (
+					<StateMessage kind={state.error}>
+						<p>
+							{state.error === "denied"
+								? "Guest-roster access is denied. Separate guest.synthetic.read authority at this venue is required."
+								: state.error === "unauthenticated"
+									? "Session unavailable. Sign in again and reload the booking."
+									: "Guest roster unavailable, missing, changed or refused. Reload current booking context before retrying."}
+						</p>
+					</StateMessage>
+				)}
+				{state.value && <StaffRosterSummary value={state.value} />}
+			</Card>
+		</section>
+	);
+}
 export function StaffBookingDetail({
 	venue,
 	booking,
@@ -386,13 +437,23 @@ export function StaffBookingDetail({
 					Reload booking detail
 				</Button>
 				<ReadState loading={state.loading} error={state.error} />
-				{state.value && (
-					<section aria-label="Authorized staff booking detail">
-						<StaffBookingSummary booking={state.value.booking} />
-						<p>Server observation: {state.value.observedAt}</p>
-					</section>
-				)}
+				{state.value &&
+					state.value.booking.venueId === venue.toLowerCase() &&
+					state.value.booking.bookingId === booking.toLowerCase() && (
+						<section aria-label="Authorized staff booking detail">
+							<StaffBookingSummary booking={state.value.booking} />
+							<p>Server observation: {state.value.observedAt}</p>
+						</section>
+					)}
 			</Card>
+			{state.value &&
+				state.value.booking.venueId === venue.toLowerCase() &&
+				state.value.booking.bookingId === booking.toLowerCase() && (
+					<StaffGuestRoster
+						key={`${venue}/${booking}/${state.value.booking.revision}`}
+						booking={state.value.booking}
+					/>
+				)}
 		</>
 	);
 }
