@@ -7205,5 +7205,339 @@
       "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
     },
     "acceptance": "NO_FULL_CAMPAIGN_REQUIREMENT_PHASE_OR_DEMONSTRATION_ACCEPTANCE"
+  },
+  "e2eUncertainUploadVerification": {
+    "taskId": "CN-E2E-UNCERTAIN-UPLOAD-001",
+    "status": "BOUNDED_SYNTHETIC_CAMPAIGN_VERIFIED",
+    "baseline": "4fccf4daafa13fa06a7d85ffcf87b6f75298beec",
+    "ownerAuthority": "Explicit one bounded CI-gated uncertain bank receipt upload execution/minimum remediation and scoped publication;no other feature or acceptance authority",
+    "prerequisiteCi": {
+      "runId": 39556012286,
+      "sha": "4fccf4daafa13fa06a7d85ffcf87b6f75298beec",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "requiredSteps": "ALL_SUCCESS_FULL_APPLICATION"
+    },
+    "scope": "Real browser/Next/authenticated proxy/Boot/PostgreSQL payment-receipt lost acknowledgement,QUARANTINED reload and explicit same-allocation completion without byte resend;24 PASS/0 FAIL/0 NOT_RUN. Bounded synthetic campaign only,not full requirement acceptance.",
+    "contract": {
+      "evidenceType": "PAYMENT RECEIPT,not identity evidence",
+      "failureBoundary": "One real backend upload200 consumed,then response socket destroyed before Next receives it;existing proxy returns502",
+      "recovery": "Explicit retry reloads QUARANTINED and completes original evidence;no second PUT or allocation",
+      "financial": "Receipt quarantine/completion not approval,verified credit,allocation or booking",
+      "security": "Normal OIDC/session/CSRF;wrong-owner GET and completion404;all business APIs real,not intercepted"
+    },
+    "rootCause": "No application defect reproduced. Previously NOT_RUN scenario lacked qualified one-use lost-response transport;test-only harness now exercises existing recovery contract.",
+    "toolchain": {
+      "node": "24.22.0",
+      "npm": "11.19.1",
+      "bin": "$HOME/.local/toolchains/node-v24.22.0-linux-x64/bin",
+      "admission": "TOOLS_PRESENT_AND_EXECUTION_LIMITS_VERIFIED",
+      "integrity": "Owned non-group/world-writable resolved Node/npm targets;local SHA256 receipts,not upstream signature verification",
+      "nodeSha256": "67ca5783febb8bf85736c79fcdd92c8d6d465a0eb2a082672bcdfa76a506751c"
+    },
+    "attempts": [
+      {
+        "label": "initial",
+        "run": "cinenest-e2e-f055ollp",
+        "counts": {
+          "PASS": 24,
+          "FAIL": 0,
+          "NOT_RUN": 0
+        },
+        "results": [
+          {
+            "id": "startup",
+            "status": "PASS"
+          },
+          {
+            "id": "customer-discovery-auth",
+            "status": "PASS"
+          },
+          {
+            "id": "hold-quote-accept",
+            "status": "PASS"
+          },
+          {
+            "id": "verification-explicit-consent",
+            "status": "PASS"
+          },
+          {
+            "id": "E-pending-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "independent-verification-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "explicit-bank-request",
+            "status": "PASS"
+          },
+          {
+            "id": "H-missing-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "I-invalid-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "J-cross-origin",
+            "status": "PASS"
+          },
+          {
+            "id": "L-idempotent-replay",
+            "status": "PASS"
+          },
+          {
+            "id": "M-changed-body-key",
+            "status": "PASS"
+          },
+          {
+            "id": "K-stale-readiness",
+            "status": "PASS"
+          },
+          {
+            "id": "claim-receipt-explicit",
+            "status": "PASS"
+          },
+          {
+            "id": "N-uncertain-upload",
+            "status": "PASS"
+          },
+          {
+            "id": "simulated-confirmation-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "C-wrong-owner",
+            "status": "PASS"
+          },
+          {
+            "id": "D-wrong-venue-grant",
+            "status": "PASS"
+          },
+          {
+            "id": "O-malformed-reference",
+            "status": "PASS"
+          },
+          {
+            "id": "P-safe-URLs",
+            "status": "PASS"
+          },
+          {
+            "id": "A-expired-quote",
+            "status": "PASS"
+          },
+          {
+            "id": "B-invalid-expired-hold",
+            "status": "PASS"
+          },
+          {
+            "id": "F-rejected-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "G-expired-session",
+            "status": "PASS"
+          }
+        ],
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-f055ollp"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-f055ollp/observations.json",
+        "traceSha256": "b14e293b9426bcb9c882d98f6d332ff13ca8874c68f1131777af3188cb92da74",
+        "uploadObservation": {
+          "protectedStateUnchanged": true,
+          "controlOk": true,
+          "state": "QUARANTINED",
+          "scanQueued": 1,
+          "transport": {
+            "attempts": 2,
+            "dropped": 1,
+            "upstreamStatus": 200
+          },
+          "browserStatus": 502,
+          "recoveryStatus": 200,
+          "bytesResent": false
+        }
+      },
+      {
+        "label": "final",
+        "run": "cinenest-e2e-omrp8yxj",
+        "counts": {
+          "PASS": 24,
+          "FAIL": 0,
+          "NOT_RUN": 0
+        },
+        "results": [
+          {
+            "id": "startup",
+            "status": "PASS"
+          },
+          {
+            "id": "customer-discovery-auth",
+            "status": "PASS"
+          },
+          {
+            "id": "hold-quote-accept",
+            "status": "PASS"
+          },
+          {
+            "id": "verification-explicit-consent",
+            "status": "PASS"
+          },
+          {
+            "id": "E-pending-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "independent-verification-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "explicit-bank-request",
+            "status": "PASS"
+          },
+          {
+            "id": "H-missing-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "I-invalid-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "J-cross-origin",
+            "status": "PASS"
+          },
+          {
+            "id": "L-idempotent-replay",
+            "status": "PASS"
+          },
+          {
+            "id": "M-changed-body-key",
+            "status": "PASS"
+          },
+          {
+            "id": "K-stale-readiness",
+            "status": "PASS"
+          },
+          {
+            "id": "claim-receipt-explicit",
+            "status": "PASS"
+          },
+          {
+            "id": "N-uncertain-upload",
+            "status": "PASS"
+          },
+          {
+            "id": "simulated-confirmation-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "C-wrong-owner",
+            "status": "PASS"
+          },
+          {
+            "id": "D-wrong-venue-grant",
+            "status": "PASS"
+          },
+          {
+            "id": "O-malformed-reference",
+            "status": "PASS"
+          },
+          {
+            "id": "P-safe-URLs",
+            "status": "PASS"
+          },
+          {
+            "id": "A-expired-quote",
+            "status": "PASS"
+          },
+          {
+            "id": "B-invalid-expired-hold",
+            "status": "PASS"
+          },
+          {
+            "id": "F-rejected-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "G-expired-session",
+            "status": "PASS"
+          }
+        ],
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-omrp8yxj"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-omrp8yxj/observations.json",
+        "traceSha256": "7f133fa2279437fdc1f969499dcebd4f3147c72e82b4f1a5aa1143080b662591",
+        "uploadObservation": {
+          "protectedStateUnchanged": true,
+          "controlOk": true,
+          "state": "QUARANTINED",
+          "completed": true,
+          "scanQueued": 1,
+          "allocationCount": 2,
+          "transport": {
+            "attempts": 2,
+            "dropped": 1,
+            "upstreamStatus": 200
+          },
+          "uncertainPersistence": {
+            "protectedStateUnchanged": true,
+            "controlOk": true,
+            "state": "QUARANTINED",
+            "completed": false,
+            "scanQueued": 0,
+            "allocationCount": 2
+          },
+          "browserStatus": 502,
+          "recoveryStatus": 200,
+          "bytesResent": false
+        }
+      }
+    ],
+    "currentCounts": {
+      "PASS": 24,
+      "FAIL": 0,
+      "NOT_RUN": 0
+    },
+    "checks": {
+      "backend": 513,
+      "bankIntegration": 251,
+      "architecture": 17,
+      "frontend": 251,
+      "faultTransportTests": 2,
+      "inertHarnessAdmission": 10,
+      "ciClassifier": 8,
+      "typecheckLintBuild": "PASS",
+      "knowledge": "PASS",
+      "isolatedExecutionTraceabilityDependency": "PASS",
+      "governanceNegativeControls": 13,
+      "interceptedReceiptBrowser": "26_PASS_INTERCEPTED_NOT_REAL_BACKEND",
+      "whitespace": "PASS",
+      "exactSourceCi": "PENDING_PUBLICATION",
+      "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
+    },
+    "limits": "Existing3CPU/7GiB application+1CPU/1GiB PostgreSQL,600s run/60s scenario;one ephemeral loopback listener in existing controller,no new process;owned port/DB/file cleanup",
+    "acceptance": "24 synthetic groups pass,not full92-requirement,phase,customer,physical,financial,recovery or production acceptance"
   }
 }

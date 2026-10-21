@@ -3587,7 +3587,7 @@ def invalid_hold_e2e_main():
 
 
 
-def inert_ci_main():
+def rejected_verification_e2e_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='57e7383252b5c980954e0196f816b07e02adff59'
@@ -3640,6 +3640,69 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=invalid_hold_e2e_main()
     if result==0:print('PASS exact bounded rejected verification E2E; backend/policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='4fccf4daafa13fa06a7d85ffcf87b6f75298beec'
+    owned={'frontend/package.json', 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java', 'frontend/tests/synthetic-e2e.mjs', 'frontend/tests/upload-fault-proxy.mjs', 'frontend/tests/upload-fault-proxy.test.mjs'}
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/status.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/PROGRESS.md', 'knowledge/ARCHITECTURE.md'}
+    added={'frontend/tests/upload-fault-proxy.mjs', 'frontend/tests/upload-fault-proxy.test.mjs'}
+    hashes={'frontend/package.json': '5e1924632e60203d0a787f040f50e8a9f90f500e67f804317f1f828334f0eaaa', 'knowledge/PROGRESS.md': '3da80a7129d806df0b1f0b0c3e67e2081be77079be3c3e44cd2c59e72a821efd', 'knowledge/execution/status.json': '621f564faa0b1dd3dbde05a4c409f6218450f3b53347c493bddc91676928b6e3', 'knowledge/execution/test-plan.json': '0af65b2fa7ff7b6ad2aed2fde41950f4bebe6ac3a2902675d39190067504e72e', 'frontend/tests/upload-fault-proxy.test.mjs': '192a86501c50b673ffab7e9cec50fc1ffd022ae201ec1e17391de558c05d57ea', 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '3f806222ddca6563cb7fa1b366682fdc8fc7e05e73f21bc6ac82f721494127cf', 'knowledge/execution/requirements.json': 'c25ab3f21e34c4d495891bddb231ff10a3bd0aa58da942c7e1fede9a915f91b1', 'frontend/tests/synthetic-e2e.mjs': '52a37a67a6c4c1e07b9bd65f63c08a6a167cbb31368a2d812fc44599b61cffa7', 'frontend/tests/upload-fault-proxy.mjs': 'f302187b10d47b6ced32e2c61cbb5a37dcb3444f0c8da3392608aa17b9b772fb', 'knowledge/ARCHITECTURE.md': '00b29e209271d5ca0f67d1f0867ace9e4d5af42e2e400268b13d21c2765a1050'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Uncertain upload E2E verification exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('e2eUncertainUploadEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Uncertain upload E2E verification changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('e2eUncertainUploadVerification',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Uncertain upload E2E verification changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Uncertain upload E2E verification changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Uncertain upload E2E verification rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=original['scripts']['test']+' && node --test tests/upload-fault-proxy.test.mjs':errors.append('Uncertain upload E2E changed existing frontend test coverage')
+    package['scripts']['test']=original['scripts']['test']
+    if package!=original:errors.append('Uncertain upload E2E changed frontend dependency/toolchain authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Uncertain upload E2E verification rewrote prior design')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Uncertain upload E2E verification promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Uncertain upload E2E verification unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Uncertain upload E2E verification changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=rejected_verification_e2e_main()
+    if result==0:print('PASS exact bounded uncertain upload E2E verification; backend/policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

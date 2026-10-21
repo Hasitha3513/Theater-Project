@@ -1,5 +1,6 @@
 // Opt-in REAL backend journey. No page.route, route.fulfill, session injection or business stubs.
 import assert from "node:assert/strict";
+import { uploadFaultProxy } from "./upload-fault-proxy.mjs";
 import {
 	safeCustomerNavigation,
 	safeLoopbackResource,
@@ -33,6 +34,7 @@ let financeObservation,
 	expiryObservation,
 	invalidHoldObservation,
 	rejectionObservation,
+	uploadObservation,
 	assertionFailure,
 	activePage;
 const navigations = [];
@@ -180,7 +182,13 @@ await once(socket, "listening");
 const port = socket.address().port;
 await new Promise((r) => socket.close(r));
 const base = `http://127.0.0.1:${port}`;
-await writeFile(`${run}/frontend-port.json`, JSON.stringify({ ports: [port] }));
+const faultTransport = await uploadFaultProxy(config.backend);
+await writeFile(
+	`${run}/frontend-port.json`,
+	JSON.stringify({
+		ports: [port, Number(new URL(faultTransport.origin).port)],
+	}),
+);
 try {
 	frontend = spawn(
 		process.execPath,
@@ -196,7 +204,7 @@ try {
 			cwd: new URL("..", import.meta.url),
 			env: {
 				...process.env,
-				CINENEST_AUTH_ORIGIN: config.backend,
+				CINENEST_AUTH_ORIGIN: faultTransport.origin,
 				NEXT_TELEMETRY_DISABLED: "1",
 			},
 			stdio: "ignore",
@@ -517,6 +525,127 @@ try {
 			await new Promise((r) => setTimeout(r, 50));
 		}
 		throw new Error("receipt completion missing");
+	});
+
+	await scenario("N-uncertain-upload", async () => {
+		// Scan the first explicitly completed receipt through the existing worker.
+		await control({ op: "prepare-upload-fault", id: bank.id });
+		await page.reload();
+		await page
+			.getByRole("button", {
+				name: "Upload private synthetic receipt",
+				exact: true,
+			})
+			.waitFor();
+		const before = await json(page, `/api/bank/requests/${bank.id}`);
+		assert.equal(before.evidence.length, 1);
+		assert.equal(before.evidence[0].state, "READY");
+		await page
+			.getByLabel("Approved synthetic JPEG/PNG fixture")
+			.setInputFiles(`${run}/receipt.png`);
+		const attempts = faultTransport.receipt.attempts;
+		const commandStart = requests.length;
+		const failed = page.waitForResponse(
+			(r) =>
+				/\/api\/bank\/uploads\/[^/]+\/content$/.test(
+					new URL(r.url()).pathname,
+				) && r.request().method() === "PUT",
+		);
+		faultTransport.arm();
+		await page
+			.getByRole("button", {
+				name: "Upload private synthetic receipt",
+				exact: true,
+			})
+			.click();
+		assert.equal((await failed).status(), 502);
+		await page
+			.getByText("Submission outcome is not confirmed.", { exact: false })
+			.waitFor();
+		const uncertain = await json(page, `/api/bank/requests/${bank.id}`);
+		const item = uncertain.evidence.find((e) => e.state === "QUARANTINED");
+		assert.ok(item);
+		assert.equal(uncertain.evidence.length, 2);
+		assert.equal(uncertain.paymentVerified, false);
+		assert.equal(uncertain.bookingConfirmed, false);
+		assert.equal(faultTransport.receipt.attempts, attempts + 1);
+		assert.equal(faultTransport.receipt.dropped, 1);
+		assert.equal(faultTransport.receipt.upstreamStatus, 200);
+		const pending = await control({
+			op: "inspect-upload-uncertain",
+			id: bank.id,
+			evidence: item.id,
+		});
+		assert.equal(pending.completed, false);
+		assert.equal(pending.scanQueued, 0);
+		assert.equal(pending.state, "QUARANTINED");
+		assert.equal(
+			requests.slice(commandStart).filter((r) => r.method === "POST").length,
+			1,
+			"Only explicit allocation, no automatic completion",
+		);
+		const other = await browser.newContext();
+		try {
+			const p = await other.newPage();
+			await login(p, "customer-b");
+			assert.equal((await api(p, `/api/bank/requests/${bank.id}`)).status, 404);
+			assert.equal(
+				(
+					await api(p, `/api/bank/uploads/${item.id}/complete`, "POST", {
+						revision: uncertain.revision,
+						commandKey: crypto.randomUUID(),
+					})
+				).status,
+				404,
+			);
+		} finally {
+			await other.close();
+		}
+		// Explicit retry reloads QUARANTINED and completes the original allocation; no PUT.
+		const complete = page.waitForResponse(
+			(r) =>
+				new URL(r.url()).pathname === `/api/bank/uploads/${item.id}/complete` &&
+				r.request().method() === "POST",
+		);
+		await page
+			.getByRole("button", {
+				name: "Upload private synthetic receipt",
+				exact: true,
+			})
+			.click();
+		assert.equal((await complete).status(), 200);
+		const recovered = await json(page, `/api/bank/requests/${bank.id}`);
+		assert.equal(recovered.evidence.length, 2);
+		assert.equal(
+			recovered.evidence.find((e) => e.id === item.id).state,
+			"QUARANTINED",
+		);
+		assert.equal(faultTransport.receipt.attempts, attempts + 1);
+		assert.equal(recovered.paymentVerified, false);
+		assert.equal(recovered.bookingConfirmed, false);
+		uploadObservation = await control({
+			op: "inspect-upload-fault",
+			id: bank.id,
+			evidence: item.id,
+		});
+		assert.equal(uploadObservation.protectedStateUnchanged, true);
+		assert.equal(uploadObservation.state, "QUARANTINED");
+		assert.equal(uploadObservation.scanQueued, 1);
+		assert.equal(uploadObservation.completed, true);
+		assert.equal(uploadObservation.allocationCount, 2);
+		assert.equal(
+			requests.slice(commandStart).filter((r) => r.method === "POST").length,
+			2,
+			"Same allocation followed by one explicit completion",
+		);
+		uploadObservation = {
+			...uploadObservation,
+			transport: { ...faultTransport.receipt },
+			uncertainPersistence: pending,
+			browserStatus: 502,
+			recoveryStatus: 200,
+			bytesResent: false,
+		};
 	});
 	await scenario("simulated-confirmation-api-support", async () => {
 		const result = await control({ op: "finance", id: bank.id });
@@ -1279,10 +1408,6 @@ try {
 		await control({ op: "expire-session" });
 		assert.equal((await api(page, "/api/accounts/me")).status, 401);
 	});
-	notRun(
-		"N-uncertain-upload",
-		"No safely qualified connection-failure transport; no fabricated responses",
-	);
 } catch (failure) {
 	assertionFailure = {
 		name: failure.name,
@@ -1306,6 +1431,7 @@ try {
 		expiryObservation,
 		invalidHoldObservation,
 		rejectionObservation,
+		uploadObservation,
 	});
 	process.exitCode = 1;
 } finally {
@@ -1324,6 +1450,7 @@ try {
 			expiryObservation,
 			invalidHoldObservation,
 			rejectionObservation,
+			uploadObservation,
 			observations,
 			navigations,
 			finalPath: activePage
@@ -1336,6 +1463,7 @@ try {
 		{ mode: 0o600 },
 	);
 	if (browser) await browser.close();
+	await faultTransport.close();
 	if (frontend && frontend.exitCode === null) {
 		frontend.kill("SIGTERM");
 		await Promise.race([

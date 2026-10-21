@@ -43,7 +43,8 @@ class SyntheticJourneyIT {
         UUID expiringHold=null,expiringQuote=null;
         Map<String,Object> expiryBaseline=null,invalidHoldBaseline=null;
         UUID invalidHold=null,rejectedRequest=null;
-        Map<String,Object> rejectionBaseline=null;
+        Map<String,Object> rejectionBaseline=null,uploadBaseline=null;
+        UUID uploadRequest=null;
         try {
             var builder=new ProcessBuilder("node",Path.of("../frontend/tests/synthetic-e2e.mjs").toAbsolutePath().toString());
             builder.redirectErrorStream(true);builder.redirectOutput(run.resolve("private-browser.log").toFile());
@@ -60,6 +61,20 @@ class SyntheticJourneyIT {
                             fixture.work();fixture.reviewerGrants();
                             var r=fixture.json(fixture.signedIn("customer-a").get("/api/verification/requests/"+body.get("id")));
                             response=fixture.json(fixture.write(staff,"POST",fixture.reviewPath(r)+"/decisions",JSONObjectUtils.toJSONString(fixture.decision(r,body.get("verdict").toString()))));
+                        }else if(op.equals("prepare-upload-fault")){
+                            if(uploadRequest!=null)throw new IllegalArgumentException("One upload fault fixture only");
+                            uploadRequest=UUID.fromString(body.get("id").toString());
+                            assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request WHERE request_id=:r AND owner_id=:a AND venue_id=:v").param("r",uploadRequest).param("a",BankIntegrationTest.A).param("v",BankIntegrationTest.VA).query(Long.class).single()).isEqualTo(1);
+                            fixture.bankWork();uploadBaseline=financialState(fixture);response.put("prepared",true);
+                        }else if(op.equals("inspect-upload-fault")||op.equals("inspect-upload-uncertain")){
+                            assertThat(uploadBaseline).isNotNull();assertThat(UUID.fromString(body.get("id").toString())).isEqualTo(uploadRequest);
+                            assertThat(financialState(fixture)).isEqualTo(uploadBaseline);
+                            UUID evidence=UUID.fromString(body.get("evidence").toString());
+                            response.put("state",fixture.jdbc.sql("SELECT state FROM cinenest_payments.bank_receipt_evidence WHERE evidence_id=:e AND request_id=:r").param("e",evidence).param("r",uploadRequest).query(String.class).single());
+                            response.put("scanQueued",fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_work WHERE evidence_id=:e AND kind='SCAN'").param("e",evidence).query(Long.class).single());
+                            response.put("completed",fixture.jdbc.sql("SELECT completed_at IS NOT NULL FROM cinenest_payments.bank_receipt_evidence WHERE evidence_id=:e AND request_id=:r").param("e",evidence).param("r",uploadRequest).query(Boolean.class).single());
+                            response.put("allocationCount",fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_receipt_evidence WHERE request_id=:r").param("r",uploadRequest).query(Long.class).single());
+                            response.put("protectedStateUnchanged",true);
                         }else if(op.equals("finance")){
                             fixture.financeGrants();
                             var customer=fixture.signedIn("customer-a");var allocator=fixture.signedIn("customer-b");
@@ -138,6 +153,12 @@ class SyntheticJourneyIT {
             if(browser!=null&&browser.isAlive()){browser.destroy();if(!browser.waitFor(3,java.util.concurrent.TimeUnit.SECONDS)){browser.destroyForcibly();browser.waitFor();}}
             BankIntegrationTest.IDP.close();
         }
+    }
+    private static Map<String,Object> financialState(BankIntegrationTest fixture){
+        Map<String,Object> state=new HashMap<>();
+        for(String table:List.of("cinenest_payments.incoming_payment_credit","cinenest_payments.bank_credit_verification","cinenest_payments.payment_allocation","cinenest_booking.booking"))
+            state.put(table,fixture.jdbc.sql("SELECT md5(COALESCE(jsonb_agg(to_jsonb(t) ORDER BY to_jsonb(t)::text)::text,'[]')) FROM "+table+" t").query(String.class).single());
+        return state;
     }
     private static boolean quoteExpired(BankIntegrationTest fixture,UUID quote){
         return fixture.jdbc.sql("SELECT expires_at<=clock_timestamp() FROM cinenest_pricing.quotation_revision WHERE quote_id=:q AND revision=1").param("q",quote).query(Boolean.class).single();
