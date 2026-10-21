@@ -209,6 +209,19 @@ export async function forwardBank(request: Request): Promise<Response> {
 		if (readiness && !validReadiness)
 			return new Response(null, { status: 400, headers });
 		if (readiness) headers.set("Cache-Control", "private, no-store");
+		const operationsQueue = new RegExp(
+			`^/api/admin/venues/${uuid}/operations/cases$`,
+		).test(url.pathname);
+		const queuePage =
+			operationsQueue &&
+			request.method === "GET" &&
+			[...url.searchParams.keys()].every(
+				(k) => k === "page" && url.searchParams.getAll(k).length === 1,
+			) &&
+			/^\d{1,6}$/.test(url.searchParams.get("page") ?? "0") &&
+			Number(url.searchParams.get("page") ?? "0") <= 100000;
+		if (operationsQueue && url.search && !queuePage)
+			return new Response(null, { status: 404, headers });
 		const bookingOperations = new RegExp(
 			`^/api/admin/venues/${uuid}/bookings/${uuid}/operations/cases$`,
 		).test(url.pathname);
@@ -261,7 +274,8 @@ export async function forwardBank(request: Request): Promise<Response> {
 				!accessPage &&
 				!validReadiness &&
 				!refundPage &&
-				!operationsPage)
+				!operationsPage &&
+				!queuePage)
 		)
 			return new Response(null, { status: 404, headers });
 		const configured = process.env.CINENEST_AUTH_ORIGIN;

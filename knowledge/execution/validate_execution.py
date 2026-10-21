@@ -4075,7 +4075,7 @@ def staff_booking_operations_contract_main():
 
 
 
-def inert_ci_main():
+def booking_operations_context_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='d4941426fdb4f0cf449a8bbeace0457d44fc332a'
@@ -4133,6 +4133,70 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=staff_booking_operations_contract_main()
     if result==0:print('PASS exact bounded booking Operations context integration; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='692f69cbeb99243799c9e17b33a62b23c29099c5'
+    owned={'frontend/tests/staff-booking-operations.test.mjs', 'frontend/package.json', 'frontend/lib/bank-backend.ts', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'frontend/tests/operations-pagination.test.mjs', 'frontend/tests/operations-pagination-browser.mjs'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/PROGRESS.md', 'knowledge/ARCHITECTURE.md'}
+    added={'frontend/tests/operations-pagination-browser.mjs', 'frontend/tests/operations-pagination.test.mjs'}
+    hashes={'frontend/tests/staff-booking-operations.test.mjs': 'bf38dedca6c09dd34a0bc21fcaed3db86ba94b0ef723bf3770786e203309e2bb', 'frontend/lib/bank-backend.ts': '72fe0e4f6aa6e326126f15ca71ebde56dc999f10f8ea1e0d3ed3a2f664a17eb4', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'c4a87711272f66e0e89f6c1bde61d108e60ff4202b419c30e9d0f349bd3f7285', 'frontend/tests/operations-pagination.test.mjs': '936c5ad04ab27807f7b8b256127a8ac843a886e0d06bfe61a38a1294d6f2372a', 'frontend/package.json': '063eb94d958a50a855f490167715bd343a1c6da9d866e9cf71b46870d199f2b5', 'knowledge/PROGRESS.md': 'd5f0e96ad0180fb7a0d8386a79c8c3ebfaedff407315e9640c6c56079a70d8df', 'knowledge/execution/test-plan.json': '0728bc32af6b6b1b2a94e43ca897f731bf92a0dfead4b22f09918f411c71a849', 'knowledge/execution/status.json': '63b4cf407adbb81bf10cd404ec587aafbe24f075d2383219ae288e6a0f3d80e7', 'knowledge/execution/requirements.json': '0e2bed47b73c46fc801518dc57ebc2f04a98a3eb3ce5a53db90a6812ba382e84', 'frontend/tests/operations-pagination-browser.mjs': '212238b5bdcce8e69dadb3f3b84fbec5b649be57b8343615bc1a919a51d68ab4', 'knowledge/ARCHITECTURE.md': 'aedb0f162a41986550fe03329076b496ae3963af99b3c5f160ce592ed40b0f4f'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Operations queue pagination correction exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('operationsQueuePaginationEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Operations queue pagination correction changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('operationsQueuePaginationImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Operations queue pagination correction changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Operations queue pagination correction changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Operations queue pagination correction rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=original['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/operations-pagination.test.mjs':errors.append('Operations queue pagination correction changed existing frontend coverage')
+    package['scripts']['test']=original['scripts']['test']
+    if package!=original:errors.append('Operations queue pagination correction changed dependency/toolchain authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Operations queue pagination correction rewrote prior design')
+    if not (R/'frontend/app/globals.css').read_text().startswith(prior('frontend/app/globals.css').decode()):errors.append('Operations queue pagination correction rewrote prior global styles')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Operations queue pagination correction promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Operations queue pagination correction unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Operations queue pagination correction changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=booking_operations_context_main()
+    if result==0:print('PASS exact bounded Operations queue pagination correction; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

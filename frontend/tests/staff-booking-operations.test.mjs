@@ -38,10 +38,10 @@ test('bounded exact authenticated GET,no-store,signal,no credentials/CSRF/mutati
 test('session,grant revocation,wrong venue,missing,conflict,rate-limit,backend denial clear authority',async()=>{
  const old=global.fetch;try{for(const status of [401,403,404,409,429,503]){global.fetch=async()=>Response.json({message:'PRIVATE'},{status});await assert.rejects(loadStaffBookingOperations(item()),e=>e.status===status);}}finally{global.fetch=old;}
 });
-test('GET-only proxy rejects unknown,duplicate,size,sensitive and invalid page queries;old venue queue remains unchanged',async()=>{
+test('GET-only proxy rejects unknown,duplicate,size,sensitive and invalid page queries;venue queue still rejects unsupported parameters',async()=>{
  const path=`/api/admin/venues/${venue}/bookings/${id}/operations/cases`;assert.equal(bankRoute(path,'GET'),true);for(const m of ['POST','PUT','PATCH','DELETE'])assert.equal(bankRoute(path,m),false);
  for(const q of ['?page=0&page=1','?page=-1','?page=100001','?page=1.5','?size=25','?token=secret','?page=','?page=1&secret=private'])assert.equal((await forwardBank(new Request('http://localhost'+path+q))).status,404);
- assert.equal((await forwardBank(new Request(`http://localhost/api/admin/venues/${venue}/operations/cases?page=0`))).status,404);
+ assert.equal((await forwardBank(new Request(`http://localhost/api/admin/venues/${venue}/operations/cases?size=25`))).status,404);
 });
 test('proxy forwards only exact page and session cookie,no client authorities or other cookies',async()=>{
  const old=global.fetch,origin=process.env.CINENEST_AUTH_ORIGIN;process.env.CINENEST_AUTH_ORIGIN='http://127.0.0.1:9876';const calls=[];try{global.fetch=async(url,init)=>{calls.push([String(url),init]);return Response.json(operationsFixture());};const path=`/api/admin/venues/${venue}/bookings/${id}/operations/cases?page=0`;const r=await forwardBank(new Request('http://localhost'+path,{headers:{cookie:'other=private; CINENEST_SESSION=synthetic-only','x-roles':'admin'}}));assert.equal(r.status,200);assert.match(r.headers.get('cache-control'),/no-store/);assert.equal(calls[0][0],'http://127.0.0.1:9876'+path);assert.deepEqual([...calls[0][1].headers],[['cookie','CINENEST_SESSION=synthetic-only']]);assert.equal(calls[0][1].method,'GET');assert.equal(calls[0][1].redirect,'manual');}finally{global.fetch=old;if(origin===undefined)delete process.env.CINENEST_AUTH_ORIGIN;else process.env.CINENEST_AUTH_ORIGIN=origin;}

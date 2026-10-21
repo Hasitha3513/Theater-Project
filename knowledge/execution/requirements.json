@@ -1583,6 +1583,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
+      },
+      "operationsQueuePaginationEvidence": {
+        "changeSetId": "CN-OPERATIONS-QUEUE-PAGINATION-001",
+        "scope": "Exact venue Operations queue GET query-allowlist repair only;no backend business change",
+        "evidencePath": "PROGRESS.md#operations-queue-pagination",
+        "sourcePaths": [
+          "frontend/lib/bank-backend.ts",
+          "frontend/tests/operations-pagination.test.mjs",
+          "frontend/tests/operations-pagination-browser.mjs",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Local synthetic HTTP upstream/browser is not Spring/PostgreSQL E2E;backend authorization separately tested with real isolated PostgreSQL"
       }
     },
     {
@@ -2215,6 +2229,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
+      },
+      "operationsQueuePaginationEvidence": {
+        "changeSetId": "CN-OPERATIONS-QUEUE-PAGINATION-001",
+        "scope": "Exact venue Operations queue GET query-allowlist repair only;no backend business change",
+        "evidencePath": "PROGRESS.md#operations-queue-pagination",
+        "sourcePaths": [
+          "frontend/lib/bank-backend.ts",
+          "frontend/tests/operations-pagination.test.mjs",
+          "frontend/tests/operations-pagination-browser.mjs",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Local synthetic HTTP upstream/browser is not Spring/PostgreSQL E2E;backend authorization separately tested with real isolated PostgreSQL"
       }
     },
     {
@@ -2308,6 +2336,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
+      },
+      "operationsQueuePaginationEvidence": {
+        "changeSetId": "CN-OPERATIONS-QUEUE-PAGINATION-001",
+        "scope": "Exact venue Operations queue GET query-allowlist repair only;no backend business change",
+        "evidencePath": "PROGRESS.md#operations-queue-pagination",
+        "sourcePaths": [
+          "frontend/lib/bank-backend.ts",
+          "frontend/tests/operations-pagination.test.mjs",
+          "frontend/tests/operations-pagination-browser.mjs",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Local synthetic HTTP upstream/browser is not Spring/PostgreSQL E2E;backend authorization separately tested with real isolated PostgreSQL"
       }
     },
     {
@@ -3141,6 +3183,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
+      },
+      "operationsQueuePaginationEvidence": {
+        "changeSetId": "CN-OPERATIONS-QUEUE-PAGINATION-001",
+        "scope": "Exact venue Operations queue GET query-allowlist repair only;no backend business change",
+        "evidencePath": "PROGRESS.md#operations-queue-pagination",
+        "sourcePaths": [
+          "frontend/lib/bank-backend.ts",
+          "frontend/tests/operations-pagination.test.mjs",
+          "frontend/tests/operations-pagination-browser.mjs",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Local synthetic HTTP upstream/browser is not Spring/PostgreSQL E2E;backend authorization separately tested with real isolated PostgreSQL"
       }
     },
     {
