@@ -7895,5 +7895,66 @@
     "negativeEvidence": "PostgreSQL persisted wrong-room and nonexistent captured revision fail409;mandatory existing DENIED audit failure returns503 and rolls back audit;full domain snapshots unchanged",
     "validation": "Knowledge+approved in-memory committed-source execution PASS;ordinary execution exactly2 pre-existing next-env integrity findings;18 governance negative controls,92/92 traceability,28-task acyclic dependencies and whitespace PASS",
     "testCorrections": "Initial run one failure/one error in new fixtures:blocked REQUEST resource type instead of actual DENIED audit action;Mockito reset invoked injected throwing stub. Corrected fixtures,retained strict expected503/409 and reran full suite successfully."
+  },
+  "bookingOperationsContextImplementation": {
+    "changeSetId": "CN-BOOKING-OPERATIONS-CONTEXT-001",
+    "ownerAuthority": "Owner inline authorization and explicit resume for bounded frontend-only booking Operations context on2026-10-21",
+    "baselineHead": "d4941426fdb4f0cf449a8bbeace0457d44fc332a",
+    "prerequisiteCI": "39624250574 COMPLETED/SUCCESS exact baseline;backend/frontend/governance passed",
+    "status": "LOCALLY_VERIFIED_BOUNDED_READ_ONLY_FRONTEND",
+    "evidencePath": "PROGRESS.md#booking-operations-context-implementation",
+    "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/operations/cases?page=0",
+    "permission": "Backend independent current VENUE operations.synthetic.read;no booking/access/refund/admin/SELF/other-venue substitution or grant stitching",
+    "context": "Strict header binding to current protected booking,venue,room,revision,purchased window/timezone;historical cases retain captured immutable revision/window/room;no inferred room-wide association",
+    "pagination": "Fixed25,page0..100000,hasNext;explicit pages/reload;no cross-page snapshot claim",
+    "physicalTruth": "synthetic=true,occupancy UNKNOWN,readiness UNVERIFIED,inventoryChanged=false;empty does not imply readiness;categories are recorded history,not current unresolved status",
+    "stateLifecycle": "Existing useProtectedRead abort/generation/session/pagehide/visibility lifecycle;keyed context unmounts on booking/venue/revision change;sanitized errors clear results",
+    "tests": "285 frontend tests PASS(10 new);TypeScript,strict lint,production build PASS;20 focused intercepted browser/visual groups PASS at375/768/1280;591 backend regressions with291 PostgreSQL BankIntegrationTest,12 Operations query unit and18 architecture tests PASS;V1-V19 clean/repeat/retained upgrade,packaged startup/HTTP denial PASS;8 classifier and10 inert harness admission checks PASS",
+    "browserRegressions": "30 existing staff-booking,17 roster and16 refund intercepted browser groups PASS;separate output paths preserve prior evidence",
+    "screenshots": [
+      {
+        "path": ".cache/staff-booking-operations/before/booking-375.png",
+        "width": 375,
+        "height": 2962,
+        "sha256": "d1ee6df69fb73148f0a4a7e1097734f992e48549f7af98d8df2db77d2dd5b7c8"
+      },
+      {
+        "path": ".cache/staff-booking-operations/before/booking-768.png",
+        "width": 768,
+        "height": 2529,
+        "sha256": "7616ca63aacd2eb5b8ac883e75a1e7433187db7e2ee17a88e258f4d109238023"
+      },
+      {
+        "path": ".cache/staff-booking-operations/before/booking-1280.png",
+        "width": 1280,
+        "height": 2259,
+        "sha256": "f466e722cdfd4b1e908bfe7ced1af48457c5f61c6888d4d8eeac2deabbfa4f3a"
+      },
+      {
+        "path": ".cache/staff-booking-operations/after/booking-375.png",
+        "width": 375,
+        "height": 5953,
+        "sha256": "3df543ab107ccb34ed3d8a9484c9b2457f1f08f34115c62d2630791438ab2fce"
+      },
+      {
+        "path": ".cache/staff-booking-operations/after/booking-768.png",
+        "width": 768,
+        "height": 4887,
+        "sha256": "a09de8b3567109d8b24467fdc6a37f637e43c7b956d3c252374cda38d7825d89"
+      },
+      {
+        "path": ".cache/staff-booking-operations/after/booking-1280.png",
+        "width": 1280,
+        "height": 3974,
+        "sha256": "d0dd17d91a80e268cd6de195c44faa3e102e58db7ea940b7771f6c7af009b670"
+      }
+    ],
+    "visualComparison": "All3 approved PNGs and6 actual before/after screenshots inspected. Existing240px navy desktop sidebar/light workspace/violet controls retained;new metadata3 columns desktop,1 mobile/tablet;one main,no horizontal overflow,visible reload focus. Full-page height2962/2529/2259 to5953/4887/3974 with2 synthetic linked cases;compact reference tables and existing shell typography remain outside scope.",
+    "remainingGaps": "Existing venue-wide operations queue?page=0 proxy404 reproduced and retained separately;no room-wide inference or new operations actions;physical occupancy/readiness/customer acceptance and real-backend full campaign not established by this UI",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "validation": "Knowledge/design,approved in-memory committed-source execution/status,18 governance negative controls,92/92 traceability,28-task acyclic dependencies and whitespace verified at final checks;ordinary validator retains2 pre-existing next-env integrity findings",
+    "rollback": "Normal scoped frontend revert retains backend/schema/cases/history/authorization and operational safety gates"
   }
 }

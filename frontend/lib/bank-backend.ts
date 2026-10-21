@@ -2,6 +2,12 @@
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
 	if (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/bookings/${uuid}/operations/cases$`,
+		).test(path)
+	)
+		return method === "GET";
+	if (
 		new RegExp(`^/api/admin/venues/${uuid}/bookings/${uuid}/refunds$`).test(
 			path,
 		)
@@ -203,6 +209,19 @@ export async function forwardBank(request: Request): Promise<Response> {
 		if (readiness && !validReadiness)
 			return new Response(null, { status: 400, headers });
 		if (readiness) headers.set("Cache-Control", "private, no-store");
+		const bookingOperations = new RegExp(
+			`^/api/admin/venues/${uuid}/bookings/${uuid}/operations/cases$`,
+		).test(url.pathname);
+		const operationsPage =
+			bookingOperations &&
+			request.method === "GET" &&
+			[...url.searchParams.keys()].every(
+				(k) => k === "page" && url.searchParams.getAll(k).length === 1,
+			) &&
+			/^\d{1,6}$/.test(url.searchParams.get("page") ?? "0") &&
+			Number(url.searchParams.get("page") ?? "0") <= 100000;
+		if (bookingOperations && !operationsPage)
+			return new Response(null, { status: 404, headers });
 		const bookingRefund = new RegExp(
 			`^/api/admin/venues/${uuid}/bookings/${uuid}/refunds$`,
 		).test(url.pathname);
@@ -238,7 +257,11 @@ export async function forwardBank(request: Request): Promise<Response> {
 			[...url.searchParams.values()].every((v) => /^\d{1,5}$/.test(v));
 		if (
 			!bankRoute(url.pathname, request.method) ||
-			(url.search && !accessPage && !validReadiness && !refundPage)
+			(url.search &&
+				!accessPage &&
+				!validReadiness &&
+				!refundPage &&
+				!operationsPage)
 		)
 			return new Response(null, { status: 404, headers });
 		const configured = process.env.CINENEST_AUTH_ORIGIN;

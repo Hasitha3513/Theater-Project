@@ -1334,6 +1334,20 @@
           "frontend/tests/staff-booking-refunds-browser.mjs"
         ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingOperationsContextEvidence": {
+        "changeSetId": "CN-BOOKING-OPERATIONS-CONTEXT-001",
+        "scope": "Protected exact-booking read-only frontend context;no operational mutation or physical readiness",
+        "evidencePath": "PROGRESS.md#booking-operations-context-implementation",
+        "sourcePaths": [
+          "frontend/lib/staff-booking-operations.ts",
+          "frontend/components/staff-booking-operations.tsx",
+          "frontend/tests/staff-booking-operations.test.mjs",
+          "frontend/tests/staff-booking-operations-browser.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
       }
     },
     {
@@ -1555,6 +1569,20 @@
           "backend/src/test/java/com/cinenest/rooms/internal/StaffBookingOperationsQueryTest.java"
         ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingOperationsContextEvidence": {
+        "changeSetId": "CN-BOOKING-OPERATIONS-CONTEXT-001",
+        "scope": "Protected exact-booking read-only frontend context;no operational mutation or physical readiness",
+        "evidencePath": "PROGRESS.md#booking-operations-context-implementation",
+        "sourcePaths": [
+          "frontend/lib/staff-booking-operations.ts",
+          "frontend/components/staff-booking-operations.tsx",
+          "frontend/tests/staff-booking-operations.test.mjs",
+          "frontend/tests/staff-booking-operations-browser.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
       }
     },
     {
@@ -2173,6 +2201,20 @@
           "backend/src/test/java/com/cinenest/rooms/internal/StaffBookingOperationsQueryTest.java"
         ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingOperationsContextEvidence": {
+        "changeSetId": "CN-BOOKING-OPERATIONS-CONTEXT-001",
+        "scope": "Protected exact-booking read-only frontend context;no operational mutation or physical readiness",
+        "evidencePath": "PROGRESS.md#booking-operations-context-implementation",
+        "sourcePaths": [
+          "frontend/lib/staff-booking-operations.ts",
+          "frontend/components/staff-booking-operations.tsx",
+          "frontend/tests/staff-booking-operations.test.mjs",
+          "frontend/tests/staff-booking-operations-browser.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
       }
     },
     {
@@ -2252,6 +2294,20 @@
           "backend/src/test/java/com/cinenest/rooms/internal/StaffBookingOperationsQueryTest.java"
         ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingOperationsContextEvidence": {
+        "changeSetId": "CN-BOOKING-OPERATIONS-CONTEXT-001",
+        "scope": "Protected exact-booking read-only frontend context;no operational mutation or physical readiness",
+        "evidencePath": "PROGRESS.md#booking-operations-context-implementation",
+        "sourcePaths": [
+          "frontend/lib/staff-booking-operations.ts",
+          "frontend/components/staff-booking-operations.tsx",
+          "frontend/tests/staff-booking-operations.test.mjs",
+          "frontend/tests/staff-booking-operations-browser.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
       }
     },
     {
@@ -3071,6 +3127,20 @@
           "backend/src/test/java/com/cinenest/rooms/internal/StaffBookingOperationsQueryTest.java"
         ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingOperationsContextEvidence": {
+        "changeSetId": "CN-BOOKING-OPERATIONS-CONTEXT-001",
+        "scope": "Protected exact-booking read-only frontend context;no operational mutation or physical readiness",
+        "evidencePath": "PROGRESS.md#booking-operations-context-implementation",
+        "sourcePaths": [
+          "frontend/lib/staff-booking-operations.ts",
+          "frontend/components/staff-booking-operations.tsx",
+          "frontend/tests/staff-booking-operations.test.mjs",
+          "frontend/tests/staff-booking-operations-browser.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
       }
     },
     {

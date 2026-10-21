@@ -1040,3 +1040,6 @@ button.button { display: inline-grid; }
 .refund-observation .toolbar { justify-content: space-between; align-items: flex-start; }
 .refund-observation h3 { margin: 0; }
 #booking-refund-results { margin-top: var(--cn-spacing-3); }
+
+/* Exact booking-linked read disclosure; existing shell and tokens retained. */
+.booking-operations #booking-operations-results { margin-top: var(--cn-spacing-3); }
