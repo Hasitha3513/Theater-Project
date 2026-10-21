@@ -946,7 +946,18 @@
       ],
       "verificationDecisionIds": [
         "OD-04"
-      ]
+      ],
+      "staffBookingAccessReadEvidence": {
+        "changeSetId": "CN-STAFF-BOOKING-ACCESS-CONTRACT-001",
+        "scope": "Access-owned exact-booking staff observational read; synthetic only",
+        "ownerAuthority": "Owner attachment56a53fc3-fa28-4174-a643-9c4b539161db authorizes reviewed backend-only contract",
+        "evidencePath": "PROGRESS.md#staff-booking-access-contract",
+        "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/access",
+        "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+      }
     },
     {
       "id": "CN-C08",
@@ -1273,6 +1284,17 @@
         "scope": "Existing separately venue-authorized GET,strict context/DTO projection,read-only staff detail roster;no admission/identity/physical/financial action",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "staffBookingAccessReadEvidence": {
+        "changeSetId": "CN-STAFF-BOOKING-ACCESS-CONTRACT-001",
+        "scope": "Access-owned exact-booking staff observational read; synthetic only",
+        "ownerAuthority": "Owner attachment56a53fc3-fa28-4174-a643-9c4b539161db authorizes reviewed backend-only contract",
+        "evidencePath": "PROGRESS.md#staff-booking-access-contract",
+        "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/access",
+        "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       }
     },
     {
@@ -1922,6 +1944,17 @@
         "evidencePath": "PROGRESS.md#guest-roster-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "staffBookingAccessReadEvidence": {
+        "changeSetId": "CN-STAFF-BOOKING-ACCESS-CONTRACT-001",
+        "scope": "Access-owned exact-booking staff observational read; synthetic only",
+        "ownerAuthority": "Owner attachment56a53fc3-fa28-4174-a643-9c4b539161db authorizes reviewed backend-only contract",
+        "evidencePath": "PROGRESS.md#staff-booking-access-contract",
+        "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/access",
+        "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       }
     },
     {
@@ -2880,6 +2913,17 @@
         "scope": "Existing separately venue-authorized GET,strict context/DTO projection,read-only staff detail roster;no admission/identity/physical/financial action",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "staffBookingAccessReadEvidence": {
+        "changeSetId": "CN-STAFF-BOOKING-ACCESS-CONTRACT-001",
+        "scope": "Access-owned exact-booking staff observational read; synthetic only",
+        "ownerAuthority": "Owner attachment56a53fc3-fa28-4174-a643-9c4b539161db authorizes reviewed backend-only contract",
+        "evidencePath": "PROGRESS.md#staff-booking-access-contract",
+        "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/access",
+        "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       }
     },
     {

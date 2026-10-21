@@ -39,6 +39,51 @@ class AccessService {
   v.put("history",repo.history(id));v.put("permittedActions",actions);return v;
  }
  @Transactional public void cleanup(){policy.configured();for(UUID id:repo.cleanupCandidates()){UUID booking=repo.bookingFor(id);repo.lock(booking);var r=repo.credential(id).orElseThrow();long before=n(r,"revision");normalize(r);if(n(r,"revision")!=before)repo.audit(null,id,booking,id(r,"venue_id"),"SECRET_RETENTION_OR_EXPIRY","APPLIED");}}
+ /** Observational staff read: only rate/audit bookkeeping may write. */
+ @Transactional public StaffBookingAccessView staffBooking(UUID actor,UUID venue,UUID booking){
+  policy.configured();
+  repo.lock(booking);
+  permit(actor,venue,"access.synthetic.review",false);
+  rate(actor);
+  BookingAccess.Context b;
+  try{b=bookings.lock(booking).orElseThrow(()->new AccessFailure(404));}
+  catch(IllegalStateException e){throw new AccessFailure(503);}
+  if(!venue.equals(b.venue()))throw new AccessFailure(403);
+  var rows=repo.bookingCredentials(booking);
+  // Recheck after booking/credential lock waits; a read cannot retain stale authority.
+  permit(actor,venue,"access.synthetic.review",false);
+  Instant observed;
+  StaffBookingAccessView.Credential credential=null;
+  String state="NOT_ISSUED";
+  var actions=new ArrayList<String>();
+  if(!rows.isEmpty()){
+   Long previous=null;int active=0;
+   for(var row:rows){
+    long version=n(row,"version");String stored=Objects.toString(row.get("state"),"");
+    if(version<=0||(previous!=null&&version>=previous)||!booking.equals(id(row,"booking_id"))||!b.owner().equals(id(row,"owner_id"))||!venue.equals(id(row,"venue_id"))||
+       !Set.of("SCHEDULED","ACTIVE","CONSUMED","EXPIRED","REVOKED","SUPERSEDED").contains(stored))throw new AccessFailure(409);
+    if(Set.of("SCHEDULED","ACTIVE").contains(stored)){active++;if(row!=rows.getFirst())throw new AccessFailure(409);}
+    previous=version;
+   }
+   if(active>1)throw new AccessFailure(409);
+   var row=rows.getFirst();binding(b,row,b.revision());
+   if(!b.timezone().equals(row.get("timezone")))throw new AccessFailure(409);
+   UUID id=id(row,"credential_id");var work=repo.bookingWork(id).orElseThrow(()->new AccessFailure(409));
+   if(work==null||!id.equals(work.get("credential_id"))||n(work,"credential_version")!=n(row,"version")||!(work.get("operation_id") instanceof UUID)||
+      !Set.of("PENDING_SIMULATION","SIMULATOR_INSTALLED","FAILED","UNKNOWN","RECONCILIATION_REQUIRED","REVOKED").contains(Objects.toString(work.get("state"),"")))throw new AccessFailure(409);
+   permit(actor,venue,"access.synthetic.review",false);
+   observed=repo.now();
+   state=row.get("state").toString();
+   if(Set.of("SCHEDULED","ACTIVE").contains(state))state=!observed.isBefore(b.end())?"EXPIRED":!observed.isBefore(b.start())?"ACTIVE":state;
+   credential=new StaffBookingAccessView.Credential(id,n(row,"version"),n(row,"revision"),n(row,"booking_revision"),work.get("state").toString(),id(work,"operation_id"));
+   if(auth.permits(actor,venue,"access.synthetic.revoke",false))actions.add("REVOKE");
+   if(Set.of("SCHEDULED","ACTIVE").contains(state)&&auth.permits(actor,venue,"access.synthetic.simulate",false))actions.add("SIMULATE");
+  }
+  else{observed=repo.now();}
+  try{repo.audit(actor,credential==null?null:credential.id(),booking,venue,"STAFF_BOOKING_READ","ALLOW");}
+  catch(org.springframework.dao.DataAccessException e){throw new AccessFailure(503);}
+  return new StaffBookingAccessView(booking,venue,b.room(),b.revision(),b.start(),b.end(),b.timezone(),observed,credential!=null,state,credential,List.copyOf(actions),true,false);
+ }
  @Transactional public Object status(UUID actor,UUID booking){policy.configured();repo.lock(booking);var b=context(booking);if(!b.owner().equals(actor))throw new AccessFailure(403);permit(actor,b.venue(),"access.synthetic.read",true);rate(actor);var r=repo.latest(booking);repo.audit(actor,r.map(x->id(x,"credential_id")).orElse(null),booking,b.venue(),"READ","ALLOW");return r.<Object>map(x->view(actor,x,false)).orElseGet(()->Map.of("synthetic",true,"doorControlled",false,"bookingId",booking,"bookingRevision",b.revision(),"state","NOT_ISSUED","permittedActions",!bookings.amendmentPending(booking)&&auth.permitsSelf(actor,"access.synthetic.issue",false)?List.of("ISSUE"):List.of(),"label","SYNTHETIC ACCESS TEST — NO DOOR CONTROL"));}
  @Transactional public Object admin(UUID actor,UUID venue,UUID credential,int page,int size){policy.configured();permit(actor,venue,"access.synthetic.review",false);rate(actor);if(page<0||page>10000||size<1||size>50)throw new AccessFailure(400);List<Map<String,Object>> rows=new ArrayList<>();for(UUID id:credential==null?repo.ids(venue,page,size):List.of(credential)){UUID booking=repo.bookingFor(id);repo.lock(booking);var r=repo.credential(id).orElseThrow(()->new AccessFailure(404));if(!venue.equals(r.get("venue_id")))throw new AccessFailure(403);rows.add(view(actor,r,true));}repo.audit(actor,credential,null,venue,"ADMIN_READ","ALLOW");return credential==null?Map.of("items",rows,"page",page,"size",size,"synthetic",true,"doorControlled",false):rows.getFirst();}
  private static UUID uuid(Map<String,Object> body,String key){try{return UUID.fromString(Objects.toString(body.get(key),""));}catch(RuntimeException e){throw new AccessFailure(400);}}

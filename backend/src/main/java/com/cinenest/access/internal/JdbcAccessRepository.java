@@ -2,6 +2,8 @@ package com.cinenest.access.internal;
 import java.util.*;import java.time.Instant;import org.springframework.jdbc.core.simple.JdbcClient;import org.springframework.stereotype.Repository;
 @Repository
 class JdbcAccessRepository implements AccessRepository {
+ public Optional<Map<String,Object>> bookingWork(UUID credential){return jdbc.sql("SELECT credential_id,credential_version,state,operation_id FROM cinenest_access.access_work WHERE credential_id=:id FOR UPDATE").param("id",credential).query().listOfRows().stream().findFirst();}
+ public List<Map<String,Object>> bookingCredentials(UUID booking){return jdbc.sql("SELECT credential_id,booking_id,booking_revision,owner_id,venue_id,room_id,starts_at,ends_at,timezone,version,revision,state FROM cinenest_access.access_credential WHERE booking_id=:id ORDER BY version DESC FOR UPDATE").param("id",booking).query().listOfRows();}
  private final JdbcClient jdbc;JdbcAccessRepository(JdbcClient jdbc){this.jdbc=jdbc;}
  public UUID bookingFor(UUID id){return jdbc.sql("SELECT booking_id FROM cinenest_access.access_credential WHERE credential_id=:id").param("id",id).query(UUID.class).optional().orElseThrow(()->new AccessFailure(404));}
  public List<Map<String,Object>> history(UUID id){return jdbc.sql("SELECT event_id AS id,actor_id AS actor,action,outcome,created_at AS at FROM cinenest_access.access_audit WHERE credential_id=:id ORDER BY created_at,event_id LIMIT 100").param("id",id).query().listOfRows();}

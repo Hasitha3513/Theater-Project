@@ -543,6 +543,116 @@ class BankIntegrationTest {
     @Test void refundCommandPersistenceFailureRollsBackApprovalAndReservation()throws Exception{var c=refundCase(100);var r=refundWrite(c.reviewer(),c.refund(),"/decisions",Map.of("action","REVIEW"));r=refundWrite(c.reviewer(),r,"/destination-verifications",Map.of("destinationReference","SYNTHETIC-PAYER-50000"));jdbc.sql("CREATE FUNCTION cinenest_payments.refund_command_test_failure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'Synthetic command persistence failure'; END $$").update();jdbc.sql("CREATE TRIGGER refund_command_test_failure BEFORE INSERT ON cinenest_payments.refund_command FOR EACH ROW EXECUTE FUNCTION cinenest_payments.refund_command_test_failure()").update();try{var b=financial(((Number)r.get("revision")).longValue());b.put("action","APPROVE");assertThat(write(c.reviewer(),"POST",refundRoot(r)+"/decisions",JSONObjectUtils.toJSONString(b)).statusCode()).isEqualTo(503);assertThat(jdbc.sql("SELECT state FROM cinenest_payments.refund_obligation").query(String.class).single()).isEqualTo("UNDER_REVIEW");assertThat(jdbc.sql("SELECT cinenest_payments.refund_committed(:c)").param("c",UUID.fromString(c.credit().get("id").toString())).query(Long.class).single()).isZero();}finally{jdbc.sql("DROP TRIGGER refund_command_test_failure ON cinenest_payments.refund_command").update();jdbc.sql("DROP FUNCTION cinenest_payments.refund_command_test_failure()").update();}}
 
 
+    String staffBookingAccess(AccessCase c){return "/api/admin/venues/"+VA+"/bookings/"+c.booking()+"/access";}
+    @Test void staffAccessReadExactUnissuedContextAndErrorEnvelope()throws Exception{
+      var c=accessCase();var response=c.staff().get(staffBookingAccess(c));assertThat(response.statusCode()).isEqualTo(200);assertThat(response.headers().firstValue("Cache-Control")).contains("no-store");var r=json(response);
+      assertThat(r.keySet()).containsExactlyInAnyOrder("bookingId","venueId","roomId","bookingRevision","sessionStart","sessionEnd","timezone","observedAt","credentialExists","state","credential","permittedActions","synthetic","doorControlled");
+      assertThat(r.get("bookingId")).isEqualTo(c.booking().toString());assertThat(r.get("venueId")).isEqualTo(VA.toString());assertThat(r.get("state")).isEqualTo("NOT_ISSUED");assertThat(r.get("credentialExists")).isEqualTo(false);assertThat(r.get("credential")).isNull();assertThat((java.util.List<?>)r.get("permittedActions")).isEmpty();
+      assertThat(c.staff().get(staffBookingAccess(c).replace(c.booking().toString(),UUID.randomUUID().toString())).statusCode()).isEqualTo(404);
+      assertThat(c.staff().get(staffBookingAccess(c).replace(c.booking().toString(),"bad-reference")).statusCode()).isEqualTo(400);
+      assertThat(new Browser().get(staffBookingAccess(c)).statusCode()).isEqualTo(401);
+      c.staff().logout();assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(401);
+    }
+    @Test void staffAccessReadRequiresIndependentCurrentSameVenueGrant()throws Exception{
+      var c=accessCase();jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE permission='access.synthetic.review'").update();grantTo(STAFF,VA,"booking.synthetic.read");
+      assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(403);assertThat(c.customer().get(staffBookingAccess(c)).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VB,"access.synthetic.review");assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(403);
+      assertThat(c.staff().get(staffBookingAccess(c).replace(VA.toString(),VB.toString())).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"access.synthetic.review");assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(200);
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET valid_until=clock_timestamp()-INTERVAL '1 second' WHERE account_id=:a AND permission='access.synthetic.review' AND venue_id=:v").param("a",STAFF).param("v",VA).update();assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"access.synthetic.review");jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(403);
+    }
+    String accessReadDomainSnapshot(){
+      var all=new java.util.TreeMap<String,String>();
+      for(String schema:java.util.List.of("cinenest_access","cinenest_booking","cinenest_payments","cinenest_notifications","cinenest_iot")){
+        for(String table:jdbc.sql("SELECT table_name FROM information_schema.tables WHERE table_schema=:s AND table_type='BASE TABLE' ORDER BY table_name").param("s",schema).query(String.class).list()){
+          if(schema.equals("cinenest_access")&&table.equals("access_audit"))continue;
+          all.put(schema+"."+table,jdbc.sql("SELECT COALESCE(string_agg(row_to_json(t)::text,'|' ORDER BY row_to_json(t)::text),'') FROM "+schema+"."+table+" t").query(String.class).single());
+        }
+      }return all.toString();
+    }
+    @Test void staffAccessReadProjectsSafeIssuedUnknownAndEffectiveExpiryWithoutWrites()throws Exception{
+      var c=accessCase();var issued=simulateAccess(c,issueAccess(c),"SYNTHETIC-UNKNOWN",false);String before=accessReadDomainSnapshot();
+      var response=c.staff().get(staffBookingAccess(c));assertThat(response.statusCode()).isEqualTo(200);var r=json(response);assertThat(r.get("state")).isEqualTo("SCHEDULED");
+      var metadata=(Map<?,?>)r.get("credential");assertThat(metadata.keySet().stream().map(Object::toString).toList()).containsExactlyInAnyOrder("id","version","revision","bookingRevision","provisioning","operationId");assertThat(metadata.get("provisioning")).isEqualTo("UNKNOWN");
+      assertThat(response.body()).doesNotContain("token","secret","hash","owner","amount","key_version","history","evidence");assertThat(accessReadDomainSnapshot()).isEqualTo(before);
+      Object clock=accessClock(c,0);try{assertThat(json(c.staff().get(staffBookingAccess(c))).get("state")).isEqualTo("ACTIVE");assertThat(accessReadDomainSnapshot()).isEqualTo(before);}finally{restoreAccessClock(clock);}
+      clock=accessClock(c,20000);try{r=json(c.staff().get(staffBookingAccess(c)));assertThat(r.get("state")).isEqualTo("EXPIRED");assertThat(((java.util.List<?>)r.get("permittedActions")).stream().map(Object::toString).toList()).doesNotContain("SIMULATE");assertThat(accessReadDomainSnapshot()).isEqualTo(before);}finally{restoreAccessClock(clock);}
+      assertThat(jdbc.sql("SELECT state FROM cinenest_access.access_credential").query(String.class).single()).isEqualTo("SCHEDULED");
+      assertThat(c.staff().get(accessPath(c)).statusCode()).isEqualTo(403);
+    }
+    @Test void staffAccessReadUsesLatestHistoricalVersionAndSeparateActionGrants()throws Exception{
+      var c=accessCase();var first=issueAccess(c);var body=accessBody(first);body.put("mode","REISSUE");var latest=json(write(c.customer(),"POST",accessPath(c)+"/credentials",JSONObjectUtils.toJSONString(body)));
+      var r=json(c.staff().get(staffBookingAccess(c)));assertThat(((Map<?,?>)r.get("credential")).get("id")).isEqualTo(latest.get("id"));assertThat(((Number)((Map<?,?>)r.get("credential")).get("version")).intValue()).isEqualTo(2);
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE permission IN('access.synthetic.revoke','access.synthetic.simulate')").update();grantTo(STAFF,VB,"access.synthetic.simulate");
+      r=json(c.staff().get(staffBookingAccess(c)));assertThat((java.util.List<?>)r.get("permittedActions")).isEmpty();
+      grantTo(STAFF,VA,"access.synthetic.revoke");assertThat(write(c.staff(),"POST",accessAdmin(latest)+"/revocations",JSONObjectUtils.toJSONString(accessBody(latest))).statusCode()).isEqualTo(200);
+      assertThat(json(c.staff().get(staffBookingAccess(c))).get("state")).isEqualTo("REVOKED");
+    }
+    @Test void staffAccessReadBindingAndWorkCorruptionFailClosed()throws Exception{
+      var c=accessCase();issueAccess(c);jdbc.sql("UPDATE cinenest_access.access_credential SET booking_revision=2").update();assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(409);
+      jdbc.sql("UPDATE cinenest_access.access_credential SET booking_revision=1").update();jdbc.sql("UPDATE cinenest_access.access_work SET credential_version=2").update();assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(409);
+    }
+    @Test void staffAccessReadAndConcurrentIssueReturnSerializedObservations()throws Exception{
+      var c=accessCase();try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+        var read=pool.submit(()->c.staff().get(staffBookingAccess(c)));var issue=pool.submit(()->issueAccess(c));
+        var result=read.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(result.statusCode()).isIn(200,503);if(result.statusCode()==200)assertThat(json(result).get("state")).isIn("NOT_ISSUED","SCHEDULED");
+        var issued=issue.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(issued.get("id")).isNotNull();assertThat(((Map<?,?>)json(c.staff().get(staffBookingAccess(c))).get("credential")).get("id")).isEqualTo(issued.get("id"));
+      }
+    }
+    @Test void staffAccessReadAndConcurrentRevokeDoNotResurrectCredential()throws Exception{
+      var c=accessCase();var issued=issueAccess(c);try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+        var read=pool.submit(()->c.staff().get(staffBookingAccess(c)));var revoke=pool.submit(()->write(c.staff(),"POST",accessAdmin(issued)+"/revocations",JSONObjectUtils.toJSONString(accessBody(issued))));
+        var observed=read.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(observed.statusCode()).isIn(200,503);if(observed.statusCode()==200)assertThat(json(observed).get("state")).isIn("SCHEDULED","REVOKED");
+        assertThat(revoke.get(15,java.util.concurrent.TimeUnit.SECONDS).statusCode()).isEqualTo(200);
+        assertThat(json(c.staff().get(staffBookingAccess(c))).get("state")).isEqualTo("REVOKED");
+      }
+    }
+    @Test void staffAccessReadAndConcurrentAmendmentObserveOnePurchasedRevision()throws Exception{
+      var c=accessCase();var original=new org.springframework.transaction.support.TransactionTemplate(transactions).execute(t->context.getBean(com.cinenest.booking.BookingAccess.class).lock(c.booking()).orElseThrow());var amendment=proposedAmendment(c);try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+        var read=pool.submit(()->c.staff().get(staffBookingAccess(c)));var confirm=pool.submit(()->write(c.customer(),"POST",amendments(c)+"/"+amendment.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(amendment))));
+        var observed=read.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(observed.statusCode()).isIn(200,503);
+        if(observed.statusCode()==200){var r=json(observed);assertThat(((Number)r.get("bookingRevision")).intValue()).isIn(1,2);assertThat(r.get("state")).isEqualTo("NOT_ISSUED");}
+        assertThat(confirm.get(15,java.util.concurrent.TimeUnit.SECONDS).statusCode()).isEqualTo(200);
+        var finalRead=json(c.staff().get(staffBookingAccess(c)));assertThat(((Number)finalRead.get("bookingRevision")).intValue()).isEqualTo(2);
+        var b=new org.springframework.transaction.support.TransactionTemplate(transactions).execute(t->context.getBean(com.cinenest.booking.BookingAccess.class).lock(c.booking()).orElseThrow());
+        assertThat(java.time.Instant.parse(finalRead.get("sessionStart").toString())).isEqualTo(b.start());
+        if(observed.statusCode()==200){var r=json(observed);var expected=((Number)r.get("bookingRevision")).intValue()==1?original:b;
+          assertThat(java.time.Instant.parse(r.get("sessionStart").toString())).isEqualTo(expected.start());assertThat(java.time.Instant.parse(r.get("sessionEnd").toString())).isEqualTo(expected.end());}
+
+      }
+    }
+    @Test void staffAccessReadWaitsForGrantRevocationAndRechecks()throws Exception{
+      var c=accessCase();try(var connection=DriverManager.getConnection(System.getenv("CINENEST_DB_URL"),System.getenv("CINENEST_DB_USER"),System.getenv("CINENEST_DB_PASSWORD"));var pool=java.util.concurrent.Executors.newSingleThreadExecutor()){
+        connection.setAutoCommit(false);
+        try(var statement=connection.prepareStatement("SELECT grant_id FROM cinenest_identity.access_grant WHERE account_id=? AND venue_id=? FOR UPDATE")){statement.setObject(1,STAFF);statement.setObject(2,VA);statement.executeQuery().close();}
+        var read=pool.submit(()->c.staff().get(staffBookingAccess(c)));
+        long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(5);boolean waiting=false;
+        while(System.nanoTime()<deadline){
+          waiting=jdbc.sql("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE wait_event_type='Lock' AND query LIKE '%SELECT grant_id FROM cinenest_identity.access_grant%' AND pid<>pg_backend_pid())").query(Boolean.class).single();
+          if(waiting)break;Thread.sleep(10);
+        }
+        try{
+          assertThat(waiting).isTrue();
+          try(var statement=connection.prepareStatement("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE account_id=? AND venue_id=? AND permission='access.synthetic.review'")){statement.setObject(1,STAFF);statement.setObject(2,VA);statement.executeUpdate();}
+          connection.commit();assertThat(read.get(15,java.util.concurrent.TimeUnit.SECONDS).statusCode()).isEqualTo(403);
+        }finally{connection.rollback();}
+      }
+    }
+    @Test void staffAccessReadConsumedCredentialNeverBecomesLive()throws Exception{
+      var c=accessCase();var issued=simulateAccess(c,issueAccess(c),"SYNTHETIC-INSTALLED",false);Object clock=accessClock(c,0);
+      try{var current=json(c.customer().get(accessPath(c)));var body=accessBody(current);var revealed=json(write(c.customer(),"POST",accessPath(c)+"/credentials/"+current.get("id")+"/reveal",JSONObjectUtils.toJSONString(body)));
+        body=accessBody(revealed);body.put("credentialId",revealed.get("id"));body.put("token",revealed.get("token"));assertThat(write(c.customer(),"POST",accessPath(c)+"/simulated-attempts",JSONObjectUtils.toJSONString(body)).statusCode()).isEqualTo(200);
+        var read=json(c.staff().get(staffBookingAccess(c)));assertThat(read.get("state")).isEqualTo("CONSUMED");assertThat(read.toString()).doesNotContain(revealed.get("token").toString());
+      }finally{restoreAccessClock(clock);}
+    }
+    @Test void staffAccessReadExpiredSessionAndMandatoryAuditFailure()throws Exception{
+      var c=accessCase();
+      jdbc.sql("ALTER TABLE cinenest_access.access_audit ADD CONSTRAINT test_staff_access_audit CHECK(action<>'STAFF_BOOKING_READ')").update();
+      try{var response=c.staff().get(staffBookingAccess(c));assertThat(response.statusCode()).isEqualTo(503);assertThat(response.body()).doesNotContain("bookingId","credentialExists");}
+      finally{jdbc.sql("ALTER TABLE cinenest_access.access_audit DROP CONSTRAINT test_staff_access_audit").update();}
+      jdbc.sql("UPDATE cinenest_identity.http_session SET expiry_time=0,last_access_time=0").update();assertThat(c.staff().get(staffBookingAccess(c)).statusCode()).isEqualTo(401);
+    }
     record AccessCase(Browser customer,Browser staff, Browser allocator,Map<String,Object> request,Map<String,Object> credit,UUID booking){}
     AccessCase accessCase()throws Exception{financeGrants();var customer=signedIn("customer-a");var staff=signedIn("staff");var allocator=signedIn("customer-b");var r=bank(customer);var c=credit(staff,"SYNTHETIC-BANK-50000");r=match(allocator,r,c);var confirmed=json(allocateCredit(allocator,r,c,Long.parseLong(r.get("amountMinor").toString())));for(String permission:java.util.List.of("access.synthetic.read","access.synthetic.issue","access.synthetic.reveal","access.synthetic.attempt"))jdbc.sql("INSERT INTO cinenest_identity.access_grant VALUES(:id,:a,:p,'SELF',NULL,'ACTIVE',clock_timestamp()-INTERVAL '1 minute',clock_timestamp()+INTERVAL '2 days',0)").param("id",UUID.randomUUID()).param("a",A).param("p",permission).update();for(String permission:java.util.List.of("access.synthetic.review","access.synthetic.revoke","access.synthetic.simulate"))grantTo(STAFF,VA,permission);return new AccessCase(customer,staff,allocator,r,c,UUID.fromString(confirmed.get("bookingId").toString()));}
     String accessPath(AccessCase c){return "/api/bookings/"+c.booking()+"/access";}

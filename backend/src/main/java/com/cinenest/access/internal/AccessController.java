@@ -8,6 +8,7 @@ class AccessController {
  AccessController(AccessService service,AccessRepository repo,PlatformTransactionManager manager){this.service=service;this.repo=repo;tx=new TransactionTemplate(manager);}
  private UUID actor(Principal p){try{return UUID.fromString(p.getName());}catch(Exception e){throw new AccessFailure(401);}}
  private ResponseEntity<?> ok(Object b){int status=b instanceof Map<?,?> m&&"DENIED".equals(m.get("attemptOutcome"))?403:200;return ResponseEntity.status(status).header("Cache-Control","no-store").body(b);}
+ @GetMapping("/api/admin/venues/{v}/bookings/{id}/access") ResponseEntity<?> bookingAccess(Principal p,@PathVariable UUID v,@PathVariable UUID id){return ok(service.staffBooking(actor(p),v,id));}
  @GetMapping("/api/bookings/{id}/access") ResponseEntity<?> read(Principal p,@PathVariable UUID id){return ok(service.status(actor(p),id));}
  @PostMapping("/api/bookings/{id}/access/credentials") ResponseEntity<?> issue(Principal p,@PathVariable UUID id,@RequestBody Map<String,Object>b){return ok(service.command(actor(p),id,null,null,"ISSUE",b));}
  @PostMapping("/api/bookings/{id}/access/credentials/{credential}/reveal") ResponseEntity<?> reveal(Principal p,@PathVariable UUID id,@PathVariable UUID credential,@RequestBody Map<String,Object>b){return ok(service.command(actor(p),id,credential,null,"REVEAL",b));}

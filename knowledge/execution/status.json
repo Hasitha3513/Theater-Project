@@ -7644,5 +7644,27 @@
     "corrections": "Lint required semantic section for table region. Initial browser keyboard assertion exposed focus loss from disabling reload;aria-disabled plus guarded handler preserves focus without duplicate loading action. Capture scroll reset removes fixed offscreen skip-link artifact,not application shell change.",
     "backendChange": "One authorization regression test only;no application source,endpoint,permission,migration or dependency changed",
     "acceptance": "No full requirement/phase/demo/physical/production acceptance;prior24/0/0 campaign historical and not rerun for this frontend change"
+  },
+  "staffBookingAccessReadImplementation": {
+    "changeSetId": "CN-STAFF-BOOKING-ACCESS-CONTRACT-001",
+    "scope": "Access-owned exact-booking staff observational read; synthetic only",
+    "ownerAuthority": "Owner attachment56a53fc3-fa28-4174-a643-9c4b539161db authorizes reviewed backend-only contract",
+    "evidencePath": "PROGRESS.md#staff-booking-access-contract",
+    "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/access",
+    "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS",
+    "baselineHead": "40c88e9c4339a095646d57ecfa2f4c94a5876c88",
+    "status": "VERIFIED_BOUNDED_SYNTHETIC_BACKEND_READ",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "schemaChange": false,
+    "newPermission": false,
+    "frontendIntegration": "NOT_IMPLEMENTED; separate authorized change set required",
+    "acceptance": "No requirement,phase,demo,physical or production acceptance advanced",
+    "observationalProof": "Real PostgreSQL snapshots of all Access records except permitted audit,Booking,Payments,Notifications and IoT unchanged across scheduled,active and expired reads;stored credential remains SCHEDULED;only scoped Access read audit writes",
+    "concurrency": "Real HTTP/PostgreSQL issue,revoke,amendment and blocked-grant revocation tests PASS;unit refusal after credential/work waits;no new business rules",
+    "corrections": "Initial test generic compilation corrected;mandatory audit persistence failure mapped503 instead409;session-expiry fixture now expires authoritative last_access_time and expiry index;invalid Booking-port context503 and BIGINT boundary covered",
+    "remaining": "Frontend proxy/workspace/booking navigation not implemented;full provider/physical/commercial acceptance remains open"
   }
 }
