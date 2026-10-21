@@ -1,6 +1,12 @@
 // Dedicated bounded binary transport. Existing JSON adapters remain unchanged.
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
+	if (
+		new RegExp(`^/api/admin/venues/${uuid}/bookings/${uuid}/refunds$`).test(
+			path,
+		)
+	)
+		return method === "GET";
 	if (new RegExp(`^/api/bookings/${uuid}/guest-roster$`).test(path))
 		return ["GET", "POST"].includes(method);
 	if (new RegExp(`^/api/bookings/${uuid}/guest-roster/companions$`).test(path))
@@ -197,6 +203,23 @@ export async function forwardBank(request: Request): Promise<Response> {
 		if (readiness && !validReadiness)
 			return new Response(null, { status: 400, headers });
 		if (readiness) headers.set("Cache-Control", "private, no-store");
+		const bookingRefund = new RegExp(
+			`^/api/admin/venues/${uuid}/bookings/${uuid}/refunds$`,
+		).test(url.pathname);
+		const refundPage =
+			bookingRefund &&
+			request.method === "GET" &&
+			[...url.searchParams.keys()].every(
+				(k) =>
+					["page", "size"].includes(k) &&
+					url.searchParams.getAll(k).length === 1,
+			) &&
+			[...url.searchParams.values()].every((v) => /^\d{1,5}$/.test(v)) &&
+			Number(url.searchParams.get("page") ?? "0") <= 10000 &&
+			Number(url.searchParams.get("size") ?? "10") >= 1 &&
+			Number(url.searchParams.get("size") ?? "10") <= 25;
+		if (bookingRefund && !refundPage)
+			return new Response(null, { status: 404, headers });
 		const accessPage =
 			(new RegExp(`^/api/admin/venues/${uuid}/access/credentials$`).test(
 				url.pathname,
@@ -215,7 +238,7 @@ export async function forwardBank(request: Request): Promise<Response> {
 			[...url.searchParams.values()].every((v) => /^\d{1,5}$/.test(v));
 		if (
 			!bankRoute(url.pathname, request.method) ||
-			(url.search && !accessPage && !validReadiness)
+			(url.search && !accessPage && !validReadiness && !refundPage)
 		)
 			return new Response(null, { status: 404, headers });
 		const configured = process.env.CINENEST_AUTH_ORIGIN;

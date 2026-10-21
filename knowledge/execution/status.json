@@ -7808,5 +7808,65 @@
     "testCorrection": "Initial new concurrency assertion incorrectly required RECONCILIATION_REQUIRED throughout explicit reconciliation;actual recorder step retains UNKNOWN outcome with OUTGOING_VERIFICATION_REQUIRED until independent verification. Assertion corrected to existing persisted contract;no business rule changed.",
     "validation": "Knowledge PASS;approved in-memory committed-source execution PASS;ordinary execution retains exactly2 pre-existing next-env integrity findings;17 governance negative controls and92/92 traceability/28-task acyclic dependencies PASS;whitespace PASS",
     "remainingGaps": "No staff frontend integration;no allocated-funds/commercial/gateway refund support or full acceptance;historical24/24 synthetic campaign not rerun"
+  },
+  "bookingRefundContextImplementation": {
+    "changeSetId": "CN-BOOKING-REFUND-CONTEXT-001",
+    "ownerAuthority": "Owner attachment30ef6189-7d28-4bca-ae97-97df14d423db authorizes bounded frontend read integration only",
+    "baselineHead": "ccfb228a9ce038a414476fe9ca1666048a3a0225",
+    "prerequisiteCI": "39594538037 COMPLETED/SUCCESS exact SHA;backend/frontend/governance steps SUCCESS",
+    "scope": "Staff booking detail to explicit protected exact-booking refund GET; no commands or financial eligibility",
+    "evidencePath": "PROGRESS.md#booking-refund-context-implementation",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "status": "LOCALLY_VERIFIED_BOUNDED_FRONTEND_READ",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/refunds?page=0&size=10",
+    "permission": "Independent backend VENUE refund.synthetic.read; booking/credit/SELF/other-venue grants do not substitute",
+    "privacy": "Strict client DTO allowlist;opaque path IDs,page/size only;drop unknown fields;no evidence,destination,actor,hash,unrelated balance or command projection",
+    "consistency": "Backend authoritative; bind venue/booking/purchased revision,page/size;reuse useProtectedRead abort/epoch/session/visibility clearing;parent reload unmounts protected panel;disclosure requires explicit action",
+    "commands": "No mutations,CSRF fetch,financial decisions or credential/device commands added",
+    "remainingGaps": "No refund administration commands/cancellation/new eligibility;commercial/gateway/real repayment unqualified;full requirements and demonstrations remain unaccepted",
+    "tests": "275 frontend tests(9 new) PASS;TypeScript,strict lint,production build PASS;16 focused intercepted browser groups+30 existing staff-booking+17 roster regression groups PASS;562 backend tests(real isolated PostgreSQL18.6,275 BankIntegrationTest,14 query unit,17 architecture),V1-V19 upgrade/repeat,startup and HTTP denial PASS;8 classifier+10 inert admission regressions PASS",
+    "screenshots": [
+      {
+        "path": ".cache/staff-booking-refunds/before/booking-375.png",
+        "width": 375,
+        "height": 2498,
+        "sha256": "111ddbeb1407ee24fa4550b35693f2bdd2e6d8d0fb607d84c491194c90114fb5"
+      },
+      {
+        "path": ".cache/staff-booking-refunds/before/booking-768.png",
+        "width": 768,
+        "height": 2169,
+        "sha256": "7090c5cb278a78d589e2448a306a8d5a25ca9c8412125df91d025b3c088b1ab2"
+      },
+      {
+        "path": ".cache/staff-booking-refunds/before/booking-1280.png",
+        "width": 1280,
+        "height": 1947,
+        "sha256": "287f82fbadb2bdd7539bcbfdd3e965621637a8b85debf409bb06a93221067ad8"
+      },
+      {
+        "path": ".cache/staff-booking-refunds/after/booking-375.png",
+        "width": 375,
+        "height": 4810,
+        "sha256": "c835b0d9fedfbcbdfbf725f9851ed1c136ce6845becdf68e7f7bfaa49fdb0068"
+      },
+      {
+        "path": ".cache/staff-booking-refunds/after/booking-768.png",
+        "width": 768,
+        "height": 3968,
+        "sha256": "97fbb8c04d9727cc6903a496c6ad3d95e9cae255e2b987c5bca321e8ca0d4350"
+      },
+      {
+        "path": ".cache/staff-booking-refunds/after/booking-1280.png",
+        "width": 1280,
+        "height": 3516,
+        "sha256": "f155b7a4262fc8070226ce3443d57b54ba9a48634653afd5f64ccdc26259cfcb"
+      }
+    ],
+    "visualComparison": "All3 reference images visually inspected;Admin references primary. Navy240px desktop sidebar/light review card/violet action tokens retained;3-column refund summaries at1280 vs1 at375/768. Corrected12px disclosure/reload gap. No horizontal overflow,one main,visible keyboard focus/native details. Heights2498/2169/1947 before vs4810/3968/3516 after for375/768/1280 with2 illustrative obligations;added truthful financial context. Reference compactness/global sidebar density outside slice;no invented metrics/actions.",
+    "validation": "Knowledge+isolated committed-source execution PASS;ordinary execution retains exactly2 pre-existing next-env findings;18 governance negative controls,92/92 traceability,28-task acyclic graph and whitespace PASS",
+    "limitations": "Intercepted browser fixtures are not backend authorization or full E2E evidence. Existing backend tests independently verify authorization. Historical24/24 synthetic campaign not rerun. No acceptance promoted."
   }
 }

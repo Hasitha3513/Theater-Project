@@ -1033,3 +1033,10 @@ button.button { display: inline-grid; }
 
 /* Exact staff booking-to-access navigation; preserve approved action contrast. */
 .card a.booking-access-link { color: var(--cn-color-surface); }
+
+/* Read-only Finance observations: existing admin surfaces and tokens. */
+.refund-observation-list { display: grid; gap: var(--cn-spacing-4); }
+.refund-observation { border: 1px solid var(--cn-color-border); border-radius: var(--cn-radius-card); padding: var(--cn-spacing-4); min-width: 0; overflow-wrap: anywhere; }
+.refund-observation .toolbar { justify-content: space-between; align-items: flex-start; }
+.refund-observation h3 { margin: 0; }
+#booking-refund-results { margin-top: var(--cn-spacing-3); }

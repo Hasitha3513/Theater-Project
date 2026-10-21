@@ -3896,7 +3896,7 @@ def booking_access_context_main():
 
 
 
-def inert_ci_main():
+def staff_booking_refund_contract_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='ac3275500e0ed30e880d89f0060ff4bd264546ab'
@@ -3949,6 +3949,69 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=booking_access_context_main()
     if result==0:print('PASS exact bounded staff booking refund read; approved backend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='ccfb228a9ce038a414476fe9ca1666048a3a0225'
+    owned={'frontend/tests/staff-booking-refunds.test.mjs', 'frontend/app/globals.css', 'frontend/components/staff-booking-refunds.tsx', 'frontend/components/staff-bookings.tsx', 'frontend/lib/bank-backend.ts', 'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/refunds/route.ts', 'frontend/tests/staff-booking-refunds-fixtures.mjs', 'frontend/tests/staff-booking-refunds-browser.mjs', 'frontend/lib/staff-booking-refunds.ts', 'frontend/package.json'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/requirements.json', 'knowledge/execution/status.json'}
+    canonical={'knowledge/PROGRESS.md', 'knowledge/ARCHITECTURE.md', 'knowledge/DESIGN.md'}
+    added={'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/refunds/route.ts', 'frontend/tests/staff-booking-refunds.test.mjs', 'frontend/tests/staff-booking-refunds-fixtures.mjs', 'frontend/tests/staff-booking-refunds-browser.mjs', 'frontend/lib/staff-booking-refunds.ts', 'frontend/components/staff-booking-refunds.tsx'}
+    hashes={'frontend/tests/staff-booking-refunds.test.mjs': '0c2c8ef2e0750fc1d4f196f923c4cd99febf63d07d4b4afb04b312b33166f9bf', 'frontend/app/globals.css': '42bee230faaf49f625dbdd2b04815b93c6584b281a6a7f9071a56014024a9467', 'knowledge/ARCHITECTURE.md': '283c4ddf069e37a134a1f234e6d7ac50fae400590f01a0f56b06ec45c862fd03', 'frontend/components/staff-booking-refunds.tsx': '45d61e39f81fa6bfcf656a5c4870686faa194707ea4742ce552706de608913be', 'frontend/components/staff-bookings.tsx': 'd75a83b05b4dd19c4bce58c7d66a8ba77a98ecdb30410762c1567c8a1f80bdd2', 'frontend/lib/bank-backend.ts': '7d8a89e8929811a688ca3b8c490556052dbe192b7be227d16ce70c600ba0696c', 'knowledge/execution/test-plan.json': '9e41cbf715dadf1b28f18ed862c942ff35bc746f2717e6d2457d113bbc62f087', 'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/refunds/route.ts': 'be10bb7cea6f974cf54c7c960655674208c13049f5429999bfad15fd88f76640', 'frontend/tests/staff-booking-refunds-fixtures.mjs': '3d140b4cdfb2984a5434fbab8b0fef021af6a63d85c093e1ff2a0f1204bfefac', 'frontend/tests/staff-booking-refunds-browser.mjs': '1b4fc1e84030e4f26a34dcb21f060c07a54968471bfc85e909573ee5d09a1fb9', 'knowledge/execution/requirements.json': '8b6f64b04c712bfb9062cac9bcc3c5cc04090662379a2dc998ce8f9a3a084810', 'knowledge/execution/status.json': 'fc2e4d23f44ff98efdc14fa7b84f8823bbe2a0f7b2c6217f92109f5a3d7a4e05', 'frontend/lib/staff-booking-refunds.ts': 'c1d6b5924adc50d44a0d082f2f10736e0c1875f6aadeee5a617f913a17bd2705', 'frontend/package.json': 'a6ff03f1916a6c17f4c2b5a7106bf8577404126129be5f2c25642fa7bfb08134', 'knowledge/PROGRESS.md': '0e5791b6e7b246fdd96730a403fab7ed5a8b8de31956e42e2eb4e08c029c746a', 'knowledge/DESIGN.md': '7f7fe5dd4a8c921371b591852657f399d8d8257ed79ed153a95980ec001c711b'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Booking refund context integration exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('bookingRefundContextEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Booking refund context integration changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('bookingRefundContextImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Booking refund context integration changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Booking refund context integration changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Booking refund context integration rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=original['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/staff-booking-refunds.test.mjs':errors.append('Booking refund context integration changed existing frontend coverage')
+    package['scripts']['test']=original['scripts']['test']
+    if package!=original:errors.append('Booking refund context integration changed dependency/toolchain authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Booking refund context integration rewrote prior design')
+    if not (R/'frontend/app/globals.css').read_text().startswith(prior('frontend/app/globals.css').decode()):errors.append('Booking refund context integration rewrote prior global styles')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Booking refund context integration promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Booking refund context integration unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Booking refund context integration changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=staff_booking_refund_contract_main()
+    if result==0:print('PASS exact bounded booking refund context integration; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

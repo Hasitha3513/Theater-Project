@@ -24,6 +24,7 @@ import {
 	StateMessage,
 } from "./primitives";
 import { loadStaffRoster, StaffRosterSummary } from "./staff-guest-roster";
+import { StaffBookingRefundPanel } from "./staff-booking-refunds";
 import { StaffVenueContext } from "./staff-venue-context";
 export function useProtectedRead<T>(
 	read: (signal: AbortSignal) => Promise<T>,
@@ -460,10 +461,16 @@ export function StaffBookingDetail({
 			{state.value &&
 				state.value.booking.venueId === venue.toLowerCase() &&
 				state.value.booking.bookingId === booking.toLowerCase() && (
-					<StaffGuestRoster
-						key={`${venue}/${booking}/${state.value.booking.revision}`}
-						booking={state.value.booking}
-					/>
+					<>
+						<StaffBookingRefundPanel
+							key={`refund/${venue}/${booking}/${state.value.booking.revision}`}
+							booking={state.value.booking}
+						/>
+						<StaffGuestRoster
+							key={`${venue}/${booking}/${state.value.booking.revision}`}
+							booking={state.value.booking}
+						/>
+					</>
 				)}
 		</>
 	);

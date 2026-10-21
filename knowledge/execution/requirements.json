@@ -1323,6 +1323,17 @@
         ],
         "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingRefundContextEvidence": {
+        "scope": "Staff booking detail to explicit protected exact-booking refund GET; no commands or financial eligibility",
+        "evidencePath": "PROGRESS.md#booking-refund-context-implementation",
+        "sourcePaths": [
+          "frontend/components/staff-booking-refunds.tsx",
+          "frontend/lib/staff-booking-refunds.ts",
+          "frontend/tests/staff-booking-refunds.test.mjs",
+          "frontend/tests/staff-booking-refunds-browser.mjs"
+        ],
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1718,6 +1729,17 @@
           "backend/src/test/java/com/cinenest/payments/internal/StaffBookingRefundQueryTest.java"
         ],
         "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingRefundContextEvidence": {
+        "scope": "Staff booking detail to explicit protected exact-booking refund GET; no commands or financial eligibility",
+        "evidencePath": "PROGRESS.md#booking-refund-context-implementation",
+        "sourcePaths": [
+          "frontend/components/staff-booking-refunds.tsx",
+          "frontend/lib/staff-booking-refunds.ts",
+          "frontend/tests/staff-booking-refunds.test.mjs",
+          "frontend/tests/staff-booking-refunds-browser.mjs"
+        ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
@@ -2989,6 +3011,17 @@
           "backend/src/test/java/com/cinenest/payments/internal/StaffBookingRefundQueryTest.java"
         ],
         "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingRefundContextEvidence": {
+        "scope": "Staff booking detail to explicit protected exact-booking refund GET; no commands or financial eligibility",
+        "evidencePath": "PROGRESS.md#booking-refund-context-implementation",
+        "sourcePaths": [
+          "frontend/components/staff-booking-refunds.tsx",
+          "frontend/lib/staff-booking-refunds.ts",
+          "frontend/tests/staff-booking-refunds.test.mjs",
+          "frontend/tests/staff-booking-refunds-browser.mjs"
+        ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
@@ -5312,6 +5345,17 @@
           "backend/src/test/java/com/cinenest/payments/internal/StaffBookingRefundQueryTest.java"
         ],
         "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bookingRefundContextEvidence": {
+        "scope": "Staff booking detail to explicit protected exact-booking refund GET; no commands or financial eligibility",
+        "evidencePath": "PROGRESS.md#booking-refund-context-implementation",
+        "sourcePaths": [
+          "frontend/components/staff-booking-refunds.tsx",
+          "frontend/lib/staff-booking-refunds.ts",
+          "frontend/tests/staff-booking-refunds.test.mjs",
+          "frontend/tests/staff-booking-refunds-browser.mjs"
+        ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },

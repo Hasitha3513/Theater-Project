@@ -1,0 +1,5 @@
+// Synthetic intercepted presentation fixtures only, never operational financial evidence.
+import {venue,id,other} from './staff-bookings-fixtures.mjs';
+export const refundId='00000000-0000-4000-8000-000000000004';
+export function refundItem(n=4,state='APPROVED') {return {id:`00000000-0000-4000-8000-${String(n).padStart(12,'0')}`,revision:3,state,resolution:state==='SIMULATED_CONFIRMED'?'COMPLETE':state==='UNKNOWN_RECONCILIATION_REQUIRED'?'RECONCILIATION_REQUIRED':'REVIEW_REQUIRED',amountMinor:'123456789012345',currency:'LKR',destinationVerified:true,attempts:[{id:'00000000-0000-4000-8000-000000000005',sequence:1,evidencePhases:['RECORDED','VERIFIED']}]};}
+export const refundFixture=(page=0,size=10,total=2)=>({bookingId:id,venueId:venue,bookingRevision:1,originatingRequestId:other,observedAt:'2026-10-21T11:00:00Z',items:Array.from({length:Math.max(0,Math.min(size,total-page*size))},(_,i)=>refundItem(4+page*size+i,i%2?'UNKNOWN_RECONCILIATION_REQUIRED':'APPROVED')),page,size,hasNext:(page+1)*size<total,synthetic:true,realRepayment:false});
