@@ -7786,5 +7786,27 @@
     "corrections": "Initial screenshot protocol failure retried after scroll reset;baseline compiled build unchanged. Unit invocation cwd corrected. Lint route-context type annotated. Browser alerts scoped to main to exclude Next route announcer. Link contrast corrected using existing token;capture reset preserves actual focus while avoiding fixed skip-link capture artifact",
     "acceptance": "13/74 criteria,25/3 task counts,92/92 requirement/plan coverage and dependencies unchanged;full24/0/0 E2E historical/not rerun;no physical/provider/production acceptance",
     "validation": "Knowledge PASS;approved in-memory committed-source execution PASS;ordinary execution only2 known next-env integrity findings;20 governance negative controls PASS;92/92 traceability and28-task acyclic graph PASS;whitespace PASS;backend application/source,global decisions,dependencies,CI and approved tokens unchanged"
+  },
+  "staffBookingRefundReadImplementation": {
+    "changeSetId": "CN-STAFF-BOOKING-REFUND-CONTRACT-001",
+    "ownerAuthority": "Owner attachment c04a08b3-e70e-4a39-b979-36c77f31af29 explicitly approves bounded backend implementation",
+    "baselineHead": "ac3275500e0ed30e880d89f0060ff4bd264546ab",
+    "prerequisiteCI": "39589039890 COMPLETED/SUCCESS at exact baseline",
+    "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
+    "status": "LOCALLY_VERIFIED_BOUNDED_BACKEND_READ",
+    "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/refunds",
+    "bookingPort": "SyntheticBooking.financialContext nonlocking Booking-owned identity/owner/venue/originatingRequest/current purchased revision projection",
+    "pagination": "Existing page0..10000,size1..25,default10; exact request query,size+1,created_at DESC/refund_id DESC; no venue queue cutoff",
+    "privacy": "Explicit DTO excludes destination/account/evidence/hash/actor/credit/source-wide balance/actions; no-store",
+    "consistency": "Identity locks then originating request then sorted credits; original funding linkage preserved across amendments; current grants and Booking context rechecked; mandatory attributable read audit fails closed",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "tests": "562 backend tests PASS,zero failures/errors/skips(275 BankIntegrationTest,14 new query unit tests,17 architecture);real isolated PostgreSQL18.6,V1-V19 clean/repeat/retained-upgrade and packaged startup/HTTP denial PASS;266 frontend tests,typecheck,lint,build PASS;8 classifier and10 harness-admission regressions PASS;no new browser/full E2E campaign claim",
+    "concurrencyEvidence": "Real PostgreSQL read/approval,reconciliation/amendment races PASS;revision/lineage conflict and post-wait grant-expiry unit tests PASS;existing allocation/refund race,separation/idempotency regressions retained",
+    "testCorrection": "Initial new concurrency assertion incorrectly required RECONCILIATION_REQUIRED throughout explicit reconciliation;actual recorder step retains UNKNOWN outcome with OUTGOING_VERIFICATION_REQUIRED until independent verification. Assertion corrected to existing persisted contract;no business rule changed.",
+    "validation": "Knowledge PASS;approved in-memory committed-source execution PASS;ordinary execution retains exactly2 pre-existing next-env integrity findings;17 governance negative controls and92/92 traceability/28-task acyclic dependencies PASS;whitespace PASS",
+    "remainingGaps": "No staff frontend integration;no allocated-funds/commercial/gateway refund support or full acceptance;historical24/24 synthetic campaign not rerun"
   }
 }

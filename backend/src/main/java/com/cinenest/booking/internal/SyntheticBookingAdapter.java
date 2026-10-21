@@ -10,6 +10,10 @@ class SyntheticBookingAdapter implements SyntheticBooking {
  private final JdbcClient jdbc;private final QuotationHolds holds;private final ScopedAuthorization auth;private final InventoryRepository inventory;private final AmendmentGuards.Pricing pricing;
  SyntheticBookingAdapter(JdbcClient jdbc,QuotationHolds holds,ScopedAuthorization auth,InventoryRepository inventory,AmendmentGuards.Pricing pricing){this.pricing=pricing;this.jdbc=jdbc;this.holds=holds;this.auth=auth;this.inventory=inventory;}
  public Optional<UUID> forRequest(UUID request){return jdbc.sql("SELECT booking_id FROM cinenest_booking.booking WHERE request_id=:r").param("r",request).query(UUID.class).optional();}
+ public Optional<FinancialContext> financialContext(UUID booking){
+  return jdbc.sql("SELECT b.booking_id,b.owner_id,b.venue_id,b.request_id,(SELECT max(r.revision) FROM cinenest_booking.booking_revision r WHERE r.booking_id=b.booking_id) AS revision FROM cinenest_booking.booking b WHERE b.booking_id=:b AND b.synthetic AND b.state='SIMULATED_CONFIRMED'")
+   .param("b",booking).query((rs,n)->new FinancialContext(rs.getObject("booking_id",UUID.class),rs.getObject("owner_id",UUID.class),rs.getObject("venue_id",UUID.class),rs.getObject("request_id",UUID.class),rs.getLong("revision"))).optional();
+ }
  public boolean entitled(UUID owner,UUID hold){var h=holds.lockAndInspect(owner,hold);return h.isPresent()&&h.get().state().equals("ACTIVE")&&h.get().expires().isAfter(inventory.now())&&h.get().start().isAfter(inventory.now());}
  public UUID confirm(Funding f){
   if(!TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Caller transaction required");

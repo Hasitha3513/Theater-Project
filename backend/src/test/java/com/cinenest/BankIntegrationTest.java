@@ -1112,4 +1112,111 @@ class BankIntegrationTest {
       try(var c=DriverManager.getConnection(url,user,password);var sql=c.createStatement()){sql.execute("CREATE DATABASE "+database);}try{Flyway.configure().dataSource(target,user,password).target("18").load().migrate();try(var c=DriverManager.getConnection(target,user,password);var sql=c.createStatement()){sql.execute("INSERT INTO cinenest_rooms.venue(venue_id,code,display_name,timezone) VALUES('00000000-0000-4000-8000-000000000001','KEEP','Retained V18','Asia/Colombo')");sql.execute("INSERT INTO cinenest_booking.hold_policy VALUES('00000000-0000-4000-8000-000000000002',600,10,60,'SYNTHETIC upgrade',clock_timestamp())");sql.execute("INSERT INTO cinenest_booking.inventory_block VALUES('00000000-0000-4000-8000-000000000003','00000000-0000-4000-8000-000000000001','00000000-0000-4000-8000-000000000004','2026-10-21T00:00:00Z','2026-10-21T03:00:00Z',0,'2026-10-21T03:00:00Z',FALSE,'CONFIRMED',0)");sql.execute("INSERT INTO cinenest_booking.reservation_hold VALUES('00000000-0000-4000-8000-000000000005','00000000-0000-4000-8000-000000000006','00000000-0000-4000-8000-000000000003','00000000-0000-4000-8000-000000000002',4,'SYNTHETIC','Asia/Colombo','SYNTHETIC',clock_timestamp(),clock_timestamp()+INTERVAL '1 hour','RELEASED',0)");sql.execute("INSERT INTO cinenest_booking.booking VALUES('00000000-0000-4000-8000-000000000007','00000000-0000-4000-8000-000000000008','00000000-0000-4000-8000-000000000005','00000000-0000-4000-8000-000000000006','00000000-0000-4000-8000-000000000001','SIMULATED_CONFIRMED',TRUE,clock_timestamp())");sql.execute("INSERT INTO cinenest_booking.booking_revision VALUES('00000000-0000-4000-8000-000000000007',1,'00000000-0000-4000-8000-000000000009',1,repeat('a',64),10000,'LKR','{\"synthetic\":true,\"commercialIssuance\":false,\"marker\":\"SYNTHETIC-RETAINED-V18\"}')");}var f=Flyway.configure().dataSource(target,user,password).load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);assertThat(f.migrate().migrationsExecuted).isZero();f.validate();try(var c=DriverManager.getConnection(target,user,password);var sql=c.createStatement();var rows=sql.executeQuery("SELECT display_name FROM cinenest_rooms.venue")){assertThat(rows.next()).isTrue();assertThat(rows.getString(1)).isEqualTo("Retained V18");try(var retained=sql.executeQuery("SELECT snapshot->>'marker' FROM cinenest_booking.booking_revision")){assertThat(retained.next()).isTrue();assertThat(retained.getString(1)).isEqualTo("SYNTHETIC-RETAINED-V18");}}}finally{try(var c=DriverManager.getConnection(url,user,password);var sql=c.createStatement()){sql.execute("DROP DATABASE "+database+" WITH (FORCE)");}}
     }
 
+    String bookingRefunds(AccessCase c){return "/api/admin/venues/"+VA+"/bookings/"+c.booking()+"/refunds";}
+    Map<String,Object> bookingRefund(AccessCase c)throws Exception{
+      var current=json(c.customer().get(bankPath(c.request())));var b=financial(((Number)current.get("revision")).longValue());
+      b.put("creditId",c.credit().get("id"));b.put("amountMinor","100");b.put("currency","LKR");
+      return json(write(c.customer(),"POST",bankPath(c.request())+"/refunds",JSONObjectUtils.toJSONString(b)));
+    }
+    @Test void bookingRefundReadRequiresIndependentPermissionAndReturnsAuthoritativeEmpty()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"booking.synthetic.read");assertThat(c.staff().get(bookingRefunds(c)).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"refund.synthetic.read");var response=c.staff().get(bookingRefunds(c));var d=json(response);
+      assertThat(response.headers().firstValue("Cache-Control").orElseThrow()).contains("no-store");
+      assertThat(d.get("bookingId")).isEqualTo(c.booking().toString());assertThat(d.get("originatingRequestId")).isEqualTo(c.request().get("id"));
+      assertThat(d.get("bookingRevision")).isEqualTo(1L);assertThat(customerItems(response)).isEmpty();assertThat(d.get("realRepayment")).isEqualTo(false);
+      assertThat(c.allocator().get(bookingRefunds(c)).statusCode()).isEqualTo(403);
+    }
+    @Test void bookingRefundReadRejectsOtherVenueAndSelfGrantStitching()throws Exception{
+      var c=accessCase();grantTo(STAFF,VB,"refund.synthetic.read");grantTo(STAFF,VA,"booking.synthetic.read");
+      grant("refund.synthetic.read","SELF",null);
+      assertThat(c.staff().get(bookingRefunds(c)).statusCode()).isEqualTo(403);assertThat(c.customer().get(bookingRefunds(c)).statusCode()).isEqualTo(403);
+      assertThat(c.staff().get(bookingRefunds(c).replace(VA.toString(),VB.toString())).statusCode()).isEqualTo(404);
+    }
+    @Test void bookingRefundReadRevocationExpirySuspensionAndSessions()throws Exception{
+      var c=accessCase();UUID g=grantTo(STAFF,VA,"refund.synthetic.read");json(c.staff().get(bookingRefunds(c)));
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update();assertThat(c.staff().get(bookingRefunds(c)).statusCode()).isEqualTo(403);
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='ACTIVE',valid_until=clock_timestamp()-INTERVAL '1 second',valid_from=clock_timestamp()-INTERVAL '1 hour' WHERE grant_id=:g").param("g",g).update();assertThat(c.staff().get(bookingRefunds(c)).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"refund.synthetic.read");jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();assertThat(c.staff().get(bookingRefunds(c)).statusCode()).isIn(401,403);
+      assertThat(new Browser().get(bookingRefunds(c)).statusCode()).isEqualTo(401);
+    }
+    @Test void bookingRefundReadMissingMalformedAndPageBounds()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"refund.synthetic.read");
+      assertThat(c.staff().get(bookingRefunds(c).replace(c.booking().toString(),UUID.randomUUID().toString())).statusCode()).isEqualTo(404);
+      assertThat(c.staff().get(bookingRefunds(c).replace(c.booking().toString(),"invalid")).statusCode()).isEqualTo(400);
+      for(String q:java.util.List.of("?page=-1","?size=26","?size=0","?page=x","?page=10001"))assertThat(c.staff().get(bookingRefunds(c)+q).statusCode()).isEqualTo(400);
+    }
+    @Test void bookingRefundReadUsesExactRequestAndPaginatesBeyondVenueQueueLimit()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"refund.synthetic.read");var first=bookingRefund(c);
+      for(int i=0;i<105;i++)jdbc.sql("INSERT INTO cinenest_payments.refund_obligation SELECT :id,credit_id,request_id,owner_id,venue_id,amount_minor,currency,policy_hash,policy_snapshot,'REQUESTED',0,NULL,clock_timestamp(),true FROM cinenest_payments.refund_obligation WHERE refund_id=:r").param("id",UUID.randomUUID()).param("r",UUID.fromString(first.get("id").toString())).update();
+      jdbc.sql("INSERT INTO cinenest_payments.refund_work(refund_id,state) SELECT refund_id,'REVIEW_REQUIRED' FROM cinenest_payments.refund_obligation ON CONFLICT DO NOTHING").update();
+      var seen=new java.util.HashSet<String>();for(int p=0;p<5;p++){var response=c.staff().get(bookingRefunds(c)+"?page="+p+"&size=25");var d=json(response);for(var row:customerItems(response))assertThat(seen.add(row.get("id").toString())).isTrue();assertThat(d.get("hasNext")).isEqualTo(p<4);}
+      assertThat(seen).hasSize(106);assertThat(customerItems(c.staff().get(bookingRefunds(c)+"?page=5&size=25"))).isEmpty();
+    }
+    @Test void bookingRefundReadPreservesAmendedFundingLineage()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"refund.synthetic.read");bookingRefund(c);var a=proposedAmendment(c);
+      json(write(c.customer(),"POST",amendments(c)+"/"+a.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(a))));
+      var d=json(c.staff().get(bookingRefunds(c)));assertThat(d.get("bookingRevision")).isEqualTo(2L);assertThat(d.get("originatingRequestId")).isEqualTo(c.request().get("id"));assertThat((java.util.List<?>)d.get("items")).hasSize(1);
+    }
+    @Test void bookingRefundReadRedactsPrivateDataAndNeverMutatesDomain()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"refund.synthetic.read");bookingRefund(c);
+      String before=jdbc.sql("SELECT jsonb_agg(to_jsonb(r))::text FROM cinenest_payments.refund_obligation r").query(String.class).single();
+      String booking=jdbc.sql("SELECT jsonb_agg(to_jsonb(b))::text FROM cinenest_booking.booking b").query(String.class).single();
+      String allocations=jdbc.sql("SELECT jsonb_agg(to_jsonb(a))::text FROM cinenest_payments.payment_allocation a").query(String.class).single();
+      var response=c.staff().get(bookingRefunds(c));var row=customerItems(response).getFirst();assertThat(row.keySet()).containsExactlyInAnyOrder("id","revision","state","resolution","amountMinor","currency","destinationVerified","attempts");
+      assertThat(row.get("amountMinor")).isEqualTo("100");assertThat(response.body()).doesNotContain("destinationReference","fixture","manifest","actor","owner","creditId","availableMinor","actions","snapshot","hash","evidenceId");
+      assertThat(jdbc.sql("SELECT jsonb_agg(to_jsonb(r))::text FROM cinenest_payments.refund_obligation r").query(String.class).single()).isEqualTo(before);
+      assertThat(jdbc.sql("SELECT jsonb_agg(to_jsonb(b))::text FROM cinenest_booking.booking b").query(String.class).single()).isEqualTo(booking);
+      assertThat(jdbc.sql("SELECT jsonb_agg(to_jsonb(a))::text FROM cinenest_payments.payment_allocation a").query(String.class).single()).isEqualTo(allocations);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_access.access_credential").query(Integer.class).single()).isZero();
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='REFUND_BOOKING_READ' AND actor_id=:a").param("a",STAFF).query(Integer.class).single()).isEqualTo(1);
+    }
+    @Test void bookingRefundReadMandatoryAuditFailsClosed()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"refund.synthetic.read");
+      jdbc.sql("ALTER TABLE cinenest_payments.bank_audit ADD CONSTRAINT test_booking_refund_read CHECK(action<>'REFUND_BOOKING_READ')").update();
+      try{var r=c.staff().get(bookingRefunds(c));assertThat(r.statusCode()).isEqualTo(503);assertThat(r.body()).doesNotContain(c.booking().toString(),c.request().get("id").toString());}
+      finally{jdbc.sql("ALTER TABLE cinenest_payments.bank_audit DROP CONSTRAINT test_booking_refund_read").update();}
+    }
+
+    RefundCase bookedRefundCase(AccessCase c)throws Exception{
+      for(UUID who:java.util.List.of(STAFF,B))for(String permission:java.util.List.of("refund.synthetic.read","refund.synthetic.review","refund.synthetic.destination.verify","refund.synthetic.approve","refund.synthetic.execute","refund.synthetic.reconcile"))grantTo(who,VA,permission);
+      return new RefundCase(c.customer(),c.staff(),c.allocator(),c.request(),c.credit(),bookingRefund(c));
+    }
+    @Test void bookingRefundReadDistinguishesApprovalUnknownFailureAndSyntheticCompletion()throws Exception{
+      var c=accessCase();var f=bookedRefundCase(c);var r=approveRefund(f);
+      assertThat(customerItems(c.staff().get(bookingRefunds(c))).getFirst().get("state")).isEqualTo("APPROVED");
+      r=refundWrite(f.executor(),r,"/attempts",Map.of());r=outgoing(f,r,"SYNTHETIC-UNKNOWN");
+      var observed=customerItems(c.staff().get(bookingRefunds(c))).getFirst();assertThat(observed.get("state")).isEqualTo("UNKNOWN_RECONCILIATION_REQUIRED");assertThat(observed.get("resolution")).isEqualTo("RECONCILIATION_REQUIRED");
+      assertThat(write(f.executor(),"POST",refundRoot(r)+"/attempts",JSONObjectUtils.toJSONString(financial(((Number)r.get("revision")).longValue()))).statusCode()).isEqualTo(409);
+      r=reconcileRefund(f,r,"SYNTHETIC-FAILED");assertThat(customerItems(c.staff().get(bookingRefunds(c))).getFirst().get("state")).isEqualTo("FAILED_CONFIRMED");
+      r=refundWrite(f.executor(),r,"/attempts",Map.of());r=outgoing(f,r,"SYNTHETIC-CONFIRMED");
+      observed=customerItems(c.staff().get(bookingRefunds(c))).getFirst();assertThat(observed.get("state")).isEqualTo("SIMULATED_CONFIRMED");assertThat((java.util.List<?>)observed.get("attempts")).hasSize(2);
+      assertThat(c.staff().get(bookingRefunds(c)).body()).doesNotContain("SYNTHETIC-PAYER","executor","fixture","manifest","availableMinor","permittedActions");
+    }
+    @Test void bookingRefundReadConcurrentApprovalAndReconciliationRemainCoherent()throws Exception{
+      var c=accessCase();var f=bookedRefundCase(c);
+      try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+       var read=pool.submit(()->c.staff().get(bookingRefunds(c)));var approve=pool.submit(()->approveRefund(f));
+       var response=read.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(response.statusCode()).isIn(200,409,503);
+       if(response.statusCode()==200)assertThat(customerItems(response).getFirst().get("state")).isIn("REQUESTED","UNDER_REVIEW","APPROVED");
+       var r=approve.get(15,java.util.concurrent.TimeUnit.SECONDS);r=refundWrite(f.executor(),r,"/attempts",Map.of());r=outgoing(f,r,"SYNTHETIC-UNKNOWN");final var unknown=r;
+       var again=pool.submit(()->c.staff().get(bookingRefunds(c)));var reconcile=pool.submit(()->reconcileRefund(f,unknown,"SYNTHETIC-CONFIRMED"));
+       response=again.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(response.statusCode()).isIn(200,409,503);
+       if(response.statusCode()==200){var item=customerItems(response).getFirst();assertThat(item.get("state")).isIn("UNKNOWN_RECONCILIATION_REQUIRED","SIMULATED_CONFIRMED");if(item.get("state").equals("SIMULATED_CONFIRMED"))assertThat(item.get("resolution")).isEqualTo("COMPLETE");else assertThat(item.get("resolution")).isIn("RECONCILIATION_REQUIRED","OUTGOING_VERIFICATION_REQUIRED");}
+       reconcile.get(15,java.util.concurrent.TimeUnit.SECONDS);
+      }
+    }
+    @Test void bookingRefundReadConcurrentAmendmentRetainsOriginAndObservedRevision()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"refund.synthetic.read");bookingRefund(c);var a=proposedAmendment(c);
+      try(var pool=java.util.concurrent.Executors.newFixedThreadPool(2)){
+       var read=pool.submit(()->c.staff().get(bookingRefunds(c)));var confirm=pool.submit(()->write(c.customer(),"POST",amendments(c)+"/"+a.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(a))));
+       var response=read.get(15,java.util.concurrent.TimeUnit.SECONDS);assertThat(response.statusCode()).isIn(200,409,503);if(response.statusCode()==200){var d=json(response);assertThat(d.get("bookingRevision")).isIn(1L,2L);assertThat(d.get("originatingRequestId")).isEqualTo(c.request().get("id"));}
+       assertThat(confirm.get(15,java.util.concurrent.TimeUnit.SECONDS).statusCode()).isEqualTo(200);
+       assertThat(json(c.staff().get(bookingRefunds(c))).get("bookingRevision")).isEqualTo(2L);
+      }
+    }
+    @Test void bookingRefundReadExpiredSessionDoesNotReturnFinancialContext()throws Exception{
+      var c=accessCase();grantTo(STAFF,VA,"refund.synthetic.read");json(c.staff().get(bookingRefunds(c)));
+      jdbc.sql("UPDATE cinenest_identity.http_session SET expiry_time=0,last_access_time=0").update();var response=c.staff().get(bookingRefunds(c));assertThat(response.statusCode()).isEqualTo(401);assertThat(response.body()).doesNotContain(c.booking().toString());
+    }
+
 }

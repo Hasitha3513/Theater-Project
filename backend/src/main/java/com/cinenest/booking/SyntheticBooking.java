@@ -7,6 +7,9 @@ public interface SyntheticBooking {
  record Purchase(String name,String description,String packageVersionId,String sessionStart,String sessionEnd,String timezone,String roomId,String amountMinor,String currency,List<Line> lines){}
  record CustomerItem(UUID id,UUID requestId,UUID venueId,String state,long revision,String purchasedAt,Purchase purchase,boolean synthetic,boolean realBooking){}
  record CustomerPage(List<CustomerItem> items,int page,int size,boolean hasNext,String observedAt,boolean synthetic){}
+ /** Non-locking internal observation. Consumers enforce their own independent financial permission. */
+ record FinancialContext(UUID bookingId,UUID ownerId,UUID venueId,UUID originatingRequestId,long bookingRevision){}
+ Optional<FinancialContext> financialContext(UUID booking);
  CustomerPage ownedHistory(UUID actor,int page,int size);
  boolean entitled(UUID owner,UUID hold);
  UUID confirm(Funding funding);

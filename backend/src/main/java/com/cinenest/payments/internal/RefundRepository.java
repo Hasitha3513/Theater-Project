@@ -7,6 +7,7 @@ interface RefundRepository {
  Map<String,Object> refund(UUID id,boolean lock);
  List<UUID> owned(UUID request,UUID owner,UUID venue,int offset,int limit);
  List<UUID> queue(UUID venue);
+ List<UUID> forRequest(UUID request,int offset,int limit);
  Optional<Map<String,Object>> replay(UUID actor,UUID key,String hash);
  void command(UUID actor,UUID key,String hash,Map<String,Object> result);
  void create(UUID id,UUID credit,UUID request,UUID owner,UUID venue,long amount,String policy,Map<String,Object> snapshot);

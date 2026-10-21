@@ -8,8 +8,9 @@ import org.springframework.transaction.PlatformTransactionManager;import org.spr
 @RestController
 @ConditionalOnProperty(name="cinenest.bank.refunds.enabled",havingValue="true")
 class RefundController {
- private final RefundService service;private final BankRepository bank;private final TransactionTemplate tx;
- RefundController(RefundService service,BankRepository bank,PlatformTransactionManager manager){this.service=service;this.bank=bank;tx=new TransactionTemplate(manager);}
+ private final RefundService service;private final StaffBookingRefundQuery bookingRefunds;private final BankRepository bank;private final TransactionTemplate tx;
+ RefundController(RefundService service,StaffBookingRefundQuery bookingRefunds,BankRepository bank,PlatformTransactionManager manager){this.service=service;this.bookingRefunds=bookingRefunds;this.bank=bank;tx=new TransactionTemplate(manager);}
+ @GetMapping("/api/admin/venues/{v}/bookings/{booking}/refunds") ResponseEntity<?> booking(Principal p,@PathVariable UUID v,@PathVariable UUID booking,@RequestParam(defaultValue="0")int page,@RequestParam(defaultValue="10")int size){return ok(bookingRefunds.read(actor(p),v,booking,page,size));}
  private UUID actor(Principal p){if(p==null)throw new BankFailure(401,"Sign-in required");return BankService.id(p.getName());}
  private ResponseEntity<?> ok(Object v){return ResponseEntity.ok().header("Cache-Control","no-store").body(v);}
  @GetMapping("/api/bank/requests/{id}/refunds") ResponseEntity<?> owned(Principal p,@PathVariable UUID id,@RequestParam(defaultValue="0")int page,@RequestParam(defaultValue="10")int size){return ok(service.ownedList(actor(p),id,page,size));}

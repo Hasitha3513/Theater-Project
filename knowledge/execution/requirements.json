@@ -1313,6 +1313,16 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
+      },
+      "staffBookingRefundReadEvidence": {
+        "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/payments/internal/StaffBookingRefundQuery.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/payments/internal/StaffBookingRefundQueryTest.java"
+        ],
+        "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1699,6 +1709,16 @@
         "implementationStatus": "NOT_VERIFIED",
         "tests": "NOT_RUN",
         "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
+      },
+      "staffBookingRefundReadEvidence": {
+        "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/payments/internal/StaffBookingRefundQuery.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/payments/internal/StaffBookingRefundQueryTest.java"
+        ],
+        "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2960,6 +2980,16 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
+      },
+      "staffBookingRefundReadEvidence": {
+        "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/payments/internal/StaffBookingRefundQuery.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/payments/internal/StaffBookingRefundQueryTest.java"
+        ],
+        "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -5273,6 +5303,16 @@
         "implementationStatus": "NOT_VERIFIED",
         "tests": "NOT_RUN",
         "implementationAuthorization": "NOT_GRANTED_READINESS_ONLY"
+      },
+      "staffBookingRefundReadEvidence": {
+        "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/payments/internal/StaffBookingRefundQuery.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/payments/internal/StaffBookingRefundQueryTest.java"
+        ],
+        "evidencePath": "PROGRESS.md#staff-booking-refund-contract",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
