@@ -1,0 +1,3 @@
+// Synthetic intercepted UI fixtures, not operational access evidence.
+import { venue,id,other,item } from './staff-bookings-fixtures.mjs';
+export const accessFixture=(issued=true)=>({bookingId:id,venueId:venue,roomId:other,bookingRevision:1,sessionStart:item().scheduledStart,sessionEnd:item().scheduledEnd,timezone:item().timezone,observedAt:'2026-10-20T10:00:00Z',credentialExists:issued,state:issued?'SCHEDULED':'NOT_ISSUED',credential:issued?{id:'00000000-0000-4000-8000-000000000004',version:1,revision:0,bookingRevision:1,provisioning:'PENDING_SIMULATION',operationId:'00000000-0000-4000-8000-000000000005'}:null,permittedActions:issued?['REVOKE','SIMULATE']:[],synthetic:true,doorControlled:false});

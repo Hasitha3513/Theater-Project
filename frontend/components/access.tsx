@@ -1,7 +1,9 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { roomRequest, RoomRequestError } from "../lib/rooms";
-import { Button, Card, Field, SelectField } from "./primitives";
+import { useEffect, useRef, useState } from "react";
+import { RoomRequestError, roomRequest } from "../lib/rooms";
+import type { BookingAccessContext } from "../lib/staff-booking-access";
+import { Button, Card, Field, SelectField, StateMessage } from "./primitives";
+import { StaffBookingAccessPanel } from "./staff-booking-access";
 export const ACCESS_LABEL = "SYNTHETIC ACCESS TEST — NO DOOR CONTROL";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export type AccessRecord = {
@@ -93,7 +95,35 @@ export function accessCommand(
 		},
 	};
 }
-export function AccessWorkspace({ admin = false }: { admin?: boolean }) {
+export function AccessWorkspace({
+	admin = false,
+	context,
+	invalidContext = false,
+}: {
+	admin?: boolean;
+	context?: BookingAccessContext;
+	invalidContext?: boolean;
+}) {
+	if (admin && invalidContext)
+		return (
+			<StateMessage kind="validation">
+				<p>
+					A valid booking and venue reference are required. Return to staff
+					booking results to select a booking.
+				</p>
+				<a href="/admin/bookings">Return to booking results</a>
+			</StateMessage>
+		);
+	if (admin && context)
+		return (
+			<StaffBookingAccessPanel
+				key={`${context.venue}/${context.booking}`}
+				context={context}
+			/>
+		);
+	return <AccessSimulationWorkspace admin={admin} />;
+}
+function AccessSimulationWorkspace({ admin = false }: { admin?: boolean }) {
 	const [target, setTarget] = useState(""),
 		[rows, setRows] = useState<AccessRecord[]>([]),
 		[selected, setSelected] = useState<AccessRecord | null>(null),

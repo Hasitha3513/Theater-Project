@@ -7666,5 +7666,125 @@
     "concurrency": "Real HTTP/PostgreSQL issue,revoke,amendment and blocked-grant revocation tests PASS;unit refusal after credential/work waits;no new business rules",
     "corrections": "Initial test generic compilation corrected;mandatory audit persistence failure mapped503 instead409;session-expiry fixture now expires authoritative last_access_time and expiry index;invalid Booking-port context503 and BIGINT boundary covered",
     "remaining": "Frontend proxy/workspace/booking navigation not implemented;full provider/physical/commercial acceptance remains open"
+  },
+  "bookingAccessContextImplementation": {
+    "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
+    "ownerAuthority": "Owner attachmentdeaefe2f-9742-41d1-8a71-3ba881fd9d3d approves bounded frontend integration",
+    "scope": "Existing staff booking detail to existing /admin/access exact booking read;synthetic only;no commands",
+    "evidencePath": "PROGRESS.md#booking-access-context-implementation",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim",
+    "baselineHead": "8cc9c5aa1bf14e154ba40242ca215705cdbd7090",
+    "prerequisiteCI": "39582712862 COMPLETED/SUCCESS at exact baseline;backend/frontend/governance steps SUCCESS",
+    "status": "LOCALLY_VERIFIED_BOUNDED_FRONTEND_READ",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "endpoint": "GET /api/admin/venues/{venueId}/bookings/{bookingId}/access",
+    "permission": "Backend independent access.synthetic.review,not booking.synthetic.read or SELF/other venue grants",
+    "safeNavigation": "/admin/access?venue={opaqueUUID}&booking={opaqueUUID};only exact validated references;invalid/duplicate/unknown query rejected;no credential/operation/token/evidence/hash/financial URL fields",
+    "protectedState": "Reuse existing useProtectedRead abort/generation;clear on reload,context/session/pagehide/visibility/unmount and denied/error response;focus/pageshow revalidation. No push-revocation guarantee",
+    "commands": "No new command controls or mutation requests;legacy venue workspace remains independently authorized and explicit",
+    "screenshots": [
+      {
+        "path": ".cache/staff-booking-access/after/access-1280.png",
+        "dimensions": [
+          1280,
+          1195
+        ],
+        "sha256": "061e836a536f7b1f7e6609064f89181babdda8985d5b082cedaa888e721a9c53"
+      },
+      {
+        "path": ".cache/staff-booking-access/after/access-375.png",
+        "dimensions": [
+          375,
+          1769
+        ],
+        "sha256": "e13ef44a865b5d254e3a1a5ac96bc8eb090b5b13827c260d5fcc2daf8e962b2d"
+      },
+      {
+        "path": ".cache/staff-booking-access/after/access-768.png",
+        "dimensions": [
+          768,
+          1416
+        ],
+        "sha256": "f159d8a42c0c264b04f6cdecdabe7c62d366c966ede8f5aa4941c701cbbb7c95"
+      },
+      {
+        "path": ".cache/staff-booking-access/after/booking-1280.png",
+        "dimensions": [
+          1280,
+          1947
+        ],
+        "sha256": "5c2b244f7df7b624146350ef31497b01313fac96922af2a7d0c66f54c49f10c2"
+      },
+      {
+        "path": ".cache/staff-booking-access/after/booking-375.png",
+        "dimensions": [
+          375,
+          2498
+        ],
+        "sha256": "dfb7633957113d21249b5655d311db7d0602ac148eb77172951a0fdeacdb69d2"
+      },
+      {
+        "path": ".cache/staff-booking-access/after/booking-768.png",
+        "dimensions": [
+          768,
+          2169
+        ],
+        "sha256": "c15c54313dcf73fb2845215ff314d21cfb5a98277bddbb84e2fcf37f5b6dfe67"
+      },
+      {
+        "path": ".cache/staff-booking-access/before/access-1280.png",
+        "dimensions": [
+          1280,
+          1153
+        ],
+        "sha256": "d74dc71cf77427be79e036328e3ce1d6de39c69583aa4af58746a885f9a55ab2"
+      },
+      {
+        "path": ".cache/staff-booking-access/before/access-375.png",
+        "dimensions": [
+          375,
+          1000
+        ],
+        "sha256": "1ae0f5566c4dfa080c5e2f94360833bc22c470a9380e9213cfc5bf380133e874"
+      },
+      {
+        "path": ".cache/staff-booking-access/before/access-768.png",
+        "dimensions": [
+          768,
+          1000
+        ],
+        "sha256": "d5e3c2cd0f547f049e5670b60a38bfb76f0468c6279b544c426355d682713a68"
+      },
+      {
+        "path": ".cache/staff-booking-access/before/booking-1280.png",
+        "dimensions": [
+          1280,
+          1903
+        ],
+        "sha256": "5d04c8ea91a2ed18d8006f395f55c2aa82624261637f128b974ce16eb675a5a4"
+      },
+      {
+        "path": ".cache/staff-booking-access/before/booking-375.png",
+        "dimensions": [
+          375,
+          2454
+        ],
+        "sha256": "567a0cf82d4b0735b30cd3c356bdc385043f82c155056b34a5d156c2c6b19f7f"
+      },
+      {
+        "path": ".cache/staff-booking-access/before/booking-768.png",
+        "dimensions": [
+          768,
+          2125
+        ],
+        "sha256": "007537147ba355b07e121766363825bd67aad6212664761f5f1af7ddc694f8af"
+      }
+    ],
+    "visualComparison": "All3 approved reference PNGs inspected;admin references primary. Existing240px navy desktop sidebar/light workspace/violet actions/gold brand unchanged. New status3 desktop columns vs1 mobile/tablet;one main,no horizontal overflow. Booking heights2454/2125/1903 to2498/2169/1947(+44px CTA);access1000/1000/1153 to1769/1416/1195 for authoritative metadata/warnings. Card link specificity originally reduced contrast;scoped surface-token foreground corrected and browser asserted. Actual focus and semantic status/alert checks;not pixel-perfect/reference-data reproduction",
+    "corrections": "Initial screenshot protocol failure retried after scroll reset;baseline compiled build unchanged. Unit invocation cwd corrected. Lint route-context type annotated. Browser alerts scoped to main to exclude Next route announcer. Link contrast corrected using existing token;capture reset preserves actual focus while avoiding fixed skip-link capture artifact",
+    "acceptance": "13/74 criteria,25/3 task counts,92/92 requirement/plan coverage and dependencies unchanged;full24/0/0 E2E historical/not rerun;no physical/provider/production acceptance",
+    "validation": "Knowledge PASS;approved in-memory committed-source execution PASS;ordinary execution only2 known next-env integrity findings;20 governance negative controls PASS;92/92 traceability and28-task acyclic graph PASS;whitespace PASS;backend application/source,global decisions,dependencies,CI and approved tokens unchanged"
   }
 }

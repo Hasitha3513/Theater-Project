@@ -957,6 +957,15 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+      },
+      "bookingAccessContextEvidence": {
+        "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
+        "ownerAuthority": "Owner attachmentdeaefe2f-9742-41d1-8a71-3ba881fd9d3d approves bounded frontend integration",
+        "scope": "Existing staff booking detail to existing /admin/access exact booking read;synthetic only;no commands",
+        "evidencePath": "PROGRESS.md#booking-access-context-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
       }
     },
     {
@@ -1295,6 +1304,15 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+      },
+      "bookingAccessContextEvidence": {
+        "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
+        "ownerAuthority": "Owner attachmentdeaefe2f-9742-41d1-8a71-3ba881fd9d3d approves bounded frontend integration",
+        "scope": "Existing staff booking detail to existing /admin/access exact booking read;synthetic only;no commands",
+        "evidencePath": "PROGRESS.md#booking-access-context-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
       }
     },
     {
@@ -1955,6 +1973,15 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+      },
+      "bookingAccessContextEvidence": {
+        "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
+        "ownerAuthority": "Owner attachmentdeaefe2f-9742-41d1-8a71-3ba881fd9d3d approves bounded frontend integration",
+        "scope": "Existing staff booking detail to existing /admin/access exact booking read;synthetic only;no commands",
+        "evidencePath": "PROGRESS.md#booking-access-context-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
       }
     },
     {
@@ -2924,6 +2951,15 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+      },
+      "bookingAccessContextEvidence": {
+        "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
+        "ownerAuthority": "Owner attachmentdeaefe2f-9742-41d1-8a71-3ba881fd9d3d approves bounded frontend integration",
+        "scope": "Existing staff booking detail to existing /admin/access exact booking read;synthetic only;no commands",
+        "evidencePath": "PROGRESS.md#booking-access-context-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
       }
     },
     {

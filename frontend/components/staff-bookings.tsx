@@ -1,18 +1,17 @@
 "use client";
-import { loadStaffRoster, StaffRosterSummary } from "./staff-guest-roster";
-import { StaffVenueContext } from "./staff-venue-context";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { stateFor } from "../lib/rooms";
+import { bookingAccessHref } from "../lib/staff-booking-access";
 import {
 	type BookingFilters,
+	bookingFilters,
+	emptyBookingFilters,
+	filtersFromUrl,
+	loadStaffBooking,
+	loadStaffBookings,
 	type StaffBooking,
 	type StaffBookingPage,
-	emptyBookingFilters,
-	bookingFilters,
-	filtersFromUrl,
-	loadStaffBookings,
-	loadStaffBooking,
 	staffBookingDetailHref,
 	staffBookingListHref,
 } from "../lib/staff-bookings";
@@ -21,10 +20,12 @@ import {
 	Button,
 	Card,
 	Field,
-	StateMessage,
 	type StateKind,
+	StateMessage,
 } from "./primitives";
-function useProtectedRead<T>(
+import { loadStaffRoster, StaffRosterSummary } from "./staff-guest-roster";
+import { StaffVenueContext } from "./staff-venue-context";
+export function useProtectedRead<T>(
 	read: (signal: AbortSignal) => Promise<T>,
 	enabled: boolean,
 ) {
@@ -442,6 +443,16 @@ export function StaffBookingDetail({
 					state.value.booking.bookingId === booking.toLowerCase() && (
 						<section aria-label="Authorized staff booking detail">
 							<StaffBookingSummary booking={state.value.booking} />
+							<Link
+								className="button button-primary booking-access-link"
+								prefetch={false}
+								href={bookingAccessHref(
+									state.value.booking.venueId,
+									state.value.booking.bookingId,
+								)}
+							>
+								Manage Cinema Access
+							</Link>
 							<p>Server observation: {state.value.observedAt}</p>
 						</section>
 					)}

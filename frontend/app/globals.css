@@ -1030,3 +1030,6 @@ button.button { display: inline-grid; }
 .app-shell.admin-shell .shell-body .page-content .configuration-dialog label > input[type="checkbox"] { width: 24px; height: 24px; flex-shrink: 0; accent-color: var(--cn-color-brand-primary); }
 
 .app-shell.admin-shell .shell-body .page-content .configuration-dialog { margin: auto; }
+
+/* Exact staff booking-to-access navigation; preserve approved action contrast. */
+.card a.booking-access-link { color: var(--cn-color-surface); }
