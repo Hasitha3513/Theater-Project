@@ -1,10 +1,18 @@
 // Opt-in REAL backend journey. No page.route, route.fulfill, session injection or business stubs.
 import assert from "node:assert/strict";
+import { safeCustomerNavigation } from "./safe-navigation.mjs";
 import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { createServer } from "node:net";
-import { readFile, writeFile, rename, unlink, mkdir, chmod } from "node:fs/promises";
-import { pathToFileURL, fileURLToPath } from "node:url";
+import {
+	readFile,
+	writeFile,
+	rename,
+	unlink,
+	mkdir,
+	chmod,
+} from "node:fs/promises";
+import { pathToFileURL } from "node:url";
 
 const run = process.env.CINENEST_E2E_RUN;
 assert.match(run ?? "", /^\/tmp\/cinenest-e2e-[^/]+$/);
@@ -18,11 +26,15 @@ let stage = "startup",
 	frontend;
 const requests = [];
 const observations = [];
-let financeObservation, assertionFailure, activePage, activeContext;
-// Private traces can contain synthetic session material. Never publish this ignored directory.
-const diagnostics = new URL(`../../.cache/e2e-booking-diagnosis/${run.split("/").at(-1)}/`, import.meta.url);
-await mkdir(diagnostics,{recursive:true,mode:0o700});
-await chmod(diagnostics,0o700);
+let financeObservation, assertionFailure, activePage;
+const navigations = [];
+// Sanitized logical browser trace only: never retain cookies, headers, bodies or query values.
+const diagnostics = new URL(
+	`../../.cache/e2e-booking-diagnosis/${run.split("/").at(-1)}/`,
+	import.meta.url,
+);
+await mkdir(diagnostics, { recursive: true, mode: 0o700 });
+await chmod(diagnostics, 0o700);
 const planned = [
 	"startup",
 	"customer-discovery-auth",
@@ -198,11 +210,39 @@ try {
 	const context = await browser.newContext({
 		viewport: { width: 1280, height: 900 },
 	});
-	activeContext=context;
-	await context.tracing.start({screenshots:false,snapshots:false,sources:false});
+
 	const page = await context.newPage();
-	activePage=page;
-	context.on("response",response=>{const url=new URL(response.url());if(url.pathname.startsWith("/api/"))observations.push({method:response.request().method(),path:url.pathname.replace(/[0-9a-f]{8}-[0-9a-f-]{27,}/gi,"{reference}"),status:response.status()});});
+	activePage = page;
+	page.on("framenavigated", (frame) => {
+		if (frame !== page.mainFrame()) return;
+		const u = new URL(frame.url());
+		// Authentication redirects are a separate contract; never record their queries.
+		if (u.origin !== base) return;
+		const expectedNegative =
+			stage === "O-malformed-reference" &&
+			u.href === base + "/bank?evidence=malformed";
+		navigations.push({
+			path: u.pathname.replace(/[0-9a-f]{8}-[0-9a-f-]{27,}/gi, "{reference}"),
+			queryKeys: [...u.searchParams.keys()].map((k) =>
+				["evidence", "request", "quote"].includes(k) ? k : "{other}",
+			),
+			stage,
+			expectedNegative,
+			safe: safeCustomerNavigation(u.href, base),
+		});
+	});
+	context.on("response", (response) => {
+		const url = new URL(response.url());
+		if (url.pathname.startsWith("/api/"))
+			observations.push({
+				method: response.request().method(),
+				path: url.pathname.replace(
+					/[0-9a-f]{8}-[0-9a-f-]{27,}/gi,
+					"{reference}",
+				),
+				status: response.status(),
+			});
+	});
 	page.setDefaultTimeout(12000);
 	context.on("request", (request) => {
 		const url = new URL(request.url());
@@ -472,7 +512,12 @@ try {
 	});
 	await scenario("simulated-confirmation-api-support", async () => {
 		const result = await control({ op: "finance", id: bank.id });
-		financeObservation={bookingId:result.bookingId,syntheticBookingStatus:result.syntheticBookingStatus,bookingConfirmed:result.bookingConfirmed,persistence:result.diagnosticBooking};
+		financeObservation = {
+			bookingId: result.bookingId,
+			syntheticBookingStatus: result.syntheticBookingStatus,
+			bookingConfirmed: result.bookingConfirmed,
+			persistence: result.diagnosticBooking,
+		};
 		assert.equal(result.syntheticBookingStatus, "SIMULATED_CONFIRMED");
 		assert.equal(result.bookingConfirmed, false);
 		await page.goto(base + "/bank?request=" + bank.id);
@@ -487,18 +532,31 @@ try {
 			(await json(page, "/api/bookings/" + result.bookingId)).id,
 			result.bookingId,
 		);
-		await page.getByRole("heading",{name:"Purchased snapshot",exact:true}).waitFor({state:"visible"});
-		await page.screenshot({path:fileURLToPath(new URL("booking-detail.png",diagnostics)),fullPage:true});
-		const historyResponse = page.waitForResponse(r=>new URL(r.url()).pathname === "/api/bookings" && r.request().method() === "GET");
+		await page
+			.getByRole("heading", { name: "Purchased snapshot", exact: true })
+			.waitFor({ state: "visible" });
+		const historyResponse = page.waitForResponse(
+			(r) =>
+				new URL(r.url()).pathname === "/api/bookings" &&
+				r.request().method() === "GET",
+		);
 		await page.goto(base + "/bookings");
-		await page.getByRole("button",{name:"Refresh booking history",exact:true}).click();
-		assert.equal((await historyResponse).status(),200,"owned booking history must load successfully");
-		await page.locator(`a[href="/bookings/${result.bookingId}"]`).first().waitFor({state:"visible"});
+		await page
+			.getByRole("button", { name: "Refresh booking history", exact: true })
+			.click();
+		assert.equal(
+			(await historyResponse).status(),
+			200,
+			"owned booking history must load successfully",
+		);
+		await page
+			.locator(`a[href="/bookings/${result.bookingId}"]`)
+			.first()
+			.waitFor({ state: "visible" });
 		assert.ok(
 			(await page.locator(`a[href="/bookings/${result.bookingId}"]`).count()) >
 				0,
 		);
-		await page.screenshot({path:fileURLToPath(new URL("booking-history.png",diagnostics)),fullPage:true});
 	});
 	await scenario("C-wrong-owner", async () => {
 		const other = await browser.newContext();
@@ -541,10 +599,43 @@ try {
 	});
 	await scenario("P-safe-URLs", async () => {
 		assert.ok(requests.length > 10);
-		assert.ok(
-			!/[?&](?:hash|token|secret|evidence|amount|csrf)=/i.test(page.url()),
+		assert.equal(
+			safeCustomerNavigation(page.url(), base),
+			false,
+			"intentional malformed-reference URL must remain invalid",
 		);
+		const reload = page.waitForResponse(
+			(r) =>
+				new URL(r.url()).pathname === "/api/bank/requests/" + bank.id &&
+				r.request().method() === "GET",
+		);
+		await page.goto(base + "/bank?request=" + bank.id);
+		assert.equal(
+			(await reload).status(),
+			200,
+			"protected request reload must succeed",
+		);
+		await page
+			.getByRole("link", {
+				name: "View simulated booking details",
+				exact: true,
+			})
+			.waitFor({ state: "visible" });
+		assert.equal(page.url(), base + "/bank?request=" + bank.id);
+		assert.equal(safeCustomerNavigation(page.url(), base), true);
 		assert.ok(!page.url().includes(creationBody.contentHash));
+		assert.ok(
+			navigations.some((n) => n.queryKeys.includes("evidence") && n.safe),
+			"actual opaque evidence handoff must be covered",
+		);
+		assert.ok(
+			navigations.some((n) => n.expectedNegative && !n.safe),
+			"malformed negative control must be covered",
+		);
+		assert.ok(
+			navigations.every((n) => n.safe || n.expectedNegative),
+			"all legitimate customer navigation must satisfy the explicit route/reference allowlist",
+		);
 	});
 	await scenario("G-expired-session", async () => {
 		await control({ op: "expire-session" });
@@ -567,7 +658,17 @@ try {
 		"No safely qualified connection-failure transport; no fabricated responses",
 	);
 } catch (failure) {
-	assertionFailure={name:failure.name,message:String(failure.message).slice(0,2500),stack:String(failure.stack).split("\n").filter(line=>line.includes("synthetic-e2e.mjs:")).slice(0,4)};
+	assertionFailure = {
+		name: failure.name,
+		message:
+			failure.name === "AssertionError"
+				? "Harness assertion failed; inspect source location"
+				: "Harness operation failed",
+		stack: String(failure.stack)
+			.split("\n")
+			.filter((line) => line.includes("synthetic-e2e.mjs:"))
+			.slice(0, 4),
+	};
 	results.push({
 		id: stage,
 		status: "FAIL",
@@ -585,9 +686,23 @@ try {
 				id,
 				"Stopped after failure or missing independent safe scenario control",
 			);
-	if(activePage){await activePage.screenshot({path:fileURLToPath(new URL("final.png",diagnostics)),fullPage:true}).catch(()=>{});}
-	if(activeContext)await activeContext.tracing.stop({path:fileURLToPath(new URL("private-trace.zip",diagnostics))});
-	await writeFile(new URL("observations.json",diagnostics),JSON.stringify({stage,assertionFailure,financeObservation,observations,finalPath:activePage?new URL(activePage.url()).pathname:undefined}),{mode:0o600});
+	await writeFile(
+		new URL("observations.json", diagnostics),
+		JSON.stringify({
+			stage,
+			assertionFailure,
+			financeObservation,
+			observations,
+			navigations,
+			finalPath: activePage
+				? new URL(activePage.url()).pathname.replace(
+						/[0-9a-f]{8}-[0-9a-f-]{27,}/gi,
+						"{reference}",
+					)
+				: undefined,
+		}),
+		{ mode: 0o600 },
+	);
 	if (browser) await browser.close();
 	if (frontend && frontend.exitCode === null) {
 		frontend.kill("SIGTERM");

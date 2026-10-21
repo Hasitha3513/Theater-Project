@@ -626,6 +626,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Test harness explicit history refresh and read/render synchronization only;actual browser/Next/proxy/Boot/PostgreSQL,no business interception;P-safe-URLs remains FAIL,5 scenarios NOT_RUN."
+      },
+      "e2eSafeUrlsEvidence": {
+        "taskId": "CN-E2E-SAFE-URLS-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-safe-urls-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Test-only customer navigation allowlist and scenario isolation;real browser/Next/proxy/Boot/PostgreSQL;20 PASS/0 FAIL/4 NOT_RUN,not full acceptance."
       }
     },
     {
@@ -1278,6 +1286,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Test harness explicit history refresh and read/render synchronization only;actual browser/Next/proxy/Boot/PostgreSQL,no business interception;P-safe-URLs remains FAIL,5 scenarios NOT_RUN."
+      },
+      "e2eSafeUrlsEvidence": {
+        "taskId": "CN-E2E-SAFE-URLS-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-safe-urls-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Test-only customer navigation allowlist and scenario isolation;real browser/Next/proxy/Boot/PostgreSQL;20 PASS/0 FAIL/4 NOT_RUN,not full acceptance."
       }
     },
     {
@@ -1677,6 +1693,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Test harness explicit history refresh and read/render synchronization only;actual browser/Next/proxy/Boot/PostgreSQL,no business interception;P-safe-URLs remains FAIL,5 scenarios NOT_RUN."
+      },
+      "e2eSafeUrlsEvidence": {
+        "taskId": "CN-E2E-SAFE-URLS-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-safe-urls-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Test-only customer navigation allowlist and scenario isolation;real browser/Next/proxy/Boot/PostgreSQL;20 PASS/0 FAIL/4 NOT_RUN,not full acceptance."
       }
     },
     {
@@ -2565,6 +2589,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Test harness explicit history refresh and read/render synchronization only;actual browser/Next/proxy/Boot/PostgreSQL,no business interception;P-safe-URLs remains FAIL,5 scenarios NOT_RUN."
+      },
+      "e2eSafeUrlsEvidence": {
+        "taskId": "CN-E2E-SAFE-URLS-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-safe-urls-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Test-only customer navigation allowlist and scenario isolation;real browser/Next/proxy/Boot/PostgreSQL;20 PASS/0 FAIL/4 NOT_RUN,not full acceptance."
       }
     },
     {

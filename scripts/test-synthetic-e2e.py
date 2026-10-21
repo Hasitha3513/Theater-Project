@@ -76,6 +76,14 @@ class AdmissionTests(unittest.TestCase):
         for forbidden in ['page.route(', 'route.fulfill(', 'context.addCookies(', 'storageState:', 'ignoreHTTPSErrors:']:
             self.assertNotIn(forbidden,source)
 
+    def test_diagnostics_never_capture_raw_browser_secrets(self):
+        source=(journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()
+        for forbidden in ['tracing.start(', 'tracing.stop(', 'page.screenshot(', 'failure.message).slice']:
+            self.assertNotIn(forbidden,source)
+        self.assertIn('queryKeys:',source)
+        self.assertIn('expectedNegative',source)
+        self.assertIn('safeCustomerNavigation(u.href, base)',source)
+
     def test_workflow_untouched_and_offline_runtime(self):
         source=Path(journey.__file__).read_text()
         self.assertIn("'--pull=never'",source)
