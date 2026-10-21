@@ -6049,5 +6049,516 @@
       "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
     },
     "acceptance": "NO_FULL_CAMPAIGN_REQUIREMENT_PHASE_OR_DEMONSTRATION_ACCEPTANCE"
+  },
+  "e2eExpiredQuoteVerification": {
+    "taskId": "CN-E2E-EXPIRED-QUOTE-001",
+    "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+    "evidencePath": "PROGRESS.md#e2e-expired-quote-verification",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance.",
+    "baseline": "f901f8f715855a81a1f4e20f49466dcf9d7bfae8",
+    "ownerAuthority": "Attachment bd012ce1-0223-4b8e-8503-be114c256bd5:bounded expired-quotation execution/remediation only;other three campaign scenarios excluded",
+    "prerequisiteCi": {
+      "runId": 39547727398,
+      "sha": "f901f8f715855a81a1f4e20f49466dcf9d7bfae8",
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS",
+      "remoteClassification": "CI_OR_GOVERNANCE",
+      "requiredSteps": "ALL_SUCCESS"
+    },
+    "toolchain": {
+      "node": "24.22.0",
+      "npm": "11.19.1",
+      "bin": "$HOME/.local/toolchains/node-v24.22.0-linux-x64/bin",
+      "admission": "TOOLS_PRESENT_AND_EXECUTION_LIMITS_VERIFIED",
+      "integrity": "Owned non-group/world-writable resolved Node/npm targets;local SHA256 receipts,not upstream signature verification",
+      "nodeSha256": "67ca5783febb8bf85736c79fcdd92c8d6d465a0eb2a082672bcdfa76a506751c"
+    },
+    "contract": {
+      "issuance": "POST /api/quotes,active owned hold,applicable immutable package version,exact revision;quote expiry inherits original hold deadline",
+      "acceptance": "POST /api/quotes/{opaque}/accept,normal session/CSRF,exact revision/hash/disclosures/idempotency key",
+      "expiry": "Real PostgreSQL clock_timestamp() at or beyond immutable quote deadline",
+      "rejection": "HTTP409;existing proxy sanitizes detailed backend refusal;explicit protected GET200 returns EXPIRED",
+      "unchanged": "Quote revision/hash/snapshot;zero acceptance/ACCEPT commands/bank requests/bookings for case;existing global credit/verification/allocation/booking fingerprints equal in-memory",
+      "coupling": "Quote and hold share deadline;not isolated proof of quote-only guard and not execution/acceptance of B-invalid-expired-hold"
+    },
+    "fixture": "Dedicated nonoverlapping14:00 synthetic session;shorten only newly created owned hold before quotation exists to8-second real deadline;owned venue verified via inventory_block;no immutable mutation,clock mock,clock change,trigger bypass or production endpoint",
+    "attempts": {
+      "fixtureFailure": {
+        "run": "cinenest-e2e-pi6ccpg6",
+        "counts": {
+          "PASS": 19,
+          "FAIL": 1,
+          "NOT_RUN": 4
+        },
+        "results": [
+          {
+            "id": "startup",
+            "status": "PASS"
+          },
+          {
+            "id": "customer-discovery-auth",
+            "status": "PASS"
+          },
+          {
+            "id": "hold-quote-accept",
+            "status": "PASS"
+          },
+          {
+            "id": "verification-explicit-consent",
+            "status": "PASS"
+          },
+          {
+            "id": "E-pending-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "independent-verification-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "explicit-bank-request",
+            "status": "PASS"
+          },
+          {
+            "id": "H-missing-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "I-invalid-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "J-cross-origin",
+            "status": "PASS"
+          },
+          {
+            "id": "L-idempotent-replay",
+            "status": "PASS"
+          },
+          {
+            "id": "M-changed-body-key",
+            "status": "PASS"
+          },
+          {
+            "id": "K-stale-readiness",
+            "status": "PASS"
+          },
+          {
+            "id": "claim-receipt-explicit",
+            "status": "PASS"
+          },
+          {
+            "id": "simulated-confirmation-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "C-wrong-owner",
+            "status": "PASS"
+          },
+          {
+            "id": "D-wrong-venue-grant",
+            "status": "PASS"
+          },
+          {
+            "id": "O-malformed-reference",
+            "status": "PASS"
+          },
+          {
+            "id": "P-safe-URLs",
+            "status": "PASS"
+          },
+          {
+            "id": "A-expired-quote",
+            "status": "FAIL",
+            "reason": "Real harness assertion/startup failure; raw private diagnostics not published",
+            "assertionFailure": {
+              "name": "AssertionError",
+              "message": "Harness assertion failed; inspect source location",
+              "stack": [
+                "    at control (file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:89:11)",
+                "    at async file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:651:23",
+                "    at async scenario (file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:71:3)",
+                "    at async file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:640:2"
+              ]
+            },
+            "financeObservation": {
+              "bookingId": "79bbd070-492e-40cf-9b38-7226be9d0cbf",
+              "syntheticBookingStatus": "SIMULATED_CONFIRMED",
+              "bookingConfirmed": false,
+              "persistence": {
+                "state": "SIMULATED_CONFIRMED",
+                "synthetic": true
+              }
+            }
+          },
+          {
+            "id": "G-expired-session",
+            "status": "NOT_RUN",
+            "reason": "Stopped after failure or missing independent safe scenario control"
+          },
+          {
+            "id": "B-invalid-expired-hold",
+            "status": "NOT_RUN",
+            "reason": "Stopped after failure or missing independent safe scenario control"
+          },
+          {
+            "id": "F-rejected-verification",
+            "status": "NOT_RUN",
+            "reason": "Stopped after failure or missing independent safe scenario control"
+          },
+          {
+            "id": "N-uncertain-upload",
+            "status": "NOT_RUN",
+            "reason": "Stopped after failure or missing independent safe scenario control"
+          }
+        ],
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-pi6ccpg6"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-pi6ccpg6/observations.json",
+        "traceSha256": "3352dfdbfd4ba8c819816f84695180e210272fa038b3c805f86231f05881ed14",
+        "expiryObservation": null,
+        "assertionFailure": {
+          "name": "AssertionError",
+          "message": "Harness assertion failed; inspect source location",
+          "stack": [
+            "    at control (file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:89:11)",
+            "    at async file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:651:23",
+            "    at async scenario (file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:71:3)",
+            "    at async file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:640:2"
+          ]
+        }
+      },
+      "expectationFailure": {
+        "run": "cinenest-e2e-96c3f3dj",
+        "counts": {
+          "PASS": 19,
+          "FAIL": 1,
+          "NOT_RUN": 4
+        },
+        "results": [
+          {
+            "id": "startup",
+            "status": "PASS"
+          },
+          {
+            "id": "customer-discovery-auth",
+            "status": "PASS"
+          },
+          {
+            "id": "hold-quote-accept",
+            "status": "PASS"
+          },
+          {
+            "id": "verification-explicit-consent",
+            "status": "PASS"
+          },
+          {
+            "id": "E-pending-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "independent-verification-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "explicit-bank-request",
+            "status": "PASS"
+          },
+          {
+            "id": "H-missing-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "I-invalid-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "J-cross-origin",
+            "status": "PASS"
+          },
+          {
+            "id": "L-idempotent-replay",
+            "status": "PASS"
+          },
+          {
+            "id": "M-changed-body-key",
+            "status": "PASS"
+          },
+          {
+            "id": "K-stale-readiness",
+            "status": "PASS"
+          },
+          {
+            "id": "claim-receipt-explicit",
+            "status": "PASS"
+          },
+          {
+            "id": "simulated-confirmation-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "C-wrong-owner",
+            "status": "PASS"
+          },
+          {
+            "id": "D-wrong-venue-grant",
+            "status": "PASS"
+          },
+          {
+            "id": "O-malformed-reference",
+            "status": "PASS"
+          },
+          {
+            "id": "P-safe-URLs",
+            "status": "PASS"
+          },
+          {
+            "id": "A-expired-quote",
+            "status": "FAIL",
+            "reason": "Real harness assertion/startup failure; raw private diagnostics not published",
+            "assertionFailure": {
+              "name": "AssertionError",
+              "message": "Harness assertion failed; inspect source location",
+              "stack": [
+                "    at file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:701:10",
+                "    at async scenario (file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:71:3)",
+                "    at async file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:640:2"
+              ]
+            },
+            "financeObservation": {
+              "bookingId": "16d3f298-17b2-4246-a196-cd8a3f3feeaf",
+              "syntheticBookingStatus": "SIMULATED_CONFIRMED",
+              "bookingConfirmed": false,
+              "persistence": {
+                "state": "SIMULATED_CONFIRMED",
+                "synthetic": true
+              }
+            }
+          },
+          {
+            "id": "G-expired-session",
+            "status": "NOT_RUN",
+            "reason": "Stopped after failure or missing independent safe scenario control"
+          },
+          {
+            "id": "B-invalid-expired-hold",
+            "status": "NOT_RUN",
+            "reason": "Stopped after failure or missing independent safe scenario control"
+          },
+          {
+            "id": "F-rejected-verification",
+            "status": "NOT_RUN",
+            "reason": "Stopped after failure or missing independent safe scenario control"
+          },
+          {
+            "id": "N-uncertain-upload",
+            "status": "NOT_RUN",
+            "reason": "Stopped after failure or missing independent safe scenario control"
+          }
+        ],
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-96c3f3dj"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-96c3f3dj/observations.json",
+        "traceSha256": "49de757c1da8a43da7f32e51ab5c8fb72700b85d385cf20381bca5cf5d002aee",
+        "expiryObservation": null,
+        "assertionFailure": {
+          "name": "AssertionError",
+          "message": "Harness assertion failed; inspect source location",
+          "stack": [
+            "    at file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:701:10",
+            "    at async scenario (file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:71:3)",
+            "    at async file:///home/hasitha-wijerathna/Documents/Theater%20Project/repository/frontend/tests/synthetic-e2e.mjs:640:2"
+          ]
+        }
+      },
+      "final": {
+        "run": "cinenest-e2e-ich3kizo",
+        "counts": {
+          "PASS": 21,
+          "FAIL": 0,
+          "NOT_RUN": 3
+        },
+        "results": [
+          {
+            "id": "startup",
+            "status": "PASS"
+          },
+          {
+            "id": "customer-discovery-auth",
+            "status": "PASS"
+          },
+          {
+            "id": "hold-quote-accept",
+            "status": "PASS"
+          },
+          {
+            "id": "verification-explicit-consent",
+            "status": "PASS"
+          },
+          {
+            "id": "E-pending-verification",
+            "status": "PASS"
+          },
+          {
+            "id": "independent-verification-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "explicit-bank-request",
+            "status": "PASS"
+          },
+          {
+            "id": "H-missing-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "I-invalid-CSRF",
+            "status": "PASS"
+          },
+          {
+            "id": "J-cross-origin",
+            "status": "PASS"
+          },
+          {
+            "id": "L-idempotent-replay",
+            "status": "PASS"
+          },
+          {
+            "id": "M-changed-body-key",
+            "status": "PASS"
+          },
+          {
+            "id": "K-stale-readiness",
+            "status": "PASS"
+          },
+          {
+            "id": "claim-receipt-explicit",
+            "status": "PASS"
+          },
+          {
+            "id": "simulated-confirmation-api-support",
+            "status": "PASS"
+          },
+          {
+            "id": "C-wrong-owner",
+            "status": "PASS"
+          },
+          {
+            "id": "D-wrong-venue-grant",
+            "status": "PASS"
+          },
+          {
+            "id": "O-malformed-reference",
+            "status": "PASS"
+          },
+          {
+            "id": "P-safe-URLs",
+            "status": "PASS"
+          },
+          {
+            "id": "A-expired-quote",
+            "status": "PASS"
+          },
+          {
+            "id": "G-expired-session",
+            "status": "PASS"
+          },
+          {
+            "id": "B-invalid-expired-hold",
+            "status": "NOT_RUN",
+            "reason": "Independent case/reset needed to avoid corrupting positive journey"
+          },
+          {
+            "id": "F-rejected-verification",
+            "status": "NOT_RUN",
+            "reason": "Independent case/reset needed; positive review cannot be rewritten"
+          },
+          {
+            "id": "N-uncertain-upload",
+            "status": "NOT_RUN",
+            "reason": "No safely qualified connection-failure transport; no fabricated responses"
+          }
+        ],
+        "admission": {
+          "admission": "LIMITS_VERIFIED",
+          "applicationCpuMax": 3,
+          "applicationMemoryGiBMax": 7,
+          "postgresCpuMax": 1,
+          "postgresMemoryGiBMax": 1,
+          "postgresPidsMax": 128,
+          "postgresTmpfsMiBMax": 512,
+          "run": "cinenest-e2e-ich3kizo"
+        },
+        "cleanupVerified": true,
+        "tracePath": ".cache/e2e-booking-diagnosis/cinenest-e2e-ich3kizo/observations.json",
+        "traceSha256": "7096771309611228b354c2edb533764430408d24e3ecba96bf9b2818ffc94fb4",
+        "expiryObservation": {
+          "quoteAcceptCommands": 0,
+          "snapshotAndFinancialStateUnchanged": true,
+          "holdBookings": 0,
+          "quoteAcceptances": 0,
+          "serverExpired": true,
+          "controlOk": true,
+          "quoteBankRequests": 0,
+          "httpStatus": 409,
+          "quoteState": "EXPIRED",
+          "recoveryPath": "/rooms"
+        },
+        "assertionFailure": null
+      }
+    },
+    "currentCounts": {
+      "PASS": 21,
+      "FAIL": 0,
+      "NOT_RUN": 3
+    },
+    "targetScenario": "A-expired-quote PASS",
+    "notRun": [
+      "B-invalid-expired-hold",
+      "F-rejected-verification",
+      "N-uncertain-upload"
+    ],
+    "corrections": [
+      "Initial test SQL incorrectly referenced nonexistent reservation_hold.venue_id;fixed to linked inventory_block venue EXISTS",
+      "Initial browser assertion expected private backend refusal;fixed to existing sanitized proxy409 contract;no application behavior changed"
+    ],
+    "checks": {
+      "inertHarnessAdmission": 10,
+      "ciClassifier": 8,
+      "realE2e": "21 PASS / 0 FAIL / 3 NOT_RUN",
+      "backend": 513,
+      "frontend": 248,
+      "typecheckLintBuild": "PASS",
+      "knowledge": "PASS",
+      "isolatedExecutionTraceabilityDependency": "PASS",
+      "governanceNegativeControls": 10,
+      "whitespace": "PASS",
+      "exactSourceCi": "PENDING_PUBLICATION",
+      "bankIntegration": 251,
+      "architecture": 17,
+      "quotationIntegration": 13,
+      "primaryExecution": "ONLY_TWO_PRE_EXISTING_NEXT_ENV_FINDINGS"
+    },
+    "acceptance": "NO_FULL_CAMPAIGN_REQUIREMENT_PHASE_OR_DEMONSTRATION_ACCEPTANCE"
   }
 }

@@ -406,6 +406,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
+      },
+      "e2eExpiredQuoteEvidence": {
+        "taskId": "CN-E2E-EXPIRED-QUOTE-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-expired-quote-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance."
       }
     },
     {
@@ -458,6 +466,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Section navigation and existing booking/quotation presentation only;existing server authority,commands,pricing,expiry,revision,consent and explicit acceptance unchanged."
+      },
+      "e2eExpiredQuoteEvidence": {
+        "taskId": "CN-E2E-EXPIRED-QUOTE-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-expired-quote-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance."
       }
     },
     {
@@ -1701,6 +1717,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Test-only customer navigation allowlist and scenario isolation;real browser/Next/proxy/Boot/PostgreSQL;20 PASS/0 FAIL/4 NOT_RUN,not full acceptance."
+      },
+      "e2eExpiredQuoteEvidence": {
+        "taskId": "CN-E2E-EXPIRED-QUOTE-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-expired-quote-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance."
       }
     },
     {
@@ -2268,6 +2292,14 @@
           "frontend/tests/quotes-browser.mjs"
         ],
         "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      },
+      "e2eExpiredQuoteEvidence": {
+        "taskId": "CN-E2E-EXPIRED-QUOTE-001",
+        "status": "TARGET_VERIFIED_CAMPAIGN_INCOMPLETE",
+        "evidencePath": "PROGRESS.md#e2e-expired-quote-verification",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "scope": "Real browser/Next/proxy/Boot/PostgreSQL expired immutable quote acceptance rejection,explicit refresh/recovery and unchanged SQL state;21 PASS/0 FAIL/3 NOT_RUN;no independent hold-expiry scenario acceptance."
       }
     },
     {

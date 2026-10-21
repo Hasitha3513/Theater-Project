@@ -40,6 +40,8 @@ class SyntheticJourneyIT {
         config.put("otherVenue",BankIntegrationTest.VB.toString());config.put("venue",BankIntegrationTest.VA.toString());config.put("local",fixture.local());
         Files.writeString(run.resolve("config.json"),JSONObjectUtils.toJSONString(config));
         Process browser=null;
+        UUID expiringHold=null,expiringQuote=null;
+        Map<String,Object> expiryBaseline=null;
         try {
             var builder=new ProcessBuilder("node",Path.of("../frontend/tests/synthetic-e2e.mjs").toAbsolutePath().toString());
             builder.redirectErrorStream(true);builder.redirectOutput(run.resolve("private-browser.log").toFile());
@@ -64,6 +66,24 @@ class SyntheticJourneyIT {
                             response=fixture.json(fixture.allocateCredit(allocator,r,c,Long.parseLong(r.get("amountMinor").toString())));
                             assertThat(response.get("syntheticBookingStatus")).isEqualTo("SIMULATED_CONFIRMED");
                             response.put("diagnosticBooking",fixture.jdbc.sql("SELECT state,synthetic FROM cinenest_booking.booking WHERE request_id=:id").param("id",UUID.fromString(body.get("id").toString())).query().singleRow());
+                        }else if(op.equals("prepare-expiring-quote")){
+                            if(expiringHold!=null)throw new IllegalArgumentException("One expiry fixture only");
+                            UUID id=UUID.fromString(body.get("holdId").toString());
+                            int changed=fixture.jdbc.sql("UPDATE cinenest_booking.reservation_hold h SET expires_at=clock_timestamp()+INTERVAL '8 seconds' WHERE hold_id=:h AND owner_id=:a AND EXISTS(SELECT 1 FROM cinenest_booking.inventory_block b WHERE b.block_id=h.block_id AND b.venue_id=:v) AND state='ACTIVE' AND expires_at>clock_timestamp() AND NOT EXISTS(SELECT 1 FROM cinenest_pricing.quotation q WHERE q.hold_id=h.hold_id)").param("h",id).param("a",BankIntegrationTest.A).param("v",BankIntegrationTest.VA).update();
+                            assertThat(changed).isEqualTo(1);expiringHold=id;response.put("prepared",true);
+                        }else if(op.equals("await-quote-expiry")){
+                            UUID id=UUID.fromString(body.get("quoteId").toString());
+                            assertThat(expiringHold).isNotNull();
+                            assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation q JOIN cinenest_pricing.quotation_revision r ON r.quote_id=q.quote_id AND r.revision=q.current_revision JOIN cinenest_booking.reservation_hold h ON h.hold_id=q.hold_id WHERE q.quote_id=:q AND q.owner_id=:a AND q.hold_id=:h AND r.expires_at=h.expires_at AND r.expires_at>clock_timestamp()").param("q",id).param("a",BankIntegrationTest.A).param("h",expiringHold).query(Long.class).single()).isEqualTo(1);
+                            expiringQuote=id;expiryBaseline=expiryState(fixture,id,expiringHold);
+                            long deadline=System.nanoTime()+java.time.Duration.ofSeconds(12).toNanos();
+                            while(!quoteExpired(fixture,id)&&System.nanoTime()<deadline)Thread.sleep(25);
+                            assertThat(quoteExpired(fixture,id)).isTrue();response.put("serverExpired",true);
+                        }else if(op.equals("inspect-expired-quote")){
+                            assertThat(expiryBaseline).isNotNull();assertThat(quoteExpired(fixture,expiringQuote)).isTrue();
+                            var actual=expiryState(fixture,expiringQuote,expiringHold);assertThat(actual.equals(expiryBaseline)).as("Expired quote snapshot and financial state unchanged").isTrue();
+                            response.put("serverExpired",true);response.put("snapshotAndFinancialStateUnchanged",true);
+                            response.put("quoteAcceptances",actual.get("acceptances"));response.put("quoteAcceptCommands",actual.get("commands"));response.put("quoteBankRequests",actual.get("requests"));response.put("holdBookings",actual.get("bookings"));
                         }else if(op.equals("subject")){
                             String subject=body.get("subject").toString();
                             if(!List.of("customer-a","customer-b","staff").contains(subject))throw new IllegalArgumentException();
@@ -84,4 +104,21 @@ class SyntheticJourneyIT {
             BankIntegrationTest.IDP.close();
         }
     }
+    private static boolean quoteExpired(BankIntegrationTest fixture,UUID quote){
+        return fixture.jdbc.sql("SELECT expires_at<=clock_timestamp() FROM cinenest_pricing.quotation_revision WHERE quote_id=:q AND revision=1").param("q",quote).query(Boolean.class).single();
+    }
+    private static Map<String,Object> expiryState(BankIntegrationTest fixture,UUID quote,UUID hold){
+        Map<String,Object> state=new HashMap<>();
+        state.put("acceptances",fixture.jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation_acceptance WHERE quote_id=:q").param("q",quote).query(Long.class).single());
+        state.put("commands",fixture.jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation_command WHERE quote_id=:q AND action='ACCEPT'").param("q",quote).query(Long.class).single());
+        state.put("requests",fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request WHERE quote_id=:q").param("q",quote).query(Long.class).single());
+        state.put("bookings",fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking WHERE hold_id=:h").param("h",hold).query(Long.class).single());
+        assertThat(state.values()).allMatch(v->v.equals(0L));
+        state.put("revision",fixture.jdbc.sql("SELECT to_jsonb(r)::text FROM cinenest_pricing.quotation_revision r WHERE quote_id=:q AND revision=1").param("q",quote).query(String.class).single());
+        // Test-only equality fingerprints stay in memory; never put ledger rows in evidence/logs.
+        for(String table:List.of("cinenest_payments.incoming_payment_credit","cinenest_payments.bank_credit_verification","cinenest_payments.payment_allocation","cinenest_booking.booking"))
+            state.put(table,fixture.jdbc.sql("SELECT md5(COALESCE(string_agg(to_jsonb(t)::text,'' ORDER BY to_jsonb(t)::text),'')) FROM "+table+" t").query(String.class).single());
+        return state;
+    }
+
 }

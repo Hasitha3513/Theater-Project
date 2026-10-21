@@ -26,7 +26,7 @@ let stage = "startup",
 	frontend;
 const requests = [];
 const observations = [];
-let financeObservation, assertionFailure, activePage;
+let financeObservation, expiryObservation, assertionFailure, activePage;
 const navigations = [];
 // Sanitized logical browser trace only: never retain cookies, headers, bodies or query values.
 const diagnostics = new URL(
@@ -637,14 +637,138 @@ try {
 			"all legitimate customer navigation must satisfy the explicit route/reference allowlist",
 		);
 	});
+	await scenario("A-expired-quote", async () => {
+		// Independent non-overlapping session; do not alter the positive journey's purchase.
+		await page.goto(base + "/rooms/" + config.room);
+		await page
+			.getByLabel("Customer start in venue local time")
+			.fill(config.local.replace(/T\d\d:\d\d/, "T14:00"));
+		await page.getByLabel("Customer duration (minutes)").fill("180");
+		await page.getByLabel("Guests", { exact: true }).fill("4");
+		await page
+			.getByRole("button", { name: "Check inventory (no hold)", exact: true })
+			.click();
+		const hold = await clickResponse(
+			page,
+			"Create temporary inventory hold",
+			"/api/holds",
+		);
+		await page
+			.getByRole("button", {
+				name: "Load applicable synthetic package choices",
+				exact: true,
+			})
+			.click();
+		await page.getByLabel("Published package").selectOption({ index: 1 });
+		await page.getByLabel("Intended method (no payment)").selectOption("BANK");
+		assert.equal(
+			(await control({ op: "prepare-expiring-quote", holdId: hold.holdId }))
+				.prepared,
+			true,
+		);
+		const expiring = await clickResponse(
+			page,
+			"Calculate synthetic quotation",
+			"/api/quotes",
+		);
+		assert.equal(expiring.state, "ISSUED");
+		assert.equal(expiring.expiresAt, expiring.holdExpiresAt);
+		const review = page.getByLabel(
+			"I reviewed this exact synthetic revision and all three disclosures",
+		);
+		assert.equal(await review.isChecked(), false);
+		await review.check();
+		assert.equal(
+			(await control({ op: "await-quote-expiry", quoteId: expiring.quoteId }))
+				.serverExpired,
+			true,
+		);
+		const rejection = page.waitForResponse(
+			(r) =>
+				new URL(r.url()).pathname ===
+					`/api/quotes/${expiring.quoteId}/accept` &&
+				r.request().method() === "POST",
+		);
+		await page
+			.getByRole("button", {
+				name: "Accept synthetic revision only",
+				exact: true,
+			})
+			.click();
+		const denied = await rejection;
+		assert.equal(denied.status(), 409);
+		const refusal = await denied.json();
+		assert.equal(
+			refusal.message,
+			"Configuration changed or code already exists. Reload and compare; your draft is retained.",
+		);
+		await page
+			.getByText(
+				/Configuration changed or code already exists. Reload and compare; your draft is retained./,
+			)
+			.waitFor({ state: "visible" });
+		const refresh = page.waitForResponse(
+			(r) =>
+				new URL(r.url()).pathname === `/api/quotes/${expiring.quoteId}` &&
+				r.request().method() === "GET",
+		);
+		await page
+			.getByRole("button", { name: "Refresh quotation state", exact: true })
+			.click();
+		const fresh = await refresh;
+		assert.equal(fresh.status(), 200);
+		const current = await fresh.json();
+		assert.equal(current.state, "EXPIRED");
+		assert.equal(current.revision, expiring.revision);
+		assert.equal(current.contentHash, expiring.contentHash);
+		assert.equal(current.bookingConfirmed, false);
+		assert.equal(current.commercialIssuance, false);
+		await page
+			.getByText(
+				"Quotation cannot be accepted. Return to inventory and obtain a new applicable hold.",
+				{ exact: true },
+			)
+			.waitFor({ state: "visible" });
+		assert.equal(
+			await page
+				.getByRole("button", {
+					name: "Accept synthetic revision only",
+					exact: true,
+				})
+				.count(),
+			0,
+		);
+		assert.equal(
+			await page
+				.getByRole("link", { name: "Continue to Verification", exact: true })
+				.count(),
+			0,
+		);
+		expiryObservation = await control({ op: "inspect-expired-quote" });
+		assert.equal(expiryObservation.snapshotAndFinancialStateUnchanged, true);
+		for (const field of [
+			"quoteAcceptances",
+			"quoteAcceptCommands",
+			"quoteBankRequests",
+			"holdBookings",
+		])
+			assert.equal(expiryObservation[field], 0);
+		assert.equal(safeCustomerNavigation(page.url(), base), true);
+		assert.ok(!page.url().includes(expiring.contentHash));
+		// Existing recovery navigation only; do not run another hold-expiry scenario.
+		await page.getByRole("link", { name: "Rooms", exact: true }).click();
+		await page.waitForURL(base + "/rooms");
+		expiryObservation = {
+			...expiryObservation,
+			httpStatus: 409,
+			quoteState: current.state,
+			recoveryPath: "/rooms",
+		};
+	});
 	await scenario("G-expired-session", async () => {
 		await control({ op: "expire-session" });
 		assert.equal((await api(page, "/api/accounts/me")).status, 401);
 	});
-	notRun(
-		"A-expired-quote",
-		"No mutation of immutable quote snapshots; dedicated test clock/case remains needed",
-	);
 	notRun(
 		"B-invalid-expired-hold",
 		"Independent case/reset needed to avoid corrupting positive journey",
@@ -677,6 +801,7 @@ try {
 		apiFailure,
 		assertionFailure,
 		financeObservation,
+		expiryObservation,
 	});
 	process.exitCode = 1;
 } finally {
@@ -692,6 +817,7 @@ try {
 			stage,
 			assertionFailure,
 			financeObservation,
+			expiryObservation,
 			observations,
 			navigations,
 			finalPath: activePage
