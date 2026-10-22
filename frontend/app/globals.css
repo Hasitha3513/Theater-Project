@@ -1137,3 +1137,11 @@ button.button { display: inline-grid; }
 @media (min-width: 768px) { .confirmation-filters, .confirmation-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 .confirmation-table { table-layout: fixed; width: 100%; }
+
+/* Existing cinematic admin tokens; aggregate-only local-hour presentation. */
+.popular-bars { list-style:none; padding:0; margin:1rem 0; display:grid; gap:.5rem; }
+.popular-row { display:grid; grid-template-columns:6.5rem minmax(0,1fr) 3rem; gap:.5rem; align-items:center; font-size:.8rem; }
+.popular-track { display:block; height:.75rem; background:var(--cn-color-surface-subtle); border-radius:.25rem; overflow:hidden; }
+.popular-fill { display:block; height:100%; background:var(--cn-color-chart-bookings); border-radius:.25rem; }
+.popular-bars strong { overflow-wrap:anywhere; }
+@media (min-width:768px) { .popular-bars { grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:1.5rem; } }

@@ -48,6 +48,7 @@ def main():
     test_p2_c06_closure_controls(validator)
     test_booking_confirmation_controls(validator)
     test_product_documentation_controls()
+    test_popular_session_starts_controls(validator)
 
 
 def test_future_register_controls():
@@ -188,5 +189,20 @@ def test_product_documentation_controls():
             module['validate_product_documentation'](lambda ok,message:errors.append(message) if not ok else None)
         assert errors,'Product documentation accepted '+label
         print('PASS product documentation rejected',label)
+
+
+def test_popular_session_starts_controls(validator):
+    faults=[]
+    status=K/'execution/status.json'
+    data=json.loads(status.read_text());data['popularSessionStartsImplementation']['automaticGrants']=True;faults.append((status,json.dumps(data).encode(),'automatic grants'))
+    decision=K/'decisions/cinenest-open-decisions.json';data=json.loads(decision.read_text());next(x for x in data['decisions'] if x['id']=='OD-16')['boundedPopularSessionStartsApproval']['cohort']='confirmed_at';faults.append((decision,json.dumps(data).encode(),'confirmation-time substitution'))
+    migration=ROOT/'backend/src/main/resources/db/migration/V23__popular_session_starts_read_audit.sql';faults.append((migration,migration.read_bytes()+b'\nALTER TABLE cinenest_booking.booking ADD COLUMN unsafe INT;\n','non-audit migration'))
+    progress=K/'PROGRESS.md';faults.append((progress,progress.read_text().replace('- [ ] **P9-C02**','- [x] **P9-C02**').encode(),'automatic criterion acceptance'))
+    requirement=K/'execution/requirements.json';data=json.loads(requirement.read_text());next(x for x in data['requirements'] if x['id']=='CN-M-POPULAR-TIME-SLOTS')['dependencies']=[];faults.append((requirement,json.dumps(data).encode(),'dependency deletion'))
+    rb,rt=Path.read_bytes,Path.read_text
+    for path,replacement,label in faults:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
+        assert result!=0,'Popular session starts accepted '+label
+        print('PASS popular session starts rejected',label)
 
 if __name__ == '__main__': main()

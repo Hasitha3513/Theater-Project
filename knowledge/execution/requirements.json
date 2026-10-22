@@ -6117,7 +6117,28 @@
       "unresolvedQuestions": [
         "OD-16",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "popularSessionStartsEvidence": {
+        "task": "CN-POPULAR-SLOTS-001",
+        "sourceBaseline": "338db745371a64c10845eee334d2d6a7104b1e6a",
+        "backendPort": "com.cinenest.booking.PopularSessionStarts",
+        "endpoint": "GET /api/admin/venues/{venueId}/reports/synthetic-popular-session-starts",
+        "metricVersion": "SYNTHETIC_POPULAR_SESSION_STARTS_V1",
+        "bandDefinitionVersion": "LOCAL_HOURLY_24_V1",
+        "scope": "bounded fixed-hour synthetic current-purchased-revision report",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "broaderConfiguredBands": "OUTSTANDING",
+        "dependencyException": {
+          "referencesPreserved": [
+            "CN-PAY-BANK-002",
+            "CN-PAY-GW-001"
+          ],
+          "scope": "bounded synthetic report only;live PayHere not required;broader gateway/provider obligations retained"
+        },
+        "evidence": "PROGRESS.md#popular-session-starts"
+      }
     },
     {
       "id": "CN-M-ROOM-UTILIZATION",

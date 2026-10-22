@@ -84,6 +84,7 @@ class BankIntegrationTest {
     String base() { return "http://127.0.0.1:" + environment.getRequiredProperty("local.server.port"); }
 
     @BeforeEach void fixtures() {
+        jdbc.sql("TRUNCATE cinenest_booking.popular_session_starts_read_audit").update();
         jdbc.sql("TRUNCATE cinenest_booking.booking_confirmation_report_read_audit").update();
         jdbc.sql("TRUNCATE cinenest_booking.staff_booking_read_audit").update();
         jdbc.sql("TRUNCATE cinenest_iot.device,cinenest_iot.audit CASCADE").update();
@@ -1005,7 +1006,7 @@ class BankIntegrationTest {
  @Test void reportGrantDoesNotPermitFinancialMutationsExportsOrDrilldown()throws Exception{reportGrant();var b=signedIn("staff");assertThat(b.get("/api/admin/venues/"+VA+"/bank/credits").statusCode()).isEqualTo(403);assertThat(b.get(report()+"&export=csv").statusCode()).isEqualTo(400);assertThat(write(b,"POST",report(),"{}").statusCode()).isBetween(403,405);var deniedBody=financial(0);deniedBody.put("fixtureKey","SYNTHETIC-BANK-100");assertThat(write(b,"POST","/api/admin/venues/"+VA+"/bank/credits",JSONObjectUtils.toJSONString(deniedBody)).statusCode()).isEqualTo(403);}
  @Test void reportCurrenciesRemainSeparateAndDatesAreValidated()throws Exception{reportGrant();var b=signedIn("staff");assertThat(reportSummary(json(b.get(report().replace("LKR","USD"))))).containsEntry("c","0");for(String suffix:java.util.List.of("&from=2026-01-01","&from=2026-01-02&to=2026-01-01","&from=2020-01-01&to=2026-01-01","&page=-1","&size=101","&asOf=2020-01-01"))assertThat(b.get(report()+suffix).statusCode()).as(suffix).isEqualTo(400);}
  @Test void reportCreditedCohortIncludesLaterVisibleEffects()throws Exception{var c=refundCase(100);approveRefund(c);reportGrant();String date=java.time.Instant.parse(CREDIT_TIME).atZone(java.time.ZoneId.of("Asia/Colombo")).toLocalDate().toString();var r=json(c.reviewer().get(report()+"&from="+date+"&to="+java.time.LocalDate.parse(date).plusDays(1)));assertThat(reportSummary(r)).containsEntry("c","50000").containsEntry("r","100");var empty=json(c.reviewer().get(report()+"&from="+java.time.LocalDate.parse(date).plusDays(1)+"&to="+java.time.LocalDate.parse(date).plusDays(2)));assertThat(reportSummary(empty)).containsEntry("c","0");}
- @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(22);}
+ @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(23);}
 
 
  @Test void reportSnapshotCannotSplitConcurrentAllocation()throws Exception{financeGrants();reportGrant();var customer=signedIn("customer-a");var staff=signedIn("staff");var allocator=signedIn("customer-b");var request=bank(customer);var credit=credit(staff,"SYNTHETIC-BANK-50000");var matched=match(allocator,request,credit);Object old=com.cinenest.payments.internal.ReportFaults.afterSummary(context,()->{try{json(allocateCredit(allocator,matched,credit,Long.parseLong(matched.get("amountMinor").toString())));}catch(Exception e){throw new IllegalStateException(e);}});try{var report=json(staff.get(report()));assertThat(reportSummary(report).get("a")).isEqualTo("0");var row=(Map<?,?>)((java.util.List<?>)snapshot(report).get("rows")).getFirst();assertThat(((Map<?,?>)row.get("amounts")).get("a")).isEqualTo("0");}finally{com.cinenest.payments.internal.ReportFaults.restore(context,old);}assertThat(reportSummary(json(staff.get(report()))).get("a")).isEqualTo(matched.get("amountMinor").toString());}
@@ -1433,8 +1434,96 @@ class BankIntegrationTest {
     @Test void confirmationReportV21UpgradeIsAdditiveRepeatableAndUnassigned()throws Exception{
       String url=environment.getRequiredProperty("spring.datasource.url"),user=environment.getRequiredProperty("spring.datasource.username"),password=environment.getRequiredProperty("spring.datasource.password"),db="confirmation_upgrade_"+UUID.randomUUID().toString().replace("-","");String target=url.substring(0,url.lastIndexOf('/')+1)+db;
       try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("CREATE DATABASE "+db);}try{
-       Flyway.configure().dataSource(target,user,password).target("21").load().migrate();var f=Flyway.configure().dataSource(target,user,password).load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);f.validate();assertThat(f.migrate().migrationsExecuted).isZero();
+       Flyway.configure().dataSource(target,user,password).target("21").load().migrate();var f=Flyway.configure().dataSource(target,user,password).target("22").load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);f.validate();assertThat(f.migrate().migrationsExecuted).isZero();
        try(var c=DriverManager.getConnection(target,user,password);var st=c.createStatement();var rows=st.executeQuery("SELECT count(*) FROM cinenest_identity.access_grant")){assertThat(rows.next()).isTrue();assertThat(rows.getInt(1)).isZero();}
       }finally{try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("DROP DATABASE "+db+" WITH (FORCE)");}}
+    }
+
+    String popularReport(UUID venue,String from,String to){return "/api/admin/venues/"+venue+"/reports/synthetic-popular-session-starts?from="+from+"&to="+to;}
+    UUID popularFixture(UUID venue,UUID room,String at){
+      UUID policy=id("confirmation-policy"),block=UUID.randomUUID(),hold=UUID.randomUUID(),booking=UUID.randomUUID();
+      jdbc.sql("INSERT INTO cinenest_booking.hold_policy VALUES(:id,600,10,60,'SYNTHETIC aggregation fixture',clock_timestamp()) ON CONFLICT DO NOTHING").param("id",policy).update();
+      jdbc.sql("INSERT INTO cinenest_booking.inventory_block VALUES(:id,:v,:r,'2020-01-01T00:00:00Z','2020-01-01T03:00:00Z',0,'2020-01-01T03:00:00Z',false,'CONFIRMED',0)").param("id",block).param("v",venue).param("r",room).update();
+      jdbc.sql("INSERT INTO cinenest_booking.reservation_hold VALUES(:h,:o,:b,:p,1,'SYNTHETIC','Asia/Colombo','SYNTHETIC','2020-01-01T00:00:00Z','2020-01-01T00:10:00Z','CONSUMED',1)").param("h",hold).param("o",A).param("b",block).param("p",policy).update();
+      jdbc.sql("INSERT INTO cinenest_booking.booking VALUES(:b,:request,:hold,:owner,:venue,'SIMULATED_CONFIRMED',true,:at)").param("b",booking).param("request",UUID.randomUUID()).param("hold",hold).param("owner",A).param("venue",venue).param("at",java.sql.Timestamp.from(java.time.Instant.parse("2025-01-01T00:00:00Z"))).update();
+      jdbc.sql("INSERT INTO cinenest_booking.booking_revision VALUES(:b,1,:q,1,repeat('a',64),1,'LKR',CAST(:snapshot AS jsonb))").param("b",booking).param("q",UUID.randomUUID()).param("snapshot",JSONObjectUtils.toJSONString(Map.of("synthetic",true,"commercialIssuance",false,"roomId",room.toString(),"sessionStart",at))).update();return booking;
+    }
+    @Test void popularReportRequiresIndependentExactVenueMembershipAndEligiblePermission()throws Exception{
+      var staff=signedIn("staff");String path=popularReport(VA,"2026-10-01","2026-10-02");
+      assertThat(new Browser().get(path).statusCode()).isEqualTo(401);
+      for(String permission:java.util.List.of("booking.synthetic.read","report.bank.synthetic.read")){grant(permission,"VENUE",VA);assertThat(staff.get(path).statusCode()).isEqualTo(403);}
+      grant("report.booking.synthetic.read","VENUE",VB);assertThat(staff.get(path).statusCode()).isEqualTo(403);
+      UUID g=grant("report.booking.synthetic.read","VENUE",VA);assertThat(staff.get(path).statusCode()).isEqualTo(200);
+      jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:a AND venue_id=:v").param("a",STAFF).param("v",VA).update();assertThat(staff.get(path).statusCode()).isEqualTo(403);scope(STAFF,VA);
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update();assertThat(staff.get(path).statusCode()).isEqualTo(403);
+      grant("report.booking.synthetic.read","VENUE",VA);jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();assertThat(staff.get(path).statusCode()).isEqualTo(403);
+    }
+    @Test void popularReportRejectsMalformedDuplicateExcessiveRangesAndUntrustedQueries()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");String path=popularReport(VA,"2026-10-01","2026-10-02");
+      for(String bad:java.util.List.of(path+"&from=2026-10-01",path+"&asOf=2020-01-01",path+"&roomId=bad",popularReport(VA,"2026-02-30","2026-03-02"),popularReport(VA,"2026-10-01","2026-11-02"),popularReport(VA,"2026-10-02","2026-10-02"))){assertThat(staff.get(bad).statusCode()).as(bad).isEqualTo(400);}
+      assertThat(staff.get(popularReport(VA,"2026-10-01","2026-11-01")).statusCode()).isEqualTo(200);
+      assertThat(json(staff.get(path))).containsEntry("total","0");
+    }
+    @Test void popularReportAuditInsertAndDeferredCommitFailurePreventDisclosure()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");String path=popularReport(VA,"2026-10-01","2026-10-02");
+      jdbc.sql("CREATE FUNCTION cinenest_booking.popular_test_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.outcome='ALLOW' THEN RAISE EXCEPTION 'SYNTHETIC audit failure'; END IF; RETURN NEW; END $$").update();
+      for(boolean deferred:java.util.List.of(false,true)){
+       jdbc.sql(deferred?"CREATE CONSTRAINT TRIGGER popular_test_fail AFTER INSERT ON cinenest_booking.popular_session_starts_read_audit DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION cinenest_booking.popular_test_fail()":"CREATE TRIGGER popular_test_fail BEFORE INSERT ON cinenest_booking.popular_session_starts_read_audit FOR EACH ROW EXECUTE FUNCTION cinenest_booking.popular_test_fail()").update();
+       try{var response=staff.get(path);assertThat(response.statusCode()).isEqualTo(503);assertThat(response.body()).doesNotContain("buckets","total");assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.popular_session_starts_read_audit WHERE outcome='ALLOW'").query(Integer.class).single()).isZero();}finally{jdbc.sql("DROP TRIGGER popular_test_fail ON cinenest_booking.popular_session_starts_read_audit").update();}
+      }jdbc.sql("DROP FUNCTION cinenest_booking.popular_test_fail()").update();assertThat(staff.get(path).statusCode()).isEqualTo(200);
+    }
+
+    @Test void popularReportUsesSessionStartHalfOpenAll24BandsAndCurrentRoom()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");
+      popularFixture(VA,RID,"2026-09-30T18:29:59Z");popularFixture(VA,RID,"2026-10-01T18:30:00Z");
+      for(int hour=0;hour<24;hour++)popularFixture(VA,RID,java.time.LocalDateTime.of(2026,10,1,hour,30).atZone(java.time.ZoneId.of("Asia/Colombo")).toInstant().toString());
+      String path=popularReport(VA,"2026-10-01","2026-10-02");var response=staff.get(path);assertThat(response.statusCode()).as(response.body()).isEqualTo(200);var data=json(response);
+      assertThat(data).containsEntry("total","24").containsEntry("cohortBasis","sessionStart").containsEntry("revisionBasis","LATEST_COMMITTED_PURCHASED_REVISION");var buckets=(java.util.List<Map<String,Object>>)data.get("buckets");assertThat(buckets).hasSize(24);for(int h=0;h<24;h++){assertThat(buckets.get(h)).containsEntry("startHour",(long)h).containsEntry("endHour",(long)h+1).containsEntry("count","1");}
+      assertThat(json(staff.get(path+"&roomId="+RID))).containsEntry("total","24");
+      UUID other=UUID.randomUUID();jdbc.sql("INSERT INTO cinenest_rooms.room(room_id,venue_id,code,name,capacity,enabled) VALUES(:r,:v,'OTHER','Synthetic',5,true)").param("r",other).param("v",VB).update();assertThat(staff.get(path+"&roomId="+other).statusCode()).isEqualTo(404);
+      assertThat(response.headers().firstValue("Cache-Control").orElse("")).contains("private","no-store");assertThat(response.body()).doesNotContain("bookingId","customer","owner","amount","currency","snapshot","confirmed_at");
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.popular_session_starts_read_audit WHERE correlation_id=:id AND actor_id=:a AND outcome='ALLOW'").param("id",UUID.fromString(response.headers().firstValue("X-Correlation-ID").orElseThrow())).param("a",STAFF).query(Integer.class).single()).isEqualTo(1);
+      assertThatThrownBy(()->jdbc.sql("DELETE FROM cinenest_booking.popular_session_starts_read_audit").update()).isInstanceOf(DataAccessException.class);
+      assertThatThrownBy(()->jdbc.sql("UPDATE cinenest_booking.popular_session_starts_read_audit SET reason_code='EMPTY'").update()).isInstanceOf(DataAccessException.class);
+    }
+    @Test void popularReportDstFoldsGapsAndTimezoneChangeUseActualInstants()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");jdbc.sql("UPDATE cinenest_rooms.venue SET timezone='America/New_York' WHERE venue_id=:v").param("v",VA).update();
+      popularFixture(VA,RID,"2026-11-01T05:30:00Z");popularFixture(VA,RID,"2026-11-01T06:30:00Z");
+      var fold=json(staff.get(popularReport(VA,"2026-11-01","2026-11-02")));assertThat(fold).containsEntry("total","2");assertThat(((java.util.List<Map<String,Object>>)fold.get("buckets")).get(1)).containsEntry("count","2");
+      popularFixture(VA,RID,"2026-03-08T06:30:00Z");popularFixture(VA,RID,"2026-03-08T07:30:00Z");var gap=json(staff.get(popularReport(VA,"2026-03-08","2026-03-09")));assertThat(gap).containsEntry("total","2");assertThat(((java.util.List<Map<String,Object>>)gap.get("buckets")).get(2)).containsEntry("count","0");
+      jdbc.sql("UPDATE cinenest_rooms.venue SET timezone='Asia/Colombo' WHERE venue_id=:v").param("v",VA).update();var changed=json(staff.get(popularReport(VA,"2026-11-01","2026-11-02")));assertThat(changed).containsEntry("timezone","Asia/Colombo");assertThat(((java.util.List<Map<String,Object>>)changed.get("buckets")).get(11)).containsEntry("count","1");
+    }
+    @Test void popularReportInvalidPersistedSourceFailsClosedInsteadOfFabricatedZero()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");confirmationFixture(VA,RID,"2026-10-01T00:00:00Z");var response=staff.get(popularReport(VA,"2026-10-01","2026-10-02"));assertThat(response.statusCode()).isEqualTo(503);assertThat(response.body()).doesNotContain("total","buckets");
+    }
+    com.cinenest.booking.PopularSessionStarts popularService(Runnable afterFacts)throws Exception{
+      var clocks=context.getBean(com.cinenest.rooms.VenueReportingClock.class);com.cinenest.rooms.VenueReportingClock wrapped=v->{var zone=clocks.timezone(v);afterFacts.run();return zone;};
+      var constructor=Class.forName("com.cinenest.booking.internal.PopularSessionStartsAdapter").getDeclaredConstructors()[0];constructor.setAccessible(true);return (com.cinenest.booking.PopularSessionStarts)constructor.newInstance(jdbc,scopedAuthorization,wrapped,transactions,context.getBean(com.cinenest.rooms.InventoryConstraints.class));
+    }
+    @Test void popularReportSnapshotKeepsConcurrentConfirmationAndRevocationAtomic()throws Exception{
+      UUID grant=grant("report.booking.synthetic.read","VENUE",VA);var tx=new org.springframework.transaction.support.TransactionTemplate(transactions);tx.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+      var service=popularService(()->tx.executeWithoutResult(t->popularFixture(VA,RID,"2026-10-01T00:00:00Z")));var from=java.time.LocalDate.parse("2026-10-01");var data=service.read(STAFF,VA,null,from,from.plusDays(1),UUID.randomUUID());assertThat(data.total()).isEqualTo("0");assertThat(context.getBean(com.cinenest.booking.PopularSessionStarts.class).read(STAFF,VA,null,from,from.plusDays(1),UUID.randomUUID()).total()).isEqualTo("1");
+      var denied=popularService(()->tx.executeWithoutResult(t->jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",grant).update()));assertThatThrownBy(()->denied.read(STAFF,VA,null,from,from.plusDays(1),UUID.randomUUID())).isInstanceOf(com.cinenest.booking.PopularSessionStarts.Unavailable.class).extracting(e->((com.cinenest.booking.PopularSessionStarts.Unavailable)e).status).isEqualTo(403);
+    }
+    @Test void popularReportSnapshotKeepsLatestPurchasedAmendmentWithoutCountingProposal()throws Exception{
+      var c=accessCase();grant("report.booking.synthetic.read","VENUE",VA);var proposal=proposedAmendment(c);var from=java.time.LocalDateTime.parse(local()).toLocalDate();var actual=context.getBean(com.cinenest.booking.PopularSessionStarts.class);var before=actual.read(STAFF,VA,null,from,from.plusDays(1),UUID.randomUUID());assertThat(before.total()).isEqualTo("1");
+      var old=popularService(()->{try{json(write(c.customer(),"POST",amendments(c)+"/"+proposal.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(proposal))));}catch(Exception e){throw new RuntimeException(e);}}).read(STAFF,VA,null,from,from.plusDays(1),UUID.randomUUID());assertThat(old.buckets()).isEqualTo(before.buckets());var now=actual.read(STAFF,VA,null,from,from.plusDays(1),UUID.randomUUID());assertThat(now.total()).isEqualTo("1");assertThat(now.buckets()).isNotEqualTo(before.buckets());assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_revision").query(Integer.class).single()).isEqualTo(2);
+    }
+    @Test void popularReportV22ToV23UpgradeAndRepeatLeavesGrantsUnassigned()throws Exception{
+      String url=environment.getRequiredProperty("spring.datasource.url"),user=environment.getRequiredProperty("spring.datasource.username"),password=environment.getRequiredProperty("spring.datasource.password"),db="popular_upgrade_"+UUID.randomUUID().toString().replace("-","");String target=url.substring(0,url.lastIndexOf('/')+1)+db;
+      try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("CREATE DATABASE "+db);}try{Flyway.configure().dataSource(target,user,password).target("22").load().migrate();var f=Flyway.configure().dataSource(target,user,password).load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);f.validate();assertThat(f.migrate().migrationsExecuted).isZero();try(var c=DriverManager.getConnection(target,user,password);var st=c.createStatement();var rs=st.executeQuery("SELECT count(*) FROM cinenest_identity.access_grant")){assertThat(rs.next()).isTrue();assertThat(rs.getInt(1)).isZero();}}finally{try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("DROP DATABASE "+db+" WITH (FORCE)");}}
+    }
+
+
+    @Test void popularReportFiltersAfterLatestRevisionAndDoesNotMutateSources()throws Exception{
+      var c=accessCase();grant("report.booking.synthetic.read","VENUE",VA);var from=java.time.LocalDateTime.parse(local()).toLocalDate();
+      var target=request(c.customer(),java.time.LocalDateTime.parse(local()).plusDays(1).toString());var h=held(c.customer(),target);
+      var pkg=jdbc.sql("SELECT package_id,version_id FROM cinenest_pricing.quotation q JOIN cinenest_pricing.quotation_revision r USING(quote_id) WHERE q.quote_id=(SELECT quote_id FROM cinenest_booking.booking_revision WHERE booking_id=:b AND revision=1)").param("b",c.booking()).query().singleRow();
+      var q=quote(c.customer(),new HashMap<>(Map.of("holdId",h.get("holdId"),"packageId",pkg.get("package_id").toString(),"packageVersionId",pkg.get("version_id").toString(),"expectedHoldRevision",h.get("revision"),"optionalServiceIds",java.util.List.of(),"paymentMethod","BANK","idempotencyKey",UUID.randomUUID().toString())));
+      var body=new HashMap<>(Map.of("targetHoldId",h.get("holdId"),"quoteId",q.get("quoteId"),"quoteRevision",q.get("revision"),"quoteHash",q.get("contentHash"),"expectedBookingRevision",1,"expectedAmendmentRevision",0,"commandKey",UUID.randomUUID().toString(),"reason","SYNTHETIC next-day attribution"));var a=json(write(c.customer(),"POST",amendments(c),JSONObjectUtils.toJSONString(body)));
+      json(write(c.customer(),"POST",amendments(c)+"/"+a.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(a))));
+      String counts="SELECT (SELECT count(*) FROM cinenest_booking.booking) bookings,(SELECT count(*) FROM cinenest_booking.booking_revision) revisions,(SELECT count(*) FROM cinenest_booking.inventory_block) blocks,(SELECT count(*) FROM cinenest_payments.payment_allocation) allocations";var before=jdbc.sql(counts).query().singleRow();
+      assertThat(json(c.staff().get(popularReport(VA,from.toString(),from.plusDays(1).toString())+"&roomId="+RID))).containsEntry("total","0");
+      assertThat(json(c.staff().get(popularReport(VA,from.plusDays(1).toString(),from.plusDays(2).toString())+"&roomId="+RID))).containsEntry("total","1");assertThat(jdbc.sql(counts).query().singleRow()).isEqualTo(before);
     }
 }

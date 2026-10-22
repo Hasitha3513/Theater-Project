@@ -8746,5 +8746,98 @@
       "whitespace": "PASS",
       "ordinaryExecution": "two pre-existing next-env findings"
     }
+  },
+  "popularSessionStartsImplementation": {
+    "task": "CN-POPULAR-SLOTS-001",
+    "sourceBaseline": "338db745371a64c10845eee334d2d6a7104b1e6a",
+    "prerequisiteCI": {
+      "run": 39814522920,
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1
+    },
+    "scope": "current purchased sessionStart,24 fixed local-hour bands,31 venue-local days",
+    "port": "com.cinenest.booking.PopularSessionStarts",
+    "endpoint": "GET /api/admin/venues/{venueId}/reports/synthetic-popular-session-starts",
+    "metricVersion": "SYNTHETIC_POPULAR_SESSION_STARTS_V1",
+    "bandDefinitionVersion": "LOCAL_HOURLY_24_V1",
+    "permission": "report.booking.synthetic.read",
+    "auditMigration": "V23__popular_session_starts_read_audit.sql",
+    "automaticGrants": false,
+    "bootstrap": false,
+    "businessTablesChanged": false,
+    "lifecycleChanged": false,
+    "dependenciesChanged": false,
+    "roadmapChanged": false,
+    "fullRequirementAccepted": false,
+    "configuredBusinessBands": "OUTSTANDING",
+    "tests": {
+      "backend": {
+        "pass": 699,
+        "fail": 0,
+        "errors": 0,
+        "skipped": 0,
+        "packagedStartup": "PASS"
+      },
+      "focusedPostgreSQL": {
+        "pass": 10,
+        "fail": 0
+      },
+      "frontend": {
+        "pass": 414,
+        "fail": 0
+      },
+      "browserNew": {
+        "pass": 39,
+        "kind": "intercepted"
+      },
+      "browserConfirmationRegression": {
+        "pass": 33,
+        "kind": "intercepted"
+      },
+      "typecheck": "PASS",
+      "lint": "PASS",
+      "build": "PASS",
+      "classifier": 8,
+      "governanceNegativeControls": 49,
+      "historicalSyntheticE2E": "24PASS_NOT_RERUN"
+    },
+    "screenshots": [
+      {
+        "width": 375,
+        "source": ".cache/popular-slots/after/375.png",
+        "portable": "knowledge/product/screenshots/popular-375.png",
+        "sha256": "59d054602aa587dca1caec385824b49f853cc8e95902c33d59da9bf150a0c556",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER",
+        "mainLandmarks": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "width": 768,
+        "source": ".cache/popular-slots/after/768.png",
+        "portable": "knowledge/product/screenshots/popular-768.png",
+        "sha256": "d4f30f861dd8c5526274e906339d623be4532826dcc6928908dc814c87bc60ad",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER",
+        "mainLandmarks": 1,
+        "horizontalOverflow": false
+      },
+      {
+        "width": 1280,
+        "source": ".cache/popular-slots/after/1280.png",
+        "portable": "knowledge/product/screenshots/popular-1280.png",
+        "sha256": "e3e7af64a17508f733a12cfe5f1148ececda37d03c7feadb15bb1b62d5cd5d89",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER",
+        "mainLandmarks": 1,
+        "horizontalOverflow": false
+      }
+    ],
+    "visualComparison": "all3 approved references inspected;navy240px desktop sidebar,white/light cards,violet controls,approved chart.bookings token;one-column375/two-column>=768;one main and0 overflow;long24-band/table scope differs from illustrative compact dashboard",
+    "documentation": {
+      "feature": "DOC-F027",
+      "workflow": "UG-022",
+      "catalogueFeatures": 27,
+      "guideWorkflows": 22
+    },
+    "publicationCI": "PENDING"
   }
 }

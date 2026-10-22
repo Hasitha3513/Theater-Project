@@ -910,3 +910,12 @@ The separate CN-BOOKING-COHORT-METRICS-V22-AUDIT-APPROVAL-001 explicitly permits
 ## Implemented product documentation
 
 Owner-authorized supplementary [FEATURE_CATALOG](product/FEATURE_CATALOG.md) describes evidence-backed capabilities; [USER_GUIDE](guides/USER_GUIDE.md) provides English UI labels with Sinhala training explanations. These do not replace the machine feature/requirement registries or the four canonical owners. See root instructions for ongoing user-visible change maintenance.
+
+<a id="popular-session-starts-policy"></a>
+## Bounded Popular Reserved Session Start Times policy
+
+Owner approval2026-10-22,CN-POPULAR-SLOTS-001: **Popular Reserved Session Start Times — Synthetic** counts each persisted synthetic=true/SIMULATED_CONFIRMED booking once by latest committed purchased `booking_revision.snapshot.sessionStart`,never confirmed_at. Current purchased room supplies optional exact-venue room attribution;amendment proposals,holds,draft/unconfirmed/unverified outcomes excluded. Fixed24 half-open local hourly bands00:00–24:00,version LOCAL_HOURLY_24_V1;configured business bands remain outstanding. Venue-local date interval[from,to),maximum31 local days. Current stored venue IANA timezone is server authority;fold occurrences share a local-hour band,gaps invent no records. Current revisions/current timezone mean previous reports can change after confirmed amendments/configuration;no historical-as-of reconstruction.
+
+Explicitly extended exact-venue report.booking.synthetic.read requires eligible current membership and fresh pre-disclosure authorization;no booking/bank/admin-label substitutes or stitched grants. No new permission,assignment,bootstrap or delegation. Mandatory attributable read audit must durably commit before disclosure;failure returns sanitized503 without aggregate data. Owner explicitly authorizes only Booking-owned audit V23,one table/constraints/one index/existing append-only guard;V22 and all business tables preserved.
+
+Bounded synthetic dependency exception allows this report without live PayHere;existing CN-PAY-BANK-002/CN-PAY-GW-001 references and wider gateway/provider obligations remain unchanged. OD-16 globally OPEN_DECISION;P9-C02 and P1-C02 unchecked;CN-M-POPULAR-TIME-SLOTS partially implemented only,0/92 requirements accepted. No attendance,arrival,occupancy,revenue,utilization or physical-readiness measure. [Contract](ARCHITECTURE.md#popular-session-starts);[evidence](PROGRESS.md#popular-session-starts).

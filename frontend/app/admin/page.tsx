@@ -1,3 +1,4 @@
+import { PopularSlotsSection } from "../../components/popular-slots";
 import { BookingConfirmationsSection } from "../../components/booking-confirmations";
 import Link from "next/link";
 import { AdminBankSummarySection } from "../../components/admin-bank-summary";
@@ -70,10 +71,11 @@ export default function AdminHome() {
 			</div>
 			<AdminBankSummarySection />
 			<BookingConfirmationsSection />
+			<PopularSlotsSection />
 			<Card title="Operational reporting">
 				<p className="muted">
-					Additional operational dashboard metrics are not available. The existing bank report
-					contains synthetic financial data only.
+					Additional operational dashboard metrics are not available. The
+					existing bank report contains synthetic financial data only.
 				</p>
 				<Link href="/admin/reports/bank">Open synthetic bank report →</Link>
 			</Card>

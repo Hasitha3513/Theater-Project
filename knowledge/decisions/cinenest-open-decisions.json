@@ -737,6 +737,40 @@
             "sha256": "cd36e4d4204632b2d4f3580ae3b4cf5855f96612ab4631fa073a2f5eafe42a51"
           }
         ]
+      },
+      "boundedPopularSessionStartsApproval": {
+        "taskId": "CN-POPULAR-SLOTS-001",
+        "date": "2026-10-22",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "requestSha256": "ad59505277eadfaef703632aa9d903bd49ab87575927e337b00e6bb1684c754c",
+        "label": "Popular Reserved Session Start Times \u2014 Synthetic",
+        "metricVersion": "SYNTHETIC_POPULAR_SESSION_STARTS_V1",
+        "bandDefinitionVersion": "LOCAL_HOURLY_24_V1",
+        "bands": "24 fixed local half-open hourly bands [00:00,01:00) through [23:00,24:00)",
+        "cohort": "latest committed booking_revision.snapshot.sessionStart",
+        "population": "synthetic=true AND persisted state=SIMULATED_CONFIRMED; count once",
+        "range": "venue-local dates [from,to);maximum31 local days",
+        "timezone": "current stored venue IANA timezone;server-resolved;actual instants;both fold occurrences share band;no invented gap records",
+        "revision": "latest committed purchased revision supplies session start and room;exclude proposals;no historical-as-of reconstruction",
+        "roomFilter": "optional canonical room UUID belonging to authorized venue",
+        "permission": "report.booking.synthetic.read",
+        "automaticGrants": false,
+        "bootstrap": "DISABLED",
+        "delegation": "DISABLED",
+        "mandatoryAudit": "Booking-owned attributable durable audit commit before disclosure;insert/commit failure sanitized503;fresh authorization after commit",
+        "migrationAuthorization": "V23__popular_session_starts_read_audit.sql;one audit table/constraints/one venue-time index/existing append-only guard;V22 and business tables unchanged",
+        "syntheticDependencyException": {
+          "referencesPreserved": [
+            "CN-PAY-BANK-002",
+            "CN-PAY-GW-001"
+          ],
+          "scope": "bounded synthetic report only;live PayHere not required;broader gateway/provider obligations retained"
+        },
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "configuredBusinessBands": "OUTSTANDING",
+        "p9C02": "UNCHECKED",
+        "globalOD16": "OPEN_DECISION",
+        "authorizationRequirements": "report.booking.synthetic.read explicitly extended;eligible current member;exact venue;fresh authorization before disclosure"
       }
     },
     {

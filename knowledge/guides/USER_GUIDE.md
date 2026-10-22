@@ -301,6 +301,22 @@ Keyboard සඳහා Tab / Shift+Tab, Enter සහ checkbox සඳහා Space 
 
 Access සහ Lighting simulator තිර `/access`, `/admin/access`, `/admin/iot` වල තිබේ. ඒවා physical lock/light ක්‍රියාකරන බවට සාක්ෂි නොවේ; මෙහි live-operation steps සපයා නැත. Customer `/refunds` සහ staff venue/room configuration capabilities catalogue තුළ සටහන් වේ; සියලු command variants සඳහා සම්පූර්ණ training coverage මෙහි නොමැත. UI examples යනු training/product workflow නොවේ.
 
-Loyalty/referral/promotion ක්‍රියා DEFERRED; PayHere DEFERRED/BLOCKED. Popular Time Slots තවම implemented නොවේ. Production recovery, physical admission සහ real banking qualified නැත. D0–D6 NOT_HELD / NOT_ACCEPTED. මෙම guide එකෙන් roadmap හෝ requirement acceptance වෙනස් නොවේ.
+Loyalty/referral/promotion ක්‍රියා DEFERRED; PayHere DEFERRED/BLOCKED. Popular Time Slots හි fixed-hour synthetic report ඇත;configured business bands තවම outstanding. Production recovery, physical admission සහ real banking qualified නැත. D0–D6 NOT_HELD / NOT_ACCEPTED. මෙම guide එකෙන් roadmap හෝ requirement acceptance වෙනස් නොවේ.
 
 UI workflow වෙනස් කරන අනාගත authorized task එකේ අදාළ UG section සහ catalogue evidence එකම commit තුළ යාවත්කාලීන කරන්න. Screenshot provenance [catalogue](../product/FEATURE_CATALOG.md#screenshot-provenance-and-coverage) තුළ ඇත; mockups සහ browser fixtures වෙන්කර හඳුන්වන්න. අලුත් feature අදහස් [FUTURE_FEATURES](../backlog/FUTURE_FEATURES.md) තුළ පමණක් සටහන් කරන්න; ක්‍රියාත්මක කිරීම සඳහා වෙනම අවසර අවශ්‍යයි.
+
+<a id="ug-022"></a>
+## Venue reporting staff
+
+### UG-022 — Popular Reserved Session Start Times
+
+- **Purpose / අරමුණ:** Synthetic reserved session ආරම්භක පැය බෙදාහැරීම කියවීම;[DOC-F027](../product/FEATURE_CATALOG.md#doc-f027).
+- **Who / කවුද:** Current eligible venue member සහ එම venue සඳහා report.booking.synthetic.read අවසරය ඇති staff පමණි. Administrator නම හෝ bank/booking read අවසරය ප්‍රමාණවත් නොවේ.
+- **Prerequisites / පෙර අවශ්‍යතා:** Operator-approved synthetic test environment සහ session;නිවැරදි venue reference;දින31ට නොවැඩි venue-local interval. මේ guide එක grant හෝ bootstrap නොසාදයි.
+- **Navigation:** /admin → Popular Reserved Session Start Times.
+- **Steps / පියවර:** 1. Popular slots venue reference ඇතුළත් කරන්න. 2. අවශ්‍ය නම් එම venue හි Popular slots room reference (optional) ඇතුළත් කරන්න. 3. Popular slots from date (inclusive) සහ Popular slots to date (exclusive) පුරවන්න;අවසන් දිනය ඇතුළත් නොවේ. 4. Load Report තෝරන්න. 5. Venue timezone,Observed at,Reporting interval සහ Total synthetic reservations තහවුරු කරන්න. 6. එක් පැයක bar එකේ දිග/පෙන්වන count කියවන්න;පහළ Equivalent hourly counts table හි එම නිවැරදි ගණනම ඇත. 7. අවශ්‍ය නම් Retry මගින් අලුතින් කියවන්න;Clear මගින් protected result ඉවත් කරන්න.
+- **Expected result / ප්‍රතිඵලය:** Server එකෙන් ලැබුණු සම්පූර්ණ24 hourly buckets;complete empty interval නම් සියලු counts zero සහ empty message. Date/room වෙනස් කිරීමෙන් old result ඉවත් වෙයි;නැවත explicit Load Report අවශ්‍යයි.
+- **Errors / දෝෂ:** Session expired නම් අනුමත login නැවත තහවුරු කරන්න. Access denied නම් exact venue permission සොයාබලන්න;වෙනත් venue grant එකක් එකතුකර බලය ලබාගත නොහැක. Dates/reference වැරදි නම් නිවැරදි කර Retry තෝරන්න. Backend/audit unavailable නම් values නොපෙන්වයි;zero අනුමාන නොකරන්න.
+- **Security and limitations / සීමා:** Synthetic reserved session starts only. Not actual attendance,occupancy,revenue or physical readiness. confirmed_at භාවිත නොකර latest purchased sessionStart ගනී. Venue timezone සහ committed amendments වෙනස් වුවහොත් පෙර දැකපු counts වෙනස් විය හැක. Fixed hourly bands පමණි;configured business bands/full requirement acceptance outstanding. No booking/financial/device mutation.
+- **Screenshot:** [375px](../product/screenshots/popular-375.png),[768px](../product/screenshots/popular-768.png),[1280px](../product/screenshots/popular-1280.png) — actual intercepted synthetic browser captures;real-backend E2E හෝ production qualification නොවේ.
+- **Verification:** PARTIAL full requirement;locally tested feature checkpoint based on338db745371a64c10845eee334d2d6a7104b1e6a. Publication commit=this record's Git history;new exact-source CI PENDING. [Source](../../frontend/components/popular-slots.tsx),[tests](../../frontend/tests/popular-slots.test.mjs),[actual evidence](../PROGRESS.md#popular-session-starts).

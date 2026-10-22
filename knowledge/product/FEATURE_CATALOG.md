@@ -4,7 +4,7 @@ Supplementary product documentation, authorized by CN-PRODUCT-DOCUMENTATION-001 
 
 ## Verification and classification
 
-Every feature below was source-inspected at `24b73caf16eebda1490d0f3552c268d15e024229`; [exact-source CI 39807842759](https://github.com/Hasitha3513/Theater-Project/actions/runs/39807842759) COMPLETED / SUCCESS, attempt 1. That CI verifies the committed software, not physical/commercial acceptance. Existing evidence records include 686 backend and 403 frontend tests; this documentation task does not rerun those suites. Historical real-backend synthetic E2E 24 PASS is bounded campaign evidence, not proof of every current workflow or a new campaign execution.
+Initial records DOC-F001–026 were source-inspected at `24b73caf16eebda1490d0f3552c268d15e024229`; [exact-source CI 39807842759](https://github.com/Hasitha3513/Theater-Project/actions/runs/39807842759) COMPLETED / SUCCESS, attempt 1. That CI verifies the committed software, not physical/commercial acceptance. Existing evidence records include 686 backend and 403 frontend tests; this documentation task does not rerun those suites. Historical real-backend synthetic E2E 24 PASS is bounded campaign evidence, not proof of every current workflow or a new campaign execution.
 
 Feature IDs `DOC-F001` onward are stable documentation identities, not new requirements or backlog IDs. Each record inherits this exact last-verified commit/CI receipt and operational classification: **synthetic/test software; production NOT AUTHORIZED, real banking/identity/admission NOT QUALIFIED**. Demo availability is conditional on an isolated synthetic environment, eligible session, independently authorized permissions and fixtures; no appointments or grants are supplied by this document. Never use real evidence or money.
 
@@ -536,7 +536,7 @@ Implementation status vocabulary: IMPLEMENTED (code exists), VERIFIED (bounded c
 |---|---|
 | CN-C09 / CN-A09 loyalty, referrals, promotions | DEFERRED execution by owner; requirements and future acceptance obligations preserved |
 | PayHere and commercial gateway | DEFERRED / BLOCKED; no live payment instructions |
-| CN-M-POPULAR-TIME-SLOTS | NOT_IMPLEMENTED; policy/contract review is not approval |
+| CN-M-POPULAR-TIME-SLOTS | PARTIAL; approved fixed hourly synthetic metric implemented; configured business bands/full acceptance outstanding |
 | Full revenue/utilization/device analytics and exports | PARTIAL overall analytics; unimplemented measures must not display invented values |
 | Grant assignment/approval/revocation administration | NOT_IMPLEMENTED commands; read capability is not delegation authority |
 | Maintenance closure/reopening | NOT_IMPLEMENTED command scope; impact preview grants no closure authority |
@@ -566,3 +566,25 @@ Approved design mockups (visual direction only, not implemented-function evidenc
 ## Maintenance
 
 For every user-visible change, review this catalogue and the corresponding guide workflow; update affected facts, source/test/screenshot references and exact source/CI evidence in the same bounded change set. Preserve historical evidence and synthetic/live distinctions. Backend-only changes update the catalogue when capability or restrictions change. New ideas belong in [FUTURE_FEATURES](../backlog/FUTURE_FEATURES.md), not here as implemented features. The four canonical owners retain policy/architecture/design/status authority.
+
+<a id="doc-f027"></a>
+## DOC-F027 — Popular Reserved Session Start Times
+
+| Field | Evidence-backed value |
+|---|---|
+| Category / module | Reports and Analytics / Reporting and Booking |
+| Intended user | Independently authorized venue reporting staff; job titles confer no authority |
+| Description / available functionality | Explicitly load a source-backed distribution of synthetic reserved starting hours from latest committed purchased booking revisions;24 local-hour bands and equivalent table |
+| Implementation status | PARTIAL |
+| Operational classification | SIMULATED / synthetic test data;not attendance,occupancy,revenue or physical readiness |
+| Demo availability | CONDITIONAL on authorized isolated synthetic fixtures/session;no grants assigned |
+| Route | /admin;GET /api/admin/venues/{venueId}/reports/synthetic-popular-session-starts |
+| Required permissions | Current eligible exact-venue member with report.booking.synthetic.read;fresh authorization after durable read audit |
+| Known limitations | 31 local days;fixed hourly bands;latest purchased room and current venue timezone;no historical reconstruction;configured business bands outstanding |
+| MVP / requirement / test plan | P9-C02 / CN-M-POPULAR-TIME-SLOTS / T-CN-M-POPULAR-TIME-SLOTS |
+| Automated test evidence | [PostgreSQL cases](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[architecture](../../backend/src/test/java/com/cinenest/PopularSessionStartsArchitectureTest.java),[frontend](../../frontend/tests/popular-slots.test.mjs),[intercepted browser](../../frontend/tests/popular-slots-browser.mjs) |
+| Source | [Public port](../../backend/src/main/java/com/cinenest/booking/PopularSessionStarts.java),[Booking adapter](../../backend/src/main/java/com/cinenest/booking/internal/PopularSessionStartsAdapter.java),[Reporting controller](../../backend/src/main/java/com/cinenest/reporting/internal/PopularSessionStartsController.java),[UI](../../frontend/components/popular-slots.tsx) |
+| Screenshot | [375px](screenshots/popular-375.png),[768px](screenshots/popular-768.png),[1280px](screenshots/popular-1280.png);actual intercepted synthetic browser captures,not live operational evidence |
+| Last verified commit / CI | New feature overrides initial catalogue default:local tested worktree based on338db745371a64c10845eee334d2d6a7104b1e6a;publication commit is this record's Git history;new exact-source CI PENDING until independently confirmed |
+
+[Policy and actual verification](../PROGRESS.md#popular-session-starts). This existing MVP feature consumes no FF ID and closes no criterion.
