@@ -1,0 +1,7 @@
+package com.cinenest;
+import org.junit.jupiter.api.Test;import java.nio.file.*;import static org.assertj.core.api.Assertions.assertThat;
+class BookingConfirmationArchitectureTest {
+ @Test void reportingUsesPublicBookingPortAndNeverForeignPersistence()throws Exception{String s=Files.readString(Path.of("src/main/java/com/cinenest/reporting/internal/BookingConfirmationReportController.java"));assertThat(s).contains("com.cinenest.booking.BookingConfirmationReport").doesNotContain("JdbcClient","cinenest_booking.",".internal.Booking","@PostMapping");}
+ @Test void aggregateOwnsSqlAndCommitBeforeFreshAuthorizationWithoutBusinessWrites()throws Exception{String s=Files.readString(Path.of("src/main/java/com/cinenest/booking/internal/BookingConfirmationReportAdapter.java"));assertThat(s).contains("ISOLATION_REPEATABLE_READ","report.booking.synthetic.read","snapshot.execute","audit.executeWithoutResult","LEFT JOIN LATERAL").doesNotContain("cinenest_rooms.","cinenest_identity.","cinenest_payments.","UPDATE cinenest_booking.booking","DELETE FROM");}
+ @Test void migrationCreatesExactlyOneAuditTableAndNoGrantsOrBusinessChanges()throws Exception{String s=Files.readString(Path.of("src/main/resources/db/migration/V22__booking_confirmation_report_read_audit.sql"));assertThat(s.split("CREATE TABLE")).hasSize(2);assertThat(s.split("CREATE INDEX")).hasSize(2);assertThat(s).contains("reject_history_mutation").doesNotContain("ALTER TABLE","INSERT INTO","access_grant","CREATE SCHEMA");}
+}

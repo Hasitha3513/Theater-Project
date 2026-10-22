@@ -1,3 +1,4 @@
+import { BookingConfirmationsSection } from "../../components/booking-confirmations";
 import Link from "next/link";
 import { AdminBankSummarySection } from "../../components/admin-bank-summary";
 import { Badge, Card, PageHeading } from "../../components/primitives";
@@ -68,9 +69,10 @@ export default function AdminHome() {
 				</Card>
 			</div>
 			<AdminBankSummarySection />
+			<BookingConfirmationsSection />
 			<Card title="Operational reporting">
 				<p className="muted">
-					Live dashboard metrics are not available. The existing bank report
+					Additional operational dashboard metrics are not available. The existing bank report
 					contains synthetic financial data only.
 				</p>
 				<Link href="/admin/reports/bank">Open synthetic bank report →</Link>

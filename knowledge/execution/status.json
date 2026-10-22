@@ -8666,5 +8666,62 @@
       "newExactSourceCI": "PENDING_PUBLICATION",
       "sourceOfFinalSha": "Git HEAD and independently verified remote main"
     }
+  },
+  "bookingConfirmationStatisticsImplementation": {
+    "taskId": "CN-BOOKING-COHORT-METRICS-001",
+    "baselineHead": "b6d3484fe8f068757fe78f21f9950691b5bfec66",
+    "prerequisiteCI": "39773603856 COMPLETED/SUCCESS exact baseline attempt1",
+    "evidencePath": "PROGRESS.md#synthetic-booking-confirmation-report",
+    "policyPath": "PROJECT.md#synthetic-booking-confirmation-policy",
+    "scope": "Synthetic Booking Confirmations only;confirmed_at;SIMULATED_CONFIRMED;no cancellation statistics",
+    "permission": "report.booking.synthetic.read",
+    "migration": "V22__booking_confirmation_report_read_audit.sql",
+    "automaticGrants": false,
+    "bootstrap": false,
+    "businessTablesChanged": false,
+    "lifecycleChanged": false,
+    "dependenciesChanged": false,
+    "roadmapChanged": false,
+    "fullRequirementAccepted": false,
+    "status": "VERIFIED_BOUNDED_SYNTHETIC_IMPLEMENTATION",
+    "validation": {
+      "backend": "PASS686 tests;0 failures/errors/skips;PostgreSQL18.6;V22 clean/V21 upgrade/repeat;packaged startup",
+      "focusedReporting": "PASS8 PostgreSQL tests;mandatory insert/deferred commit failure prevents disclosure;DST gap/fold;31 days;single snapshot/concurrent insertion;post-snapshot revocation;latest amendment revision counted once;privacy/permissions",
+      "architecture": "PASS19 foundation +3 new reporting architecture +existing full suite",
+      "frontend": "PASS403 tests;TypeScript,lint,production build",
+      "browser": "PASS33 intercepted reporting groups at375/768/1280;69 existing bank-summary regression groups;not real-backend E2E",
+      "knowledgeExecution": "PASS knowledge and isolated committed-next-env execution/status/manifest;ordinary execution only2 pre-existing next-env findings",
+      "traceabilityDependencies": "PASS92/92;unchanged acyclic28-task graph;all criterion/phase/demo checkboxes unchanged",
+      "governance": "PASS39 negative controls plus2 positive future-register cases;8 classifier regressions;whitespace",
+      "syntheticCampaign": "HISTORICAL24 PASS;NOT_RERUN"
+    },
+    "screenshots": [
+      {
+        "path": ".cache/booking-confirmations/before/375.png",
+        "sha256": "341f1c67d1799045f9fc6c898ed4ea31d438a20842fa53734664a5faf9152c20"
+      },
+      {
+        "path": ".cache/booking-confirmations/before/768.png",
+        "sha256": "a967382569e9338972720496284c12a79f8f0b4c0399021e3650e540f0d4cdc1"
+      },
+      {
+        "path": ".cache/booking-confirmations/before/1280.png",
+        "sha256": "b5d554ba9e38d0e2d5e74ed519752e7fa2f34e555cfe347b6962cd10e4cbf323"
+      },
+      {
+        "path": ".cache/booking-confirmations/after/375.png",
+        "sha256": "d6618c0fc367768f0305b3b1086044135a48f69fbb158c4cfb5f9a7d657afee4"
+      },
+      {
+        "path": ".cache/booking-confirmations/after/768.png",
+        "sha256": "2a66a0c70b3c116eb639f79f7a7ed16a57a729aa8951fd759028bdb85037a359"
+      },
+      {
+        "path": ".cache/booking-confirmations/after/1280.png",
+        "sha256": "683c39bf5895f8f2870cd6517de7c4f5c94c398fd49a500b226e678275f89391"
+      }
+    ],
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "visualComparison": "All3 references inspected;admin primary. Navy240px desktop sidebar retained;light cards,violet action,explicit total32px;new report filters/metadata2 columns>=768 and1 mobile;equal-width table columns correct narrow count headers.375/768/1280 each one main and zero horizontal overflow. Actual counts/metadata only;not pixel-perfect full reference dashboard."
   }
 }

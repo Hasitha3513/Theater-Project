@@ -5123,7 +5123,7 @@ def p1_c03_closure_main():
 
 
 
-def inert_ci_main():
+def p2_c06_closure_main():
     """Permit only the exact owner-approved P2-C06 documentation closure delta."""
     from unittest.mock import patch
     baseline='e871c46ef06f47dfd6da5f0b42a290ed1b0ca3ed'
@@ -5193,6 +5193,77 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=p1_c03_closure_main()
     if result==0:print('PASS exact owner-approved P2-C06 closure only;15/74;full requirements,phases,tasks,dependencies and historical controls preserved')
+    return result
+
+
+
+def inert_ci_main():
+    """Verify the exact approved synthetic confirmation slice before historical replay."""
+    from unittest.mock import patch
+    baseline='b6d3484fe8f068757fe78f21f9950691b5bfec66'
+    owned={'frontend/tests/booking-confirmations-browser.mjs', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROJECT.md', 'knowledge/DESIGN.md', 'backend/src/main/java/com/cinenest/booking/internal/BookingConfirmationReportAdapter.java', 'frontend/lib/booking-confirmations-backend.ts', 'frontend/tests/experience.test.mjs', 'knowledge/execution/requirements.json', 'knowledge/decisions/cinenest-open-decisions.json', 'backend/src/main/resources/db/migration/V22__booking_confirmation_report_read_audit.sql', 'frontend/tests/booking-confirmations-fixtures.mjs', 'backend/src/test/java/com/cinenest/BookingConfirmationArchitectureTest.java', 'scripts/test-governance-controls.py', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'frontend/app/globals.css', 'backend/src/main/java/com/cinenest/reporting/package-info.java', 'knowledge/execution/status.json', 'backend/src/main/java/com/cinenest/reporting/internal/BookingConfirmationReportController.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'frontend/lib/booking-confirmations.ts', 'frontend/app/admin/page.tsx', 'backend/src/main/java/com/cinenest/booking/BookingConfirmationReport.java', 'frontend/tests/booking-confirmations.test.mjs', 'knowledge/PROGRESS.md', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java', 'frontend/app/api/admin/venues/[venueId]/reports/synthetic-booking-confirmations/route.ts', 'frontend/components/booking-confirmations.tsx', 'knowledge/execution/test-plan.json', 'frontend/package.json'}
+    added={'frontend/tests/booking-confirmations-browser.mjs', 'backend/src/main/java/com/cinenest/booking/BookingConfirmationReport.java', 'backend/src/main/resources/db/migration/V22__booking_confirmation_report_read_audit.sql', 'frontend/tests/booking-confirmations.test.mjs', 'frontend/tests/booking-confirmations-fixtures.mjs', 'backend/src/test/java/com/cinenest/BookingConfirmationArchitectureTest.java', 'backend/src/main/java/com/cinenest/reporting/internal/BookingConfirmationReportController.java', 'frontend/app/api/admin/venues/[venueId]/reports/synthetic-booking-confirmations/route.ts', 'frontend/components/booking-confirmations.tsx', 'backend/src/main/java/com/cinenest/booking/internal/BookingConfirmationReportAdapter.java', 'frontend/lib/booking-confirmations-backend.ts', 'frontend/lib/booking-confirmations.ts'}
+    hashes={'backend/src/main/java/com/cinenest/booking/BookingConfirmationReport.java': '956a69a679c22b918500c3fc8dbfb7f93fea5a73d8d9bc08b867a2b29df61148', 'backend/src/main/java/com/cinenest/booking/internal/BookingConfirmationReportAdapter.java': '21f4361d97babe649bdd23b0c97fbd73ceab8d2ac405d9fce62cc83c2913e480', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '15f422bb5b299d1dd7a6c3ae297ce1f7c5ec1676cfb08a743710e7921813d8a0', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '6951b4e5132afab45d6a01c73ba187ccc2c78dc89b158250ab8d2ac2e1043edf', 'backend/src/main/java/com/cinenest/reporting/internal/BookingConfirmationReportController.java': '5a19a7734737fcc0ba577e46f9896351f0f98c1b6d76713b34e460ab15cc0c10', 'backend/src/main/java/com/cinenest/reporting/package-info.java': '011fd87765c02e2bb487ae467ec8decba785b86dde214ceccf7f90c51d2f4c5e', 'backend/src/main/resources/db/migration/V22__booking_confirmation_report_read_audit.sql': 'ed5a1c482744d76d8a2acb4054859f2902d71f849e49eff4eb53929c2d1b563e', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '9afc78d837ba2e0a62de1b0d298f9571af17dac6d943cfe3c0d4de2965d0045a', 'backend/src/test/java/com/cinenest/BookingConfirmationArchitectureTest.java': '6a6bf5b8d78411eb191c9bff5ea9bb8b5e435b07526cca40f8273725c0df1c51', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java': '5ee27ea375f32c967721cd0c2c0172d9e8fd7997d6f993b9b4d720a9d2ce3442', 'frontend/app/admin/page.tsx': 'af8b18f57e70c5e81b4c0301ee4629d985bf056078e8ff45981c1e7d1313ce15', 'frontend/app/api/admin/venues/[venueId]/reports/synthetic-booking-confirmations/route.ts': '368326aa02f8dce2d398499f7694ad53c9a05538a507475196221d7b704ecb9e', 'frontend/app/globals.css': '59ea28ab48d4383bb6fd763f2f83d39653995628e0480341daf80b7ccf3a375c', 'frontend/components/booking-confirmations.tsx': 'dd7f0067d7eb1a7c5eb0345e1430655143b29c8d2519f38c58cc0b4e54d5e7c2', 'frontend/lib/booking-confirmations-backend.ts': '52e3a4aa04d2adefb85379408dfc1786df4c70d80d31beba1cbe38d5046ed982', 'frontend/lib/booking-confirmations.ts': 'be327224884fc2ddc8f50c7c84a576b49ae3d5f830409c55511aae105bf07b62', 'frontend/package.json': '76dea4aa8b730806a9c6e92005e01022069ff61bce4c88fbdf8eb37bb49dd801', 'frontend/tests/booking-confirmations-browser.mjs': 'a211393d07f00ebd0f18e138cc08516b27ed7dc77626b83359b77d95fafd1a50', 'frontend/tests/booking-confirmations-fixtures.mjs': 'f65afd7816bb8ceed1e761f38e9323837842f69d2c450afea193ea560be2d3ff', 'frontend/tests/booking-confirmations.test.mjs': 'f92a5eecaab38926b94b797e7ec41e52fe31b301cc2df9c67da442b58ed8e776', 'frontend/tests/experience.test.mjs': '0eb880a77378bc8ab71da6721a8479f2ecdfdd4c82ed35653ac5205270f12945', 'knowledge/ARCHITECTURE.md': 'db8720e5ad7f83b8c89f5da420c1a8d3712ca5018f6b7bc5bcde645ee4b033af', 'knowledge/DESIGN.md': 'a7b1c05b6811c860fa36c7f0b4a16228cdbfe00413825b0b2b428cd6bb10cfa9', 'knowledge/PROGRESS.md': 'c7f890215626d1ee811cb5b7a9bdd02101716a77f4e915134ea7be2a6d05a1b7', 'knowledge/PROJECT.md': 'e7910fe40db04fd4a713fb2f277020fd316f3c2eb5e9ff203471f9730885abce', 'knowledge/decisions/cinenest-open-decisions.json': 'acd4d3288e05136a3998e035fc927bacfe78b66c36f8dd9ae7fd8e8ac529cf62', 'knowledge/execution/requirements.json': '7f9fdf084bfc14d75b52b0d0fc7ad362fda026d33bbf4132ec9f8a189a96110d', 'knowledge/execution/status.json': '50fe336b87ab6badb33505ec72b1215aa0c4c58f3accfd9511096f0389bffd03', 'knowledge/execution/test-plan.json': '8244f281fd90dff0ff1b70c30334a91da63bf131e2a47b35366b2f2a0ad2eb7c', 'scripts/test-governance-controls.py': 'e6873b92a39a2ea60d02c11f8d7002bfe859b3f61801468d99e62f921f412779'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Synthetic confirmation exact owner-approved source mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    old_validator=prior('knowledge/execution/validate_execution.py').decode()
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    prefix=old_validator.removesuffix(ending);index=prefix.rfind('\ndef inert_ci_main():')
+    prefix=prefix[:index]+prefix[index:].replace('def inert_ci_main():','def p2_c06_closure_main():',1)
+    if not (K/'execution/validate_execution.py').read_text().startswith(prefix):errors.append('Synthetic confirmation changed historical governance code')
+    for name,key,identity in [('knowledge/execution/requirements.json','requirements','CN-M-BOOKING-STATISTICS'),('knowledge/execution/test-plan.json','tests','T-CN-M-BOOKING-STATISTICS')]:
+        data=json.loads((R/name).read_text());row=next(x for x in data[key] if x['id']==identity);evidence=row.pop('bookingConfirmationStatisticsEvidence',{})
+        if evidence.get('fullRequirementVerified')!=False or evidence.get('fullRequirementAcceptance')!='NOT_ACCEPTED' or evidence.get('fullTestPlanStatus')!='NOT_RUN':errors.append('Synthetic confirmation falsely accepted full requirement/test')
+        if data!=json.loads(prior(name)):errors.append('Synthetic confirmation changed unrelated full scope '+name)
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('bookingConfirmationStatisticsImplementation',{})
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Synthetic confirmation changed other execution/roadmap authority')
+    if any(receipt.get(k)!=False for k in ['automaticGrants','bootstrap','businessTablesChanged','lifecycleChanged','dependenciesChanged','roadmapChanged','fullRequirementAccepted']):errors.append('Synthetic confirmation expanded implementation/acceptance authority')
+    decisions=json.loads((K/'decisions/cinenest-open-decisions.json').read_text());row=next(x for x in decisions['decisions'] if x['id']=='OD-16');policy=row.pop('boundedBookingConfirmationReportingApproval',{})
+    if row['decisionStatus']!='OPEN_DECISION' or decisions!=json.loads(prior('knowledge/decisions/cinenest-open-decisions.json')):errors.append('Synthetic confirmation changed global decisions')
+    if policy.get('cohort')!='confirmed_at' or policy.get('label')!='Synthetic Booking Confirmations' or policy.get('includedStates')!=['SIMULATED_CONFIRMED'] or policy.get('cancellationStatistics')!='NOT_AVAILABLE' or policy.get('permission')!='report.booking.synthetic.read' or policy.get('fullRequirementAcceptance')!='NOT_ACCEPTED' or policy.get('p9C02')!='UNCHECKED':errors.append('Synthetic confirmation metric policy drift')
+    if policy.get('migrationApproval',{}).get('id')!='CN-BOOKING-COHORT-METRICS-V22-AUDIT-APPROVAL-001':errors.append('Synthetic confirmation missing V22 owner authority')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Synthetic confirmation changed criterion/phase/demo acceptance')
+    for name in ['AGENTS.md','knowledge/backlog/FUTURE_FEATURES.md','knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','backend/pom.xml','frontend/package-lock.json','knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Synthetic confirmation changed protected graph/security/framework/future authority '+name)
+    for name in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md']:
+        if not (R/name).read_bytes().startswith(prior(name)):errors.append('Synthetic confirmation rewrote earlier canonical policy '+name)
+    migration='backend/src/main/resources/db/migration/V22__booking_confirmation_report_read_audit.sql'
+    old_migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',baseline,'backend/src/main/resources/db/migration'],text=True).splitlines())
+    actual={x.relative_to(R).as_posix() for x in (R/'backend/src/main/resources/db/migration').glob('*.sql')}
+    if actual!=old_migrations|{migration}:errors.append('Synthetic confirmation added unapproved migration')
+    for name in old_migrations:
+        if (R/name).read_bytes()!=prior(name):errors.append('Synthetic confirmation modified historical migration '+name)
+    ddl=(R/migration).read_text()
+    if ddl.count('CREATE TABLE')!=1 or ddl.count('CREATE INDEX')!=1 or any(x in ddl for x in ['ALTER TABLE','INSERT INTO','CREATE SCHEMA','access_grant']):errors.append('Synthetic confirmation V22 is not audit-only')
+    allowed=owned|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True).split('\0'))
+    changed.discard('')
+    if not changed<=allowed:errors.append('Synthetic confirmation unrelated source delta '+str(changed-allowed))
+    manifest=json.loads(prior('knowledge/manifest.json'))
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if name in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((R/name).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('Synthetic confirmation altered manifest authority/inventory')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact new source and bounded authority passed; historical inputs remain frozen.
+    replacements={R/name:prior(name) for name in (owned-added)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}}
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (x for x in g0(path,pattern,*a,**kw) if x.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=owned if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=p2_c06_closure_main()
+    if result==0:print('PASS exact approved Booking confirmation subset,V22 only,no automatic grants,no graph/full acceptance changes;historical controls preserved')
     return result
 
 if __name__ == '__main__':

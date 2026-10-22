@@ -6167,7 +6167,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -6193,7 +6193,18 @@
       "unresolvedQuestions": [
         "OD-16",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "bookingConfirmationStatisticsEvidence": {
+        "taskId": "CN-BOOKING-COHORT-METRICS-001",
+        "scope": "Approved confirmed_at synthetic-only subset;not full createdAt statistics",
+        "evidencePath": "PROGRESS.md#synthetic-booking-confirmation-report",
+        "policyPath": "PROJECT.md#synthetic-booking-confirmation-policy",
+        "implementationStatus": "VERIFIED_BOUNDED_SYNTHETIC_IMPLEMENTATION",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "migration": "V22 audit only;no existing lifecycle/business-table changes"
+      }
     },
     {
       "id": "CN-M-FINANCIAL-KPIS",

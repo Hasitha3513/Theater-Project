@@ -84,6 +84,7 @@ class BankIntegrationTest {
     String base() { return "http://127.0.0.1:" + environment.getRequiredProperty("local.server.port"); }
 
     @BeforeEach void fixtures() {
+        jdbc.sql("TRUNCATE cinenest_booking.booking_confirmation_report_read_audit").update();
         jdbc.sql("TRUNCATE cinenest_booking.staff_booking_read_audit").update();
         jdbc.sql("TRUNCATE cinenest_iot.device,cinenest_iot.audit CASCADE").update();
         jdbc.sql("TRUNCATE cinenest_notifications.notification_event,cinenest_notifications.notification_audit,cinenest_notifications.notification_command CASCADE").update();
@@ -1004,7 +1005,7 @@ class BankIntegrationTest {
  @Test void reportGrantDoesNotPermitFinancialMutationsExportsOrDrilldown()throws Exception{reportGrant();var b=signedIn("staff");assertThat(b.get("/api/admin/venues/"+VA+"/bank/credits").statusCode()).isEqualTo(403);assertThat(b.get(report()+"&export=csv").statusCode()).isEqualTo(400);assertThat(write(b,"POST",report(),"{}").statusCode()).isBetween(403,405);var deniedBody=financial(0);deniedBody.put("fixtureKey","SYNTHETIC-BANK-100");assertThat(write(b,"POST","/api/admin/venues/"+VA+"/bank/credits",JSONObjectUtils.toJSONString(deniedBody)).statusCode()).isEqualTo(403);}
  @Test void reportCurrenciesRemainSeparateAndDatesAreValidated()throws Exception{reportGrant();var b=signedIn("staff");assertThat(reportSummary(json(b.get(report().replace("LKR","USD"))))).containsEntry("c","0");for(String suffix:java.util.List.of("&from=2026-01-01","&from=2026-01-02&to=2026-01-01","&from=2020-01-01&to=2026-01-01","&page=-1","&size=101","&asOf=2020-01-01"))assertThat(b.get(report()+suffix).statusCode()).as(suffix).isEqualTo(400);}
  @Test void reportCreditedCohortIncludesLaterVisibleEffects()throws Exception{var c=refundCase(100);approveRefund(c);reportGrant();String date=java.time.Instant.parse(CREDIT_TIME).atZone(java.time.ZoneId.of("Asia/Colombo")).toLocalDate().toString();var r=json(c.reviewer().get(report()+"&from="+date+"&to="+java.time.LocalDate.parse(date).plusDays(1)));assertThat(reportSummary(r)).containsEntry("c","50000").containsEntry("r","100");var empty=json(c.reviewer().get(report()+"&from="+java.time.LocalDate.parse(date).plusDays(1)+"&to="+java.time.LocalDate.parse(date).plusDays(2)));assertThat(reportSummary(empty)).containsEntry("c","0");}
- @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(21);}
+ @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(22);}
 
 
  @Test void reportSnapshotCannotSplitConcurrentAllocation()throws Exception{financeGrants();reportGrant();var customer=signedIn("customer-a");var staff=signedIn("staff");var allocator=signedIn("customer-b");var request=bank(customer);var credit=credit(staff,"SYNTHETIC-BANK-50000");var matched=match(allocator,request,credit);Object old=com.cinenest.payments.internal.ReportFaults.afterSummary(context,()->{try{json(allocateCredit(allocator,matched,credit,Long.parseLong(matched.get("amountMinor").toString())));}catch(Exception e){throw new IllegalStateException(e);}});try{var report=json(staff.get(report()));assertThat(reportSummary(report).get("a")).isEqualTo("0");var row=(Map<?,?>)((java.util.List<?>)snapshot(report).get("rows")).getFirst();assertThat(((Map<?,?>)row.get("amounts")).get("a")).isEqualTo("0");}finally{com.cinenest.payments.internal.ReportFaults.restore(context,old);}assertThat(reportSummary(json(staff.get(report()))).get("a")).isEqualTo(matched.get("amountMinor").toString());}
@@ -1363,4 +1364,77 @@ class BankIntegrationTest {
       Object current=MaintenanceSnapshotSupport.body(MaintenanceSnapshotSupport.read(context,jdbc,transactions,STAFF,VA,RID,local(),end,()->{}));assertThat(MaintenanceSnapshotSupport.count(current,"confirmedBlocks")).isEqualTo(1);assertThat(MaintenanceSnapshotSupport.count(current,"activeHolds")).isZero();
     }
 
+    String confirmationReport(UUID venue,String from,String to){return "/api/admin/venues/"+venue+"/reports/synthetic-booking-confirmations?from="+from+"&to="+to;}
+    UUID confirmationFixture(UUID venue,UUID room,String at){
+      UUID policy=id("confirmation-policy"),block=UUID.randomUUID(),hold=UUID.randomUUID(),booking=UUID.randomUUID();
+      jdbc.sql("INSERT INTO cinenest_booking.hold_policy VALUES(:id,600,10,60,'SYNTHETIC aggregation fixture',clock_timestamp()) ON CONFLICT DO NOTHING").param("id",policy).update();
+      jdbc.sql("INSERT INTO cinenest_booking.inventory_block VALUES(:id,:v,:r,'2020-01-01T00:00:00Z','2020-01-01T03:00:00Z',0,'2020-01-01T03:00:00Z',false,'CONFIRMED',0)").param("id",block).param("v",venue).param("r",room).update();
+      jdbc.sql("INSERT INTO cinenest_booking.reservation_hold VALUES(:h,:o,:b,:p,1,'SYNTHETIC','Asia/Colombo','SYNTHETIC','2020-01-01T00:00:00Z','2020-01-01T00:10:00Z','CONSUMED',1)").param("h",hold).param("o",A).param("b",block).param("p",policy).update();
+      jdbc.sql("INSERT INTO cinenest_booking.booking VALUES(:b,:request,:hold,:owner,:venue,'SIMULATED_CONFIRMED',true,:at)").param("b",booking).param("request",UUID.randomUUID()).param("hold",hold).param("owner",A).param("venue",venue).param("at",java.sql.Timestamp.from(java.time.Instant.parse(at))).update();
+      jdbc.sql("INSERT INTO cinenest_booking.booking_revision VALUES(:b,1,:q,1,repeat('a',64),1,'LKR',CAST(:snapshot AS jsonb))").param("b",booking).param("q",UUID.randomUUID()).param("snapshot",JSONObjectUtils.toJSONString(Map.of("synthetic",true,"commercialIssuance",false,"roomId",room.toString()))).update();return booking;
+    }
+    @Test void confirmationReportRequiresIndependentExactVenueMembershipAndEligiblePermission()throws Exception{
+      var staff=signedIn("staff");String path=confirmationReport(VA,"2026-10-01","2026-10-02");
+      assertThat(new Browser().get(path).statusCode()).isEqualTo(401);
+      for(String permission:java.util.List.of("booking.synthetic.read","report.bank.synthetic.read")){grant(permission,"VENUE",VA);assertThat(staff.get(path).statusCode()).isEqualTo(403);}
+      grant("report.booking.synthetic.read","VENUE",VB);assertThat(staff.get(path).statusCode()).isEqualTo(403);
+      UUID g=grant("report.booking.synthetic.read","VENUE",VA);assertThat(staff.get(path).statusCode()).isEqualTo(200);
+      jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:a AND venue_id=:v").param("a",STAFF).param("v",VA).update();assertThat(staff.get(path).statusCode()).isEqualTo(403);scope(STAFF,VA);
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update();assertThat(staff.get(path).statusCode()).isEqualTo(403);
+      grant("report.booking.synthetic.read","VENUE",VA);jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();assertThat(staff.get(path).statusCode()).isEqualTo(403);
+    }
+    @Test void confirmationReportUsesHalfOpenConfirmationCohortAndPrivateAllowlist()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");
+      confirmationFixture(VA,RID,"2026-09-30T18:29:59Z");confirmationFixture(VA,RID,"2026-09-30T18:30:00Z");confirmationFixture(VA,RID,"2026-10-01T18:29:59Z");confirmationFixture(VA,RID,"2026-10-01T18:30:00Z");confirmationFixture(VB,RID,"2026-10-01T00:00:00Z");
+      var response=staff.get(confirmationReport(VA,"2026-10-01","2026-10-02"));assertThat(response.statusCode()).as(response.body()).isEqualTo(200);var data=json(response);
+      assertThat(data).containsEntry("total","2").containsEntry("timezone","Asia/Colombo").containsEntry("cohortBasis","confirmed_at").containsEntry("cancellationStatistics","NOT_AVAILABLE");assertThat(response.headers().firstValue("Cache-Control")).contains("no-store");
+      assertThat(response.body()).doesNotContain("owner","actor","amount","currency","quote","requestId","hold","revenue","cancellationRate");
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_confirmation_report_read_audit WHERE outcome='ALLOW' AND actor_id=:a AND requested_from='2026-10-01' AND timezone='Asia/Colombo'").param("a",STAFF).query(Integer.class).single()).isEqualTo(1);
+      assertThatThrownBy(()->jdbc.sql("UPDATE cinenest_booking.booking_confirmation_report_read_audit SET reason_code='EMPTY'").update()).isInstanceOf(DataAccessException.class);
+      assertThatThrownBy(()->jdbc.sql("DELETE FROM cinenest_booking.booking_confirmation_report_read_audit").update()).isInstanceOf(DataAccessException.class);
+    }
+    @Test void confirmationReportRejectsMalformedDuplicateExcessiveRangesAndUntrustedQueries()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");String path=confirmationReport(VA,"2026-10-01","2026-10-02");
+      for(String bad:java.util.List.of(path+"&from=2026-10-01",path+"&asOf=2020-01-01",path+"&roomId=bad",confirmationReport(VA,"2026-02-30","2026-03-02"),confirmationReport(VA,"2026-10-01","2026-11-02"),confirmationReport(VA,"2026-10-02","2026-10-02"))){assertThat(staff.get(bad).statusCode()).as(bad).isEqualTo(400);}
+      assertThat(staff.get(confirmationReport(VA,"2026-10-01","2026-11-01")).statusCode()).isEqualTo(200);
+      assertThat(json(staff.get(path))).containsEntry("total","0");
+    }
+    @Test void confirmationReportDstFoldAndGapUseLocalDayNot24Hours()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");jdbc.sql("UPDATE cinenest_rooms.venue SET timezone='America/New_York' WHERE venue_id=:v").param("v",VA).update();
+      for(String at:java.util.List.of("2026-03-08T04:59:59Z","2026-03-08T05:00:00Z","2026-03-09T03:59:59Z","2026-03-09T04:00:00Z","2026-11-01T05:30:00Z","2026-11-01T06:30:00Z"))confirmationFixture(VA,RID,at);
+      assertThat(json(staff.get(confirmationReport(VA,"2026-03-08","2026-03-09")))).containsEntry("total","2");
+      assertThat(json(staff.get(confirmationReport(VA,"2026-11-01","2026-11-02")))).containsEntry("total","2");
+    }
+    @Test void confirmationReportAuditInsertAndDeferredCommitFailurePreventDisclosure()throws Exception{
+      grant("report.booking.synthetic.read","VENUE",VA);var staff=signedIn("staff");String path=confirmationReport(VA,"2026-10-01","2026-10-02");
+      jdbc.sql("CREATE FUNCTION cinenest_booking.confirmation_test_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.outcome='ALLOW' THEN RAISE EXCEPTION 'SYNTHETIC audit failure'; END IF; RETURN NEW; END $$").update();
+      for(boolean deferred:java.util.List.of(false,true)){
+       jdbc.sql(deferred?"CREATE CONSTRAINT TRIGGER confirmation_test_fail AFTER INSERT ON cinenest_booking.booking_confirmation_report_read_audit DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION cinenest_booking.confirmation_test_fail()":"CREATE TRIGGER confirmation_test_fail BEFORE INSERT ON cinenest_booking.booking_confirmation_report_read_audit FOR EACH ROW EXECUTE FUNCTION cinenest_booking.confirmation_test_fail()").update();
+       try{var response=staff.get(path);assertThat(response.statusCode()).isEqualTo(503);assertThat(response.body()).doesNotContain("daily","total");assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_confirmation_report_read_audit WHERE outcome='ALLOW'").query(Integer.class).single()).isZero();}finally{jdbc.sql("DROP TRIGGER confirmation_test_fail ON cinenest_booking.booking_confirmation_report_read_audit").update();}
+      }jdbc.sql("DROP FUNCTION cinenest_booking.confirmation_test_fail()").update();assertThat(staff.get(path).statusCode()).isEqualTo(200);
+    }
+    com.cinenest.booking.BookingConfirmationReport confirmationService(Runnable afterFacts)throws Exception{
+      var clocks=context.getBean(com.cinenest.rooms.VenueReportingClock.class);com.cinenest.rooms.VenueReportingClock wrapped=v->{var zone=clocks.timezone(v);afterFacts.run();return zone;};
+      var constructor=Class.forName("com.cinenest.booking.internal.BookingConfirmationReportAdapter").getDeclaredConstructors()[0];constructor.setAccessible(true);return (com.cinenest.booking.BookingConfirmationReport)constructor.newInstance(jdbc,scopedAuthorization,wrapped,transactions);
+    }
+    @Test void confirmationReportSnapshotDoesNotSplitConcurrentInsertionAndFreshAuthRevocationWins()throws Exception{
+      UUID grant=grant("report.booking.synthetic.read","VENUE",VA);var tx=new org.springframework.transaction.support.TransactionTemplate(transactions);tx.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+      var service=confirmationService(()->tx.executeWithoutResult(s->confirmationFixture(VA,RID,"2026-10-01T00:00:00Z")));
+      var data=service.read(STAFF,VA,null,java.time.LocalDate.parse("2026-10-01"),java.time.LocalDate.parse("2026-10-02"),UUID.randomUUID());assertThat(data.total()).isEqualTo("0");
+      assertThat(context.getBean(com.cinenest.booking.BookingConfirmationReport.class).read(STAFF,VA,null,data.from(),data.to(),UUID.randomUUID()).total()).isEqualTo("1");
+      service=confirmationService(()->tx.executeWithoutResult(s->jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",grant).update()));
+      var denied=service;assertThatThrownBy(()->denied.read(STAFF,VA,null,data.from(),data.to(),UUID.randomUUID())).isInstanceOf(com.cinenest.booking.BookingConfirmationReport.Unavailable.class).extracting(e->((com.cinenest.booking.BookingConfirmationReport.Unavailable)e).status).isEqualTo(403);
+    }
+    @Test void confirmationReportLatestAmendmentRevisionCountsOneBooking()throws Exception{
+      var c=accessCase();grant("report.booking.synthetic.read","VENUE",VA);var proposal=proposedAmendment(c);json(write(c.customer(),"POST",amendments(c)+"/"+proposal.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(proposal))));
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_revision").query(Integer.class).single()).isEqualTo(2);
+      var date=java.time.LocalDate.now(java.time.ZoneId.of("Asia/Colombo"));var response=c.staff().get(confirmationReport(VA,date.toString(),date.plusDays(1).toString()));assertThat(response.statusCode()).as(response.body()).isEqualTo(200);assertThat(json(response)).containsEntry("total","1");assertThat(((java.util.List<?>)json(response).get("rooms"))).hasSize(1);
+    }
+    @Test void confirmationReportV21UpgradeIsAdditiveRepeatableAndUnassigned()throws Exception{
+      String url=environment.getRequiredProperty("spring.datasource.url"),user=environment.getRequiredProperty("spring.datasource.username"),password=environment.getRequiredProperty("spring.datasource.password"),db="confirmation_upgrade_"+UUID.randomUUID().toString().replace("-","");String target=url.substring(0,url.lastIndexOf('/')+1)+db;
+      try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("CREATE DATABASE "+db);}try{
+       Flyway.configure().dataSource(target,user,password).target("21").load().migrate();var f=Flyway.configure().dataSource(target,user,password).load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);f.validate();assertThat(f.migrate().migrationsExecuted).isZero();
+       try(var c=DriverManager.getConnection(target,user,password);var st=c.createStatement();var rows=st.executeQuery("SELECT count(*) FROM cinenest_identity.access_grant")){assertThat(rows.next()).isTrue();assertThat(rows.getInt(1)).isZero();}
+      }finally{try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("DROP DATABASE "+db+" WITH (FORCE)");}}
+    }
 }

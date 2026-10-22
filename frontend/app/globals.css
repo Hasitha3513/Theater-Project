@@ -1127,3 +1127,13 @@ button.button { display: inline-grid; }
 @media (max-width: 767px) {
  .app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-context { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Confirmation statistics use exact server counts and existing administration tokens. */
+.confirmation-report { overflow-wrap: anywhere; min-width: 0; }
+
+.confirmation-filters { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cn-spacing-4); margin-block: var(--cn-spacing-4); }
+.confirmation-summary { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cn-spacing-4); margin-block: var(--cn-spacing-6); }
+.confirmation-total { color: var(--cn-color-brand-primary); font-size: 2rem; font-weight: 700; }
+@media (min-width: 768px) { .confirmation-filters, .confirmation-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.confirmation-table { table-layout: fixed; width: 100%; }

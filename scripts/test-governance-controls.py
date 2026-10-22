@@ -46,6 +46,7 @@ def main():
     test_future_register_controls()
     test_p1_c03_closure_controls(validator)
     test_p2_c06_closure_controls(validator)
+    test_booking_confirmation_controls(validator)
 
 
 def test_future_register_controls():
@@ -152,6 +153,28 @@ def test_p2_c06_closure_controls(validator):
         assert result != 0, 'P2-C06 validator accepted ' + label
         print('PASS P2-C06 rejected', label)
     print('PASS P2-C06:8 in-memory negative controls;no stored acceptance mutations')
+
+
+def test_booking_confirmation_controls(validator):
+    """Reject authority, audit, metric and acceptance expansion for the bounded slice."""
+    faults=[]
+    status=K/'execution/status.json'
+    for key in ['automaticGrants','bootstrap','fullRequirementAccepted']:
+        data=json.loads(status.read_text());data['bookingConfirmationStatisticsImplementation'][key]=True
+        faults.append((status,json.dumps(data).encode(),key))
+    decision=K/'decisions/cinenest-open-decisions.json'
+    for key,value in [('cohort','createdAt'),('cancellationStatistics','0%')]:
+        data=json.loads(decision.read_text());row=next(x for x in data['decisions'] if x['id']=='OD-16');row['boundedBookingConfirmationReportingApproval'][key]=value
+        faults.append((decision,json.dumps(data).encode(),key))
+    progress=K/'PROGRESS.md';faults.append((progress,progress.read_text().replace('- [ ] **P9-C02**','- [x] **P9-C02**').encode(),'full P9-C02 acceptance'))
+    migration=ROOT/'backend/src/main/resources/db/migration/V22__booking_confirmation_report_read_audit.sql';faults.append((migration,migration.read_bytes()+b'\nALTER TABLE cinenest_booking.booking ADD COLUMN unauthorized INT;\n','business table change'))
+    historical=ROOT/'backend/src/main/resources/db/migration/V21__maintenance_impact_read_audit.sql';faults.append((historical,historical.read_bytes()+b'\nUNAPPROVED\n','historical migration mutation'))
+    rb,rt=Path.read_bytes,Path.read_text
+    for path,replacement,label in faults:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
+        assert result!=0,'Synthetic confirmation accepted '+label
+        print('PASS confirmation reporting rejected',label)
+    print('PASS confirmation reporting:8 in-memory negative controls')
 
 
 if __name__ == '__main__': main()

@@ -698,6 +698,45 @@
         "realFinancialReporting": "DISABLED",
         "exports": "DEFERRED_NOT_IMPLEMENTED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedBookingConfirmationReportingApproval": {
+        "taskId": "CN-BOOKING-COHORT-METRICS-001",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_ONLY",
+        "date": "2026-10-22",
+        "cohort": "confirmed_at",
+        "label": "Synthetic Booking Confirmations",
+        "includedStates": [
+          "SIMULATED_CONFIRMED"
+        ],
+        "excluded": [
+          "reservation holds",
+          "amendment proposals",
+          "inferred ongoing/completed/cancelled states",
+          "real unverified payment outcomes"
+        ],
+        "cancellationStatistics": "NOT_AVAILABLE",
+        "timezone": "stored venue IANA timezone",
+        "buckets": "venue-local daily;half-open [from,to);maximum31 venue-local days",
+        "observation": "single PostgreSQL snapshot;one booking once;latest committed revision for current room attribution;no historical-as-of reconstruction",
+        "permission": "report.booking.synthetic.read",
+        "assignments": "NONE;no automatic grants/bootstrap/delegation",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "p9C02": "UNCHECKED",
+        "migrationApproval": {
+          "id": "CN-BOOKING-COHORT-METRICS-V22-AUDIT-APPROVAL-001",
+          "scope": "one Booking-owned additive V22 audit table,constraints,one venue/time index,append-only trigger;no prior migration/business-table/lifecycle changes"
+        },
+        "approvalSources": [
+          {
+            "attachment": "ef744185-b83f-4ced-9c2c-5cc3f6011029",
+            "sha256": "f08c688226ff9e24ab6308abd4ae7fe447c46c65b30fbd74e54d73471c4238be"
+          },
+          {
+            "attachment": "bedfed77-368b-4ea8-9691-c1a02562ee72",
+            "sha256": "cd36e4d4204632b2d4f3580ae3b4cf5855f96612ab4631fa073a2f5eafe42a51"
+          }
+        ]
       }
     },
     {
