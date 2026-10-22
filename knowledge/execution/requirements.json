@@ -1470,6 +1470,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
+      },
+      "maintenanceImpactReadEvidence": {
+        "taskId": "CN-MAINTENANCE-IMPACT-READ-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_MAINTENANCE_IMPACT_READ",
+        "evidencePath": "PROGRESS.md#maintenance-impact-read",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Inventory-only advisory read and mandatory audit;no closure/reopening/physical authority or full requirement acceptance"
       }
     },
     {
@@ -2385,6 +2393,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Local synthetic HTTP upstream/browser is not Spring/PostgreSQL E2E;backend authorization separately tested with real isolated PostgreSQL"
+      },
+      "maintenanceImpactReadEvidence": {
+        "taskId": "CN-MAINTENANCE-IMPACT-READ-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_MAINTENANCE_IMPACT_READ",
+        "evidencePath": "PROGRESS.md#maintenance-impact-read",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Inventory-only advisory read and mandatory audit;no closure/reopening/physical authority or full requirement acceptance"
       }
     },
     {

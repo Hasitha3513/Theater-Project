@@ -6,6 +6,8 @@ import java.util.UUID;
 /** Identity-owned trusted grant boundary. Locking checks participate in the caller's transaction. */
 public interface ScopedAuthorization {
     default boolean permitsSelf(UUID actor,String action,boolean lock){return false;}
+    /** Current venue membership; default denies for adapters without this read contract. */
+    default boolean member(UUID actor,UUID venue,boolean lock){return false;}
     boolean eligible(UUID actor);
     boolean eligible(UUID actor, boolean lock);
     boolean permits(UUID actor, UUID venue, String action, boolean lock);

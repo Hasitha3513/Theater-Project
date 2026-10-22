@@ -61,6 +61,7 @@ class InventoryIntegrationTest {
         jdbc.sql("TRUNCATE cinenest_booking.hold_policy CASCADE").update();
         jdbc.sql("TRUNCATE cinenest_booking.inventory_block CASCADE").update();
         jdbc.sql("TRUNCATE cinenest_booking.inventory_audit").update();
+        jdbc.sql("TRUNCATE cinenest_booking.maintenance_impact_read_audit").update();
         jdbc.sql("TRUNCATE cinenest_pricing.package CASCADE").update();
         jdbc.sql("TRUNCATE cinenest_pricing.configuration_audit").update();
         jdbc.sql("TRUNCATE cinenest_pricing.service_definition CASCADE").update();
@@ -343,6 +344,84 @@ class InventoryIntegrationTest {
         org.springframework.test.util.ReflectionTestUtils.invokeMethod(fresh,"reconcile",VA);
         var recovered=org.springframework.test.util.ReflectionTestUtils.<Map<String,Object>>invokeMethod(fresh,"read",A,UUID.fromString(h.get("holdId").toString()));
         assertThat(recovered).containsEntry("state","EXPIRED");assertThat(JSONObjectUtils.parse(create(a,req).body())).containsEntry("state","EXPIRED");
+    }
+    String impact(String start,String end){return "/api/admin/venues/"+VA+"/rooms/"+RID+"/maintenance-impact?startLocal="+start+"&endLocal="+end;}
+    String impact(){return impact(local(),java.time.LocalDateTime.parse(local()).plusHours(4).toString());}
+    Map<String,Object> impactRead(Browser b)throws Exception{var r=b.get(impact());assertThat(r.statusCode()).as(r.body()).isEqualTo(200);return JSONObjectUtils.parse(r.body());}
+    @SuppressWarnings("unchecked") int impactCount(Map<String,Object> p,String category){return ((Number)((Map<String,Object>)p.get("counts")).get(category)).intValue();}
+    @ParameterizedTest @ValueSource(strings={"booking.synthetic.read","operations.synthetic.read","room.write","ADMIN","SELF","OTHER_VENUE","REVOKED","EXPIRED","MEMBERSHIP","SUSPENDED"})
+    void impactRequiresIndependentCurrentAuthorityAndMembership(String change)throws Exception{
+        String permission=java.util.Set.of("booking.synthetic.read","operations.synthetic.read","room.write","ADMIN").contains(change)?change:"inventory.read";
+        UUID g=grant(permission,change.equals("SELF")?"SELF":"VENUE",change.equals("SELF")?null:change.equals("OTHER_VENUE")?VB:VA);
+        if(change.equals("REVOKED"))jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update();
+        if(change.equals("EXPIRED"))jdbc.sql("UPDATE cinenest_identity.access_grant SET valid_from=clock_timestamp()-INTERVAL '2 hours',valid_until=clock_timestamp()-INTERVAL '1 hour' WHERE grant_id=:g").param("g",g).update();
+        if(change.equals("MEMBERSHIP"))jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:a AND venue_id=:v").param("a",STAFF).param("v",VA).update();
+        var b=signedIn("staff");if(change.equals("SUSPENDED"))jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();
+        assertThat(b.get(impact()).statusCode()).isEqualTo(403);
+    }
+    @Test void impactMissingSessionAndNoStitchingAndExpiredSession()throws Exception{
+        assertThat(new Browser().get(impact()).statusCode()).isEqualTo(401);var b=signedIn("staff");assertThat(b.get(impact()).statusCode()).isEqualTo(403);grant("inventory.read","VENUE",VB);grant("operations.synthetic.read","VENUE",VA);assertThat(b.get(impact()).statusCode()).isEqualTo(403);
+        grant("inventory.read","VENUE",VA);jdbc.sql("UPDATE cinenest_identity.http_session SET expiry_time=0,last_access_time=0").update();assertThat(b.get(impact()).statusCode()).isEqualTo(401);
+    }
+    @Test void impactStrictInputsAndRoomVenueBinding()throws Exception{
+        grant("inventory.read","VENUE",VA);grant("inventory.read","VENUE",VB);var b=signedIn("staff");
+        for(String q:new String[]{impact()+"&startLocal="+local(),impact()+"&ownerId=PRIVATE",impact().replace("endLocal=","other="),impact(local(),local()),impact(local(),"2026-02-30T10:00"),impact(local(),java.time.LocalDateTime.parse(local()).plusDays(2).toString()),impact().replace(RID.toString(),"bad")})assertThat(b.get(q).statusCode()).as(q).isEqualTo(400);
+        assertThat(b.get(impact().replace(RID.toString(),UUID.randomUUID().toString())).statusCode()).isEqualTo(404);assertThat(b.get(impact().replace(VA.toString(),VB.toString())).statusCode()).isEqualTo(404);
+        assertThat(write(b,"POST",impact(),"{}").statusCode()).isBetween(403,405);
+    }
+    @Test void impactExactAllowlistEmptyCountsAndAuditContext()throws Exception{
+        grant("inventory.read","VENUE",VA);var b=signedIn("staff");var before=inventoryRows();var r=b.get(impact());var p=JSONObjectUtils.parse(r.body());assertThat(r.statusCode()).isEqualTo(200);assertThat(r.headers().firstValue("Cache-Control").orElseThrow()).contains("no-store");
+        assertThat(p.keySet()).containsExactlyInAnyOrder("venueId","roomId","timezone","configuration","requestedStart","requestedEnd","observedAt","complete","recordLimit","counts","incompleteReason","synthetic","evidenceLevel","occupancy","readiness");assertThat(p).containsEntry("complete",true).containsEntry("occupancy","UNKNOWN").containsEntry("readiness","UNVERIFIED").containsEntry("synthetic",true);assertThat(impactCount(p,"activeHolds")).isZero();assertThat(inventoryRows()).isEqualTo(before);
+        UUID correlation=UUID.fromString(r.headers().firstValue("X-Correlation-ID").orElseThrow());var a=jdbc.sql("SELECT * FROM cinenest_booking.maintenance_impact_read_audit WHERE correlation_id=:c").param("c",correlation).query().singleRow();assertThat(a).containsEntry("actor_id",STAFF).containsEntry("venue_id",VA).containsEntry("room_id",RID).containsEntry("outcome","ALLOW");assertThat(a.get("requested_start").toString()).isNotBlank();assertThat(r.body()).doesNotContain(A.toString(),B.toString(),STAFF.toString(),"holdId","blockId","bookingId","canClose","roomReady","safeToEnter","reopeningApproved");
+    }
+    @Test void impactActiveExpiredPendingInvalidatableReleasedAndConfirmedFacts()throws Exception{
+        grant("inventory.read","VENUE",VA);var b=signedIn("staff");var a=signedIn("customer-a");var h=held(a,request(a,local()));assertThat(impactCount(impactRead(b),"activeHolds")).isEqualTo(1);expire(h);var before=inventoryRows();assertThat(impactCount(impactRead(b),"expiredPendingHolds")).isEqualTo(1);assertThat(inventoryRows()).isEqualTo(before);reconcile();assertThat(impactCount(impactRead(b),"expiredPendingHolds")).isZero();
+        h=held(a,request(a,local()));jdbc.sql("UPDATE cinenest_rooms.venue SET cleaning_buffer_minutes=8,version=version+1 WHERE venue_id=:v").param("v",VA).update();assertThat(impactCount(impactRead(b),"invalidatablePendingHolds")).isEqualTo(1);reconcile();assertThat(impactCount(impactRead(b),"activeHolds")).isZero();h=held(a,request(a,local()));jdbc.sql("UPDATE cinenest_booking.inventory_block SET kind='CONFIRMED'").update();expire(h);assertThat(impactCount(impactRead(b),"confirmedBlocks")).isEqualTo(1);
+    }
+    void maintenanceBlock(UUID room,String start,int minutes){var from=java.time.LocalDateTime.parse(start).atZone(java.time.ZoneId.of("Asia/Colombo")).toInstant();jdbc.sql("INSERT INTO cinenest_booking.inventory_block VALUES(:id,:v,:r,:s,:e,0,:e,true,'MAINTENANCE',0)").param("id",UUID.randomUUID()).param("v",VA).param("r",room).param("s",from.atOffset(java.time.ZoneOffset.UTC)).param("e",from.plusSeconds(minutes*60L).atOffset(java.time.ZoneOffset.UTC)).update();}
+    @Test void impactMaintenanceMultipleAdjacencyBuffersAndOtherRoomIsolation()throws Exception{
+        grant("inventory.read","VENUE",VA);var b=signedIn("staff");var a=signedIn("customer-a");held(a,request(a,local()));String until=java.time.LocalDateTime.parse(local()).plusMinutes(187).toString();var adjacent=JSONObjectUtils.parse(b.get(impact(until,java.time.LocalDateTime.parse(until).plusMinutes(1).toString())).body());assertThat(impactCount(adjacent,"activeHolds")).isZero();var buffer=JSONObjectUtils.parse(b.get(impact(java.time.LocalDateTime.parse(local()).plusMinutes(180).toString(),until)).body());assertThat(impactCount(buffer,"activeHolds")).isEqualTo(1);
+        maintenanceBlock(RID,until,20);assertThat(impactCount(impactRead(b),"maintenanceBlocks")).isEqualTo(1);maintenanceBlock(UUID.randomUUID(),until,20);assertThat(impactCount(impactRead(b),"maintenanceBlocks")).isEqualTo(1);
+    }
+    @Test void impactLimitsReturnExplicitIncompleteWithoutPartialCounts()throws Exception{
+        grant("inventory.read","VENUE",VA);var b=signedIn("staff");var start=java.time.LocalDateTime.parse(local()).atZone(java.time.ZoneId.of("Asia/Colombo")).toInstant();jdbc.sql("INSERT INTO cinenest_booking.inventory_block SELECT gen_random_uuid(),:v,:r,CAST(:s AS timestamptz)+n*INTERVAL '1 second',CAST(:s AS timestamptz)+(n+1)*INTERVAL '1 second',0,CAST(:s AS timestamptz)+(n+1)*INTERVAL '1 second',true,'MAINTENANCE',0 FROM generate_series(0,1000)n").param("v",VA).param("r",RID).param("s",start.toString()).update();var p=impactRead(b);assertThat(p).containsEntry("complete",false).containsEntry("counts",null).containsEntry("incompleteReason","RECORD_LIMIT");
+    }
+    @Test void impactAuditFailureRollsBackAndNeverDisclosesOrMutates()throws Exception{
+        grant("inventory.read","VENUE",VA);var b=signedIn("staff");var before=inventoryRows();jdbc.sql("ALTER TABLE cinenest_booking.maintenance_impact_read_audit ADD CONSTRAINT impact_fault CHECK(outcome<>'ALLOW') NOT VALID").update();try{var r=b.get(impact());assertThat(r.statusCode()).isEqualTo(503);assertThat(r.body()).isEmpty();assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.maintenance_impact_read_audit WHERE outcome='ALLOW'").query(Integer.class).single()).isZero();assertThat(inventoryRows()).isEqualTo(before);}finally{jdbc.sql("ALTER TABLE cinenest_booking.maintenance_impact_read_audit DROP CONSTRAINT impact_fault").update();}
+        impactRead(b);assertThatThrownBy(()->jdbc.sql("DELETE FROM cinenest_booking.maintenance_impact_read_audit").update()).isInstanceOf(DataAccessException.class);assertThatThrownBy(()->jdbc.sql("INSERT INTO cinenest_booking.maintenance_impact_read_audit(event_id,observed_at,outcome,reason_code,correlation_id) VALUES(gen_random_uuid(),clock_timestamp(),'ALLOW','SCOPED_READ',gen_random_uuid())").update()).isInstanceOf(DataAccessException.class);
+    }
+    @Test void impactRealSnapshotCreationExpiryReconciliationMaintenanceAndFreshAuth()throws Exception{
+        grant("inventory.read","VENUE",VA);var a=signedIn("customer-a");var req=request(a,local());var saved=new java.util.concurrent.atomic.AtomicReference<Map<String,Object>>();String end=java.time.LocalDateTime.parse(local()).plusHours(4).toString();
+        Object first=MaintenanceSnapshotSupport.body(MaintenanceSnapshotSupport.read(context,jdbc,transactions,STAFF,VA,RID,local(),end,()->{try{saved.set(held(a,req));}catch(Exception e){throw new RuntimeException(e);}}));assertThat(MaintenanceSnapshotSupport.count(first,"activeHolds")).isZero();assertThat(impactCount(impactRead(signedIn("staff")),"activeHolds")).isEqualTo(1);
+        var fresh=new org.springframework.transaction.support.TransactionTemplate(transactions);fresh.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        Object expiry=MaintenanceSnapshotSupport.body(MaintenanceSnapshotSupport.read(context,jdbc,transactions,STAFF,VA,RID,local(),end,()->fresh.executeWithoutResult(t->expire(saved.get()))));assertThat(MaintenanceSnapshotSupport.count(expiry,"activeHolds")).isEqualTo(1);
+        Object old=MaintenanceSnapshotSupport.body(MaintenanceSnapshotSupport.read(context,jdbc,transactions,STAFF,VA,RID,local(),end,()->fresh.executeWithoutResult(t->reconcile())));assertThat(MaintenanceSnapshotSupport.count(old,"expiredPendingHolds")).isEqualTo(1);assertThat(impactCount(impactRead(signedIn("staff")),"activeHolds")).isZero();
+        Object maintenance=MaintenanceSnapshotSupport.body(MaintenanceSnapshotSupport.read(context,jdbc,transactions,STAFF,VA,RID,local(),end,()->fresh.executeWithoutResult(t->maintenanceBlock(RID,local(),30))));assertThat(MaintenanceSnapshotSupport.count(maintenance,"maintenanceBlocks")).isZero();assertThat(impactCount(impactRead(signedIn("staff")),"maintenanceBlocks")).isEqualTo(1);
+        var denied=MaintenanceSnapshotSupport.read(context,jdbc,transactions,STAFF,VA,RID,local(),end,()->fresh.executeWithoutResult(t->jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE permission='inventory.read'").update()));assertThat((Integer)org.springframework.test.util.ReflectionTestUtils.invokeMethod(denied,"status")).isEqualTo(403);
+    }
+    @Test void impactAuditV20UpgradePreservesInventoryAndIsRepeatable()throws Exception{
+        String db="impact_upgrade_"+UUID.randomUUID().toString().replace("-",""),url=System.getenv("CINENEST_DB_URL"),user=System.getenv("CINENEST_DB_USER"),password=System.getenv("CINENEST_DB_PASSWORD");
+        try(var c=DriverManager.getConnection(url,user,password);var s=c.createStatement()){s.execute("CREATE DATABASE "+db);}String target=url.substring(0,url.lastIndexOf('/')+1)+db;
+        try{Flyway.configure().dataSource(target,user,password).target("20").load().migrate();try(var c=DriverManager.getConnection(target,user,password);var s=c.createStatement()){s.execute("INSERT INTO cinenest_booking.inventory_block VALUES(gen_random_uuid(),'"+VA+"','"+RID+"','2030-01-01T00:00Z','2030-01-01T01:00Z',0,'2030-01-01T01:00Z',true,'MAINTENANCE',7)");}
+            var f=Flyway.configure().dataSource(target,user,password).load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);assertThat(f.migrate().migrationsExecuted).isZero();f.validate();try(var c=DriverManager.getConnection(target,user,password);var s=c.createStatement();var rows=s.executeQuery("SELECT count(*),min(revision) FROM cinenest_booking.inventory_block")){assertThat(rows.next()).isTrue();assertThat(rows.getInt(1)).isEqualTo(1);assertThat(rows.getLong(2)).isEqualTo(7);}
+        }finally{try(var c=DriverManager.getConnection(url,user,password);var s=c.createStatement()){s.execute("DROP DATABASE "+db+" WITH (FORCE)");}}
+    }
+    @Test void impactDisabledRoomAndTimezoneDstAndOutsideHoursRemainObservational()throws Exception{
+        grant("inventory.read","VENUE",VA);var b=signedIn("staff");jdbc.sql("UPDATE cinenest_rooms.room SET enabled=false").update();assertThat(impactRead(b).get("timezone")).isEqualTo("Asia/Colombo");
+        jdbc.sql("UPDATE cinenest_rooms.venue SET timezone='America/New_York'").update();
+        assertThat(b.get(impact("2026-03-08T02:30","2026-03-08T03:30")).statusCode()).isEqualTo(400);assertThat(b.get(impact("2026-11-01T01:30","2026-11-01T02:30")).statusCode()).isEqualTo(400);
+        var spring=JSONObjectUtils.parse(b.get(impact("2026-03-08T00:00","2026-03-09T00:00")).body());assertThat(java.time.Duration.between(java.time.Instant.parse(spring.get("requestedStart").toString()),java.time.Instant.parse(spring.get("requestedEnd").toString())).toHours()).isEqualTo(23);
+        var fall=JSONObjectUtils.parse(b.get(impact("2026-11-01T00:00","2026-11-02T00:00")).body());assertThat(java.time.Duration.between(java.time.Instant.parse(fall.get("requestedStart").toString()),java.time.Instant.parse(fall.get("requestedEnd").toString())).toHours()).isEqualTo(25);
+    }
+    @Test void impactAuditAtomicRollbackConcurrentReadsAndNoOtherSideEffects()throws Exception{
+        grant("inventory.read","VENUE",VA);var b=signedIn("staff");var before=inventoryRows();var tables=java.util.List.of("cinenest_booking.booking","cinenest_booking.booking_revision","cinenest_rooms.turnover_case","cinenest_rooms.turnover_entry","cinenest_iot.command","cinenest_access.access_credential","cinenest_payments.payment_allocation","cinenest_notifications.notification_intent");var counts=new java.util.HashMap<String,Long>();for(String t:tables)counts.put(t,jdbc.sql("SELECT count(*) FROM "+t).query(Long.class).single());
+        var parallel=java.util.concurrent.CompletableFuture.supplyAsync(()->{try{return b.get(impact()).statusCode();}catch(Exception e){throw new RuntimeException(e);}});impactRead(b);assertThat(parallel.get()).isEqualTo(200);assertThat(inventoryRows()).isEqualTo(before);for(String t:tables)assertThat(jdbc.sql("SELECT count(*) FROM "+t).query(Long.class).single()).isEqualTo(counts.get(t));
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.maintenance_impact_read_audit WHERE outcome='ALLOW'").query(Integer.class).single()).isEqualTo(2);
+    }
+
+    @Test void impactBrokenHoldLinkFailsClosedAndHasConstantOwnedQueryBudget()throws Exception{
+        grant("inventory.read","VENUE",VA);var spy=org.mockito.Mockito.spy(jdbc);String end=java.time.LocalDateTime.parse(local()).plusHours(4).toString();MaintenanceSnapshotSupport.body(MaintenanceSnapshotSupport.read(context,spy,transactions,STAFF,VA,RID,local(),end,()->{}));org.mockito.Mockito.verify(spy,org.mockito.Mockito.times(3)).sql(org.mockito.ArgumentMatchers.anyString());
+        maintenanceBlock(RID,local(),30);jdbc.sql("UPDATE cinenest_booking.inventory_block SET kind='HOLD'").update();var r=signedIn("staff").get(impact());assertThat(r.statusCode()).isEqualTo(503);assertThat(r.body()).isEmpty();
     }
 
 }

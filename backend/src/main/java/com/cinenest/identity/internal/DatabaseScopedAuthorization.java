@@ -12,6 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 class DatabaseScopedAuthorization implements ScopedAuthorization {
     private final JdbcClient jdbc;
     DatabaseScopedAuthorization(JdbcClient jdbc) { this.jdbc = jdbc; }
+    public boolean member(UUID actor,UUID venue,boolean lock) {
+        if(actor==null||venue==null)return false;
+        return !jdbc.sql("SELECT account_id FROM cinenest_identity.account_scope WHERE account_id=:a AND venue_id=:v"+(lock?" FOR UPDATE":"")).param("a",actor).param("v",venue).query(UUID.class).list().isEmpty();
+    }
     public boolean eligible(UUID actor) {
         return eligible(actor,false);
     }

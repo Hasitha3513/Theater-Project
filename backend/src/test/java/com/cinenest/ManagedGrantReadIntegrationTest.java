@@ -192,7 +192,7 @@ class ManagedGrantReadIntegrationTest {
         try(var c=DriverManager.getConnection(url,user,password);var s=c.createStatement()){s.execute("CREATE DATABASE "+db);}String target=url.substring(0,url.lastIndexOf('/')+1)+db;
         try{Flyway.configure().dataSource(target,user,password).target("19").load().migrate();
             try(var c=DriverManager.getConnection(target,user,password);var s=c.createStatement()){s.execute("INSERT INTO cinenest_identity.account VALUES ('"+A+"',TRUE,'ELIGIBLE',9)");s.execute("INSERT INTO cinenest_identity.account_scope VALUES ('"+A+"','"+VA+"')");s.execute("INSERT INTO cinenest_identity.access_grant VALUES(gen_random_uuid(),'"+A+"','booking.synthetic.read','VENUE','"+VA+"','ACTIVE','2000-01-01','2100-01-01',7)");}
-            var m=Flyway.configure().dataSource(target,user,password).load();assertThat(m.migrate().migrationsExecuted).isEqualTo(1);assertThat(m.migrate().migrationsExecuted).isZero();
+            var m=Flyway.configure().dataSource(target,user,password).target("20").load();assertThat(m.migrate().migrationsExecuted).isEqualTo(1);assertThat(m.migrate().migrationsExecuted).isZero();
             try(var c=DriverManager.getConnection(target,user,password);var s=c.createStatement();var rs=s.executeQuery("SELECT count(*),min(revision) FROM cinenest_identity.access_grant")){assertThat(rs.next()).isTrue();assertThat(rs.getInt(1)).isEqualTo(1);assertThat(rs.getLong(2)).isEqualTo(7);}
         }finally{try(var c=DriverManager.getConnection(url,user,password);var s=c.createStatement()){s.execute("DROP DATABASE "+db+" WITH (FORCE)");}}
     }

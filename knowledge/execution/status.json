@@ -8465,5 +8465,23 @@
     "regressions": "PASS:353 frontend/30 focused;TypeScript/lint/build;648 unchanged backend/PostgreSQL/architecture;63 new and63 existing intercepted browser groups;375/768/1280 screenshots;zero mutation requests",
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
     "validation": "PASS:knowledge;isolated execution;26 negative controls;8 classifier;92/92 traceability;28-task unchanged acyclic dependencies;whitespace. Ordinary execution:only two pre-existing next-env findings"
+  },
+  "maintenanceImpactReadImplementation": {
+    "taskId": "CN-MAINTENANCE-IMPACT-READ-001",
+    "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_MAINTENANCE_IMPACT_READ",
+    "evidencePath": "PROGRESS.md#maintenance-impact-read",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Inventory-only advisory read and mandatory audit;no closure/reopening/physical authority or full requirement acceptance",
+    "baselineHead": "faee61795c29c6e39fd45e66e11c03d7d0283bfc",
+    "prerequisiteCI": "39748878258 attempt1 COMPLETED/SUCCESS exact source",
+    "ownerAuthority": "Retained read task cbcf00dd-92fa-405f-a2e9-5ea1ec5cbb00 plus audit-only amendment7f672da7-0879-441c-96c5-d6dea7235fc9",
+    "ownerRequestSha256": "8ce1df63775bb3c8a9689fcd47d1b0679aeca69d1b038d62b169073d2ad433b4",
+    "migration": "V21 maintenance_impact_read_audit only",
+    "domainMutations": false,
+    "closureOrReopeningAuthority": false,
+    "regressions": "PASS:675 backend incl22 new Inventory/2 Bank snapshot/3 architecture;PostgreSQL18.6 V1-V21;3 owned SQL calls;353 unchanged frontend tests/TypeScript/lint/build",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "validation": "PASS:knowledge;isolated execution;26 negative controls;8 classifier;92/92 traceability;28-task unchanged acyclic dependencies;whitespace. Ordinary execution:two pre-existing next-env findings"
   }
 }

@@ -4756,7 +4756,7 @@ def managed_grant_backend_main():
 
 
 
-def inert_ci_main():
+def managed_grant_frontend_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='3d67aa20191a9c658100ca5970453815e6cd16e4'
@@ -4821,6 +4821,74 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=managed_grant_backend_main()
     if result==0:print('PASS exact bounded Bounded managed-grant frontend inspection; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+def inert_ci_main():
+    """Pin authorized maintenance preview/audit sources before immutable historical replay."""
+    from unittest.mock import patch
+    baseline='faee61795c29c6e39fd45e66e11c03d7d0283bfc'
+    owned={'backend/src/main/java/com/cinenest/booking/internal/MaintenanceImpactQuery.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/booking/internal/MaintenanceImpactController.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/MaintenanceImpactArchitectureTest.java', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java', 'backend/src/test/java/com/cinenest/MaintenanceSnapshotSupport.java', 'backend/src/main/resources/db/migration/V21__maintenance_impact_read_audit.sql', 'backend/src/main/java/com/cinenest/identity/ScopedAuthorization.java', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java'}
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/status.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/PROGRESS.md', 'knowledge/ARCHITECTURE.md'}
+    added={'backend/src/main/java/com/cinenest/booking/internal/MaintenanceImpactQuery.java', 'backend/src/main/java/com/cinenest/booking/internal/MaintenanceImpactController.java', 'backend/src/test/java/com/cinenest/MaintenanceImpactArchitectureTest.java', 'backend/src/test/java/com/cinenest/MaintenanceSnapshotSupport.java', 'backend/src/main/resources/db/migration/V21__maintenance_impact_read_audit.sql'}
+    hashes={'backend/src/main/java/com/cinenest/booking/internal/MaintenanceImpactQuery.java': '2a29c536cd3f41828cbbb6ec24dd94ac3387fc0782054cb97802a41960e46e27', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '7f63e8ed34b8fbcc43e61853055fce8966fb53e5c34ede72ad1aa63f099cfefc', 'backend/src/main/java/com/cinenest/booking/internal/MaintenanceImpactController.java': '53a1f1cd48b57beb5a2f67e5e0bf2a8607e117e76e556ef14dac8fd2ce528fcf', 'knowledge/execution/test-plan.json': '902433814a9f9794fdeaa17af58e927dd6fd9d615e2b195bc648123e57da08d4', 'knowledge/PROGRESS.md': '21d97de7e218784213474e398991ab6151c84a9df939a76458b76bdb45a243cd', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '42c1aa9dc6acb5ec7ec451049b857af69f19eaca42b2c2194bc7d810cb004172', 'backend/src/test/java/com/cinenest/MaintenanceImpactArchitectureTest.java': '612e2f12e201efa0bbebeee2f045250be8b05403033ef78f91cda180aa40f499', 'knowledge/execution/status.json': '18b9dedc4d4b49aeeb1c640b71d2e2554815d94a5b0a39b446e74276437aa19d', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java': 'b88df22683e9a8d2a54e679c11dc11b5d2634d5273c91ab90a06d2bead2890c4', 'backend/src/test/java/com/cinenest/MaintenanceSnapshotSupport.java': '60a5b168aa3faf9315160b7213ea1a2ca90f41f4d20f36d697b82b8139c80108', 'knowledge/execution/requirements.json': '3b39aeaa6d2a64ef770c3125e8063407dd95bbf4666e91c24bf850ce28eebde1', 'backend/src/main/resources/db/migration/V21__maintenance_impact_read_audit.sql': '3bb99640aaee87ecceea74d13a3bad543fc2c6fa17ee0a28969b54531dfae3c7', 'knowledge/ARCHITECTURE.md': 'fddc0d543a19ee52fff8e59c3173e8c362b67f55711887fa991132a347747792', 'backend/src/main/java/com/cinenest/identity/ScopedAuthorization.java': '1937fec5ecc2957dd7cdb417efd1015e379820280b0cdfd7703012158422c8d4', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java': 'd0fb2c6e8a8cc2526c0256656810dacacf1cfc64ab00eb3b8213e7a719ce6a09', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '736f9881fdff3b606f4c004823bf3a3e27eecb5f63400352ad37b0455659fc80'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Bounded maintenance impact read and audit exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('maintenanceImpactReadEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Bounded maintenance impact read and audit changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('maintenanceImpactReadImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Bounded maintenance impact read and audit changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded maintenance impact read and audit changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Bounded maintenance impact read and audit rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package!=original:errors.append('Summary changed dependency or unrelated frontend/package authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Bounded maintenance impact read and audit rewrote prior design')
+    # Exact scoped stylesheet bytes are pinned above; unrelated changes remain rejected.
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Bounded maintenance impact read and audit promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Bounded maintenance impact read and audit unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded maintenance impact read and audit changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['frontend/components/bank-report.tsx','frontend/lib/bank-backend.ts','frontend/lib/session.ts','frontend/lib/rooms.ts','backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java','backend/src/main/java/com/cinenest/payments/BankBalanceReport.java','frontend/tests/synthetic-e2e.mjs','backend/src/test/java/com/cinenest/SyntheticJourneyIT.java']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Summary changed protected existing contract/campaign '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['knowledge/PROJECT.md','knowledge/DESIGN.md','knowledge/decisions/cinenest-open-decisions.json']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Maintenance read changed preserved policy '+name)
+    state=json.loads((K/'execution/status.json').read_text()).get('maintenanceImpactReadImplementation',{})
+    if state.get('domainMutations')!=False or state.get('closureOrReopeningAuthority')!=False:errors.append('Maintenance preview expanded operational authority')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=managed_grant_frontend_main()
+    if result==0:print('PASS exact bounded Bounded maintenance impact read and audit; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':
