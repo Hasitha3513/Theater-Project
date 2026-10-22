@@ -1779,6 +1779,16 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "No permissions,grants,bootstrap,migrations or acceptance;actual accounts/venues/reviewers/allowances UNASSIGNED/DISABLED"
+      },
+      "identityGrantReadCapabilityEvidence": {
+        "decisionId": "CN-IDENTITY-GRANT-READ-APPROVAL-001",
+        "status": "OWNER_APPROVED_NAMED_CAPABILITY_POLICY_ONLY",
+        "evidencePath": "PROJECT.md#identity-grant-read-approval",
+        "capabilityPolicyGate": "SATISFIED",
+        "implementationStatus": "NOT_IMPLEMENTED_THIS_RECORDING_SESSION",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No grants/bootstrap/migrations;actual assignments UNASSIGNED/DISABLED;prior bounded backend read authority retained for subsequent work"
       }
     },
     {
@@ -2097,6 +2107,16 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "No permissions,grants,bootstrap,migrations or acceptance;actual accounts/venues/reviewers/allowances UNASSIGNED/DISABLED"
+      },
+      "identityGrantReadCapabilityEvidence": {
+        "decisionId": "CN-IDENTITY-GRANT-READ-APPROVAL-001",
+        "status": "OWNER_APPROVED_NAMED_CAPABILITY_POLICY_ONLY",
+        "evidencePath": "PROJECT.md#identity-grant-read-approval",
+        "capabilityPolicyGate": "SATISFIED",
+        "implementationStatus": "NOT_IMPLEMENTED_THIS_RECORDING_SESSION",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No grants/bootstrap/migrations;actual assignments UNASSIGNED/DISABLED;prior bounded backend read authority retained for subsequent work"
       }
     },
     {
@@ -3352,6 +3372,16 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "No permissions,grants,bootstrap,migrations or acceptance;actual accounts/venues/reviewers/allowances UNASSIGNED/DISABLED"
+      },
+      "identityGrantReadCapabilityEvidence": {
+        "decisionId": "CN-IDENTITY-GRANT-READ-APPROVAL-001",
+        "status": "OWNER_APPROVED_NAMED_CAPABILITY_POLICY_ONLY",
+        "evidencePath": "PROJECT.md#identity-grant-read-approval",
+        "capabilityPolicyGate": "SATISFIED",
+        "implementationStatus": "NOT_IMPLEMENTED_THIS_RECORDING_SESSION",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No grants/bootstrap/migrations;actual assignments UNASSIGNED/DISABLED;prior bounded backend read authority retained for subsequent work"
       }
     },
     {

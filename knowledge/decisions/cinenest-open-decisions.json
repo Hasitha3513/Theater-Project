@@ -827,6 +827,52 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "acceptanceStatus": "NOT_ACCEPTED",
         "normalizedPolicyPayloadSha256": "c9769d0e52ca862f36ad5af654bcb4b9329da4f3378879209593910c7647f011"
+      },
+      "boundedIdentityGrantReadApproval": {
+        "decisionId": "CN-IDENTITY-GRANT-READ-APPROVAL-001",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_CAPABILITY_DEFINITION",
+        "dateLocal": "2026-10-22",
+        "approvalSource": "Explicit owner message CN-IDENTITY-GRANT-READ-APPROVAL-001 in current conversation",
+        "canonicalSpecification": "PROJECT.md#identity-grant-read-approval",
+        "capability": "identity.grant.read",
+        "managedPermissions": [
+          "booking.synthetic.read",
+          "guest.synthetic.read"
+        ],
+        "requirements": [
+          "AUTHENTICATED_ELIGIBLE_CALLER",
+          "CURRENT_VENUE_MEMBERSHIP",
+          "ACTIVE_UNEXPIRED_EXACT_VENUE_IDENTITY_GRANT_READ",
+          "NO_CROSS_VENUE_STITCHING",
+          "NO_ACCOUNT_READ_BOOKING_READ_OR_ADMIN_LABEL_IMPLICATION",
+          "NO_SUPER_ADMIN_BYPASS"
+        ],
+        "excludedAuthority": [
+          "ASSIGN_PERMISSIONS",
+          "APPROVE_PROPOSALS",
+          "REVOKE_PERMISSIONS",
+          "CREATE_DELEGATION_ALLOWANCES",
+          "MODIFY_MEMBERSHIPS",
+          "PROVISION_ACCOUNTS",
+          "BOOTSTRAP_ADMINISTRATORS",
+          "MANAGE_FINANCIAL_OR_DEVICE_PERMISSIONS"
+        ],
+        "assignments": {
+          "identityGrantReadAssignments": "UNASSIGNED_DISABLED",
+          "bootstrapAccounts": "UNASSIGNED_DISABLED",
+          "venueAuthorities": "UNASSIGNED_DISABLED",
+          "delegationAllowances": "UNASSIGNED_DISABLED"
+        },
+        "auditMigrationBoundary": "MANDATORY_PROTECTED_READ_AUDIT_ONLY;NO_GRANT_ADMINISTRATION_ACTIVATION",
+        "capabilityPolicyGate": "SATISFIED_BY_EXPLICIT_OWNER_APPROVAL",
+        "sessionScope": "RECORD_CAPABILITY_DECISION_ONLY",
+        "runtimeCapabilityImplemented": false,
+        "grantsIssued": false,
+        "bootstrapExecuted": false,
+        "migrationsExecuted": false,
+        "broaderDecisionStatus": "OPEN_DECISION",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "normalizedPolicyPayloadSha256": "3da7c85e22f73eeb2c761037f454f4218de777d7b34b48cfd630d339e470eca4"
       }
     },
     {
@@ -1249,6 +1295,52 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "acceptanceStatus": "NOT_ACCEPTED",
         "normalizedPolicyPayloadSha256": "c9769d0e52ca862f36ad5af654bcb4b9329da4f3378879209593910c7647f011"
+      },
+      "boundedIdentityGrantReadApproval": {
+        "decisionId": "CN-IDENTITY-GRANT-READ-APPROVAL-001",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_CAPABILITY_DEFINITION",
+        "dateLocal": "2026-10-22",
+        "approvalSource": "Explicit owner message CN-IDENTITY-GRANT-READ-APPROVAL-001 in current conversation",
+        "canonicalSpecification": "PROJECT.md#identity-grant-read-approval",
+        "capability": "identity.grant.read",
+        "managedPermissions": [
+          "booking.synthetic.read",
+          "guest.synthetic.read"
+        ],
+        "requirements": [
+          "AUTHENTICATED_ELIGIBLE_CALLER",
+          "CURRENT_VENUE_MEMBERSHIP",
+          "ACTIVE_UNEXPIRED_EXACT_VENUE_IDENTITY_GRANT_READ",
+          "NO_CROSS_VENUE_STITCHING",
+          "NO_ACCOUNT_READ_BOOKING_READ_OR_ADMIN_LABEL_IMPLICATION",
+          "NO_SUPER_ADMIN_BYPASS"
+        ],
+        "excludedAuthority": [
+          "ASSIGN_PERMISSIONS",
+          "APPROVE_PROPOSALS",
+          "REVOKE_PERMISSIONS",
+          "CREATE_DELEGATION_ALLOWANCES",
+          "MODIFY_MEMBERSHIPS",
+          "PROVISION_ACCOUNTS",
+          "BOOTSTRAP_ADMINISTRATORS",
+          "MANAGE_FINANCIAL_OR_DEVICE_PERMISSIONS"
+        ],
+        "assignments": {
+          "identityGrantReadAssignments": "UNASSIGNED_DISABLED",
+          "bootstrapAccounts": "UNASSIGNED_DISABLED",
+          "venueAuthorities": "UNASSIGNED_DISABLED",
+          "delegationAllowances": "UNASSIGNED_DISABLED"
+        },
+        "auditMigrationBoundary": "MANDATORY_PROTECTED_READ_AUDIT_ONLY;NO_GRANT_ADMINISTRATION_ACTIVATION",
+        "capabilityPolicyGate": "SATISFIED_BY_EXPLICIT_OWNER_APPROVAL",
+        "sessionScope": "RECORD_CAPABILITY_DECISION_ONLY",
+        "runtimeCapabilityImplemented": false,
+        "grantsIssued": false,
+        "bootstrapExecuted": false,
+        "migrationsExecuted": false,
+        "broaderDecisionStatus": "OPEN_DECISION",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "normalizedPolicyPayloadSha256": "3da7c85e22f73eeb2c761037f454f4218de777d7b34b48cfd630d339e470eca4"
       }
     },
     {
