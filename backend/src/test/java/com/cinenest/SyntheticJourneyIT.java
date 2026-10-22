@@ -45,6 +45,7 @@ class SyntheticJourneyIT {
         UUID invalidHold=null,rejectedRequest=null;
         Map<String,Object> rejectionBaseline=null,uploadBaseline=null;
         UUID uploadRequest=null;
+        Map<String,Object> calendarCounts=null;
         try {
             var builder=new ProcessBuilder("node",Path.of("../frontend/tests/synthetic-e2e.mjs").toAbsolutePath().toString());
             builder.redirectErrorStream(true);builder.redirectOutput(run.resolve("private-browser.log").toFile());
@@ -57,7 +58,22 @@ class SyntheticJourneyIT {
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if(op.equals("review")){
+                        if(op.equals("calendar-hold-read")){
+                            String phase=body.get("phase").toString();
+                            if(phase.equals("before")){assertThat(calendarCounts).isNull();calendarCounts=calendarCounts(fixture);assertThat(calendarCounts.values()).allMatch(v->v.equals(0L));response.putAll(calendarCounts);}
+                            else if(phase.equals("selected")){assertThat(calendarCounts).isNotNull();assertThat(calendarCounts(fixture)).isEqualTo(calendarCounts);response.putAll(calendarCounts);response.put("unchanged",true);}
+                            else if(phase.equals("held")||phase.equals("accepted")){
+                                assertThat(calendarCounts).isNotNull();response.putAll(calendarHoldRead(fixture,body));
+                                var counts=calendarCounts(fixture);assertThat(counts.get("holds")).isEqualTo(1L);assertThat(counts.get("blocks")).isEqualTo(1L);assertThat(counts.get("createCommands")).isEqualTo(1L);
+                                assertThat(counts.get("requests")).isEqualTo(0L);assertThat(counts.get("bookings")).isEqualTo(0L);
+                                long quotes=phase.equals("accepted")?1L:0L;assertThat(counts.get("quotes")).isEqualTo(quotes);assertThat(counts.get("acceptances")).isEqualTo(quotes);assertThat(counts.get("acceptCommands")).isEqualTo(quotes);
+                                if(phase.equals("accepted")){
+                                    assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation q JOIN cinenest_pricing.quotation_revision r ON r.quote_id=q.quote_id AND r.revision=q.current_revision JOIN cinenest_pricing.quotation_acceptance a ON a.quote_id=q.quote_id AND a.revision=r.revision JOIN cinenest_booking.reservation_hold h ON h.hold_id=q.hold_id JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id WHERE q.quote_id=:q AND q.hold_id=:h AND q.owner_id=:owner AND q.venue_id=:venue AND q.room_id=:room AND a.actor_id=q.owner_id AND a.content_hash=r.content_hash AND r.hold_revision=h.revision AND (r.snapshot->>'sessionStart')::timestamptz=b.session_start AND (r.snapshot->>'sessionEnd')::timestamptz=b.session_end").param("q",UUID.fromString(body.get("quoteId").toString())).param("h",UUID.fromString(body.get("holdId").toString())).param("owner",BankIntegrationTest.A).param("venue",BankIntegrationTest.VA).param("room",BankIntegrationTest.RID).query(Long.class).single()).isEqualTo(1L);
+                                    response.put("acceptedQuoteBindingVerified",true);
+                                }
+                                response.putAll(counts);
+                            }else throw new IllegalArgumentException("Unknown calendar observation phase");
+                        }else if(op.equals("review")){
                             fixture.work();fixture.reviewerGrants();
                             var r=fixture.json(fixture.signedIn("customer-a").get("/api/verification/requests/"+body.get("id")));
                             response=fixture.json(fixture.write(staff,"POST",fixture.reviewPath(r)+"/decisions",JSONObjectUtils.toJSONString(fixture.decision(r,body.get("verdict").toString()))));
@@ -153,6 +169,25 @@ class SyntheticJourneyIT {
             if(browser!=null&&browser.isAlive()){browser.destroy();if(!browser.waitFor(3,java.util.concurrent.TimeUnit.SECONDS)){browser.destroyForcibly();browser.waitFor();}}
             BankIntegrationTest.IDP.close();
         }
+    }
+    // Test-only SELECT observer: no production endpoint, state transition, audit write or private evidence.
+    private static Map<String,Object> calendarCounts(BankIntegrationTest f){
+        var result=new HashMap<String,Object>();
+        for(var entry:Map.of("holds","cinenest_booking.reservation_hold","blocks","cinenest_booking.inventory_block","quotes","cinenest_pricing.quotation","acceptances","cinenest_pricing.quotation_acceptance","requests","cinenest_payments.bank_payment_request","bookings","cinenest_booking.booking").entrySet())result.put(entry.getKey(),f.jdbc.sql("SELECT count(*) FROM "+entry.getValue()).query(Long.class).single());
+        result.put("createCommands",f.jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_command WHERE action='CREATE'").query(Long.class).single());
+        result.put("acceptCommands",f.jdbc.sql("SELECT count(*) FROM cinenest_pricing.quotation_command WHERE action='ACCEPT'").query(Long.class).single());return result;
+    }
+    private static Map<String,Object> calendarHoldRead(BankIntegrationTest f,Map<String,Object> body){
+        UUID hold=UUID.fromString(body.get("holdId").toString());
+        var row=f.jdbc.sql("SELECT h.state,h.revision,h.guests,h.timezone,h.created_at,h.expires_at,b.session_start,b.session_end,b.buffer_minutes,b.blocked_until,b.blocking,p.ttl_seconds,h.configuration=:configuration AS configuration_matches,clock_timestamp() AS observed_at FROM cinenest_booking.reservation_hold h JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id JOIN cinenest_booking.hold_policy p ON p.policy_id=h.policy_id WHERE h.hold_id=:h AND h.owner_id=:owner AND b.venue_id=:venue AND b.room_id=:room")
+            .param("h",hold).param("owner",BankIntegrationTest.A).param("venue",BankIntegrationTest.VA).param("room",BankIntegrationTest.RID).param("configuration",body.get("configuration").toString()).query().singleRow();
+        assertThat(row.get("state")).isEqualTo("ACTIVE");assertThat(row.get("blocking")).isEqualTo(true);assertThat(row.get("configuration_matches")).isEqualTo(true);assertThat(((Number)row.get("revision")).longValue()).isZero();
+        var result=new HashMap<String,Object>();
+        for(String field:List.of("created_at","expires_at","session_start","session_end","blocked_until","observed_at")){Object value=row.get(field);java.time.Instant instant=value instanceof java.sql.Timestamp t?t.toInstant():((java.time.OffsetDateTime)value).toInstant();result.put(field,instant.toString());}
+        assertThat(java.time.Instant.parse(result.get("expires_at").toString())).isAfter(java.time.Instant.parse(result.get("observed_at").toString()));
+        assertThat(java.time.Duration.between(java.time.Instant.parse(result.get("created_at").toString()),java.time.Instant.parse(result.get("expires_at").toString())).getSeconds()).isEqualTo(((Number)row.get("ttl_seconds")).longValue());
+        for(String field:List.of("state","guests","timezone","buffer_minutes","ttl_seconds"))result.put(field,row.get(field));
+        result.put("scopeVerified",true);result.put("configurationMatches",true);return result;
     }
     private static Map<String,Object> financialState(BankIntegrationTest fixture){
         Map<String,Object> state=new HashMap<>();

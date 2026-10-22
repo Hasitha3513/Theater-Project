@@ -4329,7 +4329,7 @@ def customer_calendar_ui_main():
 
 
 
-def inert_ci_main():
+def review_window_failure_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='268ce5f32298f20475b386cf0402e37154fbf848'
@@ -4385,6 +4385,77 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=customer_calendar_ui_main()
     if result==0:print('PASS exact bounded Synthetic review-window test-fixture correction; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='a5193e6fe663aafeb4f4eca6b28c9d930873518d'
+    owned={'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java', 'frontend/tests/synthetic-e2e.mjs'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added=set()
+    hashes={'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '3c7327333863d484b56366f364d99d03261e9d0a504b121378935777f8a1e160', 'knowledge/ARCHITECTURE.md': '9fad6a68e71cdbfbfcdee3b0065a7893b769f32e63955f2b07564f725bf49054', 'knowledge/PROGRESS.md': '0b8de8d15ae3b1177e343d81d8a6beb84cc22a4409af66037a762fc7ddee7fca', 'knowledge/execution/requirements.json': '24cbb94286ab16fc2316b905e9c63e1ea6a17e723241f106a7e8e59570e6cee0', 'knowledge/execution/status.json': '9d9ac89c053a8d6bbf09511ca27c35ba55db2e7776aa3eaa0d95dfedf7da5e88', 'frontend/tests/synthetic-e2e.mjs': '67274b80876d5e79978d10773bc53bdd9586e8639f114938c3631b6f30856000', 'knowledge/execution/test-plan.json': '258d1275872c3133f3ab7ccb992861b8eea1646c7ba8a364fabfa21d841e2412'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Real-backend calendar-to-hold campaign exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('calendarHoldE2eEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Real-backend calendar-to-hold campaign changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('calendarHoldE2eImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Real-backend calendar-to-hold campaign changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Real-backend calendar-to-hold campaign changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Real-backend calendar-to-hold campaign rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package!=original:errors.append('Review-window correction changed frontend/package authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Real-backend calendar-to-hold campaign rewrote prior design')
+    if not (R/'frontend/app/globals.css').read_text().startswith(prior('frontend/app/globals.css').decode()):errors.append('Real-backend calendar-to-hold campaign rewrote prior global styles')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Real-backend calendar-to-hold campaign promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Real-backend calendar-to-hold campaign unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Real-backend calendar-to-hold campaign changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    browser=(R/'frontend/tests/synthetic-e2e.mjs').read_text();previous=prior('frontend/tests/synthetic-e2e.mjs').decode()
+    def planned(text):return text[text.index('const planned = ['):text.index('let apiFailure;')]
+    if planned(browser)!=planned(previous):errors.append('Calendar handoff changed campaign IDs/denominator')
+    for name in ['scripts/verify-synthetic-e2e.py','scripts/test-synthetic-e2e.py','frontend/tests/safe-navigation.mjs','frontend/tests/upload-fault-proxy.mjs']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Calendar handoff changed admission/security/fault transport '+name)
+    evidence=json.loads((K/'execution/status.json').read_text())['calendarHoldE2eImplementation']
+    if evidence['counts']!={'PASS':24,'FAIL':0,'NOT_RUN':0} or evidence['executionCount']!=1:errors.append('Calendar campaign execution evidence drift')
+    for name,digest in evidence['executedSourceHashes'].items():
+        if name not in owned or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Calendar executed source changed '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=review_window_failure_main()
+    if result==0:print('PASS exact bounded Real-backend calendar-to-hold campaign; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

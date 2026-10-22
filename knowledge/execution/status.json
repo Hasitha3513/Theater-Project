@@ -8095,5 +8095,179 @@
     "tests": "609 backend incl295 Bank/27 Inventory/8 BankCreationRules/19 architecture;PostgreSQL18.6,V1-V19 migrations/startup;299 frontend,type/lint/build;8 classifier+10 admission PASS",
     "validation": "Knowledge/design and approved in-memory committed-source execution PASS;ordinary execution exactly2 pre-existing next-env findings;10 governance negative controls,92/92 traceability,28-task acyclic dependencies and whitespace PASS",
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
+  },
+  "calendarHoldE2eImplementation": {
+    "taskId": "CN-E2E-CALENDAR-HOLD-001",
+    "status": "REAL_BACKEND_CALENDAR_HANDOFF_VERIFIED_CAMPAIGN_24_PASS",
+    "evidencePath": "PROGRESS.md#calendar-hold-e2e",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance",
+    "changeSetId": "CN-E2E-CALENDAR-HOLD-001",
+    "baselineHead": "a5193e6fe663aafeb4f4eca6b28c9d930873518d",
+    "prerequisiteCI": "39717857824 COMPLETED/SUCCESS exact source",
+    "ownerAuthority": "Explicit bounded test enhancement and one24-scenario execution attachment2af47e7c-bf81-4458-bf1f-2b758df1493a",
+    "ownerRequestSha256": "4f3723f98a88b064973763fc241fc1654a6e4d45530602b1cbfa3646fe584470",
+    "counts": {
+      "PASS": 24,
+      "FAIL": 0,
+      "NOT_RUN": 0
+    },
+    "scenarioResults": [
+      {
+        "id": "startup",
+        "status": "PASS"
+      },
+      {
+        "id": "customer-discovery-auth",
+        "status": "PASS"
+      },
+      {
+        "id": "hold-quote-accept",
+        "status": "PASS"
+      },
+      {
+        "id": "verification-explicit-consent",
+        "status": "PASS"
+      },
+      {
+        "id": "E-pending-verification",
+        "status": "PASS"
+      },
+      {
+        "id": "independent-verification-api-support",
+        "status": "PASS"
+      },
+      {
+        "id": "explicit-bank-request",
+        "status": "PASS"
+      },
+      {
+        "id": "H-missing-CSRF",
+        "status": "PASS"
+      },
+      {
+        "id": "I-invalid-CSRF",
+        "status": "PASS"
+      },
+      {
+        "id": "J-cross-origin",
+        "status": "PASS"
+      },
+      {
+        "id": "L-idempotent-replay",
+        "status": "PASS"
+      },
+      {
+        "id": "M-changed-body-key",
+        "status": "PASS"
+      },
+      {
+        "id": "K-stale-readiness",
+        "status": "PASS"
+      },
+      {
+        "id": "claim-receipt-explicit",
+        "status": "PASS"
+      },
+      {
+        "id": "N-uncertain-upload",
+        "status": "PASS"
+      },
+      {
+        "id": "simulated-confirmation-api-support",
+        "status": "PASS"
+      },
+      {
+        "id": "C-wrong-owner",
+        "status": "PASS"
+      },
+      {
+        "id": "D-wrong-venue-grant",
+        "status": "PASS"
+      },
+      {
+        "id": "O-malformed-reference",
+        "status": "PASS"
+      },
+      {
+        "id": "P-safe-URLs",
+        "status": "PASS"
+      },
+      {
+        "id": "A-expired-quote",
+        "status": "PASS"
+      },
+      {
+        "id": "B-invalid-expired-hold",
+        "status": "PASS"
+      },
+      {
+        "id": "F-rejected-verification",
+        "status": "PASS"
+      },
+      {
+        "id": "G-expired-session",
+        "status": "PASS"
+      }
+    ],
+    "calendarObservation": {
+      "date": "2026-10-24",
+      "timezone": "Asia/Colombo",
+      "selectedStart": "2026-10-24T10:00",
+      "sessionStart": "2026-10-24T04:30:00Z",
+      "sessionEnd": "2026-10-24T07:30:00Z",
+      "blockedUntil": "2026-10-24T07:37:00Z",
+      "calendarStatus": 200,
+      "noAutomaticMutations": true,
+      "formHandoffVerified": true,
+      "previousPointCleared": true,
+      "pointStatus": 200,
+      "pointMatchesSelection": true,
+      "holdStatus": 200,
+      "persisted": {
+        "blocked_until": "2026-10-24T07:37:00Z",
+        "timezone": "Asia/Colombo",
+        "blocks": 1,
+        "acceptCommands": 0,
+        "configurationMatches": true,
+        "ttl_seconds": 600,
+        "scopeVerified": true,
+        "created_at": "2026-10-22T04:24:02.998302Z",
+        "controlOk": true,
+        "requests": 0,
+        "buffer_minutes": 7,
+        "session_start": "2026-10-24T04:30:00Z",
+        "acceptances": 0,
+        "quotes": 0,
+        "observed_at": "2026-10-22T04:24:03.038988Z",
+        "expires_at": "2026-10-22T04:34:02.998302Z",
+        "createCommands": 1,
+        "guests": 4,
+        "holds": 1,
+        "state": "ACTIVE",
+        "bookings": 0,
+        "session_end": "2026-10-24T07:30:00Z"
+      },
+      "quotation": {
+        "state": "ACCEPTED",
+        "revision": 1,
+        "totalMinor": "12352",
+        "currency": "LKR",
+        "bindingVerified": true
+      }
+    },
+    "executedSourceHashes": {
+      "frontend/tests/synthetic-e2e.mjs": "67274b80876d5e79978d10773bc53bdd9586e8639f114938c3631b6f30856000",
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "3c7327333863d484b56366f364d99d03261e9d0a504b121378935777f8a1e160"
+    },
+    "run": "cinenest-e2e-wzhvvqxs",
+    "executionCount": 1,
+    "resourceAdmission": "Effective app3CPU/7GiB +PG1CPU/1GiB,pids128,tmpfs512MiB;600s runtime;no policy/harness-limit changes",
+    "executionResult": "SUCCESS;service42.832s,application peak1.3G,0swap",
+    "cleanup": "Owned container absent on harness daemon;service not-found/inactive/dead;ports released;private run absent;next-env original bytes restored",
+    "regressions": "609 backend/PostgreSQL/architecture +299 frontend/type/lint/build +8 classifier +10 admission PASS",
+    "validation": "Knowledge/design and approved in-memory committed-source execution/status PASS;ordinary execution exactly2 pre-existing next-env findings;12 governance negative controls,92/92 traceability,28-task acyclic dependencies and whitespace PASS",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
   }
 }

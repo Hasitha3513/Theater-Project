@@ -446,6 +446,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
+      },
+      "calendarHoldE2eEvidence": {
+        "taskId": "CN-E2E-CALENDAR-HOLD-001",
+        "status": "REAL_BACKEND_CALENDAR_HANDOFF_VERIFIED_CAMPAIGN_24_PASS",
+        "evidencePath": "PROGRESS.md#calendar-hold-e2e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
       }
     },
     {
@@ -514,6 +522,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN."
+      },
+      "calendarHoldE2eEvidence": {
+        "taskId": "CN-E2E-CALENDAR-HOLD-001",
+        "status": "REAL_BACKEND_CALENDAR_HANDOFF_VERIFIED_CAMPAIGN_24_PASS",
+        "evidencePath": "PROGRESS.md#calendar-hold-e2e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
       }
     },
     {
@@ -2218,6 +2234,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
+      },
+      "calendarHoldE2eEvidence": {
+        "taskId": "CN-E2E-CALENDAR-HOLD-001",
+        "status": "REAL_BACKEND_CALENDAR_HANDOFF_VERIFIED_CAMPAIGN_24_PASS",
+        "evidencePath": "PROGRESS.md#calendar-hold-e2e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
       }
     },
     {
@@ -2374,6 +2398,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
+      },
+      "calendarHoldE2eEvidence": {
+        "taskId": "CN-E2E-CALENDAR-HOLD-001",
+        "status": "REAL_BACKEND_CALENDAR_HANDOFF_VERIFIED_CAMPAIGN_24_PASS",
+        "evidencePath": "PROGRESS.md#calendar-hold-e2e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
       }
     },
     {
@@ -2428,6 +2460,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
+      },
+      "calendarHoldE2eEvidence": {
+        "taskId": "CN-E2E-CALENDAR-HOLD-001",
+        "status": "REAL_BACKEND_CALENDAR_HANDOFF_VERIFIED_CAMPAIGN_24_PASS",
+        "evidencePath": "PROGRESS.md#calendar-hold-e2e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
       }
     },
     {
@@ -2569,6 +2609,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
+      },
+      "calendarHoldE2eEvidence": {
+        "taskId": "CN-E2E-CALENDAR-HOLD-001",
+        "status": "REAL_BACKEND_CALENDAR_HANDOFF_VERIFIED_CAMPAIGN_24_PASS",
+        "evidencePath": "PROGRESS.md#calendar-hold-e2e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
       }
     },
     {
@@ -2598,6 +2646,14 @@
           "frontend/tests/inventory-browser.mjs"
         ],
         "deferred": "Commercial quote/confirmation, full administration and actual physical readiness remain at future owning tasks"
+      },
+      "calendarHoldE2eEvidence": {
+        "taskId": "CN-E2E-CALENDAR-HOLD-001",
+        "status": "REAL_BACKEND_CALENDAR_HANDOFF_VERIFIED_CAMPAIGN_24_PASS",
+        "evidencePath": "PROGRESS.md#calendar-hold-e2e",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
       }
     },
     {

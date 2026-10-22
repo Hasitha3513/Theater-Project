@@ -30,7 +30,8 @@ let stage = "startup",
 	frontend;
 const requests = [];
 const observations = [];
-let financeObservation,
+let calendarObservation,
+    financeObservation,
 	expiryObservation,
 	invalidHoldObservation,
 	rejectionObservation,
@@ -296,15 +297,50 @@ try {
 	});
 	await scenario("hold-quote-accept", async () => {
 		await page.goto(base + "/rooms/" + config.room);
-		await page
-			.getByLabel("Customer start in venue local time")
-			.fill(config.local);
-		await page.getByLabel("Customer duration (minutes)").fill("180");
-		await page.getByLabel("Guests", { exact: true }).fill("4");
-		await page
-			.getByRole("button", { name: "Check inventory (no hold)", exact: true })
-			.click();
-		await clickResponse(page, "Create temporary inventory hold", "/api/holds");
+
+        const checkpoint=requests.length;
+        const before=await control({op:"calendar-hold-read",phase:"before"});
+        assert.equal(before.holds,0);assert.equal(before.quotes,0);
+        const date=config.local.split("T")[0],duration=180,guests=4;
+        await page.getByLabel("Calendar date (venue local)").fill(date);
+        await page.getByLabel("Calendar duration (minutes)").fill(String(duration));
+        await page.getByLabel("Calendar guests",{exact:true}).fill(String(guests));
+        const calendarPath=`/api/rooms/${config.room}/availability/calendar`;
+        const calendarResponse=page.waitForResponse(r=>new URL(r.url()).pathname===calendarPath&&r.request().method()==="GET");
+        await page.getByRole("button",{name:"Load availability calendar",exact:true}).click();
+        const cr=await calendarResponse;assert.equal(cr.status(),200);
+        assert.deepEqual([...new URL(cr.url()).searchParams.entries()],[['date',date],['durationMinutes',String(duration)],['guests',String(guests)]]);
+        const calendar=await cr.json();assert.equal(calendar.roomId,config.room);assert.equal(calendar.venueId,config.venue);assert.equal(calendar.date,date);assert.equal(calendar.durationMinutes,duration);assert.equal(calendar.guests,guests);assert.equal(calendar.complete,true);assert.equal(calendar.evidenceLevel,"INVENTORY_ONLY");assert.equal(calendar.items.length,1440);
+        const selected=calendar.items.find(i=>i.startLocal===config.local&&i.available===true);
+        assert.ok(selected,"Fixture start must actually be returned available by the server");
+        calendarObservation={date,timezone:calendar.timezone,selectedStart:selected.startLocal,sessionStart:selected.sessionStart,sessionEnd:selected.sessionEnd,blockedUntil:selected.blockedUntil,calendarStatus:cr.status(),noAutomaticMutations:false};
+        await page.getByText(`Venue local time · ${calendar.timezone}`,{exact:true}).waitFor();
+        // Establish a previous point result; selecting the calendar start must invalidate it.
+        await page.getByLabel("Customer start in venue local time").fill(selected.startLocal);
+        await page.getByLabel("Customer duration (minutes)").fill(String(duration));
+        await page.getByLabel("Guests",{exact:true}).fill(String(guests));
+        await clickResponse(page,"Check inventory (no hold)",`/api/rooms/${config.room}/availability`,"GET");
+        await page.getByRole("button",{name:"Create temporary inventory hold",exact:true}).waitFor();
+        await page.getByLabel(`Session start (${calendar.timezone})`).selectOption(selected.startLocal);
+        await page.getByRole("button",{name:"Use selected time",exact:true}).click();
+        assert.equal(await page.getByLabel("Customer start in venue local time").inputValue(),selected.startLocal);
+        assert.equal(await page.getByLabel("Customer duration (minutes)").inputValue(),String(duration));
+        assert.equal(await page.getByLabel("Guests",{exact:true}).inputValue(),String(guests));
+        assert.equal(await page.getByRole("button",{name:"Create temporary inventory hold",exact:true}).count(),0);
+        calendarObservation.formHandoffVerified=true;calendarObservation.previousPointCleared=true;
+        const unmutated=await control({op:"calendar-hold-read",phase:"selected"});assert.equal(unmutated.unchanged,true);
+        assert.equal(requests.slice(checkpoint).filter(r=>r.method!=="GET").length,0);calendarObservation.noAutomaticMutations=true;
+        const pointResponse=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/rooms/${config.room}/availability`&&r.request().method()==="GET");
+        await page.getByRole("button",{name:"Check inventory (no hold)",exact:true}).click();const pr=await pointResponse;assert.equal(pr.status(),200);
+        const pq=new URL(pr.url()).searchParams;assert.equal(pq.get("sessionStartLocal"),selected.startLocal);assert.equal(pq.get("durationMinutes"),String(duration));assert.equal(pq.get("guests"),String(guests));
+        const point=await pr.json();assert.equal(point.roomId,config.room);assert.equal(point.available,true);assert.equal(point.timezone,calendar.timezone);assert.equal(point.sessionStart,selected.sessionStart);assert.equal(point.sessionEnd,selected.sessionEnd);assert.equal(point.blockedUntil,selected.blockedUntil);
+        calendarObservation.pointStatus=pr.status();calendarObservation.pointMatchesSelection=true;
+        const hold=await clickResponse(page,"Create temporary inventory hold","/api/holds");
+        const held=await control({op:"calendar-hold-read",phase:"held",holdId:hold.holdId,configuration:point.configuration});
+        assert.equal(held.scopeVerified,true);assert.equal(held.configurationMatches,true);assert.equal(held.guests,guests);assert.equal(held.timezone,calendar.timezone);assert.equal(held.session_start,selected.sessionStart);assert.equal(held.session_end,selected.sessionEnd);assert.equal(held.blocked_until,selected.blockedUntil);assert.equal(held.buffer_minutes,point.bufferMinutes);assert.equal(held.expires_at,hold.expiresAt);assert.equal(hold.state,"ACTIVE");
+        assert.equal(requests.slice(checkpoint).filter(r=>r.method==="POST"&&r.path==="/api/holds").length,1);
+        calendarObservation.holdStatus=200;calendarObservation.persisted=held;
+
 		await page
 			.getByRole("button", {
 				name: "Load applicable synthetic package choices",
@@ -324,11 +360,12 @@ try {
 				"I reviewed this exact synthetic revision and all three disclosures",
 			)
 			.check();
-		await clickResponse(
-			page,
-			"Accept synthetic revision only",
-			`/api/quotes/${quote.quoteId}/accept`,
-		);
+        assert.equal(quote.state,"ISSUED");assert.equal(quote.revision,1);
+        assert.equal(quote.lines.reduce((sum,line)=>sum+BigInt(line.amountMinor),0n),BigInt(quote.totalMinor));
+        const accepted=await clickResponse(page,"Accept synthetic revision only",`/api/quotes/${quote.quoteId}/accept`);
+        for(const field of ["quoteId","revision","contentHash","totalMinor"])assert.equal(accepted[field],quote[field]);assert.equal(accepted.state,"ACCEPTED");
+        const acceptedRead=await control({op:"calendar-hold-read",phase:"accepted",holdId:hold.holdId,configuration:point.configuration,quoteId:quote.quoteId});assert.equal(acceptedRead.acceptedQuoteBindingVerified,true);
+        calendarObservation.quotation={state:accepted.state,revision:accepted.revision,totalMinor:accepted.totalMinor,currency:accepted.currency,bindingVerified:true};
 		await page
 			.getByRole("link", { name: "Continue to Verification", exact: true })
 			.click();
@@ -1427,6 +1464,7 @@ try {
 			"Real harness assertion/startup failure; raw private diagnostics not published",
 		apiFailure,
 		assertionFailure,
+		calendarObservation,
 		financeObservation,
 		expiryObservation,
 		invalidHoldObservation,
@@ -1446,7 +1484,8 @@ try {
 		JSON.stringify({
 			stage,
 			assertionFailure,
-			financeObservation,
+			calendarObservation,
+		financeObservation,
 			expiryObservation,
 			invalidHoldObservation,
 			rejectionObservation,
@@ -1479,6 +1518,7 @@ try {
 		`${run}/result.json`,
 		JSON.stringify({
 			syntheticOnly: true,
+            calendarObservation,
 			results,
 			environment: {
 				backendPid: config.backendPid,
