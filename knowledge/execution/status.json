@@ -8326,5 +8326,54 @@
     "syntheticCampaign": "Historical24 PASS/0 FAIL/0 NOT_RUN;not rerun",
     "validation": "PASS knowledge/design,isolated committed-source execution,92/92 traceability,28-task acyclic dependencies,16 negative controls,whitespace;ordinary execution retains2 existing next-env findings",
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
+  },
+  "scopedGrantAdminPolicyApproval": {
+    "decisionId": "CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001",
+    "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_POLICY",
+    "dateLocal": "2026-10-22",
+    "approvalSource": "Explicit owner message CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001 in current conversation",
+    "canonicalSpecification": "PROJECT.md#scoped-grant-admin-policy",
+    "managedPermissions": [
+      "booking.synthetic.read",
+      "guest.synthetic.read"
+    ],
+    "policyA": "Only the two listed synthetic venue-scoped staff-read permissions;all financial,evidence,access,device,publication and administrative delegation permissions excluded.",
+    "policyB": "Dedicated administration authority plus explicit owner-approved versioned exact-venue/exact-permission delegation allowances;possession alone is not delegation authority;no wildcard venue administration or Super Admin bypass.",
+    "policyC": "Proposer,approver and recipient must be three distinct eligible accounts;no self-grant,self-approval or delegation of administration authority through this workflow.",
+    "policyD": "Immediate explicit audited same-venue revocation of either managed permission regardless of issuer,excluding self-target and administration grants;no second approval delays restrictive revocation.",
+    "policyE": "Finite grant validity capped at8hours and additionally limited by current delegation authority;proposal lifetime capped at30minutes;reject new overlapping managed grants;missing required configuration fails closed.",
+    "policyF": "Removal of delegation authority invalidates affected pending proposals;existing approved recipient grants retain independent validity until expiry or separate revocation.",
+    "policyG": "Identity owns grant mutations,command receipts and mandatory audit;all commit atomically or roll back;idempotent retry and immutable history required.",
+    "maximumManagedGrantLifetimeSeconds": 28800,
+    "maximumProposalLifetimeSeconds": 1800,
+    "bootstrap": "Separate explicit audited owner-authorized bootstrap;DISABLED_UNTIL_SEPARATELY_CONFIGURED",
+    "allowanceApproval": "OWNER_APPROVED_VERSIONED_EXACT_VENUE_AND_PERMISSION",
+    "legacyOverlapTreatment": "PRESERVE_EXISTING_GRANTS_AND_REPORT_OVERLAPS_TRUTHFULLY;REJECT_NEW_OVERLAPPING_MANAGED_GRANTS;one revoked grant does not imply all effective authority removed",
+    "assignments": {
+      "bootstrapAccounts": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+      "venueAuthorities": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+      "independentReviewers": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+      "delegationAllowances": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION"
+    },
+    "implementationAuthorization": "NOT_GRANTED",
+    "runtimePermissionsCreated": false,
+    "bootstrapExecuted": false,
+    "grantsIssued": false,
+    "migrationsExecuted": false,
+    "fullDecisionStatus": "OPEN_DECISION",
+    "acceptanceStatus": "NOT_ACCEPTED",
+    "normalizedPolicyPayloadSha256": "c9769d0e52ca862f36ad5af654bcb4b9329da4f3378879209593910c7647f011",
+    "taskId": "CN-SCOPED-GRANT-ADMIN-DECISION-001",
+    "baselineHead": "a6cd977466a8e04c43e9b6044ad89929783476f2",
+    "prerequisiteCI": "39727581154 COMPLETED/SUCCESS exact source attempt1",
+    "existingAdminBankSummaryCI": "IMPLEMENTATION_VERIFIED_WITHIN_BOUNDED_SCOPE_NOT_ACCEPTANCE",
+    "proposedNextTask": {
+      "id": "CN-SCOPED-GRANT-READ-001",
+      "status": "PROPOSED_NOT_AUTHORIZED",
+      "scope": "One Identity-owned managed-grant GET and dedicated read authorization/mandatory audit;no frontend/commands/bootstrap;requires separate scope and additive audit migration approval",
+      "specification": "ARCHITECTURE.md#scoped-grant-admin-policy"
+    },
+    "validation": "PASS knowledge/design,isolated committed-source execution,92/92 traceability,28-task acyclic graph,15 negative controls,whitespace;ordinary execution retains2 pre-existing next-env findings",
+    "publication": "PENDING_SCOPED_DOCUMENTATION_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
   }
 }

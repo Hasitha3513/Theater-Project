@@ -4462,7 +4462,7 @@ def calendar_hold_e2e_main():
 
 
 
-def inert_ci_main():
+def admin_bank_summary_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='453cec942df63214b9b6961b40cdc1c1b26e8b9b'
@@ -4522,6 +4522,87 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=calendar_hold_e2e_main()
     if result==0:print('PASS exact bounded Protected synthetic admin bank summary; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='a6cd977466a8e04c43e9b6044ad89929783476f2'
+    owned=set()
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/status.json', 'knowledge/execution/test-plan.json', 'knowledge/decisions/cinenest-open-decisions.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROJECT.md', 'knowledge/PROGRESS.md'}
+    added=set()
+    hashes={'knowledge/execution/requirements.json': '6ec1aa5a3537e6d4ff1af0770676e725dd6ec62e3f031d55512be9cba4a6e349', 'knowledge/execution/test-plan.json': '22f90b62405d3a5e8cc6be92c9cdada146bfe89eac853ba43f052b941c7a8907', 'knowledge/ARCHITECTURE.md': '9bf8acb9613be4f7d2c69ffdf555c41a4f9008eaef8042969e5a721254d23333', 'knowledge/PROJECT.md': '36ad0535e16c2edcdb244301bd512a09e1cd0e0cd05d10bb75c546dd31fd3071', 'knowledge/PROGRESS.md': '9d56fa498c150d11372ef2aa5bdb249a96b4adcd4aa226bacfa9616480c1b7f4', 'knowledge/execution/status.json': 'b761a963dd6de30e1d43236f0afac0f67dfa0696e052d80515938f18438af80b', 'knowledge/decisions/cinenest-open-decisions.json': '67910baa6e10f185de9efec5ba89783b784a211a01f41e1f1ad768aff0c747ad'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Bounded owner-approved scoped grant policy exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('scopedGrantAdminPolicyEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Bounded owner-approved scoped grant policy changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('scopedGrantAdminPolicyApproval',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Bounded owner-approved scoped grant policy changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded owner-approved scoped grant policy changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Bounded owner-approved scoped grant policy rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package!=original:errors.append('Summary changed dependency or unrelated frontend/package authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Bounded owner-approved scoped grant policy rewrote prior design')
+    # Exact scoped stylesheet bytes are pinned above; unrelated changes remain rejected.
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Bounded owner-approved scoped grant policy promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Bounded owner-approved scoped grant policy unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded owner-approved scoped grant policy changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['frontend/components/bank-report.tsx','frontend/lib/bank-backend.ts','frontend/lib/session.ts','frontend/lib/rooms.ts','backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java','backend/src/main/java/com/cinenest/payments/BankBalanceReport.java','frontend/tests/synthetic-e2e.mjs','backend/src/test/java/com/cinenest/SyntheticJourneyIT.java']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Summary changed protected existing contract/campaign '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    decisions=json.loads((K/'decisions/cinenest-open-decisions.json').read_text())
+    policies=[]
+    for row in decisions['decisions']:
+        if row['id'] in ('OD-18','OD-28'):
+            policies.append(row.pop('boundedScopedGrantAdminApproval',None))
+            if row['decisionStatus']!='OPEN_DECISION':errors.append('Grant policy closed global decision')
+    if decisions!=json.loads(prior('knowledge/decisions/cinenest-open-decisions.json')):errors.append('Grant policy changed unrelated decisions/history')
+    if len(policies)!=2 or policies[0]!=policies[1]:errors.append('Bounded policy records disagree')
+    policy=policies[0] or {}
+    if policy.get('managedPermissions')!=['booking.synthetic.read','guest.synthetic.read'] or policy.get('maximumManagedGrantLifetimeSeconds')!=28800 or policy.get('maximumProposalLifetimeSeconds')!=1800:errors.append('Grant policy scope/lifetime drift')
+    if policy.get('implementationAuthorization')!='NOT_GRANTED' or any(policy.get(k)!=False for k in ('runtimePermissionsCreated','bootstrapExecuted','grantsIssued','migrationsExecuted')):errors.append('Grant policy expanded runtime authority')
+    if set(policy.get('assignments',{}).values())!={'UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION'}:errors.append('Grant policy invented appointments')
+    original=(K/'PROJECT.md').read_text()
+    if not original.startswith(prior('knowledge/PROJECT.md').decode()):errors.append('Grant policy rewrote historical product rules')
+    payload=dict(policy);digest=payload.pop('normalizedPolicyPayloadSha256',None)
+    if hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()!=digest:errors.append('Normalized owner policy payload checksum mismatch')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=admin_bank_summary_main()
+    if result==0:print('PASS exact bounded Bounded owner-approved scoped grant policy; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

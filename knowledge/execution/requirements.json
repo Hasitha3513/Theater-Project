@@ -1770,6 +1770,15 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN."
+      },
+      "scopedGrantAdminPolicyEvidence": {
+        "decisionId": "CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_POLICY_ONLY",
+        "evidencePath": "PROJECT.md#scoped-grant-admin-policy",
+        "implementationAuthorization": "NOT_GRANTED",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No permissions,grants,bootstrap,migrations or acceptance;actual accounts/venues/reviewers/allowances UNASSIGNED/DISABLED"
       }
     },
     {
@@ -2079,6 +2088,15 @@
           "frontend/tests/staff-bookings-browser.mjs"
         ],
         "limits": "Frontend read-only proxy/list/detail integration; intercepted browser APIs are presentation evidence, not real backend/E2E or formal acceptance."
+      },
+      "scopedGrantAdminPolicyEvidence": {
+        "decisionId": "CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_POLICY_ONLY",
+        "evidencePath": "PROJECT.md#scoped-grant-admin-policy",
+        "implementationAuthorization": "NOT_GRANTED",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No permissions,grants,bootstrap,migrations or acceptance;actual accounts/venues/reviewers/allowances UNASSIGNED/DISABLED"
       }
     },
     {
@@ -3325,6 +3343,15 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing synthetic credit summary only;no new metrics or production finance/full reporting acceptance"
+      },
+      "scopedGrantAdminPolicyEvidence": {
+        "decisionId": "CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_POLICY_ONLY",
+        "evidencePath": "PROJECT.md#scoped-grant-admin-policy",
+        "implementationAuthorization": "NOT_GRANTED",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No permissions,grants,bootstrap,migrations or acceptance;actual accounts/venues/reviewers/allowances UNASSIGNED/DISABLED"
       }
     },
     {

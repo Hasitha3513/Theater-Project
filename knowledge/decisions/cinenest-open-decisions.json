@@ -790,6 +790,43 @@
         "approvalSource": "Owner instruction and attachment a05eb028-208e-4fe1-9310-1728833e5ed7",
         "canonicalSpecification": "ARCHITECTURE.md#admin-read-boundary",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedScopedGrantAdminApproval": {
+        "decisionId": "CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-22",
+        "approvalSource": "Explicit owner message CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001 in current conversation",
+        "canonicalSpecification": "PROJECT.md#scoped-grant-admin-policy",
+        "managedPermissions": [
+          "booking.synthetic.read",
+          "guest.synthetic.read"
+        ],
+        "policyA": "Only the two listed synthetic venue-scoped staff-read permissions;all financial,evidence,access,device,publication and administrative delegation permissions excluded.",
+        "policyB": "Dedicated administration authority plus explicit owner-approved versioned exact-venue/exact-permission delegation allowances;possession alone is not delegation authority;no wildcard venue administration or Super Admin bypass.",
+        "policyC": "Proposer,approver and recipient must be three distinct eligible accounts;no self-grant,self-approval or delegation of administration authority through this workflow.",
+        "policyD": "Immediate explicit audited same-venue revocation of either managed permission regardless of issuer,excluding self-target and administration grants;no second approval delays restrictive revocation.",
+        "policyE": "Finite grant validity capped at8hours and additionally limited by current delegation authority;proposal lifetime capped at30minutes;reject new overlapping managed grants;missing required configuration fails closed.",
+        "policyF": "Removal of delegation authority invalidates affected pending proposals;existing approved recipient grants retain independent validity until expiry or separate revocation.",
+        "policyG": "Identity owns grant mutations,command receipts and mandatory audit;all commit atomically or roll back;idempotent retry and immutable history required.",
+        "maximumManagedGrantLifetimeSeconds": 28800,
+        "maximumProposalLifetimeSeconds": 1800,
+        "bootstrap": "Separate explicit audited owner-authorized bootstrap;DISABLED_UNTIL_SEPARATELY_CONFIGURED",
+        "allowanceApproval": "OWNER_APPROVED_VERSIONED_EXACT_VENUE_AND_PERMISSION",
+        "legacyOverlapTreatment": "PRESERVE_EXISTING_GRANTS_AND_REPORT_OVERLAPS_TRUTHFULLY;REJECT_NEW_OVERLAPPING_MANAGED_GRANTS;one revoked grant does not imply all effective authority removed",
+        "assignments": {
+          "bootstrapAccounts": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+          "venueAuthorities": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+          "independentReviewers": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+          "delegationAllowances": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION"
+        },
+        "implementationAuthorization": "NOT_GRANTED",
+        "runtimePermissionsCreated": false,
+        "bootstrapExecuted": false,
+        "grantsIssued": false,
+        "migrationsExecuted": false,
+        "fullDecisionStatus": "OPEN_DECISION",
+        "acceptanceStatus": "NOT_ACCEPTED",
+        "normalizedPolicyPayloadSha256": "c9769d0e52ca862f36ad5af654bcb4b9329da4f3378879209593910c7647f011"
       }
     },
     {
@@ -1175,6 +1212,43 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "realPayments": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedScopedGrantAdminApproval": {
+        "decisionId": "CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001",
+        "status": "OWNER_APPROVED_BOUNDED_SYNTHETIC_POLICY",
+        "dateLocal": "2026-10-22",
+        "approvalSource": "Explicit owner message CN-SCOPED-GRANT-ADMIN-POLICY-APPROVAL-001 in current conversation",
+        "canonicalSpecification": "PROJECT.md#scoped-grant-admin-policy",
+        "managedPermissions": [
+          "booking.synthetic.read",
+          "guest.synthetic.read"
+        ],
+        "policyA": "Only the two listed synthetic venue-scoped staff-read permissions;all financial,evidence,access,device,publication and administrative delegation permissions excluded.",
+        "policyB": "Dedicated administration authority plus explicit owner-approved versioned exact-venue/exact-permission delegation allowances;possession alone is not delegation authority;no wildcard venue administration or Super Admin bypass.",
+        "policyC": "Proposer,approver and recipient must be three distinct eligible accounts;no self-grant,self-approval or delegation of administration authority through this workflow.",
+        "policyD": "Immediate explicit audited same-venue revocation of either managed permission regardless of issuer,excluding self-target and administration grants;no second approval delays restrictive revocation.",
+        "policyE": "Finite grant validity capped at8hours and additionally limited by current delegation authority;proposal lifetime capped at30minutes;reject new overlapping managed grants;missing required configuration fails closed.",
+        "policyF": "Removal of delegation authority invalidates affected pending proposals;existing approved recipient grants retain independent validity until expiry or separate revocation.",
+        "policyG": "Identity owns grant mutations,command receipts and mandatory audit;all commit atomically or roll back;idempotent retry and immutable history required.",
+        "maximumManagedGrantLifetimeSeconds": 28800,
+        "maximumProposalLifetimeSeconds": 1800,
+        "bootstrap": "Separate explicit audited owner-authorized bootstrap;DISABLED_UNTIL_SEPARATELY_CONFIGURED",
+        "allowanceApproval": "OWNER_APPROVED_VERSIONED_EXACT_VENUE_AND_PERMISSION",
+        "legacyOverlapTreatment": "PRESERVE_EXISTING_GRANTS_AND_REPORT_OVERLAPS_TRUTHFULLY;REJECT_NEW_OVERLAPPING_MANAGED_GRANTS;one revoked grant does not imply all effective authority removed",
+        "assignments": {
+          "bootstrapAccounts": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+          "venueAuthorities": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+          "independentReviewers": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION",
+          "delegationAllowances": "UNASSIGNED_DISABLED_REQUIRES_SEPARATE_AUTHORIZATION"
+        },
+        "implementationAuthorization": "NOT_GRANTED",
+        "runtimePermissionsCreated": false,
+        "bootstrapExecuted": false,
+        "grantsIssued": false,
+        "migrationsExecuted": false,
+        "fullDecisionStatus": "OPEN_DECISION",
+        "acceptanceStatus": "NOT_ACCEPTED",
+        "normalizedPolicyPayloadSha256": "c9769d0e52ca862f36ad5af654bcb4b9329da4f3378879209593910c7647f011"
       }
     },
     {
