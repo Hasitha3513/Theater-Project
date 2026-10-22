@@ -1102,6 +1102,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Test-only customer navigation allowlist and scenario isolation;real browser/Next/proxy/Boot/PostgreSQL;20 PASS/0 FAIL/4 NOT_RUN,not full acceptance."
+      },
+      "reviewWindowFailureEvidence": {
+        "taskId": "CN-CI-REVIEW-WINDOW-FAILURE-001",
+        "status": "LOCALLY_VERIFIED_TEST_FIXTURE_CORRECTION",
+        "evidencePath": "PROGRESS.md#review-window-ci-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
       }
     },
     {
@@ -2567,6 +2575,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/authenticated proxy/Boot/PostgreSQL payment-receipt lost acknowledgement,QUARANTINED reload and explicit same-allocation completion without byte resend;24 PASS/0 FAIL/0 NOT_RUN. Bounded synthetic campaign only,not full requirement acceptance."
+      },
+      "reviewWindowFailureEvidence": {
+        "taskId": "CN-CI-REVIEW-WINDOW-FAILURE-001",
+        "status": "LOCALLY_VERIFIED_TEST_FIXTURE_CORRECTION",
+        "evidencePath": "PROGRESS.md#review-window-ci-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
       }
     },
     {
@@ -3245,6 +3261,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only calendar UI and explicit preparation of existing inventory form only;no automatic commands,new policy,physical readiness or formal acceptance"
+      },
+      "reviewWindowFailureEvidence": {
+        "taskId": "CN-CI-REVIEW-WINDOW-FAILURE-001",
+        "status": "LOCALLY_VERIFIED_TEST_FIXTURE_CORRECTION",
+        "evidencePath": "PROGRESS.md#review-window-ci-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
       }
     },
     {
@@ -5163,6 +5187,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/authenticated proxy/Boot/PostgreSQL payment-receipt lost acknowledgement,QUARANTINED reload and explicit same-allocation completion without byte resend;24 PASS/0 FAIL/0 NOT_RUN. Bounded synthetic campaign only,not full requirement acceptance."
+      },
+      "reviewWindowFailureEvidence": {
+        "taskId": "CN-CI-REVIEW-WINDOW-FAILURE-001",
+        "status": "LOCALLY_VERIFIED_TEST_FIXTURE_CORRECTION",
+        "evidencePath": "PROGRESS.md#review-window-ci-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
       }
     },
     {
@@ -5301,6 +5333,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN."
+      },
+      "reviewWindowFailureEvidence": {
+        "taskId": "CN-CI-REVIEW-WINDOW-FAILURE-001",
+        "status": "LOCALLY_VERIFIED_TEST_FIXTURE_CORRECTION",
+        "evidencePath": "PROGRESS.md#review-window-ci-remediation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
       }
     },
     {

@@ -4266,7 +4266,7 @@ def calendar_backend_main():
 
 
 
-def inert_ci_main():
+def customer_calendar_ui_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='c49e51e0d3365b11bc57d7ade3791ff4841243d7'
@@ -4324,6 +4324,67 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=calendar_backend_main()
     if result==0:print('PASS exact bounded Customer availability calendar UI; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='268ce5f32298f20475b386cf0402e37154fbf848'
+    owned={'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/payments/internal/BankCreationRulesTest.java'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added=set()
+    hashes={'knowledge/execution/test-plan.json': 'ac2e02e3425dad4bd2ab056a1954f01c890aeefbbbc76bd1c51e640f3753f777', 'knowledge/execution/status.json': 'e8db22a0a2ba047196906d8312ecf9c3b2b7a894dd3b021c4f17b924b12b91eb', 'knowledge/PROGRESS.md': '6ab4e18da360f25611dc620f4a6a052df2937bb3bd75140537e9d78ea47d6736', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'f100eb3414922895a3077a813daf5d725086a0ef5984a77b4bc4b8d25a42e8b4', 'knowledge/ARCHITECTURE.md': '82133d642a38e5f0ad31edd64ba7bcb4898a4c3e91f4448e4c60a818594654ea', 'knowledge/execution/requirements.json': '7cd00a622cfe45e9b589753a53ede780fd22288810b92d45f2493407bd8da905', 'backend/src/test/java/com/cinenest/payments/internal/BankCreationRulesTest.java': '6acb7036e16549bbc88646d811b19e6720625e35972d9c257dab16ce4d163145'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Synthetic review-window test-fixture correction exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('reviewWindowFailureEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Synthetic review-window test-fixture correction changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('reviewWindowFailureImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Synthetic review-window test-fixture correction changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Synthetic review-window test-fixture correction changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Synthetic review-window test-fixture correction rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package!=original:errors.append('Review-window correction changed frontend/package authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Synthetic review-window test-fixture correction rewrote prior design')
+    if not (R/'frontend/app/globals.css').read_text().startswith(prior('frontend/app/globals.css').decode()):errors.append('Synthetic review-window test-fixture correction rewrote prior global styles')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Synthetic review-window test-fixture correction promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Synthetic review-window test-fixture correction unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Synthetic review-window test-fixture correction changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=customer_calendar_ui_main()
+    if result==0:print('PASS exact bounded Synthetic review-window test-fixture correction; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

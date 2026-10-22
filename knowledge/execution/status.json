@@ -8076,5 +8076,24 @@
       }
     ],
     "visualComparison": "All3 approved references and6 actual before/after screens visually inspected;3/2/1 input columns,3-column desktop selected summary,light rounded panels,violet44px controls,one main,no horizontal overflow. Existing longer detail layout retained;native browser date format differs from ISO storage. Fixed skip-link appears in some tall-page automated captures;existing shell not changed or hidden to improve screenshots."
+  },
+  "reviewWindowFailureImplementation": {
+    "taskId": "CN-CI-REVIEW-WINDOW-FAILURE-001",
+    "status": "LOCALLY_VERIFIED_TEST_FIXTURE_CORRECTION",
+    "evidencePath": "PROGRESS.md#review-window-ci-remediation",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged",
+    "changeSetId": "CN-CI-REVIEW-WINDOW-FAILURE-001",
+    "baselineHead": "268ce5f32298f20475b386cf0402e37154fbf848",
+    "failedCI": "39652967162 COMPLETED/FAILURE exact baseline;backend607 tests,2 failures;frontend/governance skipped",
+    "ownerAuthority": "Explicit bounded test-fixture remediation attachment292d3de2-8f4c-4305-86d4-66d0f1ebc006",
+    "ownerRequestSha256": "9135bd466c285cc1235c6b4f7cc3ce82de561456b986eb7fc3267acd351b4de3",
+    "rootCause": "Exclusive positive-fixture close23:59:59 creates one-second venue-local gap;CI serverNow18:29:59.792086Z is23:59:59.792086Colombo;timing refusal correctly precedes hold conversion",
+    "correction": "Only test annotation close\u219223:59:59.999999999;2 pure regression methods cover54 explicit date/zone/time cases and exact-close rejection;all existing assertions/production code unchanged",
+    "reproduction": "Original tests independently/together PASS outside gap;controlled closed-window independently/together reproduces both exact failures;deterministic positive-window regression FAIL before/PASS after;corrected original tests independently/together PASS",
+    "tests": "609 backend incl295 Bank/27 Inventory/8 BankCreationRules/19 architecture;PostgreSQL18.6,V1-V19 migrations/startup;299 frontend,type/lint/build;8 classifier+10 admission PASS",
+    "validation": "Knowledge/design and approved in-memory committed-source execution PASS;ordinary execution exactly2 pre-existing next-env findings;10 governance negative controls,92/92 traceability,28-task acyclic dependencies and whitespace PASS",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
   }
 }
