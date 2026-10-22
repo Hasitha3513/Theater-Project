@@ -8723,5 +8723,28 @@
     ],
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
     "visualComparison": "All3 references inspected;admin primary. Navy240px desktop sidebar retained;light cards,violet action,explicit total32px;new report filters/metadata2 columns>=768 and1 mobile;equal-width table columns correct narrow count headers.375/768/1280 each one main and zero horizontal overflow. Actual counts/metadata only;not pixel-perfect full reference dashboard."
+  },
+  "productDocumentation": {
+    "task": "CN-PRODUCT-DOCUMENTATION-001",
+    "source": "24b73caf16eebda1490d0f3552c268d15e024229",
+    "sourceCI": 39807842759,
+    "sourceCIConclusion": "SUCCESS",
+    "features": 26,
+    "workflows": 21,
+    "roles": 6,
+    "screenshots": 4,
+    "applicationChanged": false,
+    "acceptanceChanged": false,
+    "publicationCI": "PENDING",
+    "validation": {
+      "knowledge": "PASS",
+      "isolatedExecution": "PASS",
+      "requirementTraceability": "92/92",
+      "acyclicTasks": 28,
+      "governanceNegativeControls": 44,
+      "classifierRegressions": 8,
+      "whitespace": "PASS",
+      "ordinaryExecution": "two pre-existing next-env findings"
+    }
   }
 }

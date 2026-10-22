@@ -47,6 +47,7 @@ def main():
     test_p1_c03_closure_controls(validator)
     test_p2_c06_closure_controls(validator)
     test_booking_confirmation_controls(validator)
+    test_product_documentation_controls()
 
 
 def test_future_register_controls():
@@ -176,5 +177,16 @@ def test_booking_confirmation_controls(validator):
         print('PASS confirmation reporting rejected',label)
     print('PASS confirmation reporting:8 in-memory negative controls')
 
+
+
+def test_product_documentation_controls():
+    module=runpy.run_path(str(K/'validate_design_kb.py'))
+    path=K/'product/FEATURE_CATALOG.md';original=path.read_text()
+    for label,replacement in [('duplicate ID',original.replace('## DOC-F002 —','## DOC-F001 —')),('invalid status',original.replace('| Implementation status | PARTIAL |','| Implementation status | LIVE |',1)),('invalid requirement',original.replace('/ CN-C02 / T-CN-C02','/ CN-FAKE / T-CN-C02',1)),('missing synthetic warning',original.replace('production NOT AUTHORIZED','production authorized')),('broken source',original.replace('session-panel.tsx','missing-source.tsx'))]:
+        rt=Path.read_text;errors=[]
+        with patch.object(Path,'read_text',lambda p,*a,**kw:replacement if p==path else rt(p,*a,**kw)):
+            module['validate_product_documentation'](lambda ok,message:errors.append(message) if not ok else None)
+        assert errors,'Product documentation accepted '+label
+        print('PASS product documentation rejected',label)
 
 if __name__ == '__main__': main()

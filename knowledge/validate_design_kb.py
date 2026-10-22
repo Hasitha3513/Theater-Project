@@ -177,8 +177,9 @@ def validate_consolidation(check):
         'role': 'supplementary-discovery-register', 'canonical': False,
         'mvpAuthority': 'execution/requirements.json;execution/test-plan.json;execution/change-sets.json;PROGRESS.md#mvp-roadmap'
     }, 'Supplementary backlog authority/role mismatch')
-    check(current_md == ({name for name in removal_tree if name.endswith('.md')} - expected) | {supplement}, 'New narrative file or unlisted narrative deletion')
+    check(current_md == ({name for name in removal_tree if name.endswith('.md')} - expected) | {supplement, 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'}, 'New narrative file or unlisted narrative deletion')
     validate_future_features(check)
+    validate_product_documentation(check)
     mapping = {(repo / e['sourcePath']).resolve(): (repo / e['canonicalPath'], e['anchor']) for e in entries}
     for e in entries:
         raw = subprocess.check_output(['git', '-C', str(repo), 'show', migration['baselineRevision'] + ':' + e['sourcePath']])
@@ -281,6 +282,41 @@ def luminance(hex_value):
     linear = [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in channels]
     return sum(x * weight for x, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
 
+
+
+def validate_product_documentation(check):
+    """Owner-authorized supplementary implemented catalogue and training guide, never acceptance."""
+    root=ROOT.parent
+    catalog=ROOT/'product/FEATURE_CATALOG.md';guide=ROOT/'guides/USER_GUIDE.md'
+    check(catalog.is_file() and guide.is_file(),'Missing authorized product documentation')
+    if not catalog.is_file() or not guide.is_file():return
+    text=catalog.read_text();training=guide.read_text()
+    ids=re.findall(r'^## (DOC-F[0-9]{3}) —',text,re.M)
+    workflows=re.findall(r'^### (UG-[0-9]{3}) —',training,re.M)
+    check(len(ids)>=26 and len(ids)==len(set(ids)),'Missing/duplicate documented feature IDs')
+    check(len(workflows)>=21 and len(workflows)==len(set(workflows)),'Missing/duplicate guide workflow IDs')
+    reqs={x['id'] for x in json.loads((ROOT/'execution/requirements.json').read_text())['requirements']}
+    tests={x['id'] for x in json.loads((ROOT/'execution/test-plan.json').read_text())['tests']}
+    progress=(ROOT/'PROGRESS.md').read_text();criteria=set(re.findall(r'\*\*(P[0-9]+-C[0-9]+)\*\*',progress))
+    for record in re.split(r'^## DOC-F[0-9]{3} —',text,flags=re.M)[1:]:
+        check(bool(re.search(r'\| Implementation status \| (IMPLEMENTED|VERIFIED|PARTIAL|SIMULATED|DEFERRED|BLOCKED|NOT_IMPLEMENTED) \|',record)),'Invalid feature implementation status')
+        refs=re.search(r'\| MVP / requirement / test plan \| (P[0-9]+-C[0-9]+) / ([A-Z0-9-]+) / ([A-Z0-9-]+) \|',record)
+        check(bool(refs) and refs[1] in criteria and refs[2] in reqs and refs[3] in tests,'Invalid feature requirement/test/criterion reference')
+        for field in ['Category / module','Intended user','Description / available functionality','Operational classification','Demo availability','Required permissions','Known limitations','Automated test evidence','Source','Screenshot','Last verified commit / CI']:
+            check('| '+field+' |' in record,'Missing feature field '+field)
+    for role in ['Customer','Reception / Front Desk Staff','Finance Staff','Venue Manager','System Administrator','Operations / Maintenance Staff']:
+        check('## '+role+'\n' in training,'Missing role training '+role)
+    for notice in ['production NOT AUTHORIZED','SIMULATED_CONFIRMED','P9-C02 remains unchecked','browser-test captures','not implemented-function evidence']:
+        check(notice in text,'Missing product truth '+notice)
+    check('සැබෑ' in training and 'UNASSIGNED' in training and 'DISABLED' in training,'Missing Sinhala/synthetic/authorization restrictions')
+    for doc in [catalog,guide]:
+        for target in re.findall(r'\]\(([^)]+)\)',doc.read_text()):
+            if target.startswith(('https:','http:','#')):continue
+            name,_,anchor=unquote(target).partition('#');dest=(doc.parent/name).resolve()
+            check(dest.is_file(),'Broken product documentation link '+target)
+            if anchor and dest.is_file() and dest.suffix=='.md':
+                check('id="'+anchor+'"' in dest.read_text() or anchor in {'screenshot-provenance-and-coverage','synthetic-booking-confirmation-report'},'Broken product anchor '+anchor)
+    for feature in ids:check('id="'+feature.lower()+'"' in text,'Missing stable feature anchor '+feature)
 
 def main():
     errors = []

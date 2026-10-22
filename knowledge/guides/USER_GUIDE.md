@@ -1,0 +1,306 @@
+# CineNest User Guide — පරිශීලක මාර්ගෝපදේශය
+
+Version: source `24b73caf16eebda1490d0f3552c268d15e024229`, 2026-10-22. [CI 39807842759 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39807842759). [Feature catalogue](../product/FEATURE_CATALOG.md). මෙම guide එක software instructions පමණි; production හෝ formal acceptance නොවේ.
+
+## භාවිතයට පෙර
+
+මෙය **SYNTHETIC DEMONSTRATION ONLY** පරිසරය සඳහාය. Operator සකසා දුන් isolated test පරිසරයක්, test account/session හා අවශ්‍ය venue-scoped grants තිබිය යුතුය. සැබෑ NIC/passport, bank receipt, මුදල්, credentials හෝ device commands භාවිත නොකරන්න. Role headings රැකියා වගකීම් අනුව navigation පහසු කිරීමට පමණි; Administrator යන නමෙන් bypass නොලැබේ. මේ ලේඛනයෙන් account, grant, appointment හෝ bootstrap සාදන්නේ නැත.
+
+## පොදු errors සහ ආරක්ෂාව
+
+401 / Session expired: protected තොරතුරු තවදුරටත් විශ්වාස නොකර operator අනුමත login මගින් session නැවත තහවුරු කරන්න. 403: නිවැරදි venue සහ වෙනම permission අවශ්‍යයි; නැවත නැවත submit නොකරන්න. 404: reference සහ ownership තහවුරු කරන්න; වෙනත් customer reference සොයන්න එපා. 409 / Stale: context/revision නැවත load කර වෙනස්කම් කියවා explicit consent/action නැවත දෙන්න. 429/503/network error: success හෝ zero අනුමාන නොකරන්න; UI ලබාදෙන explicit retry පමණක් භාවිත කරන්න. Mutation outcome unknown නම් අලුත් command එකක් නොසාදා පවතින command recovery අනුගමනය කරන්න.
+
+Keyboard සඳහා Tab / Shift+Tab, Enter සහ checkbox සඳහා Space භාවිත කරන්න. Focus සලකුණ බලන්න. Disabled controls permissions/eligibility ඉක්මවා භාවිත නොකරන්න. Screenshot සඳහා private evidence, PIN, token හෝ sensitive payment details ගන්න එපා. Calendar/quote/payment request එකක් physical entry හෝ booking confirmation නොවේ.
+
+## Customer
+
+### UG-001 — Check session
+
+- **Purpose / අරමුණ:** Check session; [DOC-F001](../product/FEATURE_CATALOG.md#doc-f001) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `authenticated eligible account`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/account`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/account` විවෘත කරන්න. → `Check session` තෝරන්න. → ඉවත් වීමට `Log out of current session` තෝරන්න.
+- **Expected result / ප්‍රතිඵලය:** සේවාදායකයෙන් ලැබුණු session තත්ත්වය පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** මෙම පිටුවෙන් production account එකක් හෝ staff අවසරයක් සාදන්නේ නැත.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/session-panel.tsx), [IdentityIntegrationTest](../../backend/src/test/java/com/cinenest/IdentityIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-002 — Explore rooms
+
+- **Purpose / අරමුණ:** Explore rooms; [DOC-F002](../product/FEATURE_CATALOG.md#doc-f002) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `eligible customer; server discovery policy`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/rooms`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/rooms` විවෘත කරන්න. → `Venue`, `Name or code`, `Minimum capacity`, `Facility` පෙරහන් අවශ්‍ය නම් භාවිත කරන්න. → `Room details` තෝරන්න.
+- **Expected result / ප්‍රතිඵලය:** තෝරාගත් කාමරයේ තොරතුරු පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** රූප illustrative විය හැක; කාමරය හිස් හෝ ආරක්ෂිත බව මෙයින් තහවුරු නොවේ.
+- **Screenshot:** [Synthetic browser-test capture](../product/screenshots/catalog.png)
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/rooms.tsx), [RoomsIntegrationTest](../../backend/src/test/java/com/cinenest/RoomsIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-003 — Calendar selection
+
+- **Purpose / අරමුණ:** Calendar selection; [DOC-F004](../product/FEATURE_CATALOG.md#doc-f004) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `eligible customer; room visibility`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/rooms/[roomId]`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** කාමර විස්තර පිටුවේ calendar පෝරමයේ දිනය, කාලය සහ අමුත්තන් ගණන පුරවන්න. → calendar කියවීම පැහැදිලිව ඉල්ලන්න. → ලබාගත හැකි ආරම්භයක් තෝරන්න.
+- **Expected result / ප්‍රතිඵලය:** අදාළ venue timezone අනුව candidate වේලාව තෝරාගැනීමට ලැබේ.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** Calendar එක බැලීම හෝ වේලාවක් තේරීම hold එකක් සාදන්නේ නැත. UNKNOWN සහ PENDING_RECONCILIATION ලබාගත හැකි බවක් නොවේ.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/customer-calendar.tsx), [InventoryIntegrationTest](../../backend/src/test/java/com/cinenest/InventoryIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-004 — Create temporary hold
+
+- **Purpose / අරමුණ:** Create temporary hold; [DOC-F005](../product/FEATURE_CATALOG.md#doc-f005) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `eligible customer; owned hold`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/rooms/[roomId]`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `Customer start in venue local time`, `Customer duration (minutes)`, `Guests` පුරවන්න. → `Check inventory (no hold)` තෝරන්න. → අවසර ලැබුණොත් `Create temporary inventory hold` තෝරන්න. → `Refresh hold state` මගින් යාවත්කාලීන කරන්න.
+- **Expected result / ප්‍රතිඵලය:** සේවාදායකයෙන් hold reference, state සහ expiry ලැබේ.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** කල් ඉකුත් වූ hold භාවිත නොකරන්න. Outcome unresolved නම් `Retry original command` භාවිත කරන්න; අලුත් command එකක් නොසාදන්න.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/inventory.tsx), [InventoryIntegrationTest](../../backend/src/test/java/com/cinenest/InventoryIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-005 — Review and accept quotation
+
+- **Purpose / අරමුණ:** Review and accept quotation; [DOC-F006](../product/FEATURE_CATALOG.md#doc-f006) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `eligible customer; owned quote and hold`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/rooms/[roomId]`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** එම කාමරයේ supported package තෝරන්න. → quotation පෝරමය හා itemized ගණනය කියවන්න. → `Accept this revision` කොටසේ disclosures තුන කියවන්න. → `I reviewed this exact synthetic revision and all three disclosures` පැහැදිලිව තෝරා එම revision එක පිළිගන්න.
+- **Expected result / ප්‍රතිඵලය:** එම revision සඳහා authoritative acceptance තත්ත්වය ලැබේ.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** මිල හෝ revision වෙනස් නම් නැවත කියවන්න; quote acceptance ගෙවීමක් හෝ booking confirmation එකක් නොවේ.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/quotes.tsx), [QuoteIntegrationTest](../../backend/src/test/java/com/cinenest/QuoteIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-006 — Synthetic verification
+
+- **Purpose / අරමුණ:** Synthetic verification; [DOC-F007](../product/FEATURE_CATALOG.md#doc-f007) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `ownership; staff verification.review; separate verification.evidence.read`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/verification`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** Eligible quote එකෙන් `Continue to Verification` භාවිත කරන්න. → ආරක්ෂිත quotation summary කියවන්න. → operator ලබාදුන් `Operator-provided synthetic policy version` පමණක් ඇතුළත් කරන්න. → unchecked consent තෝරන්න. → `Start synthetic request` තෝරන්න. → UI ඉඩදෙන test evidence පමණක් පැහැදිලි ක්‍රියාවකින් යවන්න.
+- **Expected result / ප්‍රතිඵලය:** PENDING හෝ reviewer ලබාදුන් authoritative තත්ත්වය පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** සැබෑ NIC/passport භාවිත නොකරන්න. Quote/policy වෙනස් වුවහොත් නැවත consent අවශ්‍යයි; rejected තත්ත්වය approval නොවේ.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/verification.tsx), [VerificationIntegrationTest](../../backend/src/test/java/com/cinenest/VerificationIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-007 — Bank request and receipt
+
+- **Purpose / අරමුණ:** Bank request and receipt; [DOC-F008](../product/FEATURE_CATALOG.md#doc-f008) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `authenticated owner; protected readiness`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/bank`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** Verification හි server-approved continuation භාවිත කරන්න. → `/bank` හි loaded quotation/readiness කියවන්න. → අවසර ඇති විට පමණක් request creation පැහැදිලිව ඉල්ලන්න. → තම request context තුළ claim සහ synthetic receipt පෝරමයේ අනිවාර්ය fields පුරවා වෙන වෙනම submit කරන්න.
+- **Expected result / ප්‍රතිඵලය:** තම request, claim generation සහ evidence state reload කර පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** සැබෑ මුදල් හෝ receipts නොයවන්න. Upload uncertain නම් READY ලෙස නොසලකන්න; UI දෙන recovery එකෙන් පමණක් ඉදිරියට යන්න.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/bank.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-008 — Booking history and details
+
+- **Purpose / අරමුණ:** Booking history and details; [DOC-F009](../product/FEATURE_CATALOG.md#doc-f009) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `authenticated owner`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/bookings`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/bookings` විවෘත කරන්න. → server ලැයිස්තුවෙන් නිවැරදි booking තෝරන්න. → detail reload කළ පසු purchased room/package/session සහ status කියවන්න.
+- **Expected result / ප්‍රතිඵලය:** තම booking එකේ authoritative purchased summary පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** SIMULATED_CONFIRMED පමණක් synthetic confirmation; claim, partial allocation හෝ unknown outcome confirmation නොවේ.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/customer-bookings.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-009 — Guest roster
+
+- **Purpose / අරමුණ:** Guest roster; [DOC-F010](../product/FEATURE_CATALOG.md#doc-f010) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `ownership; staff guest.synthetic.read independently`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/bookings/[id]`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** තම `/bookings/[id]` විවෘත කරන්න. → roster හි purchased limit කියවන්න. → enabled synthetic guest form හි වලංගු test entry එකක් පුරවන්න. → එක් කිරීම පැහැදිලිව submit කර reload කරන්න.
+- **Expected result / ප්‍රතිඵලය:** Capacity සහ duplicate checks අනුව server roster එක යාවත්කාලීන වේ.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** අමුත්තෙකුගේ නම ඇතුළත් කිරීම වයස හෝ admission තහවුරු නොකරයි; automatic guest addition නැත.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/guest-roster.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-010 — Amendment review — PARTIAL
+
+- **Purpose / අරමුණ:** Amendment review — PARTIAL; [DOC-F011](../product/FEATURE_CATALOG.md#doc-f011) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `owned booking; current server eligibility`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/bookings/[id]`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** තම booking detail හි server ලබාදුන් amendment actions පමණක් භාවිත කරන්න. → proposal සහ purchased terms අතර වෙනස කියවන්න. → server ඉඩ දෙන explicit acceptance තෝරා reload කරන්න.
+- **Expected result / ප්‍රතිඵලය:** සාර්ථක නම් නව committed purchased revision පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** සියලු cancellation/extension ක්‍රියා මෙහි ඇතැයි නොසලකන්න; action නොපෙන්වයි නම් URL වෙනස් කර බලය ලබාගත නොහැක.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/booking-amendment.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-011 — Notification inbox
+
+- **Purpose / අරමුණ:** Notification inbox; [DOC-F024](../product/FEATURE_CATALOG.md#doc-f024) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Customer; permissions: `own notification.read; notification.admin.read and separate queue-command grants`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/notifications`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/notifications` විවෘත කරන්න. → තම පණිවිඩය තෝරා කියවන්න. → තිබෙන mark-read ක්‍රියාව පැහැදිලිව තෝරන්න.
+- **Expected result / ප්‍රතිඵලය:** Inbox record හි read state පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** මෙය live SMS/email ලැබුණු බවට සාක්ෂියක් නොවේ.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/notifications.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+## Reception / Front Desk Staff
+
+### UG-012 — Staff booking lookup
+
+- **Purpose / අරමුණ:** Staff booking lookup; [DOC-F014](../product/FEATURE_CATALOG.md#doc-f014) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Reception / Front Desk Staff; permissions: `booking.synthetic.read at exact venue`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin/bookings`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin/bookings` විවෘත කරන්න. → තම grant එකට අදාළ venue හා filters පුරවා කියවීම ඉල්ලන්න. → ලැයිස්තුවෙන් exact booking detail තෝරන්න.
+- **Expected result / ප්‍රතිඵලය:** එම venue හි අවසර ලත් booking summary පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** Front Desk යන රැකියා නාමයෙන් permission නොලැබේ; booking.synthetic.read අවශ්‍යයි.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/staff-bookings.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-013 — Staff guest inspection
+
+- **Purpose / අරමුණ:** Staff guest inspection; [DOC-F010](../product/FEATURE_CATALOG.md#doc-f010) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Reception / Front Desk Staff; permissions: `ownership; staff guest.synthetic.read independently`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/bookings/[id]`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** Staff booking detail තුළ guest roster section භාවිත කරන්න. → exact booking/venue තහවුරු කරන්න. → read action පැහැදිලිව ඉල්ලන්න.
+- **Expected result / ප්‍රතිඵලය:** guest.synthetic.read තිබේ නම් synthetic roster පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** Booking-read පමණක් guest-read නොවේ; physical admission නොදෙන්න.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/guest-roster.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+## Finance Staff
+
+### UG-014 — Synthetic bank review — PARTIAL
+
+- **Purpose / අරමුණ:** Synthetic bank review — PARTIAL; [DOC-F016](../product/FEATURE_CATALOG.md#doc-f016) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Finance Staff; permissions: `bank.claim.review; separate evidence/credit/allocate grants`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin/bank`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin/bank` හි තම venue queue load කරන්න. → exact request තෝරන්න. → claim/evidence review බලය තිබේ නම් පමණක් කියවන්න. → තමන්ට server ලබාදුන් explicit review action පමණක් භාවිත කරන්න.
+- **Expected result / ප්‍රතිඵලය:** Review state සහ history reload වේ.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** Evidence review, independent credit verification සහ allocation වෙනම බලතලයි; මෙම මාර්ගෝපදේශය real banking ක්‍රියා සඳහා අවසරයක් නොවේ.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/bank.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-015 — Refund review — PARTIAL
+
+- **Purpose / අරමුණ:** Refund review — PARTIAL; [DOC-F017](../product/FEATURE_CATALOG.md#doc-f017) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Finance Staff; permissions: `refund.synthetic.read/review/approve/destination.verify/execute/reconcile separately`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin/refunds`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin/refunds` වෙත යන්න හෝ staff booking හි protected refund context විවෘත කරන්න. → exact obligation හා attempt state කියවන්න. → දැනට අවසර ඇති explicit action පමණක් තෝරන්න.
+- **Expected result / ප්‍රතිඵලය:** Authoritative refund obligation/attempt තත්ත්වය පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** Approval සහ repayment වෙනස්ය; sensitive destination details නොබෙදාහරින්න. සැබෑ refund නොකරන්න.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/refunds.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-016 — Read synthetic bank report
+
+- **Purpose / අරමුණ:** Read synthetic bank report; [DOC-F018](../product/FEATURE_CATALOG.md#doc-f018) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Finance Staff; permissions: `report.bank.synthetic.read`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin/reports/bank`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin` හි `Synthetic Bank Summary` පෝරමයට venue, currency සහ venue-local date range ඇතුළත් කරන්න. → `Load Bank Summary` තෝරන්න. → අවශ්‍ය නම් detailed report link භාවිත කරන්න.
+- **Expected result / ප්‍රතිඵලය:** Server විසින් ලැබුණු synthetic credit/allocation/refund summary පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** report.bank.synthetic.read ස්වාධීනව අවශ්‍යයි; නොලැබුණු data සඳහා zero නොඅනුමාන කරන්න.
+- **Screenshot:** [Synthetic browser-test capture](../product/screenshots/analytics.png)
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/bank-report.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+## Venue Manager
+
+### UG-017 — Booking statistics
+
+- **Purpose / අරමුණ:** Booking statistics; [DOC-F019](../product/FEATURE_CATALOG.md#doc-f019) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Venue Manager; permissions: `report.booking.synthetic.read`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin` හි `Synthetic Booking Confirmations` වෙත යන්න. → `Statistics venue reference`, optional room, `From date (inclusive)`, `To date (exclusive)` පුරවන්න. → `Load statistics` තෝරන්න.
+- **Expected result / ප්‍රතිඵලය:** Total, daily confirmations, room distribution, timezone සහ observed time පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** දින 31 සීමාවයි; confirmed_at cohort එකයි. Popular session starts, revenue හෝ cancellation rate නොවේ.
+- **Screenshot:** [Synthetic browser-test capture](../product/screenshots/analytics.png)
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/booking-confirmations.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-018 — Package publication — PARTIAL
+
+- **Purpose / අරමුණ:** Package publication — PARTIAL; [DOC-F026](../product/FEATURE_CATALOG.md#doc-f026) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Venue Manager; permissions: `package.read/edit/publish/deactivate separately`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin/settings/packages`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin/settings/packages` විවෘත කරන්න. → authorized venue/package තෝරන්න. → current revision සහ structured comparison කියවන්න. → backend දක්වන edit/preview/publication controls පමණක් පැහැදිලිව භාවිත කරන්න.
+- **Expected result / ප්‍රතිඵලය:** සාර්ථක ක්‍රියාවෙන් නව draft/publication state සහ history පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** Editor වීම publisher වීම නොවේ; purchased terms නැවත ලියන්නේ නැත. UI confirmation සහ independent rules සුරකින්න.
+- **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/publications.tsx), [PublicationIntegrationTest](../../backend/src/test/java/com/cinenest/PublicationIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+## System Administrator
+
+### UG-019 — Managed grant inspection
+
+- **Purpose / අරමුණ:** Managed grant inspection; [DOC-F023](../product/FEATURE_CATALOG.md#doc-f023) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** System Administrator; permissions: `identity.grant.read at exact venue`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin/accounts`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin/accounts` හි `Managed Grant Inspection` වෙත යන්න. → `Venue reference`, `Account reference`, `Rows per page` පුරවන්න. → `Load managed grants` තෝරන්න. → server ඉඩ දෙන `Next page` පමණක් භාවිත කරන්න.
+- **Expected result / ප්‍රතිඵලය:** booking/guest managed subset එක හා observation metadata පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** identity.grant.read අවශ්‍යයි. Actual assignments UNASSIGNED; bootstrap/delegation DISABLED. Grant assign/approve/revoke නැත.
+- **Screenshot:** [Synthetic browser-test capture](../product/screenshots/grants.png)
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/managed-grant-inspection.tsx), [ManagedGrantReadIntegrationTest](../../backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+## Operations / Maintenance Staff
+
+### UG-020 — Turnover queue — PARTIAL
+
+- **Purpose / අරමුණ:** Turnover queue — PARTIAL; [DOC-F020](../product/FEATURE_CATALOG.md#doc-f020) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Operations / Maintenance Staff; permissions: `operations.synthetic.read; assign/record/review independently`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin/operations`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin/operations` හි `Venue ID` පුරවා `Load queue` තෝරන්න. → current page filter හා `Previous` / `Next` භාවිත කරන්න. → case තෝරා server ඉඩ දෙන explicit synthetic record/review ක්‍රියා පමණක් භාවිත කරන්න.
+- **Expected result / ප්‍රතිඵලය:** Recorded lifecycle, assignment හා exceptions පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** Case resolved වූවත් occupancy UNKNOWN, readiness UNVERIFIED; cleaning හෝ physical safety තහවුරු නොවේ.
+- **Screenshot:** [Synthetic browser-test capture](../product/screenshots/operations.png)
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/operations.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+### UG-021 — Maintenance Impact Preview
+
+- **Purpose / අරමුණ:** Maintenance Impact Preview; [DOC-F021](../product/FEATURE_CATALOG.md#doc-f021) යටතේ විස්තර කළ bounded software භාවිතය.
+- **Who / කවුද:** Operations / Maintenance Staff; permissions: `inventory.read independently`. Exact server authorization අවශ්‍යයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
+- **Navigation:** `/admin/operations`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Steps / පියවර:** `/admin/operations` හි `Maintenance Impact Preview` පෝරමය තෝරන්න. → `Venue reference`, `Room reference`, venue-local start/end පුරවන්න. → `Load Preview` තෝරන්න. → අසාර්ථක නම් context තහවුරු කර `Retry` තෝරන්න.
+- **Expected result / ප්‍රතිඵලය:** Interval, server observation හා authoritative conflict/completeness පෙන්වයි.
+- **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
+- **Security and limitations / සීමා:** inventory.read ස්වාධීනව අවශ්‍යයි. Empty conflicts closure/reopening/admission සඳහා අවසරයක් නොවේ.
+- **Screenshot:** [Synthetic browser-test capture](../product/screenshots/operations.png)
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/maintenance-impact.tsx), [InventoryIntegrationTest](../../backend/src/test/java/com/cinenest/InventoryIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+## අනෙකුත් සීමා සහ maintenance
+
+Access සහ Lighting simulator තිර `/access`, `/admin/access`, `/admin/iot` වල තිබේ. ඒවා physical lock/light ක්‍රියාකරන බවට සාක්ෂි නොවේ; මෙහි live-operation steps සපයා නැත. Customer `/refunds` සහ staff venue/room configuration capabilities catalogue තුළ සටහන් වේ; සියලු command variants සඳහා සම්පූර්ණ training coverage මෙහි නොමැත. UI examples යනු training/product workflow නොවේ.
+
+Loyalty/referral/promotion ක්‍රියා DEFERRED; PayHere DEFERRED/BLOCKED. Popular Time Slots තවම implemented නොවේ. Production recovery, physical admission සහ real banking qualified නැත. D0–D6 NOT_HELD / NOT_ACCEPTED. මෙම guide එකෙන් roadmap හෝ requirement acceptance වෙනස් නොවේ.
+
+UI workflow වෙනස් කරන අනාගත authorized task එකේ අදාළ UG section සහ catalogue evidence එකම commit තුළ යාවත්කාලීන කරන්න. Screenshot provenance [catalogue](../product/FEATURE_CATALOG.md#screenshot-provenance-and-coverage) තුළ ඇත; mockups සහ browser fixtures වෙන්කර හඳුන්වන්න. අලුත් feature අදහස් [FUTURE_FEATURES](../backlog/FUTURE_FEATURES.md) තුළ පමණක් සටහන් කරන්න; ක්‍රියාත්මක කිරීම සඳහා වෙනම අවසර අවශ්‍යයි.

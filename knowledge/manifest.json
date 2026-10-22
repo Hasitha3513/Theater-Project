@@ -418,14 +418,14 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c7f890215626d1ee811cb5b7a9bdd02101716a77f4e915134ea7be2a6d05a1b7",
+      "sha256": "1255a3f615033a5a391251a5df5924524f1f4a15315f6d8cce18a045991589a5",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e7910fe40db04fd4a713fb2f277020fd316f3c2eb5e9ff203471f9730885abce",
+      "sha256": "9c8ad1e39f802d0c28aba170391c1ac7cae5ea88febfed7cb04e682ad6a23485",
       "authority": "canonical-prose"
     },
     {
@@ -558,7 +558,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "50fe336b87ab6badb33505ec72b1215aa0c4c58f3accfd9511096f0389bffd03",
+      "sha256": "3b7d9debdc70d91755b0e6ff07918c09ce545d4fa999078bc4645419cf9cd1fd",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -572,13 +572,27 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e3eee957a1699bbc7ec5cf1315a70019970f7f5b028c4e63dfb3056f6a02b76a",
+      "sha256": "5a54a7e803695cb83173d54886688fd6731b9b45edb17b53a748ce93bdd0da78",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "guides/USER_GUIDE.md",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "3bf51085553333bed173dce5fb868817dda3e699783c37a8cb377b2d77bcde7c",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "manifest.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/FEATURE_CATALOG.md",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "f9cd67466fcc83072f42cc65138b10e6704c759e4924339c369c64b5b0b26eae",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -600,6 +614,34 @@
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "bee233202471451aa10716254c9001b3ea24992c962413883b87791322f33dce",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/analytics.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "683c39bf5895f8f2870cd6517de7c4f5c94c398fd49a500b226e678275f89391",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/catalog.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "4b1e661bfcd1698380978c5816ab9458ee25d9b8fa6d5d5dc7c5821dcdc0e51f",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/grants.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "5b6ad59619588dd97c6574e207f6d3f25b81bcfdaed8360d92303f250c62e596",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/operations.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "4da2255fa9a602778bb05fda9041f89ad1a5ca10297ac34ae7c0344f176dae88",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -669,7 +711,7 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "668ed11890aa6c25974e195ee5125c3e5c524712587ab761f5bffa31a962f01c",
+      "sha256": "260a417b3201f3fb62a9a59009b62ad6d5e1e4c39d42b49859d411830045e803",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -792,7 +834,7 @@
   "externalInstructionFiles": [
     {
       "path": "AGENTS.md",
-      "sha256": "6073e1acfab26c280fbc08237bd1edc82e8aa01e5311cedfd9cac6ff4acbeb04",
+      "sha256": "fb516b0040fb40c9bbc6649c62bcb6051ba41311b912ab07939cd4c6a982c94b",
       "purpose": "Current root entry; charter consolidated into PROGRESS.md"
     }
   ],

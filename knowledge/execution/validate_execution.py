@@ -5266,5 +5266,59 @@ def inert_ci_main():
     if result==0:print('PASS exact approved Booking confirmation subset,V22 only,no automatic grants,no graph/full acceptance changes;historical controls preserved')
     return result
 
+
+# CN-PRODUCT-DOCUMENTATION-001: exact owner-authorized supplementary documentation only.
+booking_confirmation_main=inert_ci_main
+
+def inert_ci_main():
+    from unittest.mock import patch
+    baseline='24b73caf16eebda1490d0f3552c268d15e024229'
+    added={'knowledge/guides/USER_GUIDE.md', 'knowledge/product/screenshots/operations.png', 'knowledge/product/screenshots/analytics.png', 'knowledge/product/screenshots/catalog.png', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/product/screenshots/grants.png'}
+    modified={'knowledge/validate_design_kb.py', 'knowledge/PROJECT.md', 'knowledge/execution/status.json', 'AGENTS.md', 'scripts/test-governance-controls.py', 'knowledge/PROGRESS.md'}
+    hashes={'AGENTS.md': 'fb516b0040fb40c9bbc6649c62bcb6051ba41311b912ab07939cd4c6a982c94b', 'knowledge/PROGRESS.md': '1255a3f615033a5a391251a5df5924524f1f4a15315f6d8cce18a045991589a5', 'knowledge/PROJECT.md': '9c8ad1e39f802d0c28aba170391c1ac7cae5ea88febfed7cb04e682ad6a23485', 'knowledge/execution/status.json': '3b7d9debdc70d91755b0e6ff07918c09ce545d4fa999078bc4645419cf9cd1fd', 'knowledge/guides/USER_GUIDE.md': '3bf51085553333bed173dce5fb868817dda3e699783c37a8cb377b2d77bcde7c', 'knowledge/product/FEATURE_CATALOG.md': 'f9cd67466fcc83072f42cc65138b10e6704c759e4924339c369c64b5b0b26eae', 'knowledge/product/screenshots/analytics.png': '683c39bf5895f8f2870cd6517de7c4f5c94c398fd49a500b226e678275f89391', 'knowledge/product/screenshots/catalog.png': '4b1e661bfcd1698380978c5816ab9458ee25d9b8fa6d5d5dc7c5821dcdc0e51f', 'knowledge/product/screenshots/grants.png': '5b6ad59619588dd97c6574e207f6d3f25b81bcfdaed8360d92303f250c62e596', 'knowledge/product/screenshots/operations.png': '4da2255fa9a602778bb05fda9041f89ad1a5ca10297ac34ae7c0344f176dae88', 'knowledge/validate_design_kb.py': '260a417b3201f3fb62a9a59009b62ad6d5e1e4c39d42b49859d411830045e803', 'scripts/test-governance-controls.py': '95c4a36072dc364fa2cb595c5bbeb78e9dea49b244248338261763e45104e98f'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Product documentation exact-source mismatch '+name)
+    old=prior('knowledge/execution/validate_execution.py').decode();ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(old.removesuffix(ending)):errors.append('Product documentation changed historical validator')
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('productDocumentation',{})
+    if state!=json.loads(prior('knowledge/execution/status.json')) or receipt.get('applicationChanged') is not False or receipt.get('acceptanceChanged') is not False:errors.append('Product documentation changed execution/acceptance authority')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Product documentation changed acceptance checkboxes')
+    allowed=added|modified|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True).split('\0'))-{''}
+    if not changed<=allowed:errors.append('Product documentation unauthorized source change '+str(changed-allowed))
+    module=__import__('runpy').run_path(str(K/'validate_design_kb.py'))
+    module['validate_product_documentation'](lambda ok,message:errors.append(message) if not ok else None)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        name='knowledge/'+entry['path']
+        if name in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((R/name).read_bytes()).hexdigest()
+    for name in sorted(added):
+        expected['files'].append({'path':name.removeprefix('knowledge/'),'kind':'visual-reference' if name.endswith('.png') else 'documentation-specification','implementationStatus':'NOT_VERIFIED','sha256':hashlib.sha256((R/name).read_bytes()).hexdigest(),'authority':'structured-asset-or-evidence'})
+    expected['files'].sort(key=lambda x:x['path'])
+    expected['externalInstructionFiles'][0]['sha256']=hashlib.sha256((R/'AGENTS.md').read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Product documentation manifest authority/inventory drift')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements={R/name:prior(name) for name in modified|{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}}
+    rb0,rt0,g0,rg0,out0=Path.read_bytes,Path.read_text,Path.glob,Path.rglob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def keep(path):return path.relative_to(R).as_posix() not in added
+    def glob(path,pattern,*a,**kw):return (x for x in g0(path,pattern,*a,**kw) if keep(x))
+    def rglob(path,pattern,*a,**kw):return (x for x in rg0(path,pattern,*a,**kw) if keep(x))
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=added|modified if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();sep='\0' if '-z' in argv else '\n'
+            text=sep.join(x for x in text.split(sep) if x not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=booking_confirmation_main()
+    if result==0:print('PASS owner-authorized product catalogue26/workflows21;no application/acceptance changes;historical governance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
