@@ -4390,7 +4390,7 @@ def review_window_failure_main():
 
 
 
-def inert_ci_main():
+def calendar_hold_e2e_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='a5193e6fe663aafeb4f4eca6b28c9d930873518d'
@@ -4456,6 +4456,72 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=review_window_failure_main()
     if result==0:print('PASS exact bounded Real-backend calendar-to-hold campaign; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='453cec942df63214b9b6961b40cdc1c1b26e8b9b'
+    owned={'frontend/lib/admin-bank-summary.ts', 'frontend/tests/admin-bank-summary-browser.mjs', 'frontend/app/globals.css', 'frontend/tests/admin-bank-summary.test.mjs', 'frontend/package.json', 'frontend/tests/experience.test.mjs', 'frontend/components/admin-bank-summary.tsx', 'frontend/app/admin/page.tsx'}
+    registries={'knowledge/execution/status.json', 'knowledge/execution/test-plan.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/DESIGN.md', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added={'frontend/components/admin-bank-summary.tsx', 'frontend/tests/admin-bank-summary-browser.mjs', 'frontend/tests/admin-bank-summary.test.mjs', 'frontend/lib/admin-bank-summary.ts'}
+    hashes={'knowledge/execution/test-plan.json': '3e1cac0782e3d972b5916fe3a30f197b5e71c6de6f6520f0aaeef429b575b7e6', 'frontend/lib/admin-bank-summary.ts': 'dbf097355cca6fac75957c410a99858c2425c8544fe0ecd21f4d19ad4717253d', 'frontend/tests/admin-bank-summary-browser.mjs': '8bf467f30794617fbd6037e634751f2b7c2bdbbc3aa60fb8a6543b1b1f65f61f', 'frontend/app/globals.css': 'ae063ca7c977bc38e41469b822a3555894a3f20b8047e45314ed5efca5931166', 'knowledge/PROGRESS.md': 'b8b0fe96cd514efe53c0c448ffef5bc7b6faa273a0a77eb25b94fdc22bff6350', 'knowledge/execution/requirements.json': '935f8c94763e259217c10e65442bbe546e58d727ac8c15d18b949a24d5f98c4d', 'knowledge/execution/status.json': '7261530f03f8a5bf517ee5c894f801b9416c35adba2e5195a1f41c1f83407606', 'knowledge/DESIGN.md': 'fb689e492f71685771f1d56d372abda7b8e760e80762150841a69b1b9372189f', 'knowledge/ARCHITECTURE.md': '8046bb5b7689945daefce748949a2bd0a4861b33c505c92319c4126ed8919873', 'frontend/tests/admin-bank-summary.test.mjs': 'd648f39680d3abdfcc76c55e3a767bf73183657aba10d04ef64cfb7a5133413a', 'frontend/package.json': '4ab088baab0bb820ecee79450bf5a21004bd0e9c3801d8d00659be8624a76a0d', 'frontend/tests/experience.test.mjs': 'ae4bb7e35a7d1a44365cc2a26d54a5bec72b6d41252af596f8302a330d387318', 'frontend/components/admin-bank-summary.tsx': 'bdaa32c046f0a201c25a6a70a85e1f9426b6f9607a2bfedcc0a6581d29d126cc', 'frontend/app/admin/page.tsx': '1674ac52374ebfeadcbab2d6b87c9d4623e486b5ed1b7bc5b247e43c619a84be'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Protected synthetic admin bank summary exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('adminBankSummaryEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Protected synthetic admin bank summary changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('adminBankSummaryImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Protected synthetic admin bank summary changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Protected synthetic admin bank summary changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Protected synthetic admin bank summary rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    package['scripts']['test']=package['scripts']['test'].removesuffix(' && node --import ./tests/tsx-loader.mjs tests/admin-bank-summary.test.mjs')
+    if package!=original:errors.append('Summary changed dependency or unrelated frontend/package authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Protected synthetic admin bank summary rewrote prior design')
+    # Exact scoped stylesheet bytes are pinned above; unrelated changes remain rejected.
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Protected synthetic admin bank summary promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Protected synthetic admin bank summary unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Protected synthetic admin bank summary changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['frontend/components/bank-report.tsx','frontend/lib/bank-backend.ts','frontend/lib/session.ts','frontend/lib/rooms.ts','backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java','backend/src/main/java/com/cinenest/payments/BankBalanceReport.java','frontend/tests/synthetic-e2e.mjs','backend/src/test/java/com/cinenest/SyntheticJourneyIT.java']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Summary changed protected existing contract/campaign '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=calendar_hold_e2e_main()
+    if result==0:print('PASS exact bounded Protected synthetic admin bank summary; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

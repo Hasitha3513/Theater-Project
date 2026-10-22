@@ -54,8 +54,13 @@ test("staff home links existing tools without fabricated operational data or aut
 	assert.match(s, /Receipt review does not establish verified funds/);
 	assert.doesNotMatch(
 		s,
-		/Business modules are not connected|Shell preview|<form|<input|Today.s revenue/,
+		/Business modules are not connected|Shell preview|Today.s revenue/,
 	);
+	// The owner-authorized summary now has explicit read filters, never mutation forms.
+	assert.equal((s.match(/<form/g) ?? []).length, 1);
+	assert.match(s, /Load Bank Summary/);
+	assert.match(s, /No financial data loaded/);
+	assert.doesNotMatch(s, /Complete-population summary|Confirm payment|Allocate funds/);
 });
 test("shell keeps unqualified identity, banking, hardware and production boundaries explicit", () => {
 	const s = source("../components/shell.tsx");

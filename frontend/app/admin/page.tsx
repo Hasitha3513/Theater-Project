@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdminBankSummarySection } from "../../components/admin-bank-summary";
 import { Badge, Card, PageHeading } from "../../components/primitives";
 export default function AdminHome() {
 	return (
@@ -66,6 +67,7 @@ export default function AdminHome() {
 					<Link href="/admin/account">My account →</Link>
 				</Card>
 			</div>
+			<AdminBankSummarySection />
 			<Card title="Operational reporting">
 				<p className="muted">
 					Live dashboard metrics are not available. The existing bank report

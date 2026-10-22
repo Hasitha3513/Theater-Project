@@ -8269,5 +8269,62 @@
     "regressions": "609 backend/PostgreSQL/architecture +299 frontend/type/lint/build +8 classifier +10 admission PASS",
     "validation": "Knowledge/design and approved in-memory committed-source execution/status PASS;ordinary execution exactly2 pre-existing next-env findings;12 governance negative controls,92/92 traceability,28-task acyclic dependencies and whitespace PASS",
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
+  },
+  "adminBankSummaryImplementation": {
+    "taskId": "CN-ADMIN-BANK-SUMMARY-001",
+    "status": "BOUNDED_SYNTHETIC_ADMIN_SUMMARY_LOCALLY_VERIFIED",
+    "evidencePath": "PROGRESS.md#admin-bank-summary",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Existing synthetic credit summary only;no new metrics or production finance/full reporting acceptance",
+    "changeSetId": "CN-ADMIN-BANK-SUMMARY-001",
+    "baselineHead": "453cec942df63214b9b6961b40cdc1c1b26e8b9b",
+    "prerequisiteCI": "39723247223 COMPLETED/SUCCESS exact source attempt1",
+    "ownerAuthority": "Explicit bounded frontend integration attachment4b643a3c-fa0a-43db-940c-991106472cde",
+    "ownerRequestSha256": "7814e66dde24b3919bcb5ee20711f6511a175c12ab8ee85e53074d83d155a2d3",
+    "backendContract": "Existing GET /api/admin/venues/{venue}/reports/synthetic-bank-balances;report.bank.synthetic.read;page0/size1;complete-population summary",
+    "regressions": "609 backend/PostgreSQL/architecture;323 frontend/type/lint/build;8 classifier;10 admission PASS",
+    "browserEvidence": {
+      "groups": 69,
+      "observations": [
+        {
+          "width": 375,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "filterColumns": "309px",
+          "amountColumns": "309px"
+        },
+        {
+          "width": 768,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "filterColumns": "327px 327px",
+          "amountColumns": "327px 327px"
+        },
+        {
+          "width": 1280,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "filterColumns": "455px 455px",
+          "amountColumns": "298px 298px 298px"
+        }
+      ],
+      "classification": "INTERCEPTED_BROWSER_ONLY"
+    },
+    "existingBrowserRegression": "70 bank-report and10 shell/navigation/accessibility intercepted groups PASS",
+    "localVisualEvidence": {
+      ".cache/admin-bank-summary/before/admin-375.png": "f4bce98602beb629132abc17b071a3d481f57435c55eeb1fb7b8f8c56198dd9f",
+      ".cache/admin-bank-summary/before/admin-1280.png": "93f5bb54dc46062c9fc33f37fa2deb25eb60e55a4a71578d6ff1294df35b1a58",
+      ".cache/admin-bank-summary/before/admin-768.png": "b09629d6136a6377b454c8590cbb265b665270681584c63aa554478683d8438d",
+      ".cache/admin-bank-summary/after/summary-375.png": "3ee5e142578b12db7e46aa0a931e7b139237566bca03a8b896bfba235f3ed35c",
+      ".cache/admin-bank-summary/after/summary-1280.png": "57a93500ed53a61977d3c7d1d2e92deaf6ad5abebbe2dc7634b2b4f6f30da55b",
+      ".cache/admin-bank-summary/after/summary-768.png": "5626e6d70ba0a130d59ce80e5241eee2d27533aff4afc6d64b7d17feac50a069",
+      ".cache/admin-bank-summary/after/admin-375.png": "c1f42f986d7c70cae32c0082c7c6b46a0e78b54a4238520e2f86160ec3535a81",
+      ".cache/admin-bank-summary/after/admin-1280.png": "eeac4fa7327c2028efaf005640cca541b8b31526a27d28c17983e96dd059e22a",
+      ".cache/admin-bank-summary/after/admin-768.png": "fc42969d49cddfb475d676ee07c7d3fdc4b33096fece8eb5fff7b776054cd7ec"
+    },
+    "syntheticCampaign": "Historical24 PASS/0 FAIL/0 NOT_RUN;not rerun",
+    "validation": "PASS knowledge/design,isolated committed-source execution,92/92 traceability,28-task acyclic dependencies,16 negative controls,whitespace;ordinary execution retains2 existing next-env findings",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
   }
 }

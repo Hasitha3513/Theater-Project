@@ -787,6 +787,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Shell/navigation/landing/admin-home/metadata wording and presentation only; no backend/policy/contracted disclosure/token changes."
+      },
+      "adminBankSummaryEvidence": {
+        "taskId": "CN-ADMIN-BANK-SUMMARY-001",
+        "status": "BOUNDED_SYNTHETIC_ADMIN_SUMMARY_LOCALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#admin-bank-summary",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing synthetic credit summary only;no new metrics or production finance/full reporting acceptance"
       }
     },
     {
@@ -1208,6 +1216,14 @@
           "frontend/tests/staff-booking-refunds-browser.mjs"
         ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "adminBankSummaryEvidence": {
+        "taskId": "CN-ADMIN-BANK-SUMMARY-001",
+        "status": "BOUNDED_SYNTHETIC_ADMIN_SUMMARY_LOCALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#admin-bank-summary",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing synthetic credit summary only;no new metrics or production finance/full reporting acceptance"
       }
     },
     {
@@ -1231,6 +1247,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Presentation/landmarks/native shared checkbox only;operations attestations,permissions,exact report values,request handlers and financial/physical acceptance unchanged."
+      },
+      "adminBankSummaryEvidence": {
+        "taskId": "CN-ADMIN-BANK-SUMMARY-001",
+        "status": "BOUNDED_SYNTHETIC_ADMIN_SUMMARY_LOCALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#admin-bank-summary",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing synthetic credit summary only;no new metrics or production finance/full reporting acceptance"
       }
     },
     {
@@ -2242,6 +2266,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
+      },
+      "adminBankSummaryEvidence": {
+        "taskId": "CN-ADMIN-BANK-SUMMARY-001",
+        "status": "BOUNDED_SYNTHETIC_ADMIN_SUMMARY_LOCALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#admin-bank-summary",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing synthetic credit summary only;no new metrics or production finance/full reporting acceptance"
       }
     },
     {

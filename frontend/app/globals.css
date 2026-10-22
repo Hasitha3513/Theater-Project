@@ -1044,6 +1044,14 @@ button.button { display: inline-grid; }
 /* Exact booking-linked read disclosure; existing shell and tokens retained. */
 .booking-operations #booking-operations-results { margin-top: var(--cn-spacing-3); }
 
+/* Explicitly loaded synthetic bank summary; no new dashboard metric definitions. */
+.admin-bank-summary { margin-block: var(--cn-spacing-6); }
+.admin-bank-summary .summary-filter-grid { display: grid; gap: var(--cn-spacing-4); margin-block: var(--cn-spacing-6); }
+.admin-bank-summary .bank-summary-result { border-top: 1px solid var(--cn-color-border); padding-top: var(--cn-spacing-4); }
+.admin-shell .shell-body .page-content .staff-workspace.admin-bank-summary .report-amounts { margin-block: var(--cn-spacing-6); }
+.admin-shell .shell-body .page-content .staff-workspace.admin-bank-summary .report-amounts dd { overflow-wrap: anywhere; }
+@media(min-width:768px) { .admin-bank-summary .summary-filter-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+
 /* Existing booking-panel tokens; native date/time controls preserve minute precision. */
 .app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar{border:1px solid var(--cn-color-border);border-radius:16px;padding:clamp(16px,3vw,28px);margin:24px 0;background:var(--cn-color-surface);min-width:0}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar fieldset{border:0;padding:0;margin:20px 0;min-width:0}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar legend{font-weight:600;margin-bottom:16px}.calendar-heading{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.calendar-heading h3{margin-top:4px}.calendar-results{border-top:1px solid var(--cn-color-border);padding-top:20px}.calendar-legend{font-size:.875rem;line-height:1.7}.calendar-selection{margin:20px 0}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar select{max-width:100%;min-width:0}.calendar-reasons{padding-left:20px}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar .toolbar{gap:12px;flex-wrap:wrap}.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar dd{overflow-wrap:anywhere}
 
