@@ -8426,5 +8426,26 @@
     "retainedImplementationRequest": "Owner attachmenta10051a0-9441-48f8-b76d-8ff41472d359;CN-SCOPED-GRANT-READ-001 only;subsequent session after baseline/CI/technical readiness checks",
     "validation": "PASS knowledge/design,isolated committed-source execution,92/92 traceability,28-task acyclic dependencies,15 negative controls,whitespace;ordinary execution retains2 pre-existing next-env findings",
     "publication": "PENDING_SCOPED_DOCUMENTATION_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
+  },
+  "managedGrantReadImplementation": {
+    "taskId": "CN-SCOPED-GRANT-READ-001",
+    "status": "BOUNDED_SYNTHETIC_MANAGED_GRANT_READ_LOCALLY_VERIFIED",
+    "evidencePath": "PROGRESS.md#managed-grant-read-implementation",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Only protected synthetic managed-grant GET and mandatory audit;no authority assignments/commands/frontend or full requirement acceptance",
+    "changeSetId": "CN-SCOPED-GRANT-READ-001",
+    "baselineHead": "0bcb611f31e92eea859f734052fea353df607f5f",
+    "prerequisiteCI": "39734924599 COMPLETED/SUCCESS exact source",
+    "ownerAuthority": "Explicit bounded backend-only resume attachment5cb17ec9-cbe6-4879-9601-09b4dd190804",
+    "ownerRequestSha256": "b649b842c5678e8864531ed16875bf17e5fa75af070215340cbbd1aaceb8df03",
+    "capability": "identity.grant.read;runtime definition only,no actual assignments",
+    "actualAssignments": "UNASSIGNED_DISABLED",
+    "endpoint": "GET /api/admin/venues/{venueId}/accounts/{accountId}/grants",
+    "migration": "V20 protected-read audit only;V1-V19 unchanged",
+    "defaultEnabled": false,
+    "regressions": "PASS:648 backend/36 managed-grant integration/3 new architecture;323 unchanged frontend;TypeScript/lint/build;packaged startup/real HTTP;four PostgreSQL lock-wait races;V19-V20/repeat",
+    "validation": "PASS:knowledge;isolated committed-next-env execution;24 governance negative controls;8 CI classifier;92/92 traceability;28-task acyclic dependencies;whitespace. Ordinary execution:only two pre-existing next-env findings",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
   }
 }

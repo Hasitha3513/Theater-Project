@@ -4608,7 +4608,7 @@ def scoped_grant_policy_main():
 
 
 
-def inert_ci_main():
+def grant_read_capability_record_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='40fd60f5be1284c0bcba2ea2a8ab8e42b34d1dff'
@@ -4682,6 +4682,74 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=scoped_grant_policy_main()
     if result==0:print('PASS exact bounded Explicit owner-approved grant read capability; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='0bcb611f31e92eea859f734052fea353df607f5f'
+    owned={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantRepository.java', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java', 'backend/src/main/resources/db/migration/V20__managed_grant_read_audit.sql', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantQuery.java', 'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantController.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/ManagedGrantArchitectureTest.java'}
+    registries={'knowledge/execution/test-plan.json', 'knowledge/execution/status.json', 'knowledge/execution/requirements.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added={'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantRepository.java', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java', 'backend/src/main/resources/db/migration/V20__managed_grant_read_audit.sql', 'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantQuery.java', 'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantController.java', 'backend/src/test/java/com/cinenest/ManagedGrantArchitectureTest.java'}
+    hashes={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '7f90455cd01b68aca2a9cbc0d1d8f8f01f36b8410fe447456411578f4218388f', 'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantRepository.java': '166de28545c0baeb1777f5505bfbf24a888d4b873a5bc1f625ed3ee3c4245bcc', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java': '4167d8983df653427b0b0e54445943b32419a57af474a61dc7be83f8e0e4583d', 'backend/src/main/resources/db/migration/V20__managed_grant_read_audit.sql': '82ec3c777478332258339f85898473b1f6a1e1c0749eef4d1ba97ed69e395ed6', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '0fe5b3b574fe439bf2d72e9119b67fd40580b1e13c59ab4ab0d28d170017713b', 'knowledge/ARCHITECTURE.md': '9a0f626caf1b2e6d13df18c46aadbd177078bdf2e86f4d243e3029e3f6119d30', 'knowledge/execution/status.json': 'b27f16ffa183fa3aa668dbcff7895988c9390d44e56e4cdf144bfd9818f06d72', 'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantQuery.java': 'd06c6b0787b6212ca2ec783076ad141e42cd0e3383b60d077c2339bb57ddb5f3', 'knowledge/PROGRESS.md': 'f6dd4f1e400afe3af556c8fbd4ebc8c2d66751262d8ffa80dedab1c64e91c8a3', 'backend/src/main/java/com/cinenest/identity/internal/ManagedGrantController.java': 'ae011318f3a88a8e0a40f198c0bcfde4dcc7eff1664370bcddba2f18f4a5342a', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '9c23a23f8ec4d761293496afcd8eaf59eaf30f6d29a84aac18e9a94216c9f379', 'knowledge/execution/requirements.json': '7465d2685c09fb1bcb14b349f10d5aed2f692fef0487a66f0341d421ff02312c', 'backend/src/test/java/com/cinenest/ManagedGrantArchitectureTest.java': '89313a89d9b0454056a84fa3686b8272d0cdd2820e93549bb88ac510e5bedb15', 'knowledge/execution/test-plan.json': '3fceac4b830e9b187e06fe5201a2818faf02bcc81af99ac55d89d8e0f625d5cd'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Bounded managed-grant read implementation exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('managedGrantReadEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Bounded managed-grant read implementation changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('managedGrantReadImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Bounded managed-grant read implementation changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded managed-grant read implementation changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Bounded managed-grant read implementation rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package!=original:errors.append('Summary changed dependency or unrelated frontend/package authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Bounded managed-grant read implementation rewrote prior design')
+    # Exact scoped stylesheet bytes are pinned above; unrelated changes remain rejected.
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Bounded managed-grant read implementation promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Bounded managed-grant read implementation unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded managed-grant read implementation changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['frontend/components/bank-report.tsx','frontend/lib/bank-backend.ts','frontend/lib/session.ts','frontend/lib/rooms.ts','backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java','backend/src/main/java/com/cinenest/payments/BankBalanceReport.java','frontend/tests/synthetic-e2e.mjs','backend/src/test/java/com/cinenest/SyntheticJourneyIT.java']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Summary changed protected existing contract/campaign '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['knowledge/PROJECT.md','knowledge/DESIGN.md','knowledge/decisions/cinenest-open-decisions.json']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Grant read changed preserved policy '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=grant_read_capability_record_main()
+    if result==0:print('PASS exact bounded Bounded managed-grant read implementation; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

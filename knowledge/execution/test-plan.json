@@ -1185,6 +1185,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "No grants/bootstrap/migrations;actual assignments UNASSIGNED/DISABLED;prior bounded backend read authority retained for subsequent work"
+      },
+      "managedGrantReadEvidence": {
+        "taskId": "CN-SCOPED-GRANT-READ-001",
+        "status": "BOUNDED_SYNTHETIC_MANAGED_GRANT_READ_LOCALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#managed-grant-read-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Only protected synthetic managed-grant GET and mandatory audit;no authority assignments/commands/frontend or full requirement acceptance"
       }
     },
     {
@@ -1376,6 +1384,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "No grants/bootstrap/migrations;actual assignments UNASSIGNED/DISABLED;prior bounded backend read authority retained for subsequent work"
+      },
+      "managedGrantReadEvidence": {
+        "taskId": "CN-SCOPED-GRANT-READ-001",
+        "status": "BOUNDED_SYNTHETIC_MANAGED_GRANT_READ_LOCALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#managed-grant-read-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Only protected synthetic managed-grant GET and mandatory audit;no authority assignments/commands/frontend or full requirement acceptance"
       }
     },
     {
@@ -2331,6 +2347,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "No grants/bootstrap/migrations;actual assignments UNASSIGNED/DISABLED;prior bounded backend read authority retained for subsequent work"
+      },
+      "managedGrantReadEvidence": {
+        "taskId": "CN-SCOPED-GRANT-READ-001",
+        "status": "BOUNDED_SYNTHETIC_MANAGED_GRANT_READ_LOCALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#managed-grant-read-implementation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Only protected synthetic managed-grant GET and mandatory audit;no authority assignments/commands/frontend or full requirement acceptance"
       }
     },
     {
