@@ -4825,7 +4825,7 @@ def managed_grant_frontend_main():
 
 
 
-def inert_ci_main():
+def maintenance_impact_backend_main():
     """Pin authorized maintenance preview/audit sources before immutable historical replay."""
     from unittest.mock import patch
     baseline='faee61795c29c6e39fd45e66e11c03d7d0283bfc'
@@ -4889,6 +4889,81 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=managed_grant_frontend_main()
     if result==0:print('PASS exact bounded Bounded maintenance impact read and audit; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='4ea2542d988bad429e3fede23008a9536c14140b'
+    owned={'frontend/tests/maintenance-impact-fixtures.mjs', 'frontend/tests/maintenance-impact.test.mjs', 'frontend/components/operations.tsx', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/maintenance-impact/route.ts', 'frontend/components/maintenance-impact.tsx', 'frontend/tests/maintenance-impact-browser.mjs', 'frontend/app/globals.css', 'frontend/lib/maintenance-impact.ts', 'frontend/lib/maintenance-impact-backend.ts', 'frontend/package.json'}
+    registries={'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json', 'knowledge/execution/status.json'}
+    canonical={'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/DESIGN.md'}
+    added={'frontend/tests/maintenance-impact-fixtures.mjs', 'frontend/tests/maintenance-impact.test.mjs', 'frontend/tests/maintenance-impact-browser.mjs', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/maintenance-impact/route.ts', 'frontend/components/maintenance-impact.tsx', 'frontend/lib/maintenance-impact.ts', 'frontend/lib/maintenance-impact-backend.ts'}
+    hashes={'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/maintenance-impact/route.ts': '0256771c60e5e5936d6b76a73877396c2f8727595346a2687be3ca1f2c84a2e6', 'frontend/app/globals.css': '1f459afe02e04b7d3a58b45b29d554b2d199ce42fba27386f23c97f0f843374f', 'frontend/components/maintenance-impact.tsx': 'e57b3e79938221ad63680620e479d664fe3254741996a214048bd3f1fbe43dbd', 'frontend/components/operations.tsx': '44ef2d0f3b88eaa846589670e0266e36f2e8ea83bdc167d1e8ca57783fc9f300', 'frontend/lib/maintenance-impact-backend.ts': '8ea06f79a7f14ad9b3f8a1507a6fcf20d8c3e2f7d1c3f21d5ec8ee0784816f28', 'frontend/lib/maintenance-impact.ts': '0bf28651524c6a552df804b0e3e13885f76d3bb4fc49a2f78df73416b71918ce', 'frontend/package.json': '0216aaf041b030f6fbb26d86ada2ad4d3dcf5f7f161308e284de19996ebab2ab', 'frontend/tests/maintenance-impact-browser.mjs': 'a728bc0e9ded44b490c8f501356cf9899d02b28a2e0d0d693a50c89e42c0db1a', 'frontend/tests/maintenance-impact-fixtures.mjs': '86f753d71b8f0c717a11d8d3e4353e9f2f168eb509f7841177473b916f42006a', 'frontend/tests/maintenance-impact.test.mjs': 'e5d00ff82c30392728807f07a477b4032a29be767eea240249d6fa48441f9dbb', 'knowledge/ARCHITECTURE.md': '496cb0418e3410dacbc7f7f674f543a67aa5d4660b21a06d0931067589f0c347', 'knowledge/DESIGN.md': 'b241470c594746fde20fa666de47bfc7c632ff3aa182993f634fe05bc7c25f48', 'knowledge/PROGRESS.md': '70f32a00dc9fce8181e1af20a7e36f4f7b44d9c04d8c367c40243984aa41bcbb', 'knowledge/execution/requirements.json': '744d0dfbac6b98728b5c14dd3adb4963815b2a7adcd8605f670434d64e98fbcf', 'knowledge/execution/status.json': '7b9eb74fe360cc2db8ffd7b33bb4b020eca06d6e497c0f1cb8d237483163352b', 'knowledge/execution/test-plan.json': '7408f447ed7ed435daffb5a70f29f3ce25eadd722b69bfb1d3db4157f17f478f'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Bounded maintenance impact frontend exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('maintenanceImpactFrontendEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Bounded maintenance impact frontend changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('maintenanceImpactFrontendImplementation',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Bounded maintenance impact frontend changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded maintenance impact frontend changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Bounded maintenance impact frontend rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    original['scripts']['test']+=' && node --import ./tests/tsx-loader.mjs tests/maintenance-impact.test.mjs'
+    if package!=original:errors.append('Maintenance frontend changed unrelated package/dependency authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Bounded maintenance impact frontend rewrote prior design')
+    # Exact scoped stylesheet bytes are pinned above; unrelated changes remain rejected.
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Bounded maintenance impact frontend promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Bounded maintenance impact frontend unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded maintenance impact frontend changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['frontend/components/bank-report.tsx','frontend/lib/bank-backend.ts','frontend/lib/session.ts','frontend/lib/rooms.ts','backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java','backend/src/main/java/com/cinenest/payments/BankBalanceReport.java','frontend/tests/synthetic-e2e.mjs','backend/src/test/java/com/cinenest/SyntheticJourneyIT.java']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Summary changed protected existing contract/campaign '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['knowledge/PROJECT.md','knowledge/decisions/cinenest-open-decisions.json']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Maintenance frontend changed preserved policy '+name)
+    state=json.loads((K/'execution/status.json').read_text()).get('maintenanceImpactFrontendImplementation',{})
+    if state.get('domainMutations')!=False or state.get('closureOrReopeningAuthority')!=False:errors.append('Maintenance frontend expanded operational authority')
+    for name in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',baseline,'backend'],text=True).splitlines():
+        if (R/name).read_bytes()!=prior(name):errors.append('Maintenance frontend changed backend '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=maintenance_impact_backend_main()
+    if result==0:print('PASS exact bounded Bounded maintenance impact frontend; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':

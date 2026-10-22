@@ -1478,6 +1478,15 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Inventory-only advisory read and mandatory audit;no closure/reopening/physical authority or full requirement acceptance"
+      },
+      "maintenanceImpactFrontendEvidence": {
+        "taskId": "CN-MAINTENANCE-IMPACT-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_FRONTEND",
+        "evidencePath": "PROGRESS.md#maintenance-impact-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Independent inventory.read;advisory counts only;no closure/reopening or physical authority",
+        "tests": "PASS:675 backend tests/PostgreSQL18.6 authorization,audit,snapshot/architecture regressions;394 frontend tests incl41 focused;TypeScript,lint,production build;63 focused browser groups at375/768/1280;63 Operations,11 real Next/local upstream pagination,20 booking-operations browser regressions;8 classifier;knowledge,isolated execution,29 governance negative controls,92/92 traceability,28-task unchanged dependencies,whitespace. Browser fixtures are not real-backend E2E. Ordinary execution only2 pre-existing next-env findings."
       }
     },
     {
@@ -2401,6 +2410,15 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Inventory-only advisory read and mandatory audit;no closure/reopening/physical authority or full requirement acceptance"
+      },
+      "maintenanceImpactFrontendEvidence": {
+        "taskId": "CN-MAINTENANCE-IMPACT-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_FRONTEND",
+        "evidencePath": "PROGRESS.md#maintenance-impact-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Independent inventory.read;advisory counts only;no closure/reopening or physical authority",
+        "tests": "PASS:675 backend tests/PostgreSQL18.6 authorization,audit,snapshot/architecture regressions;394 frontend tests incl41 focused;TypeScript,lint,production build;63 focused browser groups at375/768/1280;63 Operations,11 real Next/local upstream pagination,20 booking-operations browser regressions;8 classifier;knowledge,isolated execution,29 governance negative controls,92/92 traceability,28-task unchanged dependencies,whitespace. Browser fixtures are not real-backend E2E. Ordinary execution only2 pre-existing next-env findings."
       }
     },
     {

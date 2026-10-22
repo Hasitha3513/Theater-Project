@@ -8483,5 +8483,21 @@
     "regressions": "PASS:675 backend incl22 new Inventory/2 Bank snapshot/3 architecture;PostgreSQL18.6 V1-V21;3 owned SQL calls;353 unchanged frontend tests/TypeScript/lint/build",
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
     "validation": "PASS:knowledge;isolated execution;26 negative controls;8 classifier;92/92 traceability;28-task unchanged acyclic dependencies;whitespace. Ordinary execution:two pre-existing next-env findings"
+  },
+  "maintenanceImpactFrontendImplementation": {
+    "taskId": "CN-MAINTENANCE-IMPACT-FE-001",
+    "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_FRONTEND",
+    "evidencePath": "PROGRESS.md#maintenance-impact-frontend",
+    "fullRequirementVerified": false,
+    "fullRequirementAcceptance": "NOT_ACCEPTED",
+    "limits": "Independent inventory.read;advisory counts only;no closure/reopening or physical authority",
+    "baselineHead": "4ea2542d988bad429e3fede23008a9536c14140b",
+    "prerequisiteCI": "39755932580 attempt1 COMPLETED/SUCCESS exact source",
+    "ownerRequestSha256": "959e23b4d38169aa75f4260030e6d5e6ba4ef1d16c874d13cec6a1513b9b49c0",
+    "domainMutations": false,
+    "closureOrReopeningAuthority": false,
+    "regressions": "PASS:675 backend tests/PostgreSQL18.6 authorization,audit,snapshot/architecture regressions;394 frontend tests incl41 focused;TypeScript,lint,production build;63 focused browser groups at375/768/1280;63 Operations,11 real Next/local upstream pagination,20 booking-operations browser regressions;8 classifier;knowledge,isolated execution,29 governance negative controls,92/92 traceability,28-task unchanged dependencies,whitespace. Browser fixtures are not real-backend E2E. Ordinary execution only2 pre-existing next-env findings.",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
+    "screenshots": ".cache/maintenance-impact/before/{375,768,1280}.png;after/{375,768,1280}.png;after/incomplete-{375,768,1280}.png;actual screenshots reviewed against approved Admin references"
   }
 }

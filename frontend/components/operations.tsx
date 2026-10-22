@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import { roomRequest, RoomRequestError } from "../lib/rooms";
 import { Button, Card, Field, SelectField, PageHeading } from "./primitives";
+import { MaintenanceImpactPreview } from "./maintenance-impact";
 export const OPERATIONS_LABEL = "SYNTHETIC OPERATIONAL TEST";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 type Entry = {
@@ -224,6 +225,7 @@ export function OperationsWorkspace() {
 			>
 				{busy ? "Loading…" : message}
 			</p>
+			<MaintenanceImpactPreview />
 			<Card title="Turnover queue">
 				<Field
 					id="operations-venue"

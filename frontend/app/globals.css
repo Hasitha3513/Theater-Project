@@ -1078,3 +1078,52 @@ button.button { display: inline-grid; }
 }
 
 .app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-desktop tbody th { vertical-align: top; }
+
+/* Independent, observational maintenance-impact preview. */
+.maintenance-impact {
+	min-width: 0;
+}
+.app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--cn-spacing-3);
+}
+.app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-context {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+	gap: var(--cn-spacing-3);
+}
+.app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-context dt {
+	font-weight: 600;
+}
+.app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-context dd {
+	margin: 0;
+	overflow-wrap: anywhere;
+	min-width: 0;
+}
+.app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-counts {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+	gap: var(--cn-spacing-4);
+}
+.app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-counts > div {
+	border: 1px solid var(--cn-color-border);
+	border-radius: var(--cn-radius-card);
+	padding: var(--cn-spacing-4);
+	background: var(--cn-card-background);
+}
+.app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-counts dd {
+	margin: var(--cn-spacing-2) 0 0;
+	font-size: 1.5rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+.app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-result {
+	overflow-wrap: anywhere;
+}
+.app-shell.admin-shell .shell-body .page-content .staff-workspace .maintenance-impact .filter-grid {
+ grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+}
+@media (max-width: 767px) {
+ .app-shell.admin-shell .shell-body .page-content .maintenance-impact .impact-context { grid-template-columns: minmax(0, 1fr); }
+}
