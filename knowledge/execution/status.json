@@ -8499,5 +8499,21 @@
     "regressions": "PASS:675 backend tests/PostgreSQL18.6 authorization,audit,snapshot/architecture regressions;394 frontend tests incl41 focused;TypeScript,lint,production build;63 focused browser groups at375/768/1280;63 Operations,11 real Next/local upstream pagination,20 booking-operations browser regressions;8 classifier;knowledge,isolated execution,29 governance negative controls,92/92 traceability,28-task unchanged dependencies,whitespace. Browser fixtures are not real-backend E2E. Ordinary execution only2 pre-existing next-env findings.",
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
     "screenshots": ".cache/maintenance-impact/before/{375,768,1280}.png;after/{375,768,1280}.png;after/incomplete-{375,768,1280}.png;actual screenshots reviewed against approved Admin references"
+  },
+  "futureFeaturesBacklogSetup": {
+    "taskId": "CN-FUTURE-FEATURES-BACKLOG-001",
+    "source": "Explicit current owner request for one supplementary future-feature Markdown register",
+    "baselineHead": "c911a925b7d32c2f39f8ce4068d39c594f40a32a",
+    "register": "backlog/FUTURE_FEATURES.md",
+    "role": "SUPPLEMENTARY_DISCOVERY_REGISTER_NOT_CANONICAL",
+    "status": "VERIFIED_DOCUMENTATION_REGISTER_SETUP_ONLY",
+    "featureCount": 0,
+    "featureApprovalGranted": false,
+    "implementationAuthorityGranted": false,
+    "mvpScopeChanged": false,
+    "dependenciesChanged": false,
+    "evidencePath": "PROGRESS.md#future-features-backlog",
+    "validation": "PASS:knowledge validation;isolated execution with committed next-env bytes projected in memory;22 governance negative controls plus2 positive register cases;92/92 traceability;unchanged acyclic28-task dependency graph;8 CI classifier regressions;Git whitespace. Ordinary execution retains only2 pre-existing next-env integrity findings. No application tests or operations executed for this documentation-only change.",
+    "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
   }
 }

@@ -418,21 +418,21 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "70f32a00dc9fce8181e1af20a7e36f4f7b44d9c04d8c367c40243984aa41bcbb",
+      "sha256": "3f6bc045ed6da2d9de89507ebbf20a7097f3ad9b1244a7bd9237db3d68dfa57d",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "646c6ab6cdee2ed59be65d77f34d0a7a37f44b58556813dab126ed486c366a04",
+      "sha256": "1544f48bf8eac8b749f17fcd4e2c9644e8eb03f0a130d8d4dee9fcc249904a01",
       "authority": "canonical-prose"
     },
     {
       "path": "README.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "164d2549e8941e547987dc801fbc0b1ae48aef1056e2f6badf30f21f9479cc54",
+      "sha256": "5995fa10f7fa0cf3781c27278ad4c59159523a0971f632c6ef676b21d52751db",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -440,6 +440,13 @@
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "f414d822f6c5ce4f3c2e8fd9eb3558220ce9c82fa96ca3dfdab74b29da7e115f",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "backlog/FUTURE_FEATURES.md",
+      "kind": "documentation-specification",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "d0e70dba26eebc47ae651a27621f85441bbc3b7587d05aeed91c2ca1f0902433",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -551,7 +558,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "7b9eb74fe360cc2db8ffd7b33bb4b020eca06d6e497c0f1cb8d237483163352b",
+      "sha256": "6568133941e78fee3c8a9e54c84d9e7be58e048584dd012e66e9319ad96ba2bb",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -565,7 +572,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "4c580ce26aca343502eab4997344a88f9a4a92430f0ccf9be75297b49b97cc2e",
+      "sha256": "f2d0902dbf91b5cda996099b9c865dd983219842d0460f5b9667d0cf1cb7f890",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -662,7 +669,7 @@
       "path": "validate_design_kb.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cb63594a90d80d56629939343dccf9adc5137e983e6127820c4dc8305c8fd570",
+      "sha256": "668ed11890aa6c25974e195ee5125c3e5c524712587ab761f5bffa31a962f01c",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -785,7 +792,7 @@
   "externalInstructionFiles": [
     {
       "path": "AGENTS.md",
-      "sha256": "4cf83b670837b4ff06b5a9499f05399fe100c878b93a97fa6dfe57ce05f0fe33",
+      "sha256": "6073e1acfab26c280fbc08237bd1edc82e8aa01e5311cedfd9cac6ff4acbeb04",
       "purpose": "Current root entry; charter consolidated into PROGRESS.md"
     }
   ],
@@ -2773,5 +2780,12 @@
     "checklistSha256": "0998cfa36ec81cfa3db6786666116d206a1a56b709347d5b71668840304cc80d",
     "graphRefreshDate": "2026-10-15",
     "previewRefresh": "NOT_PERFORMED_HTML_MISSING"
+  },
+  "futureFeatureBacklog": {
+    "path": "backlog/FUTURE_FEATURES.md",
+    "authority": "CN-FUTURE-FEATURES-BACKLOG-001 explicit owner authorization",
+    "role": "supplementary-discovery-register",
+    "canonical": false,
+    "mvpAuthority": "execution/requirements.json;execution/test-plan.json;execution/change-sets.json;PROGRESS.md#mvp-roadmap"
   }
 }

@@ -61,6 +61,75 @@ def read_spec(name):
     return ''.join(lines)
 
 
+def validate_future_features(check):
+    """One specifically owner-authorized supplementary register; no additional prose allowance."""
+    path = ROOT / 'backlog/FUTURE_FEATURES.md'
+    check(path.is_file(), 'Missing authorized future register')
+    if not path.is_file():
+        return
+    text = path.read_text()
+    headings = ['Purpose and scope', 'MVP separation rules', 'Feature identification format', 'Classification',
+                'Feature discovery workflow', 'Prioritization policy', 'Approval and readiness requirements',
+                'Lifecycle and status tracking', 'Dependencies and execution links', 'Testing and acceptance requirements',
+                'Feature record template', 'Feature records', 'Implementation history']
+    for heading in headings:
+        check('## ' + heading in text, 'Future register missing section ' + heading)
+    classes = {'EXISTING_MVP', 'FUTURE_ENHANCEMENT', 'BUG', 'TECHNICAL_DEBT', 'RESEARCH_IDEA'}
+    states = {'IDEA', 'TRIAGED', 'NEEDS_DECISION', 'APPROVED', 'READY', 'IN_PROGRESS', 'IMPLEMENTED', 'VERIFIED', 'ACCEPTED', 'DEFERRED', 'REJECTED', 'DUPLICATE'}
+    for value in classes | states:
+        check(value in text, 'Future register missing classification/status ' + value)
+    check('Never move, relabel or defer an existing MVP obligation' in text and 'not a fifth canonical knowledge document' in text,
+          'Future register lost MVP/canonical boundary')
+    # Ignore the fenced example template when recognizing actual records.
+    body = re.sub(r'^```[^\n]*\n.*?^```\s*$', '', text, flags=re.M | re.S)
+    records = list(re.finditer(r'^### (FF-[0-9]{4}) — (.+)$', body, re.M))
+    ids = [m.group(1) for m in records]
+    check(len(ids) == len(set(ids)) and 'FF-0000' not in ids, 'Future feature IDs duplicated/invalid')
+    required = ['Classification', 'Description', 'Business justification', 'User benefit', 'Discovery date', 'Source/reference',
+                'MVP overlap', 'Priority', 'Owner module', 'Backend impact', 'Frontend impact', 'Database impact', 'Security impact',
+                'Dependencies', 'Proposed acceptance criteria', 'Owner approval', 'Implementation authority', 'Implementation status',
+                'Execution record', 'Test/evidence', 'Commit SHA', 'CI evidence', 'Acceptance', 'Definition of Done / rollback', 'History']
+    graph = {}
+    for index, match in enumerate(records):
+        chunk = body[match.end():records[index+1].start() if index+1 < len(records) else len(body)]
+        fields = {}
+        for key in required:
+            values = re.findall(r'^- ' + re.escape(key) + r': (.+)$', chunk, re.M)
+            check(len(values) == 1, match.group(1) + ' missing/duplicate field ' + key)
+            fields[key] = values[0] if len(values) == 1 else ''
+        status = fields['Implementation status']
+        check(fields['Classification'] in classes and status in states, match.group(1) + ' invalid classification/status')
+        check(bool(re.fullmatch(r'\d{4}-\d{2}-\d{2}', fields['Discovery date'])), match.group(1) + ' missing discovery date')
+        if status in {'APPROVED', 'READY', 'IN_PROGRESS', 'IMPLEMENTED', 'VERIFIED', 'ACCEPTED'}:
+            check(fields['Owner approval'] not in {'', 'PENDING', 'NOT_GRANTED'}, match.group(1) + ' missing owner approval')
+        if status in {'READY', 'IN_PROGRESS', 'IMPLEMENTED', 'VERIFIED', 'ACCEPTED'}:
+            check(fields['Implementation authority'].startswith('GRANTED '), match.group(1) + ' missing explicit implementation authority')
+        if status in {'IMPLEMENTED', 'VERIFIED', 'ACCEPTED'}:
+            check(bool(re.fullmatch('[0-9a-f]{40}', fields['Commit SHA'])), match.group(1) + ' missing exact commit')
+        if status in {'VERIFIED', 'ACCEPTED'}:
+            check('https://github.com/Hasitha3513/Theater-Project/actions/runs/' in fields['CI evidence'] and
+                  'COMPLETED / SUCCESS' in fields['CI evidence'], match.group(1) + ' missing successful exact-source CI receipt')
+        if status == 'ACCEPTED':
+            check(fields['Acceptance'] not in {'', 'PENDING', 'NOT_ACCEPTED'}, match.group(1) + ' missing acceptance evidence')
+        graph[match.group(1)] = set(re.findall(r'FF-[0-9]{4}', fields['Dependencies']))
+    active, done = set(), set()
+    def visit(identity):
+        if identity in active:
+            check(False, 'Future dependency cycle ' + identity)
+            return
+        if identity in done:
+            return
+        active.add(identity)
+        for dependency in graph.get(identity, set()):
+            check(dependency in graph, 'Unknown future dependency ' + dependency)
+            if dependency in graph:
+                visit(dependency)
+        active.remove(identity)
+        done.add(identity)
+    for identity in graph:
+        visit(identity)
+
+
 def validate_consolidation(check):
     """Verify source destinations, retained substantive lines, machine authorities and immutable historical originals."""
     import os
@@ -101,7 +170,15 @@ def validate_consolidation(check):
     missing = {name for name in removal_tree if not (repo / name).is_file()}
     check(missing == expected, 'Unlisted deletion or incomplete approved removal')
     current_md = {name for name in subprocess.check_output(['git', '-C', str(repo), 'ls-files', '--cached', '--others', '--exclude-standard'], text=True).splitlines() if name.endswith('.md') and (repo / name).is_file() and name not in {'knowledge/' + name for name in UNMANAGED_WORKSPACE_ASSETS} and name not in {'knowledge/' + name for name in export_paths}}
-    check(current_md == {name for name in removal_tree if name.endswith('.md')} - expected, 'New narrative file or unlisted narrative deletion')
+    supplement = 'knowledge/backlog/FUTURE_FEATURES.md'
+    check(manifest.get('futureFeatureBacklog') == {
+        'path': 'backlog/FUTURE_FEATURES.md',
+        'authority': 'CN-FUTURE-FEATURES-BACKLOG-001 explicit owner authorization',
+        'role': 'supplementary-discovery-register', 'canonical': False,
+        'mvpAuthority': 'execution/requirements.json;execution/test-plan.json;execution/change-sets.json;PROGRESS.md#mvp-roadmap'
+    }, 'Supplementary backlog authority/role mismatch')
+    check(current_md == ({name for name in removal_tree if name.endswith('.md')} - expected) | {supplement}, 'New narrative file or unlisted narrative deletion')
+    validate_future_features(check)
     mapping = {(repo / e['sourcePath']).resolve(): (repo / e['canonicalPath'], e['anchor']) for e in entries}
     for e in entries:
         raw = subprocess.check_output(['git', '-C', str(repo), 'show', migration['baselineRevision'] + ':' + e['sourcePath']])

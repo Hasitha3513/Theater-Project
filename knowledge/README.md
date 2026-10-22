@@ -7,3 +7,5 @@ KB1.7.0 maintains the [P0–P10 MVP roadmap and D0–D6 reviews](PROGRESS.md#mvp
 Structured data stays in existing product/decisions/execution/sources registries and tokens/styles assets. Historical evidence JSON remains immutable; current verification/status recorded in PROGRESS and status.json. One backlog/coverage model, no duplicate sources of truth.
 
 Safe checks from Git root: `python3 knowledge/validate_design_kb.py`; `python3 knowledge/execution/validate_execution.py`; `git diff --check`. Validators inspect canonical substantive content and derived registry projections and source preservation, not only retained legacy files. Application/provider/hardware/physical tests remain NOT RUN.
+
+Supplementary owner-authorized [Future Features Register](backlog/FUTURE_FEATURES.md) captures genuinely new ideas, enhancements, defects and debt with source/approval/evidence links. It is not canonical prose or a replacement MVP backlog. Existing MVP requirements and the four canonical documents retain authority.

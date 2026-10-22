@@ -9,6 +9,7 @@ Users include customers/bookers, booking/room operators, identity reviewers, ban
 ## Navigation
 
 - [MVP scope](#mvp-scope)
+- [Supplementary future-feature intake](backlog/FUTURE_FEATURES.md)
 - [Actors and access](#authorization-requirements)
 - [Features](#features)
 - [Business Rules](#business-rules)
@@ -890,3 +891,9 @@ Caller must be authenticated and currently eligible,with current venue membershi
 The capability grants no assignment,proposal approval,revocation,delegation-allowance creation,membership modification,account provisioning,administrator bootstrap,financial/device permission management or frontend administration authority. All actual identity.grant.read assignments,bootstrap accounts,venue authorities and delegation allowances remain UNASSIGNED/DISABLED until separately authorized. Prior reviewer gaps and A–G policy remain unchanged;approval is not an appointment or qualification.
 
 Owner authorizes recording this capability decision. Subsequent code work remains limited to the separately scoped CN-SCOPED-GRANT-READ-001 backend read contract;the existing implementation request attachmenta10051a0-9441-48f8-b76d-8ff41472d359 remains retained,not executed by this recording. Any additive audit migration must only support mandatory protected-read auditing and must not activate grant administration. No endpoint,permission assignment,bootstrap,migration,production or acceptance signoff occurs here. OD-18/28 remain globally OPEN_DECISION. [Technical gate reconciliation](ARCHITECTURE.md#identity-grant-read-approval),[recording evidence](PROGRESS.md#identity-grant-read-approval).
+
+
+<a id="future-feature-intake"></a>
+## Supplementary future-feature intake
+
+Owner decision CN-FUTURE-FEATURES-BACKLOG-001 authorizes the single supplementary [Future Features Register](backlog/FUTURE_FEATURES.md), alongside continued approved MVP delivery. It owns discovery records only;PROJECT,ARCHITECTURE,DESIGN and PROGRESS remain the four canonical documents. Existing requirements,approved deferrals,dependencies and acceptance obligations never move there to reduce the MVP workload. An IDEA or prioritization is not feature approval;bounded owner approval and separate implementation authority precede execution. Owner-approved future work may proceed alongside MVP delivery without silently changing MVP scope or acceptance counts. [Setup evidence](PROGRESS.md#future-features-backlog).

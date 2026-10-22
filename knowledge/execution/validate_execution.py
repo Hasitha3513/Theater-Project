@@ -4897,7 +4897,7 @@ def maintenance_impact_backend_main():
 
 
 
-def inert_ci_main():
+def maintenance_impact_frontend_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='4ea2542d988bad429e3fede23008a9536c14140b'
@@ -4964,6 +4964,83 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=maintenance_impact_backend_main()
     if result==0:print('PASS exact bounded Bounded maintenance impact frontend; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+
+def inert_ci_main():
+    """Pin the owner-authorized supplementary intake and unchanged MVP before historical replay."""
+    from unittest.mock import patch
+    baseline='c911a925b7d32c2f39f8ce4068d39c594f40a32a'
+    owned={'scripts/test-governance-controls.py', 'knowledge/PROGRESS.md', 'knowledge/README.md', 'knowledge/validate_design_kb.py', 'knowledge/PROJECT.md', 'knowledge/backlog/FUTURE_FEATURES.md', 'AGENTS.md'}
+    registries={'knowledge/execution/status.json'}
+    canonical=set()
+    added={'knowledge/backlog/FUTURE_FEATURES.md'}
+    hashes={'AGENTS.md': '6073e1acfab26c280fbc08237bd1edc82e8aa01e5311cedfd9cac6ff4acbeb04', 'knowledge/PROGRESS.md': '3f6bc045ed6da2d9de89507ebbf20a7097f3ad9b1244a7bd9237db3d68dfa57d', 'knowledge/PROJECT.md': '1544f48bf8eac8b749f17fcd4e2c9644e8eb03f0a130d8d4dee9fcc249904a01', 'knowledge/README.md': '5995fa10f7fa0cf3781c27278ad4c59159523a0971f632c6ef676b21d52751db', 'knowledge/backlog/FUTURE_FEATURES.md': 'd0e70dba26eebc47ae651a27621f85441bbc3b7587d05aeed91c2ca1f0902433', 'knowledge/execution/status.json': '6568133941e78fee3c8a9e54c84d9e7be58e048584dd012e66e9319ad96ba2bb', 'knowledge/validate_design_kb.py': '668ed11890aa6c25974e195ee5125c3e5c524712587ab761f5bffa31a962f01c', 'scripts/test-governance-controls.py': '74b38e8da9e6863dfa9c9ae89af2d3c54df86f26b29f66559101b9d127a72191'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Owner-authorized future-feature register setup exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('futureFeatureBacklogEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Owner-authorized future-feature register setup changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('futureFeaturesBacklogSetup',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Owner-authorized future-feature register setup changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Owner-authorized future-feature register setup changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Owner-authorized future-feature register setup rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    if package!=original:errors.append('Summary changed dependency or unrelated frontend/package authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Owner-authorized future-feature register setup rewrote prior design')
+    # Exact scoped stylesheet bytes are pinned above; unrelated changes remain rejected.
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Owner-authorized future-feature register setup promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Owner-authorized future-feature register setup unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Owner-authorized future-feature register setup changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['frontend/components/bank-report.tsx','frontend/lib/bank-backend.ts','frontend/lib/session.ts','frontend/lib/rooms.ts','backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java','backend/src/main/java/com/cinenest/payments/BankBalanceReport.java','frontend/tests/synthetic-e2e.mjs','backend/src/test/java/com/cinenest/SyntheticJourneyIT.java']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Summary changed protected existing contract/campaign '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/decisions/cinenest-open-decisions.json','knowledge/execution/requirements.json','knowledge/execution/test-plan.json']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Future register changed MVP/design/policy '+name)
+    for name in ['AGENTS.md','knowledge/README.md']:
+        if not (R/name).read_bytes().startswith(prior(name)):errors.append('Future register rewrote historical instructions/index '+name)
+    state=json.loads((K/'execution/status.json').read_text()).get('futureFeaturesBacklogSetup',{})
+    if state.get('featureCount')!=0 or any(state.get(k)!=False for k in ['featureApprovalGranted','implementationAuthorityGranted','mvpScopeChanged','dependenciesChanged']):errors.append('Future register setup invented feature authority/MVP changes')
+    expected=json.loads(prior('knowledge/manifest.json'))
+    for item in expected['files']:
+        if item['path']!='manifest.json':item['sha256']=hashlib.sha256((K/item['path']).read_bytes()).hexdigest()
+    expected['files'].append({'path':'backlog/FUTURE_FEATURES.md','kind':'documentation-specification','implementationStatus':'NOT_VERIFIED','sha256':hashlib.sha256((K/'backlog/FUTURE_FEATURES.md').read_bytes()).hexdigest(),'authority':'structured-asset-or-evidence'})
+    expected['files'].sort(key=lambda item:item['path'])
+    expected['externalInstructionFiles'][0]['sha256']=hashlib.sha256((R/'AGENTS.md').read_bytes()).hexdigest()
+    expected['futureFeatureBacklog']={'path':'backlog/FUTURE_FEATURES.md','authority':'CN-FUTURE-FEATURES-BACKLOG-001 explicit owner authorization','role':'supplementary-discovery-register','canonical':False,'mvpAuthority':'execution/requirements.json;execution/test-plan.json;execution/change-sets.json;PROGRESS.md#mvp-roadmap'}
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('Future register manifest changed unrelated inventory/authority')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    replacements[K/'manifest.json']=prior('knowledge/manifest.json')
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=maintenance_impact_frontend_main()
+    if result==0:print('PASS exact bounded Owner-authorized future-feature register setup; approved documentation delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':
