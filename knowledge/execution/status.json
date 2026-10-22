@@ -763,7 +763,7 @@
       "accepted": false
     },
     "planningCriteria": {
-      "checked": 13,
+      "checked": 14,
       "total": 74,
       "overallEffortPercentage": null
     },
@@ -8515,5 +8515,82 @@
     "evidencePath": "PROGRESS.md#future-features-backlog",
     "validation": "PASS:knowledge validation;isolated execution with committed next-env bytes projected in memory;22 governance negative controls plus2 positive register cases;92/92 traceability;unchanged acyclic28-task dependency graph;8 CI classifier regressions;Git whitespace. Ordinary execution retains only2 pre-existing next-env integrity findings. No application tests or operations executed for this documentation-only change.",
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
+  },
+  "p1C03Closure": {
+    "taskId": "CN-P1-C03-CLOSURE-RECORD-001",
+    "criterionId": "P1-C03",
+    "wording": "Initial feature migrations, session storage, and durable-work foundations implemented.",
+    "status": "OWNER_APPROVED_CLOSED",
+    "owner": "Hasitha Wijerathna",
+    "approvalDate": "2026-10-22",
+    "approvalTimezone": "Asia/Colombo",
+    "approvalAuthority": "Explicit owner approval in this session, limited to P1-C03",
+    "sourceCommit": "656d093b953d3b9556b3e7a71812530d2f814cdd",
+    "ci": {
+      "runId": 39767953720,
+      "runAttempt": 1,
+      "jobId": 119787993406,
+      "headSha": "656d093b953d3b9556b3e7a71812530d2f814cdd",
+      "status": "completed",
+      "conclusion": "success",
+      "classification": "CI_OR_GOVERNANCE",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39767953720",
+      "backendTests": 675,
+      "frontendTests": 394
+    },
+    "evidencePath": "PROGRESS.md#p1-c03-closure",
+    "evidenceRevalidated": [
+      "Flyway V1-V21 / PostgreSQL validation / populated V20 upgrade",
+      "JDBC session persistence, expiry, cross-instance logout and CSRF",
+      "Durable receipts / worker leases and fencing",
+      "Mandatory audit transaction rollback and replay",
+      "Actual child-JVM worker restart and concurrency",
+      "Public ports / module persistence architecture"
+    ],
+    "previousCounts": {
+      "p1Checked": 2,
+      "roadmapChecked": 13,
+      "roadmapTotal": 74,
+      "unchecked": 61,
+      "criteriaCompletionPercent": 17.6
+    },
+    "currentCounts": {
+      "p1Checked": 3,
+      "roadmapChecked": 14,
+      "roadmapTotal": 74,
+      "unchecked": 60,
+      "criteriaCompletionPercent": 18.9
+    },
+    "scopeExclusions": [
+      "Full P1 phase acceptance",
+      "Full CN-NFR-02 or CN-NFR-03",
+      "Production disaster recovery",
+      "Real financial settlement",
+      "Physical hardware readiness",
+      "Commercial operations",
+      "Production deployment",
+      "Formal acceptance of all 92 requirements"
+    ],
+    "requirementsAccepted": 0,
+    "requirementTotal": 92,
+    "otherCriterionClosures": [],
+    "formalTestStatusesChanged": false,
+    "dependenciesChanged": false,
+    "applicationChanged": false,
+    "futureBacklogChanged": false,
+    "validation": {
+      "knowledge": "PASS",
+      "isolatedExecutionStatusManifest": "PASS; committed next-env bytes projected in memory; unrelated file never edited",
+      "traceabilityAndDependencies": "PASS; 92/92 requirements/test-plan mapping and unchanged acyclic 28-task graph",
+      "governanceNegativeControls": "PASS; 23 persistent negative controls (6 acceptance/dependency + 9 future-register + 8 P1-C03); 2 positive register cases; 7 additional exact-source/authority controls PASS",
+      "whitespace": "PASS",
+      "ordinaryExecution": "FAIL only 2 pre-existing next-env.d.ts integrity findings; preserved unchanged",
+      "applicationTests": "NOT_RERUN_DOCUMENTATION_ONLY; prerequisite exact-source results revalidated"
+    },
+    "publication": {
+      "state": "AUTHORIZED_AFTER_VALIDATION",
+      "newExactSourceCI": "PENDING_PUBLICATION",
+      "sourceOfFinalSha": "Git HEAD and independently verified remote main; no self-referential commit SHA"
+    }
   }
 }

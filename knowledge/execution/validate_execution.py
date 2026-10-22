@@ -4971,7 +4971,7 @@ def maintenance_impact_frontend_main():
 
 
 
-def inert_ci_main():
+def future_backlog_setup_main():
     """Pin the owner-authorized supplementary intake and unchanged MVP before historical replay."""
     from unittest.mock import patch
     baseline='c911a925b7d32c2f39f8ce4068d39c594f40a32a'
@@ -5041,6 +5041,84 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=maintenance_impact_frontend_main()
     if result==0:print('PASS exact bounded Owner-authorized future-feature register setup; approved documentation delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+
+
+def inert_ci_main():
+    """Permit only the exact owner-approved P1-C03 documentation closure delta."""
+    from unittest.mock import patch
+    baseline='656d093b953d3b9556b3e7a71812530d2f814cdd'
+    owned={'knowledge/PROGRESS.md','knowledge/execution/status.json','scripts/test-governance-controls.py'}
+    hashes={'knowledge/PROGRESS.md': '7a15850add47e03561d3e74572b390e9c40f991a52859fd9f2449e7c15e8c0cb', 'knowledge/execution/status.json': 'cf8898676430d8728cf4d5de71d4508c4a46852171dae02ce15ec30210b9d295', 'scripts/test-governance-controls.py': '07a487058ef2433426d7fff29f7a15c902113c2aafac2195580ef7f71ff58d7b'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('P1-C03 approved closure exact source mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    prior_validator=prior('knowledge/execution/validate_execution.py').decode()
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    historical=prior_validator.removesuffix(ending)
+    index=historical.rfind('def inert_ci_main():')
+    historical=historical[:index]+historical[index:].replace('def inert_ci_main():','def future_backlog_setup_main():',1)
+    if not (K/'execution/validate_execution.py').read_text().startswith(historical):errors.append('P1-C03 weakened historical validator source')
+    original=prior('knowledge/PROGRESS.md').decode();current=(K/'PROGRESS.md').read_text()
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    before={identity:state for state,identity in re.findall(pattern,original,re.M)}
+    after={identity:state for state,identity in re.findall(pattern,current,re.M)}
+    expected=dict(before)
+    if before.get('P1-C03')!=' ':errors.append('P1-C03 closure baseline is not unchecked')
+    expected['P1-C03']='x'
+    if after!=expected:errors.append('P1-C03 closure changed another criterion/phase/demo checkbox')
+    criteria={k:v for k,v in after.items() if re.fullmatch(r'P\d+-C\d+',k)}
+    if len(criteria)!=74 or sum(v=='x' for v in criteria.values())!=14 or sum(v=='x' for k,v in criteria.items() if k.startswith('P1-'))!=3:
+        errors.append('P1-C03 closure derived roadmap counts disagree')
+    oldrow=next(line for line in original.splitlines() if line.startswith('- [ ] **P1-C03**'))
+    newrow=next((line for line in current.splitlines() if line.startswith('- [x] **P1-C03**')),'')
+    if newrow.split(' Evidence:')[0]!=oldrow.replace('- [ ]','- [x]',1).split(' Evidence:')[0]:
+        errors.append('P1-C03 changed registered wording or traceability')
+    state=json.loads((K/'execution/status.json').read_text());closure=state.pop('p1C03Closure',{})
+    if state['roadmapMaintenance']['planningCriteria']['checked']!=14:errors.append('P1-C03 status count is not14')
+    state['roadmapMaintenance']['planningCriteria']['checked']=13
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('P1-C03 changed unrelated execution authority/history')
+    if (closure.get('criterionId'),closure.get('status'),closure.get('sourceCommit'),closure.get('approvalDate'))!=('P1-C03','OWNER_APPROVED_CLOSED',baseline,'2026-10-22'):
+        errors.append('P1-C03 owner approval provenance missing')
+    ci=closure.get('ci',{})
+    if (ci.get('runId'),ci.get('headSha'),ci.get('status'),ci.get('conclusion'))!=(39767953720,baseline,'completed','success'):
+        errors.append('P1-C03 exact-source CI evidence missing')
+    if closure.get('requirementsAccepted')!=0 or closure.get('otherCriterionClosures')!=[] or any(closure.get(k)!=False for k in ['formalTestStatusesChanged','dependenciesChanged','applicationChanged','futureBacklogChanged']):
+        errors.append('P1-C03 expanded acceptance or implementation scope')
+    allowed=owned|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('P1-C03 unrelated source delta '+str(changed-allowed))
+    for name in ['AGENTS.md','knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/README.md','knowledge/backlog/FUTURE_FEATURES.md','knowledge/execution/requirements.json','knowledge/execution/test-plan.json','knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','knowledge/validate_design_kb.py']:
+        if (R/name).read_bytes()!=prior(name):errors.append('P1-C03 changed protected authority '+name)
+    manifest=json.loads(prior('knowledge/manifest.json'))
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if name in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((R/name).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('P1-C03 manifest changed unrelated inventory/authority')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # The exact authorized successor bytes, counts and one-checkbox scope passed.
+    # Replay historical validators against their original approved inputs only.
+    replacements={R/name:prior(name) for name in owned|{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}}
+    rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+            text=value if isinstance(value,str) else value.decode()
+            text=''.join(line+'\n' for line in text.splitlines() if line not in owned)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=future_backlog_setup_main()
+    if result==0:print('PASS exact owner-approved P1-C03 closure only;14/74;full requirements,phases,tasks,dependencies and historical controls preserved')
     return result
 
 if __name__ == '__main__':
