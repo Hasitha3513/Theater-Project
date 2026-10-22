@@ -45,6 +45,7 @@ def main():
 
     test_future_register_controls()
     test_p1_c03_closure_controls(validator)
+    test_p2_c06_closure_controls(validator)
 
 
 def test_future_register_controls():
@@ -107,7 +108,7 @@ def test_p1_c03_closure_controls(validator):
         data['p1C03Closure'][field] = value
         faults.append((status, json.dumps(data).encode(), label))
     data = json.loads(status.read_text())
-    data['roadmapMaintenance']['planningCriteria']['checked'] = 15
+    data['roadmapMaintenance']['planningCriteria']['checked'] = 16
     faults.append((status, json.dumps(data).encode(), 'false roadmap count'))
     data = json.loads(status.read_text())
     data['p1C03Closure']['ci']['conclusion'] = 'failure'
@@ -119,6 +120,38 @@ def test_p1_c03_closure_controls(validator):
         assert result != 0, 'P1-C03 validator accepted ' + label
         print('PASS P1-C03 rejected', label)
     print('PASS P1-C03:8 in-memory negative controls;no stored acceptance mutations')
+
+def test_p2_c06_closure_controls(validator):
+    """Only the exact approved criterion closure may advance the roadmap."""
+    progress = K / 'PROGRESS.md'
+    original = progress.read_text()
+    faults = [
+        (progress, original.replace('- [x] **P2-C06**', '- [ ] **P2-C06**').encode(), 'lost approved closure'),
+        (progress, original.replace('- [ ] **P1-C02**', '- [x] **P1-C02**').encode(), 'another criterion closure'),
+        (progress, original.replace('- [ ] **P2-ACCEPT**', '- [x] **P2-ACCEPT**').encode(), 'full P2 phase acceptance'),
+    ]
+    status = K / 'execution/status.json'
+    for label, field, value in [
+        ('false source', 'sourceCommit', '0' * 40),
+        ('full requirements acceptance', 'requirementsAccepted', 92),
+        ('extra closure', 'otherCriterionClosures', ['P1-C02']),
+    ]:
+        data = json.loads(status.read_text())
+        data['p2C06Closure'][field] = value
+        faults.append((status, json.dumps(data).encode(), label))
+    data = json.loads(status.read_text())
+    data['roadmapMaintenance']['planningCriteria']['checked'] = 16
+    faults.append((status, json.dumps(data).encode(), 'false roadmap count'))
+    data = json.loads(status.read_text())
+    data['p2C06Closure']['ci']['conclusion'] = 'failure'
+    faults.append((status, json.dumps(data).encode(), 'failed prerequisite CI'))
+    read_bytes, read_text = Path.read_bytes, Path.read_text
+    for path, replacement, label in faults:
+        with patch.object(Path, 'read_bytes', lambda p, *a, **kw: replacement if p == path else read_bytes(p, *a, **kw)), patch.object(Path, 'read_text', lambda p, *a, **kw: replacement.decode() if p == path else read_text(p, *a, **kw)), redirect_stdout(io.StringIO()):
+            result = validator['inert_ci_main']()
+        assert result != 0, 'P2-C06 validator accepted ' + label
+        print('PASS P2-C06 rejected', label)
+    print('PASS P2-C06:8 in-memory negative controls;no stored acceptance mutations')
 
 
 if __name__ == '__main__': main()

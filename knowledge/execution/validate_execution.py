@@ -5049,7 +5049,7 @@ def future_backlog_setup_main():
 
 
 
-def inert_ci_main():
+def p1_c03_closure_main():
     """Permit only the exact owner-approved P1-C03 documentation closure delta."""
     from unittest.mock import patch
     baseline='656d093b953d3b9556b3e7a71812530d2f814cdd'
@@ -5119,6 +5119,80 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=future_backlog_setup_main()
     if result==0:print('PASS exact owner-approved P1-C03 closure only;14/74;full requirements,phases,tasks,dependencies and historical controls preserved')
+    return result
+
+
+
+def inert_ci_main():
+    """Permit only the exact owner-approved P2-C06 documentation closure delta."""
+    from unittest.mock import patch
+    baseline='e871c46ef06f47dfd6da5f0b42a290ed1b0ca3ed'
+    owned={'knowledge/PROGRESS.md','knowledge/execution/status.json','scripts/test-governance-controls.py'}
+    hashes={'knowledge/PROGRESS.md': 'a943b749c16a55271f7825f3416903df95a3ed8408f5f20dcc94d352d374c187', 'knowledge/execution/status.json': '0b608e6bc4febdbd1325e4f303961a78fa0ef3e93b306bfd1ced89427e50d95c', 'scripts/test-governance-controls.py': 'bd5c969d220ea262af85cea2fc54b8c5ca3fa478ffced064d9b9ceea79bd4c9c'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('P2-C06 approved closure exact source mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    prior_validator=prior('knowledge/execution/validate_execution.py').decode()
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    historical=prior_validator.removesuffix(ending)
+    index=historical.rfind('\ndef inert_ci_main():')
+    historical=historical[:index]+historical[index:].replace('def inert_ci_main():','def p1_c03_closure_main():',1)
+    if not (K/'execution/validate_execution.py').read_text().startswith(historical):errors.append('P2-C06 weakened historical validator source')
+    original=prior('knowledge/PROGRESS.md').decode();current=(K/'PROGRESS.md').read_text()
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    before={identity:state for state,identity in re.findall(pattern,original,re.M)}
+    after={identity:state for state,identity in re.findall(pattern,current,re.M)}
+    expected=dict(before)
+    if before.get('P2-C06')!=' ':errors.append('P2-C06 closure baseline is not unchecked')
+    expected['P2-C06']='x'
+    if after!=expected:errors.append('P2-C06 closure changed another criterion/phase/demo checkbox')
+    criteria={k:v for k,v in after.items() if re.fullmatch(r'P\d+-C\d+',k)}
+    if len(criteria)!=74 or sum(v=='x' for v in criteria.values())!=15 or sum(v=='x' for k,v in criteria.items() if k.startswith('P2-'))!=4:
+        errors.append('P2-C06 closure derived roadmap counts disagree')
+    oldrow=next(line for line in original.splitlines() if line.startswith('- [ ] **P2-C06**'))
+    newrow=next((line for line in current.splitlines() if line.startswith('- [x] **P2-C06**')),'')
+    if newrow.split(' Evidence:')[0]!=oldrow.replace('- [ ]','- [x]',1).split(' Evidence:')[0]:
+        errors.append('P2-C06 changed registered wording or traceability')
+    state=json.loads((K/'execution/status.json').read_text());closure=state.pop('p2C06Closure',{})
+    if state['roadmapMaintenance']['planningCriteria']['checked']!=15:errors.append('P2-C06 status count is not15')
+    state['roadmapMaintenance']['planningCriteria']['checked']=14
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('P2-C06 changed unrelated execution authority/history')
+    if (closure.get('criterionId'),closure.get('status'),closure.get('sourceCommit'),closure.get('approvalDate'))!=('P2-C06','OWNER_APPROVED_CLOSED',baseline,'2026-10-22'):
+        errors.append('P2-C06 owner approval provenance missing')
+    ci=closure.get('ci',{})
+    if (ci.get('runId'),ci.get('headSha'),ci.get('status'),ci.get('conclusion'))!=(39770919606,baseline,'completed','success'):
+        errors.append('P2-C06 exact-source CI evidence missing')
+    if closure.get('requirementsAccepted')!=0 or closure.get('otherCriterionClosures')!=[] or any(closure.get(k)!=False for k in ['formalTestStatusesChanged','dependenciesChanged','applicationChanged','futureBacklogChanged']):
+        errors.append('P2-C06 expanded acceptance or implementation scope')
+    allowed=owned|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('P2-C06 unrelated source delta '+str(changed-allowed))
+    for name in ['AGENTS.md','knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/README.md','knowledge/backlog/FUTURE_FEATURES.md','knowledge/execution/requirements.json','knowledge/execution/test-plan.json','knowledge/execution/change-sets.json','knowledge/decisions/cinenest-open-decisions.json','knowledge/validate_design_kb.py']:
+        if (R/name).read_bytes()!=prior(name):errors.append('P2-C06 changed protected authority '+name)
+    manifest=json.loads(prior('knowledge/manifest.json'))
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if name in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((R/name).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('P2-C06 manifest changed unrelated inventory/authority')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # The exact authorized successor bytes, counts and one-checkbox scope passed.
+    # Replay historical validators against their original approved inputs only.
+    replacements={R/name:prior(name) for name in owned|{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}}
+    rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+            text=value if isinstance(value,str) else value.decode()
+            text=''.join(line+'\n' for line in text.splitlines() if line not in owned)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=p1_c03_closure_main()
+    if result==0:print('PASS exact owner-approved P2-C06 closure only;15/74;full requirements,phases,tasks,dependencies and historical controls preserved')
     return result
 
 if __name__ == '__main__':

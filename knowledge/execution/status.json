@@ -763,7 +763,7 @@
       "accepted": false
     },
     "planningCriteria": {
-      "checked": 14,
+      "checked": 15,
       "total": 74,
       "overallEffortPercentage": null
     },
@@ -8591,6 +8591,80 @@
       "state": "AUTHORIZED_AFTER_VALIDATION",
       "newExactSourceCI": "PENDING_PUBLICATION",
       "sourceOfFinalSha": "Git HEAD and independently verified remote main; no self-referential commit SHA"
+    }
+  },
+  "p2C06Closure": {
+    "taskId": "CN-P2-C06-CLOSURE-RECORD-001",
+    "criterionId": "P2-C06",
+    "wording": "Audit history, version preservation, and invalid capacity/duration checks verified.",
+    "status": "OWNER_APPROVED_CLOSED",
+    "owner": "Hasitha Wijerathna",
+    "approvalDate": "2026-10-22",
+    "approvalAuthority": "Explicit owner authorization for bounded P2-C06 only",
+    "sourceCommit": "e871c46ef06f47dfd6da5f0b42a290ed1b0ca3ed",
+    "ci": {
+      "runId": 39770919606,
+      "runAttempt": 1,
+      "jobId": 119797938699,
+      "headSha": "e871c46ef06f47dfd6da5f0b42a290ed1b0ca3ed",
+      "status": "completed",
+      "conclusion": "success",
+      "classification": "CI_OR_GOVERNANCE",
+      "url": "https://github.com/Hasitha3513/Theater-Project/actions/runs/39770919606",
+      "backendTests": 675
+    },
+    "evidencePath": "PROGRESS.md#p2-c06-closure",
+    "clauses": {
+      "auditHistory": "VERIFIED",
+      "versionPreservation": "VERIFIED",
+      "invalidCapacity": "VERIFIED",
+      "invalidDuration": "VERIFIED"
+    },
+    "previousCounts": {
+      "p2Checked": 3,
+      "roadmapChecked": 14,
+      "roadmapTotal": 74,
+      "unchecked": 60,
+      "criteriaCompletionPercent": 18.9
+    },
+    "currentCounts": {
+      "p2Checked": 4,
+      "roadmapChecked": 15,
+      "roadmapTotal": 74,
+      "unchecked": 59,
+      "criteriaCompletionPercent": 20.3
+    },
+    "scopeExclusions": [
+      "Full P2 phase acceptance",
+      "Full package acceptance requirements",
+      "Real payment processing",
+      "Production financial integrity",
+      "Physical room-capacity qualification",
+      "Complete operational audit acceptance",
+      "Production deployment",
+      "Formal acceptance of the 92 requirements"
+    ],
+    "requirementsAccepted": 0,
+    "requirementTotal": 92,
+    "otherCriterionClosures": [],
+    "formalTestStatusesChanged": false,
+    "dependenciesChanged": false,
+    "applicationChanged": false,
+    "futureBacklogChanged": false,
+    "validation": {
+      "knowledge": "PASS",
+      "isolatedExecutionStatusManifest": "PASS; only committed next-env bytes projected in memory without file changes",
+      "traceabilityAndDependencies": "PASS;92/92 traceability;28 unchanged acyclic tasks;formal acceptance unchanged",
+      "governanceNegativeControls": "PASS;31 persistent in-memory negative controls plus2 positive future-register cases",
+      "classifierRegressions": "PASS;8 tests",
+      "whitespace": "PASS",
+      "ordinaryExecution": "FAIL only2 pre-existing next-env.d.ts integrity findings;preserved unchanged",
+      "applicationTests": "NOT_RERUN_DOCUMENTATION_ONLY; approved source CI results revalidated"
+    },
+    "publication": {
+      "state": "AUTHORIZED_AFTER_VALIDATION",
+      "newExactSourceCI": "PENDING_PUBLICATION",
+      "sourceOfFinalSha": "Git HEAD and independently verified remote main"
     }
   }
 }
