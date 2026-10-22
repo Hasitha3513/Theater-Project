@@ -1,3 +1,4 @@
+import { ManagedGrantInspection } from "../../../components/managed-grant-inspection";
 import { AdminReads } from "../../../components/admin-reads";
 import { PageHeading } from "../../../components/primitives";
 export default function Page() {
@@ -9,6 +10,7 @@ export default function Page() {
 			>
 				Current venue-scoped read permissions are enforced by the backend.
 			</PageHeading>
+			<ManagedGrantInspection />
 			<AdminReads />
 		</>
 	);

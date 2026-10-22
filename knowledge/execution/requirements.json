@@ -1797,6 +1797,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Only protected synthetic managed-grant GET and mandatory audit;no authority assignments/commands/frontend or full requirement acceptance"
+      },
+      "managedGrantFrontendEvidence": {
+        "taskId": "CN-SCOPED-GRANT-INSPECTION-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_FRONTEND_INSPECTION",
+        "evidencePath": "PROGRESS.md#managed-grant-inspection-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only managed subset UI/proxy;intercepted browser evidence not real-backend E2E;no authority assignments/commands"
       }
     },
     {
@@ -2133,6 +2141,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Only protected synthetic managed-grant GET and mandatory audit;no authority assignments/commands/frontend or full requirement acceptance"
+      },
+      "managedGrantFrontendEvidence": {
+        "taskId": "CN-SCOPED-GRANT-INSPECTION-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_FRONTEND_INSPECTION",
+        "evidencePath": "PROGRESS.md#managed-grant-inspection-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only managed subset UI/proxy;intercepted browser evidence not real-backend E2E;no authority assignments/commands"
       }
     },
     {
@@ -3406,6 +3422,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Only protected synthetic managed-grant GET and mandatory audit;no authority assignments/commands/frontend or full requirement acceptance"
+      },
+      "managedGrantFrontendEvidence": {
+        "taskId": "CN-SCOPED-GRANT-INSPECTION-FE-001",
+        "status": "LOCALLY_VERIFIED_BOUNDED_SYNTHETIC_FRONTEND_INSPECTION",
+        "evidencePath": "PROGRESS.md#managed-grant-inspection-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Read-only managed subset UI/proxy;intercepted browser evidence not real-backend E2E;no authority assignments/commands"
       }
     },
     {

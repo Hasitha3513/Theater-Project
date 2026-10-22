@@ -1058,3 +1058,23 @@ button.button { display: inline-grid; }
 .app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar .filter-grid{align-items:start}
 .app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar .calendar-selection{display:grid;gap:var(--cn-spacing-4)}
 @media(min-width:1024px){.app-shell.customer-shell .shell-body .page-content .booking-workflow .customer-calendar .calendar-selection{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Managed subset inspection: existing admin tokens and shell, no authority controls. */
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection { margin-block: var(--cn-spacing-6); }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-filter-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(8rem,.4fr); gap: var(--cn-spacing-4); }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-result { border-top: 1px solid var(--cn-color-border); margin-top: var(--cn-spacing-4); padding-top: var(--cn-spacing-4); }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-context, .app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-facts { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--cn-spacing-3); }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-context dd, .app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-facts dd { margin: 0; overflow-wrap: anywhere; }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-context dt, .app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-facts dt { font-weight: 600; }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-desktop th small { display: block; font-weight: normal; overflow-wrap: anywhere; }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-desktop th { width: 32%; overflow-wrap: anywhere; }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-mobile { display: none; }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection p, .app-shell.admin-shell .shell-body .page-content .managed-grant-inspection h4 { overflow-wrap: anywhere; }
+@media (max-width: 767px) {
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-filter-grid, .app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-context, .app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-facts { grid-template-columns: minmax(0,1fr); }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-desktop { display: none; }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-mobile { display: grid; gap: var(--cn-spacing-4); }
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-mobile article { border-top: 1px solid var(--cn-color-border); padding-block: var(--cn-spacing-4); }
+}
+
+.app-shell.admin-shell .shell-body .page-content .managed-grant-inspection .grant-desktop tbody th { vertical-align: top; }

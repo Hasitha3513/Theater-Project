@@ -87,7 +87,16 @@ try {
 			.click();
 		await page.getByRole("cell", { name: "SUSPENDED", exact: true }).waitFor();
 		checks++;
-		await page.getByRole("button", { name: "Next page", exact: true }).click();
+		await page
+			.locator("section.card")
+			.filter({
+				has: page.getByRole("heading", {
+					name: "Scoped accounts and audit",
+					exact: true,
+				}),
+			})
+			.getByRole("button", { name: "Next page", exact: true })
+			.click();
 		await page.getByRole("cell", { name: "SUSPENDED", exact: true }).waitFor();
 		assert.ok(requests >= 2);
 		checks++;

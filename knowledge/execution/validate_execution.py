@@ -4688,7 +4688,7 @@ def grant_read_capability_record_main():
 
 
 
-def inert_ci_main():
+def managed_grant_backend_main():
     """Qualify exact owner-authorized booking presentation source before historical replay."""
     from unittest.mock import patch
     baseline='0bcb611f31e92eea859f734052fea353df607f5f'
@@ -4750,6 +4750,77 @@ def inert_ci_main():
         return value
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=grant_read_capability_record_main()
     if result==0:print('PASS exact bounded Bounded managed-grant read implementation; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
+    return result
+
+
+
+
+
+def inert_ci_main():
+    """Qualify exact owner-authorized booking presentation source before historical replay."""
+    from unittest.mock import patch
+    baseline='3d67aa20191a9c658100ca5970453815e6cd16e4'
+    owned={'frontend/app/globals.css', 'frontend/tests/admin-browser.mjs', 'frontend/app/api/admin/venues/[venueId]/accounts/[id]/grants/route.ts', 'frontend/lib/managed-grants.ts', 'frontend/app/admin/accounts/page.tsx', 'frontend/tests/managed-grants-fixtures.mjs', 'frontend/components/managed-grant-inspection.tsx', 'frontend/package.json', 'frontend/lib/managed-grants-backend.ts', 'frontend/tests/managed-grants.test.mjs', 'frontend/tests/managed-grants-browser.mjs'}
+    registries={'knowledge/execution/status.json', 'knowledge/execution/requirements.json', 'knowledge/execution/test-plan.json'}
+    canonical={'knowledge/DESIGN.md', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md'}
+    added={'frontend/app/api/admin/venues/[venueId]/accounts/[id]/grants/route.ts', 'frontend/lib/managed-grants.ts', 'frontend/tests/managed-grants-fixtures.mjs', 'frontend/components/managed-grant-inspection.tsx', 'frontend/lib/managed-grants-backend.ts', 'frontend/tests/managed-grants.test.mjs', 'frontend/tests/managed-grants-browser.mjs'}
+    hashes={'frontend/app/globals.css': '1dbce2d2320420bbaa0c21144115129c341a2fd0b1250a2658e42f49ba0dd76b', 'frontend/tests/admin-browser.mjs': '17548962b577e04ea488e0915d0598c5375e79b18dddc0a549690b8118671ade', 'frontend/app/api/admin/venues/[venueId]/accounts/[id]/grants/route.ts': '241c878bc601a82086cb522385090aefbda6bdfd8404a4343a745234f93bf630', 'frontend/lib/managed-grants.ts': '74a70b6a1981169e55b68371f6cad935d02d09fd2b8802196ca6fb0d3224692d', 'knowledge/execution/requirements.json': 'a8dc68c91b761785b56a752a09d635b719205b2af587e821bd144007fd0cf2a0', 'frontend/app/admin/accounts/page.tsx': '420f7a70418c7a7d47a7a1862a610cffca69492fbfdfd922f17398e11dd0cdae', 'knowledge/DESIGN.md': 'ada6a459a96e0c2e74666c3a558b8b988b8dd4f8b086eb7ff47dcbc16069f025', 'frontend/tests/managed-grants-fixtures.mjs': '9852c01e5f6889fb8abd6a714733ae0889eb6b671abe08b7571588b343bd3199', 'frontend/components/managed-grant-inspection.tsx': 'a925f82841f4a7d3915e2240ff62390197714b469efc0c6e898d5f29baada68f', 'frontend/package.json': '702a0454a02799b0de39de6aae7d93bd769ccf52c9f92591204b5185ef318b58', 'knowledge/execution/status.json': '68991b1327ef682dcec322535766859dbf14213bbc2b5b1c089d6d78b2545f85', 'knowledge/PROGRESS.md': '2ab31be10f238a60f4d289a16e31182e1ab222e1cc0df2d3e7500634c765faa8', 'knowledge/execution/test-plan.json': '4edd9e74412e386d514e9c679d836a1693495ae0474cfb8aa6c5ade23d0c9028', 'frontend/lib/managed-grants-backend.ts': '1799c6e3d3fec6c7e7ea4ec3c4fa744215b909b497321bc2c0eaba48e0b112f9', 'frontend/tests/managed-grants.test.mjs': 'b0e2456fd37ce76f47cd3b854646bed912ec11df03c967e0109b46314a5fca1a', 'frontend/tests/managed-grants-browser.mjs': 'cd840dfac45dc1a58cabdd03c95b460b211cec2893fff653a7dd9e3a58600346', 'knowledge/ARCHITECTURE.md': 'dafaa99229f664918cd574063e357dc5404a335ceabde36040d99d2c193bbbbe'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Bounded managed-grant frontend inspection exact source/approval mismatch '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        current=json.loads((R/name).read_text())
+        for row in current[key]:row.pop('managedGrantFrontendEvidence',None)
+        if current!=json.loads(prior(name)):errors.append('Bounded managed-grant frontend inspection changed full requirement/test authority '+name)
+    current=json.loads((K/'execution/status.json').read_text());current.pop('managedGrantInspectionFrontend',None)
+    if current!=json.loads(prior('knowledge/execution/status.json')):errors.append('Bounded managed-grant frontend inspection changed unrelated execution state')
+    for name in ['knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','frontend/package-lock.json','backend/pom.xml']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded managed-grant frontend inspection changed graph/global policy/frontend/dependency/CI '+name)
+    if not (K/'ARCHITECTURE.md').read_text().startswith(prior('knowledge/ARCHITECTURE.md').decode()):errors.append('Bounded managed-grant frontend inspection rewrote prior architecture')
+    package=json.loads((R/'frontend/package.json').read_text());original=json.loads(prior('frontend/package.json'))
+    expected=dict(original);expected['scripts']=dict(original['scripts']);expected['scripts']['test']+=' && node --import ./tests/tsx-loader.mjs tests/managed-grants.test.mjs'
+    if package!=expected:errors.append('Grant frontend changed dependency or prior test authority')
+    if not (K/'DESIGN.md').read_text().startswith(prior('knowledge/DESIGN.md').decode()):errors.append('Bounded managed-grant frontend inspection rewrote prior design')
+    # Exact scoped stylesheet bytes are pinned above; unrelated changes remain rejected.
+    pattern=r'^- \[([ x])\] \*\*(P\d+-C\d+|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Bounded managed-grant frontend inspection promoted phase/demo acceptance')
+    allowed=set(owned)|set(registries)|set(canonical)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only'],text=True).splitlines())
+    if not changed<=allowed:errors.append('Bounded managed-grant frontend inspection unrelated delta '+str(changed-allowed))
+    for name in ['knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css','frontend/styles/breakpoints.css','frontend/lib/bank.ts','frontend/lib/verification.ts','frontend/lib/quotes.ts','knowledge/CineNest Cinema Admin Dashboard Mockup-1.png','knowledge/CineNest Cinema Dashboard Showcase-2.png','knowledge/CineNest Private Cinema Booking UI.png']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Bounded managed-grant frontend inspection changed protected visual/disclosure authority '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['frontend/components/bank-report.tsx','frontend/lib/bank-backend.ts','frontend/lib/session.ts','frontend/lib/rooms.ts','backend/src/main/java/com/cinenest/reporting/internal/BankReportController.java','backend/src/main/java/com/cinenest/payments/BankBalanceReport.java','frontend/tests/synthetic-e2e.mjs','backend/src/test/java/com/cinenest/SyntheticJourneyIT.java']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Summary changed protected existing contract/campaign '+name)
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    for name in ['knowledge/PROJECT.md','knowledge/decisions/cinenest-open-decisions.json','frontend/lib/admin-backend.ts','frontend/lib/session.ts']:
+        if (R/name).read_bytes()!=prior(name):errors.append('Grant frontend changed preserved policy/proxy/session '+name)
+    state=json.loads((K/'execution/status.json').read_text()).get('managedGrantInspectionFrontend',{})
+    if state.get('actualAssignments')!='UNASSIGNED_DISABLED' or state.get('backendChanged')!=False or state.get('featureFlagEnabled')!=False:errors.append('Grant frontend expanded runtime authority')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    # Exact successor source and scope have passed. Historical validation receives
+    # its original inputs only; no unrelated integrity exception is introduced.
+    replacements={R/name:prior(name) for name in (set(owned)-added)|set(registries)|set(canonical)}
+    manifest=json.loads((K/'manifest.json').read_text())
+    for entry in manifest['files']:
+        name='knowledge/'+entry['path']
+        if R/name in replacements:entry['sha256']=hashlib.sha256(prior(name)).hexdigest()
+    replacements[K/'manifest.json']=json.dumps(manifest,ensure_ascii=False).encode()
+    rb0,rt0,g0,out0=Path.read_bytes,Path.read_text,Path.glob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,pattern,*a,**kw):return (p for p in g0(path,pattern,*a,**kw) if p.relative_to(R).as_posix() not in added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=set(owned)|set(registries)|set(canonical) if 'diff' in argv else added
+            text=value if isinstance(value,str) else value.decode();text=''.join(line+'\n' for line in text.splitlines() if line not in removed)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=managed_grant_backend_main()
+    if result==0:print('PASS exact bounded Bounded managed-grant frontend inspection; approved frontend delta pinned;policy/graph/full acceptance unchanged; historical controls retained')
     return result
 
 if __name__ == '__main__':
