@@ -9145,5 +9145,53 @@
       "workflowCount": 23
     },
     "publicationCI": "PENDING"
+  },
+  "extensionPreviewImplementation": {
+    "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+    "status": "IMPLEMENTED_LOCALLY_TESTED",
+    "baseline": "030acef6177756e5f937d098d49323b1335b350f",
+    "prerequisiteCI": {
+      "run": 39911829949,
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1
+    },
+    "policyApproval": "OWNER_APPROVED_A_TO_J_2026_10_23",
+    "frontend": "PENDING_NOT_IMPLEMENTED",
+    "pricingBasis": "FROZEN_PURCHASED_TERMS",
+    "customerOnly": true,
+    "inventoryReserved": false,
+    "fundingCreated": false,
+    "purchasedRevisionChanged": false,
+    "migrationsChanged": false,
+    "staffAuthorityAdded": false,
+    "automaticGrants": false,
+    "bootstrap": false,
+    "dependenciesChanged": false,
+    "roadmapChanged": false,
+    "fullRequirementAccepted": false,
+    "localVerification": {
+      "backendTests": 739,
+      "focusedPostgreSQLTests": 13,
+      "purePricingTests": 5,
+      "focusedArchitectureTests": 2,
+      "frontendTests": 428,
+      "build": "PASS",
+      "typecheck": "PASS",
+      "lint": "PASS_92_EXISTING_INFORMATIONAL_DIAGNOSTICS",
+      "npmAudit": "PASS_ZERO_VULNERABILITIES",
+      "postgresql": "18.6_ISOLATED_PASS",
+      "domainFingerprints": "UNCHANGED_SUCCESSFUL_PREVIEW",
+      "concurrency": "CANCELLATION_AMENDMENT_ISSUANCE_SERIALIZED_OBSERVATIONS_PASS",
+      "classifierRegressions": 8,
+      "governanceNegativeControls": 72,
+      "governancePositiveCases": 2,
+      "knowledge": "PASS",
+      "isolatedExecutionTraceabilityDependencies": "PASS",
+      "ordinaryExecution": "TWO_PREEXISTING_NEXT_ENV_FINDINGS_ONLY",
+      "whitespace": "PASS",
+      "historicalSyntheticE2E": "24_PASS_NOT_RERUN"
+    },
+    "exactSourceCI": "PENDING"
   }
 }

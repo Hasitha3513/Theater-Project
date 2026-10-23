@@ -1565,4 +1565,87 @@ class BankIntegrationTest {
 
     @Test void cancellationDeferredCommitFailureRollsBackEntitlementAndRelease()throws Exception{var c=accessCase();jdbc.sql("CREATE FUNCTION cinenest_booking.test_cancel_commit_failure() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'Synthetic commit fault';END $$").update();jdbc.sql("CREATE CONSTRAINT TRIGGER test_cancel_commit_failure AFTER INSERT ON cinenest_booking.booking_cancellation DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION cinenest_booking.test_cancel_commit_failure()").update();try{assertThat(cancel(c,cancellationBody()).statusCode()).isEqualTo(503);assertThat(jdbc.sql("SELECT state FROM cinenest_booking.booking").query(String.class).single()).isEqualTo("SIMULATED_CONFIRMED");assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.cancellation_refund_obligation").query(Integer.class).single()).isZero();assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_block WHERE blocking AND kind='CONFIRMED'").query(Integer.class).single()).isEqualTo(1);}finally{jdbc.sql("DROP TRIGGER test_cancel_commit_failure ON cinenest_booking.booking_cancellation").update();jdbc.sql("DROP FUNCTION cinenest_booking.test_cancel_commit_failure()").update();}}
     @Test void cancellationExpiredCredentialStillRejectsAndCsrfIsRequired()throws Exception{var c=accessCase();var credential=issueAccess(c);Object original=accessClock(c,20000);try{c.customer().get(accessPath(c));}finally{restoreAccessClock(original);}assertThat(jdbc.sql("SELECT state FROM cinenest_access.access_credential").query(String.class).single()).isEqualTo("EXPIRED");assertThat(cancel(c,cancellationBody()).statusCode()).isEqualTo(409);assertThat(c.customer().call("POST",cancellation(c)+"s",Map.of()).statusCode()).isEqualTo(403);}
+
+    String extension(AccessCase c){return "/api/bookings/"+c.booking()+"/extension-eligibility";}
+    Map<String,Object> extensionBody(){return new HashMap<>(Map.of("additionalMinutes",60,"expectedPurchasedRevision",1,"expectedLifecycleVersion",0));}
+    HttpResponse<String> extensionQuote(AccessCase c,Map<String,Object> b)throws Exception{return write(c.customer(),"POST",extension(c).replace("extension-eligibility","extension-quotes"),JSONObjectUtils.toJSONString(b));}
+    Map<String,String> extensionDomainFingerprint(){var result=new java.util.TreeMap<String,String>();
+      for(var row:jdbc.sql("SELECT table_schema,table_name FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema IN ('cinenest_booking','cinenest_payments','cinenest_pricing','cinenest_access','cinenest_notifications','cinenest_rooms') ORDER BY 1,2").query().listOfRows()){
+       String table=row.get("table_schema")+"."+row.get("table_name");
+       result.put(table,jdbc.sql("SELECT md5(COALESCE(string_agg(to_jsonb(t)::text,',' ORDER BY to_jsonb(t)::text),'')) FROM "+table+" t").query(String.class).single());
+      }return result;
+    }
+    @Test void extensionPreviewFrozenPriceNoMutationOrSensitiveFields()throws Exception{
+      var c=accessCase();var before=extensionDomainFingerprint();var eligibility=json(c.customer().get(extension(c)));
+      assertThat(eligibility).containsEntry("eligible",true).containsEntry("purchasedRevision",1L).containsEntry("lifecycleVersion",0L).containsEntry("occupancy","UNKNOWN").containsEntry("readiness","UNVERIFIED");
+      var response=extensionQuote(c,extensionBody());var q=json(response);
+      assertThat(q).containsEntry("additionalMinor","100").containsEntry("currency","LKR").containsEntry("currentDurationMinutes",180L).containsEntry("proposedDurationMinutes",240L).containsEntry("pricingBasis","FROZEN_PURCHASED_TERMS").containsEntry("timeReserved",false).containsEntry("paymentRequested",false).containsEntry("bookingChanged",false);
+      assertThat(response.headers().firstValue("Cache-Control").orElse("")).contains("no-store");assertThat(q.get("warning")).isEqualTo("Indicative synthetic extension preview. No additional time is reserved. No payment has been requested. Your booking has not changed.");
+      assertThat(response.body()).doesNotContain("holdId","quoteHash","ownerId","credential","evidence","account");assertThat(extensionDomainFingerprint()).isEqualTo(before);
+    }
+    @Test void extensionOwnerSessionCsrfAndStrictParameters()throws Exception{
+      var c=accessCase();assertThat(new Browser().get(extension(c)).statusCode()).isEqualTo(401);assertThat(c.allocator().get(extension(c)).statusCode()).isEqualTo(404);
+      assertThat(c.staff().get(extension(c)).statusCode()).isEqualTo(404);assertThat(c.customer().get(extension(c)+"?page=0").statusCode()).isEqualTo(400);
+      assertThat(c.customer().get(extension(c)+"?x=1&x=2").statusCode()).isEqualTo(400);
+      assertThat(c.customer().call("POST",extension(c).replace("extension-eligibility","extension-quotes"),Map.of()).statusCode()).isEqualTo(403);
+      var b=extensionBody();b.put("ownerId",A.toString());assertThat(extensionQuote(c,b).statusCode()).isEqualTo(400);
+      assertThat(c.customer().get("/api/bookings/not-an-id/extension-eligibility").statusCode()).isEqualTo(400);
+      jdbc.sql("UPDATE cinenest_identity.http_session SET expiry_time=0,last_access_time=0").update();assertThat(c.customer().get(extension(c)).statusCode()).isEqualTo(401);
+    }
+    @Test void extensionInvalidDurationsAndStaleVersions()throws Exception{
+      var c=accessCase();for(Object n:java.util.List.of(0,-1,1.5,"60",2147483648L)) {var b=extensionBody();b.put("additionalMinutes",n);assertThat(extensionQuote(c,b).statusCode()).isEqualTo(400);}
+      for(int n:java.util.List.of(30,120)){var b=extensionBody();b.put("additionalMinutes",n);assertThat(extensionQuote(c,b).statusCode()).isEqualTo(409);}
+      for(String key:java.util.List.of("expectedPurchasedRevision","expectedLifecycleVersion")){var b=extensionBody();b.put(key,3);assertThat(extensionQuote(c,b).statusCode()).isEqualTo(409);b.remove(key);assertThat(extensionQuote(c,b).statusCode()).isEqualTo(400);}
+    }
+    @Test void extensionCancelledAndPendingAmendmentAreNotEligible()throws Exception{
+      var c=accessCase();var proposal=json(write(c.customer(),"POST",amendments(c),JSONObjectUtils.toJSONString(amendmentBody(c))));
+      assertThat(json(c.customer().get(extension(c)))).containsEntry("eligible",false).containsEntry("reason","AMENDMENT_PENDING");assertThat(extensionQuote(c,extensionBody()).statusCode()).isEqualTo(409);
+      json(write(c.customer(),"POST",amendments(c)+"/"+proposal.get("id")+"/withdrawals",JSONObjectUtils.toJSONString(amendmentCommand(proposal))));json(cancel(c,cancellationBody()));
+      assertThat(json(c.customer().get(extension(c)))).containsEntry("eligible",false).containsEntry("reason","BOOKING_NOT_CONFIRMED");assertThat(extensionQuote(c,extensionBody()).statusCode()).isEqualTo(409);
+    }
+    @Test void extensionCommittedAmendmentIsUnsupportedRevision()throws Exception{
+      var c=accessCase();var proposal=json(write(c.customer(),"POST",amendments(c),JSONObjectUtils.toJSONString(amendmentBody(c))));json(write(c.customer(),"POST",amendments(c)+"/"+proposal.get("id")+"/confirm",JSONObjectUtils.toJSONString(amendmentCommand(proposal))));
+      assertThat(json(c.customer().get(extension(c)))).containsEntry("purchasedRevision",2L).containsEntry("reason","PURCHASE_REVISION_UNSUPPORTED");assertThat(extensionQuote(c,extensionBody()).statusCode()).isEqualTo(409);
+    }
+    @Test void extensionAnyCredentialHistoryIsDenied()throws Exception{
+      var c=accessCase();var credential=issueAccess(c);assertThat(json(c.customer().get(extension(c)))).containsEntry("reason","CREDENTIAL_EVER_ISSUED");
+      json(write(c.staff(),"POST",accessAdmin(credential)+"/revocations",JSONObjectUtils.toJSONString(accessBody(credential))));assertThat(json(c.customer().get(extension(c)))).containsEntry("reason","CREDENTIAL_EVER_ISSUED");assertThat(extensionQuote(c,extensionBody()).statusCode()).isEqualTo(409);
+    }
+    @Test void extensionExpiredCredentialHistoryIsDenied()throws Exception{
+      var c=accessCase();issueAccess(c);Object original=accessClock(c,20000);try{c.customer().get(accessPath(c));}finally{restoreAccessClock(original);}
+      assertThat(jdbc.sql("SELECT state FROM cinenest_access.access_credential").query(String.class).single()).isEqualTo("EXPIRED");assertThat(json(c.customer().get(extension(c)))).containsEntry("reason","CREDENTIAL_EVER_ISSUED");
+    }
+    @Test void extensionPublicationChangesCannotRepriceFrozenPurchase()throws Exception{
+      var c=accessCase();var before=json(extensionQuote(c,extensionBody()));UUID pkg=jdbc.sql("SELECT package_id FROM cinenest_pricing.package_draft").query(UUID.class).single();
+      var d=JSONObjectUtils.parse(draft("REVISED"));d.put("expectedRevision",0);d.put("extensionPriceMinor","999");json(write(c.staff(),"PUT",path(pkg)+"/draft",JSONObjectUtils.toJSONString(d)));
+      var old=jdbc.sql("SELECT publication_id,revision FROM cinenest_pricing.package_publication WHERE package_id=:p AND state='ACTIVE'").param("p",pkg).query().singleRow();grantTo(B,VA,"package.deactivate");
+      var req=request(false);req.put("expectedRevision",1);req.put("replacesPublicationId",old.get("publication_id").toString());req.put("replacesRevision",old.get("revision"));published(c.allocator(),pkg,req);
+      assertThat(json(extensionQuote(c,extensionBody())).get("additionalMinor")).isEqualTo(before.get("additionalMinor"));
+    }
+    @Test void extensionRoomConstraintChangesFailClosedButInventoryIsNotReserved()throws Exception{
+      var c=accessCase();jdbc.sql("UPDATE cinenest_rooms.room SET capacity=3,version=version+1 WHERE room_id=:r").param("r",RID).update();assertThat(json(c.customer().get(extension(c)))).containsEntry("eligible",false);assertThat(extensionQuote(c,extensionBody()).statusCode()).isEqualTo(409);
+      jdbc.sql("UPDATE cinenest_rooms.room SET capacity=5,version=version+1 WHERE room_id=:r").param("r",RID).update();
+      // An independently blocking following booking/maintenance interval does not become an availability promise.
+      jdbc.sql("INSERT INTO cinenest_booking.inventory_block(block_id,venue_id,room_id,session_start,session_end,buffer_minutes,blocked_until,blocking,kind) SELECT :id,venue_id,room_id,blocked_until,blocked_until+INTERVAL '1 hour',0,blocked_until+INTERVAL '1 hour',true,'MAINTENANCE' FROM cinenest_booking.inventory_block WHERE kind='CONFIRMED'").param("id",UUID.randomUUID()).update();
+      var before=extensionDomainFingerprint();assertThat(json(extensionQuote(c,extensionBody()))).containsEntry("timeReserved",false).doesNotContainKey("available");assertThat(extensionDomainFingerprint()).isEqualTo(before);
+    }
+    @Test void extensionCancellationRaceIsSerializedObservation()throws Exception{
+      var c=accessCase();try(var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+       var read=pool.submit(()->extensionQuote(c,extensionBody()));var cancel=pool.submit(()->cancel(c,cancellationBody()));assertThat(read.get().statusCode()).isIn(200,409);assertThat(cancel.get().statusCode()).isEqualTo(200);
+      }assertThat(extensionQuote(c,extensionBody()).statusCode()).isEqualTo(409);
+    }
+    @Test void extensionAmendmentRaceIsSerializedObservation()throws Exception{
+      var c=accessCase();var b=amendmentBody(c);try(var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+       var read=pool.submit(()->extensionQuote(c,extensionBody()));var change=pool.submit(()->write(c.customer(),"POST",amendments(c),JSONObjectUtils.toJSONString(b)));assertThat(read.get().statusCode()).isIn(200,409);assertThat(change.get().statusCode()).isEqualTo(200);
+      }assertThat(extensionQuote(c,extensionBody()).statusCode()).isEqualTo(409);
+    }
+    @Test void extensionIssuanceRaceIsSerializedObservation()throws Exception{
+      var c=accessCase();try(var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+       var read=pool.submit(()->extensionQuote(c,extensionBody()));var issue=pool.submit(()->issueAccess(c));assertThat(read.get().statusCode()).isIn(200,409);assertThat(issue.get()).isNotEmpty();
+      }assertThat(extensionQuote(c,extensionBody()).statusCode()).isEqualTo(409);
+    }
+    @Test void extensionDenialAuditFailurePreventsDisclosure()throws Exception{
+      var c=accessCase();jdbc.sql("CREATE FUNCTION cinenest_booking.test_extension_denial() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'Synthetic audit failure';END $$").update();jdbc.sql("CREATE TRIGGER test_extension_denial BEFORE INSERT ON cinenest_booking.inventory_audit FOR EACH ROW EXECUTE FUNCTION cinenest_booking.test_extension_denial()").update();
+      try{assertThat(c.allocator().get(extension(c)).statusCode()).isEqualTo(503);}finally{jdbc.sql("DROP TRIGGER test_extension_denial ON cinenest_booking.inventory_audit").update();jdbc.sql("DROP FUNCTION cinenest_booking.test_extension_denial()").update();}
+    }
 }

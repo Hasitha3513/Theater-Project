@@ -610,3 +610,29 @@ For every user-visible change, review this catalogue and the corresponding guide
 | Last verified commit / CI | Backend4b3ac401f510e97b4a21821530938e48fa8f0a20/CI39904035164 SUCCESS;frontend checkpoint based on that baseline;publication commit=this record's Git history;new exact-source CI PENDING |
 
 [Actual verification and remaining obligations](../PROGRESS.md#synthetic-cancellation-frontend). Additional mappings:P6-C04/C05/C06,CN-A02/CN-O01/CN-A07/BR-10/BP-AC12 and their existing full plans. Existing MVP feature;no FF ID or criterion closure.
+
+<a id="doc-f029"></a>
+## DOC-F029 — Synthetic owner extension eligibility and additional-price preview
+
+| Field | Implemented boundary |
+|---|---|
+| Implementation status | PARTIAL |
+| Category / module | Booking extensions / Booking, Pricing, Identity, Rooms, Access |
+| Intended user | Current eligible booking owner only |
+| Description / available functionality | Protected eligibility and exact positive frozen-term additional-price preview |
+| Operational classification | SIMULATED;no real money or physical readiness |
+| Demo availability | CONDITIONAL backend only;frontend PENDING |
+| Required permissions | Authenticated eligible exact owner;no new staff capability or grants |
+| Known limitations | Revision1/lifecycle0,pre-start,never-issued,no pending amendment;no reservation,funding or commit |
+| Screenshot | Not applicable:backend-only,no customer controls implemented |
+| Routes | GET /api/bookings/{bookingId}/extension-eligibility;POST /api/bookings/{bookingId}/extension-quotes |
+| Authority | Current eligible owner;synthetic confirmed revision1/lifecycle0,pre-start,no pending amendment,no credential ever issued |
+| Capability | Frozen purchased whole-unit exact LKR additional-price preview;no duplicated base/guests/add-ons;no current-price substitution |
+| UI availability | FRONTEND PENDING;no customer/staff controls or new authenticated Next.js proxy |
+| Truth | Indicative synthetic extension preview.No additional time reserved,no payment requested,booking unchanged;occupancy UNKNOWN/readiness UNVERIFIED |
+| Source | [Booking](../../backend/src/main/java/com/cinenest/booking/internal/ExtensionPreviewService.java),[Pricing](../../backend/src/main/java/com/cinenest/pricing/internal/ExtensionPricingAdapter.java) |
+| Automated test evidence | [PostgreSQL](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[pure price](../../backend/src/test/java/com/cinenest/pricing/internal/ExtensionPricingTest.java),[architecture](../../backend/src/test/java/com/cinenest/ExtensionPreviewArchitectureTest.java) |
+| MVP / requirement / test plan | P6-C03 / CN-A02 / T-CN-A02 |
+| Last verified commit / CI | [Current verification](../PROGRESS.md#extension-preview);baseline030acef6177756e5f937d098d49323b1335b350f/CI39911829949 SUCCESS;new exact-source CI PENDING |
+
+No extension hold,additional funding,refund,revision,credential,device or notification action;no commercial/physical acceptance.

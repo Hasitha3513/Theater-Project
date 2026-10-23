@@ -409,6 +409,15 @@
         "uncertainFunding": "REJECT",
         "migrationAuthority": "V24_MINIMUM_BOOKING_PAYMENTS_NOTIFICATIONS_BUSINESS_SCHEMA",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "boundedExtensionPreviewApproval": {
+        "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+        "status": "APPROVED_OWNER_PREVIEW_ONLY",
+        "date": "2026-10-23",
+        "source": "Owner attachment7baf82b8-a415-4ea5-8b76-6be5eec83bc3",
+        "scope": "PROJECT.md#extension-preview-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "reservationFundingCommit": "NOT_AUTHORIZED"
       }
     },
     {
@@ -1068,6 +1077,15 @@
         "uncertainFunding": "REJECT",
         "migrationAuthority": "V24_MINIMUM_BOOKING_PAYMENTS_NOTIFICATIONS_BUSINESS_SCHEMA",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "boundedExtensionPreviewApproval": {
+        "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+        "status": "APPROVED_OWNER_PREVIEW_ONLY",
+        "date": "2026-10-23",
+        "source": "Owner attachment7baf82b8-a415-4ea5-8b76-6be5eec83bc3",
+        "scope": "PROJECT.md#extension-preview-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "reservationFundingCommit": "NOT_AUTHORIZED"
       }
     },
     {
@@ -1477,6 +1495,15 @@
         "uncertainFunding": "REJECT",
         "migrationAuthority": "V24_MINIMUM_BOOKING_PAYMENTS_NOTIFICATIONS_BUSINESS_SCHEMA",
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "boundedExtensionPreviewApproval": {
+        "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+        "status": "APPROVED_OWNER_PREVIEW_ONLY",
+        "date": "2026-10-23",
+        "source": "Owner attachment7baf82b8-a415-4ea5-8b76-6be5eec83bc3",
+        "scope": "PROJECT.md#extension-preview-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "reservationFundingCommit": "NOT_AUTHORIZED"
       }
     },
     {

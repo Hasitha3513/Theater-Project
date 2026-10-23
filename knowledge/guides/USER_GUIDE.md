@@ -336,3 +336,10 @@ UI workflow වෙනස් කරන අනාගත authorized task එකේ 
 - **Security and limitations / සීමා:** Started,ever-issued,pending amendment හෝuncertain funding මෙම UI එකෙන් bypass කළ නොහැක. No real money,credential revocation,physical safety,emergency bypass හෝproduction authority. Existing full MVP obligations/acceptance unchanged.
 - **Screenshot:** [Customer375](../product/screenshots/cancellation-after-customer-375.png),[768](../product/screenshots/cancellation-after-customer-768.png),[1280](../product/screenshots/cancellation-after-customer-1280.png);[Staff375](../product/screenshots/cancellation-after-staff-375.png),[768](../product/screenshots/cancellation-after-staff-768.png),[1280](../product/screenshots/cancellation-after-staff-1280.png) — intercepted synthetic presentation fixtures,not real-backend E2E evidence.
 - **Verification:** [Source/tests/results](../PROGRESS.md#synthetic-cancellation-frontend);frontend local checkpoint based on4b3ac401f510e97b4a21821530938e48fa8f0a20;new exact-source CI PENDING. Full requirements NOT_ACCEPTED.
+
+<a id="ug-024"></a>
+### UG-024 — Extension preview / අමතර කාලය සඳහා මිල පෙරදසුන
+
+**FRONTEND PENDING.** Customer/staff booking pages do not yet offer an extension button or duration selector. The implemented backend can check an eligible owner's synthetic booking and calculate an indicative extra price from purchased rates;this guide does not prescribe unsupported UI actions. පවතින booking එක වෙනස් නොවේ;අමතර කාලය වෙන් කිරීමක් හෝගෙවීම් ඉල්ලීමක් සිදු නොවේ.
+
+Only eligible owners with a pre-start,never-issued,revision1/lifecycle0 SIMULATED_CONFIRMED booking may use the protected backend contract. A price preview is not an accepted extension,inventory reservation,payment invitation or access approval. Pending/stale/cancelled/unsupported/unauthorized contexts fail closed. Existing booking/cancellation/reschedule controls remain unchanged. [Feature boundary](../product/FEATURE_CATALOG.md#doc-f029),[actual evidence](../PROGRESS.md#extension-preview).

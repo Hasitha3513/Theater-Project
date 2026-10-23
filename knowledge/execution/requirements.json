@@ -1156,6 +1156,13 @@
           "frontend/tests/booking-cancellation.test.mjs",
           "frontend/tests/booking-cancellation-browser.mjs"
         ]
+      },
+      "extensionPreviewEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+        "reference": "PROGRESS.md#extension-preview",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -1464,6 +1471,13 @@
           "frontend/tests/booking-cancellation.test.mjs",
           "frontend/tests/booking-cancellation-browser.mjs"
         ]
+      },
+      "extensionPreviewEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+        "reference": "PROGRESS.md#extension-preview",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -4164,6 +4178,13 @@
           "frontend/tests/quotes-browser.mjs"
         ],
         "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      },
+      "extensionPreviewEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+        "reference": "PROGRESS.md#extension-preview",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5158,6 +5179,13 @@
           "frontend/tests/quotes-browser.mjs"
         ],
         "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      },
+      "extensionPreviewEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+        "reference": "PROGRESS.md#extension-preview",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5270,6 +5298,13 @@
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "extensionPreviewEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
+        "reference": "PROGRESS.md#extension-preview",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {

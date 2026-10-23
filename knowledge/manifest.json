@@ -7,7 +7,7 @@
   "recordedDate": "2026-10-14",
   "designTokenVersion": "1.0.0",
   "chartSpecVersion": "1.2.0",
-  "versionRationale": "Owner-requested P0\u2013P10 roadmap/74 template criteria and D0\u2013D6 demonstration planning in four canonical files; missing HTML explicit, no implementation authority",
+  "versionRationale": "Owner-requested P0–P10 roadmap/74 template criteria and D0–D6 demonstration planning in four canonical files; missing HTML explicit, no implementation authority",
   "decisionStatuses": [
     "APPROVED",
     "DOCUMENTED_DRAFT",
@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ddf3d59a71a0b7dfe01137c11d8b00dca670e5dcd10235444122c87b29625086",
+      "sha256": "fca77d28310f376108f865015246a3b3f69a1841106a9d8ed6a919a97bca1873",
       "authority": "canonical-prose"
     },
     {
@@ -418,14 +418,14 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "f8879099bb68fddab4f11b7b2dbfe0f4fb56f30662bccab71d89aa491ae8f229",
+      "sha256": "29017c4fde076e35115e8997c430fc00548079627c4712801af44ca3fb837b5e",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "f62d42ac6d276657e6dcaccc6610c652748afb10e1a99f73c75f08d5db10180e",
+      "sha256": "d7a53e2fcff521724db7f893d61a4507a7a63bfda3b1762fb26bb8d72dad5809",
       "authority": "canonical-prose"
     },
     {
@@ -453,7 +453,7 @@
       "path": "decisions/cinenest-open-decisions.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "44c0b99b604144782d4c0a3a2325eb137449e1520e1d6e30b00514d1d48104af",
+      "sha256": "5be328a299377b7bff22b7f61ba3c0b6d4966b0adbd443c666f7619b8b76c913",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -544,7 +544,7 @@
       "path": "execution/requirements.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "209490c962ccd146698395b8c9e8d434f761409f64787e4ea6877e071c12125d",
+      "sha256": "6ac74ac04874000210e661d2ff6834b3f1b7255a42ee9b06fda55440501e3624",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -558,28 +558,28 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ff2211c1c96c820b40092cdb0be2f8e2f54471d6c3d0f3021381fbd14065c931",
+      "sha256": "80edd14be14e98b29756af1f252331900dd4dfb567a0b814a99f957c7c03108e",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/test-plan.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "d175e5cc1002c4ec9ed13d6075de6fac2dabefdecacba0f8bebd181d9c095a21",
+      "sha256": "cac87fa47a51f6654076de30dbeedccb35fa0a736b5c5555dc7629c8be1f1e11",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "a48eac4abf4c4e9ada142e3f1ace522136e098312d45d1d91c4e166bd5a26a66",
+      "sha256": "418d0319985893e9ec9f0f7d0ef0752ac2b3e5551f71a1ff692e1da67248791a",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "guides/USER_GUIDE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ac7322ff8a25a1a981153744ffcf6bc6c5391b99aaa6c6f961d1531e79e8c7b3",
+      "sha256": "0041048e303702f35e864814f5957779d31235dae78a4c2992a5f19cba0e5a49",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -592,7 +592,7 @@
       "path": "product/FEATURE_CATALOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e0cf4d075770a71cf7b12b940a6619b3d3e96c2e030d8d540e6305025bdaf8fe",
+      "sha256": "747f9f9438e3a3ead4ea381daac4a2d3ba553517ab86fa8a4e8a29927672fceb",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -820,7 +820,7 @@
       "authority": "structured-asset-or-evidence"
     },
     {
-      "path": "\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+      "path": "නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
@@ -2886,7 +2886,7 @@
   },
   "unmanagedWorkspaceAssets": {
     "Mini movie theater Ruels and Conditions.docx": "e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf",
-    "\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1"
+    "නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1"
   },
   "roadmapMaintenance": {
     "sourceId": "S17",
