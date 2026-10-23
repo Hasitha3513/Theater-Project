@@ -131,6 +131,8 @@ Keyboard සඳහා Tab / Shift+Tab, Enter සහ checkbox සඳහා Space 
 - **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
 - **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/guest-roster.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
 
+Current synthetic roster input: use only `SYNTHETIC-1` through `SYNTHETIC-999999` companion labels; never real guest names or identity documents. Use the existing explicit roster initialization/add actions; self-declaration is not age or admission evidence.
+
 ### UG-010 — Amendment review — PARTIAL
 
 - **Purpose / අරමුණ:** Amendment review — PARTIAL; [DOC-F011](../product/FEATURE_CATALOG.md#doc-f011) යටතේ විස්තර කළ bounded software භාවිතය.
@@ -175,15 +177,17 @@ Keyboard සඳහා Tab / Shift+Tab, Enter සහ checkbox සඳහා Space 
 ### UG-013 — Staff guest inspection
 
 - **Purpose / අරමුණ:** Staff guest inspection; [DOC-F010](../product/FEATURE_CATALOG.md#doc-f010) යටතේ විස්තර කළ bounded software භාවිතය.
-- **Who / කවුද:** Reception / Front Desk Staff; permissions: `ownership; staff guest.synthetic.read independently`. Exact server authorization අවශ්‍යයි.
+- **Who / කවුද:** Reception / Front Desk Staff; permissions: `booking.synthetic.read for staff detail; independent same-venue guest.synthetic.read for roster`. Exact server authorization අවශ්‍යයි.
 - **Prerequisites / පෙර අවශ්‍යතා:** සුදුසු test session, නිවැරදි venue/owned context, operator-approved synthetic fixtures; ඉහත පොදු ආරක්ෂක සීමා අදාළයි.
-- **Navigation:** `/bookings/[id]`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
+- **Navigation:** `/admin/bookings/venues/[venueId]/[booking]`. `[id]` ආදී placeholders වෙනුවට UI ලබාදෙන exact opaque reference භාවිත කරන්න.
 - **Steps / පියවර:** Staff booking detail තුළ guest roster section භාවිත කරන්න. → exact booking/venue තහවුරු කරන්න. → read action පැහැදිලිව ඉල්ලන්න.
 - **Expected result / ප්‍රතිඵලය:** guest.synthetic.read තිබේ නම් synthetic roster පෙන්වයි.
 - **Errors / දෝෂ:** ඉහත පොදු error ක්‍රමය අනුගමනය කරන්න; backend response නැතිනම් සාර්ථකයි කියා නොසලකන්න.
 - **Security and limitations / සීමා:** Booking-read පමණක් guest-read නොවේ; physical admission නොදෙන්න.
 - **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
-- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/guest-roster.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+- **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/staff-guest-roster.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
+
+Current route/permission/source guidance rechecked at `ebef814649893926f49023e51e27d7efbbc9af15` (CI39929478983 SUCCESS); this is source inspection, not a fresh browser test.
 
 ## Finance Staff
 
@@ -338,7 +342,9 @@ UI workflow වෙනස් කරන අනාගත authorized task එකේ 
 - **Verification:** [Source/tests/results](../PROGRESS.md#synthetic-cancellation-frontend);frontend local checkpoint based on4b3ac401f510e97b4a21821530938e48fa8f0a20;new exact-source CI PENDING. Full requirements NOT_ACCEPTED.
 
 <a id="ug-024"></a>
-### UG-024 — Extension preview / අමතර කාලය සඳහා මිල පෙරදසුන
+#Current cancellation guard clarification (CN-KNOWLEDGE-SYNC-001): an unresolved persisted ACTIVE extension reservation blocks cancellation. Resolve it only through the existing authorized lifecycle; elapsed time alone is not proof of committed release. Backend eligibility remains authoritative. No cancellation/refund action is automatic.
+
+## UG-024 — Extension preview / අමතර කාලය සඳහා මිල පෙරදසුන
 
 **FRONTEND PENDING.** Customer/staff booking pages do not yet offer an extension button or duration selector. The implemented backend can check an eligible owner's synthetic booking and calculate an indicative extra price from purchased rates;this guide does not prescribe unsupported UI actions. පවතින booking එක වෙනස් නොවේ;අමතර කාලය වෙන් කිරීමක් හෝගෙවීම් ඉල්ලීමක් සිදු නොවේ.
 

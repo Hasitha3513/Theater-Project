@@ -1,38 +1,35 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-IOT-001",
-  "mode": "SYNTHETIC_IOT_IMPLEMENTATION",
-  "workStatus": "VERIFIED",
-  "productStage": "BOUNDED_SYNTHETIC_IOT_REAL_EQUIPMENT_DISABLED",
+  "taskId": "CN-KNOWLEDGE-SYNC-001",
+  "mode": "DOCUMENTATION_ONLY_KNOWLEDGE_SYNCHRONIZATION",
+  "workStatus": "VERIFIED_DOCUMENTATION_ONLY",
+  "productStage": "BOUNDED_SYNTHETIC_IMPLEMENTATION_FULL_ACCEPTANCE_PENDING",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "89b9cd42e693277037275641cf44d0ebd1f884c5",
+  "baselineHead": "ebef814649893926f49023e51e27d7efbbc9af15",
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
-  "currentChangeSet": "CN-IOT-001",
+  "currentChangeSet": "CN-KNOWLEDGE-SYNC-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-OPS-001",
-  "nextAction": "Read-only review of CN-ACCEPT-001 prerequisites and remaining acceptance gates; PayHere deferred/BLOCKED",
+  "nextRecommendedChangeSet": "CN-EXTENSION-FUNDING-PREP-001",
+  "nextAction": "Separate owner policy/contract approval before bounded extension funding preparation; no funding implementation authorized",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
+  "implementationEvidence": "PROGRESS.md#knowledge-sync-001; existing bounded feature receipts retained",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
     "PR-BANK-001"
   ],
-  "blockers": [
-    "CN-OPS-001 retains its own OD-13/29 scope/policy/implementation-authority gates",
-    "PayHere deferred/BLOCKED;venue/specialist and wider commercial/privacy/physical gates pending"
-  ],
+  "blockers": ["CN-ACCEPT-001/CN-LAUNCH-001 and PayHere remain blocked; specialist/physical/production/recovery gates remain", "Extension funding preparation requires separate owner authority"],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS",
-  "publicationEvidence": "CN-IOT-001 source 88f50c53bcdb0844b65758d2d221580349255f90 pushed to origin/main;exact-source CI39155271379 SUCCESS;final closure receipt publication/CI verified separately",
-  "lastObservedHead": "88f50c53bcdb0844b65758d2d221580349255f90",
-  "evidencePath": "PROGRESS.md#iot-implementation",
-  "evidenceFreshness": "2026-10-19 exact-source IoT CI verified;30 owned source hashes",
+  "publicationState": "NOT_YET_PUBLISHED",
+  "publicationEvidence": "Baseline exact-source CI39929478983 completed/success attempt1; synchronization commit/CI pending",
+  "lastObservedHead": "ebef814649893926f49023e51e27d7efbbc9af15",
+  "evidencePath": "PROGRESS.md#knowledge-sync-001",
+  "evidenceFreshness": "2026-10-23 baseline source/remote/CI independently verified",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -9257,5 +9254,249 @@
       "historicalSyntheticE2E": "24_PASS_NOT_RERUN"
     },
     "exactSourceCI": "PENDING"
+  },
+  "historicalHeaderBeforeKnowledgeSync": {
+    "taskId": "CN-IOT-001",
+    "mode": "SYNTHETIC_IOT_IMPLEMENTATION",
+    "workStatus": "VERIFIED",
+    "productStage": "BOUNDED_SYNTHETIC_IOT_REAL_EQUIPMENT_DISABLED",
+    "baselineHead": "89b9cd42e693277037275641cf44d0ebd1f884c5",
+    "currentChangeSet": "CN-IOT-001",
+    "nextRecommendedChangeSet": "CN-OPS-001",
+    "nextAction": "Read-only review of CN-ACCEPT-001 prerequisites and remaining acceptance gates; PayHere deferred/BLOCKED",
+    "implementationEvidence": "CN-IOT-001 bounded synthetic lighting VERIFIED/CLOSED;30 owned source hashes match exact-source CI;full physical/commercial acceptance NOT_ACCEPTED",
+    "blockers": [
+      "CN-OPS-001 retains its own OD-13/29 scope/policy/implementation-authority gates",
+      "PayHere deferred/BLOCKED;venue/specialist and wider commercial/privacy/physical gates pending"
+    ],
+    "publicationState": "SOURCE_PUBLISHED_EXACT_CI_SUCCESS",
+    "publicationEvidence": "CN-IOT-001 source 88f50c53bcdb0844b65758d2d221580349255f90 pushed to origin/main;exact-source CI39155271379 SUCCESS;final closure receipt publication/CI verified separately",
+    "lastObservedHead": "88f50c53bcdb0844b65758d2d221580349255f90",
+    "evidencePath": "PROGRESS.md#iot-implementation",
+    "evidenceFreshness": "2026-10-19 exact-source IoT CI verified;30 owned source hashes"
+  },
+  "knowledgeSynchronization": {
+    "taskId": "CN-KNOWLEDGE-SYNC-001",
+    "date": "2026-10-23",
+    "baseline": "ebef814649893926f49023e51e27d7efbbc9af15",
+    "auditFiles": 116,
+    "auditFindings": [
+      {
+        "id": "KB-01",
+        "priority": "P1",
+        "path": "knowledge/PROJECT.md",
+        "line": 5,
+        "finding": "Blanket implementation/PDF availability statements stale; current bounded implementation and recovered sources exist.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION"
+        ]
+      },
+      {
+        "id": "KB-02",
+        "priority": "P1",
+        "path": "knowledge/README.md",
+        "line": 5,
+        "finding": "Blanket no implementation/test authority/current absence statements need historical qualification.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "HISTORICAL_RECORD"
+        ]
+      },
+      {
+        "id": "KB-03",
+        "priority": "P1",
+        "path": "knowledge/ARCHITECTURE.md",
+        "line": 5,
+        "finding": "Initial qualification/implementation summary predates implemented bounded stack.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "APPROVED_ARCHITECTURE"
+        ]
+      },
+      {
+        "id": "KB-04",
+        "priority": "P1",
+        "path": "knowledge/DESIGN.md",
+        "line": 733,
+        "finding": "No rendered application exists conflicts with implemented frontend and screenshot evidence.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "HISTORICAL_RECORD"
+        ]
+      },
+      {
+        "id": "KB-05",
+        "priority": "P1",
+        "path": "knowledge/execution/requirements.json",
+        "line": 20,
+        "finding": "92 uiApiOwnership baseline absence statements stale; retain full requirement NOT_VERIFIED.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "HISTORICAL_RECORD"
+        ]
+      },
+      {
+        "id": "KB-06",
+        "priority": "P1",
+        "path": "knowledge/execution/test-plan.json",
+        "line": 42,
+        "finding": "91 generic not-run reasons stale; preserve full-plan NOT_RUN and distinguish focused tests.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "HISTORICAL_RECORD"
+        ]
+      },
+      {
+        "id": "KB-07",
+        "priority": "P1",
+        "path": "knowledge/execution/status.json",
+        "line": 13,
+        "finding": "Current task/head projection old; latest reservation publication exists later in same file.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "HISTORICAL_RECORD"
+        ]
+      },
+      {
+        "id": "KB-08",
+        "priority": "P1",
+        "path": "knowledge/PROGRESS.md",
+        "line": 695,
+        "finding": "Task/dependency current projection differs from authoritative CLOSED tasks and approved dependency graph.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION"
+        ]
+      },
+      {
+        "id": "KB-09",
+        "priority": "P1",
+        "path": "knowledge/decisions/cinenest-open-decisions.json",
+        "line": 707,
+        "finding": "OD-15 PDF absence rationale stale; remaining reconciliation scope stays OPEN.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "HISTORICAL_RECORD",
+          "OPEN_DECISION"
+        ]
+      },
+      {
+        "id": "KB-10",
+        "priority": "P1",
+        "path": "knowledge/execution/omissions.json",
+        "line": null,
+        "finding": "Historical missing-source/no-code/no-CI/all-owner-TBD statements must not serve as current status.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "HISTORICAL_RECORD"
+        ]
+      },
+      {
+        "id": "KB-11",
+        "priority": "P1",
+        "path": "knowledge/product/FEATURE_CATALOG.md",
+        "line": 551,
+        "finding": "Overview excludes popular session-start statistics despite implemented DOC-F027.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION"
+        ]
+      },
+      {
+        "id": "KB-12",
+        "priority": "P2",
+        "path": "knowledge/guides/USER_GUIDE.md",
+        "line": null,
+        "finding": "UG-013 customer route conflicts with staff workflow; synthetic guest identifier guidance and extension guard omissions need exact current contract wording.",
+        "disposition": "CURRENT_FACT_SYNCHRONIZED_OR_HISTORICAL_CONTEXT_CLARIFIED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION"
+        ]
+      },
+      {
+        "id": "KB-13",
+        "priority": "P2",
+        "path": "knowledge/styles/cinenest-theme.css",
+        "line": 1,
+        "finding": "Not wired comment stale; frontend imports it. Generator comment must match without token changes.",
+        "disposition": "PROTECTED_ASSET_UNCHANGED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "REQUIRES_OWNER_APPROVAL"
+        ]
+      },
+      {
+        "id": "KB-14",
+        "priority": "P2",
+        "path": "knowledge/validate_design_kb.py",
+        "line": 244,
+        "finding": "Generated CSS not-wired banner stale; protected successor update requires bounded governance.",
+        "disposition": "PROTECTED_ASSET_UNCHANGED",
+        "classification": [
+          "FACTUAL_STALE_DOCUMENTATION",
+          "REQUIRES_OWNER_APPROVAL"
+        ]
+      },
+      {
+        "id": "KB-15",
+        "priority": "P1",
+        "path": "knowledge/ARCHITECTURE.md",
+        "line": null,
+        "finding": "Historical V17 recovery specification must be reassessed against V25 before future qualification; no authority to silently rewrite approved contract.",
+        "disposition": "SEPARATE_QUALIFICATION_OR_OWNER_REVIEW_REQUIRED",
+        "classification": [
+          "HISTORICAL_RECORD",
+          "IMPLEMENTATION_EVIDENCE_GAP",
+          "REQUIRES_OWNER_APPROVAL"
+        ]
+      },
+      {
+        "id": "KB-16",
+        "priority": "P1",
+        "path": "knowledge/Mini movie theater Ruels and Conditions.pdf",
+        "line": null,
+        "finding": "English/Sinhala/Tamil external processing wording differs; draft is not approved legal/retention policy.",
+        "disposition": "SEPARATE_QUALIFICATION_OR_OWNER_REVIEW_REQUIRED",
+        "classification": [
+          "HISTORICAL_RECORD",
+          "OPEN_DECISION",
+          "REQUIRES_OWNER_APPROVAL"
+        ]
+      },
+      {
+        "id": "KB-17",
+        "priority": "P2",
+        "path": "knowledge/manifest.json",
+        "line": null,
+        "finding": "All 113 hashed file entries match; manifest.json is intentionally unhashed in its own 114-entry inventory. Read-only regeneration differs in serialization only, not entry content; no integrity failure established.",
+        "disposition": "NO_INTEGRITY_DEFECT; EXISTING_REFRESH_PROCESS",
+        "classification": [
+          "HISTORICAL_RECORD"
+        ]
+      }
+    ],
+    "baselineCI": {
+      "run": 39929478983,
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1
+    },
+    "checks": "PASS knowledge; committed-source isolated execution;92/92 traceability;28 acyclic tasks;8 classifier regressions;84 governance negative controls plus2 positive cases;manifest refresh;whitespace. Ordinary execution:2 pre-existing next-env.d.ts findings, preserved.",
+    "applicationChanged": false,
+    "policiesChanged": false,
+    "decisionsApproved": false,
+    "requirementsAccepted": false,
+    "criteriaChanged": false,
+    "dependenciesChanged": false,
+    "historicalEvidenceChanged": false,
+    "extensionFundingStarted": false
   }
 }

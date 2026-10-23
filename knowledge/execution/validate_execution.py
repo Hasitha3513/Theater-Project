@@ -5682,5 +5682,90 @@ def inert_ci_main():
     if result==0:print('PASS exact approved owner extension reservation,V25 only,durable5/60 budget;original purchase/finance/permissions/acceptance preserved;historical controls retained')
     return result
 
+
+# CN-KNOWLEDGE-SYNC-001: exact documentation-only successor, preserving every prior control.
+knowledge_sync_prior_main = inert_ci_main
+
+def inert_ci_main():
+    from unittest.mock import patch
+    baseline = 'ebef814649893926f49023e51e27d7efbbc9af15'
+    hashes = {'knowledge/PROJECT.md': '48dc4a061653b4b92dffb6471819eb1e9b43a36528633ac0542ecef1d39a9db2', 'knowledge/ARCHITECTURE.md': 'f40c0a4a0c0a7cdd3e0eace20878dc303fab87dc8a1c02e7d8f75c6f3b9d20f5', 'knowledge/DESIGN.md': 'da9230c3bf68031b57ec8bc83947b7c957d7f5fda1c71a5c1782c29df6a8dc04', 'knowledge/PROGRESS.md': '82d0f9d7810c9ab77ee8b6c02ccd098ffaf7322cb2b76db729887fb709a89967', 'knowledge/README.md': 'd0dd9609054edccf945fcea8e43cbcb5ddd95133647e965135fb1c59f50e6e62', 'knowledge/execution/status.json': 'e86a689f78b0b3fe11595bcabe3f642318002cb114cde68675452c47d771f692', 'knowledge/execution/omissions.json': '59c7a4aea35e6a82476bcef9edf1643319d8033d62e0fd91d7635b9a84c6d228', 'knowledge/execution/requirements.json': '11e6645a4cf1da920b8ceba4335c6d46f1a8bdc9d1bf1391e593df0adb20f0bd', 'knowledge/execution/test-plan.json': 'cd402a828109b21b982bb8094d204e4fbbec0f7e180ce4fbfa36df1ecc24ed2f', 'knowledge/product/FEATURE_CATALOG.md': 'bd1b12115b43902801d010a0b942b11508e53bc6c084c840a33b4ad88bfb9f33', 'knowledge/guides/USER_GUIDE.md': '7e176af5302264373b897e7ec2ea0c6cb25091ef5b8d0e30585a46c7219326c4'}
+    errors = []
+    def prior(name):
+        return subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':' + name])
+    for name, digest in hashes.items():
+        if not (R / name).is_file() or hashlib.sha256((R / name).read_bytes()).hexdigest() != digest:
+            errors.append('Knowledge sync exact documentation mismatch ' + name)
+    if errors:
+        print('\n'.join('FAIL ' + e for e in errors))
+        return 1
+    ending = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K / 'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):
+        errors.append('Knowledge sync changed historical governance')
+    # History/approvals/dependencies/full acceptance are compared structurally, not inferred from prose.
+    for name, key in [('execution/requirements.json', 'currentInterpretation'), ('execution/test-plan.json', 'currentInterpretation'), ('execution/omissions.json', 'currentAssessment')]:
+        current = json.loads((K / name).read_text())
+        annotation = current.pop(key, {})
+        if annotation.get('taskId') != 'CN-KNOWLEDGE-SYNC-001' or current != json.loads(prior('knowledge/' + name)):
+            errors.append('Knowledge sync changed historical requirement/test/omission payload ' + name)
+    state = json.loads((K / 'execution/status.json').read_text())
+    receipt = state.pop('knowledgeSynchronization', {})
+    header = state.pop('historicalHeaderBeforeKnowledgeSync', {})
+    old_state = json.loads(prior('knowledge/execution/status.json'))
+    if any(header.get(k) != old_state.get(k) for k in header) or len(header) != 15:
+        errors.append('Knowledge sync lost historical header')
+    state.update(header)
+    if state != old_state:
+        errors.append('Knowledge sync changed historical execution evidence')
+    for key in ['applicationChanged', 'policiesChanged', 'decisionsApproved', 'requirementsAccepted', 'criteriaChanged', 'dependenciesChanged', 'historicalEvidenceChanged', 'extensionFundingStarted']:
+        if receipt.get(key) is not False:
+            errors.append('Knowledge sync exceeded documentation authority ' + key)
+    if receipt.get('baseline') != baseline or receipt.get('baselineCI') != {'run':39929478983, 'status':'completed', 'conclusion':'success', 'attempt':1}:
+        errors.append('Knowledge sync lost source/CI evidence')
+    if len(receipt.get('auditFindings', [])) != 17:
+        errors.append('Knowledge sync lost audit classifications')
+    pattern = r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern, (K / 'PROGRESS.md').read_text(), re.M) != re.findall(pattern, prior('knowledge/PROGRESS.md').decode(), re.M):
+        errors.append('Knowledge sync changed criterion/demo checkboxes')
+    # Every tracked path outside the exact documentation delta must remain at the approved baseline.
+    allowed = set(hashes) | {'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'frontend/next-env.d.ts'}
+    tracked = subprocess.check_output(['git', '-C', str(R), 'ls-tree', '-r', '--name-only', '-z', baseline], text=True).split('\0')
+    for name in filter(None, tracked):
+        if name not in allowed and (not (R / name).is_file() or (R / name).read_bytes() != prior(name)):
+            errors.append('Knowledge sync changed protected source/history ' + name)
+    changed = set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'], text=True).split('\0')) - {''}
+    if not changed <= allowed:
+        errors.append('Knowledge sync unrelated delta ' + str(changed - allowed))
+    manifest = json.loads((K / 'manifest.json').read_text())
+    expected = json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/' + entry['path'] in allowed and entry['path'] != 'manifest.json':
+            entry['sha256'] = hashlib.sha256((K / entry['path']).read_bytes()).hexdigest()
+    if manifest != expected:
+        errors.append('Knowledge sync manifest authority/inventory drift')
+    if errors:
+        print('\n'.join('FAIL ' + e for e in errors))
+        return 1
+    # Run the unchanged historical validator chain against its exact committed evidence snapshot.
+    replacements = {R / name: prior(name) for name in set(hashes) | {'knowledge/manifest.json', 'knowledge/execution/validate_execution.py'}}
+    rb0, rt0, out0 = Path.read_bytes, Path.read_text, subprocess.check_output
+    def rb(path, *a, **kw):
+        return replacements[path] if path in replacements else rb0(path, *a, **kw)
+    def rt(path, *a, **kw):
+        return replacements[path].decode() if path in replacements else rt0(path, *a, **kw)
+    def output(argv, *a, **kw):
+        value = out0(argv, *a, **kw)
+        if isinstance(argv, list) and argv[:3] == ['git', '-C', str(R)] and 'diff' in argv and '--name-only' in argv:
+            text = value if isinstance(value, str) else value.decode()
+            sep = '\0' if '-z' in argv else '\n'
+            text = sep.join(x for x in text.split(sep) if x not in allowed - {'frontend/next-env.d.ts'})
+            return text if isinstance(value, str) else text.encode()
+        return value
+    with patch.object(Path, 'read_bytes', rb), patch.object(Path, 'read_text', rt), patch.object(subprocess, 'check_output', output):
+        result = knowledge_sync_prior_main()
+    if result == 0:
+        print('PASS exact documentation-only knowledge synchronization; immutable historical evidence, policies, module source, 92 requirements, 28 dependencies and all acceptance gates preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -2,7 +2,7 @@
 
 This document owns the approved hybrid direction and implementation guidance for tokens/components, admin/customer pages, charts, responsive behavior and accessibility. [Project rules](PROJECT.md), [architecture](ARCHITECTURE.md), [progress](PROGRESS.md). Page descriptions apply the referenced business/security contracts; they do not redefine them.
 
-ADR-001 hybrid direction is APPROVED; detailed page behavior is DOCUMENTED_DRAFT except confirmed package/bank core requirements; rendering/application NOT_VERIFIED. Active tokens1.0.0/theme and chart contracts1.2.0 remain preserved. JSON tokens and chart contracts are the machine authorities; prose explains their use. OD-11 source-palette conflict is unapplied. Screenshots and demo fixtures are never operational data.
+ADR-001 hybrid direction and the bounded OD-11 current-token baseline are APPROVED. Shared shells, customer/admin workflows and bounded reporting presentation are implemented with recorded screenshot/test evidence in the later sections; broader page specifications remain DOCUMENTED_DRAFT and full acceptance is NOT_VERIFIED. Active tokens1.0.0/theme and chart contracts1.2.0 remain preserved. JSON tokens and chart contracts are the machine authorities; prose explains their use. The alternate source palette was not applied. Screenshots and demo fixtures are never operational data.
 
 ## Navigation
 
@@ -730,7 +730,11 @@ Room-filtered booking allocation and global receiving-account collections can ha
 <a id="interactions-a11y"></a>
 ## Interactions A11Y
 
+Historical 2026-10-14 source checkpoint (retained verbatim):
+
 CN-KB-FEATURES-TECH-001 · 2026-10-14. Decision: DOCUMENTED_DRAFT. Implementation: NOT_VERIFIED. Source S1 and existing visual/page guidance. No rendered application exists.
+
+Current clarification: later implementation sections and [current progress](PROGRESS.md#knowledge-sync-001) supersede the historical application-absence statement; full accessibility acceptance remains unverified.
 
 ### Canonical shared references
 [Design system](DESIGN.md#design-system) defines tokens/typography/spacing/breakpoints; [admin](DESIGN.md#admin-pages) and [customer](DESIGN.md#customer-pages) define pages; [business lifecycles](PROJECT.md#business-rules) define behavior. Reuse shared shell/components with role-specific navigation, not divergent page styles.

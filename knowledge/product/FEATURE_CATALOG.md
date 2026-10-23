@@ -548,7 +548,7 @@ CineNest supports private-cinema discovery and an explicitly controlled syntheti
 
 Customer sequence: discover room → inspect calendar/date and duration → explicitly check and create hold → choose supported package/quote → explicitly accept exact revision → consent and synthetic verification → eligible bank request → explicit claim/receipt → independent authorized synthetic review/credit/allocation → protected simulated booking/history. Each server gate can stop continuation. No automatic financial or identity action is implied by navigation.
 
-Staff can inspect exact venue bookings and independently permitted roster/access/refund/operations context. Managers can manage configured rooms and package drafts/publications within granted scope. Administration supplies protected account/audit/grant-subset reads, not automatic grant administration. Reporting supplies synthetic bank summaries and confirmation-time statistics, not actual revenue or popular session-start statistics.
+Staff can inspect exact venue bookings and independently permitted roster/access/refund/operations context. Managers can manage configured rooms and package drafts/publications within granted scope. Administration supplies protected account/audit/grant-subset reads, not automatic grant administration. Reporting supplies synthetic bank summaries, confirmation-time statistics and [Popular Reserved Session Start Times](#doc-f027). These are bounded synthetic measures, not actual revenue or physical occupancy.
 
 REQUIRES LIVE INTEGRATION: real bank/provider qualification, real identity processing, live SMS/email, physical access/devices and production disaster recovery. NOT YET IMPLEMENTED: the missing/deferred scope above and remaining registered MVP obligations. Demonstrating software neither holds D0–D6 nor supplies customer acceptance. P9-C02 remains unchecked.
 
@@ -610,6 +610,8 @@ For every user-visible change, review this catalogue and the corresponding guide
 | Last verified commit / CI | Backend4b3ac401f510e97b4a21821530938e48fa8f0a20/CI39904035164 SUCCESS;frontend checkpoint based on that baseline;publication commit=this record's Git history;new exact-source CI PENDING |
 
 [Actual verification and remaining obligations](../PROGRESS.md#synthetic-cancellation-frontend). Additional mappings:P6-C04/C05/C06,CN-A02/CN-O01/CN-A07/BR-10/BP-AC12 and their existing full plans. Existing MVP feature;no FF ID or criterion closure.
+
+Current guard clarification: cancellation rejects an unresolved persisted ACTIVE extension reservation; expiry alone does not prove committed release. No refund settlement or physical clearance follows from cancellation.
 
 <a id="doc-f029"></a>
 ## DOC-F029 — Synthetic owner extension eligibility and additional-price preview
