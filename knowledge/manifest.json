@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "fca77d28310f376108f865015246a3b3f69a1841106a9d8ed6a919a97bca1873",
+      "sha256": "c102f30c4d59ed8ebca89c85ae1e26a9a9f2c669d67543ac6cfae971c3d43200",
       "authority": "canonical-prose"
     },
     {
@@ -404,7 +404,7 @@
       "path": "DESIGN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "61d43c83acefec22ba933fab3f737666505c2aa9070fb6cc1a4933d8c5f059e6",
+      "sha256": "d4b47b5884df2434af877a463d166d4c205a65277eb3a4c0b3c4070f24c8cb5d",
       "authority": "canonical-prose"
     },
     {
@@ -418,14 +418,14 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "29017c4fde076e35115e8997c430fc00548079627c4712801af44ca3fb837b5e",
+      "sha256": "9df073fce7b0722eb90db8a7ae5634c119b87c8061efc7402272876caef5e4fa",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "d7a53e2fcff521724db7f893d61a4507a7a63bfda3b1762fb26bb8d72dad5809",
+      "sha256": "543c9ae164e7ae9c0c2c29e5280457471d881a1a22e55d1a6b25ab557a3f53b1",
       "authority": "canonical-prose"
     },
     {
@@ -453,7 +453,7 @@
       "path": "decisions/cinenest-open-decisions.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "5be328a299377b7bff22b7f61ba3c0b6d4966b0adbd443c666f7619b8b76c913",
+      "sha256": "9388e09f520fd8bc4b13bf1a3f0791b7d13ae6d071fe647a5f07035b8d0caad5",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -544,7 +544,7 @@
       "path": "execution/requirements.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6ac74ac04874000210e661d2ff6834b3f1b7255a42ee9b06fda55440501e3624",
+      "sha256": "88a4951a2dbcb9becb0fb87878443b83f6ff672a9085583de0d7cff02873c195",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -558,28 +558,28 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "80edd14be14e98b29756af1f252331900dd4dfb567a0b814a99f957c7c03108e",
+      "sha256": "2d786f0a7f476f547fdd96a10e3b3d4d05e4bf55219d1b73683c05e7ef4d9c90",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/test-plan.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cac87fa47a51f6654076de30dbeedccb35fa0a736b5c5555dc7629c8be1f1e11",
+      "sha256": "dcf29025820306971f5cc7b87195687cb5b4efbd0a7efd8aa9fc9a6be010d651",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "418d0319985893e9ec9f0f7d0ef0752ac2b3e5551f71a1ff692e1da67248791a",
+      "sha256": "60bfbf78011235713f8b41223f59b0414307d40d5cf0151c2c3a4256c15945f5",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "guides/USER_GUIDE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "0041048e303702f35e864814f5957779d31235dae78a4c2992a5f19cba0e5a49",
+      "sha256": "91e8fea94eff5a28654d826fd5f00311af75af66277b535ffc0b19bdc89ad058",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -592,7 +592,7 @@
       "path": "product/FEATURE_CATALOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "747f9f9438e3a3ead4ea381daac4a2d3ba553517ab86fa8a4e8a29927672fceb",
+      "sha256": "928b034f5a2ad94128dc5474d805fb339d1d8ceab8c5cc2bafe414b69e434434",
       "authority": "structured-asset-or-evidence"
     },
     {

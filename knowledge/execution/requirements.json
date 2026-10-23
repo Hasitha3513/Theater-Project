@@ -1163,6 +1163,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "reference": "PROGRESS.md#extension-reservation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -1475,6 +1482,13 @@
       "extensionPreviewEvidence": {
         "taskId": "CN-BOOKING-EXTENSION-PREVIEW-001",
         "reference": "PROGRESS.md#extension-preview",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "reference": "PROGRESS.md#extension-reservation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
@@ -4185,6 +4199,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "reference": "PROGRESS.md#extension-reservation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5026,6 +5047,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL missing/malformed/expired/wrong-owner hold and unsupported scope-override denial,explicit UI refresh/inquiry recovery,unchanged protected SQL state;22 PASS/0 FAIL/2 NOT_RUN."
+      },
+      "extensionReservationEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "reference": "PROGRESS.md#extension-reservation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5186,6 +5214,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "reference": "PROGRESS.md#extension-reservation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5305,6 +5340,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "reference": "PROGRESS.md#extension-reservation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5363,6 +5405,13 @@
           "frontend/tests/quotes-browser.mjs"
         ],
         "deferred": "Real commercial issuance/acceptance, purchased booking/payment/reporting and full authorization plans remain unverified"
+      },
+      "extensionReservationEvidence": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "reference": "PROGRESS.md#extension-reservation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {

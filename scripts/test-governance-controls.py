@@ -52,6 +52,7 @@ def main():
     test_synthetic_cancellation_controls(validator)
     test_cancellation_frontend_controls(validator)
     test_extension_preview_controls(validator)
+    test_extension_reservation_controls(validator)
 
 
 def test_future_register_controls():
@@ -245,5 +246,17 @@ def test_extension_preview_controls(validator):
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
         assert result!=0,'Extension preview accepted '+label
         print('PASS extension preview rejected',label)
+
+def test_extension_reservation_controls(validator):
+    path=K/'execution/status.json';faults=[]
+    for key,value in [('financialMutation',True),('purchasedRevisionChanged',True),('originalConfirmedBlockChanged',True),('staffAuthorityAdded',True),('fullRequirementAccepted',True),('customerOnly',False),('tailOnly',False),('lifetimeSeconds',1200)]:
+        data=json.loads(path.read_text());data['extensionReservationImplementation'][key]=value;faults.append((path,json.dumps(data).encode(),key))
+    for key,value in [('maximumAttempts',6),('windowSeconds',120),('durable',False),('verifiedCommittedReplayFree',False)]:
+        data=json.loads(path.read_text());data['extensionReservationImplementation']['admission'][key]=value;faults.append((path,json.dumps(data).encode(),'admission/'+key))
+    rb,rt=Path.read_bytes,Path.read_text
+    for target,replacement,label in faults:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
+        assert result!=0,'Extension reservation accepted '+label
+        print('PASS extension reservation rejected',label)
 
 if __name__ == '__main__': main()

@@ -65,8 +65,8 @@ class InventoryCalendar {
  static byte[] encode(Map<String,Object> dto){byte[] bytes=JSONObjectUtils.toJSONString(dto).getBytes(StandardCharsets.UTF_8);if(bytes.length>512*1024)throw unavailable();return bytes;}
  private List<Block> blocks(UUID room,InventoryConstraints.Facts f,Instant from,Instant to,Instant now){
   var rows=jdbc.sql("""
-   SELECT b.*,h.hold_id,h.state AS hold_state,h.expires_at,h.guests,h.timezone
-   FROM cinenest_booking.inventory_block b LEFT JOIN cinenest_booking.reservation_hold h USING(block_id)
+   SELECT b.*,h.hold_id,h.state AS hold_state,h.expires_at,h.guests,h.timezone,to_jsonb(e) AS extension_record
+   FROM cinenest_booking.inventory_block b LEFT JOIN cinenest_booking.reservation_hold h USING(block_id) LEFT JOIN cinenest_booking.booking_extension_reservation e ON e.tail_block=b.block_id
    WHERE b.room_id=:r AND b.blocking
      AND tstzrange(b.session_start,b.blocked_until,'[)') && tstzrange(CAST(:start AS timestamptz),CAST(:until AS timestamptz),'[)')
    ORDER BY b.session_start,b.block_id LIMIT 1001
@@ -75,7 +75,8 @@ class InventoryCalendar {
   for(var row:rows){
    if(!f.venueId().equals(row.get("venue_id")))throw unavailable();
    Instant start=instant(row.get("session_start")),end=instant(row.get("session_end")),until=instant(row.get("blocked_until"));String kind=Objects.toString(row.get("kind"),"");boolean pending=false;
-   if(!end.isAfter(start)||until.isBefore(end)||!Set.of("HOLD","CONFIRMED","MAINTENANCE").contains(kind))throw unavailable();
+   if(!end.isAfter(start)||until.isBefore(end)||!Set.of("HOLD","CONFIRMED","MAINTENANCE","EXTENSION_HOLD").contains(kind))throw unavailable();
+   if(kind.equals("EXTENSION_HOLD"))pending=ExtensionInventoryObservation.pending(row,f,now);
    if(kind.equals("HOLD")){
     if(row.get("hold_id")==null||!"ACTIVE".equals(row.get("hold_state"))||!(row.get("guests") instanceof Number n))throw unavailable();
     Instant expiry=instant(row.get("expires_at"));pending=!now.isBefore(expiry);

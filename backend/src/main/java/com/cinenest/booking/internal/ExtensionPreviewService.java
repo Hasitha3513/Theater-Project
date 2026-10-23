@@ -38,7 +38,7 @@ class ExtensionPreviewService {
             long lifecycle=((Number)base.get("lifecycle_version")).longValue();
             if(input!=null&&(integer(input,"expectedPurchasedRevision")!=revision||integer(input,"expectedLifecycleVersion")!=lifecycle))throw new InventoryFailure(409,"Booking version changed");
             String reason=b==null?"BOOKING_NOT_CONFIRMED":revision!=1||lifecycle!=0?"PURCHASE_REVISION_UNSUPPORTED":
-                !now().isBefore(b.start())?"SESSION_STARTED":!access.neverIssued(booking)?"CREDENTIAL_EVER_ISSUED":
+                bookings.extensionPending(booking)?"EXTENSION_PENDING":!now().isBefore(b.start())?"SESSION_STARTED":!access.neverIssued(booking)?"CREDENTIAL_EVER_ISSUED":
                 jdbc.sql("SELECT EXISTS(SELECT 1 FROM cinenest_booking.booking_amendment WHERE booking_id=:b AND state='PROPOSED')").param("b",booking).query(Boolean.class).single()?"AMENDMENT_PENDING":"ELIGIBLE";
             ExtensionPricing.Preview price=null;Map<String,Object> purchase=null;
             if(reason.equals("ELIGIBLE")){

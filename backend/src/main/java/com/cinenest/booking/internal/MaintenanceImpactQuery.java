@@ -52,8 +52,8 @@ class MaintenanceImpactQuery {
   LocalDateTime local=LocalDateTime.parse(startLocal),finish=LocalDateTime.parse(endLocal);
   if(!end.isAfter(start)||finish.isAfter(local.toLocalDate().plusDays(1).atStartOfDay()))throw InventoryRules.invalid();
   var rows=jdbc.sql("""
-   SELECT b.*,h.hold_id,h.state AS hold_state,h.expires_at,h.guests,h.timezone AS hold_timezone
-   FROM cinenest_booking.inventory_block b LEFT JOIN cinenest_booking.reservation_hold h USING(block_id)
+   SELECT b.*,h.hold_id,h.state AS hold_state,h.expires_at,h.guests,h.timezone AS hold_timezone,to_jsonb(e) AS extension_record
+   FROM cinenest_booking.inventory_block b LEFT JOIN cinenest_booking.reservation_hold h USING(block_id) LEFT JOIN cinenest_booking.booking_extension_reservation e ON e.tail_block=b.block_id
    WHERE b.room_id=:r AND b.blocking
     AND tstzrange(b.session_start,b.blocked_until,'[)') && tstzrange(CAST(:start AS timestamptz),CAST(:end AS timestamptz),'[)')
    ORDER BY b.session_start,b.block_id LIMIT 1001
@@ -64,6 +64,7 @@ class MaintenanceImpactQuery {
    Instant from=instant(row.get("session_start")),to=instant(row.get("session_end")),until=instant(row.get("blocked_until"));
    if(!to.isAfter(from)||until.isBefore(to))throw new IllegalStateException("Invalid inventory interval");
    switch(Objects.toString(row.get("kind"),"")){
+    case "EXTENSION_HOLD"->{var e=ExtensionInventoryObservation.record(row);if(ExtensionInventoryObservation.expired(e,at))expired++;else if(!ExtensionReservationService.valid(e,f))invalid++;else active++;}
     case "CONFIRMED"->confirmed++;
     case "MAINTENANCE"->maintenance++;
     case "HOLD"->{

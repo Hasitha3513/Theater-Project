@@ -19,6 +19,7 @@ class CancellationService {
   if(venue!=null&&(!identity.member(actor,venue,true)||!identity.permits(actor,venue,"booking.synthetic.cancel",true)))throw new InventoryFailure(403,"Cancellation permission required");
  }
  private String reason(BookingAccess.Context b){
+  if(bookings.extensionPending(b.booking()))throw new InventoryFailure(409,"Resolve the pending extension reservation first");
   if(!inventory.now().isBefore(b.start()))return "SESSION_STARTED";
   if(!access.neverIssued(b.booking()))return "CREDENTIAL_EVER_ISSUED";
   if(jdbc.sql("SELECT EXISTS(SELECT 1 FROM cinenest_booking.booking_amendment WHERE booking_id=:b AND state='PROPOSED')").param("b",b.booking()).query(Boolean.class).single())return "AMENDMENT_PENDING";

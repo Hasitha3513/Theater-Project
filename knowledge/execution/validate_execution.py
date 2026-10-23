@@ -5596,5 +5596,91 @@ def inert_ci_main():
     if result==0:print('PASS exact owner-only extension preview;no migration,reservation,funding,revision,staff authority or acceptance changes;historical controls retained')
     return result
 
+
+# CN-BOOKING-EXTENSION-RESERVATION-BE-001: exact bounded V25 reservation and owner budget authority.
+extension_reservation_prior_main=inert_ci_main
+
+def inert_ci_main():
+    from unittest.mock import patch
+    baseline='7dad40cbd198069fc6f9e5db8ae0b5647f7736f1'
+    owned={'knowledge/DESIGN.md', 'backend/src/main/java/com/cinenest/booking/internal/AmendmentService.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'knowledge/decisions/cinenest-open-decisions.json', 'backend/src/main/java/com/cinenest/booking/internal/CancellationService.java', 'backend/src/test/java/com/cinenest/ExtensionReservationArchitectureTest.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'knowledge/guides/USER_GUIDE.md', 'backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql', 'knowledge/product/FEATURE_CATALOG.md', 'scripts/test-governance-controls.py', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationWorker.java', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionInventoryObservation.java', 'backend/src/main/java/com/cinenest/booking/internal/MaintenanceImpactQuery.java', 'knowledge/PROJECT.md', 'backend/src/main/java/com/cinenest/access/internal/AccessService.java', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionPreviewService.java', 'backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java', 'knowledge/execution/requirements.json', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationController.java', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java', 'backend/src/main/java/com/cinenest/booking/internal/BookingAccessAdapter.java', 'knowledge/ARCHITECTURE.md', 'backend/src/main/java/com/cinenest/booking/internal/JdbcInventoryRepository.java', 'knowledge/execution/status.json', 'knowledge/PROGRESS.md', 'backend/src/main/java/com/cinenest/booking/BookingAccess.java', 'knowledge/execution/test-plan.json'}
+    added={'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationController.java', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java', 'backend/src/test/java/com/cinenest/ExtensionReservationArchitectureTest.java', 'backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationWorker.java', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionInventoryObservation.java'}
+    hashes={'backend/src/main/java/com/cinenest/access/internal/AccessService.java': 'bec0943577c91972a30338310c1641ebec625e6e592d11b9eed50fc46915c87c', 'backend/src/main/java/com/cinenest/booking/BookingAccess.java': '295b1e2824f9a0a60ffa323fd8f165f550e9c33683990695e3d462c353d46dfc', 'backend/src/main/java/com/cinenest/booking/internal/AmendmentService.java': '1bd214d7d3fdc6d4ad0e3b721178796cba51354312bd84a9f67211ae742a1f68', 'backend/src/main/java/com/cinenest/booking/internal/BookingAccessAdapter.java': '532bb6b8526dd7593de700514b14fbfa8d9255eab8c3541a5f2654bef3f74954', 'backend/src/main/java/com/cinenest/booking/internal/CancellationService.java': '36281b6e5811d6be63ccbe5b793227a4fdb91748f3ee88c087a27d0f7c44f627', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionInventoryObservation.java': '4ff8f806a7bb8654e91eae87951a258740af0f1512577df192bb7988c65cd453', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionPreviewService.java': 'c867c6c8a9ecaef2c8da5bcfde947a7973bb46b68eb5514f4d0ebf35f9d13a6f', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationController.java': '9eb912c1846274dc3301dad92a4ff476c022b8b6b259f51de5980a7804672f32', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java': '2a73ed6305627daca9b84d563aaed2dbd3fa5afde612f57d284f46f6f25a63b7', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationWorker.java': '377626628ebf4dbfbe4e1011925895e004343e0e510c4f7c68a288e7ba6116f1', 'backend/src/main/java/com/cinenest/booking/internal/InventoryCalendar.java': 'ba299db52f0915b6fd7827f7ff7bdaf9a4dfa73a8ab7c7ca8d677aab204d4c68', 'backend/src/main/java/com/cinenest/booking/internal/JdbcInventoryRepository.java': '1e7c43c6d81b4175801fd45ef82ada403099d4e39118bee2afda2a9606d3ccb0', 'backend/src/main/java/com/cinenest/booking/internal/MaintenanceImpactQuery.java': 'c7b58150d275244005bb96c03089b67c37e8407a1c6c9729a7a4a3d4cf6d0013', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '5f3c909b0bea581803cd97547c178d914a0d6575f04cbe3683fed74c1853eee4', 'backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql': 'b90cbb93256b8b89d9dcf88e9925a251b4f5842aeca229e7417297359d912223', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'bb2afe7fe5209a4a1185e595f82772d07b621e0b75e3b07e708a6086e07f5470', 'backend/src/test/java/com/cinenest/ExtensionReservationArchitectureTest.java': '614033817c024a4bbd990215eadcfa259b2e208ed44f84a7d00c5229422ce7fd', 'knowledge/ARCHITECTURE.md': 'c102f30c4d59ed8ebca89c85ae1e26a9a9f2c669d67543ac6cfae971c3d43200', 'knowledge/DESIGN.md': 'd4b47b5884df2434af877a463d166d4c205a65277eb3a4c0b3c4070f24c8cb5d', 'knowledge/PROGRESS.md': '9df073fce7b0722eb90db8a7ae5634c119b87c8061efc7402272876caef5e4fa', 'knowledge/PROJECT.md': '543c9ae164e7ae9c0c2c29e5280457471d881a1a22e55d1a6b25ab557a3f53b1', 'knowledge/decisions/cinenest-open-decisions.json': '9388e09f520fd8bc4b13bf1a3f0791b7d13ae6d071fe647a5f07035b8d0caad5', 'knowledge/execution/requirements.json': '88a4951a2dbcb9becb0fb87878443b83f6ff672a9085583de0d7cff02873c195', 'knowledge/execution/status.json': '2d786f0a7f476f547fdd96a10e3b3d4d05e4bf55219d1b73683c05e7ef4d9c90', 'knowledge/execution/test-plan.json': 'dcf29025820306971f5cc7b87195687cb5b4efbd0a7efd8aa9fc9a6be010d651', 'knowledge/guides/USER_GUIDE.md': '91e8fea94eff5a28654d826fd5f00311af75af66277b535ffc0b19bdc89ad058', 'knowledge/product/FEATURE_CATALOG.md': '928b034f5a2ad94128dc5474d805fb339d1d8ceab8c5cc2bafe414b69e434434', 'scripts/test-governance-controls.py': 'd5b58c3cda33e1ca6e1fb35cd8b0edd9e39336c7d161fa1245d6f1348d1c4c13'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Extension reservation exact-source mismatch '+name)
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Extension reservation changed historical governance')
+    data=json.loads((K/'execution/status.json').read_text());receipt=data.pop('extensionReservationImplementation',{})
+    if data!=json.loads(prior('knowledge/execution/status.json')):errors.append('Extension reservation changed unrelated execution authority')
+    for key in ['purchasedRevisionChanged','financialMutation','staffAuthorityAdded','automaticGrants','bootstrap','dependenciesChanged','roadmapChanged','fullRequirementAccepted','originalConfirmedBlockChanged']:
+        if receipt.get(key) is not False:errors.append('Extension reservation exceeded authority '+key)
+    if receipt.get('customerOnly') is not True or receipt.get('tailOnly') is not True or receipt.get('lifetimeSeconds')!=600 or receipt.get('frontend')!='PENDING_NOT_IMPLEMENTED':errors.append('Extension reservation changed bounded owner/tail/lifetime/frontend policy')
+    budget=receipt.get('admission',{})
+    if budget!={'maximumAttempts':5,'windowSeconds':60,'scope':'ELIGIBLE_OWNER_ALL_BOOKINGS_AND_VENUES','durable':True,'verifiedCommittedReplayFree':True,'changedReplayConsumesBudget':True,'ordinaryHoldBudgetSeparate':True}:errors.append('Extension reservation changed exact approved admission budget')
+    if receipt.get('approval')!='CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001' or receipt.get('baseline')!=baseline or receipt.get('prerequisiteCI')!={'run':39918547446,'status':'completed','conclusion':'success','attempt':1}:errors.append('Extension reservation lost owner/CI authority')
+    for name,key,prefix in [('requirements.json','requirements',''),('test-plan.json','tests','T-')]:
+        value=json.loads((K/'execution'/name).read_text())
+        for row in value[key]:
+            if row['id'] in {prefix+x for x in ['CN-A02','CN-C08','BR-04','PK-AC07','PK-AC10','PK-AC12','PK-AC13']}:
+                e=row.pop('extensionReservationEvidence',{})
+                if e.get('fullRequirementVerified') is not False or e.get('fullRequirementAcceptance')!='NOT_ACCEPTED' or e.get('fullTestPlanStatus')!='NOT_RUN':errors.append('Extension reservation falsely accepted full requirement/test')
+        if value!=json.loads(prior('knowledge/execution/'+name)):errors.append('Extension reservation changed requirement/test scope/dependencies')
+    decisions=json.loads((K/'decisions/cinenest-open-decisions.json').read_text())
+    def remove(v):
+        if isinstance(v,dict):
+            if v.get('id') in ['OD-07','OD-20','OD-28']:
+                e=v.pop('boundedExtensionReservationApproval',{})
+                if v.get('decisionStatus')!='OPEN_DECISION' or e.get('fundingPurchaseCommit')!='NOT_AUTHORIZED' or e.get('admissionApproval')!='CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001':errors.append('Extension reservation changed global/financial approval')
+            else:
+                for x in v.values():remove(x)
+        elif isinstance(v,list):
+            for x in v:remove(x)
+    remove(decisions)
+    if decisions!=json.loads(prior('knowledge/decisions/cinenest-open-decisions.json')):errors.append('Extension reservation changed unrelated owner policy')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if len(re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M))<74:errors.append('Extension reservation criterion parser incomplete')
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Extension reservation changed criterion/demo acceptance')
+    protected=['AGENTS.md','knowledge/backlog/FUTURE_FEATURES.md','knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java']
+    protected+=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',baseline,'frontend','backend/src/main/resources'],text=True).splitlines()
+    for name in protected:
+        if name!='frontend/next-env.d.ts' and (R/name).read_bytes()!=prior(name):errors.append('Extension reservation changed protected source/schema '+name)
+    old_migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',baseline,'backend/src/main/resources/db/migration'],text=True).splitlines())
+    migration='backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql'
+    if {x.relative_to(R).as_posix() for x in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!=old_migrations|{migration}:errors.append('Extension reservation exceeded V25 migration scope')
+    ddl=(R/migration).read_text()
+    if set(re.findall(r'CREATE TABLE (\S+) \(',ddl))!={'cinenest_booking.booking_extension_reservation','cinenest_booking.booking_extension_command','cinenest_booking.booking_extension_audit'} or any(x in ddl for x in ['cinenest_payments.','cinenest_identity.','cinenest_access.','DROP TABLE']):errors.append('Extension reservation foreign/broader schema change')
+    for name in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md']:
+        if not (R/name).read_bytes().startswith(prior(name)):errors.append('Extension reservation rewrote historical canonical policy '+name)
+    service=(R/'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java').read_text()
+    if any(x in service for x in ['cinenest_payments.','cinenest_rooms.','cinenest_access.','cinenest_identity.','INSERT INTO cinenest_booking.booking_revision','UPDATE cinenest_booking.booking SET','NotificationFacts']):errors.append('Extension reservation foreign/financial/purchased mutation')
+    security='backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java'
+    expected=prior(security).decode().replace('                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-eligibility")','                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-reservations/*").authenticated()\n                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/extension-reservations","/api/bookings/*/extension-reservations/*/withdrawals").authenticated()\n                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-eligibility")')
+    if (R/security).read_text()!=expected:errors.append('Extension reservation broadened authentication/CSRF')
+    allowed=owned|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True).split('\0'))-{''}
+    if not changed<=allowed:errors.append('Extension reservation unrelated source change '+str(changed-allowed))
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/'+entry['path'] in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Extension reservation manifest inventory drift')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements={R/name:prior(name) for name in (owned-added)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}}
+    rb0,rt0,g0,rg0,out0=Path.read_bytes,Path.read_text,Path.glob,Path.rglob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def keep(path):return path.relative_to(R).as_posix() not in added
+    def glob(path,pattern,*a,**kw):return (x for x in g0(path,pattern,*a,**kw) if keep(x))
+    def rglob(path,pattern,*a,**kw):return (x for x in rg0(path,pattern,*a,**kw) if keep(x))
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=owned if 'diff' in argv else added;text=value if isinstance(value,str) else value.decode();sep='\0' if '-z' in argv else '\n';text=sep.join(x for x in text.split(sep) if x not in removed);return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=extension_reservation_prior_main()
+    if result==0:print('PASS exact approved owner extension reservation,V25 only,durable5/60 budget;original purchase/finance/permissions/acceptance preserved;historical controls retained')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -636,3 +636,25 @@ For every user-visible change, review this catalogue and the corresponding guide
 | Last verified commit / CI | [Current verification](../PROGRESS.md#extension-preview);baseline030acef6177756e5f937d098d49323b1335b350f/CI39911829949 SUCCESS;new exact-source CI PENDING |
 
 No extension hold,additional funding,refund,revision,credential,device or notification action;no commercial/physical acceptance.
+
+<a id="doc-f030"></a>
+## DOC-F030 — Synthetic customer extension inventory reservation
+
+| Field | Implemented boundary |
+|---|---|
+| Category / module | Booking extensions / Booking,Identity,Rooms,Pricing,Access |
+| Intended user | Current eligible booking owner only |
+| Description / available functionality | Explicit durable temporary [B,B') extension coverage;600-second validity clipped to original start;protected status and withdrawal;audited expiry/invalidation |
+| Implementation status | PARTIAL |
+| Operational classification | SIMULATED;no funding,purchased extension commitment or physical readiness |
+| Demo availability | CONDITIONAL backend only;explicit approved synthetic configuration;frontend PENDING |
+| Required permissions | Eligible owner,current session,revision1/lifecycle0,pre-start,never-issued,no pending amendment;no new staff permission/grant |
+| Known limitations |5 creation attempts/rolling60s across owner bookings/venues;all non-replay eligible attempts count;verified committed replay free,no renewal;429 over budget. Pending reservation blocks conflicting booking changes. No payment/commit/credential/device/notification changes |
+| Route | POST /api/bookings/{bookingId}/extension-reservations;GET .../{reservationId};POST .../{reservationId}/withdrawals |
+| MVP / requirement / test plan | P6-C02 / CN-A02 / T-CN-A02 |
+| Automated test evidence | [PostgreSQL](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[architecture](../../backend/src/test/java/com/cinenest/ExtensionReservationArchitectureTest.java) |
+| Source | [Service](../../backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java),[worker](../../backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationWorker.java),[V25](../../backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql) |
+| Screenshot | Not applicable:backend-only,no new frontend control |
+| Last verified commit / CI | Baseline7dad40cbd198069fc6f9e5db8ae0b5647f7736f1/CI39918547446 SUCCESS;[actual evidence](../PROGRESS.md#extension-reservation);new exact-source CI PENDING |
+
+Original booking and purchased revision remain unchanged;temporary coverage is not permission to occupy or extend the session. Existing full requirements and financial/physical acceptance remain open.

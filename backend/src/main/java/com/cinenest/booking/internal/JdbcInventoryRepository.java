@@ -46,6 +46,6 @@ class JdbcInventoryRepository implements InventoryRepository {
     }
     public List<Map<String,Object>> inventory(UUID venue,int page,int size) {
         return jdbc.sql("SELECT block_id,room_id,session_start,session_end,buffer_minutes,blocked_until,kind FROM cinenest_booking.inventory_block WHERE venue_id=:v AND blocking ORDER BY session_start,block_id LIMIT :size OFFSET :offset")
-            .param("v",venue).param("size",size).param("offset",Math.multiplyExact((long)page,size)).query((rs,n)->Map.<String,Object>of("blockId",rs.getObject(1,UUID.class),"roomId",rs.getObject(2,UUID.class),"sessionStart",rs.getTimestamp(3).toInstant(),"sessionEnd",rs.getTimestamp(4).toInstant(),"bufferMinutes",rs.getInt(5),"blockedUntil",rs.getTimestamp(6).toInstant(),"kind",rs.getString(7))).list();
+            .param("v",venue).param("size",size).param("offset",Math.multiplyExact((long)page,size)).query((rs,n)->Map.<String,Object>of("blockId",rs.getObject(1,UUID.class),"roomId",rs.getObject(2,UUID.class),"sessionStart",rs.getTimestamp(3).toInstant(),"sessionEnd",rs.getTimestamp(4).toInstant(),"bufferMinutes",rs.getInt(5),"blockedUntil",rs.getTimestamp(6).toInstant(),"kind",rs.getString(7),"coverageType",switch(rs.getString(7)){case "EXTENSION_HOLD"->"TEMPORARY_EXTENSION_COVERAGE";case "CONFIRMED"->"PURCHASED_CONFIRMED_SESSION";case "HOLD"->"TEMPORARY_SESSION_HOLD";default->"MAINTENANCE_BLOCK";})).list();
     }
 }

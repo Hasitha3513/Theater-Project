@@ -418,6 +418,16 @@
         "scope": "PROJECT.md#extension-preview-policy",
         "fullDecisionStatus": "OPEN_DECISION",
         "reservationFundingCommit": "NOT_AUTHORIZED"
+      },
+      "boundedExtensionReservationApproval": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "status": "APPROVED_SYNTHETIC_RESERVATION_ONLY",
+        "date": "2026-10-23",
+        "source": "Owner attachmentc578ad5b-622f-4b21-a62b-700805ffff49;Policy M amendment37311f1f-ca44-4d4d-bb43-1958c83c4493",
+        "admissionApproval": "CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001",
+        "scope": "PROJECT.md#extension-reservation-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "fundingPurchaseCommit": "NOT_AUTHORIZED"
       }
     },
     {
@@ -1086,6 +1096,16 @@
         "scope": "PROJECT.md#extension-preview-policy",
         "fullDecisionStatus": "OPEN_DECISION",
         "reservationFundingCommit": "NOT_AUTHORIZED"
+      },
+      "boundedExtensionReservationApproval": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "status": "APPROVED_SYNTHETIC_RESERVATION_ONLY",
+        "date": "2026-10-23",
+        "source": "Owner attachmentc578ad5b-622f-4b21-a62b-700805ffff49;Policy M amendment37311f1f-ca44-4d4d-bb43-1958c83c4493",
+        "admissionApproval": "CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001",
+        "scope": "PROJECT.md#extension-reservation-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "fundingPurchaseCommit": "NOT_AUTHORIZED"
       }
     },
     {
@@ -1504,6 +1524,16 @@
         "scope": "PROJECT.md#extension-preview-policy",
         "fullDecisionStatus": "OPEN_DECISION",
         "reservationFundingCommit": "NOT_AUTHORIZED"
+      },
+      "boundedExtensionReservationApproval": {
+        "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
+        "status": "APPROVED_SYNTHETIC_RESERVATION_ONLY",
+        "date": "2026-10-23",
+        "source": "Owner attachmentc578ad5b-622f-4b21-a62b-700805ffff49;Policy M amendment37311f1f-ca44-4d4d-bb43-1958c83c4493",
+        "admissionApproval": "CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001",
+        "scope": "PROJECT.md#extension-reservation-policy",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "fundingPurchaseCommit": "NOT_AUTHORIZED"
       }
     },
     {
