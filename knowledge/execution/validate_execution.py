@@ -5767,5 +5767,88 @@ def inert_ci_main():
         print('PASS exact documentation-only knowledge synchronization; immutable historical evidence, policies, module source, 92 requirements, 28 dependencies and all acceptance gates preserved')
     return result
 
+
+# CN-EXTENSION-CONTEXT-PORT-001: bounded owner-context port and existing MVP planning projection.
+mvp_resume_prior_main = inert_ci_main
+
+def inert_ci_main():
+    from unittest.mock import patch
+    baseline = 'f5977f8763890e1eb502e93e8ef549ee150742e3'
+    hashes = {'backend/src/main/java/com/cinenest/booking/ExtensionReservationContext.java': '99df7ce866727539ee7ca237324ed3e5eba5b9dc3dd98a6db93d41cabd7ac4da', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java': '3ef9380264ea327e324c24822f6bd1fea31e8033e89d33136f163389c33d1fc3', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'eb72e0a5072c2cdb03a052f65cfa4440521911abb5a85680ab5c09154cca0036', 'backend/src/test/java/com/cinenest/ExtensionReservationArchitectureTest.java': '71ff4e47a4cabab3b1fc1f91b1c592c46f0fc69b754c87d38466fdd2f0d5ba80', 'knowledge/ARCHITECTURE.md': '3d9b807d75334146065e0880b91a2ca8ea3c72846160005e0f7bf458ffee3416', 'knowledge/PROGRESS.md': '8fd3fc3c9fd92b6141ccce3a5d2bffe0b057f36acc2dbe2b8daff97b18d50507', 'knowledge/execution/change-sets.json': '2975efe55cf93b76225ab5ad862851d2e2a72d2ff8b75bde71441c6ad1c70433', 'knowledge/execution/requirements.json': 'b1a27401eacdb1405cceb268c446923259791f0ad72f7cb21a37962a964237d3', 'knowledge/execution/test-plan.json': 'f54612bdc9521d3cf5f4053542ba57eb9bfefd094a23ba31739c0978065d50f9', 'knowledge/execution/status.json': '0a830cfaf7c376f3965bd18f420e25495fccbc4041319925f9f07b7cb79eb444', 'knowledge/product/FEATURE_CATALOG.md': '95a48e5ea1016a6ada33a0aa0e86ecadfbd0ef36545b1f699c231a1d89da6309', 'knowledge/guides/USER_GUIDE.md': '851c986a49cfed246f3df45f43c616655522fc02e671c9e56f799b73b2f02f1d'}
+    added = 'backend/src/main/java/com/cinenest/booking/ExtensionReservationContext.java'
+    errors = []
+    def prior(name):
+        return subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':' + name])
+    for name, digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest() != digest:
+            errors.append('MVP context exact scope mismatch ' + name)
+    if errors:
+        print('\n'.join('FAIL '+e for e in errors)); return 1
+    ending = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):
+        errors.append('MVP context changed historical governance')
+    for name, annotation in [('change-sets.json','remainingImplementationPlan'),('requirements.json','developmentReconciliation'),('test-plan.json','developmentVerificationPlan')]:
+        current = json.loads((K/'execution'/name).read_text())
+        projection = current.pop(annotation,{})
+        for row in current.get('requirements',current.get('tests',current.get('testPlans',[]))):
+            row.pop('reservationContextEvidence',None)
+        if current != json.loads(prior('knowledge/execution/'+name)):
+            errors.append('MVP context changed existing requirement/test/task/dependency/approval history '+name)
+        if name == 'change-sets.json':
+            plan = projection
+            if len(plan.get('workstreams',[])) != 11 or len(plan.get('criterionCoverage',[])) != 74 or sum(c['ownerClosed'] for c in plan.get('criterionCoverage',[])) != 15 or plan.get('financialPolicyApproval') is not False or plan.get('selectedChangeSet') != 'CN-EXTENSION-CONTEXT-PORT-001':
+                errors.append('MVP planning coverage/authority drift')
+        if name == 'requirements.json':
+            if {x['id'] for x in projection.get('requirements',[])} != {x['id'] for x in current['requirements']} or len(projection.get('requirements',[])) != 92 or projection.get('acceptedRequirements') != 0:
+                errors.append('MVP requirement coverage drift')
+    state = json.loads((K/'execution/status.json').read_text())
+    receipt = state.pop('mvpImplementationResume',{})
+    header = state.pop('historicalHeaderBeforeMvpResume',{})
+    old_state = json.loads(prior('knowledge/execution/status.json'))
+    if len(header) != 15 or any(v != old_state.get(k) for k,v in header.items()):
+        errors.append('MVP context historical header lost')
+    state.update(header)
+    if state != old_state: errors.append('MVP context changed existing execution evidence')
+    for key in ['financialPolicyApproved','fundingRequestCreated','creditMatchingCreated','allocationCreated','purchasedBookingChanged','newHttpEndpoint','migrationChanged','staffAuthorityAdded','grantAssigned','bootstrapConfigured','formalAcceptanceChanged']:
+        if receipt.get(key) is not False: errors.append('MVP context exceeded authority '+key)
+    if receipt.get('baseline') != baseline or receipt.get('baselineCI') != {'run':39940029147,'status':'completed','conclusion':'success','attempt':1}:
+        errors.append('MVP context source/CI baseline drift')
+    pattern = r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M) != re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):
+        errors.append('MVP context criterion/demo acceptance changed')
+    allowed = set(hashes)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    tracked = subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True).split('\0')
+    for name in filter(None,tracked):
+        if name not in allowed and (not (R/name).is_file() or (R/name).read_bytes() != prior(name)):
+            errors.append('MVP context unrelated source/history change '+name)
+    changed = set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True).split('\0'))-{''}
+    if not changed <= allowed: errors.append('MVP context unrelated tracked delta '+str(changed-allowed))
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/'+entry['path'] in allowed and entry['path'] != 'manifest.json':
+            entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+    if manifest != expected: errors.append('MVP context manifest inventory/approval drift')
+    if errors:
+        print('\n'.join('FAIL '+e for e in errors));return 1
+    # Preserve all historical checks against their immutable evidence, after validating this exact delta.
+    replacements={R/name:prior(name) for name in set(hashes)-{added}|{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw): return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw): return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw): return (x for x in g0(path,*a,**kw) if x != R/added)
+    def rglob(path,*a,**kw): return (x for x in rg0(path,*a,**kw) if x != R/added)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            text=value if isinstance(value,str) else value.decode();sep='\0' if '-z' in argv else '\n'
+            hide=allowed-{'frontend/next-env.d.ts'} if 'diff' in argv else {added}
+            text=sep.join(x for x in text.split(sep) if x not in hide)
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):
+        result=mvp_resume_prior_main()
+    if result==0: print('PASS bounded owner-only typed reservation context; 92 requirements/74 criteria/11 workstreams; existing decisions, migrations, domain commands, acceptance and unrelated source preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

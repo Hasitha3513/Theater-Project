@@ -660,3 +660,5 @@ No extension hold,additional funding,refund,revision,credential,device or notifi
 | Last verified commit / CI | Baseline7dad40cbd198069fc6f9e5db8ae0b5647f7736f1/CI39918547446 SUCCESS;[actual evidence](../PROGRESS.md#extension-reservation);new exact-source CI PENDING |
 
 Original booking and purchased revision remain unchanged;temporary coverage is not permission to occupy or extend the session. Existing full requirements and financial/physical acceptance remain open.
+
+CN-EXTENSION-CONTEXT-PORT-001 adds an internal typed owner reservation observation to DOC-F030 using its existing protected GET/audit path. No new customer control or API route;no payment request,matching,allocation or extension commitment. Caller transaction and current owner eligibility are required. [Evidence](../PROGRESS.md#extension-context-port).

@@ -186,7 +186,7 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "PK-AC01\u201313, after supporting policy decisions; core editing and bought-term protection distinct",
+      "acceptanceCriteria": "PK-AC01–13, after supporting policy decisions; core editing and bought-term protection distinct",
       "moduleOwnership": "Pricing/Booking",
       "uiApiOwnership": "Packages & Pricing/customer quote; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -300,7 +300,7 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "BP-AC01\u201313, no receipt/funds/booking/access conflation, online path retained",
+      "acceptanceCriteria": "BP-AC01–13, no receipt/funds/booking/access conflation, online path retained",
       "moduleOwnership": "Payments/Booking/Notifications/Audit",
       "uiApiOwnership": "Customer claim and admin review; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -996,7 +996,7 @@
         "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       },
       "bookingAccessContextEvidence": {
         "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
@@ -1005,7 +1005,7 @@
         "evidencePath": "PROGRESS.md#booking-access-context-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim"
       }
     },
     {
@@ -1170,6 +1170,17 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "reservationContextEvidence": {
+        "taskId": "CN-EXTENSION-CONTEXT-PORT-001",
+        "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+        "source": "backend/src/main/java/com/cinenest/booking/ExtensionReservationContext.java",
+        "tests": "backend/src/test/java/com/cinenest/BankIntegrationTest.java#typedReservationContext",
+        "evidencePath": "PROGRESS.md#extension-context-port",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Owner-only typed observation; no staff/financial authority,request,match,allocation,migration or commitment."
       }
     },
     {
@@ -1403,7 +1414,7 @@
         "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       },
       "bookingAccessContextEvidence": {
         "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
@@ -1412,7 +1423,7 @@
         "evidencePath": "PROGRESS.md#booking-access-context-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim"
       },
       "staffBookingRefundReadEvidence": {
         "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
@@ -1492,6 +1503,17 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "reservationContextEvidence": {
+        "taskId": "CN-EXTENSION-CONTEXT-PORT-001",
+        "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+        "source": "backend/src/main/java/com/cinenest/booking/ExtensionReservationContext.java",
+        "tests": "backend/src/test/java/com/cinenest/BankIntegrationTest.java#typedReservationContext",
+        "evidencePath": "PROGRESS.md#extension-context-port",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Owner-only typed observation; no staff/financial authority,request,match,allocation,migration or commitment."
       }
     },
     {
@@ -2345,7 +2367,7 @@
         "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       },
       "bookingAccessContextEvidence": {
         "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
@@ -2354,7 +2376,7 @@
         "evidencePath": "PROGRESS.md#booking-access-context-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim"
       },
       "syntheticCancellationEvidence": {
         "taskId": "CN-BOOKING-CANCELLATION-001",
@@ -2686,9 +2708,9 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "PK-AC01\u201313 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
+      "acceptanceCriteria": "PK-AC01–13 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
       "moduleOwnership": "Pricing (existing proposed owner); Booking owns purchased snapshots",
-      "uiApiOwnership": "System Settings \u2192 Packages & Pricing (proposed subsection, no verified route); customer package/quote/confirmation views; actual backend/API and UI implementation absent, interfaces are proposals",
+      "uiApiOwnership": "System Settings → Packages & Pricing (proposed subsection, no verified route); customer package/quote/confirmation views; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
         "CN-PKG-001",
         "CN-PKG-002"
@@ -2764,7 +2786,7 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "BP-AC01\u201313; independent bank credit and guarded one-booking result; not tests run",
+      "acceptanceCriteria": "BP-AC01–13; independent bank credit and guarded one-booking result; not tests run",
       "moduleOwnership": "Payments; Booking; Notifications",
       "uiApiOwnership": "Payment Processing; Customer Dashboard/Booking History; protected claim upload/status; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -2887,9 +2909,9 @@
       "approvalEvidence": "Explicit user S8/S9/S10 or ADR-001 as linked; supporting policies not promoted",
       "priority": "P1",
       "scope": "desired product",
-      "acceptanceCriteria": "BP-AC01\u201313; alert failure retains queue; approval alone no completed booking/access/refund",
+      "acceptanceCriteria": "BP-AC01–13; alert failure retains queue; approval alone no completed booking/access/refund",
       "moduleOwnership": "Payments; Booking; Notifications; Audit",
-      "uiApiOwnership": "Payments \u2192 Bank Deposit Reviews (proposed subsection); actual backend/API and UI implementation absent, interfaces are proposals",
+      "uiApiOwnership": "Payments → Bank Deposit Reviews (proposed subsection); actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002",
@@ -3458,7 +3480,7 @@
         "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       },
       "bookingAccessContextEvidence": {
         "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
@@ -3467,7 +3489,7 @@
         "evidencePath": "PROGRESS.md#booking-access-context-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim"
       },
       "staffBookingRefundReadEvidence": {
         "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
@@ -3612,6 +3634,17 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only managed subset UI/proxy;intercepted browser evidence not real-backend E2E;no authority assignments/commands"
+      },
+      "reservationContextEvidence": {
+        "taskId": "CN-EXTENSION-CONTEXT-PORT-001",
+        "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+        "source": "backend/src/main/java/com/cinenest/booking/ExtensionReservationContext.java",
+        "tests": "backend/src/test/java/com/cinenest/BankIntegrationTest.java#typedReservationContext",
+        "evidencePath": "PROGRESS.md#extension-context-port",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Owner-only typed observation; no staff/financial authority,request,match,allocation,migration or commitment."
       }
     },
     {
@@ -5424,7 +5457,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "future acceptance conditional on final supporting policy; not an executed test",
-      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility \u2192 one confirmed snapshot, separate acknowledged access",
+      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility → one confirmed snapshot, separate acknowledged access",
       "moduleOwnership": "Pricing/Booking/Payments/Access as scenario",
       "uiApiOwnership": "Canonical package/bank page+API guards; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -6278,7 +6311,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts \u00d7 100. Zero rooms \u2192 N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts × 100. Zero rooms → N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -6414,7 +6447,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range \u00d7 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator \u2192 N/A; unknown/incomplete inputs \u2192 unavailable.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range × 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator → N/A; unknown/incomplete inputs → unavailable.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -6452,7 +6485,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -6502,7 +6535,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator \u2192 N/A; prior zero/missing \u2192 N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator → N/A; prior zero/missing → N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -6540,7 +6573,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices \u00d7100, unknown included; 0 devices \u2192 N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices ×100, unknown included; 0 devices → N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -6617,7 +6650,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "BN-M01\u201308 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "BN-M01–08 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [
@@ -7013,5 +7046,2632 @@
     "legacyFields": "uiApiOwnership, reasonNotRun and allApplicationTests absence statements are historical initial-baseline projections, not current source absence. Read each appended bounded implementation evidence and product/FEATURE_CATALOG.md for current coverage.",
     "fullAcceptanceUnchanged": true,
     "fullPlanOutcomesUnchanged": true
+  },
+  "developmentReconciliation": {
+    "baseline": "f5977f8763890e1eb502e93e8ef549ee150742e3",
+    "authority": "execution/change-sets.json#remainingImplementationPlan",
+    "requirements": [
+      {
+        "id": "CN-AGENT-WORKFLOW-001",
+        "workstreams": [
+          "W01",
+          "W11"
+        ],
+        "criterionIds": [
+          "P0-C01",
+          "P0-C02",
+          "P0-C04",
+          "P0-C05",
+          "P0-C06"
+        ],
+        "development": "IMPLEMENTED_VERIFIED_WORKFLOW_ONLY",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-AGENT-WORKFLOW-001; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PR-UI-001",
+        "workstreams": [
+          "W01",
+          "W11"
+        ],
+        "criterionIds": [
+          "P0-C03",
+          "P1-C06",
+          "P2-C04"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "foundationEvidence",
+          "uiImplementationEvidence",
+          "frontendExperienceEvidence",
+          "frontendSharedStatesEvidence",
+          "customerDiscoveryEvidence",
+          "cinemaImageAssetsEvidence",
+          "bookingExperienceEvidence",
+          "adminExperienceEvidence",
+          "operationsExperienceEvidence",
+          "configurationExperienceEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PR-UI-001; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PR-PKG-001",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "foundationEvidence",
+          "packageImplementationEvidence",
+          "publicationImplementationEvidence",
+          "quotationImplementationEvidence",
+          "configurationExperienceEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-19",
+          "OD-20",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PR-PKG-001; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PR-BANK-001",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C05",
+          "P4-C08"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "foundationEvidence",
+          "bankRequestImplementationEvidence",
+          "bankLedgerImplementationEvidence",
+          "bankingExperienceEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PR-BANK-001; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C01",
+        "workstreams": [
+          "W02"
+        ],
+        "criterionIds": [
+          "P2-C01",
+          "P2-C04"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "roomImplementationEvidence",
+          "publicationImplementationEvidence",
+          "syntheticE2eEvidence",
+          "frontendExperienceEvidence",
+          "frontendSharedStatesEvidence",
+          "customerDiscoveryEvidence",
+          "cinemaImageAssetsEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C02",
+        "workstreams": [
+          "W01",
+          "W05",
+          "W09"
+        ],
+        "criterionIds": [
+          "P1-C04",
+          "P4-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "authImplementationEvidence",
+          "syntheticE2eEvidence",
+          "frontendSharedStatesEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C02; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C03",
+        "workstreams": [
+          "W03",
+          "W02"
+        ],
+        "criterionIds": [
+          "P3-C03",
+          "P3-C04",
+          "P3-C05",
+          "P3-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "inventoryImplementationEvidence",
+          "syntheticE2eEvidence",
+          "customerDiscoveryEvidence",
+          "bookingExperienceEvidence",
+          "e2eExpiredQuoteEvidence",
+          "e2eInvalidHoldEvidence",
+          "calendarAvailabilityEvidence",
+          "customerCalendarUiEvidence",
+          "calendarHoldE2eEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-09",
+          "OD-21"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C03; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C04",
+        "workstreams": [
+          "W03",
+          "W02"
+        ],
+        "criterionIds": [
+          "P3-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "quotationImplementationEvidence",
+          "syntheticE2eEvidence",
+          "customerDiscoveryEvidence",
+          "bookingExperienceEvidence",
+          "e2eExpiredQuoteEvidence",
+          "e2eInvalidHoldEvidence",
+          "calendarHoldE2eEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C04; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C05",
+        "workstreams": [
+          "W05",
+          "W07"
+        ],
+        "criterionIds": [
+          "P4-C01",
+          "P4-C02",
+          "P4-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "verificationImplementationEvidence",
+          "syntheticE2eEvidence",
+          "guestRosterImplementationEvidence",
+          "bookingExperienceEvidence",
+          "verificationExperienceEvidence",
+          "bookingHistoryExperienceEvidence",
+          "e2eRejectedVerificationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-03",
+          "OD-05"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C05; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C06",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P5-C01",
+          "P5-C02",
+          "P5-C03",
+          "P5-C04"
+        ],
+        "development": "DEFERRED_EXECUTION_SCOPE_RETAINED",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-06",
+          "OD-07",
+          "OD-20"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C06; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C07",
+        "workstreams": [
+          "W07",
+          "W10"
+        ],
+        "criterionIds": [
+          "P5-C05",
+          "P7-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "staffBookingAccessReadEvidence",
+          "bookingAccessContextEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-02",
+          "OD-05",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C07; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C08",
+        "workstreams": [
+          "W06",
+          "W03"
+        ],
+        "criterionIds": [
+          "P3-C06",
+          "P5-C06",
+          "P6-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedAmendmentImplementationEvidence",
+          "syntheticE2eEvidence",
+          "staffBookingReadEvidence",
+          "staffBookingFrontendEvidence",
+          "bookingHistoryExperienceEvidence",
+          "e2eBookingRemediationEvidence",
+          "e2eSafeUrlsEvidence",
+          "reviewWindowFailureEvidence",
+          "syntheticCancellationEvidence",
+          "syntheticCancellationFrontendEvidence",
+          "extensionPreviewEvidence",
+          "extensionReservationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-07",
+          "OD-20",
+          "OD-21",
+          "OD-24",
+          "OD-28"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C08; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C09",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "development": "DEFERRED_EXECUTION_SCOPE_RETAINED",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "executionDeferralEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-08"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C09; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A01",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedBankReportImplementationEvidence",
+          "frontendExperienceEvidence",
+          "adminBankSummaryEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A02",
+        "workstreams": [
+          "W06",
+          "W03"
+        ],
+        "criterionIds": [
+          "P3-C04",
+          "P6-C01",
+          "P6-C02",
+          "P6-C03",
+          "P6-C04",
+          "P6-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "inventoryImplementationEvidence",
+          "boundedAmendmentImplementationEvidence",
+          "staffBookingReadEvidence",
+          "staffBookingFrontendEvidence",
+          "frontendSharedStatesEvidence",
+          "adminExperienceEvidence",
+          "staffGuestRosterEvidence",
+          "staffBookingAccessReadEvidence",
+          "bookingAccessContextEvidence",
+          "staffBookingRefundReadEvidence",
+          "bookingRefundContextEvidence",
+          "bookingOperationsContextEvidence",
+          "syntheticCancellationEvidence",
+          "syntheticCancellationFrontendEvidence",
+          "extensionPreviewEvidence",
+          "extensionReservationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-07",
+          "OD-09",
+          "OD-20",
+          "OD-21",
+          "OD-24"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A02; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A03",
+        "workstreams": [
+          "W02"
+        ],
+        "criterionIds": [
+          "P2-C01",
+          "P3-C02",
+          "P8-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "roomImplementationEvidence",
+          "configurationExperienceEvidence",
+          "maintenanceImpactReadEvidence",
+          "maintenanceImpactFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A03; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A04",
+        "workstreams": [
+          "W02"
+        ],
+        "criterionIds": [
+          "P2-C05",
+          "P9-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "uiImplementationEvidence",
+          "roomImplementationEvidence",
+          "cinemaImageAssetsEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A04; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A05",
+        "workstreams": [
+          "W08",
+          "W07"
+        ],
+        "criterionIds": [
+          "P8-C01",
+          "P8-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedIotImplementationEvidence",
+          "boundedOperationsImplementationEvidence",
+          "staffBookingOperationsReadEvidence",
+          "bookingOperationsContextEvidence",
+          "operationsQueuePaginationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-02",
+          "OD-13",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A05; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A06",
+        "workstreams": [
+          "W01",
+          "W05",
+          "W09"
+        ],
+        "criterionIds": [
+          "P1-C04",
+          "P4-C02",
+          "P9-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "authImplementationEvidence",
+          "verificationImplementationEvidence",
+          "adminReadImplementationEvidence",
+          "adminReviewContextEvidence",
+          "adminExperienceEvidence",
+          "e2eRejectedVerificationEvidence",
+          "scopedGrantAdminPolicyEvidence",
+          "identityGrantReadCapabilityEvidence",
+          "managedGrantReadEvidence",
+          "managedGrantFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-03",
+          "OD-05",
+          "OD-18",
+          "OD-28"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A06; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A07",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P5-C06",
+          "P6-C05",
+          "P6-C06",
+          "P10-C04"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "staffBookingRefundReadEvidence",
+          "bookingRefundContextEvidence",
+          "adminBankSummaryEvidence",
+          "syntheticCancellationEvidence",
+          "syntheticCancellationFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-06",
+          "OD-07",
+          "OD-20",
+          "OD-28"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A07; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A08",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "operationsExperienceEvidence",
+          "adminBankSummaryEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A08; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A09",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "development": "DEFERRED_EXECUTION_SCOPE_RETAINED",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "executionDeferralEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-08"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A09; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A10",
+        "workstreams": [
+          "W10",
+          "W11"
+        ],
+        "criterionIds": [
+          "P2-C05",
+          "P9-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "adminReadImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-05",
+          "OD-18",
+          "OD-28"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A10; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A11",
+        "workstreams": [
+          "W01",
+          "W05",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "adminReadImplementationEvidence",
+          "staffBookingReadEvidence",
+          "staffBookingFrontendEvidence",
+          "scopedGrantAdminPolicyEvidence",
+          "identityGrantReadCapabilityEvidence",
+          "managedGrantReadEvidence",
+          "managedGrantFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-05",
+          "OD-18",
+          "OD-28"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A11; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-O01",
+        "workstreams": [
+          "W05",
+          "W07"
+        ],
+        "criterionIds": [
+          "P6-C04",
+          "P7-C01",
+          "P7-C02",
+          "P7-C04",
+          "P7-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "guestRosterImplementationEvidence",
+          "staffBookingAccessReadEvidence",
+          "bookingAccessContextEvidence",
+          "syntheticCancellationEvidence",
+          "syntheticCancellationFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-02"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-O01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-O02",
+        "workstreams": [
+          "W07",
+          "W10"
+        ],
+        "criterionIds": [
+          "P8-C01",
+          "P8-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedIotImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-02",
+          "OD-13"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-O02; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-O03",
+        "workstreams": [
+          "W08",
+          "W07"
+        ],
+        "criterionIds": [
+          "P8-C02",
+          "P8-C04",
+          "P8-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedOperationsImplementationEvidence",
+          "guestRosterImplementationEvidence",
+          "operationsExperienceEvidence",
+          "staffGuestRosterEvidence",
+          "staffBookingOperationsReadEvidence",
+          "bookingOperationsContextEvidence",
+          "operationsQueuePaginationEvidence",
+          "maintenanceImpactReadEvidence",
+          "maintenanceImpactFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-13",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-O03; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-O04",
+        "workstreams": [
+          "W07",
+          "W10"
+        ],
+        "criterionIds": [
+          "P7-C02",
+          "P7-C06",
+          "P8-C03",
+          "P8-C06",
+          "P8-C07",
+          "P10-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedIotImplementationEvidence",
+          "boundedOperationsImplementationEvidence",
+          "staffBookingOperationsReadEvidence",
+          "bookingOperationsContextEvidence",
+          "operationsQueuePaginationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-02",
+          "OD-13",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-O04; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A12",
+        "workstreams": [
+          "W01",
+          "W11"
+        ],
+        "criterionIds": [
+          "P2-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "packageImplementationEvidence",
+          "publicationImplementationEvidence",
+          "configurationExperienceEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-19",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A12; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-C10",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C01",
+          "P4-C04",
+          "P4-C08"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankRequestImplementationEvidence",
+          "bankLedgerImplementationEvidence",
+          "syntheticE2eEvidence",
+          "bankingExperienceEvidence",
+          "e2eBookingRemediationEvidence",
+          "e2eSafeUrlsEvidence",
+          "e2eRejectedVerificationEvidence",
+          "e2eUncertainUploadEvidence",
+          "reviewWindowFailureEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-C10; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-A13",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C05",
+          "P4-C06",
+          "P4-C08"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankRequestImplementationEvidence",
+          "bankLedgerImplementationEvidence",
+          "adminReviewContextEvidence",
+          "adminExperienceEvidence",
+          "e2eUncertainUploadEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-05",
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-A13; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-NFR-01",
+        "workstreams": [
+          "W01",
+          "W11"
+        ],
+        "criterionIds": [
+          "P1-C06",
+          "P9-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "uiImplementationEvidence",
+          "operationsExperienceEvidence",
+          "configurationExperienceEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-NFR-01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-NFR-02",
+        "workstreams": [
+          "W01",
+          "W05",
+          "W09"
+        ],
+        "criterionIds": [
+          "P0-C03",
+          "P0-C06",
+          "P0-C07",
+          "P1-C02",
+          "P1-C03",
+          "P1-C05",
+          "P3-C06",
+          "P9-C04",
+          "P9-C05",
+          "P9-C07"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "foundationEvidence",
+          "authImplementationEvidence",
+          "roomImplementationEvidence",
+          "packageImplementationEvidence",
+          "publicationImplementationEvidence",
+          "inventoryImplementationEvidence",
+          "quotationImplementationEvidence",
+          "verificationImplementationEvidence",
+          "bankRequestImplementationEvidence",
+          "bankLedgerImplementationEvidence",
+          "adminReadImplementationEvidence",
+          "syntheticE2eEvidence",
+          "guestRosterImplementationEvidence",
+          "adminReviewContextEvidence",
+          "staffBookingReadEvidence",
+          "staffBookingFrontendEvidence",
+          "frontendExperienceEvidence",
+          "frontendSharedStatesEvidence",
+          "customerDiscoveryEvidence",
+          "bookingExperienceEvidence",
+          "verificationExperienceEvidence",
+          "bankingExperienceEvidence",
+          "bookingHistoryExperienceEvidence",
+          "adminExperienceEvidence",
+          "operationsExperienceEvidence",
+          "configurationExperienceEvidence",
+          "e2eBookingRemediationEvidence",
+          "e2eSafeUrlsEvidence",
+          "e2eExpiredQuoteEvidence",
+          "e2eInvalidHoldEvidence",
+          "e2eRejectedVerificationEvidence",
+          "e2eUncertainUploadEvidence",
+          "staffGuestRosterEvidence",
+          "staffBookingAccessReadEvidence",
+          "bookingAccessContextEvidence",
+          "staffBookingRefundReadEvidence",
+          "bookingRefundContextEvidence",
+          "staffBookingOperationsReadEvidence",
+          "bookingOperationsContextEvidence",
+          "operationsQueuePaginationEvidence",
+          "calendarAvailabilityEvidence",
+          "customerCalendarUiEvidence",
+          "reviewWindowFailureEvidence",
+          "calendarHoldE2eEvidence",
+          "adminBankSummaryEvidence",
+          "scopedGrantAdminPolicyEvidence",
+          "identityGrantReadCapabilityEvidence",
+          "managedGrantReadEvidence",
+          "managedGrantFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-03",
+          "OD-05",
+          "OD-18",
+          "OD-28"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-NFR-02; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-NFR-03",
+        "workstreams": [
+          "W10",
+          "W11"
+        ],
+        "criterionIds": [
+          "P1-C01",
+          "P1-C02",
+          "P1-C03",
+          "P5-C06",
+          "P9-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "foundationEvidence",
+          "boundedBankReportImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-NFR-03; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-NFR-04",
+        "workstreams": [
+          "W10",
+          "W11"
+        ],
+        "criterionIds": [
+          "P9-C06",
+          "P10-C02"
+        ],
+        "development": "PARTIAL_INERT_CONTROLLER_OPERATIONAL_QUALIFICATION_BLOCKED",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-05"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-NFR-04; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-NFR-05",
+        "workstreams": [
+          "W08",
+          "W07"
+        ],
+        "criterionIds": [
+          "P0-C07",
+          "P7-C01",
+          "P7-C05",
+          "P7-C06",
+          "P8-C04",
+          "P8-C07",
+          "P9-C07",
+          "P10-C01",
+          "P10-C03",
+          "P10-C04",
+          "P10-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedOperationsImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-02",
+          "OD-13",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-NFR-05; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-NFR-06",
+        "workstreams": [
+          "W11"
+        ],
+        "criterionIds": [
+          "P0-C08",
+          "P9-C08",
+          "P10-C01",
+          "P10-C02",
+          "P10-C03",
+          "P10-C07"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-01",
+          "OD-06"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-NFR-06; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-SUP-01",
+        "workstreams": [
+          "W10",
+          "W11"
+        ],
+        "criterionIds": [
+          "P5-C05",
+          "P8-C06",
+          "P9-C07",
+          "P10-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-SUP-01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-01",
+        "workstreams": [
+          "W03",
+          "W02"
+        ],
+        "criterionIds": [
+          "P3-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "inventoryImplementationEvidence",
+          "calendarAvailabilityEvidence",
+          "customerCalendarUiEvidence",
+          "calendarHoldE2eEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-09",
+          "OD-21"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-02",
+        "workstreams": [
+          "W03",
+          "W02"
+        ],
+        "criterionIds": [
+          "P2-C06",
+          "P3-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "inventoryImplementationEvidence",
+          "calendarAvailabilityEvidence",
+          "customerCalendarUiEvidence",
+          "calendarHoldE2eEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-09",
+          "OD-17",
+          "OD-18",
+          "OD-19",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-02; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-03",
+        "workstreams": [
+          "W03",
+          "W02"
+        ],
+        "criterionIds": [
+          "P3-C01",
+          "P3-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "quotationImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-03; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-04",
+        "workstreams": [
+          "W06",
+          "W03"
+        ],
+        "criterionIds": [
+          "P3-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "quotationImplementationEvidence",
+          "extensionPreviewEvidence",
+          "extensionReservationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-04; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-05",
+        "workstreams": [
+          "W03",
+          "W02"
+        ],
+        "criterionIds": [
+          "P3-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "quotationImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-05; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-06",
+        "workstreams": [
+          "W03",
+          "W02"
+        ],
+        "criterionIds": [
+          "P3-C02",
+          "P6-C03",
+          "P8-C04"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "inventoryImplementationEvidence",
+          "calendarAvailabilityEvidence",
+          "customerCalendarUiEvidence",
+          "calendarHoldE2eEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-09",
+          "OD-13",
+          "OD-21",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-06; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-07",
+        "workstreams": [
+          "W03",
+          "W02"
+        ],
+        "criterionIds": [
+          "P3-C03",
+          "P3-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "inventoryImplementationEvidence",
+          "calendarHoldE2eEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-09",
+          "OD-21"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-07; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-08",
+        "workstreams": [
+          "W05",
+          "W07"
+        ],
+        "criterionIds": [
+          "P4-C03",
+          "P7-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "guestRosterImplementationEvidence",
+          "staffGuestRosterEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-03",
+          "OD-05"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-08; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-09",
+        "workstreams": [
+          "W07",
+          "W10"
+        ],
+        "criterionIds": [
+          "P7-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-02"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-09; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BR-10",
+        "workstreams": [
+          "W06",
+          "W03"
+        ],
+        "criterionIds": [
+          "P3-C01",
+          "P3-C04",
+          "P6-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "quotationImplementationEvidence",
+          "boundedAmendmentImplementationEvidence",
+          "syntheticCancellationEvidence",
+          "syntheticCancellationFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-07",
+          "OD-17",
+          "OD-20",
+          "OD-21",
+          "OD-22",
+          "OD-24",
+          "OD-25"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BR-10; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC01",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "packageImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC02",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "packageImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC02; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC03",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C02",
+          "P2-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "packageImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC03; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC04",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C03",
+          "P2-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "publicationImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-19",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC04; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC05",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "publicationImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-19",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC05; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC06",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "publicationImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-19",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC06; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC07",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P3-C01",
+          "P6-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "quotationImplementationEvidence",
+          "e2eExpiredQuoteEvidence",
+          "e2eInvalidHoldEvidence",
+          "extensionReservationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC07; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC08",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P5-C02",
+          "P5-C03"
+        ],
+        "development": "DEFERRED_EXECUTION_SCOPE_RETAINED",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-06",
+          "OD-07",
+          "OD-20"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC08; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC09",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "publicationImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-19",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC09; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC10",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P3-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "quotationImplementationEvidence",
+          "extensionPreviewEvidence",
+          "extensionReservationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC10; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC11",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P2-C03",
+          "P2-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "publicationImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-18",
+          "OD-19",
+          "OD-21",
+          "OD-22"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC11; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC12",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P6-C03",
+          "P6-C06",
+          "P7-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedAmendmentImplementationEvidence",
+          "extensionPreviewEvidence",
+          "extensionReservationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-02"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC12; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "PK-AC13",
+        "workstreams": [
+          "W02",
+          "W03",
+          "W06"
+        ],
+        "criterionIds": [
+          "P3-C01",
+          "P6-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "quotationImplementationEvidence",
+          "extensionReservationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#PK-AC13; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC01",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C06",
+          "P4-C08"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankLedgerImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-24",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC02",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C07"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankLedgerImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-24",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC02; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC03",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C06",
+          "P4-C07"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankLedgerImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-24",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC03; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC04",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C01",
+          "P4-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankRequestImplementationEvidence",
+          "syntheticE2eEvidence",
+          "adminReviewContextEvidence",
+          "e2eUncertainUploadEvidence",
+          "reviewWindowFailureEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC04; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC05",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C07",
+          "P5-C04",
+          "P6-C06"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankLedgerImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-24",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC05; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC06",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C04"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankRequestImplementationEvidence",
+          "syntheticE2eEvidence",
+          "e2eBookingRemediationEvidence",
+          "e2eSafeUrlsEvidence",
+          "e2eRejectedVerificationEvidence",
+          "reviewWindowFailureEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC06; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC07",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C07"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankRequestImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC07; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC08",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C01"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankRequestImplementationEvidence",
+          "e2eUncertainUploadEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC08; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC09",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C04"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankRequestImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC09; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC10",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bankRequestImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-23",
+          "OD-24",
+          "OD-25",
+          "OD-26",
+          "OD-28",
+          "OD-29"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC10; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC11",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P4-C08",
+          "P7-C04"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-02"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC11; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC12",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P6-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "staffBookingRefundReadEvidence",
+          "bookingRefundContextEvidence",
+          "syntheticCancellationEvidence",
+          "syntheticCancellationFrontendEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-07",
+          "OD-28"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC12; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BP-AC13",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedBankReportImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BP-AC13; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-REVENUE-BOOKINGS",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-REVENUE-BOOKINGS; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-ROOM-OCCUPANCY",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-ROOM-OCCUPANCY; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-REVENUE-TREND",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-REVENUE-TREND; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-POPULAR-TIME-SLOTS",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "popularSessionStartsEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-POPULAR-TIME-SLOTS; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-ROOM-UTILIZATION",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-ROOM-UTILIZATION; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-BOOKING-STATISTICS",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "bookingConfirmationStatisticsEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-BOOKING-STATISTICS; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-FINANCIAL-KPIS",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-FINANCIAL-KPIS; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-SYSTEM-IOT-STATUS",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-SYSTEM-IOT-STATUS; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-PAYMENT-ADDON-BREAKDOWN",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-PAYMENT-ADDON-BREAKDOWN; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "CN-M-BANK-PAYMENT-REVIEW-FINANCES",
+        "workstreams": [
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#CN-M-BANK-PAYMENT-REVIEW-FINANCES; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BN-M01",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03",
+          "P10-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16",
+          "OD-23",
+          "OD-24",
+          "OD-27"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BN-M01; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BN-M02",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16",
+          "OD-23",
+          "OD-24",
+          "OD-27"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BN-M02; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BN-M03",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16",
+          "OD-23",
+          "OD-24",
+          "OD-27"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BN-M03; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BN-M04",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16",
+          "OD-23",
+          "OD-24",
+          "OD-27"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BN-M04; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BN-M05",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16",
+          "OD-23",
+          "OD-24",
+          "OD-27"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BN-M05; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BN-M06",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03",
+          "P10-C05"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence",
+          "boundedBankReportImplementationEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16",
+          "OD-23",
+          "OD-24",
+          "OD-27"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BN-M06; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BN-M07",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16",
+          "OD-23",
+          "OD-24",
+          "OD-27"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BN-M07; existing appended bounded evidence, unchanged full acceptance"
+      },
+      {
+        "id": "BN-M08",
+        "workstreams": [
+          "W04",
+          "W09"
+        ],
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "development": "BOUNDED_IMPLEMENTATION_WIDER_SCOPE_PARTIAL",
+        "existingEvidenceKeys": [
+          "codeEvidence"
+        ],
+        "fullAcceptance": "NOT_ACCEPTED",
+        "testId": null,
+        "blockingDecisions": [
+          "OD-16",
+          "OD-23",
+          "OD-24",
+          "OD-27"
+        ],
+        "scopeSource": "execution/requirements.json; product/FEATURE_CATALOG.md",
+        "formalAcceptanceUnchanged": true,
+        "existingEvidenceSource": "execution/requirements.json#BN-M08; existing appended bounded evidence, unchanged full acceptance"
+      }
+    ],
+    "count": 92,
+    "acceptedRequirements": 0
   }
 }

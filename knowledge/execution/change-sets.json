@@ -1990,5 +1990,1572 @@
         "evidencePath": "PROGRESS.md#mvp-roadmap"
       }
     }
-  ]
+  ],
+  "remainingImplementationPlan": {
+    "taskId": "CN-MVP-IMPLEMENTATION-RESUME-001",
+    "date": "2026-10-23",
+    "baseline": "f5977f8763890e1eb502e93e8ef549ee150742e3",
+    "authority": "Current owner: update existing MVP plan and implement one independently safe slice; open financial policies are not approved",
+    "roadmapAuthority": "PROGRESS.md#mvp-roadmap",
+    "projectionOnly": "These coverage mappings derive from the existing74 criteria and92 requirements; no second roadmap or acceptance authority",
+    "developmentVerificationLevels": [
+      "IMPLEMENTED",
+      "AUTOMATED_BOUNDED_VERIFICATION",
+      "REAL_PROVIDER_QUALIFICATION",
+      "PHYSICAL_ACCEPTANCE",
+      "FORMAL_PRODUCT_ACCEPTANCE"
+    ],
+    "workstreams": [
+      {
+        "id": "W01",
+        "title": "Foundation, Identity and Authorization",
+        "boundedImplementedAndVerified": "Qualified foundation/JDBC sessions/scoped authorization/account and grant inspection",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Full role/delegation commands, bootstrap and production identity",
+        "blockers": "OD-18/28 delegation and actual assignments remain open",
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001",
+          "PR-UI-001",
+          "CN-C02",
+          "CN-A06",
+          "CN-A11",
+          "CN-A12",
+          "CN-NFR-01",
+          "CN-NFR-02"
+        ],
+        "criterionIds": [
+          "P0-C01",
+          "P0-C02",
+          "P0-C03",
+          "P0-C04",
+          "P0-C05",
+          "P0-C06",
+          "P0-C07",
+          "P1-C02",
+          "P1-C03",
+          "P1-C04",
+          "P1-C05",
+          "P1-C06",
+          "P2-C02",
+          "P2-C04",
+          "P3-C06",
+          "P4-C02",
+          "P4-C03",
+          "P9-C01",
+          "P9-C04",
+          "P9-C05",
+          "P9-C06",
+          "P9-C07"
+        ],
+        "dependencies": "Owner-approved policy, explicit command/migration/bootstrap scope; finance excluded",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-GRANT-COMMANDS-001",
+            "scope": "Proposal-creation command only under approved A–G policy; bootstrap/approver assignments and command authority still separately required",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W02",
+        "title": "Rooms, Venues, Packages and Pricing",
+        "boundedImplementedAndVerified": "Versioned room/package configuration/publication and frozen pricing",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Full package override/tax/proration qualification and acceptance",
+        "blockers": "OD-17/19/21/22 wider policy; physical capacity/media qualification",
+        "requirementIds": [
+          "PR-PKG-001",
+          "CN-C01",
+          "CN-C03",
+          "CN-C04",
+          "CN-A03",
+          "CN-A04",
+          "BR-01",
+          "BR-02",
+          "BR-03",
+          "BR-05",
+          "BR-06",
+          "BR-07",
+          "PK-AC01",
+          "PK-AC02",
+          "PK-AC03",
+          "PK-AC04",
+          "PK-AC05",
+          "PK-AC06",
+          "PK-AC07",
+          "PK-AC08",
+          "PK-AC09",
+          "PK-AC10",
+          "PK-AC11",
+          "PK-AC12",
+          "PK-AC13"
+        ],
+        "criterionIds": [
+          "P2-C01",
+          "P2-C02",
+          "P2-C03",
+          "P2-C04",
+          "P2-C05",
+          "P2-C06",
+          "P3-C01",
+          "P3-C02",
+          "P3-C03",
+          "P3-C04",
+          "P3-C05",
+          "P3-C06",
+          "P5-C02",
+          "P5-C03",
+          "P6-C02",
+          "P6-C03",
+          "P6-C06",
+          "P7-C03",
+          "P8-C04",
+          "P8-C05",
+          "P9-C01"
+        ],
+        "dependencies": "Existing approved publication/version rules; additional policies not inferred",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-PACKAGE-POLICY-BOUNDARY-TEST-001",
+            "scope": "One existing version-publication boundary regression under current approved rules; no tax/proration policy change",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W03",
+        "title": "Booking, Calendar, Holds and Quotations",
+        "boundedImplementedAndVerified": "Calendar, explicit holds, immutable quotes/acceptance and real-backend calendar-to-hold campaign",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Full criterion acceptance and broader inventory concurrency coverage",
+        "blockers": "Existing policies permit independent regression work; customer acceptance remains separate",
+        "requirementIds": [
+          "PR-PKG-001",
+          "CN-C03",
+          "CN-C04",
+          "CN-C08",
+          "CN-A02",
+          "BR-01",
+          "BR-02",
+          "BR-03",
+          "BR-04",
+          "BR-05",
+          "BR-06",
+          "BR-07",
+          "BR-10",
+          "PK-AC01",
+          "PK-AC02",
+          "PK-AC03",
+          "PK-AC04",
+          "PK-AC05",
+          "PK-AC06",
+          "PK-AC07",
+          "PK-AC08",
+          "PK-AC09",
+          "PK-AC10",
+          "PK-AC11",
+          "PK-AC12",
+          "PK-AC13"
+        ],
+        "criterionIds": [
+          "P2-C02",
+          "P2-C03",
+          "P2-C06",
+          "P3-C01",
+          "P3-C02",
+          "P3-C03",
+          "P3-C04",
+          "P3-C05",
+          "P3-C06",
+          "P5-C02",
+          "P5-C03",
+          "P5-C06",
+          "P6-C01",
+          "P6-C02",
+          "P6-C03",
+          "P6-C04",
+          "P6-C06",
+          "P7-C03",
+          "P8-C04"
+        ],
+        "dependencies": "Existing reconciled/pending-reconciliation rules, isolated PostgreSQL",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-INVENTORY-REGRESSION-001",
+            "scope": "One concurrent calendar-to-explicit-hold regression with current configuration/expiry rules",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W04",
+        "title": "Online and Bank Payments",
+        "boundedImplementedAndVerified": "Synthetic bank requests/evidence/credit allocation/refund primitives",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Hosted gateway and real banking qualification; extension funding preparation",
+        "blockers": "PayHere deferred; extension A–P and V26 financial scope not approved",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-C06",
+          "CN-A07",
+          "CN-C10",
+          "CN-A13",
+          "BP-AC01",
+          "BP-AC02",
+          "BP-AC03",
+          "BP-AC04",
+          "BP-AC05",
+          "BP-AC06",
+          "BP-AC07",
+          "BP-AC08",
+          "BP-AC09",
+          "BP-AC10",
+          "BP-AC11",
+          "BP-AC12",
+          "BP-AC13",
+          "BN-M01",
+          "BN-M02",
+          "BN-M03",
+          "BN-M04",
+          "BN-M05",
+          "BN-M06",
+          "BN-M07",
+          "BN-M08"
+        ],
+        "criterionIds": [
+          "P10-C04",
+          "P10-C05",
+          "P4-C01",
+          "P4-C04",
+          "P4-C05",
+          "P4-C06",
+          "P4-C07",
+          "P4-C08",
+          "P5-C01",
+          "P5-C02",
+          "P5-C03",
+          "P5-C04",
+          "P5-C06",
+          "P6-C05",
+          "P6-C06",
+          "P7-C04",
+          "P9-C03"
+        ],
+        "dependencies": "Explicit bounded financial policy/permission/migration authority; context port alone supplies no authority",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-EXTENSION-FUNDING-PREP-001",
+            "scope": "Funding request/read/advisory matching only after explicit bounded financial policy and V26 authority",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W05",
+        "title": "Identity Verification and Guest Check-in",
+        "boundedImplementedAndVerified": "Synthetic manual review/guest roster and staff inspection",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Real identity processing, all-guest age/admission/check-in",
+        "blockers": "OD-03/05, named reviewers and physical admission evidence",
+        "requirementIds": [
+          "CN-C02",
+          "CN-C05",
+          "CN-A06",
+          "CN-A11",
+          "CN-O01",
+          "CN-NFR-02",
+          "BR-08"
+        ],
+        "criterionIds": [
+          "P0-C03",
+          "P0-C06",
+          "P0-C07",
+          "P1-C02",
+          "P1-C03",
+          "P1-C04",
+          "P1-C05",
+          "P3-C06",
+          "P4-C01",
+          "P4-C02",
+          "P4-C03",
+          "P6-C04",
+          "P7-C01",
+          "P7-C02",
+          "P7-C04",
+          "P7-C05",
+          "P7-C06",
+          "P9-C01",
+          "P9-C04",
+          "P9-C05",
+          "P9-C07"
+        ],
+        "dependencies": "No inferred identity/age approval or physical admission",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-GUEST-ADMISSION-CONTRACT-001",
+            "scope": "Exact all-guest check-in eligibility/read contract after age/privacy/admission policy; no physical admission implementation inferred",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W06",
+        "title": "Booking Amendments, Extensions and Cancellation",
+        "boundedImplementedAndVerified": "Zero-delta reschedule, pre-start cancellation, extension preview and tail reservation; typed owner-only reservation context port with PostgreSQL/architecture verification",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Customer extension preview/reservation UI; policy-gated funding and purchased extension commit",
+        "blockers": "Funding policies remain open; safe owner-context port needs no financial decision",
+        "requirementIds": [
+          "PR-PKG-001",
+          "CN-C08",
+          "CN-A02",
+          "BR-04",
+          "BR-10",
+          "PK-AC01",
+          "PK-AC02",
+          "PK-AC03",
+          "PK-AC04",
+          "PK-AC05",
+          "PK-AC06",
+          "PK-AC07",
+          "PK-AC08",
+          "PK-AC09",
+          "PK-AC10",
+          "PK-AC11",
+          "PK-AC12",
+          "PK-AC13"
+        ],
+        "criterionIds": [
+          "P2-C02",
+          "P2-C03",
+          "P2-C06",
+          "P3-C01",
+          "P3-C04",
+          "P3-C06",
+          "P5-C02",
+          "P5-C03",
+          "P5-C06",
+          "P6-C01",
+          "P6-C02",
+          "P6-C03",
+          "P6-C04",
+          "P6-C06",
+          "P7-C03"
+        ],
+        "dependencies": "Existing owner-only observation, existing audit/lock semantics; no finance or migration",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-EXTENSION-CONTEXT-PORT-001",
+            "scope": "Typed owner-scoped reservation observation and existing GET reuse, caller transaction and mandatory existing audit only",
+            "status": "IMPLEMENTED_LOCALLY_VERIFIED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback",
+            "evidence": "PROGRESS.md#extension-context-port"
+          }
+        ]
+      },
+      {
+        "id": "W07",
+        "title": "Smart Locks, IoT and Room Automation",
+        "boundedImplementedAndVerified": "Synthetic credential and lighting lifecycles",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Real lock/device provisioning, offline/egress/occupancy qualification",
+        "blockers": "OD-02/13, hardware/provider and physical tests",
+        "requirementIds": [
+          "CN-C05",
+          "CN-C07",
+          "CN-A05",
+          "CN-O01",
+          "CN-O02",
+          "CN-O03",
+          "CN-O04",
+          "CN-NFR-05",
+          "BR-08",
+          "BR-09"
+        ],
+        "criterionIds": [
+          "P0-C07",
+          "P10-C01",
+          "P10-C03",
+          "P10-C04",
+          "P10-C05",
+          "P10-C06",
+          "P4-C01",
+          "P4-C02",
+          "P4-C03",
+          "P5-C05",
+          "P6-C04",
+          "P7-C01",
+          "P7-C02",
+          "P7-C03",
+          "P7-C04",
+          "P7-C05",
+          "P7-C06",
+          "P8-C01",
+          "P8-C02",
+          "P8-C03",
+          "P8-C04",
+          "P8-C05",
+          "P8-C06",
+          "P8-C07",
+          "P9-C07"
+        ],
+        "dependencies": "Separate physical/provider authority; simulator is not evidence of safety",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-DEVICE-QUALIFICATION-CONTRACT-001",
+            "scope": "One representative lock offline/egress qualification contract after provider/hardware access authority",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W08",
+        "title": "Maintenance, Cleaning and Room Readiness",
+        "boundedImplementedAndVerified": "Synthetic cases/checklist assertions and inventory impact preview",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Controlled closure/reopening and physical clearance",
+        "blockers": "Independent inventory authority/lifecycle policy, staff and safety evidence",
+        "requirementIds": [
+          "CN-A05",
+          "CN-O03",
+          "CN-NFR-05"
+        ],
+        "criterionIds": [
+          "P0-C07",
+          "P10-C01",
+          "P10-C03",
+          "P10-C04",
+          "P10-C06",
+          "P7-C01",
+          "P7-C05",
+          "P7-C06",
+          "P8-C01",
+          "P8-C02",
+          "P8-C03",
+          "P8-C04",
+          "P8-C05",
+          "P8-C07",
+          "P9-C07"
+        ],
+        "dependencies": "No timer/ACK/empty-case readiness inference",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-MAINTENANCE-CLOSURE-POLICY-001",
+            "scope": "One closure-impact-to-inventory command contract after independent closure/reopening policy",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W09",
+        "title": "Administration and Reporting",
+        "boundedImplementedAndVerified": "Staff booking/context views, bank summary, confirmations/popular session starts",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Remaining metrics/exports/administration mutations",
+        "blockers": "OD-16 metric population/denominator and finance policy",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-C02",
+          "CN-C06",
+          "CN-C09",
+          "CN-A01",
+          "CN-A06",
+          "CN-A07",
+          "CN-A08",
+          "CN-A09",
+          "CN-A11",
+          "CN-C10",
+          "CN-A13",
+          "CN-NFR-02",
+          "BP-AC01",
+          "BP-AC02",
+          "BP-AC03",
+          "BP-AC04",
+          "BP-AC05",
+          "BP-AC06",
+          "BP-AC07",
+          "BP-AC08",
+          "BP-AC09",
+          "BP-AC10",
+          "BP-AC11",
+          "BP-AC12",
+          "BP-AC13",
+          "CN-M-REVENUE-BOOKINGS",
+          "CN-M-ROOM-OCCUPANCY",
+          "CN-M-REVENUE-TREND",
+          "CN-M-POPULAR-TIME-SLOTS",
+          "CN-M-ROOM-UTILIZATION",
+          "CN-M-BOOKING-STATISTICS",
+          "CN-M-FINANCIAL-KPIS",
+          "CN-M-SYSTEM-IOT-STATUS",
+          "CN-M-PAYMENT-ADDON-BREAKDOWN",
+          "CN-M-BANK-PAYMENT-REVIEW-FINANCES",
+          "BN-M01",
+          "BN-M02",
+          "BN-M03",
+          "BN-M04",
+          "BN-M05",
+          "BN-M06",
+          "BN-M07",
+          "BN-M08"
+        ],
+        "criterionIds": [
+          "P0-C03",
+          "P0-C06",
+          "P0-C07",
+          "P1-C02",
+          "P1-C03",
+          "P1-C04",
+          "P1-C05",
+          "P10-C04",
+          "P10-C05",
+          "P3-C06",
+          "P4-C01",
+          "P4-C02",
+          "P4-C03",
+          "P4-C04",
+          "P4-C05",
+          "P4-C06",
+          "P4-C07",
+          "P4-C08",
+          "P5-C01",
+          "P5-C02",
+          "P5-C03",
+          "P5-C04",
+          "P5-C06",
+          "P6-C05",
+          "P6-C06",
+          "P7-C04",
+          "P9-C01",
+          "P9-C02",
+          "P9-C03",
+          "P9-C04",
+          "P9-C05",
+          "P9-C07"
+        ],
+        "dependencies": "One explicitly approved nonfinancial measure; no invented revenue/occupancy",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-REPORT-METRIC-SOURCE-001",
+            "scope": "One source-backed nonfinancial reporting measure after its exact OD-16 definition is approved",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W10",
+        "title": "Notifications, Audit and Recovery",
+        "boundedImplementedAndVerified": "Durable synthetic in-app notifications/audit/worker receipts; inert recovery controller",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Live delivery and operational recovery qualification",
+        "blockers": "Provider/privacy authority and pending recovery appointments/runtime qualification",
+        "requirementIds": [
+          "CN-C07",
+          "CN-A10",
+          "CN-O02",
+          "CN-O04",
+          "CN-NFR-03",
+          "CN-NFR-04",
+          "CN-SUP-01",
+          "BR-09"
+        ],
+        "criterionIds": [
+          "P1-C01",
+          "P1-C02",
+          "P1-C03",
+          "P10-C02",
+          "P10-C05",
+          "P10-C06",
+          "P2-C05",
+          "P5-C05",
+          "P5-C06",
+          "P7-C02",
+          "P7-C03",
+          "P7-C06",
+          "P8-C01",
+          "P8-C02",
+          "P8-C03",
+          "P8-C06",
+          "P8-C07",
+          "P9-C01",
+          "P9-C05",
+          "P9-C06",
+          "P9-C07"
+        ],
+        "dependencies": "Existing synthetic delivery/restart rules only; GnuPG remains separate/deferred",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-NOTIFICATION-RECOVERY-REGRESSION-001",
+            "scope": "One existing synthetic notification UNKNOWN-result restart regression; no live delivery",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      },
+      {
+        "id": "W11",
+        "title": "End-to-End Testing and Production Qualification",
+        "boundedImplementedAndVerified": "Historical real-backend campaign24 PASS; focused application/architecture CI",
+        "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
+        "missing": "Later cancellation/extension E2E, demos, production qualification",
+        "blockers": "Existing harness admission plus separately authorized campaign and customer/physical acceptance",
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001",
+          "PR-UI-001",
+          "CN-A10",
+          "CN-A12",
+          "CN-NFR-01",
+          "CN-NFR-03",
+          "CN-NFR-04",
+          "CN-NFR-06",
+          "CN-SUP-01"
+        ],
+        "criterionIds": [
+          "P0-C01",
+          "P0-C02",
+          "P0-C03",
+          "P0-C04",
+          "P0-C05",
+          "P0-C06",
+          "P0-C08",
+          "P1-C01",
+          "P1-C02",
+          "P1-C03",
+          "P1-C06",
+          "P10-C01",
+          "P10-C02",
+          "P10-C03",
+          "P10-C06",
+          "P10-C07",
+          "P2-C02",
+          "P2-C04",
+          "P2-C05",
+          "P5-C05",
+          "P5-C06",
+          "P8-C06",
+          "P9-C01",
+          "P9-C05",
+          "P9-C06",
+          "P9-C07",
+          "P9-C08"
+        ],
+        "dependencies": "Synthetic-only later-feature campaign; no automatic formal acceptance",
+        "priority": "P1",
+        "changeSets": [
+          {
+            "id": "CN-E2E-CANCELLATION-001",
+            "scope": "One real-backend synthetic cancellation browser scenario using existing approved cancellation contracts",
+            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
+            "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          }
+        ]
+      }
+    ],
+    "criterionCoverage": [
+      {
+        "id": "P0-C01",
+        "phase": "P0",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001"
+        ],
+        "source": "PROGRESS.md#roadmap-p0",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P0-C02",
+        "phase": "P0",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001"
+        ],
+        "source": "PROGRESS.md#roadmap-p0",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P0-C03",
+        "phase": "P0",
+        "ownerClosed": true,
+        "requirementIds": [
+          "PR-UI-001",
+          "CN-NFR-02"
+        ],
+        "source": "PROGRESS.md#roadmap-p0",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P0-C04",
+        "phase": "P0",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001"
+        ],
+        "source": "PROGRESS.md#roadmap-p0",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P0-C05",
+        "phase": "P0",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001"
+        ],
+        "source": "PROGRESS.md#roadmap-p0",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P0-C06",
+        "phase": "P0",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001",
+          "CN-NFR-02"
+        ],
+        "source": "PROGRESS.md#roadmap-p0",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P0-C07",
+        "phase": "P0",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-05"
+        ],
+        "source": "PROGRESS.md#roadmap-p0",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P0-C08",
+        "phase": "P0",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-06"
+        ],
+        "source": "PROGRESS.md#roadmap-p0",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P1-C01",
+        "phase": "P1",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-NFR-03"
+        ],
+        "source": "PROGRESS.md#roadmap-p1",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P1-C02",
+        "phase": "P1",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "source": "PROGRESS.md#roadmap-p1",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P1-C03",
+        "phase": "P1",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "source": "PROGRESS.md#roadmap-p1",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P1-C04",
+        "phase": "P1",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C02",
+          "CN-A06"
+        ],
+        "source": "PROGRESS.md#roadmap-p1",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P1-C05",
+        "phase": "P1",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-02"
+        ],
+        "source": "PROGRESS.md#roadmap-p1",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P1-C06",
+        "phase": "P1",
+        "ownerClosed": true,
+        "requirementIds": [
+          "PR-UI-001",
+          "CN-NFR-01"
+        ],
+        "source": "PROGRESS.md#roadmap-p1",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P2-C01",
+        "phase": "P2",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-C01",
+          "CN-A03"
+        ],
+        "source": "PROGRESS.md#roadmap-p2",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P2-C02",
+        "phase": "P2",
+        "ownerClosed": true,
+        "requirementIds": [
+          "PR-PKG-001",
+          "CN-A12",
+          "PK-AC01",
+          "PK-AC02",
+          "PK-AC03"
+        ],
+        "source": "PROGRESS.md#roadmap-p2",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P2-C03",
+        "phase": "P2",
+        "ownerClosed": true,
+        "requirementIds": [
+          "PK-AC04",
+          "PK-AC05",
+          "PK-AC06",
+          "PK-AC09",
+          "PK-AC11"
+        ],
+        "source": "PROGRESS.md#roadmap-p2",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P2-C04",
+        "phase": "P2",
+        "ownerClosed": false,
+        "requirementIds": [
+          "PR-UI-001",
+          "CN-C01"
+        ],
+        "source": "PROGRESS.md#roadmap-p2",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P2-C05",
+        "phase": "P2",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A04",
+          "CN-A10"
+        ],
+        "source": "PROGRESS.md#roadmap-p2",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P2-C06",
+        "phase": "P2",
+        "ownerClosed": true,
+        "requirementIds": [
+          "BR-02",
+          "PK-AC03",
+          "PK-AC04",
+          "PK-AC11"
+        ],
+        "source": "PROGRESS.md#roadmap-p2",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P3-C01",
+        "phase": "P3",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C04",
+          "BR-03",
+          "BR-04",
+          "BR-05",
+          "BR-10",
+          "PK-AC07",
+          "PK-AC10",
+          "PK-AC13"
+        ],
+        "source": "PROGRESS.md#roadmap-p3",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P3-C02",
+        "phase": "P3",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A03",
+          "BR-01",
+          "BR-02",
+          "BR-03",
+          "BR-06"
+        ],
+        "source": "PROGRESS.md#roadmap-p3",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P3-C03",
+        "phase": "P3",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-C03",
+          "BR-07"
+        ],
+        "source": "PROGRESS.md#roadmap-p3",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P3-C04",
+        "phase": "P3",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C03",
+          "CN-A02",
+          "BR-10"
+        ],
+        "source": "PROGRESS.md#roadmap-p3",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P3-C05",
+        "phase": "P3",
+        "ownerClosed": true,
+        "requirementIds": [
+          "CN-C03",
+          "BR-07"
+        ],
+        "source": "PROGRESS.md#roadmap-p3",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P3-C06",
+        "phase": "P3",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C03",
+          "CN-C08",
+          "CN-NFR-02"
+        ],
+        "source": "PROGRESS.md#roadmap-p3",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P4-C01",
+        "phase": "P4",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C05",
+          "CN-C10",
+          "BP-AC04",
+          "BP-AC08"
+        ],
+        "source": "PROGRESS.md#roadmap-p4",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P4-C02",
+        "phase": "P4",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C05",
+          "CN-A06"
+        ],
+        "source": "PROGRESS.md#roadmap-p4",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P4-C03",
+        "phase": "P4",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C02",
+          "CN-C05",
+          "BR-08"
+        ],
+        "source": "PROGRESS.md#roadmap-p4",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P4-C04",
+        "phase": "P4",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C10",
+          "BP-AC06",
+          "BP-AC09"
+        ],
+        "source": "PROGRESS.md#roadmap-p4",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P4-C05",
+        "phase": "P4",
+        "ownerClosed": false,
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-A13",
+          "BP-AC10"
+        ],
+        "source": "PROGRESS.md#roadmap-p4",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P4-C06",
+        "phase": "P4",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A13",
+          "BP-AC01",
+          "BP-AC03",
+          "BP-AC04"
+        ],
+        "source": "PROGRESS.md#roadmap-p4",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P4-C07",
+        "phase": "P4",
+        "ownerClosed": false,
+        "requirementIds": [
+          "BP-AC02",
+          "BP-AC03",
+          "BP-AC05",
+          "BP-AC07"
+        ],
+        "source": "PROGRESS.md#roadmap-p4",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P4-C08",
+        "phase": "P4",
+        "ownerClosed": false,
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-C10",
+          "CN-A13",
+          "BP-AC01",
+          "BP-AC11"
+        ],
+        "source": "PROGRESS.md#roadmap-p4",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P5-C01",
+        "phase": "P5",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C06"
+        ],
+        "source": "PROGRESS.md#roadmap-p5",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P5-C02",
+        "phase": "P5",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C06",
+          "PK-AC08"
+        ],
+        "source": "PROGRESS.md#roadmap-p5",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P5-C03",
+        "phase": "P5",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C06",
+          "PK-AC08"
+        ],
+        "source": "PROGRESS.md#roadmap-p5",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P5-C04",
+        "phase": "P5",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C06",
+          "BP-AC05"
+        ],
+        "source": "PROGRESS.md#roadmap-p5",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P5-C05",
+        "phase": "P5",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C07",
+          "CN-SUP-01"
+        ],
+        "source": "PROGRESS.md#roadmap-p5",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P5-C06",
+        "phase": "P5",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C08",
+          "CN-A07",
+          "CN-NFR-03"
+        ],
+        "source": "PROGRESS.md#roadmap-p5",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P6-C01",
+        "phase": "P6",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C08",
+          "CN-A02",
+          "BR-10"
+        ],
+        "source": "PROGRESS.md#roadmap-p6",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P6-C02",
+        "phase": "P6",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A02",
+          "PK-AC07",
+          "PK-AC13"
+        ],
+        "source": "PROGRESS.md#roadmap-p6",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P6-C03",
+        "phase": "P6",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A02",
+          "BR-06",
+          "PK-AC12"
+        ],
+        "source": "PROGRESS.md#roadmap-p6",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P6-C04",
+        "phase": "P6",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A02",
+          "CN-O01"
+        ],
+        "source": "PROGRESS.md#roadmap-p6",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P6-C05",
+        "phase": "P6",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A07",
+          "BP-AC12"
+        ],
+        "source": "PROGRESS.md#roadmap-p6",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P6-C06",
+        "phase": "P6",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A02",
+          "CN-A07",
+          "PK-AC12",
+          "BP-AC05"
+        ],
+        "source": "PROGRESS.md#roadmap-p6",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P7-C01",
+        "phase": "P7",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O01",
+          "CN-NFR-05"
+        ],
+        "source": "PROGRESS.md#roadmap-p7",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P7-C02",
+        "phase": "P7",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O01",
+          "CN-O04"
+        ],
+        "source": "PROGRESS.md#roadmap-p7",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P7-C03",
+        "phase": "P7",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C07",
+          "BR-09",
+          "PK-AC12"
+        ],
+        "source": "PROGRESS.md#roadmap-p7",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P7-C04",
+        "phase": "P7",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O01",
+          "BP-AC11"
+        ],
+        "source": "PROGRESS.md#roadmap-p7",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P7-C05",
+        "phase": "P7",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-05",
+          "BR-08"
+        ],
+        "source": "PROGRESS.md#roadmap-p7",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P7-C06",
+        "phase": "P7",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O01",
+          "CN-O04",
+          "CN-NFR-05"
+        ],
+        "source": "PROGRESS.md#roadmap-p7",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P8-C01",
+        "phase": "P8",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A05",
+          "CN-O02"
+        ],
+        "source": "PROGRESS.md#roadmap-p8",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P8-C02",
+        "phase": "P8",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O02",
+          "CN-O03"
+        ],
+        "source": "PROGRESS.md#roadmap-p8",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P8-C03",
+        "phase": "P8",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A05",
+          "CN-O04"
+        ],
+        "source": "PROGRESS.md#roadmap-p8",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P8-C04",
+        "phase": "P8",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O03",
+          "CN-NFR-05",
+          "BR-06"
+        ],
+        "source": "PROGRESS.md#roadmap-p8",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P8-C05",
+        "phase": "P8",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A03",
+          "CN-O03"
+        ],
+        "source": "PROGRESS.md#roadmap-p8",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P8-C06",
+        "phase": "P8",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O04",
+          "CN-SUP-01"
+        ],
+        "source": "PROGRESS.md#roadmap-p8",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P8-C07",
+        "phase": "P8",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O04",
+          "CN-NFR-05"
+        ],
+        "source": "PROGRESS.md#roadmap-p8",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P9-C01",
+        "phase": "P9",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-C09",
+          "CN-A01",
+          "CN-A04",
+          "CN-A06",
+          "CN-A08",
+          "CN-A09",
+          "CN-A10",
+          "CN-A11"
+        ],
+        "source": "PROGRESS.md#roadmap-p9",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P9-C02",
+        "phase": "P9",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-M-REVENUE-BOOKINGS",
+          "CN-M-ROOM-OCCUPANCY",
+          "CN-M-REVENUE-TREND",
+          "CN-M-POPULAR-TIME-SLOTS",
+          "CN-M-ROOM-UTILIZATION",
+          "CN-M-BOOKING-STATISTICS",
+          "CN-M-FINANCIAL-KPIS",
+          "CN-M-SYSTEM-IOT-STATUS",
+          "CN-M-PAYMENT-ADDON-BREAKDOWN",
+          "CN-M-BANK-PAYMENT-REVIEW-FINANCES"
+        ],
+        "source": "PROGRESS.md#roadmap-p9",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P9-C03",
+        "phase": "P9",
+        "ownerClosed": false,
+        "requirementIds": [
+          "BP-AC13",
+          "BN-M01",
+          "BN-M02",
+          "BN-M03",
+          "BN-M04",
+          "BN-M05",
+          "BN-M06",
+          "BN-M07",
+          "BN-M08"
+        ],
+        "source": "PROGRESS.md#roadmap-p9",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P9-C04",
+        "phase": "P9",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-02"
+        ],
+        "source": "PROGRESS.md#roadmap-p9",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P9-C05",
+        "phase": "P9",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "source": "PROGRESS.md#roadmap-p9",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P9-C06",
+        "phase": "P9",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-01",
+          "CN-NFR-04"
+        ],
+        "source": "PROGRESS.md#roadmap-p9",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P9-C07",
+        "phase": "P9",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-05",
+          "CN-SUP-01"
+        ],
+        "source": "PROGRESS.md#roadmap-p9",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P9-C08",
+        "phase": "P9",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-06"
+        ],
+        "source": "PROGRESS.md#roadmap-p9",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P10-C01",
+        "phase": "P10",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-05",
+          "CN-NFR-06"
+        ],
+        "source": "PROGRESS.md#roadmap-p10",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P10-C02",
+        "phase": "P10",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-04",
+          "CN-NFR-06"
+        ],
+        "source": "PROGRESS.md#roadmap-p10",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P10-C03",
+        "phase": "P10",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-05",
+          "CN-NFR-06"
+        ],
+        "source": "PROGRESS.md#roadmap-p10",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P10-C04",
+        "phase": "P10",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-A07",
+          "CN-NFR-05"
+        ],
+        "source": "PROGRESS.md#roadmap-p10",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P10-C05",
+        "phase": "P10",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-O04",
+          "BN-M01",
+          "BN-M06"
+        ],
+        "source": "PROGRESS.md#roadmap-p10",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P10-C06",
+        "phase": "P10",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-05",
+          "CN-SUP-01"
+        ],
+        "source": "PROGRESS.md#roadmap-p10",
+        "boundedEvidenceIsNotAcceptance": true
+      },
+      {
+        "id": "P10-C07",
+        "phase": "P10",
+        "ownerClosed": false,
+        "requirementIds": [
+          "CN-NFR-06"
+        ],
+        "source": "PROGRESS.md#roadmap-p10",
+        "boundedEvidenceIsNotAcceptance": true
+      }
+    ],
+    "selectedChangeSet": "CN-EXTENSION-CONTEXT-PORT-001",
+    "financialPolicyApproval": false,
+    "java": "EXISTING_JAVA25_CONFIRMED_BY_OWNER_NO_MIGRATION",
+    "nextCandidate": {
+      "id": "CN-EXTENSION-PREVIEW-FE-001",
+      "scope": "Existing customer booking detail: explicit owner-only extension eligibility/price preview using existing APIs; no reservation/funding mutation",
+      "dependencies": "Existing preview/proxy contracts and exact-source prerequisite CI; separately bounded UI scope and visual evidence",
+      "status": "PROPOSED_NEXT_BOUNDED_UNIT"
+    }
+  }
 }

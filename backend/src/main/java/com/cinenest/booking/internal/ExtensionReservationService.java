@@ -14,7 +14,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 /** Synthetic coverage only. Admission commits independently; business transitions remain atomic. */
 @Service
-class ExtensionReservationService {
+class ExtensionReservationService implements ExtensionReservationContext {
  static final String POLICY="SYNTHETIC_EXTENSION_RESERVATION_V1";
  private final JdbcClient jdbc;private final BookingAccess bookings;private final AmendmentGuards.Access access;private final ScopedAuthorization identity;
  private final InventoryConstraints rooms;private final ExtensionPricing pricing;private final Environment environment;private final TransactionTemplate tx,admissionTx;
@@ -100,7 +100,21 @@ class ExtensionReservationService {
   });
  }
  private void command(UUID actor,UUID key,UUID reservation,String action,String digest,Map<String,Object> result){jdbc.sql("INSERT INTO cinenest_booking.booking_extension_command(owner_id,command_key,reservation_id,action,payload_hash,result) VALUES(:a,:k,:r,:action,:hash,CAST(:result AS jsonb))").param("a",actor).param("k",key).param("r",reservation).param("action",action).param("hash",digest).param("result",json(result)).update();}
- Object read(UUID actor,String rawBooking,String rawReservation){scoped();UUID booking=InventoryRules.id(rawBooking),reservation=InventoryRules.id(rawReservation);return tx.execute(status->{access.lock(booking);eligible(actor);var b=basic(actor,booking);rooms.lock((UUID)b.get("venue_id"));var r=row(booking,reservation);var f=rooms.inspect((UUID)r.get("room_id")).orElseThrow(()->new InventoryFailure(503,"Room unavailable"));audit(actor,booking,reservation,"READ","ALLOW",((Number)r.get("revision")).longValue());return view(r,f,now());});}
+ Object read(UUID actor,String rawBooking,String rawReservation){
+  UUID booking=InventoryRules.id(rawBooking),reservation=InventoryRules.id(rawReservation);
+  return tx.execute(status->{try{return response(observeOwned(actor,booking,reservation));}
+   catch(ExtensionReservationContext.Rejected denied){throw new InventoryFailure(denied.status(),denied.getMessage());}});
+ }
+ @Override public Observation observeOwned(UUID owner,UUID booking,UUID reservation){
+  if(!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Caller transaction required");
+  try{
+   scoped();if(owner==null)throw new InventoryFailure(401,"Session required");if(booking==null||reservation==null)throw InventoryRules.invalid();
+   access.lock(booking);eligible(owner);var b=basic(owner,booking);rooms.lock((UUID)b.get("venue_id"));var r=row(booking,reservation);
+   var f=rooms.inspect((UUID)r.get("room_id")).orElseThrow(()->new InventoryFailure(503,"Room unavailable"));
+   audit(owner,booking,reservation,"READ","ALLOW",((Number)r.get("revision")).longValue());return observation(r,f,now());
+  }catch(InventoryFailure denied){throw new ExtensionReservationContext.Rejected(denied.status,denied.getMessage());}
+   catch(RuntimeException unavailable){throw new ExtensionReservationContext.Rejected(503,"Extension reservation unavailable;reload");}
+ }
  Object withdraw(UUID actor,String rawBooking,String rawReservation,String rawBody){scoped();UUID booking=InventoryRules.id(rawBooking),reservation=InventoryRules.id(rawReservation);var body=parse(rawBody);if(!body.keySet().equals(Set.of("expectedRevision","commandKey")))throw InventoryRules.invalid();UUID key=uuid(body,"commandKey");long revision=ExtensionPreviewService.integer(body,"expectedRevision");String digest=payload("WITHDRAW",rawBooking,rawReservation,rawBody);
   return tx.execute(status->{access.lock(booking);eligible(actor);var b=basic(actor,booking);var old=receipt(actor,key);if(old.isPresent())return replay(old.get(),digest);rooms.lock((UUID)b.get("venue_id"));var r=row(booking,reservation);
    if(((Number)r.get("revision")).longValue()!=revision)throw new InventoryFailure(409,"Reservation changed");
@@ -123,15 +137,31 @@ class ExtensionReservationService {
   var c=InventoryRules.candidate(f,instant(r.get("original_start")),Math.toIntExact(Duration.between(instant(r.get("original_start")),instant(r.get("proposed_end"))).toMinutes()),((Number)r.get("guests")).intValue());
   return f.enabled()&&f.configuration().equals(r.get("configuration"))&&f.timezone().equals(r.get("timezone"))&&f.bufferMinutes()!=null&&f.bufferMinutes().intValue()==((Number)r.get("buffer_minutes")).intValue()&&c.blockedUntil().equals(instant(r.get("proposed_until")));
  }catch(RuntimeException invalid){return false;}}
- private Map<String,Object> view(Map<String,Object> r,InventoryConstraints.Facts f,Instant time){
+ private Map<String,Object> view(Map<String,Object> r,InventoryConstraints.Facts f,Instant time){return response(observation(r,f,time));}
+ private Observation observation(Map<String,Object> r,InventoryConstraints.Facts f,Instant time){
   boolean active="ACTIVE".equals(r.get("state")),expired=!time.isBefore(instant(r.get("expires_at"))),invalid=!valid(r,f);var q=parse(r.get("quotation").toString());
-  var out=new LinkedHashMap<String,Object>();for(String key:List.of("booking_id","reservation_id"))out.put(key.equals("booking_id")?"bookingId":"reservationId",r.get(key));
-  out.put("purchasedRevision",r.get("purchased_revision"));out.put("proposalRevision",r.get("revision"));out.put("state",r.get("state"));
-  out.put("originalSession",Map.of("start",instant(r.get("original_start")).toString(),"end",instant(r.get("original_end")).toString(),"blockedUntil",instant(r.get("original_until")).toString()));
-  out.put("proposedSession",Map.of("start",instant(r.get("original_start")).toString(),"end",instant(r.get("proposed_end")).toString(),"blockedUntil",instant(r.get("proposed_until")).toString()));
-  out.put("additionalCoverage",Map.of("start",instant(r.get("original_until")).toString(),"end",instant(r.get("proposed_until")).toString()));
-  for(String key:List.of("additionalMinor","currency","packageVersionId","pricingBasis","additionalMinutes","termsVersion"))out.put(key,q.get(key));
-  out.put("createdAt",instant(r.get("created_at")).toString());out.put("expiresAt",instant(r.get("expires_at")).toString());out.put("observedAt",time.toString());out.put("effective",active&&!expired&&!invalid);out.put("pendingReconciliation",active&&(expired||invalid));out.put("reasons",active&&(expired||invalid)?List.of("PENDING_RECONCILIATION"):List.of());
-  out.put("bookingChanged",false);out.put("paymentRequested",false);out.put("occupancy","UNKNOWN");out.put("readiness","UNVERIFIED");out.put("synthetic",true);out.put("warning","Temporary synthetic extension coverage only. Original booking unchanged. No payment requested or extension confirmed.");return out;
+  return new Observation((UUID)r.get("booking_id"),(UUID)r.get("reservation_id"),(UUID)r.get("venue_id"),
+   ((Number)r.get("purchased_revision")).longValue(),((Number)r.get("lifecycle_version")).longValue(),((Number)r.get("revision")).longValue(),
+   State.valueOf(r.get("state").toString()),r.get("configuration").toString(),
+   new Window(instant(r.get("original_start")),instant(r.get("original_end")),instant(r.get("original_until"))),
+   new Window(instant(r.get("original_start")),instant(r.get("proposed_end")),instant(r.get("proposed_until"))),
+   new Coverage(instant(r.get("original_until")),instant(r.get("proposed_until"))),Long.parseLong(q.get("additionalMinor").toString()),
+   q.get("currency").toString(),UUID.fromString(q.get("packageVersionId").toString()),q.get("pricingBasis").toString(),
+   Math.toIntExact(((Number)q.get("additionalMinutes")).longValue()),q.get("termsVersion").toString(),
+   instant(r.get("created_at")),instant(r.get("expires_at")),time,active&&!expired&&!invalid,active&&(expired||invalid),
+   active&&(expired||invalid)?List.of("PENDING_RECONCILIATION"):List.of());
+ }
+ private static Map<String,Object> window(Window w){return Map.of("start",w.start().toString(),"end",w.end().toString(),"blockedUntil",w.blockedUntil().toString());}
+ private static Map<String,Object> response(Observation o){
+  var out=new LinkedHashMap<String,Object>();out.put("bookingId",o.bookingId());out.put("reservationId",o.reservationId());
+  out.put("purchasedRevision",o.purchasedRevision());out.put("proposalRevision",o.proposalRevision());out.put("state",o.state().name());
+  out.put("originalSession",window(o.originalSession()));out.put("proposedSession",window(o.proposedSession()));
+  out.put("additionalCoverage",Map.of("start",o.additionalCoverage().start().toString(),"end",o.additionalCoverage().end().toString()));
+  out.put("additionalMinor",Long.toString(o.additionalMinor()));out.put("currency",o.currency());out.put("packageVersionId",o.packageVersionId().toString());
+  out.put("pricingBasis",o.pricingBasis());out.put("additionalMinutes",o.additionalMinutes());out.put("termsVersion",o.termsVersion());
+  out.put("createdAt",o.createdAt().toString());out.put("expiresAt",o.expiresAt().toString());out.put("observedAt",o.observedAt().toString());
+  out.put("effective",o.effective());out.put("pendingReconciliation",o.pendingReconciliation());out.put("reasons",o.reasons());
+  out.put("bookingChanged",false);out.put("paymentRequested",false);out.put("occupancy","UNKNOWN");out.put("readiness","UNVERIFIED");
+  out.put("synthetic",true);out.put("warning","Temporary synthetic extension coverage only. Original booking unchanged. No payment requested or extension confirmed.");return out;
  }
 }

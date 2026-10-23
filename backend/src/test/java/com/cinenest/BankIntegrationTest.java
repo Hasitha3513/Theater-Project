@@ -1839,4 +1839,54 @@ class BankIntegrationTest {
       try{org.springframework.test.util.ReflectionTestUtils.setField(service,"clock",(java.util.function.Supplier<java.time.Instant>)()->start.minusSeconds(30));r=json(reserve(c,b));assertThat(r).containsEntry("expiresAt",start.toString());}finally{org.springframework.test.util.ReflectionTestUtils.setField(service,"clock",clock);}
       Object rate=org.springframework.test.util.ReflectionTestUtils.getField(service,"rate");try{org.springframework.test.util.ReflectionTestUtils.setField(service,"rate",0);assertThat(json(c.customer().get(reservationPath(c,r)))).containsEntry("state","ACTIVE");assertThat(withdrawReservation(c,r)).containsEntry("state","WITHDRAWN");}finally{org.springframework.test.util.ReflectionTestUtils.setField(service,"rate",rate);}
     }
+    com.cinenest.booking.ExtensionReservationContext.Observation reservationContext(UUID owner,AccessCase c,Map<String,Object> r){
+      return new org.springframework.transaction.support.TransactionTemplate(transactions).execute(t->context.getBean(com.cinenest.booking.ExtensionReservationContext.class).observeOwned(owner,c.booking(),UUID.fromString(r.get("reservationId").toString())));
+    }
+    @Test void typedReservationContextPreservesHttpContractAndHasNoDomainWrites()throws Exception{
+      var c=accessCase();var r=reservation(c);var before=extensionDomainFingerprint();before.remove("cinenest_booking.booking_extension_audit");var o=reservationContext(A,c,r);
+      assertThat(o.bookingId()).isEqualTo(c.booking());assertThat(o.venueId()).isEqualTo(VA);assertThat(o.state()).isEqualTo(com.cinenest.booking.ExtensionReservationContext.State.ACTIVE);
+      assertThat(o.additionalMinor()).isEqualTo(100);assertThat(o.currency()).isEqualTo("LKR");assertThat(o.purchasedRevision()).isEqualTo(1);assertThat(o.lifecycleVersion()).isZero();assertThat(o.effective()).isTrue();assertThat(o.pendingReconciliation()).isFalse();
+      var http=json(c.customer().get(reservationPath(c,r)));assertThat(http).containsEntry("additionalMinor",Long.toString(o.additionalMinor())).containsEntry("effective",o.effective()).containsEntry("state",o.state().name()).containsEntry("paymentRequested",false).containsEntry("bookingChanged",false);
+      assertThat(http).doesNotContainKeys("venueId","configuration","lifecycleVersion","ownerId","creditId","canFund","financiallyEligible");
+      assertThat(http.get("expiresAt")).isEqualTo(o.expiresAt().toString());assertThat(o.additionalCoverage().start()).isEqualTo(o.originalSession().blockedUntil());
+      var after=extensionDomainFingerprint();after.remove("cinenest_booking.booking_extension_audit");assertThat(after).isEqualTo(before);
+      assertThatThrownBy(()->o.reasons().add("AVAILABLE")).isInstanceOf(UnsupportedOperationException.class);
+    }
+    @Test void typedReservationContextRequiresCallerTransaction(){
+      assertThatThrownBy(()->context.getBean(com.cinenest.booking.ExtensionReservationContext.class).observeOwned(A,UUID.randomUUID(),UUID.randomUUID())).isInstanceOf(IllegalStateException.class).hasMessage("Caller transaction required");
+    }
+    @Test void typedReservationContextDeniesWrongOwnerMissingAndMismatchedReservation()throws Exception{
+      var c=accessCase();var r=reservation(c);
+      for(UUID actor:java.util.List.of(B,STAFF))assertThatThrownBy(()->reservationContext(actor,c,r)).isInstanceOf(com.cinenest.booking.ExtensionReservationContext.Rejected.class).satisfies(e->assertThat(((com.cinenest.booking.ExtensionReservationContext.Rejected)e).status()).isEqualTo(404));
+      var missing=new HashMap<>(r);missing.put("reservationId",UUID.randomUUID().toString());assertThatThrownBy(()->reservationContext(A,c,missing)).isInstanceOf(com.cinenest.booking.ExtensionReservationContext.Rejected.class).satisfies(e->assertThat(((com.cinenest.booking.ExtensionReservationContext.Rejected)e).status()).isEqualTo(404));
+    }
+    @Test void typedReservationContextRechecksCurrentAccountEligibility()throws Exception{
+      var c=accessCase();var r=reservation(c);jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=revision+1 WHERE account_id=:a").param("a",A).update();
+      assertThatThrownBy(()->reservationContext(A,c,r)).isInstanceOf(com.cinenest.booking.ExtensionReservationContext.Rejected.class).satisfies(e->assertThat(((com.cinenest.booking.ExtensionReservationContext.Rejected)e).status()).isEqualTo(403));
+    }
+    @Test void typedReservationContextExpiredObservationDoesNotReconcileOrRenew()throws Exception{
+      var c=accessCase();var r=reservation(c);Object service=context.getBean("extensionReservationService"),clock=org.springframework.test.util.ReflectionTestUtils.getField(service,"clock");var before=extensionDomainFingerprint();before.remove("cinenest_booking.booking_extension_audit");
+      try{org.springframework.test.util.ReflectionTestUtils.setField(service,"clock",(java.util.function.Supplier<java.time.Instant>)()->java.time.Instant.parse(r.get("expiresAt").toString()));var o=reservationContext(A,c,r);assertThat(o.state()).isEqualTo(com.cinenest.booking.ExtensionReservationContext.State.ACTIVE);assertThat(o.effective()).isFalse();assertThat(o.pendingReconciliation()).isTrue();assertThat(o.reasons()).containsExactly("PENDING_RECONCILIATION");assertThat(o.expiresAt().toString()).isEqualTo(r.get("expiresAt"));}
+      finally{org.springframework.test.util.ReflectionTestUtils.setField(service,"clock",clock);}
+      var after=extensionDomainFingerprint();after.remove("cinenest_booking.booking_extension_audit");assertThat(after).isEqualTo(before);
+    }
+    @Test void typedReservationContextPreservesWithdrawnAndInvalidConfiguration()throws Exception{
+      var c=accessCase();var r=reservation(c);jdbc.sql("UPDATE cinenest_rooms.room SET enabled=false,version=version+1 WHERE room_id=:r").param("r",RID).update();var invalid=reservationContext(A,c,r);assertThat(invalid.effective()).isFalse();assertThat(invalid.pendingReconciliation()).isTrue();
+      var w=withdrawReservation(c,r);var o=reservationContext(A,c,w);assertThat(o.state()).isEqualTo(com.cinenest.booking.ExtensionReservationContext.State.WITHDRAWN);assertThat(o.effective()).isFalse();assertThat(o.pendingReconciliation()).isFalse();
+    }
+    @Test void typedReservationContextReadAuditParticipatesInCallerRollbackAndFailsClosed()throws Exception{
+      var c=accessCase();var r=reservation(c);var tx=new org.springframework.transaction.support.TransactionTemplate(transactions);
+      tx.executeWithoutResult(t->{context.getBean(com.cinenest.booking.ExtensionReservationContext.class).observeOwned(A,c.booking(),UUID.fromString(r.get("reservationId").toString()));t.setRollbackOnly();});
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_audit WHERE action='READ'").query(Integer.class).single()).isZero();
+      jdbc.sql("ALTER TABLE cinenest_booking.booking_extension_audit ADD CONSTRAINT context_audit_fault CHECK(action<>'READ')").update();
+      try{assertThatThrownBy(()->reservationContext(A,c,r)).isInstanceOf(com.cinenest.booking.ExtensionReservationContext.Rejected.class).satisfies(e->{assertThat(((com.cinenest.booking.ExtensionReservationContext.Rejected)e).status()).isEqualTo(503);assertThat(e.getMessage()).doesNotContain("SQL","context_audit_fault");});assertThat(c.customer().get(reservationPath(c,r)).statusCode()).isEqualTo(503);}
+      finally{jdbc.sql("ALTER TABLE cinenest_booking.booking_extension_audit DROP CONSTRAINT context_audit_fault").update();}
+      assertThat(reservationContext(A,c,r).effective()).isTrue();
+    }
+    @Test void typedReservationContextConcurrentWithdrawalReturnsCoherentObservation()throws Exception{
+      var c=accessCase();var r=reservation(c);try(var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+       var read=pool.submit(()->reservationContext(A,c,r));var write=pool.submit(()->withdrawReservation(c,r));var o=read.get();assertThat(write.get()).containsEntry("state","WITHDRAWN");
+       assertThat(o.state()).isIn(com.cinenest.booking.ExtensionReservationContext.State.ACTIVE,com.cinenest.booking.ExtensionReservationContext.State.WITHDRAWN);assertThat(o.effective()).isEqualTo(o.state()==com.cinenest.booking.ExtensionReservationContext.State.ACTIVE);
+      }assertThat(reservationContext(A,c,r).state()).isEqualTo(com.cinenest.booking.ExtensionReservationContext.State.WITHDRAWN);
+    }
 }
