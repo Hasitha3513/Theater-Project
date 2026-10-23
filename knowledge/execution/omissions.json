@@ -113,6 +113,13 @@
     "OM-07": "Manual instruction discovery confirmed; automatic loading/native registration NOT_VERIFIED.",
     "OM-08": "Approved engagement execution deferral preserved, no feature deletion.",
     "OM-09": "Exact-source application CI exists; production recovery remains NOT_VERIFIED/NOT_ACCEPTED.",
-    "OM-10": "Bounded synthetic tests exist; D0–D6/business/physical/production acceptance absent."
+    "OM-10": "Bounded synthetic tests exist; D0–D6/business/physical/production acceptance absent.",
+    "latestPublicationCI": {
+      "sha": "651a37b040971c2e1575bf856cb577634004c933",
+      "run": 39983888347,
+      "status": "completed",
+      "conclusion": "failure",
+      "scope": "Backend/frontend steps passed;Knowledge and whitespace failed. Existing successful receipts are historical;no recovery qualification."
+    }
   }
 }

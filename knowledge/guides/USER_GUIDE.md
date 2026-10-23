@@ -342,9 +342,9 @@ UI workflow වෙනස් කරන අනාගත authorized task එකේ 
 - **Verification:** [Source/tests/results](../PROGRESS.md#synthetic-cancellation-frontend);frontend local checkpoint based on4b3ac401f510e97b4a21821530938e48fa8f0a20;new exact-source CI PENDING. Full requirements NOT_ACCEPTED.
 
 <a id="ug-024"></a>
-#Current cancellation guard clarification (CN-KNOWLEDGE-SYNC-001): an unresolved persisted ACTIVE extension reservation blocks cancellation. Resolve it only through the existing authorized lifecycle; elapsed time alone is not proof of committed release. Backend eligibility remains authoritative. No cancellation/refund action is automatic.
+Current cancellation guard clarification (CN-KNOWLEDGE-SYNC-001): an unresolved persisted ACTIVE extension reservation blocks cancellation. Resolve it only through the existing authorized lifecycle; elapsed time alone is not proof of committed release. Backend eligibility remains authoritative. No cancellation/refund action is automatic.
 
-## UG-024 — Extension preview / අමතර කාලය සඳහා මිල පෙරදසුන
+### UG-024 — Extension preview / අමතර කාලය සඳහා මිල පෙරදසුන
 
 **FRONTEND PENDING.** Customer/staff booking pages do not yet offer an extension button or duration selector. The implemented backend can check an eligible owner's synthetic booking and calculate an indicative extra price from purchased rates;this guide does not prescribe unsupported UI actions. පවතින booking එක වෙනස් නොවේ;අමතර කාලය වෙන් කිරීමක් හෝගෙවීම් ඉල්ලීමක් සිදු නොවේ.
 
@@ -357,4 +357,4 @@ Only eligible owners with a pre-start,never-issued,revision1/lifecycle0 SIMULATE
 
 A created reservation protects additional blocking coverage for600 seconds at most,clipped to original start. Five new/rejected creation attempts per rolling60 seconds per eligible owner across all bookings/venues;verified identical committed command replay is free and never renews expiry. Reads and explicit withdrawal do not consume creation budget. Use a fresh status read for current validity:replayed command results describe their original observation time. EXPIRED/INVALIDATED/WITHDRAWN is not an extended booking;PENDING_RECONCILIATION remains unavailable until cleanup commits. Original purchase persists on withdrawal/expiry. Pending reservations temporarily prevent conflicting cancellation/rescheduling/credential issuance;do not invent UI recovery controls. [Feature](../product/FEATURE_CATALOG.md#doc-f030),[actual evidence](../PROGRESS.md#extension-reservation).
 
-UG-025 technical integration update: existing reservation status reads now share a typed Booking observation. Customer steps and frontend availability are unchanged;there is no funding button or new user action. ACTIVE may still be ineffective/PENDING_RECONCILIATION after expiry or configuration change. This is not payment or purchased-extension approval.
+Current status guidance: use the existing protected status read for an authoritative observation. ACTIVE may still be ineffective/PENDING_RECONCILIATION after expiry or configuration change. Frontend controls remain PENDING;there is no funding button or new automatic action. This is not payment or purchased-extension approval.

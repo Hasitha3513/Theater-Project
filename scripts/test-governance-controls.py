@@ -53,6 +53,7 @@ def main():
     test_cancellation_frontend_controls(validator)
     test_extension_preview_controls(validator)
     test_extension_reservation_controls(validator)
+    test_ci_empty_diff_controls(validator)
 
 
 def test_future_register_controls():
@@ -258,5 +259,65 @@ def test_extension_reservation_controls(validator):
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
         assert result!=0,'Extension reservation accepted '+label
         print('PASS extension reservation rejected',label)
+
+
+def test_ci_empty_diff_controls(validator):
+    """Parser, strict successor and clean-checkout controls; no saved mutations."""
+    import subprocess
+    parse = validator['parse_git_paths']
+    cases = [
+        ('empty diff', '', False, set()),
+        ('empty stdout bytes', b'', False, set()),
+        ('blank lines', '\n\n', False, set()),
+        ('whitespace-only lines', ' \n\t\n', False, set()),
+        ('trailing newline', 'knowledge/PROGRESS.md\n', False, {'knowledge/PROGRESS.md'}),
+        ('one valid path', 'knowledge/PROJECT.md', False, {'knowledge/PROJECT.md'}),
+        ('multiple paths', 'knowledge/PROJECT.md\nknowledge/PROGRESS.md\n', False, {'knowledge/PROJECT.md','knowledge/PROGRESS.md'}),
+        ('legitimate spaces preserved', ' path with spaces.md \n', False, {' path with spaces.md '}),
+        ('NUL separators', b'knowledge/PROJECT.md\0\0', True, {'knowledge/PROJECT.md'}),
+        ('empty NUL diff', '\0\0', True, set()),
+    ]
+    for label,value,nul,expected in cases:
+        assert parse(value,nul=nul)==expected,label
+        print('PASS empty-diff parser',label)
+    assert not parse('backend/unauthorized.java\n') <= {'knowledge/PROJECT.md'}
+    assert not parse('knowledge/execution/evidence/checks.json\n') <= {'knowledge/PROJECT.md'}
+    print('PASS unauthorized and protected path classification remains negative')
+    errors = validator['ci_successor_errors']()
+    assert errors==[], errors
+    print('PASS legitimate exact successor documentation admission')
+    rb,rt,out = Path.read_bytes,Path.read_text,subprocess.check_output
+    for rel in ['knowledge/PROJECT.md','knowledge/execution/requirements.json','knowledge/execution/status.json','scripts/test-governance-controls.py','knowledge/execution/evidence/checks.json']:
+        target=ROOT/rel;replacement=rb(target)+b'\nUNAUTHORIZED_PAYLOAD\n'
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
+            assert validator['ci_successor_errors'](),rel
+        print('PASS rejected successor changed-payload/protected-history',rel)
+    def unknown_path(argv,*a,**kw):
+        value=out(argv,*a,**kw)
+        if isinstance(argv,list) and 'diff' in argv and '--name-only' in argv:
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode()
+            text += sep+'backend/unauthorized.java'+sep
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(subprocess,'check_output',unknown_path):
+        assert validator['ci_successor_errors'](),'Unauthorized source path accepted'
+    print('PASS rejected unauthorized actual changed-path collection')
+    # Model only the unrelated worktree file as its committed CI bytes. All task
+    # sources, hashes, real changed paths and unauthorized-file guards remain real.
+    target=ROOT/'frontend/next-env.d.ts';before=rb(target)
+    committed=out(['git','-C',str(ROOT),'show','HEAD:frontend/next-env.d.ts'])
+    def clean_output(argv,*a,**kw):
+        value=out(argv,*a,**kw)
+        if isinstance(argv,list) and 'diff' in argv and '--name-only' in argv:
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode()
+            paths=[p for p in text.split(sep) if p and p!='frontend/next-env.d.ts']
+            text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:committed if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:committed.decode() if p==target else rt(p,*a,**kw)),patch.object(subprocess,'check_output',clean_output),redirect_stdout(io.StringIO()):
+        result=validator['inert_ci_main']()
+    assert rb(target)==before,'Unrelated next-env modified by projection'
+    assert result==0,'Actual full historical validator chain failed clean-checkout projection'
+    print('PASS full clean-checkout projection;all historical controls;unrelated bytes preserved')
 
 if __name__ == '__main__': main()

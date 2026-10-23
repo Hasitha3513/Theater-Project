@@ -1991,7 +1991,7 @@ def engagement_decision_main():
     require('25 CLOSED,3 BLOCKED,0 READY,0 IN_PROGRESS /28' in progress,'Engagement task count stale')
     require('<a id="engagement-execution-deferral"></a>' in (K/'PROJECT.md').read_text(),'Engagement authority reference missing')
     allowed={'knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/manifest.json','knowledge/execution/validate_execution.py','knowledge/execution/change-sets.json','knowledge/execution/status.json','knowledge/execution/requirements.json','knowledge/execution/omissions.json','knowledge/decisions/cinenest-open-decisions.json','frontend/next-env.d.ts'}
-    changed=set(subprocess.check_output(['git','-C',str(R),'diff',base,'--name-only'],text=True).splitlines())
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',base,'--name-only'],text=True))
     require(changed<=allowed,'Engagement changed unrelated files: '+str(changed-allowed))
     # Application inventory/content checks remain enforced by the prior implementation validator.
     if errors:
@@ -5848,6 +5848,110 @@ def inert_ci_main():
     with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):
         result=mvp_resume_prior_main()
     if result==0: print('PASS bounded owner-only typed reservation context; 92 requirements/74 criteria/11 workstreams; existing decisions, migrations, domain commands, acceptance and unrelated source preserved')
+    return result
+
+
+# CN-CI-EMPTY-DIFF-VALIDATION-001: one corrected Git-output consumer.
+def parse_git_paths(output, *, nul=False):
+    """Ignore blank output records, preserving the exact nonblank path spelling."""
+    if isinstance(output, bytes):
+        output = output.decode('utf-8', errors='surrogateescape')
+    entries = output.split('\0') if nul else output.splitlines()
+    return {path for path in entries if path and (nul or path.strip())}
+
+
+ci_empty_diff_prior_main = inert_ci_main
+
+def ci_successor_errors():
+    """Exact, owner-authorized successor only; never a general document exemption."""
+    baseline = '651a37b040971c2e1575bf856cb577634004c933'
+    hashes = {'knowledge/PROJECT.md': '042888a79e81a0446583cbf7ab48e12afa1b0fc9ea9e47eaa6ef843023997026', 'knowledge/README.md': '2c45662c76a774e2eb56c254b76fa7c9c9b67f9780d2ea8c814fe512ae62285b', 'knowledge/PROGRESS.md': '889bef35aec0b147b0d1dcfdcd9287c6cc0109efc7b03b60dba6a51cdf431931', 'knowledge/execution/requirements.json': '027a340cc87344f43d8e0f15ecb0fadb0b477814f511393e42617f16ee50611b', 'knowledge/execution/status.json': '53939e141c4d9d35ec46aa738dc66c8f230d4a5054354d99ef8ffea1c10a0954', 'knowledge/execution/omissions.json': 'd2e0191515365f91ead58af9a35a8f061688f171d2791cf68ba6ff7142fc4c70', 'knowledge/product/FEATURE_CATALOG.md': '622331e1d0fc261e6addbe348993f3a5f00c9d0b3b65bde67afde946027dafeb', 'knowledge/guides/USER_GUIDE.md': '70443ac570f13c0f85a12788cce7e11858c5c4c42c91e97554c5159183a25b5d', 'scripts/test-governance-controls.py': '8f2da4f3f7a7d1ce75ba52ec014ea97830898274e0993e40f0f117125433e28a'}
+    untracked_preserved = {'knowledge/Mini movie theater Ruels and Conditions.docx': 'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf', 'knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx': '8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    errors = []
+    def prior(name):
+        return subprocess.check_output(['git', '-C', str(R), 'show', baseline + ':' + name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('CI recovery exact successor payload mismatch '+name)
+    if errors: return errors
+    # Exactly one historical runtime line changes; immutable source/evidence stays original.
+    old_line = "changed=set(subprocess.check_output(['git','-C',str(R),'diff',base,'--name-only'],text=True).splitlines())"
+    new_line = "changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',base,'--name-only'],text=True))"
+    ending = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    expected_prefix = prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending).replace(old_line,new_line) + '\n# CN-CI-EMPTY-DIFF-VALIDATION-001: one corrected Git-output consumer.\ndef parse_git_paths(output, *, nul=False):\n    """Ignore blank output records, preserving the exact nonblank path spelling."""\n    if isinstance(output, bytes):\n        output = output.decode(\'utf-8\', errors=\'surrogateescape\')\n    entries = output.split(\'\\0\') if nul else output.splitlines()\n    return {path for path in entries if path and (nul or path.strip())}\n\n'
+    if not (K/'execution/validate_execution.py').read_text().startswith(expected_prefix):
+        errors.append('CI recovery changed historical governance outside admitted parser correction')
+    current=json.loads((K/'execution/requirements.json').read_text());original=json.loads(prior('knowledge/execution/requirements.json'))
+    projection=current.pop('developmentReconciliation',{});original.pop('developmentReconciliation')
+    if current!=original: errors.append('CI recovery changed original requirements/history/acceptance')
+    requirements={row['id']:row for row in current['requirements']}
+    rows=projection.get('requirements',[])
+    if len(requirements)!=92 or len(rows)!=92 or {x['id'] for x in rows}!=set(requirements):
+        errors.append('CI recovery lost original92requirement traceability')
+    for row in rows:
+        original_row=requirements.get(row['id'],{})
+        if row.get('testIds')!=original_row.get('testIds') or row.get('testId')!=original_row.get('testIds',[None])[0]:
+            errors.append('CI recovery projected test reference drift '+row['id'])
+        if any(not original_row.get(key) for key in row.get('existingEvidenceKeys',[])):
+            errors.append('CI recovery empty evidence misclassified '+row['id'])
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('ciEmptyDiffRecovery',{});continuation=state.pop('knowledgeSynchronizationContinuation',{})
+    original=json.loads(prior('knowledge/execution/status.json'))
+    for header in [continuation.get('previousCurrentHeader',{}),receipt.get('previousCurrentHeader',{})]:
+        if any(original.get(k)!=v for k,v in header.items()): errors.append('CI recovery lost prior header evidence')
+        state.update(header)
+    if len(receipt.get('previousCurrentHeader',{}))!=15 or state!=original:
+        errors.append('CI recovery changed historical status/implementation/approval evidence')
+    for key in ['applicationChanged','migrationsChanged','businessPolicyChanged','decisionsApproved','requirementsAccepted','criteriaChanged','historicalEvidenceChanged','extensionFundingStarted']:
+        if receipt.get(key) is not False: errors.append('CI recovery exceeded authority '+key)
+    if receipt.get('baseline')!=baseline or receipt.get('failedRun')!=39983888347:
+        errors.append('CI recovery source/CI provenance drift')
+    omissions=json.loads((K/'execution/omissions.json').read_text());omissions['currentAssessment'].pop('latestPublicationCI',None)
+    if omissions!=json.loads(prior('knowledge/execution/omissions.json')):
+        errors.append('CI recovery modified original omission/history records')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):
+        errors.append('CI recovery changed criterion/demo acceptance')
+    allowed=set(hashes)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    tracked=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True).split('\0')
+    for name in filter(None,tracked):
+        if name not in allowed and (not (R/name).is_file() or (R/name).read_bytes()!=prior(name)):
+            errors.append('CI recovery unrelated protected source/history change '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=allowed: errors.append('CI recovery unauthorized changed paths '+str(changed-allowed))
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked:
+        if name not in untracked_preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=untracked_preserved[name]:
+            errors.append('CI recovery unauthorized untracked payload '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/'+entry['path'] in allowed and entry['path']!='manifest.json':
+            entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+    if manifest!=expected: errors.append('CI recovery manifest inventory/authority drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=ci_successor_errors()
+    if errors:
+        print('\n'.join('FAIL '+e for e in errors));return 1
+    baseline='651a37b040971c2e1575bf856cb577634004c933'
+    owned=set({'knowledge/PROJECT.md': '042888a79e81a0446583cbf7ab48e12afa1b0fc9ea9e47eaa6ef843023997026', 'knowledge/README.md': '2c45662c76a774e2eb56c254b76fa7c9c9b67f9780d2ea8c814fe512ae62285b', 'knowledge/PROGRESS.md': '889bef35aec0b147b0d1dcfdcd9287c6cc0109efc7b03b60dba6a51cdf431931', 'knowledge/execution/requirements.json': '027a340cc87344f43d8e0f15ecb0fadb0b477814f511393e42617f16ee50611b', 'knowledge/execution/status.json': '53939e141c4d9d35ec46aa738dc66c8f230d4a5054354d99ef8ffea1c10a0954', 'knowledge/execution/omissions.json': 'd2e0191515365f91ead58af9a35a8f061688f171d2791cf68ba6ff7142fc4c70', 'knowledge/product/FEATURE_CATALOG.md': '622331e1d0fc261e6addbe348993f3a5f00c9d0b3b65bde67afde946027dafeb', 'knowledge/guides/USER_GUIDE.md': '70443ac570f13c0f85a12788cce7e11858c5c4c42c91e97554c5159183a25b5d', 'scripts/test-governance-controls.py': '8f2da4f3f7a7d1ce75ba52ec014ea97830898274e0993e40f0f117125433e28a'})|{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name]) for name in owned}
+    rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(path,*a,**kw): return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw): return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+            nul='-z' in argv;sep='\0' if nul else '\n';text=value if isinstance(value,str) else value.decode()
+            # Hide only exact independently validated successor paths; retain every other path.
+            paths=[x for x in (text.split(sep) if nul else text.splitlines()) if x and x not in owned]
+            text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):
+        result=ci_empty_diff_prior_main()
+    if result==0: print('PASS empty-diff recovery and exact documentation successor;all original source/history/acceptance controls preserved')
     return result
 
 if __name__ == '__main__':

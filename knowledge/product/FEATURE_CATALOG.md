@@ -657,7 +657,7 @@ No extension hold,additional funding,refund,revision,credential,device or notifi
 | Automated test evidence | [PostgreSQL](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[architecture](../../backend/src/test/java/com/cinenest/ExtensionReservationArchitectureTest.java) |
 | Source | [Service](../../backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java),[worker](../../backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationWorker.java),[V25](../../backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql) |
 | Screenshot | Not applicable:backend-only,no new frontend control |
-| Last verified commit / CI | Baseline7dad40cbd198069fc6f9e5db8ae0b5647f7736f1/CI39918547446 SUCCESS;[actual evidence](../PROGRESS.md#extension-reservation);new exact-source CI PENDING |
+| Last verified commit / CI | Baseline7dad40cbd198069fc6f9e5db8ae0b5647f7736f1/CI39918547446 SUCCESS;[actual evidence](../PROGRESS.md#extension-reservation). Latest typed-context source651a37b040971c2e1575bf856cb577634004c933:[CI39983888347](https://github.com/Hasitha3513/Theater-Project/actions/runs/39983888347) COMPLETED/FAILURE at Knowledge and whitespace;backend/frontend steps passed;overall qualification not granted |
 
 Original booking and purchased revision remain unchanged;temporary coverage is not permission to occupy or extend the session. Existing full requirements and financial/physical acceptance remain open.
 
