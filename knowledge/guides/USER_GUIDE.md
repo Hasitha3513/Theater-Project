@@ -320,3 +320,17 @@ UI workflow වෙනස් කරන අනාගත authorized task එකේ 
 - **Security and limitations / සීමා:** Synthetic reserved session starts only. Not actual attendance,occupancy,revenue or physical readiness. confirmed_at භාවිත නොකර latest purchased sessionStart ගනී. Venue timezone සහ committed amendments වෙනස් වුවහොත් පෙර දැකපු counts වෙනස් විය හැක. Fixed hourly bands පමණි;configured business bands/full requirement acceptance outstanding. No booking/financial/device mutation.
 - **Screenshot:** [375px](../product/screenshots/popular-375.png),[768px](../product/screenshots/popular-768.png),[1280px](../product/screenshots/popular-1280.png) — actual intercepted synthetic browser captures;real-backend E2E හෝ production qualification නොවේ.
 - **Verification:** PARTIAL full requirement;locally tested feature checkpoint based on338db745371a64c10845eee334d2d6a7104b1e6a. Publication commit=this record's Git history;new exact-source CI PENDING. [Source](../../frontend/components/popular-slots.tsx),[tests](../../frontend/tests/popular-slots.test.mjs),[actual evidence](../PROGRESS.md#popular-session-starts).
+
+<a id="ug-023"></a>
+## Backend-supported cancellation — frontend PENDING
+
+### UG-023 — Synthetic pre-start cancellation
+
+- **Purpose / අරමුණ:** [DOC-F028](../product/FEATURE_CATALOG.md#doc-f028) හි backend-supported synthetic cancellation සීමාව දැනගැනීම;customer/staff තිර ක්‍රියාමාර්ග PENDING.
+- **Who / කවුද:** Eligible booking owner හෝ එම venue සඳහා booking.synthetic.cancel ඇති current eligible staff member පමණි. Permission grants/bootstrap මෙම කාර්යයෙන් නොසාදයි.
+- **Prerequisites / පෙර අවශ්‍යතා:** Session ආරම්භයට පෙර;කිසිදු credential එකක් පෙර issue නොවී තිබීම;pending amendment නොමැතිවීම;financial funding reconciled වීම. Revoked/expired credential එකක් තිබුණත් cancel කිරීම ප්‍රතික්ෂේප වේ.
+- **Navigation / Steps:** PENDING — frontend cancellation controls තවම සකස් කර නැත. දැනට Cancel button එකක් ඇතැයි මෙම guide එක නොකියයි. Separately authorized frontend එකේ explicit consent/action,reason සහcurrent revision සමඟ backend command භාවිත කළ යුතුය;manual API usage training මෙහි නොමැත.
+- **Expected result / ප්‍රතිඵලය:** Backend SIMULATED_CANCELLED සහ RESERVED_REVIEW_REQUIRED obligation;current purchased inventory පමණක් release වේ;history සහ original allocation රඳාපවතී. මෙය මුදල් ආපසු ගෙවීමක්,refund approval එකක් හෝ physical vacancy තහවුරු කිරීමක් නොවේ.
+- **Errors / දෝෂ:** Started,issued credential,pending amendment හෝuncertain funding නම් review අවශ්‍යයි. Session/permission/version errors මත automatic retry/new command නොකර authoritative state නැවත load කළ යුතුය. එකම command identity නැවත භාවිත කිරීමේ ප්‍රතිඵල backend තීරණය කරයි.
+- **Security and limitations / සීමා:** No real money,post-start/emergency bypass,credential revocation හෝproduction authority. Existing history කියවීමෙන් cancelled state confirmed ලෙස නොපෙන්විය යුතුය.
+- **Verification:** Backend-only bounded evidence;[source/tests/results](../PROGRESS.md#synthetic-cancellation);frontend steps PENDING;full requirements NOT_ACCEPTED;new exact-source CI PENDING.

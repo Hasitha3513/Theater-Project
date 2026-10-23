@@ -388,6 +388,27 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "realPayments": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedSyntheticCancellationApproval": {
+        "id": "CN-BOOKING-CANCELLATION-001",
+        "ownerApproval": "EXPLICIT_OWNER_APPROVED",
+        "approvalDate": "2026-10-23",
+        "sourceAttachmentSha256": "11b0257ad03db9696878331f8e2277bdc90f722c0f57b1efcf21cf3c91bf45e9",
+        "policyVersion": "SYNTHETIC_PRESTART_CANCEL_V1",
+        "scope": "PRE_START_NEVER_ISSUED_SYNTHETIC_CONFIRMED_ONLY",
+        "staffPermission": "booking.synthetic.cancel",
+        "refundPercent": 100,
+        "deductionsMinor": 0,
+        "refundState": "RESERVED_REVIEW_REQUIRED",
+        "repaymentApproved": false,
+        "automaticGrants": false,
+        "bootstrap": false,
+        "currentPurchasedBlockOnly": true,
+        "everIssued": "REJECT",
+        "pendingAmendment": "REJECT",
+        "uncertainFunding": "REJECT",
+        "migrationAuthority": "V24_MINIMUM_BOOKING_PAYMENTS_NOTIFICATIONS_BUSINESS_SCHEMA",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1026,6 +1047,27 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "realPayments": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedSyntheticCancellationApproval": {
+        "id": "CN-BOOKING-CANCELLATION-001",
+        "ownerApproval": "EXPLICIT_OWNER_APPROVED",
+        "approvalDate": "2026-10-23",
+        "sourceAttachmentSha256": "11b0257ad03db9696878331f8e2277bdc90f722c0f57b1efcf21cf3c91bf45e9",
+        "policyVersion": "SYNTHETIC_PRESTART_CANCEL_V1",
+        "scope": "PRE_START_NEVER_ISSUED_SYNTHETIC_CONFIRMED_ONLY",
+        "staffPermission": "booking.synthetic.cancel",
+        "refundPercent": 100,
+        "deductionsMinor": 0,
+        "refundState": "RESERVED_REVIEW_REQUIRED",
+        "repaymentApproved": false,
+        "automaticGrants": false,
+        "bootstrap": false,
+        "currentPurchasedBlockOnly": true,
+        "everIssued": "REJECT",
+        "pendingAmendment": "REJECT",
+        "uncertainFunding": "REJECT",
+        "migrationAuthority": "V24_MINIMUM_BOOKING_PAYMENTS_NOTIFICATIONS_BUSINESS_SCHEMA",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1414,6 +1456,27 @@
         "broaderDecisionStatus": "OPEN_DECISION",
         "formalAcceptance": "NOT_ACCEPTED",
         "normalizedPolicyPayloadSha256": "3da7c85e22f73eeb2c761037f454f4218de777d7b34b48cfd630d339e470eca4"
+      },
+      "boundedSyntheticCancellationApproval": {
+        "id": "CN-BOOKING-CANCELLATION-001",
+        "ownerApproval": "EXPLICIT_OWNER_APPROVED",
+        "approvalDate": "2026-10-23",
+        "sourceAttachmentSha256": "11b0257ad03db9696878331f8e2277bdc90f722c0f57b1efcf21cf3c91bf45e9",
+        "policyVersion": "SYNTHETIC_PRESTART_CANCEL_V1",
+        "scope": "PRE_START_NEVER_ISSUED_SYNTHETIC_CONFIRMED_ONLY",
+        "staffPermission": "booking.synthetic.cancel",
+        "refundPercent": 100,
+        "deductionsMinor": 0,
+        "refundState": "RESERVED_REVIEW_REQUIRED",
+        "repaymentApproved": false,
+        "automaticGrants": false,
+        "bootstrap": false,
+        "currentPurchasedBlockOnly": true,
+        "everIssued": "REJECT",
+        "pendingAmendment": "REJECT",
+        "uncertainFunding": "REJECT",
+        "migrationAuthority": "V24_MINIMUM_BOOKING_PAYMENTS_NOTIFICATIONS_BUSINESS_SCHEMA",
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {

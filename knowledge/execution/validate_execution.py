@@ -5379,5 +5379,74 @@ def inert_ci_main():
     if result==0:print('PASS exact owner-approved Popular Slots,V23 audit-only,no grants/business/dependency/full-acceptance changes;historical controls preserved')
     return result
 
+
+# CN-BOOKING-CANCELLATION-001: bounded owner-approved business migration and backend only.
+popular_session_starts_main=inert_ci_main
+
+def inert_ci_main():
+    from unittest.mock import patch
+    baseline='6117a7aa52fe7019cd42d44687f659e01b173682'
+    owned={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'scripts/test-governance-controls.py', 'backend/src/main/java/com/cinenest/booking/internal/SyntheticBookingAdapter.java', 'backend/src/main/java/com/cinenest/payments/internal/LedgerService.java', 'knowledge/product/FEATURE_CATALOG.md', 'backend/src/main/java/com/cinenest/booking/internal/JdbcStaffBookingReadStore.java', 'backend/src/main/java/com/cinenest/booking/internal/AmendmentNotificationContext.java', 'backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql', 'knowledge/execution/test-plan.json', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/main/java/com/cinenest/notifications/NotificationFacts.java', 'frontend/tests/customer-bookings.test.mjs', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationService.java', 'knowledge/guides/USER_GUIDE.md', 'backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java', 'frontend/tests/staff-bookings.test.mjs', 'frontend/lib/staff-bookings.ts', 'knowledge/PROJECT.md', 'knowledge/execution/requirements.json', 'backend/src/main/java/com/cinenest/booking/SyntheticBooking.java', 'backend/src/test/java/com/cinenest/CancellationArchitectureTest.java', 'knowledge/decisions/cinenest-open-decisions.json', 'frontend/components/customer-bookings.tsx', 'backend/src/main/java/com/cinenest/booking/internal/CancellationService.java', 'backend/src/main/java/com/cinenest/booking/CancellationFunding.java', 'backend/src/main/java/com/cinenest/booking/internal/CancellationController.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'knowledge/execution/status.json'}
+    added={'backend/src/test/java/com/cinenest/CancellationArchitectureTest.java', 'backend/src/main/java/com/cinenest/booking/internal/CancellationService.java', 'backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java', 'backend/src/main/java/com/cinenest/booking/CancellationFunding.java', 'backend/src/main/java/com/cinenest/booking/internal/CancellationController.java', 'backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql'}
+    hashes={'backend/src/main/java/com/cinenest/booking/CancellationFunding.java': '214353cebe7295d9432a6d19414f5f3ffa2ec696f5a045a457bfc5d3e1264327', 'backend/src/main/java/com/cinenest/booking/SyntheticBooking.java': 'b90fd6da8c927573b56580d69f7a9e501b63305b24e815940d3ae132c40a16dd', 'backend/src/main/java/com/cinenest/booking/internal/AmendmentNotificationContext.java': '79a207a64ccf1b762108336256ea50901440a61bdf85f1339d9525aa8214fc33', 'backend/src/main/java/com/cinenest/booking/internal/CancellationController.java': 'cca0e826725cc72f881aed55fdcf44934974ac00000e6cac80a0e22404463c92', 'backend/src/main/java/com/cinenest/booking/internal/CancellationService.java': 'a44fdbac717505909b2da2928975ba01a69fb3dcee3ed908405b26abc2efcdff', 'backend/src/main/java/com/cinenest/booking/internal/JdbcStaffBookingReadStore.java': 'd351f159c63993ec04bb59ab9cbac224fc0a9e6a48bb00817e6220f83c2be5f4', 'backend/src/main/java/com/cinenest/booking/internal/SyntheticBookingAdapter.java': 'e41a09c9af9b3854ac513caf43a284b5a129ec148620a9bf5ba7fd0ccb3f2f76', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': 'ffe2177be3a27cdf0e672fa0da7e7298388db95843d3db94e731b24c5537cf3f', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '2eeaf845840c7bb3e50e5eb966ee6337b80c3632b6c4aa72da7fa8bccca4e849', 'backend/src/main/java/com/cinenest/notifications/NotificationFacts.java': '6a041bfa7ae8cf3078092468b0327eab56ce88bd64113f057d35a935c841615e', 'backend/src/main/java/com/cinenest/notifications/internal/NotificationService.java': '899dee40bdec033b33cc31d52e4117853b94465d10b96e67a37e4de85c5ac659', 'backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java': 'a210c894456c2fd24907ec10079734e5d4654ad6d9be33ff0d6b5336ec44acf3', 'backend/src/main/java/com/cinenest/payments/internal/LedgerService.java': 'c47f697ffdea61e21e57ee320eb4d1c96b10be53be263a53f35f9458911e360f', 'backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql': 'aa79391ae3cfa07f7b32f248055d321471eddb5ccdb839b6a108097da11344c4', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '5b3c1f631d41dba1cc7077908102fee70a727c4633096965c2104c59c43a9de0', 'backend/src/test/java/com/cinenest/CancellationArchitectureTest.java': 'e08e7d3fca81b4d724a6711b10c263408701d25f5886344e319833e0c03d4de7', 'frontend/components/customer-bookings.tsx': 'f8ab07497e99d9c175ac521883323a73127c4bebdba62c1b7d42de63741be8bd', 'frontend/lib/staff-bookings.ts': 'e7b0d8a343a0247179335c608fa0032f963f3e29c1f38031f220cd1fa8ed9dbb', 'frontend/tests/customer-bookings.test.mjs': '0a2fcbd3ae29b1e375542b2eeba40e73e5e222acd2a7b85da11a08b733cceabc', 'frontend/tests/staff-bookings.test.mjs': '59584b12daa4def697f8a391db6861c2e03800700f2548778a7b33ef8bad1689', 'knowledge/ARCHITECTURE.md': '00a58c001d184ca12fc46b3652f2bae42a352393b4ceab210c1be275d941a6d5', 'knowledge/PROGRESS.md': 'ee46a0b07b156986d7caf4ad5e066af6c90a69c47e50f9032686afc7ed6595cf', 'knowledge/PROJECT.md': 'f62d42ac6d276657e6dcaccc6610c652748afb10e1a99f73c75f08d5db10180e', 'knowledge/decisions/cinenest-open-decisions.json': '44c0b99b604144782d4c0a3a2325eb137449e1520e1d6e30b00514d1d48104af', 'knowledge/execution/requirements.json': '6550cc77f156a4f7ac81d490ed3f89b0fba93eeb6a7712f4c0bd9bba2a4d6999', 'knowledge/execution/status.json': 'c95a07e63cc89d7df826c70b52e215d31bbf1ad7d2057e90c5ab1b83b29f5ad7', 'knowledge/execution/test-plan.json': 'd23ddf40e4bddcd93d902fb0f2c5ce1ef449bde689957bfe81fcf61f1c11d69c', 'knowledge/guides/USER_GUIDE.md': '9a8b1199691feef14efbbde85b66f127d6405d6e291d8afda6415ca4ee0fcaf5', 'knowledge/product/FEATURE_CATALOG.md': '32949952964a8820f66321312bcf336eede0b9fa6e8ad6b77a19898b9b21d042', 'scripts/test-governance-controls.py': 'c4e736a20494e9380c367509581f1600d83577f396c36535afcce16ebe4bbd06'}
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Cancellation approved exact-source mismatch '+name)
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n".replace('\n','\n')
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Cancellation changed historical governance')
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('syntheticCancellationImplementation',{})
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Cancellation changed unrelated execution/acceptance authority')
+    if any(receipt.get(key) is not False for key in ['automaticGrants','bootstrap','dependenciesChanged','roadmapChanged','fullRequirementAccepted']):errors.append('Cancellation expanded grants/acceptance/dependency authority')
+    policy=receipt.get('policy',{})
+    if policy.get('ownerApproval')!='EXPLICIT_OWNER_APPROVED' or policy.get('scope')!='PRE_START_NEVER_ISSUED_SYNTHETIC_CONFIRMED_ONLY' or policy.get('staffPermission')!='booking.synthetic.cancel' or policy.get('refundPercent')!=100 or policy.get('deductionsMinor')!=0 or policy.get('refundState')!='RESERVED_REVIEW_REQUIRED' or policy.get('repaymentApproved') is not False or policy.get('migrationAuthority')!='V24_MINIMUM_BOOKING_PAYMENTS_NOTIFICATIONS_BUSINESS_SCHEMA' or policy.get('currentPurchasedBlockOnly') is not True or any(policy.get(k)!='REJECT' for k in ['everIssued','pendingAmendment','uncertainFunding']):errors.append('Cancellation owner policy drift')
+    decisions=json.loads((K/'decisions/cinenest-open-decisions.json').read_text())
+    for row in decisions['decisions']:
+        if row['id'] in ['OD-07','OD-20','OD-28']:
+            if row.pop('boundedSyntheticCancellationApproval',{})!=policy or row['decisionStatus']!='OPEN_DECISION':errors.append('Cancellation changed global decision authority')
+    if decisions!=json.loads(prior('knowledge/decisions/cinenest-open-decisions.json')):errors.append('Cancellation changed unrelated decisions')
+    for name,key,prefix in [('requirements.json','requirements',''),('test-plan.json','tests','T-')]:
+        data=json.loads((K/'execution'/name).read_text())
+        for row in data[key]:
+            if row['id'] in {prefix+x for x in ['CN-C08','CN-A02','CN-O01','CN-A07','BR-10','BP-AC12']}:
+                e=row.pop('syntheticCancellationEvidence',{})
+                if e.get('fullRequirementVerified') is not False or e.get('fullRequirementAcceptance')!='NOT_ACCEPTED' or e.get('fullTestPlanStatus')!='NOT_RUN':errors.append('Cancellation falsely accepted full requirement/test')
+        if data!=json.loads(prior('knowledge/execution/'+name)):errors.append('Cancellation changed full scope/dependencies '+name)
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Cancellation changed criterion/demo acceptance')
+    for name in ['AGENTS.md','knowledge/backlog/FUTURE_FEATURES.md','knowledge/execution/change-sets.json','.github/workflows/foundation.yml','scripts/ci-classify.py','backend/pom.xml','frontend/package.json','frontend/package-lock.json','knowledge/tokens/cinenest-design-tokens.json','knowledge/styles/cinenest-theme.css']:
+        if (R/name).is_file() and (R/name).read_bytes()!=prior(name):errors.append('Cancellation changed protected authority '+name)
+    for name in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md']:
+        if not (R/name).read_bytes().startswith(prior(name)):errors.append('Cancellation rewrote historical policy '+name)
+    old_migrations=set(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only',baseline,'backend/src/main/resources/db/migration'],text=True).splitlines())
+    actual={x.relative_to(R).as_posix() for x in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}
+    if actual!=old_migrations|{'backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql'}:errors.append('Cancellation exceeded V24 migration authority')
+    for name in old_migrations:
+        if (R/name).read_bytes()!=prior(name):errors.append('Cancellation changed historical migration '+name)
+    allowed=owned|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    changed=set(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True).split('\0'))-{''}
+    if not changed<=allowed:errors.append('Cancellation unrelated source change '+str(changed-allowed))
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        name='knowledge/'+entry['path']
+        if name in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((R/name).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Cancellation manifest authority/inventory drift')
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    replacements={R/name:prior(name) for name in (owned-added)|{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}}
+    rb0,rt0,g0,rg0,out0=Path.read_bytes,Path.read_text,Path.glob,Path.rglob,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def keep(path):return path.relative_to(R).as_posix() not in added
+    def glob(path,pattern,*a,**kw):return (x for x in g0(path,pattern,*a,**kw) if keep(x))
+    def rglob(path,pattern,*a,**kw):return (x for x in rg0(path,pattern,*a,**kw) if keep(x))
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            removed=owned if 'diff' in argv else added;text=value if isinstance(value,str) else value.decode();sep='\0' if '-z' in argv else '\n';text=sep.join(x for x in text.split(sep) if x not in removed);return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=popular_session_starts_main()
+    if result==0:print('PASS exact approved pre-start never-issued synthetic cancellation,V24 only,no grants/dependency/full-acceptance changes;all historical controls preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

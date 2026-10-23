@@ -134,3 +134,20 @@ test("conflicting confirmation fields cannot establish a purchased booking", () 
 		}),
 	);
 });
+
+test("cancelled purchased history remains visible and never becomes a confirmed booking", () => {
+	const cancelled = {
+		...row,
+		state: "SIMULATED_CANCELLED",
+		syntheticBookingStatus: "SIMULATED_CANCELLED",
+	};
+	assert.equal(bookingRecord(cancelled), cancelled);
+	assert.equal(bookingGroup(cancelled, row.purchase.sessionStart), "Cancelled");
+	assert.throws(() =>
+		bookingRecord({
+			...cancelled,
+			syntheticBookingStatus: "SIMULATED_CONFIRMED",
+		}),
+	);
+	assert.equal(bankRoute(`/api/bookings/${id}/cancellations`, "POST"), false);
+});

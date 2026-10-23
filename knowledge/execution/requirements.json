@@ -1126,6 +1126,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
+      },
+      "syntheticCancellationEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation",
+        "status": "BOUNDED_SYNTHETIC_BACKEND_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/CancellationService.java",
+          "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
       }
     },
     {
@@ -1404,6 +1418,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Intercepted browser evidence is presentation only;existing backend PostgreSQL authorization rerun separately;full physical/customer acceptance remains outstanding"
+      },
+      "syntheticCancellationEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation",
+        "status": "BOUNDED_SYNTHETIC_BACKEND_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/CancellationService.java",
+          "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
       }
     },
     {
@@ -1911,6 +1939,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing synthetic credit summary only;no new metrics or production finance/full reporting acceptance"
+      },
+      "syntheticCancellationEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation",
+        "status": "BOUNDED_SYNTHETIC_BACKEND_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/CancellationService.java",
+          "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
       }
     },
     {
@@ -2237,6 +2279,20 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
+      },
+      "syntheticCancellationEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation",
+        "status": "BOUNDED_SYNTHETIC_BACKEND_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/CancellationService.java",
+          "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
       }
     },
     {
@@ -4448,6 +4504,20 @@
         "status": "VERIFIED",
         "evidencePath": "PROGRESS.md#amend-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "syntheticCancellationEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation",
+        "status": "BOUNDED_SYNTHETIC_BACKEND_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/CancellationService.java",
+          "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
       }
     },
     {
@@ -5918,6 +5988,20 @@
           "frontend/tests/staff-booking-refunds-browser.mjs"
         ],
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "syntheticCancellationEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation",
+        "status": "BOUNDED_SYNTHETIC_BACKEND_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/CancellationService.java",
+          "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
+          "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
       }
     },
     {
@@ -6188,7 +6272,7 @@
       "approvalEvidence": "Draft/recommended requirement; scope/decisions remain unapproved",
       "priority": "P1",
       "scope": "proposed metric/report; not real operational facts",
-      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
       "moduleOwnership": "Analytics/owning source module",
       "uiApiOwnership": "Defined chart/report contracts; actual backend/API and UI implementation absent, interfaces are proposals",
       "changeSetIds": [

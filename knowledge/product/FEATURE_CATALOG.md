@@ -588,3 +588,25 @@ For every user-visible change, review this catalogue and the corresponding guide
 | Last verified commit / CI | New feature overrides initial catalogue default:local tested worktree based on338db745371a64c10845eee334d2d6a7104b1e6a;publication commit is this record's Git history;new exact-source CI PENDING until independently confirmed |
 
 [Policy and actual verification](../PROGRESS.md#popular-session-starts). This existing MVP feature consumes no FF ID and closes no criterion.
+
+<a id="doc-f028"></a>
+## DOC-F028 — Synthetic pre-start booking cancellation backend
+
+| Field | Evidence-backed value |
+|---|---|
+| Category / module | Booking and Refunds / Booking, Payments, Access, Identity, Notifications |
+| Intended user | Eligible booking owner or independently authorized exact-venue staff |
+| Description / available functionality | Explicit pre-start cancellation only with never-issued credentials,known reconciled synthetic funding and no pending amendment;source-linked100% allocated principal reservation and current purchased-block release |
+| Implementation status | PARTIAL |
+| Operational classification | SIMULATED / no real repayment,physical vacancy or commercial acceptance |
+| Demo availability | CONDITIONAL backend API only;customer/staff cancellation UI PENDING;no grants assigned |
+| Route | GET /api/bookings/{bookingId}/cancellation;POST /api/bookings/{bookingId}/cancellations;matching exact-venue staff routes |
+| Required permissions | Eligible owner;or exact-venue current eligible member with independent booking.synthetic.cancel;no implicit admin bypass |
+| Known limitations | Reject started,ever-issued,amendment-pending or financially uncertain bookings;RESERVED_REVIEW_REQUIRED is not refund approval/execution/settlement;original allocations remain unavailable for spending |
+| MVP / requirement / test plan | P6-C01 / CN-C08 / T-CN-C08 |
+| Automated test evidence | [PostgreSQL cases](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[architecture](../../backend/src/test/java/com/cinenest/CancellationArchitectureTest.java) |
+| Source | [Booking service](../../backend/src/main/java/com/cinenest/booking/internal/CancellationService.java),[Payments adapter](../../backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java),[V24](../../backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql) |
+| Screenshot | NOT_CAPTURED;backend-only implementation,no invented cancellation controls |
+| Last verified commit / CI | Local implementation checkpoint based on6117a7aa52fe7019cd42d44687f659e01b173682;publication commit=this record's Git history;new exact-source CI PENDING |
+
+[Actual verification and remaining obligations](../PROGRESS.md#synthetic-cancellation). Additional mappings:P6-C04/C05/C06,CN-A02/CN-O01/CN-A07/BR-10/BP-AC12 and their existing full plans. Existing MVP feature;no FF ID or criterion closure.

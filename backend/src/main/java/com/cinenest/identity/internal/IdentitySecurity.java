@@ -111,6 +111,8 @@ class IdentitySecurity {
                 .requestMatchers("/api/admin/venues/*/operations/cases", "/api/admin/venues/*/operations/cases/**").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/iot/devices","/api/admin/venues/*/iot/devices/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/iot/devices/*/commands","/api/admin/venues/*/iot/devices/*/commands/*/simulations","/api/admin/venues/*/iot/devices/*/commands/*/reconciliations").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/cancellation","/api/admin/venues/*/bookings/*/cancellation").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/cancellations","/api/admin/venues/*/bookings/*/cancellations").authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request, response, failure) -> {

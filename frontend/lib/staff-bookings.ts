@@ -13,7 +13,7 @@ export type StaffBooking = {
 	venueId: string;
 	roomId: string;
 	revision: number;
-	state: "SIMULATED_CONFIRMED";
+	state: "SIMULATED_CONFIRMED" | "SIMULATED_CANCELLED";
 	scheduledStart: string;
 	scheduledEnd: string;
 	timezone: string;
@@ -165,7 +165,7 @@ export function staffBookingRecord(
 	if (
 		v?.synthetic !== true ||
 		v.realBooking !== false ||
-		v.state !== "SIMULATED_CONFIRMED" ||
+		!["SIMULATED_CONFIRMED", "SIMULATED_CANCELLED"].includes(v.state) ||
 		reviewReference(v.venueId) !== reviewReference(venue) ||
 		(booking && reviewReference(v.bookingId) !== reviewReference(booking)) ||
 		!Number.isSafeInteger(v.revision) ||

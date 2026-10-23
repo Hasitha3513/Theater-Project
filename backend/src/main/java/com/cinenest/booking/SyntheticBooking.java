@@ -14,5 +14,6 @@ public interface SyntheticBooking {
  boolean entitled(UUID owner,UUID hold);
  UUID confirm(Funding funding);
  Optional<Map<String,Object>> read(UUID actor,UUID booking);
+ Optional<String> state(UUID booking);
  Optional<UUID> forRequest(UUID request);
 }

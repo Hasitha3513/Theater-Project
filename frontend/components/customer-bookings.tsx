@@ -116,10 +116,13 @@ export function bookingRecord(value: unknown): Booking {
 		!UUID.test(b.requestId) ||
 		!UUID.test(b.venueId) ||
 		![1, 2].includes(b.revision) ||
-		(b.state ?? b.syntheticBookingStatus) !== "SIMULATED_CONFIRMED" ||
-		(b.state !== undefined && b.state !== "SIMULATED_CONFIRMED") ||
+		!["SIMULATED_CONFIRMED", "SIMULATED_CANCELLED"].includes(
+			b.state ?? b.syntheticBookingStatus ?? "",
+		) ||
+		(b.state !== undefined &&
+			b.state !== (b.syntheticBookingStatus ?? b.state)) ||
 		(b.syntheticBookingStatus !== undefined &&
-			b.syntheticBookingStatus !== "SIMULATED_CONFIRMED") ||
+			b.syntheticBookingStatus !== (b.state ?? b.syntheticBookingStatus)) ||
 		!p ||
 		!UUID.test(p.roomId) ||
 		!/^\d+$/.test(p.amountMinor) ||
@@ -133,6 +136,8 @@ export function bookingRecord(value: unknown): Booking {
 	return b;
 }
 export function bookingGroup(b: Booking, observedAt: string) {
+	if ((b.state ?? b.syntheticBookingStatus) === "SIMULATED_CANCELLED")
+		return "Cancelled";
 	const now = Date.parse(observedAt);
 	if (!Number.isFinite(now))
 		throw Error("Missing authoritative observation time");
@@ -199,6 +204,8 @@ function requestRecord(r: RequestSummary) {
 	return r;
 }
 export function requestBookingLabel(status: string) {
+	if (status === "SIMULATED_CANCELLED")
+		return "Cancelled synthetic booking — refund resolution separate";
 	return status === "SIMULATED_CONFIRMED"
 		? "Linked synthetic booking"
 		: "Pending/unconfirmed request — not a booking";
@@ -339,7 +346,8 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 					if (
 						p.id !== b.requestId ||
 						p.financial.bookingId !== b.id ||
-						p.financial.syntheticBookingStatus !== "SIMULATED_CONFIRMED" ||
+						p.financial.syntheticBookingStatus !==
+							(b.state ?? b.syntheticBookingStatus) ||
 						!Number.isSafeInteger(p.revision)
 					)
 						throw Error();
@@ -446,7 +454,7 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 					{bookings.items.length === 0 ? (
 						<p>No owned bookings.</p>
 					) : (
-						["Upcoming", "Current", "Past"].map((group) => (
+						["Upcoming", "Current", "Past", "Cancelled"].map((group) => (
 							<section key={group}>
 								<h2>{group}</h2>
 								<ul className="purchased-booking-list">
@@ -569,7 +577,7 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 						</p>
 						<p>
 							History: retained immutable revision {detail.revision},
-							SIMULATED_CONFIRMED. Original purchased history is retained.
+							{detail.state}. Original purchased history is retained.
 						</p>
 					</Card>
 					<nav
@@ -581,7 +589,10 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 						<a href="#booking-amendment">Review rescheduling</a>
 					</nav>
 					<section id="booking-guests" aria-label="Guest roster section">
-						<GuestRoster key={detail.id} bookingId={detail.id} />
+						{(detail.state ?? detail.syntheticBookingStatus) ===
+							"SIMULATED_CONFIRMED" && (
+							<GuestRoster key={detail.id} bookingId={detail.id} />
+						)}
 					</section>
 					<section
 						id="booking-payment"
@@ -637,10 +648,13 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 						id="booking-amendment"
 						aria-label="Explicit rescheduling section"
 					>
-						<BookingAmendment
-							booking={detail}
-							onCommitted={() => void load(0, 0)}
-						/>
+						{(detail.state ?? detail.syntheticBookingStatus) ===
+							"SIMULATED_CONFIRMED" && (
+							<BookingAmendment
+								booking={detail}
+								onCommitted={() => void load(0, 0)}
+							/>
+						)}
 					</section>
 					<Card title="Synthetic refund status">
 						<p>

@@ -49,6 +49,7 @@ def main():
     test_booking_confirmation_controls(validator)
     test_product_documentation_controls()
     test_popular_session_starts_controls(validator)
+    test_synthetic_cancellation_controls(validator)
 
 
 def test_future_register_controls():
@@ -204,5 +205,19 @@ def test_popular_session_starts_controls(validator):
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
         assert result!=0,'Popular session starts accepted '+label
         print('PASS popular session starts rejected',label)
+
+def test_synthetic_cancellation_controls(validator):
+    faults=[]
+    status=K/'execution/status.json'
+    for key,value in [('automaticGrants',True),('bootstrap',True),('fullRequirementAccepted',True),('dependenciesChanged',True)]:
+        data=json.loads(status.read_text());data['syntheticCancellationImplementation'][key]=value;faults.append((status,json.dumps(data).encode(),key))
+    decision=K/'decisions/cinenest-open-decisions.json';data=json.loads(decision.read_text());next(x for x in data['decisions'] if x['id']=='OD-07')['boundedSyntheticCancellationApproval']['refundPercent']=50;faults.append((decision,json.dumps(data).encode(),'unapproved principal deduction'))
+    migration=ROOT/'backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql';faults.append((migration,migration.read_bytes()+b"\nDELETE FROM cinenest_payments.payment_allocation;\n",'allocated principal deletion'))
+    progress=K/'PROGRESS.md';faults.append((progress,progress.read_text().replace('- [ ] **P6-C04**','- [x] **P6-C04**').encode(),'false full cancellation acceptance'))
+    rb,rt=Path.read_bytes,Path.read_text
+    for path,replacement,label in faults:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
+        assert result!=0,'Synthetic cancellation accepted '+label
+        print('PASS synthetic cancellation rejected',label)
 
 if __name__ == '__main__': main()

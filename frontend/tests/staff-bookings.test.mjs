@@ -274,3 +274,11 @@ test("real HTTP proxy transport restricts cookies,headers,redirects and private 
 		await new Promise((r) => server.close(r));
 	}
 });
+
+test("cancelled synthetic staff history is retained without inventing live confirmation", () => {
+	const cancelled = { ...item(), state: "SIMULATED_CANCELLED" };
+	assert.equal(staffBookingRecord(cancelled, venue).state, "SIMULATED_CANCELLED");
+	assert.throws(() =>
+		staffBookingRecord({ ...cancelled, state: "CANCELLED_REAL" }, venue),
+	);
+});

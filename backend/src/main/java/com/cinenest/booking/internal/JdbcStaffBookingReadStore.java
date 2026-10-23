@@ -24,7 +24,7 @@ class JdbcStaffBookingReadStore implements StaffBookingReadStore {
  private Item item(java.sql.ResultSet row,int n)throws java.sql.SQLException{
   String state=row.getString("state"),zone=row.getString("timezone"),name=row.getString("package_name");
   int guests=row.getInt("guests");long revision=row.getLong("revision");
-  if(!"SIMULATED_CONFIRMED".equals(state)||guests<1||revision<1||name==null)throw new IllegalStateException("Invalid purchased context");
+  if(!Set.of("SIMULATED_CONFIRMED","SIMULATED_CANCELLED").contains(state)||guests<1||revision<1||name==null)throw new IllegalStateException("Invalid purchased context");
   ZoneId.of(zone);
   return new Item(row.getObject("booking_id",UUID.class),row.getObject("venue_id",UUID.class),row.getObject("room_id",UUID.class),revision,state,row.getTimestamp("scheduled_start").toInstant(),row.getTimestamp("scheduled_end").toInstant(),zone,name,guests,true,false);
  }
