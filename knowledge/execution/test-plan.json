@@ -756,6 +756,22 @@
           "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
           "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
         ]
+      },
+      "syntheticCancellationFrontendEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-FE-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation-frontend",
+        "status": "LOCALLY_TESTED_BOUNDED_CUSTOMER_STAFF_UI",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Pre-start never-issued synthetic scope only;no repayment,physical or commercial acceptance",
+        "sourcePaths": [
+          "frontend/components/booking-cancellation.tsx",
+          "frontend/lib/booking-cancellation.ts",
+          "frontend/lib/booking-cancellation-backend.ts",
+          "frontend/tests/booking-cancellation.test.mjs",
+          "frontend/tests/booking-cancellation-browser.mjs"
+        ]
       }
     },
     {
@@ -962,6 +978,22 @@
           "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
           "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
           "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
+      },
+      "syntheticCancellationFrontendEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-FE-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation-frontend",
+        "status": "LOCALLY_TESTED_BOUNDED_CUSTOMER_STAFF_UI",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Pre-start never-issued synthetic scope only;no repayment,physical or commercial acceptance",
+        "sourcePaths": [
+          "frontend/components/booking-cancellation.tsx",
+          "frontend/lib/booking-cancellation.ts",
+          "frontend/lib/booking-cancellation-backend.ts",
+          "frontend/tests/booking-cancellation.test.mjs",
+          "frontend/tests/booking-cancellation-browser.mjs"
         ]
       }
     },
@@ -1318,6 +1350,22 @@
           "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
           "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
         ]
+      },
+      "syntheticCancellationFrontendEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-FE-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation-frontend",
+        "status": "LOCALLY_TESTED_BOUNDED_CUSTOMER_STAFF_UI",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Pre-start never-issued synthetic scope only;no repayment,physical or commercial acceptance",
+        "sourcePaths": [
+          "frontend/components/booking-cancellation.tsx",
+          "frontend/lib/booking-cancellation.ts",
+          "frontend/lib/booking-cancellation-backend.ts",
+          "frontend/tests/booking-cancellation.test.mjs",
+          "frontend/tests/booking-cancellation-browser.mjs"
+        ]
       }
     },
     {
@@ -1522,6 +1570,22 @@
           "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
           "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
           "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
+      },
+      "syntheticCancellationFrontendEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-FE-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation-frontend",
+        "status": "LOCALLY_TESTED_BOUNDED_CUSTOMER_STAFF_UI",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Pre-start never-issued synthetic scope only;no repayment,physical or commercial acceptance",
+        "sourcePaths": [
+          "frontend/components/booking-cancellation.tsx",
+          "frontend/lib/booking-cancellation.ts",
+          "frontend/lib/booking-cancellation-backend.ts",
+          "frontend/tests/booking-cancellation.test.mjs",
+          "frontend/tests/booking-cancellation-browser.mjs"
         ]
       }
     },
@@ -2977,6 +3041,22 @@
           "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
           "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
         ]
+      },
+      "syntheticCancellationFrontendEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-FE-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation-frontend",
+        "status": "LOCALLY_TESTED_BOUNDED_CUSTOMER_STAFF_UI",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Pre-start never-issued synthetic scope only;no repayment,physical or commercial acceptance",
+        "sourcePaths": [
+          "frontend/components/booking-cancellation.tsx",
+          "frontend/lib/booking-cancellation.ts",
+          "frontend/lib/booking-cancellation-backend.ts",
+          "frontend/tests/booking-cancellation.test.mjs",
+          "frontend/tests/booking-cancellation-browser.mjs"
+        ]
       }
     },
     {
@@ -3716,6 +3796,22 @@
           "backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java",
           "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
           "backend/src/test/java/com/cinenest/CancellationArchitectureTest.java"
+        ]
+      },
+      "syntheticCancellationFrontendEvidence": {
+        "taskId": "CN-BOOKING-CANCELLATION-FE-001",
+        "evidencePath": "PROGRESS.md#synthetic-cancellation-frontend",
+        "status": "LOCALLY_TESTED_BOUNDED_CUSTOMER_STAFF_UI",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN",
+        "limits": "Pre-start never-issued synthetic scope only;no repayment,physical or commercial acceptance",
+        "sourcePaths": [
+          "frontend/components/booking-cancellation.tsx",
+          "frontend/lib/booking-cancellation.ts",
+          "frontend/lib/booking-cancellation-backend.ts",
+          "frontend/tests/booking-cancellation.test.mjs",
+          "frontend/tests/booking-cancellation-browser.mjs"
         ]
       }
     },

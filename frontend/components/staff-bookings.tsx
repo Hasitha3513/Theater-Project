@@ -1,4 +1,5 @@
 "use client";
+import { BookingCancellationPanel } from "./booking-cancellation";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { stateFor } from "../lib/rooms";
@@ -94,8 +95,9 @@ function Notice() {
 			<strong>
 				SYNTHETIC STAFF BOOKING READS — NOT REAL COMMERCIAL CONFIRMATION.
 			</strong>{" "}
-			No booking, payment, refund, admission or access actions are available
-			here. Backend read auditing is intentional.
+			Only the separately authorized synthetic cancellation panel can change
+			booking state. No payment,refund settlement,admission or device actions
+			are available here. Backend auditing is intentional.
 		</p>
 	);
 }
@@ -429,6 +431,20 @@ export function StaffBookingDetail({
 		[venue, booking],
 	);
 	const state = useProtectedRead(read, true);
+	const [cancelled, setCancelled] = useState<string>();
+	const cancellationKey = `${venue}/${booking}/${state.value?.booking.revision}`;
+	useEffect(() => {
+		if (
+			!state.value ||
+			state.value.booking.venueId !== venue.toLowerCase() ||
+			state.value.booking.bookingId !== booking.toLowerCase()
+		)
+			setCancelled(undefined);
+	}, [venue, booking, state.value]);
+	const currentBooking =
+		state.value && cancelled === cancellationKey
+			? { ...state.value.booking, state: "SIMULATED_CANCELLED" as const }
+			: state.value?.booking;
 	return (
 		<>
 			<Notice />
@@ -444,17 +460,21 @@ export function StaffBookingDetail({
 					state.value.booking.venueId === venue.toLowerCase() &&
 					state.value.booking.bookingId === booking.toLowerCase() && (
 						<section aria-label="Authorized staff booking detail">
-							<StaffBookingSummary booking={state.value.booking} />
-							<Link
-								className="button button-primary booking-access-link"
-								prefetch={false}
-								href={bookingAccessHref(
-									state.value.booking.venueId,
-									state.value.booking.bookingId,
-								)}
-							>
-								Manage Cinema Access
-							</Link>
+							<StaffBookingSummary
+								booking={currentBooking ?? state.value.booking}
+							/>
+							{currentBooking?.state !== "SIMULATED_CANCELLED" && (
+								<Link
+									className="button button-primary booking-access-link"
+									prefetch={false}
+									href={bookingAccessHref(
+										state.value.booking.venueId,
+										state.value.booking.bookingId,
+									)}
+								>
+									Manage Cinema Access
+								</Link>
+							)}
 							<p>Server observation: {state.value.observedAt}</p>
 						</section>
 					)}
@@ -463,6 +483,14 @@ export function StaffBookingDetail({
 				state.value.booking.venueId === venue.toLowerCase() &&
 				state.value.booking.bookingId === booking.toLowerCase() && (
 					<>
+						<BookingCancellationPanel
+							key={`cancellation/${cancellationKey}`}
+							context={{
+								venueId: venue.toLowerCase(),
+								bookingId: booking.toLowerCase(),
+							}}
+							onCommitted={() => setCancelled(cancellationKey)}
+						/>
 						<StaffBookingOperationsPanel
 							key={`operations/${venue}/${booking}/${state.value.booking.revision}`}
 							booking={state.value.booking}

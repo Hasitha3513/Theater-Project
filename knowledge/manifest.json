@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "00a58c001d184ca12fc46b3652f2bae42a352393b4ceab210c1be275d941a6d5",
+      "sha256": "ddf3d59a71a0b7dfe01137c11d8b00dca670e5dcd10235444122c87b29625086",
       "authority": "canonical-prose"
     },
     {
@@ -404,7 +404,7 @@
       "path": "DESIGN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b2baa6623a645999a2e47e89166742e0736140aa5847f0e55c5a8caa9fbb9d24",
+      "sha256": "61d43c83acefec22ba933fab3f737666505c2aa9070fb6cc1a4933d8c5f059e6",
       "authority": "canonical-prose"
     },
     {
@@ -418,7 +418,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "ee46a0b07b156986d7caf4ad5e066af6c90a69c47e50f9032686afc7ed6595cf",
+      "sha256": "f8879099bb68fddab4f11b7b2dbfe0f4fb56f30662bccab71d89aa491ae8f229",
       "authority": "canonical-prose"
     },
     {
@@ -544,7 +544,7 @@
       "path": "execution/requirements.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6550cc77f156a4f7ac81d490ed3f89b0fba93eeb6a7712f4c0bd9bba2a4d6999",
+      "sha256": "209490c962ccd146698395b8c9e8d434f761409f64787e4ea6877e071c12125d",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -558,28 +558,28 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c95a07e63cc89d7df826c70b52e215d31bbf1ad7d2057e90c5ab1b83b29f5ad7",
+      "sha256": "ff2211c1c96c820b40092cdb0be2f8e2f54471d6c3d0f3021381fbd14065c931",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/test-plan.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "d23ddf40e4bddcd93d902fb0f2c5ce1ef449bde689957bfe81fcf61f1c11d69c",
+      "sha256": "d175e5cc1002c4ec9ed13d6075de6fac2dabefdecacba0f8bebd181d9c095a21",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "695b272a23270c864aea53413696f7dcdacd8278e8999d765cde7707afc15805",
+      "sha256": "a48eac4abf4c4e9ada142e3f1ace522136e098312d45d1d91c4e166bd5a26a66",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "guides/USER_GUIDE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "9a8b1199691feef14efbbde85b66f127d6405d6e291d8afda6415ca4ee0fcaf5",
+      "sha256": "ac7322ff8a25a1a981153744ffcf6bc6c5391b99aaa6c6f961d1531e79e8c7b3",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -592,7 +592,7 @@
       "path": "product/FEATURE_CATALOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "32949952964a8820f66321312bcf336eede0b9fa6e8ad6b77a19898b9b21d042",
+      "sha256": "e0cf4d075770a71cf7b12b940a6619b3d3e96c2e030d8d540e6305025bdaf8fe",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -621,6 +621,90 @@
       "kind": "visual-reference",
       "implementationStatus": "NOT_VERIFIED",
       "sha256": "683c39bf5895f8f2870cd6517de7c4f5c94c398fd49a500b226e678275f89391",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-after-customer-1280.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "a3d5d3f3393ee4b4975cefb8dc2515f9079ef54381efbaca87ebbd479fd5d1a9",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-after-customer-375.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "7154478236c44104f5d435c109d5be5562b5b6b9e90a15116231d6b075440f77",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-after-customer-768.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "b949db5629c70743d04e0de929c025f3e84285493b32d8a7835a32a012b7c0c1",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-after-staff-1280.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "3688eefcd87b254fc3d6e340174bd2d40eac5d168e7d1075ecc91aa2f4ed3940",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-after-staff-375.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "1281417320acc643c750b2082a5d20d42ef31c2852b2971720768d9ecc0af083",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-after-staff-768.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "ccc6718b1621d5be4275f15647b7cae6133e39838ed7666a089cac9575a28f85",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-before-customer-1280.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "f46eac13c9f812ae96f8189802234511884da99ad25a218f998a5d6a3a97f8ab",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-before-customer-375.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "32ca69413c811ec0ae0b469ef7fa3ecd709bdcfef97ca3ae0629f298591b8300",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-before-customer-768.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "8ee3696036b124ad092cf9146eea770017b58e8c9bc071f7fa7bba2b81b82a5b",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-before-staff-1280.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "5a774ebd61f42e38c7e830c6d5f68031b6fada97dc0d5e8f9a8478831c5869ce",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-before-staff-375.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "8ada010a739288d1ab85938ae3111a42e3976a7f8ef81dcf905cb55d2da4344b",
+      "authority": "structured-asset-or-evidence"
+    },
+    {
+      "path": "product/screenshots/cancellation-before-staff-768.png",
+      "kind": "visual-reference",
+      "implementationStatus": "NOT_VERIFIED",
+      "sha256": "d56982e97a02ac6886a0fbaf6b33b5d0a876e0761f5bd4cdc9233e00ae6f6b9c",
       "authority": "structured-asset-or-evidence"
     },
     {

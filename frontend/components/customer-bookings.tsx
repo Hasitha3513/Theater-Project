@@ -1,4 +1,5 @@
 "use client";
+import { BookingCancellationPanel } from "./booking-cancellation";
 import { bankRequestHref, confirmedBookingHref } from "../lib/bank-request";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { roomRequest } from "../lib/rooms";
@@ -437,8 +438,9 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 				<Badge tone="warning">{CUSTOMER_LABEL}</Badge>
 			</p>
 			<p>
-				Synthetic purchased history and bounded rescheduling. No real payment,
-				refund, admission or support ticket is created.
+				Synthetic purchased history, bounded rescheduling and explicit synthetic
+				cancellation. No real payment, refund, admission or support ticket is
+				created.
 			</p>
 			<Button busy={busy} onClick={() => void load()}>
 				Refresh booking history
@@ -570,6 +572,32 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 			)}
 			{detail && detail.id === bookingId && payment && refunds && (
 				<>
+					<BookingCancellationPanel
+						key={`cancellation/${detail.id}/${detail.revision}`}
+						context={{ bookingId: detail.id }}
+						onCommitted={() => {
+							setDetail((current) =>
+								current
+									? {
+											...current,
+											state: "SIMULATED_CANCELLED",
+											syntheticBookingStatus: "SIMULATED_CANCELLED",
+										}
+									: current,
+							);
+							setPayment((current) =>
+								current
+									? {
+											...current,
+											financial: {
+												...current.financial,
+												syntheticBookingStatus: "SIMULATED_CANCELLED",
+											},
+										}
+									: current,
+							);
+						}}
+					/>
 					<Card title="Purchased snapshot">
 						<Purchased b={detail} />
 						<p>

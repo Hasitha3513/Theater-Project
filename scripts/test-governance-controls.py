@@ -50,6 +50,7 @@ def main():
     test_product_documentation_controls()
     test_popular_session_starts_controls(validator)
     test_synthetic_cancellation_controls(validator)
+    test_cancellation_frontend_controls(validator)
 
 
 def test_future_register_controls():
@@ -219,5 +220,19 @@ def test_synthetic_cancellation_controls(validator):
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
         assert result!=0,'Synthetic cancellation accepted '+label
         print('PASS synthetic cancellation rejected',label)
+
+def test_cancellation_frontend_controls(validator):
+    faults=[]
+    path=K/'execution/status.json'
+    for key,value in [('automaticGrants',True),('fullRequirementAccepted',True),('businessRulesChanged',True),('migrationsChanged',True),('permission','booking.synthetic.read')]:
+        data=json.loads(path.read_text());data['syntheticCancellationFrontendImplementation'][key]=value;faults.append((path,json.dumps(data).encode(),key))
+    proxy=ROOT/'frontend/lib/booking-cancellation-backend.ts';faults.append((proxy,proxy.read_text().replace('x-csrf-token','x-ignored-token').encode(),'CSRF forwarding change'))
+    component=ROOT/'frontend/components/booking-cancellation.tsx';original=component.read_text();changed=original.replace('[confirmed, setConfirmed] = useState(false)','[confirmed, setConfirmed] = useState(true)');assert changed!=original;faults.append((component,changed.encode(),'prechecked cancellation consent'))
+    progress=K/'PROGRESS.md';faults.append((progress,progress.read_text().replace('- [ ] **P6-C01**','- [x] **P6-C01**').encode(),'automatic P6 acceptance'))
+    rb,rt=Path.read_bytes,Path.read_text
+    for target,replacement,label in faults:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)),redirect_stdout(io.StringIO()):result=validator['inert_ci_main']()
+        assert result!=0,'Cancellation frontend accepted '+label
+        print('PASS cancellation frontend rejected',label)
 
 if __name__ == '__main__': main()

@@ -8903,5 +8903,247 @@
       "concurrency": "CANCELLATION_AMENDMENT_ISSUANCE_FUNDING_SERIALIZATION_PASS"
     },
     "compatibleFrontendReads": "Existing history/detail accepts SIMULATED_CANCELLED;no new cancellation controls or proxy commands"
+  },
+  "syntheticCancellationFrontendImplementation": {
+    "taskId": "CN-BOOKING-CANCELLATION-FE-001",
+    "status": "IMPLEMENTED_LOCALLY_TESTED",
+    "baseline": "4b3ac401f510e97b4a21821530938e48fa8f0a20",
+    "prerequisiteCI": {
+      "run": 39904035164,
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1
+    },
+    "ownerAuthority": "Explicit bounded Customer and Staff frontend implementation;existing backend policy only",
+    "automaticGrants": false,
+    "bootstrap": false,
+    "businessRulesChanged": false,
+    "migrationsChanged": false,
+    "dependenciesChanged": false,
+    "roadmapChanged": false,
+    "fullRequirementAccepted": false,
+    "permission": "booking.synthetic.cancel",
+    "backendAuthority": "UNCHANGED_PRESTART_NEVER_ISSUED_ONLY",
+    "refundState": "RESERVED_REVIEW_REQUIRED_NOT_APPROVAL_OR_REPAYMENT",
+    "localVerification": {
+      "backendTests": 719,
+      "frontendTests": 428,
+      "focusedFrontendProxyTests": 12,
+      "typecheck": "PASS",
+      "lint": "PASS_EXISTING_INFORMATIONAL_DIAGNOSTICS_ONLY",
+      "build": "PASS",
+      "browserScenarios": 6,
+      "browserClassification": "INTERCEPTED_SYNTHETIC_BROWSER_NOT_REAL_BACKEND_E2E",
+      "historicalSyntheticE2E": "24_PASS_NOT_RERUN",
+      "classifierRegressions": 8,
+      "governance": "PASS",
+      "governanceNegativeControls": 64,
+      "governancePositiveCases": 2,
+      "knowledgeValidation": "PASS",
+      "isolatedExecutionStatusTraceabilityDependencies": "PASS",
+      "ordinaryExecutionValidation": "ONLY_TWO_PREEXISTING_NEXT_ENV_FINDINGS",
+      "whitespace": "PASS",
+      "existingCustomerBrowserGroups": 108,
+      "existingStaffBrowserGroups": 30,
+      "buttonPaint": [
+        {
+          "kind": "customer",
+          "width": 375,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "explicitPosts": 3,
+          "buttonPaint": {
+            "disabled": false,
+            "background": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(81, 53, 255), rgb(117, 76, 255)) repeat scroll 0% 0% / auto padding-box border-box",
+            "opacity": "1",
+            "transition": "none",
+            "animations": 0
+          },
+          "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+        },
+        {
+          "kind": "customer",
+          "width": 768,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "explicitPosts": 3,
+          "buttonPaint": {
+            "disabled": false,
+            "background": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(81, 53, 255), rgb(117, 76, 255)) repeat scroll 0% 0% / auto padding-box border-box",
+            "opacity": "1",
+            "transition": "none",
+            "animations": 0
+          },
+          "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+        },
+        {
+          "kind": "customer",
+          "width": 1280,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "explicitPosts": 3,
+          "buttonPaint": {
+            "disabled": false,
+            "background": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(81, 53, 255), rgb(117, 76, 255)) repeat scroll 0% 0% / auto padding-box border-box",
+            "opacity": "1",
+            "transition": "none",
+            "animations": 0
+          },
+          "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+        },
+        {
+          "kind": "staff",
+          "width": 375,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "explicitPosts": 3,
+          "buttonPaint": {
+            "disabled": false,
+            "background": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(81, 53, 255), rgb(117, 76, 255)) repeat scroll 0% 0% / auto padding-box border-box",
+            "opacity": "1",
+            "transition": "none",
+            "animations": 0
+          },
+          "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+        },
+        {
+          "kind": "staff",
+          "width": 768,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "explicitPosts": 3,
+          "buttonPaint": {
+            "disabled": false,
+            "background": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(81, 53, 255), rgb(117, 76, 255)) repeat scroll 0% 0% / auto padding-box border-box",
+            "opacity": "1",
+            "transition": "none",
+            "animations": 0
+          },
+          "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+        },
+        {
+          "kind": "staff",
+          "width": 1280,
+          "mainLandmarks": 1,
+          "horizontalOverflow": false,
+          "explicitPosts": 3,
+          "buttonPaint": {
+            "disabled": false,
+            "background": "rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(81, 53, 255), rgb(117, 76, 255)) repeat scroll 0% 0% / auto padding-box border-box",
+            "opacity": "1",
+            "transition": "none",
+            "animations": 0
+          },
+          "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+        }
+      ],
+      "cleanInstall": "PASS_UNCHANGED_LOCKFILE_0_REPORTED_VULNERABILITIES"
+    },
+    "screenshots": [
+      {
+        "phase": "before",
+        "kind": "customer",
+        "width": 375,
+        "path": "knowledge/product/screenshots/cancellation-before-customer-375.png",
+        "sha256": "32ca69413c811ec0ae0b469ef7fa3ecd709bdcfef97ca3ae0629f298591b8300",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "before",
+        "kind": "customer",
+        "width": 768,
+        "path": "knowledge/product/screenshots/cancellation-before-customer-768.png",
+        "sha256": "8ee3696036b124ad092cf9146eea770017b58e8c9bc071f7fa7bba2b81b82a5b",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "before",
+        "kind": "customer",
+        "width": 1280,
+        "path": "knowledge/product/screenshots/cancellation-before-customer-1280.png",
+        "sha256": "f46eac13c9f812ae96f8189802234511884da99ad25a218f998a5d6a3a97f8ab",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "before",
+        "kind": "staff",
+        "width": 375,
+        "path": "knowledge/product/screenshots/cancellation-before-staff-375.png",
+        "sha256": "8ada010a739288d1ab85938ae3111a42e3976a7f8ef81dcf905cb55d2da4344b",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "before",
+        "kind": "staff",
+        "width": 768,
+        "path": "knowledge/product/screenshots/cancellation-before-staff-768.png",
+        "sha256": "d56982e97a02ac6886a0fbaf6b33b5d0a876e0761f5bd4cdc9233e00ae6f6b9c",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "before",
+        "kind": "staff",
+        "width": 1280,
+        "path": "knowledge/product/screenshots/cancellation-before-staff-1280.png",
+        "sha256": "5a774ebd61f42e38c7e830c6d5f68031b6fada97dc0d5e8f9a8478831c5869ce",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "after",
+        "kind": "customer",
+        "width": 375,
+        "path": "knowledge/product/screenshots/cancellation-after-customer-375.png",
+        "sha256": "7154478236c44104f5d435c109d5be5562b5b6b9e90a15116231d6b075440f77",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "after",
+        "kind": "customer",
+        "width": 768,
+        "path": "knowledge/product/screenshots/cancellation-after-customer-768.png",
+        "sha256": "b949db5629c70743d04e0de929c025f3e84285493b32d8a7835a32a012b7c0c1",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "after",
+        "kind": "customer",
+        "width": 1280,
+        "path": "knowledge/product/screenshots/cancellation-after-customer-1280.png",
+        "sha256": "a3d5d3f3393ee4b4975cefb8dc2515f9079ef54381efbaca87ebbd479fd5d1a9",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "after",
+        "kind": "staff",
+        "width": 375,
+        "path": "knowledge/product/screenshots/cancellation-after-staff-375.png",
+        "sha256": "1281417320acc643c750b2082a5d20d42ef31c2852b2971720768d9ecc0af083",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "after",
+        "kind": "staff",
+        "width": 768,
+        "path": "knowledge/product/screenshots/cancellation-after-staff-768.png",
+        "sha256": "ccc6718b1621d5be4275f15647b7cae6133e39838ed7666a089cac9575a28f85",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      },
+      {
+        "phase": "after",
+        "kind": "staff",
+        "width": 1280,
+        "path": "knowledge/product/screenshots/cancellation-after-staff-1280.png",
+        "sha256": "3688eefcd87b254fc3d6e340174bd2d40eac5d168e7d1075ecc91aa2f4ed3940",
+        "classification": "INTERCEPTED_SYNTHETIC_BROWSER"
+      }
+    ],
+    "visualComparison": "All3 approved references inspected;existing240px navy desktop sidebar/light workspace,violet actions,white cinematic booking cards retained;single-column bounded cancellation forms with44px controls;0 horizontal overflow and1 main at375/768/1280. No new dashboard metrics,photos or production claims. Keyboard-focus test uses real Tab;enabled CTA screenshots wait for React commit. Disabled-to-enabled background transition produced a pale confirmation CTA despite computed gradient;setting transition:none only on the new confirmation button restored the visible approved violet action. Theme/tokens/shell unchanged. Resting-state screenshots and keyboard interaction reverified. Ineligible/uncertain responses do not display an eligible refund-principal claim.",
+    "documentation": {
+      "featureId": "DOC-F028",
+      "workflowId": "UG-023",
+      "featureCount": 28,
+      "workflowCount": 23
+    },
+    "publicationCI": "PENDING"
   }
 }

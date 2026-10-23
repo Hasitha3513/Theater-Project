@@ -590,7 +590,7 @@ For every user-visible change, review this catalogue and the corresponding guide
 [Policy and actual verification](../PROGRESS.md#popular-session-starts). This existing MVP feature consumes no FF ID and closes no criterion.
 
 <a id="doc-f028"></a>
-## DOC-F028 — Synthetic pre-start booking cancellation backend
+## DOC-F028 — Synthetic pre-start booking cancellation
 
 | Field | Evidence-backed value |
 |---|---|
@@ -599,14 +599,14 @@ For every user-visible change, review this catalogue and the corresponding guide
 | Description / available functionality | Explicit pre-start cancellation only with never-issued credentials,known reconciled synthetic funding and no pending amendment;source-linked100% allocated principal reservation and current purchased-block release |
 | Implementation status | PARTIAL |
 | Operational classification | SIMULATED / no real repayment,physical vacancy or commercial acceptance |
-| Demo availability | CONDITIONAL backend API only;customer/staff cancellation UI PENDING;no grants assigned |
-| Route | GET /api/bookings/{bookingId}/cancellation;POST /api/bookings/{bookingId}/cancellations;matching exact-venue staff routes |
+| Demo availability | CONDITIONAL customer/staff booking-detail panels and backend;eligible session/exact permissions required;no grants assigned |
+| Route | /bookings/[id] and /admin/bookings/venues/[venue]/[booking];GET /api/bookings/{bookingId}/cancellation;POST /api/bookings/{bookingId}/cancellations;matching exact-venue staff routes |
 | Required permissions | Eligible owner;or exact-venue current eligible member with independent booking.synthetic.cancel;no implicit admin bypass |
 | Known limitations | Reject started,ever-issued,amendment-pending or financially uncertain bookings;RESERVED_REVIEW_REQUIRED is not refund approval/execution/settlement;original allocations remain unavailable for spending |
 | MVP / requirement / test plan | P6-C01 / CN-C08 / T-CN-C08 |
-| Automated test evidence | [PostgreSQL cases](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[architecture](../../backend/src/test/java/com/cinenest/CancellationArchitectureTest.java) |
-| Source | [Booking service](../../backend/src/main/java/com/cinenest/booking/internal/CancellationService.java),[Payments adapter](../../backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java),[V24](../../backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql) |
-| Screenshot | NOT_CAPTURED;backend-only implementation,no invented cancellation controls |
-| Last verified commit / CI | Local implementation checkpoint based on6117a7aa52fe7019cd42d44687f659e01b173682;publication commit=this record's Git history;new exact-source CI PENDING |
+| Automated test evidence | [Frontend/proxy](../../frontend/tests/booking-cancellation.test.mjs),[intercepted browser](../../frontend/tests/booking-cancellation-browser.mjs),[PostgreSQL cases](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[architecture](../../backend/src/test/java/com/cinenest/CancellationArchitectureTest.java) |
+| Source | [UI](../../frontend/components/booking-cancellation.tsx),[strict proxy](../../frontend/lib/booking-cancellation-backend.ts),[Booking service](../../backend/src/main/java/com/cinenest/booking/internal/CancellationService.java),[Payments adapter](../../backend/src/main/java/com/cinenest/payments/internal/CancellationFundingAdapter.java),[V24](../../backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql) |
+| Screenshot | [Customer375](screenshots/cancellation-after-customer-375.png),[768](screenshots/cancellation-after-customer-768.png),[1280](screenshots/cancellation-after-customer-1280.png);[Staff375](screenshots/cancellation-after-staff-375.png),[768](screenshots/cancellation-after-staff-768.png),[1280](screenshots/cancellation-after-staff-1280.png);actual intercepted browser captures |
+| Last verified commit / CI | Backend4b3ac401f510e97b4a21821530938e48fa8f0a20/CI39904035164 SUCCESS;frontend checkpoint based on that baseline;publication commit=this record's Git history;new exact-source CI PENDING |
 
-[Actual verification and remaining obligations](../PROGRESS.md#synthetic-cancellation). Additional mappings:P6-C04/C05/C06,CN-A02/CN-O01/CN-A07/BR-10/BP-AC12 and their existing full plans. Existing MVP feature;no FF ID or criterion closure.
+[Actual verification and remaining obligations](../PROGRESS.md#synthetic-cancellation-frontend). Additional mappings:P6-C04/C05/C06,CN-A02/CN-O01/CN-A07/BR-10/BP-AC12 and their existing full plans. Existing MVP feature;no FF ID or criterion closure.
