@@ -6550,5 +6550,99 @@ def inert_ci_main():
     if result==0:print('PASS exact real-backend extension E2E successor;approved proxy correction only;history,decisions,financial and acceptance boundaries preserved')
     return result
 
+
+
+# CN-R1-PLAN-001: exact documentation-only release scheduling successor; no execution/acceptance authority.
+release1_prior_main = inert_ci_main
+RELEASE1_BASELINE = '0d936c059dff8b3a4f6f2b3586ac2c29e452e1cf'
+RELEASE1_HASHES = {'knowledge/PROJECT.md': '2abe30c1ee5d575cc09fe5c73476fe6ad9673227530f3f98aa7d97038d2b63aa', 'knowledge/PROGRESS.md': 'e581ee416b41d251b44ee2ebca07a315d468a93112e5e3a587032272884e51d3', 'knowledge/execution/change-sets.json': '1cd3a49a369edda6a134aa3083198b96762d2962c398160460ed464afb1e19c0', 'knowledge/execution/status.json': '70fd7306e623db443ad1d005d2a036cd7bddec038e08376e294a95076b02b62d', 'scripts/test-governance-controls.py': '3e3fd0719f9687a9056c18c5158489391c42567c74cdb85952c2574235e20b2f'}
+
+def release1_plan_errors(plan=None):
+    import datetime
+    if plan is None:plan=json.loads((K/'execution/change-sets.json').read_text()).get('release1DeliverySlice',{})
+    errors=[]
+    req=json.loads((K/'execution/requirements.json').read_text());ids={r['id'] for r in req['requirements']};matrix=req['mvpKnowledgeTraceability']
+    mapping=plan.get('requirementMapping',[])
+    if len(mapping)!=92 or {r.get('requirementId') for r in mapping}!=ids:errors.append('Release1 requirement coverage must preserve92uniqueIDs')
+    if any(r.get('classification') not in {'RELEASE_1_BOUNDED_SCOPE','RELEASE_1_DEPENDENCY','POST_RELEASE_1_RETAINED_MVP'} for r in mapping):errors.append('Release1 scope classification invalid')
+    criteria={r.get('id',r.get('criterionId')) for r in matrix['criterionIndex']};tests={r['id'] for r in json.loads((K/'execution/test-plan.json').read_text())['tests']}
+    for r in mapping:
+        if not set(r.get('criterionIds',[]))<=criteria or not set(r.get('testIds',[]))<=tests:errors.append('Release1 invalid traceability')
+    for r in plan.get('criterionMapping',[]):
+        if r.get('criterionId') not in criteria or not set(r.get('requirementIds',[]))<=ids or r.get('coverage')!='BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE':errors.append('Release1 criterion drift')
+    rows=plan.get('schedule',[]);start=datetime.date(2026,10,25);seen=set()
+    if len(rows)!=21:errors.append('Release1 needs21boundedrows')
+    gate_ids={g.get('id') for g in plan.get('approvalGates',[])}
+    if gate_ids!={'G-COMMERCIAL','G-BANK','G-PRIVACY','G-HARDWARE','G-ADMISSION','G-ROOM-BLOCK','G-DELIVERY','G-RECOVERY','G-LAUNCH'} or any(g.get('status')!='BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE' for g in plan.get('approvalGates',[])):errors.append('Release1 missing or falsely approved gates')
+    for n,r in enumerate(rows,1):
+        if r.get('day')!=n or r.get('targetDate')!=str(start+datetime.timedelta(days=n-1)):errors.append('Release1 day/date drift')
+        if r.get('taskId') in seen or not set(r.get('dependencies',[]))<=seen:errors.append('Release1 duplicate/unknown/forward dependency')
+        seen.add(r.get('taskId'))
+        if not set(r.get('requirementIds',[]))<=ids or not set(r.get('approvalGates',[]))<=gate_ids:errors.append('Release1 task reference drift')
+        if r.get('status')!=('AUTHORIZED_DOCUMENTATION_ONLY' if n==1 else 'PLANNED_SEPARATE_AUTHORIZATION_REQUIRED'):errors.append('Release1 implementation authority invented')
+        if any(not r.get(k) for k in ['owningModules','deliverable','implementationScope','tests','definitionOfDone','releaseBlocker','rollbackStrategy']):errors.append('Release1 incomplete bounded row')
+    if plan.get('authority')!='PLANNING_AND_CONTROLLED_DOCUMENTATION_PUBLICATION_ONLY' or plan.get('implementationAuthority')!='NOT_GRANTED_BY_THIS_PLAN' or plan.get('launchStatus')!='BLOCKED_NOT_AUTHORIZED':errors.append('Release1 exceeded planning authority')
+    expected={'criteriaChecked':15,'criteriaTotal':74,'formalRequirementsAccepted':0,'requirementsTotal':92,'fullPlansPass':1,'fullPlansNotRun':91,'demosHeld':0,'demosAccepted':0,'physicalQualified':False,'realBankQualified':False,'productionAuthorized':False}
+    if plan.get('acceptanceUnchanged')!=expected:errors.append('Release1 acceptance changed')
+    cases=plan.get('acceptanceMatrix',[])
+    if len(cases)!=12 or len({r.get('id') for r in cases})!=12:errors.append('Release1 acceptance coverage missing')
+    for r in cases:
+        if not set(r.get('requirementIds',[]))<=ids or not set(r.get('criterionIds',[]))<=criteria or r.get('formalAcceptance')!='NOT_ACCEPTED' or r.get('releaseTestResult')!='NOT_RUN_BY_PLANNING':errors.append('Release1 invented acceptance/test result')
+    return errors
+
+def release1_successor_errors():
+    errors=[];baseline=RELEASE1_BASELINE
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in RELEASE1_HASHES.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Release1 exact authorized payload mismatch '+name)
+    if errors:return errors
+    try:errors.extend(release1_plan_errors())
+    except (ValueError,KeyError,TypeError):errors.append('Release1 required planning/traceability registry malformed')
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Release1 historical validator changed')
+    changes=json.loads((K/'execution/change-sets.json').read_text());changes.pop('release1DeliverySlice',None)
+    if changes!=json.loads(prior('knowledge/execution/change-sets.json')):errors.append('Release1 original task graph/11workstreams/history changed')
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('release1Planning',{});state.update(receipt.get('previousCurrentHeader',{}))
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Release1 historical status/evidence changed')
+    for key in ['applicationChanged','migrationsChanged','decisionsApproved','grantsAssigned','realFundsExecuted','deviceCommandsExecuted','acceptanceChanged','dependenciesRemoved','providerQualificationClaimed','physicalQualificationClaimed','productionAuthorized','historicalEvidenceChanged']:
+        if receipt.get(key) is not False:errors.append('Release1 unauthorized claim '+key)
+    ledger=receipt.get('knowledgeReading',{})
+    if ledger.get('baseline')!=baseline or len(ledger.get('files',[]))!=116 or ledger.get('complete') is not True or ledger.get('unresolvedCoverageGaps')!=[]:errors.append('Release1 qualified reading missing')
+    owned=set(RELEASE1_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for name in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Release1 protected/unrelated payload changed '+name)
+    for row in ledger.get('files',[]):
+        if row.get('path') in tracked and row.get('sha256')!=hashlib.sha256(prior(row['path'])).hexdigest():errors.append('Release1 reading baseline hash drift '+row['path'])
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Release1 acceptance checkbox drift')
+    if not (K/'PROJECT.md').read_bytes().startswith(prior('knowledge/PROJECT.md')):errors.append('Release1 original business policy/history changed')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Release1 unauthorized paths '+str(changed-owned))
+    previous=json.loads(prior('knowledge/manifest.json'));current=json.loads((K/'manifest.json').read_text())
+    for row in previous['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if previous!=current:errors.append('Release1 manifest inventory/status/authority changed')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=release1_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    owned=set(RELEASE1_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',RELEASE1_BASELINE+':'+name]) for name in owned}
+    rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[x for x in text.split(sep) if x and x not in owned];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=release1_prior_main()
+    if result==0:print('PASS exact Release1 planning successor;original92requirements74criteria11workstreams,history,decisions,source and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

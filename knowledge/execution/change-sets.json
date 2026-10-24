@@ -3598,5 +3598,2804 @@
         "authority": "PROPOSED_SEPARATE_EXECUTION_AUTHORIZATION_REQUIRED"
       }
     }
+  },
+  "release1DeliverySlice": {
+    "taskId": "CN-R1-PLAN-001",
+    "recordedDate": "2026-10-25",
+    "baseline": "0d936c059dff8b3a4f6f2b3586ac2c29e452e1cf",
+    "baselineCI": {
+      "runId": 40122819485,
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "0d936c059dff8b3a4f6f2b3586ac2c29e452e1cf"
+    },
+    "ownerDirection": "Owner attachment 0a564ab0-612e-426c-be6b-0846cfdf9584/Pasted text.txt;21-day customer-release planning and prioritization only",
+    "attachmentSha256": "3517fbadc2b080abdc1944fcae294b0d05fd99595b4fba2e778bb22c5f21ecb6",
+    "authority": "PLANNING_AND_CONTROLLED_DOCUMENTATION_PUBLICATION_ONLY",
+    "implementationAuthority": "NOT_GRANTED_BY_THIS_PLAN",
+    "launchStatus": "BLOCKED_NOT_AUTHORIZED",
+    "targetWindow": {
+      "timezone": "Asia/Colombo",
+      "start": "2026-10-25",
+      "endInclusive": "2026-11-14",
+      "calendarDays": 21,
+      "basis": "Proposed inclusive target anchored to owner request date;not a confirmed launch/staffing or vendor-delivery commitment"
+    },
+    "sourceOfTruth": "Existing P0-P10/74criteria,92requirements,11workstreams and original28task dependency graph unchanged;this is a release scheduling overlay,not another roadmap",
+    "releaseDefinition": "Online cinema booking via existing actual sequence plus qualified manual-bank payment and qualified physical smart-lock access;online booking does not imply hosted gateway payment",
+    "requirementMapping": [
+      {
+        "requirementId": "CN-AGENT-WORKFLOW-001",
+        "classification": "RELEASE_1_DEPENDENCY",
+        "criterionIds": [
+          "P0-C01",
+          "P0-C02",
+          "P0-C04",
+          "P0-C05",
+          "P0-C06"
+        ],
+        "testIds": [
+          "T-CN-AGENT-WORKFLOW-001"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PR-UI-001",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P0-C03",
+          "P1-C06",
+          "P2-C04"
+        ],
+        "testIds": [
+          "T-PR-UI-001"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PR-PKG-001",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C02"
+        ],
+        "testIds": [
+          "T-PR-PKG-001"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PR-BANK-001",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C05",
+          "P4-C08"
+        ],
+        "testIds": [
+          "T-PR-BANK-001"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C01",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C01",
+          "P2-C04"
+        ],
+        "testIds": [
+          "T-CN-C01"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C02",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P1-C04",
+          "P4-C03"
+        ],
+        "testIds": [
+          "T-CN-C02"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C03",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C03",
+          "P3-C04",
+          "P3-C05",
+          "P3-C06"
+        ],
+        "testIds": [
+          "T-CN-C03"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C04",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C01"
+        ],
+        "testIds": [
+          "T-CN-C04"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C05",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C01",
+          "P4-C02",
+          "P4-C03"
+        ],
+        "testIds": [
+          "T-CN-C05"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C06",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P5-C01",
+          "P5-C02",
+          "P5-C03",
+          "P5-C04"
+        ],
+        "testIds": [
+          "T-CN-C06"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-C07",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P5-C05",
+          "P7-C03"
+        ],
+        "testIds": [
+          "T-CN-C07"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C08",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C06",
+          "P5-C06",
+          "P6-C01"
+        ],
+        "testIds": [
+          "T-CN-C08"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C09",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "testIds": [
+          "T-CN-C09"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-A01",
+        "classification": "RELEASE_1_DEPENDENCY",
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "testIds": [
+          "T-CN-A01"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A02",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C04",
+          "P6-C01",
+          "P6-C02",
+          "P6-C03",
+          "P6-C04",
+          "P6-C06"
+        ],
+        "testIds": [
+          "T-CN-A02"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A03",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C01",
+          "P3-C02",
+          "P8-C05"
+        ],
+        "testIds": [
+          "T-CN-A03"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A04",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C05",
+          "P9-C01"
+        ],
+        "testIds": [
+          "T-CN-A04"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A05",
+        "classification": "RELEASE_1_DEPENDENCY",
+        "criterionIds": [
+          "P8-C01",
+          "P8-C03"
+        ],
+        "testIds": [
+          "T-CN-A05"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A06",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P1-C04",
+          "P4-C02",
+          "P9-C01"
+        ],
+        "testIds": [
+          "T-CN-A06"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A07",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P5-C06",
+          "P6-C05",
+          "P6-C06",
+          "P10-C04"
+        ],
+        "testIds": [
+          "T-CN-A07"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A08",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "testIds": [
+          "T-CN-A08"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-A09",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "testIds": [
+          "T-CN-A09"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-A10",
+        "classification": "RELEASE_1_DEPENDENCY",
+        "criterionIds": [
+          "P2-C05",
+          "P9-C01"
+        ],
+        "testIds": [
+          "T-CN-A10"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A11",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P9-C01"
+        ],
+        "testIds": [
+          "T-CN-A11"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-O01",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P6-C04",
+          "P7-C01",
+          "P7-C02",
+          "P7-C04",
+          "P7-C06"
+        ],
+        "testIds": [
+          "T-CN-O01"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-O02",
+        "classification": "RELEASE_1_DEPENDENCY",
+        "criterionIds": [
+          "P8-C01",
+          "P8-C02"
+        ],
+        "testIds": [
+          "T-CN-O02"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-O03",
+        "classification": "RELEASE_1_DEPENDENCY",
+        "criterionIds": [
+          "P8-C02",
+          "P8-C04",
+          "P8-C05"
+        ],
+        "testIds": [
+          "T-CN-O03"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-O04",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P7-C02",
+          "P7-C06",
+          "P8-C03",
+          "P8-C06",
+          "P8-C07",
+          "P10-C05"
+        ],
+        "testIds": [
+          "T-CN-O04"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A12",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C02"
+        ],
+        "testIds": [
+          "T-CN-A12"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-C10",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C01",
+          "P4-C04",
+          "P4-C08"
+        ],
+        "testIds": [
+          "T-CN-C10"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-A13",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C05",
+          "P4-C06",
+          "P4-C08"
+        ],
+        "testIds": [
+          "T-CN-A13"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-NFR-01",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P1-C06",
+          "P9-C06"
+        ],
+        "testIds": [
+          "T-CN-NFR-01"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-NFR-02",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P0-C03",
+          "P0-C06",
+          "P0-C07",
+          "P1-C02",
+          "P1-C03",
+          "P1-C05",
+          "P3-C06",
+          "P9-C04",
+          "P9-C05",
+          "P9-C07"
+        ],
+        "testIds": [
+          "T-CN-NFR-02"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-NFR-03",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P1-C01",
+          "P1-C02",
+          "P1-C03",
+          "P5-C06",
+          "P9-C05"
+        ],
+        "testIds": [
+          "T-CN-NFR-03"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-NFR-04",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P9-C06",
+          "P10-C02"
+        ],
+        "testIds": [
+          "T-CN-NFR-04"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-NFR-05",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P0-C07",
+          "P7-C01",
+          "P7-C05",
+          "P7-C06",
+          "P8-C04",
+          "P8-C07",
+          "P9-C07",
+          "P10-C01",
+          "P10-C03",
+          "P10-C04",
+          "P10-C06"
+        ],
+        "testIds": [
+          "T-CN-NFR-05"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-NFR-06",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P0-C08",
+          "P9-C08",
+          "P10-C01",
+          "P10-C02",
+          "P10-C03",
+          "P10-C07"
+        ],
+        "testIds": [
+          "T-CN-NFR-06"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-SUP-01",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P5-C05",
+          "P8-C06",
+          "P9-C07",
+          "P10-C06"
+        ],
+        "testIds": [
+          "T-CN-SUP-01"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-01",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C02"
+        ],
+        "testIds": [
+          "T-BR-01"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-02",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C06",
+          "P3-C02"
+        ],
+        "testIds": [
+          "T-BR-02"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-03",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C01",
+          "P3-C02"
+        ],
+        "testIds": [
+          "T-BR-03"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-04",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C01"
+        ],
+        "testIds": [
+          "T-BR-04"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-05",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C01"
+        ],
+        "testIds": [
+          "T-BR-05"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-06",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C02",
+          "P6-C03",
+          "P8-C04"
+        ],
+        "testIds": [
+          "T-BR-06"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-07",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C03",
+          "P3-C05"
+        ],
+        "testIds": [
+          "T-BR-07"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-08",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C03",
+          "P7-C05"
+        ],
+        "testIds": [
+          "T-BR-08"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-09",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P7-C03"
+        ],
+        "testIds": [
+          "T-BR-09"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BR-10",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C01",
+          "P3-C04",
+          "P6-C01"
+        ],
+        "testIds": [
+          "T-BR-10"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC01",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C02"
+        ],
+        "testIds": [
+          "T-PK-AC01"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC02",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C02"
+        ],
+        "testIds": [
+          "T-PK-AC02"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC03",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C02",
+          "P2-C06"
+        ],
+        "testIds": [
+          "T-PK-AC03"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC04",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C03",
+          "P2-C06"
+        ],
+        "testIds": [
+          "T-PK-AC04"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC05",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C03"
+        ],
+        "testIds": [
+          "T-PK-AC05"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC06",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C03"
+        ],
+        "testIds": [
+          "T-PK-AC06"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC07",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C01",
+          "P6-C02"
+        ],
+        "testIds": [
+          "T-PK-AC07"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC08",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P5-C02",
+          "P5-C03"
+        ],
+        "testIds": [
+          "T-PK-AC08"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "PK-AC09",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C03"
+        ],
+        "testIds": [
+          "T-PK-AC09"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC10",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P3-C01"
+        ],
+        "testIds": [
+          "T-PK-AC10"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC11",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P2-C03",
+          "P2-C06"
+        ],
+        "testIds": [
+          "T-PK-AC11"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "PK-AC12",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P6-C03",
+          "P6-C06",
+          "P7-C03"
+        ],
+        "testIds": [
+          "T-PK-AC12"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "PK-AC13",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P3-C01",
+          "P6-C02"
+        ],
+        "testIds": [
+          "T-PK-AC13"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BP-AC01",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C06",
+          "P4-C08"
+        ],
+        "testIds": [
+          "T-BP-AC01"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC02",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C07"
+        ],
+        "testIds": [
+          "T-BP-AC02"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC03",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C06",
+          "P4-C07"
+        ],
+        "testIds": [
+          "T-BP-AC03"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC04",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C01",
+          "P4-C06"
+        ],
+        "testIds": [
+          "T-BP-AC04"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC05",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P4-C07",
+          "P5-C04",
+          "P6-C06"
+        ],
+        "testIds": [
+          "T-BP-AC05"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BP-AC06",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C04"
+        ],
+        "testIds": [
+          "T-BP-AC06"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC07",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C07"
+        ],
+        "testIds": [
+          "T-BP-AC07"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC08",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C01"
+        ],
+        "testIds": [
+          "T-BP-AC08"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC09",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C04"
+        ],
+        "testIds": [
+          "T-BP-AC09"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC10",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C05"
+        ],
+        "testIds": [
+          "T-BP-AC10"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC11",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P4-C08",
+          "P7-C04"
+        ],
+        "testIds": [
+          "T-BP-AC11"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC12",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P6-C05"
+        ],
+        "testIds": [
+          "T-BP-AC12"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "BP-AC13",
+        "classification": "RELEASE_1_BOUNDED_SCOPE",
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "testIds": [
+          "T-BP-AC13"
+        ],
+        "scopeBoundary": "Existing requirement remains whole and NOT_ACCEPTED; Release1 covers only booking/manual-bank/physical-access or essential operational clauses. Remaining clauses retain original MVP acceptance."
+      },
+      {
+        "requirementId": "CN-M-REVENUE-BOOKINGS",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-REVENUE-BOOKINGS"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-ROOM-OCCUPANCY",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-ROOM-OCCUPANCY"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-REVENUE-TREND",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-REVENUE-TREND"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-POPULAR-TIME-SLOTS",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-POPULAR-TIME-SLOTS"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-ROOM-UTILIZATION",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-ROOM-UTILIZATION"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-BOOKING-STATISTICS",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-BOOKING-STATISTICS"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-FINANCIAL-KPIS",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-FINANCIAL-KPIS"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-SYSTEM-IOT-STATUS",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-SYSTEM-IOT-STATUS"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-PAYMENT-ADDON-BREAKDOWN",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-PAYMENT-ADDON-BREAKDOWN"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "CN-M-BANK-PAYMENT-REVIEW-FINANCES",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C02"
+        ],
+        "testIds": [
+          "T-CN-M-BANK-PAYMENT-REVIEW-FINANCES"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BN-M01",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C03",
+          "P10-C05"
+        ],
+        "testIds": [
+          "T-BN-M01"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BN-M02",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "testIds": [
+          "T-BN-M02"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BN-M03",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "testIds": [
+          "T-BN-M03"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BN-M04",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "testIds": [
+          "T-BN-M04"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BN-M05",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "testIds": [
+          "T-BN-M05"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BN-M06",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C03",
+          "P10-C05"
+        ],
+        "testIds": [
+          "T-BN-M06"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BN-M07",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "testIds": [
+          "T-BN-M07"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      },
+      {
+        "requirementId": "BN-M08",
+        "classification": "POST_RELEASE_1_RETAINED_MVP",
+        "criterionIds": [
+          "P9-C03"
+        ],
+        "testIds": [
+          "T-BN-M08"
+        ],
+        "scopeBoundary": "Preserved full MVP obligation; no execution deferral approval, dependency removal or formal acceptance is implied."
+      }
+    ],
+    "criterionMapping": [
+      {
+        "criterionId": "P0-C01",
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P0-C02",
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P0-C03",
+        "requirementIds": [
+          "PR-UI-001",
+          "CN-NFR-02"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P0-C04",
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P0-C05",
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P0-C06",
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001",
+          "CN-NFR-02"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P0-C07",
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-05"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P0-C08",
+        "requirementIds": [
+          "CN-NFR-06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P1-C01",
+        "requirementIds": [
+          "CN-NFR-03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P1-C02",
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P1-C03",
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P1-C04",
+        "requirementIds": [
+          "CN-C02",
+          "CN-A06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P1-C05",
+        "requirementIds": [
+          "CN-NFR-02"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P1-C06",
+        "requirementIds": [
+          "PR-UI-001",
+          "CN-NFR-01"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P2-C01",
+        "requirementIds": [
+          "CN-C01",
+          "CN-A03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P2-C02",
+        "requirementIds": [
+          "PR-PKG-001",
+          "CN-A12",
+          "PK-AC01",
+          "PK-AC02",
+          "PK-AC03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P2-C03",
+        "requirementIds": [
+          "PK-AC04",
+          "PK-AC05",
+          "PK-AC06",
+          "PK-AC09",
+          "PK-AC11"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P2-C04",
+        "requirementIds": [
+          "CN-C01",
+          "PR-UI-001"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P2-C05",
+        "requirementIds": [
+          "CN-A04",
+          "CN-A10"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P2-C06",
+        "requirementIds": [
+          "BR-02",
+          "PK-AC03",
+          "PK-AC04",
+          "PK-AC11"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P3-C01",
+        "requirementIds": [
+          "CN-C04",
+          "BR-03",
+          "BR-04",
+          "BR-05",
+          "BR-10",
+          "PK-AC07",
+          "PK-AC10"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P3-C02",
+        "requirementIds": [
+          "BR-01",
+          "BR-02",
+          "BR-03",
+          "BR-06",
+          "CN-A03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P3-C03",
+        "requirementIds": [
+          "CN-C03",
+          "BR-07"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P3-C04",
+        "requirementIds": [
+          "CN-C03",
+          "CN-A02",
+          "BR-10"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P3-C05",
+        "requirementIds": [
+          "CN-C03",
+          "BR-07"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P3-C06",
+        "requirementIds": [
+          "CN-C08",
+          "CN-C03",
+          "CN-NFR-02"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P4-C01",
+        "requirementIds": [
+          "CN-C05",
+          "CN-C10",
+          "BP-AC04",
+          "BP-AC08"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P4-C02",
+        "requirementIds": [
+          "CN-C05",
+          "CN-A06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P4-C03",
+        "requirementIds": [
+          "BR-08",
+          "CN-C02",
+          "CN-C05"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P4-C04",
+        "requirementIds": [
+          "CN-C10",
+          "BP-AC06",
+          "BP-AC09"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P4-C05",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-A13",
+          "BP-AC10"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P4-C06",
+        "requirementIds": [
+          "CN-A13",
+          "BP-AC01",
+          "BP-AC03",
+          "BP-AC04"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P4-C07",
+        "requirementIds": [
+          "BP-AC02",
+          "BP-AC03",
+          "BP-AC07"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P4-C08",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-A13",
+          "CN-C10",
+          "BP-AC01",
+          "BP-AC11"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P5-C05",
+        "requirementIds": [
+          "CN-C07",
+          "CN-SUP-01"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P5-C06",
+        "requirementIds": [
+          "CN-A07",
+          "CN-C08",
+          "CN-NFR-03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P6-C01",
+        "requirementIds": [
+          "CN-A02",
+          "CN-C08",
+          "BR-10"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P6-C02",
+        "requirementIds": [
+          "CN-A02",
+          "PK-AC07"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P6-C03",
+        "requirementIds": [
+          "CN-A02",
+          "BR-06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P6-C04",
+        "requirementIds": [
+          "CN-A02",
+          "CN-O01"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P6-C05",
+        "requirementIds": [
+          "CN-A07",
+          "BP-AC12"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P6-C06",
+        "requirementIds": [
+          "CN-A02",
+          "CN-A07"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P7-C01",
+        "requirementIds": [
+          "CN-O01",
+          "CN-NFR-05"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P7-C02",
+        "requirementIds": [
+          "CN-O01",
+          "CN-O04"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P7-C03",
+        "requirementIds": [
+          "CN-C07",
+          "BR-09"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P7-C04",
+        "requirementIds": [
+          "CN-O01",
+          "BP-AC11"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P7-C05",
+        "requirementIds": [
+          "BR-08",
+          "CN-NFR-05"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P7-C06",
+        "requirementIds": [
+          "CN-O01",
+          "CN-O04",
+          "CN-NFR-05"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P8-C01",
+        "requirementIds": [
+          "CN-O02",
+          "CN-A05"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P8-C02",
+        "requirementIds": [
+          "CN-O02",
+          "CN-O03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P8-C03",
+        "requirementIds": [
+          "CN-A05",
+          "CN-O04"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P8-C04",
+        "requirementIds": [
+          "CN-O03",
+          "BR-06",
+          "CN-NFR-05"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P8-C05",
+        "requirementIds": [
+          "CN-A03",
+          "CN-O03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P8-C06",
+        "requirementIds": [
+          "CN-SUP-01",
+          "CN-O04"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P8-C07",
+        "requirementIds": [
+          "CN-NFR-05",
+          "CN-O04"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P9-C01",
+        "requirementIds": [
+          "CN-A01",
+          "CN-A04",
+          "CN-A06",
+          "CN-A10",
+          "CN-A11"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P9-C03",
+        "requirementIds": [
+          "BP-AC13"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P9-C04",
+        "requirementIds": [
+          "CN-NFR-02"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P9-C05",
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P9-C06",
+        "requirementIds": [
+          "CN-NFR-01",
+          "CN-NFR-04"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P9-C07",
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-05",
+          "CN-SUP-01"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P9-C08",
+        "requirementIds": [
+          "CN-NFR-06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P10-C01",
+        "requirementIds": [
+          "CN-NFR-05",
+          "CN-NFR-06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P10-C02",
+        "requirementIds": [
+          "CN-NFR-04",
+          "CN-NFR-06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P10-C03",
+        "requirementIds": [
+          "CN-NFR-05",
+          "CN-NFR-06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P10-C04",
+        "requirementIds": [
+          "CN-NFR-05",
+          "CN-A07"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P10-C05",
+        "requirementIds": [
+          "CN-O04"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P10-C06",
+        "requirementIds": [
+          "CN-SUP-01",
+          "CN-NFR-05"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      },
+      {
+        "criterionId": "P10-C07",
+        "requirementIds": [
+          "CN-NFR-06"
+        ],
+        "coverage": "BOUNDED_RELEASE_SLICE_ONLY_NO_FULL_CRITERION_CLOSURE"
+      }
+    ],
+    "existingSoftwareEvidence": {
+      "baselineCI": "40122819485 SUCCESS at 0d936c059dff8b3a4f6f2b3586ac2c29e452e1cf",
+      "syntheticRealStackCampaign": "32PASS/0FAIL/0NOT_RUN at baseline;historical24actuallyrerun plus8extensiongroups;not rerun by planning",
+      "backendTests": 807,
+      "frontendTests": 481,
+      "reuseGroups": [
+        "identity",
+        "rooms",
+        "packages",
+        "inventory",
+        "quotes",
+        "verification",
+        "bank",
+        "bookings",
+        "guests",
+        "access",
+        "iot",
+        "operations",
+        "notifications",
+        "auditRead",
+        "bankReport",
+        "recovery"
+      ],
+      "limits": "Bounded automated software evidence only.32PASS does not include real-bank or physical-lock qualification;none of the future21-day tests executed by this planning task."
+    },
+    "confirmedGaps": [
+      {
+        "id": "R1-GAP-BANK",
+        "evidence": "backend/src/main/java/com/cinenest/payments/internal/BankPolicy.java:16-24",
+        "gap": "synthetic-quotation profile, synthetic policy and approved synthetic fixture hashes only;real invoices,receipts,bank instructions,commercial lifecycle and evidence/privacy are unqualified"
+      },
+      {
+        "id": "R1-GAP-LOCK",
+        "evidence": "backend/src/main/java/com/cinenest/access/internal/AccessPolicy.java;AccessService.java;LocalAccessSimulator.java",
+        "gap": "Opaque single-use synthetic credential/SIMULATOR_INSTALLED only;no selected hardware-specific PIN adapter,physical re-entry or offline/revocation/egress acceptance"
+      },
+      {
+        "id": "R1-GAP-ROOM",
+        "evidence": "backend/src/main/java/com/cinenest/booking/internal/InventoryController.java;MaintenanceImpactController.java",
+        "gap": "Existing staff inventory/maintenance-impact reads and synthetic operations cases are not a temporary closure/reopening command or physical clearance"
+      },
+      {
+        "id": "R1-GAP-PREREQUISITES",
+        "evidence": "knowledge/PROJECT.md#manual-payment-first;#accountability-appointments;knowledge/execution/change-sets.json",
+        "gap": "Named venue/finance/legal/privacy/safety appointments,commercial policies,delivery/recovery/provider configuration and launch graph including gateway-dependent edges remain open"
+      }
+    ],
+    "approvalGates": [
+      {
+        "id": "G-COMMERCIAL",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [
+          "OD-17",
+          "OD-20",
+          "OD-22",
+          "OD-25"
+        ],
+        "requiredEvidence": "Owner and qualified finance/legal reviewers: approve actual venue package prices, LKR tax/fees, terms/consent, content/exhibition rights where offered, real commercial quotation and confirmation semantics; current indicative/synthetic policy is insufficient.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      },
+      {
+        "id": "G-BANK",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [
+          "OD-24",
+          "OD-27",
+          "OD-28",
+          "OD-29"
+        ],
+        "requiredEvidence": "Owner/finance: approved receiving-account instructions and independent change control; exact-venue named credit verifier and separate allocator; limits, review staffing, deadlines, late/partial/excess/disputed funds and correction/refund handling. No bank account, real-money limit or app grant supplied.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      },
+      {
+        "id": "G-PRIVACY",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [
+          "OD-03",
+          "OD-05",
+          "OD-15"
+        ],
+        "requiredEvidence": "Qualified privacy/legal owner: real ID/payslip handling, lawful processing/consent, storage region, access, retention/deletion, quarantine/scanning, safe preview, backup and incident response. Synthetic fixtures are not production acceptance.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      },
+      {
+        "id": "G-HARDWARE",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [
+          "OD-02"
+        ],
+        "requiredEvidence": "Owner and qualified installer: exact lock/controller make, model, firmware, documented protocol/SDK/license, PIN format/limits, idempotency/readback, local clock/timezone, offline/reboot/re-entry/revocation and power/manual override. No vendor or compatible PIN format selected.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      },
+      {
+        "id": "G-ADMISSION",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [
+          "OD-03",
+          "OD-04",
+          "OD-05",
+          "OD-13",
+          "OD-29"
+        ],
+        "requiredEvidence": "Named venue staff and qualified safety/privacy reviewers: all-guest original-ID/age check, physically enforced pre-entry gate, staffed support/cleaning, vacancy/readiness observation, fallback and independent emergency egress. No timer/ACK is clearance.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      },
+      {
+        "id": "G-ROOM-BLOCK",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [
+          "OD-10",
+          "OD-13",
+          "OD-29"
+        ],
+        "requiredEvidence": "Owner/Operations and Booking/Inventory: approve one narrow temporary-unavailability command, exact scope/revision/conflict handling and independent release review; impact preview and case closure do not mutate inventory or prove reopening safety.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      },
+      {
+        "id": "G-DELIVERY",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [
+          "OD-01",
+          "OD-28"
+        ],
+        "requiredEvidence": "Owner: approved real sign-in deployment/OIDC client/TLS and protected customer credential retrieval/support channel; synthetic in-app notices are not live SMS/email. No secret in notifications, logs or URLs.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      },
+      {
+        "id": "G-RECOVERY",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [
+          "OD-15"
+        ],
+        "requiredEvidence": "Owner/operator/custodian and independent reviewer: separately admitted non-destructive staging recovery rehearsal, agreed RPO/RTO, secrets/backups, monitoring/on-call and support acceptance. No GnuPG or historical runtime reused implicitly.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      },
+      {
+        "id": "G-LAUNCH",
+        "status": "BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+        "decisionIds": [],
+        "requiredEvidence": "Existing CN-ACCEPT-001/CN-LAUNCH-001 graph, D0-D6 and all relevant requirements remain authoritative, including unresolved gateway-dependent edges. Manual-first priority alone does not waive them. Formal release-specific scope/alternative demonstration and exact-build venue/provider/safety/customer acceptance plus explicit deployment authorization are still required.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+      }
+    ],
+    "earlyInputs": "Request exact hardware/protocol/firmware and qualified installer plus venue/finance/privacy/safety appointments on Day1;resolve by Day3 if the21-day target is to remain credible.Overlapping external evidence preparation does not bypass single-writer/source approvals.Week2/3 cannot wait to discover these inputs.",
+    "schedule": [
+      {
+        "day": 1,
+        "targetDate": "2026-10-25",
+        "taskId": "CN-R1-PLAN-001",
+        "title": "Release1 scope, gates and schedule",
+        "requirementIds": [
+          "CN-AGENT-WORKFLOW-001",
+          "CN-NFR-06"
+        ],
+        "owningModules": [
+          "foundation"
+        ],
+        "deliverable": "Release1 scope, gates and schedule",
+        "dependencies": [],
+        "approvalGates": [],
+        "status": "AUTHORIZED_DOCUMENTATION_ONLY",
+        "implementationScope": "Record only this planning overlay; retain92requirements/74criteria/11workstreams and acceptance.",
+        "tests": "Knowledge/design, traceability, decisions, dependency/manifest, governance positive/negative, clean checkout and whitespace",
+        "definitionOfDone": "Reviewed exact docs-only diff, controlled successor, push and exact-source CI; no application changes",
+        "releaseBlocker": "No implementation authority supplied by this schedule; real-stack evidence/environment admission and separate task scope required",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 2,
+        "targetDate": "2026-10-26",
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "title": "Existing customer booking to bank-pending journey",
+        "requirementIds": [
+          "CN-C01",
+          "CN-C02",
+          "CN-C03",
+          "CN-C04",
+          "CN-C05",
+          "CN-C10",
+          "BR-06",
+          "BR-07",
+          "BR-10"
+        ],
+        "owningModules": [
+          "booking",
+          "pricing",
+          "identity",
+          "verification",
+          "payments"
+        ],
+        "deliverable": "Existing customer booking to bank-pending journey",
+        "dependencies": [
+          "CN-R1-PLAN-001"
+        ],
+        "approvalGates": [],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "Extend/reuse existing admitted real-stack harness: discovery/calendar, explicit hold, quote/revision acceptance, synthetic verification and explicit bank request. Preserve actual domain sequence; no automatic hold/payment.",
+        "tests": "Real Chromium/Next/Spring/PostgreSQL, ownership, CSRF, expiry, exact money, interrupted requests and committed DB state; no intercepted business APIs",
+        "definitionOfDone": "Source-backed continuous trace reaches authoritative pending request without calling it confirmed; no domain/financial mutations beyond synthetic commands",
+        "releaseBlocker": "No implementation authority supplied by this schedule; real-stack evidence/environment admission and separate task scope required",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 3,
+        "targetDate": "2026-10-27",
+        "taskId": "CN-R1-POLICY-READINESS-001",
+        "title": "Commercial, privacy, staff and hardware prerequisites",
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-NFR-05",
+          "CN-C05",
+          "CN-C10",
+          "CN-O01"
+        ],
+        "owningModules": [
+          "identity",
+          "payments",
+          "access",
+          "rooms"
+        ],
+        "deliverable": "Commercial, privacy, staff and hardware prerequisites",
+        "dependencies": [
+          "CN-R1-PLAN-001"
+        ],
+        "approvalGates": [
+          "G-COMMERCIAL",
+          "G-BANK",
+          "G-PRIVACY",
+          "G-HARDWARE",
+          "G-ADMISSION"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One bounded readiness record of supplied exact-venue approvals/actor independence/actual hardware evidence; no inferred approval or grants. Request these inputs from Day1, not Week3.",
+        "tests": "Validate provenance, scoped approvals, unresolved decisions and reviewer independence",
+        "definitionOfDone": "Every prerequisite explicitly approved/evidenced or stays BLOCKED; no real funds/IDs/door operation",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 4,
+        "targetDate": "2026-10-28",
+        "taskId": "CN-R1-CUSTOMER-BOOKING-RECOVERY-001",
+        "title": "Customer pending-state recovery regression",
+        "requirementIds": [
+          "CN-C03",
+          "CN-C08",
+          "CN-C10",
+          "CN-NFR-01",
+          "CN-NFR-02"
+        ],
+        "owningModules": [
+          "booking",
+          "payments"
+        ],
+        "deliverable": "Customer pending-state recovery regression",
+        "dependencies": [
+          "CN-R1-BOOKING-JOURNEY-E2E-001"
+        ],
+        "approvalGates": [],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One test-only customer reload/unknown-result regression through existing routes; fix only separately approved minimal proven defect.",
+        "tests": "Lost response, expired session, changed quote, wrong owner, stale parsed response, 375/768/1280px and keyboard",
+        "definitionOfDone": "No duplicate request or false success; original command identity and authoritative expired/conflict recovery retained",
+        "releaseBlocker": "No implementation authority supplied by this schedule; real-stack evidence/environment admission and separate task scope required",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 5,
+        "targetDate": "2026-10-29",
+        "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+        "title": "Approved commercial quote mode boundary",
+        "requirementIds": [
+          "CN-C04",
+          "CN-A12",
+          "BR-01",
+          "BR-02",
+          "BR-03",
+          "BR-04",
+          "BR-05",
+          "BR-10",
+          "PK-AC07"
+        ],
+        "owningModules": [
+          "pricing",
+          "rooms"
+        ],
+        "deliverable": "Approved commercial quote mode boundary",
+        "dependencies": [
+          "CN-R1-POLICY-READINESS-001"
+        ],
+        "approvalGates": [
+          "G-COMMERCIAL"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "Propose/implement only one separately approved production-policy quote gate; preserve immutable current synthetic behavior. Exact policy/schema/API scope must be approved before code.",
+        "tests": "Exact minor units, policy/version binding, capacity/duration, DST, hold TTL, rollback and concurrency",
+        "definitionOfDone": "One reviewed bounded source-backed commercial quote slice; no sample rate promoted to actual price; larger scope split",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 6,
+        "targetDate": "2026-10-30",
+        "taskId": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+        "title": "Temporary room-unavailability command boundary",
+        "requirementIds": [
+          "CN-A03",
+          "CN-O03",
+          "BR-06"
+        ],
+        "owningModules": [
+          "booking",
+          "rooms"
+        ],
+        "deliverable": "Temporary room-unavailability command boundary",
+        "dependencies": [
+          "CN-R1-PLAN-001"
+        ],
+        "approvalGates": [
+          "G-ROOM-BLOCK"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately approved temporary room-block create command after exact permission/interval/conflict policy approval; reuse Booking-owned inventory/public Rooms constraints. No guessed write permission or automatic reopening; release/reopening remains separately scoped.",
+        "tests": "PostgreSQL concurrent hold/confirmation/block conflicts, exact write authority, mandatory-audit rollback and denied reads/writes",
+        "definitionOfDone": "One exact-room temporary block command and focused tests after separate authorization,or explicit BLOCKED;never infer physical clearance or reopen automatically",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 7,
+        "targetDate": "2026-10-31",
+        "taskId": "CN-R1-BOOKING-WEEK1-GATE-001",
+        "title": "Booking software checkpoint",
+        "requirementIds": [
+          "CN-C03",
+          "CN-C04",
+          "CN-C08",
+          "CN-NFR-01",
+          "CN-NFR-02"
+        ],
+        "owningModules": [
+          "booking",
+          "pricing",
+          "identity"
+        ],
+        "deliverable": "Booking software checkpoint",
+        "dependencies": [
+          "CN-R1-BOOKING-JOURNEY-E2E-001",
+          "CN-R1-CUSTOMER-BOOKING-RECOVERY-001"
+        ],
+        "approvalGates": [],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "Execute existing admitted relevant real-stack regressions and mobile/browser checks; keep commercial qualification separate if Day5 blocked.",
+        "tests": "Competing bookings, expired holds/quote, database exclusion, restart, timezone, explicit submission and exact-source CI",
+        "definitionOfDone": "Software evidence for reused journey recorded; commercial gaps explicit; no formal criterion closure",
+        "releaseBlocker": "No implementation authority supplied by this schedule; real-stack evidence/environment admission and separate task scope required",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 8,
+        "targetDate": "2026-11-01",
+        "taskId": "CN-R1-PAYSLIP-BOUNDARY-001",
+        "title": "Private real-evidence intake boundary",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-C10",
+          "BP-AC04",
+          "BP-AC08",
+          "CN-NFR-02"
+        ],
+        "owningModules": [
+          "payments",
+          "verification"
+        ],
+        "deliverable": "Private real-evidence intake boundary",
+        "dependencies": [
+          "CN-R1-POLICY-READINESS-001"
+        ],
+        "approvalGates": [
+          "G-PRIVACY",
+          "G-BANK"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately approved private intake/scanning adapter boundary; retain synthetic fixture-only path. No real documents used before approved environment and handling procedure.",
+        "tests": "Malformed/oversize/polyglot files, private preview, quarantine, unknown upload, same command recovery, owner/venue denial",
+        "definitionOfDone": "Real-evidence handling contract and one bounded adapter qualified in admitted staging; no receipt-as-credit claim",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 9,
+        "targetDate": "2026-11-02",
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+        "title": "Versioned actual bank instructions boundary",
+        "requirementIds": [
+          "CN-C10",
+          "BP-AC06",
+          "BP-AC09"
+        ],
+        "owningModules": [
+          "payments"
+        ],
+        "deliverable": "Versioned actual bank instructions boundary",
+        "dependencies": [
+          "CN-R1-POLICY-READINESS-001"
+        ],
+        "approvalGates": [
+          "G-BANK",
+          "G-COMMERCIAL"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately approved instructions/configuration read path with exact receiving-account approval and immutable request binding; no bank API integration or real account data in repository.",
+        "tests": "Old/new version races, revoked authority, no private destination leakage, exact deadlines and safe status",
+        "definitionOfDone": "Approved instructions supplied and version-bound; no live payment collection yet",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 10,
+        "targetDate": "2026-11-03",
+        "taskId": "CN-R1-INDEPENDENT-CREDIT-001",
+        "title": "Independent receiving-credit record boundary",
+        "requirementIds": [
+          "CN-A13",
+          "CN-A07",
+          "BP-AC01",
+          "BP-AC03",
+          "BP-AC04"
+        ],
+        "owningModules": [
+          "payments",
+          "identity"
+        ],
+        "deliverable": "Independent receiving-credit record boundary",
+        "dependencies": [
+          "CN-R1-BANK-INSTRUCTIONS-001",
+          "CN-R1-PAYSLIP-BOUNDARY-001"
+        ],
+        "approvalGates": [
+          "G-BANK"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately approved real-manual credit-record adapter/command under current separation; source reference dedupe, mandatory audit. Reviewer receipt decision never creates credit automatically.",
+        "tests": "Customer/verifier/allocator independence, exact venue/current grants, duplicate source, audit rollback, receipts and concurrent reviewers",
+        "definitionOfDone": "Independent authoritative bank evidence recorded once in qualified staging; no allocation/confirmation by this command",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 11,
+        "targetDate": "2026-11-04",
+        "taskId": "CN-R1-GUARDED-CONFIRM-001",
+        "title": "Manual-credit guarded confirmation boundary",
+        "requirementIds": [
+          "CN-A13",
+          "BP-AC01",
+          "BP-AC02",
+          "BP-AC03",
+          "BP-AC07",
+          "BP-AC11"
+        ],
+        "owningModules": [
+          "payments",
+          "booking",
+          "pricing"
+        ],
+        "deliverable": "Manual-credit guarded confirmation boundary",
+        "dependencies": [
+          "CN-R1-INDEPENDENT-CREDIT-001",
+          "CN-R1-COMMERCIAL-QUOTE-001"
+        ],
+        "approvalGates": [
+          "G-BANK",
+          "G-COMMERCIAL"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately approved allocator/confirmation mode boundary reusing public ports and inventory guards. Never promote SIMULATED_CONFIRMED to commercial state by label substitution.",
+        "tests": "Allocation caps, row locks, competing holds, stale revisions, expired inventory and atomic failed commit recovery",
+        "definitionOfDone": "No duplicate allocation, no displaced booking; actual financial provenance remains after failed confirmation; no physical-access readiness claim",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 12,
+        "targetDate": "2026-11-05",
+        "taskId": "CN-R1-BANK-EXCEPTIONS-001",
+        "title": "Manual finance exception reconciliation boundary",
+        "requirementIds": [
+          "CN-A07",
+          "BP-AC02",
+          "BP-AC03",
+          "BP-AC07",
+          "BP-AC12"
+        ],
+        "owningModules": [
+          "payments"
+        ],
+        "deliverable": "Manual finance exception reconciliation boundary",
+        "dependencies": [
+          "CN-R1-INDEPENDENT-CREDIT-001"
+        ],
+        "approvalGates": [
+          "G-BANK"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One bounded exception/reconciliation unit: pending/late/insufficient/excess/disputed/duplicate evidence without forfeiture or automatic refund. Split new business commands for separate authority.",
+        "tests": "Amounts retained, duplicate/changed payload, mandatory audit failure, source-linked obligations and unknown result",
+        "definitionOfDone": "Every unmatched real amount traceable; refund obligation distinct from approval/settlement; unresolved cases block affected confirmation",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 13,
+        "targetDate": "2026-11-06",
+        "taskId": "CN-R1-BANK-ADMIN-E2E-001",
+        "title": "Finance staff and customer status continuity",
+        "requirementIds": [
+          "CN-A02",
+          "CN-A07",
+          "CN-A13",
+          "CN-A11",
+          "CN-C08",
+          "BP-AC04",
+          "BP-AC10",
+          "BP-AC13"
+        ],
+        "owningModules": [
+          "payments",
+          "booking",
+          "notifications"
+        ],
+        "deliverable": "Finance staff and customer status continuity",
+        "dependencies": [
+          "CN-R1-GUARDED-CONFIRM-001",
+          "CN-R1-BANK-EXCEPTIONS-001"
+        ],
+        "approvalGates": [
+          "G-BANK",
+          "G-PRIVACY",
+          "G-DELIVERY"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately authorized real-stack admin/customer continuity test; reuse existing queues/protected reads. Live notifications require separate provider/event scope.",
+        "tests": "Private evidence denial, current venue permissions, reviewer decisions, committed funds/booking versus pending status, zero secret exposure",
+        "definitionOfDone": "Customer/staff see separate authoritative evidence/credit/allocation/booking states; durable queue survives notification failure",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 14,
+        "targetDate": "2026-11-07",
+        "taskId": "CN-R1-BANK-WEEK2-GATE-001",
+        "title": "Real manual-bank qualification checkpoint",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-C10",
+          "CN-A13",
+          "BP-AC01",
+          "BP-AC03",
+          "BP-AC07",
+          "BP-AC11",
+          "CN-NFR-03"
+        ],
+        "owningModules": [
+          "payments",
+          "booking"
+        ],
+        "deliverable": "Real manual-bank qualification checkpoint",
+        "dependencies": [
+          "CN-R1-BANK-ADMIN-E2E-001",
+          "CN-R1-BOOKING-WEEK1-GATE-001"
+        ],
+        "approvalGates": [
+          "G-BANK",
+          "G-COMMERCIAL",
+          "G-PRIVACY"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "Qualified independent finance owner reviews exact build/procedures/evidence; controlled real test transfer needs separate explicit operational authorization. Otherwise mark NOT_RUN.",
+        "tests": "Actual receiving-account evidence and ledger reconciliation, wrong/late/duplicate funds, failure/restart recovery",
+        "definitionOfDone": "Signed venue/build/independent-review evidence or BLOCKED; green CI cannot qualify real banking",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 15,
+        "targetDate": "2026-11-08",
+        "taskId": "CN-R1-LOCK-ADAPTER-001",
+        "title": "Selected hardware adapter boundary",
+        "requirementIds": [
+          "CN-O01",
+          "CN-O04",
+          "CN-C07",
+          "BR-09"
+        ],
+        "owningModules": [
+          "access",
+          "iot"
+        ],
+        "deliverable": "Selected hardware adapter boundary",
+        "dependencies": [
+          "CN-R1-POLICY-READINESS-001"
+        ],
+        "approvalGates": [
+          "G-HARDWARE",
+          "G-ADMISSION"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately approved hardware-specific port/adapter after contract/firmware review; reuse durable operation IDs/secrets boundary; opaque single-use simulator token is not a PIN.",
+        "tests": "Vendor conformance, expiry and readback, stale ACK/replay, wrong room/revision and secret exclusion",
+        "definitionOfDone": "Exact hardware/firmware adapter evidence; no door command without separately authorized bench/hardware environment",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 16,
+        "targetDate": "2026-11-09",
+        "taskId": "CN-R1-PIN-LIFECYCLE-001",
+        "title": "Booking-bound PIN provisioning boundary",
+        "requirementIds": [
+          "CN-O01",
+          "CN-C07",
+          "BR-09",
+          "BP-AC11"
+        ],
+        "owningModules": [
+          "access",
+          "booking",
+          "payments"
+        ],
+        "deliverable": "Booking-bound PIN provisioning boundary",
+        "dependencies": [
+          "CN-R1-LOCK-ADAPTER-001",
+          "CN-R1-GUARDED-CONFIRM-001"
+        ],
+        "approvalGates": [
+          "G-HARDWARE",
+          "G-ADMISSION",
+          "G-BANK"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately approved device-format PIN lifecycle: purchased interval, activation/expiry/revocation, distinct request/ACK/physical state; retain existing history and current eligibility.",
+        "tests": "Provision/revoke races, old revision callback, expiry boundary, duplicate request and private reveal",
+        "definitionOfDone": "Current qualified paid booking binds room/PIN/window; no cleaning-buffer access; failed access does not erase money",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 17,
+        "targetDate": "2026-11-10",
+        "taskId": "CN-R1-CHECKIN-GATE-001",
+        "title": "Staff-supported original-ID gate boundary",
+        "requirementIds": [
+          "BR-08",
+          "CN-C05",
+          "CN-O01",
+          "CN-NFR-05"
+        ],
+        "owningModules": [
+          "verification",
+          "access",
+          "booking"
+        ],
+        "deliverable": "Staff-supported original-ID gate boundary",
+        "dependencies": [
+          "CN-R1-PIN-LIFECYCLE-001"
+        ],
+        "approvalGates": [
+          "G-ADMISSION",
+          "G-PRIVACY"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately approved all-guest on-site attestation and physically enforced gate; roster/self-declaration is not age proof. No real ID evidence stored by default.",
+        "tests": "Underage/unverified/absent guest, wrong booking, venue/suspended staff, revoked attestation and fail-closed bypass attempts",
+        "definitionOfDone": "Approved staffing and physical gate prevent pre-check-in incoming entry; exit remains independent",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 18,
+        "targetDate": "2026-11-11",
+        "taskId": "CN-R1-OFFLINE-REENTRY-001",
+        "title": "Installed lock offline/re-entry qualification",
+        "requirementIds": [
+          "CN-O01",
+          "CN-O04",
+          "CN-NFR-05"
+        ],
+        "owningModules": [
+          "access",
+          "iot"
+        ],
+        "deliverable": "Installed lock offline/re-entry qualification",
+        "dependencies": [
+          "CN-R1-PIN-LIFECYCLE-001",
+          "CN-R1-CHECKIN-GATE-001"
+        ],
+        "approvalGates": [
+          "G-HARDWARE",
+          "G-ADMISSION"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately authorized installed-hardware qualification session for repeated valid-window entry, wrong/expired PIN, network outage/reboot/clock drift and revocation uncertainty.",
+        "tests": "Actual door observations versus ACK, loss before/after provisioning, power failure, staff fallback and no replay after revocation",
+        "definitionOfDone": "Named reviewer records device/firmware/configuration/observations; simulator evidence alone fails physical gate",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 19,
+        "targetDate": "2026-11-12",
+        "taskId": "CN-R1-READINESS-EGRESS-001",
+        "title": "Room block, staffed fallback and independent egress qualification",
+        "requirementIds": [
+          "CN-A03",
+          "CN-O03",
+          "CN-O04",
+          "CN-NFR-05",
+          "CN-SUP-01",
+          "BR-06"
+        ],
+        "owningModules": [
+          "rooms",
+          "booking",
+          "access"
+        ],
+        "deliverable": "Room block, staffed fallback and independent egress qualification",
+        "dependencies": [
+          "CN-R1-ROOM-BLOCK-CONTRACT-001",
+          "CN-R1-OFFLINE-REENTRY-001"
+        ],
+        "approvalGates": [
+          "G-ROOM-BLOCK",
+          "G-ADMISSION",
+          "G-HARDWARE"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately authorized venue safety rehearsal; temporary inventory-block command must already be separately implemented/tested, not invented in rehearsal. Vacancy/cleaning/readiness need physical observation.",
+        "tests": "Qualified independent egress with power/network failure, unavailable room/support response and conflicting future booking",
+        "definitionOfDone": "Actual specialist and staff evidence; no app/cloud/PIN-dependent exit; unresolved room remains unavailable",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 20,
+        "targetDate": "2026-11-13",
+        "taskId": "CN-R1-CUSTOMER-UAT-001",
+        "title": "Exact-build customer journey and recovery rehearsal",
+        "requirementIds": [
+          "CN-NFR-01",
+          "CN-NFR-02",
+          "CN-NFR-03",
+          "CN-NFR-04",
+          "CN-NFR-05",
+          "CN-SUP-01"
+        ],
+        "owningModules": [
+          "identity",
+          "booking",
+          "payments",
+          "access",
+          "notifications"
+        ],
+        "deliverable": "Exact-build customer journey and recovery rehearsal",
+        "dependencies": [
+          "CN-R1-BANK-WEEK2-GATE-001",
+          "CN-R1-READINESS-EGRESS-001"
+        ],
+        "approvalGates": [
+          "G-RECOVERY",
+          "G-DELIVERY",
+          "G-LAUNCH"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "One separately authorized exact-build customer UAT/recovery evidence session; approved pilot scope, customer reviewer, monitoring/support and safe staging restore required.",
+        "tests": "Actual customer booking/payment/check-in/entry plus browser/authorization/restart/restore and incident response",
+        "definitionOfDone": "Required reviewers accept scoped evidence; failing/NOT_RUN critical case blocks launch, no formal acceptance auto-update",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      {
+        "day": 21,
+        "targetDate": "2026-11-14",
+        "taskId": "CN-R1-LAUNCH-DECISION-001",
+        "title": "Release go/no-go and controlled pilot decision",
+        "requirementIds": [
+          "CN-NFR-06",
+          "CN-NFR-05",
+          "CN-NFR-04"
+        ],
+        "owningModules": [
+          "foundation"
+        ],
+        "deliverable": "Release go/no-go and controlled pilot decision",
+        "dependencies": [
+          "CN-R1-CUSTOMER-UAT-001"
+        ],
+        "approvalGates": [
+          "G-LAUNCH"
+        ],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "Read-only evidence review and explicit owner launch decision only; deployment/pilot execution requires separate authorization, retained graph prerequisites and rollback owner.",
+        "tests": "All critical acceptance rows verified with build/venue/provider/device evidence and current permissions; no unresolved critical financial/safety blocker",
+        "definitionOfDone": "GO only after authorized reviewer/owner decision and deployment permission; otherwise NO_GO, reschedule affected gates without false release claim",
+        "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      }
+    ],
+    "parallelism": "Only independent separately authorized work may proceed while another gate is blocked;do not execute dependent live-bank/hardware tests.No parallel repository writers or automatic grants implied.",
+    "criticalPath": [
+      "Approved commercial/finance/privacy/venue and actual hardware inputs",
+      "Qualified quote/evidence/instructions and independent credit recording",
+      "Guarded real-manual allocation/confirmation and bank reconciliation",
+      "Selected hardware adapter/PIN plus enforced check-in",
+      "Installed-device/offline/re-entry/egress/readiness qualification",
+      "Exact-build customer UAT,recovery and retained acceptance/dependency gates",
+      "Explicit owner GO and separate deployment/pilot authorization"
+    ],
+    "acceptanceMatrix": [
+      {
+        "id": "CUSTOMER-BOOKING",
+        "requirementIds": [
+          "CN-C01",
+          "CN-C02",
+          "CN-C03",
+          "CN-C04",
+          "CN-C05",
+          "CN-C10"
+        ],
+        "criterionIds": [
+          "P2-C04",
+          "P3-C01",
+          "P3-C02",
+          "P3-C03",
+          "P3-C04",
+          "P3-C05",
+          "P3-C06",
+          "P4-C03"
+        ],
+        "expectedEvidence": "Authenticated customer reaches own pending request using explicit actions and immutable pricing;32PASS supports bounded synthetic reuse only",
+        "currentStatus": "REAL_STACK_SYNTHETIC_VERIFIED_BOUNDED;COMMERCIAL_NOT_VERIFIED",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "COMPETING-EXPIRED",
+        "requirementIds": [
+          "CN-C03",
+          "BR-06",
+          "BR-07",
+          "CN-NFR-02"
+        ],
+        "criterionIds": [
+          "P3-C03",
+          "P3-C05",
+          "P3-C06"
+        ],
+        "expectedEvidence": "PostgreSQL exclusion/current holds/cleaning windows survive competing requests,expiry,restart and command replay",
+        "currentStatus": "SOFTWARE_EVIDENCE_EXISTS;EXACT_RELEASE_BUILD_RECHECK_REQUIRED",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "EVIDENCE",
+        "requirementIds": [
+          "CN-C10",
+          "BP-AC03",
+          "BP-AC04",
+          "BP-AC08",
+          "CN-NFR-02"
+        ],
+        "criterionIds": [
+          "P4-C01",
+          "P4-C05"
+        ],
+        "expectedEvidence": "Reject invalid/duplicate/malicious evidence;private quarantine/preview/history/unknown upload;never receipt-as-funds",
+        "currentStatus": "SYNTHETIC_VERIFIED_BOUNDED;REAL_EVIDENCE_NOT_QUALIFIED",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "BANK-VERIFY-ALLOCATE",
+        "requirementIds": [
+          "PR-BANK-001",
+          "CN-A13",
+          "BP-AC01",
+          "BP-AC02",
+          "BP-AC03",
+          "BP-AC07"
+        ],
+        "criterionIds": [
+          "P4-C04",
+          "P4-C06",
+          "P4-C07",
+          "P4-C08"
+        ],
+        "expectedEvidence": "Independent bank evidence plus separate exact-venue allocation commits once only when inventory/eligibility/current terms permit;late funds retained",
+        "currentStatus": "SYNTHETIC_VERIFIED_BOUNDED;REAL_BANK_BLOCKED",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "AUTHORIZATION",
+        "requirementIds": [
+          "CN-NFR-02",
+          "CN-C08",
+          "CN-A02",
+          "CN-A13",
+          "CN-O01"
+        ],
+        "criterionIds": [
+          "P1-C04",
+          "P1-C05",
+          "P9-C04"
+        ],
+        "expectedEvidence": "Owner/venue/current-session/independent capabilities;denied and revoked scopes;CSRF and no stitching/admin bypass",
+        "currentStatus": "BOUNDED_SOFTWARE_TESTED;PRODUCTION_ASSIGNMENTS_NOT_AUTHORIZED",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "PROVISIONING",
+        "requirementIds": [
+          "CN-O01",
+          "CN-C07",
+          "BP-AC11",
+          "BR-09"
+        ],
+        "criterionIds": [
+          "P7-C01",
+          "P7-C02",
+          "P7-C03",
+          "P7-C04"
+        ],
+        "expectedEvidence": "Exact installed model/firmware binds booking revision/room/purchased window and protected PIN;ACK distinct from physical outcome",
+        "currentStatus": "PHYSICAL_NOT_VERIFIED",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "CHECKIN",
+        "requirementIds": [
+          "BR-08",
+          "CN-C05",
+          "CN-NFR-05"
+        ],
+        "criterionIds": [
+          "P7-C05",
+          "P9-C07"
+        ],
+        "expectedEvidence": "Qualified staff original-ID/all-guest procedure and physically enforced incoming gate;no self-declaration approval",
+        "currentStatus": "NOT_VERIFIED;POLICY_AND_PHYSICAL_GATE_OPEN",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "WRONG-EXPIRED-REENTRY",
+        "requirementIds": [
+          "CN-O01",
+          "CN-O04",
+          "BR-09"
+        ],
+        "criterionIds": [
+          "P7-C06"
+        ],
+        "expectedEvidence": "Installed hardware wrong/expired/revoked PIN denial and approved valid-window re-entry;old credential never resurrected",
+        "currentStatus": "NOT_VERIFIED;CURRENT_SIMULATOR_SINGLE_USE_IS_INSUFFICIENT",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "OFFLINE-EGRESS",
+        "requirementIds": [
+          "CN-O04",
+          "CN-NFR-05",
+          "CN-SUP-01"
+        ],
+        "criterionIds": [
+          "P7-C06",
+          "P8-C06",
+          "P8-C07"
+        ],
+        "expectedEvidence": "Actual power/network/clock/device failure,fallback and independent emergency exit;no cloud/PIN dependency for exit",
+        "currentStatus": "NOT_VERIFIED;QUALIFIED_SPECIALIST_REQUIRED",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "ROOM-READINESS",
+        "requirementIds": [
+          "CN-A03",
+          "CN-O03",
+          "BR-06",
+          "CN-NFR-05"
+        ],
+        "criterionIds": [
+          "P8-C04",
+          "P8-C05"
+        ],
+        "expectedEvidence": "Explicit unavailable-room block plus conflicts and authorized release;observed vacancy/cleaning/readiness independent of timer/ACK",
+        "currentStatus": "PARTIAL_READS_ONLY;COMMAND_POLICY_AND_PHYSICAL_EVIDENCE_MISSING",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "AUDIT-RECOVERY",
+        "requirementIds": [
+          "CN-A11",
+          "CN-NFR-03",
+          "CN-NFR-04"
+        ],
+        "criterionIds": [
+          "P1-C03",
+          "P9-C05",
+          "P9-C06"
+        ],
+        "expectedEvidence": "Mandatory audit,receipt/worker fencing,restart plus separately admitted backup/restore/RPO/RTO and operator evidence",
+        "currentStatus": "SOFTWARE_FOUNDATIONS_VERIFIED;PRODUCTION_RECOVERY_NOT_QUALIFIED",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      },
+      {
+        "id": "LAUNCH",
+        "requirementIds": [
+          "CN-NFR-01",
+          "CN-NFR-02",
+          "CN-NFR-04",
+          "CN-NFR-05",
+          "CN-NFR-06",
+          "CN-SUP-01"
+        ],
+        "criterionIds": [
+          "P0-C07",
+          "P0-C08",
+          "P9-C07",
+          "P9-C08",
+          "P10-C01",
+          "P10-C02",
+          "P10-C03",
+          "P10-C04",
+          "P10-C05",
+          "P10-C06",
+          "P10-C07"
+        ],
+        "expectedEvidence": "Required exact-build venue/provider/device/customer and specialist evidence;retained graph/demos,explicit GO and separate production authorization",
+        "currentStatus": "BLOCKED;NO_ACCEPTANCE_OR_DEPLOYMENT_AUTHORITY",
+        "formalAcceptance": "NOT_ACCEPTED",
+        "releaseTestResult": "NOT_RUN_BY_PLANNING"
+      }
+    ],
+    "postRelease1": "All mapped POST_RELEASE_1_RETAINED_MVP items and unfulfilled clauses remain in Full MVP:hosted PayHere/mixed methods,extension funding/commit,in-session/issued-credential lifecycle,advanced analytics/exports,loyalty/referrals/promotions,full device automation and wider grant/settings administration.No original dependency or demo gate waived.",
+    "nextImplementationTask": {
+      "id": "CN-R1-BOOKING-JOURNEY-E2E-001",
+      "priority": "P0",
+      "scope": "Extend/reuse existing admitted real-stack harness: discovery/calendar, explicit hold, quote/revision acceptance, synthetic verification and explicit bank request. Preserve actual domain sequence; no automatic hold/payment.",
+      "authority": "REQUIRES_SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION",
+      "policyBlocked": false,
+      "definitionOfDone": "Source-backed continuous trace reaches authoritative pending request without calling it confirmed; no domain/financial mutations beyond synthetic commands",
+      "tests": "Real Chromium/Next/Spring/PostgreSQL, ownership, CSRF, expiry, exact money, interrupted requests and committed DB state; no intercepted business APIs"
+    },
+    "acceptanceUnchanged": {
+      "criteriaChecked": 15,
+      "criteriaTotal": 74,
+      "formalRequirementsAccepted": 0,
+      "requirementsTotal": 92,
+      "fullPlansPass": 1,
+      "fullPlansNotRun": 91,
+      "demosHeld": 0,
+      "demosAccepted": 0,
+      "physicalQualified": false,
+      "realBankQualified": false,
+      "productionAuthorized": false
+    }
   }
 }
