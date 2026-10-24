@@ -61,7 +61,18 @@ class SyntheticJourneyIT {
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if(op.equals("extension-cross-booking-fixture")){
+                        if(op.equals("r1-no-request")){
+ UUID q=UUID.fromString(body.get("quoteId").toString());assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request WHERE quote_id=:q").param("q",q).query(Long.class).single()).isZero();
+ assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_command").query(Long.class).single()).isZero();response.put("noRequestOrReceipt",true);
+ }else if(op.equals("r1-pending-inspect")){
+ response.putAll(release1Pending(fixture,body));
+ }else if(op.equals("r1-race-inspect")){
+ @SuppressWarnings("unchecked") var keys=(List<String>)body.get("keys");assertThat(keys).hasSize(2);
+ var receipts=fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_command WHERE command_key IN (:a,:b) AND action='CREATE'").param("a",UUID.fromString(keys.get(0))).param("b",UUID.fromString(keys.get(1))).query(Long.class).single();assertThat(receipts).isEqualTo(1L);
+ var held=fixture.jdbc.sql("SELECT h.state,b.blocking FROM cinenest_booking.reservation_hold h JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id WHERE h.hold_id=:h").param("h",UUID.fromString(body.get("holdId").toString())).query().singleRow();
+ boolean released=Boolean.TRUE.equals(body.get("released"));assertThat(held.get("state")).isEqualTo(released?"RELEASED":"ACTIVE");assertThat(held.get("blocking")).isEqualTo(!released);
+ response.put("createReceipts",receipts);response.put("blocking",held.get("blocking"));response.put("overlapPairs",release1OverlapPairs(fixture));
+ }else if(op.equals("extension-cross-booking-fixture")){
  assertThat(extensionBaseline).isNull();var owner=fixture.signedIn("customer-a");var hold=fixture.held(owner,fixture.request(owner,java.time.LocalDateTime.parse(fixture.local()).plusDays(14).toString()));UUID other=UUID.randomUUID();
  assertThat(fixture.write(owner,"POST","/api/holds/"+hold.get("holdId")+"/release",JSONObjectUtils.toJSONString(Map.of("expectedRevision",hold.get("revision"),"idempotencyKey",UUID.randomUUID().toString()))).statusCode()).isEqualTo(200);
  // Existing recoverySameOwnerOtherPersistedBooking test pattern: read subject only,not a second accepted purchase.
@@ -179,7 +190,8 @@ class SyntheticJourneyIT {
                             if(!List.of("customer-a","customer-b","staff").contains(subject))throw new IllegalArgumentException();
                             BankIntegrationTest.IDP.subject=subject;
                         }else if(op.equals("expire-session")){
-                            fixture.jdbc.sql("DELETE FROM cinenest_identity.http_session WHERE principal_name=:p").param("p",BankIntegrationTest.A.toString()).update();
+                            int expired=fixture.jdbc.sql("UPDATE cinenest_identity.http_session SET last_access_time=0,expiry_time=0 WHERE principal_name=:p AND max_inactive_interval>0").param("p",BankIntegrationTest.A.toString()).update();
+                            assertThat(expired).isPositive();response.put("sessionDeadlineExpired",true);response.put("expiredSessions",expired);
                         }else throw new IllegalArgumentException("Unsupported test control");
                         response.put("controlOk",true);
                     }catch(Exception|AssertionError failure){response=Map.of("controlOk",false,"changedTables",response.getOrDefault("changedTables",List.of()),"newAuditActions",response.getOrDefault("newAuditActions",List.of()));}
@@ -215,6 +227,23 @@ class SyntheticJourneyIT {
         return result;
     }
     // Test-only SELECT observer: no production endpoint, state transition, audit write or private evidence.
+    private static long release1OverlapPairs(BankIntegrationTest f){
+ assertThat(f.jdbc.sql("SELECT count(*) FROM pg_constraint WHERE conrelid='cinenest_booking.inventory_block'::regclass AND contype='x' AND convalidated").query(Long.class).single()).isEqualTo(1L);
+ long result=f.jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_block a JOIN cinenest_booking.inventory_block b ON a.block_id<b.block_id AND a.room_id=b.room_id AND a.blocking AND b.blocking AND tstzrange(a.session_start,a.blocked_until,'[)') && tstzrange(b.session_start,b.blocked_until,'[)')").query(Long.class).single();assertThat(result).isZero();return result;
+    }
+    private static Map<String,Object> release1Pending(BankIntegrationTest f,Map<String,Object> body){
+ UUID quote=UUID.fromString(body.get("quoteId").toString()),request=UUID.fromString(body.get("requestId").toString()),key=UUID.fromString(body.get("commandKey").toString());
+ var bound=f.jdbc.sql("SELECT r.state,r.review_state,r.revision,r.amount_minor,r.currency,h.state AS hold_state,b.blocking,r.snapshot=qr.snapshot AND r.quote_hash=qr.content_hash AND r.amount_minor=(qr.snapshot->>'totalMinor')::bigint AND r.currency=qr.snapshot->>'currency' AND r.owner_id=q.owner_id AND r.venue_id=q.venue_id AND r.hold_id=q.hold_id AND a.actor_id=r.owner_id AND a.content_hash=r.quote_hash AND bh.owner_id=r.owner_id AND bh.hold_id=h.hold_id AND bh.expires_at=h.expires_at AND bh.expires_at=r.hold_until AND b.venue_id=r.venue_id AND b.room_id=q.room_id AS binding_verified FROM cinenest_payments.bank_payment_request r JOIN cinenest_pricing.quotation q ON q.quote_id=r.quote_id JOIN cinenest_pricing.quotation_revision qr ON qr.quote_id=q.quote_id AND qr.revision=r.quote_revision JOIN cinenest_pricing.quotation_acceptance a ON a.quote_id=q.quote_id AND a.revision=qr.revision JOIN cinenest_booking.reservation_hold h ON h.hold_id=r.hold_id JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id JOIN cinenest_booking.booking_bank_request_hold bh ON bh.request_id=r.request_id WHERE r.request_id=:r AND r.quote_id=:q AND r.owner_id=:owner AND r.venue_id=:venue")
+ .param("r",request).param("q",quote).param("owner",BankIntegrationTest.A).param("venue",BankIntegrationTest.VA).query().singleRow();
+ assertThat(bound.get("state")).isEqualTo("OPEN");assertThat(bound.get("review_state")).isEqualTo("PENDING");assertThat(bound.get("revision")).isEqualTo(0L);assertThat(bound.get("hold_state")).isEqualTo("ACTIVE");assertThat(bound.get("blocking")).isEqualTo(true);assertThat(bound.get("binding_verified")).isEqualTo(true);
+ Map<String,Object> out=new HashMap<>();out.put("requestState",bound.get("state"));out.put("reviewState",bound.get("review_state"));out.put("bindingVerified",true);
+ long requests=f.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Long.class).single();assertThat(requests).isEqualTo(1L);out.put("requests",requests);
+ long receipts=f.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_command WHERE actor_id=:a AND command_key=:k AND response->>'id'=:r").param("a",BankIntegrationTest.A).param("k",key).param("r",request.toString()).query(Long.class).single();assertThat(receipts).isEqualTo(1L);out.put("commandReceipts",receipts);
+ for(var pair:Map.of("credits","cinenest_payments.incoming_payment_credit","verifications","cinenest_payments.bank_credit_verification","allocations","cinenest_payments.payment_allocation","bookings","cinenest_booking.booking","credentials","cinenest_access.access_credential","provisioningWork","cinenest_access.access_work").entrySet()){
+  long count=f.jdbc.sql("SELECT count(*) FROM "+pair.getValue()).query(Long.class).single();assertThat(count).isZero();out.put(pair.getKey(),count);
+ }
+ out.put("overlapPairs",release1OverlapPairs(f));out.put("databaseExclusionVerified",true);return out;
+    }
     private static Map<String,Object> calendarCounts(BankIntegrationTest f){
         var result=new HashMap<String,Object>();
         for(var entry:Map.of("holds","cinenest_booking.reservation_hold","blocks","cinenest_booking.inventory_block","quotes","cinenest_pricing.quotation","acceptances","cinenest_pricing.quotation_acceptance","requests","cinenest_payments.bank_payment_request","bookings","cinenest_booking.booking").entrySet())result.put(entry.getKey(),f.jdbc.sql("SELECT count(*) FROM "+entry.getValue()).query(Long.class).single());

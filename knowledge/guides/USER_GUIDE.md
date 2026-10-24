@@ -105,6 +105,8 @@ Keyboard සඳහා Tab / Shift+Tab, Enter සහ checkbox සඳහා Space 
 - **Screenshot:** NOT_CAPTURED — මෙම workflow සඳහා portable screenshot නැත; design mockup එක implementation evidence නොවේ.
 - **Verification:** PARTIAL full workflow/operational qualification; source-inspected `24b73caf16eebda1490d0f3552c268d15e024229`; CI above. [Source](../../frontend/components/bank.tsx), [BankIntegrationTest](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java). Documentation review is not a fresh browser execution.
 
+**Verified pending/recovery clarification—CN-R1-BOOKING-JOURNEY-E2E-001:** Create response timeout වුවහොත් payment/booking සාර්ථක බව හෝ අසාර්ථක බව අනුමාන නොකරන්න. UI පෙන්වන **Retry original bank request** ක්‍රියාව explicit ලෙස භාවිත කරන්න;existing implementation එක same command/payload යළි භාවිත කරයි. තම request reload කිරීමේදී OPEN/PENDING සහ UNFUNDED/NOT_CONFIRMED යනු verified funds හෝ confirmed booking නොවේ. අලුත් payment/hold එකක් ස්වයංක්‍රීයව නොයවන්න. Real-stack37PASS evidence සහ private local375/768/1280screenshots [PROGRESS](../PROGRESS.md#release1-booking-journey) හි සඳහන්ය;ඉහත historical source-inspection receipt සහ portable screenshot limitation retained. සැබෑ මුදල්/IDs/door operations සඳහා අවසරයක් නැත.
+
 ### UG-008 — Booking history and details
 
 - **Purpose / අරමුණ:** Booking history and details; [DOC-F009](../product/FEATURE_CATALOG.md#doc-f009) යටතේ විස්තර කළ bounded software භාවිතය.

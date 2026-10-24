@@ -486,6 +486,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "AI-generated concept interiors,not verified venue photographs;frontend assets/presentation only,no room records or operational authority."
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -556,6 +564,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Shared presentation and error classification only;existing responses,sanitized proxies,authorization,money/identity/device behavior unchanged."
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -686,6 +702,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -791,6 +815,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -891,6 +923,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/proxy/Boot/PostgreSQL synthetic evidence,explicit venue-scoped staff UI rejection,customer status,private preview denial,bank ineligibility and unchanged protected state;23 PASS/0 FAIL/1 NOT_RUN."
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -1213,6 +1253,14 @@
         },
         "evidence": "PROGRESS.md#extension-reservation-e2e",
         "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -2950,6 +2998,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -3117,6 +3173,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Read-only allowlisted saved configuration/history comparison,admin room summary and publication review wording only;existing request/permission/revision/publication/financial/physical authority unchanged."
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -3723,6 +3787,14 @@
         },
         "evidence": "PROGRESS.md#extension-reservation-e2e",
         "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -3794,6 +3866,14 @@
         },
         "evidence": "PROGRESS.md#extension-reservation-e2e",
         "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -4508,6 +4588,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -4576,6 +4664,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -4794,6 +4890,14 @@
         },
         "evidence": "PROGRESS.md#extension-reservation-e2e",
         "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -5698,6 +5802,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -5800,6 +5912,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -5891,6 +6011,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -6037,6 +6165,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {
@@ -6093,6 +6229,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "release1BookingJourneyEvidence": {
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "status": "REAL_STACK_VERIFIED_BOUNDED_SYNTHETIC_PENDING_JOURNEY",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
       }
     },
     {

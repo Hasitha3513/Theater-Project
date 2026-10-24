@@ -6644,5 +6644,115 @@ def inert_ci_main():
     if result==0:print('PASS exact Release1 planning successor;original92requirements74criteria11workstreams,history,decisions,source and acceptance preserved')
     return result
 
+
+
+# CN-R1-BOOKING-JOURNEY-E2E-001: exact synthetic test/evidence successor; no application or live authority.
+r1_day2_prior_main = inert_ci_main
+R1_DAY2_BASELINE = 'ae714b53e6233abb5165fa8bc965677c03d40fb6'
+R1_DAY2_HASHES = {'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': 'baf906afa4633f27a7232ccb34baf84e56bc42712cf4b741a20b61bf967bec2f', 'frontend/tests/synthetic-e2e.mjs': 'deae08788b7af62661aa30cba5b53c78e09b52ca89b712232f3ebff7214b3b95', 'frontend/tests/release1-booking-e2e.mjs': '406c20342e90d985f850fb13ef45d26e5d3caf3eed8d092c451bcb2be8c86200', 'frontend/tests/upload-fault-proxy.mjs': '73c7f0a066ef30631b6dc6e4f16be82d48986f94f4bf865f6ca777b0601c1271', 'frontend/tests/upload-fault-proxy.test.mjs': 'c38f020da6630c4589d82acf0e470d66809c69d0fe2590c609feb1ff57ec0f8a', 'scripts/test-synthetic-e2e.py': 'be632402e84a5d44843504b7b21763f6462a196aaa2533d31a54244845f6b43f', 'knowledge/ARCHITECTURE.md': '8c72a92320d4f92ed4ed5a95d8d560284822357ca34fff809cdabd6f8135f8a6', 'knowledge/PROGRESS.md': 'f2d105facd202b4477113f5c18afa5ab2573445ea2d1abdba0cbf3d49667fc1a', 'knowledge/execution/requirements.json': '9003847f2cc8c2b3ba5f3a0cb605eeb68effc2debc4655e713bf551ab7136dcf', 'knowledge/execution/change-sets.json': 'aa700adbae019c496d809b50c131b98f66f67f282ca01ccd9d005c8763bab6b3', 'knowledge/execution/status.json': '382d29c497f6a694e1905e0e39f8689488606ddb9d645b5a06a9ff8fdceda780', 'knowledge/product/FEATURE_CATALOG.md': '37ecf5a93c102c2d5477393e70a078630ec404207dc0bd74ea2421c35ebbe7d5', 'knowledge/guides/USER_GUIDE.md': 'fd41cf95272f00b1f44460cc1cce150c3a4203412d275f4af5547b0c26415385', 'scripts/test-governance-controls.py': '94377bafa8b6f4418aeb268006b53fecae97246069ccc24d8cf051a610ecdb36'}
+R1_DAY2_ADDED = {'frontend/tests/release1-booking-e2e.mjs'}
+
+def r1_day2_planning_projection(plan):
+    import copy
+    result=copy.deepcopy(plan);receipt=result.pop('day2Execution',{})
+    for row in result.get('schedule',[]):
+        if row.get('taskId')=='CN-R1-BOOKING-JOURNEY-E2E-001':row.clear();row.update(receipt.get('previousDay2',{}))
+    result['nextImplementationTask']=receipt.get('previousNextImplementationTask',{})
+    return result
+
+def r1_day2_evidence_errors(evidence):
+    errors=[]
+    if evidence.get('baseline')!=R1_DAY2_BASELINE or evidence.get('counts')!={'PASS':37,'FAIL':0,'NOT_RUN':0}:errors.append('Day2 exact source/campaign count missing')
+    scenarios=evidence.get('scenarios',[])
+    if len(scenarios)!=37 or len({r.get('id') for r in scenarios})!=37 or any(r.get('status')!='PASS' for r in scenarios):errors.append('Day2 actual unique37PASS scenarios missing')
+    required={'R1-bank-timeout-recovery','R1-pending-state','R1-inventory-negative','R1-concurrent-inventory','R1-concurrent-bank-replay'}
+    if not required<={r.get('id') for r in scenarios}:errors.append('Day2 required scenarios absent')
+    rows=evidence.get('day2DatabaseEvidence',[]);pending=[r for r in rows if 'requests' in r]
+    if len(rows)!=7 or len(pending)!=5:errors.append('Day2 DB observation coverage missing')
+    for row in pending:
+        if row.get('requests')!=1 or row.get('commandReceipts')!=1 or row.get('bindingVerified') is not True or row.get('databaseExclusionVerified') is not True or row.get('overlapPairs')!=0:errors.append('Day2 pending request/inventory integrity missing')
+        if any(row.get(k)!=0 for k in ['credits','verifications','allocations','bookings','credentials','provisioningWork']):errors.append('Day2 premature financial/booking/access transition')
+    for phase,blocking in [('initial-hold-race',True),('owned-race-fixture-released',False)]:
+        selected=[r for r in rows if r.get('phase')==phase]
+        if len(selected)!=1 or selected[0].get('createReceipts')!=1 or selected[0].get('blocking') is not blocking or selected[0].get('overlapPairs')!=0:errors.append('Day2 initial hold race/release proof missing')
+    if evidence.get('faultCheckpoint')!={'attempts':3,'stalled':1,'upstreamStatus':200}:errors.append('Day2 real response/explicit command recovery missing')
+    expected={'request':'OPEN','review':'PENDING','funding':'UNFUNDED','booking':'NOT_CONFIRMED','bookingsPersisted':0,'bankCreditVerifications':0,'credits':0,'allocations':0,'credentials':0,'provisioningWork':0}
+    if evidence.get('pendingState')!=expected:errors.append('Day2 pending truth changed')
+    if evidence.get('cleanupVerified') is not True:errors.append('Day2 cleanup not verified')
+    for key in ['applicationChanged','migrationsChanged','businessPolicyChanged','operationalGrantsAssigned','realFundsExecuted','deviceCommandsExecuted','acceptanceChanged','historicalEvidenceChanged','productionAuthorized','extensionFundingStarted']:
+        if evidence.get(key) is not False:errors.append('Day2 authority exceeded '+key)
+    checks=evidence.get('validation',{})
+    if checks.get('backendTests')!=807 or checks.get('frontendTests')!=482 or checks.get('backendFailures')!=0 or checks.get('frontendFailures')!=0:errors.append('Day2 actual regression evidence missing')
+    return errors
+
+def r1_day2_successor_errors():
+    baseline=R1_DAY2_BASELINE;errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in R1_DAY2_HASHES.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Day2 exact authorized payload mismatch '+name)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Day2 historical validator changed')
+    requirements=json.loads((K/'execution/requirements.json').read_text());selected=set('CN-C01 CN-C02 CN-C03 CN-C04 CN-C05 CN-C08 CN-C10 CN-NFR-01 CN-NFR-02 CN-NFR-03 BR-06 BR-07 BR-10 BP-AC01 BP-AC03 BP-AC04 BP-AC06 BP-AC07'.split())
+    for row in requirements['requirements']:
+        note=row.pop('release1BookingJourneyEvidence',None)
+        if (row['id'] in selected)!=(note is not None):errors.append('Day2 requirement annotation scope drift')
+    if requirements!=json.loads(prior('knowledge/execution/requirements.json')):errors.append('Day2 original92requirements/matrix/acceptance changed')
+    changes=json.loads((K/'execution/change-sets.json').read_text());plan=changes['release1DeliverySlice'];row=next(r for r in plan['schedule'] if r.get('day')==2)
+    if row.get('status')!='LOCAL_VERIFIED_CI_PENDING' or row.get('resultCounts')!={'PASS':37,'FAIL':0,'NOT_RUN':0}:errors.append('Day2 current task execution missing')
+    if plan['nextImplementationTask'].get('id')!='CN-R1-CUSTOMER-BOOKING-RECOVERY-001' or plan['nextImplementationTask'].get('authority')!='REQUIRES_SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION':errors.append('Day2 next-task authority drift')
+    changes['release1DeliverySlice']=r1_day2_planning_projection(plan);errors.extend(release1_plan_errors(changes['release1DeliverySlice']))
+    receipt=changes.pop('release1Day2Evidence',{})
+    for row in changes['remainingImplementationPlan']['workstreams']:
+        if row['id'] in receipt.get('previousWorkstreamValues',{}):row.update(receipt['previousWorkstreamValues'][row['id']])
+    if changes!=json.loads(prior('knowledge/execution/change-sets.json')):errors.append('Day2 original plan/dependencies/history changed')
+    state=json.loads((K/'execution/status.json').read_text());evidence=state.pop('release1BookingJourney',{});state.update(evidence.get('previousCurrentHeader',{}))
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Day2 previous status/evidence changed')
+    errors.extend(r1_day2_evidence_errors(evidence))
+    source_names={'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java','frontend/tests/synthetic-e2e.mjs','frontend/tests/release1-booking-e2e.mjs','frontend/tests/upload-fault-proxy.mjs','frontend/tests/upload-fault-proxy.test.mjs','scripts/test-synthetic-e2e.py'}
+    if set(evidence.get('sourceHashes',{}))!=source_names or any(R1_DAY2_HASHES.get(n)!=d for n,d in evidence.get('sourceHashes',{}).items()):errors.append('Day2 tested source identity mismatch')
+    ledger=evidence.get('knowledgeReadingLedger',{});files=ledger.get('files',[])
+    if ledger.get('baseline')!=baseline or ledger.get('complete') is not True or len(files)!=116 or len({r.get('path') for r in files})!=116 or ledger.get('unresolvedCoverageGaps')!=[]:errors.append('Day2 qualified full-reading reuse missing')
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for row in files:
+        if row.get('path') in tracked and row.get('sha256')!=hashlib.sha256(prior(row['path'])).hexdigest():errors.append('Day2 reading hash drift '+row['path'])
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Day2 acceptance checkbox drift')
+    owned=set(R1_DAY2_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for name in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Day2 protected/unrelated source changed '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Day2 unauthorized changed paths '+str(changed-owned))
+    preserved={'knowledge/Mini movie theater Ruels and Conditions.docx':'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf','knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx':'8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked-R1_DAY2_ADDED:
+        if name not in preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=preserved[name]:errors.append('Day2 unauthorized untracked file '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Day2 manifest authority/inventory/status drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=r1_day2_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    owned=set(R1_DAY2_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'};added=R1_DAY2_ADDED
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',R1_DAY2_BASELINE+':'+name]) for name in owned-added}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw):return (x for x in g0(path,*a,**kw) if x not in {R/n for n in added})
+    def rglob(path,*a,**kw):return (x for x in rg0(path,*a,**kw) if x not in {R/n for n in added})
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();hide=owned if 'diff' in argv else added;paths=[x for x in text.split(sep) if x and x not in hide];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=r1_day2_prior_main()
+    if result==0:print('PASS exact Release1 Day2 real-stack successor;application,financial/physical policy,history,92requirements74criteria and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

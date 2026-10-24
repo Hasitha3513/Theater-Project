@@ -105,3 +105,64 @@ test("extension faults lose a committed response or prevent forwarding without r
 		await new Promise((r) => upstream.close(r));
 	}
 });
+
+test("bank timeout withholds only the real exact CREATE response and never resends", async () => {
+	let creates = 0;
+	const upstream = createServer(async (req, res) => {
+		for await (const _chunk of req) {
+		}
+		if (req.url === "/api/bank/requests" && req.method === "POST") creates++;
+		res.setHeader("Content-Type", "application/json");
+		res.end(JSON.stringify({ creates }));
+	});
+	upstream.listen(0, "127.0.0.1");
+	await once(upstream, "listening");
+	const proxy = await uploadFaultProxy(
+		`http://127.0.0.1:${upstream.address().port}`,
+	);
+	try {
+		proxy.armBankCreate();
+		assert.throws(() => proxy.armBankCreate());
+		for (const [path, method] of [
+			["/api/bank/requests", "GET"],
+			["/api/bank/requests/readiness", "GET"],
+			["/api/bank/requests?unsupported=x", "POST"],
+		]) {
+			assert.equal((await fetch(proxy.origin + path, { method })).status, 200);
+		}
+		assert.equal(proxy.bankCreateReceipt.attempts, 0);
+		const controller = new AbortController();
+		const rejected = assert.rejects(
+			fetch(proxy.origin + "/api/bank/requests", {
+				method: "POST",
+				body: "{}",
+				signal: controller.signal,
+			}),
+		);
+		for (let n = 0; !proxy.bankCreateReceipt.stalled && n < 100; n++)
+			await new Promise((r) => setTimeout(r, 5));
+		assert.deepEqual(proxy.bankCreateReceipt, {
+			attempts: 1,
+			stalled: 1,
+			upstreamStatus: 200,
+		});
+		controller.abort();
+		await rejected;
+		assert.equal(creates, 1);
+		assert.throws(() => proxy.armBankCreate());
+		assert.equal(
+			(
+				await fetch(proxy.origin + "/api/bank/requests", {
+					method: "POST",
+					body: "{}",
+				})
+			).status,
+			200,
+		);
+		assert.equal(creates, 2);
+		assert.equal(proxy.bankCreateReceipt.attempts, 2);
+	} finally {
+		await proxy.close();
+		await new Promise((r) => upstream.close(r));
+	}
+});

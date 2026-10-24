@@ -1,6 +1,7 @@
 // Opt-in REAL backend journey. No page.route, route.fulfill, session injection or business stubs.
 import assert from "node:assert/strict";
 import {extensionScenarios,extensionReservationJourney} from "./extension-reservation-e2e.mjs";
+import {release1Scenarios,release1PendingJourney} from "./release1-booking-e2e.mjs";
 import { uploadFaultProxy } from "./upload-fault-proxy.mjs";
 import {
 	safeCustomerNavigation,
@@ -49,6 +50,7 @@ await mkdir(diagnostics, { recursive: true, mode: 0o700 });
 await chmod(diagnostics, 0o700);
 const planned = [
  ...extensionScenarios,
+ ...release1Scenarios,
 	"startup",
 	"customer-discovery-auth",
 	"hold-quote-accept",
@@ -430,6 +432,9 @@ try {
 			`/api/bank/requests/readiness?quote=${quote.quoteId}`,
 		);
 		assert.notEqual(readiness.reason, "ELIGIBLE");
+        const denied=await api(page,"/api/bank/requests","POST",{quoteId:quote.quoteId,quoteRevision:quote.revision,contentHash:quote.contentHash,commandKey:crypto.randomUUID()});
+        assert.equal(denied.status,409);
+        await control({op:"r1-no-request",quoteId:quote.quoteId});
 	});
 	await scenario("independent-verification-api-support", async () => {
 		const result = await control({
@@ -462,15 +467,15 @@ try {
 				new URL(r.url()).pathname === "/api/bank/requests" &&
 				r.method() === "POST",
 		);
-		bank = await clickResponse(
-			page,
-			"Create synthetic request",
-			"/api/bank/requests",
-		);
-		creationBody = (await observed).postDataJSON();
-		assert.equal(bank.bookingConfirmed, false);
-		assert.equal(bank.paymentVerified, false);
+        faultTransport.armBankCreate();
+        const timedOut=page.waitForResponse(r=>new URL(r.url()).pathname==="/api/bank/requests"&&r.request().method()==="POST",{timeout:25000});
+        await page.getByRole("button",{name:"Create synthetic request",exact:true}).click();
+        creationBody=(await observed).postDataJSON();
+        assert.equal((await timedOut).status(),502);
+        assert.equal(faultTransport.bankCreateReceipt.upstreamStatus,200);
+        assert.equal(faultTransport.bankCreateReceipt.stalled,1);
 	});
+ bank=await release1PendingJourney({page,browser,base,config,api,json,login,control,scenario,bank,quote,creationBody,calendarObservation,faultTransport,diagnostics,requests});
 	await scenario("H-missing-CSRF", async () => {
 		assert.equal(
 			(await api(page, "/api/bank/requests", "POST", creationBody, false))
@@ -1446,8 +1451,9 @@ try {
 		}
 	});
 	await scenario("G-expired-session", async () => {
-		await control({ op: "expire-session" });
+        const expired=await control({op:"expire-session"});assert.equal(expired.sessionDeadlineExpired,true);assert.ok(expired.expiredSessions>0);
 		assert.equal((await api(page, "/api/accounts/me")).status, 401);
+        assert.equal((await api(page, `/api/bank/requests/${bank.id}`)).status,401);
 	});
 } catch (failure) {
 	assertionFailure = {
@@ -1458,7 +1464,7 @@ try {
 				: "Harness operation failed",
 		stack: String(failure.stack)
 			.split("\n")
-			.filter((line) => /synthetic-e2e\.mjs:|extension-reservation-e2e\.mjs:/.test(line))
+			.filter((line) => /synthetic-e2e\.mjs:|extension-reservation-e2e\.mjs:|release1-booking-e2e\.mjs:/.test(line))
 			.slice(0, 4),
 	};
 	results.push({

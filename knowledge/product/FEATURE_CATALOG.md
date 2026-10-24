@@ -173,6 +173,8 @@ Calendar discovery maps to P3-C02; explicit reservation holds additionally map t
 | Screenshot | NOT_CAPTURED in this portable guide; source/tests are evidence, not an invented screenshot |
 | Last verified commit / CI | `24b73caf16eebda1490d0f3552c268d15e024229` / [39807842759 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/39807842759) |
 
+Current bounded verification update—CN-R1-BOOKING-JOURNEY-E2E-001:real browser/Next/Spring/PostgreSQL pending journey verified,including committed-response timeout→unknown→explicit original-command replay. OPEN/PENDING and UNFUNDED/NOT_CONFIRMED remain distinct;one request/receipt,no premature allocation/booking/access. Application behavior unchanged. [Current evidence and screenshots](../PROGRESS.md#release1-booking-journey);historical source-inspection receipt above retained. Real banking/identity/physical admission remain unqualified.
+
 <a id="doc-f009"></a>
 ## DOC-F009 — Customer booking history and detail
 

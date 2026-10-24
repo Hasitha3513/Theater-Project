@@ -20,6 +20,10 @@ export async function uploadFaultProxy(backend) {
 	const receipt = { attempts: 0, dropped: 0, upstreamStatus: null };
 	const sockets = new Set();
 	let extensionFault;
+	let bankCreateArmed = false,
+		bankCreateUsed = false;
+	const bankCreateTimers = new Set();
+	const bankCreateReceipt = { attempts: 0, stalled: 0, upstreamStatus: null };
 	const extensionHttp = [];
 	const extensionReceipt = {
 		attempts: 0,
@@ -37,6 +41,14 @@ export async function uploadFaultProxy(backend) {
 			/^\/api\/bookings\/[0-9a-f-]{36}\/extension-reservations$/.test(
 				incoming.url,
 			);
+		const bankCreate =
+			incoming.method === "POST" && incoming.url === "/api/bank/requests";
+		const stallBankCreate = bankCreate && bankCreateArmed;
+		if (bankCreate) bankCreateReceipt.attempts++;
+		if (stallBankCreate) {
+			bankCreateArmed = false;
+			bankCreateUsed = true;
+		}
 		const extensionDrop = extension && extensionFault;
 		if (extension) {
 			extensionReceipt.attempts++;
@@ -78,7 +90,24 @@ export async function uploadFaultProxy(backend) {
 							"{reference}",
 						),
 					});
-				if (drop || extensionDrop === "after-commit") {
+				if (stallBankCreate) {
+					// The real transaction finishes; only its response is withheld.
+					// Next's unchanged 15s timeout must expire before this 20s safety bound.
+					response.resume();
+					response.on("end", () => {
+						bankCreateReceipt.upstreamStatus = response.statusCode;
+						bankCreateReceipt.stalled++;
+						const timer = setTimeout(() => {
+							bankCreateTimers.delete(timer);
+							outgoing.destroy();
+						}, 20000);
+						bankCreateTimers.add(timer);
+						outgoing.on("close", () => {
+							clearTimeout(timer);
+							bankCreateTimers.delete(timer);
+						});
+					});
+				} else if (drop || extensionDrop === "after-commit") {
 					// Consume the actual backend response before losing it. Never invent success.
 					response.resume();
 					response.on("end", () => {
@@ -118,6 +147,12 @@ export async function uploadFaultProxy(backend) {
 		receipt,
 		extensionReceipt,
 		extensionHttp,
+		bankCreateReceipt,
+		armBankCreate() {
+			if (bankCreateArmed || bankCreateUsed)
+				throw new Error("Single bank creation timeout only");
+			bankCreateArmed = true;
+		},
 		pointBackend(value) {
 			const candidate = new URL(value);
 			if (
@@ -141,6 +176,7 @@ export async function uploadFaultProxy(backend) {
 			extensionFault = mode;
 		},
 		async close() {
+			for (const timer of bankCreateTimers) clearTimeout(timer);
 			const closed = new Promise((resolve, reject) =>
 				server.close((e) => (e ? reject(e) : resolve())),
 			);

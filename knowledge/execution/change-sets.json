@@ -2131,7 +2131,7 @@
       {
         "id": "W03",
         "title": "Booking, Calendar, Holds and Quotations",
-        "boundedImplementedAndVerified": "Calendar, explicit holds, immutable quotes/acceptance and real-backend calendar-to-hold campaign",
+        "boundedImplementedAndVerified": "Calendar, explicit holds, immutable quotes/acceptance and real-backend calendar-to-hold campaign; Release1 Day2 real-stack37PASS including pending bank request,original-command timeout recovery and PostgreSQL concurrency/zero premature finance/access evidence;not real-provider/physical acceptance",
         "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
         "missing": "Full criterion acceptance and broader inventory concurrency coverage",
         "blockers": "Existing policies permit independent regression work; customer acceptance remains separate",
@@ -2199,7 +2199,7 @@
       {
         "id": "W04",
         "title": "Online and Bank Payments",
-        "boundedImplementedAndVerified": "Synthetic bank requests/evidence/credit allocation/refund primitives",
+        "boundedImplementedAndVerified": "Synthetic bank requests/evidence/credit allocation/refund primitives; Release1 Day2 real-stack37PASS including pending bank request,original-command timeout recovery and PostgreSQL concurrency/zero premature finance/access evidence;not real-provider/physical acceptance",
         "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
         "missing": "Hosted gateway and real banking qualification; extension funding preparation",
         "blockers": "PayHere deferred; extension A–P and V26 financial scope not approved",
@@ -2623,7 +2623,7 @@
       {
         "id": "W11",
         "title": "End-to-End Testing and Production Qualification",
-        "boundedImplementedAndVerified": "Historical real-backend campaign24 PASS; focused application/architecture CI;latest complete real-backend synthetic campaign32 PASS,including8 extension groups",
+        "boundedImplementedAndVerified": "Historical real-backend campaign24 PASS; focused application/architecture CI;prior complete real-backend synthetic campaign32 PASS,including8 extension groups; Release1 Day2 real-stack37PASS including pending bank request,original-command timeout recovery and PostgreSQL concurrency/zero premature finance/access evidence;not real-provider/physical acceptance",
         "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
         "missing": "Cancellation real-backend E2E,remaining demonstrations and provider/physical/production qualification",
         "blockers": "Existing harness admission plus separately authorized campaign and customer/physical acceptance",
@@ -5519,12 +5519,20 @@
           "CN-R1-PLAN-001"
         ],
         "approvalGates": [],
-        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "status": "LOCAL_VERIFIED_CI_PENDING",
         "implementationScope": "Extend/reuse existing admitted real-stack harness: discovery/calendar, explicit hold, quote/revision acceptance, synthetic verification and explicit bank request. Preserve actual domain sequence; no automatic hold/payment.",
         "tests": "Real Chromium/Next/Spring/PostgreSQL, ownership, CSRF, expiry, exact money, interrupted requests and committed DB state; no intercepted business APIs",
         "definitionOfDone": "Source-backed continuous trace reaches authoritative pending request without calling it confirmed; no domain/financial mutations beyond synthetic commands",
         "releaseBlocker": "No implementation authority supplied by this schedule; real-stack evidence/environment admission and separate task scope required",
-        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit.",
+        "actualExecutionDate": "2026-10-25",
+        "implementationAuthority": "Owner Day2 attachment840bbb32-8679-4185-b31d-3c99a9ff48ee explicitly authorizes bounded synthetic real-stack E2E only",
+        "evidencePath": "PROGRESS.md#release1-booking-journey",
+        "resultCounts": {
+          "PASS": 37,
+          "FAIL": 0,
+          "NOT_RUN": 0
+        }
       },
       {
         "day": 3,
@@ -6376,13 +6384,13 @@
     ],
     "postRelease1": "All mapped POST_RELEASE_1_RETAINED_MVP items and unfulfilled clauses remain in Full MVP:hosted PayHere/mixed methods,extension funding/commit,in-session/issued-credential lifecycle,advanced analytics/exports,loyalty/referrals/promotions,full device automation and wider grant/settings administration.No original dependency or demo gate waived.",
     "nextImplementationTask": {
-      "id": "CN-R1-BOOKING-JOURNEY-E2E-001",
+      "id": "CN-R1-CUSTOMER-BOOKING-RECOVERY-001",
       "priority": "P0",
-      "scope": "Extend/reuse existing admitted real-stack harness: discovery/calendar, explicit hold, quote/revision acceptance, synthetic verification and explicit bank request. Preserve actual domain sequence; no automatic hold/payment.",
+      "scope": "One test-only customer reload/unknown-result regression through existing routes; fix only separately approved minimal proven defect.",
       "authority": "REQUIRES_SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION",
       "policyBlocked": false,
-      "definitionOfDone": "Source-backed continuous trace reaches authoritative pending request without calling it confirmed; no domain/financial mutations beyond synthetic commands",
-      "tests": "Real Chromium/Next/Spring/PostgreSQL, ownership, CSRF, expiry, exact money, interrupted requests and committed DB state; no intercepted business APIs"
+      "definitionOfDone": "No duplicate request or false success; original command identity and authoritative expired/conflict recovery retained",
+      "tests": "Lost response, expired session, changed quote, wrong owner, stale parsed response, 375/768/1280px and keyboard"
     },
     "acceptanceUnchanged": {
       "criteriaChecked": 15,
@@ -6396,6 +6404,71 @@
       "physicalQualified": false,
       "realBankQualified": false,
       "productionAuthorized": false
+    },
+    "day2Execution": {
+      "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+      "baseline": "ae714b53e6233abb5165fa8bc965677c03d40fb6",
+      "previousDay2": {
+        "day": 2,
+        "targetDate": "2026-10-26",
+        "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "title": "Existing customer booking to bank-pending journey",
+        "requirementIds": [
+          "CN-C01",
+          "CN-C02",
+          "CN-C03",
+          "CN-C04",
+          "CN-C05",
+          "CN-C10",
+          "BR-06",
+          "BR-07",
+          "BR-10"
+        ],
+        "owningModules": [
+          "booking",
+          "pricing",
+          "identity",
+          "verification",
+          "payments"
+        ],
+        "deliverable": "Existing customer booking to bank-pending journey",
+        "dependencies": [
+          "CN-R1-PLAN-001"
+        ],
+        "approvalGates": [],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "Extend/reuse existing admitted real-stack harness: discovery/calendar, explicit hold, quote/revision acceptance, synthetic verification and explicit bank request. Preserve actual domain sequence; no automatic hold/payment.",
+        "tests": "Real Chromium/Next/Spring/PostgreSQL, ownership, CSRF, expiry, exact money, interrupted requests and committed DB state; no intercepted business APIs",
+        "definitionOfDone": "Source-backed continuous trace reaches authoritative pending request without calling it confirmed; no domain/financial mutations beyond synthetic commands",
+        "releaseBlocker": "No implementation authority supplied by this schedule; real-stack evidence/environment admission and separate task scope required",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      "previousNextImplementationTask": {
+        "id": "CN-R1-BOOKING-JOURNEY-E2E-001",
+        "priority": "P0",
+        "scope": "Extend/reuse existing admitted real-stack harness: discovery/calendar, explicit hold, quote/revision acceptance, synthetic verification and explicit bank request. Preserve actual domain sequence; no automatic hold/payment.",
+        "authority": "REQUIRES_SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION",
+        "policyBlocked": false,
+        "definitionOfDone": "Source-backed continuous trace reaches authoritative pending request without calling it confirmed; no domain/financial mutations beyond synthetic commands",
+        "tests": "Real Chromium/Next/Spring/PostgreSQL, ownership, CSRF, expiry, exact money, interrupted requests and committed DB state; no intercepted business APIs"
+      },
+      "evidencePath": "PROGRESS.md#release1-booking-journey",
+      "scope": "Day2 explicit synthetic test-only authorization;future rows and commercial/physical gates unchanged"
     }
+  },
+  "release1Day2Evidence": {
+    "taskId": "CN-R1-BOOKING-JOURNEY-E2E-001",
+    "previousWorkstreamValues": {
+      "W03": {
+        "boundedImplementedAndVerified": "Calendar, explicit holds, immutable quotes/acceptance and real-backend calendar-to-hold campaign"
+      },
+      "W04": {
+        "boundedImplementedAndVerified": "Synthetic bank requests/evidence/credit allocation/refund primitives"
+      },
+      "W11": {
+        "boundedImplementedAndVerified": "Historical real-backend campaign24 PASS; focused application/architecture CI;latest complete real-backend synthetic campaign32 PASS,including8 extension groups"
+      }
+    },
+    "evidencePath": "PROGRESS.md#release1-booking-journey"
   }
 }

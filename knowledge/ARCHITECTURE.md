@@ -2636,3 +2636,11 @@ CN-MVP-KNOWLEDGE-TRACEABILITY-001 adds an in-place derived matrix in execution/r
 ## Real-backend extension verification boundary
 
 CN-E2E-EXTENSION-RESERVATION-001 reuses existing contracts,V25 and bounded test controls. The only owner-approved application correction aligns the two extension proxies with existing session/logout protocol+Host origin validation:NextURL loopback normalization must not reject the actual same-origin browser. Origin,CSRF,exact routes/DTOs/session/ownership and sanitized errors remain mandatory;forwarded-host headers do not grant trust. Test-only transport loses a consumed real response or drops before forwarding,never fabricates business success. Fresh-instance reads,deterministic test clock and SELECT fingerprints are synthetic test evidence,not new production endpoints or recovery authority. [Evidence](PROGRESS.md#extension-reservation-e2e).
+
+
+<a id="release1-booking-e2e-boundary"></a>
+## Release1 Day2 real-stack pending journey — 2026-10-25
+
+CN-R1-BOOKING-JOURNEY-E2E-001 extends only the existing opt-in SyntheticJourneyIT/Next.js/Chromium/owned PostgreSQL harness and its fault-transport tests. No application/public API/schema/permission/policy change. Actual sequence is explicit hold before quote/acceptance,then synthetic verification and explicit bank request;the historical proposed diagrams do not reorder current contracts. New test observer joins immutable quote/acceptance,hold/block and request snapshots only inside disposable test storage;it is not cross-module application SQL or a new reporting port. PostgreSQL validated exclusion and zero overlapping blocking pairs are asserted.
+
+One exact POST /api/bank/requests response is consumed from the real backend after commit and withheld until the unchanged15s authenticated Next transport returns502;the20s harness safety bound never supplies a fabricated response. Explicit UI retry preserves the entire original command;one request/receipt remains. Test transport does not retry or mock business APIs. Pending checkpoint has OPEN/PENDING/UNFUNDED/NOT_CONFIRMED,no Booking row,no credit/allocation/access work. Later historical synthetic confirmation/extension scenarios run separately and do not rewrite that checkpoint. [Actual evidence](PROGRESS.md#release1-booking-journey).
