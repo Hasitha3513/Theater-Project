@@ -797,6 +797,13 @@
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN",
         "limits": "Owner-only typed observation; no staff/financial authority,request,match,allocation,migration or commitment."
+      },
+      "extensionPreviewFrontendEvidence": {
+        "taskId": "CN-EXTENSION-PREVIEW-FE-001",
+        "reference": "PROGRESS.md#extension-preview-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -1045,6 +1052,13 @@
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN",
         "limits": "Owner-only typed observation; no staff/financial authority,request,match,allocation,migration or commitment."
+      },
+      "extensionPreviewFrontendEvidence": {
+        "taskId": "CN-EXTENSION-PREVIEW-FE-001",
+        "reference": "PROGRESS.md#extension-preview-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -2892,6 +2906,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionPreviewFrontendEvidence": {
+        "taskId": "CN-EXTENSION-PREVIEW-FE-001",
+        "reference": "PROGRESS.md#extension-preview-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -3421,6 +3442,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionPreviewFrontendEvidence": {
+        "taskId": "CN-EXTENSION-PREVIEW-FE-001",
+        "reference": "PROGRESS.md#extension-preview-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -3485,6 +3513,13 @@
       "extensionReservationEvidence": {
         "taskId": "CN-BOOKING-EXTENSION-RESERVATION-BE-001",
         "reference": "PROGRESS.md#extension-reservation",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionPreviewFrontendEvidence": {
+        "taskId": "CN-EXTENSION-PREVIEW-FE-001",
+        "reference": "PROGRESS.md#extension-preview-frontend",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"

@@ -5954,5 +5954,83 @@ def inert_ci_main():
     if result==0: print('PASS empty-diff recovery and exact documentation successor;all original source/history/acceptance controls preserved')
     return result
 
+
+# CN-EXTENSION-PREVIEW-FE-001: exact customer preview successor; no general exemption.
+extension_frontend_prior_main = inert_ci_main
+EXTENSION_FRONTEND_BASELINE = '7a598de5e50a91b527cb76c67765fb09318c91b6'
+EXTENSION_FRONTEND_HASHES = {'frontend/app/globals.css': '6adc8a6d46f87819a8865c9afe228fa62ea6d9d32e992cb80b4a6b1df098b8eb', 'frontend/components/customer-bookings.tsx': '3762b6f73029f826844eb3b660c48031d276d7fe3bec3eaa3942a389b545b4ff', 'frontend/components/booking-extension-preview.tsx': '9d2720c1e3f3910ba0f9797049dcf846c82b9e9405573436cd4d14308382d920', 'frontend/lib/extension-preview.ts': 'c4f2c38d0242a13507b15b2249e5a87d345154bc506ebbe66da0ba3be6a1509f', 'frontend/lib/extension-preview-backend.ts': '0f5a4498f20b294c36bfb80cbddf83d8bdc04c568849f097bab0d6f53a2a1a59', 'frontend/app/api/bookings/[id]/extension-eligibility/route.ts': 'b93d131dcf99f4a70466b166c6a1e61c2791ecefcc4ed6f388c9a4fa455c927e', 'frontend/app/api/bookings/[id]/extension-quotes/route.ts': '19690a2fd338c1e431afcc6dc6acd1c4c83c01d1ee197437f8324e3cc074a112', 'frontend/package.json': 'b05a4e9aa5e649db3e54c72abecb74494592cac14e2da6684450710d45859808', 'frontend/tests/extension-preview.test.mjs': '1dbfe6da1beb7f6269924ab040c7dd525474f68cdad4c4c36beb70b2ba225a83', 'frontend/tests/extension-preview-browser.mjs': '1692bb824091da9eaae7d238f54d66b07982e43935ca1f71fac69c186da0beeb', 'knowledge/ARCHITECTURE.md': '9b46661a7d97f2e2465300cc2ae1d20f43bb1d0c70d33f8de339f132d7223f47', 'knowledge/DESIGN.md': 'f1311a661a8b27b774c1abe50255d009a76b3a39f1a7cd5d4709968cf4e17797', 'knowledge/PROGRESS.md': '48bdaf6051ad8e4f8f5060bb46972d6bcc1d48a72c191c00a086a33af14d3b6e', 'knowledge/product/FEATURE_CATALOG.md': 'f5b80cd0c7985dd6cce1f2870350056821e75c78a65659b12ba32722d2a9bbcd', 'knowledge/guides/USER_GUIDE.md': 'e143039eb64e55cc34849f2253e49f2733de658fb71f629d104a5f86b2b98a89', 'knowledge/execution/status.json': '37a5f937c14d9ad4c872eeb22b7853773d228094804c21058ef279eaa7b77adf', 'knowledge/execution/requirements.json': '4bca9cc68164e0420e6898358cddda5415a8846f7d8789f7a9a125f29e892791', 'knowledge/execution/test-plan.json': 'c3e67bca7b0f8034e79c1cec7a5a8916a0ba76b7675c8157d4346c4504345bde', 'scripts/test-governance-controls.py': '8e2a1bf68b3013e7edd549e035b0c60677271831245cf3e7b126a451f37b9039'}
+EXTENSION_FRONTEND_ADDED = {'frontend/app/api/bookings/[id]/extension-eligibility/route.ts', 'frontend/tests/extension-preview.test.mjs', 'frontend/lib/extension-preview.ts', 'frontend/lib/extension-preview-backend.ts', 'frontend/components/booking-extension-preview.tsx', 'frontend/app/api/bookings/[id]/extension-quotes/route.ts', 'frontend/tests/extension-preview-browser.mjs'}
+
+def extension_frontend_successor_errors():
+    baseline=EXTENSION_FRONTEND_BASELINE;hashes=EXTENSION_FRONTEND_HASHES
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('Extension frontend exact authorized payload mismatch '+name)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):
+        errors.append('Extension frontend historical validator changed')
+    for name,key in [('requirements.json','requirements'),('test-plan.json','tests')]:
+        current=json.loads((K/'execution'/name).read_text())
+        for row in current[key]:row.pop('extensionPreviewFrontendEvidence',None)
+        if current!=json.loads(prior('knowledge/execution/'+name)):
+            errors.append('Extension frontend changed requirement/test acceptance/history '+name)
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('extensionPreviewFrontend',{})
+    state.update(receipt.get('previousCurrentHeader',{}))
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Extension frontend changed existing status/approval evidence')
+    for key in ['backendChanged','migrationsChanged','inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','historicalSyntheticCampaignRerun']:
+        if receipt.get(key) is not False:errors.append('Extension frontend exceeded authority '+key)
+    if receipt.get('customerOnly') is not True or receipt.get('baseline')!=baseline:errors.append('Extension frontend authority/baseline mismatch')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):
+        errors.append('Extension frontend acceptance checkbox drift')
+    package=json.loads((R/'frontend/package.json').read_text());old=json.loads(prior('frontend/package.json'))
+    if package['scripts']['test']!=old['scripts']['test']+' && node --import ./tests/tsx-loader.mjs tests/extension-preview.test.mjs':errors.append('Extension frontend lost test coverage')
+    package['scripts']['test']=old['scripts']['test']
+    if package!=old:errors.append('Extension frontend dependency/toolchain drift')
+    allowed=set(hashes)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for name in tracked-allowed:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Extension frontend unrelated protected source/history change '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=allowed:errors.append('Extension frontend unauthorized changed path '+str(changed-allowed))
+    preserved={'knowledge/Mini movie theater Ruels and Conditions.docx':'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf','knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx':'8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked-set(hashes):
+        if name not in preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=preserved[name]:errors.append('Extension frontend unauthorized untracked payload '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/'+entry['path'] in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Extension frontend manifest inventory/authority drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=extension_frontend_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    baseline=EXTENSION_FRONTEND_BASELINE
+    added=EXTENSION_FRONTEND_ADDED
+    owned=set(EXTENSION_FRONTEND_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name]) for name in owned-added}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw):return (x for x in g0(path,*a,**kw) if x not in {R/n for n in added})
+    def rglob(path,*a,**kw):return (x for x in rg0(path,*a,**kw) if x not in {R/n for n in added})
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode()
+            hide=owned if 'diff' in argv else added
+            paths=[x for x in text.split(sep) if x and x not in hide]
+            text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=extension_frontend_prior_main()
+    if result==0:print('PASS exact owner-only extension preview frontend;backend,policy,migrations,history,92 requirements and74 criteria preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

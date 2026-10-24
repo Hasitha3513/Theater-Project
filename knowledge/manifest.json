@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "3d9b807d75334146065e0880b91a2ca8ea3c72846160005e0f7bf458ffee3416",
+      "sha256": "9b46661a7d97f2e2465300cc2ae1d20f43bb1d0c70d33f8de339f132d7223f47",
       "authority": "canonical-prose"
     },
     {
@@ -404,7 +404,7 @@
       "path": "DESIGN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "da9230c3bf68031b57ec8bc83947b7c957d7f5fda1c71a5c1782c29df6a8dc04",
+      "sha256": "f1311a661a8b27b774c1abe50255d009a76b3a39f1a7cd5d4709968cf4e17797",
       "authority": "canonical-prose"
     },
     {
@@ -418,7 +418,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "889bef35aec0b147b0d1dcfdcd9287c6cc0109efc7b03b60dba6a51cdf431931",
+      "sha256": "48bdaf6051ad8e4f8f5060bb46972d6bcc1d48a72c191c00a086a33af14d3b6e",
       "authority": "canonical-prose"
     },
     {
@@ -544,7 +544,7 @@
       "path": "execution/requirements.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "027a340cc87344f43d8e0f15ecb0fadb0b477814f511393e42617f16ee50611b",
+      "sha256": "4bca9cc68164e0420e6898358cddda5415a8846f7d8789f7a9a125f29e892791",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -558,28 +558,28 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "53939e141c4d9d35ec46aa738dc66c8f230d4a5054354d99ef8ffea1c10a0954",
+      "sha256": "37a5f937c14d9ad4c872eeb22b7853773d228094804c21058ef279eaa7b77adf",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/test-plan.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "f54612bdc9521d3cf5f4053542ba57eb9bfefd094a23ba31739c0978065d50f9",
+      "sha256": "c3e67bca7b0f8034e79c1cec7a5a8916a0ba76b7675c8157d4346c4504345bde",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "31ffa785e9aac79063b76e77ed6d330b6f3c4be5ffc85be6550b466ded680e12",
+      "sha256": "2a0ba62212074804b48a46cb1122f02dcd3e192bad751a904211ad329b32486d",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "guides/USER_GUIDE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "70443ac570f13c0f85a12788cce7e11858c5c4c42c91e97554c5159183a25b5d",
+      "sha256": "e143039eb64e55cc34849f2253e49f2733de658fb71f629d104a5f86b2b98a89",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -592,7 +592,7 @@
       "path": "product/FEATURE_CATALOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "622331e1d0fc261e6addbe348993f3a5f00c9d0b3b65bde67afde946027dafeb",
+      "sha256": "f5b80cd0c7985dd6cce1f2870350056821e75c78a65659b12ba32722d2a9bbcd",
       "authority": "structured-asset-or-evidence"
     },
     {

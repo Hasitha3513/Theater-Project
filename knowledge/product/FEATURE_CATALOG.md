@@ -621,23 +621,25 @@ Current guard clarification: cancellation rejects an unresolved persisted ACTIVE
 | Implementation status | PARTIAL |
 | Category / module | Booking extensions / Booking, Pricing, Identity, Rooms, Access |
 | Intended user | Current eligible booking owner only |
-| Description / available functionality | Protected eligibility and exact positive frozen-term additional-price preview |
+| Description / available functionality | Protected eligibility and exact frozen-term additional-price preview, with current booking context and labelled calculated end |
 | Operational classification | SIMULATED;no real money or physical readiness |
-| Demo availability | CONDITIONAL backend only;frontend PENDING |
+| Demo availability | CONDITIONAL synthetic backend and customer preview UI |
 | Required permissions | Authenticated eligible exact owner;no new staff capability or grants |
 | Known limitations | Revision1/lifecycle0,pre-start,never-issued,no pending amendment;no reservation,funding or commit |
-| Screenshot | Not applicable:backend-only,no customer controls implemented |
+| Screenshot | Local before/after375/768/1280 screenshots;[evidence](../PROGRESS.md#extension-preview-frontend) |
 | Routes | GET /api/bookings/{bookingId}/extension-eligibility;POST /api/bookings/{bookingId}/extension-quotes |
 | Authority | Current eligible owner;synthetic confirmed revision1/lifecycle0,pre-start,no pending amendment,no credential ever issued |
 | Capability | Frozen purchased whole-unit exact LKR additional-price preview;no duplicated base/guests/add-ons;no current-price substitution |
-| UI availability | FRONTEND PENDING;no customer/staff controls or new authenticated Next.js proxy |
+| UI availability | Existing customer booking detail:explicit Check Extension Options and Preview Additional Price;strict authenticated GET/CSRF POST proxies;no staff controls |
 | Truth | Indicative synthetic extension preview.No additional time reserved,no payment requested,booking unchanged;occupancy UNKNOWN/readiness UNVERIFIED |
 | Source | [Booking](../../backend/src/main/java/com/cinenest/booking/internal/ExtensionPreviewService.java),[Pricing](../../backend/src/main/java/com/cinenest/pricing/internal/ExtensionPricingAdapter.java) |
 | Automated test evidence | [PostgreSQL](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[pure price](../../backend/src/test/java/com/cinenest/pricing/internal/ExtensionPricingTest.java),[architecture](../../backend/src/test/java/com/cinenest/ExtensionPreviewArchitectureTest.java) |
 | MVP / requirement / test plan | P6-C03 / CN-A02 / T-CN-A02 |
-| Last verified commit / CI | [Current verification](../PROGRESS.md#extension-preview);baseline030acef6177756e5f937d098d49323b1335b350f/CI39911829949 SUCCESS;new exact-source CI PENDING |
+| Last verified commit / CI | [Current verification](../PROGRESS.md#extension-preview);baseline030acef6177756e5f937d098d49323b1335b350f/CI39911829949 SUCCESS;customer UI baseline7a598de5e50a91b527cb76c67765fb09318c91b6/CI40010655685 SUCCESS;successor CI PENDING |
 
 No extension hold,additional funding,refund,revision,credential,device or notification action;no commercial/physical acceptance.
+
+Backend preview does not check competing blocking inventory or provide total price/expiry/proposed-end timestamp. The UI discloses these limits;calculated end is an elapsed-minute display,not a reservation. [Frontend](../../frontend/components/booking-extension-preview.tsx),[proxy](../../frontend/lib/extension-preview-backend.ts),[focused tests](../../frontend/tests/extension-preview.test.mjs).
 
 <a id="doc-f030"></a>
 ## DOC-F030 — Synthetic customer extension inventory reservation

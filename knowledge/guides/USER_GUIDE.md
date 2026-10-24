@@ -346,11 +346,12 @@ Current cancellation guard clarification (CN-KNOWLEDGE-SYNC-001): an unresolved 
 
 ### UG-024 — Extension preview / අමතර කාලය සඳහා මිල පෙරදසුන
 
-**FRONTEND PENDING.** Customer/staff booking pages do not yet offer an extension button or duration selector. The implemented backend can check an eligible owner's synthetic booking and calculate an indicative extra price from purchased rates;this guide does not prescribe unsupported UI actions. පවතින booking එක වෙනස් නොවේ;අමතර කාලය වෙන් කිරීමක් හෝගෙවීම් ඉල්ලීමක් සිදු නොවේ.
+Open your existing customer booking detail and find **Explore extra cinema time** below the purchased snapshot. Review booking/package/session context, then explicitly select **Check Extension Options**. The server determines ownership, current eligibility and purchased duration increments. Enter a permitted **Additional duration (minutes)** and choose **Preview Additional Price**. No request is sent merely by opening the panel or changing duration.
 
-Only eligible owners with a pre-start,never-issued,revision1/lifecycle0 SIMULATED_CONFIRMED booking may use the protected backend contract. A price preview is not an accepted extension,inventory reservation,payment invitation or access approval. Pending/stale/cancelled/unsupported/unauthorized contexts fail closed. Existing booking/cancellation/reschedule controls remain unchanged. [Feature boundary](../product/FEATURE_CATALOG.md#doc-f029),[actual evidence](../PROGRESS.md#extension-preview).
+The preview separates purchased price from additional LKR price. Proposed end is a labelled calculated display in the purchased timezone,not a backend-confirmed change. No total price or preview expiry is supplied. Competing blocking inventory is not checked by this preview;no extra time is guaranteed. **This is a price and availability preview only. Your booking has not been extended, and no payment has been requested.** පවතින booking එක වෙනස් නොවේ;ගෙවීමක් හෝ අමතර කාල වෙන්කිරීමක් සිදු නොවේ.
 
-<a id="ug-025"></a>
+Only current eligible owners with pre-start,never-issued,revision1/lifecycle0 SIMULATED_CONFIRMED context may preview. Pending amendment/extension,changed room,started/cancelled/unsupported/unauthorized context is rejected. On a conflict reload the booking;on a service failure use Check Extension Options explicitly to retry;on expired session sign in and reload. Protected results clear on context/session/navigation changes. This panel has no reservation,funding,commit or PIN control. [Feature](../product/FEATURE_CATALOG.md#doc-f029),[evidence](../PROGRESS.md#extension-preview-frontend).
+
 ### UG-025 — Temporary extension reservation / තාවකාලික අමතර කාල වෙන්කිරීම
 
 **FRONTEND PENDING.** No new customer/staff extension-reservation button or withdrawal control has been implemented. Backend capability supports explicit eligible-owner creation,status GET and withdrawal only. Existing purchased booking/session remains unchanged;අමතර කාලය භාවිතයට අවසර ලැබී නැත. No payment is requested and no purchased extension is committed.

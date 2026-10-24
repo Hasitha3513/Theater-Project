@@ -1,4 +1,5 @@
 "use client";
+import { BookingExtensionPreview } from "./booking-extension-preview";
 import { BookingCancellationPanel } from "./booking-cancellation";
 import { bankRequestHref, confirmedBookingHref } from "../lib/bank-request";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -608,6 +609,10 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 							{detail.state}. Original purchased history is retained.
 						</p>
 					</Card>
+					<BookingExtensionPreview
+						key={`extension/${detail.id}/${detail.revision}/${detail.state}`}
+						booking={detail}
+					/>
 					<nav
 						className="booking-next-actions"
 						aria-label="Booking detail sections"
