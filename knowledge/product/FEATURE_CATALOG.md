@@ -664,3 +664,6 @@ Backend preview does not check competing blocking inventory or provide total pri
 Original booking and purchased revision remain unchanged;temporary coverage is not permission to occupy or extend the session. Existing full requirements and financial/physical acceptance remain open.
 
 CN-EXTENSION-CONTEXT-PORT-001 adds an internal typed owner reservation observation to DOC-F030 using its existing protected GET/audit path. No new customer control or API route;no payment request,matching,allocation or extension commitment. Caller transaction and current owner eligibility are required. [Evidence](../PROGRESS.md#extension-context-port).
+
+
+CN-EXTENSION-RESERVATION-RECOVERY-READ-001 extends DOC-F030 backend capability with authenticated owner-only GET /api/bookings/{bookingId}/extension-reservations/commands/{commandKey}. A committed CREATE receipt resolves the opaque reservationId;existing status GET remains authoritative. Missing receipt is unresolved,not proof of failure. No replay,creation,renewal,withdrawal,funding or purchase change. Frontend reservation workflow remains PENDING;[contract](../ARCHITECTURE.md#extension-reservation-recovery),[tests/evidence](../PROGRESS.md#extension-reservation-recovery).

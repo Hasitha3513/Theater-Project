@@ -111,7 +111,7 @@ class IdentitySecurity {
                 .requestMatchers("/api/admin/venues/*/operations/cases", "/api/admin/venues/*/operations/cases/**").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/iot/devices","/api/admin/venues/*/iot/devices/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/iot/devices/*/commands","/api/admin/venues/*/iot/devices/*/commands/*/simulations","/api/admin/venues/*/iot/devices/*/commands/*/reconciliations").authenticated()
-                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-reservations/*").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-reservations/*","/api/bookings/*/extension-reservations/commands/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/extension-reservations","/api/bookings/*/extension-reservations/*/withdrawals").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-eligibility").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/extension-quotes").authenticated()

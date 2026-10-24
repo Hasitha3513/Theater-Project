@@ -437,6 +437,7 @@ class BankIntegrationTest {
       if(name.startsWith("notification-")){for(String k:java.util.List.of("enabled","channel","adapter","synthetic-accounts","expiry-seconds","retention-seconds","attempt-limit","retry-seconds","lease-seconds","rate-count","rate-seconds","worker-delay-ms"))config.put("cinenest.notifications."+k,environment.getRequiredProperty("cinenest.notifications."+k));config.put("cinenest.notifications.worker-enabled",true);}
       config.put("cinenest.booking.extension-reservations.worker-enabled",name.startsWith("extension-"));
       if(name.startsWith("extension-")){config.put("cinenest.identity.enabled",true);for(String k:java.util.List.of("session-timeout-seconds","issuer","authorization-uri","token-uri","jwk-set-uri","client-id","client-secret"))config.put("cinenest.identity."+k,environment.getRequiredProperty("cinenest.identity."+k));for(String key:java.util.List.of("enabled","rate-count","rate-seconds","approval-reference"))config.put("cinenest.booking.extension-reservations."+key,environment.getRequiredProperty("cinenest.booking.extension-reservations."+key));config.put("cinenest.booking.extension-reservations.poll-ms",100);}
+      if(name.startsWith("recovery-read-")){config.put("cinenest.identity.enabled",true);for(String k:java.util.List.of("session-timeout-seconds","issuer","authorization-uri","token-uri","jwk-set-uri","client-id","client-secret"))config.put("cinenest.identity."+k,environment.getRequiredProperty("cinenest.identity."+k));config.put("cinenest.booking.extension-reservations.enabled",false);config.put("cinenest.booking.extension-reservations.worker-enabled",false);config.put("cinenest.bank.worker-enabled",false);config.put("cinenest.bank.ledger.worker-enabled",false);}
       var builder=new ProcessBuilder(PathJava(),"-Djava.awt.headless=true","-cp",System.getProperty("surefire.test.class.path",System.getProperty("java.class.path")),"com.cinenest.CineNestApplication","--spring.profiles.active=synthetic-quotation","--server.address=127.0.0.1","--server.port=0");builder.environment().put("SPRING_APPLICATION_JSON",JSONObjectUtils.toJSONString(config));builder.redirectErrorStream(true);builder.redirectOutput(STORE.resolve(name+".log").toFile());return builder.start();
     }
     String PathJava(){return java.nio.file.Path.of(System.getProperty("java.home"),"bin","java").toString();}
@@ -1888,5 +1889,92 @@ class BankIntegrationTest {
        var read=pool.submit(()->reservationContext(A,c,r));var write=pool.submit(()->withdrawReservation(c,r));var o=read.get();assertThat(write.get()).containsEntry("state","WITHDRAWN");
        assertThat(o.state()).isIn(com.cinenest.booking.ExtensionReservationContext.State.ACTIVE,com.cinenest.booking.ExtensionReservationContext.State.WITHDRAWN);assertThat(o.effective()).isEqualTo(o.state()==com.cinenest.booking.ExtensionReservationContext.State.ACTIVE);
       }assertThat(reservationContext(A,c,r).state()).isEqualTo(com.cinenest.booking.ExtensionReservationContext.State.WITHDRAWN);
+    }
+    String recoveryPath(AccessCase c,Object key){return extensionReservations(c)+"/commands/"+key;}
+    Map<String,String> recoveryDomain(){var f=extensionDomainFingerprint();f.remove("cinenest_booking.booking_extension_audit");f.remove("cinenest_booking.inventory_audit");return f;}
+    @Test void recoveryLostCreateResponseResolvesCommittedReferenceThenFreshStatus()throws Exception{
+      var c=accessCase();var body=reservationBody(c);assertThat(reserve(c,body).statusCode()).isEqualTo(200); // Discard the entire CREATE response body.
+      var before=recoveryDomain();long attempts=reservationAttempts();var response=c.customer().get(recoveryPath(c,body.get("commandKey")));var recovered=json(response);
+      assertThat(recovered.keySet()).containsExactlyInAnyOrder("bookingId","reservationId","commandKey","commandType","recoveryStatus","statusReadRequired");
+      assertThat(recovered).containsEntry("bookingId",c.booking().toString()).containsEntry("commandKey",body.get("commandKey")).containsEntry("commandType","CREATE").containsEntry("recoveryStatus","COMMITTED_REFERENCE").containsEntry("statusReadRequired",true);
+      assertThat(recovered.get("reservationId")).isEqualTo(jdbc.sql("SELECT reservation_id::text FROM cinenest_booking.booking_extension_command WHERE command_key=:k").param("k",UUID.fromString(body.get("commandKey").toString())).query(String.class).single());
+      assertThat(response.headers().firstValue("Cache-Control")).contains("private, no-store");
+      assertThat(response.body()).doesNotContain("payload","hash","owner","amount","evidence","credential","PIN","state");
+      assertThat(json(c.customer().get(reservationPath(c,recovered)))).containsEntry("state","ACTIVE").containsEntry("bookingChanged",false).containsEntry("paymentRequested",false);
+      assertThat(recoveryDomain()).isEqualTo(before);assertThat(reservationAttempts()).isEqualTo(attempts);
+    }
+    @Test void recoveryRepeatedGetsAuditIndependentlyWithoutReplayOrBudgetConsumption()throws Exception{
+      var c=accessCase();var body=reservationBody(c);json(reserve(c,body));var before=recoveryDomain();long attempts=reservationAttempts();
+      var a=json(c.customer().get(recoveryPath(c,body.get("commandKey"))));assertThat(json(c.customer().get(recoveryPath(c,body.get("commandKey"))))).isEqualTo(a);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_audit WHERE action='READ'").query(Integer.class).single()).isEqualTo(2);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_audit WHERE action='REPLAY'").query(Integer.class).single()).isZero();assertThat(reservationAttempts()).isEqualTo(attempts);assertThat(recoveryDomain()).isEqualTo(before);
+    }
+    @Test void recoveryUnknownCommandIsUnresolvedAndNeverCreates()throws Exception{
+      var c=accessCase();var before=recoveryDomain();var r=c.customer().get(recoveryPath(c,UUID.randomUUID()));assertThat(r.statusCode()).isEqualTo(404);assertThat(r.body()).contains("outcome remains unknown");assertThat(recoveryDomain()).isEqualTo(before);assertThat(reservationAttempts()).isZero();
+    }
+    @Test void recoveryWrongOwnerAndPrivilegedStaffCannotDiscoverCommand()throws Exception{
+      var c=accessCase();var body=reservationBody(c);json(reserve(c,body));
+      for(Browser b:java.util.List.of(c.staff(),c.allocator())){var known=b.get(recoveryPath(c,body.get("commandKey")));var unknown=b.get(recoveryPath(c,UUID.randomUUID()));assertThat(known.statusCode()).isEqualTo(404);assertThat(known.body()).isEqualTo(unknown.body()).doesNotContain(body.get("commandKey").toString());}
+    }
+    @Test void recoveryCrossBookingReferenceCannotBeDisclosed()throws Exception{
+      var c=accessCase();var body=reservationBody(c);json(reserve(c,body));var r=c.customer().get(recoveryPath(c,body.get("commandKey")).replace(c.booking().toString(),UUID.randomUUID().toString()));assertThat(r.statusCode()).isEqualTo(404);assertThat(r.body()).doesNotContain("reservationId",body.get("commandKey").toString());
+    }
+    @Test void recoveryWithdrawReceiptIsNotACreateReceipt()throws Exception{
+      var c=accessCase();var r=reservation(c);var key=UUID.randomUUID();json(write(c.customer(),"POST",reservationPath(c,r)+"/withdrawals",JSONObjectUtils.toJSONString(Map.of("expectedRevision",0,"commandKey",key.toString()))));assertThat(c.customer().get(recoveryPath(c,key)).statusCode()).isEqualTo(404);
+    }
+    @ParameterizedTest @ValueSource(strings={"ACTIVE_PENDING","EXPIRED","WITHDRAWN","INVALIDATED"})
+    void recoveryTerminalOrPendingReferenceNeverReactivates(String state)throws Exception{
+      var c=accessCase();var body=reservationBody(c);Map<String,Object> r;
+      if(state.equals("ACTIVE_PENDING")||state.equals("EXPIRED")){
+       Object service=context.getBean("extensionReservationService"),clock=org.springframework.test.util.ReflectionTestUtils.getField(service,"clock");var time=jdbc.sql("SELECT clock_timestamp()-INTERVAL '599 seconds'").query(java.time.OffsetDateTime.class).single().toInstant();
+       try{org.springframework.test.util.ReflectionTestUtils.setField(service,"clock",(java.util.function.Supplier<java.time.Instant>)()->time);r=json(reserve(c,body));}finally{org.springframework.test.util.ReflectionTestUtils.setField(service,"clock",clock);}awaitReservationExpiry(r);if(state.equals("EXPIRED"))extensionMaintenance();
+      }else{r=json(reserve(c,body));if(state.equals("WITHDRAWN"))withdrawReservation(c,r);else{jdbc.sql("UPDATE cinenest_rooms.venue SET version=version+1 WHERE venue_id=:v").param("v",VA).update();extensionMaintenance();}}
+      var before=recoveryDomain();var recovered=json(c.customer().get(recoveryPath(c,body.get("commandKey"))));assertThat(recovered.get("reservationId")).isEqualTo(r.get("reservationId"));var current=json(c.customer().get(reservationPath(c,recovered)));
+      assertThat(current.get("state")).isEqualTo(state.equals("ACTIVE_PENDING")?"ACTIVE":state);assertThat(current.get("effective")).isEqualTo(false);assertThat(current.get("pendingReconciliation")).isEqualTo(state.equals("ACTIVE_PENDING"));assertThat(recoveryDomain()).isEqualTo(before);
+    }
+    @Test void recoveryCurrentSuspensionDenied()throws Exception{var c=accessCase();var body=reservationBody(c);json(reserve(c,body));jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=revision+1 WHERE account_id=:a").param("a",A).update();assertThat(c.customer().get(recoveryPath(c,body.get("commandKey"))).statusCode()).isEqualTo(403);}
+    @Test void recoveryMissingSessionDenied()throws Exception{var c=accessCase();assertThat(new Browser().get(recoveryPath(c,UUID.randomUUID())).statusCode()).isEqualTo(401);}
+    @Test void recoveryInvalidatedSessionDenied()throws Exception{var c=accessCase();var body=reservationBody(c);json(reserve(c,body));jdbc.sql("UPDATE cinenest_identity.http_session SET expiry_time=0,last_access_time=0").update();assertThat(c.customer().get(recoveryPath(c,body.get("commandKey"))).statusCode()).isEqualTo(401);}
+    @ParameterizedTest @ValueSource(strings={"invalid","00000000-0000-0000-0000-000000000001?page=0","00000000-0000-0000-0000-000000000001?x=1&x=2"})
+    void recoveryMalformedReferencesAndAllQueriesRejected(String suffix)throws Exception{var c=accessCase();assertThat(c.customer().get(recoveryPath(c,suffix)).statusCode()).isEqualTo(400);assertThat(reservationAttempts()).isZero();}
+    @Test void recoveryMandatoryReadAuditFailureRollsBackAndFailsClosed()throws Exception{
+      var c=accessCase();var body=reservationBody(c);json(reserve(c,body));var before=recoveryDomain();
+      jdbc.sql("CREATE FUNCTION cinenest_booking.test_recovery_audit_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.action='READ' THEN RAISE EXCEPTION 'Synthetic recovery audit fault';END IF;RETURN NEW;END $$").update();jdbc.sql("CREATE TRIGGER test_recovery_audit_fail BEFORE INSERT ON cinenest_booking.booking_extension_audit FOR EACH ROW EXECUTE FUNCTION cinenest_booking.test_recovery_audit_fail()").update();
+      try{var r=c.customer().get(recoveryPath(c,body.get("commandKey")));assertThat(r.statusCode()).isEqualTo(503);assertThat(r.body()).doesNotContain("reservationId");assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_audit WHERE action='READ'").query(Integer.class).single()).isZero();assertThat(recoveryDomain()).isEqualTo(before);}
+      finally{jdbc.sql("DROP TRIGGER test_recovery_audit_fail ON cinenest_booking.booking_extension_audit").update();jdbc.sql("DROP FUNCTION cinenest_booking.test_recovery_audit_fail()").update();}
+    }
+    @Test void recoveryDatabaseDependencyFailureIsSanitizedUnavailable()throws Exception{
+      var c=accessCase();jdbc.sql("ALTER TABLE cinenest_booking.booking_extension_command RENAME TO test_recovery_unavailable").update();
+      try{var r=c.customer().get(recoveryPath(c,UUID.randomUUID()));assertThat(r.statusCode()).isEqualTo(503);assertThat(r.body()).doesNotContain("SELECT","booking_extension_command","SQL");}
+      finally{jdbc.sql("ALTER TABLE cinenest_booking.test_recovery_unavailable RENAME TO booking_extension_command").update();}
+    }
+    @ParameterizedTest @ValueSource(booleans={true,false})
+    void recoverySerializesWithUncommittedCreateAndNeverCreates(boolean commit)throws Exception{
+      var c=accessCase();var body=reservationBody(c);var staged=new java.util.concurrent.CountDownLatch(1);var finish=new java.util.concurrent.CountDownLatch(1);
+      try(var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+       var create=pool.submit(()->new org.springframework.transaction.support.TransactionTemplate(transactions).execute(t->{var r=org.springframework.test.util.ReflectionTestUtils.invokeMethod(context.getBean("extensionReservationService"),"create",A,c.booking().toString(),JSONObjectUtils.toJSONString(body),false);staged.countDown();try{if(!finish.await(5,java.util.concurrent.TimeUnit.SECONDS))throw new AssertionError("Commit gate unavailable");}catch(InterruptedException e){throw new RuntimeException(e);}if(!commit)t.setRollbackOnly();return r;}));
+       assertThat(staged.await(5,java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_command").query(Integer.class).single()).isZero();
+       var read=pool.submit(()->c.customer().get(recoveryPath(c,body.get("commandKey"))));
+       boolean blocked=false;for(int n=0;n<100;n++){if(jdbc.sql("SELECT EXISTS(SELECT 1 FROM pg_locks WHERE locktype='advisory' AND NOT granted)").query(Boolean.class).single()){blocked=true;break;}Thread.sleep(10);}assertThat(blocked).as("Recovery must wait on the actual PostgreSQL booking advisory lock").isTrue();
+       try{assertThatThrownBy(()->read.get(100,java.util.concurrent.TimeUnit.MILLISECONDS)).isInstanceOf(java.util.concurrent.TimeoutException.class);}finally{finish.countDown();}
+       create.get(5,java.util.concurrent.TimeUnit.SECONDS);var response=read.get(5,java.util.concurrent.TimeUnit.SECONDS);assertThat(response.statusCode()).isEqualTo(commit?200:404);
+       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_reservation").query(Integer.class).single()).isEqualTo(commit?1:0);
+       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_command").query(Integer.class).single()).isEqualTo(commit?1:0);
+      }finally{finish.countDown();}
+    }
+    @Test void recoveryAbsenceDoesNotPredictACommandThatStartsLater()throws Exception{var c=accessCase();var body=reservationBody(c);assertThat(c.customer().get(recoveryPath(c,body.get("commandKey"))).statusCode()).isEqualTo(404);assertThat(reservationAttempts()).isZero();json(reserve(c,body));assertThat(c.customer().get(recoveryPath(c,body.get("commandKey"))).statusCode()).isEqualTo(200);}
+    @Test void recoverySurvivesSeparateApplicationRestartWithoutEnablingCreation()throws Exception{
+      var c=accessCase();var body=reservationBody(c);json(reserve(c,body));Object expected=null;
+      for(String name:java.util.List.of("recovery-read-one","recovery-read-two")){Process child=restartedWorker(name);try{awaitRefundRestart(child,name);var result=json(c.customer().get(extensionChildOrigin(name)+recoveryPath(c,body.get("commandKey"))));if(expected==null)expected=result.get("reservationId");else assertThat(result.get("reservationId")).isEqualTo(expected);}finally{stopWorker(child);}}
+      assertThat(reservationAttempts()).isEqualTo(1);
+    }
+    @Test void recoveryRemainsAvailableWhenCreationConfigurationDisabled()throws Exception{var c=accessCase();var body=reservationBody(c);json(reserve(c,body));Object service=context.getBean("extensionReservationService"),enabled=org.springframework.test.util.ReflectionTestUtils.getField(service,"enabled");try{org.springframework.test.util.ReflectionTestUtils.setField(service,"enabled",false);assertThat(c.customer().get(recoveryPath(c,body.get("commandKey"))).statusCode()).isEqualTo(200);}finally{org.springframework.test.util.ReflectionTestUtils.setField(service,"enabled",enabled);}}
+    @Test void recoverySameOwnerOtherPersistedBookingCannotResolveOriginalReceipt()throws Exception{
+      var c=accessCase();var body=reservationBody(c);json(reserve(c,body));
+      // Minimal independently owned persisted read subject; no purchase/financial acceptance is asserted.
+      var otherHold=held(c.customer(),request(c.customer(),java.time.LocalDateTime.parse(local()).plusDays(1).toString()));UUID other=UUID.randomUUID();
+      jdbc.sql("INSERT INTO cinenest_booking.booking(booking_id,request_id,hold_id,owner_id,venue_id,state,synthetic) VALUES(:b,:request,:hold,:a,:v,'SIMULATED_CONFIRMED',true)").param("b",other).param("request",UUID.randomUUID()).param("hold",UUID.fromString(otherHold.get("holdId").toString())).param("a",A).param("v",VA).update();
+      var response=c.customer().get(recoveryPath(c,body.get("commandKey")).replace(c.booking().toString(),other.toString()));assertThat(response.statusCode()).isEqualTo(404);assertThat(response.body()).contains("outcome remains unknown").doesNotContain("reservationId");
     }
 }

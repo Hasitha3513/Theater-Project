@@ -10,4 +10,9 @@ class ExtensionReservationArchitectureTest {
   String service=Files.readString(Path.of("src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java"));
   assertThat(service).contains("implements ExtensionReservationContext", "isActualTransactionActive()", "response(observeOwned", "audit(owner,booking,reservation,\"READ\"").doesNotContain("cinenest_payments.", "REQUIRES_NEW_FUNDING");
  }
+ @Test void recoveryReadIsBoundedBookingOwnedAndNeverReplaysOrMutates()throws Exception{
+  String s=Files.readString(Path.of("src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java"));
+  String read=s.substring(s.indexOf(" Object recover("),s.indexOf(" Object read(UUID actor"));
+  assertThat(read).contains("access.lock(booking);eligible(actor);basic(actor,booking)","c.owner_id=:a","c.action='CREATE'","e.booking_id=:b","audit(actor,booking,reservation,\"READ\"").doesNotContain("admit(","replay(","finish(","maintenance(","INSERT INTO","UPDATE ","DELETE ","cinenest_payments.","cinenest_access.","cinenest_identity.");
+ }
 }

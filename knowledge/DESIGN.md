@@ -1378,3 +1378,9 @@ CN-BOOKING-EXTENSION-RESERVATION-BE-001 is backend-only;no customer/staff extens
 CN-EXTENSION-PREVIEW-FE-001 reuses the existing customer shell, purchased cinematic illustration, light Card, gold border, violet Button, Field, Badge and semantic StateMessage. One panel follows the purchased snapshot; no extra main/header/navigation shell. Explicit Check Extension Options precedes a server-bounded numeric duration field and explicit Preview Additional Price. Exact LKR prices remain separate from existing purchased price; derived end is labelled and uses the venue timezone. Required preview-only notice and UNKNOWN/UNVERIFIED disclosures remain visible. No reservation/payment continuation control is invented.
 
 Three approved references were visually inspected; the customer booking reference is primary. Actual baseline/after screenshots at 375/768/1280 use synthetic intercepted fixtures, not operational evidence. The scope preserves reference navy/gold/violet composition while adapting the preview into the existing booking-detail hierarchy; no mockup photos/metrics or fictional amenities are added. Screenshot measurements and bounded accessibility evidence are recorded in [PROGRESS](PROGRESS.md#extension-preview-frontend).
+
+
+<a id="extension-reservation-recovery"></a>
+## Recovery-reference presentation contract — 2026-10-24
+
+CN-EXTENSION-RESERVATION-RECOVERY-READ-001 adds backend-only reference recovery. No reservation button,proxy,screenshot,layout or token change;customer reservation/status/withdrawal UI remains PENDING. Future authorized UI must use recovered reservationId for a fresh status GET,distinguish command-time reference from current state,and keep missing receipt as UNKNOWN outcome. Do not offer automatic replacement or treat COMMITTED_REFERENCE as a paid extension. [Contract](ARCHITECTURE.md#extension-reservation-recovery).

@@ -6032,5 +6032,84 @@ def inert_ci_main():
     if result==0:print('PASS exact owner-only extension preview frontend;backend,policy,migrations,history,92 requirements and74 criteria preserved')
     return result
 
+
+# CN-EXTENSION-RESERVATION-RECOVERY-READ-001: exact customer preview successor; no general exemption.
+extension_recovery_prior_main = inert_ci_main
+EXTENSION_RECOVERY_BASELINE = 'd77320f2a9eaeb9df631977a3e0118ddac6e204d'
+EXTENSION_RECOVERY_HASHES = {'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationController.java': 'fad8fd0fba96c2a297184ef4ca6753f6e2c11c890f755a3967e935a7fbc0882d', 'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java': 'f60c362bee7e709533d49b3f2c17da71dd311c8faaf8480e1b5c449410f8b3b0', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'ff6827f60a21fe493261dd66b75a636013b014c8ff12ee0dc3afc5b6f0cf7442', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '0245f18b52bdec404fe79a3eabf597b26c19755b7a079fc24a502731d49f0f22', 'backend/src/test/java/com/cinenest/ExtensionReservationArchitectureTest.java': '4d1462b33fdede86e5f42b6da2f4e47f62c20c1e2df9eef0535c18f6e11d1530', 'knowledge/ARCHITECTURE.md': '2bf3d0a5840b0ed55a32d4c5ceafe23821a25972b9bef2f68069f2b1c7a8d569', 'knowledge/DESIGN.md': '0628526f1256823b7a69756a195f876fca5fc8f7a9d9a72b032f20852737d874', 'knowledge/PROGRESS.md': '17617395ab71eefb034be9d4c889386b178dc224cc49b9f1b8bb1b115b5b4fba', 'knowledge/product/FEATURE_CATALOG.md': '5640c7f83ffe80f488123c85ccc23d54243abcd7fac8e308467f485d53385266', 'knowledge/guides/USER_GUIDE.md': '5a7f5db82f76bcf1d4a1dc336f2d6f48ea6bbf65f8e55c4226374c63e13a55f1', 'knowledge/execution/status.json': 'cde5b673c0a49e5ce0e1a55bce124a5757bf12986cae815eab3d69008d9dda4f', 'knowledge/execution/requirements.json': '6641b2ec0111b0b3cb157594a7a8c6237cbbcbb4d761ffeffe849aec307ddd4c', 'knowledge/execution/test-plan.json': '351667f7a778ef524a03164349844867aa68c5079930f56ac0128c94b9d58db2', 'scripts/test-governance-controls.py': 'ea299c0d03267790b9871351ca72390d873f8ffbfbd700c60fdf1190f3b3ecc4'}
+EXTENSION_RECOVERY_ADDED = set()
+
+def extension_recovery_successor_errors():
+    baseline=EXTENSION_RECOVERY_BASELINE;hashes=EXTENSION_RECOVERY_HASHES
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('Extension recovery exact authorized payload mismatch '+name)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):
+        errors.append('Extension recovery historical validator changed')
+    for name,key in [('requirements.json','requirements'),('test-plan.json','tests')]:
+        current=json.loads((K/'execution'/name).read_text())
+        for row in current[key]:row.pop('extensionRecoveryReadEvidence',None)
+        if current!=json.loads(prior('knowledge/execution/'+name)):
+            errors.append('Extension recovery changed requirement/test acceptance/history '+name)
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('extensionReservationRecoveryRead',{})
+    state.update(receipt.get('previousCurrentHeader',{}))
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Extension recovery changed existing status/approval evidence')
+    for key in ['migrationsChanged','inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','frontendImplemented','missingReceiptMeansFailed','historicalSyntheticCampaignRerun']:
+        if receipt.get(key) is not False:errors.append('Extension recovery exceeded authority '+key)
+    if receipt.get('customerOnly') is not True or receipt.get('baseline')!=baseline:errors.append('Extension recovery authority/baseline mismatch')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):
+        errors.append('Extension recovery acceptance checkbox drift')
+    service=(R/'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java').read_text()
+    start=service.index(' /** Committed reference only;');end=service.index(' Object read(UUID actor',start)
+    if service[:start]+service[end:]!=prior('backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java').decode():errors.append('Recovery changed original reservation commands')
+    security=(R/'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java').read_text().replace(',"/api/bookings/*/extension-reservations/commands/*"','')
+    if security!=prior('backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java').decode():errors.append('Recovery broadened unrelated security')
+    allowed=set(hashes)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for name in tracked-allowed:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Extension recovery unrelated protected source/history change '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=allowed:errors.append('Extension recovery unauthorized changed path '+str(changed-allowed))
+    preserved={'knowledge/Mini movie theater Ruels and Conditions.docx':'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf','knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx':'8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked-set(hashes):
+        if name not in preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=preserved[name]:errors.append('Extension recovery unauthorized untracked payload '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/'+entry['path'] in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Extension recovery manifest inventory/authority drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=extension_recovery_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    baseline=EXTENSION_RECOVERY_BASELINE
+    added=EXTENSION_RECOVERY_ADDED
+    owned=set(EXTENSION_RECOVERY_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name]) for name in owned-added}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw):return (x for x in g0(path,*a,**kw) if x not in {R/n for n in added})
+    def rglob(path,*a,**kw):return (x for x in rg0(path,*a,**kw) if x not in {R/n for n in added})
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode()
+            hide=owned if 'diff' in argv else added
+            paths=[x for x in text.split(sep) if x and x not in hide]
+            text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=extension_recovery_prior_main()
+    if result==0:print('PASS exact owner-only committed CREATE recovery read;original commands,frontend,migrations,financial policy,history and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

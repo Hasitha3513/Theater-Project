@@ -100,6 +100,24 @@ class ExtensionReservationService implements ExtensionReservationContext {
   });
  }
  private void command(UUID actor,UUID key,UUID reservation,String action,String digest,Map<String,Object> result){jdbc.sql("INSERT INTO cinenest_booking.booking_extension_command(owner_id,command_key,reservation_id,action,payload_hash,result) VALUES(:a,:k,:r,:action,:hash,CAST(:result AS jsonb))").param("a",actor).param("k",key).param("r",reservation).param("action",action).param("hash",digest).param("result",json(result)).update();}
+ /** Committed reference only; absence never proves an earlier command cannot subsequently commit. */
+ record Recovery(UUID bookingId,UUID reservationId,UUID commandKey,String commandType,String recoveryStatus,boolean statusReadRequired) {}
+ Object recover(UUID actor,String rawBooking,String rawCommand){
+  scoped();UUID booking=InventoryRules.id(rawBooking),key=InventoryRules.id(rawCommand);
+  return tx.execute(status->{
+   // Same booking serialization as CREATE; no admission, replay, expiry or lifecycle transition.
+   access.lock(booking);eligible(actor);basic(actor,booking);
+   var rows=jdbc.sql("SELECT e.reservation_id,e.revision FROM cinenest_booking.booking_extension_command c JOIN cinenest_booking.booking_extension_reservation e ON e.reservation_id=c.reservation_id WHERE c.owner_id=:a AND c.command_key=:k AND c.action='CREATE' AND e.owner_id=:a AND e.booking_id=:b")
+    .param("a",actor).param("k",key).param("b",booking).query().listOfRows();
+   if(rows.isEmpty())throw new InventoryFailure(404,"Recovery unresolved; no committed reference available. Original command outcome remains unknown");
+   if(rows.size()!=1)throw new InventoryFailure(503,"Recovery unavailable");
+   var row=rows.getFirst();UUID reservation=(UUID)row.get("reservation_id");
+   audit(actor,booking,reservation,"READ","ALLOW",((Number)row.get("revision")).longValue());
+   // Recheck within the existing Identity lock before disclosing the protected reference.
+   if(!identity.eligible(actor,false))throw new InventoryFailure(403,"Current eligibility required");
+   return new Recovery(booking,reservation,key,"CREATE","COMMITTED_REFERENCE",true);
+  });
+ }
  Object read(UUID actor,String rawBooking,String rawReservation){
   UUID booking=InventoryRules.id(rawBooking),reservation=InventoryRules.id(rawReservation);
   return tx.execute(status->{try{return response(observeOwned(actor,booking,reservation));}
