@@ -58,6 +58,7 @@ def main():
     test_extension_recovery_controls(validator)
     test_knowledge_reading_controls(validator)
     test_reservation_frontend_controls(validator)
+    test_knowledge_traceability_controls(validator)
 
 
 def test_future_register_controls():
@@ -287,14 +288,14 @@ def test_ci_empty_diff_controls(validator):
     assert not parse('backend/unauthorized.java\n') <= {'knowledge/PROJECT.md'}
     assert not parse('knowledge/execution/evidence/checks.json\n') <= {'knowledge/PROJECT.md'}
     print('PASS unauthorized and protected path classification remains negative')
-    errors = validator['reservation_frontend_successor_errors']()
+    errors = validator['knowledge_traceability_successor_errors']()
     assert errors==[], errors
     print('PASS legitimate exact successor documentation admission')
     rb,rt,out = Path.read_bytes,Path.read_text,subprocess.check_output
     for rel in ['knowledge/PROJECT.md','knowledge/execution/requirements.json','knowledge/execution/status.json','scripts/test-governance-controls.py','knowledge/execution/evidence/checks.json']:
         target=ROOT/rel;replacement=rb(target)+b'\nUNAUTHORIZED_PAYLOAD\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['reservation_frontend_successor_errors'](),rel
+            assert validator['knowledge_traceability_successor_errors'](),rel
         print('PASS rejected successor changed-payload/protected-history',rel)
     def unknown_path(argv,*a,**kw):
         value=out(argv,*a,**kw)
@@ -304,7 +305,7 @@ def test_ci_empty_diff_controls(validator):
             return text if isinstance(value,str) else text.encode()
         return value
     with patch.object(subprocess,'check_output',unknown_path):
-        assert validator['reservation_frontend_successor_errors'](),'Unauthorized source path accepted'
+        assert validator['knowledge_traceability_successor_errors'](),'Unauthorized source path accepted'
     print('PASS rejected unauthorized actual changed-path collection')
     # Model only the unrelated worktree file as its committed CI bytes. All task
     # sources, hashes, real changed paths and unauthorized-file guards remain real.
@@ -329,7 +330,7 @@ def test_extension_frontend_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','backendChanged']:
         value=json.loads(rt(path));value['extensionPreviewFrontend'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['reservation_frontend_successor_errors'](),key
+            assert validator['knowledge_traceability_successor_errors'](),key
         print('PASS extension frontend rejected',key)
 
 def test_extension_recovery_controls(validator):
@@ -337,7 +338,7 @@ def test_extension_recovery_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','frontendImplemented','missingReceiptMeansFailed']:
         value=json.loads(rt(path));value['extensionReservationRecoveryRead'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['reservation_frontend_successor_errors'](),key
+            assert validator['knowledge_traceability_successor_errors'](),key
         print('PASS extension recovery rejected',key)
 
 def test_knowledge_reading_controls(validator):
@@ -353,11 +354,11 @@ def test_knowledge_reading_controls(validator):
     rb,rt=Path.read_bytes,Path.read_text
     for target,replacement,label in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['reservation_frontend_successor_errors'](),label
+            assert validator['knowledge_traceability_successor_errors'](),label
         print('PASS knowledge-reading rejected',label)
 
 def test_reservation_frontend_controls(validator):
-    assert not validator['reservation_frontend_successor_errors']()
+    assert not validator['knowledge_traceability_successor_errors']()
     path=K/'execution/status.json';original=json.loads(path.read_text())
     faults=[]
     for key in ['backendChanged','migrationsChanged','financialMutation','fundingCreated','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','automaticCreation','automaticRenewal','missingReceiptMeansFailed','historicalSyntheticCampaignRerun']:
@@ -370,8 +371,45 @@ def test_reservation_frontend_controls(validator):
     rb,rt=Path.read_bytes,Path.read_text
     for target,replacement,label in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['reservation_frontend_successor_errors'](),label
+            assert validator['knowledge_traceability_successor_errors'](),label
         print('PASS reservation frontend rejected',label)
     print('PASS reservation frontend exact successor; historical positive/negative controls retained')
+
+def test_knowledge_traceability_controls(validator):
+    import copy
+    matrix=json.loads((K/'execution/requirements.json').read_text())['mvpKnowledgeTraceability']
+    assert validator['traceability_matrix_errors'](matrix)==[]
+    print('PASS traceability positive92requirements74criteria37diagrams11modules')
+    faults=[]
+    def fault(label,mutate):
+        value=copy.deepcopy(matrix);mutate(value);faults.append((label,value))
+    fault('missing requirement',lambda m:m['requirements'].pop())
+    fault('duplicate requirement',lambda m:m['requirements'].append(m['requirements'][0]))
+    fault('formal acceptance',lambda m:m['requirements'][0].update(acceptanceStatus='ACCEPTED'))
+    fault('criterion checkbox',lambda m:m['criterionIndex'][0].update(checked=False))
+    fault('unknown test ID',lambda m:m['requirements'][0].update(testIds=['T-NOT-FOUND']))
+    fault('test plan invented PASS',lambda m:m['requirements'][1].update(formalTestPlanStatuses={m['requirements'][1]['testIds'][0]:'PASS'}))
+    fault('unknown workstream',lambda m:m['requirements'][0].update(workstreamIds=['W12']))
+    fault('unknown module',lambda m:m['moduleIndex'][0].update(id='redis'))
+    fault('omitted diagram',lambda m:m['diagramIndex'].pop())
+    fault('diagram approval',lambda m:m['diagramIndex'][0].update(authority='APPROVED_IMPLEMENTED'))
+    fault('diagram hash',lambda m:m['diagramIndex'][0].update(sha256='0'*64))
+    fault('missing diagram family',lambda m:m['requirements'][0]['diagrams'].pop('ER'))
+    fault('inapplicable without reason',lambda m:m['requirements'][0]['diagrams']['ER'].update(reason=''))
+    fault('source path traversal',lambda m:m['implementationGroups']['identity']['source'][0].update(path='../secret'))
+    fault('invented API',lambda m:m['implementationGroups']['identity']['apiContracts'][0].update(path='/api/automatic-grants'))
+    fault('invented table',lambda m:m['implementationGroups']['identity']['database'][0].update(table='cinenest_identity.automatic_grants'))
+    fault('next task unauthorized',lambda m:m['nextImplementationTask'].update(authority='GRANTED'))
+    fault('global policy closed',lambda m:m.update(openDecisionIds=[]))
+    fault('context as metric',lambda m:next(r for r in m['requirements'] if r['requirementId']=='BN-M03').update(apiStatus='REFERENCE_FOUND'))
+    for label,value in faults:
+        assert validator['traceability_matrix_errors'](value),label
+        print('PASS traceability rejected',label)
+    path=K/'execution/status.json';rb,rt=Path.read_bytes,Path.read_text
+    for key in ['applicationChanged','migrationsChanged','businessPolicyChanged','decisionsApproved','acceptanceChanged','historicalEvidenceChanged','extensionFundingStarted','fullCampaignRerun']:
+        value=json.loads(path.read_text());value['knowledgeTraceabilityReconciliation'][key]=True;replacement=json.dumps(value).encode()
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
+            assert validator['knowledge_traceability_successor_errors'](),key
+        print('PASS traceability rejected scope',key)
 
 if __name__ == '__main__': main()

@@ -6263,5 +6263,200 @@ def inert_ci_main():
     if result==0:print('PASS exact customer reservation frontend successor;backend,history,decisions and acceptance preserved')
     return result
 
+def traceability_matrix_errors(matrix=None):
+    """Read-only structural/reference validation; semantic associations require recorded review."""
+    errors=[]
+    def need(ok,message):
+        if not ok:errors.append('Traceability '+message)
+    requirements=json.loads((K/'execution/requirements.json').read_text())
+    plan=json.loads((K/'execution/test-plan.json').read_text())
+    changes=json.loads((K/'execution/change-sets.json').read_text())
+    decisions=json.loads((K/'decisions/cinenest-open-decisions.json').read_text())
+    matrix=requirements.get('mvpKnowledgeTraceability',{}) if matrix is None else matrix
+    original={r['id']:r for r in requirements['requirements']}
+    test_index={t['id']:t for t in plan['tests']}
+    streams={w['id']:w for w in changes['remainingImplementationPlan']['workstreams']}
+    need(matrix.get('projectionOnly') is True,'must remain a derived projection')
+    need(matrix.get('taskId')=='CN-MVP-KNOWLEDGE-TRACEABILITY-001','task identity drift')
+    need(set(original)=={r.get('requirementId') for r in matrix.get('requirements',[])} and len(matrix.get('requirements',[]))==92,'92 original IDs missing/duplicated')
+    need(len(streams)==11,'workstream denominator changed')
+    need(matrix.get('openDecisionIds')==sorted(d['id'] for d in decisions['decisions'] if d['decisionStatus']=='OPEN_DECISION'),'global open decisions changed')
+    vocabulary=matrix.get('statusVocabulary',{})
+    need(all(vocabulary.get(k) for k in ['NOT_APPLICABLE','NOT_FOUND','NOT_VERIFIED','REFERENCE_FOUND','DECLARED_DDL_REFERENCE_FOUND','ARCHITECTURAL_CONTEXT_ONLY','SEMANTIC_FLOW_MATCH']),'missing distinct evidence vocabulary')
+    parsed=[]
+    for line in (K/'PROGRESS.md').read_text().splitlines():
+        match=re.match(r'^- \[([ x])\] \*\*(P\d+-C\d+)\*\* (.*?) — Req: (.*?); tests: (.*?); tasks: (.*?)\. Evidence:',line)
+        if match:parsed.append({'id':match[2],'wording':match[3],'checked':match[1]=='x','requirementIds':match[4].split(', '),'testIds':match[5].split(', '),'taskIds':match[6].split(', ')})
+    criteria=matrix.get('criterionIndex',[])
+    need(len(parsed)==74 and len(criteria)==74 and sum(c['checked'] for c in parsed)==15,'74/15 criterion accounting drift')
+    need([{k:c.get(k) for k in ['id','wording','checked','requirementIds','testIds','taskIds']} for c in criteria]==parsed,'criterion wording/checkbox/mapping drift')
+    def reference(ref):
+        name=ref.get('path','');line=ref.get('line')
+        safe=isinstance(name,str) and not Path(name).is_absolute() and '..' not in Path(name).parts
+        path=R/name if safe else R/'__invalid_traceability_reference__'
+        valid=safe and path.is_file() and isinstance(line,int) and not isinstance(line,bool) and line>=1
+        need(valid,'invalid reference '+str(name))
+        if not valid:return None
+        body=path.read_text();lines=body.splitlines()
+        need(line<=len(lines),'line outside source '+name)
+        return lines[line-1] if line<=len(lines) else None
+    modules=matrix.get('moduleIndex',[])
+    actual_modules={p.parent.name for p in (R/'backend/src/main/java/com/cinenest').glob('*/package-info.java')}
+    need(len(modules)==11 and {m.get('id') for m in modules}==actual_modules,'eleven actual module declarations lost/invented')
+    for module in modules:
+        line=reference(module)
+        if line is not None:need((R/module['path']).read_text().strip()==module.get('declaration'),'module declaration changed '+module['id'])
+    diagrams=matrix.get('diagramIndex',[]);diagram_index={d.get('path'):d for d in diagrams}
+    actual_diagrams={str(p.relative_to(R)) for p in K.glob('[0-9][0-9]_*.md')}
+    need(len(diagrams)==37 and set(diagram_index)==actual_diagrams,'37 diagram inventory drift')
+    for diagram in diagrams:
+        name=diagram.get('path','');path=R/name
+        need(path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()==diagram.get('sha256'),'diagram hash drift '+name)
+        need(diagram.get('authority')=='PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL' and diagram.get('authored_requirement_ids')==[] and diagram.get('authored_id_relation')=='NOT_FOUND','diagram approval/authored-ID fabrication '+name)
+        anchor=diagram.get('line_anchors',{}).get('mermaid_start')
+        line=reference({'path':name,'line':anchor})
+        if line is not None:need(line.strip()=='```mermaid','diagram anchor is not Mermaid source '+name)
+    groups=matrix.get('implementationGroups',{})
+    def api_signatures(path):
+        prefix='';result=set()
+        for n,line in enumerate(path.read_text().splitlines(),1):
+            if '@RequestMapping' in line:
+                found=re.search(r'@RequestMapping\("([^\"]+)"',line);prefix=found[1] if found else ''
+            for match in re.finditer(r'@(Get|Post|Put|Patch|Delete)Mapping(?:\(([^\n]*?)\))?',line):
+                for suffix in re.findall(r'"([^\"]+)"',match[2] or '') or ['']:result.add((match[1].upper(),prefix+suffix,n))
+        return result
+    signature_cache={}
+    for name,group in groups.items():
+        need(set(group.get('owningModules',[]))<=actual_modules,'invented module '+name)
+        need(group.get('scope') and group.get('verification'),'missing bounded evidence scope '+name)
+        for key in ['source','frontend','publicPorts','automatedTests']:
+            for ref in group.get(key,[]):reference(ref)
+        for api in group.get('apiContracts',[]):
+            source=api.get('source','');reference({'path':source,'line':api.get('line')})
+            path=R/source
+            if path.is_file():
+                if source not in signature_cache:signature_cache[source]=api_signatures(path)
+                need((api.get('method'),api.get('path'),api.get('line')) in signature_cache[source],'API signature not declared '+str(api))
+        for table in group.get('database',[]):
+            declaration=reference(table)
+            need(declaration is not None and re.search(r'CREATE TABLE\s+'+re.escape(table.get('table',''))+r'\b',declaration,re.I) is not None,'table not declared by owned migration '+str(table.get('table')))
+            need(str(table.get('path','')).startswith('backend/src/main/resources/db/migration/V'),'table source is not existing Flyway migration')
+    families={'USE_CASE','ACTIVITY','SEQUENCE','ER','COMPONENT','SYSTEM_CONTEXT'}
+    developments={'PARTIAL','NOT_IMPLEMENTED','DEFERRED','IMPLEMENTED_VERIFIED_WORKFLOW_ONLY','NOT_IMPLEMENTED_REQUESTED_TIME_BASED_METRIC','PARTIAL_DIFFERENT_APPROVED_REPORT_ONLY'}
+    categories={'MISSING_DOCUMENTATION_REFERENCE','MISSING_IMPLEMENTATION','MISSING_TEST_COVERAGE','INCONSISTENT_ARCHITECTURE','CONFLICTING_BUSINESS_RULE','OPEN_POLICY_DECISION','MISSING_PROVIDER_QUALIFICATION','MISSING_PHYSICAL_HARDWARE_ACCEPTANCE','MISSING_FORMAL_ACCEPTANCE_EVIDENCE'}
+    for row in matrix.get('requirements',[]):
+        rid=row.get('requirementId');source=original.get(rid)
+        if source is None:continue
+        for key in ['title','decisionStatus','implementationStatus','acceptanceStatus']:need(row.get(key)==source[key],'original metadata changed '+str(rid)+'/'+key)
+        need(row.get('acceptanceStatus')=='NOT_ACCEPTED' and row.get('currentDevelopment') in developments,'formal acceptance/full verification fabricated '+rid)
+        need(bool(row.get('businessObjective')),'missing business objective '+rid)
+        need(row.get('workstreamIds')==[w['id'] for w in streams.values() if rid in w['requirementIds']],'workstream reference drift '+rid)
+        need(row.get('criterionIds')==[c['id'] for c in parsed if rid in c['requirementIds']],'criterion reference drift '+rid)
+        need(row.get('existingChangeSetIds')==source['changeSetIds'],'existing change-set association changed '+rid)
+        need(row.get('testIds')==source['testIds'],'test-ID association changed '+rid)
+        for tid in row.get('testIds',[]):need(tid in test_index and rid in test_index[tid]['requirementIds'],'missing reciprocal test mapping '+rid+'/'+tid)
+        need(row.get('formalTestPlanStatuses')=={tid:test_index[tid]['status'] for tid in source['testIds']},'formal test status changed '+rid)
+        need(set(row.get('implementationGroupIds',[]))<=set(groups),'unknown implementation group '+rid)
+        need(set(row.get('diagrams',{}))==families,'missing diagram-family outcome '+rid)
+        for family,entry in row.get('diagrams',{}).items():
+            status=entry.get('status');refs=entry.get('references',[])
+            need(status in ['REFERENCE_FOUND','NOT_FOUND','NOT_APPLICABLE'],'invalid diagram status '+rid)
+            if status!='REFERENCE_FOUND':need(not refs and bool(entry.get('reason')),'unknown/inapplicable diagram must have rationale and no invented references '+rid);continue
+            need(bool(refs) and entry.get('relationship') in ['ARCHITECTURAL_CONTEXT_ONLY','SEMANTIC_FLOW_MATCH'],'missing semantic relation qualification '+rid)
+            if family in ['COMPONENT','SYSTEM_CONTEXT']:need(entry.get('relationship')=='ARCHITECTURAL_CONTEXT_ONLY','generic context presented as direct contract '+rid)
+            need(entry.get('authoredRequirementIdLink')=='NOT_FOUND','authored requirement-ID link invented '+rid)
+            for ref in refs:
+                diagram=diagram_index.get(ref.get('path'))
+                need(diagram is not None and diagram.get('family')==family,'wrong diagram family/path '+rid)
+                if diagram:need(ref.get('sha256')==diagram['sha256'] and ref.get('line')==diagram['line_anchors']['mermaid_start'],'diagram reference identity drift '+rid)
+        need(all(g.get('category') in categories for g in row.get('gaps',[])) and any(g.get('category')=='MISSING_FORMAL_ACCEPTANCE_EVIDENCE' for g in row.get('gaps',[])),'missing/invalid gap classification '+rid)
+        if row.get('implementationRelationship')=='RELATED_REPORT_CONTEXT_ONLY_REQUESTED_METRIC_NOT_FOUND':need(row.get('apiStatus')=='NOT_FOUND','related report masquerades as requested metric '+rid)
+    need(matrix.get('nextImplementationTask',{}).get('id')=='CN-E2E-EXTENSION-RESERVATION-001' and matrix.get('nextImplementationTask',{}).get('authority')=='PROPOSED_SEPARATE_EXECUTION_AUTHORIZATION_REQUIRED','next implementation authority invented')
+    return errors
+
+# CN-MVP-KNOWLEDGE-TRACEABILITY-001: exact reviewed documentation successor;no general exemption.
+knowledge_traceability_prior_main = inert_ci_main
+KNOWLEDGE_TRACEABILITY_BASELINE = 'a5f167971ac7f5688c400fa1bc25801a8295cc39'
+KNOWLEDGE_TRACEABILITY_HASHES = {'knowledge/ARCHITECTURE.md': 'e5613fb38fe008340e9c9a6d711b842baee9671112b67cd916a315a21012b1e2', 'knowledge/PROGRESS.md': '39ee61b90bf1b15b78825470dc766bf555e2428473684e1b2de5f7a02319ce86', 'knowledge/README.md': '4248b82a476d7f1291b26169b90e541fecc1a7d51d4239c9e0107ddd66244f4d', 'knowledge/product/FEATURE_CATALOG.md': '00910c132bb101e1e24b9a68d8f4fd049f8901dfdd5e821c220bc2021c174e74', 'knowledge/execution/requirements.json': 'e76fb27488c7dde404843030d48267b99cbac6b269ff8eecb2e2d46bbd6af643', 'knowledge/execution/change-sets.json': '32362e0cc14b47c4a385cc5fe14f11d07f8ea713798dc6d81ff2ef3abf66bae1', 'knowledge/execution/status.json': 'e47d85405d757aca22f49e21206128a719253e94850df2a3e627e8bb67964608', 'scripts/test-governance-controls.py': '182b95074c4a2236bcd98bdee5f794e8da545fdffbfcd0952d2afa4d93649f29'}
+KNOWLEDGE_TRACEABILITY_ADDED = set()
+
+def knowledge_traceability_successor_errors():
+    baseline=KNOWLEDGE_TRACEABILITY_BASELINE;hashes=KNOWLEDGE_TRACEABILITY_HASHES
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Traceability exact authorized payload mismatch '+name)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Traceability historical validator changed')
+    data=json.loads((K/'execution/requirements.json').read_text());data.pop('mvpKnowledgeTraceability',None)
+    if data!=json.loads(prior('knowledge/execution/requirements.json')):errors.append('Traceability original92requirements/acceptance changed')
+    data=json.loads((K/'execution/change-sets.json').read_text());plan=data['remainingImplementationPlan'];receipt=plan.pop('traceabilityReconciliation',{})
+    for w in plan['workstreams']:
+        if w['id'] in receipt.get('previousWorkstreamValues',{}):w.update(receipt['previousWorkstreamValues'][w['id']])
+    if data!=json.loads(prior('knowledge/execution/change-sets.json')):errors.append('Traceability historical graph/dependencies/plan drift')
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('knowledgeTraceabilityReconciliation',{});state.update(receipt.get('previousCurrentHeader',{}))
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Traceability prior status/evidence changed')
+    for key in ['applicationChanged','migrationsChanged','businessPolicyChanged','decisionsApproved','acceptanceChanged','historicalEvidenceChanged','extensionFundingStarted','fullCampaignRerun']:
+        if receipt.get(key) is not False:errors.append('Traceability exceeded authority '+key)
+    ledger=receipt.get('knowledgeReadingLedger',{})
+    if receipt.get('baseline')!=baseline or ledger.get('baseline')!=baseline or ledger.get('complete') is not True or ledger.get('discoveredFiles')!=116 or ledger.get('reviewedFiles')!=116 or ledger.get('unresolvedCoverageGaps')!=[]:errors.append('Traceability complete qualified reading missing')
+    rows=ledger.get('files',[])
+    if len(rows)!=116 or len({r.get('path') for r in rows})!=116:errors.append('Traceability full-reading inventory drift')
+    tracked_kb=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline,'knowledge'],text=True),nul=True)
+    for row in rows:
+        name=row.get('path','')
+        if name in tracked_kb and row.get('sha256')!=hashlib.sha256(prior(name)).hexdigest():errors.append('Traceability reviewed baseline hash mismatch '+name)
+        if not row.get('coverageMethod'):errors.append('Traceability reading method missing '+name)
+    errors.extend(traceability_matrix_errors())
+    progress=(K/'PROGRESS.md').read_text();changes=json.loads((K/'execution/change-sets.json').read_text())['changeSets']
+    task_rows=''.join('| '+c['id']+' | '+str(c['phase'])+' | '+c['objective']+' | '+(', '.join(c['dependencies']) or 'None')+' | '+c['workStatus']+' / '+c['readiness']+' |\n' for c in changes)
+    if task_rows not in progress:errors.append('Traceability task projection differs from authority')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):
+        errors.append('Traceability acceptance checkbox drift')
+    allowed=set(hashes)|KNOWLEDGE_TRACEABILITY_ADDED|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for name in tracked-allowed:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Traceability unrelated protected source/history change '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=allowed:errors.append('Traceability unauthorized changed path '+str(changed-allowed))
+    preserved={'knowledge/Mini movie theater Ruels and Conditions.docx':'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf','knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx':'8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked-set(hashes):
+        if name not in preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=preserved[name]:errors.append('Traceability unauthorized untracked payload '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/'+entry['path'] in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+    expected['externalInstructionFiles'][0]['sha256']=hashlib.sha256((R/'AGENTS.md').read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Traceability manifest inventory/authority drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=knowledge_traceability_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    baseline=KNOWLEDGE_TRACEABILITY_BASELINE
+    added=KNOWLEDGE_TRACEABILITY_ADDED
+    owned=set(KNOWLEDGE_TRACEABILITY_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name]) for name in owned-added}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw):return (x for x in g0(path,*a,**kw) if x not in {R/n for n in added})
+    def rglob(path,*a,**kw):return (x for x in rg0(path,*a,**kw) if x not in {R/n for n in added})
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode()
+            hide=owned if 'diff' in argv else added
+            paths=[x for x in text.split(sep) if x and x not in hide]
+            text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=knowledge_traceability_prior_main()
+    if result==0:print('PASS exact92requirement knowledge traceability successor;application,history,decisions and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

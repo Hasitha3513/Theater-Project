@@ -1,21 +1,21 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-EXTENSION-RESERVATION-FE-001",
-  "mode": "BOUNDED_OWNER_EXTENSION_RESERVATION_FRONTEND",
-  "workStatus": "LOCAL_VERIFIED_EXACT_SOURCE_CI_PENDING",
+  "taskId": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
+  "mode": "CONTROLLED_KNOWLEDGE_TRACEABILITY_RECONCILIATION",
+  "workStatus": "LOCAL_VERIFIED_PUBLICATION_PENDING",
   "productStage": "BOUNDED_SYNTHETIC_IMPLEMENTATION_FULL_ACCEPTANCE_PENDING",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
+  "baselineHead": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
-  "currentChangeSet": "CN-EXTENSION-RESERVATION-FE-001",
+  "currentChangeSet": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
   "futurePlanApproval": "NOT_APPROVED",
   "nextRecommendedChangeSet": "CN-E2E-EXTENSION-RESERVATION-001",
-  "nextAction": "Separately authorize real-backend browser reservation/recovery/withdrawal verification after exact-source CI SUCCESS;no funding",
+  "nextAction": "Bounded existing-contract real-backend extension reservation/recovery/withdrawal verification after separate execution authority;no further general audit",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "PROGRESS.md#extension-reservation-frontend",
+  "implementationEvidence": "PROGRESS.md#mvp-knowledge-traceability",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
@@ -28,11 +28,11 @@
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
-  "publicationState": "LOCAL_VERIFIED_PUBLICATION_PENDING",
-  "publicationEvidence": "BaselineCI40074312569 SUCCESS;successor CI PENDING",
-  "lastObservedHead": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
-  "evidencePath": "PROGRESS.md#extension-reservation-frontend",
-  "evidenceFreshness": "2026-10-24 bounded frontend;no acceptance change",
+  "publicationState": "LOCAL_VERIFIED_CI_PENDING",
+  "publicationEvidence": "BaselineCI40084047467 SUCCESS;successorCI PENDING",
+  "lastObservedHead": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
+  "evidencePath": "PROGRESS.md#mvp-knowledge-traceability",
+  "evidenceFreshness": "2026-10-24 traceability only;no acceptance change",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -11890,6 +11890,3293 @@
       "cleanCheckout": "PASS_ACTUAL_LOCAL_CLONE_PROJECTED_TASK_PAYLOAD",
       "screenshots": ".cache/extension-reservation-fe",
       "fullCampaignRerun": false
+    }
+  },
+  "knowledgeTraceabilityReconciliation": {
+    "taskId": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
+    "baseline": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
+    "previousCurrentHeader": {
+      "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+      "mode": "BOUNDED_OWNER_EXTENSION_RESERVATION_FRONTEND",
+      "workStatus": "LOCAL_VERIFIED_EXACT_SOURCE_CI_PENDING",
+      "baselineHead": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
+      "currentChangeSet": "CN-EXTENSION-RESERVATION-FE-001",
+      "nextRecommendedChangeSet": "CN-E2E-EXTENSION-RESERVATION-001",
+      "nextAction": "Separately authorize real-backend browser reservation/recovery/withdrawal verification after exact-source CI SUCCESS;no funding",
+      "implementationEvidence": "PROGRESS.md#extension-reservation-frontend",
+      "publicationState": "LOCAL_VERIFIED_PUBLICATION_PENDING",
+      "publicationEvidence": "BaselineCI40074312569 SUCCESS;successor CI PENDING",
+      "lastObservedHead": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
+      "evidencePath": "PROGRESS.md#extension-reservation-frontend",
+      "evidenceFreshness": "2026-10-24 bounded frontend;no acceptance change"
+    },
+    "knowledgeReadingLedger": {
+      "taskId": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
+      "baseline": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
+      "reviewDate": "2026-10-24",
+      "discoveredFiles": 116,
+      "reviewedFiles": 116,
+      "complete": true,
+      "unresolvedCoverageGaps": [],
+      "method": "Recursive SHA inventory;106unchanged from the verified prior116ledger;37numbered diagrams+mindmap freshly reviewed;all10changed files completely covered through fresh reading or explicitly byte-qualified prior content plus all novel content. Fresh and composite methods are per-file,not equated with parsing/inventory.",
+      "limitations": [
+        "No new binary rendering is claimed;all33PNG,3PDF,2DOCX remain byte-identical to previously completed independent visual review.",
+        "Source/Mermaid review is not a new rendered-diagram publication or application/provider/physical acceptance.",
+        "Historical text/translation/embedded-image limitations remain recorded in individual prior entries."
+      ],
+      "files": [
+        {
+          "path": "knowledge/01_ActivityDiagram_Customer_Booking_and_Online_Payment.md",
+          "sha256": "c966f0290f7b3d00b3545f972a4481a6896f50411b5654a9c1e62083e7a5ac9b",
+          "bytes": 11253,
+          "line_count": 157,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                157
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-00.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "customer_booking_online_payment",
+          "supported_modules": [
+            "rooms",
+            "pricing",
+            "booking",
+            "payments",
+            "verification",
+            "notifications",
+            "access"
+          ],
+          "explicit_semantic_support": [
+            "discover/select room and published package",
+            "authoritative inventory/hold and itemized quote",
+            "explicit terms acceptance and eligibility guards",
+            "hosted gateway authenticated result, idempotent recording, T1/T2 funds retention",
+            "conditional confirmation and separately tracked access/notification"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 24,
+            "mermaid_end": 92
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/01_Component Architecture Diagram_Platform_Components_and_Integration_Boundaries.md",
+          "sha256": "4780fb3f761cabd4be1748fa7cf67696564ac8a89b2a121a4f12026e9db1e662",
+          "bytes": 22239,
+          "line_count": 264,
+          "family": "COMPONENT",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                264
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-01.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "platform_hexagonal",
+          "supported_modules": [
+            "all eleven modules"
+          ],
+          "explicit_semantic_support": [
+            "one modular monolith and Next.js portal/admin",
+            "public application interfaces and module-owned persistence",
+            "external adapters outside database atomicity",
+            "durable intent and independent side-effect recovery",
+            "no generic shared repositories, microservices, Kafka, active Redis or analytics database"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 18,
+            "mermaid_end": 168
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/01_ER_Diagrams_Core_Relationship_Overview.md",
+          "sha256": "5ace6f964b784bf7a4423e464baf92690f24cb93c83ce198fce15551c35857a1",
+          "bytes": 10367,
+          "line_count": 136,
+          "family": "ER",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                136
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-02.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "core_relationships",
+          "supported_modules": [
+            "booking",
+            "rooms",
+            "pricing",
+            "payments",
+            "verification",
+            "access",
+            "devices"
+          ],
+          "explicit_semantic_support": [
+            "users",
+            "venues/rooms",
+            "package versions/quotes",
+            "reservation requests/holds/room blocks",
+            "booking revisions",
+            "credits/allocations/refunds",
+            "guest/verification",
+            "credentials/sessions/devices/maintenance/incidents"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 14,
+            "mermaid_end": 57
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/01_Sequence_Diagrams_Customer_Booking_and_Online_Payment.md",
+          "sha256": "ea6150b4cd8912a98df55889a536bc7176c75208d9dfa8b785a59f5ffd8b51cc",
+          "bytes": 11709,
+          "line_count": 175,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                175
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-03.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "customer_booking_online_payment",
+          "supported_modules": [
+            "rooms",
+            "pricing",
+            "booking",
+            "payments",
+            "verification",
+            "notifications",
+            "access"
+          ],
+          "explicit_semantic_support": [
+            "discover/select room and published package",
+            "authoritative inventory/hold and itemized quote",
+            "explicit terms acceptance and eligibility guards",
+            "hosted gateway authenticated result, idempotent recording, T1/T2 funds retention",
+            "conditional confirmation and separately tracked access/notification"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 26,
+            "mermaid_end": 119
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/01_System_Context_Overview.md",
+          "sha256": "1337d7c9cd0a8cd9a75f70cc15126fff0432f821958ddbc9a7749e4bf8aa3c1f",
+          "bytes": 12674,
+          "line_count": 163,
+          "family": "SYSTEM_CONTEXT",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                163
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-04.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "system_context",
+          "supported_modules": [
+            "all business modules"
+          ],
+          "explicit_semantic_support": [
+            "customer/staff/finance distinct scopes",
+            "Google identity, gateway, OCR, email/SMS, lock and devices are external trust boundaries",
+            "manual customer/reviewer-to-bank exchanges are not CineNest bank integration",
+            "PIN versus unapproved QR; optional analytics unapproved",
+            "synthetic software does not qualify financial providers or physical readiness"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 18,
+            "mermaid_end": 92
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/01_Use case_Customer_Booking_and_Account.md",
+          "sha256": "e0e7632fbcefcdb46deb9bc864757328af339043939b3906cd5bff34ae159b05",
+          "bytes": 9937,
+          "line_count": 168,
+          "family": "USE_CASE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                168
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-05.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "customer_account_booking",
+          "supported_modules": [
+            "identity",
+            "rooms",
+            "pricing",
+            "booking",
+            "payments",
+            "verification",
+            "access"
+          ],
+          "explicit_semantic_support": [
+            "visitor discovery",
+            "Google sign-in/customer account",
+            "quotation/availability/terms",
+            "online or bank payment",
+            "own history/access",
+            "amendment/cancellation/support"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 23,
+            "mermaid_end": 85
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/02_ActivityDiagram_Bank_Deposit_Receipt_Review_and_Approval.md",
+          "sha256": "8caf610bb9080c45dced24b20e48045ee4eb582506b04d5e50d3d8a6bfeb7d2c",
+          "bytes": 11240,
+          "line_count": 156,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                156
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-06.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "bank_claim_review",
+          "supported_modules": [
+            "payments",
+            "booking",
+            "identity",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "versioned bank instructions and distinct deadlines",
+            "private receipt claim with safe upload",
+            "independent bank-credit verification",
+            "unique credit, guarded allocation, excess/late/partial reconciliation",
+            "conditional booking confirmation"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 91
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/02_Component Architecture Diagram_Payments_Module_Hexagonal_Ports_and_Adapters.md",
+          "sha256": "a616e07fee58640ac3eb22c234372b520950fd3172ef3f8ba329fa572c7d4ec7",
+          "bytes": 19717,
+          "line_count": 225,
+          "family": "COMPONENT",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                225
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-07.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "payments_hexagonal",
+          "supported_modules": [
+            "payments",
+            "identity",
+            "booking"
+          ],
+          "explicit_semantic_support": [
+            "driving HTTP/callback/work adapters to core-provided interface",
+            "application/domain depend on core-owned required ports",
+            "PostgreSQL/private receipt/gateway/auth/work driven adapters",
+            "manual banking has no bank API; simulator is test-only",
+            "payment credit/allocation/refund/booking/access lifecycles separate"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 16,
+            "mermaid_end": 115
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/02_ER_Diagrams_Identity_Sessions_and_Scoped_RBAC_ABAC.md",
+          "sha256": "efb68d1da16443fe89da02257c39e9e40b353f850a16ebec0409f5084b10c5b3",
+          "bytes": 10561,
+          "line_count": 170,
+          "family": "ER",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                170
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-08.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "identity_sessions_grants",
+          "supported_modules": [
+            "identity",
+            "rooms"
+          ],
+          "explicit_semantic_support": [
+            "PRINCIPAL",
+            "USER_ACCOUNT",
+            "EXTERNAL_IDENTITY issuer+subject",
+            "AUTH_SESSION",
+            "ROLE/PERMISSION/ROLE_PERMISSION",
+            "ROLE_GRANT scope+validity",
+            "GRANT_LIMIT"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 14,
+            "mermaid_end": 94
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/02_Sequence_Diagrams_Bank_Deposit_Receipt_Review_and_Approval.md",
+          "sha256": "b572974e8d52a8467fac313efdf812e8badfcec6bdef7870841cfd32956ffb71",
+          "bytes": 12248,
+          "line_count": 183,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                183
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-09.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "bank_claim_review",
+          "supported_modules": [
+            "payments",
+            "booking",
+            "identity",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "versioned bank instructions and distinct deadlines",
+            "private receipt claim with safe upload",
+            "independent bank-credit verification",
+            "unique credit, guarded allocation, excess/late/partial reconciliation",
+            "conditional booking confirmation"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 26,
+            "mermaid_end": 127
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/02_System_Context_External_Actors_and_Data_Exchanges.md",
+          "sha256": "f7bdd5ba48a5beef1c7fa8cf931e0bd078be08ba7f002495fdeaf007a130dd0e",
+          "bytes": 15929,
+          "line_count": 182,
+          "family": "SYSTEM_CONTEXT",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                182
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-10.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "system_context",
+          "supported_modules": [
+            "all business modules"
+          ],
+          "explicit_semantic_support": [
+            "customer/staff/finance distinct scopes",
+            "Google identity, gateway, OCR, email/SMS, lock and devices are external trust boundaries",
+            "manual customer/reviewer-to-bank exchanges are not CineNest bank integration",
+            "PIN versus unapproved QR; optional analytics unapproved",
+            "synthetic software does not qualify financial providers or physical readiness"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 18,
+            "mermaid_end": 102
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/02_Use case_Package_and_Venue_Administration.md",
+          "sha256": "1ce618104c6812a625984afaef72dad8083b2701bad25c6edd6b2148cc7104f0",
+          "bytes": 9524,
+          "line_count": 158,
+          "family": "USE_CASE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                158
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-11.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "administration",
+          "supported_modules": [
+            "rooms",
+            "pricing",
+            "booking",
+            "reporting",
+            "identity"
+          ],
+          "explicit_semantic_support": [
+            "venue/room facilities",
+            "configurable packages",
+            "publication/deactivation",
+            "booking amendment",
+            "maintenance closure",
+            "scoped defined reports and audit"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 24,
+            "mermaid_end": 79
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/03_ActivityDiagram_Package_Editing_Publication_and_Deactivation.md",
+          "sha256": "cf8da514f9618fac071c91aeffda019a47bd95aa6bf48e675c03c716613eb5fb",
+          "bytes": 10342,
+          "line_count": 148,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                148
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-12.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "package_publication",
+          "supported_modules": [
+            "pricing",
+            "rooms",
+            "identity",
+            "audit"
+          ],
+          "explicit_semantic_support": [
+            "editable draft with optimistic revision",
+            "capacity/minimum duration/operating constraints",
+            "explicit publication authority and effective windows",
+            "immutable published version; scheduled activation rechecks",
+            "deactivation preserves purchased terms"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 24,
+            "mermaid_end": 86
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/03_ER_Diagrams_Venues_Versioned_Packages_and_Add_Ons.md",
+          "sha256": "6d9ffe75f6e4941aed7f352240872d13429a0c27e8f27a428f5e5622690dd100",
+          "bytes": 10786,
+          "line_count": 184,
+          "family": "ER",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                184
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-13.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "venue_catalog",
+          "supported_modules": [
+            "rooms",
+            "pricing"
+          ],
+          "explicit_semantic_support": [
+            "VENUE timezone",
+            "ROOM capacity",
+            "OPERATING_WINDOW closing_day_offset",
+            "PACKAGE/PACKAGE_VERSION",
+            "PACKAGE_APPLICABILITY",
+            "ADD_ON/PACKAGE_OPTION/ROOM_ADD_ON"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 14,
+            "mermaid_end": 110
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/03_Sequence_Diagrams_Package_Editing_Publication_and_Deactivation.md",
+          "sha256": "45f65b9fbff49ba581e780805c016963f31724c66509ec45565634ce2c4d5533",
+          "bytes": 10454,
+          "line_count": 159,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                159
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-14.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "package_publication",
+          "supported_modules": [
+            "pricing",
+            "rooms",
+            "identity",
+            "audit"
+          ],
+          "explicit_semantic_support": [
+            "editable draft with optimistic revision",
+            "capacity/minimum duration/operating constraints",
+            "explicit publication authority and effective windows",
+            "immutable published version; scheduled activation rechecks",
+            "deactivation preserves purchased terms"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 24,
+            "mermaid_end": 105
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/03_Use case_Payments_Bank_Review_and_Refunds.md",
+          "sha256": "f943e4507e954ef5f9dbc0bf3e7a511e5dd75beca42dd0d4fdb2b928083d0b96",
+          "bytes": 11534,
+          "line_count": 185,
+          "family": "USE_CASE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                185
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-15.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "payment_review_refund",
+          "supported_modules": [
+            "payments",
+            "booking",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "bank claims/reviewer notifications",
+            "independent verified credit",
+            "safe allocation",
+            "authenticated gateway results",
+            "conditional confirmation",
+            "financial resolution and refund"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 24,
+            "mermaid_end": 90
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/04_ActivityDiagram_Identity_Evidence_and_Eligibility_Review.md",
+          "sha256": "9c55c1bbb69e1f2f77170a483ceacffb95d83eaae115daa422b76f426325b41a",
+          "bytes": 9932,
+          "line_count": 147,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                147
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-16.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "identity_evidence",
+          "supported_modules": [
+            "verification",
+            "identity",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "owned consented safe upload and private storage",
+            "OCR extraction with uncertainty and bounded retries",
+            "conditional approved automated pre-decision versus manual review",
+            "purpose-scoped audited evidence read",
+            "attributable current-revision decision and correction history"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 86
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/04_ER_Diagrams_Quotes_Reservation_Holds_and_Booking_Revisions.md",
+          "sha256": "97ab66bcaf7aa82bf5a1c6015f8d209e209d13e216d96340894f869c14b014da",
+          "bytes": 13498,
+          "line_count": 224,
+          "family": "ER",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                224
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-17.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "booking_quote_inventory",
+          "supported_modules": [
+            "booking",
+            "pricing"
+          ],
+          "explicit_semantic_support": [
+            "QUOTE/QUOTE_LINE",
+            "BOOKING current revision",
+            "RESERVATION_REQUEST",
+            "RESERVATION_HOLD",
+            "ROOM_BLOCK booking XOR maintenance owner",
+            "BOOKING_REVISION immutable purchased terms",
+            "POLICY_VERSION/QUOTE_POLICY/CONSENT_RECORD"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 14,
+            "mermaid_end": 142
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/04_Sequence_Diagrams_Identity_Evidence_and_Eligibility_Review.md",
+          "sha256": "db351d9357efe128f8a9ee19b0de1a9fb858881786447fe7d64224453a9d7642",
+          "bytes": 11195,
+          "line_count": 172,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                172
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-18.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "identity_evidence",
+          "supported_modules": [
+            "verification",
+            "identity",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "owned consented safe upload and private storage",
+            "OCR extraction with uncertainty and bounded retries",
+            "conditional approved automated pre-decision versus manual review",
+            "purpose-scoped audited evidence read",
+            "attributable current-revision decision and correction history"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 26,
+            "mermaid_end": 118
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/04_Use case_Identity_Verification_and_Authorization.md",
+          "sha256": "02d007e2d4800106d8f565981063f1afb5e19500076ad0f3cd5f6cc2de399247",
+          "bytes": 11101,
+          "line_count": 178,
+          "family": "USE_CASE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                178
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-19.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "identity_and_authorization",
+          "supported_modules": [
+            "verification",
+            "identity"
+          ],
+          "explicit_semantic_support": [
+            "private evidence submission",
+            "OCR assisted precheck",
+            "purpose-scoped review and eligibility",
+            "scoped grant management/revocation/suspension",
+            "audit and deny-by-default authorization"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 86
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/05_ActivityDiagram_Scoped_RBAC_and_ABAC_Authorization.md",
+          "sha256": "7c59f7f67fff37a7009be325d1097fdc1e8f4b9c8ca07b9b58d1abedf46f9a40",
+          "bytes": 10177,
+          "line_count": 140,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                140
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-20.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "scoped_authorization",
+          "supported_modules": [
+            "identity",
+            "all owning business modules"
+          ],
+          "explicit_semantic_support": [
+            "current eligible principal",
+            "authoritative minimal resource attributes",
+            "permission and scope in same applicable grant",
+            "mandatory restrictions, purpose, limits and revocation freshness",
+            "business invariants independently enforced; scoped lists/downloads/events"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 24,
+            "mermaid_end": 72
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/05_ER_Diagrams_Payments_Bank_Evidence_Allocations_and_Refunds.md",
+          "sha256": "1bcb6600d96f2205fc57fa60499caf53424d4109047b3a11cb7c2d873af9638e",
+          "bytes": 16223,
+          "line_count": 262,
+          "family": "ER",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                262
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-21.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "financial_lifecycles",
+          "supported_modules": [
+            "payments"
+          ],
+          "explicit_semantic_support": [
+            "PAYMENT_REQUEST/ATTEMPT/GATEWAY_EVENT",
+            "BANK_ACCOUNT/VERSION",
+            "BANK_CLAIM/RECEIPT/TRANSACTION/REVIEW",
+            "PAYMENT_CREDIT gateway XOR bank source",
+            "CREDIT_ALLOCATION/reversal",
+            "REFUND/APPROVAL/ATTEMPT"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 14,
+            "mermaid_end": 173
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/05_Sequence_Diagrams_Scoped_RBAC_and_ABAC_Authorization.md",
+          "sha256": "2f50e2e2a1fd68439dff7344c2a5974853bec8dfa6a6161deec1d239baa5bb0b",
+          "bytes": 11697,
+          "line_count": 163,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                163
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-22.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "scoped_authorization",
+          "supported_modules": [
+            "identity",
+            "all owning business modules"
+          ],
+          "explicit_semantic_support": [
+            "current eligible principal",
+            "authoritative minimal resource attributes",
+            "permission and scope in same applicable grant",
+            "mandatory restrictions, purpose, limits and revocation freshness",
+            "business invariants independently enforced; scoped lists/downloads/events"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 103
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/05_Use case_Cinema_Access_and_IoT_Operations.md",
+          "sha256": "69e586cdff1e8e2aa1bbd0e8b73e6b417d0c862442600ac1cc3e3c9140330c54",
+          "bytes": 12026,
+          "line_count": 185,
+          "family": "USE_CASE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                185
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-23.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "access_and_iot",
+          "supported_modules": [
+            "access",
+            "devices",
+            "booking",
+            "rooms",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "all-guest original-ID check-in",
+            "timed credentials/entry",
+            "supported AC/light/projector",
+            "observed health",
+            "warnings/incidents",
+            "expiry/revocation",
+            "actual cleaning/readiness"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 27,
+            "mermaid_end": 95
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/06_ActivityDiagram_Booking_Amendment_and_Session_Extension.md",
+          "sha256": "f7e374edcd32caacd8efb11a6f9cfcd6e279b0ce4e2a08a7b8400411cae3a66a",
+          "bytes": 10673,
+          "line_count": 148,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                148
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-24.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "amendment_extension",
+          "supported_modules": [
+            "booking",
+            "pricing",
+            "payments",
+            "access",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "purchased snapshot and current revision",
+            "bounded replacement hold preserving original purchase",
+            "explicit amended terms acceptance",
+            "additional verified funds or refund obligation",
+            "atomic guarded inventory replacement; latest committed revision alone drives PIN synchronization"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 83
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/06_ER_Diagrams_Identity_Evidence_Guest_Check_In_and_Access_Credentials.md",
+          "sha256": "2d91f322d22760a86b9e13db4883bd038b07779795ac6ba24cb73915b2015dd0",
+          "bytes": 13633,
+          "line_count": 214,
+          "family": "ER",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                214
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-25.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "verification_guest_access",
+          "supported_modules": [
+            "verification",
+            "booking",
+            "access",
+            "devices"
+          ],
+          "explicit_semantic_support": [
+            "VERIFICATION_CASE/ID_EVIDENCE/DECISION/DECISION_EVIDENCE",
+            "selected reservation eligibility",
+            "BOOKING_GUEST/REVISION_GUEST",
+            "GUEST_CHECK_IN",
+            "ACCESS_CREDENTIAL/PROVISION_ATTEMPT/EVENT"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 14,
+            "mermaid_end": 133
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/06_Sequence_Diagrams_Booking_Amendment_and_Session_Extension.md",
+          "sha256": "1aa3721afa0271e9cf29612344deaa0ae23d6683e8bf0a44b38351fd1dfab588",
+          "bytes": 11868,
+          "line_count": 173,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                173
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-26.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "amendment_extension",
+          "supported_modules": [
+            "booking",
+            "pricing",
+            "payments",
+            "access",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "purchased snapshot and current revision",
+            "bounded replacement hold preserving original purchase",
+            "explicit amended terms acceptance",
+            "additional verified funds or refund obligation",
+            "atomic guarded inventory replacement; latest committed revision alone drives PIN synchronization"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 116
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/07_ActivityDiagram_Booking_Cancellation_and_Refund_Execution.md",
+          "sha256": "6c529adef0c63e6507878bf38a2887d3399de4d745a18f6d738e628ad2f05a44",
+          "bytes": 11113,
+          "line_count": 149,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                149
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-27.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "cancellation_refund",
+          "supported_modules": [
+            "booking",
+            "payments",
+            "access",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "accepted cancellation policy and explicit consequences",
+            "idempotent cancellation with same-transaction obligation",
+            "eligible inventory release and separate credential revocation",
+            "independent refund authority and balance reservation",
+            "reconcile same outgoing attempt when uncertain; approval differs from completed repayment"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 83
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/07_ER_Diagrams_Sessions_Devices_Maintenance_and_Readiness.md",
+          "sha256": "ea8754a7b0acc0530a115ccaf08d2ec42361db684a5892c066fc718c81b2c497",
+          "bytes": 14647,
+          "line_count": 232,
+          "family": "ER",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                232
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-28.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "execution_operations",
+          "supported_modules": [
+            "devices",
+            "booking",
+            "rooms"
+          ],
+          "explicit_semantic_support": [
+            "DEVICE/ROOM_DEVICE_ASSIGNMENT history",
+            "CINEMA_SESSION",
+            "DEVICE_COMMAND/ATTEMPT/OBSERVATION",
+            "MAINTENANCE_REQUEST",
+            "ROOM_READINESS_CHECK",
+            "INCIDENT/ACTION"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 14,
+            "mermaid_end": 147
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/07_Sequence_Diagrams_Cancellation_and_Refund_Execution.md",
+          "sha256": "0b42ef9c1eb756ca8dc5f406ad79c4118cd4587937dec6424b9d83b445a5b45a",
+          "bytes": 11859,
+          "line_count": 175,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                175
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-29.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "cancellation_refund",
+          "supported_modules": [
+            "booking",
+            "payments",
+            "access",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "accepted cancellation policy and explicit consequences",
+            "idempotent cancellation with same-transaction obligation",
+            "eligible inventory release and separate credential revocation",
+            "independent refund authority and balance reservation",
+            "reconcile same outgoing attempt when uncertain; approval differs from completed repayment"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 26,
+            "mermaid_end": 118
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/08_ActivityDiagram_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+          "sha256": "94e17ac06403a52a622ab2943c32ef6a369f03add81259e58779584d77b63a34",
+          "bytes": 12835,
+          "line_count": 168,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                168
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-30.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "access_session_reset",
+          "supported_modules": [
+            "access",
+            "booking",
+            "devices",
+            "rooms",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "latest committed revision and purchased access interval",
+            "provision/reconcile installation truth",
+            "all-guest physical original-ID eligibility gate",
+            "room-scoped commands, acknowledgements versus observations",
+            "independent session clock and five-minute warning",
+            "expiry independent of egress; actual vacancy/cleaning/readiness"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 26,
+            "mermaid_end": 100
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/08_ER_Diagrams_Durable_Work_Notifications_and_Audit.md",
+          "sha256": "5771f7abbfcc403aca0e638f92c0695bef5366aee431f5aa87e48320c1ce15ba",
+          "bytes": 12696,
+          "line_count": 191,
+          "family": "ER",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                191
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-31.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "durable_work_audit",
+          "supported_modules": [
+            "notifications",
+            "audit",
+            "module-owned durable infrastructure"
+          ],
+          "explicit_semantic_support": [
+            "DOMAIN_EVENT",
+            "EVENT_DELIVERY unique event+handler",
+            "SCHEDULED_JOB lease+expected revision",
+            "NOTIFICATION/ATTEMPT",
+            "AUDIT_EVENT redacted owner-qualified references"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 14,
+            "mermaid_end": 109
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/08_Sequence_Diagrams_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+          "sha256": "3219d3fc2fa5b1e0fc2cb1eaf131ce37899b4dce00ba8a4bf3054b483b175ac2",
+          "bytes": 13874,
+          "line_count": 199,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                199
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-32.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "access_session_reset",
+          "supported_modules": [
+            "access",
+            "booking",
+            "devices",
+            "rooms",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "latest committed revision and purchased access interval",
+            "provision/reconcile installation truth",
+            "all-guest physical original-ID eligibility gate",
+            "room-scoped commands, acknowledgements versus observations",
+            "independent session clock and five-minute warning",
+            "expiry independent of egress; actual vacancy/cleaning/readiness"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 26,
+            "mermaid_end": 139
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/09_ActivityDiagram_Room_Maintenance_and_Controlled_Closure.md",
+          "sha256": "041ae51c6712800d143512b04bad966340765a657bbda6ec5560d2b13da1504f",
+          "bytes": 11022,
+          "line_count": 150,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                150
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-33.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "maintenance_closure",
+          "supported_modules": [
+            "rooms",
+            "booking",
+            "payments",
+            "identity"
+          ],
+          "explicit_semantic_support": [
+            "authorized venue/room interval and reason",
+            "inventory impact and explicit booking conflict resolution",
+            "transactional maintenance block via Booking public contract",
+            "actual safe-to-work and inspection evidence",
+            "authorized release preserves other blocks; time alone not readiness"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 86
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/09_Sequence_Diagrams_Room_Maintenance_and_Controlled_Closure.md",
+          "sha256": "5d65ef724b5687756a10584db66be165729d22f8502e89ad244f277821821da2",
+          "bytes": 11641,
+          "line_count": 172,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                172
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-34.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "maintenance_closure",
+          "supported_modules": [
+            "rooms",
+            "booking",
+            "payments",
+            "identity"
+          ],
+          "explicit_semantic_support": [
+            "authorized venue/room interval and reason",
+            "inventory impact and explicit booking conflict resolution",
+            "transactional maintenance block via Booking public contract",
+            "actual safe-to-work and inspection evidence",
+            "authorized release preserves other blocks; time alone not readiness"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 115
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/10_ActivityDiagram_Operational_Incident_and_Recovery.md",
+          "sha256": "3134b63a975314ed0989b332456fa9314944cd0e74f426c63c4c95678e04f19d",
+          "bytes": 11644,
+          "line_count": 151,
+          "family": "ACTIVITY",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                151
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-35.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "incident_recovery",
+          "supported_modules": [
+            "devices",
+            "rooms",
+            "booking",
+            "payments",
+            "access",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "validated source/target intake and incident correlation",
+            "assignment and independent immediate local safety response",
+            "current-authority supported bounded recovery",
+            "reconcile before repeat command/payment/refund",
+            "credible restoration evidence with separate residual obligations"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 25,
+            "mermaid_end": 85
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/10_Sequence_Diagrams_Operational_Incident_and_Recovery.md",
+          "sha256": "f6c3bcb355afcf667616fb7f9723363a8cbe361490647971b2cfd9c21b4ebb31",
+          "bytes": 12679,
+          "line_count": 179,
+          "family": "SEQUENCE",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                179
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-36.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "incident_recovery",
+          "supported_modules": [
+            "devices",
+            "rooms",
+            "booking",
+            "payments",
+            "access",
+            "notifications"
+          ],
+          "explicit_semantic_support": [
+            "validated source/target intake and incident correlation",
+            "assignment and independent immediate local safety response",
+            "current-authority supported bounded recovery",
+            "reconcile before repeat command/payment/refund",
+            "credible restoration evidence with separate residual obligations"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 5,
+            "mermaid_start": 26,
+            "mermaid_end": 122
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/ARCHITECTURE.md",
+          "sha256": "8c087b5a03466883ac9c037be05cfe7c1264c2fc2414c6019c7747159933fb0d",
+          "lines": 2626,
+          "method": "Fresh full sequential content reading in untruncated bounded chunks",
+          "contentCoverage": [
+            [
+              1,
+              2626
+            ]
+          ],
+          "complete": true,
+          "limitations": [
+            "Linked image visual review belongs to prior byte-qualified coverage/other reviewer;not newly claimed here."
+          ],
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/Analysis output 1.png",
+          "sha256": "e4b6d0b2b7f56dbefb381e58f6e48ccadfc3bdb027a8e9f18bf4af89900a3045",
+          "bytes": 1111963,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Corrected logical ER overview: immutable package/quote/purchase revisions; exactly-one credit source; allocation/refund separation; scoped roles and physical controls delegated to detailed views. Proposed/not implemented label is historical, not current blanket absence.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/Analysis output Component1.png",
+          "sha256": "dc56360810fc8b23f79465e61908a702a3acfffa92075d7f8737bbaaaafbff84",
+          "bytes": 573299,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Corrected proposed hexagonal modules/public ports and per-module PostgreSQL; manual bank observation; no active Redis; emergency egress independent. Proposed interfaces not implementation acceptance.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Admin Dashboard Mockup-1.png",
+          "sha256": "52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f",
+          "bytes": 1778454,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Six admin compositions: navy sidebar, violet actions, light cards/tables; illustrative metrics, physical controls and user data are not current operational facts.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking Activity Diagrams.png",
+          "sha256": "7e2f8a66688f04791723d4ed6fc586b3a6c6d3327a730bc9318d6e5b8655f386",
+          "bytes": 1699170,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Eight swimlane flows: booking/payment, bank review, identity, physical access, package publish, maintenance, refund and incidents. High-level OCR/confirmation/door actions not authority to execute or bypass current eligibility.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking ERD Poster.png",
+          "sha256": "5de9cb08255fbf11816f5c5110f9f6cb7aec099c0ae136230b46961d12bded08",
+          "bytes": 1764444,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Original ER poster includes mutable package/booking/payment PIN and device-key fields; supporting older logical proposal, superseded by immutable purchases/private evidence/owned-schema models.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking System Context Diagram-1.png",
+          "sha256": "d9ad0d359f72e23a2f9800a122954063224ca17a01e2a7e28ff16e6cd6d937fd",
+          "bytes": 1815479,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Customer/venue/finance/verification/operations interact with monolith and gateway/bank/messaging/OCR/device/optional analytics. OCR-authenticity and direct bank arrows remain proposals, not approved providers.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Dashboard Showcase-2.png",
+          "sha256": "27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7",
+          "bytes": 1720889,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Dashboard/rooms/bookings/live controls/users composites; Redis and all-operational indicators are illustrative proposed content, not architecture/provider approval.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Component Architecture Diagram-2.png",
+          "sha256": "8c955cec4888b9c3082c329263977664301b08c2f93e7f172785c246e7b6a2c2",
+          "bytes": 1773670,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Older Refine/Ant/TanStack/JWT/JPA/Redis/Kafka/analytics DB diagram; proposed component dependencies, superseded by current no-Redis/no-Kafka/Next/JDBC/session boundaries.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest End-to-End Architecture Mind Map.png",
+          "sha256": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
+          "bytes": 1918151,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Eight-step customer and five-step admin journey; eight core plus shared support capabilities; PostgreSQL18/Spring4.1/Modulith2.1/Next16/React19 proposed versions must defer to qualified source; no financial/physical acceptance implied.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Modular Monolith Architecture Diagram-1.png",
+          "sha256": "ef0b7f4573fe6ee9ece71aeb442cf48393d3576e2d9cdbac7fe6cfd50e31e7b4",
+          "bytes": 1685898,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Actors, modular layers, events and infrastructure; nine depicted modules, Ant/JWT/JPA/Timescale/Redis are historical supporting proposals, not current approved eleven-module JDBC/session baseline.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Private Cinema Booking UI.png",
+          "sha256": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852",
+          "bytes": 1784261,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Customer hero, room selection, payment, ID, confirmation and history composites; preserve styling but no inference of PayHere, ID approval, PIN/loyalty availability.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Sequence Diagrams Overview.png",
+          "sha256": "867cea5376ef3cf7e394074baa5474b3ab8e433ae1b6714c7afa4078e1e0da21",
+          "bytes": 1802732,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Ten sequenceoverviewpanels: onlinebooking,bankreview,identity,entry,sessionextension,packagepublish,maintenance,refund,incident,auth; high-level gateway/door/OCR flows are historical design not currentfinancial/physical authority.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest System Context Diagram-2.png",
+          "sha256": "a43214fd222f5c69fc7f836477824f0ea1caf9747a2e338febe8072088ffbdf0",
+          "bytes": 1627114,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Actor/system exchanges including optional analytics, gateway examples and bank/API options; draft context only; scope/current approvals govern bank/OCR/notifications and privacy.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest Use Case Diagram Infographic.png",
+          "sha256": "5dbee4d681192108cc0620ba61b02639a0441777375ce3b1ec8fbdcfd28bfe61",
+          "bytes": 1916400,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Customer/admin/staff/external usecases with include/extend relationships;11logicalsystemcapabilities;scopedRBAC/ABAC andconditionalpermissions;historicalprovider/payment/accessclaims not acceptance.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/CineNest_E2E_Mind_Map.md",
+          "sha256": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5",
+          "bytes": 12204,
+          "line_count": 386,
+          "family": "MIND_MAP",
+          "reading": {
+            "coverage": "COMPLETE_CONTENT",
+            "ranges": [
+              [
+                1,
+                386
+              ]
+            ],
+            "method": "Fresh sequential full Markdown/Mermaid/table reading; exact repeated paragraphs reused only after fresh earlier paragraph read in this task; no unique text omitted.",
+            "chunk": "/tmp/cinenest-traceability/diagram-read-37.txt",
+            "limitations": [
+              "Source/Mermaid semantic review; not rendered visual review or runtime proof."
+            ]
+          },
+          "authored_requirement_ids": [],
+          "authored_id_relation": "NOT_FOUND",
+          "topic": "end_to_end_outline",
+          "supported_modules": [
+            "all business modules"
+          ],
+          "explicit_semantic_support": [
+            "customer discovery through reservation/payment/verification/access",
+            "admin configuration, monitoring, review, operations and analytics",
+            "modular monolith hexagonal PostgreSQL direction",
+            "proposed versions/providers/physical features not approvals",
+            "high-level ordering does not override canonical domain sequence"
+          ],
+          "authority": "PROPOSED_DESIGN_NOT_IMPLEMENTATION_OR_APPROVAL",
+          "line_anchors": {
+            "title": 1,
+            "status": 310,
+            "mermaid_start": 11,
+            "mermaid_end": 97
+          },
+          "coverageMethod": "FRESH_COMPLETE_MARKDOWN_MERMAID_SEMANTIC_REVIEW",
+          "priorVisualReview": "Matching PNG/PDF assets use independently hash-qualified prior visual coverage;not newly rendered."
+        },
+        {
+          "path": "knowledge/DESIGN.md",
+          "sha256": "220100bb66e091e2d7c23ff6c80c3dc703ca35be1a85ce6dafd53d011d57a36a",
+          "lines": 1394,
+          "method": "Fresh full sequential content reading in untruncated bounded chunks",
+          "contentCoverage": [
+            [
+              1,
+              1394
+            ]
+          ],
+          "complete": true,
+          "limitations": [
+            "Linked image visual review belongs to prior byte-qualified coverage/other reviewer;not newly claimed here."
+          ],
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/Mini movie theater Ruels and Conditions.docx",
+          "sha256": "e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf",
+          "reviewMethod": "OOXML complete paragraph/table extraction plus bundled LibreOffice render_docx.py and individual full-page PNG visual inspection; embedded JPEG separately opened where present",
+          "pageRangesReviewed": [
+            "1-25"
+          ],
+          "pagesReviewed": 25,
+          "contentCoverage": "COMPLETE readable text and relevant tables/diagrams reviewed",
+          "visualCoverage": "ALL rendered pages individually opened and reviewed",
+          "unresolvedCoverageGaps": [],
+          "limitations": [
+            "Historical supporting source/proposal, not current approval or implementation evidence.",
+            "English, Sinhala and Tamil ten-section terms reviewed including three textual workflow diagrams; source renders literal Markdown/LaTeX and contains translation/typographic artifacts.",
+            "Describes fixed commercial/age/forfeiture, Redis TTL, immediate gateway-to-PIN, tokenized rebilling and physical siren behavior; none adopted as new policy."
+          ],
+          "authority": "HISTORICAL_SUPPORTING_SOURCE_NOT_POLICY_APPROVAL",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/Mini movie theater Ruels and Conditions.pdf",
+          "sha256": "2d4961de671a356db2a6d81a0c2f9b185d969952fb9e656d19bcb6e97da6dea2",
+          "reviewMethod": "Poppler full text extraction plus individual full-page PNG visual inspection",
+          "pageRangesReviewed": [
+            "1-26"
+          ],
+          "pagesReviewed": 26,
+          "contentCoverage": "COMPLETE readable text and relevant tables/diagrams reviewed",
+          "visualCoverage": "ALL rendered pages individually opened and reviewed",
+          "unresolvedCoverageGaps": [],
+          "limitations": [
+            "Historical supporting source/proposal, not current approval or implementation evidence.",
+            "English, Sinhala and Tamil ten-section terms reviewed including three textual workflow diagrams; source renders literal Markdown/LaTeX and contains translation/typographic artifacts.",
+            "Describes fixed commercial/age/forfeiture, Redis TTL, immediate gateway-to-PIN, tokenized rebilling and physical siren behavior; none adopted as new policy."
+          ],
+          "authority": "HISTORICAL_SUPPORTING_SOURCE_NOT_POLICY_APPROVAL",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/PROGRESS.md",
+          "sha256": "cb56d2f826182b996ee4ee884bfa9a6a3477c3c96557210dcc737e859707f858",
+          "lines": 2830,
+          "method": "COMPLETE_COMPOSITE: SHA-qualified prior full content plus exact equal-byte segment reuse, all changed/new content fully read, fresh relevant current sections",
+          "contentCoverage": [
+            [
+              1,
+              2830
+            ]
+          ],
+          "complete": true,
+          "limitations": [
+            "Linked image visual review belongs to prior byte-qualified coverage/other reviewer;not newly claimed here."
+          ],
+          "freshRanges": [
+            [
+              1,
+              1010
+            ],
+            [
+              1051,
+              1051
+            ],
+            [
+              2716,
+              2830
+            ]
+          ],
+          "priorLedger": "/tmp/cinenest-full-reading/canonical-review.json",
+          "priorBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
+          "priorSha256": "155a10bee794bb86cac1b9104cd675f8857f2018b43b0399a5ecf27437945c16",
+          "compositeSegments": [
+            {
+              "currentLines": [
+                1,
+                7
+              ],
+              "baselineLines": [
+                1,
+                7
+              ],
+              "method": "Exact byte-equal segment reused from fully reviewed prior ledger"
+            },
+            {
+              "currentLines": [
+                8,
+                8
+              ],
+              "baselineLines": [
+                8,
+                8
+              ],
+              "method": "Fresh full literal reading of entire changed/added current content; diff inspected untruncated"
+            },
+            {
+              "currentLines": [
+                9,
+                1050
+              ],
+              "baselineLines": [
+                9,
+                1050
+              ],
+              "method": "Exact byte-equal segment reused from fully reviewed prior ledger"
+            },
+            {
+              "currentLines": [
+                1051,
+                1051
+              ],
+              "baselineLines": [
+                1051,
+                1051
+              ],
+              "method": "Fresh full literal reading of entire changed/added current content; diff inspected untruncated"
+            },
+            {
+              "currentLines": [
+                1052,
+                2813
+              ],
+              "baselineLines": [
+                1052,
+                2813
+              ],
+              "method": "Exact byte-equal segment reused from fully reviewed prior ledger"
+            },
+            {
+              "currentLines": [
+                2814,
+                2830
+              ],
+              "baselineLines": [
+                2814,
+                2813
+              ],
+              "method": "Fresh full literal reading of entire changed/added current content; diff inspected untruncated"
+            }
+          ],
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/PROJECT.md",
+          "sha256": "042888a79e81a0446583cbf7ab48e12afa1b0fc9ea9e47eaa6ef843023997026",
+          "lines": 946,
+          "method": "Verified byte-identical reuse of full prior1-946 coverage;fresh relevant consultation1-110",
+          "contentCoverage": [
+            [
+              1,
+              946
+            ]
+          ],
+          "complete": true,
+          "limitations": [
+            "Linked image visual review belongs to prior byte-qualified coverage/other reviewer;not newly claimed here."
+          ],
+          "freshRanges": [
+            [
+              1,
+              110
+            ]
+          ],
+          "priorLedger": "/tmp/cinenest-full-reading/canonical-review.json",
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/README.md",
+          "sha256": "2c45662c76a774e2eb56c254b76fa7c9c9b67f9780d2ea8c814fe512ae62285b",
+          "lines": 13,
+          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs",
+          "contentCoverage": [
+            [
+              1,
+              13
+            ]
+          ],
+          "fullContentReviewed": true,
+          "visualCoverage": "Text/Mermaid source only; linked images reviewed by other reviewer, not this ledger",
+          "limitations": [],
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/Smart_Cinema_Platform.pdf",
+          "sha256": "f414d822f6c5ce4f3c2e8fd9eb3558220ce9c82fa96ca3dfdab74b29da7e115f",
+          "reviewMethod": "Poppler full text extraction plus individual full-page PNG visual inspection",
+          "pageRangesReviewed": [
+            "1-14"
+          ],
+          "pagesReviewed": 14,
+          "contentCoverage": "COMPLETE readable text and relevant tables/diagrams reviewed",
+          "visualCoverage": "ALL rendered pages individually opened and reviewed",
+          "unresolvedCoverageGaps": [],
+          "limitations": [
+            "Historical supporting source/proposal, not current approval or implementation evidence.",
+            "All fourteen image-only slides read visually; extraction is empty, not unreadable content. Illustrations include signup, Redis concurrency, booking buffer/pricing, AI age check, gateway/PIN, ESP32, exit/siren, admin controls and future referrals.",
+            "Some tiny decorative wireframe labels are nonsensical/too small; material diagram labels, arrows and all slide prose are readable."
+          ],
+          "authority": "HISTORICAL_SUPPORTING_SOURCE_NOT_POLICY_APPROVAL",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/backlog/FUTURE_FEATURES.md",
+          "sha256": "d0e70dba26eebc47ae651a27621f85441bbc3b7587d05aeed91c2ca1f0902433",
+          "lines": 136,
+          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs",
+          "contentCoverage": [
+            [
+              1,
+              136
+            ]
+          ],
+          "fullContentReviewed": true,
+          "visualCoverage": "Text/Mermaid source only; linked images reviewed by other reviewer, not this ledger",
+          "limitations": [],
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/decisions/cinenest-open-decisions.json",
+          "sha256": "9388e09f520fd8bc4b13bf1a3f0791b7d13ae6d071fe647a5f07035b8d0caad5",
+          "sizeBytes": 94132,
+          "reviewMethod": "Complete UTF-8 file read in contiguous untruncated ranges; JSON IDs/source/decision/metric relationships reviewed",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Approved bounded policies do not resolve global OD-07/20/28; historical source ledger is not current complete-reading evidence."
+          ],
+          "logicalLines": 1598,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/decisions/cinenest-palette-comparison.json",
+          "sha256": "7c3927eb45669e1971d6edb341800228d8b5eebef8235c4f60ebb200cb330318",
+          "sizeBytes": 677,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 25,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/change-sets.json",
+          "sha256": "2975efe55cf93b76225ab5ad862851d2e2a72d2ff8b75bde71441c6ad1c70433",
+          "sizeBytes": 143466,
+          "reviewMethod": "Complete UTF-8 JSON lines1–EOF displayed in contiguous ranges;28 change-set lifecycle/dependency/approval records,11 workstreams,74criterion mappings reviewed",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical proposal/readiness objects coexist with current CLOSED states; bounded resolvedDecisionIds do not imply global OD closure; nextCandidate historical extension preview does not override latest task authority."
+          ],
+          "logicalLines": 3561,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-checks.json",
+          "sha256": "284a6f2e7ece5f930ce157ec2dc6e7246336f681abfcf51b43bf4a240990cf79",
+          "sizeBytes": 4631,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 92,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-inputs-and-sources.json",
+          "sha256": "76c6fd25617eb0662fc778643bdad694702dcf02dc474ccf594b69efba2faadb",
+          "sizeBytes": 17310,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 286,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-publication.json",
+          "sha256": "b734a288a8452d1bc6a046a6bea08d119b4a6d8b772e57d867ce14bbc91aa911",
+          "sizeBytes": 2185,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 51,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-review.json",
+          "sha256": "8992bf0cbc6c313ba2201ecc60f7515bab4012c0e23c8a267c6940b46b217ec6",
+          "sizeBytes": 1255,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 30,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/evidence/checks.json",
+          "sha256": "881c3efd81efa857bcb86e77ef89a840d9b6640e07d6adeb06a12a161338729f",
+          "sizeBytes": 2756,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 44,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/evidence/instruction-review.json",
+          "sha256": "c7c51a4dd1793f053af3d8b53f9444eca015a49ecb19eb80ea405fcc3f47a650",
+          "sizeBytes": 1744,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 47,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/evidence/publication.json",
+          "sha256": "464768ddb38eed03c963e133bf70cd24c1e12be0c1970b3e1fefe6d45a290869",
+          "sizeBytes": 590,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 17,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/evidence/source-review.json",
+          "sha256": "8d608708fcdcbe78b318b1d98f2b913836d2ecbdf500f850682cbf5f72c96f35",
+          "sizeBytes": 1797,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 39,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/omissions.json",
+          "sha256": "d2e0191515365f91ead58af9a35a8f061688f171d2791cf68ba6ff7142fc4c70",
+          "sizeBytes": 6495,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 125,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/refresh_manifest.py",
+          "sha256": "5d3e650a258f669d4d44b354147ff4c25c7dbd61008fdec5269d681b2f59fb59",
+          "sizeBytes": 2480,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 44,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/execution/requirements.json",
+          "sha256": "9d181c480493d1db242a8c3fcbfebcc4802e095b6a738064746ef53a07fcbd8f",
+          "coverage": "COMPLETE_COMPOSITE",
+          "method": "Entire genuinely fully reviewed prior registry reused only after exact JSON payload equality excluding eight fully read identical new extensionReservationFrontendEvidence annotations; current92 requirement titles/objectives/criteria/decisions/test/workstream relationships freshly inspected. Not a fresh literal whole-file reread. Lossless repeated-subtree displays used for relevant semantic inspection; truncated exploratory outputs not counted as fresh full ranges.",
+          "priorBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
+          "priorSha256": "6641b2ec0111b0b3cb157594a7a8c6237cbbcbb4d761ffeffe849aec307ddd4c",
+          "novelFieldsFullyRead": [
+            [
+              "CN-C08",
+              {
+                "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+                "reference": "PROGRESS.md#extension-reservation-frontend",
+                "fullRequirementVerified": false,
+                "fullRequirementAcceptance": "NOT_ACCEPTED",
+                "fullTestPlanStatus": "NOT_RUN"
+              }
+            ],
+            [
+              "CN-A02",
+              {
+                "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+                "reference": "PROGRESS.md#extension-reservation-frontend",
+                "fullRequirementVerified": false,
+                "fullRequirementAcceptance": "NOT_ACCEPTED",
+                "fullTestPlanStatus": "NOT_RUN"
+              }
+            ],
+            [
+              "CN-NFR-02",
+              {
+                "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+                "reference": "PROGRESS.md#extension-reservation-frontend",
+                "fullRequirementVerified": false,
+                "fullRequirementAcceptance": "NOT_ACCEPTED",
+                "fullTestPlanStatus": "NOT_RUN"
+              }
+            ],
+            [
+              "BR-04",
+              {
+                "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+                "reference": "PROGRESS.md#extension-reservation-frontend",
+                "fullRequirementVerified": false,
+                "fullRequirementAcceptance": "NOT_ACCEPTED",
+                "fullTestPlanStatus": "NOT_RUN"
+              }
+            ],
+            [
+              "PK-AC07",
+              {
+                "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+                "reference": "PROGRESS.md#extension-reservation-frontend",
+                "fullRequirementVerified": false,
+                "fullRequirementAcceptance": "NOT_ACCEPTED",
+                "fullTestPlanStatus": "NOT_RUN"
+              }
+            ],
+            [
+              "PK-AC10",
+              {
+                "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+                "reference": "PROGRESS.md#extension-reservation-frontend",
+                "fullRequirementVerified": false,
+                "fullRequirementAcceptance": "NOT_ACCEPTED",
+                "fullTestPlanStatus": "NOT_RUN"
+              }
+            ],
+            [
+              "PK-AC12",
+              {
+                "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+                "reference": "PROGRESS.md#extension-reservation-frontend",
+                "fullRequirementVerified": false,
+                "fullRequirementAcceptance": "NOT_ACCEPTED",
+                "fullTestPlanStatus": "NOT_RUN"
+              }
+            ],
+            [
+              "PK-AC13",
+              {
+                "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+                "reference": "PROGRESS.md#extension-reservation-frontend",
+                "fullRequirementVerified": false,
+                "fullRequirementAcceptance": "NOT_ACCEPTED",
+                "fullTestPlanStatus": "NOT_RUN"
+              }
+            ]
+          ],
+          "complete": true,
+          "limitations": [
+            "Source inventory/relationships do not constitute full business acceptance or new application execution."
+          ],
+          "coverageMethod": "COMPLETE_COMPOSITE_EXACT_PRIOR_PAYLOAD_PLUS_ALL_NOVEL_CONTENT"
+        },
+        {
+          "path": "knowledge/execution/source-ledger.json",
+          "sha256": "be3f7dff80bc0c5d321187c6b3df430a3f24e9c7c7cf80c7dab96bcabc68ad6a",
+          "sizeBytes": 31720,
+          "reviewMethod": "Complete UTF-8 file read in contiguous untruncated ranges; JSON IDs/source/decision/metric relationships reviewed",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Approved bounded policies do not resolve global OD-07/20/28; historical source ledger is not current complete-reading evidence."
+          ],
+          "logicalLines": 760,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "task": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
+          "baseline": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
+          "path": "knowledge/execution/status.json",
+          "sha256": "42ca9d644f815238e1fc95346ae2e6b102765deaa27454e9f1fbb3df07ba3cf3",
+          "lines": 11895,
+          "coverage": "COMPLETE_CONTENT_WITH_EXPLICIT_QUALIFIED_REUSE",
+          "method": "Full previously read baseline content reused only for byte-identical matched source ranges; entire1705-line unified delta freshly displayed in four contiguous untruncated outputs1–430,431–900,901–1330,1331–EOF. All novel current lines, fields, values, nested objects and relationships read.",
+          "reusedBaseline": {
+            "commit": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
+            "sha256": "6f77d6ca6dfe459fe214b7ff45fe16f22d304fa71aefe7c3636cf5203c615f59",
+            "ledgers": [
+              "/tmp/cinenest-full-reading/status-review.json",
+              "/tmp/cinenest-full-reading/status-tail-review.json"
+            ],
+            "coverageAttribution": {
+              "parent": [
+                1,
+                440
+              ],
+              "diagramsReviewer": [
+                441,
+                8940
+              ],
+              "binaryReviewer": [
+                6001,
+                10249
+              ]
+            }
+          },
+          "exactReusedRanges": [
+            {
+              "currentLines": [
+                1,
+                2
+              ],
+              "reviewedBaselineLines": [
+                1,
+                2
+              ],
+              "bytesSha256": "30ca094220dcaf1eba1754fb531ede236946a06b0b5b18e176b515a0d6730733",
+              "exactBytesEqual": true
+            },
+            {
+              "currentLines": [
+                6,
+                10
+              ],
+              "reviewedBaselineLines": [
+                6,
+                10
+              ],
+              "bytesSha256": "d3390d25674d36d0421c33267caa255ed8ddfdeb1d5715b06959c87c40f034a4",
+              "exactBytesEqual": true
+            },
+            {
+              "currentLines": [
+                12,
+                12
+              ],
+              "reviewedBaselineLines": [
+                12,
+                12
+              ],
+              "bytesSha256": "d5a2ffd3a4dd12dc4c3ea845080923a24ed727749083deef0d85d4d116fd8d28",
+              "exactBytesEqual": true
+            },
+            {
+              "currentLines": [
+                14,
+                14
+              ],
+              "reviewedBaselineLines": [
+                14,
+                14
+              ],
+              "bytesSha256": "d48b7b130a897b07429685dc6c68da57ab6cfcde93904525e88c06e8d6be6bbb",
+              "exactBytesEqual": true
+            },
+            {
+              "currentLines": [
+                17,
+                17
+              ],
+              "reviewedBaselineLines": [
+                17,
+                17
+              ],
+              "bytesSha256": "ff3f8149329df303c9e44ff088f5e9c1a9f83ec78407a195d930fdd4efca368c",
+              "exactBytesEqual": true
+            },
+            {
+              "currentLines": [
+                19,
+                30
+              ],
+              "reviewedBaselineLines": [
+                19,
+                30
+              ],
+              "bytesSha256": "39e6bed3644c2f076f0a776336c98e41e9473eeed0b308e77543eacbeb980082",
+              "exactBytesEqual": true
+            },
+            {
+              "currentLines": [
+                36,
+                10247
+              ],
+              "reviewedBaselineLines": [
+                36,
+                10247
+              ],
+              "bytesSha256": "fccfec46721a4225c2276f7eeb48d4f0e0f4b1f1c96e945214784cd3efbf5baf",
+              "exactBytesEqual": true
+            },
+            {
+              "currentLines": [
+                11894,
+                11895
+              ],
+              "reviewedBaselineLines": [
+                10248,
+                10249
+              ],
+              "bytesSha256": "df739a06c1cbb1244e3363d38bcf9fa50ce84fed399c2193a3c7f08d59918b2a",
+              "exactBytesEqual": true
+            }
+          ],
+          "freshCurrentRanges": [
+            [
+              3,
+              5
+            ],
+            [
+              11,
+              11
+            ],
+            [
+              13,
+              13
+            ],
+            [
+              15,
+              16
+            ],
+            [
+              18,
+              18
+            ],
+            [
+              31,
+              35
+            ],
+            [
+              10248,
+              11893
+            ]
+          ],
+          "freshDelta": "/tmp/cinenest-traceability/status-delta.txt",
+          "limitations": [
+            "This is content review, not external CI or database test reexecution.",
+            "Embedded reading ledger records other reviewers historical visual/content review; this subtask does not claim fresh visual inspection of every linked asset.",
+            "Historical PENDING receipts and pre-feature gaps remain historical; current CI must be independently queried."
+          ],
+          "relationshipsReviewed": {
+            "topLevelTask": "CN-EXTENSION-RESERVATION-FE-001",
+            "currentChangeSet": "CN-EXTENSION-RESERVATION-FE-001",
+            "nextRecommendedChangeSet": "CN-E2E-EXTENSION-RESERVATION-001",
+            "publicationState": "LOCAL_VERIFIED_PUBLICATION_PENDING",
+            "embeddedLedgerFiles": 116,
+            "embeddedLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
+            "boundedFrontendVerification": {
+              "backendTests": 807,
+              "frontendTests": 480,
+              "newFocusedTests": 31,
+              "reservationBrowserChecks": 45,
+              "previewBrowserChecks": 39,
+              "cancellationBrowserResponsiveScenarios": 6,
+              "browserEvidence": "INTERCEPTED_FIXTURES_NOT_REAL_BACKEND_E2E",
+              "classifierTests": 8,
+              "launcherTests": 14,
+              "governanceAssertions": 154,
+              "npmAuditVulnerabilities": 0,
+              "build": "PASS",
+              "typecheck": "PASS",
+              "lint": "PASS_EXISTING_INFORMATIONAL_DIAGNOSTICS",
+              "ordinaryExecution": "TWO_PREEXISTING_UNRELATED_NEXT_ENV_FINDINGS",
+              "cleanCheckout": "PASS_ACTUAL_LOCAL_CLONE_PROJECTED_TASK_PAYLOAD",
+              "screenshots": ".cache/extension-reservation-fe",
+              "fullCampaignRerun": false
+            },
+            "truthSafeguards": [
+              "Customer-only frontend, existing reservation/recovery/withdrawal APIs; no backend or migration changes.",
+              "No financial mutation/funding/purchased revision/access/grant change, no automatic creation/renewal.",
+              "No receipt must not become proof of failed creation.",
+              "480frontend/807backend and45reservation+39preview browser fixturechecks are bounded records, not real-backend extension E2E.",
+              "Historical24campaign PASS was not rerun by extension reservation frontend.",
+              "15/74 roadmap and0/92 formal requirements unchanged."
+            ]
+          },
+          "unresolvedCoverageGaps": [],
+          "repositoryWrites": false,
+          "coverageMethod": "COMPLETE_COMPOSITE_EXACT_PRIOR_PAYLOAD_PLUS_ALL_NOVEL_CONTENT"
+        },
+        {
+          "path": "knowledge/execution/test-plan.json",
+          "sha256": "cfdedf9f32f8c9e4ad264f10ed2841b3e2d63b9e579730a20820d9ba4556b701",
+          "lines": 4444,
+          "completeFreshReview": true,
+          "ranges": [
+            [
+              1,
+              4444
+            ]
+          ],
+          "method": "Literal source contents in untruncated contiguous chunks",
+          "limitations": [],
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/execution/validate_execution.py",
+          "sha256": "9b7f105b4f715dd829d9df8f2fb4b6908ba6ec5376db166dab09a1b6aa272de5",
+          "lines": 6267,
+          "completeFreshReview": false,
+          "ranges": [
+            [
+              6181,
+              6267
+            ],
+            [
+              5720,
+              5963
+            ]
+          ],
+          "method": "Qualified prior full content-reading ledger at status.extensionReservationFrontend.knowledgeReadingLedger plus byte-identical prior body proof; fresh complete new successor6184-6267 and focused5720-5963 review. Not fresh entire-file reread.",
+          "limitations": [
+            "Static review only; validator/negative controls not executed by read-only reviewer."
+          ],
+          "completeCompositeContentReview": true,
+          "reusedRanges": [
+            [
+              1,
+              6183
+            ]
+          ],
+          "reuseProof": {
+            "priorBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
+            "priorWholeSha256": "a6eaa5f7ecf4755b71ca7f331406c9490d2f18aa949d44132812a6e27874ad51",
+            "priorLedgerContentCoverage": "ALL_LINES1-6185",
+            "priorBodyPrefixSha256": "2a36eaeb16e1f514bc3f0e34287671e3a2e7e8cb8da7cec7a1fec8aa16312c9c",
+            "currentStartsWithExactPriorBody": true,
+            "priorBodyBytes": 823231,
+            "currentSha256": "9b7f105b4f715dd829d9df8f2fb4b6908ba6ec5376db166dab09a1b6aa272de5"
+          },
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/guides/USER_GUIDE.md",
+          "sha256": "f01b2a5a4e1d2623d48a4ef49cc5b457a1b32ada4fe05d19f7ee034fabafe01a",
+          "lines": 369,
+          "method": "Fresh full sequential content reading in untruncated bounded chunks",
+          "contentCoverage": [
+            [
+              1,
+              369
+            ]
+          ],
+          "complete": true,
+          "limitations": [
+            "Linked image visual review belongs to prior byte-qualified coverage/other reviewer;not newly claimed here."
+          ],
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/manifest.json",
+          "sha256": "bebfacfe3888dcf16c314ccd3e891408dfa879a927ec346e9f5d06ae535617a9",
+          "lines": 2938,
+          "completeFreshReview": true,
+          "ranges": [
+            [
+              1,
+              2938
+            ]
+          ],
+          "method": "Literal source contents in untruncated contiguous chunks",
+          "limitations": [],
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/product/FEATURE_CATALOG.md",
+          "sha256": "f194ec7358d3245913fd8a33ffa03b5fee8552b9c9c6c3552dcb2298924007eb",
+          "lines": 672,
+          "method": "Fresh full sequential content reading in untruncated bounded chunks",
+          "contentCoverage": [
+            [
+              1,
+              672
+            ]
+          ],
+          "complete": true,
+          "limitations": [
+            "Linked image visual review belongs to prior byte-qualified coverage/other reviewer;not newly claimed here."
+          ],
+          "coverageMethod": "FRESH_OR_COMPOSITE_AS_EXPLICITLY_RECORDED"
+        },
+        {
+          "path": "knowledge/product/cinenest-bank-payment-lifecycles.json",
+          "sha256": "c12a0454905509c14cfad5eae94e83b861a36d3fe02bc3ad283d1afeb142599f",
+          "sizeBytes": 18120,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 303,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/cinenest-draft-rules.json",
+          "sha256": "1827c0410b9c366ea390e7c4b6c23e160901379cd8b739bd561a84dae1e486bc",
+          "sizeBytes": 1530,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 51,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/cinenest-feature-catalog.json",
+          "sha256": "bee233202471451aa10716254c9001b3ea24992c962413883b87791322f33dce",
+          "sizeBytes": 25313,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 531,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/analytics.png",
+          "sha256": "683c39bf5895f8f2870cd6517de7c4f5c94c398fd49a500b226e678275f89391",
+          "bytes": 426281,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Full-page synthetic admin dashboard/bank summary/confirmation statistics snapshot: 3 confirmations,2+1daily,currentroom3; no operational metrics fabricated; independent reportpermission and no real finance acceptance.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-1280.png",
+          "sha256": "a3d5d3f3393ee4b4975cefb8dc2515f9079ef54381efbaca87ebbd479fd5d1a9",
+          "bytes": 136138,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-375.png",
+          "sha256": "7154478236c44104f5d435c109d5be5562b5b6b9e90a15116231d6b075440f77",
+          "bytes": 104302,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-768.png",
+          "sha256": "b949db5629c70743d04e0de929c025f3e84285493b32d8a7835a32a012b7c0c1",
+          "bytes": 209040,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-1280.png",
+          "sha256": "3688eefcd87b254fc3d6e340174bd2d40eac5d168e7d1075ecc91aa2f4ed3940",
+          "bytes": 145909,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-375.png",
+          "sha256": "1281417320acc643c750b2082a5d20d42ef31c2852b2971720768d9ecc0af083",
+          "bytes": 106666,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-768.png",
+          "sha256": "ccc6718b1621d5be4275f15647b7cae6133e39838ed7666a089cac9575a28f85",
+          "bytes": 132007,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-1280.png",
+          "sha256": "f46eac13c9f812ae96f8189802234511884da99ad25a218f998a5d6a3a97f8ab",
+          "bytes": 242617,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-375.png",
+          "sha256": "32ca69413c811ec0ae0b469ef7fa3ecd709bdcfef97ca3ae0629f298591b8300",
+          "bytes": 81664,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-768.png",
+          "sha256": "8ee3696036b124ad092cf9146eea770017b58e8c9bc071f7fa7bba2b81b82a5b",
+          "bytes": 368823,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-1280.png",
+          "sha256": "5a774ebd61f42e38c7e830c6d5f68031b6fada97dc0d5e8f9a8478831c5869ce",
+          "bytes": 143869,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-375.png",
+          "sha256": "8ada010a739288d1ab85938ae3111a42e3976a7f8ef81dcf905cb55d2da4344b",
+          "bytes": 77206,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-768.png",
+          "sha256": "d56982e97a02ac6886a0fbaf6b33b5d0a876e0761f5bd4cdc9233e00ae6f6b9c",
+          "bytes": 92499,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Historical before/after customer/staff cancellation screenshot at named width. Reviewed every visible pixel/text in source viewport: explicit eligibility/reason/acknowledgement and confirm; independent booking.synthetic.cancel for staff; synthetic no-real-refund/admission warnings. Viewport crops do not establish offscreen content or current runtime behavior.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/catalog.png",
+          "sha256": "4b1e661bfcd1698380978c5816ab9458ee25d9b8fa6d5d5dc7c5821dcdc0e51f",
+          "bytes": 193370,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Customer catalog filters and one synthetic room card,AIillustration/notactualvenuephoto, capacity4fromfixture,HDMIlabel,explicitdetailnavigation/paging; no readiness inference.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/grants.png",
+          "sha256": "5b6ad59619588dd97c6574e207f6d3f25b81bcfdaed8360d92303f250c62e596",
+          "bytes": 170521,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Admin managed grant inspection screenshot,exactvenue/account,independent identity.grant.read,subsetnotcompleteauthorization; bootstrap/delegation disabled; sourceviewport ends during observationcopy.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/operations.png",
+          "sha256": "4da2255fa9a602778bb05fda9041f89ad1a5ca10297ac34ae7c0344f176dae88",
+          "bytes": 179794,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Fullmobile operations screenshot: UNKNOWNoccupancy,UNVERIFIEDphysicalreadiness; independentinventory.read maintenanceimpactpreview;venue-localinterval,explicitload/retry/clear;queue andsyntheticcreatepermission;focusvisible.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-1280.png",
+          "sha256": "e3e7af64a17508f733a12cfe5f1148ececda37d03c7feadb15bb1b62d5cd5d89",
+          "bytes": 562038,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-375.png",
+          "sha256": "59d054602aa587dca1caec385824b49f853cc8e95902c33d59da9bf150a0c556",
+          "bytes": 504861,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-768.png",
+          "sha256": "d4f30f861dd8c5526274e906339d623be4532826dcc6928908dc814c87bc60ad",
+          "bytes": 506780,
+          "coverage": "VISUALLY_REVIEWED",
+          "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/sources/CN-AGENT-SETUP-001-request.txt",
+          "sha256": "5069b092f2eb4b71e180e11d13e701b2a99a3c8f143a3e1f992bbcaf862e72f2",
+          "lines": 434,
+          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs",
+          "contentCoverage": [
+            [
+              1,
+              434
+            ]
+          ],
+          "fullContentReviewed": true,
+          "visualCoverage": "Text/Mermaid source only; linked images reviewed by other reviewer, not this ledger",
+          "limitations": [],
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/sources/CN-DEC-001-request.txt",
+          "sha256": "c13879ccf2719e8d1e36b813ad3c971f109514822fdae6da1e98ee1261943d0f",
+          "lines": 375,
+          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs",
+          "contentCoverage": [
+            [
+              1,
+              375
+            ]
+          ],
+          "fullContentReviewed": true,
+          "visualCoverage": "Text/Mermaid source only; linked images reviewed by other reviewer, not this ledger",
+          "limitations": [],
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/sources/CN-KB-BANK-PAYMENT-001-request.txt",
+          "sha256": "4c63f237b0bb3e67011efd2103ffc614b702f313fb2970ae1ceaf72d9e19c0b1",
+          "lines": 415,
+          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs",
+          "contentCoverage": [
+            [
+              1,
+              415
+            ]
+          ],
+          "fullContentReviewed": true,
+          "visualCoverage": "Text/Mermaid source only; linked images reviewed by other reviewer, not this ledger",
+          "limitations": [],
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/sources/CN-KB-FEATURES-TECH-001-request.txt",
+          "sha256": "9cf09c1dcbd849ddbd15449a0b76b9e21f478a33dc66439086ee93dad429f06d",
+          "lines": 669,
+          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs",
+          "contentCoverage": [
+            [
+              1,
+              669
+            ]
+          ],
+          "fullContentReviewed": true,
+          "visualCoverage": "Text/Mermaid source only; linked images reviewed by other reviewer, not this ledger",
+          "limitations": [],
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt",
+          "sha256": "1cd916c41a310b49aae6daff7405ad5f2c1fd01bd52f5ff486feccf6b536ee84",
+          "lines": 310,
+          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs",
+          "contentCoverage": [
+            [
+              1,
+              310
+            ]
+          ],
+          "fullContentReviewed": true,
+          "visualCoverage": "Text/Mermaid source only; linked images reviewed by other reviewer, not this ledger",
+          "limitations": [],
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/sources/cinenest-source-register.json",
+          "sha256": "4fbbc5682f1f0070a3ee1b727cf92e49e6d8b6750eea24c51055a232273461f4",
+          "sizeBytes": 7984,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 176,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/styles/cinenest-theme.css",
+          "sha256": "d3968b08519db0dea663f0336b40913207dd5a8613f1361c37f7a97b6c43533a",
+          "sizeBytes": 3736,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 100,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/tokens/cinenest-chart-specs.json",
+          "sha256": "e4300304ba0aa0fcc6fa363cefe91b21da5150761fbe12ca9308315ba1f9c275",
+          "sizeBytes": 46963,
+          "reviewMethod": "Complete UTF-8 file read in contiguous untruncated ranges; JSON IDs/source/decision/metric relationships reviewed",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Approved bounded policies do not resolve global OD-07/20/28; historical source ledger is not current complete-reading evidence."
+          ],
+          "logicalLines": 729,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/tokens/cinenest-design-tokens.json",
+          "sha256": "8c817e4f055eadb28ab556c868ff21cd899430001cb3d374d2265b2b8df74cea",
+          "sizeBytes": 3334,
+          "reviewMethod": "Full UTF-8 source content displayed and reviewed; JSON parsed separately for source/decision/module relations where applicable",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Historical evidence/proposed defaults retain original status; source IDs map to source register, diagrams subordinate to canonical approval."
+          ],
+          "logicalLines": 136,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/validate_design_kb.py",
+          "sha256": "260a417b3201f3fb62a9a59009b62ad6d5e1e4c39d42b49859d411830045e803",
+          "sizeBytes": 48906,
+          "reviewMethod": "Complete UTF-8 file read in contiguous untruncated ranges; JSON IDs/source/decision/metric relationships reviewed",
+          "contentCoverage": "ALL_LINES",
+          "visualCoverage": "NOT_APPLICABLE",
+          "limitations": [],
+          "notes": [
+            "Approved bounded policies do not resolve global OD-07/20/28; historical source ledger is not current complete-reading evidence."
+          ],
+          "logicalLines": 633,
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
+          "reviewMethod": "OOXML complete paragraph/table extraction plus bundled LibreOffice render_docx.py and individual full-page PNG visual inspection; embedded JPEG separately opened where present",
+          "pageRangesReviewed": [
+            "1-12"
+          ],
+          "pagesReviewed": 12,
+          "contentCoverage": "COMPLETE readable text and relevant tables/diagrams reviewed",
+          "visualCoverage": "ALL rendered pages individually opened and reviewed",
+          "unresolvedCoverageGaps": [],
+          "limitations": [
+            "Historical supporting source/proposal, not current approval or implementation evidence.",
+            "Seven sections, both comparison/risk tables and architecture mapping reviewed. Embedded map has Next.js, gateway, Google SSO/JWT, Redis, S3, payment ledger, IoT and ESP32.",
+            "PDF source has right-edge clipping of wide table presentation; complete text is recoverable in extraction and separately reviewed DOCX tables. This is a source layout limitation, not approval for architectural alternatives."
+          ],
+          "authority": "HISTORICAL_SUPPORTING_SOURCE_NOT_POLICY_APPROVAL",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        },
+        {
+          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
+          "reviewMethod": "Poppler full text extraction plus individual full-page PNG visual inspection",
+          "pageRangesReviewed": [
+            "1-12"
+          ],
+          "pagesReviewed": 12,
+          "contentCoverage": "COMPLETE readable text and relevant tables/diagrams reviewed",
+          "visualCoverage": "ALL rendered pages individually opened and reviewed",
+          "unresolvedCoverageGaps": [],
+          "limitations": [
+            "Historical supporting source/proposal, not current approval or implementation evidence.",
+            "Seven sections, both comparison/risk tables and architecture mapping reviewed. Embedded map has Next.js, gateway, Google SSO/JWT, Redis, S3, payment ledger, IoT and ESP32.",
+            "PDF source has right-edge clipping of wide table presentation; complete text is recoverable in extraction and separately reviewed DOCX tables. This is a source layout limitation, not approval for architectural alternatives."
+          ],
+          "authority": "HISTORICAL_SUPPORTING_SOURCE_NOT_POLICY_APPROVAL",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
+          "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
+        }
+      ]
+    },
+    "matrixReference": "requirements.json#mvpKnowledgeTraceability",
+    "sourceGroups": 23,
+    "requirements": 92,
+    "criteria": 74,
+    "workstreams": 11,
+    "numberedDiagrams": 37,
+    "applicationChanged": false,
+    "migrationsChanged": false,
+    "businessPolicyChanged": false,
+    "decisionsApproved": false,
+    "acceptanceChanged": false,
+    "historicalEvidenceChanged": false,
+    "extensionFundingStarted": false,
+    "fullCampaignRerun": false,
+    "successorCI": "PENDING",
+    "localValidation": {
+      "knowledgeDesign": "PASS",
+      "matrixAndExactSuccessor": "PASS",
+      "governanceControls": 182,
+      "ciClassifierTests": 8,
+      "cleanCheckoutProjection": "PASS",
+      "ordinaryWorktree": "Two preserved pre-existing frontend/next-env.d.ts findings;not task-caused",
+      "applicationSuites": "NOT_RERUN_LOCALLY;full exact-source successor CI required",
+      "whitespace": "PASS"
     }
   }
 }

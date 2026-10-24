@@ -2316,10 +2316,10 @@
       {
         "id": "W06",
         "title": "Booking Amendments, Extensions and Cancellation",
-        "boundedImplementedAndVerified": "Zero-delta reschedule, pre-start cancellation, extension preview and tail reservation; typed owner-only reservation context port with PostgreSQL/architecture verification",
+        "boundedImplementedAndVerified": "Zero-delta reschedule,pre-start never-issued cancellation,extension preview and temporary tail reservation with customer UI,status/CREATE recovery/withdrawal;typed owner-only public context",
         "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
-        "missing": "Customer extension preview/reservation UI; policy-gated funding and purchased extension commit",
-        "blockers": "Funding policies remain open; safe owner-context port needs no financial decision",
+        "missing": "Real-backend browser extension reservation/recovery/withdrawal evidence;policy-gated funding,purchased extension commit and wider commercial/issued-credential lifecycle",
+        "blockers": "Existing synthetic reservation contracts permit separately authorized E2E verification;funding A–P/financial/migration authority remain open",
         "requirementIds": [
           "PR-PKG-001",
           "CN-C08",
@@ -3556,6 +3556,26 @@
       "scope": "Existing customer booking detail: explicit owner-only extension eligibility/price preview using existing APIs; no reservation/funding mutation",
       "dependencies": "Existing preview/proxy contracts and exact-source prerequisite CI; separately bounded UI scope and visual evidence",
       "status": "PROPOSED_NEXT_BOUNDED_UNIT"
+    },
+    "traceabilityReconciliation": {
+      "taskId": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
+      "baseline": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
+      "previousWorkstreamValues": {
+        "W06": {
+          "boundedImplementedAndVerified": "Zero-delta reschedule, pre-start cancellation, extension preview and tail reservation; typed owner-only reservation context port with PostgreSQL/architecture verification",
+          "missing": "Customer extension preview/reservation UI; policy-gated funding and purchased extension commit",
+          "blockers": "Funding policies remain open; safe owner-context port needs no financial decision"
+        }
+      },
+      "source": "requirements.json#mvpKnowledgeTraceability",
+      "scope": "Current factual implementation projection only;originalchangeSets/dependencies/decisions/acceptance unchanged",
+      "nextCandidate": {
+        "id": "CN-E2E-EXTENSION-RESERVATION-001",
+        "scope": "One real-backend synthetic browser reservation/status/recovery/withdrawal verification using existing contracts;no funding or paid-extension commit.",
+        "authority": "PROPOSED_SEPARATE_EXECUTION_AUTHORIZATION_REQUIRED",
+        "definitionOfDone": "Admitted isolated harness;explicit UI actions,owner/CSRF/replay/unknown-result invariants,authoritative PostgreSQL checks,zero unintended finance/purchase/access mutation;honest scenario accounting and exact-source CI.",
+        "rollback": "Test-only scoped revert;clean only owned ephemeral test resources;preserve historical evidence."
+      }
     }
   }
 }
