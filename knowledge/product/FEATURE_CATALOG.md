@@ -175,6 +175,8 @@ Calendar discovery maps to P3-C02; explicit reservation holds additionally map t
 
 Current bounded verification update—CN-R1-BOOKING-JOURNEY-E2E-001:real browser/Next/Spring/PostgreSQL pending journey verified,including committed-response timeout→unknown→explicit original-command replay. OPEN/PENDING and UNFUNDED/NOT_CONFIRMED remain distinct;one request/receipt,no premature allocation/booking/access. Application behavior unchanged. [Current evidence and screenshots](../PROGRESS.md#release1-booking-journey);historical source-inspection receipt above retained. Real banking/identity/physical admission remain unqualified.
 
+Current recovery verification—CN-R1-CUSTOMER-BOOKING-RECOVERY-001:existing pending request survives fresh-tab quotation reload and explicit owned-history refresh;hard refresh/lifecycle reload,original-command retry and session/logout denial verified through real stack. No new feature/API or automatic payment. [Evidence](../PROGRESS.md#release1-customer-recovery).
+
 <a id="doc-f009"></a>
 ## DOC-F009 — Customer booking history and detail
 

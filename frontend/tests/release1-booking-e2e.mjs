@@ -1,5 +1,6 @@
 // Real-stack Release1 checks. No business interception, cookie injection or mocked API success.
 import assert from "node:assert/strict";
+import { unknownRevisit, refreshPending } from "./release1-recovery-e2e.mjs";
 import { writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
@@ -97,6 +98,7 @@ export async function release1PendingJourney({
 					.count(),
 				0,
 			);
+			await unknownRevisit({page,base,quote,creationBody,json,control,diagnostics,scenario});
 			const observed = page.waitForRequest(
 				(r) =>
 					new URL(r.url()).pathname === "/api/bank/requests" &&
@@ -187,6 +189,7 @@ export async function release1PendingJourney({
 			);
 			await inspect("pending-page-and-responsive-reads");
 		});
+		await refreshPending({page,bank,requests,control,quote,creationBody,diagnostics,scenario});
 		const contexts = [];
 		try {
 			const peers = [];

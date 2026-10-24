@@ -72,7 +72,7 @@ class AdmissionTests(unittest.TestCase):
                 self.assertTrue((root/'next-env.original').exists())
 
     def test_no_business_interception_or_cookie_injection(self):
-        source=(journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/extension-reservation-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/release1-booking-e2e.mjs').read_text()
+        source=(journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/extension-reservation-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/release1-booking-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/release1-recovery-e2e.mjs').read_text()
         for forbidden in ['page.route(', 'route.fulfill(', 'context.addCookies(', 'storageState:', 'ignoreHTTPSErrors:']:
             self.assertNotIn(forbidden,source)
 

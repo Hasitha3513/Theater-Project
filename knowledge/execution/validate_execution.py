@@ -6754,5 +6754,107 @@ def inert_ci_main():
     if result==0:print('PASS exact Release1 Day2 real-stack successor;application,financial/physical policy,history,92requirements74criteria and acceptance preserved')
     return result
 
+
+
+# CN-R1-CUSTOMER-BOOKING-RECOVERY-001: exact test/evidence successor; no app or financial authority.
+r1_recovery_prior_main=inert_ci_main
+R1_RECOVERY_BASELINE='326c4426f8d8fd3e38f98e0d364e435794429ec8'
+R1_RECOVERY_HASHES={'frontend/tests/release1-recovery-e2e.mjs': '5e89a8ab2ddaccd449ab0aa6125bea27f7d53d0252ed65ffc5399be68ea0dddc', 'frontend/tests/release1-booking-e2e.mjs': '72082da9ceb4076587057584792419dc5866e2a20956678c2e1e04a6c74a2d9f', 'frontend/tests/synthetic-e2e.mjs': 'beb6109437781d9d61d38a5ec1923b67e74f41c5657fbc67b34503ff5c290578', 'scripts/test-synthetic-e2e.py': 'a0a2ceeacff435af62990dc219493f8ad7af03f650b122ce1697f5126806ac17', 'knowledge/PROGRESS.md': 'cfab0c7d479b10d4ed5966f6a377bfe2569ce97e114bb5250cd7c99844f16a10', 'knowledge/execution/requirements.json': '65397cf913084237d55f6bcaa54aadf1eddd23a8e357d46f3080b2d342664199', 'knowledge/execution/change-sets.json': '404e65c0064a407e2773fb4fed1765a926f46dd2085cc3bc9a56d7976f1caa8d', 'knowledge/execution/status.json': 'b0254d021eec7fdc5fb0c25af8afff81dcba7745a91f36e50057896c5d3c9cc1', 'knowledge/product/FEATURE_CATALOG.md': '013aef73202aa4bb8c654744611a01533ec621bf1a9ff242c789e4ab710852f0', 'knowledge/guides/USER_GUIDE.md': 'dc8cdce2fc3e2142baa93bba9a6aa721ffa292f7cef073c32d1a7288acd75983', 'scripts/test-governance-controls.py': '82f4d4332eec18b9c1b2827d2bff8dda4b3c9fd7a2fa85360f58d83bf6e38f2f'}
+R1_RECOVERY_ADDED={'frontend/tests/release1-recovery-e2e.mjs'}
+
+def r1_recovery_planning_projection(plan):
+    import copy
+    result=copy.deepcopy(plan);receipt=result.pop('recoveryExecution',{})
+    for row in result.get('schedule',[]):
+        if row.get('taskId')=='CN-R1-CUSTOMER-BOOKING-RECOVERY-001':row.clear();row.update(receipt.get('previousDay',{}))
+    result['nextImplementationTask']=receipt.get('previousNextImplementationTask',{})
+    return result
+
+def r1_recovery_evidence_errors(evidence):
+    errors=[]
+    if evidence.get('baseline')!=R1_RECOVERY_BASELINE or evidence.get('counts')!={'PASS':40,'FAIL':0,'NOT_RUN':0}:errors.append('Recovery exact source/count missing')
+    rows=evidence.get('scenarios',[]);required={'R1-recovery-unknown-revisit','R1-recovery-refresh-cache','R1-recovery-session-clearing'}
+    if len(rows)!=40 or len({x.get('id') for x in rows})!=40 or any(x.get('status')!='PASS' for x in rows) or not required<={x.get('id') for x in rows}:errors.append('Recovery actual unique40PASS missing')
+    for key in ['revisit','refresh']:
+        value=evidence.get(key,{});db=value.get('database',{})
+        if value.get('writeRequests')!=0 or db.get('requests')!=1 or db.get('commandReceipts')!=1 or db.get('bindingVerified') is not True or db.get('databaseExclusionVerified') is not True or db.get('overlapPairs')!=0:errors.append('Recovery request/receipt/inventory integrity missing')
+        if any(db.get(k)!=0 for k in ['credits','verifications','allocations','bookings','credentials','provisioningWork']):errors.append('Recovery premature finance/booking/access transition')
+    if evidence.get('revisit',{}).get('discoveredThroughOwnedHistory') is not True or evidence.get('revisit',{}).get('creationMemoryReused') is not False:errors.append('Recovery independent history discovery missing')
+    refresh=evidence.get('refresh',{})
+    if refresh.get('hardRefresh') is not True or refresh.get('controlledPageLifecycle') is not True or refresh.get('physicalBFCacheQualification') is not False:errors.append('Recovery lifecycle evidence/limits changed')
+    if evidence.get('session')!={'requestStatus':401,'logoutStatus':204,'postLogoutReadStatus':401,'protectedSummaryCleared':True,'historyCleared':True}:errors.append('Recovery session/expiry/revocation proof missing')
+    if evidence.get('cleanupVerified') is not True:errors.append('Recovery cleanup missing')
+    for key in ['applicationChanged','migrationsChanged','policyChanged','acceptanceChanged','grantsAssigned','realBanking','physicalCommands','extensionFunding','productionAuthorized']:
+        if evidence.get(key) is not False:errors.append('Recovery authority exceeded '+key)
+    checks=evidence.get('validation',{})
+    if checks.get('backendTests')!=807 or checks.get('frontendTests')!=482 or checks.get('backendFailures')!=0 or checks.get('frontendFailures')!=0:errors.append('Recovery actual regression evidence missing')
+    return errors
+
+def r1_recovery_successor_errors():
+    errors=[];baseline=R1_RECOVERY_BASELINE
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in R1_RECOVERY_HASHES.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Recovery exact authorized payload mismatch '+name)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Recovery historical validator changed')
+    req=json.loads((K/'execution/requirements.json').read_text());selected={'CN-C03','CN-C08','CN-C10','CN-NFR-01','CN-NFR-02'}
+    for row in req['requirements']:
+        annotation=row.pop('release1RecoveryEvidence',None)
+        if (row['id'] in selected)!=(annotation is not None):errors.append('Recovery requirement annotation scope drift')
+    if req!=json.loads(prior('knowledge/execution/requirements.json')):errors.append('Recovery original92requirements/history/acceptance changed')
+    changes=json.loads((K/'execution/change-sets.json').read_text());plan=changes['release1DeliverySlice'];row=next(r for r in plan['schedule'] if r['taskId']=='CN-R1-CUSTOMER-BOOKING-RECOVERY-001')
+    if row.get('status')!='LOCAL_VERIFIED_CI_PENDING' or row.get('resultCounts')!={'PASS':40,'FAIL':0,'NOT_RUN':0}:errors.append('Recovery task evidence missing')
+    if plan['nextImplementationTask'].get('id')!='CN-R1-BOOKING-WEEK1-GATE-001' or plan['nextImplementationTask'].get('authority')!='REQUIRES_SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION':errors.append('Recovery next task authority drift')
+    changes['release1DeliverySlice']=r1_recovery_planning_projection(plan)
+    if changes!=json.loads(prior('knowledge/execution/change-sets.json')):errors.append('Recovery original plan/dependencies/blocked gates changed')
+    state=json.loads((K/'execution/status.json').read_text());evidence=state.pop('release1CustomerRecovery',{});state.update(evidence.get('previousCurrentHeader',{}))
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Recovery historical status/evidence changed')
+    errors.extend(r1_recovery_evidence_errors(evidence))
+    sources={'frontend/tests/release1-recovery-e2e.mjs','frontend/tests/release1-booking-e2e.mjs','frontend/tests/synthetic-e2e.mjs','scripts/test-synthetic-e2e.py'}
+    if set(evidence.get('sourceHashes',{}))!=sources or any(R1_RECOVERY_HASHES.get(n)!=h for n,h in evidence.get('sourceHashes',{}).items()):errors.append('Recovery executed source identity mismatch')
+    ledger=evidence.get('knowledgeReading',{});files=ledger.get('files',[])
+    if ledger.get('baseline')!=baseline or ledger.get('complete') is not True or len(files)!=116 or len({x.get('path') for x in files})!=116 or ledger.get('unresolvedCoverageGaps')!=[]:errors.append('Recovery qualified complete-reading reuse missing')
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for row in files:
+        if row.get('path') in tracked and row.get('sha256')!=hashlib.sha256(prior(row['path'])).hexdigest():errors.append('Recovery reading hash drift '+row['path'])
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Recovery acceptance checkbox drift')
+    owned=set(R1_RECOVERY_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for name in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Recovery protected/unrelated source changed '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Recovery unauthorized changed paths '+str(changed-owned))
+    preserved={'knowledge/Mini movie theater Ruels and Conditions.docx':'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf','knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx':'8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked-R1_RECOVERY_ADDED:
+        if name not in preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=preserved[name]:errors.append('Recovery unauthorized untracked file '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Recovery manifest authority/inventory/status drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=r1_recovery_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    owned=set(R1_RECOVERY_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'};added=R1_RECOVERY_ADDED
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',R1_RECOVERY_BASELINE+':'+name]) for name in owned-added}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw):return (x for x in g0(path,*a,**kw) if x not in {R/n for n in added})
+    def rglob(path,*a,**kw):return (x for x in rg0(path,*a,**kw) if x not in {R/n for n in added})
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();hide=owned if 'diff' in argv else added;paths=[x for x in text.split(sep) if x and x not in hide];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=r1_recovery_prior_main()
+    if result==0:print('PASS exact real-stack customer recovery successor;original app,history,92requirements74criteria and financial/physical/acceptance boundaries preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -107,6 +107,8 @@ Keyboard සඳහා Tab / Shift+Tab, Enter සහ checkbox සඳහා Space 
 
 **Verified pending/recovery clarification—CN-R1-BOOKING-JOURNEY-E2E-001:** Create response timeout වුවහොත් payment/booking සාර්ථක බව හෝ අසාර්ථක බව අනුමාන නොකරන්න. UI පෙන්වන **Retry original bank request** ක්‍රියාව explicit ලෙස භාවිත කරන්න;existing implementation එක same command/payload යළි භාවිත කරයි. තම request reload කිරීමේදී OPEN/PENDING සහ UNFUNDED/NOT_CONFIRMED යනු verified funds හෝ confirmed booking නොවේ. අලුත් payment/hold එකක් ස්වයංක්‍රීයව නොයවන්න. Real-stack37PASS evidence සහ private local375/768/1280screenshots [PROGRESS](../PROGRESS.md#release1-booking-journey) හි සඳහන්ය;ඉහත historical source-inspection receipt සහ portable screenshot limitation retained. සැබෑ මුදල්/IDs/door operations සඳහා අවසරයක් නැත.
 
+**Recovery—CN-R1-CUSTOMER-BOOKING-RECOVERY-001:** Refresh/revisit පසු **My bookings → Refresh booking history → View Bank Request** භාවිත කරන්න. Pending request එක purchased booking එකක් නොවේ. Unknown result සඳහා existing original-command retry හෝ owned history පරීක්ෂා කරන්න;අලුත් payment/hold එකක් නොයවන්න. Session unavailable නම් නැවත sign in කර history explicit ලෙස refresh කරන්න. [Real-stack evidence](../PROGRESS.md#release1-customer-recovery).
+
 ### UG-008 — Booking history and details
 
 - **Purpose / අරමුණ:** Booking history and details; [DOC-F009](../product/FEATURE_CATALOG.md#doc-f009) යටතේ විස්තර කළ bounded software භාවිතය.

@@ -710,6 +710,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
+      },
+      "release1RecoveryEvidence": {
+        "taskId": "CN-R1-CUSTOMER-BOOKING-RECOVERY-001",
+        "status": "BOUNDED_REAL_STACK_SYNTHETIC_RECOVERY_VERIFIED",
+        "evidencePath": "PROGRESS.md#release1-customer-recovery",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -1261,6 +1268,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
+      },
+      "release1RecoveryEvidence": {
+        "taskId": "CN-R1-CUSTOMER-BOOKING-RECOVERY-001",
+        "status": "BOUNDED_REAL_STACK_SYNTHETIC_RECOVERY_VERIFIED",
+        "evidencePath": "PROGRESS.md#release1-customer-recovery",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -3006,6 +3020,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
+      },
+      "release1RecoveryEvidence": {
+        "taskId": "CN-R1-CUSTOMER-BOOKING-RECOVERY-001",
+        "status": "BOUNDED_REAL_STACK_SYNTHETIC_RECOVERY_VERIFIED",
+        "evidencePath": "PROGRESS.md#release1-customer-recovery",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -3181,6 +3202,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
+      },
+      "release1RecoveryEvidence": {
+        "taskId": "CN-R1-CUSTOMER-BOOKING-RECOVERY-001",
+        "status": "BOUNDED_REAL_STACK_SYNTHETIC_RECOVERY_VERIFIED",
+        "evidencePath": "PROGRESS.md#release1-customer-recovery",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -3795,6 +3823,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
+      },
+      "release1RecoveryEvidence": {
+        "taskId": "CN-R1-CUSTOMER-BOOKING-RECOVERY-001",
+        "status": "BOUNDED_REAL_STACK_SYNTHETIC_RECOVERY_VERIFIED",
+        "evidencePath": "PROGRESS.md#release1-customer-recovery",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED"
       }
     },
     {

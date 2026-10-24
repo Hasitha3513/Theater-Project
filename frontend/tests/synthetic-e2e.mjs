@@ -1,5 +1,6 @@
 // Opt-in REAL backend journey. No page.route, route.fulfill, session injection or business stubs.
 import assert from "node:assert/strict";
+import { recoveryScenarios, expiredSessionRecovery } from "./release1-recovery-e2e.mjs";
 import {extensionScenarios,extensionReservationJourney} from "./extension-reservation-e2e.mjs";
 import {release1Scenarios,release1PendingJourney} from "./release1-booking-e2e.mjs";
 import { uploadFaultProxy } from "./upload-fault-proxy.mjs";
@@ -51,6 +52,7 @@ await chmod(diagnostics, 0o700);
 const planned = [
  ...extensionScenarios,
  ...release1Scenarios,
+ ...recoveryScenarios,
 	"startup",
 	"customer-discovery-auth",
 	"hold-quote-accept",
@@ -1455,6 +1457,7 @@ try {
 		assert.equal((await api(page, "/api/accounts/me")).status, 401);
         assert.equal((await api(page, `/api/bank/requests/${bank.id}`)).status,401);
 	});
+ await expiredSessionRecovery({page,base,bank,scenario,diagnostics,login,api});
 } catch (failure) {
 	assertionFailure = {
 		name: failure.name,
@@ -1464,7 +1467,7 @@ try {
 				: "Harness operation failed",
 		stack: String(failure.stack)
 			.split("\n")
-			.filter((line) => /synthetic-e2e\.mjs:|extension-reservation-e2e\.mjs:|release1-booking-e2e\.mjs:/.test(line))
+			.filter((line) => /synthetic-e2e\.mjs:|extension-reservation-e2e\.mjs:|release1-booking-e2e\.mjs:|release1-recovery-e2e\.mjs:/.test(line))
 			.slice(0, 4),
 	};
 	results.push({
