@@ -10204,5 +10204,46 @@
       "Foundation source checksum mismatch frontend/next-env.d.ts",
       "Unapproved protected source/token/dependency change frontend/next-env.d.ts"
     ]
+  },
+  "agentsKnowledgeReading": {
+    "taskId": "CN-AGENTS-KNOWLEDGE-READING-001",
+    "date": "2026-10-24",
+    "baseline": "65584950387e8fc306ee39955efd50019d417d7a",
+    "authority": "Owner-authorized root instruction enrichment and necessary validation only",
+    "discoveredFiles": 116,
+    "extensions": {
+      "md": 46,
+      "png": 33,
+      "json": 23,
+      "txt": 5,
+      "pdf": 3,
+      "py": 3,
+      "docx": 2,
+      "css": 1
+    },
+    "coverage": "Recursive path/size/hash inventory;fresh task-relevant governance/current-record consultation;NOT a fresh full content/visual audit",
+    "reusableFullReadingLedgerClaimed": false,
+    "originalInstructionsPreserved": true,
+    "applicationChanged": false,
+    "migrationsChanged": false,
+    "businessPolicyChanged": false,
+    "decisionsApproved": false,
+    "acceptanceChanged": false,
+    "historicalEvidenceChanged": false,
+    "extensionFundingStarted": false,
+    "publication": "Exact-source Git/CI result reported at closeout;not inferred",
+    "validation": {
+      "backendTests": 807,
+      "frontendTests": 449,
+      "backend": "PASS isolated PostgreSQL18.6,V1–V25,architecture,packaged startup/HTTP denial",
+      "frontend": "PASS npm ci/build/typecheck/lint;93 informational diagnostics;0 audit vulnerabilities",
+      "governancePassAssertions": 136,
+      "negativeRejections": 118,
+      "classifierTests": 8,
+      "launcherTests": 14,
+      "knowledgeTraceabilityDependenciesManifestWhitespace": "PASS",
+      "execution": "PASS committed-source projection;ordinary worktree retains only two pre-existing next-env findings",
+      "syntheticE2ECampaignRerun": false
+    }
   }
 }

@@ -418,7 +418,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "17617395ab71eefb034be9d4c889386b178dc224cc49b9f1b8bb1b115b5b4fba",
+      "sha256": "155a10bee794bb86cac1b9104cd675f8857f2018b43b0399a5ecf27437945c16",
       "authority": "canonical-prose"
     },
     {
@@ -558,7 +558,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cde5b673c0a49e5ce0e1a55bce124a5757bf12986cae815eab3d69008d9dda4f",
+      "sha256": "6f77d6ca6dfe459fe214b7ff45fe16f22d304fa71aefe7c3636cf5203c615f59",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -572,7 +572,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "60378b580dd43b54cd880fd893820d4ceb51b1b1f99b3f13477179977facb15a",
+      "sha256": "a6eaa5f7ecf4755b71ca7f331406c9490d2f18aa949d44132812a6e27874ad51",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -939,7 +939,7 @@
   "externalInstructionFiles": [
     {
       "path": "AGENTS.md",
-      "sha256": "fb516b0040fb40c9bbc6649c62bcb6051ba41311b912ab07939cd4c6a982c94b",
+      "sha256": "c6c7f1afc8c8b5c90dc7f6148aee99d9acc461b9a267647dc574169610ba9c9c",
       "purpose": "Current root entry; charter consolidated into PROGRESS.md"
     }
   ],

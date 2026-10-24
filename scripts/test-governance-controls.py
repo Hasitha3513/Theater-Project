@@ -56,6 +56,7 @@ def main():
     test_ci_empty_diff_controls(validator)
     test_extension_frontend_controls(validator)
     test_extension_recovery_controls(validator)
+    test_knowledge_reading_controls(validator)
 
 
 def test_future_register_controls():
@@ -285,14 +286,14 @@ def test_ci_empty_diff_controls(validator):
     assert not parse('backend/unauthorized.java\n') <= {'knowledge/PROJECT.md'}
     assert not parse('knowledge/execution/evidence/checks.json\n') <= {'knowledge/PROJECT.md'}
     print('PASS unauthorized and protected path classification remains negative')
-    errors = validator.get('extension_recovery_successor_errors',validator.get('extension_frontend_successor_errors',validator['ci_successor_errors']))()
+    errors = validator['knowledge_reading_successor_errors']()
     assert errors==[], errors
     print('PASS legitimate exact successor documentation admission')
     rb,rt,out = Path.read_bytes,Path.read_text,subprocess.check_output
     for rel in ['knowledge/PROJECT.md','knowledge/execution/requirements.json','knowledge/execution/status.json','scripts/test-governance-controls.py','knowledge/execution/evidence/checks.json']:
         target=ROOT/rel;replacement=rb(target)+b'\nUNAUTHORIZED_PAYLOAD\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator.get('extension_recovery_successor_errors',validator.get('extension_frontend_successor_errors',validator['ci_successor_errors']))(),rel
+            assert validator['knowledge_reading_successor_errors'](),rel
         print('PASS rejected successor changed-payload/protected-history',rel)
     def unknown_path(argv,*a,**kw):
         value=out(argv,*a,**kw)
@@ -302,7 +303,7 @@ def test_ci_empty_diff_controls(validator):
             return text if isinstance(value,str) else text.encode()
         return value
     with patch.object(subprocess,'check_output',unknown_path):
-        assert validator.get('extension_recovery_successor_errors',validator.get('extension_frontend_successor_errors',validator['ci_successor_errors']))(),'Unauthorized source path accepted'
+        assert validator['knowledge_reading_successor_errors'](),'Unauthorized source path accepted'
     print('PASS rejected unauthorized actual changed-path collection')
     # Model only the unrelated worktree file as its committed CI bytes. All task
     # sources, hashes, real changed paths and unauthorized-file guards remain real.
@@ -327,7 +328,7 @@ def test_extension_frontend_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','backendChanged']:
         value=json.loads(rt(path));value['extensionPreviewFrontend'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator.get('extension_recovery_successor_errors',validator['extension_frontend_successor_errors'])(),key
+            assert validator['knowledge_reading_successor_errors'](),key
         print('PASS extension frontend rejected',key)
 
 def test_extension_recovery_controls(validator):
@@ -335,7 +336,23 @@ def test_extension_recovery_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','frontendImplemented','missingReceiptMeansFailed']:
         value=json.loads(rt(path));value['extensionReservationRecoveryRead'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['extension_recovery_successor_errors'](),key
+            assert validator['knowledge_reading_successor_errors'](),key
         print('PASS extension recovery rejected',key)
+
+def test_knowledge_reading_controls(validator):
+    agents=ROOT/'AGENTS.md';original=agents.read_text()
+    assert original.startswith(__import__('subprocess').check_output(['git','-C',str(ROOT),'show',validator['KNOWLEDGE_READING_BASELINE']+':AGENTS.md'],text=True))
+    for phrase in ['every file under `knowledge/`','SHA-256','verified full-reading ledger only','PDF and DOCX','PNG diagrams','FORMALLY ACCEPTED','successor-admission mechanism']:
+        assert phrase in original,phrase
+    print('PASS knowledge-reading rules preserve original and require complete coverage, verified reuse and authority')
+    faults=[(agents,original.replace('every file under `knowledge/`','selected files').encode(),'weakened discovery'),(agents,original.replace('verified full-reading ledger only','any summary').encode(),'unverified reuse'),(agents,original.replace('FORMALLY ACCEPTED','ACCEPTED').encode(),'acceptance distinction')]
+    path=K/'execution/status.json'
+    for key in ['applicationChanged','migrationsChanged','businessPolicyChanged','decisionsApproved','acceptanceChanged','historicalEvidenceChanged','extensionFundingStarted','reusableFullReadingLedgerClaimed']:
+        value=json.loads(path.read_text());value['agentsKnowledgeReading'][key]=True;faults.append((path,json.dumps(value).encode(),key))
+    rb,rt=Path.read_bytes,Path.read_text
+    for target,replacement,label in faults:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
+            assert validator['knowledge_reading_successor_errors'](),label
+        print('PASS knowledge-reading rejected',label)
 
 if __name__ == '__main__': main()

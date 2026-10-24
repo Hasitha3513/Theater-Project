@@ -6111,5 +6111,75 @@ def inert_ci_main():
     if result==0:print('PASS exact owner-only committed CREATE recovery read;original commands,frontend,migrations,financial policy,history and acceptance preserved')
     return result
 
+# CN-AGENTS-KNOWLEDGE-READING-001: exact root-instruction successor; no general exemption.
+knowledge_reading_prior_main = inert_ci_main
+KNOWLEDGE_READING_BASELINE = '65584950387e8fc306ee39955efd50019d417d7a'
+KNOWLEDGE_READING_HASHES = {'AGENTS.md': 'c6c7f1afc8c8b5c90dc7f6148aee99d9acc461b9a267647dc574169610ba9c9c', 'knowledge/PROGRESS.md': '155a10bee794bb86cac1b9104cd675f8857f2018b43b0399a5ecf27437945c16', 'knowledge/execution/status.json': '6f77d6ca6dfe459fe214b7ff45fe16f22d304fa71aefe7c3636cf5203c615f59', 'scripts/test-governance-controls.py': '9a7572ed6603c1d22ee743b5d57aa475f864475ac03ad4541386ff1e31b2728c'}
+KNOWLEDGE_READING_ADDED = set()
+
+def knowledge_reading_successor_errors():
+    baseline=KNOWLEDGE_READING_BASELINE;hashes=KNOWLEDGE_READING_HASHES
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('Knowledge reading exact authorized payload mismatch '+name)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):
+        errors.append('Knowledge reading historical validator changed')
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('agentsKnowledgeReading',{})
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Knowledge reading changed existing status/approval evidence')
+    for key in ['applicationChanged','migrationsChanged','businessPolicyChanged','decisionsApproved','acceptanceChanged','historicalEvidenceChanged','extensionFundingStarted','reusableFullReadingLedgerClaimed']:
+        if receipt.get(key) is not False:errors.append('Knowledge reading exceeded authority '+key)
+    if receipt.get('baseline')!=baseline or receipt.get('originalInstructionsPreserved') is not True:errors.append('Knowledge reading authority/baseline mismatch')
+    if not (R/'AGENTS.md').read_bytes().startswith(prior('AGENTS.md')):errors.append('Knowledge reading changed original instructions')
+    if not (K/'PROGRESS.md').read_bytes().startswith(prior('knowledge/PROGRESS.md')):errors.append('Knowledge reading rewrote historical progress')
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):
+        errors.append('Knowledge reading acceptance checkbox drift')
+    allowed=set(hashes)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for name in tracked-allowed:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Knowledge reading unrelated protected source/history change '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=allowed:errors.append('Knowledge reading unauthorized changed path '+str(changed-allowed))
+    preserved={'knowledge/Mini movie theater Ruels and Conditions.docx':'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf','knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx':'8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked-set(hashes):
+        if name not in preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=preserved[name]:errors.append('Knowledge reading unauthorized untracked payload '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/'+entry['path'] in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+    expected['externalInstructionFiles'][0]['sha256']=hashlib.sha256((R/'AGENTS.md').read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Knowledge reading manifest inventory/authority drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=knowledge_reading_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    baseline=KNOWLEDGE_READING_BASELINE
+    added=KNOWLEDGE_READING_ADDED
+    owned=set(KNOWLEDGE_READING_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name]) for name in owned-added}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw):return (x for x in g0(path,*a,**kw) if x not in {R/n for n in added})
+    def rglob(path,*a,**kw):return (x for x in rg0(path,*a,**kw) if x not in {R/n for n in added})
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode()
+            hide=owned if 'diff' in argv else added
+            paths=[x for x in text.split(sep) if x and x not in hide]
+            text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=knowledge_reading_prior_main()
+    if result==0:print('PASS exact knowledge-reading governance successor;original instructions,application,history,decisions and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
