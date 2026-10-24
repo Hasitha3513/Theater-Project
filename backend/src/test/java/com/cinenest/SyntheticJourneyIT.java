@@ -13,7 +13,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Opt-in only: never selected by the existing Surefire *Test convention. */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties={"cinenest.booking.amendments.enabled=true","cinenest.bank.refunds.enabled=true","cinenest.bank.refunds.maximum-minor=50000","spring.datasource.hikari.maximum-pool-size=4","spring.datasource.hikari.minimum-idle=0","cinenest.bank.enabled=true","cinenest.bank.ledger.enabled=true","cinenest.bank.ledger.resolution-seconds=60","cinenest.bank.worker-enabled=false","cinenest.bank.policy-version=SYNTHETIC-BANK1","cinenest.bank.lead-seconds=60","cinenest.bank.request-seconds=3000","cinenest.bank.initiation-seconds=900","cinenest.bank.submission-seconds=1200","cinenest.bank.review-seconds=1800","cinenest.bank.hold-seconds=2400","cinenest.bank.escalation-seconds=2500","cinenest.bank.upload-seconds=60","cinenest.bank.retention-seconds=3600","cinenest.bank.cleanup-seconds=1","cinenest.bank.review-opens=00:00","cinenest.bank.review-closes=23:59:59","cinenest.verification.enabled=true","cinenest.verification.worker-enabled=false","cinenest.verification.policy-version=SYNTHETIC-V1","cinenest.verification.upload-seconds=60","cinenest.verification.retention-seconds=3600","cinenest.verification.decision-seconds=600","cinenest.verification.cleanup-seconds=1","cinenest.pricing.synthetic-quotes.enabled=true","cinenest.pricing.synthetic-quotes.tax-profile=SYNTHETIC_FIXED_MINOR_V1","cinenest.pricing.synthetic-quotes.tax-minor=7","cinenest.pricing.synthetic-quotes.approval-reference=SYNTHETIC test fixture only","cinenest.pricing.synthetic-quotes.rate-count=100","cinenest.pricing.synthetic-quotes.rate-seconds=60","cinenest.pricing.publication-worker.enabled=false","cinenest.booking.holds.enabled=true","cinenest.booking.holds.rate-count=100","cinenest.booking.holds.rate-seconds=60","cinenest.booking.holds.approval-reference=SYNTHETIC owner-approved inventory test"})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties={"cinenest.booking.extension-reservations.enabled=true","cinenest.booking.extension-reservations.worker-enabled=false","cinenest.booking.extension-reservations.rate-count=5","cinenest.booking.extension-reservations.rate-seconds=60","cinenest.booking.extension-reservations.approval-reference=CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001 synthetic test","cinenest.booking.amendments.enabled=true","cinenest.bank.refunds.enabled=true","cinenest.bank.refunds.maximum-minor=50000","spring.datasource.hikari.maximum-pool-size=4","spring.datasource.hikari.minimum-idle=0","cinenest.bank.enabled=true","cinenest.bank.ledger.enabled=true","cinenest.bank.ledger.resolution-seconds=60","cinenest.bank.worker-enabled=false","cinenest.bank.policy-version=SYNTHETIC-BANK1","cinenest.bank.lead-seconds=60","cinenest.bank.request-seconds=3000","cinenest.bank.initiation-seconds=900","cinenest.bank.submission-seconds=1200","cinenest.bank.review-seconds=1800","cinenest.bank.hold-seconds=2400","cinenest.bank.escalation-seconds=2500","cinenest.bank.upload-seconds=60","cinenest.bank.retention-seconds=3600","cinenest.bank.cleanup-seconds=1","cinenest.bank.review-opens=00:00","cinenest.bank.review-closes=23:59:59","cinenest.verification.enabled=true","cinenest.verification.worker-enabled=false","cinenest.verification.policy-version=SYNTHETIC-V1","cinenest.verification.upload-seconds=60","cinenest.verification.retention-seconds=3600","cinenest.verification.decision-seconds=600","cinenest.verification.cleanup-seconds=1","cinenest.pricing.synthetic-quotes.enabled=true","cinenest.pricing.synthetic-quotes.tax-profile=SYNTHETIC_FIXED_MINOR_V1","cinenest.pricing.synthetic-quotes.tax-minor=7","cinenest.pricing.synthetic-quotes.approval-reference=SYNTHETIC test fixture only","cinenest.pricing.synthetic-quotes.rate-count=100","cinenest.pricing.synthetic-quotes.rate-seconds=60","cinenest.pricing.publication-worker.enabled=false","cinenest.booking.holds.enabled=true","cinenest.booking.holds.rate-count=100","cinenest.booking.holds.rate-seconds=60","cinenest.booking.holds.approval-reference=SYNTHETIC owner-approved inventory test"})
 @org.springframework.test.context.ActiveProfiles("synthetic-quotation")
 @EnabledIfEnvironmentVariable(named="CINENEST_E2E_RUN", matches="/tmp/cinenest-e2e-[^/]+")
 class SyntheticJourneyIT {
@@ -39,13 +39,16 @@ class SyntheticJourneyIT {
         config.put("ports",List.of(java.net.URI.create(fixture.base()).getPort(),java.net.URI.create(BankIntegrationTest.IDP.issuer()).getPort()));config.put("backendPid",ProcessHandle.current().pid());
         config.put("otherVenue",BankIntegrationTest.VB.toString());config.put("venue",BankIntegrationTest.VA.toString());config.put("local",fixture.local());
         Files.writeString(run.resolve("config.json"),JSONObjectUtils.toJSONString(config));
-        Process browser=null;
+        Process browser=null,extensionChild=null;
         UUID expiringHold=null,expiringQuote=null;
         Map<String,Object> expiryBaseline=null,invalidHoldBaseline=null;
         UUID invalidHold=null,rejectedRequest=null;
         Map<String,Object> rejectionBaseline=null,uploadBaseline=null;
         UUID uploadRequest=null;
         Map<String,Object> calendarCounts=null;
+ Map<String,String> extensionBaseline=null;
+ Map<String,Long> extensionAuditCounts=null;
+ Object extensionClock=null;
         try {
             var builder=new ProcessBuilder("node",Path.of("../frontend/tests/synthetic-e2e.mjs").toAbsolutePath().toString());
             builder.redirectErrorStream(true);builder.redirectOutput(run.resolve("private-browser.log").toFile());
@@ -58,7 +61,37 @@ class SyntheticJourneyIT {
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if(op.equals("calendar-hold-read")){
+                        if(op.equals("extension-cross-booking-fixture")){
+ assertThat(extensionBaseline).isNull();var owner=fixture.signedIn("customer-a");var hold=fixture.held(owner,fixture.request(owner,java.time.LocalDateTime.parse(fixture.local()).plusDays(14).toString()));UUID other=UUID.randomUUID();
+ assertThat(fixture.write(owner,"POST","/api/holds/"+hold.get("holdId")+"/release",JSONObjectUtils.toJSONString(Map.of("expectedRevision",hold.get("revision"),"idempotencyKey",UUID.randomUUID().toString()))).statusCode()).isEqualTo(200);
+ // Existing recoverySameOwnerOtherPersistedBooking test pattern: read subject only,not a second accepted purchase.
+ fixture.jdbc.sql("INSERT INTO cinenest_booking.booking(booking_id,request_id,hold_id,owner_id,venue_id,state,synthetic) VALUES(:b,:request,:hold,:a,:v,'SIMULATED_CONFIRMED',true)").param("b",other).param("request",UUID.randomUUID()).param("hold",UUID.fromString(hold.get("holdId").toString())).param("a",BankIntegrationTest.A).param("v",BankIntegrationTest.VA).update();response.put("bookingId",other.toString());response.put("fixtureOnly",true);
+ }else if(op.equals("extension-baseline")){
+ extensionAuditCounts=bankAuditCounts(fixture);extensionBaseline=extensionInvariants(fixture);extensionBaseline.remove("cinenest_booking.inventory_audit");response.put("captured",true);
+ }else if(op.equals("extension-inspect")){
+ assertThat(extensionBaseline).isNotNull();var unchanged=extensionInvariants(fixture);unchanged.remove("cinenest_booking.inventory_audit");var priorAudit=extensionAuditCounts;response.put("newAuditActions",bankAuditCounts(fixture).entrySet().stream().filter(e->!e.getValue().equals(priorAudit.getOrDefault(e.getKey(),0L))).map(Map.Entry::getKey).toList());var expected=extensionBaseline;response.put("changedTables",unchanged.keySet().stream().filter(k->!unchanged.get(k).equals(expected.get(k))).toList());assertThat(unchanged).isEqualTo(extensionBaseline);
+ response.put("originalFinancialAccessNotificationStateUnchanged",true);
+ var rows=fixture.jdbc.sql("SELECT e.state,e.revision,b.blocking,b.session_start=e.original_until AND b.blocked_until=e.proposed_until AND b.buffer_minutes=0 AS exact_tail,e.expires_at>e.created_at AND e.expires_at<=e.created_at+INTERVAL '600 seconds' AS bounded_deadline FROM cinenest_booking.booking_extension_reservation e JOIN cinenest_booking.inventory_block b ON b.block_id=e.tail_block ORDER BY e.created_at").query().listOfRows();
+ for(var row:rows){assertThat(row.get("exact_tail")).isEqualTo(true);assertThat(row.get("bounded_deadline")).isEqualTo(true);assertThat(row.get("blocking")).isEqualTo(row.get("state").equals("ACTIVE"));}
+ response.put("reservations",rows);response.put("active",rows.stream().filter(r->r.get("state").equals("ACTIVE")).count());
+ response.put("creates",fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_command WHERE action='CREATE'").query(Long.class).single());
+ response.put("withdrawals",fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_command WHERE action='WITHDRAW'").query(Long.class).single());
+ response.put("auditCreates",fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking_extension_audit WHERE action='CREATE'").query(Long.class).single());
+ }else if(op.equals("extension-restart")){
+ assertThat(extensionChild).isNull();extensionChild=fixture.restartedWorker("recovery-read-e2e");fixture.awaitRefundRestart(extensionChild,"recovery-read-e2e");response.put("backend",fixture.extensionChildOrigin("recovery-read-e2e"));
+ }else if(op.equals("extension-stop-restart")){
+ assertThat(extensionChild).isNotNull();fixture.stopWorker(extensionChild);extensionChild=null;
+ }else if(op.equals("extension-suspend")){
+ fixture.jdbc.sql("UPDATE cinenest_identity.account SET eligibility=:e,revision=revision+1 WHERE account_id=:a").param("e",Boolean.TRUE.equals(body.get("suspended"))?"SUSPENDED":"ELIGIBLE").param("a",BankIntegrationTest.A).update();
+ }else if(op.equals("extension-expire")){
+ Object service=context.getBean("extensionReservationService");extensionClock=org.springframework.test.util.ReflectionTestUtils.getField(service,"clock");
+ var future=fixture.jdbc.sql("SELECT max(expires_at)+INTERVAL '1 second' FROM cinenest_booking.booking_extension_reservation").query(java.time.OffsetDateTime.class).single().toInstant();
+ org.springframework.test.util.ReflectionTestUtils.setField(service,"clock",(java.util.function.Supplier<java.time.Instant>)()->future);
+ response.put("clockAdvancedBeyondDeadline",true);
+ }else if(op.equals("extension-reconcile")){
+ fixture.extensionMaintenance();org.springframework.test.util.ReflectionTestUtils.setField(context.getBean("extensionReservationService"),"clock",extensionClock);extensionClock=null;
+ response.put("authoritativeMaintenanceCompleted",true);
+ }else if(op.equals("calendar-hold-read")){
                             String phase=body.get("phase").toString();
                             if(phase.equals("before")){assertThat(calendarCounts).isNull();calendarCounts=calendarCounts(fixture);assertThat(calendarCounts.values()).allMatch(v->v.equals(0L));response.putAll(calendarCounts);}
                             else if(phase.equals("selected")){assertThat(calendarCounts).isNotNull();assertThat(calendarCounts(fixture)).isEqualTo(calendarCounts);response.putAll(calendarCounts);response.put("unchanged",true);}
@@ -149,7 +182,7 @@ class SyntheticJourneyIT {
                             fixture.jdbc.sql("DELETE FROM cinenest_identity.http_session WHERE principal_name=:p").param("p",BankIntegrationTest.A.toString()).update();
                         }else throw new IllegalArgumentException("Unsupported test control");
                         response.put("controlOk",true);
-                    }catch(Exception|AssertionError failure){response=Map.of("controlOk",false);}
+                    }catch(Exception|AssertionError failure){response=Map.of("controlOk",false,"changedTables",response.getOrDefault("changedTables",List.of()),"newAuditActions",response.getOrDefault("newAuditActions",List.of()));}
                     Path tmp=run.resolve("reply.tmp");Files.writeString(tmp,JSONObjectUtils.toJSONString(response));Files.move(tmp,run.resolve("reply.json"),StandardCopyOption.ATOMIC_MOVE);
                 }
                 Thread.sleep(25);
@@ -167,8 +200,19 @@ class SyntheticJourneyIT {
             assertThat(browser.exitValue()).isZero();
         }finally{
             if(browser!=null&&browser.isAlive()){browser.destroy();if(!browser.waitFor(3,java.util.concurrent.TimeUnit.SECONDS)){browser.destroyForcibly();browser.waitFor();}}
+            if(extensionChild!=null)fixture.stopWorker(extensionChild);
+            if(extensionClock!=null)org.springframework.test.util.ReflectionTestUtils.setField(context.getBean("extensionReservationService"),"clock",extensionClock);
             BankIntegrationTest.IDP.close();
         }
+    }
+    private static Map<String,Long> bankAuditCounts(BankIntegrationTest f){var result=new TreeMap<String,Long>();for(var row:f.jdbc.sql("SELECT action,count(*) AS n FROM cinenest_payments.bank_audit GROUP BY action").query().listOfRows())result.put(row.get("action").toString(),((Number)row.get("n")).longValue());return result;}
+    private static Map<String,String> extensionInvariants(BankIntegrationTest f){
+        var result=f.extensionUnchangedSources();
+        result.put("originalConfirmedInventory",f.jdbc.sql("SELECT md5(COALESCE(string_agg(to_jsonb(t)::text,',' ORDER BY to_jsonb(t)::text),'')) FROM cinenest_booking.inventory_block t WHERE kind='CONFIRMED'").query(String.class).single());
+        // Existing booking detail performs this mandatory protected refund-list read.
+        // Preserve every other financial audit event as well as all financial domain rows.
+        result.put("cinenest_payments.bank_audit",f.jdbc.sql("SELECT md5(COALESCE(string_agg(to_jsonb(t)::text,',' ORDER BY to_jsonb(t)::text),'')) FROM cinenest_payments.bank_audit t WHERE action NOT IN ('BOOKING_READ','CUSTOMER_REFUNDS_READ','STATUS')").query(String.class).single());
+        return result;
     }
     // Test-only SELECT observer: no production endpoint, state transition, audit write or private evidence.
     private static Map<String,Object> calendarCounts(BankIntegrationTest f){

@@ -69,7 +69,8 @@ export async function forwardExtension(request: Request): Promise<Response> {
 		let body: string | undefined;
 		if (request.method === "POST") {
 			if (
-				request.headers.get("origin") !== url.origin ||
+				request.headers.get("origin") !==
+					`${url.protocol}//${request.headers.get("host") ?? url.host}` ||
 				!request.headers.get("x-csrf-token")
 			)
 				return fail(403);

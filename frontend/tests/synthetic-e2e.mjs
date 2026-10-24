@@ -1,5 +1,6 @@
 // Opt-in REAL backend journey. No page.route, route.fulfill, session injection or business stubs.
 import assert from "node:assert/strict";
+import {extensionScenarios,extensionReservationJourney} from "./extension-reservation-e2e.mjs";
 import { uploadFaultProxy } from "./upload-fault-proxy.mjs";
 import {
 	safeCustomerNavigation,
@@ -47,6 +48,7 @@ const diagnostics = new URL(
 await mkdir(diagnostics, { recursive: true, mode: 0o700 });
 await chmod(diagnostics, 0o700);
 const planned = [
+ ...extensionScenarios,
 	"startup",
 	"customer-discovery-auth",
 	"hold-quote-accept",
@@ -97,6 +99,7 @@ async function control(body) {
 		try {
 			const result = JSON.parse(await readFile(`${run}/reply.json`, "utf8"));
 			await unlink(`${run}/reply.json`);
+ if(!result.controlOk)await writeFile(new URL("last-control.json",diagnostics),JSON.stringify({changedTables:result.changedTables,newAuditActions:result.newAuditActions}),{mode:0o600});
 			assert.equal(
 				result.controlOk,
 				true,
@@ -732,6 +735,7 @@ try {
 				0,
 		);
 	});
+ await extensionReservationJourney({browser,page,base,booking:financeObservation.bookingId,api,json,login,control,scenario,transport:faultTransport,diagnostics,observations});
 	await scenario("C-wrong-owner", async () => {
 		const other = await browser.newContext();
 		const p = await other.newPage();
@@ -1454,7 +1458,7 @@ try {
 				: "Harness operation failed",
 		stack: String(failure.stack)
 			.split("\n")
-			.filter((line) => line.includes("synthetic-e2e.mjs:"))
+			.filter((line) => /synthetic-e2e\.mjs:|extension-reservation-e2e\.mjs:/.test(line))
 			.slice(0, 4),
 	};
 	results.push({

@@ -2316,10 +2316,10 @@
       {
         "id": "W06",
         "title": "Booking Amendments, Extensions and Cancellation",
-        "boundedImplementedAndVerified": "Zero-delta reschedule,pre-start never-issued cancellation,extension preview and temporary tail reservation with customer UI,status/CREATE recovery/withdrawal;typed owner-only public context",
+        "boundedImplementedAndVerified": "Zero-delta reschedule,pre-start never-issued cancellation,extension preview and temporary tail reservation with customer UI,status/CREATE recovery/withdrawal;typed owner-only public context;real-backend browser preview/reservation/status/recovery/withdrawal,authorization,concurrency,expiry and fresh-backend reads verified",
         "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
-        "missing": "Real-backend browser extension reservation/recovery/withdrawal evidence;policy-gated funding,purchased extension commit and wider commercial/issued-credential lifecycle",
-        "blockers": "Existing synthetic reservation contracts permit separately authorized E2E verification;funding A–P/financial/migration authority remain open",
+        "missing": "Policy-gated funding,purchased extension commit and wider commercial/issued-credential lifecycle;full acceptance",
+        "blockers": "Funding A–P/financial/migration authority remain open;bounded synthetic reservation E2E now verified",
         "requirementIds": [
           "PR-PKG-001",
           "CN-C08",
@@ -2623,9 +2623,9 @@
       {
         "id": "W11",
         "title": "End-to-End Testing and Production Qualification",
-        "boundedImplementedAndVerified": "Historical real-backend campaign24 PASS; focused application/architecture CI",
+        "boundedImplementedAndVerified": "Historical real-backend campaign24 PASS; focused application/architecture CI;latest complete real-backend synthetic campaign32 PASS,including8 extension groups",
         "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
-        "missing": "Later cancellation/extension E2E, demos, production qualification",
+        "missing": "Cancellation real-backend E2E,remaining demonstrations and provider/physical/production qualification",
         "blockers": "Existing harness admission plus separately authorized campaign and customer/physical acceptance",
         "requirementIds": [
           "CN-AGENT-WORKFLOW-001",
@@ -3575,6 +3575,27 @@
         "authority": "PROPOSED_SEPARATE_EXECUTION_AUTHORIZATION_REQUIRED",
         "definitionOfDone": "Admitted isolated harness;explicit UI actions,owner/CSRF/replay/unknown-result invariants,authoritative PostgreSQL checks,zero unintended finance/purchase/access mutation;honest scenario accounting and exact-source CI.",
         "rollback": "Test-only scoped revert;clean only owned ephemeral test resources;preserve historical evidence."
+      }
+    },
+    "extensionReservationE2E": {
+      "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+      "baseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+      "previousWorkstreamValues": {
+        "W06": {
+          "boundedImplementedAndVerified": "Zero-delta reschedule,pre-start never-issued cancellation,extension preview and temporary tail reservation with customer UI,status/CREATE recovery/withdrawal;typed owner-only public context",
+          "missing": "Real-backend browser extension reservation/recovery/withdrawal evidence;policy-gated funding,purchased extension commit and wider commercial/issued-credential lifecycle",
+          "blockers": "Existing synthetic reservation contracts permit separately authorized E2E verification;funding A–P/financial/migration authority remain open"
+        },
+        "W11": {
+          "boundedImplementedAndVerified": "Historical real-backend campaign24 PASS; focused application/architecture CI",
+          "missing": "Later cancellation/extension E2E, demos, production qualification",
+          "blockers": "Existing harness admission plus separately authorized campaign and customer/physical acceptance"
+        }
+      },
+      "nextCandidate": {
+        "id": "CN-E2E-CANCELLATION-001",
+        "scope": "Bounded real-backend customer/staff synthetic cancellation verification using existing contracts;no refund settlement,new policies or acceptance",
+        "authority": "PROPOSED_SEPARATE_EXECUTION_AUTHORIZATION_REQUIRED"
       }
     }
   }

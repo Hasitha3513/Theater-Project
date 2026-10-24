@@ -1202,6 +1202,17 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationE2EEvidence": {
+        "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+        "scope": "Owner-only synthetic preview/temporary reservation/status/recovery/withdrawal;not purchased extension",
+        "browserCampaign": {
+          "PASS": 32,
+          "FAIL": 0,
+          "NOT_RUN": 0
+        },
+        "evidence": "PROGRESS.md#extension-reservation-e2e",
+        "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
       }
     },
     {
@@ -3701,6 +3712,17 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationE2EEvidence": {
+        "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+        "scope": "Owner-only synthetic preview/temporary reservation/status/recovery/withdrawal;not purchased extension",
+        "browserCampaign": {
+          "PASS": 32,
+          "FAIL": 0,
+          "NOT_RUN": 0
+        },
+        "evidence": "PROGRESS.md#extension-reservation-e2e",
+        "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
       }
     },
     {
@@ -3761,6 +3783,17 @@
         "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
         "evidencePath": "PROGRESS.md#report-bank-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "extensionReservationE2EEvidence": {
+        "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+        "scope": "Owner-only synthetic preview/temporary reservation/status/recovery/withdrawal;not purchased extension",
+        "browserCampaign": {
+          "PASS": 32,
+          "FAIL": 0,
+          "NOT_RUN": 0
+        },
+        "evidence": "PROGRESS.md#extension-reservation-e2e",
+        "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
       }
     },
     {
@@ -4750,6 +4783,17 @@
           "frontend/tests/booking-cancellation.test.mjs",
           "frontend/tests/booking-cancellation-browser.mjs"
         ]
+      },
+      "extensionReservationE2EEvidence": {
+        "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+        "scope": "Owner-only synthetic preview/temporary reservation/status/recovery/withdrawal;not purchased extension",
+        "browserCampaign": {
+          "PASS": 32,
+          "FAIL": 0,
+          "NOT_RUN": 0
+        },
+        "evidence": "PROGRESS.md#extension-reservation-e2e",
+        "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
       }
     },
     {
@@ -5220,7 +5264,18 @@
         "OD-07",
         "OD-20",
         "Future change-set scope/authority required"
-      ]
+      ],
+      "extensionReservationE2EEvidence": {
+        "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+        "scope": "Owner-only synthetic preview/temporary reservation/status/recovery/withdrawal;not purchased extension",
+        "browserCampaign": {
+          "PASS": 32,
+          "FAIL": 0,
+          "NOT_RUN": 0
+        },
+        "evidence": "PROGRESS.md#extension-reservation-e2e",
+        "formalAcceptance": "UNCHANGED_NOT_ACCEPTED"
+      }
     },
     {
       "id": "PK-AC09",

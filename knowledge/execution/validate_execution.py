@@ -6458,5 +6458,97 @@ def inert_ci_main():
     if result==0:print('PASS exact92requirement knowledge traceability successor;application,history,decisions and acceptance preserved')
     return result
 
+
+# CN-E2E-EXTENSION-RESERVATION-001: exact owner-approved test/evidence and two-proxy successor.
+extension_e2e_prior_main = inert_ci_main
+EXTENSION_E2E_BASELINE = 'ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8'
+EXTENSION_E2E_HASHES = {'knowledge/ARCHITECTURE.md': '114c0110999c32e70ed1793a5ead48436563ef57bd7da4e110fc39fd285c3433', 'knowledge/PROGRESS.md': '20878ccd365135577a2c8e05a03e2fe12ecda479af2bf66c89fc4704f08aae89', 'knowledge/product/FEATURE_CATALOG.md': '33e41e884038fc6cd8b78863e305fe40e0b3e1f440f94c5a13f6107442603cb0', 'knowledge/guides/USER_GUIDE.md': 'a09e2571876359f7bfbcae552caafb56af9b7958247bb5f631f6e9869bbbcc08', 'knowledge/execution/requirements.json': 'a13a14fe8eb1b9c76345716f83ccc7c3625b3b28005ddf10b61532cbb8658098', 'knowledge/execution/change-sets.json': '3338fee34565658ab0f1f50d6cdd7409b318be9487bd9d77b664892236c66ffa', 'knowledge/execution/status.json': '67b1e06c2e1fd7192f35cf018bb3a9599a9c73558ac0bb573cf31eaee68ff68d', 'scripts/test-governance-controls.py': '856b05f5934b5ce01408766d135d44c2bcd583ea4feb6cf5ce8c31ddbd213f57', 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': 'b321e6f64136b23139395901f019556b5ed72986747412e64af393b87b7b2142', 'frontend/lib/extension-preview-backend.ts': '0203517ffd1c5e1a2a858ccf18ebd36add76aa560de94c8b3820d65c0635b365', 'frontend/lib/extension-reservation-backend.ts': '51278ebb21070771579d5755cadf20f5394648ebeb86a8e5c856b98166ba586c', 'frontend/tests/extension-preview.test.mjs': '73dce268298ad055dec1d4358ef5adf795a1e827501a2d22f65d5a7742be9601', 'frontend/tests/extension-reservation.test.mjs': '3f38f8a6c635c9a5add69c6c7c5c25ddaf4957df2f5d5df95884d52f69626f4d', 'frontend/tests/synthetic-e2e.mjs': '4ccebe0eac530af23cbb73354e32ffe184588c8aa7b0cbf99f5572d909849a2a', 'frontend/tests/upload-fault-proxy.mjs': 'df4d08935613037cb903a1d09e474cc6d9b3bca7b30f05a6b82e5c9fbd5df380', 'frontend/tests/upload-fault-proxy.test.mjs': '9fb1749a4ff9c8239ce64ac5cdbed8d8c38fe8dcf4af79b9570a3fc00eae4e49', 'frontend/tests/extension-reservation-e2e.mjs': 'd2a4a34d61b3bc9eb855a6ec32b64013ff22488de8c81039d37bcd0a47c746ab', 'scripts/test-synthetic-e2e.py': '74c5bc73bf555686fd1b94542ed286107dce7584b7db0258b6096a2f6e1d2da1'}
+EXTENSION_E2E_ADDED = {'frontend/tests/extension-reservation-e2e.mjs'}
+
+def extension_e2e_successor_errors():
+    baseline=EXTENSION_E2E_BASELINE;hashes=EXTENSION_E2E_HASHES;errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:errors.append('Extension E2E exact authorized payload mismatch '+name)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Extension E2E historical validator changed')
+    ids={'CN-C08','BR-10','CN-NFR-02','CN-NFR-03','PK-AC08'}
+    requirements=json.loads((K/'execution/requirements.json').read_text())
+    for row in requirements['requirements']:
+        annotation=row.pop('extensionReservationE2EEvidence',None)
+        if (row['id'] in ids)!=(annotation is not None):errors.append('Extension E2E requirement evidence scope drift')
+    if requirements!=json.loads(prior('knowledge/execution/requirements.json')):errors.append('Extension E2E original92requirements/matrix/acceptance changed')
+    changes=json.loads((K/'execution/change-sets.json').read_text());plan=changes['remainingImplementationPlan'];receipt=plan.pop('extensionReservationE2E',{})
+    for row in plan['workstreams']:
+        if row['id'] in receipt.get('previousWorkstreamValues',{}):row.update(receipt['previousWorkstreamValues'][row['id']])
+    if changes!=json.loads(prior('knowledge/execution/change-sets.json')):errors.append('Extension E2E task graph/dependencies/history drift')
+    state=json.loads((K/'execution/status.json').read_text());evidence=state.pop('extensionReservationE2E',{});state.update(evidence.get('previousCurrentHeader',{}))
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Extension E2E previous status/evidence changed')
+    for key in ['fundingCreated','allocationChanged','purchasedRevisionChanged','accessChanged','grantsAssigned','acceptanceChanged','migrationsChanged']:
+        if evidence.get(key) is not False:errors.append('Extension E2E authority exceeded '+key)
+    if evidence.get('counts')!={'PASS':32,'FAIL':0,'NOT_RUN':0} or len(evidence.get('scenarios',[]))!=32 or any(r.get('status')!='PASS' for r in evidence.get('scenarios',[])):errors.append('Extension E2E actual campaign evidence missing')
+    if len({r.get('id') for r in evidence.get('scenarios',[])})!=32:errors.append('Extension E2E duplicate scenario identity')
+    ledger=evidence.get('knowledgeReadingLedger',{})
+    if ledger.get('baseline')!=baseline or ledger.get('complete') is not True or ledger.get('reviewedFiles')!=116 or len(ledger.get('files',[]))!=116 or ledger.get('unresolvedCoverageGaps')!=[]:errors.append('Extension E2E qualified reading missing')
+    tracked_kb=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline,'knowledge'],text=True),nul=True)
+    for row in ledger.get('files',[]):
+        if row.get('path') in tracked_kb and row.get('sha256')!=hashlib.sha256(prior(row['path'])).hexdigest():errors.append('Extension E2E reading hash drift '+row['path'])
+    if evidence.get('proxyCorrectionApproval',{}).get('statement')!='Approve the two-file proxy correction':errors.append('Extension E2E two-proxy approval absent')
+    for name in ['frontend/lib/extension-preview-backend.ts','frontend/lib/extension-reservation-backend.ts']:
+        original=prior(name).decode();expected=original.replace('request.headers.get("origin") !== url.origin','request.headers.get("origin") !== `${url.protocol}//${request.headers.get("host") ?? url.host}`')
+        compact=lambda s:re.sub(r'\s+','',s)
+        if compact((R/name).read_text())!=compact(expected):errors.append('Extension E2E unapproved proxy behavior '+name)
+    for name,digest in evidence.get('sourceHashes',{}).items():
+        if hashes.get(name)!=digest:errors.append('Extension E2E executed source hash mismatch '+name)
+    if evidence.get('auditReadExceptions')!=['BOOKING_READ','STATUS','CUSTOMER_REFUNDS_READ'] or evidence.get('cleanupVerified') is not True:errors.append('Extension E2E audit/cleanup drift')
+    db=evidence.get('databaseAndTransportEvidence',{}).get('databaseObservations',[])
+    if len(db)!=15 or db[-1].get('active')!=0 or db[-1].get('creates')!=2 or db[-1].get('withdrawals')!=1 or any(r.get('originalFinancialAccessNotificationStateUnchanged') is not True for r in db):errors.append('Extension E2E DB invariants missing')
+    errors.extend(traceability_matrix_errors())
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Extension E2E acceptance checkbox drift')
+    allowed=set(hashes)|EXTENSION_E2E_ADDED|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for name in tracked-allowed:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Extension E2E protected/unrelated source changed '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=allowed:errors.append('Extension E2E unauthorized changed paths '+str(changed-allowed))
+    preserved={'knowledge/Mini movie theater Ruels and Conditions.docx':'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf','knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx':'8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked-set(hashes):
+        if name not in preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=preserved[name]:errors.append('Extension E2E unauthorized untracked payload '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in allowed and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    expected['externalInstructionFiles'][0]['sha256']=hashlib.sha256((R/'AGENTS.md').read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Extension E2E manifest inventory/authority drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=extension_e2e_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    baseline=EXTENSION_E2E_BASELINE
+    added=EXTENSION_E2E_ADDED
+    owned=set(EXTENSION_E2E_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name]) for name in owned-added}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw):return (x for x in g0(path,*a,**kw) if x not in {R/n for n in added})
+    def rglob(path,*a,**kw):return (x for x in rg0(path,*a,**kw) if x not in {R/n for n in added})
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode()
+            hide=owned if 'diff' in argv else added
+            paths=[x for x in text.split(sep) if x and x not in hide]
+            text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=extension_e2e_prior_main()
+    if result==0:print('PASS exact real-backend extension E2E successor;approved proxy correction only;history,decisions,financial and acceptance boundaries preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

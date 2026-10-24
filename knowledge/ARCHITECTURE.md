@@ -2630,3 +2630,9 @@ Session-scoped browser storage holds only account/booking-namespaced opaque comm
 ## MVP knowledge traceability — current source reconciliation
 
 CN-MVP-KNOWLEDGE-TRACEABILITY-001 adds an in-place derived matrix in execution/requirements.json#mvpKnowledgeTraceability. All37 numbered exports are proposed behavior without authored requirement-ID tags;semantic flow matches and generic architectural context are explicitly distinguished. Logical ER labels do not imply actual DDL. Current source index records the11package-info module declarations,existing public contracts,controller signatures,frontend components and Flyway-owned tables;Reporting consumes Booking/Payments public reads and does not own their persistence. The logical Audit/Analytics/Engagement labels in older designs must not fabricate additional backend modules:current scoped audit UI is Identity-owned and other modules own their audit records;Engagement implementation is not found. No architecture/policy/permission/provider/physical decision changes. [Current reconciliation and gaps](PROGRESS.md#mvp-knowledge-traceability).
+
+
+<a id="extension-reservation-e2e"></a>
+## Real-backend extension verification boundary
+
+CN-E2E-EXTENSION-RESERVATION-001 reuses existing contracts,V25 and bounded test controls. The only owner-approved application correction aligns the two extension proxies with existing session/logout protocol+Host origin validation:NextURL loopback normalization must not reject the actual same-origin browser. Origin,CSRF,exact routes/DTOs/session/ownership and sanitized errors remain mandatory;forwarded-host headers do not grant trust. Test-only transport loses a consumed real response or drops before forwarding,never fabricates business success. Fresh-instance reads,deterministic test clock and SELECT fingerprints are synthetic test evidence,not new production endpoints or recovery authority. [Evidence](PROGRESS.md#extension-reservation-e2e).

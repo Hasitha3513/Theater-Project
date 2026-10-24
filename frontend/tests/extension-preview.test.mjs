@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server.js";
 // Isolated client/proxy fixtures; not real-backend E2E.
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -249,6 +250,37 @@ test("real loopback HTTP proxy sanitization and backend authorization authority"
 			assert.equal(calls.at(-1).headers.cookie, "CINENEST_SESSION=synthetic");
 		}
 		assert.deepEqual(JSON.parse(calls[1].body), command);
+		// Next.js may supply an internal request URL; browser Host/Origin remain public.
+		const publicRequest = () =>
+			new NextRequest(
+				"http://127.0.0.1:43210" + extensionPath(bookingId, true),
+				{
+					method: "POST",
+					headers: {
+						host: "127.0.0.1:43210",
+						origin: "http://127.0.0.1:43210",
+						cookie: "CINENEST_SESSION=synthetic",
+						"x-csrf-token": "synthetic-csrf",
+						"content-type": "application/json",
+					},
+					body: JSON.stringify(command),
+				},
+			);
+		assert.equal((await forwardExtension(publicRequest())).status, 200);
+		for (const field of ["origin", "x-csrf-token"]) {
+			const bad = publicRequest();
+			bad.headers.delete(field);
+			const count = calls.length;
+			assert.equal((await forwardExtension(bad)).status, 403);
+			assert.equal(calls.length, count);
+		}
+		const cross = publicRequest();
+		cross.headers.set("origin", "http://attacker.test");
+		assert.equal((await forwardExtension(cross)).status, 403);
+		const forwarded = publicRequest();
+		forwarded.headers.set("origin", "http://attacker.test");
+		forwarded.headers.set("x-forwarded-host", "attacker.test");
+		assert.equal((await forwardExtension(forwarded)).status, 403);
 		for (const code of [400, 401, 403, 404, 409, 429, 503]) {
 			status = code;
 			const r = await forwardExtension(req());

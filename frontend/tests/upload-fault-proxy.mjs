@@ -3,7 +3,8 @@ import { createServer, request } from "node:http";
 import { once } from "node:events";
 
 export async function uploadFaultProxy(backend) {
-	const origin = new URL(backend);
+	let origin = new URL(backend);
+	const originalOrigin = origin;
 	if (
 		origin.protocol !== "http:" ||
 		origin.hostname !== "127.0.0.1" ||
@@ -18,8 +19,32 @@ export async function uploadFaultProxy(backend) {
 		used = false;
 	const receipt = { attempts: 0, dropped: 0, upstreamStatus: null };
 	const sockets = new Set();
+	let extensionFault;
+	const extensionHttp = [];
+	const extensionReceipt = {
+		attempts: 0,
+		committedDrops: 0,
+		beforeForwardDrops: 0,
+		upstreamStatus: null,
+	};
 	const server = createServer((incoming, outgoing) => {
 		if (!incoming.url.startsWith("/api/") || incoming.url.startsWith("//")) {
+			outgoing.destroy();
+			return;
+		}
+		const extension =
+			incoming.method === "POST" &&
+			/^\/api\/bookings\/[0-9a-f-]{36}\/extension-reservations$/.test(
+				incoming.url,
+			);
+		const extensionDrop = extension && extensionFault;
+		if (extension) {
+			extensionReceipt.attempts++;
+			extensionFault = undefined;
+		}
+		if (extensionDrop === "before-forward") {
+			extensionReceipt.beforeForwardDrops++;
+			incoming.resume();
 			outgoing.destroy();
 			return;
 		}
@@ -44,12 +69,26 @@ export async function uploadFaultProxy(backend) {
 				timeout: 16000,
 			},
 			(response) => {
-				if (drop) {
+				if (incoming.url.includes("/extension-"))
+					extensionHttp.push({
+						method: incoming.method,
+						status: response.statusCode,
+						path: incoming.url.replace(
+							/[0-9a-f]{8}-[0-9a-f-]{27,}/gi,
+							"{reference}",
+						),
+					});
+				if (drop || extensionDrop === "after-commit") {
 					// Consume the actual backend response before losing it. Never invent success.
 					response.resume();
 					response.on("end", () => {
-						receipt.upstreamStatus = response.statusCode;
-						receipt.dropped++;
+						if (drop) {
+							receipt.upstreamStatus = response.statusCode;
+							receipt.dropped++;
+						} else {
+							extensionReceipt.upstreamStatus = response.statusCode;
+							extensionReceipt.committedDrops++;
+						}
 						outgoing.destroy();
 					});
 				} else {
@@ -77,6 +116,30 @@ export async function uploadFaultProxy(backend) {
 			armed = true;
 		},
 		receipt,
+		extensionReceipt,
+		extensionHttp,
+		pointBackend(value) {
+			const candidate = new URL(value);
+			if (
+				candidate.protocol !== "http:" ||
+				candidate.hostname !== "127.0.0.1" ||
+				candidate.username ||
+				candidate.password ||
+				candidate.pathname !== "/" ||
+				candidate.search ||
+				candidate.hash
+			)
+				throw new Error("Exact loopback backend required");
+			origin = candidate;
+		},
+		restoreBackend() {
+			origin = originalOrigin;
+		},
+		armExtension(mode) {
+			if (extensionFault || !["before-forward", "after-commit"].includes(mode))
+				throw new Error("Invalid extension fault");
+			extensionFault = mode;
+		},
 		async close() {
 			const closed = new Promise((resolve, reject) =>
 				server.close((e) => (e ? reject(e) : resolve())),

@@ -1,21 +1,21 @@
 {
   "schemaVersion": "1.0.0",
-  "taskId": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
-  "mode": "CONTROLLED_KNOWLEDGE_TRACEABILITY_RECONCILIATION",
+  "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+  "mode": "BOUNDED_REAL_BACKEND_SYNTHETIC_E2E",
   "workStatus": "LOCAL_VERIFIED_PUBLICATION_PENDING",
   "productStage": "BOUNDED_SYNTHETIC_IMPLEMENTATION_FULL_ACCEPTANCE_PENDING",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
   "branch": "main",
   "upstream": "origin/main",
-  "baselineHead": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
+  "baselineHead": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
-  "currentChangeSet": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
+  "currentChangeSet": "CN-E2E-EXTENSION-RESERVATION-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-E2E-EXTENSION-RESERVATION-001",
-  "nextAction": "Bounded existing-contract real-backend extension reservation/recovery/withdrawal verification after separate execution authority;no further general audit",
+  "nextRecommendedChangeSet": "CN-E2E-CANCELLATION-001",
+  "nextAction": "Bounded real-backend customer/staff synthetic cancellation verification using existing contracts;no refund settlement,new policies or acceptance;separate bounded execution authority required",
   "nextReadyChangeSet": null,
-  "implementationEvidence": "PROGRESS.md#mvp-knowledge-traceability",
+  "implementationEvidence": "PROGRESS.md#extension-reservation-e2e",
   "approvedCoreDecisions": [
     "PR-UI-001",
     "PR-PKG-001",
@@ -29,10 +29,10 @@
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
   "publicationState": "LOCAL_VERIFIED_CI_PENDING",
-  "publicationEvidence": "BaselineCI40084047467 SUCCESS;successorCI PENDING",
-  "lastObservedHead": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
-  "evidencePath": "PROGRESS.md#mvp-knowledge-traceability",
-  "evidenceFreshness": "2026-10-24 traceability only;no acceptance change",
+  "publicationEvidence": "Prerequisite CI40087229203 SUCCESS;successorCI PENDING",
+  "lastObservedHead": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+  "evidencePath": "PROGRESS.md#extension-reservation-e2e",
+  "evidenceFreshness": "2026-10-24/25 real-backend campaign32 PASS;formal acceptance unchanged",
   "availableTools": [
     "exec/file reads/edits",
     "Git CLI 2.53.0",
@@ -15177,6 +15177,1966 @@
       "ordinaryWorktree": "Two preserved pre-existing frontend/next-env.d.ts findings;not task-caused",
       "applicationSuites": "NOT_RERUN_LOCALLY;full exact-source successor CI required",
       "whitespace": "PASS"
+    }
+  },
+  "extensionReservationE2E": {
+    "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+    "baseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+    "previousCurrentHeader": {
+      "taskId": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
+      "mode": "CONTROLLED_KNOWLEDGE_TRACEABILITY_RECONCILIATION",
+      "workStatus": "LOCAL_VERIFIED_PUBLICATION_PENDING",
+      "baselineHead": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
+      "currentChangeSet": "CN-MVP-KNOWLEDGE-TRACEABILITY-001",
+      "nextRecommendedChangeSet": "CN-E2E-EXTENSION-RESERVATION-001",
+      "nextAction": "Bounded existing-contract real-backend extension reservation/recovery/withdrawal verification after separate execution authority;no further general audit",
+      "implementationEvidence": "PROGRESS.md#mvp-knowledge-traceability",
+      "publicationState": "LOCAL_VERIFIED_CI_PENDING",
+      "publicationEvidence": "BaselineCI40084047467 SUCCESS;successorCI PENDING",
+      "lastObservedHead": "a5f167971ac7f5688c400fa1bc25801a8295cc39",
+      "evidencePath": "PROGRESS.md#mvp-knowledge-traceability",
+      "evidenceFreshness": "2026-10-24 traceability only;no acceptance change"
+    },
+    "knowledgeReadingLedger": {
+      "baseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+      "complete": true,
+      "discoveredFiles": 116,
+      "reviewedFiles": 116,
+      "unresolvedCoverageGaps": [],
+      "files": [
+        {
+          "path": "knowledge/01_ActivityDiagram_Customer_Booking_and_Online_Payment.md",
+          "sha256": "c966f0290f7b3d00b3545f972a4481a6896f50411b5654a9c1e62083e7a5ac9b",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "c966f0290f7b3d00b3545f972a4481a6896f50411b5654a9c1e62083e7a5ac9b",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 157
+        },
+        {
+          "path": "knowledge/01_Component Architecture Diagram_Platform_Components_and_Integration_Boundaries.md",
+          "sha256": "4780fb3f761cabd4be1748fa7cf67696564ac8a89b2a121a4f12026e9db1e662",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "4780fb3f761cabd4be1748fa7cf67696564ac8a89b2a121a4f12026e9db1e662",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 264
+        },
+        {
+          "path": "knowledge/01_ER_Diagrams_Core_Relationship_Overview.md",
+          "sha256": "5ace6f964b784bf7a4423e464baf92690f24cb93c83ce198fce15551c35857a1",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5ace6f964b784bf7a4423e464baf92690f24cb93c83ce198fce15551c35857a1",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 136
+        },
+        {
+          "path": "knowledge/01_Sequence_Diagrams_Customer_Booking_and_Online_Payment.md",
+          "sha256": "ea6150b4cd8912a98df55889a536bc7176c75208d9dfa8b785a59f5ffd8b51cc",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "ea6150b4cd8912a98df55889a536bc7176c75208d9dfa8b785a59f5ffd8b51cc",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 175
+        },
+        {
+          "path": "knowledge/01_System_Context_Overview.md",
+          "sha256": "1337d7c9cd0a8cd9a75f70cc15126fff0432f821958ddbc9a7749e4bf8aa3c1f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "1337d7c9cd0a8cd9a75f70cc15126fff0432f821958ddbc9a7749e4bf8aa3c1f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 163
+        },
+        {
+          "path": "knowledge/01_Use case_Customer_Booking_and_Account.md",
+          "sha256": "e0e7632fbcefcdb46deb9bc864757328af339043939b3906cd5bff34ae159b05",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "e0e7632fbcefcdb46deb9bc864757328af339043939b3906cd5bff34ae159b05",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 168
+        },
+        {
+          "path": "knowledge/02_ActivityDiagram_Bank_Deposit_Receipt_Review_and_Approval.md",
+          "sha256": "8caf610bb9080c45dced24b20e48045ee4eb582506b04d5e50d3d8a6bfeb7d2c",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8caf610bb9080c45dced24b20e48045ee4eb582506b04d5e50d3d8a6bfeb7d2c",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 156
+        },
+        {
+          "path": "knowledge/02_Component Architecture Diagram_Payments_Module_Hexagonal_Ports_and_Adapters.md",
+          "sha256": "a616e07fee58640ac3eb22c234372b520950fd3172ef3f8ba329fa572c7d4ec7",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "a616e07fee58640ac3eb22c234372b520950fd3172ef3f8ba329fa572c7d4ec7",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 225
+        },
+        {
+          "path": "knowledge/02_ER_Diagrams_Identity_Sessions_and_Scoped_RBAC_ABAC.md",
+          "sha256": "efb68d1da16443fe89da02257c39e9e40b353f850a16ebec0409f5084b10c5b3",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "efb68d1da16443fe89da02257c39e9e40b353f850a16ebec0409f5084b10c5b3",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 170
+        },
+        {
+          "path": "knowledge/02_Sequence_Diagrams_Bank_Deposit_Receipt_Review_and_Approval.md",
+          "sha256": "b572974e8d52a8467fac313efdf812e8badfcec6bdef7870841cfd32956ffb71",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "b572974e8d52a8467fac313efdf812e8badfcec6bdef7870841cfd32956ffb71",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 183
+        },
+        {
+          "path": "knowledge/02_System_Context_External_Actors_and_Data_Exchanges.md",
+          "sha256": "f7bdd5ba48a5beef1c7fa8cf931e0bd078be08ba7f002495fdeaf007a130dd0e",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "f7bdd5ba48a5beef1c7fa8cf931e0bd078be08ba7f002495fdeaf007a130dd0e",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 182
+        },
+        {
+          "path": "knowledge/02_Use case_Package_and_Venue_Administration.md",
+          "sha256": "1ce618104c6812a625984afaef72dad8083b2701bad25c6edd6b2148cc7104f0",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "1ce618104c6812a625984afaef72dad8083b2701bad25c6edd6b2148cc7104f0",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 158
+        },
+        {
+          "path": "knowledge/03_ActivityDiagram_Package_Editing_Publication_and_Deactivation.md",
+          "sha256": "cf8da514f9618fac071c91aeffda019a47bd95aa6bf48e675c03c716613eb5fb",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "cf8da514f9618fac071c91aeffda019a47bd95aa6bf48e675c03c716613eb5fb",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 148
+        },
+        {
+          "path": "knowledge/03_ER_Diagrams_Venues_Versioned_Packages_and_Add_Ons.md",
+          "sha256": "6d9ffe75f6e4941aed7f352240872d13429a0c27e8f27a428f5e5622690dd100",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "6d9ffe75f6e4941aed7f352240872d13429a0c27e8f27a428f5e5622690dd100",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 184
+        },
+        {
+          "path": "knowledge/03_Sequence_Diagrams_Package_Editing_Publication_and_Deactivation.md",
+          "sha256": "45f65b9fbff49ba581e780805c016963f31724c66509ec45565634ce2c4d5533",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "45f65b9fbff49ba581e780805c016963f31724c66509ec45565634ce2c4d5533",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 159
+        },
+        {
+          "path": "knowledge/03_Use case_Payments_Bank_Review_and_Refunds.md",
+          "sha256": "f943e4507e954ef5f9dbc0bf3e7a511e5dd75beca42dd0d4fdb2b928083d0b96",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "f943e4507e954ef5f9dbc0bf3e7a511e5dd75beca42dd0d4fdb2b928083d0b96",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 185
+        },
+        {
+          "path": "knowledge/04_ActivityDiagram_Identity_Evidence_and_Eligibility_Review.md",
+          "sha256": "9c55c1bbb69e1f2f77170a483ceacffb95d83eaae115daa422b76f426325b41a",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "9c55c1bbb69e1f2f77170a483ceacffb95d83eaae115daa422b76f426325b41a",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 147
+        },
+        {
+          "path": "knowledge/04_ER_Diagrams_Quotes_Reservation_Holds_and_Booking_Revisions.md",
+          "sha256": "97ab66bcaf7aa82bf5a1c6015f8d209e209d13e216d96340894f869c14b014da",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "97ab66bcaf7aa82bf5a1c6015f8d209e209d13e216d96340894f869c14b014da",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 224
+        },
+        {
+          "path": "knowledge/04_Sequence_Diagrams_Identity_Evidence_and_Eligibility_Review.md",
+          "sha256": "db351d9357efe128f8a9ee19b0de1a9fb858881786447fe7d64224453a9d7642",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "db351d9357efe128f8a9ee19b0de1a9fb858881786447fe7d64224453a9d7642",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 172
+        },
+        {
+          "path": "knowledge/04_Use case_Identity_Verification_and_Authorization.md",
+          "sha256": "02d007e2d4800106d8f565981063f1afb5e19500076ad0f3cd5f6cc2de399247",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "02d007e2d4800106d8f565981063f1afb5e19500076ad0f3cd5f6cc2de399247",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 178
+        },
+        {
+          "path": "knowledge/05_ActivityDiagram_Scoped_RBAC_and_ABAC_Authorization.md",
+          "sha256": "7c59f7f67fff37a7009be325d1097fdc1e8f4b9c8ca07b9b58d1abedf46f9a40",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "7c59f7f67fff37a7009be325d1097fdc1e8f4b9c8ca07b9b58d1abedf46f9a40",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 140
+        },
+        {
+          "path": "knowledge/05_ER_Diagrams_Payments_Bank_Evidence_Allocations_and_Refunds.md",
+          "sha256": "1bcb6600d96f2205fc57fa60499caf53424d4109047b3a11cb7c2d873af9638e",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "1bcb6600d96f2205fc57fa60499caf53424d4109047b3a11cb7c2d873af9638e",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 262
+        },
+        {
+          "path": "knowledge/05_Sequence_Diagrams_Scoped_RBAC_and_ABAC_Authorization.md",
+          "sha256": "2f50e2e2a1fd68439dff7344c2a5974853bec8dfa6a6161deec1d239baa5bb0b",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "2f50e2e2a1fd68439dff7344c2a5974853bec8dfa6a6161deec1d239baa5bb0b",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 163
+        },
+        {
+          "path": "knowledge/05_Use case_Cinema_Access_and_IoT_Operations.md",
+          "sha256": "69e586cdff1e8e2aa1bbd0e8b73e6b417d0c862442600ac1cc3e3c9140330c54",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "69e586cdff1e8e2aa1bbd0e8b73e6b417d0c862442600ac1cc3e3c9140330c54",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 185
+        },
+        {
+          "path": "knowledge/06_ActivityDiagram_Booking_Amendment_and_Session_Extension.md",
+          "sha256": "f7e374edcd32caacd8efb11a6f9cfcd6e279b0ce4e2a08a7b8400411cae3a66a",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "f7e374edcd32caacd8efb11a6f9cfcd6e279b0ce4e2a08a7b8400411cae3a66a",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 148
+        },
+        {
+          "path": "knowledge/06_ER_Diagrams_Identity_Evidence_Guest_Check_In_and_Access_Credentials.md",
+          "sha256": "2d91f322d22760a86b9e13db4883bd038b07779795ac6ba24cb73915b2015dd0",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "2d91f322d22760a86b9e13db4883bd038b07779795ac6ba24cb73915b2015dd0",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 214
+        },
+        {
+          "path": "knowledge/06_Sequence_Diagrams_Booking_Amendment_and_Session_Extension.md",
+          "sha256": "1aa3721afa0271e9cf29612344deaa0ae23d6683e8bf0a44b38351fd1dfab588",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "1aa3721afa0271e9cf29612344deaa0ae23d6683e8bf0a44b38351fd1dfab588",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 173
+        },
+        {
+          "path": "knowledge/07_ActivityDiagram_Booking_Cancellation_and_Refund_Execution.md",
+          "sha256": "6c529adef0c63e6507878bf38a2887d3399de4d745a18f6d738e628ad2f05a44",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "6c529adef0c63e6507878bf38a2887d3399de4d745a18f6d738e628ad2f05a44",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 149
+        },
+        {
+          "path": "knowledge/07_ER_Diagrams_Sessions_Devices_Maintenance_and_Readiness.md",
+          "sha256": "ea8754a7b0acc0530a115ccaf08d2ec42361db684a5892c066fc718c81b2c497",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "ea8754a7b0acc0530a115ccaf08d2ec42361db684a5892c066fc718c81b2c497",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 232
+        },
+        {
+          "path": "knowledge/07_Sequence_Diagrams_Cancellation_and_Refund_Execution.md",
+          "sha256": "0b42ef9c1eb756ca8dc5f406ad79c4118cd4587937dec6424b9d83b445a5b45a",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "0b42ef9c1eb756ca8dc5f406ad79c4118cd4587937dec6424b9d83b445a5b45a",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 175
+        },
+        {
+          "path": "knowledge/08_ActivityDiagram_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+          "sha256": "94e17ac06403a52a622ab2943c32ef6a369f03add81259e58779584d77b63a34",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "94e17ac06403a52a622ab2943c32ef6a369f03add81259e58779584d77b63a34",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 168
+        },
+        {
+          "path": "knowledge/08_ER_Diagrams_Durable_Work_Notifications_and_Audit.md",
+          "sha256": "5771f7abbfcc403aca0e638f92c0695bef5366aee431f5aa87e48320c1ce15ba",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5771f7abbfcc403aca0e638f92c0695bef5366aee431f5aa87e48320c1ce15ba",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 191
+        },
+        {
+          "path": "knowledge/08_Sequence_Diagrams_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+          "sha256": "3219d3fc2fa5b1e0fc2cb1eaf131ce37899b4dce00ba8a4bf3054b483b175ac2",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "3219d3fc2fa5b1e0fc2cb1eaf131ce37899b4dce00ba8a4bf3054b483b175ac2",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 199
+        },
+        {
+          "path": "knowledge/09_ActivityDiagram_Room_Maintenance_and_Controlled_Closure.md",
+          "sha256": "041ae51c6712800d143512b04bad966340765a657bbda6ec5560d2b13da1504f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "041ae51c6712800d143512b04bad966340765a657bbda6ec5560d2b13da1504f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 150
+        },
+        {
+          "path": "knowledge/09_Sequence_Diagrams_Room_Maintenance_and_Controlled_Closure.md",
+          "sha256": "5d65ef724b5687756a10584db66be165729d22f8502e89ad244f277821821da2",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5d65ef724b5687756a10584db66be165729d22f8502e89ad244f277821821da2",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 172
+        },
+        {
+          "path": "knowledge/10_ActivityDiagram_Operational_Incident_and_Recovery.md",
+          "sha256": "3134b63a975314ed0989b332456fa9314944cd0e74f426c63c4c95678e04f19d",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "3134b63a975314ed0989b332456fa9314944cd0e74f426c63c4c95678e04f19d",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 151
+        },
+        {
+          "path": "knowledge/10_Sequence_Diagrams_Operational_Incident_and_Recovery.md",
+          "sha256": "f6c3bcb355afcf667616fb7f9723363a8cbe361490647971b2cfd9c21b4ebb31",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "f6c3bcb355afcf667616fb7f9723363a8cbe361490647971b2cfd9c21b4ebb31",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 179
+        },
+        {
+          "path": "knowledge/ARCHITECTURE.md",
+          "sha256": "e5613fb38fe008340e9c9a6d711b842baee9671112b67cd916a315a21012b1e2",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8c087b5a03466883ac9c037be05cfe7c1264c2fc2414c6019c7747159933fb0d",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 2632
+        },
+        {
+          "path": "knowledge/Analysis output 1.png",
+          "sha256": "e4b6d0b2b7f56dbefb381e58f6e48ccadfc3bdb027a8e9f18bf4af89900a3045",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "e4b6d0b2b7f56dbefb381e58f6e48ccadfc3bdb027a8e9f18bf4af89900a3045",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/Analysis output Component1.png",
+          "sha256": "dc56360810fc8b23f79465e61908a702a3acfffa92075d7f8737bbaaaafbff84",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "dc56360810fc8b23f79465e61908a702a3acfffa92075d7f8737bbaaaafbff84",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Cinema Admin Dashboard Mockup-1.png",
+          "sha256": "52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking Activity Diagrams.png",
+          "sha256": "7e2f8a66688f04791723d4ed6fc586b3a6c6d3327a730bc9318d6e5b8655f386",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "7e2f8a66688f04791723d4ed6fc586b3a6c6d3327a730bc9318d6e5b8655f386",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking ERD Poster.png",
+          "sha256": "5de9cb08255fbf11816f5c5110f9f6cb7aec099c0ae136230b46961d12bded08",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5de9cb08255fbf11816f5c5110f9f6cb7aec099c0ae136230b46961d12bded08",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking System Context Diagram-1.png",
+          "sha256": "d9ad0d359f72e23a2f9800a122954063224ca17a01e2a7e28ff16e6cd6d937fd",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "d9ad0d359f72e23a2f9800a122954063224ca17a01e2a7e28ff16e6cd6d937fd",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Cinema Dashboard Showcase-2.png",
+          "sha256": "27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Component Architecture Diagram-2.png",
+          "sha256": "8c955cec4888b9c3082c329263977664301b08c2f93e7f172785c246e7b6a2c2",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8c955cec4888b9c3082c329263977664301b08c2f93e7f172785c246e7b6a2c2",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest End-to-End Architecture Mind Map.png",
+          "sha256": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Modular Monolith Architecture Diagram-1.png",
+          "sha256": "ef0b7f4573fe6ee9ece71aeb442cf48393d3576e2d9cdbac7fe6cfd50e31e7b4",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "ef0b7f4573fe6ee9ece71aeb442cf48393d3576e2d9cdbac7fe6cfd50e31e7b4",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Private Cinema Booking UI.png",
+          "sha256": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Sequence Diagrams Overview.png",
+          "sha256": "867cea5376ef3cf7e394074baa5474b3ab8e433ae1b6714c7afa4078e1e0da21",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "867cea5376ef3cf7e394074baa5474b3ab8e433ae1b6714c7afa4078e1e0da21",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest System Context Diagram-2.png",
+          "sha256": "a43214fd222f5c69fc7f836477824f0ea1caf9747a2e338febe8072088ffbdf0",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "a43214fd222f5c69fc7f836477824f0ea1caf9747a2e338febe8072088ffbdf0",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest Use Case Diagram Infographic.png",
+          "sha256": "5dbee4d681192108cc0620ba61b02639a0441777375ce3b1ec8fbdcfd28bfe61",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5dbee4d681192108cc0620ba61b02639a0441777375ce3b1ec8fbdcfd28bfe61",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/CineNest_E2E_Mind_Map.md",
+          "sha256": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 386
+        },
+        {
+          "path": "knowledge/DESIGN.md",
+          "sha256": "220100bb66e091e2d7c23ff6c80c3dc703ca35be1a85ce6dafd53d011d57a36a",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "220100bb66e091e2d7c23ff6c80c3dc703ca35be1a85ce6dafd53d011d57a36a",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 1394
+        },
+        {
+          "path": "knowledge/Mini movie theater Ruels and Conditions.docx",
+          "sha256": "e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/Mini movie theater Ruels and Conditions.pdf",
+          "sha256": "2d4961de671a356db2a6d81a0c2f9b185d969952fb9e656d19bcb6e97da6dea2",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "2d4961de671a356db2a6d81a0c2f9b185d969952fb9e656d19bcb6e97da6dea2",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/PROGRESS.md",
+          "sha256": "39ee61b90bf1b15b78825470dc766bf555e2428473684e1b2de5f7a02319ce86",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "cb56d2f826182b996ee4ee884bfa9a6a3477c3c96557210dcc737e859707f858",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 2846
+        },
+        {
+          "path": "knowledge/PROJECT.md",
+          "sha256": "042888a79e81a0446583cbf7ab48e12afa1b0fc9ea9e47eaa6ef843023997026",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "042888a79e81a0446583cbf7ab48e12afa1b0fc9ea9e47eaa6ef843023997026",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 946
+        },
+        {
+          "path": "knowledge/README.md",
+          "sha256": "4248b82a476d7f1291b26169b90e541fecc1a7d51d4239c9e0107ddd66244f4d",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "2c45662c76a774e2eb56c254b76fa7c9c9b67f9780d2ea8c814fe512ae62285b",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 13
+        },
+        {
+          "path": "knowledge/Smart_Cinema_Platform.pdf",
+          "sha256": "f414d822f6c5ce4f3c2e8fd9eb3558220ce9c82fa96ca3dfdab74b29da7e115f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "f414d822f6c5ce4f3c2e8fd9eb3558220ce9c82fa96ca3dfdab74b29da7e115f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/backlog/FUTURE_FEATURES.md",
+          "sha256": "d0e70dba26eebc47ae651a27621f85441bbc3b7587d05aeed91c2ca1f0902433",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "d0e70dba26eebc47ae651a27621f85441bbc3b7587d05aeed91c2ca1f0902433",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 136
+        },
+        {
+          "path": "knowledge/decisions/cinenest-open-decisions.json",
+          "sha256": "9388e09f520fd8bc4b13bf1a3f0791b7d13ae6d071fe647a5f07035b8d0caad5",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "9388e09f520fd8bc4b13bf1a3f0791b7d13ae6d071fe647a5f07035b8d0caad5",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 1598
+        },
+        {
+          "path": "knowledge/decisions/cinenest-palette-comparison.json",
+          "sha256": "7c3927eb45669e1971d6edb341800228d8b5eebef8235c4f60ebb200cb330318",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "7c3927eb45669e1971d6edb341800228d8b5eebef8235c4f60ebb200cb330318",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 25
+        },
+        {
+          "path": "knowledge/execution/change-sets.json",
+          "sha256": "32362e0cc14b47c4a385cc5fe14f11d07f8ea713798dc6d81ff2ef3abf66bae1",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "2975efe55cf93b76225ab5ad862851d2e2a72d2ff8b75bde71441c6ad1c70433",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 3581
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-checks.json",
+          "sha256": "284a6f2e7ece5f930ce157ec2dc6e7246336f681abfcf51b43bf4a240990cf79",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "284a6f2e7ece5f930ce157ec2dc6e7246336f681abfcf51b43bf4a240990cf79",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 92
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-inputs-and-sources.json",
+          "sha256": "76c6fd25617eb0662fc778643bdad694702dcf02dc474ccf594b69efba2faadb",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "76c6fd25617eb0662fc778643bdad694702dcf02dc474ccf594b69efba2faadb",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 286
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-publication.json",
+          "sha256": "b734a288a8452d1bc6a046a6bea08d119b4a6d8b772e57d867ce14bbc91aa911",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "b734a288a8452d1bc6a046a6bea08d119b4a6d8b772e57d867ce14bbc91aa911",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 51
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-review.json",
+          "sha256": "8992bf0cbc6c313ba2201ecc60f7515bab4012c0e23c8a267c6940b46b217ec6",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8992bf0cbc6c313ba2201ecc60f7515bab4012c0e23c8a267c6940b46b217ec6",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 30
+        },
+        {
+          "path": "knowledge/execution/evidence/checks.json",
+          "sha256": "881c3efd81efa857bcb86e77ef89a840d9b6640e07d6adeb06a12a161338729f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "881c3efd81efa857bcb86e77ef89a840d9b6640e07d6adeb06a12a161338729f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 44
+        },
+        {
+          "path": "knowledge/execution/evidence/instruction-review.json",
+          "sha256": "c7c51a4dd1793f053af3d8b53f9444eca015a49ecb19eb80ea405fcc3f47a650",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "c7c51a4dd1793f053af3d8b53f9444eca015a49ecb19eb80ea405fcc3f47a650",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 47
+        },
+        {
+          "path": "knowledge/execution/evidence/publication.json",
+          "sha256": "464768ddb38eed03c963e133bf70cd24c1e12be0c1970b3e1fefe6d45a290869",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "464768ddb38eed03c963e133bf70cd24c1e12be0c1970b3e1fefe6d45a290869",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 17
+        },
+        {
+          "path": "knowledge/execution/evidence/source-review.json",
+          "sha256": "8d608708fcdcbe78b318b1d98f2b913836d2ecbdf500f850682cbf5f72c96f35",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8d608708fcdcbe78b318b1d98f2b913836d2ecbdf500f850682cbf5f72c96f35",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 39
+        },
+        {
+          "path": "knowledge/execution/omissions.json",
+          "sha256": "d2e0191515365f91ead58af9a35a8f061688f171d2791cf68ba6ff7142fc4c70",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "d2e0191515365f91ead58af9a35a8f061688f171d2791cf68ba6ff7142fc4c70",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 125
+        },
+        {
+          "path": "knowledge/execution/refresh_manifest.py",
+          "sha256": "5d3e650a258f669d4d44b354147ff4c25c7dbd61008fdec5269d681b2f59fb59",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5d3e650a258f669d4d44b354147ff4c25c7dbd61008fdec5269d681b2f59fb59",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 44
+        },
+        {
+          "path": "knowledge/execution/requirements.json",
+          "sha256": "e76fb27488c7dde404843030d48267b99cbac6b269ff8eecb2e2d46bbd6af643",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "9d181c480493d1db242a8c3fcbfebcc4802e095b6a738064746ef53a07fcbd8f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 32721
+        },
+        {
+          "path": "knowledge/execution/source-ledger.json",
+          "sha256": "be3f7dff80bc0c5d321187c6b3df430a3f24e9c7c7cf80c7dab96bcabc68ad6a",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "be3f7dff80bc0c5d321187c6b3df430a3f24e9c7c7cf80c7dab96bcabc68ad6a",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 760
+        },
+        {
+          "path": "knowledge/execution/status.json",
+          "sha256": "e47d85405d757aca22f49e21206128a719253e94850df2a3e627e8bb67964608",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "42ca9d644f815238e1fc95346ae2e6b102765deaa27454e9f1fbb3df07ba3cf3",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 15182
+        },
+        {
+          "path": "knowledge/execution/test-plan.json",
+          "sha256": "cfdedf9f32f8c9e4ad264f10ed2841b3e2d63b9e579730a20820d9ba4556b701",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "cfdedf9f32f8c9e4ad264f10ed2841b3e2d63b9e579730a20820d9ba4556b701",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 4444
+        },
+        {
+          "path": "knowledge/execution/validate_execution.py",
+          "sha256": "8d9d32195e2e152361f2c263719feae63f4eb68da749a79209472e3a1993f810",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "9b7f105b4f715dd829d9df8f2fb4b6908ba6ec5376db166dab09a1b6aa272de5",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 6462
+        },
+        {
+          "path": "knowledge/guides/USER_GUIDE.md",
+          "sha256": "f01b2a5a4e1d2623d48a4ef49cc5b457a1b32ada4fe05d19f7ee034fabafe01a",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "f01b2a5a4e1d2623d48a4ef49cc5b457a1b32ada4fe05d19f7ee034fabafe01a",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 369
+        },
+        {
+          "path": "knowledge/manifest.json",
+          "sha256": "a4fe7c3b7b9987a73675d0964521ce2b1e7620d7242d4502a5a74134e48b1c02",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "bebfacfe3888dcf16c314ccd3e891408dfa879a927ec346e9f5d06ae535617a9",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 2938
+        },
+        {
+          "path": "knowledge/product/FEATURE_CATALOG.md",
+          "sha256": "00910c132bb101e1e24b9a68d8f4fd049f8901dfdd5e821c220bc2021c174e74",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_CN_MVP_KNOWLEDGE_TRACEABILITY_CONTROLLED_SUCCESSOR_CONTENT_REVIEW",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "f194ec7358d3245913fd8a33ffa03b5fee8552b9c9c6c3552dcb2298924007eb",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 675
+        },
+        {
+          "path": "knowledge/product/cinenest-bank-payment-lifecycles.json",
+          "sha256": "c12a0454905509c14cfad5eae94e83b861a36d3fe02bc3ad283d1afeb142599f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "c12a0454905509c14cfad5eae94e83b861a36d3fe02bc3ad283d1afeb142599f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 303
+        },
+        {
+          "path": "knowledge/product/cinenest-draft-rules.json",
+          "sha256": "1827c0410b9c366ea390e7c4b6c23e160901379cd8b739bd561a84dae1e486bc",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "1827c0410b9c366ea390e7c4b6c23e160901379cd8b739bd561a84dae1e486bc",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 51
+        },
+        {
+          "path": "knowledge/product/cinenest-feature-catalog.json",
+          "sha256": "bee233202471451aa10716254c9001b3ea24992c962413883b87791322f33dce",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "bee233202471451aa10716254c9001b3ea24992c962413883b87791322f33dce",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 531
+        },
+        {
+          "path": "knowledge/product/screenshots/analytics.png",
+          "sha256": "683c39bf5895f8f2870cd6517de7c4f5c94c398fd49a500b226e678275f89391",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "683c39bf5895f8f2870cd6517de7c4f5c94c398fd49a500b226e678275f89391",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-1280.png",
+          "sha256": "a3d5d3f3393ee4b4975cefb8dc2515f9079ef54381efbaca87ebbd479fd5d1a9",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "a3d5d3f3393ee4b4975cefb8dc2515f9079ef54381efbaca87ebbd479fd5d1a9",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-375.png",
+          "sha256": "7154478236c44104f5d435c109d5be5562b5b6b9e90a15116231d6b075440f77",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "7154478236c44104f5d435c109d5be5562b5b6b9e90a15116231d6b075440f77",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-768.png",
+          "sha256": "b949db5629c70743d04e0de929c025f3e84285493b32d8a7835a32a012b7c0c1",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "b949db5629c70743d04e0de929c025f3e84285493b32d8a7835a32a012b7c0c1",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-1280.png",
+          "sha256": "3688eefcd87b254fc3d6e340174bd2d40eac5d168e7d1075ecc91aa2f4ed3940",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "3688eefcd87b254fc3d6e340174bd2d40eac5d168e7d1075ecc91aa2f4ed3940",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-375.png",
+          "sha256": "1281417320acc643c750b2082a5d20d42ef31c2852b2971720768d9ecc0af083",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "1281417320acc643c750b2082a5d20d42ef31c2852b2971720768d9ecc0af083",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-768.png",
+          "sha256": "ccc6718b1621d5be4275f15647b7cae6133e39838ed7666a089cac9575a28f85",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "ccc6718b1621d5be4275f15647b7cae6133e39838ed7666a089cac9575a28f85",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-1280.png",
+          "sha256": "f46eac13c9f812ae96f8189802234511884da99ad25a218f998a5d6a3a97f8ab",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "f46eac13c9f812ae96f8189802234511884da99ad25a218f998a5d6a3a97f8ab",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-375.png",
+          "sha256": "32ca69413c811ec0ae0b469ef7fa3ecd709bdcfef97ca3ae0629f298591b8300",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "32ca69413c811ec0ae0b469ef7fa3ecd709bdcfef97ca3ae0629f298591b8300",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-768.png",
+          "sha256": "8ee3696036b124ad092cf9146eea770017b58e8c9bc071f7fa7bba2b81b82a5b",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8ee3696036b124ad092cf9146eea770017b58e8c9bc071f7fa7bba2b81b82a5b",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-1280.png",
+          "sha256": "5a774ebd61f42e38c7e830c6d5f68031b6fada97dc0d5e8f9a8478831c5869ce",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5a774ebd61f42e38c7e830c6d5f68031b6fada97dc0d5e8f9a8478831c5869ce",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-375.png",
+          "sha256": "8ada010a739288d1ab85938ae3111a42e3976a7f8ef81dcf905cb55d2da4344b",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8ada010a739288d1ab85938ae3111a42e3976a7f8ef81dcf905cb55d2da4344b",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-768.png",
+          "sha256": "d56982e97a02ac6886a0fbaf6b33b5d0a876e0761f5bd4cdc9233e00ae6f6b9c",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "d56982e97a02ac6886a0fbaf6b33b5d0a876e0761f5bd4cdc9233e00ae6f6b9c",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/catalog.png",
+          "sha256": "4b1e661bfcd1698380978c5816ab9458ee25d9b8fa6d5d5dc7c5821dcdc0e51f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "4b1e661bfcd1698380978c5816ab9458ee25d9b8fa6d5d5dc7c5821dcdc0e51f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/grants.png",
+          "sha256": "5b6ad59619588dd97c6574e207f6d3f25b81bcfdaed8360d92303f250c62e596",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5b6ad59619588dd97c6574e207f6d3f25b81bcfdaed8360d92303f250c62e596",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/operations.png",
+          "sha256": "4da2255fa9a602778bb05fda9041f89ad1a5ca10297ac34ae7c0344f176dae88",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "4da2255fa9a602778bb05fda9041f89ad1a5ca10297ac34ae7c0344f176dae88",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-1280.png",
+          "sha256": "e3e7af64a17508f733a12cfe5f1148ececda37d03c7feadb15bb1b62d5cd5d89",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "e3e7af64a17508f733a12cfe5f1148ececda37d03c7feadb15bb1b62d5cd5d89",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-375.png",
+          "sha256": "59d054602aa587dca1caec385824b49f853cc8e95902c33d59da9bf150a0c556",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "59d054602aa587dca1caec385824b49f853cc8e95902c33d59da9bf150a0c556",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-768.png",
+          "sha256": "d4f30f861dd8c5526274e906339d623be4532826dcc6928908dc814c87bc60ad",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "d4f30f861dd8c5526274e906339d623be4532826dcc6928908dc814c87bc60ad",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/sources/CN-AGENT-SETUP-001-request.txt",
+          "sha256": "5069b092f2eb4b71e180e11d13e701b2a99a3c8f143a3e1f992bbcaf862e72f2",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "5069b092f2eb4b71e180e11d13e701b2a99a3c8f143a3e1f992bbcaf862e72f2",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 434
+        },
+        {
+          "path": "knowledge/sources/CN-DEC-001-request.txt",
+          "sha256": "c13879ccf2719e8d1e36b813ad3c971f109514822fdae6da1e98ee1261943d0f",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "c13879ccf2719e8d1e36b813ad3c971f109514822fdae6da1e98ee1261943d0f",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 375
+        },
+        {
+          "path": "knowledge/sources/CN-KB-BANK-PAYMENT-001-request.txt",
+          "sha256": "4c63f237b0bb3e67011efd2103ffc614b702f313fb2970ae1ceaf72d9e19c0b1",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "4c63f237b0bb3e67011efd2103ffc614b702f313fb2970ae1ceaf72d9e19c0b1",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 415
+        },
+        {
+          "path": "knowledge/sources/CN-KB-FEATURES-TECH-001-request.txt",
+          "sha256": "9cf09c1dcbd849ddbd15449a0b76b9e21f478a33dc66439086ee93dad429f06d",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "9cf09c1dcbd849ddbd15449a0b76b9e21f478a33dc66439086ee93dad429f06d",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 669
+        },
+        {
+          "path": "knowledge/sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt",
+          "sha256": "1cd916c41a310b49aae6daff7405ad5f2c1fd01bd52f5ff486feccf6b536ee84",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "1cd916c41a310b49aae6daff7405ad5f2c1fd01bd52f5ff486feccf6b536ee84",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 310
+        },
+        {
+          "path": "knowledge/sources/cinenest-source-register.json",
+          "sha256": "4fbbc5682f1f0070a3ee1b727cf92e49e6d8b6750eea24c51055a232273461f4",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "4fbbc5682f1f0070a3ee1b727cf92e49e6d8b6750eea24c51055a232273461f4",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 176
+        },
+        {
+          "path": "knowledge/styles/cinenest-theme.css",
+          "sha256": "d3968b08519db0dea663f0336b40913207dd5a8613f1361c37f7a97b6c43533a",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "d3968b08519db0dea663f0336b40913207dd5a8613f1361c37f7a97b6c43533a",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 100
+        },
+        {
+          "path": "knowledge/tokens/cinenest-chart-specs.json",
+          "sha256": "e4300304ba0aa0fcc6fa363cefe91b21da5150761fbe12ca9308315ba1f9c275",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "e4300304ba0aa0fcc6fa363cefe91b21da5150761fbe12ca9308315ba1f9c275",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 729
+        },
+        {
+          "path": "knowledge/tokens/cinenest-design-tokens.json",
+          "sha256": "8c817e4f055eadb28ab556c868ff21cd899430001cb3d374d2265b2b8df74cea",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8c817e4f055eadb28ab556c868ff21cd899430001cb3d374d2265b2b8df74cea",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 136
+        },
+        {
+          "path": "knowledge/validate_design_kb.py",
+          "sha256": "260a417b3201f3fb62a9a59009b62ad6d5e1e4c39d42b49859d411830045e803",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "260a417b3201f3fb62a9a59009b62ad6d5e1e4c39d42b49859d411830045e803",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "TEXT_SOURCE_REVIEW;MATCHING_DIAGRAM_VISUALS_USE_PRIOR_COVERAGE",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record.",
+          "baselineLineCount": 633
+        },
+        {
+          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        },
+        {
+          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
+          "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
+          "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
+          "priorReadingRecord": "knowledgeTraceabilityReconciliation.knowledgeReadingLedger.files",
+          "priorReviewedHash": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
+          "contentCoverage": "COMPLETE_QUALIFIED_REUSE_OR_CONTROLLED_SUCCESSOR_REVIEW",
+          "visualCoverage": "PRIOR_QUALIFIED_VISUAL_REVIEW_REUSED_NO_NEW_RENDER",
+          "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
+        }
+      ],
+      "method": "Re-inventory and SHA verification;107 prior ledger payloads byte-identical;9 exact controlled successor KB payloads reviewed in the preceding CN-MVP-KNOWLEDGE-TRACEABILITY-001 task. Fresh task consultation of canonical policy/architecture/design/progress,Activity01/06 and Sequence06,actual contracts/V25/tests. No repeated general audit.",
+      "limitations": [
+        "No new binary visual review claimed;unchanged PNG/PDF/DOCX reuse qualified prior visual coverage.",
+        "Proposed diagrams do not authorize funding,paid extension or hardware behavior."
+      ]
+    },
+    "requirements": [
+      "CN-C08",
+      "BR-10",
+      "CN-NFR-02",
+      "CN-NFR-03",
+      "PK-AC08"
+    ],
+    "criteria": [
+      "P6-C01",
+      "P6-C06",
+      "P1-C05"
+    ],
+    "scenarios": [
+      {
+        "id": "startup",
+        "status": "PASS"
+      },
+      {
+        "id": "customer-discovery-auth",
+        "status": "PASS"
+      },
+      {
+        "id": "hold-quote-accept",
+        "status": "PASS"
+      },
+      {
+        "id": "verification-explicit-consent",
+        "status": "PASS"
+      },
+      {
+        "id": "E-pending-verification",
+        "status": "PASS"
+      },
+      {
+        "id": "independent-verification-api-support",
+        "status": "PASS"
+      },
+      {
+        "id": "explicit-bank-request",
+        "status": "PASS"
+      },
+      {
+        "id": "H-missing-CSRF",
+        "status": "PASS"
+      },
+      {
+        "id": "I-invalid-CSRF",
+        "status": "PASS"
+      },
+      {
+        "id": "J-cross-origin",
+        "status": "PASS"
+      },
+      {
+        "id": "L-idempotent-replay",
+        "status": "PASS"
+      },
+      {
+        "id": "M-changed-body-key",
+        "status": "PASS"
+      },
+      {
+        "id": "K-stale-readiness",
+        "status": "PASS"
+      },
+      {
+        "id": "claim-receipt-explicit",
+        "status": "PASS"
+      },
+      {
+        "id": "N-uncertain-upload",
+        "status": "PASS"
+      },
+      {
+        "id": "simulated-confirmation-api-support",
+        "status": "PASS"
+      },
+      {
+        "id": "X-A-preview",
+        "status": "PASS"
+      },
+      {
+        "id": "X-B-create",
+        "status": "PASS"
+      },
+      {
+        "id": "X-C-status",
+        "status": "PASS"
+      },
+      {
+        "id": "X-E-withdraw",
+        "status": "PASS"
+      },
+      {
+        "id": "X-D-lost-response",
+        "status": "PASS"
+      },
+      {
+        "id": "X-F-authorization",
+        "status": "PASS"
+      },
+      {
+        "id": "X-G-concurrency-expiry",
+        "status": "PASS"
+      },
+      {
+        "id": "X-D-unresolved",
+        "status": "PASS"
+      },
+      {
+        "id": "C-wrong-owner",
+        "status": "PASS"
+      },
+      {
+        "id": "D-wrong-venue-grant",
+        "status": "PASS"
+      },
+      {
+        "id": "O-malformed-reference",
+        "status": "PASS"
+      },
+      {
+        "id": "P-safe-URLs",
+        "status": "PASS"
+      },
+      {
+        "id": "A-expired-quote",
+        "status": "PASS"
+      },
+      {
+        "id": "B-invalid-expired-hold",
+        "status": "PASS"
+      },
+      {
+        "id": "F-rejected-verification",
+        "status": "PASS"
+      },
+      {
+        "id": "G-expired-session",
+        "status": "PASS"
+      }
+    ],
+    "counts": {
+      "PASS": 32,
+      "FAIL": 0,
+      "NOT_RUN": 0
+    },
+    "environment": {
+      "java": "25.0.4.1+1",
+      "node": "24.22.0",
+      "npm": "11.19.1",
+      "playwright": "1.62.1",
+      "chromium": "151.0.7922.34",
+      "postgres": "18.6",
+      "flyway": "V1–V25",
+      "applicationMax": "3CPU/7GiB",
+      "databaseMax": "1CPU/1GiB/128PIDs/512MiBtmpfs",
+      "timeoutSeconds": 600,
+      "realStack": "Browser→Next.js→Spring Boot/Spring Modulith→PostgreSQL"
+    },
+    "databaseAndTransportEvidence": {
+      "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
+      "requirements": [
+        "CN-C08",
+        "CN-NFR-02",
+        "CN-NFR-03"
+      ],
+      "syntheticOnly": true,
+      "scenarios": [
+        "X-A-preview",
+        "X-B-create",
+        "X-C-status",
+        "X-E-withdraw",
+        "X-D-lost-response",
+        "X-F-authorization",
+        "X-G-concurrency-expiry",
+        "X-D-unresolved"
+      ],
+      "databaseObservations": [
+        {
+          "stage": 0,
+          "reservations": [],
+          "active": 0,
+          "creates": 0,
+          "withdrawals": 0,
+          "auditCreates": 0,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 1,
+          "reservations": [
+            {
+              "state": "ACTIVE",
+              "revision": 0,
+              "blocking": true,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 1,
+          "creates": 1,
+          "withdrawals": 0,
+          "auditCreates": 1,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 2,
+          "reservations": [
+            {
+              "state": "ACTIVE",
+              "revision": 0,
+              "blocking": true,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 1,
+          "creates": 1,
+          "withdrawals": 0,
+          "auditCreates": 1,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 3,
+          "reservations": [
+            {
+              "state": "ACTIVE",
+              "revision": 0,
+              "blocking": true,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 1,
+          "creates": 1,
+          "withdrawals": 0,
+          "auditCreates": 1,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 4,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 0,
+          "creates": 1,
+          "withdrawals": 1,
+          "auditCreates": 1,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 5,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "ACTIVE",
+              "revision": 0,
+              "blocking": true,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 1,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 6,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "ACTIVE",
+              "revision": 0,
+              "blocking": true,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 1,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 7,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "ACTIVE",
+              "revision": 0,
+              "blocking": true,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 1,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 8,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "ACTIVE",
+              "revision": 0,
+              "blocking": true,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 1,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 9,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "ACTIVE",
+              "revision": 0,
+              "blocking": true,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 1,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 10,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "EXPIRED",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 0,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 11,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "EXPIRED",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 0,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 12,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "EXPIRED",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 0,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 13,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "EXPIRED",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 0,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        },
+        {
+          "stage": 14,
+          "reservations": [
+            {
+              "state": "WITHDRAWN",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            },
+            {
+              "state": "EXPIRED",
+              "revision": 1,
+              "blocking": false,
+              "exact_tail": true,
+              "bounded_deadline": true
+            }
+          ],
+          "active": 0,
+          "creates": 2,
+          "withdrawals": 1,
+          "auditCreates": 2,
+          "originalFinancialAccessNotificationStateUnchanged": true
+        }
+      ],
+      "transport": {
+        "attempts": 6,
+        "committedDrops": 1,
+        "beforeForwardDrops": 1,
+        "upstreamStatus": 200
+      },
+      "freshBackendInstanceReadVerified": true,
+      "noBusinessInterception": true,
+      "noExtensionFundingOrAllocation": true,
+      "noPurchasedRevisionOrCredentialChange": true
+    },
+    "sourceHashes": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "b321e6f64136b23139395901f019556b5ed72986747412e64af393b87b7b2142",
+      "frontend/lib/extension-preview-backend.ts": "0203517ffd1c5e1a2a858ccf18ebd36add76aa560de94c8b3820d65c0635b365",
+      "frontend/lib/extension-reservation-backend.ts": "51278ebb21070771579d5755cadf20f5394648ebeb86a8e5c856b98166ba586c",
+      "frontend/tests/extension-preview.test.mjs": "73dce268298ad055dec1d4358ef5adf795a1e827501a2d22f65d5a7742be9601",
+      "frontend/tests/extension-reservation.test.mjs": "3f38f8a6c635c9a5add69c6c7c5c25ddaf4957df2f5d5df95884d52f69626f4d",
+      "frontend/tests/synthetic-e2e.mjs": "4ccebe0eac530af23cbb73354e32ffe184588c8aa7b0cbf99f5572d909849a2a",
+      "frontend/tests/upload-fault-proxy.mjs": "df4d08935613037cb903a1d09e474cc6d9b3bca7b30f05a6b82e5c9fbd5df380",
+      "frontend/tests/upload-fault-proxy.test.mjs": "9fb1749a4ff9c8239ce64ac5cdbed8d8c38fe8dcf4af79b9570a3fc00eae4e49",
+      "frontend/tests/extension-reservation-e2e.mjs": "d2a4a34d61b3bc9eb855a6ec32b64013ff22488de8c81039d37bcd0a47c746ab",
+      "scripts/test-synthetic-e2e.py": "74c5bc73bf555686fd1b94542ed286107dce7584b7db0258b6096a2f6e1d2da1"
+    },
+    "artifactDirectory": ".cache/e2e-booking-diagnosis/cinenest-e2e-ky1gn4_8",
+    "artifacts": {
+      "extension-evidence.json": "b051bc2a376428277fa305391364bf5df5b978b06c35f6b3db1e51d1ccfd3360",
+      "extension-active-768.png": "35526f2b5dc7dacec40ffd20cbd9ba1b66efeb065f5fb902885c4d1a1c413a36",
+      "observations.json": "f1e6851dae6ee985f6bdcebaa28ce3b2cdc669c852fa57d14d6a6d0556612318",
+      "extension-active-1280.png": "3194cd75a82b2b0b28046ade8ba954fc8750e06d9e93a67ffc74f30b0169a54b",
+      "extension-active-375.png": "237fdc5f06f7d1f68076e5fd630f6f349375bfba1836d16d78008924e84e61d6"
+    },
+    "fullBackendTests": 807,
+    "fullFrontendTests": 481,
+    "freshBackendReadLimitation": "A fresh separate backend instance with creation disabled reads the same committed database through the unchanged frontend transport;original process remains alive. This is not disaster-recovery qualification.",
+    "proxyCorrectionApproval": {
+      "source": "Explicit owner reply to request_user_input_async in this task",
+      "statement": "Approve the two-file proxy correction",
+      "files": [
+        "frontend/lib/extension-preview-backend.ts",
+        "frontend/lib/extension-reservation-backend.ts"
+      ],
+      "scope": "Existing logout protocol+Host same-origin convention;Origin and CSRF still mandatory;no forwarded-host trust"
+    },
+    "auditReadExceptions": [
+      "BOOKING_READ",
+      "STATUS",
+      "CUSTOMER_REFUNDS_READ"
+    ],
+    "cleanupVerified": true,
+    "fundingCreated": false,
+    "allocationChanged": false,
+    "purchasedRevisionChanged": false,
+    "accessChanged": false,
+    "grantsAssigned": false,
+    "acceptanceChanged": false,
+    "migrationsChanged": false,
+    "successorCI": "PENDING",
+    "validation": {
+      "fullBackendTests": 807,
+      "fullFrontendTests": 481,
+      "productionBuild": "PASS actual harness",
+      "typeScript": "PASS",
+      "lint": "PASS;98information diagnostics",
+      "lockedNpmInstallAudit": "PASS;0vulnerabilities",
+      "harnessAdmissionTests": 10,
+      "ciClassifierRegressions": 8,
+      "launcherTests": 14,
+      "governanceControls": 193,
+      "knowledgeDesign": "PASS",
+      "exactSuccessorAndTraceability": "PASS",
+      "manifestAndDependencies": "PASS",
+      "actualCleanCheckout": "PASS;final exact payload recheck follows",
+      "whitespace": "PASS",
+      "ordinaryWorktree": "Only2pre-existing next-env.d.ts findings;exact unrelated hash preserved",
+      "successorCI": "PENDING"
     }
   }
 }

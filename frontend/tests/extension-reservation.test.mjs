@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server.js";
 // Synthetic DTO/client/proxy fixtures; no real-backend browser E2E claim.
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -264,6 +265,33 @@ test("actual HTTP proxy exact forwarding, CSRF, sanitized denials and strict que
 		assert.equal(r.status, 200);
 		assert.equal(calls.at(-1).csrf, "synthetic-csrf");
 		assert.deepEqual(JSON.parse(calls.at(-1).body), create());
+		const publicRequest = () =>
+			new NextRequest("http://127.0.0.1:43210" + path, {
+				method: "POST",
+				headers: {
+					host: "127.0.0.1:43210",
+					origin: "http://127.0.0.1:43210",
+					cookie: "CINENEST_SESSION=synthetic-only",
+					"x-csrf-token": "synthetic-csrf",
+					"content-type": "application/json",
+				},
+				body: JSON.stringify(create()),
+			});
+		assert.equal((await forwardReservation(publicRequest())).status, 200);
+		for (const field of ["origin", "x-csrf-token"]) {
+			const bad = publicRequest();
+			bad.headers.delete(field);
+			const count = calls.length;
+			assert.equal((await forwardReservation(bad)).status, 403);
+			assert.equal(calls.length, count);
+		}
+		const cross = publicRequest();
+		cross.headers.set("origin", "http://attacker.test");
+		assert.equal((await forwardReservation(cross)).status, 403);
+		const forwarded = publicRequest();
+		forwarded.headers.set("origin", "http://attacker.test");
+		forwarded.headers.set("x-forwarded-host", "attacker.test");
+		assert.equal((await forwardReservation(forwarded)).status, 403);
 		assert.equal(r.headers.get("Cache-Control"), "private, no-store");
 		r = await forwardReservation(req(reservationPath(bookingId, reserveId)));
 		assert.equal(r.status, 200);
