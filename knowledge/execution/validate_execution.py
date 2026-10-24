@@ -6181,5 +6181,87 @@ def inert_ci_main():
     if result==0:print('PASS exact knowledge-reading governance successor;original instructions,application,history,decisions and acceptance preserved')
     return result
 
+# CN-EXTENSION-RESERVATION-FE-001: exact customer reservation frontend successor; no general exemption.
+reservation_frontend_prior_main = inert_ci_main
+RESERVATION_FRONTEND_BASELINE = '7be95d4b8d9a607e784380fcc516dd50c427f4c9'
+RESERVATION_FRONTEND_HASHES = {'frontend/app/globals.css': '3907b84a544a18b702771e15b4ced4eca29d2fcfb3b539412f543199e1ffca36', 'frontend/components/booking-extension-preview.tsx': '5e58ff70bd0b7b14b5e4a3cf44e11ae81f4f6d01d03a356328a92e798b460e17', 'frontend/package.json': '19e7ae0cee5ea65159d9b33ce391793a9ecdc7abe48c56717b5cae46befb687e', 'knowledge/ARCHITECTURE.md': '8c087b5a03466883ac9c037be05cfe7c1264c2fc2414c6019c7747159933fb0d', 'knowledge/DESIGN.md': '220100bb66e091e2d7c23ff6c80c3dc703ca35be1a85ce6dafd53d011d57a36a', 'knowledge/PROGRESS.md': 'cb56d2f826182b996ee4ee884bfa9a6a3477c3c96557210dcc737e859707f858', 'knowledge/execution/requirements.json': '9d181c480493d1db242a8c3fcbfebcc4802e095b6a738064746ef53a07fcbd8f', 'knowledge/execution/status.json': '42ca9d644f815238e1fc95346ae2e6b102765deaa27454e9f1fbb3df07ba3cf3', 'knowledge/execution/test-plan.json': 'cfdedf9f32f8c9e4ad264f10ed2841b3e2d63b9e579730a20820d9ba4556b701', 'knowledge/guides/USER_GUIDE.md': 'f01b2a5a4e1d2623d48a4ef49cc5b457a1b32ada4fe05d19f7ee034fabafe01a', 'knowledge/product/FEATURE_CATALOG.md': 'f194ec7358d3245913fd8a33ffa03b5fee8552b9c9c6c3552dcb2298924007eb', 'scripts/test-governance-controls.py': 'b1c773e7d57f21a765dc6b7f2181bc818b366a7a720ad6531a8bb13e40d1dc18', 'frontend/app/api/bookings/[id]/extension-reservations/[reservation]/route.ts': '718d81c1091f2528e9a9ac7ee1b6d7eb1dd09762ae1dd5d01d219c93febc7c2e', 'frontend/app/api/bookings/[id]/extension-reservations/[reservation]/withdrawals/route.ts': '5cfc6eed1141ed0ae99bb6fed72fdf2c39e09c4bf6c196a73305d053e511d081', 'frontend/app/api/bookings/[id]/extension-reservations/commands/[commandKey]/route.ts': '53ab97954e50e320fbe671824c2e17051a5b65fccf5578c4bf75427770fad395', 'frontend/app/api/bookings/[id]/extension-reservations/route.ts': '42c6f28186d176d2a7302d43ed013df04318ffda2ebc359593332f2e0cbba222', 'frontend/components/extension-reservation.tsx': 'bc2904137ec5308693459d8ca47115075934797463641c84db9517f2fb0a65ae', 'frontend/lib/extension-reservation-backend.ts': '5f9f9de8434e7a6e9f7f057c5abf19a1215179ae854f76639e8bf11f98d4ed18', 'frontend/lib/extension-reservation.ts': 'c462b4e50c8f02f635f51bb200696c1de67bc2a2617bf7064272e205984565e5', 'frontend/tests/extension-reservation-browser.mjs': '667e4d0c0283613ef46fa0569ce1368c75b214a9a324a9980ba39d5274d5c72c', 'frontend/tests/extension-reservation-fixtures.mjs': '887ec64290ebad1b9f9be446d9c6c091a33eb24a7b2e09cb41fae3e156d54f99', 'frontend/tests/extension-reservation.test.mjs': 'cf9f2f5154c1f30004093abc6d4364f8ebccc9fae89216c7f1e97763d5b0656b'}
+RESERVATION_FRONTEND_ADDED = {'frontend/tests/extension-reservation.test.mjs', 'frontend/app/api/bookings/[id]/extension-reservations/route.ts', 'frontend/tests/extension-reservation-browser.mjs', 'frontend/app/api/bookings/[id]/extension-reservations/[reservation]/route.ts', 'frontend/components/extension-reservation.tsx', 'frontend/app/api/bookings/[id]/extension-reservations/[reservation]/withdrawals/route.ts', 'frontend/lib/extension-reservation-backend.ts', 'frontend/lib/extension-reservation.ts', 'frontend/tests/extension-reservation-fixtures.mjs', 'frontend/app/api/bookings/[id]/extension-reservations/commands/[commandKey]/route.ts'}
+
+def reservation_frontend_successor_errors():
+    baseline=RESERVATION_FRONTEND_BASELINE;hashes=RESERVATION_FRONTEND_HASHES
+    errors=[]
+    def prior(name):return subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name])
+    for name,digest in hashes.items():
+        if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+            errors.append('Reservation frontend exact authorized payload mismatch '+name)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):
+        errors.append('Reservation frontend historical validator changed')
+    state=json.loads((K/'execution/status.json').read_text());receipt=state.pop('extensionReservationFrontend',{})
+    state.update(receipt.get('previousCurrentHeader',{}))
+    if state!=json.loads(prior('knowledge/execution/status.json')):errors.append('Reservation frontend changed existing status/approval evidence')
+    for key in ['backendChanged','migrationsChanged','financialMutation','fundingCreated','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','automaticCreation','automaticRenewal','missingReceiptMeansFailed','historicalSyntheticCampaignRerun']:
+        if receipt.get(key) is not False:errors.append('Reservation frontend exceeded authority '+key)
+    if receipt.get('baseline')!=baseline or receipt.get('customerOnly') is not True:errors.append('Reservation frontend authority/baseline mismatch')
+    ledger=receipt.get('knowledgeReadingLedger',{})
+    if ledger.get('complete') is not True or ledger.get('reviewedFiles')!=116 or ledger.get('discoveredFiles')!=116 or ledger.get('unresolvedCoverageGaps')!=[] or ledger.get('baseline')!=baseline:errors.append('Incomplete knowledge reading ledger')
+    rows=ledger.get('files',[])
+    if len(rows)!=116 or len({r.get('path') for r in rows})!=116:errors.append('Incomplete knowledge reading coverage')
+    tracked_kb=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline,'knowledge'],text=True),nul=True)
+    for row in rows:
+        name=row.get('path','')
+        if name in tracked_kb and row.get('sha256')!=hashlib.sha256(prior(name)).hexdigest():errors.append('Reading baseline hash mismatch '+name)
+        if not (row.get('reviewMethod') or row.get('method')) or not (row.get('contentCoverage') or row.get('coverage')):errors.append('Missing reading method '+name)
+    for name,key in [('requirements.json','requirements'),('test-plan.json','tests')]:
+        data=json.loads((K/'execution'/name).read_text())
+        for row in data[key]:row.pop('extensionReservationFrontendEvidence',None)
+        if data!=json.loads(prior('knowledge/execution/'+name)):errors.append('Reservation frontend changed requirement/test acceptance '+name)
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):
+        errors.append('Reservation frontend acceptance checkbox drift')
+    allowed=set(hashes)|RESERVATION_FRONTEND_ADDED|{'knowledge/execution/validate_execution.py','knowledge/manifest.json','frontend/next-env.d.ts'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',baseline],text=True),nul=True)
+    for name in tracked-allowed:
+        if not (R/name).is_file() or (R/name).read_bytes()!=prior(name):errors.append('Reservation frontend unrelated protected source/history change '+name)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',baseline,'--name-only','-z'],text=True),nul=True)
+    if not changed<=allowed:errors.append('Reservation frontend unauthorized changed path '+str(changed-allowed))
+    preserved={'knowledge/Mini movie theater Ruels and Conditions.docx':'e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf','knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx':'8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1'}
+    untracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--others','--exclude-standard','-z'],text=True),nul=True)
+    for name in untracked-set(hashes):
+        if name not in preserved or hashlib.sha256((R/name).read_bytes()).hexdigest()!=preserved[name]:errors.append('Reservation frontend unauthorized untracked payload '+name)
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for entry in expected['files']:
+        if 'knowledge/'+entry['path'] in allowed and entry['path']!='manifest.json':entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+    expected['externalInstructionFiles'][0]['sha256']=hashlib.sha256((R/'AGENTS.md').read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Reservation frontend manifest inventory/authority drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=reservation_frontend_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    baseline=RESERVATION_FRONTEND_BASELINE
+    added=RESERVATION_FRONTEND_ADDED
+    owned=set(RESERVATION_FRONTEND_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/name:subprocess.check_output(['git','-C',str(R),'show',baseline+':'+name]) for name in owned-added}
+    rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(path,*a,**kw):return replacements[path] if path in replacements else rb0(path,*a,**kw)
+    def rt(path,*a,**kw):return replacements[path].decode() if path in replacements else rt0(path,*a,**kw)
+    def glob(path,*a,**kw):return (x for x in g0(path,*a,**kw) if x not in {R/n for n in added})
+    def rglob(path,*a,**kw):return (x for x in rg0(path,*a,**kw) if x not in {R/n for n in added})
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode()
+            hide=owned if 'diff' in argv else added
+            paths=[x for x in text.split(sep) if x and x not in hide]
+            text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=reservation_frontend_prior_main()
+    if result==0:print('PASS exact customer reservation frontend successor;backend,history,decisions and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

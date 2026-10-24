@@ -1152,3 +1152,7 @@ button.button { display: inline-grid; }
 .extension-preview-panel form { max-width:36rem; }
 .extension-price-summary { border-top:1px solid var(--cn-color-border); padding-top:1rem; margin-top:1rem; }
 .extension-summary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr)); gap:var(--cn-spacing-4); }
+
+/* Temporary extension coverage is a separate explicit stage within the purchased booking card. */
+.extension-reservation-panel { border-top:1px solid var(--cn-color-border); margin-top:var(--cn-spacing-4); padding-top:var(--cn-spacing-4); }
+.extension-preview-panel .extension-reservation-panel button { margin-block:var(--cn-spacing-3); }

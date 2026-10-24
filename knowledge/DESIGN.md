@@ -1384,3 +1384,11 @@ Three approved references were visually inspected; the customer booking referenc
 ## Recovery-reference presentation contract — 2026-10-24
 
 CN-EXTENSION-RESERVATION-RECOVERY-READ-001 adds backend-only reference recovery. No reservation button,proxy,screenshot,layout or token change;customer reservation/status/withdrawal UI remains PENDING. Future authorized UI must use recovered reservationId for a fresh status GET,distinguish command-time reference from current state,and keep missing receipt as UNKNOWN outcome. Do not offer automatic replacement or treat COMMITTED_REFERENCE as a paid extension. [Contract](ARCHITECTURE.md#extension-reservation-recovery).
+
+
+<a id="extension-reservation-frontend"></a>
+## CN-EXTENSION-RESERVATION-FE-001 — customer temporary coverage stage
+
+Customer booking reference is the primary visual direction;all three approved PNG references were visually inspected. Existing cinematic shell,gold-topped white booking card,violet actions,shared Field/StateMessage/Badge and responsive summary grid are reused. A separated Reserve additional cinema time section follows the unchanged explicit preview. Review Extension Reservation loads configuration;unchecked acknowledgement then enables Reserve Extension Time. Status shows authoritative state/exact LKR/proposed end/created/expiry/observation in purchased timezone,revision and collapsed references. Explicit unchecked withdrawal acknowledgement gates withdrawal. UNKNOWN occupancy,UNVERIFIED readiness,no payment/no purchased extension warnings remain visible.
+
+Actual intercepted-browser screenshots at375/768/1280 cover baseline preview and new reservation stage. One main landmark,no horizontal overflow,visible keyboard focus and explicit Space/Enter actions tested. Original reference composition is adapted to an existing owned booking rather than a new checkout shell;mockup PayHere/PIN/real confirmation claims are not copied. No new tokens/framework/images or admin UI. Evidence and measured layout are owned by PROGRESS.

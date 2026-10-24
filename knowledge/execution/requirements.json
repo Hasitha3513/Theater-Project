@@ -1195,6 +1195,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationFrontendEvidence": {
+        "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+        "reference": "PROGRESS.md#extension-reservation-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -1539,6 +1546,13 @@
       "extensionRecoveryReadEvidence": {
         "taskId": "CN-EXTENSION-RESERVATION-RECOVERY-READ-001",
         "reference": "PROGRESS.md#extension-reservation-recovery",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationFrontendEvidence": {
+        "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+        "reference": "PROGRESS.md#extension-reservation-frontend",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
@@ -3680,6 +3694,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationFrontendEvidence": {
+        "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+        "reference": "PROGRESS.md#extension-reservation-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -4285,6 +4306,13 @@
       "extensionRecoveryReadEvidence": {
         "taskId": "CN-EXTENSION-RESERVATION-RECOVERY-READ-001",
         "reference": "PROGRESS.md#extension-reservation-recovery",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationFrontendEvidence": {
+        "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+        "reference": "PROGRESS.md#extension-reservation-frontend",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
@@ -5143,6 +5171,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationFrontendEvidence": {
+        "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+        "reference": "PROGRESS.md#extension-reservation-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5324,6 +5359,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationFrontendEvidence": {
+        "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+        "reference": "PROGRESS.md#extension-reservation-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5464,6 +5506,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationFrontendEvidence": {
+        "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+        "reference": "PROGRESS.md#extension-reservation-frontend",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
       }
     },
     {
@@ -5533,6 +5582,13 @@
       "extensionRecoveryReadEvidence": {
         "taskId": "CN-EXTENSION-RESERVATION-RECOVERY-READ-001",
         "reference": "PROGRESS.md#extension-reservation-recovery",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "fullTestPlanStatus": "NOT_RUN"
+      },
+      "extensionReservationFrontendEvidence": {
+        "taskId": "CN-EXTENSION-RESERVATION-FE-001",
+        "reference": "PROGRESS.md#extension-reservation-frontend",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"

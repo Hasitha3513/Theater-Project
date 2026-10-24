@@ -1,4 +1,5 @@
 "use client";
+import { ExtensionReservationPanel } from "./extension-reservation";
 import { useEffect, useRef, useState } from "react";
 import {
 	extensionMoney,
@@ -11,6 +12,7 @@ import {
 } from "../lib/extension-preview";
 import { Badge, Button, Card, Field, StateMessage } from "./primitives";
 export type ExtensionBooking = {
+	amendmentPlanning?: { guests: number };
 	id: string;
 	venueId: string;
 	revision: number;
@@ -41,8 +43,9 @@ export function ExtensionPriceSummary({
 	value: ExtensionResult;
 	booking: ExtensionBooking;
 }) {
-	if (v.additionalMinor === undefined || v.additionalMinutes === undefined) return null;
- const p = b.purchase,
+	if (v.additionalMinor === undefined || v.additionalMinutes === undefined)
+		return null;
+	const p = b.purchase,
 		end = new Date(
 			Date.parse(p.sessionEnd) + (v.additionalMinutes ?? 0) * 60000,
 		).toISOString();
@@ -368,6 +371,10 @@ export function BookingExtensionPreview({
 					)}
 				</div>
 			)}
+			<ExtensionReservationPanel
+				booking={b}
+				preview={loadedIdentity === identity ? value : undefined}
+			/>
 		</Card>
 	);
 }

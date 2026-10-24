@@ -57,6 +57,7 @@ def main():
     test_extension_frontend_controls(validator)
     test_extension_recovery_controls(validator)
     test_knowledge_reading_controls(validator)
+    test_reservation_frontend_controls(validator)
 
 
 def test_future_register_controls():
@@ -286,14 +287,14 @@ def test_ci_empty_diff_controls(validator):
     assert not parse('backend/unauthorized.java\n') <= {'knowledge/PROJECT.md'}
     assert not parse('knowledge/execution/evidence/checks.json\n') <= {'knowledge/PROJECT.md'}
     print('PASS unauthorized and protected path classification remains negative')
-    errors = validator['knowledge_reading_successor_errors']()
+    errors = validator['reservation_frontend_successor_errors']()
     assert errors==[], errors
     print('PASS legitimate exact successor documentation admission')
     rb,rt,out = Path.read_bytes,Path.read_text,subprocess.check_output
     for rel in ['knowledge/PROJECT.md','knowledge/execution/requirements.json','knowledge/execution/status.json','scripts/test-governance-controls.py','knowledge/execution/evidence/checks.json']:
         target=ROOT/rel;replacement=rb(target)+b'\nUNAUTHORIZED_PAYLOAD\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['knowledge_reading_successor_errors'](),rel
+            assert validator['reservation_frontend_successor_errors'](),rel
         print('PASS rejected successor changed-payload/protected-history',rel)
     def unknown_path(argv,*a,**kw):
         value=out(argv,*a,**kw)
@@ -303,7 +304,7 @@ def test_ci_empty_diff_controls(validator):
             return text if isinstance(value,str) else text.encode()
         return value
     with patch.object(subprocess,'check_output',unknown_path):
-        assert validator['knowledge_reading_successor_errors'](),'Unauthorized source path accepted'
+        assert validator['reservation_frontend_successor_errors'](),'Unauthorized source path accepted'
     print('PASS rejected unauthorized actual changed-path collection')
     # Model only the unrelated worktree file as its committed CI bytes. All task
     # sources, hashes, real changed paths and unauthorized-file guards remain real.
@@ -328,7 +329,7 @@ def test_extension_frontend_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','backendChanged']:
         value=json.loads(rt(path));value['extensionPreviewFrontend'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['knowledge_reading_successor_errors'](),key
+            assert validator['reservation_frontend_successor_errors'](),key
         print('PASS extension frontend rejected',key)
 
 def test_extension_recovery_controls(validator):
@@ -336,7 +337,7 @@ def test_extension_recovery_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','frontendImplemented','missingReceiptMeansFailed']:
         value=json.loads(rt(path));value['extensionReservationRecoveryRead'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['knowledge_reading_successor_errors'](),key
+            assert validator['reservation_frontend_successor_errors'](),key
         print('PASS extension recovery rejected',key)
 
 def test_knowledge_reading_controls(validator):
@@ -352,7 +353,25 @@ def test_knowledge_reading_controls(validator):
     rb,rt=Path.read_bytes,Path.read_text
     for target,replacement,label in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['knowledge_reading_successor_errors'](),label
+            assert validator['reservation_frontend_successor_errors'](),label
         print('PASS knowledge-reading rejected',label)
+
+def test_reservation_frontend_controls(validator):
+    assert not validator['reservation_frontend_successor_errors']()
+    path=K/'execution/status.json';original=json.loads(path.read_text())
+    faults=[]
+    for key in ['backendChanged','migrationsChanged','financialMutation','fundingCreated','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','automaticCreation','automaticRenewal','missingReceiptMeansFailed','historicalSyntheticCampaignRerun']:
+        value=json.loads(path.read_text());value['extensionReservationFrontend'][key]=True;faults.append((path,json.dumps(value).encode(),key))
+    for key,value in [('complete',False),('reviewedFiles',115),('unresolvedCoverageGaps',['missing'])]:
+        data=json.loads(path.read_text());data['extensionReservationFrontend']['knowledgeReadingLedger'][key]=value;faults.append((path,json.dumps(data).encode(),'reading '+key))
+    target=ROOT/'frontend/lib/extension-reservation.ts';faults.append((target,target.read_bytes()+b'\n// unauthorized payload\n','changed application payload'))
+    target=ROOT/'backend/pom.xml'
+    faults.append((target,target.read_bytes()+b'\n','unrelated backend change'))
+    rb,rt=Path.read_bytes,Path.read_text
+    for target,replacement,label in faults:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
+            assert validator['reservation_frontend_successor_errors'](),label
+        print('PASS reservation frontend rejected',label)
+    print('PASS reservation frontend exact successor; historical positive/negative controls retained')
 
 if __name__ == '__main__': main()
