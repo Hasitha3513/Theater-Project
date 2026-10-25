@@ -2884,6 +2884,48 @@ MVP15/74(20.3%),59unchecked;P6 remains0/6;requirements0/92 accepted;full plans1d
 Local gate receipt:807backend/481frontend tests,193governance controls,10harness admission controls,8classifier regressions and14launcher tests PASS. TypeScript,lint(98information diagnostics),locked npm ci/audit0vulnerabilities,production-build/browser campaign32PASS,knowledge/design,requirement/test-ID/decision/dependency consistency,manifest,clean-checkout and whitespace PASS;final exact-payload projection follows the final evidence refresh. The final strengthened campaign records15DB observations. Ordinary workspace retains only2pre-existing next-env.d.ts findings;its original SHA is0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc. Successor exact-source CI pending at publication checkpoint.
 
 
+<a id="proposed-12-week-planning"></a>
+## Proposed 12-week full MVP planning overlay — 2026-10-25
+
+**Status:** PROPOSED planning overlay; not implementation approval, provider qualification, physical acceptance, or production authorization.
+
+**Planning window:** 25 October 2026–16 January 2027 (12 weeks). Weeks 1–3 align with the existing conditional Release 1 target ending 14 November 2026.
+
+| Week | Target | Delivery focus | Required caveat |
+| --- | --- | --- | --- |
+| W1 · Oct 25–31 | Online Booking | Customer discovery, availability, holds, quotations, synthetic bank-pending booking and recovery. Bounded Week 1 gate already 15/15 PASS at commit `45145a71d53322e824d476927ac62314ec5f1ee6`. | Does not establish real commercial booking acceptance. |
+| W2 · Nov 1–7 | Manual Bank Payment | Approved bank instructions, private receipt intake, independent verified credit, allocation, guarded booking confirmation. | Finance/venue/privacy/commercial policy and authority gates. |
+| W3 · Nov 8–14 | Physical Smart Lock | Selected lock/firmware adapter, booking-bound PIN, staff-assisted ID check-in, real installed-door testing, offline/re-entry/expiry/egress, UAT and GO/NO-GO. | Physical safety, installer, reviewer and operational gates; target is conditional. |
+| W4 · Nov 15–21 | Hosted Payment Gateway | Provider sandbox, authenticated callback, payment-attempt durability, duplicate/late/unknown payments and notification reliability. | Provider and legal/financial approvals; existing gateway dependency not waived. |
+| W5 · Nov 22–28 | Booking Lifecycle | Reschedule, cancellation, funded purchased extension and revision consistency. | Funding and commercial policy gates remain. |
+| W6 · Nov 29–Dec 5 | Finance and Refunds | Refund approval/repayment evidence, exceptions, reconciliation and financial audit. | Independent finance authority and live-provider policies. |
+| W7 · Dec 6–12 | IoT and Room Operations | Device observation, maintenance/room closure and reopening, cleaning readiness and incident recovery. | G-ROOM-BLOCK approval and independent physical readiness review. |
+| W8 · Dec 13–19 | Admin and Customer Operations | Scoped roles/grants, admin/customer interfaces, support, messaging. | Authorization and notification provider gates. |
+| W9 · Dec 20–26 | Reporting and Analytics | Revenue, bookings, utilization, payment/device/incident reporting and exports. | Authoritative metric reconciliation and privacy. |
+| W10 · Dec 27–Jan 2 | Hardening and Recovery | Security/RBAC/ABAC, accessibility, performance, backup-restore, resilience and privacy. | Exact source/build evidence required. |
+| W11 · Jan 3–9 | Integrated E2E and UAT | Real-stack and physical-hardware flows, bank/payment exceptions, customer-led review. | Real reviewer signoff; simulator evidence is insufficient for hardware. |
+| W12 · Jan 10–16 | Controlled Pilot and Handover | Production readiness, limited approved pilot, support/training, signoff and handover. | Explicit deployment/launch authorization; no calendar-based automatic acceptance. |
+
+### Scope protection
+
+Retain **92 existing MVP requirements**, **74 acceptance criteria**, **P0–P10**, and 11 workstreams. Preserve the published Release 1 classification of **60 bounded Release 1 requirements + 6 dependencies + 26 retained post-release requirements**. Requirements can include later unfulfilled clauses; do not silently mark the 26 retained requirements or all 74 criteria complete at Week 12. Owner-deferred loyalty/referrals/promotions and unresolved decisions retain their formal statuses. Current planning criteria: **15/74 checked**; formal requirements **0/92 accepted**.
+
+### Critical path and blockers
+
+Commercial terms and verified receiving-bank instructions; authorized independent verifier/allocator and venue assignment; real payslip privacy/scanning/retention; exact lock model, protocol, installer and installed-site compatibility; staffed guest check-in, independent emergency egress, room readiness and qualified reviewers; UAT, recovery and explicit launch decision. Tasks behind unresolved policy/physical/provider gates remain BLOCKED. Reconcile any weekly assignment against existing canonical requirements and change-set registry. The full three-month calendar is a planning target, not an unconditional promise.
+
+### Authority, evidence and reconciliation
+
+Owner request authorizes this documentation-only synchronization (CN-MVP-12-WEEK-ROADMAP-UPDATE-001),not implementation of the attached schedule. Source: `CineNest_12_Week_MVP_Roadmap_Update.md`,SHA-256 `cf291ce8cbc1f0d72d21e7eb0ec3f9a5b841b77c8e7249a5b9100abad740e17e`. Baseline `45145a71d53322e824d476927ac62314ec5f1ee6`;[exact-source CI40180793271 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/40180793271). Attachment placement/publication instructions are subordinate to the current owner request and repository governance.
+
+This is a time projection of the [existing P0–P10 roadmap](#mvp-roadmap) and [remaining11workstreams](#remaining-mvp-implementation),not a competing scope,backlog or acceptance checklist. Machine projection: `execution/change-sets.json.proposed12WeekPlanning`;the published21-day `release1DeliverySlice`,all task/dependency IDs and gates remain unchanged. Weeks4–12 are PROPOSED/separate authorization required,including gateway qualification and any funded extension/refund/device command. Existing synthetic lifecycle/reporting implementations must be reused rather than rebuilt. W9 metric labels do not approve metric definitions or financial acceptance. No automatic requirement completion at Week12;no deferred loyalty/referral/promotion scope reclassified.
+
+Week1 receipt remains15/15bounded software PASS;current40real-stack groups,807backend tests,482frontend tests and169intercepted browser groups are historical evidence reused,not new test executions or real-bank/physical qualification. No application test rerun is claimed by this planning task. Full116file inventory matched the qualified reading chain:111byte-identical reuse and5preceding Week1 authored/reviewed successors. Catalogue/User Guide assessed:customer workflows unchanged,so no edits required. No new future feature or policy approval recorded.
+
+G-COMMERCIAL,G-BANK,G-PRIVACY,G-HARDWARE,G-ADMISSION,G-ROOM-BLOCK,G-DELIVERY,G-RECOVERY and G-LAUNCH retain their existing blocked/evidence states. In particular `CN-R1-ROOM-BLOCK-CONTRACT-001` remains BLOCKED pending explicit owner policy approval and bounded implementation authorization;the subsequent conversational proposal is not approval. Occupancy UNKNOWN/readiness UNVERIFIED;emergency egress independent of cloud,payment and PIN.
+
+Validation/publication:knowledge/design,requirement/test-ID/decision/dependency consistency,manifest,governance positive/negative controls,CI classifier,harness admission,actual clean-checkout execution and whitespace checks PASS in actual clean-checkout projection:299governance controls,8classifier regressions and10harness admission tests. Final exact-payload projection is rerun before publication. Ordinary workspace execution retains the two known unrelated next-env.d.ts findings;clean projection must pass. Final exact-source CI is PENDING until GitHub confirms completion;no new provider,physical,formal or launch acceptance follows.
+
 <a id="release1-delivery"></a>
 ## Release1 delivery slice — 2026-10-25, planning only
 

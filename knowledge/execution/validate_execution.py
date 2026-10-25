@@ -6933,5 +6933,72 @@ def inert_ci_main():
     if result==0:print('PASS exact bounded Week1 gate;history,source,92requirements74criteria,financial/physical and formal acceptance preserved')
     return result
 
+
+# CN-MVP-12-WEEK-ROADMAP-UPDATE-001: exact documentation successor only.
+roadmap12_prior_main=inert_ci_main
+ROADMAP12_BASELINE='45145a71d53322e824d476927ac62314ec5f1ee6'
+ROADMAP12_HASHES={'knowledge/PROGRESS.md': '823c9de75a0f9a72e25dd9d15bc70e402f5ed9cbb16a686187c8da5d03a2efb2', 'knowledge/execution/status.json': '3466469a517a466056e7fe34a1079e01eba9d4aebb0f0be453ebd757a4afbae0', 'knowledge/execution/change-sets.json': 'de651858adc27f89e2606e06582ba131c6a2a2d7ba0af70dc9d07e5a2879cbba', 'scripts/test-governance-controls.py': '8461f37a57b97f4b3ab03a999ea5fbc868a67ad0596e0655b40de3337e739806'}
+
+def roadmap12_planning_errors(p):
+    errors=[]
+    if p.get('status')!='PROPOSED_PLANNING_ONLY' or p.get('requirementsCount')!=92 or p.get('criteriaCount')!=74 or p.get('workstreamsCount')!=11 or p.get('checkedCriteria')!=15 or p.get('acceptedRequirements')!=0:errors.append('Roadmap12 scope/acceptance drift')
+    if p.get('release1Classification')!={'boundedRequirements':60,'dependencies':6,'retainedPostRelease':26}:errors.append('Roadmap12 release classification changed')
+    if p.get('startDate')!='2026-10-25' or p.get('endDate')!='2027-01-16' or p.get('release1Target')!='2026-11-14':errors.append('Roadmap12 target drift')
+    for key in ['implementationAuthorized','launchAuthorized','release1PlanChanged']:
+        if p.get(key) is not False:errors.append('Roadmap12 unauthorized '+key)
+    rows=p.get('weeks',[])
+    if len(rows)!=12 or [r.get('week') for r in rows]!=list(range(1,13)):errors.append('Roadmap12 missing week')
+    for row in rows:
+        expected='EXISTING_CONDITIONAL_RELEASE1_PLAN' if row.get('week',99)<=3 else 'PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED'
+        if row.get('status')!=expected or not all(row.get(k) for k in ['label','target','focus','caveat']):errors.append('Roadmap12 week authority/caveat missing')
+    return errors
+
+def roadmap12_successor_errors():
+    errors=[]
+    def prior(n):return subprocess.check_output(['git','-C',str(R),'show',ROADMAP12_BASELINE+':'+n])
+    for n,h in ROADMAP12_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Roadmap12 exact authorized payload mismatch '+n)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Roadmap12 historical validator changed')
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('proposed12WeekRoadmapUpdate',{})
+    if s!=json.loads(prior('knowledge/execution/status.json')):errors.append('Roadmap12 historical status/evidence changed')
+    if e.get('baseline')!=ROADMAP12_BASELINE or e.get('policyStatus')!='PROPOSED_NOT_APPROVED' or any(e.get(k) is not False for k in ['applicationChanged','migrationChanged','acceptanceChanged','release1Changed']):errors.append('Roadmap12 receipt authority exceeded')
+    c=json.loads((K/'execution/change-sets.json').read_text());p=c.pop('proposed12WeekPlanning',{})
+    errors.extend(roadmap12_planning_errors(p))
+    if c!=json.loads(prior('knowledge/execution/change-sets.json')):errors.append('Roadmap12 existing tasks/dependencies/Release1 plan changed')
+    if e.get('sourceSha256')!=p.get('sourceSha256'):errors.append('Roadmap12 source mismatch')
+    text=(K/'PROGRESS.md').read_text();start='<a id="proposed-12-week-planning"></a>';stop='<a id="release1-delivery"></a>'
+    if text.count(start)!=1 or text.count(stop)!=1 or text.split(start)[0]+stop+text.split(stop,1)[1]!=prior('knowledge/PROGRESS.md').decode():errors.append('Roadmap12 historical prose/criteria/21day plan changed')
+    owned=set(ROADMAP12_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',ROADMAP12_BASELINE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=prior(n):errors.append('Roadmap12 protected source/history changed '+n)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',ROADMAP12_BASELINE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Roadmap12 unauthorized files')
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Roadmap12 manifest authority changed')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=roadmap12_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    owned=set(ROADMAP12_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',ROADMAP12_BASELINE+':'+n]) for n in owned};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in owned];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=roadmap12_prior_main()
+    if result==0:print('PASS exact proposed12week planning successor;original92requirements74criteria,P0-P10,21day Release1,history,decisions and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

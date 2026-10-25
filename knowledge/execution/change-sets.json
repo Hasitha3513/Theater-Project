@@ -6571,5 +6571,125 @@
       }
     },
     "evidencePath": "PROGRESS.md#release1-booking-journey"
+  },
+  "proposed12WeekPlanning": {
+    "taskId": "CN-MVP-12-WEEK-ROADMAP-UPDATE-001",
+    "status": "PROPOSED_PLANNING_ONLY",
+    "canonicalLocation": "knowledge/PROGRESS.md#proposed-12-week-planning",
+    "sourceSha256": "cf291ce8cbc1f0d72d21e7eb0ec3f9a5b841b77c8e7249a5b9100abad740e17e",
+    "startDate": "2026-10-25",
+    "endDate": "2027-01-16",
+    "release1Target": "2026-11-14",
+    "weeks": [
+      {
+        "week": 1,
+        "label": "W1 \u00b7 Oct 25\u201331",
+        "target": "Online Booking",
+        "focus": "Customer discovery, availability, holds, quotations, synthetic bank-pending booking and recovery. Bounded Week 1 gate already 15/15 PASS at commit `45145a71d53322e824d476927ac62314ec5f1ee6`.",
+        "caveat": "Does not establish real commercial booking acceptance.",
+        "status": "EXISTING_CONDITIONAL_RELEASE1_PLAN"
+      },
+      {
+        "week": 2,
+        "label": "W2 \u00b7 Nov 1\u20137",
+        "target": "Manual Bank Payment",
+        "focus": "Approved bank instructions, private receipt intake, independent verified credit, allocation, guarded booking confirmation.",
+        "caveat": "Finance/venue/privacy/commercial policy and authority gates.",
+        "status": "EXISTING_CONDITIONAL_RELEASE1_PLAN"
+      },
+      {
+        "week": 3,
+        "label": "W3 \u00b7 Nov 8\u201314",
+        "target": "Physical Smart Lock",
+        "focus": "Selected lock/firmware adapter, booking-bound PIN, staff-assisted ID check-in, real installed-door testing, offline/re-entry/expiry/egress, UAT and GO/NO-GO.",
+        "caveat": "Physical safety, installer, reviewer and operational gates; target is conditional.",
+        "status": "EXISTING_CONDITIONAL_RELEASE1_PLAN"
+      },
+      {
+        "week": 4,
+        "label": "W4 \u00b7 Nov 15\u201321",
+        "target": "Hosted Payment Gateway",
+        "focus": "Provider sandbox, authenticated callback, payment-attempt durability, duplicate/late/unknown payments and notification reliability.",
+        "caveat": "Provider and legal/financial approvals; existing gateway dependency not waived.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      },
+      {
+        "week": 5,
+        "label": "W5 \u00b7 Nov 22\u201328",
+        "target": "Booking Lifecycle",
+        "focus": "Reschedule, cancellation, funded purchased extension and revision consistency.",
+        "caveat": "Funding and commercial policy gates remain.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      },
+      {
+        "week": 6,
+        "label": "W6 \u00b7 Nov 29\u2013Dec 5",
+        "target": "Finance and Refunds",
+        "focus": "Refund approval/repayment evidence, exceptions, reconciliation and financial audit.",
+        "caveat": "Independent finance authority and live-provider policies.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      },
+      {
+        "week": 7,
+        "label": "W7 \u00b7 Dec 6\u201312",
+        "target": "IoT and Room Operations",
+        "focus": "Device observation, maintenance/room closure and reopening, cleaning readiness and incident recovery.",
+        "caveat": "G-ROOM-BLOCK approval and independent physical readiness review.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      },
+      {
+        "week": 8,
+        "label": "W8 \u00b7 Dec 13\u201319",
+        "target": "Admin and Customer Operations",
+        "focus": "Scoped roles/grants, admin/customer interfaces, support, messaging.",
+        "caveat": "Authorization and notification provider gates.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      },
+      {
+        "week": 9,
+        "label": "W9 \u00b7 Dec 20\u201326",
+        "target": "Reporting and Analytics",
+        "focus": "Revenue, bookings, utilization, payment/device/incident reporting and exports.",
+        "caveat": "Authoritative metric reconciliation and privacy.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      },
+      {
+        "week": 10,
+        "label": "W10 \u00b7 Dec 27\u2013Jan 2",
+        "target": "Hardening and Recovery",
+        "focus": "Security/RBAC/ABAC, accessibility, performance, backup-restore, resilience and privacy.",
+        "caveat": "Exact source/build evidence required.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      },
+      {
+        "week": 11,
+        "label": "W11 \u00b7 Jan 3\u20139",
+        "target": "Integrated E2E and UAT",
+        "focus": "Real-stack and physical-hardware flows, bank/payment exceptions, customer-led review.",
+        "caveat": "Real reviewer signoff; simulator evidence is insufficient for hardware.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      },
+      {
+        "week": 12,
+        "label": "W12 \u00b7 Jan 10\u201316",
+        "target": "Controlled Pilot and Handover",
+        "focus": "Production readiness, limited approved pilot, support/training, signoff and handover.",
+        "caveat": "Explicit deployment/launch authorization; no calendar-based automatic acceptance.",
+        "status": "PROPOSED_SEPARATE_AUTHORIZATION_REQUIRED"
+      }
+    ],
+    "requirementsCount": 92,
+    "criteriaCount": 74,
+    "workstreamsCount": 11,
+    "checkedCriteria": 15,
+    "acceptedRequirements": 0,
+    "release1Classification": {
+      "boundedRequirements": 60,
+      "dependencies": 6,
+      "retainedPostRelease": 26
+    },
+    "implementationAuthorized": false,
+    "launchAuthorized": false,
+    "release1PlanChanged": false
   }
 }
