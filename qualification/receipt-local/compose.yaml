@@ -1,0 +1,56 @@
+# Explicit opt-in local qualification only. Runner supplies unique project and secrets.
+services:
+  storage:
+    image: chrislusf/seaweedfs:4.50@sha256:c2658820e763294a9e9de7b36c81e59b879e3459148351aee4e31a126ca64860
+    command: [server, -dir=/data, -ip=storage, -ip.bind=0.0.0.0, -s3, -s3.config=/run/secrets/s3.json, -volume.max=1, -master.volumeSizeLimitMB=128]
+    volumes: [objects:/data, '${QUAL_RUN}/s3.json:/run/secrets/s3.json:ro']
+    ports: ['127.0.0.1::8333']
+    networks: [host_test]
+    cpus: 1
+    mem_limit: 1g
+    pids_limit: 128
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, 'http://127.0.0.1:9333/cluster/status']
+      interval: 3s
+      timeout: 2s
+      retries: 30
+  scanner:
+    image: clamav/clamav:1.5.4@sha256:e19130cdebaeacc71fa46eab3ed6f69941f2f22aa5e08d55e9197f8edf43ce5e
+    environment:
+      CLAMAV_NO_FRESHCLAMD: 'true'
+    volumes: [signatures:/var/lib/clamav]
+    networks: [private]
+    cpus: 2
+    mem_limit: 4g
+    pids_limit: 128
+    healthcheck:
+      test: [CMD, clamdcheck.sh]
+      interval: 5s
+      timeout: 3s
+      retries: 60
+  database:
+    image: postgres:18.6@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
+    environment:
+      POSTGRES_DB: receipt_qualification
+      POSTGRES_USER: qualification
+      POSTGRES_PASSWORD: '${QUAL_DB_PASSWORD}'
+    volumes: [database:/var/lib/postgresql]
+    ports: ['127.0.0.1::5432']
+    networks: [host_test]
+    cpus: 1
+    mem_limit: 512m
+    pids_limit: 128
+    healthcheck:
+      test: [CMD, pg_isready, -U, qualification, -d, receipt_qualification]
+      interval: 3s
+      timeout: 2s
+      retries: 30
+networks:
+  private:
+    internal: true
+  host_test:
+    driver: bridge
+volumes:
+  objects:
+  signatures:
+  database:

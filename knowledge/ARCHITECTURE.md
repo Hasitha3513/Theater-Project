@@ -2659,3 +2659,7 @@ Explicit existing bank CREATE alone calls bind in the same transaction as hold c
 Read observation uses read-only repeatable-read;fresh REQUIRES_NEW audit transaction checks eligibility,current grant and membership locks before successful disclosure. Revocation between snapshot and audit denies without data. Mandatory audit failure returns503;no successful log fallback. Reads mutate only protected audit,not domain state. Old/revoked instruction metadata never silently replaces the bound version. Full publication/suspension/customer-correction commands remain excluded.
 
 Rollback:disable new feature/read paths first,retain V26,bindings,revision/audit history and compatible application classpath;normal scoped revert/forward fix only,no destructive down migration. This scope does not qualify real accounts/storage/scanning/banking or commercial confirmation. [Verification](PROGRESS.md#staging-bank-instructions),[presentation](DESIGN.md#staging-bank-instructions).
+
+
+## Local-only receipt qualification boundary
+Payments test-only `LocalReceiptQualificationTest` and `scripts/verify-local-receipts.py` use pinned SeaweedFS/ClamAV/PostgreSQL Compose services. Existing UUID-only storage port and concrete synthetic scanner remain unchanged;version receipts and scanner outcomes exist only in test scope. No production implementation or AWS/KMS qualification. Exact scope,network/recovery limits and actual evidence: [progress](PROGRESS.md#local-receipt-qualification).

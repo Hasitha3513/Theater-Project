@@ -24514,5 +24514,71 @@
       "768": "c5625e0f6b2455e30251eb3c4676635e892a4ec54f663520dfd08d6858133bad",
       "1280": "cc0ce486ee2a40d97224ecd76773bffd39f04ce02fcf3dafc7d839550537f954"
     }
+  },
+  "localReceiptQualification": {
+    "taskId": "CN-R1-PAYSLIP-LOCAL-QUALIFICATION-001",
+    "baseline": "337c0baae6e30c233df41577a5d1e82e27da6bb9",
+    "scope": "LOCAL_CONTAINERS_SYNTHETIC_ONLY",
+    "authority": "owner attachment3b01d8e7-1510-4bca-b776-2b2dbc6904ef",
+    "awsQualified": false,
+    "applicationChanged": false,
+    "migrationChanged": false,
+    "runtimeGrantsAssigned": false,
+    "realDocumentsProcessed": false,
+    "formalAcceptanceChanged": false,
+    "historicalCampaignRerun": false,
+    "requirementIds": [
+      "PR-BANK-001",
+      "CN-C10",
+      "BP-AC04",
+      "BP-AC08",
+      "CN-NFR-02"
+    ],
+    "evidence": {
+      "source": "337c0baae6e30c233df41577a5d1e82e27da6bb9",
+      "scope": "LOCAL_CONTAINERS_SYNTHETIC_ONLY",
+      "awsQualified": false,
+      "scanner": "ClamAV 1.5.4/28164/Sun Oct 25 06:24:12 2026",
+      "results": [
+        "LOCAL_RECEIPT_PASS private-upload-version-sha256",
+        "LOCAL_RECEIPT_PASS anonymous-denied",
+        "LOCAL_RECEIPT_PASS exact-old-version-restoration",
+        "LOCAL_RECEIPT_PASS tamper-denied",
+        "LOCAL_RECEIPT_PASS lost-response-rollback-idempotent-recovery",
+        "LOCAL_RECEIPT_PASS changed-payload-replay-rejected",
+        "LOCAL_RECEIPT_PASS real-clamav-clean-image",
+        "LOCAL_RECEIPT_PASS real-clamav-eicar-preview-denied",
+        "LOCAL_RECEIPT_PASS oversized-malformed-preview-denied",
+        "LOCAL_RECEIPT_PASS stale-signatures-denied",
+        "LOCAL_RECEIPT_PASS storage-restart-version-persistence",
+        "LOCAL_RECEIPT_PASS scanner-timeout-fail-closed",
+        "LOCAL_RECEIPT_PASS scanner-unavailable-fail-closed",
+        "LOCAL_RECEIPT_PASS controlled-version-cleanup",
+        "LOCAL_RECEIPT_PASS isolated-db-no-financial-booking-access-schema",
+        "LOCAL_RECEIPT_PASS database-restart-receipt-audit-persistence"
+      ],
+      "status": "PASS",
+      "cleanupVerified": true,
+      "sourceHashes": {
+        "scripts/verify-local-receipts.py": "ad7790ab3348b5049b9e2b9250b6834f7ef34dbee0ccccc83d67b30e5092899d",
+        "qualification/receipt-local/compose.yaml": "549610ed668ee5fda99e063a5d295837878e75b3eff97e838543310eed591c19",
+        "backend/src/test/java/com/cinenest/payments/internal/LocalReceiptQualificationTest.java": "5804b09f8d552d86b9711dabf50c94137cab11130f8333fe60d88639de613746"
+      }
+    },
+    "tests": {
+      "backendPassed": 820,
+      "backendOptInSkipped": 1,
+      "frontend": 497,
+      "classifier": 8,
+      "harness": 11,
+      "launchers": 14
+    },
+    "remainingGates": [
+      "G-PRIVACY",
+      "G-BANK",
+      "G-COMMERCIAL",
+      "G-HARDWARE",
+      "G-LAUNCH"
+    ]
   }
 }

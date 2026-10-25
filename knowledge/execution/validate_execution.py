@@ -7204,5 +7204,73 @@ def inert_ci_main():
     if result==0:print('PASS exact bank-instructions real-stack test/evidence successor;application,migrations,decisions and acceptance unchanged')
     return result
 
+
+# Exact synthetic-only local adapter qualification successor; no runtime/migration admission.
+local_receipt_prior_main=inert_ci_main
+LQ_BASE='337c0baae6e30c233df41577a5d1e82e27da6bb9'
+LQ_HASHES={'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptQualificationTest.java': '5804b09f8d552d86b9711dabf50c94137cab11130f8333fe60d88639de613746', 'qualification/receipt-local/compose.yaml': '549610ed668ee5fda99e063a5d295837878e75b3eff97e838543310eed591c19', 'scripts/verify-local-receipts.py': 'ad7790ab3348b5049b9e2b9250b6834f7ef34dbee0ccccc83d67b30e5092899d', 'scripts/test-governance-controls.py': '462b9fcd28e6712c5b9da9e20bb7fad4abdfa599ebb663d5dbf1b3674e47666c', 'knowledge/PROGRESS.md': '8e16d14f4276424b0018a663a84889464265eccd29cafe4d564c4e4ba9eab7cc', 'knowledge/ARCHITECTURE.md': '3e1169f82edb4c757d3edf85a2f506d06fc659edac5ade436c04fe1aafcac92d', 'knowledge/execution/status.json': '677d9b633d8200c68af4d8f42ced84874935c671c15e2916e0d4e361bcd541a5', 'knowledge/product/FEATURE_CATALOG.md': '8f9152aba613ecc54e7ff1e17ce3e1e1a7a53c0697154418037f170d282ba9f1', 'knowledge/guides/USER_GUIDE.md': '9f6e0efbce10f3e9a374989949e56fd24fe0e1c8c30c7f651f27c30adc2c5a52'}
+
+def local_receipt_errors(e):
+    errors=[]
+    if e.get('baseline')!=LQ_BASE or e.get('scope')!='LOCAL_CONTAINERS_SYNTHETIC_ONLY':errors.append('Local receipt scope missing')
+    for k in ['awsQualified','applicationChanged','migrationChanged','runtimeGrantsAssigned','realDocumentsProcessed','formalAcceptanceChanged','historicalCampaignRerun']:
+        if e.get(k) is not False:errors.append('Local receipt boundary drift '+k)
+    run=e.get('evidence',{})
+    if run.get('cleanupVerified') is not True or run.get('status')!='PASS' or len(run.get('results',[]))!=16:errors.append('Local qualification evidence incomplete')
+    if run.get('awsQualified') is not False or run.get('source')!=LQ_BASE:errors.append('Local/provider evidence confused')
+    for n,h in run.get('sourceHashes',{}).items():
+        if LQ_HASHES.get(n)!=h:errors.append('Local executed-source mismatch '+n)
+    if len(run.get('sourceHashes',{}))!=3:errors.append('Local source coverage missing')
+    return errors
+
+def local_receipt_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',LQ_BASE+':'+n])
+    errors=[];owned=set(LQ_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in LQ_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Local receipt exact successor mismatch '+n)
+    if errors:return errors
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('localReceiptQualification',{});errors.extend(local_receipt_errors(e))
+    if s!=json.loads(before('knowledge/execution/status.json')):errors.append('Local receipt historical status drift')
+    for n in ['knowledge/PROGRESS.md','knowledge/ARCHITECTURE.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        if not (R/n).read_bytes().startswith(before(n)):errors.append('Local receipt historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',LQ_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Local receipt unowned source drift '+n)
+    folder=R/'backend/src/main/resources/db/migration'
+    if {x.relative_to(R).as_posix() for x in folder.glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('Local receipt migration scope exceeded')
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Local receipt unauthorized new source')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',LQ_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Local receipt unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Local receipt historical validator drift')
+    expected=json.loads(before('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('Local receipt manifest drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=local_receipt_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    owned=set(LQ_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',LQ_BASE],text=True),nul=True);added=owned-tracked
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',LQ_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            exclude=added if 'ls-files' in argv else owned;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in exclude];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**k):return (x for x in g0(p,*a,**k) if x not in {R/n for n in added})
+    def rglob(p,*a,**k):return (x for x in rg0(p,*a,**k) if x not in {R/n for n in added})
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=local_receipt_prior_main()
+    if result==0:print('PASS exact local receipt qualification successor;runtime,migrations,history and acceptance unchanged')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
