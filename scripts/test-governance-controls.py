@@ -63,6 +63,7 @@ def main():
     test_release1_controls(validator)
     test_release1_day2_controls(validator)
     test_r1_recovery_controls(validator)
+    test_week1_controls(validator)
 
 
 def test_future_register_controls():
@@ -292,14 +293,14 @@ def test_ci_empty_diff_controls(validator):
     assert not parse('backend/unauthorized.java\n') <= {'knowledge/PROJECT.md'}
     assert not parse('knowledge/execution/evidence/checks.json\n') <= {'knowledge/PROJECT.md'}
     print('PASS unauthorized and protected path classification remains negative')
-    errors = validator['r1_recovery_successor_errors']()
+    errors = validator['week1_successor_errors']()
     assert errors==[], errors
     print('PASS legitimate exact successor documentation admission')
     rb,rt,out = Path.read_bytes,Path.read_text,subprocess.check_output
     for rel in ['knowledge/PROJECT.md','knowledge/execution/requirements.json','knowledge/execution/status.json','scripts/test-governance-controls.py','knowledge/execution/evidence/checks.json']:
         target=ROOT/rel;replacement=rb(target)+b'\nUNAUTHORIZED_PAYLOAD\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),rel
+            assert validator['week1_successor_errors'](),rel
         print('PASS rejected successor changed-payload/protected-history',rel)
     def unknown_path(argv,*a,**kw):
         value=out(argv,*a,**kw)
@@ -309,7 +310,7 @@ def test_ci_empty_diff_controls(validator):
             return text if isinstance(value,str) else text.encode()
         return value
     with patch.object(subprocess,'check_output',unknown_path):
-        assert validator['r1_recovery_successor_errors'](),'Unauthorized source path accepted'
+        assert validator['week1_successor_errors'](),'Unauthorized source path accepted'
     print('PASS rejected unauthorized actual changed-path collection')
     # Model only the unrelated worktree file as its committed CI bytes. All task
     # sources, hashes, real changed paths and unauthorized-file guards remain real.
@@ -334,7 +335,7 @@ def test_extension_frontend_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','backendChanged']:
         value=json.loads(rt(path));value['extensionPreviewFrontend'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),key
+            assert validator['week1_successor_errors'](),key
         print('PASS extension frontend rejected',key)
 
 def test_extension_recovery_controls(validator):
@@ -342,7 +343,7 @@ def test_extension_recovery_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','frontendImplemented','missingReceiptMeansFailed']:
         value=json.loads(rt(path));value['extensionReservationRecoveryRead'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),key
+            assert validator['week1_successor_errors'](),key
         print('PASS extension recovery rejected',key)
 
 def test_knowledge_reading_controls(validator):
@@ -358,11 +359,11 @@ def test_knowledge_reading_controls(validator):
     rb,rt=Path.read_bytes,Path.read_text
     for target,replacement,label in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),label
+            assert validator['week1_successor_errors'](),label
         print('PASS knowledge-reading rejected',label)
 
 def test_reservation_frontend_controls(validator):
-    assert not validator['r1_recovery_successor_errors']()
+    assert not validator['week1_successor_errors']()
     path=K/'execution/status.json';original=json.loads(path.read_text())
     faults=[]
     for key in ['backendChanged','migrationsChanged','financialMutation','fundingCreated','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','automaticCreation','automaticRenewal','missingReceiptMeansFailed','historicalSyntheticCampaignRerun']:
@@ -375,7 +376,7 @@ def test_reservation_frontend_controls(validator):
     rb,rt=Path.read_bytes,Path.read_text
     for target,replacement,label in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),label
+            assert validator['week1_successor_errors'](),label
         print('PASS reservation frontend rejected',label)
     print('PASS reservation frontend exact successor; historical positive/negative controls retained')
 
@@ -413,29 +414,29 @@ def test_knowledge_traceability_controls(validator):
     for key in ['applicationChanged','migrationsChanged','businessPolicyChanged','decisionsApproved','acceptanceChanged','historicalEvidenceChanged','extensionFundingStarted','fullCampaignRerun']:
         value=json.loads(path.read_text());value['knowledgeTraceabilityReconciliation'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),key
+            assert validator['week1_successor_errors'](),key
         print('PASS traceability rejected scope',key)
 
 
 def test_extension_reservation_e2e_controls(validator):
-    assert not validator['r1_recovery_successor_errors']()
+    assert not validator['week1_successor_errors']()
     print('PASS extension E2E exact successor positive')
     path=K/'execution/status.json';rb,rt=Path.read_bytes,Path.read_text
     for key in ['fundingCreated','allocationChanged','purchasedRevisionChanged','accessChanged','grantsAssigned','acceptanceChanged','migrationsChanged']:
         data=json.loads(rt(path));data['extensionReservationE2E'][key]=True;payload=json.dumps(data).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:payload if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:payload.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),key
+            assert validator['week1_successor_errors'](),key
         print('PASS extension E2E rejected',key)
     for name in ['frontend/lib/extension-preview-backend.ts','frontend/lib/extension-reservation-backend.ts','backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql']:
         target=ROOT/name;payload=rb(target)+b'\nUNAUTHORIZED\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:payload if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:payload.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),name
+            assert validator['week1_successor_errors'](),name
         print('PASS extension E2E rejected changed source/migration',name)
 
 def test_release1_controls(validator):
     import copy
-    assert not validator['r1_recovery_successor_errors']()
-    plan=validator['r1_day2_planning_projection'](validator['r1_recovery_planning_projection'](json.loads((K/'execution/change-sets.json').read_text())['release1DeliverySlice']))
+    assert not validator['week1_successor_errors']()
+    plan=validator['r1_day2_planning_projection'](validator['r1_recovery_planning_projection'](validator['week1_planning_projection'](json.loads((K/'execution/change-sets.json').read_text())['release1DeliverySlice'])))
     check=validator['release1_plan_errors']
     assert check(plan)==[]
     print('PASS Release1 exact planning successor,92IDs21days and blocked real-world gates')
@@ -465,12 +466,12 @@ def test_release1_controls(validator):
         target=ROOT/name;faults.append((target,target.read_bytes()+b'\n','protected '+name))
     for target,replacement,name in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),name
+            assert validator['week1_successor_errors'](),name
         print('PASS Release1 rejected',name)
 
 def test_release1_day2_controls(validator):
     import copy
-    assert not validator['r1_recovery_successor_errors']()
+    assert not validator['week1_successor_errors']()
     value=json.loads((K/'execution/status.json').read_text())['release1BookingJourney']
     check=validator['r1_day2_evidence_errors'];assert check(value)==[]
     print('PASS Release1 Day2 exact real-stack37PASS successor and pending-state proof')
@@ -499,12 +500,12 @@ def test_release1_day2_controls(validator):
     for name in ['backend/src/main/java/com/cinenest/payments/internal/BankService.java','frontend/lib/bank-backend.ts','backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql','knowledge/decisions/cinenest-open-decisions.json']:
         target=ROOT/name;replacement=rb(target)+b'\nUNAUTHORIZED\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['r1_recovery_successor_errors'](),name
+            assert validator['week1_successor_errors'](),name
         print('PASS Release1 Day2 rejected protected',name)
 
 def test_r1_recovery_controls(validator):
     import copy
-    assert validator['r1_recovery_successor_errors']()==[]
+    assert validator['week1_successor_errors']()==[]
     receipt=json.loads((K/'execution/status.json').read_text())['release1CustomerRecovery']
     check=validator['r1_recovery_evidence_errors'];assert check(receipt)==[]
     print('PASS exact real-stack customer recovery40PASS successor')
@@ -534,7 +535,28 @@ def test_r1_recovery_controls(validator):
     for name in ['frontend/components/bank-handoff.tsx','backend/src/main/java/com/cinenest/payments/internal/BankService.java','backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql','knowledge/decisions/cinenest-open-decisions.json']:
         path=ROOT/name;changed=rb(path)+b'\nUNAUTHORIZED\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**k:changed if p==path else rb(p,*a,**k)),patch.object(Path,'read_text',lambda p,*a,**k:changed.decode() if p==path else rt(p,*a,**k)):
-            assert validator['r1_recovery_successor_errors'](),name
+            assert validator['week1_successor_errors'](),name
         print('PASS recovery rejected protected',name)
+
+def test_week1_controls(validator):
+    import copy
+    assert validator['week1_successor_errors']()==[]
+    value=json.loads((K/'execution/status.json').read_text())['release1Week1Gate'];check=validator['week1_evidence_errors'];assert check(value)==[]
+    print('PASS bounded Week1 exact-source gate evidence')
+    mutations=[]
+    def fault(label,mutate):
+        d=copy.deepcopy(value);mutate(d);mutations.append((label,d))
+    fault('missing criterion',lambda d:d['matrix'].pop())
+    fault('false criterion result',lambda d:d['matrix'][0].update(result='NOT_RUN'))
+    fault('unknown requirement',lambda d:d['matrix'][0].update(requirementIds=['CN-UNKNOWN']))
+    fault('invented test',lambda d:d['matrix'][0].update(scenarioIds=['FAKE']))
+    fault('historical sum77',lambda d:d['evidenceReuse'].update(currentCampaignCount=77))
+    fault('invented new execution',lambda d:d['evidenceReuse'].update(newCampaignsExecuted=1))
+    fault('software defect hidden',lambda d:d['blockers'].update(software=['FAIL']))
+    for key in ['applicationChanged','migrationChanged','formalAcceptanceChanged','launchAuthorized','realBankingQualified','physicalAccessQualified']:
+        fault(key,lambda d,k=key:d.update({k:True}))
+    for label,d in mutations:
+        assert check(d),label
+        print('PASS Week1 rejected',label)
 
 if __name__ == '__main__': main()

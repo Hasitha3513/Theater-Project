@@ -5691,12 +5691,15 @@
           "CN-R1-CUSTOMER-BOOKING-RECOVERY-001"
         ],
         "approvalGates": [],
-        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "status": "BOUNDED_SOFTWARE_GATE_PASS",
         "implementationScope": "Execute existing admitted relevant real-stack regressions and mobile/browser checks; keep commercial qualification separate if Day5 blocked.",
         "tests": "Competing bookings, expired holds/quote, database exclusion, restart, timezone, explicit submission and exact-source CI",
         "definitionOfDone": "Software evidence for reused journey recorded; commercial gaps explicit; no formal criterion closure",
         "releaseBlocker": "No implementation authority supplied by this schedule; real-stack evidence/environment admission and separate task scope required",
-        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit.",
+        "actualExecutionDate": "2026-10-25",
+        "evidencePath": "PROGRESS.md#release1-week1-booking-gate",
+        "implementationAuthority": "Current attachment1a4fb6ac-4d3f-4628-9726-7e3497e6842d;bounded evidence checkpoint only;no formal/product acceptance"
       },
       {
         "day": 8,
@@ -6392,14 +6395,15 @@
     ],
     "postRelease1": "All mapped POST_RELEASE_1_RETAINED_MVP items and unfulfilled clauses remain in Full MVP:hosted PayHere/mixed methods,extension funding/commit,in-session/issued-credential lifecycle,advanced analytics/exports,loyalty/referrals/promotions,full device automation and wider grant/settings administration.No original dependency or demo gate waived.",
     "nextImplementationTask": {
-      "id": "CN-R1-BOOKING-WEEK1-GATE-001",
+      "id": "CN-R1-ROOM-BLOCK-CONTRACT-001",
       "priority": "P0",
-      "scope": "Execute existing admitted relevant real-stack regressions and mobile/browser checks; keep commercial qualification separate if Day5 blocked.",
+      "scope": "One separately approved temporary room-block create command after exact permission/interval/conflict policy approval; reuse Booking-owned inventory/public Rooms constraints. No guessed write permission or automatic reopening; release/reopening remains separately scoped.",
       "authority": "REQUIRES_SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION",
-      "policyBlocked": false,
-      "definitionOfDone": "Software evidence for reused journey recorded; commercial gaps explicit; no formal criterion closure",
-      "tests": "Competing bookings, expired holds/quote, database exclusion, restart, timezone, explicit submission and exact-source CI",
-      "limits": "Bounded Week1 evidence gate;unresolved external gates must remain NOT_READY;no launch/formal acceptance authority"
+      "policyBlocked": true,
+      "requiredGate": "G-ROOM-BLOCK",
+      "definitionOfDone": "One exact-room temporary block command and focused tests after separate authorization,or explicit BLOCKED;never infer physical clearance or reopen automatically",
+      "tests": "PostgreSQL concurrent hold/confirmation/block conflicts, exact write authority, mandatory-audit rollback and denied reads/writes",
+      "limits": "Not currently executable:exact permission,interval/conflict/audit policy approval required;software gate does not waive it"
     },
     "acceptanceUnchanged": {
       "criteriaChecked": 15,
@@ -6507,6 +6511,50 @@
       "prerequisiteCI": 40130266947,
       "prerequisiteConclusion": "SUCCESS",
       "evidencePath": "PROGRESS.md#release1-customer-recovery"
+    },
+    "week1Execution": {
+      "previousDay": {
+        "day": 7,
+        "targetDate": "2026-10-31",
+        "taskId": "CN-R1-BOOKING-WEEK1-GATE-001",
+        "title": "Booking software checkpoint",
+        "requirementIds": [
+          "CN-C03",
+          "CN-C04",
+          "CN-C08",
+          "CN-NFR-01",
+          "CN-NFR-02"
+        ],
+        "owningModules": [
+          "booking",
+          "pricing",
+          "identity"
+        ],
+        "deliverable": "Booking software checkpoint",
+        "dependencies": [
+          "CN-R1-BOOKING-JOURNEY-E2E-001",
+          "CN-R1-CUSTOMER-BOOKING-RECOVERY-001"
+        ],
+        "approvalGates": [],
+        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "implementationScope": "Execute existing admitted relevant real-stack regressions and mobile/browser checks; keep commercial qualification separate if Day5 blocked.",
+        "tests": "Competing bookings, expired holds/quote, database exclusion, restart, timezone, explicit submission and exact-source CI",
+        "definitionOfDone": "Software evidence for reused journey recorded; commercial gaps explicit; no formal criterion closure",
+        "releaseBlocker": "No implementation authority supplied by this schedule; real-stack evidence/environment admission and separate task scope required",
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+      },
+      "previousNextImplementationTask": {
+        "id": "CN-R1-BOOKING-WEEK1-GATE-001",
+        "priority": "P0",
+        "scope": "Execute existing admitted relevant real-stack regressions and mobile/browser checks; keep commercial qualification separate if Day5 blocked.",
+        "authority": "REQUIRES_SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION",
+        "policyBlocked": false,
+        "definitionOfDone": "Software evidence for reused journey recorded; commercial gaps explicit; no formal criterion closure",
+        "tests": "Competing bookings, expired holds/quote, database exclusion, restart, timezone, explicit submission and exact-source CI",
+        "limits": "Bounded Week1 evidence gate;unresolved external gates must remain NOT_READY;no launch/formal acceptance authority"
+      },
+      "taskId": "CN-R1-BOOKING-WEEK1-GATE-001",
+      "evidencePath": "PROGRESS.md#release1-week1-booking-gate"
     }
   },
   "release1Day2Evidence": {

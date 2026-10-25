@@ -5,6 +5,8 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
+Current [Week1 checkpoint](#release1-week1-booking-gate):**BOUNDED_SOFTWARE_GATE_PASS**;commercial banking,physical access and customer launch remain unqualified.
+
 Current bounded verification:CN-R1-CUSTOMER-BOOKING-RECOVERY-001;[40-group real-stack evidence](#release1-customer-recovery). No new formal/product/launch acceptance.
 
 CN-R1-BOOKING-JOURNEY-E2E-001 locally verified synthetic Release1 Day2;[37-scenario evidence](#release1-booking-journey). Publication CI pending at source checkpoint;no real-bank/physical/customer-launch acceptance.
@@ -1053,6 +1055,8 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
+
+Current Week1 handoff:[gate evidence](#release1-week1-booking-gate). Next target CN-R1-ROOM-BLOCK-CONTRACT-001 remains G-ROOM-BLOCK-gated;no implementation authority or launch approval inferred. Historical handoffs below retain scope.
 
 Current recovery handoff:[evidence](#release1-customer-recovery). Verify exact-source publication CI,then separately authorize **CN-R1-BOOKING-WEEK1-GATE-001**. Preserve unresolved external gates as NOT_READY;historical handoffs below retain scope.
 
@@ -2972,3 +2976,37 @@ Diagnostic runs1/2:7PASS/1FAIL/32NOT_RUN,history text wait. Proven harness assum
 807backend/PostgreSQL/architecture tests and packaged startup/HTTP denial PASS;482frontend tests,TypeScript,lint(existing101info,noerrors/warnings),production build PASS. Existing intercepted browser regressions30bank-request+31handoff+108customer-history groups PASS;these are not the real-stack40campaign. Locked npm ci/audit0vulnerabilities.272governance positive/negative controls PASS before evidence publication;final exact-payload clean projection required. Same qualified runtime/budget/cleanup as Day2:Java25,Node24.22.0/npm11.19.1,pinned PostgreSQL18.6/V1–V25,3CPU/7GiBapplication+1CPU/1GiBDB,600souter/7minbrowser/60sscenario. Actual sanitized artifacts/source hashes in status.release1CustomerRecovery;375/768/1280pending screenshots retained/inspected,no UI redesign/fidelity claim. Private fixture storage/DB/ports cleaned;original next-env bytes,DOCX and historical resources preserved. No secrets/raw trace/private evidence committed. Full governance/traceability/decision/dependency/manifest/clean-checkout/whitespace required before publication;actual final outcome/CI reported in conversation. Ordinary next-env protection findings remain pre-existing;clean projection must pass.
 
 Release1 Day4 executed early under current authority;target schedule/history preserved,Day2 CI independently confirmed. Week1 evidence gate is the next bounded unit;real commercial quote/bank/privacy/venue authority,hardware/admission/egress,maintenance/recovery and launch gates remain blocked. MVP15/74(20.3%),59unchecked;formal requirements0/92;P6:0/6;25CLOSED/3BLOCKED;full plans1PASS/91NOT_RUN;D0–D6unheld/unaccepted. All92IDs/74criteria/history/decisions preserved. No extension funding,real bank/PIN/device or production operation. Rollback:scoped test/evidence revert;no schema/data rollback.
+
+
+<a id="release1-week1-booking-gate"></a>
+## CN-R1-BOOKING-WEEK1-GATE-001 — 2026-10-25
+
+Result:**BOUNDED_SOFTWARE_GATE_PASS** for15software checkpoint criteria only. Baseline `aad06bfe8b3b2f49378ba0137f01340f0e7e1f2c`;prerequisite [CI40132834515 SUCCESS](https://github.com/Hasitha3513/Theater-Project/actions/runs/40132834515). Current attachment1a4fb6ac authorizes bounded evidence verification/publication;no application correction required. Full116reading inventory checked:108qualified unchanged content/visual reuse,8preceding recovery authored/reviewed successors;fresh canonical/current registries and task-specific contracts/diagrams consulted.
+
+Historical37group source hashes verified at326c442;current40source hashes exactly match this baseline,all37IDs covered by40,and all retained sanitized artifact hashes verified. Reused807backend/PostgreSQL/architecture tests,482frontend tests,169intercepted browser groups and40real-stack groups;**no new application/E2E campaign run**,not77new passes. Existing independent-process durable-work/recovery and PostgreSQL concurrency/timezone tests support their bounded contracts,not production disaster recovery. Actual15-row requirement/criterion/source/scenario/exclusion matrix is status.release1Week1Gate.matrix.
+
+| Check | Requirement IDs | Acceptance reference | Reused scenario evidence | Outcome | Exclusions |
+|---|---|---|---|---|---|
+| Authentication | CN-C02, CN-NFR-02 | P1-C04, P1-C05 | customer-discovery-auth, G-expired-session, R1-recovery-session-clearing | PASS | Local synthetic OIDC/JDBC only;Google/admin/full authentication acceptance excluded |
+| Room/package discovery | CN-C01 | P2-C01, P2-C02 | customer-discovery-auth | PASS | Synthetic published fixture;no real venue qualification |
+| Availability/calendar | CN-C03, BR-07 | P3-C02 | hold-quote-accept, R1-inventory-negative | PASS | Advisory calendar;hold remains authority;timezone/DST backend tests reused |
+| Authoritative quotation | CN-C04 | P3-C01 | hold-quote-accept, A-expired-quote | PASS | Approved synthetic BANK profile;payable commercial pricing/taxes/terms not qualified |
+| Explicit hold | CN-C03, BR-07 | P3-C03, P3-C05 | hold-quote-accept, B-invalid-expired-hold | PASS | Actual hold-before-quote sequence;no automatic hold |
+| Quote acceptance | CN-C04 | P3-C01 | hold-quote-accept | PASS | Explicit unchecked acceptance binds immutable revision/hash;not full commercial acceptance |
+| Synthetic identity review | CN-C05 | P4-C02, P4-C03 | verification-explicit-consent, independent-verification-api-support, F-rejected-verification | PASS | Independent reviewer real API support;not full reviewer UI or real identity/admission qualification |
+| Bank request | CN-C10 | P4-C04 | explicit-bank-request, E-pending-verification | PASS | Synthetic instructions only;no receiving account/credit verification |
+| Authoritative pending | CN-C08, CN-C10 | P3-C06 | R1-pending-state | PASS | OPEN/PENDING/UNFUNDED/NOT_CONFIRMED;no purchased Booking row |
+| History/recovery | CN-C08, CN-C10 | P3-C06 | R1-recovery-unknown-revisit, R1-recovery-refresh-cache | PASS | Explicit Refresh booking history;controlled page lifecycle not actual BFCache qualification |
+| Duplicate commands | CN-C03, CN-C10, BR-07 | P3-C05 | L-idempotent-replay, M-changed-body-key, R1-concurrent-bank-replay | PASS | Browser committed replay;initial bank CREATE race separately in PostgreSQL tests |
+| Cross-customer denial | CN-C08, CN-NFR-02 | P3-C06, P1-C05 | C-wrong-owner, D-wrong-venue-grant, R1-inventory-negative | PASS | 404 existence masking;no administrator bypass or cross-venue stitching |
+| Capacity/duration/buffers | BR-06, BR-07, CN-C03 | P2-C06, P3-C03 | R1-inventory-negative, R1-concurrent-inventory | PASS | Fixture5capacity/180minimum/7buffer not global policy;no physical capacity qualification |
+| Unknown-result safety | CN-C10, CN-NFR-02 | P3-C05, P3-C06 | R1-bank-timeout-recovery, R1-recovery-unknown-revisit, N-uncertain-upload | PASS | Actual committed response withheld;no fabricated business result or blind duplicate;no real provider outage qualification |
+| Finance/access isolation | CN-C10, CN-C08, CN-NFR-02 | P3-C06 | R1-pending-state, R1-concurrent-bank-replay | PASS | Seven pending checkpoints across9observations:one request/receipt;zero credit/allocation/booking/access rows.Access/IoT disabled;not enabled-provider/physical proof |
+
+Bank-pending OPEN/PENDING/UNFUNDED/NOT_CONFIRMED remains distinct from receiving credit,allocation,purchased booking and access.Seven pending checkpoints across9DBobservations prove one request/receipt and zero credit/verification/allocation/booking/credential/provisioning rows;two other observations prove initial hold race/release.Exact bindings/exclusion/zero overlap preserved.Later independently funded synthetic regression does not alter earlier pending facts.No current failing regression or missing integration in this bounded scope;no claim that all MVP software is complete.
+
+Commercial/finance:G-COMMERCIAL/G-BANK quotes,tax/terms,real bank instructions,independent verifier/allocator and venue authority remain blocked.Privacy:G-PRIVACY real evidence lawful processing,scanning/quarantine,region/storage/access/retention/backup handling remain unqualified.Physical:G-HARDWARE/G-ADMISSION/G-ROOM-BLOCK exact lock/model/firmware/adapter,installed-room check-in/readiness,offline operation and independent egress remain unqualified.Recovery/delivery/launch gates remain blocked.November14target supplies no acceptance authority.
+
+New read-only toolchain/image preflight matches prior Java25.0.4.1+1/Maven3.9.16/Node24.22.0/npm11.19.1/Playwright1.62.1/Chromium1234/pinnedPostgreSQL18.6;executionNOT_RUN,not renewed resource admission.First negative projection exposed JSON parsing of deliberately corrupted protected requirements;new checker now returns explicit fail-closed error,not an uncaught exception.No application defect.New validation:required knowledge/design,traceability/test-ID,decision/dependency,manifest,governance controls,clean-checkout and whitespace;actual results/exact-source publication CI in final report. No application,migration,policy,permission,acceptance or historical evidence change. Catalogue/guide already describe this unchanged workflow and were assessed without redundant edits. MVP15/74(20.3%),59unchecked;0/92formal requirements;P3/P4 criteria unchanged;original25CLOSED/3BLOCKED,fullplans1PASS/91NOT_RUN,demosunheld/unaccepted.Preserve unrelated next-env,DOCX and historical resources.Rollback:normal scoped docs/governance revert preserving evidence.
+
+Next implementation target:**CN-R1-ROOM-BLOCK-CONTRACT-001**,currently BLOCKED by G-ROOM-BLOCK and separate authorization.Exact write authority,interval/conflict/mandatory-audit policy must be approved first.No other next implementation is invented or automatically READY.

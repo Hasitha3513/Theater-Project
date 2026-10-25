@@ -6856,5 +6856,82 @@ def inert_ci_main():
     if result==0:print('PASS exact real-stack customer recovery successor;original app,history,92requirements74criteria and financial/physical/acceptance boundaries preserved')
     return result
 
+
+# CN-R1-BOOKING-WEEK1-GATE-001 bounded evidence-only successor.
+week1_prior_main=inert_ci_main
+WEEK1_BASELINE='aad06bfe8b3b2f49378ba0137f01340f0e7e1f2c'
+WEEK1_HASHES={'knowledge/PROGRESS.md': 'c5c8b99d0c28b0146ddcfa2a29ca2b8cbf1aa11124868c4e37b3118b72f573c6', 'knowledge/execution/status.json': '9344bd2bd49ed6c517cb6ae491f91664d9126f77f22d599975669ace79ecda61', 'knowledge/execution/change-sets.json': '0deaa1b776aa28ffdf4934736e6dea1ac9462ab64b0fb023200531c2e0d846b3', 'scripts/test-governance-controls.py': '48669a639546500df6bcc8a456ed88ce11b4f8ffc4574849ec4bce471d12ad3b'}
+
+def week1_planning_projection(plan):
+    import copy
+    result=copy.deepcopy(plan);receipt=result.pop('week1Execution',{})
+    for row in result.get('schedule',[]):
+        if row.get('taskId')=='CN-R1-BOOKING-WEEK1-GATE-001':row.clear();row.update(receipt.get('previousDay',{}))
+    result['nextImplementationTask']=receipt.get('previousNextImplementationTask',{})
+    return result
+
+def week1_evidence_errors(e):
+    errors=[];rows=e.get('matrix',[])
+    try:
+        state=json.loads((K/'execution/status.json').read_text());req={r['id'] for r in json.loads((K/'execution/requirements.json').read_text())['requirements']};scenarios={r['id'] for r in state['release1CustomerRecovery']['scenarios'] if r['status']=='PASS'}
+    except (ValueError,KeyError,TypeError):return ['Week1 protected requirement/evidence JSON invalid']
+    if e.get('result')!='BOUNDED_SOFTWARE_GATE_PASS' or e.get('baseline')!=WEEK1_BASELINE:errors.append('Week1 exact bounded gate missing')
+    if len(rows)!=15 or {r.get('criterion') for r in rows}!=set(range(1,16)):errors.append('Week1 fifteen criteria missing')
+    for row in rows:
+        if row.get('result')!='PASS' or not row.get('requirementIds') or not set(row['requirementIds'])<=req or not row.get('scenarioIds') or not set(row['scenarioIds'])<=scenarios or row.get('sourceCommit')!=WEEK1_BASELINE or not row.get('remainingExclusions') or not row.get('acceptanceReferences'):errors.append('Week1 criterion evidence invalid')
+    reuse=e.get('evidenceReuse',{})
+    if reuse.get('currentCampaignCount')!=40 or reuse.get('newCampaignsExecuted')!=0 or reuse.get('newApplicationTestsExecuted')!=0 or reuse.get('historical37CoveredByCurrent40') is not True:errors.append('Week1 test accounting false')
+    if e.get('blockers',{}).get('software')!=[] or not all(e.get('blockers',{}).get(k) for k in ['commercialFinancial','privacy','physical','production']):errors.append('Week1 blocker classification missing')
+    for key in ['applicationChanged','migrationChanged','formalAcceptanceChanged','launchAuthorized','realBankingQualified','physicalAccessQualified']:
+        if e.get(key) is not False:errors.append('Week1 scope/acceptance exceeded '+key)
+    return errors
+
+def week1_successor_errors():
+    errors=[]
+    def prior(n):return subprocess.check_output(['git','-C',str(R),'show',WEEK1_BASELINE+':'+n])
+    for n,h in WEEK1_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Week1 exact payload mismatch '+n)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Week1 historical validator changed')
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('release1Week1Gate',{});s.update(e.get('previousCurrentHeader',{}))
+    if s!=json.loads(prior('knowledge/execution/status.json')):errors.append('Week1 historical status/evidence changed')
+    errors.extend(week1_evidence_errors(e))
+    c=json.loads((K/'execution/change-sets.json').read_text());p=c['release1DeliverySlice'];row=next(x for x in p['schedule'] if x['taskId']=='CN-R1-BOOKING-WEEK1-GATE-001')
+    if row.get('status')!='BOUNDED_SOFTWARE_GATE_PASS' or p['nextImplementationTask'].get('policyBlocked') is not True or p['nextImplementationTask'].get('requiredGate')!='G-ROOM-BLOCK':errors.append('Week1 task/next authority drift')
+    c['release1DeliverySlice']=week1_planning_projection(p)
+    if c!=json.loads(prior('knowledge/execution/change-sets.json')):errors.append('Week1 original plan/gates/history changed')
+    for n,h in e.get('evidenceReuse',{}).get('current40SourceHashes',{}).items():
+        if hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Week1 reused source stale '+n)
+    owned=set(WEEK1_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'};tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',WEEK1_BASELINE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=prior(n):errors.append('Week1 protected source/history changed '+n)
+    pattern=r'^- \[([ x])\] \*\*(P\d+-(?:C\d+|ACCEPT)|D\d+-(?:HELD|SCOPE-ACCEPTED))'
+    if re.findall(pattern,(K/'PROGRESS.md').read_text(),re.M)!=re.findall(pattern,prior('knowledge/PROGRESS.md').decode(),re.M):errors.append('Week1 acceptance checkbox changed')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',WEEK1_BASELINE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Week1 unauthorized files')
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Week1 manifest authority changed')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=week1_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    owned=set(WEEK1_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'};replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',WEEK1_BASELINE+':'+n]) for n in owned};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in owned];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=week1_prior_main()
+    if result==0:print('PASS exact bounded Week1 gate;history,source,92requirements74criteria,financial/physical and formal acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
