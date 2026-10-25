@@ -706,3 +706,7 @@ DOC-F031 verification update: CN-R1-BANK-INSTRUCTIONS-E2E-001 supplies13 real-st
 
 ## Local receipt adapter qualification
 Developer-only synthetic/security-test storage/scanner harness verified with actual local containers;not a customer feature,real receipt intake or AWS qualification. Existing synthetic bank flow unchanged. [Evidence](../PROGRESS.md#local-receipt-qualification).
+
+
+## Local synthetic receipt runtime integration
+Existing synthetic receipt APIs can be exercised with opt-in local SeaweedFS and real ClamAV adapters. Closed fixtures only;quarantine,protected previews,audit and authoritative status remain. Developer-only qualification,not real receipt/bank acceptance. [Evidence](../PROGRESS.md#local-receipt-integration).

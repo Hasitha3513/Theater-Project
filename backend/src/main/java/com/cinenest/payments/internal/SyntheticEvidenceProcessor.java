@@ -4,9 +4,8 @@ import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
 /** SIMULATED scanner. Hash admission is not real-document detection or production malware protection. */
 @Component("bankSyntheticEvidenceProcessor")
-class SyntheticEvidenceProcessor {
-    record Result(String digest,String mime,byte[] preview){}
-    Result process(byte[] bytes,String mime,BankPolicy.Policy policy){
+class SyntheticEvidenceProcessor implements BankEvidenceProcessor {
+    public Result process(byte[] bytes,String mime,BankPolicy.Policy policy){
         if(bytes.length==0||bytes.length>BankPolicy.MAX_BYTES)throw new BankFailure(413,"Synthetic image size rejected");
         String hash=BankPolicy.hash(bytes);
         if(!policy.fixtures().contains(hash))throw new BankFailure(415,"Only explicitly approved synthetic fixtures are allowed");

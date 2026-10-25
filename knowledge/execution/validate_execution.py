@@ -7272,5 +7272,74 @@ def inert_ci_main():
     return result
 
 
+
+# Exact owner-authorized local synthetic runtime integration. All older controls are retained.
+local_integration_prior_main=inert_ci_main
+LI_BASE='8b387a81c11880629ae2d624476c80c606520ca1'
+LI_HASHES={'backend/src/main/java/com/cinenest/payments/internal/BankEvidenceProcessor.java': '17043490f10e703a8159ed8c946240830df02da1b13e22be1fc2da6d96a569d8', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java': '7cc0343fc3e27e7530c0cab833f4489b13b0caf6293b3d9598bd4f425c70f2cd', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticEvidenceProcessor.java': 'd20187cea60dde66c133d032e952ce059ebfb45ce30df500b0c25c392ea51cbc', 'backend/src/main/java/com/cinenest/payments/internal/LocalDockerEvidenceConfiguration.java': 'c9b500a1059f6cc2863c052096ab893db1d9d57bd68e58dd1bb53ddd80a14efc', 'backend/src/main/java/com/cinenest/payments/internal/LocalS3EvidenceStore.java': '03a474ba13d0ea8c2dd3c7c7db4fca19e053d19ce46432014914bdeac70beb13', 'backend/src/main/java/com/cinenest/payments/internal/LocalEvidenceReceiptJournal.java': '90a683b96b6ac51a567c9cdc29ae258a3d363e20af53dd41652527b35075a84f', 'backend/src/main/java/com/cinenest/payments/internal/ClamAvSocketClient.java': '9073b360f85e83f78f3b4eaac5946b9642ccea2c4bfb537a9c7a5cfe88b7153f', 'backend/src/main/java/com/cinenest/payments/internal/ClamAvEvidenceProcessor.java': '01d9bca23a142dddd59f11f635ed7afb85d5238407020302f751441c3f8d4cd1', 'backend/src/test/java/com/cinenest/LocalReceiptIntegrationTest.java': '343b0ff57b53fd712ab74592a7ead82d80cd532a310385cf6dc446b39fadef93', 'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptJournalTest.java': 'f381507974c4c577d00457d733940f83a71537587baae99b01e2ce8a213abb38', 'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptRestartTest.java': '5d14708f600d743f7efff7dbcb14bc98b4808e2b3edd09103f2643de8d858f6b', 'backend/src/test/java/com/cinenest/payments/internal/BankFaults.java': '26b9a6ff92580b4ac5eed72f508e1a370bf5334e6b507fc568a9ab915050e1a3', 'qualification/receipt-local/compose.yaml': 'f873668724725f77f27e20a112eab014c552af1eaa002700b115070f45fc004f', 'scripts/verify-local-receipts.py': 'ceb644abef66e25a3218f136347bcbf6a46eeec0f9762ba09a49ecdbd13b1f9f', 'scripts/test-governance-controls.py': 'c6be432ecb8fdd0380e6da4a317003b0f13b62c1cc089266586ba38cc03b04f0', 'knowledge/PROGRESS.md': 'd2904198a4322757e3d61379eacc2fef25b65cf8d5b24d73c1d016fd0ddca93f', 'knowledge/ARCHITECTURE.md': '259772c61a92be59f0fe22e0e905a8cf3a3d752d4297ce8b4cb2613f6624ef4b', 'knowledge/execution/status.json': '442853a03482344cc827bf43f61c753c55d0a4d772c1444e52c0e9fa7de25610', 'knowledge/product/FEATURE_CATALOG.md': '701897fcfe0cf176e12ef6db665a4c7297951ad14849e32f106b9f19167b470c', 'knowledge/guides/USER_GUIDE.md': '40aa19b1da99e37e2effb3d086f2faec8dc0ca2025bb3ff51353d37ad19b5746'}
+LI_EXECUTED={'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptJournalTest.java': 'f381507974c4c577d00457d733940f83a71537587baae99b01e2ce8a213abb38', 'backend/src/main/java/com/cinenest/payments/internal/LocalS3EvidenceStore.java': '03a474ba13d0ea8c2dd3c7c7db4fca19e053d19ce46432014914bdeac70beb13', 'backend/src/main/java/com/cinenest/payments/internal/BankEvidenceProcessor.java': '17043490f10e703a8159ed8c946240830df02da1b13e22be1fc2da6d96a569d8', 'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptRestartTest.java': '5d14708f600d743f7efff7dbcb14bc98b4808e2b3edd09103f2643de8d858f6b', 'scripts/verify-local-receipts.py': 'ceb644abef66e25a3218f136347bcbf6a46eeec0f9762ba09a49ecdbd13b1f9f', 'qualification/receipt-local/compose.yaml': 'f873668724725f77f27e20a112eab014c552af1eaa002700b115070f45fc004f', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticEvidenceProcessor.java': 'd20187cea60dde66c133d032e952ce059ebfb45ce30df500b0c25c392ea51cbc', 'backend/src/main/java/com/cinenest/payments/internal/ClamAvSocketClient.java': '9073b360f85e83f78f3b4eaac5946b9642ccea2c4bfb537a9c7a5cfe88b7153f', 'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptQualificationTest.java': '5804b09f8d552d86b9711dabf50c94137cab11130f8333fe60d88639de613746', 'backend/src/test/java/com/cinenest/payments/internal/BankFaults.java': '26b9a6ff92580b4ac5eed72f508e1a370bf5334e6b507fc568a9ab915050e1a3', 'backend/src/test/java/com/cinenest/LocalReceiptIntegrationTest.java': '343b0ff57b53fd712ab74592a7ead82d80cd532a310385cf6dc446b39fadef93', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java': '7cc0343fc3e27e7530c0cab833f4489b13b0caf6293b3d9598bd4f425c70f2cd', 'backend/src/main/java/com/cinenest/payments/internal/LocalEvidenceReceiptJournal.java': '90a683b96b6ac51a567c9cdc29ae258a3d363e20af53dd41652527b35075a84f', 'backend/src/main/java/com/cinenest/payments/internal/LocalDockerEvidenceConfiguration.java': 'c9b500a1059f6cc2863c052096ab893db1d9d57bd68e58dd1bb53ddd80a14efc', 'backend/src/main/java/com/cinenest/payments/internal/ClamAvEvidenceProcessor.java': '01d9bca23a142dddd59f11f635ed7afb85d5238407020302f751441c3f8d4cd1'}
+
+def local_integration_errors(e):
+    errors=[]
+    if e.get('baseline')!=LI_BASE or e.get('scope')!='LOCAL_RUNTIME_SYNTHETIC_ONLY' or e.get('applicationChanged') is not True:errors.append('Local integration authority/scope missing')
+    for k in ['defaultEnabled','migrationChanged','publicApiChanged','frontendChanged','permissionDefinitionsChanged','operationalGrantsAssigned','realDocumentsProcessed','awsQualified','financialMutations','formalAcceptanceChanged','historicalCampaignRerun']:
+        if e.get(k) is not False:errors.append('Local integration boundary drift '+k)
+    run=e.get('evidence',{})
+    if run.get('scope')!='LOCAL_RUNTIME_SYNTHETIC_ONLY' or run.get('source')!=LI_BASE or run.get('awsQualified') is not False:errors.append('Local integration/provider evidence confused')
+    rows=run.get('results',[])
+    if run.get('status')!='PASS' or run.get('cleanupVerified') is not True or len(rows)!=17 or len(set(rows))!=17 or any(not x.startswith('LOCAL_INTEGRATION_PASS ') for x in rows):errors.append('Local integration evidence incomplete')
+    if run.get('sourceHashes')!=LI_EXECUTED:errors.append('Local integration executed-source mismatch')
+    return errors
+
+def local_integration_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',LI_BASE+':'+n])
+    errors=[];owned=set(LI_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in LI_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Local integration exact successor mismatch '+n)
+    if errors:return errors
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('localReceiptIntegration',{});errors.extend(local_integration_errors(e))
+    if s!=json.loads(before('knowledge/execution/status.json')):errors.append('Local integration historical status drift')
+    for n in ['knowledge/PROGRESS.md','knowledge/ARCHITECTURE.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        if not (R/n).read_bytes().startswith(before(n)):errors.append('Local integration historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',LI_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Local integration unowned source drift '+n)
+    folder=R/'backend/src/main/resources/db/migration'
+    if {x.relative_to(R).as_posix() for x in folder.glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('Local integration migration scope exceeded')
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Local integration unauthorized new source')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',LI_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Local integration unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Local integration historical validator drift')
+    expected=json.loads(before('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('Local integration manifest drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=local_integration_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    owned=set(LI_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',LI_BASE],text=True),nul=True);added=owned-tracked
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',LI_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            exclude=added if 'ls-files' in argv else owned;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in exclude];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**k):return (x for x in g0(p,*a,**k) if x not in {R/n for n in added})
+    def rglob(p,*a,**k):return (x for x in rg0(p,*a,**k) if x not in {R/n for n in added})
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=local_integration_prior_main()
+    if result==0:print('PASS exact local synthetic runtime integration successor;unowned sources,migrations,history and acceptance unchanged')
+    return result
+
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

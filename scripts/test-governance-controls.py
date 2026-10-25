@@ -296,14 +296,14 @@ def test_ci_empty_diff_controls(validator):
     assert not parse('backend/unauthorized.java\n') <= {'knowledge/PROJECT.md'}
     assert not parse('knowledge/execution/evidence/checks.json\n') <= {'knowledge/PROJECT.md'}
     print('PASS unauthorized and protected path classification remains negative')
-    errors = validator['local_receipt_successor_errors']()
+    errors = validator['local_integration_successor_errors']()
     assert errors==[], errors
     print('PASS legitimate exact successor documentation admission')
     rb,rt,out = Path.read_bytes,Path.read_text,subprocess.check_output
     for rel in ['knowledge/PROJECT.md','knowledge/execution/requirements.json','knowledge/execution/status.json','scripts/test-governance-controls.py','knowledge/execution/evidence/checks.json']:
         target=ROOT/rel;replacement=rb(target)+b'\nUNAUTHORIZED_PAYLOAD\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),rel
+            assert validator['local_integration_successor_errors'](),rel
         print('PASS rejected successor changed-payload/protected-history',rel)
     def unknown_path(argv,*a,**kw):
         value=out(argv,*a,**kw)
@@ -313,7 +313,7 @@ def test_ci_empty_diff_controls(validator):
             return text if isinstance(value,str) else text.encode()
         return value
     with patch.object(subprocess,'check_output',unknown_path):
-        assert validator['local_receipt_successor_errors'](),'Unauthorized source path accepted'
+        assert validator['local_integration_successor_errors'](),'Unauthorized source path accepted'
     print('PASS rejected unauthorized actual changed-path collection')
     # Model only the unrelated worktree file as its committed CI bytes. All task
     # sources, hashes, real changed paths and unauthorized-file guards remain real.
@@ -338,7 +338,7 @@ def test_extension_frontend_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','backendChanged']:
         value=json.loads(rt(path));value['extensionPreviewFrontend'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),key
+            assert validator['local_integration_successor_errors'](),key
         print('PASS extension frontend rejected',key)
 
 def test_extension_recovery_controls(validator):
@@ -346,7 +346,7 @@ def test_extension_recovery_controls(validator):
     for key in ['inventoryReserved','fundingCreated','financialMutation','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','frontendImplemented','missingReceiptMeansFailed']:
         value=json.loads(rt(path));value['extensionReservationRecoveryRead'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),key
+            assert validator['local_integration_successor_errors'](),key
         print('PASS extension recovery rejected',key)
 
 def test_knowledge_reading_controls(validator):
@@ -362,11 +362,11 @@ def test_knowledge_reading_controls(validator):
     rb,rt=Path.read_bytes,Path.read_text
     for target,replacement,label in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),label
+            assert validator['local_integration_successor_errors'](),label
         print('PASS knowledge-reading rejected',label)
 
 def test_reservation_frontend_controls(validator):
-    assert not validator['local_receipt_successor_errors']()
+    assert not validator['local_integration_successor_errors']()
     path=K/'execution/status.json';original=json.loads(path.read_text())
     faults=[]
     for key in ['backendChanged','migrationsChanged','financialMutation','fundingCreated','purchasedRevisionChanged','accessChanged','grantsAssigned','fullRequirementAccepted','automaticCreation','automaticRenewal','missingReceiptMeansFailed','historicalSyntheticCampaignRerun']:
@@ -379,7 +379,7 @@ def test_reservation_frontend_controls(validator):
     rb,rt=Path.read_bytes,Path.read_text
     for target,replacement,label in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),label
+            assert validator['local_integration_successor_errors'](),label
         print('PASS reservation frontend rejected',label)
     print('PASS reservation frontend exact successor; historical positive/negative controls retained')
 
@@ -417,28 +417,28 @@ def test_knowledge_traceability_controls(validator):
     for key in ['applicationChanged','migrationsChanged','businessPolicyChanged','decisionsApproved','acceptanceChanged','historicalEvidenceChanged','extensionFundingStarted','fullCampaignRerun']:
         value=json.loads(path.read_text());value['knowledgeTraceabilityReconciliation'][key]=True;replacement=json.dumps(value).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),key
+            assert validator['local_integration_successor_errors'](),key
         print('PASS traceability rejected scope',key)
 
 
 def test_extension_reservation_e2e_controls(validator):
-    assert not validator['local_receipt_successor_errors']()
+    assert not validator['local_integration_successor_errors']()
     print('PASS extension E2E exact successor positive')
     path=K/'execution/status.json';rb,rt=Path.read_bytes,Path.read_text
     for key in ['fundingCreated','allocationChanged','purchasedRevisionChanged','accessChanged','grantsAssigned','acceptanceChanged','migrationsChanged']:
         data=json.loads(rt(path));data['extensionReservationE2E'][key]=True;payload=json.dumps(data).encode()
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:payload if p==path else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:payload.decode() if p==path else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),key
+            assert validator['local_integration_successor_errors'](),key
         print('PASS extension E2E rejected',key)
     for name in ['frontend/lib/extension-preview-backend.ts','frontend/lib/extension-reservation-backend.ts','backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql']:
         target=ROOT/name;payload=rb(target)+b'\nUNAUTHORIZED\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:payload if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:payload.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),name
+            assert validator['local_integration_successor_errors'](),name
         print('PASS extension E2E rejected changed source/migration',name)
 
 def test_release1_controls(validator):
     import copy
-    assert not validator['local_receipt_successor_errors']()
+    assert not validator['local_integration_successor_errors']()
     plan=validator['r1_day2_planning_projection'](validator['r1_recovery_planning_projection'](validator['week1_planning_projection'](validator['bank_instruction_planning_projection'](json.loads((K/'execution/change-sets.json').read_text())['release1DeliverySlice']))))
     check=validator['release1_plan_errors']
     assert check(plan)==[]
@@ -469,12 +469,12 @@ def test_release1_controls(validator):
         target=ROOT/name;faults.append((target,target.read_bytes()+b'\n','protected '+name))
     for target,replacement,name in faults:
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),name
+            assert validator['local_integration_successor_errors'](),name
         print('PASS Release1 rejected',name)
 
 def test_release1_day2_controls(validator):
     import copy
-    assert not validator['local_receipt_successor_errors']()
+    assert not validator['local_integration_successor_errors']()
     value=json.loads((K/'execution/status.json').read_text())['release1BookingJourney']
     check=validator['r1_day2_evidence_errors'];assert check(value)==[]
     print('PASS Release1 Day2 exact real-stack37PASS successor and pending-state proof')
@@ -503,12 +503,12 @@ def test_release1_day2_controls(validator):
     for name in ['backend/src/main/java/com/cinenest/payments/internal/BankService.java','frontend/lib/bank-backend.ts','backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql','knowledge/decisions/cinenest-open-decisions.json']:
         target=ROOT/name;replacement=rb(target)+b'\nUNAUTHORIZED\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**kw:replacement if p==target else rb(p,*a,**kw)),patch.object(Path,'read_text',lambda p,*a,**kw:replacement.decode() if p==target else rt(p,*a,**kw)):
-            assert validator['local_receipt_successor_errors'](),name
+            assert validator['local_integration_successor_errors'](),name
         print('PASS Release1 Day2 rejected protected',name)
 
 def test_r1_recovery_controls(validator):
     import copy
-    assert validator['local_receipt_successor_errors']()==[]
+    assert validator['local_integration_successor_errors']()==[]
     receipt=json.loads((K/'execution/status.json').read_text())['release1CustomerRecovery']
     check=validator['r1_recovery_evidence_errors'];assert check(receipt)==[]
     print('PASS exact real-stack customer recovery40PASS successor')
@@ -538,12 +538,12 @@ def test_r1_recovery_controls(validator):
     for name in ['frontend/components/bank-handoff.tsx','backend/src/main/java/com/cinenest/payments/internal/BankService.java','backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql','knowledge/decisions/cinenest-open-decisions.json']:
         path=ROOT/name;changed=rb(path)+b'\nUNAUTHORIZED\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**k:changed if p==path else rb(p,*a,**k)),patch.object(Path,'read_text',lambda p,*a,**k:changed.decode() if p==path else rt(p,*a,**k)):
-            assert validator['local_receipt_successor_errors'](),name
+            assert validator['local_integration_successor_errors'](),name
         print('PASS recovery rejected protected',name)
 
 def test_week1_controls(validator):
     import copy
-    assert validator['local_receipt_successor_errors']()==[]
+    assert validator['local_integration_successor_errors']()==[]
     value=json.loads((K/'execution/status.json').read_text())['release1Week1Gate'];check=validator['week1_evidence_errors'];assert check(value)==[]
     print('PASS bounded Week1 exact-source gate evidence')
     mutations=[]
@@ -584,11 +584,11 @@ def test_bank_instruction_controls(validator):
     for name in ['backend/src/main/resources/db/migration/V9__synthetic_bank_requests.sql','backend/src/main/resources/db/migration/V10__synthetic_credit_allocation.sql','knowledge/backlog/FUTURE_FEATURES.md']:
         target=ROOT/name;rb,rt=Path.read_bytes,Path.read_text;replacement=rb(target)+b'\n'
         with patch.object(Path,'read_bytes',lambda p,*a,**k:replacement if p==target else rb(p,*a,**k)),patch.object(Path,'read_text',lambda p,*a,**k:replacement.decode() if p==target else rt(p,*a,**k)):
-            assert validator['local_receipt_successor_errors'](),name
+            assert validator['local_integration_successor_errors'](),name
         print('PASS bank instructions rejected historical drift',name)
     glob=Path.glob;folder=ROOT/'backend/src/main/resources/db/migration'
     with patch.object(Path,'glob',lambda p,*a,**k:iter([*glob(p,*a,**k),folder/'V27__unapproved.sql']) if p==folder else glob(p,*a,**k)):
-        assert validator['local_receipt_successor_errors']()
+        assert validator['local_integration_successor_errors']()
     print('PASS bank instructions rejected unapproved migration')
 
 def test_bank_e2e_controls(validator):
@@ -618,7 +618,33 @@ def main():
     target=ROOT/'backend/src/main/java/com/cinenest/payments/internal/BankService.java'
     rb,rt=Path.read_bytes,Path.read_text;bad=rb(target)+b'\n'
     with patch.object(Path,'read_bytes',lambda p,*a,**k:bad if p==target else rb(p,*a,**k)),patch.object(Path,'read_text',lambda p,*a,**k:bad.decode() if p==target else rt(p,*a,**k)):
-        assert v['local_receipt_successor_errors']()
+        assert v['local_integration_successor_errors']()
     print('PASS local receipts rejected runtime change')
+
+
+# Explicitly authorized synthetic-only runtime adapter admission.
+local_integration_controls_prior_main=main
+def main():
+    local_integration_controls_prior_main()
+    v=runpy.run_path(str(K/'execution/validate_execution.py'))
+    import copy
+    current=json.loads((K/'execution/status.json').read_text())['localReceiptIntegration']
+    assert not v['local_integration_errors'](current)
+    print('PASS local integration bounded runtime evidence')
+    for key in ['defaultEnabled','migrationChanged','publicApiChanged','frontendChanged','permissionDefinitionsChanged','operationalGrantsAssigned','realDocumentsProcessed','awsQualified','financialMutations','formalAcceptanceChanged','historicalCampaignRerun']:
+        changed=copy.deepcopy(current);changed[key]=True
+        assert v['local_integration_errors'](changed),key
+        print('PASS local integration rejected',key)
+    changed=copy.deepcopy(current);changed['evidence']['cleanupVerified']=False
+    assert v['local_integration_errors'](changed)
+    print('PASS local integration rejected incomplete cleanup')
+    changed=copy.deepcopy(current);changed['evidence']['sourceHashes'].pop(next(iter(changed['evidence']['sourceHashes'])))
+    assert v['local_integration_errors'](changed)
+    print('PASS local integration rejected missing executed source')
+    target=ROOT/'backend/src/main/java/com/cinenest/payments/internal/LedgerService.java'
+    rb,rt=Path.read_bytes,Path.read_text;bad=rb(target)+b'\n'
+    with patch.object(Path,'read_bytes',lambda p,*a,**k:bad if p==target else rb(p,*a,**k)),patch.object(Path,'read_text',lambda p,*a,**k:bad.decode() if p==target else rt(p,*a,**k)):
+        assert v['local_integration_successor_errors']()
+    print('PASS local integration rejected financial source change')
 
 if __name__ == '__main__': main()

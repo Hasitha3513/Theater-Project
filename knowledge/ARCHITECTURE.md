@@ -2663,3 +2663,7 @@ Rollback:disable new feature/read paths first,retain V26,bindings,revision/audit
 
 ## Local-only receipt qualification boundary
 Payments test-only `LocalReceiptQualificationTest` and `scripts/verify-local-receipts.py` use pinned SeaweedFS/ClamAV/PostgreSQL Compose services. Existing UUID-only storage port and concrete synthetic scanner remain unchanged;version receipts and scanner outcomes exist only in test scope. No production implementation or AWS/KMS qualification. Exact scope,network/recovery limits and actual evidence: [progress](PROGRESS.md#local-receipt-qualification).
+
+
+## Opt-in local synthetic receipt runtime adapters
+BankEvidenceProcessor is the Payments-private processor port. LocalDockerEvidenceConfiguration is disabled by default and only admits the existing synthetic-quotation profile with loopback receipt_qualification DB. Default beans are retained;local primary adapters use SeaweedFS encrypted objects,an encrypted single-instance fsync journal and restricted Unix-socket ClamAV. Version/digest bindings are storage metadata only;PostgreSQL retains all authorization,audit and financial authority. No new public API,permission,migration,provider approval or production configuration. [Exact behavior and tested limits](PROGRESS.md#local-receipt-integration).
