@@ -7085,5 +7085,56 @@ def inert_ci_main():
     if result==0:print('PASS exact authorized staging bank instruction successor;V1-V25,global bank/commercial gates,history,92requirements74criteria and acceptance preserved')
     return result
 
+
+# Exact CSS-only CI remediation successor;no business or acceptance changes.
+bank_css_prior_main=inert_ci_main
+BC_BASE='0ad049abdfa3cf43c085dde1a26aaf06edfb1947'
+BC_HASHES={'frontend/app/globals.css': '4fcc942c8e5a3f208c470114e6b9691bf958615d89a3e0d9c4d474fb63b008fe', 'knowledge/PROGRESS.md': '2430914456d27b95ae482ac251d01b8bf604eff0486dca11f936178607cc1991', 'knowledge/execution/status.json': 'd1a0b5f470a58aa365bed2d583ad96922729be5be73b5501c599179f2b1ec47b', 'scripts/test-governance-controls.py': '33856db7873c1b57a65f4dc02deaf66c0dadd45cd1542caddc9460821d20200d'}
+
+def bank_css_successor_errors():
+    errors=[]
+    def prior(n):return subprocess.check_output(['git','-C',str(R),'show',BC_BASE+':'+n])
+    for n,h in BC_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Bank CSS exact successor mismatch '+n)
+    if errors:return errors
+    source=prior('frontend/app/globals.css').decode();expected=source.replace('.app-shell.admin-shell .bank-instruction-panel .instruction-facts > div','.app-shell.admin-shell .shell-body .page-content .bank-instruction-panel .instruction-facts > div')
+    if (R/'frontend/app/globals.css').read_text()!=expected:errors.append('CSS correction exceeded selector boundary')
+    s=json.loads((K/'execution/status.json').read_text());s.pop('bankInstructionCssRemediation',None)
+    if s!=json.loads(prior('knowledge/execution/status.json')):errors.append('Historical status drift')
+    if not (K/'PROGRESS.md').read_bytes().startswith(prior('knowledge/PROGRESS.md')):errors.append('Historical progress drift')
+    owned=set(BC_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',BC_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=prior(n):errors.append('CSS remediation unowned history changed '+n)
+    expected_migrations={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}
+    if {x.relative_to(R).as_posix() for x in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!=expected_migrations:errors.append('CSS remediation migration scope exceeded')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',BC_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Unauthorized CSS remediation paths')
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Historical validator changed')
+    expected=json.loads(prior('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('CSS manifest mismatch')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=bank_css_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    owned=set(BC_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',BC_BASE+':'+n]) for n in owned};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in owned];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=bank_css_prior_main()
+    if result==0:print('PASS exact CSS-only bank CI successor;history,backend,migrations,permissions and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

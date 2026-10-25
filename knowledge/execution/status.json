@@ -23628,5 +23628,18 @@
       ".cache/bank-instructions/after/768-viewport.png": "7bbccc55ef94df4fd46c7cf48d7f5588c8ad135cff9467cfc9c0a13ea283e165"
     },
     "publicationCI": "PENDING_AT_SOURCE_CHECKPOINT"
+  },
+  "bankInstructionCssRemediation": {
+    "taskId": "CN-R1-BANK-INSTRUCTIONS-CI-REMEDIATION-001",
+    "baseline": "0ad049abdfa3cf43c085dde1a26aaf06edfb1947",
+    "failedRun": 40194520356,
+    "correction": "Only add existing shell-body/page-content ancestry;no declarations changed",
+    "applicationBehaviorChanged": false,
+    "frontendTests": 497,
+    "lintWarnings": 0,
+    "browserInterceptedGroups": 39,
+    "realStackE2E": "NOT_RUN",
+    "acceptanceChanged": false,
+    "publicationCI": "PENDING"
   }
 }
