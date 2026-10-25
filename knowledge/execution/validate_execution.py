@@ -7136,5 +7136,73 @@ def inert_ci_main():
     if result==0:print('PASS exact CSS-only bank CI successor;history,backend,migrations,permissions and acceptance preserved')
     return result
 
+
+# CN-R1-BANK-INSTRUCTIONS-E2E-001: exact test/evidence-only successor.
+bank_e2e_prior_main=inert_ci_main
+BE_BASE='bca1b9887161d6c30b545a9b56c92dcfd520f599'
+BE_HASHES={'backend/src/test/java/com/cinenest/BankInstructionsJourneyIT.java': '5c547828dfadb48e1289e9172b43ad57be2bd47af74d4e9bdec49e83775f5ae9', 'frontend/tests/bank-instructions-e2e.mjs': 'a2f500dcf8d8676b53f863916eff337d5a6d8b7772732d189d01ac04f8bd0c55', 'scripts/verify-synthetic-e2e.py': '00ad10a58d8d280563bf75e95b0e5ab014d06a1cc73c3d56dd20d046f38cda1e', 'scripts/test-synthetic-e2e.py': 'c1d8729cf87aa7de63d46f9022fd8fe0d5eca88fc065db269268ac4cfbf81ae5', 'scripts/test-governance-controls.py': '21cc86d394380cdb97c305c4531ea21f40dc96ca4023f90a0ba343831735b7e0', 'knowledge/PROGRESS.md': 'dbd84a6bc7ecdf16d08a32bff294e58c9efd42662f86df10d02ff95f1060312d', 'knowledge/execution/status.json': 'bac98100fefb6889c3d469b2fb2735dfb83c5125a85cdd8a599eb747368c84c3', 'knowledge/execution/requirements.json': 'c00f292b77d8580f2ffaa89a418e094ad5cff0e22487d8901d10750fa1b37d03', 'knowledge/execution/test-plan.json': '7553b065ea544618bb5506a99d22fcb0767bfa14b45235eed6d9fbe93df912f5', 'knowledge/product/FEATURE_CATALOG.md': 'f4e7f7171864e817ddb677efcec6889ed064bd0b90b64d91fbe657a38afe0e6d', 'knowledge/guides/USER_GUIDE.md': '9c60baf51cade3c569418d891bf072fcce89ea5b746115af4c5eb64c320118c3'}
+
+def bank_e2e_receipt_errors(e):
+    errors=[]
+    if e.get('baseline')!=BE_BASE or e.get('scope')!='REAL_STACK_NONPAYABLE_BANK_INSTRUCTIONS':errors.append('Missing real-stack evidence')
+    for key in ['applicationChanged','migrationChanged','runtimeGrantsAssigned','commercialAccepted','formalAcceptanceChanged','historicalCampaignRerun']:
+        if e.get(key) is not False:errors.append('Bank E2E scope drift '+key)
+    if len(e.get('results',[]))!=13 or any(r.get('status')!='PASS' for r in e.get('results',[])):errors.append('Bank E2E result accounting changed')
+    if e.get('tests',{}).get('backend')!=820 or e.get('tests',{}).get('frontend')!=497 or e.get('tests',{}).get('harness')!=11:errors.append('Bank E2E regression evidence drift')
+    return errors
+
+def bank_e2e_successor_errors():
+    errors=[]
+    def prior(n):return subprocess.check_output(['git','-C',str(R),'show',BE_BASE+':'+n])
+    for n,h in BE_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Bank E2E exact successor mismatch '+n)
+    if errors:return errors
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('bankInstructionsRealStackE2E',{});errors.extend(bank_e2e_receipt_errors(e))
+    if s!=json.loads(prior('knowledge/execution/status.json')):errors.append('Bank E2E historical status drift')
+    for n in ['knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        if not (R/n).read_bytes().startswith(prior(n)):errors.append('Bank E2E historical prose drift '+n)
+    for n,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        d=json.loads((R/n).read_text())
+        for row in d[key]:row.pop('bankInstructionsRealStackEvidence',None)
+        if d!=json.loads(prior(n)):errors.append('Bank E2E acceptance/requirement drift '+n)
+    owned=set(BE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',BE_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=prior(n):errors.append('Bank E2E unowned source/history drift '+n)
+    migration_folder=R/'backend/src/main/resources/db/migration'
+    if {x.relative_to(R).as_posix() for x in migration_folder.glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('Bank E2E migration scope exceeded')
+    inventory=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True))
+    if not inventory<=tracked|owned:errors.append('Bank E2E unauthorized application paths')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',BE_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Bank E2E unauthorized paths')
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Bank E2E historical validator drift')
+    expected=json.loads(prior('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('Bank E2E manifest drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=bank_e2e_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    owned=set(BE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',BE_BASE],text=True),nul=True);added=owned-tracked
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',BE_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            exclude=added if 'ls-files' in argv else owned;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in exclude];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**k):return (x for x in g0(p,*a,**k) if x not in {R/n for n in added})
+    def rglob(p,*a,**k):return (x for x in rg0(p,*a,**k) if x not in {R/n for n in added})
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=bank_e2e_prior_main()
+    if result==0:print('PASS exact bank-instructions real-stack test/evidence successor;application,migrations,decisions and acceptance unchanged')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

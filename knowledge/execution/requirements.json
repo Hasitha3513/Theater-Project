@@ -3034,6 +3034,11 @@
         "scope": "Non-payable staging read/binding only",
         "fullRequirementVerified": false,
         "formalAcceptanceChanged": false
+      },
+      "bankInstructionsRealStackEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-E2E-001",
+        "reference": "PROGRESS.md#bank-instructions-real-stack-e2e",
+        "formalAcceptanceChanged": false
       }
     },
     {
@@ -6222,6 +6227,11 @@
         "scope": "Non-payable staging read/binding only",
         "fullRequirementVerified": false,
         "formalAcceptanceChanged": false
+      },
+      "bankInstructionsRealStackEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-E2E-001",
+        "reference": "PROGRESS.md#bank-instructions-real-stack-e2e",
+        "formalAcceptanceChanged": false
       }
     },
     {
@@ -6412,6 +6422,11 @@
         "evidencePath": "PROGRESS.md#staging-bank-instructions",
         "scope": "Non-payable staging read/binding only",
         "fullRequirementVerified": false,
+        "formalAcceptanceChanged": false
+      },
+      "bankInstructionsRealStackEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-E2E-001",
+        "reference": "PROGRESS.md#bank-instructions-real-stack-e2e",
         "formalAcceptanceChanged": false
       }
     },

@@ -4,6 +4,7 @@ Application cgroup: <=3 CPU/7 GiB; independent database: <=1 CPU/1 GiB.
 Their sum enforces the approved <=4 CPU/8 GiB aggregate ceiling.
 """
 import argparse
+import re
 import importlib.util
 import json
 import os
@@ -130,6 +131,12 @@ def cleanup(path):
     shutil.rmtree(path)  # Root verified by uid/mode/namespace; rmtree does not follow child symlinks.
 
 
+def journey_test(scenario):
+    tests={'campaign':'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
+    if scenario not in tests:raise RuntimeError('Unsupported synthetic scenario')
+    return tests[scenario]
+
+
 def inside(path):
     private_root(path)
     runtime_limits()
@@ -161,16 +168,20 @@ def inside(path):
     (path/'database-port.json').write_text(json.dumps({'ports': [int(port)]}))
     env.update(CINENEST_DB_URL='jdbc:postgresql://127.0.0.1:'+port+'/cinenest_test',
                CINENEST_DB_USER='cinenest_test', CINENEST_DB_PASSWORD=password,
-               CINENEST_E2E_RUN=str(path), MAVEN_USER_HOME=str(ROOT/'.cache/maven'), NEXT_TELEMETRY_DISABLED='1')
+               CINENEST_E2E_RUN=str(path), CINENEST_E2E_SOURCE=call(['git','rev-parse','HEAD']), MAVEN_USER_HOME=str(ROOT/'.cache/maven'), NEXT_TELEMETRY_DISABLED='1')
     # Only local caches; no npm install, Maven download or image pull.
     with (path / 'private-build.log').open('w') as log:
         for args, cwd in [(['npm', 'run', 'build'], ROOT/'frontend'),
                           ([str(ROOT/'backend/mvnw'), '-o', '-B', '-Dmaven.repo.local='+str(ROOT/'.cache/m2'),
-                            '-Dtest=SyntheticJourneyIT', 'test'], ROOT/'backend')]:
+                            '-Dtest='+journey_test(state.get('scenario','campaign')), 'test'], ROOT/'backend')]:
             result = subprocess.run(args, cwd=cwd, env=env, stdout=log, stderr=subprocess.STDOUT, timeout=540)
             if result.returncode:
                 if (path/'result.json').is_file():
                     print((path/'result.json').read_text(), flush=True)
+                if state.get('scenario')=='bank-instructions':
+                    raw=(path/'private-build.log').read_text(errors='replace')
+                    safe={'holdStatuses':re.findall(r'BI_SAFE_HOLD_STATUS=([0-9]{3})',raw),'classes':sorted(set(re.findall(r'\b[A-Za-z]+(?:Exception|Error)\b',raw))), 'sourceLocations':sorted(set(re.findall(r'(?:BankInstructionsJourneyIT|BankIntegrationTest)\.java:[0-9]+',raw)))}
+                    print(json.dumps({'sanitizedFailure':safe}),flush=True)
                 raise RuntimeError('Build/journey failed; raw private diagnostics are not published')
     print((path/'result.json').read_text(), flush=True)
 
@@ -178,6 +189,7 @@ def inside(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--scenario', choices=['campaign','bank-instructions'], default='campaign')
     parser.add_argument('--inside', type=Path)
     parser.add_argument('--cleanup', type=Path)
     args = parser.parse_args()
@@ -195,7 +207,7 @@ def main():
             return 0
         path = Path(tempfile.mkdtemp(prefix='cinenest-e2e-'))
         os.chmod(path, 0o700)
-        (path/'ownership.json').write_text(json.dumps({'name': path.name}))
+        (path/'ownership.json').write_text(json.dumps({'name': path.name, 'scenario': args.scenario}))
         script = str(Path(__file__).resolve())
         # The service kills/reaps descendants on exit/timeout; ExecStopPost owns DB cleanup even after SIGKILL.
         command = ['systemd-run', '--user', '--wait', '--pipe', '--collect', '--unit='+path.name,

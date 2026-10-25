@@ -84,6 +84,14 @@ class AdmissionTests(unittest.TestCase):
         self.assertIn('expectedNegative',source)
         self.assertIn('safeCustomerNavigation(u.href, base)',source)
 
+    def test_bank_instruction_scenario_is_explicit_and_bounded(self):
+        self.assertEqual(journey.journey_test('campaign'),'SyntheticJourneyIT')
+        self.assertEqual(journey.journey_test('bank-instructions'),'BankInstructionsJourneyIT')
+        with self.assertRaises(RuntimeError):journey.journey_test('arbitrary')
+        source=(journey.ROOT/'frontend/tests/bank-instructions-e2e.mjs').read_text()
+        for forbidden in ['page.route(', 'route.fulfill(', 'addCookies(', 'storageState:']:
+            self.assertNotIn(forbidden,source)
+
     def test_workflow_untouched_and_offline_runtime(self):
         source=Path(journey.__file__).read_text()
         self.assertIn("'--pull=never'",source)
