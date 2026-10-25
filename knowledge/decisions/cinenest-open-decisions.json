@@ -1534,6 +1534,26 @@
         "scope": "PROJECT.md#extension-reservation-policy",
         "fullDecisionStatus": "OPEN_DECISION",
         "fundingPurchaseCommit": "NOT_AUTHORIZED"
+      },
+      "boundedStagingBankInstructionsApproval": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+        "status": "OWNER_APPROVED_BOUNDED_STAGING_ONLY",
+        "source": "Current explicit inline owner approval: BI-01 through BI-08 and bounded implementation, permission definition, immutable model/binding/audit/two GETs/fixed resolver/Admin panel;additive migration after schema verification",
+        "date": "2026-10-25",
+        "permission": "bank.instructions.read",
+        "runtimeGrantAssignments": "NOT_AUTHORIZED",
+        "realReceivingAccounts": "NOT_AUTHORIZED",
+        "globalGates": "G-BANK/G-COMMERCIAL remain unresolved",
+        "exclusions": [
+          "Real receiving accounts",
+          "Real payment collection",
+          "Production financial operations",
+          "Runtime grants",
+          "Instruction publication commands",
+          "Allocation",
+          "Booking confirmation",
+          "Physical access"
+        ]
       }
     },
     {

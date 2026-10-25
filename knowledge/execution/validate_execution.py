@@ -7000,5 +7000,90 @@ def inert_ci_main():
     if result==0:print('PASS exact proposed12week planning successor;original92requirements74criteria,P0-P10,21day Release1,history,decisions and acceptance preserved')
     return result
 
+
+# CN-R1-BANK-INSTRUCTIONS-001: exact owner-authorized non-payable staging successor.
+bank_instruction_prior_main=inert_ci_main
+BI_BASELINE='46bf621476a9596dac9725a98ce8ee1336ecedf5'
+BI_HASHES={'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '018b935688a9ebc23d5c7b6ca488e35cc78225787763b554f421e59242168cae', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'ff161ebb8da5394d9043ee260eced09dc47402edbbaeb911ac1397bf84e92d17', 'backend/src/main/java/com/cinenest/payments/internal/BankInstructionController.java': '9147f209af88289c1c387fb4ad117b3ba429e74497e9014b2ef4891eba63d7df', 'backend/src/main/java/com/cinenest/payments/internal/BankInstructions.java': '7ed586da6207de670e48a4992f6360ac275fd5217305a276ae17b8d945b726d3', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java': '0376f0c7adf70f452eb6a5b33fad3b9d3719b7adbf7565f01814c058a52b3090', 'backend/src/main/java/com/cinenest/payments/internal/FixedInstructionResolver.java': 'fa5311705adac45eef3642cb13ee5926b9fc062b842194cf0cd16023bf128e92', 'backend/src/main/java/com/cinenest/payments/internal/InstructionRepository.java': '5dba4049d3374bf47ddf1eaf1341530d29d8e9bbf0e3e01d99203bcf94800998', 'backend/src/main/java/com/cinenest/payments/internal/InstructionResolver.java': 'efd870d377265f27a3c15aac2efba489f4ba1288e10cf51fe4173dd3417e0c23', 'backend/src/main/java/com/cinenest/payments/internal/JdbcInstructionRepository.java': '4503bc60e10dd6537a0e4615f00682f69a75bb70f23f0305131d30878af0c1a3', 'backend/src/main/resources/db/migration/V26__staging_bank_instruction_reads.sql': 'e23d528454e17f1bb9d9cff2dd2536a1b6543c6d73b37056b4ff3eba57faed42', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '00e346374b69c67534763f1563ec834bc5a3e3987d2f91918c1bf684f746ddb9', 'backend/src/test/java/com/cinenest/FoundationArchitectureTest.java': '7724c780646963f23799655aca84c3596dd58d2939236ddaa46c7ad5103eeab9', 'backend/src/test/java/com/cinenest/payments/internal/BankReadinessTest.java': '6b0a255347676650c7002eac6e51ac97c9f24eac22dbdd12619a8c55b4244cf5', 'backend/src/test/java/com/cinenest/payments/internal/FixedInstructionResolverTest.java': 'd46cbb1df03426613134e6df9145283dccdc4c0c3261b56fea08edab1edd4da5', 'backend/src/test/java/com/cinenest/payments/internal/InstructionSnapshotSupport.java': 'd9ca07821a6f8666d0495a28ee7ac3c4761e7f65b886028337725f3e5f907725', 'frontend/app/admin/bank/page.tsx': '3e8b5cfbc0d6be314505a0f8e105ecb5d616b819b92f1836e1ba5e26a2fcc012', 'frontend/app/api/admin/venues/[venueId]/bank/instructions/[id]/route.ts': '2e5f4206045441c8704f2a0ffd2e12cfcdc5817c51fee41e2c13372066feb0ed', 'frontend/app/api/admin/venues/[venueId]/bank/requests/[id]/instructions/route.ts': 'a6eccdfa6957faf0795bef137a6f6adc15d40d012b962a9de11c4c6224e4a65e', 'frontend/app/globals.css': 'f77c465cd04449f8a71b19f8729c2c2205083493def76b7319219abfd3c49c5d', 'frontend/components/bank-instructions.tsx': 'db1569243fed617321113c315494d0b4ef03c49f135afdd0cca425c68982e4d0', 'frontend/lib/bank-backend.ts': 'faf78f2a399bcddb43dfd5990396b7d6eac0d23389cc387eb9c99d130f4faf69', 'frontend/lib/bank-instructions-backend.ts': '3379e179b04d4eaa75a1b8b4147728d0922628be22a8c803db4d2a0e8fad73d1', 'frontend/lib/bank-instructions.ts': '212fa9de04b43ff317492973448754da93098fca07a6d329d96ee74904dab56f', 'frontend/package.json': '920eb837e91334b68c4a8bce567c09ceaab2d32a77352f0fc7687c1a29c19f60', 'frontend/tests/bank-instructions-browser.mjs': '8c5a5eb39e50864f48876443052fb1d472e880a3c1411a9b77859431dde27ee0', 'frontend/tests/bank-instructions-fixtures.mjs': '1b77fb428d074a313e7270c92a4823009f0a897c8b0f87a4375ce220eacaab7f', 'frontend/tests/bank-instructions.test.mjs': '1b8adc50d5275d74a14ed9b8a62faa3fd69ed914828d8f02467538a8a9ed35ec', 'knowledge/ARCHITECTURE.md': 'bd5d1c5ce1338b7f0eea2e374ded119e4bb5c20a2cefea6bc29ee91844026be0', 'knowledge/DESIGN.md': '6bd46e413fd1a0d890241c6d979110930d5389cd07d47698094f5d38b19e8b6b', 'knowledge/PROGRESS.md': 'df0d6256debe1ad87b4df7c882e1e54128bf3d46dbc5ed853a94de67f02c8652', 'knowledge/PROJECT.md': 'f6a3834b2ea1e63e784ef72125c2864342caa6cdd095b40f36cdf39ff79d7741', 'knowledge/decisions/cinenest-open-decisions.json': '70cb45c317acef08d9b3203e8ce1a7c2db2414480907b0cb1a236f6b07a3cf9d', 'knowledge/execution/change-sets.json': 'dfb4c3751e83fff402d86fbb4f2c8dcacc1164b9d207b0854b8f050f1fd8e91f', 'knowledge/execution/requirements.json': 'b4acb8091c2e55044b5a576dab507c33f515b046df3b4e5711b67a282ff9055f', 'knowledge/execution/status.json': 'defb018bb17769f27bed4ac527021c4ba1acfa34a8986d815d1f8ef1ebfb5843', 'knowledge/execution/test-plan.json': 'f4d5dc27aaf6ded40eaf4f7b417fca77a9d4be1968731c0375fa131a7732d920', 'knowledge/guides/USER_GUIDE.md': 'b4623a4efda82ed87d329ed71bdaffbebd8e01d0162c0179770fc7f2d992bc32', 'knowledge/product/FEATURE_CATALOG.md': '3fe5753bf43d99cbd5f1f8497b9600be3de0274b21cc5228732b373a40ed4da9', 'scripts/test-governance-controls.py': '5d383935eae44955de76ccfa884c50e3c6ff38d767848e8e592c54a632be1574'}
+BI_CURRENT_LINE='Current bounded staging instructions:[implementation](#staging-bank-instructions).Real banking,global G-BANK/G-COMMERCIAL and launch remain blocked.\n\n'
+
+def bank_instruction_planning_projection(plan):
+    import copy
+    result=copy.deepcopy(plan);receipt=json.loads((K/'execution/status.json').read_text())['bankInstructionsStagingImplementation']
+    for row in result.get('schedule',[]):
+        if row.get('taskId')=='CN-R1-BANK-INSTRUCTIONS-001':row.clear();row.update(receipt['previousScheduleRow'])
+    return result
+
+def bank_instruction_receipt_errors(e):
+    errors=[]
+    if e.get('baseline')!=BI_BASELINE or e.get('taskId')!='CN-R1-BANK-INSTRUCTIONS-001' or e.get('fixtureOnly') is not True:errors.append('Bank instruction bounded receipt missing')
+    for key in ['defaultEnabled','realAccounts','runtimeGrantsAssigned','publicationCommands','financialMutations','commercialAccepted','formalAcceptanceChanged','syntheticCampaignRerun']:
+        if e.get(key) is not False:errors.append('Bank instructions scope exceeded '+key)
+    tests=e.get('tests',{})
+    if tests.get('backend')!=820 or tests.get('frontend')!=497 or tests.get('browserIntercepted')!=39 or tests.get('realStackCampaign')!='NOT_RUN':errors.append('Bank instruction test accounting changed')
+    if e.get('migration')!='V26__staging_bank_instruction_reads.sql' or e.get('ownerApproval',{}).get('permission')!='bank.instructions.read' or e.get('ownerApproval',{}).get('runtimeGrantAssignments')!='NOT_AUTHORIZED':errors.append('Bank instruction authority drift')
+    return errors
+
+def bank_instruction_successor_errors():
+    errors=[]
+    def prior(n):return subprocess.check_output(['git','-C',str(R),'show',BI_BASELINE+':'+n])
+    for n,h in BI_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Bank instruction exact authorized payload mismatch '+n)
+    if errors:return errors
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(prior('knowledge/execution/validate_execution.py').decode().removesuffix(ending)):errors.append('Bank instruction historical validator changed')
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('bankInstructionsStagingImplementation',{});errors.extend(bank_instruction_receipt_errors(e))
+    if s!=json.loads(prior('knowledge/execution/status.json')):errors.append('Bank instruction historical status changed')
+    c=json.loads((K/'execution/change-sets.json').read_text());c.pop('bankInstructionsStagingExecution',None);c['release1DeliverySlice']=bank_instruction_planning_projection(c['release1DeliverySlice'])
+    if c!=json.loads(prior('knowledge/execution/change-sets.json')):errors.append('Bank instruction dependency/roadmap/gate drift')
+    for name,key in [('knowledge/execution/requirements.json','requirements'),('knowledge/execution/test-plan.json','tests')]:
+        d=json.loads((R/name).read_text())
+        for row in d[key]:row.pop('bankInstructionsStagingEvidence',None)
+        if d!=json.loads(prior(name)):errors.append('Bank instruction formal requirements/test plans changed '+name)
+    d=json.loads((K/'decisions/cinenest-open-decisions.json').read_text())
+    for row in d['decisions']:row.pop('boundedStagingBankInstructionsApproval',None)
+    if d!=json.loads(prior('knowledge/decisions/cinenest-open-decisions.json')):errors.append('Bank instruction global decisions changed')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        current=(R/n).read_text()
+        if n=='knowledge/PROGRESS.md':current=current.replace(BI_CURRENT_LINE,'',1)
+        if not current.startswith(prior(n).decode()):errors.append('Bank instruction historical prose changed '+n)
+    owned=set(BI_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',BI_BASELINE],text=True),nul=True)
+    migration_folder=R/'backend/src/main/resources/db/migration'
+    expected_migrations={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}|{'backend/src/main/resources/db/migration/V26__staging_bank_instruction_reads.sql'}
+    if {x.relative_to(R).as_posix() for x in migration_folder.glob('V*.sql')}!=expected_migrations:errors.append('Bank instruction migration scope exceeded')
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=prior(n):errors.append('Bank instruction unowned source/history drift '+n)
+    inventory=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend'],text=True))
+    if not inventory<=tracked|owned:errors.append('Bank instruction unauthorized new application paths')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',BI_BASELINE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Bank instruction unauthorized paths')
+    manifest=json.loads((K/'manifest.json').read_text());expected=json.loads(prior('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if manifest!=expected:errors.append('Bank instruction manifest authority drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=bank_instruction_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    owned=set(BI_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',BI_BASELINE],text=True),nul=True);added=owned-tracked
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',BI_BASELINE+':'+n]) for n in owned&tracked};rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            exclude=added if 'ls-files' in argv else owned;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in exclude];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**k):return (x for x in g0(p,*a,**k) if x not in {R/n for n in added})
+    def rglob(p,*a,**k):return (x for x in rg0(p,*a,**k) if x not in {R/n for n in added})
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=bank_instruction_prior_main()
+    if result==0:print('PASS exact authorized staging bank instruction successor;V1-V25,global bank/commercial gates,history,92requirements74criteria and acceptance preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

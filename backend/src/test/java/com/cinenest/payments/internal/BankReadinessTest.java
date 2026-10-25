@@ -21,7 +21,7 @@ class BankReadinessTest {
  @BeforeEach void setup(){
   when(manager.getTransaction(any())).thenAnswer(x->new SimpleTransactionStatus());
   when(policy.current()).thenReturn(new BankPolicy.Policy("SYNTHETIC-TEST","test",UUID.randomUUID(),Duration.ofSeconds(60),Duration.ofSeconds(300),Duration.ofSeconds(10),Duration.ofSeconds(20),Duration.ofSeconds(30),Duration.ofSeconds(240),Duration.ofSeconds(40),Duration.ofSeconds(10),Duration.ofSeconds(60),Duration.ofSeconds(1),LocalTime.MIN,LocalTime.MAX,Set.of()));
-  service=new BankService(mock(LedgerService.class),repo,auth,quotes,holds,verification,policy,mock(PrivateEvidenceStore.class),mock(SyntheticEvidenceProcessor.class),mock(ReviewerNotice.class),mock(com.cinenest.notifications.NotificationFacts.class),manager);
+  service=new BankService(mock(LedgerService.class),repo,auth,quotes,holds,verification,policy,mock(PrivateEvidenceStore.class),mock(SyntheticEvidenceProcessor.class),mock(ReviewerNotice.class),mock(com.cinenest.notifications.NotificationFacts.class),manager,mock(BankInstructions.class));
   facts=new BankQuotation.Facts(quote,actor,venue,hold,3,1,"a".repeat(64),now.plusSeconds(600),Map.of("synthetic",true,"commercialIssuance",false,"currency","LKR","sessionStart",now.plusSeconds(3600).toString(),"sessionEnd",now.plusSeconds(7200).toString(),"timezone","Asia/Colombo","totalMinor",123L,"privateInternal","MUST_NOT_LEAK"));
   when(auth.eligible(actor,false)).thenReturn(true);when(quotes.observe(actor,quote)).thenAnswer(x->Optional.of(new BankQuotation.Observation(facts,"ELIGIBLE")));when(verification.observe(actor,quote,venue)).thenReturn(true);when(repo.now()).thenReturn(now);when(holds.conversionRefusal(eq(actor),eq(hold),eq(1L),any(),eq(false))).thenReturn("ELIGIBLE");
  }

@@ -3027,6 +3027,13 @@
         "evidencePath": "PROGRESS.md#release1-customer-recovery",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "bankInstructionsStagingEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+        "evidencePath": "PROGRESS.md#staging-bank-instructions",
+        "scope": "Non-payable staging read/binding only",
+        "fullRequirementVerified": false,
+        "formalAcceptanceChanged": false
       }
     },
     {
@@ -6208,6 +6215,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
+      },
+      "bankInstructionsStagingEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+        "evidencePath": "PROGRESS.md#staging-bank-instructions",
+        "scope": "Non-payable staging read/binding only",
+        "fullRequirementVerified": false,
+        "formalAcceptanceChanged": false
       }
     },
     {
@@ -6392,6 +6406,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankInstructionsStagingEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+        "evidencePath": "PROGRESS.md#staging-bank-instructions",
+        "scope": "Non-payable staging read/binding only",
+        "fullRequirementVerified": false,
+        "formalAcceptanceChanged": false
       }
     },
     {

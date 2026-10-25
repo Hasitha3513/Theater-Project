@@ -117,6 +117,7 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/extension-quotes").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/cancellation","/api/admin/venues/*/bookings/*/cancellation").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/cancellations","/api/admin/venues/*/bookings/*/cancellations").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/bank/instructions/*","/api/admin/venues/*/bank/requests/*/instructions").authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request, response, failure) -> {

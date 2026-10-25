@@ -1,5 +1,6 @@
-import { BankFinance } from "../../../components/bank-finance";
 import { BankWorkspace } from "../../../components/bank";
+import { BankFinance } from "../../../components/bank-finance";
+import { BankInstructionPanel } from "../../../components/bank-instructions";
 import { PageHeading } from "../../../components/primitives";
 export default async function Page({
 	searchParams,
@@ -21,6 +22,7 @@ export default async function Page({
 			</PageHeading>
 			<BankWorkspace key={venue} reviewer={true} initialVenueId={venue} />
 			<BankFinance />
+			<BankInstructionPanel />
 		</>
 	);
 }

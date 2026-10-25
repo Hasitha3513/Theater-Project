@@ -679,3 +679,24 @@ CN-EXTENSION-RESERVATION-RECOVERY-READ-001 extends DOC-F030 backend capability w
 CN-EXTENSION-RESERVATION-FE-001 adds owner-only customer booking-detail Review/Reserve Extension Time,authoritative status,refresh/revisit command recovery and explicit withdrawal. Current configuration is read from existing calendar;CREATE remains final inventory authority. References only in account-scoped session storage;no financial/identity payload. Recovery404 remains UNKNOWN;no automatic replacement/renewal or paid extension. Four strict authenticated GET/CSRF POST proxies reuse existing routes. [UI](../../frontend/components/extension-reservation.tsx),[transport](../../frontend/lib/extension-reservation.ts),[tests](../../frontend/tests/extension-reservation.test.mjs),[browser fixtures](../../frontend/tests/extension-reservation-browser.mjs),[current evidence](../PROGRESS.md#extension-reservation-frontend). Wider funding/commit/physical scope remains unimplemented/unqualified.
 
 DOC-F029/DOC-F030 verification update (CN-E2E-EXTENSION-RESERVATION-001):actual browser/Next.js/Spring Boot/PostgreSQL preview,temporary reservation,status,original-command recovery and withdrawal verified in the32-PASS synthetic campaign. Current owner/session,CSRF,conflict/expiry and unchanged purchase/finance/access behavior verified. This does not enable funding,paid extension,PIN changes or physical admission. [Source-backed evidence](../PROGRESS.md#extension-reservation-e2e).
+
+<a id="doc-f031"></a>
+## DOC-F031 — Protected staging bank instruction inspection
+
+| Field | Implemented boundary |
+|---|---|
+| Implementation status | PARTIAL |
+| Category / module | Bank instruction inspection / Payments, Identity |
+| Intended user | Independently authorized staging venue staff |
+| Description / available functionality | Exact immutable instruction revision and request-bound read;explicit load/retry/clear |
+| Operational classification | SIMULATED / non-payable staging software |
+| Demo availability | CONDITIONAL isolated fixtures and independently authorized test session |
+| Required permissions | bank.instructions.read plus current membership;request reads additionally require existing bank.claim.review and bank.evidence.read |
+| Known limitations | No real account,publication,collection,grants or commercial qualification |
+| Automated test evidence | [PostgreSQL](../../backend/src/test/java/com/cinenest/BankIntegrationTest.java),[frontend](../../frontend/tests/bank-instructions.test.mjs) |
+| Source | [Backend](../../backend/src/main/java/com/cinenest/payments/internal/BankInstructions.java),[panel](../../frontend/components/bank-instructions.tsx) |
+| Screenshot | Local375/768/1280 before/after evidence;hashes in existing execution receipt;not portable committed images |
+| MVP / requirement / test plan | P4-C04 / CN-C10 / T-CN-C10 |
+| Last verified commit / CI | Baseline46bf621/CI40185148738 SUCCESS;new exact-source publication CI PENDING |
+
+PARTIAL wider MVP;implemented bounded non-payable staging software only. Existing /admin/bank offers explicit exact revision/request lookup,version/effective/approval/observation metadata and safe errors/retry;no real account details. Requires current membership/exact-venue bank.instructions.read;request reads additionally preserve bank.claim.review,bank.evidence.read and no-own-review rules. New synthetic requests bind atomically only when feature enabled;old requests are not backfilled. No grant assignments,publication,collection or commercial acceptance. Requirements CN-C10/BP-AC06/BP-AC09;tests T-CN-C10/T-BP-AC06/T-BP-AC09 remain formally unchanged. Source:backend BankInstructions/InstructionRepository/FixedInstructionResolver,frontend bank-instructions panel/proxy and V26. [Actual tests/screenshots/CI boundary](../PROGRESS.md#staging-bank-instructions). Source checkpoint baseline46bf621;successor exact-sourceCI pending until separately verified. Real receiving accounts/privacy/provider/finance/launch gates remain blocked.

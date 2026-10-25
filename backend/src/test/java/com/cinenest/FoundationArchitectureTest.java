@@ -138,4 +138,10 @@ class FoundationArchitectureTest {
   String source=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/booking/internal/InventoryCalendar.java"));
   org.assertj.core.api.Assertions.assertThat(source).contains("setReadOnly(true)","ISOLATION_REPEATABLE_READ","rooms.observe","LIMIT 1001").doesNotContain("reconcileLocked","cinenest_rooms.","cinenest_payments.","cinenest_iot.","cinenest_notifications.","FOR UPDATE","INSERT ","UPDATE ","DELETE ");
  }
+    @Test void instructionReadsKeepOwnedPersistenceAndFixedResolver() throws Exception {
+        var classes=new ClassFileImporter().importPackages("com.cinenest");
+        noClasses().that().haveSimpleName("BankInstructions").should().dependOnClassesThat().resideInAPackage("org.springframework.jdbc..").check(classes);
+        var source=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/payments/internal/JdbcInstructionRepository.java"));assertThat(source).doesNotContain("cinenest_identity.","cinenest_booking.","cinenest_pricing.");
+        var resolver=java.nio.file.Files.readString(java.nio.file.Path.of("src/main/java/com/cinenest/payments/internal/FixedInstructionResolver.java"));assertThat(resolver).doesNotContain("java.net.","java.nio.file.","HttpClient");
+    }
 }

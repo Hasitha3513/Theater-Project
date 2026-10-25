@@ -5753,12 +5753,32 @@
           "G-BANK",
           "G-COMMERCIAL"
         ],
-        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "status": "VERIFIED_STAGING_ONLY_PUBLICATION_PENDING",
         "implementationScope": "One separately approved instructions/configuration read path with exact receiving-account approval and immutable request binding; no bank API integration or real account data in repository.",
         "tests": "Old/new version races, revoked authority, no private destination leakage, exact deadlines and safe status",
         "definitionOfDone": "Approved instructions supplied and version-bound; no live payment collection yet",
         "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
-        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit.",
+        "boundedStagingAuthority": {
+          "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+          "status": "OWNER_APPROVED_BOUNDED_STAGING_ONLY",
+          "source": "Current explicit inline owner approval: BI-01 through BI-08 and bounded implementation, permission definition, immutable model/binding/audit/two GETs/fixed resolver/Admin panel;additive migration after schema verification",
+          "date": "2026-10-25",
+          "permission": "bank.instructions.read",
+          "runtimeGrantAssignments": "NOT_AUTHORIZED",
+          "realReceivingAccounts": "NOT_AUTHORIZED",
+          "globalGates": "G-BANK/G-COMMERCIAL remain unresolved",
+          "exclusions": [
+            "Real receiving accounts",
+            "Real payment collection",
+            "Production financial operations",
+            "Runtime grants",
+            "Instruction publication commands",
+            "Allocation",
+            "Booking confirmation",
+            "Physical access"
+          ]
+        }
       },
       {
         "day": 10,
@@ -6691,5 +6711,10 @@
     "implementationAuthorized": false,
     "launchAuthorized": false,
     "release1PlanChanged": false
+  },
+  "bankInstructionsStagingExecution": {
+    "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+    "evidence": "PROGRESS.md#staging-bank-instructions",
+    "globalBankCommercialGatesResolved": false
   }
 }

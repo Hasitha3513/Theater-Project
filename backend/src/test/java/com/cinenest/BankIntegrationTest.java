@@ -84,6 +84,7 @@ class BankIntegrationTest {
     String base() { return "http://127.0.0.1:" + environment.getRequiredProperty("local.server.port"); }
 
     @BeforeEach void fixtures() {
+        jdbc.sql("TRUNCATE cinenest_payments.bank_instruction_revision,cinenest_payments.bank_instruction_audit CASCADE").update();
         jdbc.sql("TRUNCATE cinenest_booking.booking_extension_audit,cinenest_booking.booking_extension_command,cinenest_booking.booking_extension_reservation CASCADE").update();
         jdbc.sql("TRUNCATE cinenest_booking.cancellation_audit,cinenest_booking.cancellation_command,cinenest_booking.booking_cancellation CASCADE").update();
         jdbc.sql("TRUNCATE cinenest_payments.cancellation_refund_source,cinenest_payments.cancellation_refund_obligation CASCADE").update();
@@ -1013,7 +1014,7 @@ class BankIntegrationTest {
  @Test void reportGrantDoesNotPermitFinancialMutationsExportsOrDrilldown()throws Exception{reportGrant();var b=signedIn("staff");assertThat(b.get("/api/admin/venues/"+VA+"/bank/credits").statusCode()).isEqualTo(403);assertThat(b.get(report()+"&export=csv").statusCode()).isEqualTo(400);assertThat(write(b,"POST",report(),"{}").statusCode()).isBetween(403,405);var deniedBody=financial(0);deniedBody.put("fixtureKey","SYNTHETIC-BANK-100");assertThat(write(b,"POST","/api/admin/venues/"+VA+"/bank/credits",JSONObjectUtils.toJSONString(deniedBody)).statusCode()).isEqualTo(403);}
  @Test void reportCurrenciesRemainSeparateAndDatesAreValidated()throws Exception{reportGrant();var b=signedIn("staff");assertThat(reportSummary(json(b.get(report().replace("LKR","USD"))))).containsEntry("c","0");for(String suffix:java.util.List.of("&from=2026-01-01","&from=2026-01-02&to=2026-01-01","&from=2020-01-01&to=2026-01-01","&page=-1","&size=101","&asOf=2020-01-01"))assertThat(b.get(report()+suffix).statusCode()).as(suffix).isEqualTo(400);}
  @Test void reportCreditedCohortIncludesLaterVisibleEffects()throws Exception{var c=refundCase(100);approveRefund(c);reportGrant();String date=java.time.Instant.parse(CREDIT_TIME).atZone(java.time.ZoneId.of("Asia/Colombo")).toLocalDate().toString();var r=json(c.reviewer().get(report()+"&from="+date+"&to="+java.time.LocalDate.parse(date).plusDays(1)));assertThat(reportSummary(r)).containsEntry("c","50000").containsEntry("r","100");var empty=json(c.reviewer().get(report()+"&from="+java.time.LocalDate.parse(date).plusDays(1)+"&to="+java.time.LocalDate.parse(date).plusDays(2)));assertThat(reportSummary(empty)).containsEntry("c","0");}
- @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(25);}
+ @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(26);}
 
 
  @Test void reportSnapshotCannotSplitConcurrentAllocation()throws Exception{financeGrants();reportGrant();var customer=signedIn("customer-a");var staff=signedIn("staff");var allocator=signedIn("customer-b");var request=bank(customer);var credit=credit(staff,"SYNTHETIC-BANK-50000");var matched=match(allocator,request,credit);Object old=com.cinenest.payments.internal.ReportFaults.afterSummary(context,()->{try{json(allocateCredit(allocator,matched,credit,Long.parseLong(matched.get("amountMinor").toString())));}catch(Exception e){throw new IllegalStateException(e);}});try{var report=json(staff.get(report()));assertThat(reportSummary(report).get("a")).isEqualTo("0");var row=(Map<?,?>)((java.util.List<?>)snapshot(report).get("rows")).getFirst();assertThat(((Map<?,?>)row.get("amounts")).get("a")).isEqualTo("0");}finally{com.cinenest.payments.internal.ReportFaults.restore(context,old);}assertThat(reportSummary(json(staff.get(report()))).get("a")).isEqualTo(matched.get("amountMinor").toString());}
@@ -1819,7 +1820,7 @@ class BankIntegrationTest {
       String url=System.getenv("CINENEST_DB_URL"),user=System.getenv("CINENEST_DB_USER"),password=System.getenv("CINENEST_DB_PASSWORD"),db="extension_upgrade_"+UUID.randomUUID().toString().replace("-","");String target=url.substring(0,url.lastIndexOf('/')+1)+db;
       try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("CREATE DATABASE "+db);}
       try{Flyway.configure().dataSource(target,user,password).target("24").load().migrate();try(var c=DriverManager.getConnection(target,user,password);var st=c.createStatement()){st.execute("INSERT INTO cinenest_rooms.venue(venue_id,code,display_name,timezone) VALUES('00000000-0000-4000-8000-000000000001','KEEP','Retained V24','Asia/Colombo')");}
-       var f=Flyway.configure().dataSource(target,user,password).load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);assertThat(f.migrate().migrationsExecuted).isZero();f.validate();
+       var f=Flyway.configure().dataSource(target,user,password).target("25").load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);assertThat(f.migrate().migrationsExecuted).isZero();f.validate();
        try(var c=DriverManager.getConnection(target,user,password);var st=c.createStatement();var rs=st.executeQuery("SELECT (SELECT count(*) FROM cinenest_rooms.venue WHERE code='KEEP'),(SELECT count(*) FROM pg_constraint WHERE conrelid='cinenest_booking.inventory_block'::regclass AND contype='x'),(SELECT count(*) FROM cinenest_identity.access_grant)")){rs.next();assertThat(rs.getInt(1)).isEqualTo(1);assertThat(rs.getInt(2)).isEqualTo(1);assertThat(rs.getInt(3)).isZero();}
       }finally{try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("DROP DATABASE "+db);}}
     }
@@ -1976,5 +1977,83 @@ class BankIntegrationTest {
       var otherHold=held(c.customer(),request(c.customer(),java.time.LocalDateTime.parse(local()).plusDays(1).toString()));UUID other=UUID.randomUUID();
       jdbc.sql("INSERT INTO cinenest_booking.booking(booking_id,request_id,hold_id,owner_id,venue_id,state,synthetic) VALUES(:b,:request,:hold,:a,:v,'SIMULATED_CONFIRMED',true)").param("b",other).param("request",UUID.randomUUID()).param("hold",UUID.fromString(otherHold.get("holdId").toString())).param("a",A).param("v",VA).update();
       var response=c.customer().get(recoveryPath(c,body.get("commandKey")).replace(c.booking().toString(),other.toString()));assertThat(response.statusCode()).isEqualTo(404);assertThat(response.body()).contains("outcome remains unknown").doesNotContain("reservationId");
+    }
+
+    AutoCloseable instructionsEnabled(){var env=(org.springframework.core.env.ConfigurableEnvironment)environment;env.getPropertySources().addFirst(new org.springframework.core.env.MapPropertySource("instruction-test",Map.of("cinenest.bank.instructions.enabled",true,"cinenest.bank.instructions.mode","STAGING_ONLY")));return ()->env.getPropertySources().remove("instruction-test");}
+    UUID instructionFixture(String version,String fixtureVersion){UUID next=UUID.randomUUID(),ref=id("CN-R1-BI-NONPAYABLE"),rv=id(fixtureVersion);String digest=hash(("NON-PAYABLE STAGING FIXTURE|NO REAL RECEIVING ACCOUNT|DO NOT TRANSFER MONEY|"+rv).getBytes(java.nio.charset.StandardCharsets.UTF_8));jdbc.sql("INSERT INTO cinenest_payments.bank_instruction_revision VALUES(:i,:v,:ver,'STAGING_ONLY',:ref,:rv,:hash,clock_timestamp()-interval '5 minutes',clock_timestamp()+interval '1 hour',:a,:b,:approval,:hash,clock_timestamp()-interval '10 minutes',clock_timestamp())").param("i",next).param("v",VA).param("ver",version).param("ref",ref).param("rv",rv).param("hash",digest).param("a",A).param("b",STAFF).param("approval",UUID.randomUUID()).update();return next;}
+    String instructionPath(UUID id){return "/api/admin/venues/"+VA+"/bank/instructions/"+id;}
+    String boundInstructions(Object id){return "/api/admin/venues/"+VA+"/bank/requests/"+id+"/instructions";}
+    @Test void instructionProtectedReadAndLegacyBindingStayIndependent()throws Exception{
+      var staff=signedIn("staff");var customer=signedIn("customer-a");UUID revision=instructionFixture("SYNTHETIC-BANK1","CN-R1-BI-V1");var legacy=bank(customer);bankGrants();
+      assertThat(staff.get(instructionPath(revision)).statusCode()).isEqualTo(404);
+      try(var enabled=instructionsEnabled()){
+       assertThat(staff.get(instructionPath(revision)).statusCode()).isEqualTo(403);UUID grant=grant("bank.instructions.read","VENUE",VA);
+       var before=businessSnapshot();var response=staff.get(instructionPath(revision));assertThat(response.statusCode()).isEqualTo(200);assertThat(response.headers().firstValue("Cache-Control").orElse("")).contains("private","no-store");
+       var value=json(response);assertThat(value).containsEntry("mode","STAGING_ONLY").containsEntry("collectionEnabled",false).containsEntry("synthetic",true).containsEntry("requestId",null);assertThat(value.toString()).doesNotContain("reference_id","referenceVersion","proposer","approver","approval_sha256");
+       var after=businessSnapshot();before.remove("cinenest_payments.bank_instruction_audit");after.remove("cinenest_payments.bank_instruction_audit");assertThat(after).isEqualTo(before);
+       assertThat(staff.get(boundInstructions(legacy.get("id"))).statusCode()).isEqualTo(409);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_instruction_request_binding").query(Integer.class).single()).isZero();
+       assertThat(staff.get(instructionPath(revision)+"?page=0").statusCode()).isEqualTo(400);assertThat(staff.get(instructionPath(revision)+"?page=0&page=1").statusCode()).isEqualTo(400);
+       assertThat(staff.get(instructionPath(revision).replace(VA.toString(),VB.toString())).statusCode()).isEqualTo(403);
+       assertThat(customer.get(instructionPath(revision)).statusCode()).isEqualTo(403);
+       jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",grant).update();assertThat(staff.get(instructionPath(revision)).statusCode()).isEqualTo(403);
+      }
+    }
+    @Test void instructionCreateBindingAndCommandReplayAreAtomicAndVersionPinned()throws Exception{
+      UUID revision=instructionFixture("SYNTHETIC-BANK1","CN-R1-BI-V1");var a=signedIn("customer-a");var body=bankBody(a);var staff=signedIn("staff");grant("bank.instructions.read","VENUE",VA);bankGrants();
+      try(var enabled=instructionsEnabled()){
+       Map<String,Object> created;try(var pool=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){var attempts=pool.invokeAll(java.util.List.<java.util.concurrent.Callable<HttpResponse<String>>>of(()->write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)),()->write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body))));created=json(attempts.get(0).get());assertThat(json(attempts.get(1).get())).isEqualTo(created);}var replay=json(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)));assertThat(replay).isEqualTo(created);
+       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_instruction_request_binding").query(Integer.class).single()).isEqualTo(1);
+       var first=json(staff.get(boundInstructions(created.get("id"))));assertThat(first.get("instructionRevisionId")).isEqualTo(revision.toString());
+       instructionFixture("SYNTHETIC-BANK2","CN-R1-BI-V2");assertThat(json(staff.get(boundInstructions(created.get("id")))).get("instructionRevisionId")).isEqualTo(revision.toString());
+       var changed=new HashMap<>(body);changed.put("quoteRevision",999);assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(changed)).statusCode()).isEqualTo(409);
+       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.incoming_payment_credit").query(Integer.class).single()).isZero();assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.booking").query(Integer.class).single()).isZero();assertThat(jdbc.sql("SELECT count(*) FROM cinenest_access.access_credential").query(Integer.class).single()).isZero();
+       jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE permission='bank.evidence.read'").update();assertThat(staff.get(boundInstructions(created.get("id"))).statusCode()).isEqualTo(403);assertThat(staff.get(instructionPath(revision)).statusCode()).isEqualTo(200);
+       staff.logout();assertThat(staff.get(instructionPath(revision)).statusCode()).isEqualTo(401);
+      }
+    }
+    @Test void instructionAuditFailureRollsBackCreateAndNeverDiscloses()throws Exception{
+      UUID revision=instructionFixture("SYNTHETIC-BANK1","CN-R1-BI-V1");var a=signedIn("customer-a");var body=bankBody(a);var staff=signedIn("staff");grant("bank.instructions.read","VENUE",VA);
+      jdbc.sql("ALTER TABLE cinenest_payments.bank_instruction_audit ADD CONSTRAINT instruction_fault CHECK(false) NOT VALID").update();
+      try(var enabled=instructionsEnabled()){
+       assertThat(staff.get(instructionPath(revision)).statusCode()).isEqualTo(503);
+       assertThat(write(a,"POST","/api/bank/requests",JSONObjectUtils.toJSONString(body)).statusCode()).isEqualTo(503);
+       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request").query(Integer.class).single()).isZero();assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_instruction_request_binding").query(Integer.class).single()).isZero();
+      }finally{jdbc.sql("ALTER TABLE cinenest_payments.bank_instruction_audit DROP CONSTRAINT instruction_fault").update();}
+    }
+    @Test void instructionResolverAndSchemaFailClosed()throws Exception{
+      var staff=signedIn("staff");grant("bank.instructions.read","VENUE",VA);UUID invalid=instructionFixture("SYNTHETIC-BAD","UNKNOWN-REF-VERSION");
+      try(var enabled=instructionsEnabled()){assertThat(staff.get(instructionPath(invalid)).statusCode()).isEqualTo(503);}
+      for(String table:java.util.List.of("bank_instruction_revision","bank_instruction_audit"))assertThatThrownBy(()->jdbc.sql("DELETE FROM cinenest_payments."+table).update()).isInstanceOf(DataAccessException.class);
+      assertThatThrownBy(()->jdbc.sql("UPDATE cinenest_payments.bank_instruction_revision SET effective_until=effective_until+interval '1 hour'").update()).isInstanceOf(DataAccessException.class);
+      assertThatThrownBy(()->jdbc.sql("INSERT INTO cinenest_payments.bank_instruction_revision SELECT gen_random_uuid(),venue_id,instruction_version,mode,reference_id,reference_version,content_sha256,effective_from,effective_until,proposer_id,approver_id,approval_reference,approval_sha256,approved_at,registered_at FROM cinenest_payments.bank_instruction_revision LIMIT 1").update()).isInstanceOf(DataAccessException.class);
+    }
+    @Test void instructionReadRechecksRevocationAfterSnapshot()throws Exception{
+      UUID revision=instructionFixture("SYNTHETIC-BANK1","CN-R1-BI-V1"),g=grant("bank.instructions.read","VENUE",VA);
+      try(var enabled=instructionsEnabled()){
+       int status=com.cinenest.payments.internal.InstructionSnapshotSupport.read(context,transactions,STAFF,VA,revision,()->{var t=new org.springframework.transaction.support.TransactionTemplate(transactions);t.setPropagationBehavior(org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW);t.executeWithoutResult(s->jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update());});assertThat(status).isEqualTo(403);
+       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_instruction_audit WHERE outcome='ALLOW'").query(Integer.class).single()).isZero();
+      }
+    }
+    @Test void instructionV26UpgradeRetainsPopulatedV25AndNoRuntimeSeeds()throws Exception{
+      String url=System.getenv("CINENEST_DB_URL"),user=System.getenv("CINENEST_DB_USER"),password=System.getenv("CINENEST_DB_PASSWORD"),db="instruction_upgrade_"+UUID.randomUUID().toString().replace("-","");String target=url.substring(0,url.lastIndexOf('/')+1)+db;
+      try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("CREATE DATABASE "+db);}
+      try{Flyway.configure().dataSource(target,user,password).target("25").load().migrate();try(var c=DriverManager.getConnection(target,user,password);var st=c.createStatement()){st.execute("INSERT INTO cinenest_rooms.venue(venue_id,code,display_name,timezone) VALUES('00000000-0000-4000-8000-000000000001','KEEP26','Retained V25','Asia/Colombo')");}
+       var f=Flyway.configure().dataSource(target,user,password).load();assertThat(f.migrate().migrationsExecuted).isEqualTo(1);f.validate();assertThat(f.migrate().migrationsExecuted).isZero();try(var c=DriverManager.getConnection(target,user,password);var st=c.createStatement();var rs=st.executeQuery("SELECT (SELECT count(*) FROM cinenest_payments.bank_instruction_revision),(SELECT display_name FROM cinenest_rooms.venue WHERE code='KEEP26'),(SELECT count(*) FROM cinenest_identity.access_grant)")){assertThat(rs.next()).isTrue();assertThat(rs.getInt(1)).isZero();assertThat(rs.getString(2)).isEqualTo("Retained V25");assertThat(rs.getInt(3)).isZero();}
+      }finally{try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute("DROP DATABASE "+db);}}
+    }
+
+    @Test void instructionAuthorityMembershipExpiryAndMethodsFailClosed()throws Exception{
+      UUID rev=instructionFixture("SYNTHETIC-BANK1","CN-R1-BI-V1");var staff=signedIn("staff");grant("bank.instructions.read","VENUE",VB);
+      try(var enabled=instructionsEnabled()){
+       assertThat(staff.get(instructionPath(rev)).statusCode()).isEqualTo(403);var g=grant("bank.instructions.read","VENUE",VA);
+       jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:a AND venue_id=:v").param("a",STAFF).param("v",VA).update();assertThat(staff.get(instructionPath(rev)).statusCode()).isEqualTo(403);scope(STAFF,VA);
+       jdbc.sql("UPDATE cinenest_identity.access_grant SET valid_until=clock_timestamp()-interval '1 second' WHERE grant_id=:g").param("g",g).update();assertThat(staff.get(instructionPath(rev)).statusCode()).isEqualTo(403);grant("bank.instructions.read","VENUE",VA);
+       jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();assertThat(staff.get(instructionPath(rev)).statusCode()).isEqualTo(403);jdbc.sql("UPDATE cinenest_identity.account SET eligibility='ELIGIBLE' WHERE account_id=:a").param("a",STAFF).update();
+       assertThat(staff.get(instructionPath(UUID.randomUUID())).statusCode()).isEqualTo(404);assertThat(write(staff,"POST",instructionPath(rev),"{}").statusCode()).isEqualTo(403);
+      }
+    }
+    @ParameterizedTest @ValueSource(strings={"self","mode","period"}) void instructionSchemaRejectsUnsupportedApprovalOrMode(String fault){
+      instructionFixture("SYNTHETIC-BANK1","CN-R1-BI-V1");String mode=fault.equals("mode")?"'PRODUCTION'":"mode",approver=fault.equals("self")?"proposer_id":"approver_id",until=fault.equals("period")?"effective_from":"effective_until";
+      assertThatThrownBy(()->jdbc.sql("INSERT INTO cinenest_payments.bank_instruction_revision SELECT gen_random_uuid(),venue_id,'SYNTHETIC-NEW',"+mode+",reference_id,reference_version,content_sha256,effective_from,"+until+",proposer_id,"+approver+",approval_reference,approval_sha256,approved_at,registered_at FROM cinenest_payments.bank_instruction_revision LIMIT 1").update()).isInstanceOf(DataIntegrityViolationException.class);
     }
 }

@@ -2006,6 +2006,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
+      },
+      "bankInstructionsStagingEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+        "evidencePath": "PROGRESS.md#staging-bank-instructions",
+        "scope": "Non-payable staging read/binding only",
+        "fullRequirementVerified": false,
+        "formalAcceptanceChanged": false
       }
     },
     {
@@ -3883,6 +3890,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Synthetic integration positive review-window coverage only;production deadlines,precedence,authorization,financial authority and full requirement acceptance unchanged"
+      },
+      "bankInstructionsStagingEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+        "evidencePath": "PROGRESS.md#staging-bank-instructions",
+        "scope": "Non-payable staging read/binding only",
+        "fullRequirementVerified": false,
+        "formalAcceptanceChanged": false
       }
     },
     {
@@ -3960,6 +3974,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real receipts/commercial policy, independent bank credits, allocation, confirmation/refunds/live delivery remain unimplemented"
+      },
+      "bankInstructionsStagingEvidence": {
+        "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
+        "evidencePath": "PROGRESS.md#staging-bank-instructions",
+        "scope": "Non-payable staging read/binding only",
+        "fullRequirementVerified": false,
+        "formalAcceptanceChanged": false
       }
     },
     {
