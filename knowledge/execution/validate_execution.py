@@ -7519,5 +7519,89 @@ def inert_ci_main():
 
 
 
+
+# Exact owner-authorized S1 contract successor; no runtime, migration or permission admission.
+s1_prior_main=inert_ci_main
+s1_historical_guard=receipt_admission_successor_errors
+S1_BASE='baa01111addb8757e8dcc4c8433aa577ce747d4f'
+S1_HASHES={'backend/src/main/java/com/cinenest/access/SmartLock.java': 'f95cc952a26b8e92f3de660a11b0c2263d1580c14e7ca6734fdf6e2e3f9acc9d', 'backend/src/test/java/com/cinenest/iot/contract/ContractLockAdapter.java': 'bb9fbd3b9834389a1c8de72a2a7cc5d0cdbc4bc05bf701d934c2038acefa3e83', 'backend/src/test/java/com/cinenest/iot/contract/SmartLockContractTest.java': '412d7a9a6baa128153dbc953db42418e65fe36a1009356e5f85fc3c8ab323a4d', 'backend/src/test/java/com/cinenest/SmartLockArchitectureTest.java': '3f6a28fdf42fb94b05916a651722d8d62891e282c8ad75e60131d453f4925e82', 'knowledge/ARCHITECTURE.md': 'f802a1c3f19806b62305e441e816262814fb7f58f8dc5a0e07ba78515c873afc', 'knowledge/PROGRESS.md': '1fef9c7451e8baeac8e818c1c4531b3d8fe83552a34e36f10757debe8f6e9626', 'knowledge/product/FEATURE_CATALOG.md': '4d987cb77f6bd61272db4dc6e96c2a0846d024f4929c7e7b493235aafcd52eb1', 'knowledge/execution/status.json': 'f1dc4bb8c7fb13094a5a5fbefd0460fe2a5ddf5a307a03d766a359cbbb33657c'}
+
+def s1_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-LOCK-ADAPTER-001' or e.get('slice')!='S1' or e.get('baseline')!=S1_BASE:errors.append('S1 identity drift')
+    if e.get('authorization')!='EXPLICIT_OWNER_S1_ONLY' or e.get('implementation')!='INERT_PORT_AND_TEST_SOURCE_ADAPTER_ONLY':errors.append('S1 authority drift')
+    for key in ['runtimeWiringChanged','networkOperations','migrationsChanged','permissionsChanged']:
+        if e.get(key) is not False:errors.append('S1 scope drift '+key)
+    if e.get('physicalEvidence')!='NOT_VERIFIED':errors.append('S1 fabricated physical evidence')
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('S1 acceptance drift')
+    return errors
+
+def s1_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',S1_BASE+':'+n])
+    errors=[];owned=set(S1_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in S1_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('S1 exact successor mismatch '+n)
+    if errors:return errors
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('genericSmartLockS1',{});errors.extend(s1_record_errors(e))
+    if s!=json.loads(before('knowledge/execution/status.json')):errors.append('S1 historical status drift')
+    for n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md']:
+        if not (R/n).read_bytes().startswith(before(n)):errors.append('S1 historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',S1_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('S1 unowned source drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('S1 unauthorized new source')
+    if {x.relative_to(R).as_posix() for x in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('S1 unauthorized migration')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',S1_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('S1 unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('S1 historical validator drift')
+    expected=json.loads(before('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('S1 manifest drift')
+    return errors
+
+def s1_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['genericSmartLockS1'];assert not s1_record_errors(e)
+    for key in ['runtimeWiringChanged','networkOperations','migrationsChanged','permissionsChanged']:
+        changed=copy.deepcopy(e);changed[key]=True;assert s1_record_errors(changed);print('PASS S1 rejects '+key)
+    for field,value in [('slice','S2'),('physicalEvidence','VERIFIED'),('authorization','IMPLIED')]:
+        changed=copy.deepcopy(e);changed[field]=value;assert s1_record_errors(changed);print('PASS S1 rejects '+field)
+    changed=copy.deepcopy(e);changed['acceptance']['checkedCriteria']=16;assert s1_record_errors(changed);print('PASS S1 rejects acceptance')
+    original=Path.read_bytes
+    for n in ['backend/src/main/java/com/cinenest/access/SmartLock.java','backend/src/main/java/com/cinenest/access/internal/AccessService.java','backend/src/main/resources/db/migration/V13__synthetic_access.sql','knowledge/decisions/cinenest-open-decisions.json']:
+        target=R/n
+        def rb(p,*a,**kw):return original(p,*a,**kw)+b'\nUNAUTHORIZED' if p==target else original(p,*a,**kw)
+        with patch.object(Path,'read_bytes',rb):assert s1_successor_errors(),n
+        print('PASS S1 rejects changed payload/history '+n)
+
+receipt_admission_successor_errors=s1_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=s1_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    s1_negative_controls()
+    owned=set(S1_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',S1_BASE],text=True),nul=True);added=owned-tracked
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',S1_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            exclude=added if 'ls-files' in argv else owned;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in exclude];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**k):return (x for x in g0(p,*a,**k) if x not in {R/n for n in added})
+    def rglob(p,*a,**k):return (x for x in rg0(p,*a,**k) if x not in {R/n for n in added})
+    with patch.dict(globals(),{'receipt_admission_successor_errors':s1_historical_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=s1_prior_main()
+    if result==0:print('PASS exact S1 contract successor;runtime,migrations,permissions and historical evidence unchanged')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

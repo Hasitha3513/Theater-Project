@@ -24889,5 +24889,47 @@
       "formallyAcceptedRequirements": 0
     },
     "validation": "Exact-source knowledge/governance/traceability/manifest/clean-checkout evidence reported after execution;publicationCI pending until independently verified"
+  },
+  "genericSmartLockS1": {
+    "taskId": "CN-R1-LOCK-ADAPTER-001",
+    "slice": "S1",
+    "baseline": "baa01111addb8757e8dcc4c8433aa577ce747d4f",
+    "authorization": "EXPLICIT_OWNER_S1_ONLY",
+    "implementation": "INERT_PORT_AND_TEST_SOURCE_ADAPTER_ONLY",
+    "requirements": [
+      "CN-O01",
+      "CN-O04",
+      "CN-C07",
+      "BR-09"
+    ],
+    "tests": {
+      "focusedContractArchitecture": 14,
+      "backendTotal": 856,
+      "backendPassed": 851,
+      "backendSkipped": 5,
+      "isolatedPostgreSqlAndPackagedStartup": "PASS",
+      "frontend": 497,
+      "typecheck": "PASS",
+      "lint": "PASS_ZERO_WARNINGS",
+      "productionBuild": "PASS",
+      "launcherContracts": 14,
+      "classifier": 8,
+      "recoveryContracts": 13,
+      "governance": "PASS_POSITIVE_AND_NEGATIVE_CONTROLS",
+      "cleanCheckout": "PASS_ACTUAL_ISOLATED_CHECKOUT",
+      "hardware": "NOT_RUN_NOT_AUTHORIZED"
+    },
+    "runtimeWiringChanged": false,
+    "networkOperations": false,
+    "migrationsChanged": false,
+    "permissionsChanged": false,
+    "physicalEvidence": "NOT_VERIFIED",
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "publication": "PENDING"
   }
 }

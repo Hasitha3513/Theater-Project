@@ -714,3 +714,7 @@ Existing synthetic receipt APIs can be exercised with opt-in local SeaweedFS and
 
 ## Disabled receipt admission qualification utilities
 Developer-only default-DENY policy and bounded PNG/JPEG validation are verified with fresh official28165 signatures and actual private local storage/Unix-socket scanning.3new and17retained named container checks PASS. No new customer feature,real receipts,permissions or financial capability. Existing synthetic fixture admission remains unchanged. [Evidence and limits](../PROGRESS.md#receipt-admission-qualification).
+
+
+## Generic Smart Lock contract — developer-only S1
+Access-owned typed SmartLock port and network-free test-source adapter establish a hardware-independent contract only. No customer capability or real lock compatibility is enabled. Existing synthetic access remains unchanged. CN-C07/CN-O01/CN-O04/BR-09 remain partially implemented beyond this slice;physical PIN,readback,re-entry,offline expiry,check-in and egress qualification remain blocked. [Evidence](../PROGRESS.md#generic-smart-lock-s1).
