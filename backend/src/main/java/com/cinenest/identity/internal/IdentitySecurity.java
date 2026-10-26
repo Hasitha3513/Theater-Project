@@ -73,11 +73,14 @@ class IdentitySecurity {
     SecurityFilterChain identityBoundary(HttpSecurity http, IdentityStore store, org.springframework.core.env.Environment env) throws Exception {
         boolean manual=env.getProperty("cinenest.identity.manual.enabled",Boolean.class,false);
         if(manual && !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic"))) throw new IllegalStateException("Local synthetic profile required");
+        boolean google=env.getProperty("cinenest.identity.google.enabled",Boolean.class,false);
+        if(google && (!manual || !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic")))) throw new IllegalStateException("Google S1 requires isolated manual coexistence");
         var contexts = new HttpSessionSecurityContextRepository();
         var oidc = new OidcUserService();
         http.securityContext(context -> context.securityContextRepository(contexts))
             .requestCache(cache -> cache.disable())
             .authorizeHttpRequests(requests -> {
+                if(google) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/google/status","/oauth2/authorization/google","/login/oauth2/code/google").permitAll();
                 if(manual) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/csrf").permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/auth/registrations","/api/auth/email-verifications","/api/auth/login").permitAll();
                 requests
@@ -137,8 +140,9 @@ class IdentitySecurity {
                     response.setStatus(403);
                 }))
             .sessionManagement(sessions -> sessions.sessionFixation(fixation -> fixation.changeSessionId()));
-        if(!manual) http.oauth2Login(login -> login.loginPage("/oauth2/authorization/cinenest")
+        if(!manual || google) http.oauth2Login(login -> login.loginPage(google?"/oauth2/authorization/google":"/oauth2/authorization/cinenest")
                 .authorizedClientRepository(discardProviderTokens())
+                .tokenEndpoint(token -> {if(google)token.accessTokenResponseClient(GoogleOidcContract.tokenClient());})
                 .userInfoEndpoint(info -> info.oidcUserService(request -> {
                     var user = oidc.loadUser(request);
                     if (store.associatedEligibleAccount(user.getIssuer().toString(), user.getSubject()).isEmpty())
@@ -146,7 +150,7 @@ class IdentitySecurity {
                     return user;
                 }))
                 .failureHandler((request, response, failure) -> {
-                    clear(request);
+                    if(google){SecurityContextHolder.clearContext();var session=request.getSession(false);if(session!=null)session.invalidate();}else clear(request);
                     store.audit(null, null, "AUTHENTICATION", false);
                     response.setStatus(403);
                 })

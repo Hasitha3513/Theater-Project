@@ -5,6 +5,8 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
+Current Google S1:[simulated-provider integration](#google-sso-s1);live Google remains BLOCKED_PROVIDER,not qualified.
+
 Current manual customer authentication:[local synthetic implementation and verification](#local-customer-auth);real-customer/provider admission remains disabled.
 
 Current bounded staging instructions:[implementation](#staging-bank-instructions).Real banking,global G-BANK/G-COMMERCIAL and launch remain blocked.
@@ -332,7 +334,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 flowchart TB
   G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; synthetic bank-only refunds VERIFIED; full refund acceptance OPEN; venue/reviewers PENDING; PayHere BLOCKED; Admin reads and bounded synthetic notifications VERIFIED"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
-  P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; 3 of 6 criteria (C01/C03/C06)<br/>Shell/discovery/original illustrative assets;bounded grant/capability policy + managed grant backend read and inspection UI; acceptance unchanged<br/>NOT_ACCEPTED"]
+  P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; Google S1 simulated-provider contract implemented; 3 of 6 criteria (C01/C03/C06)<br/>Shell/discovery/original illustrative assets;bounded grant/capability policy + managed grant backend read and inspection UI; acceptance unchanged<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; landing-to-catalog connected; audit/version/capacity/duration evidence owner-approved; 4 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; bounded read-only calendar/customer UI and real calendar-to-hold E2E; guided booking sections, bounded synthetic customer history,exact request and simulated booking navigation; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P4["P4 Identity/bank/guest roster<br/>Synthetic identity/request/ledger,customer handoff,contextual receipts and exact staff review navigation within bounded scopes; partial real E2E, booking detail/URL safety/session,quotation,hold,identity rejection and lost receipt acknowledgement verified;staff roster read integrated; 24 synthetic groups PASS; full acceptance remains open<br/>0 of 8 full criteria; NOT_ACCEPTED"]
@@ -1059,6 +1061,8 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
+
+Current Google S1 handoff:[evidence](#google-sso-s1). Next existing Google task S2 requires owner configuration and separate provider qualification authority.
 
 Current owner-authentication handoff:[bounded evidence](#local-customer-auth). Next CN-R1-GOOGLE-SSO-001 requires separate provider-specific authority;historical handoffs below remain unchanged.
 
@@ -3201,3 +3205,13 @@ P1/Foundation-Identity workstream progresses with bounded manual-auth implementa
 Next single unit:CN-R1-GOOGLE-SSO-001 requires separate provider-specific approval/configuration and qualification;no provider credentials or implicit linking authority are supplied here. [Policy](PROJECT.md#local-customer-auth),[architecture](ARCHITECTURE.md#local-customer-auth).
 
 Final local verification:902 backend tests(897PASS/5unchanged opt-in skips),including13new PostgreSQL/HTTP and4boundary tests;13real-stack Chromium groups;9responsive screenshots;production frontend build,TypeScript,zero-warning lint,complete frontend suite plus4new transport/form tests and npm audit zero vulnerabilities PASS. Actual clean-checkout knowledge/execution/traceability/dependency/decision/manifest checks,365retained governance controls,16new manual-auth negative controls,8classifier tests and whitespace PASS. Unmodified launcher assertions14PASS with ephemeral frontend-port fixture;ordinary raw invocation hit preserved preview3000. Only the two pre-existing ordinary next-env findings remain;clean projection excludes that unrelated modification. Source CI remains publication-gated and independently reported.
+
+
+<a id="google-sso-s1"></a>
+## CN-R1-GOOGLE-SSO-001 — S1 local contract implementation
+Baseline main/upstream/live remote b2f18be263d270226f26d78432eeecad34f85bf8;CI40359101482 COMPLETED/SUCCESS attempt1 independently verified. Root instructions and qualified116-file reading coverage reused:103 original hashes unchanged,13controlled reviewed successors;relevant canonical/Identity/session/authorization diagrams and source contracts freshly consulted. No general MVP audit repeated. Owner explicitly authorized bounded S1 in reply before application edits;record is change-sets.json googleSsoS1Execution.
+Implemented Google-named OIDC contract configuration,manual coexistence,strict frontend status/start/callback transport,simulated-only Google control and sanitized errors. Allprovider activity is loopback fixture protocol verification,not real Google. Original V1–V28,11modules,permissions,manual accounts/credentials and financial/access paths retained. No new-account admission,runtime linking,grants,live activation or formal acceptance. Exact test results/source hashes/screenshots and qualification limits are in status.json googleSsoS1;publication CI independently verified after push.
+Initial browser error-state locator matched Next's route announcer as well as the expected alert;the locator was made specific. Visual review found anchor/button contrast interference;the existing native Button primitive now preserves readable text and keyboard behavior without CSS changes. New signature fixture actually corrupts JWT signature;it does not substitute a token endpoint failure for signature evidence.
+P1/Identity advances only within synthetic software scope. Original92requirements,74criteria,P0–P10,11workstreams,conditional21dayRelease1 and proposedWeeks4–12 retained;15/74checked,0/92formal requirement acceptance unchanged. November14 Google requirement remains PARTIAL/BLOCKED_PROVIDER;Facebook,production admission/privacy/commercial banking/hardware remain unqualified. Next single unit:CN-R1-GOOGLE-SSO-001 S2 provider configuration and qualification admission;owner-controlled Google Web client,secret,consent/test users and exact redirect configuration plus separate live qualification authorization required. [Policy](PROJECT.md#google-sso-s1),[technical owner](ARCHITECTURE.md#google-sso-s1).
+
+Google S1 local receipt:919backend tests(914PASS/5unchanged opt-in skips),15new Google protocol/security cases plus2boundary tests,5simulated-provider real-browser groups and13manual-auth real-browser regression groups PASS. Frontend clean install,production build,TypeScript,zero-warning lint,full suite plus2new tests,npm audit zero vulnerabilities PASS. Screens375/768/1280 captured/visually reviewed;no overflow;keyboard Enter verified. No real Google provider test was performed. Exact source/hash/governance/publication receipt:status.json googleSsoS1.

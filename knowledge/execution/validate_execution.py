@@ -7870,5 +7870,100 @@ def inert_ci_main():
     return result
 
 
+
+# Explicit owner-authorized local synthetic Google S1 successor; exact bytes, no global admission.
+google_sso_prior_main=inert_ci_main
+google_sso_prior_guard=receipt_admission_successor_errors
+GOOGLE_BASE='b2f18be263d270226f26d78432eeecad34f85bf8'
+GOOGLE_HASHES={'backend/src/main/java/com/cinenest/identity/internal/GoogleOidcContract.java': 'd20ecb5d749c4e90dee763ee764110d5ffba2a05036232f05e2aa8036db3314c', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '9535d69d0f1e5271e776cd8ac02664a534f7a58ad84f4dd1735bae9a308428dd', 'backend/src/test/java/com/cinenest/GoogleContractIssuer.java': '5f5a21d070232eb4f8141e1477342d228b223fe8dab0c1b62f87d9f58ee634ff', 'backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java': 'ff9f613a11edb08208438a4ed4b0040edc2cd858d24f578a5044b7f2aa6fce96', 'backend/src/test/java/com/cinenest/identity/internal/GoogleContractBoundaryTest.java': 'b6ccebdeb2a3a863f067796bd8f5aff4e3fc680fb2b1879ba49fac9b21bbbba2', 'frontend/app/api/auth/google/callback/route.ts': 'fd9c9715bed167c5648c1b0d9981c88161a7d9c455c39b04f67f4f0a3b0ee88e', 'frontend/app/api/auth/google/start/route.ts': '1219fff3d2201a9b3007ac2e4c8075df2c81615432e5a5577cc59db8799efa52', 'frontend/app/api/auth/google/status/route.ts': '8e5dd6c93e073628ac67bfcb7612174b2aeb9d7094bc4517d5650d59f018192f', 'frontend/components/google-sso.tsx': '60d4b5b36a4c879e07810f58e2029f93e1fc2b0c490dc4b6fd7c3998c62ebfe6', 'frontend/components/manual-auth-form.tsx': 'fdf3354d7dee1fa6013a3e90328dc5a1a4c4da3aadf2d33a3e6e9c96ea6f3de3', 'frontend/lib/google-sso-backend.ts': '514e528f58aed3e8a67087fbe108fecf9ad37767acc486be4a7de8beedface28', 'frontend/package.json': '23a1136069b4a183a7e96c8f24c1f444763c2ff12487c17ac087600520957d2f', 'frontend/tests/google-sso-e2e.mjs': '76c731574f1c3ff77e1cf0131fdc25aa4f4768f699c1859fb2c39e2c247b3eee', 'frontend/tests/google-sso.test.mjs': 'b90170a94ddd7505661f0bb72d9310473521d40884e6c07b585f2be07ef834ed', 'knowledge/ARCHITECTURE.md': 'bdf1ce9b2cd4449e85b0f18a0062ea786bebdead6dba16206e7bc04a2cb6d2f5', 'knowledge/PROGRESS.md': '2e0abc666947777371de2860d318c3f8be421c77ad2bb835aadf678b93ee8f3a', 'knowledge/PROJECT.md': '1a3a8928a060316e93808be5dde5cde0c857fb06b772a3b97b301379ccc8b903', 'knowledge/execution/change-sets.json': '37be801a8729407c06b1975a110cd6d733bea13a85bf70e9d353b9f0071326b6', 'knowledge/execution/status.json': '235e2c2327f45077e6a76805833c59624637d32c59bcb7940e71f4f253100f3b', 'knowledge/guides/USER_GUIDE.md': '2284caf84c279baebba574923e3fa12f908be1badc8d8e2035b3b7b563c65c6f', 'knowledge/product/FEATURE_CATALOG.md': '2bc079efc59e085884b733298fd37743e6af237dc505a82a93c00d1b7adbb5cd'}
+
+def google_sso_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-GOOGLE-SSO-001' or e.get('baseline')!=GOOGLE_BASE or e.get('authorization')!='EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1':errors.append('Google S1 authority drift')
+    for key in ['newAccountAdmission','runtimeLinkingImplemented','migrationsChanged','realCustomersAdmitted','realEmailDelivered','liveProviderActivated','passwordRecoveryImplemented','runtimeGrantsAssigned','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged']:
+        if e.get(key) is not False:errors.append('Google S1 forbidden activation '+key)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('Google S1 acceptance drift')
+    if e.get('flywayHead')!=28 or e.get('e2e',{}).get('browserInterception') is not False or e.get('e2e',{}).get('cookieInjection') is not False:errors.append('Google S1 qualification drift')
+    if e.get('liveGoogleStatus')!='BLOCKED_PROVIDER':errors.append('Google S1 falsely qualified live provider')
+    if e.get('verification')!='VERIFIED_SIMULATED_PROVIDER_ONLY':errors.append('Google S1 qualification incomplete')
+    return errors
+
+def google_sso_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',GOOGLE_BASE+':'+n])
+    errors=[];owned=set(GOOGLE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in GOOGLE_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Google S1 exact successor mismatch '+n)
+    if errors:return errors
+    state=json.loads((K/'execution/status.json').read_text());e=state.pop('googleSsoS1',{});errors.extend(google_sso_record_errors(e))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('Google S1 historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());record=plan.pop('googleSsoS1Execution',{})
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('Google S1 historical planning drift')
+    if record.get('authorization')!='EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1' or record.get('status')!='VERIFIED_SIMULATED_PROVIDER_ONLY':errors.append('Google S1 unapproved scope/status')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        expected=before(n).decode()
+        if n=='knowledge/PROGRESS.md':
+            expected=expected.replace('## Current status and approvals\n','## Current status and approvals\n\nCurrent Google S1:[simulated-provider integration](#google-sso-s1);live Google remains BLOCKED_PROVIDER,not qualified.\n',1).replace('## Current handoff and exact next action\n','## Current handoff and exact next action\n\nCurrent Google S1 handoff:[evidence](#google-sso-s1). Next existing Google task S2 requires owner configuration and separate provider qualification authority.\n',1).replace('local manual registration/login VERIFIED_SYNTHETIC; 3 of 6 criteria','local manual registration/login VERIFIED_SYNTHETIC; Google S1 simulated-provider contract implemented; 3 of 6 criteria',1)
+        if not (R/n).read_text().startswith(expected):errors.append('Google S1 historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',GOOGLE_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Google S1 unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Google S1 unauthorized new source')
+    if {p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!=({n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}):errors.append('Google S1 migration scope drift')
+    package=json.loads((R/'frontend/package.json').read_text());prior=json.loads(before('frontend/package.json'))
+    if {n:package[n] for n in ['dependencies','devDependencies','engines','packageManager']}!={n:prior[n] for n in ['dependencies','devDependencies','engines','packageManager']}:errors.append('Google S1 dependency/toolchain drift')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',GOOGLE_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Google S1 unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Google S1 prior validator altered')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('Google S1 manifest drift')
+    return errors
+
+def google_sso_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['googleSsoS1'];assert not google_sso_record_errors(e)
+    for key in ['newAccountAdmission','runtimeLinkingImplemented','migrationsChanged','realCustomersAdmitted','realEmailDelivered','liveProviderActivated','passwordRecoveryImplemented','runtimeGrantsAssigned','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged']:
+        changed=copy.deepcopy(e);changed[key]=True;assert google_sso_record_errors(changed);print('PASS Google S1 rejects '+key)
+    changed=copy.deepcopy(e);changed['acceptance']['checkedCriteria']=16;assert google_sso_record_errors(changed);print('PASS Google S1 rejects acceptance')
+    changed=copy.deepcopy(e);changed['e2e']['browserInterception']=True;assert google_sso_record_errors(changed);print('PASS Google S1 rejects intercepted evidence')
+    changed=copy.deepcopy(e);changed['liveGoogleStatus']='VERIFIED_LIVE';assert google_sso_record_errors(changed);print('PASS Google S1 rejects false live qualification')
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/java/com/cinenest/identity/internal/GoogleOidcContract.java','backend/src/main/java/com/cinenest/payments/internal/BankService.java','backend/src/main/resources/db/migration/V2__identity_accounts_grants_sessions.sql','knowledge/decisions/cinenest-open-decisions.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert google_sso_successor_errors(),n
+        print('PASS Google S1 rejects source/history drift '+n)
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob0(p,*a,**kw),folder/'V29__unapproved.sql']) if p==folder else glob0(p,*a,**kw)):assert google_sso_successor_errors()
+    print('PASS Google S1 rejects extra migration')
+
+receipt_admission_successor_errors=google_sso_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=google_sso_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    google_sso_negative_controls()
+    owned=set(GOOGLE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',GOOGLE_BASE],text=True),nul=True)
+    added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',GOOGLE_BASE+':'+n]) for n in owned&tracked}
+    rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+    def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+    def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**kw):return glob0(p,*a,**kw)
+    with patch.dict(globals(),{'receipt_admission_successor_errors':google_sso_prior_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=google_sso_prior_main()
+    if result==0:print('PASS exact local synthetic customer-auth successor;history/grants/providers/acceptance preserved')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

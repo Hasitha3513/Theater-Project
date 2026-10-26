@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { GoogleSso } from "./google-sso";
 import { Button, Card, Field } from "./primitives";
 export function ManualAuthForm({ mode }: { mode: "register" | "login" }) {
 	const [notice, setNotice] = useState("");
@@ -207,8 +208,7 @@ export function ManualAuthForm({ mode }: { mode: "register" | "login" }) {
 					{mode === "register" ? "Log in" : "Create test account"}
 				</a>
 			</p>
-			<Button disabled>Google sign-in unavailable</Button>{" "}
-			<Button disabled>Facebook Login unavailable</Button>
+			<GoogleSso /> <Button disabled>Facebook Login unavailable</Button>
 		</Card>
 	);
 }

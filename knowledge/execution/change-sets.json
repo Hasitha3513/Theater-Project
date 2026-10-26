@@ -6913,5 +6913,27 @@
     "rollback": "Disable manual mode;retain Identity history and additive migration;reviewed forward fix",
     "supersedesPreparationOnlyFor": "customerWebsitePriorityPreparation.changeSets.B;original historical preparation retained",
     "evidence": "PROGRESS.md#local-customer-auth;status.json#manualCustomerAuth;source-qualified unit/PG/browser results"
+  },
+  "googleSsoS1Execution": {
+    "taskId": "CN-R1-GOOGLE-SSO-001",
+    "baseline": "b2f18be263d270226f26d78432eeecad34f85bf8",
+    "authorization": "EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1",
+    "source": "Owner reply: Authorize this bounded S1 scope",
+    "status": "VERIFIED_SIMULATED_PROVIDER_ONLY",
+    "scope": "Disabled-by-default Google OIDC contract;pre-associated issuer/subject synthetic accounts only;manual/JDBC coexistence;frontend/error handling;isolated real-stack/security tests",
+    "excluded": [
+      "new-account admission",
+      "runtime linking/unlinking",
+      "migrations",
+      "grants",
+      "live-provider activation"
+    ],
+    "requirements": [
+      "CN-C02",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "evidence": "PROGRESS.md#google-sso-s1;status.json#googleSsoS1",
+    "liveGoogle": "BLOCKED_PROVIDER;S2 authority NOT_GRANTED"
   }
 }

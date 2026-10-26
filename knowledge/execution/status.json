@@ -25550,5 +25550,149 @@
     "publication": "PENDING exact-source CI;final commit/run outcome independently reported",
     "remaining": "Real admission/email/privacy/recovery,Google/Facebook,commercial banking and physical hardware remain separately gated",
     "nextTask": "CN-R1-GOOGLE-SSO-001;separate provider-specific authorization/qualification required"
+  },
+  "googleSsoS1": {
+    "taskId": "CN-R1-GOOGLE-SSO-001",
+    "slice": "S1",
+    "baseline": "b2f18be263d270226f26d78432eeecad34f85bf8",
+    "baselineCI": {
+      "runId": 40359101482,
+      "headSha": "b2f18be263d270226f26d78432eeecad34f85bf8",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "authorization": "EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1",
+    "source": "Owner reply: Authorize this bounded S1 scope",
+    "verification": "VERIFIED_SIMULATED_PROVIDER_ONLY",
+    "realCustomersAdmitted": false,
+    "realEmailDelivered": false,
+    "liveProviderActivated": false,
+    "passwordRecoveryImplemented": false,
+    "runtimeGrantsAssigned": false,
+    "financialMutations": false,
+    "physicalAccessMutations": false,
+    "productionQualified": false,
+    "acceptanceChanged": false,
+    "newAccountAdmission": false,
+    "runtimeLinkingImplemented": false,
+    "migrationsChanged": false,
+    "flywayHead": 28,
+    "liveGoogleStatus": "BLOCKED_PROVIDER",
+    "liveActivationAuthority": "NOT_GRANTED",
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "reading": {
+      "ledger": "bankInstructionsRealStackE2E.reading.files;manualCustomerAuth.reading",
+      "accounted": 116,
+      "originalHashesUnchanged": 103,
+      "controlledSuccessorsReviewed": 13,
+      "scope": "Prior full content/visual coverage reused;relevant canonical,Identity,authorization diagrams/contracts and authored delta reviewed;no repeated general audit"
+    },
+    "security": {
+      "flow": "AUTHORIZATION_CODE_PKCE_S256",
+      "identity": "pre-associated issuer/subject only;no email merge/new-account admission;manual credentials/UUID retained",
+      "missingUnverifiedEmail": "No email authority;only already associated eligible signed subject admitted",
+      "checks": [
+        "state",
+        "nonce",
+        "expiry",
+        "issuer",
+        "audience",
+        "tampered signature",
+        "replayed callback",
+        "cancelled login",
+        "2second token timeout",
+        "unknown matching-email denial",
+        "suspended account",
+        "foreign account isolation",
+        "session rotation",
+        "mandatory audit failure",
+        "token/secret exclusion from logs and authenticated JDBC attributes"
+      ],
+      "default": "disabled;explicit local-synthetic+manual+CONTRACT_TEST required;no live mode"
+    },
+    "backend": {
+      "tests": 919,
+      "passed": 914,
+      "skipped": 5,
+      "failures": 0,
+      "googleIntegrationCases": 15,
+      "googleBoundaryTests": 2,
+      "manualRealBrowserRegression": "PASS13groups",
+      "architecture": "PASS full existing suites;11modules unchanged",
+      "migrations": "V1–V28 identical;no additive migration",
+      "packagedStartup": "PASS default denied against isolated PostgreSQL18.6",
+      "limits": "Five existing opt-in receipt/provider/restart campaigns not rerun"
+    },
+    "frontend": {
+      "npmCi": "PASS",
+      "build": "PASS production",
+      "typecheck": "PASS",
+      "lint": "PASS zero warnings/errors;122style-info diagnostics",
+      "suite": "PASS entire existing suite plus2Google transport tests",
+      "audit": "PASS zero vulnerabilities"
+    },
+    "e2e": {
+      "browserInterception": false,
+      "cookieInjection": false,
+      "provider": "SIMULATED_NOT_GOOGLE",
+      "groups": [
+        "three responsive qualified-only Google controls;one main/h1;no overflow",
+        "keyboard Google protocol login;pre-associated existing UUID;real JDBC session",
+        "secure cookies and refresh continuity;no cookie injection",
+        "existing CSRF/logout session invalidation",
+        "sanitized callback rejection and frontend error state"
+      ],
+      "groupCount": 5,
+      "stack": "Real Chromium -> Next -> Spring/JDBC -> PostgreSQL;loopback simulated issuer only",
+      "invariants": "No added accounts/associations/grants or financial/booking/access/IoT changes;current mapped UUID only"
+    },
+    "screenshots": [
+      {
+        "path": ".cache/google-sso-e2e/login-1280.png",
+        "sha256": "36ac39c6fbc344a32f62049b36a9398ddb6b6613cce3c9482c6d3ae68400941f"
+      },
+      {
+        "path": ".cache/google-sso-e2e/login-375.png",
+        "sha256": "826357dfb1eb48ba0768c40927046ba5ad8bfe5a01ad84a54ca7ac67257dee67"
+      },
+      {
+        "path": ".cache/google-sso-e2e/login-768.png",
+        "sha256": "7582cbf4c6e98ee14ff67fc7de9ad7378a4364ba16e2075b5a5241e1f49737b9"
+      }
+    ],
+    "visualReview": "375/768/1280 captures;native Button text contrast corrected;one main/h1 and no horizontal overflow;keyboard Enter flow;not screen-reader or Google brand acceptance",
+    "sourceHashes": {
+      "backend/src/main/java/com/cinenest/identity/internal/GoogleOidcContract.java": "d20ecb5d749c4e90dee763ee764110d5ffba2a05036232f05e2aa8036db3314c",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "9535d69d0f1e5271e776cd8ac02664a534f7a58ad84f4dd1735bae9a308428dd",
+      "backend/src/test/java/com/cinenest/GoogleContractIssuer.java": "5f5a21d070232eb4f8141e1477342d228b223fe8dab0c1b62f87d9f58ee634ff",
+      "backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java": "ff9f613a11edb08208438a4ed4b0040edc2cd858d24f578a5044b7f2aa6fce96",
+      "backend/src/test/java/com/cinenest/identity/internal/GoogleContractBoundaryTest.java": "b6ccebdeb2a3a863f067796bd8f5aff4e3fc680fb2b1879ba49fac9b21bbbba2",
+      "frontend/app/api/auth/google/callback/route.ts": "fd9c9715bed167c5648c1b0d9981c88161a7d9c455c39b04f67f4f0a3b0ee88e",
+      "frontend/app/api/auth/google/start/route.ts": "1219fff3d2201a9b3007ac2e4c8075df2c81615432e5a5577cc59db8799efa52",
+      "frontend/app/api/auth/google/status/route.ts": "8e5dd6c93e073628ac67bfcb7612174b2aeb9d7094bc4517d5650d59f018192f",
+      "frontend/components/google-sso.tsx": "60d4b5b36a4c879e07810f58e2029f93e1fc2b0c490dc4b6fd7c3998c62ebfe6",
+      "frontend/components/manual-auth-form.tsx": "fdf3354d7dee1fa6013a3e90328dc5a1a4c4da3aadf2d33a3e6e9c96ea6f3de3",
+      "frontend/lib/google-sso-backend.ts": "514e528f58aed3e8a67087fbe108fecf9ad37767acc486be4a7de8beedface28",
+      "frontend/package.json": "23a1136069b4a183a7e96c8f24c1f444763c2ff12487c17ac087600520957d2f",
+      "frontend/tests/google-sso-e2e.mjs": "76c731574f1c3ff77e1cf0131fdc25aa4f4768f699c1859fb2c39e2c247b3eee",
+      "frontend/tests/google-sso.test.mjs": "b90170a94ddd7505661f0bb72d9310473521d40884e6c07b585f2be07ef834ed"
+    },
+    "governance": "PASS actual clean-checkout knowledge/execution, retained governance controls, Google S1 negative controls, classifier 8 tests, traceability, manifest, historical preservation and whitespace; ordinary worktree retains only two pre-existing next-env findings",
+    "launcher": "14PASS on isolated frontend-port fixture;preserved preview occupies3000;no unrelated services stopped",
+    "missingProviderInputs": [
+      "Owner-controlled Google Cloud project/Web OAuth client reference",
+      "Client ID and privately supplied client secret",
+      "Consent/audience/test-user configuration",
+      "Approved local callback/origin",
+      "Production domain/TLS callback and privacy/provider review",
+      "Separate live-provider qualification and association/admission authority"
+    ],
+    "publication": "PENDING exact-source CI;final result independently reported",
+    "nextUnit": "CN-R1-GOOGLE-SSO-001/S2 provider-configuration and qualification admission"
   }
 }

@@ -1,0 +1,71 @@
+package com.cinenest;
+
+import com.nimbusds.jose.util.JSONObjectUtils;
+import java.net.*;import java.net.http.*;import java.nio.file.*;import java.util.*;import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.*;import org.junit.jupiter.params.ParameterizedTest;import org.junit.jupiter.params.provider.ValueSource;import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.springframework.beans.factory.annotation.Autowired;import org.springframework.boot.test.context.SpringBootTest;import org.springframework.core.env.Environment;import org.springframework.jdbc.core.simple.JdbcClient;import org.springframework.test.context.ActiveProfiles;import org.springframework.test.context.DynamicPropertyRegistry;import org.springframework.test.context.DynamicPropertySource;
+import static org.assertj.core.api.Assertions.*;
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.hikari.maximum-pool-size=2","spring.datasource.hikari.minimum-idle=0"})
+@ActiveProfiles("local-synthetic")
+@org.junit.jupiter.api.extension.ExtendWith(org.springframework.boot.test.system.OutputCaptureExtension.class)
+@org.springframework.test.annotation.DirtiesContext(classMode=org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS)
+class GoogleSsoIntegrationTest {
+ static final GoogleContractIssuer IDP=new GoogleContractIssuer();static final UUID A=UUID.randomUUID(),B=UUID.randomUUID();static final Path OUTBOX;static final int FRONTEND;
+ static {try{OUTBOX=Files.createTempDirectory("cinenest-google-mail-");try(var s=new java.net.ServerSocket(0,1,InetAddress.getByName("127.0.0.1"))){FRONTEND=s.getLocalPort();}}catch(Exception e){throw new ExceptionInInitializerError(e);}}
+ @Autowired JdbcClient jdbc;@Autowired Environment env;
+ @DynamicPropertySource static void properties(DynamicPropertyRegistry r){
+  r.add("cinenest.identity.enabled",()->"true");r.add("cinenest.identity.manual.enabled",()->"true");r.add("cinenest.identity.session-timeout-seconds",()->"120");r.add("cinenest.identity.manual.outbox",OUTBOX::toString);
+  r.add("cinenest.identity.google.enabled",()->"true");r.add("cinenest.identity.google.mode",()->"CONTRACT_TEST");r.add("cinenest.identity.google.contract-issuer",IDP::issuer);r.add("cinenest.identity.google.client-id",()->IDP.clientId);r.add("cinenest.identity.google.client-secret",()->IDP.clientSecret);r.add("cinenest.identity.google.frontend-origin",()->"http://127.0.0.1:"+FRONTEND);
+ }
+ @BeforeEach void fixtures() throws Exception {jdbc.sql("TRUNCATE cinenest_identity.account CASCADE").update();jdbc.sql("TRUNCATE cinenest_identity.http_session CASCADE").update();jdbc.sql("TRUNCATE cinenest_identity.security_audit").update();jdbc.sql("TRUNCATE cinenest_identity.manual_throttle").update();IDP.mode="VALID";IDP.subject="customer-a";IDP.codes.clear();
+  for(UUID id:List.of(A,B))jdbc.sql("INSERT INTO cinenest_identity.account VALUES(:id,TRUE,'ELIGIBLE',0)").param("id",id).update();
+  jdbc.sql("INSERT INTO cinenest_identity.external_identity VALUES(:issuer,'customer-a',:id)").param("issuer",IDP.issuer()).param("id",A).update();
+  try(var files=Files.list(OUTBOX)){for(var p:files.toList())Files.delete(p);}
+ }
+ @AfterAll static void cleanup() throws Exception {IDP.close();try(var files=Files.list(OUTBOX)){for(var p:files.toList())Files.delete(p);}Files.delete(OUTBOX);}
+ String base(){return "http://127.0.0.1:"+env.getRequiredProperty("local.server.port");}
+ class Browser {
+  final HttpClient client=HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();String cookie;
+  HttpResponse<String> get(String url)throws Exception{return send("GET",url,null,null);}
+  HttpResponse<String> send(String method,String url,String body,String csrf)throws Exception {
+   var request=HttpRequest.newBuilder(URI.create(url.startsWith("http")?url:base()+url)).method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(body));if(cookie!=null)request.header("Cookie",cookie);if(body!=null)request.header("Content-Type","application/json");if(csrf!=null)request.header("X-CSRF-TOKEN",csrf);
+   var response=client.send(request.build(),HttpResponse.BodyHandlers.ofString());for(String c:response.headers().allValues("Set-Cookie"))if(c.startsWith("CINENEST_SESSION="))cookie=c.split(";",2)[0];return response;
+  }
+  String callback()throws Exception {var first=get("/oauth2/authorization/google");assertThat(first.statusCode()).isEqualTo(302);String authorization=first.headers().firstValue("Location").orElseThrow();assertThat(authorization).contains("code_challenge_method=S256").contains("nonce=").contains("state=");return get(authorization).headers().firstValue("Location").orElseThrow().replace("http://127.0.0.1:"+FRONTEND+"/api/auth/google/callback",base()+"/login/oauth2/code/google");}
+  int login()throws Exception{return get(callback()).statusCode();}
+  HttpResponse<String> post(String path,Map<String,?> value)throws Exception {var csrf=JSONObjectUtils.parse(get("/api/auth/csrf").body()).get("token").toString();return send("POST",path,JSONObjectUtils.toJSONString(value),csrf);}
+ }
+ @Test void associatedSubjectUsesExistingUuidRotatesSessionAndNeverStoresProviderTokens(org.springframework.boot.test.system.CapturedOutput output)throws Exception {
+  var b=new Browser();String callback=b.callback();String before=b.cookie;assertThat(b.get(callback).statusCode()).isEqualTo(204);assertThat(b.cookie).isNotEqualTo(before);
+  var own=b.get("/api/accounts/me");assertThat(own.body()).contains(A.toString()).doesNotContain(IDP.lastIdToken,IDP.lastAccessToken,IDP.clientSecret);
+  assertThat(b.get("/api/accounts/"+B).statusCode()).isEqualTo(403);
+  assertThat(output.getAll()).doesNotContain(IDP.lastIdToken,IDP.lastAccessToken,IDP.clientSecret);
+  String serialized=jdbc.sql("SELECT coalesce(string_agg(encode(attribute_bytes,'escape'),''),'') FROM cinenest_identity.http_session_attributes").query(String.class).single();assertThat(serialized).doesNotContain(IDP.lastIdToken,IDP.lastAccessToken,IDP.clientSecret);
+  assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.account").query(Integer.class).single()).isEqualTo(2);
+ }
+ @ParameterizedTest @ValueSource(strings={"NONCE","EXPIRED","AUDIENCE","ISSUER","SIGNATURE","CANCEL","TIMEOUT"})
+ void badProviderOutcomesFailClosed(String mode)throws Exception {IDP.mode=mode;var b=new Browser();assertThat(b.login()).isEqualTo(403);assertThat(b.get("/api/accounts/me").statusCode()).isEqualTo(401);}
+ @Test void invalidStateAndReplayedCallbackAreDenied()throws Exception {var b=new Browser();String callback=b.callback();assertThat(b.get(callback+"wrong").statusCode()).isEqualTo(403);b=new Browser();callback=b.callback();assertThat(b.get(callback).statusCode()).isEqualTo(204);assertThat(b.get(callback).statusCode()).isEqualTo(403);assertThat(b.get("/api/accounts/me").statusCode()).isEqualTo(401);}
+ @ParameterizedTest @ValueSource(strings={"MISSING_EMAIL","UNVERIFIED_EMAIL"})
+ void emailIsNotIdentityOrAdmissionAuthorityForAlreadyAssociatedSubject(String mode)throws Exception {IDP.mode=mode;assertThat(new Browser().login()).isEqualTo(204);}
+ @Test void unknownSubjectEvenMatchingEmailCannotCreateOrLinkAnAccount()throws Exception {
+  var encoder=new org.springframework.security.crypto.password.Pbkdf2PasswordEncoder("",16,600000,256);encoder.setAlgorithm(org.springframework.security.crypto.password.Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
+  jdbc.sql("INSERT INTO cinenest_identity.manual_customer(account_id,email,password_hash,verification_digest,verification_expires_at,verified_at) VALUES(:id,'same-address@example.test',:hash,repeat('b',64),clock_timestamp()+INTERVAL '1 hour',clock_timestamp())").param("id",B).param("hash","{pbkdf2-v1}"+encoder.encode("Synthetic fixture phrase!")).update();
+  IDP.subject="unknown";assertThat(new Browser().login()).isEqualTo(403);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.account").query(Integer.class).single()).isEqualTo(2);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.external_identity").query(Integer.class).single()).isEqualTo(1);}
+ @Test void suspensionAndMandatoryAuditFailureDenySession()throws Exception {jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=1 WHERE account_id=:id").param("id",A).update();assertThat(new Browser().login()).isEqualTo(403);
+  jdbc.sql("UPDATE cinenest_identity.account SET eligibility='ELIGIBLE' WHERE account_id=:id").param("id",A).update();jdbc.sql("ALTER TABLE cinenest_identity.security_audit ADD CONSTRAINT google_audit_fault CHECK(false) NOT VALID").update();try{var b=new Browser();assertThat(b.login()).isEqualTo(500);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.http_session WHERE principal_name=:id").param("id",A.toString()).query(Integer.class).single()).isZero();}finally{jdbc.sql("ALTER TABLE cinenest_identity.security_audit DROP CONSTRAINT google_audit_fault").update();}}
+ @Test void manualPasswordCredentialsAndAccountIdentitySurviveGoogleLogin()throws Exception {
+  var b=new Browser();String email="manual@example.test",password="Local cinema testing 2026!";assertThat(b.post("/api/auth/registrations",Map.of("email",email,"password",password)).statusCode()).isEqualTo(202);
+  String token;try(var paths=Files.list(OUTBOX)){token=Files.readAllLines(paths.findFirst().orElseThrow()).get(2);}assertThat(b.post("/api/auth/email-verifications",Map.of("token",token)).statusCode()).isEqualTo(204);
+  UUID id=jdbc.sql("SELECT account_id FROM cinenest_identity.manual_customer WHERE email=:email").param("email",email).query(UUID.class).single();String hash=jdbc.sql("SELECT password_hash FROM cinenest_identity.manual_customer").query(String.class).single();
+  // Trusted isolated fixture association; no runtime linking command exists.
+  jdbc.sql("INSERT INTO cinenest_identity.external_identity VALUES(:issuer,'manual',:id)").param("issuer",IDP.issuer()).param("id",id).update();IDP.subject="manual";
+  assertThat(b.login()).isEqualTo(204);assertThat(b.get("/api/accounts/me").body()).contains(id.toString());assertThat(b.post("/api/auth/login",Map.of("email",email,"password",password)).statusCode()).isEqualTo(204);assertThat(b.get("/api/accounts/me").body()).contains(id.toString());assertThat(jdbc.sql("SELECT password_hash FROM cinenest_identity.manual_customer").query(String.class).single()).isEqualTo(hash);
+ }
+ @Test @EnabledIfEnvironmentVariable(named="CINENEST_GOOGLE_E2E",matches="true")
+ void realBrowserContractJourney()throws Exception {
+  Path run=Files.createTempDirectory("cinenest-google-e2e-");Files.writeString(run.resolve("config.json"),JSONObjectUtils.toJSONString(Map.of("backend",base(),"issuer",IDP.issuer(),"port",FRONTEND,"account",A.toString())));
+  Map<String,Long> before=new HashMap<>();for(String table:List.of("cinenest_payments.bank_payment_request","cinenest_payments.incoming_payment_credit","cinenest_payments.payment_allocation","cinenest_booking.booking","cinenest_access.access_credential","cinenest_iot.device"))before.put(table,jdbc.sql("SELECT count(*) FROM "+table).query(Long.class).single());
+  var process=new ProcessBuilder("node",Path.of("../frontend/tests/google-sso-e2e.mjs").toAbsolutePath().toString(),run.toString()).redirectErrorStream(true).redirectOutput(run.resolve("browser.log").toFile()).start();try{assertThat(process.waitFor(2,TimeUnit.MINUTES)).isTrue();assertThat(process.exitValue()).as(Files.readString(run.resolve("browser.log"))).isZero();for(var e:before.entrySet())assertThat(jdbc.sql("SELECT count(*) FROM "+e.getKey()).query(Long.class).single()).isEqualTo(e.getValue());assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.account").query(Integer.class).single()).isEqualTo(2);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.access_grant").query(Integer.class).single()).isZero();}finally{if(process.isAlive())process.destroy();}
+ }
+}
