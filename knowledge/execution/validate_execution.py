@@ -7341,5 +7341,72 @@ def inert_ci_main():
 
 
 
+
+# Exact owner-authorized disabled receipt qualification. No customer intake or policy activation.
+receipt_admission_prior_main=inert_ci_main
+RA_BASE='eba8c905db417736896004e34c42fb01a25507cc'
+RA_HASHES={'backend/src/main/java/com/cinenest/payments/internal/ReceiptAdmissionPolicy.java': 'e0c71ec4ac281a208c802c1a77cdba163b8de247fdedfa294dfba856876c1223', 'backend/src/main/java/com/cinenest/payments/internal/ReceiptImageValidator.java': 'd8fbd60dd32fb538b0b1f4756d2bd5a20631f67a63d3eea4c59cb431383dd01f', 'backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionTest.java': '754365406fd166f7abc44c0a30946aa0b6c923e81cf32b4ccb303e5a7c3c88af', 'backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionContainerTest.java': 'a0b342821cc86184a8084b8ed9c1bb171b5fcead51f1d25a663dbb9df0e7881a', 'scripts/verify-local-receipts.py': '07c0e361ed190332395296fb7c970c3c7279caff15d1f84923c794fab1d4db78', 'scripts/test-governance-controls.py': 'dbcdf8fd4b0495968c39eeba4f34b993e894beb7df4c98a68bf89426f624354f', 'knowledge/PROGRESS.md': '8e1dd277c35ef1815051a0cb7499611860eed902daa533905d644d97d8acc4b3', 'knowledge/ARCHITECTURE.md': 'da3d96e44f5762f08881eb3fc2323022e7b0ae1056ffba5f3ef9d52b1d03fd48', 'knowledge/product/FEATURE_CATALOG.md': '993f922d4c8d9e989862e3c21303ff712010c2cfcffda67178bdf0a1852ebea4', 'knowledge/guides/USER_GUIDE.md': '3525915b8bea6cce3fcdd12aefd6209952dea86e0c1cd43b03e42abceffe3644', 'knowledge/execution/status.json': '25490168dab90ceee230a3e373e6737eab257d7fc4f59c95bdedf668eb2587ee'}
+RA_EVIDENCE={'source': 'eba8c905db417736896004e34c42fb01a25507cc', 'scope': 'LOCAL_RUNTIME_SYNTHETIC_ONLY', 'awsQualified': False, 'scanner': 'ClamAV 1.5.4/28165/Mon Oct 26 06:27:07 2026', 'results': ['LOCAL_INTEGRATION_PASS wrong-owner-upload-denied', 'LOCAL_INTEGRATION_PASS wrong-venue-and-csrf-denied', 'LOCAL_INTEGRATION_PASS upload-lost-result-status-and-no-byte-retry', 'LOCAL_INTEGRATION_PASS concurrent-completion-command-replay', 'LOCAL_INTEGRATION_PASS real-unix-scanner-unavailable-quarantine', 'LOCAL_INTEGRATION_PASS scan-audit-rollback-with-external-preview-retained', 'LOCAL_INTEGRATION_PASS real-clamav-ready-and-protected-preview', 'LOCAL_INTEGRATION_PASS preview-mandatory-audit-fail-closed', 'LOCAL_INTEGRATION_PASS owner-preview-and-revoked-authority-denied', 'LOCAL_INTEGRATION_PASS zero-financial-booking-access-mutations', 'LOCAL_INTEGRATION_PASS malformed-fixture-admission-preserved', 'LOCAL_INTEGRATION_PASS fresh-spring-boot-protected-status-preview-and-revocation', 'LOCAL_INTEGRATION_PASS fresh-application-database-and-financial-invariants', 'LOCAL_INTEGRATION_PASS encrypted-provider-object-and-bound-plaintext-integrity', 'LOCAL_INTEGRATION_PASS fresh-jvm-version-journal-recovery-and-replay', 'LOCAL_INTEGRATION_PASS unix-socket-clean-and-eicar-fail-closed', 'LOCAL_INTEGRATION_PASS exact-version-cleanup-and-durable-tombstone'], 'status': 'PASS', 'admissionResults': ['RECEIPT_ADMISSION_PASS png-jpeg-private-versioned-store-and-real-scan', 'RECEIPT_ADMISSION_PASS malware-and-unavailable-scanner-fail-closed', 'RECEIPT_ADMISSION_PASS no-customer-admission-or-financial-wiring'], 'cleanupVerified': True, 'sourceHashes': {'scripts/verify-local-receipts.py': '07c0e361ed190332395296fb7c970c3c7279caff15d1f84923c794fab1d4db78', 'qualification/receipt-local/compose.yaml': 'f873668724725f77f27e20a112eab014c552af1eaa002700b115070f45fc004f', 'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptQualificationTest.java': '5804b09f8d552d86b9711dabf50c94137cab11130f8333fe60d88639de613746', 'backend/src/main/java/com/cinenest/payments/internal/BankEvidenceProcessor.java': '17043490f10e703a8159ed8c946240830df02da1b13e22be1fc2da6d96a569d8', 'backend/src/main/java/com/cinenest/payments/internal/BankService.java': '7cc0343fc3e27e7530c0cab833f4489b13b0caf6293b3d9598bd4f425c70f2cd', 'backend/src/main/java/com/cinenest/payments/internal/SyntheticEvidenceProcessor.java': 'd20187cea60dde66c133d032e952ce059ebfb45ce30df500b0c25c392ea51cbc', 'backend/src/main/java/com/cinenest/payments/internal/LocalDockerEvidenceConfiguration.java': 'c9b500a1059f6cc2863c052096ab893db1d9d57bd68e58dd1bb53ddd80a14efc', 'backend/src/main/java/com/cinenest/payments/internal/LocalS3EvidenceStore.java': '03a474ba13d0ea8c2dd3c7c7db4fca19e053d19ce46432014914bdeac70beb13', 'backend/src/main/java/com/cinenest/payments/internal/LocalEvidenceReceiptJournal.java': '90a683b96b6ac51a567c9cdc29ae258a3d363e20af53dd41652527b35075a84f', 'backend/src/main/java/com/cinenest/payments/internal/ClamAvSocketClient.java': '9073b360f85e83f78f3b4eaac5946b9642ccea2c4bfb537a9c7a5cfe88b7153f', 'backend/src/main/java/com/cinenest/payments/internal/ClamAvEvidenceProcessor.java': '01d9bca23a142dddd59f11f635ed7afb85d5238407020302f751441c3f8d4cd1', 'backend/src/main/java/com/cinenest/payments/internal/ReceiptAdmissionPolicy.java': 'e0c71ec4ac281a208c802c1a77cdba163b8de247fdedfa294dfba856876c1223', 'backend/src/main/java/com/cinenest/payments/internal/ReceiptImageValidator.java': 'd8fbd60dd32fb538b0b1f4756d2bd5a20631f67a63d3eea4c59cb431383dd01f', 'backend/src/test/java/com/cinenest/LocalReceiptIntegrationTest.java': '343b0ff57b53fd712ab74592a7ead82d80cd532a310385cf6dc446b39fadef93', 'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptJournalTest.java': 'f381507974c4c577d00457d733940f83a71537587baae99b01e2ce8a213abb38', 'backend/src/test/java/com/cinenest/payments/internal/LocalReceiptRestartTest.java': '5d14708f600d743f7efff7dbcb14bc98b4808e2b3edd09103f2643de8d858f6b', 'backend/src/test/java/com/cinenest/payments/internal/BankFaults.java': '26b9a6ff92580b4ac5eed72f508e1a370bf5334e6b507fc568a9ab915050e1a3', 'backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionTest.java': '754365406fd166f7abc44c0a30946aa0b6c923e81cf32b4ccb303e5a7c3c88af', 'backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionContainerTest.java': 'a0b342821cc86184a8084b8ed9c1bb171b5fcead51f1d25a663dbb9df0e7881a'}}
+
+def receipt_admission_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-RECEIPT-ADMISSION-QUALIFICATION-001' or e.get('baseline')!=RA_BASE or e.get('scope')!='DISABLED_UTILITY_SYNTHETIC_QUALIFICATION' or e.get('defaultDeny') is not True:errors.append('Receipt admission scope/default deny missing')
+    for k in ['realDocumentsProcessed','runtimeWiringChanged','bankServiceChanged','syntheticProcessorsChanged','migrationChanged','publicApiChanged','frontendChanged','runtimeGrantsAssigned','financialMutations','formalAcceptanceChanged','productionQualified','historicalCampaignRerun']:
+        if e.get(k) is not False:errors.append('Receipt admission boundary drift '+k)
+    run=e.get('evidence',{})
+    if run!=RA_EVIDENCE or run.get('status')!='PASS' or run.get('cleanupVerified') is not True or len(run.get('admissionResults',[]))!=3 or len(run.get('results',[]))!=17:errors.append('Receipt qualification execution drift')
+    if e.get('implementationStatus')!='VERIFIED_SYNTHETIC_QUALIFICATION':errors.append('Receipt qualification completion inflated')
+    return errors
+
+def receipt_admission_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',RA_BASE+':'+n])
+    errors=[];owned=set(RA_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in RA_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Receipt admission exact successor mismatch '+n)
+    if errors:return errors
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('receiptAdmissionQualification',{});errors.extend(receipt_admission_errors(e))
+    if s!=json.loads(before('knowledge/execution/status.json')):errors.append('Receipt admission historical status drift')
+    for n in ['knowledge/PROGRESS.md','knowledge/ARCHITECTURE.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        if not (R/n).read_bytes().startswith(before(n)):errors.append('Receipt admission historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',RA_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Receipt admission unowned source drift '+n)
+    folder=R/'backend/src/main/resources/db/migration'
+    if {x.relative_to(R).as_posix() for x in folder.glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('Receipt admission migration scope exceeded')
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Receipt admission unauthorized new source')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',RA_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Receipt admission unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Receipt admission historical validator drift')
+    expected=json.loads(before('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('Receipt admission manifest drift')
+    return errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=receipt_admission_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    owned=set(RA_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',RA_BASE],text=True),nul=True);added=owned-tracked
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',RA_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            exclude=added if 'ls-files' in argv else owned;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in exclude];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**k):return (x for x in g0(p,*a,**k) if x not in {R/n for n in added})
+    def rglob(p,*a,**k):return (x for x in rg0(p,*a,**k) if x not in {R/n for n in added})
+    with patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=receipt_admission_prior_main()
+    if result==0:print('PASS exact disabled receipt qualification successor;unowned sources,migrations,history and acceptance unchanged')
+    return result
+
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

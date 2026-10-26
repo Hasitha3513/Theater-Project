@@ -710,3 +710,7 @@ Developer-only synthetic/security-test storage/scanner harness verified with act
 
 ## Local synthetic receipt runtime integration
 Existing synthetic receipt APIs can be exercised with opt-in local SeaweedFS and real ClamAV adapters. Closed fixtures only;quarantine,protected previews,audit and authoritative status remain. Developer-only qualification,not real receipt/bank acceptance. [Evidence](../PROGRESS.md#local-receipt-integration).
+
+
+## Disabled receipt admission qualification utilities
+Developer-only default-DENY policy and bounded PNG/JPEG validation are verified with fresh official28165 signatures and actual private local storage/Unix-socket scanning.3new and17retained named container checks PASS. No new customer feature,real receipts,permissions or financial capability. Existing synthetic fixture admission remains unchanged. [Evidence and limits](../PROGRESS.md#receipt-admission-qualification).

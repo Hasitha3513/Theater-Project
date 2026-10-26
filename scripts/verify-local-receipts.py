@@ -30,9 +30,9 @@ def main():
         package = ROOT / 'backend/src/main/java/com/cinenest/payments/internal'
         sources += [package / name for name in ['BankEvidenceProcessor.java', 'BankService.java', 'SyntheticEvidenceProcessor.java',
             'LocalDockerEvidenceConfiguration.java', 'LocalS3EvidenceStore.java', 'LocalEvidenceReceiptJournal.java',
-            'ClamAvSocketClient.java', 'ClamAvEvidenceProcessor.java']]
+            'ClamAvSocketClient.java', 'ClamAvEvidenceProcessor.java', 'ReceiptAdmissionPolicy.java', 'ReceiptImageValidator.java']]
         sources += [ROOT / 'backend/src/test/java' / name for name in ['com/cinenest/LocalReceiptIntegrationTest.java',
-            'com/cinenest/payments/internal/LocalReceiptJournalTest.java', 'com/cinenest/payments/internal/LocalReceiptRestartTest.java', 'com/cinenest/payments/internal/BankFaults.java']]
+            'com/cinenest/payments/internal/LocalReceiptJournalTest.java', 'com/cinenest/payments/internal/LocalReceiptRestartTest.java', 'com/cinenest/payments/internal/BankFaults.java', 'com/cinenest/payments/internal/ReceiptAdmissionTest.java', 'com/cinenest/payments/internal/ReceiptAdmissionContainerTest.java']]
     source_hashes = {str(p.relative_to(ROOT)): __import__('hashlib').sha256(p.read_bytes()).hexdigest() for p in sources}
     cache = ROOT / '.cache/local-receipts'
     cache.mkdir(parents=True, exist_ok=True)
@@ -87,6 +87,7 @@ def main():
         else:
             raise RuntimeError('Local service health deadline exceeded')
         metadata = call(['docker', 'exec', scanner, 'clamdscan', *(['--config-file=/run/receipt-config/clamd.conf'] if args.integration else []), '--version'])
+        print('Scanner qualification metadata:', metadata, flush=True)
         # ClamAV reports engine/signature version/signature date. Fail if unsupported or stale.
         fields = metadata.split('/', 2)
         signature = datetime.datetime.strptime(fields[2].strip(), '%a %b %d %H:%M:%S %Y').replace(tzinfo=datetime.timezone.utc)
@@ -110,7 +111,7 @@ def main():
             env.pop('CINENEST_LOCAL_RECEIPT', None)
         with (run / 'tests.log').open('w') as log:
             subprocess.run([str(ROOT / 'backend/mvnw'), '-B', '-Dmaven.repo.local=' + str(ROOT / '.cache/m2'),
-                            '-Dtest=' + ('LocalReceiptJournalTest,LocalReceiptIntegrationTest' if args.integration else 'LocalReceiptQualificationTest'), 'test'], cwd=ROOT / 'backend', env=env,
+                            '-Dtest=' + ('ReceiptAdmissionTest,ReceiptAdmissionContainerTest,LocalReceiptJournalTest,LocalReceiptIntegrationTest' if args.integration else 'LocalReceiptQualificationTest'), 'test'], cwd=ROOT / 'backend', env=env,
                            stdout=log, stderr=subprocess.STDOUT, check=True)
         if args.integration:
             with (run / 'application-restart.log').open('w') as log:
@@ -126,6 +127,11 @@ def main():
         result = {'source': call(['git', '-C', str(ROOT), 'rev-parse', 'HEAD']),
             'scope': 'LOCAL_RUNTIME_SYNTHETIC_ONLY' if args.integration else 'LOCAL_CONTAINERS_SYNTHETIC_ONLY', 'awsQualified': False, 'scanner': metadata,
             'results': lines, 'status': 'PASS'}
+        if args.integration:
+            admission = [line.strip() for line in (run / 'tests.log').read_text().splitlines() if line.startswith('RECEIPT_ADMISSION_PASS ')]
+            if len(admission) != 3 or len(set(admission)) != 3:
+                raise RuntimeError('Receipt admission qualification evidence incomplete')
+            result['admissionResults'] = admission
     finally:
         updater = subprocess.run(['docker', 'inspect', project + '-updater'], env=env, capture_output=True, text=True)
         if updater.returncode == 0:

@@ -24674,5 +24674,184 @@
       "Real receipt privacy/bank/commercial approvals unresolved",
       "No hardware or launch acceptance"
     ]
+  },
+  "receiptAdmissionQualification": {
+    "taskId": "CN-R1-RECEIPT-ADMISSION-QUALIFICATION-001",
+    "baseline": "eba8c905db417736896004e34c42fb01a25507cc",
+    "scope": "DISABLED_UTILITY_SYNTHETIC_QUALIFICATION",
+    "authority": "Explicit owner authorization in conversation: default-deny policy and bounded PNG/JPEG qualification only;no real receipts or customer wiring",
+    "implementationStatus": "VERIFIED_SYNTHETIC_QUALIFICATION",
+    "defaultDeny": true,
+    "realDocumentsProcessed": false,
+    "runtimeWiringChanged": false,
+    "bankServiceChanged": false,
+    "syntheticProcessorsChanged": false,
+    "migrationChanged": false,
+    "publicApiChanged": false,
+    "frontendChanged": false,
+    "runtimeGrantsAssigned": false,
+    "financialMutations": false,
+    "formalAcceptanceChanged": false,
+    "productionQualified": false,
+    "historicalCampaignRerun": false,
+    "requirementIds": [
+      "PR-BANK-001",
+      "CN-C10",
+      "BP-AC04",
+      "BP-AC08",
+      "CN-NFR-02"
+    ],
+    "evidence": {
+      "source": "eba8c905db417736896004e34c42fb01a25507cc",
+      "scope": "LOCAL_RUNTIME_SYNTHETIC_ONLY",
+      "awsQualified": false,
+      "scanner": "ClamAV 1.5.4/28165/Mon Oct 26 06:27:07 2026",
+      "results": [
+        "LOCAL_INTEGRATION_PASS wrong-owner-upload-denied",
+        "LOCAL_INTEGRATION_PASS wrong-venue-and-csrf-denied",
+        "LOCAL_INTEGRATION_PASS upload-lost-result-status-and-no-byte-retry",
+        "LOCAL_INTEGRATION_PASS concurrent-completion-command-replay",
+        "LOCAL_INTEGRATION_PASS real-unix-scanner-unavailable-quarantine",
+        "LOCAL_INTEGRATION_PASS scan-audit-rollback-with-external-preview-retained",
+        "LOCAL_INTEGRATION_PASS real-clamav-ready-and-protected-preview",
+        "LOCAL_INTEGRATION_PASS preview-mandatory-audit-fail-closed",
+        "LOCAL_INTEGRATION_PASS owner-preview-and-revoked-authority-denied",
+        "LOCAL_INTEGRATION_PASS zero-financial-booking-access-mutations",
+        "LOCAL_INTEGRATION_PASS malformed-fixture-admission-preserved",
+        "LOCAL_INTEGRATION_PASS fresh-spring-boot-protected-status-preview-and-revocation",
+        "LOCAL_INTEGRATION_PASS fresh-application-database-and-financial-invariants",
+        "LOCAL_INTEGRATION_PASS encrypted-provider-object-and-bound-plaintext-integrity",
+        "LOCAL_INTEGRATION_PASS fresh-jvm-version-journal-recovery-and-replay",
+        "LOCAL_INTEGRATION_PASS unix-socket-clean-and-eicar-fail-closed",
+        "LOCAL_INTEGRATION_PASS exact-version-cleanup-and-durable-tombstone"
+      ],
+      "status": "PASS",
+      "admissionResults": [
+        "RECEIPT_ADMISSION_PASS png-jpeg-private-versioned-store-and-real-scan",
+        "RECEIPT_ADMISSION_PASS malware-and-unavailable-scanner-fail-closed",
+        "RECEIPT_ADMISSION_PASS no-customer-admission-or-financial-wiring"
+      ],
+      "cleanupVerified": true,
+      "sourceHashes": {
+        "scripts/verify-local-receipts.py": "07c0e361ed190332395296fb7c970c3c7279caff15d1f84923c794fab1d4db78",
+        "qualification/receipt-local/compose.yaml": "f873668724725f77f27e20a112eab014c552af1eaa002700b115070f45fc004f",
+        "backend/src/test/java/com/cinenest/payments/internal/LocalReceiptQualificationTest.java": "5804b09f8d552d86b9711dabf50c94137cab11130f8333fe60d88639de613746",
+        "backend/src/main/java/com/cinenest/payments/internal/BankEvidenceProcessor.java": "17043490f10e703a8159ed8c946240830df02da1b13e22be1fc2da6d96a569d8",
+        "backend/src/main/java/com/cinenest/payments/internal/BankService.java": "7cc0343fc3e27e7530c0cab833f4489b13b0caf6293b3d9598bd4f425c70f2cd",
+        "backend/src/main/java/com/cinenest/payments/internal/SyntheticEvidenceProcessor.java": "d20187cea60dde66c133d032e952ce059ebfb45ce30df500b0c25c392ea51cbc",
+        "backend/src/main/java/com/cinenest/payments/internal/LocalDockerEvidenceConfiguration.java": "c9b500a1059f6cc2863c052096ab893db1d9d57bd68e58dd1bb53ddd80a14efc",
+        "backend/src/main/java/com/cinenest/payments/internal/LocalS3EvidenceStore.java": "03a474ba13d0ea8c2dd3c7c7db4fca19e053d19ce46432014914bdeac70beb13",
+        "backend/src/main/java/com/cinenest/payments/internal/LocalEvidenceReceiptJournal.java": "90a683b96b6ac51a567c9cdc29ae258a3d363e20af53dd41652527b35075a84f",
+        "backend/src/main/java/com/cinenest/payments/internal/ClamAvSocketClient.java": "9073b360f85e83f78f3b4eaac5946b9642ccea2c4bfb537a9c7a5cfe88b7153f",
+        "backend/src/main/java/com/cinenest/payments/internal/ClamAvEvidenceProcessor.java": "01d9bca23a142dddd59f11f635ed7afb85d5238407020302f751441c3f8d4cd1",
+        "backend/src/main/java/com/cinenest/payments/internal/ReceiptAdmissionPolicy.java": "e0c71ec4ac281a208c802c1a77cdba163b8de247fdedfa294dfba856876c1223",
+        "backend/src/main/java/com/cinenest/payments/internal/ReceiptImageValidator.java": "d8fbd60dd32fb538b0b1f4756d2bd5a20631f67a63d3eea4c59cb431383dd01f",
+        "backend/src/test/java/com/cinenest/LocalReceiptIntegrationTest.java": "343b0ff57b53fd712ab74592a7ead82d80cd532a310385cf6dc446b39fadef93",
+        "backend/src/test/java/com/cinenest/payments/internal/LocalReceiptJournalTest.java": "f381507974c4c577d00457d733940f83a71537587baae99b01e2ce8a213abb38",
+        "backend/src/test/java/com/cinenest/payments/internal/LocalReceiptRestartTest.java": "5d14708f600d743f7efff7dbcb14bc98b4808e2b3edd09103f2643de8d858f6b",
+        "backend/src/test/java/com/cinenest/payments/internal/BankFaults.java": "26b9a6ff92580b4ac5eed72f508e1a370bf5334e6b507fc568a9ab915050e1a3",
+        "backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionTest.java": "754365406fd166f7abc44c0a30946aa0b6c923e81cf32b4ccb303e5a7c3c88af",
+        "backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionContainerTest.java": "a0b342821cc86184a8084b8ed9c1bb171b5fcead51f1d25a663dbb9df0e7881a"
+      }
+    },
+    "tests": {
+      "focusedUnits": {
+        "run": 11,
+        "pass": 11
+      },
+      "containerJUnit": {
+        "run": 21,
+        "pass": 21
+      },
+      "newNamedContainerChecks": 3,
+      "retainedNamedWorkflowChecks": 17,
+      "backend": {
+        "run": 842,
+        "pass": 837,
+        "skip": 5,
+        "fail": 0,
+        "errors": 0
+      },
+      "frontend": {
+        "pass": 497,
+        "typecheck": "PASS",
+        "lint": "PASS_ZERO_WARNINGS_109_INFOS",
+        "build": "PASS"
+      },
+      "knowledge": "PASS",
+      "cleanCheckoutExecution": "PASS",
+      "governanceControls": 365,
+      "classifier": 8,
+      "harnessAdmission": 11,
+      "recovery": 13,
+      "launchers": 14,
+      "whitespace": "PASS",
+      "publicationCI": "PENDING_UNTIL_ACTUAL_EXACT_SOURCE_RUN_COMPLETES"
+    },
+    "reading": {
+      "priorFullLedger": "bankInstructionsRealStackE2E.reading.files",
+      "filesAccounted": 116,
+      "byteIdentical": 107,
+      "reviewedSuccessors": 9,
+      "method": "Verified prior content/visual coverage reused with inherited limitations;current task sources/canonical constraints and reviewed successor records consulted;not a new full visual audit"
+    },
+    "remainingGates": [
+      "G-PRIVACY",
+      "G-BANK",
+      "G-COMMERCIAL",
+      "Production provider/key/retention/recovery qualification",
+      "Hardware and launch acceptance"
+    ],
+    "initialFreshnessFailure": {
+      "source": "eba8c905db417736896004e34c42fb01a25507cc",
+      "status": "BLOCKED_EXTERNAL_EVIDENCE",
+      "executionDate": "2026-10-26",
+      "scanner": "ClamAV 1.5.4/28164/Sun Oct 25 06:24:12 2026",
+      "failure": "Actual signature database outside approved local freshness limit",
+      "attempts": 2,
+      "positiveContainerQualification": "NOT_RUN",
+      "retainedContainerRegression": "NOT_RUN",
+      "cleanupVerified": true,
+      "sourceSnapshot": {
+        "backend/src/main/java/com/cinenest/payments/internal/ReceiptAdmissionPolicy.java": "e0c71ec4ac281a208c802c1a77cdba163b8de247fdedfa294dfba856876c1223",
+        "backend/src/main/java/com/cinenest/payments/internal/ReceiptImageValidator.java": "d8fbd60dd32fb538b0b1f4756d2bd5a20631f67a63d3eea4c59cb431383dd01f",
+        "backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionTest.java": "754365406fd166f7abc44c0a30946aa0b6c923e81cf32b4ccb303e5a7c3c88af",
+        "backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionContainerTest.java": "d52d1328ee22951a5cb2645b62e60250ce49c8aa9370dac279d372e10b6a1948",
+        "scripts/verify-local-receipts.py": "07c0e361ed190332395296fb7c970c3c7279caff15d1f84923c794fab1d4db78"
+      },
+      "sourceSnapshotInterpretation": "Current candidate inventory,not proof of container execution;failed attempts stopped at launcher admission.Final utility tested by final backend suite.",
+      "unitExecutedSources": {
+        "backend/src/main/java/com/cinenest/payments/internal/ReceiptAdmissionPolicy.java": "e0c71ec4ac281a208c802c1a77cdba163b8de247fdedfa294dfba856876c1223",
+        "backend/src/main/java/com/cinenest/payments/internal/ReceiptImageValidator.java": "d8fbd60dd32fb538b0b1f4756d2bd5a20631f67a63d3eea4c59cb431383dd01f",
+        "backend/src/test/java/com/cinenest/payments/internal/ReceiptAdmissionTest.java": "754365406fd166f7abc44c0a30946aa0b6c923e81cf32b4ccb303e5a7c3c88af"
+      },
+      "logs": {
+        "/tmp/cinenest-admission-backend-final.log": "95a38e97bf2591513d53eef1d9832f98f2aa44b9ac27abbd8aceb3286be1ceef",
+        "/tmp/cinenest-admission-containers.log": "2946d192d7fb4897246f404f2d224c179973af19484290ac8f30fd84b8678d34",
+        "/tmp/cinenest-admission-containers-recheck.log": "b31b52158679f97aae7bdf4fcdc6bc278747653d8e6115db197d4dc507732f44"
+      }
+    },
+    "freshnessRecovery": {
+      "officialVersion": "28165",
+      "signatureBuildTime": "2026-10-26T06:27:07Z",
+      "maximumAgeHours": 24,
+      "freshnessPolicyChanged": false,
+      "clockChanged": false,
+      "dns": "Official current.cvd.clamav.net advertises28165;normal resolver unchanged",
+      "tls": "TLS1.3,certificate hostname/chain verification OK;official HTTPS cdiff and detached signatures downloaded and verified",
+      "proxy": "No host/container proxy variables observed;no proxy configuration changed",
+      "clocks": "Host2026-10-26T07:02:17.756Z/container07:02:17Z;no clock mismatch found",
+      "permissionsAndPersistence": "Existing DatabaseOwnerclamav update succeeded;restarted non-root scanner loaded28165 from shared signature volume",
+      "rateLimiting": "No429/403 or update failure in diagnostic;IPv6 unavailable fell back successfully toIPv4",
+      "daemonNotification": "Expected updater has no scanner socket;existing explicit scanner restart loads persisted update",
+      "rootCause": "Earlier official28164 exceeded24h;new official28165 now available.No local clock/TLS/proxy/permission defect proven",
+      "diagnosticLogSha256": "c424c99d5fc547f6324d4919b8b5b8069dfa7d0ab49814c01056c31094ae1c98",
+      "testFixtureCorrections": "Initial test tried to recreate existing bucket(409);alternative bucket PUT failed in bounded fixture.Corrected test now inspects existing harness bucket versioning and isolates objects with unique journal namespace;no runtime adapter change.EICAR asserts actual FOUND before fail-closed wrapper."
+    },
+    "verificationLogs": {
+      "/tmp/cinenest-admission-recovery-backend.log": "95381d33d57cf0ab7877809952f82db5e5bb7f9ab3e2689e1ef979502286f795",
+      "/tmp/cinenest-admission-recovery-frontend-test.log": "d04ef487e45db59900f9b41cc24f88cd7465496087ffb2bdf13f684479f34c88",
+      "/tmp/cinenest-admission-containers-qualified-final.log": "c02b8f1b655a955fd17bc62e56e9d565e03ea38107e7fad23384094ecdcc12b1"
+    }
   }
 }
