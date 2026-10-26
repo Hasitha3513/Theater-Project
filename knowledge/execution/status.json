@@ -25018,5 +25018,199 @@
       "T-BR-09"
     ],
     "operationalAssignments": "NONE;disposable isolated PostgreSQL authorization fixtures only"
+  },
+  "customerWebsiteReadiness": {
+    "taskId": "CN-R1-CUSTOMER-WEBSITE-PREVIEW-001",
+    "baseline": "5bee6ad4791d1dacbd16bd4eef99c514c8c724af",
+    "baselineCI": {
+      "runId": 40320831574,
+      "headSha": "5bee6ad4791d1dacbd16bd4eef99c514c8c724af",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "authorization": "REPRIORITIZATION_PREPARATION_AND_EXISTING_LOCAL_PREVIEW_ONLY",
+    "sourceRequestSha256": "70796995206021ceac2be4e4302c72112053a3c7bef38d0ebb66be8fb7b819ef",
+    "applicationChanged": false,
+    "migrationsChanged": false,
+    "permissionsChanged": false,
+    "runtimeGrantsAssigned": false,
+    "providersActivated": false,
+    "realOperations": false,
+    "acceptanceChanged": false,
+    "knowledgeFilesAdded": false,
+    "reading": {
+      "ledger": "bankInstructionsRealStackE2E.reading.files",
+      "accounted": 116,
+      "originalHashesUnchanged": 104,
+      "reviewedSuccessors": 12,
+      "scope": "Verified prior full-content/visual coverage reused with inherited limits;relevant canonical/source contracts freshly consulted;authored documentation reviewed. No full audit repeated"
+    },
+    "preview": {
+      "customer": "http://127.0.0.1:3000/",
+      "admin": "http://127.0.0.1:3000/admin",
+      "backend": "http://127.0.0.1:8080",
+      "database": "OWNED_ISOLATED_EMPTY_POSTGRESQL_18_6",
+      "flywayHead": 27,
+      "browserInterception": false,
+      "routeHttp200": 7,
+      "catalogHttp200": true,
+      "protectedAccountHttp403": true,
+      "responsiveViews": 21,
+      "viewports": [
+        375,
+        768,
+        1280
+      ],
+      "oneMainOneH1NoHorizontalOverflow": true,
+      "screenshotCount": 23,
+      "screenshots": [
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/account-1280.png",
+          "sha256": "863a8428cefaa379515172b9c03aeb59401556050ab6b245b3498231cf423c98",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/account-375.png",
+          "sha256": "be700e460a7f782ca3c7c11f1eb31a532de41eacde2e3d210075e7a5f702ab87",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/account-768.png",
+          "sha256": "e2c9976011be274bab458434e580dbc1b51bb50e62f252f3d525502911772c69",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-1280.png",
+          "sha256": "5850e017a23e0ce704d665cc65b436448d405dcc66b33ca641e09ea4cd751ecb",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-375.png",
+          "sha256": "1bf3ed055b9e4d3a6d27839682e62191d36b259b1f08cc48e2180b3d1cae1f2f",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-768.png",
+          "sha256": "bb4e46b164f490dbaca1c2c493d94932cfd69d0f2b9030701511fa461a57c51b",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-overview.png",
+          "sha256": "a3ea657c86c7a341ebbfa67c7557c380100ea9698825c61e0863f3bef681b8e8",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-packages-1280.png",
+          "sha256": "196e9de08ca18dfbddda199899ecd9712b5402a2b779dd8ab9ef472115bbb683",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-packages-375.png",
+          "sha256": "8f3f4e761cd76f69dd2597590882bf1abf3fd5de9e7b981f4c76aa99be747b36",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-packages-768.png",
+          "sha256": "20bf228a9e815be234f88ec8fae7b3246a8c2a80fa8dc2ac6da2e224d99ebf8b",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-rooms-1280.png",
+          "sha256": "01993e9b4074a0fa8c298c11aa2b6b2ebebeeac9b09c442424367f398a266422",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-rooms-375.png",
+          "sha256": "7e07b0ebd7b24a33ab1e99ca1dbc64111e42932f75077a601a5bedc220b29108",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/admin-rooms-768.png",
+          "sha256": "da174af5491f6d27b3be80ecf20c82e660494484d03b04811f08fd636873a615",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/bookings-1280.png",
+          "sha256": "5f474a4cafcd423f4cdd1149b8adb42dfbd36e3ac45b30bb87974887f1ad99ae",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/bookings-375.png",
+          "sha256": "cf1a4e55f53274ebf933bf4b0cda873060a4e55275f46d2cec46b932be9b0ad5",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/bookings-768.png",
+          "sha256": "ff571529ffd45017be8f5ab86c50efe682dbff5a7fefdcefb2f5b7a50ff222c0",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/home-1280.png",
+          "sha256": "c7d9595a375517670d58b07ede0c1992e0d65db481e458f826d1e56ef3259ad0",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/home-375.png",
+          "sha256": "c10e745e02ac247b72d45a7c8c6032cd0d9998dcaec566e1ef6357c1f9575d0a",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/home-768.png",
+          "sha256": "e226b65e4ded188e59bb7c974388146407eba10f796814a62af0c42ce65f66b0",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/home-overview.png",
+          "sha256": "d66f0f6a53fb633f664a0e76b4ac6e59943c49883d8dacfbaf08c824298336ce",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/rooms-1280.png",
+          "sha256": "4548d3ceef4dbe53eea7ff95549fad7874aaaa8e5488c3f1f19c89b304fbe906",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/rooms-375.png",
+          "sha256": "e56ba14fde63349bb5d0d165186e5bd9ea86c644109742a414cb804be08477d6",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        },
+        {
+          "path": ".cache/customer-website-preview-5bee6ad/rooms-768.png",
+          "sha256": "f1534a1e54b2d645c2aa82b2a193e85ea14758490767bcf73807e40b72a4a90b",
+          "evidence": "ACTUAL_LOCAL_BROWSER_CAPTURE_NOT_PROVIDER_OR_AUTHENTICATED_OPERATION_ACCEPTANCE"
+        }
+      ],
+      "limitations": [
+        "Empty catalog;full room-selection/booking cannot be verified",
+        "No associated account/provider or venue grant;authenticated management not verified",
+        "Account-button completion NOT_VERIFIED;default account API denial independently observed",
+        "Only home/admin at all widths visually inspected;all seven routes captured/DOM measured",
+        "No live Google/Facebook,password/profile/banner tests;no new feature acceptance",
+        "Local artifact files ignored/not versioned;not immutable provider qualification evidence"
+      ]
+    },
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "validation": "PASS_KNOWLEDGE_TRACEABILITY_DEPENDENCY_DECISION_MANIFEST_WHITESPACE_AND_ACTUAL_CLEAN_CHECKOUT",
+    "publication": "PENDING",
+    "nextAction": "CN-R1-CUSTOMER-AUTH-001_POLICY_AND_IMPLEMENTATION_ADMISSION",
+    "governance": {
+      "retainedAssertions": 365,
+      "websiteNegativeControls": 16,
+      "futureFixturePositive": 2,
+      "futureFixtureNegative": 9,
+      "fixtureCorrection": "Predecessor FF-0001 collision reproduced;test-only next-unused ID and matching self-dependency fault;no check suppressed"
+    },
+    "applicationRegressionEvidence": {
+      "sourceCommit": "5bee6ad4791d1dacbd16bd4eef99c514c8c724af",
+      "runId": 40320831574,
+      "backend": "880PASS_5OPT_IN_SKIP",
+      "frontend": "497PASS",
+      "scope": "Reused unchanged application-source CI evidence;not a new local campaign run"
+    }
   }
 }

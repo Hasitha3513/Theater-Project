@@ -134,3 +134,61 @@ No feature records yet. No FF ID has been allocated. No future feature has been 
 | 2026-10-22 | CN-FUTURE-FEATURES-BACKLOG-001 | Owner-authorized supplementary register established; no feature implementation or MVP status change | [Setup record](../PROGRESS.md#future-features-backlog); publication commit is discoverable from this file's Git history; final exact-source CI receipt is reported in closeout |
 
 Future implementation entries must link actual FF/execution IDs, commit SHAs, exact-source CI and acceptance scope; never populate this table with planned successes. Preserve prior entries when work is rejected, deferred, superseded or reopened.
+
+
+### FF-0001 — Facebook Login provider
+
+- Classification: FUTURE_ENHANCEMENT
+- Description: Additional customer login provider beyond the explicitly scoped Google/OIDC foundation
+- Business justification: Owner requested November14 customer-facing release priority expansion;implementation not authorized
+- User benefit: Requested customer access/content usability benefit;not user-acceptance evidence
+- Discovery date: 2026-10-26
+- Source/reference: Owner customer website/authentication attachment SHA-256 70796995206021ceac2be4e4302c72112053a3c7bef38d0ebb66be8fb7b819ef;PROGRESS.md#customer-website-preview
+- MVP overlap: Identity/login overlaps CN-C02 for FF-0001;banner accessibility/security overlaps CN-NFR-01/02 for FF-0002. Additive provider/content scope is not a new requirement ID;no existing obligation moved or deferred
+- Priority: P0 owner-requested preparation priority;implementation/launch remains unapproved
+- Owner module: Identity
+- Backend impact: Proposed owner-module ports and protected contracts;NOT_IMPLEMENTED
+- Frontend impact: Proposed provider entry or protected banner management/home presentation;NOT_IMPLEMENTED
+- Database impact: PENDING exact additive schema and separate authorization;no migration in discovery
+- Security impact: Provider identity/account linking or dedicated publication authority and asset isolation;no grants
+- Dependencies: CN-C02;OD-01;OD-05;provider app/credentials/callback/review evidence;separate implementation authority
+- Proposed acceptance criteria: Exact approved scope;ownership/venue/CSRF/privacy and negative tests;real-stack responsive evidence;separate provider or publication qualification
+- Owner approval: PENDING
+- Implementation authority: NOT_GRANTED
+- Implementation status: IDEA
+- Execution record: change-sets.json#customerWebsitePriorityPreparation
+- Test/evidence: NOT_RUN for new feature;existing local preview is not feature verification
+- Commit SHA: NOT_IMPLEMENTED
+- CI evidence: NOT_RUN
+- Acceptance: NOT_ACCEPTED
+- Definition of Done / rollback: PENDING approved contract;disable new provider/content mode and retain immutable history
+- History: 2026-10-26 IDEA recorded from owner direction;no approval,code or acceptance implied
+
+
+### FF-0002 — Non-financial homepage banner management
+
+- Classification: FUTURE_ENHANCEMENT
+- Description: Versioned homepage banner draft/image/placement/scheduling and publish/unpublish;no discounts or financial promotions
+- Business justification: Owner requested November14 customer-facing release priority expansion;implementation not authorized
+- User benefit: Requested customer access/content usability benefit;not user-acceptance evidence
+- Discovery date: 2026-10-26
+- Source/reference: Owner customer website/authentication attachment SHA-256 70796995206021ceac2be4e4302c72112053a3c7bef38d0ebb66be8fb7b819ef;PROGRESS.md#customer-website-preview
+- MVP overlap: Identity/login overlaps CN-C02 for FF-0001;banner accessibility/security overlaps CN-NFR-01/02 for FF-0002. Additive provider/content scope is not a new requirement ID;no existing obligation moved or deferred
+- Priority: P0 owner-requested preparation priority;implementation/launch remains unapproved
+- Owner module: PENDING_EXISTING_MODULE_OWNER_DECISION
+- Backend impact: Proposed owner-module ports and protected contracts;NOT_IMPLEMENTED
+- Frontend impact: Proposed provider entry or protected banner management/home presentation;NOT_IMPLEMENTED
+- Database impact: PENDING exact additive schema and separate authorization;no migration in discovery
+- Security impact: Provider identity/account linking or dedicated publication authority and asset isolation;no grants
+- Dependencies: CN-NFR-01;CN-NFR-02;site/venue scope and permission approval;public asset storage policy;separate implementation authority
+- Proposed acceptance criteria: Exact approved scope;ownership/venue/CSRF/privacy and negative tests;real-stack responsive evidence;separate provider or publication qualification
+- Owner approval: PENDING
+- Implementation authority: NOT_GRANTED
+- Implementation status: IDEA
+- Execution record: change-sets.json#customerWebsitePriorityPreparation
+- Test/evidence: NOT_RUN for new feature;existing local preview is not feature verification
+- Commit SHA: NOT_IMPLEMENTED
+- CI evidence: NOT_RUN
+- Acceptance: NOT_ACCEPTED
+- Definition of Done / rollback: PENDING approved contract;disable new provider/content mode and retain immutable history
+- History: 2026-10-26 IDEA recorded from owner direction;no approval,code or acceptance implied

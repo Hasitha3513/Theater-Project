@@ -76,7 +76,9 @@ def test_future_register_controls():
     path = K / 'backlog/FUTURE_FEATURES.md'
     original = path.read_text()
     template = re.search(r'```markdown\n(.*?)\n```', original, re.S).group(1)
-    record = template.replace('FF-<NNNN> — <title>', 'FF-0001 — In-memory validation fixture')
+    next_id = max([int(n) for n in re.findall(r'^### FF-([0-9]{4}) — ', original, re.M)], default=0) + 1
+    fixture_id = f'FF-{next_id:04d}'
+    record = template.replace('FF-<NNNN> — <title>', fixture_id + ' — In-memory validation fixture')
     record = re.sub(r'^- Classification:.*$', '- Classification: FUTURE_ENHANCEMENT', record, flags=re.M)
     record = re.sub(r'^- Discovery date:.*$', '- Discovery date: 2026-10-22', record, flags=re.M)
     record = re.sub(r'^- Dependencies:.*$', '- Dependencies: NONE', record, flags=re.M)
@@ -91,7 +93,7 @@ def test_future_register_controls():
         with patch.object(Path, 'read_text', lambda p, *a, **kw: value if p == path else rb(p, *a, **kw)):
             module['validate_future_features'](lambda ok, message: failures.append(message) if not ok else None)
         return failures
-    assert not errors_for(original), 'Empty authorized register rejected'
+    assert not errors_for(original), 'Existing authorized register rejected'
     assert not errors_for(original + '\n' + record), 'Valid IDEA record rejected'
     bad = {
         'duplicate ID': record + '\n' + record,
@@ -101,7 +103,7 @@ def test_future_register_controls():
         'unapproved feature': record.replace('Implementation status: IDEA', 'Implementation status: APPROVED'),
         'unauthorized readiness': record.replace('Implementation status: IDEA', 'Implementation status: READY').replace('Owner approval: PENDING', 'Owner approval: in-memory bounded approval fixture'),
         'unverified success': record.replace('Implementation status: IDEA', 'Implementation status: VERIFIED').replace('Owner approval: PENDING', 'Owner approval: in-memory bounded approval fixture').replace('Implementation authority: NOT_GRANTED', 'Implementation authority: GRANTED in-memory test only'),
-        'self dependency': record.replace('Dependencies: NONE', 'Dependencies: FF-0001'),
+        'self dependency': record.replace('Dependencies: NONE', 'Dependencies: ' + fixture_id),
         'unknown dependency': record.replace('Dependencies: NONE', 'Dependencies: FF-9999'),
     }
     for name, broken in bad.items():

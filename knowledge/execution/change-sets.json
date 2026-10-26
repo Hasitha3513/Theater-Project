@@ -6733,5 +6733,151 @@
     "physicalAdapterAdmission": "BLOCKED_HARDWARE_PROVIDER_AUTHORIZATION",
     "rollback": "Disable registry;retain immutable V27/history;reviewed forward fix or task-code revert only",
     "preserved": "Original Release1 schedule,92 requirements,74 criteria and acceptance history unchanged"
+  },
+  "customerWebsitePriorityPreparation": {
+    "taskId": "CN-R1-CUSTOMER-WEBSITE-PREVIEW-001",
+    "baseline": "5bee6ad4791d1dacbd16bd4eef99c514c8c724af",
+    "sourceRequestSha256": "70796995206021ceac2be4e4302c72112053a3c7bef38d0ebb66be8fb7b819ef",
+    "authority": "REPRIORITIZATION_PREPARATION_AND_EXISTING_LOCAL_PREVIEW_ONLY",
+    "scopeExpansion": "REQUESTED_NOT_AUTOMATICALLY_REQUIREMENT_OR_IMPLEMENTATION_APPROVED",
+    "changeSets": [
+      {
+        "unit": "A",
+        "taskId": "CN-R1-CUSTOMER-WEBSITE-PREVIEW-001",
+        "title": "Local existing website/admin preview",
+        "ownerModule": "frontend/foundation",
+        "status": "EXECUTED_BOUNDED_PREVIEW_ONLY",
+        "authority": "EXISTING_LOCAL_PREVIEW_AND_PLANNING_ONLY",
+        "blockers": "NONE_FOR_EXISTING_PREVIEW",
+        "requirements": [
+          "CN-C01",
+          "CN-C02",
+          "CN-C08",
+          "CN-A01",
+          "CN-A03",
+          "CN-A12",
+          "CN-NFR-01",
+          "CN-NFR-02"
+        ],
+        "tests": "Preview:actual routes/screenshots/default denial only;future unit:unit,PG,ownership/CSRF/linking/rate-limit/audit,recovery,real-stack responsive tests and provider evidence as applicable",
+        "definitionOfDone": "Exact bounded source/contract approval,required tests and CI;no formal acceptance inferred",
+        "rollback": "Preview:stop only owned launcher/container. Future code:disable only admitted mode;retain audit/identity/revision history;reviewed forward fix/additive-schema compatibility",
+        "traceabilityLimit": "PARTIAL_SCOPE_REFERENCE_NOT_REQUIREMENT_ACCEPTANCE"
+      },
+      {
+        "unit": "B",
+        "taskId": "CN-R1-CUSTOMER-AUTH-001",
+        "title": "Manual registration,verification,password sessions and recovery",
+        "ownerModule": "identity",
+        "status": "PREPARED_NOT_IMPLEMENTATION_AUTHORIZED",
+        "authority": "NOT_GRANTED",
+        "blockers": "Credential/admission/email/abuse/recovery policy and explicit implementation authorization",
+        "requirements": [
+          "CN-C02",
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "tests": "Preview:actual routes/screenshots/default denial only;future unit:unit,PG,ownership/CSRF/linking/rate-limit/audit,recovery,real-stack responsive tests and provider evidence as applicable",
+        "definitionOfDone": "Exact bounded source/contract approval,required tests and CI;no formal acceptance inferred",
+        "rollback": "Preview:stop only owned launcher/container. Future code:disable only admitted mode;retain audit/identity/revision history;reviewed forward fix/additive-schema compatibility",
+        "traceabilityLimit": "PARTIAL_SCOPE_REFERENCE_NOT_REQUIREMENT_ACCEPTANCE"
+      },
+      {
+        "unit": "C",
+        "taskId": "CN-R1-CUSTOMER-PROFILE-001",
+        "title": "Own name/phone and verification/provider-state profile",
+        "ownerModule": "identity",
+        "status": "PREPARED_NOT_IMPLEMENTATION_AUTHORIZED",
+        "authority": "NOT_GRANTED",
+        "blockers": "Field purpose/privacy/revision/linking boundaries and explicit implementation authorization",
+        "requirements": [
+          "CN-C02",
+          "CN-C08",
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "tests": "Preview:actual routes/screenshots/default denial only;future unit:unit,PG,ownership/CSRF/linking/rate-limit/audit,recovery,real-stack responsive tests and provider evidence as applicable",
+        "definitionOfDone": "Exact bounded source/contract approval,required tests and CI;no formal acceptance inferred",
+        "rollback": "Preview:stop only owned launcher/container. Future code:disable only admitted mode;retain audit/identity/revision history;reviewed forward fix/additive-schema compatibility",
+        "traceabilityLimit": "PARTIAL_SCOPE_REFERENCE_NOT_REQUIREMENT_ACCEPTANCE"
+      },
+      {
+        "unit": "D",
+        "taskId": "CN-R1-GOOGLE-SSO-001",
+        "title": "Google provider onboarding and browser session qualification",
+        "ownerModule": "identity",
+        "status": "PREPARED_NOT_IMPLEMENTATION_AUTHORIZED",
+        "authority": "NOT_GRANTED",
+        "blockers": "Provider client/secret/origins/callback/consent evidence;admission/linking policy;explicit implementation authorization",
+        "requirements": [
+          "CN-C02",
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "tests": "Preview:actual routes/screenshots/default denial only;future unit:unit,PG,ownership/CSRF/linking/rate-limit/audit,recovery,real-stack responsive tests and provider evidence as applicable",
+        "definitionOfDone": "Exact bounded source/contract approval,required tests and CI;no formal acceptance inferred",
+        "rollback": "Preview:stop only owned launcher/container. Future code:disable only admitted mode;retain audit/identity/revision history;reviewed forward fix/additive-schema compatibility",
+        "traceabilityLimit": "PARTIAL_SCOPE_REFERENCE_NOT_REQUIREMENT_ACCEPTANCE"
+      },
+      {
+        "unit": "E",
+        "taskId": "CN-R1-FACEBOOK-LOGIN-001",
+        "title": "Facebook provider login qualification",
+        "ownerModule": "identity",
+        "status": "PREPARED_NOT_IMPLEMENTATION_AUTHORIZED",
+        "authority": "NOT_GRANTED",
+        "blockers": "FF-0001;provider/app/API/review evidence;admission/linking policy;explicit implementation authorization",
+        "requirements": [
+          "CN-C02",
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "tests": "Preview:actual routes/screenshots/default denial only;future unit:unit,PG,ownership/CSRF/linking/rate-limit/audit,recovery,real-stack responsive tests and provider evidence as applicable",
+        "definitionOfDone": "Exact bounded source/contract approval,required tests and CI;no formal acceptance inferred",
+        "rollback": "Preview:stop only owned launcher/container. Future code:disable only admitted mode;retain audit/identity/revision history;reviewed forward fix/additive-schema compatibility",
+        "traceabilityLimit": "ADDITIVE_REQUEST_CROSS_CUTTING_REFERENCE_ONLY"
+      },
+      {
+        "unit": "F",
+        "taskId": "CN-R1-HOMEPAGE-CONTENT-001",
+        "title": "Non-financial banner draft and publication",
+        "ownerModule": "PENDING_EXISTING_MODULE_OWNER_DECISION",
+        "status": "PREPARED_NOT_IMPLEMENTATION_AUTHORIZED",
+        "authority": "NOT_GRANTED",
+        "blockers": "FF-0002;site/venue ownership;permissions;image/storage/schedule/editor-publisher policy;explicit implementation authorization",
+        "requirements": [
+          "CN-NFR-01",
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "tests": "Preview:actual routes/screenshots/default denial only;future unit:unit,PG,ownership/CSRF/linking/rate-limit/audit,recovery,real-stack responsive tests and provider evidence as applicable",
+        "definitionOfDone": "Exact bounded source/contract approval,required tests and CI;no formal acceptance inferred",
+        "rollback": "Preview:stop only owned launcher/container. Future code:disable only admitted mode;retain audit/identity/revision history;reviewed forward fix/additive-schema compatibility",
+        "traceabilityLimit": "ADDITIVE_REQUEST_CROSS_CUTTING_REFERENCE_ONLY"
+      },
+      {
+        "unit": "G",
+        "taskId": "CN-R1-CUSTOMER-WEBSITE-E2E-001",
+        "title": "Integrated real-stack customer website qualification",
+        "ownerModule": "cross-module tests",
+        "status": "PREPARED_NOT_IMPLEMENTATION_AUTHORIZED",
+        "authority": "NOT_GRANTED",
+        "blockers": "Admitted B-F source and test environment/fixture execution authorization",
+        "requirements": [
+          "CN-C01",
+          "CN-C02",
+          "CN-C08",
+          "CN-NFR-01",
+          "CN-NFR-02",
+          "CN-NFR-03"
+        ],
+        "tests": "Preview:actual routes/screenshots/default denial only;future unit:unit,PG,ownership/CSRF/linking/rate-limit/audit,recovery,real-stack responsive tests and provider evidence as applicable",
+        "definitionOfDone": "Exact bounded source/contract approval,required tests and CI;no formal acceptance inferred",
+        "rollback": "Preview:stop only owned launcher/container. Future code:disable only admitted mode;retain audit/identity/revision history;reviewed forward fix/additive-schema compatibility",
+        "traceabilityLimit": "PARTIAL_SCOPE_REFERENCE_NOT_REQUIREMENT_ACCEPTANCE"
+      }
+    ],
+    "preserved": "Original Release1 schedule/history,92 requirements,74 criteria,15 checked and0accepted;all provider/privacy/finance/physical gates unchanged",
+    "nextSingleUnit": "CN-R1-CUSTOMER-AUTH-001_POLICY_AND_IMPLEMENTATION_ADMISSION"
   }
 }

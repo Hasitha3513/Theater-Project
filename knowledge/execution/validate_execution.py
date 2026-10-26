@@ -7691,5 +7691,91 @@ def inert_ci_main():
     return result
 
 
+
+# Exact owner-requested customer-site preview and planning successor. No application admission.
+website_prior_main=inert_ci_main
+website_prior_guard=receipt_admission_successor_errors
+WEBSITE_BASE='5bee6ad4791d1dacbd16bd4eef99c514c8c724af'
+WEBSITE_HASHES={'knowledge/PROJECT.md': '136204c907326ea8f82e3df3f6f2c32d4f33f063d5bf5353c73c658c5058496d', 'knowledge/ARCHITECTURE.md': '929fadfc9afc29184e4586a320d6c03d6c4f363b8b4756bb30075a9f780a5709', 'knowledge/PROGRESS.md': '1ed44a5caf8682fb26ab3018ebe98b8629127bac0f0c1fdd6fd1f44726d3648d', 'knowledge/product/FEATURE_CATALOG.md': 'f0e17fd4e89146d66e56c805d2b004587b4137dea64b4a13c242d453ccbd9973', 'knowledge/guides/USER_GUIDE.md': '51deea145e3ed4949f0af9d16714494db42989b6c7548ec09f70c39fbada7c54', 'knowledge/backlog/FUTURE_FEATURES.md': '97f00ad9685c410724184a7cbe4e762fdd2e9f1e4f560bcb2bd6f5615993b8dd', 'knowledge/execution/status.json': '292ffdd84bbe3f021abce3ce41121e934b98523377e44a7269885939269c00fd', 'knowledge/execution/change-sets.json': 'e3bf49028994f3023bcf7ae782b92a783a1d5f667f5f570f0f928dffc6105ada', 'scripts/test-governance-controls.py': '0b7f3409cc537da92f8076ff2a4d6725d568f2194761f0a9b4e83458b7fc97ad'}
+
+def website_record_errors(e):
+    failures=[]
+    if e.get('taskId')!='CN-R1-CUSTOMER-WEBSITE-PREVIEW-001' or e.get('baseline')!=WEBSITE_BASE or e.get('authorization')!='REPRIORITIZATION_PREPARATION_AND_EXISTING_LOCAL_PREVIEW_ONLY':failures.append('Website authority drift')
+    for field in ['applicationChanged','migrationsChanged','permissionsChanged','runtimeGrantsAssigned','providersActivated','realOperations','acceptanceChanged','knowledgeFilesAdded']:
+        if e.get(field) is not False:failures.append('Website forbidden activation '+field)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:failures.append('Website acceptance drift')
+    if e.get('preview',{}).get('browserInterception') is not False or e.get('preview',{}).get('screenshotCount')!=23:failures.append('Website fabricated preview evidence')
+    return failures
+
+def website_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',WEBSITE_BASE+':'+n])
+    failures=[];owned=set(WEBSITE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in WEBSITE_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:failures.append('Website exact successor mismatch '+n)
+    if failures:return failures
+    state=json.loads((K/'execution/status.json').read_text());record=state.pop('customerWebsiteReadiness',{});failures.extend(website_record_errors(record))
+    if state!=json.loads(before('knowledge/execution/status.json')):failures.append('Website historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());overlay=plan.pop('customerWebsitePriorityPreparation',{})
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):failures.append('Website historical planning drift')
+    if overlay.get('authority')!='REPRIORITIZATION_PREPARATION_AND_EXISTING_LOCAL_PREVIEW_ONLY' or len(overlay.get('changeSets',[]))!=7:failures.append('Website overlay drift')
+    for unit in overlay.get('changeSets',[]):
+        if unit.get('unit')!='A' and (unit.get('authority')!='NOT_GRANTED' or unit.get('status')!='PREPARED_NOT_IMPLEMENTATION_AUTHORIZED'):failures.append('Website false implementation admission')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md','knowledge/backlog/FUTURE_FEATURES.md']:
+        if not (R/n).read_bytes().startswith(before(n)):failures.append('Website historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',WEBSITE_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):failures.append('Website unowned/application drift '+n)
+    added=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))-tracked
+    if added:failures.append('Website unauthorized new source')
+    if {x.relative_to(R).as_posix() for x in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:failures.append('Website unauthorized migration')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',WEBSITE_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:failures.append('Website unapproved paths')
+    end="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(end)):failures.append('Website prior validator altered')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:failures.append('Website manifest drift')
+    return failures
+
+def website_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['customerWebsiteReadiness'];assert not website_record_errors(e)
+    for key in ['applicationChanged','migrationsChanged','permissionsChanged','runtimeGrantsAssigned','providersActivated','realOperations','acceptanceChanged','knowledgeFilesAdded']:
+        changed=copy.deepcopy(e);changed[key]=True;assert website_record_errors(changed);print('PASS website rejects '+key)
+    changed=copy.deepcopy(e);changed['acceptance']['checkedCriteria']=16;assert website_record_errors(changed);print('PASS website rejects acceptance')
+    original=Path.read_bytes
+    for n in ['backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java','backend/src/main/resources/db/migration/V27__inactive_smart_lock_registry.sql','frontend/app/page.tsx','knowledge/decisions/cinenest-open-decisions.json','scripts/test-governance-controls.py','knowledge/backlog/FUTURE_FEATURES.md']:
+        target=R/n
+        def rb(p,*a,**kw):return original(p,*a,**kw)+b'\nUNAUTHORIZED' if p==target else original(p,*a,**kw)
+        with patch.object(Path,'read_bytes',rb):assert website_successor_errors(),n
+        print('PASS website rejects changed source/history '+n)
+    original_glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**k:iter([*original_glob(p,*a,**k),folder/'V28__unapproved.sql']) if p==folder else original_glob(p,*a,**k)):assert website_successor_errors()
+    print('PASS website rejects unapproved migration')
+
+receipt_admission_successor_errors=website_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    failures=website_successor_errors()
+    if failures:print('\n'.join('FAIL '+e for e in failures));return 1
+    website_negative_controls()
+    owned=set(WEBSITE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',WEBSITE_BASE+':'+n]) for n in owned};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+            sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in owned];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.dict(globals(),{'receipt_admission_successor_errors':website_prior_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=website_prior_main()
+    if result==0:print('PASS exact website preview/planning successor;no application/provider/acceptance activation')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

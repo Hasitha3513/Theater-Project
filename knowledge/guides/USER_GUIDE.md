@@ -393,3 +393,11 @@ Run `DOCKER_HOST=unix:///var/run/docker.sock JAVA_HOME=/usr/lib/jvm/java-25-open
 
 ## Receipt admission qualification — developer boundary
 Customer/staff upload steps do not change. Never upload real receipts. New validation utilities have no customer wiring and the admission policy always denies. The existing local integration command additionally selects candidate image/storage/scanner tests;it verifies actual signature age before running and never bypasses stale metadata. Final controlled qualification with official28165 signatures passes;this does not qualify production receipt processing. [Actual status](../PROGRESS.md#receipt-admission-qualification).
+
+
+<a id="local-customer-admin-preview"></a>
+## Local Customer Website and Admin inspection
+Current owner-requested local preview is http://127.0.0.1:3000 for Customer and http://127.0.0.1:3000/admin for Admin;it uses the existing Run.sh all launcher and a separate owned local database. The launcher still requires explicitly supplied local database/toolchain configuration;no credentials are stored in Git. This preview session is not a production service or a deployment promise.
+Use Explore Cinema Rooms to open /rooms. The fresh preview has no configured rooms:No matching rooms is an authoritative empty catalog,not a room-ready statement. The three homepage booking/package links intentionally begin at room selection. A full booking cannot be demonstrated from an empty catalog without separately admitted fixtures/configuration and an eligible account.
+/account is Current account session,not a sign-up or editable profile. There is no qualified manual/Google/Facebook customer-login flow in this preview. Opening /admin exposes the shell/navigation only;Room configuration and Package drafts still require current server-side venue permissions. Do not interpret visible links,form fields or HTTP200HTML as permission or a successful data mutation. No account/grant was provisioned for this inspection.
+Current requested follow-ups:bounded customer authentication,own-profile management,provider qualification and non-financial homepage content. They remain separately gated;email-based auto-linking,financial promotions and real receipt asset reuse are not permitted by this guide. Screenshots/evidence and exact limits:[current preview](../PROGRESS.md#customer-website-preview).
