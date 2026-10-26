@@ -75,6 +75,9 @@ class IdentitySecurity {
         if(manual && !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic"))) throw new IllegalStateException("Local synthetic profile required");
         boolean google=env.getProperty("cinenest.identity.google.enabled",Boolean.class,false);
         if(google && (!manual || !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic")))) throw new IllegalStateException("Google S1 requires isolated manual coexistence");
+        if(google && env.getProperty("cinenest.identity.google.mode","").equals("LIVE_QUALIFICATION")) {
+            http.addFilterBefore(new GoogleLiveExecutionGate(env.getProperty("cinenest.identity.google.live-execution",Boolean.class,false)),org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.class);
+        }
         var contexts = new HttpSessionSecurityContextRepository();
         var oidc = new OidcUserService();
         http.securityContext(context -> context.securityContextRepository(contexts))

@@ -45,6 +45,13 @@ class GoogleSsoIntegrationTest {
  }
  @ParameterizedTest @ValueSource(strings={"NONCE","EXPIRED","AUDIENCE","ISSUER","SIGNATURE","CANCEL","TIMEOUT"})
  void badProviderOutcomesFailClosed(String mode)throws Exception {IDP.mode=mode;var b=new Browser();assertThat(b.login()).isEqualTo(403);assertThat(b.get("/api/accounts/me").statusCode()).isEqualTo(401);}
+ @ParameterizedTest @ValueSource(strings={"", "wrong-verifier"})
+ void missingOrInvalidPkceCannotExchangeCommittedAuthorizationCode(String verifier)throws Exception {
+  var b=new Browser();String callback=b.callback();String code=java.util.Arrays.stream(URI.create(callback).getRawQuery().split("&")).filter(x->x.startsWith("code=")).findFirst().orElseThrow().substring(5);
+  String body="grant_type=authorization_code&code="+code+"&redirect_uri="+java.net.URLEncoder.encode("http://127.0.0.1:"+FRONTEND+"/api/auth/google/callback",java.nio.charset.StandardCharsets.UTF_8)+(verifier.isEmpty()?"":"&code_verifier="+verifier);
+  var request=HttpRequest.newBuilder(URI.create(IDP.issuer()+"/token")).header("Authorization","Basic "+Base64.getEncoder().encodeToString((IDP.clientId+":"+IDP.clientSecret).getBytes(java.nio.charset.StandardCharsets.UTF_8))).header("Content-Type","application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString(body)).build();
+  assertThat(b.client.send(request,HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(400);assertThat(b.get("/api/accounts/me").statusCode()).isEqualTo(401);
+ }
  @Test void invalidStateAndReplayedCallbackAreDenied()throws Exception {var b=new Browser();String callback=b.callback();assertThat(b.get(callback+"wrong").statusCode()).isEqualTo(403);b=new Browser();callback=b.callback();assertThat(b.get(callback).statusCode()).isEqualTo(204);assertThat(b.get(callback).statusCode()).isEqualTo(403);assertThat(b.get("/api/accounts/me").statusCode()).isEqualTo(401);}
  @ParameterizedTest @ValueSource(strings={"MISSING_EMAIL","UNVERIFIED_EMAIL"})
  void emailIsNotIdentityOrAdmissionAuthorityForAlreadyAssociatedSubject(String mode)throws Exception {IDP.mode=mode;assertThat(new Browser().login()).isEqualTo(204);}

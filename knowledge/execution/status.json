@@ -25694,5 +25694,133 @@
     ],
     "publication": "PENDING exact-source CI;final result independently reported",
     "nextUnit": "CN-R1-GOOGLE-SSO-001/S2 provider-configuration and qualification admission"
+  },
+  "googleSsoS2A": {
+    "taskId": "CN-R1-GOOGLE-SSO-001",
+    "slice": "S2-A",
+    "baseline": "7e8d20d34a6ce4d735e29e33caec07da8e88dde8",
+    "baselineCI": {
+      "runId": 40371889736,
+      "headSha": "7e8d20d34a6ce4d735e29e33caec07da8e88dde8",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "authorization": "EXPLICIT_OWNER_DISABLED_LIVE_ADAPTER_S2A",
+    "verification": "VERIFIED_OFFLINE_ADAPTER_ONLY",
+    "realCustomersAdmitted": false,
+    "realEmailDelivered": false,
+    "liveProviderActivated": false,
+    "liveExecutionPerformed": false,
+    "providerCredentialsCreated": false,
+    "passwordRecoveryImplemented": false,
+    "runtimeGrantsAssigned": false,
+    "financialMutations": false,
+    "physicalAccessMutations": false,
+    "productionQualified": false,
+    "acceptanceChanged": false,
+    "newAccountAdmission": false,
+    "runtimeLinkingImplemented": false,
+    "migrationsChanged": false,
+    "flywayHead": 28,
+    "liveGoogleStatus": "BLOCKED_PROVIDER",
+    "liveExecutionAuthority": "NOT_GRANTED",
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "reading": {
+      "ledger": "bankInstructionsRealStackE2E.reading.files;manualCustomerAuth.reading;googleSsoS1.reading",
+      "accounted": 116,
+      "originalHashesUnchanged": 103,
+      "controlledSuccessorsReviewed": 13,
+      "scope": "Qualified full content/visual reuse;fresh relevant canonical,Identity/authorization/ER/sequence and S2-A source/delta review;no new general audit"
+    },
+    "backend": {
+      "tests": 930,
+      "passed": 925,
+      "skipped": 5,
+      "failures": 0,
+      "newLiveConfigurationCases": 7,
+      "newRealStackBoundaryCases": 2,
+      "additionalPkceNegatives": 2,
+      "architecture": "PASS full11module architecture/security/regression suites",
+      "postgres": "PASS isolated PostgreSQL18.6,existing clean/upgrade/ownership/concurrency suites",
+      "migrations": "V1–V28 byte-identical;no migration",
+      "packagedStartup": "PASS default denied and migrated PostgreSQL",
+      "limits": "Existing five opt-in campaigns remain skipped;actual Google not executed"
+    },
+    "frontend": {
+      "npmCi": "PASS",
+      "build": "PASS",
+      "typecheck": "PASS",
+      "lint": "PASS zero warnings/errors;style infos only",
+      "suite": "PASS full existing suite plus2new S2-A transport tests",
+      "audit": "PASS zero vulnerabilities"
+    },
+    "e2e": {
+      "browserInterception": false,
+      "cookieInjection": false,
+      "provider": "OFFLINE_GOOGLE_REGISTRATION_FIXTURE",
+      "registrationFixture": "Test-only bean replacement supplies strictly validated Google endpoints and controlled test credentials;no production discovery/Google transport is executed",
+      "groups": [
+        "three responsive configured/unqualified disabled controls",
+        "start/callback default DENY through actual Next/backend stack",
+        "refresh retains blocked state;zero external browser requests"
+      ],
+      "groupCount": 3,
+      "callback": "http://127.0.0.1:42137/api/auth/google/callback",
+      "callbackScope": "Fixed local origin42137 verified during ephemeral harness;not a continuing server or registered Google client",
+      "invariants": "Counts unchanged for accounts,external identities,grants,payments,credits,allocations,bookings,credentials and IoT",
+      "s1": "PASS5simulated-provider browser groups and17protocol/security cases",
+      "manual": "PASS13real-browser regression groups"
+    },
+    "security": {
+      "discovery": "Fixed HTTPS URI;exact issuer/auth/token/jwks;no redirects;2second bounds;64KiB;strict duplicate/root parsing;RS256/code/S256/client_secret_basic",
+      "credentials": "Backend private canonical nonsymlink0600 file/0700 parent,8KiB;no inline live secret or fixture issuer;sanitized failure without cause",
+      "execution": "Backend filter before OAuth and frontend independently default DENY;status always unqualified;future switches require separate owner authority",
+      "identity": "Existing pre-associated eligible synthetic UUID only;no new account or linking;manual credentials/session/audit unchanged",
+      "limitations": "Spring internal ClientRegistration contains secret and its toString is unsafe;application never logs/serializes it;do not log credentials/configuration/token payloads"
+    },
+    "screenshots": [
+      {
+        "path": ".cache/google-live-boundary-e2e/login-1280.png",
+        "sha256": "a65c8d1a9ec113ae298398363e17fd23c5eed9485a2edf135b36f3c8b390a05f"
+      },
+      {
+        "path": ".cache/google-live-boundary-e2e/login-375.png",
+        "sha256": "eb0f9ea769d791caf6a8bc18307a8f9aa8397f70a78148b1d9cc8cd036d45a72"
+      },
+      {
+        "path": ".cache/google-live-boundary-e2e/login-768.png",
+        "sha256": "0613f7dd74436b536059f3f7fec54d0add350f4cc57a27c0e463846fb3bbdcb9"
+      }
+    ],
+    "visualReview": "375/768/1280 actual captures inspected;readable configured/unqualified disabled controls,no overflow;not Google branding,screen-reader or production acceptance",
+    "sourceHashes": {
+      "backend/src/main/java/com/cinenest/identity/internal/GoogleLiveExecutionGate.java": "2d528e9a82108e98023f036881a21bc48d3ff56e9ad135d103fd26acc52674f0",
+      "backend/src/main/java/com/cinenest/identity/internal/GoogleLiveProvider.java": "cc8e348b1bdab008fc3f0a919e9cd52631970f73a6148cb2e4d161fb6f35d560",
+      "backend/src/main/java/com/cinenest/identity/internal/GoogleOidcContract.java": "e6bd6266bf465d2f696ad3282d2755c5e03a0d2153f6d5cdc4af2a23c91a78b9",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "84ba8cedad29a5da1a89d3c2eb4b53b1817f9475dd93199c8cbf664bbb685730",
+      "backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java": "eb48b6b95dc8671cee6df45c681d99b5afbafd7e51042fde2dd0a85c1937556c",
+      "backend/src/test/java/com/cinenest/identity/internal/GoogleLiveBoundaryIntegrationTest.java": "c0e9a5c6c23352d86af2c552a5d60ef710b10fae9acc7c05d1745567ae8ea02a",
+      "backend/src/test/java/com/cinenest/identity/internal/GoogleLiveProviderTest.java": "c835cd6264cb69857c1f6f6cfa080f8f51b5085cc17604379feaf54584c63c2a",
+      "frontend/components/google-sso.tsx": "65425e48085e33b89d7261a01888fde31f3424c2ad2b994c9823ab539a463177",
+      "frontend/lib/google-sso-backend.ts": "e79b9d29d40cdb6b184c86577d2e1174f73f1bfa59c4882e44f6b8e061cde023",
+      "frontend/tests/google-live-boundary-e2e.mjs": "a7bf83f4b0bea87e7a9648202eb93d1f4b3635d8f9cefa9fa870d237a6e9c355",
+      "frontend/tests/google-sso.test.mjs": "e3dd7b0b43e5680d7b7b86d7412bb3e8e226f5ea0e577199e737c2067853fd75"
+    },
+    "launcher": "14PASS with unchanged launcher tests and isolated ephemeral frontend-port fixture;no unrelated service stopped",
+    "classifier": "8PASS",
+    "governance": "PASS actual clean-checkout knowledge/execution,manifest,92/92 traceability,dependency/decision consistency,retained positive/negative controls plus25 S2-A negative cases,8classifier tests and whitespace;ordinary worktree retains only2pre-existing next-env findings",
+    "publication": "PENDING exact-source CI;final result independently reported",
+    "remaining": [
+      "Owner-controlled OAuth Web client and secure secret configuration",
+      "Owner-adopted verified fixed callback and test identities/associations",
+      "Separate S2-B live execution authority and actual Google browser evidence",
+      "Separate S2-C production/privacy/admission authority;no automatic admission"
+    ],
+    "nextUnit": "CN-R1-GOOGLE-SSO-001 S2-B owner configuration and live qualification admission"
   }
 }

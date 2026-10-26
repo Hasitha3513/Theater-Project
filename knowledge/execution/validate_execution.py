@@ -7965,5 +7965,102 @@ def inert_ci_main():
     return result
 
 
+
+# Explicit owner-authorized local synthetic Google S2-A successor; exact bytes, no global admission.
+google_s2a_prior_main=inert_ci_main
+google_s2a_prior_guard=receipt_admission_successor_errors
+G2A_BASE='7e8d20d34a6ce4d735e29e33caec07da8e88dde8'
+G2A_HASHES={'backend/src/main/java/com/cinenest/identity/internal/GoogleLiveExecutionGate.java': '2d528e9a82108e98023f036881a21bc48d3ff56e9ad135d103fd26acc52674f0', 'backend/src/main/java/com/cinenest/identity/internal/GoogleLiveProvider.java': 'cc8e348b1bdab008fc3f0a919e9cd52631970f73a6148cb2e4d161fb6f35d560', 'backend/src/main/java/com/cinenest/identity/internal/GoogleOidcContract.java': 'e6bd6266bf465d2f696ad3282d2755c5e03a0d2153f6d5cdc4af2a23c91a78b9', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '84ba8cedad29a5da1a89d3c2eb4b53b1817f9475dd93199c8cbf664bbb685730', 'backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java': 'eb48b6b95dc8671cee6df45c681d99b5afbafd7e51042fde2dd0a85c1937556c', 'backend/src/test/java/com/cinenest/identity/internal/GoogleLiveBoundaryIntegrationTest.java': 'c0e9a5c6c23352d86af2c552a5d60ef710b10fae9acc7c05d1745567ae8ea02a', 'backend/src/test/java/com/cinenest/identity/internal/GoogleLiveProviderTest.java': 'c835cd6264cb69857c1f6f6cfa080f8f51b5085cc17604379feaf54584c63c2a', 'frontend/components/google-sso.tsx': '65425e48085e33b89d7261a01888fde31f3424c2ad2b994c9823ab539a463177', 'frontend/lib/google-sso-backend.ts': 'e79b9d29d40cdb6b184c86577d2e1174f73f1bfa59c4882e44f6b8e061cde023', 'frontend/tests/google-live-boundary-e2e.mjs': 'a7bf83f4b0bea87e7a9648202eb93d1f4b3635d8f9cefa9fa870d237a6e9c355', 'frontend/tests/google-sso.test.mjs': 'e3dd7b0b43e5680d7b7b86d7412bb3e8e226f5ea0e577199e737c2067853fd75', 'knowledge/ARCHITECTURE.md': 'cdc2722f74590b55af5d64c83a933ee4fa692c6c79be3cf591dda9e67342848b', 'knowledge/PROGRESS.md': '22367d8ec22451cfdc3e053e10bdc13c45c3920a66f05551a646599c5a50872e', 'knowledge/PROJECT.md': 'cab88c733940f6fc01f2399a067503f5c48630cd8dae50bc61f70bcfaef5f802', 'knowledge/execution/change-sets.json': '5e1a584d427eca2832deb47a856fb4dbeecf4face5355040a2a8f3f729b53ef2', 'knowledge/execution/status.json': '3dc15c9e85e3dcd6a3de5751a119d3e1f7ae8086e5e5ea71cdbfc36d2b495b11', 'knowledge/guides/USER_GUIDE.md': '10d6fad7a1fb226875f93762fda366365af0c9778e3ffd24e3c60a8df7006638', 'knowledge/product/FEATURE_CATALOG.md': 'ea4c82b894334e8ee4bc1c9523e9149f5b57a8a833a91f1c08195f238030289d'}
+
+def google_s2a_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-GOOGLE-SSO-001' or e.get('baseline')!=G2A_BASE or e.get('authorization')!='EXPLICIT_OWNER_DISABLED_LIVE_ADAPTER_S2A':errors.append('Google S2-A authority drift')
+    for key in ['liveExecutionPerformed','providerCredentialsCreated','newAccountAdmission','runtimeLinkingImplemented','migrationsChanged','realCustomersAdmitted','realEmailDelivered','liveProviderActivated','passwordRecoveryImplemented','runtimeGrantsAssigned','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged']:
+        if e.get(key) is not False:errors.append('Google S2-A forbidden activation '+key)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('Google S2-A acceptance drift')
+    if e.get('flywayHead')!=28 or e.get('e2e',{}).get('browserInterception') is not False or e.get('e2e',{}).get('cookieInjection') is not False:errors.append('Google S2-A qualification drift')
+    if e.get('liveExecutionAuthority')!='NOT_GRANTED':errors.append('Google S2-A unauthorized execution authority')
+    if e.get('liveGoogleStatus')!='BLOCKED_PROVIDER':errors.append('Google S2-A falsely qualified live provider')
+    if e.get('verification')!='VERIFIED_OFFLINE_ADAPTER_ONLY':errors.append('Google S2-A qualification incomplete')
+    return errors
+
+def google_s2a_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',G2A_BASE+':'+n])
+    errors=[];owned=set(G2A_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in G2A_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Google S2-A exact successor mismatch '+n)
+    if errors:return errors
+    state=json.loads((K/'execution/status.json').read_text());e=state.pop('googleSsoS2A',{});errors.extend(google_s2a_record_errors(e))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('Google S2-A historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());record=plan.pop('googleSsoS2AExecution',{})
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('Google S2-A historical planning drift')
+    if record.get('authorization')!='EXPLICIT_OWNER_DISABLED_LIVE_ADAPTER_S2A' or record.get('status')!='VERIFIED_OFFLINE_ADAPTER_ONLY':errors.append('Google S2-A unapproved scope/status')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        expected=before(n).decode()
+        if n=='knowledge/PROGRESS.md':
+            expected=expected.replace('Current Google S1:[simulated-provider integration](#google-sso-s1);live Google remains BLOCKED_PROVIDER,not qualified.','Current Google S2-A:[disabled live-provider adapter](#google-sso-s2a);live execution/qualification remains BLOCKED_PROVIDER.',1).replace('Current Google S1 handoff:[evidence](#google-sso-s1). Next existing Google task S2 requires owner configuration and separate provider qualification authority.','Current Google S2-A handoff:[evidence](#google-sso-s2a). Next S2-B requires owner-controlled configuration and separate live execution authority.',1).replace('Google S1 simulated-provider contract implemented; 3 of 6 criteria','Google S2-A disabled live-provider adapter implemented; live qualification pending; 3 of 6 criteria',1)
+        if not (R/n).read_text().startswith(expected):errors.append('Google S2-A historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',G2A_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Google S2-A unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Google S2-A unauthorized new source')
+    if {p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!=({n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}):errors.append('Google S2-A migration scope drift')
+    package=json.loads((R/'frontend/package.json').read_text());prior=json.loads(before('frontend/package.json'))
+    if {n:package[n] for n in ['dependencies','devDependencies','engines','packageManager']}!={n:prior[n] for n in ['dependencies','devDependencies','engines','packageManager']}:errors.append('Google S2-A dependency/toolchain drift')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',G2A_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Google S2-A unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Google S2-A prior validator altered')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('Google S2-A manifest drift')
+    return errors
+
+def google_s2a_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['googleSsoS2A'];assert not google_s2a_record_errors(e)
+    for key in ['liveExecutionPerformed','providerCredentialsCreated','newAccountAdmission','runtimeLinkingImplemented','migrationsChanged','realCustomersAdmitted','realEmailDelivered','liveProviderActivated','passwordRecoveryImplemented','runtimeGrantsAssigned','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged']:
+        changed=copy.deepcopy(e);changed[key]=True;assert google_s2a_record_errors(changed);print('PASS Google S2-A rejects '+key)
+    changed=copy.deepcopy(e);changed['acceptance']['checkedCriteria']=16;assert google_s2a_record_errors(changed);print('PASS Google S2-A rejects acceptance')
+    changed=copy.deepcopy(e);changed['e2e']['browserInterception']=True;assert google_s2a_record_errors(changed);print('PASS Google S2-A rejects intercepted evidence')
+    changed=copy.deepcopy(e);changed['liveGoogleStatus']='VERIFIED_LIVE';assert google_s2a_record_errors(changed);print('PASS Google S2-A rejects false live qualification')
+    changed=copy.deepcopy(e);changed['liveExecutionAuthority']='GRANTED';assert google_s2a_record_errors(changed);print('PASS Google S2-A rejects unapproved live authority')
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/java/com/cinenest/identity/internal/GoogleLiveProvider.java','backend/src/main/java/com/cinenest/identity/internal/GoogleLiveExecutionGate.java','backend/src/main/java/com/cinenest/identity/internal/GoogleOidcContract.java','backend/src/main/java/com/cinenest/payments/internal/BankService.java','backend/src/main/resources/db/migration/V2__identity_accounts_grants_sessions.sql','knowledge/decisions/cinenest-open-decisions.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert google_s2a_successor_errors(),n
+        print('PASS Google S2-A rejects source/history drift '+n)
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob0(p,*a,**kw),folder/'V29__unapproved.sql']) if p==folder else glob0(p,*a,**kw)):assert google_s2a_successor_errors()
+    print('PASS Google S2-A rejects extra migration')
+
+receipt_admission_successor_errors=google_s2a_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=google_s2a_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    google_s2a_negative_controls()
+    owned=set(G2A_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',G2A_BASE],text=True),nul=True)
+    added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',G2A_BASE+':'+n]) for n in owned&tracked}
+    rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+    def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+    def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**kw):return glob0(p,*a,**kw)
+    with patch.dict(globals(),{'receipt_admission_successor_errors':google_s2a_prior_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=google_s2a_prior_main()
+    if result==0:print('PASS exact local synthetic customer-auth successor;history/grants/providers/acceptance preserved')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -736,3 +736,8 @@ CN-R1-CUSTOMER-AUTH-001 implements local synthetic-only registration and email/p
 <a id="google-sso-s1"></a>
 ## Google OIDC contract S1 — not live Google Login
 Existing manual registration/login remain. A disabled-by-default,local synthetic S1 adds shared-session Google-named OIDC protocol integration for already associated eligible synthetic subjects. Test mode visibly says simulated provider;unknown subjects cannot register/link/merge through email. Tokens/secrets are not account DTOs. No operational association writes,new grants,migration or production activation. Facebook remains unavailable. Real Google is BLOCKED_PROVIDER until owner configuration and separately authorized qualification. [Evidence](../PROGRESS.md#google-sso-s1);existing DOC-F/requirement identities and acceptance unchanged.
+
+
+<a id="google-sso-s2a"></a>
+### Google adapter — S2-A software boundary only
+Identity now supports a separate default-disabled live Google qualification configuration,strict discovery/endpoints,private backend secret resolution and existing associated-account sessions. Both live execution gates remain disabled;the UI can truthfully show configured/unqualified without offering login. Offline provider-contract/real-stack tests are software evidence only;actual Google login,customer admission/linking and production remain unqualified. Manual email/password and S1 synthetic regression coverage retained. [Implementation evidence](../PROGRESS.md#google-sso-s2a).

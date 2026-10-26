@@ -14,6 +14,9 @@ export async function forwardGoogleSso(
 		request.method !== "GET"
 	)
 		return empty(405);
+	const live = process.env.CINENEST_GOOGLE_MODE === "LIVE_QUALIFICATION";
+	const liveExecution =
+		live && process.env.CINENEST_GOOGLE_LIVE_EXECUTION === "true";
 	const input = new URL(request.url);
 	const query = input.searchParams;
 	if (action !== "callback" && input.search) return empty(400);
@@ -21,17 +24,44 @@ export async function forwardGoogleSso(
 		action === "callback" &&
 		([...query.keys()].some(
 			(k) =>
-				!["code", "state", "error"].includes(k) || query.getAll(k).length !== 1,
+				![
+					"code",
+					"state",
+					"error",
+					...(live
+						? [
+								"scope",
+								"authuser",
+								"prompt",
+								"iss",
+								"hd",
+								"error_description",
+								"error_uri",
+							]
+						: []),
+				].includes(k) || query.getAll(k).length !== 1,
 		) ||
 			!query.get("state") ||
 			Boolean(query.get("code")) === Boolean(query.get("error")) ||
 			[...query.values()].some((v) => v.length > 2048))
 	)
 		return empty(400);
+	if (
+		input.search.length > 8192 ||
+		(live &&
+			query.has("iss") &&
+			query.get("iss") !== "https://accounts.google.com")
+	)
+		return empty(400);
+	if (live && action !== "status" && !liveExecution) return empty(503);
 	try {
-		const issuer = new URL(process.env.CINENEST_GOOGLE_CONTRACT_ISSUER ?? "");
+		const issuer = new URL(
+			live
+				? "https://accounts.google.com"
+				: (process.env.CINENEST_GOOGLE_CONTRACT_ISSUER ?? ""),
+		);
 		const backend = new URL(process.env.CINENEST_AUTH_ORIGIN ?? "");
-		for (const u of [issuer, backend])
+		for (const u of live ? [backend] : [issuer, backend])
 			if (
 				u.protocol !== "http:" ||
 				!["127.0.0.1", "localhost", "[::1]"].includes(u.hostname) ||
@@ -50,7 +80,13 @@ export async function forwardGoogleSso(
 					? "/oauth2/authorization/google"
 					: "/login/oauth2/code/google";
 		const target = new URL(path, backend);
-		if (action === "callback") target.search = query.toString();
+		if (action === "callback") {
+			// Provider presentation metadata never becomes identity/authorization input.
+			for (const key of ["code", "state", "error"]) {
+				const value = query.get(key);
+				if (value !== null) target.searchParams.set(key, value);
+			}
+		}
 		const forwarded = new Headers();
 		const cookie = request.headers
 			.get("cookie")
@@ -71,12 +107,21 @@ export async function forwardGoogleSso(
 			if (response.status !== 200) return empty(503);
 			const value = await response.json();
 			if (
-				value.mode !== "CONTRACT_TEST" ||
+				value.mode !== (live ? "LIVE_QUALIFICATION" : "CONTRACT_TEST") ||
 				value.liveProviderQualified !== false
 			)
 				return empty(503);
 			return Response.json(
-				{ mode: "CONTRACT_TEST", liveProviderQualified: false },
+				{
+					mode: value.mode,
+					liveProviderQualified: false,
+					...(live
+						? {
+								executionEnabled:
+									liveExecution && value.executionEnabled === true,
+							}
+						: {}),
+				},
 				{ headers },
 			);
 		}
@@ -85,7 +130,7 @@ export async function forwardGoogleSso(
 			if (
 				response.status !== 302 ||
 				location.origin !== issuer.origin ||
-				location.pathname !== "/authorize" ||
+				location.pathname !== (live ? "/o/oauth2/v2/auth" : "/authorize") ||
 				location.username ||
 				location.password ||
 				location.hash
