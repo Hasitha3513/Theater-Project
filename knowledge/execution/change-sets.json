@@ -6716,5 +6716,22 @@
     "taskId": "CN-R1-BANK-INSTRUCTIONS-001",
     "evidence": "PROGRESS.md#staging-bank-instructions",
     "globalBankCommercialGatesResolved": false
+  },
+  "lockRegistryFoundationExecution": {
+    "parentTask": "CN-R1-LOCK-ADAPTER-001",
+    "slice": "HARDWARE_INDEPENDENT_REGISTRY_FOUNDATION",
+    "authorization": "EXPLICIT_OWNER_REGISTRY_FOUNDATION_ONLY",
+    "status": "LOCALLY_VERIFIED_EXACT_SOURCE_CI_PENDING",
+    "requirements": [
+      "CN-O01",
+      "CN-O04",
+      "CN-C07",
+      "BR-09"
+    ],
+    "evidence": "status.json#lockRegistryFoundation",
+    "schema": "V27__inactive_smart_lock_registry.sql",
+    "physicalAdapterAdmission": "BLOCKED_HARDWARE_PROVIDER_AUTHORIZATION",
+    "rollback": "Disable registry;retain immutable V27/history;reviewed forward fix or task-code revert only",
+    "preserved": "Original Release1 schedule,92 requirements,74 criteria and acceptance history unchanged"
   }
 }

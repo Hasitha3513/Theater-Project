@@ -24931,5 +24931,92 @@
       "formallyAcceptedRequirements": 0
     },
     "publication": "PENDING"
+  },
+  "lockRegistryFoundation": {
+    "taskId": "CN-R1-LOCK-ADAPTER-001",
+    "slice": "HARDWARE_INDEPENDENT_REGISTRY_FOUNDATION",
+    "baseline": "1f601648777fbc1f84c86c4cb3f72874b00e01c2",
+    "prerequisiteCI": {
+      "runId": 40306448734,
+      "headSha": "1f601648777fbc1f84c86c4cb3f72874b00e01c2",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    "authorization": "EXPLICIT_OWNER_REGISTRY_FOUNDATION_ONLY",
+    "date": "2026-10-26",
+    "mode": "DISABLED_BY_DEFAULT_QUALIFICATION_ONLY",
+    "schemaHead": 27,
+    "permissionsDefined": [
+      "iot.lock.registry.register",
+      "iot.lock.registry.read"
+    ],
+    "runtimeGrantAssignments": false,
+    "deviceOperations": false,
+    "roomAssignments": false,
+    "financialMutations": false,
+    "physicalEvidence": "NOT_VERIFIED",
+    "tests": {
+      "focused": 29,
+      "postgresHttp": 17,
+      "policy": 10,
+      "architecture": 2,
+      "backend": "PASS",
+      "frontend": 497,
+      "typecheck": "PASS",
+      "lint": "PASS_ZERO_WARNINGS",
+      "build": "PASS",
+      "npmAudit": "PASS_ZERO_VULNERABILITIES",
+      "governance": "PASS_365_RETAINED_ASSERTIONS_AND_15_REGISTRY_NEGATIVE_CONTROLS",
+      "cleanCheckout": "PASS_ACTUAL_ISOLATED_CHECKOUT",
+      "hardware": "NOT_RUN_NOT_AUTHORIZED",
+      "backendTotal": 885,
+      "backendPassed": 880,
+      "backendSkipped": 5,
+      "isolatedPostgreSqlAndPackagedStartup": "PASS",
+      "classifier": 8,
+      "recoveryContracts": 13,
+      "knowledge": "PASS",
+      "traceabilityDependencyDecisionManifest": "PASS",
+      "launcherContracts": 14,
+      "ordinaryExecution": "ONLY_TWO_PREEXISTING_NEXT_ENV_FINDINGS"
+    },
+    "reading": {
+      "priorFullLedger": "bankInstructionsRealStackE2E.reading.files",
+      "filesAccounted": 116,
+      "byteIdenticalOriginals": 105,
+      "reviewedSuccessors": 11,
+      "method": "Verified unchanged full-reading/visual coverage reused with inherited limitations;task-relevant canonical,IoT/Access/Identity and activity/sequence/ER sources freshly consulted;authored successors directly reviewed. No repeated general audit."
+    },
+    "requirements": [
+      "CN-O01",
+      "CN-O04",
+      "CN-C07",
+      "BR-09"
+    ],
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "publication": "PENDING",
+    "userGuide": "ASSESSED_UNCHANGED_NO_UI",
+    "limitations": [
+      "No real browser,Tuya,physical installation or production evidence",
+      "Global hardware/admission and commercial/privacy gates unchanged",
+      "Five prior opt-in backend tests remain separately qualified,not claimed rerun"
+    ],
+    "testSources": [
+      "backend/src/test/java/com/cinenest/LockRegistryIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/iot/internal/LockRegistryPolicyTest.java",
+      "backend/src/test/java/com/cinenest/LockRegistryArchitectureTest.java"
+    ],
+    "testIds": [
+      "T-CN-O01",
+      "T-CN-O04",
+      "T-CN-C07",
+      "T-BR-09"
+    ],
+    "operationalAssignments": "NONE;disposable isolated PostgreSQL authorization fixtures only"
   }
 }

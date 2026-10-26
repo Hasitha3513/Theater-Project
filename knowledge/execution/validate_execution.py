@@ -7603,5 +7603,93 @@ def inert_ci_main():
     return result
 
 
+
+# Exact owner-authorized qualification-only IoT registry successor; no grants or device activation.
+registry_prior_main=inert_ci_main
+registry_historical_guard=receipt_admission_successor_errors
+REGISTRY_BASE='1f601648777fbc1f84c86c4cb3f72874b00e01c2'
+REGISTRY_HASHES={'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '2e805b1683cddf4546e6aed049d3f3e9b7b9d8cf71a2ff5bf8cfb6b9230beee1', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '59b75ffebf6be7abeb8303e908bfbead8d41438f29be9b635be694b7073883ca', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '04cda61410e4b2e57454862eb368bf29461830d65752bef2bc8e6c60f923d737', 'backend/src/main/resources/db/migration/V27__inactive_smart_lock_registry.sql': 'c9164abae01706f23588aeae077bdfd5810b5c14af54ba471156d27785566533', 'backend/src/test/java/com/cinenest/LockRegistryArchitectureTest.java': 'b93d66c2bab502315f0bafb5684d5f853d6d3104a5b065bb396f9dc288cd2ba8', 'backend/src/test/java/com/cinenest/LockRegistryIntegrationTest.java': 'b5c1754bafa39616e7ed32de9aa022e2f55aa33778cc830921f0a2d2a602c8a9', 'backend/src/test/java/com/cinenest/iot/internal/LockRegistryPolicyTest.java': '99cf351c27eedd4d88c7a2561f0431c1a7d39bc85632fe706f881273070439bc', 'knowledge/PROJECT.md': '1a0898eaca00848dc8c8fe477b951247ec0dd32a0cb88ab4fe5051c8d669eda7', 'knowledge/ARCHITECTURE.md': '3ccad099832d0bf24817d206f5b76c6c41610c697f51ebc9974a1010e195529d', 'knowledge/PROGRESS.md': '66586df73099716f3b686d82f26c8dc62db3dcf66103e63590ae9fc44126a7e1', 'knowledge/product/FEATURE_CATALOG.md': '67d0a3f63f33219bacf0de44d49ec8d76871ac94535d77a73559cf8c919c5081', 'knowledge/execution/status.json': '4276133e51ce58d2dee8cbd32b74114e55b93cc9ecda911ecb68e78be70702b1', 'knowledge/execution/change-sets.json': '738bdd554e09d86d1e82c6ae9a76fb1dc488e83ae75f353ad25ef5261b3ca311', 'backend/src/main/java/com/cinenest/iot/internal/LockRegistryRepository.java': 'b68e37b35dcc4a5e9d44e173f54e1525f3d4a5e2f73b4106582a2018e83e98be', 'backend/src/main/java/com/cinenest/iot/internal/JdbcLockRegistryRepository.java': '90f3b291968569668e57b423e2573d2e6f4f6b29e2e59b94625fa6e362c4fb5a', 'backend/src/main/java/com/cinenest/iot/internal/LockRegistryPolicy.java': '26c539c0e92832c1de3396f6d6d8994f60fbc8dac2757c84488fc91133d5ed3a', 'backend/src/main/java/com/cinenest/iot/internal/LockRegistryService.java': '4bbb33094e6e2eaf9750f7605a3557656d70f21551872728cecd1573bb5d92af', 'backend/src/main/java/com/cinenest/iot/internal/LockRegistryController.java': 'cd67850394a536b759abc535a52c7be6b3722fef83aad34e74095c7df1056ab1', 'backend/src/main/java/com/cinenest/iot/internal/LockRegistryReferenceResolver.java': '99e870f95c0911760441de49d95c7c5bfb318b45b27a22ac7a67a67b681d6079'}
+
+def registry_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-LOCK-ADAPTER-001' or e.get('slice')!='HARDWARE_INDEPENDENT_REGISTRY_FOUNDATION' or e.get('baseline')!=REGISTRY_BASE:errors.append('Registry identity drift')
+    if e.get('authorization')!='EXPLICIT_OWNER_REGISTRY_FOUNDATION_ONLY' or e.get('mode')!='DISABLED_BY_DEFAULT_QUALIFICATION_ONLY':errors.append('Registry authority/mode drift')
+    if e.get('schemaHead')!=27 or e.get('permissionsDefined')!=['iot.lock.registry.register','iot.lock.registry.read']:errors.append('Registry schema/permission scope drift')
+    for key in ['runtimeGrantAssignments','deviceOperations','roomAssignments','financialMutations']:
+        if e.get(key) is not False:errors.append('Registry forbidden activation '+key)
+    if e.get('physicalEvidence')!='NOT_VERIFIED':errors.append('Registry fabricated hardware evidence')
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('Registry acceptance drift')
+    return errors
+
+def registry_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',REGISTRY_BASE+':'+n])
+    errors=[];owned=set(REGISTRY_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in REGISTRY_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Registry exact successor mismatch '+n)
+    if errors:return errors
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('lockRegistryFoundation',{});errors.extend(registry_record_errors(e))
+    if s!=json.loads(before('knowledge/execution/status.json')):errors.append('Registry historical status drift')
+    sets=json.loads((K/'execution/change-sets.json').read_text());record=sets.pop('lockRegistryFoundationExecution',{})
+    if sets!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('Registry historical change-set drift')
+    if record.get('parentTask')!='CN-R1-LOCK-ADAPTER-001' or record.get('authorization')!='EXPLICIT_OWNER_REGISTRY_FOUNDATION_ONLY' or record.get('physicalAdapterAdmission')!='BLOCKED_HARDWARE_PROVIDER_AUTHORIZATION':errors.append('Registry parent/scope admission drift')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md']:
+        if not (R/n).read_bytes().startswith(before(n)):errors.append('Registry historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',REGISTRY_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Registry unowned source drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Registry unauthorized new source')
+    if {x.relative_to(R).as_posix() for x in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!=({n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}|{'backend/src/main/resources/db/migration/V27__inactive_smart_lock_registry.sql'}):errors.append('Registry unauthorized migration')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',REGISTRY_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Registry unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Registry historical validator drift')
+    expected=json.loads(before('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('Registry manifest drift')
+    return errors
+
+def registry_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['lockRegistryFoundation'];assert not registry_record_errors(e)
+    for key in ['runtimeGrantAssignments','deviceOperations','roomAssignments','financialMutations']:
+        changed=copy.deepcopy(e);changed[key]=True;assert registry_record_errors(changed);print('PASS Registry rejects '+key)
+    for field,value in [('slice','PRODUCTION_ADAPTER'),('physicalEvidence','VERIFIED'),('authorization','IMPLIED'),('schemaHead',28),('permissionsDefined',['iot.synthetic.read'])]:
+        changed=copy.deepcopy(e);changed[field]=value;assert registry_record_errors(changed);print('PASS Registry rejects '+field)
+    changed=copy.deepcopy(e);changed['acceptance']['checkedCriteria']=16;assert registry_record_errors(changed);print('PASS Registry rejects acceptance')
+    original=Path.read_bytes
+    for n in ['backend/src/main/resources/db/migration/V27__inactive_smart_lock_registry.sql','backend/src/main/resources/db/migration/V16__synthetic_lighting.sql','backend/src/main/java/com/cinenest/access/internal/AccessService.java','backend/src/main/java/com/cinenest/payments/internal/BankService.java','knowledge/decisions/cinenest-open-decisions.json']:
+        target=R/n
+        def rb(p,*a,**kw):return original(p,*a,**kw)+b'\nUNAUTHORIZED' if p==target else original(p,*a,**kw)
+        with patch.object(Path,'read_bytes',rb):assert registry_successor_errors(),n
+        print('PASS Registry rejects changed payload/history '+n)
+
+receipt_admission_successor_errors=registry_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=registry_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    registry_negative_controls()
+    owned=set(REGISTRY_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',REGISTRY_BASE],text=True),nul=True);added=owned-tracked
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',REGISTRY_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            exclude=added if 'ls-files' in argv else owned;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in exclude];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**k):return (x for x in g0(p,*a,**k) if x not in {R/n for n in added})
+    def rglob(p,*a,**k):return (x for x in rg0(p,*a,**k) if x not in {R/n for n in added})
+    with patch.dict(globals(),{'receipt_admission_successor_errors':registry_historical_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=registry_prior_main()
+    if result==0:print('PASS exact Registry contract successor;V27-only immutable registry;no grants,device operations or historical evidence changes')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

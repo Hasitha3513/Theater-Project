@@ -718,3 +718,7 @@ Developer-only default-DENY policy and bounded PNG/JPEG validation are verified 
 
 ## Generic Smart Lock contract — developer-only S1
 Access-owned typed SmartLock port and network-free test-source adapter establish a hardware-independent contract only. No customer capability or real lock compatibility is enabled. Existing synthetic access remains unchanged. CN-C07/CN-O01/CN-O04/BR-09 remain partially implemented beyond this slice;physical PIN,readback,re-entry,offline expiry,check-in and egress qualification remain blocked. [Evidence](../PROGRESS.md#generic-smart-lock-s1).
+
+
+### Inactive Smart Lock Device Registry — qualification backend only
+CN-R1-LOCK-ADAPTER-001 now has an explicitly authorized,disabled-by-default IoT registry foundation. Independently venue-authorized registration,list,detail and immutable revision reads admit only closed synthetic qualification references. Duplicate-safe commands,immutable receipts/history and mandatory protected-read audit preserve recovery and authorization. Registration does not prove compatibility,assignment,health,installation or physical readiness. No Admin/customer screen,Tuya network transport,real PIN,device command,grant assignment or customer access is enabled. Existing synthetic lighting and Access workflows remain unchanged. [Policy](../PROJECT.md#lock-registry-foundation);[evidence](../PROGRESS.md#lock-registry-foundation). User Guide assessed:unchanged because no frontend/user workflow was authorized or changed.
