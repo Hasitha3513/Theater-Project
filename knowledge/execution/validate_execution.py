@@ -7408,5 +7408,116 @@ def inert_ci_main():
 
 
 
+
+# Exact owner-authorized documentation-only GP-01/02/08/10 policy record. No runtime/application admission.
+gp_policy_prior_main=inert_ci_main
+gp_historical_receipt_successor_errors=receipt_admission_successor_errors
+GP_BASE='1491386bf743a8a9a26f3718bcfafa5c510f2238'
+GP_HASHES={'knowledge/PROJECT.md': 'dcb36c519bce48dd4c30c84dc6f33494af6e484a4b3bd73d79f9799354aef339', 'knowledge/PROGRESS.md': '492a9aab46f47f45b5c48830e34e2ee7ce0d2c913effefff5ba26197390a5829', 'knowledge/decisions/cinenest-open-decisions.json': '66c2758e23389e962d3d92e71650c542950142e76628ba6adbb0bb5b38ec2fe2', 'knowledge/execution/status.json': 'a3ceeb17dfb6a0169765f41f0268217fbe6b50d0863c2ce90e815781cca801e6'}
+GP_POLICY={'taskId': 'CN-R1-PAYSLIP-BOUNDARY-001', 'status': 'APPROVED_BOUNDED_TECHNICAL_POLICY', 'dateLocal': '2026-10-26', 'timezone': 'Asia/Colombo', 'approvalSource': 'Explicit owner conversation approving GP-01/GP-02/GP-08/GP-10 and documentation-only recording', 'requestSha256': 'f54a287d5e3cb1311d38d9d82294d4b3b6d120ea3968bdc4e89378f3b366a043', 'requestEncoding': 'UTF-8,LF newlines,no terminal newline', 'approvalText': 'I explicitly approve GP-01, GP-02, GP-08 and GP-10 as bounded technical policies under the existing `CN-R1-PAYSLIP-BOUNDARY-001` task.\n\nI authorize documentation-only recording of these bounded decisions in the existing authoritative Knowledge Base and decision registry.\n\nApproved scope:\n\n- GP-01: Bank deposit/transfer receipts only.\n- GP-02: PNG/JPEG, maximum 5 MiB per image, 20 MP and two images per request. Preserve broader PDF requirements.\n- GP-08: Preserve existing fail-closed quarantine, integrity verification, ClamAV scanning and signature-freshness requirements.\n- GP-10: Real customer receipt admission remains DISABLED/DENY.\n\nGP-03, GP-04 production scope, GP-05, GP-06, GP-07 appointments and GP-09 remain unresolved.\n\nPreserve global OD-05/OD-26 OPEN_DECISION status and all historical approval records.\n\nThis authorization does not approve application implementation, migrations, runtime grants, real customer receipt processing, production storage, real banking or deployment.\n\nFollow AGENTS.md, update only existing authorized Knowledge Base records, run mandatory governance validation and publish only validated task-owned documentation changes.\n\nPreserve all 92 requirements, 74 acceptance criteria and existing MVP acceptance states.', 'canonicalSpecification': 'PROJECT.md#receipt-privacy-technical-policy', 'scope': 'DOCUMENTATION_ONLY_BOUNDED_TECHNICAL_POLICY', 'approvedPolicyIds': ['GP-01', 'GP-02', 'GP-08', 'GP-10'], 'policies': {'GP-01': {'documentScope': 'BANK_DEPOSIT_TRANSFER_RECEIPTS_ONLY'}, 'GP-02': {'formats': ['image/png', 'image/jpeg'], 'maximumBytesPerImage': 5242880, 'maximumPixels': 20000000, 'maximumImagesPerRequest': 2, 'broaderPdfRequirements': 'PRESERVED_UNRESOLVED'}, 'GP-08': {'quarantine': 'EXISTING_FAIL_CLOSED_UNCHANGED', 'integrityVerification': 'EXISTING_UNCHANGED', 'clamAvScanning': 'EXISTING_UNCHANGED', 'signatureFreshness': 'EXISTING_24_HOUR_REQUIREMENT_UNCHANGED'}, 'GP-10': {'realCustomerReceiptAdmission': 'DISABLED_DENY'}}, 'unresolvedPolicyScopes': ['GP-03', 'GP-04 production scope', 'GP-05', 'GP-06', 'GP-07 appointments', 'GP-09'], 'implementationAuthorization': 'NOT_GRANTED', 'productionPrivacy': 'UNRESOLVED', 'fullDecisionStatus': 'OPEN_DECISION', 'realDocumentsProcessed': False, 'runtimeGrantsAssigned': False, 'productionStorageApproved': False, 'realBankingApproved': False, 'deploymentAuthorized': False, 'formalAcceptanceChanged': False}
+
+def gp_policy_errors(e):
+    errors=[]
+    if e!=GP_POLICY:errors.append('Bounded owner approval payload changed')
+    if hashlib.sha256(e.get('approvalText','').encode()).hexdigest()!=e.get('requestSha256'):errors.append('Owner approval provenance/hash mismatch')
+    return errors
+
+def gp_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-PAYSLIP-BOUNDARY-001' or e.get('baseline')!=GP_BASE or e.get('workStatus')!='VERIFIED_DOCUMENTATION_ONLY':errors.append('Privacy recording identity/scope changed')
+    if e.get('approvalRequestSha256')!=GP_POLICY['requestSha256']:errors.append('Privacy approval reference mismatch')
+    if e.get('implementationAuthorization')!='NOT_GRANTED' or e.get('realReceiptImplementationAdmission')!='BLOCKED' or e.get('realCustomerReceiptAdmission')!='DISABLED_DENY':errors.append('Privacy recording enables unapproved implementation/intake')
+    if e.get('globalDecisionStatuses')!={'OD-05':'OPEN_DECISION','OD-26':'OPEN_DECISION'}:errors.append('Privacy global decision closure')
+    for k in ['applicationChanged','migrationChanged','runtimeGrantsAssigned','realDocumentsProcessed','productionConfigurationChanged','formalAcceptanceChanged']:
+        if e.get(k) is not False:errors.append('Privacy recording boundary drift '+k)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('Privacy recording acceptance drift')
+    return errors
+
+def gp_policy_negative_controls():
+    import copy
+    policy=json.loads((K/'decisions/cinenest-open-decisions.json').read_text());policy=next(x for x in policy['decisions'] if x['id']=='OD-26')['boundedReceiptTechnicalPolicyApproval']
+    record=json.loads((K/'execution/status.json').read_text())['receiptPrivacyTechnicalPolicyRecording']
+    assert not gp_policy_errors(policy) and not gp_record_errors(record)
+    print('PASS bounded privacy owner approval and documentation-only projection')
+    for label,change in [
+        ('extra GP approval',lambda d:d['approvedPolicyIds'].append('GP-03')),
+        ('missing GP approval',lambda d:d['approvedPolicyIds'].pop()),
+        ('image size',lambda d:d['policies']['GP-02'].update(maximumBytesPerImage=10485760)),
+        ('pixel limit',lambda d:d['policies']['GP-02'].update(maximumPixels=40000000)),
+        ('image count',lambda d:d['policies']['GP-02'].update(maximumImagesPerRequest=3)),
+        ('PDF removal',lambda d:d['policies']['GP-02'].update(broaderPdfRequirements='REMOVED')),
+        ('freshness weakened',lambda d:d['policies']['GP-08'].update(signatureFreshness='DISABLED')),
+        ('real intake',lambda d:d['policies']['GP-10'].update(realCustomerReceiptAdmission='ENABLED')),
+        ('global closure',lambda d:d.update(fullDecisionStatus='APPROVED')),
+        ('implementation approval',lambda d:d.update(implementationAuthorization='APPROVED')),
+        ('production storage',lambda d:d.update(productionStorageApproved=True)),
+        ('personnel appointment',lambda d:d.update(keyCustodian='INVENTED')),
+        ('retention invented',lambda d:d.update(retentionDays=90)),
+        ('approval provenance',lambda d:d.update(approvalText='RECOMMENDATION ONLY'))]:
+        changed=copy.deepcopy(policy);change(changed);assert gp_policy_errors(changed),label;print('PASS privacy recording rejected',label)
+    for k in ['applicationChanged','migrationChanged','runtimeGrantsAssigned','realDocumentsProcessed','productionConfigurationChanged','formalAcceptanceChanged']:
+        changed=copy.deepcopy(record);changed[k]=True;assert gp_record_errors(changed),k;print('PASS privacy recording rejected',k)
+    changed=copy.deepcopy(record);changed['globalDecisionStatuses']['OD-05']='APPROVED';assert gp_record_errors(changed);print('PASS privacy recording rejected OD-05 closure')
+    changed=copy.deepcopy(record);changed['acceptance']['checkedCriteria']=16;assert gp_record_errors(changed);print('PASS privacy recording rejected criterion acceptance')
+
+def gp_policy_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',GP_BASE+':'+n])
+    errors=[];owned=set(GP_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in GP_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Bounded privacy policy exact successor mismatch '+n)
+    if errors:return errors
+    s=json.loads((K/'execution/status.json').read_text());e=s.pop('receiptPrivacyTechnicalPolicyRecording',{});errors.extend(gp_record_errors(e))
+    if s!=json.loads(before('knowledge/execution/status.json')):errors.append('Bounded privacy policy historical status drift')
+    registry=json.loads((K/'decisions/cinenest-open-decisions.json').read_text());previous=json.loads(before('knowledge/decisions/cinenest-open-decisions.json'))
+    node=next(x for x in registry['decisions'] if x['id']=='OD-26');bounded=node.pop('boundedReceiptTechnicalPolicyApproval',{});errors.extend(gp_policy_errors(bounded))
+    if registry.get('lastUpdatedTask')!='CN-R1-PAYSLIP-BOUNDARY-001':errors.append('Privacy policy update provenance missing')
+    registry['lastUpdatedTask']=previous['lastUpdatedTask']
+    if registry!=previous:errors.append('Privacy global decisions or historical approvals changed')
+    for n in ['knowledge/PROJECT.md','knowledge/PROGRESS.md']:
+        if not (R/n).read_bytes().startswith(before(n)):errors.append('Bounded privacy policy historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',GP_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Bounded privacy policy unowned source drift '+n)
+    folder=R/'backend/src/main/resources/db/migration'
+    if {x.relative_to(R).as_posix() for x in folder.glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('Bounded privacy policy migration scope exceeded')
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Bounded privacy policy unauthorized new source')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',GP_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Bounded privacy policy unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Bounded privacy policy historical validator drift')
+    expected=json.loads(before('knowledge/manifest.json'))
+    for row in expected['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=expected:errors.append('Bounded privacy policy manifest drift')
+    return errors
+
+# Existing governance callers use the latest exact fence;historical replay retains its original strict function.
+receipt_admission_successor_errors=gp_policy_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=gp_policy_successor_errors()
+    if errors:print('\n'.join('FAIL '+e for e in errors));return 1
+    gp_policy_negative_controls()
+    owned=set(GP_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',GP_BASE],text=True),nul=True);added=owned-tracked
+    replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',GP_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,g0,rg0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+    def rb(p,*a,**k):return replacements[p] if p in replacements else rb0(p,*a,**k)
+    def rt(p,*a,**k):return replacements[p].decode() if p in replacements else rt0(p,*a,**k)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            exclude=added if 'ls-files' in argv else owned;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in exclude];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**k):return (x for x in g0(p,*a,**k) if x not in {R/n for n in added})
+    def rglob(p,*a,**k):return (x for x in rg0(p,*a,**k) if x not in {R/n for n in added})
+    with patch.dict(globals(),{'receipt_admission_successor_errors':gp_historical_receipt_successor_errors}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=gp_policy_prior_main()
+    if result==0:print('PASS exact bounded privacy policy documentation successor;unowned sources,migrations,history and acceptance unchanged')
+    return result
+
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

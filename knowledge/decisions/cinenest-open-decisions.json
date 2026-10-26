@@ -1319,6 +1319,65 @@
         "requestSha256": "22fb4107bb4cc126cbc9a658a7a8a121df0f6d5acd15a269366463464824a407",
         "scope": "Synthetic-only bank requests/private receipts/durable scoped review; explicit configured timing and retention, zero CineNest-added synthetic BANK fee, no real funds/credit/allocation/confirmation/refunds/live delivery. Exact approved specification in ARCHITECTURE.md#bank-request-boundary.",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedReceiptTechnicalPolicyApproval": {
+        "taskId": "CN-R1-PAYSLIP-BOUNDARY-001",
+        "status": "APPROVED_BOUNDED_TECHNICAL_POLICY",
+        "dateLocal": "2026-10-26",
+        "timezone": "Asia/Colombo",
+        "approvalSource": "Explicit owner conversation approving GP-01/GP-02/GP-08/GP-10 and documentation-only recording",
+        "requestSha256": "f54a287d5e3cb1311d38d9d82294d4b3b6d120ea3968bdc4e89378f3b366a043",
+        "requestEncoding": "UTF-8,LF newlines,no terminal newline",
+        "approvalText": "I explicitly approve GP-01, GP-02, GP-08 and GP-10 as bounded technical policies under the existing `CN-R1-PAYSLIP-BOUNDARY-001` task.\n\nI authorize documentation-only recording of these bounded decisions in the existing authoritative Knowledge Base and decision registry.\n\nApproved scope:\n\n- GP-01: Bank deposit/transfer receipts only.\n- GP-02: PNG/JPEG, maximum 5 MiB per image, 20 MP and two images per request. Preserve broader PDF requirements.\n- GP-08: Preserve existing fail-closed quarantine, integrity verification, ClamAV scanning and signature-freshness requirements.\n- GP-10: Real customer receipt admission remains DISABLED/DENY.\n\nGP-03, GP-04 production scope, GP-05, GP-06, GP-07 appointments and GP-09 remain unresolved.\n\nPreserve global OD-05/OD-26 OPEN_DECISION status and all historical approval records.\n\nThis authorization does not approve application implementation, migrations, runtime grants, real customer receipt processing, production storage, real banking or deployment.\n\nFollow AGENTS.md, update only existing authorized Knowledge Base records, run mandatory governance validation and publish only validated task-owned documentation changes.\n\nPreserve all 92 requirements, 74 acceptance criteria and existing MVP acceptance states.",
+        "canonicalSpecification": "PROJECT.md#receipt-privacy-technical-policy",
+        "scope": "DOCUMENTATION_ONLY_BOUNDED_TECHNICAL_POLICY",
+        "approvedPolicyIds": [
+          "GP-01",
+          "GP-02",
+          "GP-08",
+          "GP-10"
+        ],
+        "policies": {
+          "GP-01": {
+            "documentScope": "BANK_DEPOSIT_TRANSFER_RECEIPTS_ONLY"
+          },
+          "GP-02": {
+            "formats": [
+              "image/png",
+              "image/jpeg"
+            ],
+            "maximumBytesPerImage": 5242880,
+            "maximumPixels": 20000000,
+            "maximumImagesPerRequest": 2,
+            "broaderPdfRequirements": "PRESERVED_UNRESOLVED"
+          },
+          "GP-08": {
+            "quarantine": "EXISTING_FAIL_CLOSED_UNCHANGED",
+            "integrityVerification": "EXISTING_UNCHANGED",
+            "clamAvScanning": "EXISTING_UNCHANGED",
+            "signatureFreshness": "EXISTING_24_HOUR_REQUIREMENT_UNCHANGED"
+          },
+          "GP-10": {
+            "realCustomerReceiptAdmission": "DISABLED_DENY"
+          }
+        },
+        "unresolvedPolicyScopes": [
+          "GP-03",
+          "GP-04 production scope",
+          "GP-05",
+          "GP-06",
+          "GP-07 appointments",
+          "GP-09"
+        ],
+        "implementationAuthorization": "NOT_GRANTED",
+        "productionPrivacy": "UNRESOLVED",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "realDocumentsProcessed": false,
+        "runtimeGrantsAssigned": false,
+        "productionStorageApproved": false,
+        "realBankingApproved": false,
+        "deploymentAuthorized": false,
+        "formalAcceptanceChanged": false
       }
     },
     {
@@ -1614,5 +1673,5 @@
       }
     }
   ],
-  "lastUpdatedTask": "CN-DEC-001"
+  "lastUpdatedTask": "CN-R1-PAYSLIP-BOUNDARY-001"
 }
