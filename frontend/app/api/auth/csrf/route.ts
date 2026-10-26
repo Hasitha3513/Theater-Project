@@ -1,0 +1,5 @@
+import { forwardManualAuth } from "../../../../lib/manual-auth-backend";
+export const dynamic = "force-dynamic";
+export function GET(request: Request) {
+	return forwardManualAuth(request, "csrf");
+}

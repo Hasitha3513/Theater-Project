@@ -6879,5 +6879,39 @@
     ],
     "preserved": "Original Release1 schedule/history,92 requirements,74 criteria,15 checked and0accepted;all provider/privacy/finance/physical gates unchanged",
     "nextSingleUnit": "CN-R1-CUSTOMER-AUTH-001_POLICY_AND_IMPLEMENTATION_ADMISSION"
+  },
+  "manualCustomerAuthExecution": {
+    "taskId": "CN-R1-CUSTOMER-AUTH-001",
+    "baseline": "efca37a10ebc9ab4b4cd551b5040007418e99f70",
+    "authorization": "EXPLICIT_OWNER_LOCAL_SYNTHETIC_AUTH_ONLY",
+    "authorizationDate": "2026-10-26",
+    "status": "VERIFIED_LOCAL_SYNTHETIC_ONLY",
+    "requirements": [
+      "CN-C02",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "scope": [
+      "Local synthetic registration",
+      "test-email ownership verification",
+      "PBKDF2-HMAC-SHA256 600000 iterations",
+      "existing JDBC sessions and logout",
+      "Identity-only additive schema",
+      "register/login/account frontend",
+      "real-stack security and PostgreSQL tests"
+    ],
+    "excluded": [
+      "real customers",
+      "real email",
+      "password recovery",
+      "Google/Facebook",
+      "profile editing",
+      "runtime grants",
+      "booking/payment/access activation",
+      "production deployment"
+    ],
+    "rollback": "Disable manual mode;retain Identity history and additive migration;reviewed forward fix",
+    "supersedesPreparationOnlyFor": "customerWebsitePriorityPreparation.changeSets.B;original historical preparation retained",
+    "evidence": "PROGRESS.md#local-customer-auth;status.json#manualCustomerAuth;source-qualified unit/PG/browser results"
   }
 }

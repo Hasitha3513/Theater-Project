@@ -25212,5 +25212,343 @@
       "frontend": "497PASS",
       "scope": "Reused unchanged application-source CI evidence;not a new local campaign run"
     }
+  },
+  "manualCustomerAuth": {
+    "taskId": "CN-R1-CUSTOMER-AUTH-001",
+    "baseline": "efca37a10ebc9ab4b4cd551b5040007418e99f70",
+    "baselineCI": {
+      "runId": 40334830458,
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "efca37a10ebc9ab4b4cd551b5040007418e99f70"
+    },
+    "authorization": "EXPLICIT_OWNER_LOCAL_SYNTHETIC_AUTH_ONLY",
+    "authorizationDate": "2026-10-26",
+    "verification": "VERIFIED_LOCAL_SYNTHETIC_ONLY",
+    "reading": {
+      "ledger": "bankInstructionsRealStackE2E.reading.files",
+      "accounted": 116,
+      "originalHashesUnchanged": 103,
+      "controlledReviewedSuccessors": 13,
+      "coverage": "Verified prior full content/visual review reused with inherited limitations;fresh relevant canonical/Identity/authorization diagrams/contracts plus authored changes reviewed;not a new full audit"
+    },
+    "flywayHead": 28,
+    "realCustomersAdmitted": false,
+    "realEmailDelivered": false,
+    "providerSsoImplemented": false,
+    "passwordRecoveryImplemented": false,
+    "runtimeGrantsAssigned": false,
+    "financialMutations": false,
+    "physicalAccessMutations": false,
+    "productionQualified": false,
+    "acceptanceChanged": false,
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "backend": {
+      "command": "JAVA_HOME=qualified-Java25 DOCKER_HOST=unix:///var/run/docker.sock CINENEST_MANUAL_E2E=true PLAYWRIGHT_MODULE_PATH=qualified-playwright python3 scripts/verify-foundation.py",
+      "tests": 902,
+      "passed": 897,
+      "skipped": 5,
+      "failures": 0,
+      "limits": "Five unchanged opt-in media/provider/restart campaigns skipped;no claim those were rerun",
+      "newPostgreSQLTests": 13,
+      "newBoundaryUnitTests": 4,
+      "cleanAndV27Upgrade": "PASS;OIDC identities/revision/JDBC session retained;repeat migration zero changes",
+      "architecture": "PASS existing full module/security suites",
+      "oidcRegression": "PASS existing synthetic issuer/session/authorization suite",
+      "packagedDefaultDenial": "PASS migrated PostgreSQL HTTP startup"
+    },
+    "frontend": {
+      "cleanInstall": "PASS npm ci",
+      "build": "PASS production webpack build",
+      "typecheck": "PASS",
+      "lint": "PASS zero warnings/errors;existing and test-only style info diagnostics remain",
+      "suite": "PASS complete existing npm test plus4 new transport/form tests",
+      "audit": "PASS zero vulnerabilities",
+      "sourceDependenciesChanged": false
+    },
+    "e2e": {
+      "stack": "Real Chromium -> Next production build -> Spring Boot/Spring Security -> isolated PostgreSQL18.6",
+      "browserInterception": false,
+      "cookieInjection": false,
+      "groups": [
+        "six responsive form captures;one main/h1;no horizontal overflow",
+        "overlong password rejected without silent browser truncation or submission",
+        "pre-verification login denied",
+        "registration;duplicate normalized email safe;one-time test-email verified",
+        "password login;keyboard control;secure cookie;session rotation",
+        "authenticated account;refresh continuity;three responsive account captures",
+        "PostgreSQL session expiry denies protected account",
+        "secure logout;revoked session denied",
+        "CSRF denial",
+        "unknown account enumeration-resistant errors;durable rate limit",
+        "used-token rejection",
+        "expired-token denial through real frontend and PostgreSQL",
+        "JavaScript-disabled native form uses POST;no credentials in URL;CSRF fails closed"
+      ],
+      "groupCount": 13,
+      "httpEvidence": [
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/registrations",
+          "status": 202
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/registrations",
+          "status": 202
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/email-verifications",
+          "status": 204
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 204
+        },
+        {
+          "path": "/api/accounts/me",
+          "status": 200
+        },
+        {
+          "path": "/api/accounts/me",
+          "status": 200
+        },
+        {
+          "path": "/api/accounts/me",
+          "status": 401
+        },
+        {
+          "path": "/api/accounts/me",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 204
+        },
+        {
+          "path": "/api/accounts/me",
+          "status": 200
+        },
+        {
+          "path": "/api/session/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/session/logout",
+          "status": 204
+        },
+        {
+          "path": "/api/accounts/me",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/registrations",
+          "status": 403
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 401
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/login",
+          "status": 429
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/registrations",
+          "status": 202
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/email-verifications",
+          "status": 400
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/registrations",
+          "status": 202
+        },
+        {
+          "path": "/api/auth/csrf",
+          "status": 200
+        },
+        {
+          "path": "/api/auth/email-verifications",
+          "status": 400
+        }
+      ],
+      "snapshotAssertions": "verified manual account;V28;mandatory audited LOGIN;unchanged bank requests/credits/allocations/bookings/access credentials/IoT devices;no scope/grant assignment",
+      "security": "secureHttpOnlySameSiteLax;real browser session rotation;CSRF;pre-verification/wrong-password denial;expired/reused tokens;expiry/logout;rate limits;password no-truncation"
+    },
+    "screenshots": [
+      {
+        "path": ".cache/manual-auth-e2e/account-1280.png",
+        "sha256": "72e0c3ac913b27fa62cc6a874fdf316de632d670a867d187b31c5bf18cbcd616"
+      },
+      {
+        "path": ".cache/manual-auth-e2e/account-375.png",
+        "sha256": "bf7a0c7fbe9561940a7bcf84028e8b98360a78fef675624454f06e77a5044c0a"
+      },
+      {
+        "path": ".cache/manual-auth-e2e/account-768.png",
+        "sha256": "c2c7671ed7353debb87c3502c45bb443200685674d8656f27131ea2b413eb6c9"
+      },
+      {
+        "path": ".cache/manual-auth-e2e/login-1280.png",
+        "sha256": "bc47354f1842fa8c5a1b30b9ea0785c8467e63c0fb90347b307293eef3086a33"
+      },
+      {
+        "path": ".cache/manual-auth-e2e/login-375.png",
+        "sha256": "b6f008182fd8da1774b694191b65dd19d8a4ba12dde9e5bdca074e2b671d53dd"
+      },
+      {
+        "path": ".cache/manual-auth-e2e/login-768.png",
+        "sha256": "b79503d27914961bc5853de9d8806ba1fcbec208ebe7c379d119ff9f5e067d6e"
+      },
+      {
+        "path": ".cache/manual-auth-e2e/register-1280.png",
+        "sha256": "7ad0add7c6b0b640aec5f18cf37c39477b2ef325d46aebbb9e862fa548b8f802"
+      },
+      {
+        "path": ".cache/manual-auth-e2e/register-375.png",
+        "sha256": "ba086eb88887f922acd6a2acd441f2b564b59bb9166b8f057463602f7598b510"
+      },
+      {
+        "path": ".cache/manual-auth-e2e/register-768.png",
+        "sha256": "a60615463aafa8e9c918eb1aa553b435b0bbfd7d5146141d546b17ce18576d0b"
+      }
+    ],
+    "visualReview": "All9captures:register/login/account at375/768/1280 visually inspected;one main/h1 and no horizontal overflow measured;keyboard form traversal verified;not a screen-reader audit",
+    "sourceHashes": {
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "4d709b1bb1e0ffd88cea838b00d3c9f5f3419209a66f7def84e5cae3a7df28b3",
+      "backend/src/main/java/com/cinenest/identity/internal/LocalCustomerController.java": "829d29bda36c9c81911149048ed01e851916cf555b334accaf8fecdba41ee23b",
+      "backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java": "c1f9fab9cea23bd84c25213aa3a04a8ceaf264eecab75cb9d73f67faf0955f30",
+      "backend/src/main/resources/application-local-synthetic.properties": "7c62eaf63302b4b18a1c616435ebf9c50cce7cb5701cb1c52ace657cc927a931",
+      "backend/src/main/resources/db/migration/V28__local_manual_customer_identity.sql": "f7f18489b2d73fdbe164bc43581e286f77f70b5c67407140267080e0d579b4a8",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "92d0407a9964272de8a8624558c2931486096751ad23fdf60e77e561f98c6a02",
+      "backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java": "3afc7dd361051e33686d965402fba04bf959536767a377bf942c82f38782183c",
+      "backend/src/test/java/com/cinenest/identity/internal/LocalIdentityBoundaryTest.java": "8baf78ba617203256efd6d57ef15fef6700064d015cb3680fceccbe5a31b3231",
+      "frontend/app/account/page.tsx": "5a4f78523f23c71932e36c76c1e6e9f1af96a48609fb18dd39df729047968111",
+      "frontend/app/api/auth/csrf/route.ts": "03cd011cb4d16c104f4e7483a9ab20356da9797f5b57ddd09e60489f522bf337",
+      "frontend/app/api/auth/email-verifications/route.ts": "96e882c7a3f5c21b07283e60f0f6b9bc3fc0f3d25b5a485230d5ae6212d8678d",
+      "frontend/app/api/auth/login/route.ts": "b1a22bcd9dc77cf0032ef26bf4cdc42d6c700c764ef86f9611c7df4930005c96",
+      "frontend/app/api/auth/registrations/route.ts": "082d60bfea03aef7ba5cc2b3e4bb6edf79272255c63a602dd2fa33e39ad6c639",
+      "frontend/app/login/page.tsx": "53d69dd6191a1f8f465aebb4ba546cf1d99100b9589738996270dc32358fa3ef",
+      "frontend/app/register/page.tsx": "c6046e824c70aefba2805b2c1a36891c9bc99d3de5e9d15fa1212ba29264302c",
+      "frontend/components/manual-auth-form.tsx": "dbf4c6e3a02b4a8a723b5c8b4fa834131675f3c8281768f5dbe0552b5be140b6",
+      "frontend/lib/manual-auth-backend.ts": "c6fe4fa590614f861be387f72398204c0395246bd1f2d2fea653b3704313335e",
+      "frontend/package.json": "afed275fe6ae30fcfa7ad73fb10860dd268761fd8ccdf4695726c5c1c78ef6af",
+      "frontend/tests/manual-auth-e2e.mjs": "4b76e1e070611cffb4d67c42ee6521818477b54fdbcbc5a1e52c6caf36e0b718",
+      "frontend/tests/manual-auth.test.mjs": "a63e9dfc9eb3dcb6df4a86c118f162fdfcc86448676a69799692257b9b442a1f"
+    },
+    "governance": {
+      "knowledgeDesign": "PASS",
+      "executionCleanCheckout": "PASS",
+      "traceabilityDependenciesDecisionRegistryManifest": "PASS preserved full existing controls",
+      "historicalSourceAndAcceptance": "PASS exact successor fences",
+      "negativeControlsRetained": 365,
+      "newManualNegativeControls": 16,
+      "classifierTests": 8,
+      "whitespace": "PASS including new files in clean projection",
+      "ordinaryWorktree": "Only2 pre-existing preserved next-env.d.ts findings;exact original bytes retained",
+      "cleanProjection": "Actual git clone plus29 task-owned overlays;no unrelated changes"
+    },
+    "launcherTests": "14PASS with ephemeral frontend-port fixture;unmodified raw invocation hit preserved existing preview on3000;no unrelated service stopped",
+    "classifierTests": "8PASS",
+    "publication": "PENDING exact-source CI;final commit/run outcome independently reported",
+    "remaining": "Real admission/email/privacy/recovery,Google/Facebook,commercial banking and physical hardware remain separately gated",
+    "nextTask": "CN-R1-GOOGLE-SSO-001;separate provider-specific authorization/qualification required"
   }
 }

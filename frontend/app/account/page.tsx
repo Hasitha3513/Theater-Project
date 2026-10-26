@@ -7,6 +7,10 @@ export default function AccountPage() {
 				Only the minimum account representation supported by the current
 				backend.
 			</PageHeading>
+			<p>
+				<a href="/login">Log in</a> ·{" "}
+				<a href="/register">Create local test account</a>
+			</p>
 			<SessionPanel />
 		</>
 	);

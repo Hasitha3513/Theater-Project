@@ -54,6 +54,7 @@ class IdentitySecurity {
     }
 
     @Bean
+    @ConditionalOnProperty(name="cinenest.identity.manual.enabled", havingValue="false", matchIfMissing=true)
     ClientRegistrationRepository identityClient(
             @Value("${cinenest.identity.issuer}") String issuer,
             @Value("${cinenest.identity.authorization-uri}") String authorization,
@@ -69,12 +70,17 @@ class IdentitySecurity {
     }
 
     @Bean
-    SecurityFilterChain identityBoundary(HttpSecurity http, IdentityStore store) throws Exception {
+    SecurityFilterChain identityBoundary(HttpSecurity http, IdentityStore store, org.springframework.core.env.Environment env) throws Exception {
+        boolean manual=env.getProperty("cinenest.identity.manual.enabled",Boolean.class,false);
+        if(manual && !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic"))) throw new IllegalStateException("Local synthetic profile required");
         var contexts = new HttpSessionSecurityContextRepository();
         var oidc = new OidcUserService();
         http.securityContext(context -> context.securityContextRepository(contexts))
             .requestCache(cache -> cache.disable())
-            .authorizeHttpRequests(requests -> requests
+            .authorizeHttpRequests(requests -> {
+                if(manual) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/csrf").permitAll()
+                    .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/auth/registrations","/api/auth/email-verifications","/api/auth/login").permitAll();
+                requests
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/catalog/venues", "/api/catalog/rooms", "/api/catalog/rooms/*", "/api/venues/*/packages", "/api/venues/*/packages/*").permitAll()
                 .requestMatchers("/oauth2/authorization/cinenest", "/login/oauth2/code/cinenest").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/accounts","/api/admin/venues/*/accounts/*","/api/admin/venues/*/accounts/*/grants","/api/admin/venues/*/audit","/api/admin/venues/*/audit/*").authenticated()
@@ -120,7 +126,7 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/cancellation","/api/admin/venues/*/bookings/*/cancellation").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/cancellations","/api/admin/venues/*/bookings/*/cancellations").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/bank/instructions/*","/api/admin/venues/*/bank/requests/*/instructions").authenticated()
-                .anyRequest().denyAll())
+                .anyRequest().denyAll(); })
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request, response, failure) -> {
                     store.audit(null, null, "HTTP_DENIAL", false);
@@ -130,8 +136,8 @@ class IdentitySecurity {
                     store.audit(actor(), null, "HTTP_DENIAL", false);
                     response.setStatus(403);
                 }))
-            .sessionManagement(sessions -> sessions.sessionFixation(fixation -> fixation.changeSessionId()))
-            .oauth2Login(login -> login.loginPage("/oauth2/authorization/cinenest")
+            .sessionManagement(sessions -> sessions.sessionFixation(fixation -> fixation.changeSessionId()));
+        if(!manual) http.oauth2Login(login -> login.loginPage("/oauth2/authorization/cinenest")
                 .authorizedClientRepository(discardProviderTokens())
                 .userInfoEndpoint(info -> info.oidcUserService(request -> {
                     var user = oidc.loadUser(request);
@@ -168,12 +174,12 @@ class IdentitySecurity {
                         if (session != null) session.invalidate();
                         throw failure;
                     }
-                }))
-            .logout(logout -> logout.logoutUrl("/api/session/logout")
+                }));
+        http.logout(logout -> logout.logoutUrl("/api/session/logout")
                 .addLogoutHandler((request, response, authentication) ->
                     store.audit(actor(authentication), null, "LOGOUT", true))
                 .logoutSuccessHandler((request, response, authentication) -> response.setStatus(204)));
-        // CSRF remains enabled, including logout. No password/Basic or broad API allow rule.
+        // CSRF remains enabled, including logout. No HTTP Basic or broad API allow rule; manual login retains independent CSRF.
         return http.build();
     }
 

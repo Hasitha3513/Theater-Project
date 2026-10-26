@@ -7777,5 +7777,98 @@ def inert_ci_main():
     return result
 
 
+
+# Explicit owner-authorized local synthetic manual Identity successor; exact bytes, no global admission.
+manual_auth_prior_main=inert_ci_main
+manual_auth_prior_guard=receipt_admission_successor_errors
+AUTH_BASE='efca37a10ebc9ab4b4cd551b5040007418e99f70'
+AUTH_HASHES={'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '4d709b1bb1e0ffd88cea838b00d3c9f5f3419209a66f7def84e5cae3a7df28b3', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerController.java': '829d29bda36c9c81911149048ed01e851916cf555b334accaf8fecdba41ee23b', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java': 'c1f9fab9cea23bd84c25213aa3a04a8ceaf264eecab75cb9d73f67faf0955f30', 'backend/src/main/resources/application-local-synthetic.properties': '7c62eaf63302b4b18a1c616435ebf9c50cce7cb5701cb1c52ace657cc927a931', 'backend/src/main/resources/db/migration/V28__local_manual_customer_identity.sql': 'f7f18489b2d73fdbe164bc43581e286f77f70b5c67407140267080e0d579b4a8', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '92d0407a9964272de8a8624558c2931486096751ad23fdf60e77e561f98c6a02', 'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java': '3afc7dd361051e33686d965402fba04bf959536767a377bf942c82f38782183c', 'backend/src/test/java/com/cinenest/identity/internal/LocalIdentityBoundaryTest.java': '8baf78ba617203256efd6d57ef15fef6700064d015cb3680fceccbe5a31b3231', 'frontend/app/account/page.tsx': '5a4f78523f23c71932e36c76c1e6e9f1af96a48609fb18dd39df729047968111', 'frontend/app/api/auth/csrf/route.ts': '03cd011cb4d16c104f4e7483a9ab20356da9797f5b57ddd09e60489f522bf337', 'frontend/app/api/auth/email-verifications/route.ts': '96e882c7a3f5c21b07283e60f0f6b9bc3fc0f3d25b5a485230d5ae6212d8678d', 'frontend/app/api/auth/login/route.ts': 'b1a22bcd9dc77cf0032ef26bf4cdc42d6c700c764ef86f9611c7df4930005c96', 'frontend/app/api/auth/registrations/route.ts': '082d60bfea03aef7ba5cc2b3e4bb6edf79272255c63a602dd2fa33e39ad6c639', 'frontend/app/login/page.tsx': '53d69dd6191a1f8f465aebb4ba546cf1d99100b9589738996270dc32358fa3ef', 'frontend/app/register/page.tsx': 'c6046e824c70aefba2805b2c1a36891c9bc99d3de5e9d15fa1212ba29264302c', 'frontend/components/manual-auth-form.tsx': 'dbf4c6e3a02b4a8a723b5c8b4fa834131675f3c8281768f5dbe0552b5be140b6', 'frontend/lib/manual-auth-backend.ts': 'c6fe4fa590614f861be387f72398204c0395246bd1f2d2fea653b3704313335e', 'frontend/package.json': 'afed275fe6ae30fcfa7ad73fb10860dd268761fd8ccdf4695726c5c1c78ef6af', 'frontend/tests/manual-auth-e2e.mjs': '4b76e1e070611cffb4d67c42ee6521818477b54fdbcbc5a1e52c6caf36e0b718', 'frontend/tests/manual-auth.test.mjs': 'a63e9dfc9eb3dcb6df4a86c118f162fdfcc86448676a69799692257b9b442a1f', 'knowledge/ARCHITECTURE.md': '8bf3b4685c1a30757057cc091262c66505a8fc55e29f2a416f4616e1c05b7776', 'knowledge/PROGRESS.md': '009e1cfcb326062b73ddef0abced6d91b20c2859fd6faa6c8ba4a5fb778756c7', 'knowledge/PROJECT.md': 'fc87d315707466cea337a6be723782ae8745be4480fc33d07d73c3bd09d39ccd', 'knowledge/execution/change-sets.json': '71898ec53de056b0c18500b0363ab4a7dda7295d77ae724ac7e645c72d9c15c6', 'knowledge/execution/status.json': '4bd70a62a2041c4d55d64f4eec29929e12dee572b7d28e91a8652bc7ef7fb4c9', 'knowledge/guides/USER_GUIDE.md': '8c6ad3615428d170f86e3d7afd5d2636f3f8834092bda7db00d6165040a1a501', 'knowledge/product/FEATURE_CATALOG.md': 'f2512f6add13995bb194aa796a3179aa56674ed605dfe8f8e836d40e2c116a6a'}
+
+def manual_auth_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-CUSTOMER-AUTH-001' or e.get('baseline')!=AUTH_BASE or e.get('authorization')!='EXPLICIT_OWNER_LOCAL_SYNTHETIC_AUTH_ONLY':errors.append('Manual Identity authority drift')
+    for key in ['realCustomersAdmitted','realEmailDelivered','providerSsoImplemented','passwordRecoveryImplemented','runtimeGrantsAssigned','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged']:
+        if e.get(key) is not False:errors.append('Manual Identity forbidden activation '+key)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('Manual Identity acceptance drift')
+    if e.get('flywayHead')!=28 or e.get('e2e',{}).get('browserInterception') is not False or e.get('e2e',{}).get('cookieInjection') is not False:errors.append('Manual Identity qualification drift')
+    if e.get('verification')!='VERIFIED_LOCAL_SYNTHETIC_ONLY':errors.append('Manual Identity qualification incomplete')
+    return errors
+
+def manual_auth_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',AUTH_BASE+':'+n])
+    errors=[];owned=set(AUTH_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in AUTH_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Manual Identity exact successor mismatch '+n)
+    if errors:return errors
+    state=json.loads((K/'execution/status.json').read_text());e=state.pop('manualCustomerAuth',{});errors.extend(manual_auth_record_errors(e))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('Manual Identity historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());record=plan.pop('manualCustomerAuthExecution',{})
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('Manual Identity historical planning drift')
+    if record.get('authorization')!='EXPLICIT_OWNER_LOCAL_SYNTHETIC_AUTH_ONLY' or record.get('status')!='VERIFIED_LOCAL_SYNTHETIC_ONLY':errors.append('Manual Identity unapproved scope/status')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        expected=before(n).decode()
+        if n=='knowledge/PROGRESS.md':
+            expected=expected.replace('## Current status and approvals\n','## Current status and approvals\n\nCurrent manual customer authentication:[local synthetic implementation and verification](#local-customer-auth);real-customer/provider admission remains disabled.\n',1).replace('## Current handoff and exact next action\n','## Current handoff and exact next action\n\nCurrent owner-authentication handoff:[bounded evidence](#local-customer-auth). Next CN-R1-GOOGLE-SSO-001 requires separate provider-specific authority;historical handoffs below remain unchanged.\n',1).replace('Foundation + bounded auth + UI VERIFIED; 3 of 6 criteria','Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; 3 of 6 criteria',1)
+        if not (R/n).read_text().startswith(expected):errors.append('Manual Identity historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',AUTH_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Manual Identity unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Manual Identity unauthorized new source')
+    if {p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!=({n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}|{'backend/src/main/resources/db/migration/V28__local_manual_customer_identity.sql'}):errors.append('Manual Identity migration scope drift')
+    package=json.loads((R/'frontend/package.json').read_text());prior=json.loads(before('frontend/package.json'))
+    if {n:package[n] for n in ['dependencies','devDependencies','engines','packageManager']}!={n:prior[n] for n in ['dependencies','devDependencies','engines','packageManager']}:errors.append('Manual Identity dependency/toolchain drift')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',AUTH_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Manual Identity unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Manual Identity prior validator altered')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('Manual Identity manifest drift')
+    return errors
+
+def manual_auth_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['manualCustomerAuth'];assert not manual_auth_record_errors(e)
+    for key in ['realCustomersAdmitted','realEmailDelivered','providerSsoImplemented','passwordRecoveryImplemented','runtimeGrantsAssigned','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged']:
+        changed=copy.deepcopy(e);changed[key]=True;assert manual_auth_record_errors(changed);print('PASS manual Identity rejects '+key)
+    changed=copy.deepcopy(e);changed['acceptance']['checkedCriteria']=16;assert manual_auth_record_errors(changed);print('PASS manual Identity rejects acceptance')
+    changed=copy.deepcopy(e);changed['e2e']['browserInterception']=True;assert manual_auth_record_errors(changed);print('PASS manual Identity rejects intercepted evidence')
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java','backend/src/main/java/com/cinenest/payments/internal/BankService.java','backend/src/main/resources/db/migration/V2__identity_accounts_grants_sessions.sql','knowledge/decisions/cinenest-open-decisions.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert manual_auth_successor_errors(),n
+        print('PASS manual Identity rejects source/history drift '+n)
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob0(p,*a,**kw),folder/'V29__unapproved.sql']) if p==folder else glob0(p,*a,**kw)):assert manual_auth_successor_errors()
+    print('PASS manual Identity rejects extra migration')
+
+receipt_admission_successor_errors=manual_auth_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=manual_auth_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    manual_auth_negative_controls()
+    owned=set(AUTH_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',AUTH_BASE],text=True),nul=True)
+    added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',AUTH_BASE+':'+n]) for n in owned&tracked}
+    rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+    def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+    def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**kw):return (q for q in glob0(p,*a,**kw) if q!=R/'backend/src/main/resources/db/migration/V28__local_manual_customer_identity.sql')
+    with patch.dict(globals(),{'receipt_admission_successor_errors':manual_auth_prior_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=manual_auth_prior_main()
+    if result==0:print('PASS exact local synthetic customer-auth successor;history/grants/providers/acceptance preserved')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
