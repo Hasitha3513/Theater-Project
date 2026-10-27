@@ -8062,5 +8062,92 @@ def inert_ci_main():
     return result
 
 
+
+# Explicit owner-authorized test-only S2-B correlation successor. All earlier guards replay unchanged.
+google_correlation_prior_main=inert_ci_main
+google_correlation_prior_guard=receipt_admission_successor_errors
+GC_BASE='fbd3e58733d0d95384a2050da4e35f2421907681'
+GC_HASHES={'backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java': 'c3dc855f0945482542101dac559dd14f469419e9401aea7fa7dde4feb30c8b40', 'backend/src/test/java/com/cinenest/identity/internal/GoogleAuditCorrelationSupport.java': '732d4371c8f5aad6abdd96bef468919f3a92e077b5d3ce7406a67866b9ea2eaa', 'knowledge/ARCHITECTURE.md': 'b1a75f652d01bf1cf6d3f97139ce81886f3fcc9b4c2ceab13b6bce5325439eec', 'knowledge/PROGRESS.md': 'a4add1b0b47de12afc9fa6832837c633cb0e3cf80ee4c0516636b023280b47a1', 'knowledge/execution/status.json': '6e4b9cbf6a1ea3c2111c86414ad2e0a8a98f67e690d2f38296bfad5f8f98d171', 'knowledge/execution/change-sets.json': 'a9cca459ed0abd10ec45f8e50423f351a00d0929c7b20f392fc9d9ea99f77838'}
+
+def google_correlation_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-GOOGLE-SSO-001' or e.get('baseline')!=GC_BASE or e.get('authorization')!='EXPLICIT_OWNER_TEST_ONLY_CORRELATION' or e.get('verification')!='VERIFIED_TEST_ONLY_CORRELATION':errors.append('Google correlation authority/result drift')
+    for key in ['productionBehaviorChanged','auditSemanticsChanged','migrationsChanged','customerAdmissionChanged','liveExecutionPerformed','qualificationAssociationsChanged','runtimeGrantsAssigned','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged']:
+        if e.get(key) is not False:errors.append('Google correlation forbidden scope '+key)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('Google correlation acceptance drift')
+    if e.get('historicalEvidence',{}).get('cause')!='NOT_VERIFIED;new tests cannot retroactively attribute historical events' or e.get('historicalEvidence',{}).get('originalEventsChanged') is not False:errors.append('Google correlation invented historical explanation')
+    if e.get('parentCloseout')!='NOT_FULLY_CLOSED_HISTORICAL_ATTRIBUTION_UNAVAILABLE':errors.append('Google correlation false parent closure')
+    if e.get('instrumentation',{}).get('publicApi') is not False:errors.append('Google correlation public API')
+    return errors
+
+def google_correlation_successor_errors():
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',GC_BASE+':'+n])
+    errors=[];owned=set(GC_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    for n,h in GC_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:errors.append('Google correlation exact successor mismatch '+n)
+    if errors:return errors
+    state=json.loads((K/'execution/status.json').read_text());e=state.pop('googleSsoS2BCorrelation',{});errors.extend(google_correlation_record_errors(e))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('Google correlation historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());record=plan.pop('googleSsoS2BCorrelationExecution',{})
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('Google correlation historical planning drift')
+    if record.get('authorization')!='EXPLICIT_OWNER_TEST_ONLY_CORRELATION' or record.get('status')!='VERIFIED_TEST_ONLY_CORRELATION':errors.append('Google correlation missing bounded authority')
+    for n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md']:
+        expected=before(n).decode()
+        if n=='knowledge/PROGRESS.md':
+            expected=expected.replace('Current Google S2-A:[disabled live-provider adapter](#google-sso-s2a);live execution/qualification remains BLOCKED_PROVIDER.','Current Google S2-B:[test-only request/audit correlation](#google-sso-s2b-correlation);historical denial attribution remains NOT_VERIFIED;production admission stays disabled.',1).replace('Current Google S2-A handoff:[evidence](#google-sso-s2a). Next S2-B requires owner-controlled configuration and separate live execution authority.','Current Google S2-B handoff:[correlation evidence](#google-sso-s2b-correlation). Next single unit:separately authorize bounded Facebook Login integration;no production/provider authority implied.',1).replace('Google S2-A disabled live-provider adapter implemented; live qualification pending; 3 of 6 criteria','Google S2-B test-only audit correlation VERIFIED; historical live-audit attribution open; 3 of 6 criteria',1)
+        if not (R/n).read_text().startswith(expected):errors.append('Google correlation historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',GC_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Google correlation unowned/production/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Google correlation unauthorized new source')
+    if {p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('Google correlation migration drift')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',GC_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Google correlation unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Google correlation prior validator altered')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('Google correlation manifest drift')
+    return errors
+
+def google_correlation_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['googleSsoS2BCorrelation'];assert not google_correlation_record_errors(e)
+    for key in ['productionBehaviorChanged','auditSemanticsChanged','migrationsChanged','customerAdmissionChanged','liveExecutionPerformed','qualificationAssociationsChanged','runtimeGrantsAssigned','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged']:
+        bad=copy.deepcopy(e);bad[key]=True;assert google_correlation_record_errors(bad);print('PASS Google correlation rejects '+key)
+    bad=copy.deepcopy(e);bad['historicalEvidence']['cause']='EXPLAINED_TWO_CALLBACKS';assert google_correlation_record_errors(bad);print('PASS Google correlation rejects invented historical attribution')
+    bad=copy.deepcopy(e);bad['parentCloseout']='CLOSED';assert google_correlation_record_errors(bad);print('PASS Google correlation rejects false parent closure')
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java','backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java','backend/src/main/java/com/cinenest/payments/internal/BankService.java','knowledge/decisions/cinenest-open-decisions.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert google_correlation_successor_errors(),n
+        print('PASS Google correlation rejects production/history drift '+n)
+
+receipt_admission_successor_errors=google_correlation_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=google_correlation_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    google_correlation_negative_controls()
+    owned=set(GC_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',GC_BASE],text=True),nul=True)
+    added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',GC_BASE+':'+n]) for n in owned&tracked}
+    rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+    def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.dict(globals(),{'receipt_admission_successor_errors':google_correlation_prior_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=google_correlation_prior_main()
+    if result==0:print('PASS exact test-only Google correlation successor;production/audit/history/admission unchanged')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

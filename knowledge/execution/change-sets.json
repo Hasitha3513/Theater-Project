@@ -6956,5 +6956,13 @@
       "CN-NFR-02",
       "CN-NFR-03"
     ]
+  },
+  "googleSsoS2BCorrelationExecution": {
+    "parentTaskId": "CN-R1-GOOGLE-SSO-001",
+    "authorization": "EXPLICIT_OWNER_TEST_ONLY_CORRELATION",
+    "status": "VERIFIED_TEST_ONLY_CORRELATION",
+    "scope": "Isolated callback/request/audit correlation tests only;no production auth/audit/schema/admission changes",
+    "historicalAttribution": "UNRESOLVED;not a retroactive explanation or formal acceptance",
+    "nextSingleUnit": "Separately authorize bounded Facebook Login integration;no implicit implementation or provider activation authority"
   }
 }

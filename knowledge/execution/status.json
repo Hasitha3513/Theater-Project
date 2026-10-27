@@ -25822,5 +25822,115 @@
       "Separate S2-C production/privacy/admission authority;no automatic admission"
     ],
     "nextUnit": "CN-R1-GOOGLE-SSO-001 S2-B owner configuration and live qualification admission"
+  },
+  "googleSsoS2BCorrelation": {
+    "taskId": "CN-R1-GOOGLE-SSO-001",
+    "slice": "S2-B_TEST_ONLY_REQUEST_AUDIT_CORRELATION",
+    "baseline": "fbd3e58733d0d95384a2050da4e35f2421907681",
+    "authorization": "EXPLICIT_OWNER_TEST_ONLY_CORRELATION",
+    "authorizationReference": "Owner message: GOOGLE SSO S2-B TEST-ONLY CORRELATION;bounded isolated tests and support only",
+    "verification": "VERIFIED_TEST_ONLY_CORRELATION",
+    "productionBehaviorChanged": false,
+    "auditSemanticsChanged": false,
+    "migrationsChanged": false,
+    "customerAdmissionChanged": false,
+    "liveExecutionPerformed": false,
+    "qualificationAssociationsChanged": false,
+    "runtimeGrantsAssigned": false,
+    "financialMutations": false,
+    "physicalAccessMutations": false,
+    "productionQualified": false,
+    "acceptanceChanged": false,
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "testSourcePaths": [
+      "backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/GoogleAuditCorrelationSupport.java"
+    ],
+    "instrumentation": {
+      "scope": "Explicit TestConfiguration import in isolated GoogleSsoIntegrationTest only",
+      "captured": [
+        "test-generated requestId",
+        "test-generated attemptId",
+        "fixed route enum",
+        "HTTP status",
+        "generated audit-event UUID",
+        "fixed event/outcome enums",
+        "separate-connection committed-row visibility"
+      ],
+      "notCaptured": [
+        "query strings",
+        "Google email or subject",
+        "authorization codes",
+        "ID/access tokens",
+        "client secrets",
+        "session cookies",
+        "actor/target parameters"
+      ],
+      "publicApi": false
+    },
+    "scenarios": {
+      "A": "PASS:one callback,one attributable committed denial,no admission or identity mutation",
+      "B": "PASS:two callback requests,same test attempt,distinct committed denial event IDs,no admission",
+      "C": "PASS:two opaque attempts,one committed denial each,no admission",
+      "D": "PASS:existing associated account,one committed success,JDBC principal,unchanged Identity snapshot;existing manual coexistence regression retained"
+    },
+    "focusedBackend": {
+      "tests": 80,
+      "passed": 77,
+      "skipped": 3,
+      "failures": 0,
+      "provider": "SIMULATED_CONTRACT_PROVIDER_ONLY"
+    },
+    "historicalEvidence": {
+      "denialRecords": 2,
+      "distinctCommittedTransactions": 2,
+      "separationSeconds": 63.527456,
+      "requestIdentifiers": "NOT_RETAINED",
+      "cause": "NOT_VERIFIED;new tests cannot retroactively attribute historical events",
+      "originalEventsChanged": false
+    },
+    "parentCloseout": "NOT_FULLY_CLOSED_HISTORICAL_ATTRIBUTION_UNAVAILABLE",
+    "reading": {
+      "ledger": "bankInstructionsRealStackE2E.reading.files;googleSsoS2A.reading",
+      "accounted": 116,
+      "originalHashesUnchanged": 103,
+      "controlledSuccessorsReviewed": 13,
+      "method": "Qualified prior content/visual review reused;relevant canonical/security/Identity diagrams and task-owned successor deltas consulted;no general audit or new visual review claimed"
+    },
+    "catalogueAndGuideAssessment": "No customer-visible workflow change;existing Feature Catalogue/User Guide remain accurate;no edits required",
+    "rollback": "Remove only test import/support/scenarios via a reviewed successor;preserve production behavior and immutable evidence",
+    "fullBackend": {
+      "tests": 934,
+      "passed": 926,
+      "skipped": 8,
+      "failures": 0,
+      "architecture": "PASS existing 11-module and security boundaries",
+      "postgres": "PASS disposable PostgreSQL18.6 clean/upgrade/ownership suites;V1-V28 unchanged",
+      "packagedStartup": "PASS migrated PostgreSQL and real HTTP denial",
+      "testInstrumentationAbsentFromArtifact": true,
+      "testHeaderAbsentFromProductionClasses": true,
+      "skips": "Eight existing opt-in browser/local receipt campaigns not enabled;no skipped new correlation scenario"
+    },
+    "frontend": {
+      "cleanInstall": "PASS",
+      "build": "PASS",
+      "typecheck": "PASS",
+      "lint": "PASS zero warnings",
+      "tests": "PASS full existing suite",
+      "audit": "PASS zero vulnerabilities",
+      "nextEnvUnrelatedBytesPreserved": true
+    },
+    "governance": {
+      "ordinaryExecution": "FAIL only two pre-existing next-env checksum/protected-source findings;not relabeled PASS",
+      "cleanCheckoutProjection": "PASS documented historical-chain projection;unrelated file bytes preserved",
+      "positiveNegativeControls": "PASS prior and new scope/history controls",
+      "knowledge": "PASS",
+      "whitespace": "PASS"
+    }
   }
 }
