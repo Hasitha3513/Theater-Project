@@ -92,6 +92,8 @@ class IdentitySecurity {
                 if(manual) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/csrf").permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/auth/registrations","/api/auth/email-verifications","/api/auth/login").permitAll();
                 requests
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/accounts/me/profile").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/accounts/me/profile").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/catalog/venues", "/api/catalog/rooms", "/api/catalog/rooms/*", "/api/venues/*/packages", "/api/venues/*/packages/*").permitAll()
                 .requestMatchers("/oauth2/authorization/cinenest", "/login/oauth2/code/cinenest").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/accounts","/api/admin/venues/*/accounts/*","/api/admin/venues/*/accounts/*/grants","/api/admin/venues/*/audit","/api/admin/venues/*/audit/*").authenticated()

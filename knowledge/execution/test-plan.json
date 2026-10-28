@@ -354,6 +354,22 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Shared presentation and error classification only;existing responses,sanitized proxies,authorization,money/identity/device behavior unchanged."
+      },
+      "localCustomerProfileEvidence": {
+        "taskId": "CN-R1-CUSTOMER-PROFILE-001",
+        "status": "VERIFIED_LOCAL_SYNTHETIC_PROFILE_SUBSET",
+        "evidencePath": "PROGRESS.md#local-customer-profile",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": [
+          "CustomerProfileIntegrationTest",
+          "CustomerProfileRulesTest",
+          "GoogleSsoIntegrationTest.existingProviderSessionCanEditOnlyItsOwnProfile",
+          "FacebookSsoIntegrationTest.existingProviderSessionCanEditOnlyItsOwnProfile",
+          "frontend/tests/customer-profile.test.mjs",
+          "frontend/tests/customer-profile-e2e.mjs"
+        ],
+        "limits": "Own name/optional unverified phone only;existing Booking transport reused with truthful unavailable state when policy disabled;no production admission,provider linking,grants or financial/booking/access changes"
       }
     },
     {
@@ -818,6 +834,22 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "localCustomerProfileEvidence": {
+        "taskId": "CN-R1-CUSTOMER-PROFILE-001",
+        "status": "VERIFIED_LOCAL_SYNTHETIC_PROFILE_SUBSET",
+        "evidencePath": "PROGRESS.md#local-customer-profile",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": [
+          "CustomerProfileIntegrationTest",
+          "CustomerProfileRulesTest",
+          "GoogleSsoIntegrationTest.existingProviderSessionCanEditOnlyItsOwnProfile",
+          "FacebookSsoIntegrationTest.existingProviderSessionCanEditOnlyItsOwnProfile",
+          "frontend/tests/customer-profile.test.mjs",
+          "frontend/tests/customer-profile-e2e.mjs"
+        ],
+        "limits": "Own name/optional unverified phone only;existing Booking transport reused with truthful unavailable state when policy disabled;no production admission,provider linking,grants or financial/booking/access changes"
       }
     },
     {
@@ -2662,6 +2694,22 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "fullTestPlanStatus": "NOT_RUN"
+      },
+      "localCustomerProfileEvidence": {
+        "taskId": "CN-R1-CUSTOMER-PROFILE-001",
+        "status": "VERIFIED_LOCAL_SYNTHETIC_PROFILE_SUBSET",
+        "evidencePath": "PROGRESS.md#local-customer-profile",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": [
+          "CustomerProfileIntegrationTest",
+          "CustomerProfileRulesTest",
+          "GoogleSsoIntegrationTest.existingProviderSessionCanEditOnlyItsOwnProfile",
+          "FacebookSsoIntegrationTest.existingProviderSessionCanEditOnlyItsOwnProfile",
+          "frontend/tests/customer-profile.test.mjs",
+          "frontend/tests/customer-profile-e2e.mjs"
+        ],
+        "limits": "Own name/optional unverified phone only;existing Booking transport reused with truthful unavailable state when policy disabled;no production admission,provider linking,grants or financial/booking/access changes"
       }
     },
     {
@@ -2692,6 +2740,22 @@
         "scope": "Synthetic current bank-credit balances only; exports and remaining chart/production acceptance deferred",
         "evidencePath": "PROGRESS.md#report-bank-implementation",
         "fullAcceptance": "NOT_ACCEPTED"
+      },
+      "localCustomerProfileEvidence": {
+        "taskId": "CN-R1-CUSTOMER-PROFILE-001",
+        "status": "VERIFIED_LOCAL_SYNTHETIC_PROFILE_SUBSET",
+        "evidencePath": "PROGRESS.md#local-customer-profile",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "tests": [
+          "CustomerProfileIntegrationTest",
+          "CustomerProfileRulesTest",
+          "GoogleSsoIntegrationTest.existingProviderSessionCanEditOnlyItsOwnProfile",
+          "FacebookSsoIntegrationTest.existingProviderSessionCanEditOnlyItsOwnProfile",
+          "frontend/tests/customer-profile.test.mjs",
+          "frontend/tests/customer-profile-e2e.mjs"
+        ],
+        "limits": "Own name/optional unverified phone only;existing Booking transport reused with truthful unavailable state when policy disabled;no production admission,provider linking,grants or financial/booking/access changes"
       }
     },
     {

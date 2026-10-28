@@ -6603,7 +6603,7 @@
     "weeks": [
       {
         "week": 1,
-        "label": "W1 \u00b7 Oct 25\u201331",
+        "label": "W1 · Oct 25–31",
         "target": "Online Booking",
         "focus": "Customer discovery, availability, holds, quotations, synthetic bank-pending booking and recovery. Bounded Week 1 gate already 15/15 PASS at commit `45145a71d53322e824d476927ac62314ec5f1ee6`.",
         "caveat": "Does not establish real commercial booking acceptance.",
@@ -6611,7 +6611,7 @@
       },
       {
         "week": 2,
-        "label": "W2 \u00b7 Nov 1\u20137",
+        "label": "W2 · Nov 1–7",
         "target": "Manual Bank Payment",
         "focus": "Approved bank instructions, private receipt intake, independent verified credit, allocation, guarded booking confirmation.",
         "caveat": "Finance/venue/privacy/commercial policy and authority gates.",
@@ -6619,7 +6619,7 @@
       },
       {
         "week": 3,
-        "label": "W3 \u00b7 Nov 8\u201314",
+        "label": "W3 · Nov 8–14",
         "target": "Physical Smart Lock",
         "focus": "Selected lock/firmware adapter, booking-bound PIN, staff-assisted ID check-in, real installed-door testing, offline/re-entry/expiry/egress, UAT and GO/NO-GO.",
         "caveat": "Physical safety, installer, reviewer and operational gates; target is conditional.",
@@ -6627,7 +6627,7 @@
       },
       {
         "week": 4,
-        "label": "W4 \u00b7 Nov 15\u201321",
+        "label": "W4 · Nov 15–21",
         "target": "Hosted Payment Gateway",
         "focus": "Provider sandbox, authenticated callback, payment-attempt durability, duplicate/late/unknown payments and notification reliability.",
         "caveat": "Provider and legal/financial approvals; existing gateway dependency not waived.",
@@ -6635,7 +6635,7 @@
       },
       {
         "week": 5,
-        "label": "W5 \u00b7 Nov 22\u201328",
+        "label": "W5 · Nov 22–28",
         "target": "Booking Lifecycle",
         "focus": "Reschedule, cancellation, funded purchased extension and revision consistency.",
         "caveat": "Funding and commercial policy gates remain.",
@@ -6643,7 +6643,7 @@
       },
       {
         "week": 6,
-        "label": "W6 \u00b7 Nov 29\u2013Dec 5",
+        "label": "W6 · Nov 29–Dec 5",
         "target": "Finance and Refunds",
         "focus": "Refund approval/repayment evidence, exceptions, reconciliation and financial audit.",
         "caveat": "Independent finance authority and live-provider policies.",
@@ -6651,7 +6651,7 @@
       },
       {
         "week": 7,
-        "label": "W7 \u00b7 Dec 6\u201312",
+        "label": "W7 · Dec 6–12",
         "target": "IoT and Room Operations",
         "focus": "Device observation, maintenance/room closure and reopening, cleaning readiness and incident recovery.",
         "caveat": "G-ROOM-BLOCK approval and independent physical readiness review.",
@@ -6659,7 +6659,7 @@
       },
       {
         "week": 8,
-        "label": "W8 \u00b7 Dec 13\u201319",
+        "label": "W8 · Dec 13–19",
         "target": "Admin and Customer Operations",
         "focus": "Scoped roles/grants, admin/customer interfaces, support, messaging.",
         "caveat": "Authorization and notification provider gates.",
@@ -6667,7 +6667,7 @@
       },
       {
         "week": 9,
-        "label": "W9 \u00b7 Dec 20\u201326",
+        "label": "W9 · Dec 20–26",
         "target": "Reporting and Analytics",
         "focus": "Revenue, bookings, utilization, payment/device/incident reporting and exports.",
         "caveat": "Authoritative metric reconciliation and privacy.",
@@ -6675,7 +6675,7 @@
       },
       {
         "week": 10,
-        "label": "W10 \u00b7 Dec 27\u2013Jan 2",
+        "label": "W10 · Dec 27–Jan 2",
         "target": "Hardening and Recovery",
         "focus": "Security/RBAC/ABAC, accessibility, performance, backup-restore, resilience and privacy.",
         "caveat": "Exact source/build evidence required.",
@@ -6683,7 +6683,7 @@
       },
       {
         "week": 11,
-        "label": "W11 \u00b7 Jan 3\u20139",
+        "label": "W11 · Jan 3–9",
         "target": "Integrated E2E and UAT",
         "focus": "Real-stack and physical-hardware flows, bank/payment exceptions, customer-led review.",
         "caveat": "Real reviewer signoff; simulator evidence is insufficient for hardware.",
@@ -6691,7 +6691,7 @@
       },
       {
         "week": 12,
-        "label": "W12 \u00b7 Jan 10\u201316",
+        "label": "W12 · Jan 10–16",
         "target": "Controlled Pilot and Handover",
         "focus": "Production readiness, limited approved pilot, support/training, signoff and handover.",
         "caveat": "Explicit deployment/launch authorization; no calendar-based automatic acceptance.",
@@ -7028,5 +7028,42 @@
       "Separate bounded fixture/live qualification authorization",
       "Production/privacy/commercial/hardware qualification"
     ]
+  },
+  "customerProfileExecution": {
+    "taskId": "CN-R1-CUSTOMER-PROFILE-001",
+    "authorization": "EXPLICIT_OWNER_PROFILE_AND_ADDITIVE_V29",
+    "status": "VERIFIED_LOCAL_SYNTHETIC",
+    "supersedesOnly": "Historical prepared unit C implementation-admission status; prior record retained unchanged",
+    "requirements": [
+      "CN-C02",
+      "CN-C08",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "ownerModule": "identity",
+    "scope": [
+      "own profile read",
+      "full name and optional unverified phone update",
+      "independent revision and atomic immutable audit",
+      "additive V29 only",
+      "existing account UI and Booking read reuse",
+      "synthetic security/PostgreSQL/real-browser tests"
+    ],
+    "exclusions": [
+      "production admission",
+      "credentials/provider associations",
+      "grants",
+      "phone verification",
+      "historical migrations",
+      "other module persistence",
+      "live provider attempts"
+    ],
+    "approvalEvidence": {
+      "scope": "Owner attached Customer Profile Management request; subsequent explicit V29 authorization in this conversation",
+      "attachmentSha256": "df309602dea892d554a7fd4c91cda50d98ce6e0d3894e7e934b3109f339c7056",
+      "v29": "Explicit owner authorization: only Identity customer_profile and immutable customer_profile_audit; V28 head independently verified before creation"
+    },
+    "definitionOfDone": "Own-profile read/edit/refresh/conflict/logout verified through Chromium/Next/Spring/PostgreSQL; mandatory regressions/governance/clean-checkout and exact-source CI; formal acceptance unchanged",
+    "rollback": "Disable local profile flag; retain additive V29 and immutable history; compatible app rollback or reviewed forward fix; no down migration/deletion"
   }
 }

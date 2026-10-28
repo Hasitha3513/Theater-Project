@@ -8421,5 +8421,109 @@ def inert_ci_main():
     if result==0:print('PASS exact owner-authorized local HTTPS successor;history/provider gates/admission preserved')
     return result
 
+# Explicit owner-authorized local self-profile/V29 successor. Historical guards replay unchanged.
+profile_previous_main=inert_ci_main
+profile_previous_guard=receipt_admission_successor_errors
+PROFILE_BASE='ef763404ea829c555fca6acbccaf08d0c9bb4214'
+PROFILE_HASHES={'backend/src/main/java/com/cinenest/identity/internal/CustomerProfileController.java': '3deed681129d15f6040b339b2d3e6f993236f42dc3c80b46d54649dfecd34e8e', 'backend/src/main/java/com/cinenest/identity/internal/CustomerProfileService.java': '0d9a982269f5372a517aa5f43d8a3b7051ce7e251e8af09a4d771b4c91a471f1', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'd24aa848dde291a9f1ab8a4024872dab720b4f5cde7f47c46e2fe1d12cbd8e44', 'backend/src/main/resources/application-local-synthetic.properties': '5c2c68628940529e675099791a36f37548925a94e99d5dc69163f5dd54d4c6aa', 'backend/src/main/resources/db/migration/V29__local_customer_profile.sql': '742ad5bd9714ddf7fdc5882fb268b64c8f5045fcd94afc27b0017cdefa1bf8af', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'e0b3057db2dc6143a733e31bbef5a8fdae8b7612326145d36fca6636a1abb409', 'backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java': 'f459fb7569f3135a982637bc746bf29e89811e74f70b420522d6ace95bfa9a94', 'backend/src/test/java/com/cinenest/FacebookSsoIntegrationTest.java': 'ff6b71dc5e7d58067893a164b5784ade5c769ec484eb8f5a7d5eab4cac3d4d2c', 'backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java': '6dd7fcf32de34530f963440acded14540d410d59c9c84f26840a5edfb649ecc8', 'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java': '60d78caef0fb129fe7566f6da3a3250a13f320b6324b1b2caec7565d9b0c1230', 'backend/src/test/java/com/cinenest/identity/internal/CustomerProfileRulesTest.java': '573889eec8f655ddca4745f4b04b71169eab2eaa133f0b4b88c86c3c8f134951', 'frontend/app/account/page.tsx': 'a357aed125f396cd9e63b128b2755ae88375aa83f551f0cc42efee84930fc65b', 'frontend/app/api/accounts/me/profile/route.ts': 'fcd2636df13fe074f96306e9f222e52fd57909878e4ef58252bc9e4bb13aba0a', 'frontend/components/customer-bookings.tsx': '03b3e7df8e761afa6456be38330796004fc4e53ed7d82416b1c7bb0dad82d725', 'frontend/components/customer-profile.tsx': 'a7daa578618881a3956f7d75cc76303bbf4fb0b1d0251ee7a1e6e7adca720e7b', 'frontend/components/session-panel.tsx': '2410ad88fa0104772f8859e7b8f2f3f8bee042e1bdf61bf9f84334eeb77bfb13', 'frontend/lib/customer-profile-backend.ts': 'de99c3ec7e2cd3cde3e2516ab77667cc3484e1c170022dc935a3653603576694', 'frontend/lib/customer-profile.ts': '4fac70ced3a01ce935f945bc3613e45be09e3d43bc41217ad464738e4f3ae616', 'frontend/package.json': '258d26277836b0f78a6a81d719e3d3fac67138f7ec4e568bf1a277b3ab0e5481', 'frontend/tests/customer-profile-e2e.mjs': '510243ecb0ccba43cbfe1b94f110ec5b559d16ca078b6c7fb3076138dcf8c834', 'frontend/tests/customer-profile.test.mjs': '0b7d46d7dd06ac4c65ebbf1f80daa9e796bbf9ebb5e1ba26eacd8eedd32b3fa2', 'knowledge/ARCHITECTURE.md': 'dc94ff554146cf4d08f29401cc8ae03d5e74861c48395df6a4724d3f52051ce2', 'knowledge/DESIGN.md': '91e40004e267f9e193dfcce491398751c67268be717ffad3d1e3f943e63364f1', 'knowledge/PROGRESS.md': '8daeecb2c32e853991edb28435492297fdf1813b7b255433cbbbd20dbb5ab6fa', 'knowledge/PROJECT.md': '66d5d98426d8b7d5c8bf66be8609dc8b30a8be4d4541928bcc4a9f5e0a614794', 'knowledge/execution/change-sets.json': '084229c3280ff9a98506661960d973127385fec99e80a83ca9e02308ddf4be82', 'knowledge/execution/requirements.json': '7003813fed707dab42fefd334a6bb1e9b8a3062909219b9cf66ce113da73a933', 'knowledge/execution/status.json': '17895516bb992a3f5d3748f5af204832bb16ef4b6e26d3887de935fa9ea3ed02', 'knowledge/execution/test-plan.json': '12bfe8b8813e686317e8517b3a240738e14fc5a2a18276db545389525324685f', 'knowledge/guides/USER_GUIDE.md': '5e557e1b59bd742415c431f8107e013835b9456eb97a88170cb1bb30ee239049', 'knowledge/product/FEATURE_CATALOG.md': 'c30e069339b4c11c9d5730d404c21ac039c0c4a858417f03c7026c1d3bf8e924'}
+PROFILE_PROSE_REPLACEMENTS={'Current S2-B:[local trusted HTTPS compatibility](#local-https-ingress);manual/Google/Facebook synthetic contracts verified;Meta callback registration and live qualification remain blocked. Historical Google denial attribution remains NOT_VERIFIED.': 'Current local customer profile:[bounded implementation and evidence](#local-customer-profile);manual/Google/Facebook synthetic compatibility preserved. Latest owner-reported Facebook capture remains INCONCLUSIVE;no new provider attempt. Historical Google denial attribution remains NOT_VERIFIED.', 'Current S2-B handoff:[local HTTPS evidence](#local-https-ingress). Next single unit:owner-authorized Meta HTTPS callback registration/acceptance check;no live execution or fixture authority implied.': 'Current profile handoff:[local self-profile evidence](#local-customer-profile). Next single unit:CN-R1-FACEBOOK-SSO-001 S2-B obtain separate bounded time-coordinated capture authorization;no retry,fixture or live-login authority implied.', 'Local trusted HTTPS auth compatibility VERIFIED_SYNTHETIC; Meta qualification blocked; Google historical audit attribution open; 3 of 6 criteria': 'Local self-profile/V29 VERIFIED_SYNTHETIC; manual/Google/Facebook contracts preserved; Meta live qualification blocked; Google historical audit attribution open; 3 of 6 criteria'}
+
+def profile_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-CUSTOMER-PROFILE-001' or e.get('authorization')!='EXPLICIT_OWNER_PROFILE_AND_ADDITIVE_V29' or e.get('verification')!='VERIFIED_LOCAL_SYNTHETIC':errors.append('PROFILE exact bounded authority/evidence missing')
+    for key in ['enabledByDefault','liveProviderExecuted','productionActivated','accountsAssociated','runtimeGrantsAssigned','historicalMigrationsChanged','formalAcceptanceChanged','otherModuleMutations','phoneVerified']:
+        if e.get(key) is not False:errors.append('PROFILE prohibited '+key)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('PROFILE acceptance drift')
+    if e.get('migration')!='V29__local_customer_profile.sql' or e.get('editableFields')!=['fullName','phone']:errors.append('PROFILE schema/field scope drift')
+    if e.get('historicalFacebookCapture')!='INCONCLUSIVE' or e.get('historicalGoogleAuditCause')!='NOT_VERIFIED':errors.append('PROFILE invented provider history')
+    if e.get('requirements')!=['CN-C02','CN-C08','CN-NFR-02','CN-NFR-03'] or not e.get('tests',{}).get('browserRealStack'):errors.append('PROFILE missing traceability/browser evidence')
+    tests=e.get('tests',{});foundation=tests.get('foundation',{})
+    if foundation!={'total':978,'passed':968,'skipped':10,'failures':0,'errors':0} or tests.get('screenshots')!=6 or tests.get('browserProvider')!='NONE_NO_ROUTE_INTERCEPTION_NO_COOKIE_INJECTION':errors.append('PROFILE missing executed verification evidence')
+    return errors
+
+def profile_successor_errors():
+    errors=[];owned=set(PROFILE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',PROFILE_BASE+':'+n])
+    for n,digest in PROFILE_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=digest:errors.append('PROFILE unadmitted payload '+n)
+    state=json.loads((K/'execution/status.json').read_text());e=state.pop('customerProfile',{});errors.extend(profile_record_errors(e))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('PROFILE historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());record=plan.pop('customerProfileExecution',{})
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('PROFILE historical planning drift')
+    if record.get('authorization')!='EXPLICIT_OWNER_PROFILE_AND_ADDITIVE_V29' or record.get('status')!='VERIFIED_LOCAL_SYNTHETIC':errors.append('PROFILE planning authority absent')
+    for name,key in [('requirements.json','requirements'),('test-plan.json','tests')]:
+        matrix=json.loads((K/'execution'/name).read_text());expected=json.loads(before('knowledge/execution/'+name));seen=[]
+        for row in matrix[key]:
+            if 'localCustomerProfileEvidence' in row:
+                seen.append(row['id']);evidence=row.pop('localCustomerProfileEvidence')
+                if evidence.get('taskId')!='CN-R1-CUSTOMER-PROFILE-001' or evidence.get('fullRequirementVerified') is not False or evidence.get('fullRequirementAcceptance')!='NOT_ACCEPTED':errors.append('PROFILE false full requirement acceptance')
+        ids=['CN-C02','CN-C08','CN-NFR-02','CN-NFR-03']
+        if set(seen)!=set(ids if key=='requirements' else ['T-'+n for n in ids]) or matrix!=expected:errors.append('PROFILE historical traceability/status drift '+name)
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        expected=before(n).decode()
+        if n=='knowledge/PROGRESS.md':
+            for old,new in PROFILE_PROSE_REPLACEMENTS.items():expected=expected.replace(old,new,1)
+        if not (R/n).read_text().startswith(expected):errors.append('PROFILE historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',PROFILE_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('PROFILE unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('PROFILE unauthorized new source')
+    if {p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!=({n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}|{'backend/src/main/resources/db/migration/V29__local_customer_profile.sql'}):errors.append('PROFILE migration inventory drift')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',PROFILE_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('PROFILE unauthorized path')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('PROFILE prior validator changed')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('PROFILE manifest drift')
+    return errors
+
+profile_unchecked_errors=profile_successor_errors
+def profile_successor_errors():
+    try:return profile_unchecked_errors()
+    except (json.JSONDecodeError,UnicodeError,OSError,subprocess.CalledProcessError):return ['PROFILE malformed/unavailable protected payload']
+
+def profile_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['customerProfile'];assert not profile_record_errors(e)
+    for key in ['enabledByDefault','liveProviderExecuted','productionActivated','accountsAssociated','runtimeGrantsAssigned','historicalMigrationsChanged','formalAcceptanceChanged','otherModuleMutations','phoneVerified']:
+        bad=copy.deepcopy(e);bad[key]=True;assert profile_record_errors(bad);print('PASS PROFILE rejects '+key)
+    for key in ['historicalFacebookCapture','historicalGoogleAuditCause']:
+        bad=copy.deepcopy(e);bad[key]='EXPLAINED';assert profile_record_errors(bad);print('PASS PROFILE preserves '+key)
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/resources/db/migration/V29__local_customer_profile.sql','backend/src/main/resources/db/migration/V28__local_manual_customer_identity.sql','backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java','backend/src/main/java/com/cinenest/payments/internal/BankService.java','knowledge/decisions/cinenest-open-decisions.json']:
+        if not (R/n).exists():raise AssertionError('Negative control path missing '+n)
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert profile_successor_errors(),n
+        print('PASS PROFILE rejects altered/unowned payload '+n)
+
+receipt_admission_successor_errors=profile_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=profile_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    profile_negative_controls()
+    owned=set(PROFILE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',PROFILE_BASE],text=True),nul=True)
+    added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',PROFILE_BASE+':'+n]) for n in owned&tracked}
+    rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+    def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+    def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    def glob(p,*a,**kw):return (x for x in glob0(p,*a,**kw) if x.relative_to(R).as_posix() not in added) if p==R/'backend/src/main/resources/db/migration' else glob0(p,*a,**kw)
+    with patch.dict(globals(),{'receipt_admission_successor_errors':profile_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=profile_previous_main()
+    if result==0:print('PASS exact owner-authorized local PROFILE successor;history/provider gates/admission preserved')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

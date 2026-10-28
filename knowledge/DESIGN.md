@@ -1416,3 +1416,11 @@ Existing /login manual form and Google control remain. FacebookSso shows a disab
 <a id="local-https-ingress"></a>
 ## Development HTTPS presentation boundary
 Existing registration/login/account UI and design tokens remain unchanged at the explicitly local https://localhost:4443 origin. Provider availability remains truthful;live Google/Facebook execution stays disabled. No browser certificate-warning bypass is an accepted workflow. Local TLS/browser tests are not actual Meta qualification or production acceptance. [Technical owner](ARCHITECTURE.md#local-https-ingress).
+
+
+<a id="local-customer-profile"></a>
+## Local account profile UI
+
+`/account` preserves SessionPanel and reuses the existing visual primitives. My profile shows authoritative read-only identity/email/status/provider types plus optional name/phone. Edit changes only name and unverified phone; accessible labels, Save/Cancel, loading, unavailable and explicit conflict/reload states are provided. A 409 discards the stale edit; uncertain save never automatically retries and requires an authoritative reload. Logout, page hide/focus/visibility changes clear protected profile state; request generations suppress stale responses. Booking history is the existing Booking component rendered with an embedded heading after an eligible profile read, with no copied booking state in Identity.
+
+Screenshots and responsive results: [PROGRESS](PROGRESS.md#local-customer-profile). Provider-type labels do not imply live-provider qualification. Local-synthetic presentation does not approve production customer data handling or modify formal acceptance.

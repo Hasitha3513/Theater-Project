@@ -4,7 +4,7 @@ import java.net.*;import java.net.http.*;import java.nio.file.*;import java.util
 import org.junit.jupiter.api.*;import org.junit.jupiter.params.ParameterizedTest;import org.junit.jupiter.params.provider.ValueSource;import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;import org.springframework.boot.test.context.SpringBootTest;import org.springframework.core.env.Environment;import org.springframework.jdbc.core.simple.JdbcClient;import org.springframework.test.context.ActiveProfiles;import org.springframework.test.context.DynamicPropertyRegistry;import org.springframework.test.context.DynamicPropertySource;
 import static org.assertj.core.api.Assertions.*;
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.hikari.maximum-pool-size=2","spring.datasource.hikari.minimum-idle=0"})
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"cinenest.identity.profile.enabled=true","spring.datasource.hikari.maximum-pool-size=2","spring.datasource.hikari.minimum-idle=0"})
 @ActiveProfiles("local-synthetic")
 @org.junit.jupiter.api.extension.ExtendWith(org.springframework.boot.test.system.OutputCaptureExtension.class)
 @org.springframework.test.annotation.DirtiesContext(classMode=org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS)
@@ -64,6 +64,16 @@ class FacebookSsoIntegrationTest {
  }
  @Test void manualAndGoogleCoexistWithFacebook()throws Exception{
   var b=new Browser();assertThat(b.login()).isEqualTo(204);assertThat(b.post("/api/auth/login",Map.of("email",EMAIL,"password",PASSWORD)).statusCode()).isEqualTo(204);assertThat(b.get(b.callback("google")).statusCode()).isEqualTo(204);assertThat(b.get("/api/accounts/me").body().contains(A.toString())).isTrue();assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.account").query(Integer.class).single()).isEqualTo(2);
+ }
+ @Test void existingProviderSessionCanEditOnlyItsOwnProfile()throws Exception {
+  var b=new Browser();assertThat(b.login()).isEqualTo(204);
+  var initial=b.get("/api/accounts/me/profile");assertThat(initial.statusCode()).isEqualTo(200);
+  var data=JSONObjectUtils.parse(initial.body());assertThat(data.get("customerId")).isEqualTo(A.toString());
+  assertThat(data.get("linkedProviderTypes").toString()).contains("FACEBOOK");
+  String csrf=JSONObjectUtils.parse(b.get("/api/session/csrf").body()).get("token").toString();
+  assertThat(b.send("PUT","/api/accounts/me/profile","{\"fullName\":\"Synthetic Profile\",\"phone\":null,\"expectedRevision\":0}",csrf).statusCode()).isEqualTo(200);
+  assertThat(jdbc.sql("SELECT revision FROM cinenest_identity.customer_profile WHERE account_id=:id").param("id",A).query(Long.class).single()).isEqualTo(1);
+  assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.customer_profile WHERE account_id=:id").param("id",B).query(Integer.class).single()).isZero();
  }
  @Test void providerCredentialsNeverReachSessionOrLogs(org.springframework.boot.test.system.CapturedOutput out)throws Exception{
   assertThat(new Browser().login()).isEqualTo(204);String serialized=jdbc.sql("SELECT coalesce(string_agg(encode(attribute_bytes,'escape'),''),'') FROM cinenest_identity.http_session_attributes").query(String.class).single();assertThat(serialized.contains(FB.secret)).isFalse();assertThat(serialized.contains(FB.knownSubject)).isFalse();assertThat(out.getAll().contains(FB.secret)).isFalse();assertThat(out.getAll().contains(FB.knownSubject)).isFalse();

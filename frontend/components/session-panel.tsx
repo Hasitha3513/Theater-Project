@@ -38,6 +38,7 @@ export function SessionPanel() {
 		const current = ++generation.current;
 		setSession({ kind: "loading" });
 		const ok = await endSession();
+		window.dispatchEvent(new Event("cinenest-session-change"));
 		if (generation.current !== current) return;
 		setSession({ kind: ok ? "unauthenticated" : "error" });
 		setNotice(

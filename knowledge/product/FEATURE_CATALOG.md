@@ -755,3 +755,8 @@ Disabled-by-default Meta live-provider boundary implemented under explicit S2-A 
 
 ### Local HTTPS authentication compatibility
 Development-only https://localhost:4443 ingress supports existing authentication qualification without public exposure or provider activation. Manual/JDBC behavior and synthetic-provider contracts remain the same;real Meta callback acceptance and live execution are separate gates. [Configuration](../ARCHITECTURE.md#local-https-ingress),[actual evidence](../PROGRESS.md#local-https-ingress).
+
+
+### Local own customer profile (CN-R1-CUSTOMER-PROFILE-001)
+
+In an explicitly enabled isolated local-synthetic environment, an eligible signed-in customer can read their profile and edit full name/optional unverified phone with conflict protection. Existing verified email, account status, ID and provider types are read-only. Existing session/logout and Booking-owned history are reused. No linking, eligibility changes, real-customer admission or new permissions. [Policy](../PROJECT.md#local-customer-profile), [contract](../ARCHITECTURE.md#local-customer-profile), [evidence](../PROGRESS.md#local-customer-profile).

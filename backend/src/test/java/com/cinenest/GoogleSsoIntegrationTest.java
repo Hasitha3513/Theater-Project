@@ -7,7 +7,7 @@ import java.net.*;import java.net.http.*;import java.nio.file.*;import java.util
 import org.junit.jupiter.api.*;import org.junit.jupiter.params.ParameterizedTest;import org.junit.jupiter.params.provider.ValueSource;import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;import org.springframework.boot.test.context.SpringBootTest;import org.springframework.core.env.Environment;import org.springframework.jdbc.core.simple.JdbcClient;import org.springframework.test.context.ActiveProfiles;import org.springframework.test.context.DynamicPropertyRegistry;import org.springframework.test.context.DynamicPropertySource;
 import static org.assertj.core.api.Assertions.*;
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.hikari.maximum-pool-size=2","spring.datasource.hikari.minimum-idle=0"})
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"cinenest.identity.profile.enabled=true","spring.datasource.hikari.maximum-pool-size=2","spring.datasource.hikari.minimum-idle=0"})
 @ActiveProfiles("local-synthetic")
 @org.junit.jupiter.api.extension.ExtendWith(org.springframework.boot.test.system.OutputCaptureExtension.class)
 @org.springframework.test.annotation.DirtiesContext(classMode=org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS)
@@ -100,6 +100,16 @@ class GoogleSsoIntegrationTest {
   Audit audit=request.audits().getFirst();assertThat(audit.kind()).isEqualTo(Kind.AUTHENTICATION);assertThat(audit.outcome()).isEqualTo(expected);assertThat(audit.committed()).isTrue();
   assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.security_audit WHERE event_id=:id AND event_kind='AUTHENTICATION' AND outcome=:outcome").param("id",audit.eventId()).param("outcome",expected.name()).query(Integer.class).single()).isEqualTo(1);
   assertThat(request.toString()).doesNotContain(IDP.lastIdToken,IDP.lastAccessToken,IDP.clientSecret,IDP.subject);
+ }
+ @Test void existingProviderSessionCanEditOnlyItsOwnProfile()throws Exception {
+  var b=new Browser();assertThat(b.login()).isEqualTo(204);
+  var initial=b.get("/api/accounts/me/profile");assertThat(initial.statusCode()).isEqualTo(200);
+  var data=JSONObjectUtils.parse(initial.body());assertThat(data.get("customerId")).isEqualTo(A.toString());
+  assertThat(data.get("linkedProviderTypes").toString()).contains("GOOGLE");
+  String csrf=JSONObjectUtils.parse(b.get("/api/session/csrf").body()).get("token").toString();
+  assertThat(b.send("PUT","/api/accounts/me/profile","{\"fullName\":\"Synthetic Profile\",\"phone\":null,\"expectedRevision\":0}",csrf).statusCode()).isEqualTo(200);
+  assertThat(jdbc.sql("SELECT revision FROM cinenest_identity.customer_profile WHERE account_id=:id").param("id",A).query(Long.class).single()).isEqualTo(1);
+  assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.customer_profile WHERE account_id=:id").param("id",B).query(Integer.class).single()).isZero();
  }
  @Test void correlatedSingleDeniedCallback()throws Exception {
   var before=identitySnapshot();IDP.subject="unassociated-correlation-fixture";var browser=new Browser();assertThat(browser.login()).isEqualTo(403);

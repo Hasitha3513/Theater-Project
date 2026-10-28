@@ -311,7 +311,13 @@ function Pager({
 		</div>
 	);
 }
-export function CustomerBookings({ bookingId }: { bookingId?: string }) {
+export function CustomerBookings({
+	bookingId,
+	embedded = false,
+}: {
+	bookingId?: string;
+	embedded?: boolean;
+}) {
 	const [bookings, setBookings] = useState<Page<Booking> | null>(null),
 		[requests, setRequests] = useState<Page<RequestSummary> | null>(null),
 		[detail, setDetail] = useState<Booking | null>(null),
@@ -428,7 +434,11 @@ export function CustomerBookings({ bookingId }: { bookingId?: string }) {
 			className="customer-bookings booking-history-experience"
 			data-cn-theme="booking-panel"
 		>
-			<h1>{bookingId ? "Booking detail" : "My bookings"}</h1>
+			{embedded ? (
+				<h2>My bookings</h2>
+			) : (
+				<h1>{bookingId ? "Booking detail" : "My bookings"}</h1>
+			)}
 			{bookingId && (
 				<p>
 					<a href="/bookings">Return to customer history</a> ·{" "}

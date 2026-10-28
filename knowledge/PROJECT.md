@@ -1023,3 +1023,11 @@ Owner explicitly authorized disabled-by-default Identity-owned Meta live-provide
 <a id="local-https-ingress"></a>
 ## Owner-authorized local HTTPS authentication compatibility — 2026-10-28
 Under CN-R1-FACEBOOK-SSO-001 S2-B the owner explicitly authorizes non-production local HTTPS ingress and the smallest development-origin compatibility corrections. No live Google/Facebook execution,provider-console changes,new accounts/associations,grants,migrations or production admission is authorized. The local candidate is https://localhost:4443;Meta acceptance/registration remains NOT_VERIFIED. The existing HTTP Google qualification configuration is preserved. Global commercial/privacy/hardware gates and formal acceptance remain unchanged. [Technical boundary](ARCHITECTURE.md#local-https-ingress),[evidence](PROGRESS.md#local-https-ingress).
+
+
+<a id="local-customer-profile"></a>
+## Bounded local customer profile — CN-R1-CUSTOMER-PROFILE-001
+
+Owner authorization permits Identity-owned self-profile viewing/editing in an explicitly enabled local-synthetic environment only. Editable fields are full name and optional, unverified phone. Customer ID, existing verified manual email/status, current eligibility and linked provider **types** are read-only; no provider subject or credential disclosure. Profile edits do not grant commercial, payment, staff or access eligibility. Existing Booking-owned history remains a separate protected read. Production personal-data admission/retention and phone verification are not approved by this slice.
+
+A separate explicit owner authorization permits additive V29 profile/audit persistence only after verifying V28 head. V1–V28, external identity associations, credentials, runtime grants and other module tables remain unchanged. Traceability is partial CN-C02/C08 and CN-NFR-02/03, not full requirement/formal acceptance. Technical boundary: [ARCHITECTURE](ARCHITECTURE.md#local-customer-profile); actual evidence: [PROGRESS](PROGRESS.md#local-customer-profile).

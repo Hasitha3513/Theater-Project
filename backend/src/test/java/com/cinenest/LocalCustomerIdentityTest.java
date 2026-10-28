@@ -146,7 +146,7 @@ class LocalCustomerIdentityTest {
     sql.execute("INSERT INTO cinenest_identity.external_identity VALUES ('https://synthetic.invalid','retained-subject','"+id+"')");
     sql.execute("INSERT INTO cinenest_identity.http_session VALUES ('"+UUID.randomUUID()+"','"+UUID.randomUUID()+"',1,1,120,9999999999999,'"+id+"')");
    }
-   var flyway=org.flywaydb.core.Flyway.configure().dataSource(target,user,password).load();assertThat(flyway.migrate().migrationsExecuted).isEqualTo(1);assertThat(flyway.migrate().migrationsExecuted).isZero();flyway.validate();
+   var flyway=org.flywaydb.core.Flyway.configure().dataSource(target,user,password).target("28").load();assertThat(flyway.migrate().migrationsExecuted).isEqualTo(1);assertThat(flyway.migrate().migrationsExecuted).isZero();flyway.validate();
    try(var c=java.sql.DriverManager.getConnection(target,user,password);var sql=c.createStatement()){
     try(var rows=sql.executeQuery("SELECT revision FROM cinenest_identity.account")){assertThat(rows.next()).isTrue();assertThat(rows.getLong(1)).isEqualTo(7);}
     try(var rows=sql.executeQuery("SELECT subject FROM cinenest_identity.external_identity")){assertThat(rows.next()).isTrue();assertThat(rows.getString(1)).isEqualTo("retained-subject");}
