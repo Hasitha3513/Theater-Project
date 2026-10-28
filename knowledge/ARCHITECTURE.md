@@ -2778,3 +2778,52 @@ V29 adds only `cinenest_identity.customer_profile` (account PK/FK, name, phone, 
 The DTO exposes only customerId/fullName/phone/verifiedEmail/emailVerificationStatus/accountStatus/linkedProviderTypes/revision/updatedAt. Verified email is sourced solely from existing verified manual records; provider-only accounts display NOT_AVAILABLE rather than fabricated ownership. Provider types are derived without disclosing issuer/subject. Next.js proxy strictly bounds requests/DTOs, forwards only the session cookie and CSRF header to configured auth backend, rejects mass assignment/query selectors/cross-origin mutation, and sanitizes errors. Existing Booking transport owns booking reads; Identity never joins Booking tables.
 
 Rollback: disable local profile flag, retain V29 and immutable history, roll application forward or back to compatible code; no destructive down migration. Previously qualified V27→V28 regression now explicitly targets V28; separate V28→V29 test preserves existing account revision. Tests/evidence: [PROGRESS](PROGRESS.md#local-customer-profile). No new grants, linking, verification, financial or physical operations.
+
+
+<a id="admin-advertising-admission-contract"></a>
+
+## Admin advertising admission contract
+
+`CN-R1-ADMIN-ADVERTISING-001` aliases existing unit F / FF-0002. **PROPOSED / BLOCKED_IMPLEMENTATION_AUTHORIZATION**. This contract does not authorize application edits, migrations, public-media activation or grants. Retain the 11 modules. Proposed owner: Rooms (existing venue/catalog ownership), using Identity's scoped-authorization public port; no Pricing/Booking/Payments business changes. Publication reuses revision/audit/idempotency patterns, not financial tables or permissions. Existing V3 venue FK and V29 migration head were inspected; V1–V29 remain immutable.
+
+### Proposed bounded source boundary
+
+- New Rooms internal `BannerController`, `BannerService`, `BannerRepository`, `JdbcBannerRepository`, `BannerPolicy`, `BannerAssets`; associated unit/PostgreSQL/security tests under Rooms. No new public module dependency.
+- Existing `identity/internal/DatabaseScopedAuthorization.java` action recognition and `IdentitySecurity.java` exact route policy only; no credential/session/account/eligibility changes.
+- Candidate additive `backend/src/main/resources/db/migration/V30__local_venue_banners.sql`, subject to head/DDL verification and separate approval; no migration file created by preparation.
+- Frontend candidate `/admin/advertising`, banner editor/list/history/preview and homepage published-banner component; existing `app/admin/page.tsx`, `app/page.tsx`, `lib/navigation.ts`, transport/route allowlists and targeted styles only as necessary. Existing manual/Google/Facebook transport behavior remains unchanged.
+- Focused tests, local fixture harness and existing authoritative Knowledge Base records only. No production config, cloud provisioning, upload endpoint or new media dependency.
+
+### Proposed persistence and invariants
+
+Four Rooms-owned tables: `banner` (UUID identity, venue FK, resource revision, current draft revision, nullable published revision), immutable `banner_revision` (banner/revision composite unique, title 1–120, plain-text description 0–1000, nonempty alt 1–240, asset ID/version/SHA-256, UTC start/end, order 0–10000, safe-link enum, author, creation time), immutable `banner_command` (actor/idempotency UUID/action/canonical request digest/result revision/audit reference) and immutable `banner_audit` (actor/venue/banner/action/outcome/old/new resource revisions/correlation/time). Content is never HTML. Exact SQL must be reviewed before migration authorization/execution; this logical schema is not executable DDL approval.
+
+Resource revision and content revision are independent. Composite FKs bind draft/publication to the same banner and venue; unique command identity rejects changed payload, and replay reauthorizes without duplicate mutation. Immutable row triggers reject update/delete/truncate for revisions, commands and audit. Atomic audit/command linkage uses deferred integrity constraints where necessary; audit failure rolls back the entire mutation. Row locks and expected resource revisions serialize publication; grant revocation is rechecked at the transactional boundary. Editing creates a new immutable draft while the previously published snapshot remains unchanged until explicit publication. Unpublish clears only the live pointer and preserves history. No deletion API.
+
+### Proposed candidate API and permissions
+
+All names below are candidates, not existing routes or grants. `content.banner.read`, `content.banner.edit`, `content.banner.publish` definitions are exact VENUE scoped, deny by default, without administrator bypass, scope stitching or assignment authority. Reads/preview/history require read; mutations require edit or publish as appropriate. Publication additionally requires current read authority, exact reviewed content revision, and an independent publisher. Server identity supplies actor; never accept actor/grants from request data. Session, CSRF and sanitized error conventions remain intact. Protected responses are no-store and audited; list scope is applied before query.
+
+| Candidate endpoint | Contract |
+| --- | --- |
+| `GET /api/admin/venues/{venueId}/banner-assets` | Fixed concept-image catalogue; no arbitrary paths or external URLs. |
+| `GET/POST /api/admin/venues/{venueId}/banners` | Bounded list / create draft. POST requires idempotency UUID and content. |
+| `GET/PUT /api/admin/venues/{venueId}/banners/{bannerId}` | Protected detail / append draft; PUT requires expected resource revision and idempotency UUID. |
+| `GET .../{bannerId}/revisions` and `GET .../{bannerId}/preview` | Bounded immutable history / current exact draft preview, never public. |
+| `POST .../{bannerId}/publications` | Expected resource revision, reviewed content revision, review hash, idempotency UUID. |
+| `POST .../{bannerId}/unpublish` | Expected resource revision and idempotency UUID; mandatory audit. |
+| `GET /api/catalog/banners?venueId={optionalUuid}` | Public DTO only: banner/venue/revision, title/description/alt, fixed image descriptor, safe internal link, visibility deadline; never author/audit/draft/command details. |
+
+Proposed content request fields: `title`, `description`, `altText`, `assetId`, `assetVersion`, `startsAt`, `endsAt`, `displayOrder`, `linkTarget` (`NONE` or `ROOMS`). Server resolves asset digest and rejects client substitutions. Mutation response: resource/content/published revisions, derived publication state and safe command receipt; no security-internal identifiers. Stable HTTP categories: 400 malformed, 401 missing/expired session, 403 authority/CSRF denial, sanitized 404 inaccessible resource, 409 revision/key-content conflict, 503 audit/storage unavailability. No raw SQL or private data in errors.
+
+### Proposed media, scheduling and cache boundary
+
+Only existing original concept images `hero`, `violet`, `blue`, `amber`, `recliners` from `frontend/public/cinema/` may be selected. A separate immutable banner-asset catalogue binds exact existing WebP bytes, dimensions, MIME, version and SHA-256. Verify manifest before admission; reject unknown IDs, altered digest, traversal and arbitrary URL. Do not populate the existing empty approved-room-photo allowlist or reinterpret these illustrations as photographs. Existing illustration caption remains visible. Public static fixture files are already public; draft text/history remain private. No receipt storage, SeaweedFS ACL or production object-store use.
+
+Visibility is server authoritative: enabled venue AND published revision AND `startsAt <= databaseNow < endsAt`. Require finite offset-aware instants and `start < end`; UI shows venue IANA timezone and offset confirmation. Ordering is deterministic by displayOrder, venue UUID, banner UUID. No scheduler or background service identity is required for read-time visibility. Initial public data is no-store with no ISR publication caching; active browser content expires at the returned server-derived boundary and hides on stale/failed refresh. Refresh on focus and bounded polling discovers publication/unpublication; it does not make the browser clock publication authority. Strict immediate removal from disconnected clients cannot be guaranteed and is not claimed. Images may use immutable versioned caching. Links resolve only fixed internal targets, never arbitrary schemes or external locations.
+
+### Proposed tests, rollback and Definition of Done
+
+Required: draft/create/edit, duplicate key replay and changed payload, independent publisher denial, exact-venue/read/edit/publish/revoked grants and no admin bypass, CSRF, transaction/audit rollback, immutable DB revisions and command history, concurrent edits/publications/revocations, clean V1–V30 and V29 upgrade/checksum tests, schedule exact endpoints/timezone/order, asset allowlist/digest/MIME/path/link negatives, no draft leakage, no-store/cache boundary, real Chromium → Next.js → Spring Boot → isolated PostgreSQL at 375/768/1280, accessibility, screenshots, regression/typecheck/lint/build, module architecture, governance/manifest/traceability/clean checkout. Assert zero Booking/Payments/Access/IoT and identity credential/provider mutations. No implementation tests are claimed by this preparation.
+
+Rollback: disable local feature gate, remove homepage exposure and stop only owned test services; preserve immutable history. Retain additive tables; no destructive down migration or rewriting old migrations. Forward-fix only after evidence review. Definition of Done after authorization: all specified local fixture workflows pass real-stack tests, security/concurrency/migration evidence and exact-source CI succeed, existing KB synchronized, no production/commercial acceptance inferred. Production media, real administrative assignments, site-wide scope and uploads remain separate admissions.

@@ -27027,5 +27027,34 @@
       "workflowTimeoutChanged": false,
       "testsRemovedOrWeakened": false
     }
+  },
+  "advertisingAdmission": {
+    "taskId": "CN-R1-ADMIN-ADVERTISING-001",
+    "existingUnit": "CN-R1-HOMEPAGE-CONTENT-001/F/FF-0002",
+    "priority": "OWNER_APPROVED_P0",
+    "facebookS2B": "HOLD_NEW_OWNER_INSTRUCTION_REQUIRED",
+    "implementationAuthorization": "NOT_GRANTED",
+    "status": "BLOCKED_IMPLEMENTATION_AUTHORIZATION",
+    "baseline": "6cdf1e2c0606c315783434580fade023a874185a",
+    "ci": {
+      "run": 40744887215,
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    "proposedOwner": "rooms",
+    "proposedMigration": "V30_SUBJECT_TO_HEAD_DDL_APPROVAL",
+    "requirements": 92,
+    "criteria": 74,
+    "checkedCriteria": 15,
+    "formallyAccepted": 0,
+    "applicationChanged": false,
+    "migrationCreated": false,
+    "permissionsDefined": false,
+    "runtimeGrantsAssigned": false,
+    "publicStorageActivated": false,
+    "publicationEnabled": false,
+    "facebookResumed": false,
+    "formalAcceptanceChanged": false,
+    "tests": "ADVERTISING_NOT_RUN_AUTHORIZATION_MISSING"
   }
 }

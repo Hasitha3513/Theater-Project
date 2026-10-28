@@ -7065,5 +7065,15 @@
     },
     "definitionOfDone": "Own-profile read/edit/refresh/conflict/logout verified through Chromium/Next/Spring/PostgreSQL; mandatory regressions/governance/clean-checkout and exact-source CI; formal acceptance unchanged",
     "rollback": "Disable local profile flag; retain additive V29 and immutable history; compatible app rollback or reviewed forward fix; no down migration/deletion"
+  },
+  "advertisingPriorityAdmission": {
+    "taskId": "CN-R1-ADMIN-ADVERTISING-001",
+    "existingUnit": "CN-R1-HOMEPAGE-CONTENT-001/F/FF-0002",
+    "authorization": "PRIORITY_HOLD_AND_DOCUMENTATION_ONLY",
+    "implementationAuthority": "NOT_GRANTED",
+    "facebookS2B": "HOLD_NEW_OWNER_INSTRUCTION_REQUIRED",
+    "status": "BLOCKED_IMPLEMENTATION_AUTHORIZATION",
+    "contract": "knowledge/ARCHITECTURE.md#admin-advertising-admission-contract",
+    "acceptance": "UNCHANGED_NOT_ACCEPTED"
   }
 }

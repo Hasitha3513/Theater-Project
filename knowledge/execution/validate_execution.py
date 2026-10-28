@@ -8593,5 +8593,108 @@ def inert_ci_main():
     with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
         return profile_full_validation()
 
+
+# Documentation-only advertising priority/admission; prior authorities remain immutable.
+ADVERTISING_BASE='6cdf1e2c0606c315783434580fade023a874185a'
+ADVERTISING_HASHES={'knowledge/PROJECT.md': '30d0f4c65d7689be882b5df1e870314ecbdfdf9b13df40570097603df9b082fc', 'knowledge/ARCHITECTURE.md': '51f4420f0ce854c6581d7710393b4f41c9387dfce24ea5f63963798b7108fe56', 'knowledge/DESIGN.md': 'f10d788c946867ab35777b5e9144fcc6704f78934de8a9de973025bd275c3389', 'knowledge/PROGRESS.md': '9c13e7d57c5e4546827422ca186649b08576fc8bf784d012bb4e5d29e5648a00', 'knowledge/execution/status.json': '5d6711931ea76345c4bdea2a2d6b21556d43aebb62e3ee0168dff0f45f033701', 'knowledge/execution/change-sets.json': 'b59eaf7b67dae9850fca198208228f8337e8128a8a9f3e29f1f6bd6425bb61ed'}
+ADVERTISING_REPLACEMENTS={'Current local customer profile:[bounded implementation and evidence](#local-customer-profile);manual/Google/Facebook synthetic compatibility preserved. Latest owner-reported Facebook capture remains INCONCLUSIVE;no new provider attempt. Historical Google denial attribution remains NOT_VERIFIED.': 'Current priority:[Admin advertising admission](#admin-advertising-priority-admission). Facebook S2-B HOLD by owner direction; no provider/capture/live-login resumption. Local self-profile remains verified; historical provider evidence and Google denial uncertainty remain unchanged.', 'Current profile handoff:[local self-profile evidence](#local-customer-profile). Next single unit:CN-R1-FACEBOOK-SSO-001 S2-B obtain separate bounded time-coordinated capture authorization;no retry,fixture or live-login authority implied.': 'Current handoff:CN-R1-ADMIN-ADVERTISING-001; obtain exact bounded local advertising implementation approval described in [admission](#admin-advertising-priority-admission). Facebook S2-B remains HOLD; no Meta attempt authorized.', 'Meta live qualification blocked; Google historical audit attribution open;': 'Facebook S2-B HOLD; Admin advertising admission priority (NOT_GRANTED); Google historical audit attribution open;'}
+advertising_previous_main=inert_ci_main
+advertising_previous_guard=receipt_admission_successor_errors
+advertising_previous_reader_controls=profile_git_reader_controls
+
+def advertising_reader_controls():
+    from unittest.mock import patch
+    # Synthetic cache-budget controls require their own empty fixture. The real
+    # historical reader keeps its original bounded cache across validations.
+    with patch.dict(globals(),{'PROFILE_GIT_OBJECT_CACHE':{},'PROFILE_GIT_OBJECT_CACHE_STATE':{'bytes':0}}):
+        advertising_previous_reader_controls()
+
+
+def advertising_record_errors(e):
+    errors=[]
+    if e.get('implementationAuthorization')!='NOT_GRANTED' or e.get('status')!='BLOCKED_IMPLEMENTATION_AUTHORIZATION':errors.append('ADVERTISING false implementation authority')
+    if e.get('facebookS2B')!='HOLD_NEW_OWNER_INSTRUCTION_REQUIRED':errors.append('ADVERTISING Facebook HOLD changed')
+    for key in ['applicationChanged','migrationCreated','permissionsDefined','runtimeGrantsAssigned','publicStorageActivated','publicationEnabled','facebookResumed','formalAcceptanceChanged']:
+        if e.get(key) is not False:errors.append('ADVERTISING unauthorized '+key)
+    if [e.get(n) for n in ['requirements','criteria','checkedCriteria','formallyAccepted']]!=[92,74,15,0]:errors.append('ADVERTISING acceptance drift')
+    return errors
+
+def advertising_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        return advertising_unmemoized_errors()
+
+def advertising_unmemoized_errors():
+    errors=[];owned=set(ADVERTISING_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',ADVERTISING_BASE+':'+n])
+    for n,digest in ADVERTISING_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=digest:errors.append('ADVERTISING unadmitted payload '+n)
+    if errors:return errors
+    state=json.loads((K/'execution/status.json').read_text());errors.extend(advertising_record_errors(state.pop('advertisingAdmission',{})))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('ADVERTISING historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());e=plan.pop('advertisingPriorityAdmission',{})
+    if e.get('authorization')!='PRIORITY_HOLD_AND_DOCUMENTATION_ONLY' or e.get('implementationAuthority')!='NOT_GRANTED':errors.append('ADVERTISING planning authority drift')
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('ADVERTISING historical plan drift')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/PROGRESS.md']:
+        expected=before(n).decode()
+        if n=='knowledge/PROGRESS.md':
+            for old,new in ADVERTISING_REPLACEMENTS.items():expected=expected.replace(old,new,1)
+        if not (R/n).read_text().startswith(expected):errors.append('ADVERTISING historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',ADVERTISING_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('ADVERTISING unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('ADVERTISING new source not authorized')
+    if {p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('ADVERTISING migration inventory drift')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',ADVERTISING_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('ADVERTISING unauthorized path')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('ADVERTISING prior validator modified')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('ADVERTISING manifest drift')
+    return errors
+
+def advertising_negative_controls():
+    from unittest.mock import patch
+    import copy
+    e=json.loads((K/'execution/status.json').read_text())['advertisingAdmission'];assert not advertising_record_errors(e)
+    for key in ['applicationChanged','migrationCreated','permissionsDefined','runtimeGrantsAssigned','publicStorageActivated','publicationEnabled','facebookResumed','formalAcceptanceChanged']:
+        bad=copy.deepcopy(e);bad[key]=True;assert advertising_record_errors(bad);print('PASS ADVERTISING rejects '+key)
+    for key in ['implementationAuthorization','facebookS2B']:
+        bad=copy.deepcopy(e);bad[key]='APPROVED';assert advertising_record_errors(bad);print('PASS ADVERTISING rejects false '+key)
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/resources/db/migration/V29__local_customer_profile.sql','frontend/app/page.tsx','knowledge/execution/requirements.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert advertising_successor_errors(),n
+        print('PASS ADVERTISING preserves '+n)
+
+receipt_admission_successor_errors=advertising_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=advertising_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        advertising_negative_controls()
+        owned=set(ADVERTISING_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+        replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',ADVERTISING_BASE+':'+n]) for n in owned}
+        rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            value=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+                sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in owned];text=sep.join(paths)+(sep if paths else '')
+                return text if isinstance(value,str) else text.encode()
+            return value
+        # Immutable show calls delegate to the existing memoized reader unchanged.
+        # Do not add a second cache layer for the projection's mutable diff filter.
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':advertising_previous_guard,'profile_git_reader_controls':advertising_reader_controls}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=advertising_previous_main()
+        if result==0:print('PASS ADVERTISING documentation-only successor;Facebook HOLD;no implementation authority')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

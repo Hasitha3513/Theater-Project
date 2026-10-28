@@ -1424,3 +1424,12 @@ Existing registration/login/account UI and design tokens remain unchanged at the
 `/account` preserves SessionPanel and reuses the existing visual primitives. My profile shows authoritative read-only identity/email/status/provider types plus optional name/phone. Edit changes only name and unverified phone; accessible labels, Save/Cancel, loading, unavailable and explicit conflict/reload states are provided. A 409 discards the stale edit; uncertain save never automatically retries and requires an authoritative reload. Logout, page hide/focus/visibility changes clear protected profile state; request generations suppress stale responses. Booking history is the existing Booking component rendered with an embedded heading after an eligible profile read, with no copied booking state in Identity.
 
 Screenshots and responsive results: [PROGRESS](PROGRESS.md#local-customer-profile). Provider-type labels do not imply live-provider qualification. Local-synthetic presentation does not approve production customer data handling or modify formal acceptance.
+
+
+<a id="admin-advertising-proposed-workflow"></a>
+
+## Admin advertising proposed workflow
+
+**PROPOSED; NOT_IMPLEMENTED.** [Architecture contract](ARCHITECTURE.md#admin-advertising-admission-contract) owns APIs, security and persistence. Proposed existing Admin shell entry `/admin/advertising`: exact venue selector, draft list/status, plain-text title/description/alt, fixed approved concept-image picker, explicit venue-time schedule with offsets, display order and NONE/ROOMS link selector. Separate save draft, preview, publish and unpublish controls expose expected revisions; stale conflict retains edits for explicit reload/reconciliation. Publisher eligibility is server checked; an independent publisher policy awaits owner approval.
+
+Homepage shows only server-admitted live snapshots, responsive image/text with the original illustration disclosure and accessible keyboard links. Draft preview is protected and clearly labelled unpublished. Loading/empty/unavailable states do not substitute draft content. Proposed status distinguishes DRAFT, SCHEDULED, LIVE, EXPIRED and UNPUBLISHED derived from server state; no implemented UI/screenshots are claimed. Feature Catalogue and User Guide were assessed: existing not-implemented descriptions remain accurate; no training workflow is added before implementation. Browser verification at 375/768/1280 is required after authorization.
