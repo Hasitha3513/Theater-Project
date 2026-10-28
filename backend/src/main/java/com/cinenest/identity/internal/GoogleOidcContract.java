@@ -24,6 +24,12 @@ class GoogleOidcContract {
         if(!"http".equals(u.getScheme()) || !java.util.Set.of("127.0.0.1","localhost","[::1]").contains(u.getHost()) || u.getPort()<1 || u.getUserInfo()!=null || u.getQuery()!=null || u.getFragment()!=null || !(u.getPath().isEmpty()||u.getPath().equals("/")))throw new IllegalArgumentException("Explicit loopback contract origin required");
         return u;
     }
+    // Only the separately launched, loopback-bound development TLS ingress.
+    // Provider endpoints remain subject to the original HTTP fixture/fixed live rules.
+    static URI frontendOrigin(String value) {
+        if ("https://localhost:4443".equals(value)) return URI.create(value);
+        return loopback(value);
+    }
     static org.springframework.security.oauth2.client.endpoint.RestClientAuthorizationCodeTokenResponseClient tokenClient() {
         var factory=new org.springframework.http.client.JdkClientHttpRequestFactory(java.net.http.HttpClient.newBuilder().connectTimeout(java.time.Duration.ofSeconds(2)).followRedirects(java.net.http.HttpClient.Redirect.NEVER).build());
         factory.setReadTimeout(java.time.Duration.ofSeconds(2));
@@ -43,7 +49,7 @@ class GoogleOidcContract {
             String client=env.getRequiredProperty("cinenest.identity.google.client-id");
             String frontend=env.getRequiredProperty("cinenest.identity.google.frontend-origin");
             // Validate local context and private credentials before any provider network operation.
-            loopback(frontend);
+            frontendOrigin(frontend);
             if(!client.matches("[A-Za-z0-9_-]{1,200}\\.apps\\.googleusercontent\\.com"))throw new IllegalStateException("Google qualification client invalid");
             String secret=GoogleLiveProvider.secret(env.getRequiredProperty("cinenest.identity.google.client-secret-file"));
             return new InMemoryClientRegistrationRepository(GoogleLiveProvider.registration(client,secret,frontend,discovery.get()));
@@ -59,7 +65,7 @@ class GoogleOidcContract {
         @Value("${cinenest.identity.google.frontend-origin}") String frontend) {
         if(!manual || !mode.equals("CONTRACT_TEST") || client.isBlank() || secret.isBlank())throw new IllegalStateException("S1 requires manual coexistence and isolated contract mode;live provider activation is not authorized");
         String base=loopback(issuer).toString().replaceAll("/$","");
-        String origin=loopback(frontend).toString().replaceAll("/$","");
+        String origin=frontendOrigin(frontend).toString().replaceAll("/$","");
         return new InMemoryClientRegistrationRepository(ClientRegistration.withRegistrationId("google")
             .clientId(client).clientSecret(secret).authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
             .redirectUri(origin+"/api/auth/google/callback").scope("openid")

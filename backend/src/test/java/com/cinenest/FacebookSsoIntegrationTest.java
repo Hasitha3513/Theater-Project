@@ -11,12 +11,13 @@ import static org.assertj.core.api.Assertions.*;
 class FacebookSsoIntegrationTest {
  static final FacebookContractIssuer FB=new FacebookContractIssuer();static final GoogleContractIssuer GOOGLE=new GoogleContractIssuer();
  static final UUID A=UUID.randomUUID(),B=UUID.randomUUID();static final String EMAIL=UUID.randomUUID()+"@example.test",PASSWORD=UUID.randomUUID()+"-"+UUID.randomUUID();static final Path OUTBOX;static final int FRONTEND;
- static {try{OUTBOX=Files.createTempDirectory("cinenest-facebook-mail-");try(var s=new ServerSocket(0,1,InetAddress.getByName("127.0.0.1"))){FRONTEND=s.getLocalPort();}FB.redirect="http://127.0.0.1:"+FRONTEND+"/api/auth/facebook/callback";}catch(Exception e){throw new ExceptionInInitializerError(e);}}
+ static {try{OUTBOX=Files.createTempDirectory("cinenest-facebook-mail-");try(var s=new ServerSocket(0,1,InetAddress.getByName("127.0.0.1"))){FRONTEND=s.getLocalPort();}FB.redirect=frontendOrigin()+"/api/auth/facebook/callback";}catch(Exception e){throw new ExceptionInInitializerError(e);}}
+ static String frontendOrigin(){return "true".equals(System.getenv("CINENEST_HTTPS_E2E"))?"https://localhost:4443":"http://127.0.0.1:"+FRONTEND;}
  @Autowired JdbcClient jdbc;@Autowired Environment env;
  @DynamicPropertySource static void properties(DynamicPropertyRegistry r){
   r.add("cinenest.identity.enabled",()->"true");r.add("cinenest.identity.manual.enabled",()->"true");r.add("cinenest.identity.session-timeout-seconds",()->"120");r.add("cinenest.identity.manual.outbox",OUTBOX::toString);
-  r.add("cinenest.identity.facebook.enabled",()->"true");r.add("cinenest.identity.facebook.mode",()->"CONTRACT_TEST");r.add("cinenest.identity.facebook.contract-origin",FB::origin);r.add("cinenest.identity.facebook.client-id",()->FB.appId);r.add("cinenest.identity.facebook.client-secret-file",()->FB.secretFile.toString());r.add("cinenest.identity.facebook.frontend-origin",()->"http://127.0.0.1:"+FRONTEND);
-  r.add("cinenest.identity.google.enabled",()->"true");r.add("cinenest.identity.google.mode",()->"CONTRACT_TEST");r.add("cinenest.identity.google.contract-issuer",GOOGLE::issuer);r.add("cinenest.identity.google.client-id",()->GOOGLE.clientId);r.add("cinenest.identity.google.client-secret",()->GOOGLE.clientSecret);r.add("cinenest.identity.google.frontend-origin",()->"http://127.0.0.1:"+FRONTEND);
+  r.add("cinenest.identity.facebook.enabled",()->"true");r.add("cinenest.identity.facebook.mode",()->"CONTRACT_TEST");r.add("cinenest.identity.facebook.contract-origin",FB::origin);r.add("cinenest.identity.facebook.client-id",()->FB.appId);r.add("cinenest.identity.facebook.client-secret-file",()->FB.secretFile.toString());r.add("cinenest.identity.facebook.frontend-origin",()->frontendOrigin());
+  r.add("cinenest.identity.google.enabled",()->"true");r.add("cinenest.identity.google.mode",()->"CONTRACT_TEST");r.add("cinenest.identity.google.contract-issuer",GOOGLE::issuer);r.add("cinenest.identity.google.client-id",()->GOOGLE.clientId);r.add("cinenest.identity.google.client-secret",()->GOOGLE.clientSecret);r.add("cinenest.identity.google.frontend-origin",()->frontendOrigin());
  }
  @BeforeEach void fixture()throws Exception {
   jdbc.sql("TRUNCATE cinenest_identity.account CASCADE").update();jdbc.sql("TRUNCATE cinenest_identity.http_session CASCADE").update();jdbc.sql("TRUNCATE cinenest_identity.security_audit").update();jdbc.sql("TRUNCATE cinenest_identity.manual_throttle").update();FB.reset();GOOGLE.mode="VALID";GOOGLE.subject="customer-a";GOOGLE.codes.clear();
@@ -35,7 +36,7 @@ class FacebookSsoIntegrationTest {
    var r=client.send(q.build(),HttpResponse.BodyHandlers.ofString());for(String c:r.headers().allValues("Set-Cookie"))if(c.startsWith("CINENEST_SESSION="))cookie=c.split(";",2)[0];return r;
   }
   HttpResponse<String> get(String path)throws Exception{return send("GET",path,null,null);}
-  String callback(String provider)throws Exception{var first=get("/oauth2/authorization/"+provider);assertThat(first.statusCode()).isEqualTo(302);var target=first.headers().firstValue("Location").orElseThrow();var reply=get(target);assertThat(reply.statusCode()).isEqualTo(302);return reply.headers().firstValue("Location").orElseThrow().replace("http://127.0.0.1:"+FRONTEND+"/api/auth/"+provider+"/callback",base()+"/login/oauth2/code/"+provider);}
+  String callback(String provider)throws Exception{var first=get("/oauth2/authorization/"+provider);assertThat(first.statusCode()).isEqualTo(302);var target=first.headers().firstValue("Location").orElseThrow();var reply=get(target);assertThat(reply.statusCode()).isEqualTo(302);return reply.headers().firstValue("Location").orElseThrow().replace(frontendOrigin()+"/api/auth/"+provider+"/callback",base()+"/login/oauth2/code/"+provider);}
   int login()throws Exception{return get(callback("facebook")).statusCode();}
   HttpResponse<String> post(String path,Map<String,?> body)throws Exception{String csrf=JSONObjectUtils.parse(get("/api/auth/csrf").body()).get("token").toString();return send("POST",path,JSONObjectUtils.toJSONString(body),csrf);}
  }

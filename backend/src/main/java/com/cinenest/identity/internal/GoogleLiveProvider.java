@@ -67,7 +67,7 @@ final class GoogleLiveProvider {
     static ClientRegistration registration(String client,String secret,String frontend,Map<String,Object> metadata) {
         validateMetadata(metadata);
         if(!client.matches("[A-Za-z0-9_-]{1,200}\\.apps\\.googleusercontent\\.com") || secret.isBlank())throw new IllegalStateException("Google qualification credentials invalid");
-        String origin=GoogleOidcContract.loopback(frontend).toString().replaceAll("/$","");
+        String origin=GoogleOidcContract.frontendOrigin(frontend).toString().replaceAll("/$","");
         return ClientRegistration.withRegistrationId("google").clientId(client).clientSecret(secret)
             .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE).redirectUri(origin+"/api/auth/google/callback")
             .scope("openid").authorizationUri(AUTHORIZATION).tokenUri(TOKEN).jwkSetUri(JWKS).issuerUri(ISSUER)

@@ -12,6 +12,7 @@ import {
 	unlink,
 } from "node:fs/promises";
 import { pathToFileURL, fileURLToPath } from "node:url";
+import { createIngress } from "../../scripts/local-https-ingress.mjs";
 const run = process.argv[2];
 assert.match(run ?? "", /^\/tmp\/cinenest-manual-e2e-[^/]+$/);
 const config = JSON.parse(await readFile(`${run}/config.json`, "utf8"));
@@ -22,7 +23,8 @@ const reserve = createServer().listen(0, "127.0.0.1");
 await once(reserve, "listening");
 const port = reserve.address().port;
 await new Promise((r) => reserve.close(r));
-const base = `http://127.0.0.1:${port}`;
+const tls = process.env.CINENEST_HTTPS_E2E === "true";
+const base = tls ? "https://localhost:4443" : `http://127.0.0.1:${port}`;
 const shots = new URL("../../.cache/manual-auth-e2e/", import.meta.url);
 await mkdir(shots, { recursive: true, mode: 0o700 });
 const frontend = spawn(
@@ -46,6 +48,7 @@ const frontend = spawn(
 	},
 );
 let browser;
+let ingress;
 const results = [];
 const requests = [];
 async function control(op) {
@@ -67,6 +70,19 @@ async function control(op) {
 	throw Error("Control timed out");
 }
 try {
+	if (tls) {
+		ingress = createIngress(
+			{
+				key: await readFile(process.env.CINENEST_LOCAL_HTTPS_KEY),
+				cert: await readFile(process.env.CINENEST_LOCAL_HTTPS_CERT),
+			},
+			port,
+		);
+		await new Promise((resolve, reject) => {
+			ingress.once("error", reject);
+			ingress.listen(4443, "127.0.0.1", resolve);
+		});
+	}
 	for (let i = 0; i < 150; i++) {
 		try {
 			if ((await fetch(base + "/login")).status === 200) break;
@@ -80,6 +96,15 @@ try {
 	});
 	const context = await browser.newContext();
 	const page = await context.newPage();
+	if (tls) {
+		const denied = await page.request.get(`${base}/login`, {
+			headers: { "X-Forwarded-Host": "evil.invalid" },
+		});
+		assert.equal(denied.status(), 400);
+		results.push(
+			"trusted HTTPS without certificate bypass;spoofed forwarding rejected",
+		);
+	}
 	page.on("response", (r) => {
 		if (r.url().includes("/api/"))
 			requests.push({ path: new URL(r.url()).pathname, status: r.status() });
@@ -143,14 +168,26 @@ try {
 			.isDisabled(),
 		true,
 	);
-    await page.goto(`${base}/register`);
-    await page.getByLabel("Test email address",{exact:true}).fill("too-long@example.test");
-    await page.getByLabel("Password",{exact:true}).fill("x".repeat(129));
-    assert.equal((await page.getByLabel("Password",{exact:true}).inputValue()).length,129);
-    await page.getByRole("button",{name:/Create test account/}).click();
-    await page.getByText("Password must contain 15–128 characters.",{exact:false}).waitFor();
-    assert.equal(requests.filter(x=>x.path==="/api/auth/registrations").length,0);
-    results.push("overlong password rejected without silent browser truncation or submission");
+	await page.goto(`${base}/register`);
+	await page
+		.getByLabel("Test email address", { exact: true })
+		.fill("too-long@example.test");
+	await page.getByLabel("Password", { exact: true }).fill("x".repeat(129));
+	assert.equal(
+		(await page.getByLabel("Password", { exact: true }).inputValue()).length,
+		129,
+	);
+	await page.getByRole("button", { name: /Create test account/ }).click();
+	await page
+		.getByText("Password must contain 15–128 characters.", { exact: false })
+		.waitFor();
+	assert.equal(
+		requests.filter((x) => x.path === "/api/auth/registrations").length,
+		0,
+	);
+	results.push(
+		"overlong password rejected without silent browser truncation or submission",
+	);
 	await register();
 	let token;
 	for (const file of await readdir(config.outbox)) {
@@ -300,20 +337,35 @@ try {
 	await page.getByText("Request not accepted.", { exact: false }).waitFor();
 	results.push("used-token rejection");
 	await register();
-    const expired=await control("expired-token");
-    await page.getByLabel("Private test-email verification token").fill(expired.token);
-    await page.getByRole("button",{name:/Verify test email/}).click();
-    await page.getByText("Request not accepted.",{exact:false}).waitFor();
-    results.push("expired-token denial through real frontend and PostgreSQL");
-    const noJs=await browser.newContext({javaScriptEnabled:false});
-    const native=await noJs.newPage();await native.goto(`${base}/login`);
-    await native.getByLabel("Test email address",{exact:true}).fill("nojs@example.test");
-    await native.getByLabel("Password",{exact:true}).fill("Local cinema testing 2026!");
-    const denied=native.waitForResponse(r=>new URL(r.url()).pathname==="/api/auth/login");
-    await native.getByRole("button",{name:/^Log in/}).click();const fallback=await denied;
-    assert.equal(fallback.request().method(),"POST");assert.equal(new URL(fallback.url()).search,"");assert.equal(fallback.status(),403);
-    await noJs.close();results.push("JavaScript-disabled native form uses POST;no credentials in URL;CSRF fails closed");
-    await writeFile(
+	const expired = await control("expired-token");
+	await page
+		.getByLabel("Private test-email verification token")
+		.fill(expired.token);
+	await page.getByRole("button", { name: /Verify test email/ }).click();
+	await page.getByText("Request not accepted.", { exact: false }).waitFor();
+	results.push("expired-token denial through real frontend and PostgreSQL");
+	const noJs = await browser.newContext({ javaScriptEnabled: false });
+	const native = await noJs.newPage();
+	await native.goto(`${base}/login`);
+	await native
+		.getByLabel("Test email address", { exact: true })
+		.fill("nojs@example.test");
+	await native
+		.getByLabel("Password", { exact: true })
+		.fill("Local cinema testing 2026!");
+	const denied = native.waitForResponse(
+		(r) => new URL(r.url()).pathname === "/api/auth/login",
+	);
+	await native.getByRole("button", { name: /^Log in/ }).click();
+	const fallback = await denied;
+	assert.equal(fallback.request().method(), "POST");
+	assert.equal(new URL(fallback.url()).search, "");
+	assert.equal(fallback.status(), 403);
+	await noJs.close();
+	results.push(
+		"JavaScript-disabled native form uses POST;no credentials in URL;CSRF fails closed",
+	);
+	await writeFile(
 		`${run}/results.json`,
 		JSON.stringify(
 			{
@@ -333,6 +385,7 @@ try {
 	);
 } finally {
 	await browser?.close();
+	if (ingress) await new Promise((resolve) => ingress.close(resolve));
 	frontend.kill("SIGTERM");
 	await once(frontend, "exit").catch(() => {});
 }

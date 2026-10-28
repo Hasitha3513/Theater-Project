@@ -82,7 +82,9 @@ jobs:
           npm audit --audit-level=high
       - name: Local launcher contracts
         if: steps.classify.outputs.category != 'INERT_ONLY'
-        run: python3 scripts/test-launchers.py
+        run: |
+          python3 scripts/test-launchers.py
+          node --test scripts/test-local-https-ingress.mjs
       - name: Knowledge and whitespace
         run: |
           python3 knowledge/validate_design_kb.py

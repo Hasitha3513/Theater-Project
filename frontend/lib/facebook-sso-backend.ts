@@ -21,6 +21,7 @@ export async function forwardFacebookSso(
 		live && process.env.CINENEST_FACEBOOK_LIVE_EXECUTION === "true";
 	if (live && action !== "status" && !execution) return empty(503);
 	const input = new URL(request.url);
+	const frontendOrigin = `${input.protocol}//${request.headers.get("host") ?? input.host}`;
 	let approvedOrigin = "";
 	if (live && execution) {
 		try {
@@ -34,7 +35,7 @@ export async function forwardFacebookSso(
 				fixed.search ||
 				fixed.hash ||
 				fixed.pathname !== "/" ||
-				fixed.origin !== input.origin
+				fixed.origin !== frontendOrigin
 			)
 				return empty(503);
 			approvedOrigin = fixed.origin;
@@ -43,7 +44,9 @@ export async function forwardFacebookSso(
 		}
 	}
 	if (
-		(!live && input.protocol !== "http:") ||
+		(!live &&
+			input.protocol !== "http:" &&
+			frontendOrigin !== "https://localhost:4443") ||
 		(live && execution && input.protocol !== "https:") ||
 		(!approvedOrigin &&
 			(!["127.0.0.1", "localhost", "[::1]"].includes(input.hostname) ||

@@ -7007,5 +7007,26 @@
     ],
     "rollback": "Disable Facebook and both execution gates;restart;retain immutable identity/session/audit/history",
     "nextSingleUnit": "CN-R1-FACEBOOK-SSO-001 S2-B owner configuration/callback/operator/identity admission"
+  },
+  "facebookHttpsIngressExecution": {
+    "parentTask": "CN-R1-FACEBOOK-SSO-001",
+    "slice": "LOCAL_HTTPS_INGRESS",
+    "authorization": "EXPLICIT_OWNER_LOCAL_HTTPS",
+    "status": "VERIFIED_LOCAL_SYNTHETIC",
+    "requirements": [
+      "CN-C02",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "module": "identity",
+    "definitionOfDone": "Trusted local TLS,manual/Google/Facebook synthetic compatibility and negative host/CSRF/session tests;no provider activation or acceptance",
+    "rollback": "Disable local ingress and restore unchanged HTTP configuration;preserve history",
+    "remainingGates": [
+      "Meta registered-callback acceptance",
+      "Owner-controlled private Meta configuration",
+      "Approved operator and independently verified app-scoped association",
+      "Separate bounded fixture/live qualification authorization",
+      "Production/privacy/commercial/hardware qualification"
+    ]
   }
 }

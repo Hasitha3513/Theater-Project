@@ -26162,5 +26162,97 @@
         "visualReview": "COMPLETE"
       }
     ]
+  },
+  "facebookHttpsIngress": {
+    "taskId": "CN-R1-FACEBOOK-SSO-001",
+    "slice": "LOCAL_HTTPS_INGRESS",
+    "baseline": "d626def207528955c9754468c349556e2877a133",
+    "authorization": "EXPLICIT_OWNER_LOCAL_HTTPS",
+    "authorizationReference": "Owner HTTPS LOCAL INGRESS IMPLEMENTATION request, 2026-10-28",
+    "verification": "VERIFIED_LOCAL_SYNTHETIC",
+    "origin": "https://localhost:4443",
+    "metaCallbackAcceptance": "NOT_VERIFIED",
+    "liveProviderExecuted": false,
+    "productionActivated": false,
+    "accountsAssociated": false,
+    "runtimeGrantsAssigned": false,
+    "migrationsChanged": false,
+    "formalAcceptanceChanged": false,
+    "providerConsoleChanged": false,
+    "executionGates": {
+      "googleBackend": "DENY",
+      "googleFrontend": "DENY",
+      "facebookBackend": "DENY",
+      "facebookFrontend": "DENY"
+    },
+    "requirements": [
+      "CN-C02",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "module": "identity",
+    "infrastructure": "Existing Node TLS/http;explicit local launcher;loopback-only",
+    "trust": "Dedicated private CA in user NSS only;system trust unchanged;fresh Chromium without bypass",
+    "reading": {
+      "ledger": "bankInstructionsRealStackE2E.reading.files;facebookSsoS2A.reading",
+      "filesAccounted": 116,
+      "unchangedOriginal": 102,
+      "reviewedSuccessors": 14,
+      "newFiles": 0,
+      "missingFiles": 0,
+      "method": "Verified prior complete-content/visual coverage reuse;fresh task-relevant canonical/contracts/diagram and authored successor review;no new full audit claimed"
+    },
+    "tests": {
+      "focusedBackend": {
+        "total": 74,
+        "passed": 74,
+        "skipped": 0,
+        "failures": 0,
+        "errors": 0
+      },
+      "frontend": {
+        "total": 513,
+        "passed": 513,
+        "failures": 0,
+        "errors": 0,
+        "cleanInstallBuildTypecheckLintAudit": "PASS_ZERO_WARNINGS_ZERO_VULNERABILITIES"
+      },
+      "tlsIngress": {
+        "total": 3,
+        "passed": 3
+      },
+      "browser": "REAL_CHROMIUM_TLS_NEXT_SPRING_POSTGRES_SYNTHETIC_PROVIDERS_ONLY",
+      "phases": [
+        "manual_registration_verification_login_refresh_expiry_logout_csrf",
+        "google_fixture_associated_login_rotation_logout",
+        "facebook_fixture_disabled_associated_unassociated_google_coexistence"
+      ],
+      "cookieInjection": false,
+      "interception": false,
+      "tlsBypass": false,
+      "screenshots": "375_768_1280_REVIEWED",
+      "foundation": {
+        "total": 967,
+        "passed": 957,
+        "skipped": 10,
+        "failures": 0,
+        "errors": 0,
+        "packagedStartup": "PASS"
+      },
+      "governance": "PASS_FULL_POSITIVE_NEGATIVE_CONTROLS",
+      "cleanProjection": "PASS_FULL_HISTORICAL_CHAIN",
+      "executionWorktree": "FAIL_TWO_PRESERVED_NEXT_ENV_INTEGRITY_FINDINGS"
+    },
+    "historicalGoogleAuditCause": "NOT_VERIFIED",
+    "rollback": "Stop explicit ingress,restore existing HTTP frontend origin;retain history;remove only dedicated CA NSS trust if retired",
+    "nextUnit": "Owner-authorized Meta HTTPS callback registration/acceptance check;no live activation implied",
+    "publication": "COMMIT_AND_EXACT_SOURCE_CI_PENDING",
+    "testDataScope": "Disposable PostgreSQL fixtures only;existing qualification database and persistent associations unchanged"
   }
 }

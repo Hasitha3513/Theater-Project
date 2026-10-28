@@ -1411,3 +1411,8 @@ Existing /login manual form and Google control remain. FacebookSso shows a disab
 ## Facebook configured/unqualified presentation
 
 /login retains manual and Google controls. A configured LIVE_QUALIFICATION adapter shows an explicitly disabled Facebook control and notice until both independent execution gates and callback prerequisites pass. Configured is not qualified. Existing synthetic-mode labels remain. Responsive375/768/1280 browser coverage,refresh/default-DENY,zero external browser requests and protected DB invariants are recorded in [PROGRESS](PROGRESS.md#facebook-sso-s2a);no real provider or exhaustive accessibility acceptance is implied.
+
+
+<a id="local-https-ingress"></a>
+## Development HTTPS presentation boundary
+Existing registration/login/account UI and design tokens remain unchanged at the explicitly local https://localhost:4443 origin. Provider availability remains truthful;live Google/Facebook execution stays disabled. No browser certificate-warning bypass is an accepted workflow. Local TLS/browser tests are not actual Meta qualification or production acceptance. [Technical owner](ARCHITECTURE.md#local-https-ingress).

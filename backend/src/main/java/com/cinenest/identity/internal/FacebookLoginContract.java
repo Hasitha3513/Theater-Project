@@ -67,7 +67,7 @@ class FacebookLoginContract {
                 if(live!=null){origin="https://www.facebook.com";frontend=live.frontend;appId=live.app;secret=live.secret;}
                 else {
                 origin=GoogleOidcContract.loopback(env.getRequiredProperty("cinenest.identity.facebook.contract-origin")).toString().replaceAll("/$","");
-                frontend=GoogleOidcContract.loopback(env.getRequiredProperty("cinenest.identity.facebook.frontend-origin")).toString().replaceAll("/$","");
+                frontend=GoogleOidcContract.frontendOrigin(env.getRequiredProperty("cinenest.identity.facebook.frontend-origin")).toString().replaceAll("/$","");
                 appId=env.getRequiredProperty("cinenest.identity.facebook.client-id");if(!appId.matches("synthetic-[0-9a-f]{32}"))throw new IllegalStateException();
                 secret=GoogleLiveProvider.secret(env.getRequiredProperty("cinenest.identity.facebook.client-secret-file"));
                 }

@@ -221,3 +221,61 @@ test("Facebook proxy strips presentation metadata,cookies and private errors;sta
 		delete process.env.CINENEST_FACEBOOK_MODE;
 	}
 });
+
+test("local HTTPS contract frontend is exact and does not expand provider trust", async () => {
+	configure();
+	let calls = 0;
+	global.fetch = async () => {
+		calls++;
+		return Response.json({
+			mode: "CONTRACT_TEST",
+			syntheticOnly: true,
+			liveProviderQualified: false,
+		});
+	};
+	try {
+		assert.equal(
+			(
+				await forwardFacebookSso(
+					new Request("https://localhost:4443/api/auth/facebook/status"),
+					"status",
+				)
+			).status,
+			200,
+		);
+		assert.equal(
+			(
+				await forwardFacebookSso(
+					new Request("https://localhost:4444/api/auth/facebook/status"),
+					"status",
+				)
+			).status,
+			503,
+		);
+		assert.equal(
+			(
+				await forwardFacebookSso(
+					new Request("https://localhost:31000/api/auth/facebook/status", {
+						headers: { Host: "localhost:4443" },
+					}),
+					"status",
+				)
+			).status,
+			200,
+		);
+		assert.equal(
+			(
+				await forwardFacebookSso(
+					new Request("https://localhost:31000/api/auth/facebook/status", {
+						headers: { Host: "evil.invalid:4443" },
+					}),
+					"status",
+				)
+			).status,
+			503,
+		);
+		assert.equal(calls, 2);
+	} finally {
+		global.fetch = original;
+	}
+});

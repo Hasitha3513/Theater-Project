@@ -4,13 +4,15 @@ import { spawn } from "node:child_process";
 import { once } from "node:events";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { pathToFileURL, fileURLToPath } from "node:url";
+import { createIngress } from "../../scripts/local-https-ingress.mjs";
 const run = process.argv[2];
 assert.match(run ?? "", /^\/tmp\/cinenest-google-e2e-[^/]+$/);
 const config = JSON.parse(await readFile(`${run}/config.json`, "utf8"));
 const { chromium } = await import(
 	pathToFileURL(`${process.env.PLAYWRIGHT_MODULE_PATH}/index.mjs`).href
 );
-const base = `http://127.0.0.1:${config.port}`;
+const tls = process.env.CINENEST_HTTPS_E2E === "true";
+const base = tls ? "https://localhost:4443" : `http://127.0.0.1:${config.port}`;
 const shots = new URL("../../.cache/google-sso-e2e/", import.meta.url);
 await mkdir(shots, { recursive: true, mode: 0o700 });
 const server = spawn(
@@ -35,8 +37,22 @@ const server = spawn(
 	},
 );
 let browser;
+let ingress;
 const results = [];
 try {
+	if (tls) {
+		ingress = createIngress(
+			{
+				key: await readFile(process.env.CINENEST_LOCAL_HTTPS_KEY),
+				cert: await readFile(process.env.CINENEST_LOCAL_HTTPS_CERT),
+			},
+			config.port,
+		);
+		await new Promise((resolve, reject) => {
+			ingress.once("error", reject);
+			ingress.listen(4443, "127.0.0.1", resolve);
+		});
+	}
 	for (let i = 0; i < 100; i++) {
 		try {
 			if ((await fetch(`${base}/login`)).status === 200) break;
@@ -131,6 +147,7 @@ try {
 	);
 } finally {
 	await browser?.close();
+	if (ingress) await new Promise((resolve) => ingress.close(resolve));
 	server.kill("SIGTERM");
 	await once(server, "exit").catch(() => {});
 }

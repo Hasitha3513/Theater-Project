@@ -1018,3 +1018,8 @@ Selected protocol:Meta manual Web Authorization Code flow;opaque access token an
 ## Facebook S2-A bounded implementation authority (2026-10-28)
 
 Owner explicitly authorized disabled-by-default Identity-owned Meta live-provider adapter preparation,isolated security/browser tests and existing manual/Google/JDBC coexistence only. No actual Meta authentication,customer creation,email merging,linking,grants,migration or production admission is authorized. S1 remains available unchanged. Callback-origin approval/provider acceptance is absent;live execution stays DENY. Environment gates are technical controls,not approval evidence. FF-0001 remains IN_PROGRESS for whole-provider scope. [Technical owner](ARCHITECTURE.md#facebook-sso-s2a),[actual evidence](PROGRESS.md#facebook-sso-s2a). Global policies,92requirements and formal acceptance remain unchanged.
+
+
+<a id="local-https-ingress"></a>
+## Owner-authorized local HTTPS authentication compatibility — 2026-10-28
+Under CN-R1-FACEBOOK-SSO-001 S2-B the owner explicitly authorizes non-production local HTTPS ingress and the smallest development-origin compatibility corrections. No live Google/Facebook execution,provider-console changes,new accounts/associations,grants,migrations or production admission is authorized. The local candidate is https://localhost:4443;Meta acceptance/registration remains NOT_VERIFIED. The existing HTTP Google qualification configuration is preserved. Global commercial/privacy/hardware gates and formal acceptance remain unchanged. [Technical boundary](ARCHITECTURE.md#local-https-ingress),[evidence](PROGRESS.md#local-https-ingress).

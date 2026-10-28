@@ -751,3 +751,7 @@ CN-R1-FACEBOOK-SSO-001 implements a disabled-by-default local Facebook-shaped We
 ### Facebook S2-A — configured adapter,live execution disabled
 
 Disabled-by-default Meta live-provider boundary implemented under explicit S2-A authority. Existing S1/manual/Google/session behavior preserved. Configured UI is not provider qualification;no real Meta account login,new-account/linking/grant/migration or production admission. [Evidence](../PROGRESS.md#facebook-sso-s2a),[guide](../guides/USER_GUIDE.md#facebook-sso-s2a). Existing feature/requirement identities and acceptance unchanged.
+
+
+### Local HTTPS authentication compatibility
+Development-only https://localhost:4443 ingress supports existing authentication qualification without public exposure or provider activation. Manual/JDBC behavior and synthetic-provider contracts remain the same;real Meta callback acceptance and live execution are separate gates. [Configuration](../ARCHITECTURE.md#local-https-ingress),[actual evidence](../PROGRESS.md#local-https-ingress).

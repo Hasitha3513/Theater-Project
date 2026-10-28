@@ -8333,5 +8333,93 @@ def inert_ci_main():
     if result==0:print('PASS exact owner-authorized Facebook S2-A successor;unowned production/history/admission unchanged')
     return result
 
+
+# Explicit owner-authorized local HTTPS development successor. Historical guards replay unchanged.
+https_previous_main=inert_ci_main
+https_previous_guard=receipt_admission_successor_errors
+HTTPS_BASE='d626def207528955c9754468c349556e2877a133'
+HTTPS_HASHES={'Run-https.sh': '6b6b7dab3b1b2770aff393bc07b8e21622c807956e871b50e313a2cd1ac6d0b5', 'scripts/local-https-ingress.mjs': 'ae74d81f459da4769ec267dc13d49ef8d3403e61da97b6e07832c09a1a643174', 'scripts/test-local-https-ingress.mjs': 'db4db8ac4da0236837ffb4dbee129c9bb24398a33f188bcef0d7423ba555de59', '.github/workflows/foundation.yml': 'a5aab623f3142b73843d703a53cb9bf0bf56fb11c0f3f47719e099e420ff6481', 'backend/src/main/java/com/cinenest/identity/internal/GoogleOidcContract.java': 'fc7726c02fa4c88bf3d72079c48961631060bbe5e3b8c0fff7623eb16219c54d', 'backend/src/main/java/com/cinenest/identity/internal/GoogleLiveProvider.java': '28aa47cad8210fe3c32a06fb02319b1053b29cf77582c88030d195bccfad1831', 'backend/src/main/java/com/cinenest/identity/internal/FacebookLoginContract.java': 'bf0f6582d2470960f59573807707cae9500c9a39c9d2a017df725ef5be4eae68', 'backend/src/test/java/com/cinenest/identity/internal/GoogleContractBoundaryTest.java': 'ff2a5dd8fde33100c73c9d70fbf1613926aa73e3b377ef698ff891264f558945', 'backend/src/test/java/com/cinenest/identity/internal/FacebookContractBoundaryTest.java': '9f60057b588abc764987bbecc23eeb573cae4c53d6e5141d63a922bb4c2f0ac1', 'backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java': 'cb19d3359c6c0dc3855bb4d4a71e7f63bd762d5c0185b56fbc675e20e5a2009b', 'backend/src/test/java/com/cinenest/FacebookSsoIntegrationTest.java': 'e6a8524bcaa0c9bcea8750adcbe7e34ae78e0eea453fcf3f1ee87ee3f1724adb', 'frontend/lib/facebook-sso-backend.ts': '9913aa88a02b5a2930490b7336a7aeb67fc12e1bd2dde671e5d40aea608e2c7b', 'frontend/tests/facebook-sso.test.mjs': 'e3010f85b55a0024a81695cbbe7f238893e748f2fcc4c46c7406dd162c1e2d39', 'frontend/tests/manual-auth-e2e.mjs': 'f29fce603add523bbb791f55c465da3a3542d467c9dd30e017ff2707bcc2650e', 'frontend/tests/google-sso-e2e.mjs': 'd808e83ccf353dddb9beb96399c2e5a90c8c4025129002a20882fffea95536ec', 'frontend/tests/facebook-sso-e2e.mjs': 'de44da846729b5437958c61f006af2385760b902df46192ea9ea8138828bc58d', 'knowledge/PROJECT.md': '5a2f84888fcbdb6c51ff2fa874e53493fe4f0c5f5f322841f08be763b86ccf0a', 'knowledge/ARCHITECTURE.md': '9a634bbf4ade4673f8350e77fd1202f34ae3b407699ac1fb6aa83f7fe2928725', 'knowledge/DESIGN.md': '5f9ac30cd6c3651035fe4d67da11477ce89c8cfb59a7307b7304b3256718b318', 'knowledge/PROGRESS.md': '01cace577f1ec0ec82a085e3d8673c08708eb4e079bdbe152a1f264b2383950f', 'knowledge/product/FEATURE_CATALOG.md': 'f69557b6806ad406fa90d0c424f8b6f590e3e0dcfc8e89334aa46d996de9dc7a', 'knowledge/guides/USER_GUIDE.md': '9cb707d7cb8f99487466d7e9da247807ce6b927cf1f2fc058dbb2610727e4af3', 'knowledge/execution/status.json': '6f3fe147a1ab35c730a05eb69d5ed18e578539352b8fb37430764dec996e4bf9', 'knowledge/execution/change-sets.json': '7b0bdf1698c5a372933445e345fcf894332c7b1b521868947a94b8c28860d8fe'}
+HTTPS_PROSE_REPLACEMENTS={'Current Facebook S2-A:[disabled live-provider boundary](#facebook-sso-s2a);manual/Google/S1 preserved;actual Meta qualification remains BLOCKED_PROVIDER. Historical Google denial attribution remains NOT_VERIFIED.': 'Current S2-B:[local trusted HTTPS compatibility](#local-https-ingress);manual/Google/Facebook synthetic contracts verified;Meta callback registration and live qualification remain blocked. Historical Google denial attribution remains NOT_VERIFIED.', 'Current Facebook S2-A handoff:[bounded implementation](#facebook-sso-s2a). Next single unit:S2-B owner configuration/callback/operator/identity admission;live execution requires separate authority.': 'Current S2-B handoff:[local HTTPS evidence](#local-https-ingress). Next single unit:owner-authorized Meta HTTPS callback registration/acceptance check;no live execution or fixture authority implied.', 'Facebook S2-A disabled adapter implemented; S1 VERIFIED_SYNTHETIC; Google historical live-audit attribution open; 3 of 6 criteria': 'Local trusted HTTPS auth compatibility VERIFIED_SYNTHETIC; Meta qualification blocked; Google historical audit attribution open; 3 of 6 criteria'}
+
+def https_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-FACEBOOK-SSO-001' or e.get('slice')!='LOCAL_HTTPS_INGRESS' or e.get('authorization')!='EXPLICIT_OWNER_LOCAL_HTTPS' or e.get('verification')!='VERIFIED_LOCAL_SYNTHETIC':errors.append('HTTPS exact bounded authority/evidence missing')
+    for key in ['liveProviderExecuted','productionActivated','accountsAssociated','runtimeGrantsAssigned','migrationsChanged','formalAcceptanceChanged','providerConsoleChanged']:
+        if e.get(key) is not False:errors.append('HTTPS prohibited '+key)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('HTTPS acceptance drift')
+    if e.get('origin')!='https://localhost:4443' or e.get('metaCallbackAcceptance')!='NOT_VERIFIED':errors.append('HTTPS invented provider qualification')
+    return errors
+
+def https_successor_errors():
+    errors=[];owned=set(HTTPS_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',HTTPS_BASE+':'+n])
+    for n,digest in HTTPS_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=digest:errors.append('HTTPS unadmitted payload '+n)
+    state=json.loads((K/'execution/status.json').read_text());e=state.pop('facebookHttpsIngress',{});errors.extend(https_record_errors(e))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('HTTPS historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());record=plan.pop('facebookHttpsIngressExecution',{})
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('HTTPS historical planning drift')
+    if record.get('authorization')!='EXPLICIT_OWNER_LOCAL_HTTPS' or record.get('status')!='VERIFIED_LOCAL_SYNTHETIC':errors.append('HTTPS planning authority absent')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+        expected=before(n).decode()
+        if n=='knowledge/PROGRESS.md':
+            for old,new in HTTPS_PROSE_REPLACEMENTS.items():expected=expected.replace(old,new,1)
+        if not (R/n).read_text().startswith(expected):errors.append('HTTPS historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',HTTPS_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('HTTPS unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('HTTPS unauthorized new source')
+    if {p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('HTTPS migration inventory drift')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',HTTPS_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('HTTPS unauthorized path')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('HTTPS prior validator changed')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('HTTPS manifest drift')
+    return errors
+
+https_unchecked_errors=https_successor_errors
+def https_successor_errors():
+    try:return https_unchecked_errors()
+    except (json.JSONDecodeError,UnicodeError,OSError,subprocess.CalledProcessError):return ['HTTPS malformed/unavailable protected payload']
+
+def https_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['facebookHttpsIngress'];assert not https_record_errors(e)
+    for key in ['liveProviderExecuted','productionActivated','accountsAssociated','runtimeGrantsAssigned','migrationsChanged','formalAcceptanceChanged','providerConsoleChanged']:
+        bad=copy.deepcopy(e);bad[key]=True;assert https_record_errors(bad);print('PASS HTTPS rejects '+key)
+    rb0=Path.read_bytes
+    for n in ['scripts/local-https-ingress.mjs','backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java','knowledge/decisions/cinenest-open-decisions.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert https_successor_errors(),n
+        print('PASS HTTPS rejects altered/unowned payload '+n)
+
+receipt_admission_successor_errors=https_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=https_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    https_negative_controls()
+    owned=set(HTTPS_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',HTTPS_BASE],text=True),nul=True)
+    added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',HTTPS_BASE+':'+n]) for n in owned&tracked}
+    rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+    def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.dict(globals(),{'receipt_admission_successor_errors':https_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=https_previous_main()
+    if result==0:print('PASS exact owner-authorized local HTTPS successor;history/provider gates/admission preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

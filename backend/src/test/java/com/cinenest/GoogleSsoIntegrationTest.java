@@ -15,10 +15,11 @@ import static org.assertj.core.api.Assertions.*;
 class GoogleSsoIntegrationTest {
  static final GoogleContractIssuer IDP=new GoogleContractIssuer();static final UUID A=UUID.randomUUID(),B=UUID.randomUUID();static final Path OUTBOX;static final int FRONTEND;
  static {try{OUTBOX=Files.createTempDirectory("cinenest-google-mail-");try(var s=new java.net.ServerSocket(0,1,InetAddress.getByName("127.0.0.1"))){FRONTEND=s.getLocalPort();}}catch(Exception e){throw new ExceptionInInitializerError(e);}}
+ static String frontendOrigin(){return "true".equals(System.getenv("CINENEST_HTTPS_E2E"))?"https://localhost:4443":"http://127.0.0.1:"+FRONTEND;}
  @Autowired JdbcClient jdbc;@Autowired Environment env;@Autowired Recorder correlation;
  @DynamicPropertySource static void properties(DynamicPropertyRegistry r){
   r.add("cinenest.identity.enabled",()->"true");r.add("cinenest.identity.manual.enabled",()->"true");r.add("cinenest.identity.session-timeout-seconds",()->"120");r.add("cinenest.identity.manual.outbox",OUTBOX::toString);
-  r.add("cinenest.identity.google.enabled",()->"true");r.add("cinenest.identity.google.mode",()->"CONTRACT_TEST");r.add("cinenest.identity.google.contract-issuer",IDP::issuer);r.add("cinenest.identity.google.client-id",()->IDP.clientId);r.add("cinenest.identity.google.client-secret",()->IDP.clientSecret);r.add("cinenest.identity.google.frontend-origin",()->"http://127.0.0.1:"+FRONTEND);
+  r.add("cinenest.identity.google.enabled",()->"true");r.add("cinenest.identity.google.mode",()->"CONTRACT_TEST");r.add("cinenest.identity.google.contract-issuer",IDP::issuer);r.add("cinenest.identity.google.client-id",()->IDP.clientId);r.add("cinenest.identity.google.client-secret",()->IDP.clientSecret);r.add("cinenest.identity.google.frontend-origin",()->frontendOrigin());
  }
  @BeforeEach void fixtures() throws Exception {correlation.reset();jdbc.sql("TRUNCATE cinenest_identity.account CASCADE").update();jdbc.sql("TRUNCATE cinenest_identity.http_session CASCADE").update();jdbc.sql("TRUNCATE cinenest_identity.security_audit").update();jdbc.sql("TRUNCATE cinenest_identity.manual_throttle").update();IDP.mode="VALID";IDP.subject="customer-a";IDP.codes.clear();
   for(UUID id:List.of(A,B))jdbc.sql("INSERT INTO cinenest_identity.account VALUES(:id,TRUE,'ELIGIBLE',0)").param("id",id).update();
@@ -35,7 +36,7 @@ class GoogleSsoIntegrationTest {
    var request=HttpRequest.newBuilder(URI.create(url.startsWith("http")?url:base()+url)).method(method,body==null?HttpRequest.BodyPublishers.noBody():HttpRequest.BodyPublishers.ofString(body));if(url.startsWith(base()) || !url.startsWith("http"))request.header(GoogleAuditCorrelationSupport.ATTEMPT_HEADER,attempt.toString());if(cookie!=null)request.header("Cookie",cookie);if(body!=null)request.header("Content-Type","application/json");if(csrf!=null)request.header("X-CSRF-TOKEN",csrf);
    var response=client.send(request.build(),HttpResponse.BodyHandlers.ofString());for(String c:response.headers().allValues("Set-Cookie"))if(c.startsWith("CINENEST_SESSION="))cookie=c.split(";",2)[0];return response;
   }
-  String callback()throws Exception {var first=get("/oauth2/authorization/google");assertThat(first.statusCode()).isEqualTo(302);String authorization=first.headers().firstValue("Location").orElseThrow();assertThat(authorization).contains("code_challenge_method=S256").contains("nonce=").contains("state=");return get(authorization).headers().firstValue("Location").orElseThrow().replace("http://127.0.0.1:"+FRONTEND+"/api/auth/google/callback",base()+"/login/oauth2/code/google");}
+  String callback()throws Exception {var first=get("/oauth2/authorization/google");assertThat(first.statusCode()).isEqualTo(302);String authorization=first.headers().firstValue("Location").orElseThrow();assertThat(authorization).contains("code_challenge_method=S256").contains("nonce=").contains("state=");return get(authorization).headers().firstValue("Location").orElseThrow().replace(frontendOrigin()+"/api/auth/google/callback",base()+"/login/oauth2/code/google");}
   int login()throws Exception{return get(callback()).statusCode();}
   HttpResponse<String> post(String path,Map<String,?> value)throws Exception {var csrf=JSONObjectUtils.parse(get("/api/auth/csrf").body()).get("token").toString();return send("POST",path,JSONObjectUtils.toJSONString(value),csrf);}
  }
@@ -52,7 +53,7 @@ class GoogleSsoIntegrationTest {
  @ParameterizedTest @ValueSource(strings={"", "wrong-verifier"})
  void missingOrInvalidPkceCannotExchangeCommittedAuthorizationCode(String verifier)throws Exception {
   var b=new Browser();String callback=b.callback();String code=java.util.Arrays.stream(URI.create(callback).getRawQuery().split("&")).filter(x->x.startsWith("code=")).findFirst().orElseThrow().substring(5);
-  String body="grant_type=authorization_code&code="+code+"&redirect_uri="+java.net.URLEncoder.encode("http://127.0.0.1:"+FRONTEND+"/api/auth/google/callback",java.nio.charset.StandardCharsets.UTF_8)+(verifier.isEmpty()?"":"&code_verifier="+verifier);
+  String body="grant_type=authorization_code&code="+code+"&redirect_uri="+java.net.URLEncoder.encode(frontendOrigin()+"/api/auth/google/callback",java.nio.charset.StandardCharsets.UTF_8)+(verifier.isEmpty()?"":"&code_verifier="+verifier);
   var request=HttpRequest.newBuilder(URI.create(IDP.issuer()+"/token")).header("Authorization","Basic "+Base64.getEncoder().encodeToString((IDP.clientId+":"+IDP.clientSecret).getBytes(java.nio.charset.StandardCharsets.UTF_8))).header("Content-Type","application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString(body)).build();
   assertThat(b.client.send(request,HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(400);assertThat(b.get("/api/accounts/me").statusCode()).isEqualTo(401);
  }
