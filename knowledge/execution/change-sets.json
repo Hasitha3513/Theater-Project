@@ -6964,5 +6964,26 @@
     "scope": "Isolated callback/request/audit correlation tests only;no production auth/audit/schema/admission changes",
     "historicalAttribution": "UNRESOLVED;not a retroactive explanation or formal acceptance",
     "nextSingleUnit": "Separately authorize bounded Facebook Login integration;no implicit implementation or provider activation authority"
+  },
+  "facebookSsoS1Execution": {
+    "taskId": "CN-R1-FACEBOOK-SSO-001",
+    "slice": "S1_LOCAL_SYNTHETIC_ONLY",
+    "authorization": "EXPLICIT_OWNER_BOUNDED_FACEBOOK_S1",
+    "status": "VERIFIED_SYNTHETIC",
+    "requirements": [
+      "CN-C02",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "definitionOfDone": "Disabled fixture boundary,pre-associated-only admission,security/real-stack regression and governance PASS;no live qualification",
+    "exclusions": [
+      "live Facebook",
+      "customer creation/linking",
+      "runtime grants",
+      "migrations",
+      "financial/booking/access changes"
+    ],
+    "rollback": "Disable both S1 flags and restart;no schema rollback;retain audit/history",
+    "nextSingleUnit": "CN-R1-FACEBOOK-SSO-001 S2 Meta configuration and bounded live-qualification admission"
   }
 }

@@ -70,9 +70,12 @@ class IdentitySecurity {
     }
 
     @Bean
-    SecurityFilterChain identityBoundary(HttpSecurity http, IdentityStore store, org.springframework.core.env.Environment env) throws Exception {
+    SecurityFilterChain identityBoundary(HttpSecurity http, IdentityStore store, org.springframework.core.env.Environment env, org.springframework.beans.factory.ObjectProvider<FacebookLoginContract.Provider> facebookProviders, org.springframework.beans.factory.ObjectProvider<org.springframework.security.oauth2.client.web.AuthorizationRequestRepository<org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest>> transactions) throws Exception {
         boolean manual=env.getProperty("cinenest.identity.manual.enabled",Boolean.class,false);
         if(manual && !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic"))) throw new IllegalStateException("Local synthetic profile required");
+        boolean facebook=env.getProperty("cinenest.identity.facebook.enabled",Boolean.class,false);
+        var facebookProvider=facebookProviders.getIfAvailable();
+        if(facebook && (!manual || facebookProvider==null || !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic"))))throw new IllegalStateException("Facebook S1 requires isolated manual coexistence");
         boolean google=env.getProperty("cinenest.identity.google.enabled",Boolean.class,false);
         if(google && (!manual || !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic")))) throw new IllegalStateException("Google S1 requires isolated manual coexistence");
         if(google && env.getProperty("cinenest.identity.google.mode","").equals("LIVE_QUALIFICATION")) {
@@ -83,6 +86,7 @@ class IdentitySecurity {
         http.securityContext(context -> context.securityContextRepository(contexts))
             .requestCache(cache -> cache.disable())
             .authorizeHttpRequests(requests -> {
+                if(facebook) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/facebook/status","/oauth2/authorization/facebook","/login/oauth2/code/facebook").permitAll();
                 if(google) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/google/status","/oauth2/authorization/google","/login/oauth2/code/google").permitAll();
                 if(manual) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/csrf").permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/auth/registrations","/api/auth/email-verifications","/api/auth/login").permitAll();
@@ -143,23 +147,27 @@ class IdentitySecurity {
                     response.setStatus(403);
                 }))
             .sessionManagement(sessions -> sessions.sessionFixation(fixation -> fixation.changeSessionId()));
-        if(!manual || google) http.oauth2Login(login -> login.loginPage(google?"/oauth2/authorization/google":"/oauth2/authorization/cinenest")
+        if(!manual || google || facebook) http.oauth2Login(login -> login.loginPage(google?"/oauth2/authorization/google":facebook?"/oauth2/authorization/facebook":"/oauth2/authorization/cinenest")
                 .authorizedClientRepository(discardProviderTokens())
-                .tokenEndpoint(token -> {if(google)token.accessTokenResponseClient(GoogleOidcContract.tokenClient());})
-                .userInfoEndpoint(info -> info.oidcUserService(request -> {
+                .authorizationEndpoint(endpoint -> {if(facebook)endpoint.authorizationRequestRepository(transactions.getObject());})
+                .tokenEndpoint(token -> {if(google || facebook)token.accessTokenResponseClient(request -> request.getClientRegistration().getRegistrationId().equals("facebook") && facebook ? facebookProvider.exchange(request) : GoogleOidcContract.tokenClient().getTokenResponse(request));})
+                .userInfoEndpoint(info -> info.userService(request -> {if(!facebook)throw new OAuth2AuthenticationException(new OAuth2Error("access_denied"));return facebookProvider.authenticate(request,store);}).oidcUserService(request -> {
                     var user = oidc.loadUser(request);
                     if (store.associatedEligibleAccount(user.getIssuer().toString(), user.getSubject()).isEmpty())
                         throw new OAuth2AuthenticationException(new OAuth2Error("access_denied"));
                     return user;
                 }))
                 .failureHandler((request, response, failure) -> {
-                    if(google){SecurityContextHolder.clearContext();var session=request.getSession(false);if(session!=null)session.invalidate();}else clear(request);
+                    if(google || facebook){SecurityContextHolder.clearContext();var session=request.getSession(false);if(session!=null)session.invalidate();}else clear(request);
                     store.audit(null, null, "AUTHENTICATION", false);
                     response.setStatus(403);
                 })
                 .successHandler((request, response, authentication) -> {
-                    var external = (OidcUser) authentication.getPrincipal();
-                    var associated = store.associatedEligibleAccount(external.getIssuer().toString(), external.getSubject());
+                    java.util.Optional<UUID> associated=java.util.Optional.empty();
+                    if(authentication.getPrincipal() instanceof OidcUser external) associated=store.associatedEligibleAccount(external.getIssuer().toString(),external.getSubject());
+                    else if(facebook && authentication instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth && oauth.getAuthorizedClientRegistrationId().equals("facebook")) {
+                        try {UUID account=UUID.fromString(authentication.getName());if(store.eligible(account))associated=java.util.Optional.of(account);}catch(IllegalArgumentException rejected){/* fail closed */}
+                    }
                     if (associated.isEmpty()) {
                         clear(request);
                         store.audit(null, null, "AUTHENTICATION", false);

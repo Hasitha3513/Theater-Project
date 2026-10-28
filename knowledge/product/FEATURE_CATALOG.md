@@ -741,3 +741,8 @@ Existing manual registration/login remain. A disabled-by-default,local synthetic
 <a id="google-sso-s2a"></a>
 ### Google adapter — S2-A software boundary only
 Identity now supports a separate default-disabled live Google qualification configuration,strict discovery/endpoints,private backend secret resolution and existing associated-account sessions. Both live execution gates remain disabled;the UI can truthfully show configured/unqualified without offering login. Offline provider-contract/real-stack tests are software evidence only;actual Google login,customer admission/linking and production remain unqualified. Manual email/password and S1 synthetic regression coverage retained. [Implementation evidence](../PROGRESS.md#google-sso-s2a).
+
+
+### Facebook Login — S1 synthetic-only overlay (2026-10-28)
+
+CN-R1-FACEBOOK-SSO-001 implements a disabled-by-default local Facebook-shaped Web Login fixture adapter for pre-associated eligible synthetic accounts. Existing manual/Google/JDBC sessions remain. No account creation,email merging,linking,grants,migration or real Meta authentication. This dated overlay supersedes earlier Facebook-unavailable descriptions only when the isolated fixture is explicitly configured;default remains unavailable. FF-0001 remains incomplete for live-provider scope. [Evidence](../PROGRESS.md#facebook-sso-s1),[operator guide](../guides/USER_GUIDE.md#facebook-sso-s1). Requirement/DOC-F IDs and acceptance unchanged.

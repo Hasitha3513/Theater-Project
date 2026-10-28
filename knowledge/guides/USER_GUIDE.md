@@ -425,3 +425,9 @@ Reproduce only with existing qualified toolchains:frontend production build ප�
 ### Google S2-A — configured but disabled
 Google adapter configured;live execution remains disabled යන notice එක provider qualification PASS බව නොකියයි. Google button disabled තබන අතර manual test email/password login තවම භාවිත කළ හැක. Facebook තවම unavailable. S2-A තුළ real Google credentials ලබාගෙන හෝ account login එකක් කර නැහැ;Google button බලෙන් enable කිරීම හෝ flags වෙනස් කිරීම owner approval නොවේ.
 Operator requirements:[exact backend/private-secret/frontend configuration](../ARCHITECTURE.md#google-sso-s2a). Fixed local callback http://127.0.0.1:42137/api/auth/google/callback offline-registration real-stack harness එකෙන් පරීක්ෂා කළා;test server පසුව නවත්වන නිසා running preview එකක් හෝ Cloud Console registration එකක් ලෙස නොසලකන්න. Real Web client/secret private backend file එකක තබා separate S2-B authorization ලැබෙන තුරු execution gates false තබන්න. Secret,ID/access token හෝ ClientRegistration object logs/screenshots/Git වලට ඇතුළත් නොකරන්න. [Evidence and limits](../PROGRESS.md#google-sso-s2a).
+
+
+<a id="facebook-sso-s1"></a>
+### Facebook S1 local fixture qualification
+
+Default /login හි Facebook Login unavailable disabled වේ. Authorized isolated fixture configured නම් පමණක් Continue with Facebook — synthetic qualification දිස්වේ. මෙය real Facebook Login නොවේ. Existing eligible pre-associated test identity එක පමණක් /account වෙත යයි;unknown/suspended identity deny වේ. Account linking,new registration හෝ email matching සිදු නොවේ. Keyboard මඟින් button activate කළ හැක;failure එක sanitized alert එකක දැක්වේ. Existing Check session සහ Log out controls භාවිත කරන්න;manual/Google flows තවම පවතී. Real Meta credentials හෝ customer identifiers මේ fixture එකට දෙන්න එපා. [Exact configuration](../ARCHITECTURE.md#facebook-sso-s1),[verification](../PROGRESS.md#facebook-sso-s1).

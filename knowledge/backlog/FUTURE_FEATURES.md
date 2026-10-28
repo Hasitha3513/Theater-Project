@@ -192,3 +192,8 @@ Future implementation entries must link actual FF/execution IDs, commit SHAs, ex
 - Acceptance: NOT_ACCEPTED
 - Definition of Done / rollback: PENDING approved contract;disable new provider/content mode and retain immutable history
 - History: 2026-10-26 IDEA recorded from owner direction;no approval,code or acceptance implied
+
+
+## Controlled FF-0001 bounded S1 implementation evidence — 2026-10-28
+
+Owner explicitly authorized CN-R1-FACEBOOK-SSO-001 S1 local synthetic-only implementation after the original discovery. Existing IDEA/NOT_GRANTED lines above are frozen discovery history,not current S1 authority. Current whole-feature lifecycle:IN_PROGRESS;S1 VERIFIED_SYNTHETIC only. Live-provider scope remains unapproved/unqualified;no formal acceptance. Exact scope,tests,publication and next unit:execution/status.json facebookSsoS1 and PROGRESS.md#facebook-sso-s1. No requirement moved or count changed.

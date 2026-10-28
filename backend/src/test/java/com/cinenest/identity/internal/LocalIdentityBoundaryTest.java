@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 class LocalIdentityBoundaryTest {
  @Test void enabledManualAuthenticationRefusesNonLocalProfile() {
   var env=new MockEnvironment().withProperty("cinenest.identity.manual.enabled","true");
-  assertThatThrownBy(()->new IdentitySecurity().identityBoundary(mock(HttpSecurity.class),mock(IdentityStore.class),env)).isInstanceOf(IllegalStateException.class);
+  assertThatThrownBy(()->new IdentitySecurity().identityBoundary(mock(HttpSecurity.class),mock(IdentityStore.class),env,mock(org.springframework.beans.factory.ObjectProvider.class),mock(org.springframework.beans.factory.ObjectProvider.class))).isInstanceOf(IllegalStateException.class);
  }
  @Test void emailNormalizationNeverAppliesProviderSpecificAliases() {
   assertThat(LocalCustomerIdentity.email(" Test+One@EXAMPLE.TEST ")).isEqualTo("test+one@example.test");

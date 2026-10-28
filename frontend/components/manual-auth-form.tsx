@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { FacebookSso } from "./facebook-sso";
 import { GoogleSso } from "./google-sso";
 import { Button, Card, Field } from "./primitives";
 export function ManualAuthForm({ mode }: { mode: "register" | "login" }) {
@@ -208,7 +209,7 @@ export function ManualAuthForm({ mode }: { mode: "register" | "login" }) {
 					{mode === "register" ? "Log in" : "Create test account"}
 				</a>
 			</p>
-			<GoogleSso /> <Button disabled>Facebook Login unavailable</Button>
+			<GoogleSso /> <FacebookSso />
 		</Card>
 	);
 }

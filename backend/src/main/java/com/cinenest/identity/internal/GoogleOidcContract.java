@@ -31,7 +31,8 @@ class GoogleOidcContract {
         client.setRestClient(org.springframework.web.client.RestClient.builder().requestFactory(factory).messageConverters(c->{c.clear();c.add(new org.springframework.http.converter.FormHttpMessageConverter());c.add(new org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter());}).defaultStatusHandler(new org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler()).build());
         return client;
     }
-    @Bean ClientRegistrationRepository googleClient(org.springframework.core.env.Environment env) {
+    @Bean @ConditionalOnProperty(name="cinenest.identity.facebook.enabled",havingValue="false",matchIfMissing=true)
+    ClientRegistrationRepository googleClient(org.springframework.core.env.Environment env) {
         return configuredClient(env,()->GoogleLiveProvider.discover(GoogleLiveProvider.discoveryClient()));
     }
     ClientRegistrationRepository configuredClient(org.springframework.core.env.Environment env,java.util.function.Supplier<Map<String,Object>> discovery) {

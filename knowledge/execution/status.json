@@ -25932,5 +25932,128 @@
       "knowledge": "PASS",
       "whitespace": "PASS"
     }
+  },
+  "facebookSsoS1": {
+    "taskId": "CN-R1-FACEBOOK-SSO-001",
+    "slice": "S1_LOCAL_SYNTHETIC_ONLY",
+    "baseline": "abd18d02281077dbf6d63312b5202e751b1ed01d",
+    "authorization": "EXPLICIT_OWNER_BOUNDED_FACEBOOK_S1",
+    "verification": "VERIFIED_SYNTHETIC",
+    "enabledByDefault": false,
+    "liveExecutionPerformed": false,
+    "newAccountAdmission": false,
+    "runtimeLinking": false,
+    "runtimeGrantsAssigned": false,
+    "migrationsChanged": false,
+    "financialMutations": false,
+    "physicalAccessMutations": false,
+    "productionQualified": false,
+    "acceptanceChanged": false,
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "module": "identity",
+    "requirements": [
+      "CN-C02",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "feature": "FF-0001",
+    "legacyPreparationTask": "CN-R1-FACEBOOK-LOGIN-001",
+    "tests": {
+      "foundation": {
+        "total": 956,
+        "passed": 948,
+        "skipped": 8,
+        "failures": 0,
+        "errors": 0
+      },
+      "facebookIntegration": 19,
+      "facebookBoundary": 3,
+      "browserPhases": [
+        "disabled",
+        "associated",
+        "unassociated"
+      ],
+      "browserResultGroups": 9,
+      "browserProvider": "ISOLATED_SYNTHETIC_FIXTURE_NOT_META",
+      "responsiveWidths": [
+        375,
+        768,
+        1280
+      ],
+      "visualReview": "ALL_THREE_SCREENSHOTS_REVIEWED",
+      "frontend": "PASS_CLEAN_INSTALL_BUILD_TYPECHECK_LINT_TEST_AUDIT_ZERO_VULNERABILITIES",
+      "governance": "PASS_FULL_POSITIVE_NEGATIVE_CONTROLS",
+      "frontendTestCount": 509,
+      "focused": {
+        "total": 96,
+        "passed": 94,
+        "skipped": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      "launchers": {
+        "total": 14,
+        "status": "PASS"
+      },
+      "ciClassifier": {
+        "total": 8,
+        "status": "PASS"
+      },
+      "knowledgeDesign": "PASS",
+      "whitespace": "PASS",
+      "executionWorktree": "FAIL_TWO_PREEXISTING_NEXT_ENV_INTEGRITY_FINDINGS",
+      "cleanProjection": "PASS_FULL_HISTORICAL_CHAIN_UNRELATED_BYTES_PRESERVED",
+      "sourceReferences": [
+        "FacebookSsoIntegrationTest#associatedFacebookUsesExistingSessionAndAudit",
+        "FacebookSsoIntegrationTest#providerFailuresNeverAdmit",
+        "FacebookSsoIntegrationTest#invalidStateAndReplayAreDeniedBeforeTokenReuse",
+        "FacebookSsoIntegrationTest#suspendedAndAuditFailureStayClosed",
+        "FacebookSsoIntegrationTest#manualAndGoogleCoexistWithFacebook",
+        "FacebookSsoIntegrationTest#realBrowserSyntheticFacebookJourney",
+        "FacebookContractBoundaryTest",
+        "frontend/tests/facebook-sso.test.mjs"
+      ]
+    },
+    "database": "Disposable PostgreSQL only;no existing Google qualification database mutations",
+    "reading": {
+      "ledger": "bankInstructionsRealStackE2E.reading.files",
+      "filesAccounted": 116,
+      "unchanged": 102,
+      "reviewedSuccessors": 14,
+      "coverage": "VERIFIED_REUSE_PLUS_FRESH_RELEVANT_REVIEW",
+      "preflight": {
+        "unchanged": 103,
+        "reviewedSuccessors": 13
+      },
+      "newFiles": 0,
+      "missingFiles": 0
+    },
+    "historicalGoogleAuditCause": "NOT_VERIFIED",
+    "liveProvider": "NOT_RUN_BLOCKED_PROVIDER_AND_SEPARATE_AUTHORIZATION",
+    "rollback": "Disable both S1 flags and restart;no schema rollback;retain audit/history",
+    "publication": "COMMIT_AND_EXACT_SOURCE_CI_PENDING",
+    "nextUnit": "CN-R1-FACEBOOK-SSO-001 S2 Meta configuration and bounded live-qualification admission",
+    "screenshots": [
+      {
+        "path": ".cache/facebook-sso-e2e/login-1280.png",
+        "sha256": "8f754e3f95edbb0258984fd4216829e4ce98714411859ad46c1df0ddf787ea28",
+        "visualReview": "COMPLETE"
+      },
+      {
+        "path": ".cache/facebook-sso-e2e/login-375.png",
+        "sha256": "546d9218d077b4c2dd1bf6e65631290b713a7fa52e20ad1d201a49e0ba385f52",
+        "visualReview": "COMPLETE"
+      },
+      {
+        "path": ".cache/facebook-sso-e2e/login-768.png",
+        "sha256": "e1b52a823fe59d18d6ecf9682f6838380b6b0abb7bca64a7d48ed3766888ef4d",
+        "visualReview": "COMPLETE"
+      }
+    ]
   }
 }
