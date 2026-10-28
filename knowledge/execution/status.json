@@ -26994,6 +26994,38 @@
         "sha256": "0ad5e081f7e0876d44d769a772420796800f455c2e867adfee95ae7f4ca38f76",
         "scope": "Synthetic test identity only;ignored local evidence;not production acceptance"
       }
-    ]
+    ],
+    "ciRemediation": {
+      "firstSource": "bb94b87b66fe6700bc07b32a1d78d58f3041db79",
+      "run": 40737223988,
+      "conclusion": "CANCELLED_MAXIMUM_JOB_EXECUTION_20_MINUTES",
+      "annotation": "The job has exceeded the maximum execution time of 20m0s",
+      "backend": "SUCCESS",
+      "frontend": "SUCCESS",
+      "primaryValidator": "PASS",
+      "externalGovernanceMatrix": "CANCELLED_NOT_PASS",
+      "change": "Bounded process-local immutable 40-hex SHA Git-show memoization with reader/text context separation and 128 MiB/20000-entry caps;fail-fast only after an exact-source checksum rejection;accepted payloads still execute the full historical chain",
+      "validation": {
+        "intermediateValidatorSha256": "27271e2406e8df92839b2ba426bb6f2b0e9b33955170979c65f28aa1d7f63ad3",
+        "primary": {
+          "exit": 0,
+          "seconds": 177.03
+        },
+        "external": {
+          "exit": 0,
+          "seconds": 213.66,
+          "passControlOutcomes": 365
+        },
+        "knowledge": {
+          "exit": 0,
+          "seconds": 1.03
+        },
+        "boundedReaderUnit": "PASS_INCLUDING_MUTABLE_CONTEXT_MEMORY_ACCOUNTING",
+        "finalGate": "Re-run primary/external/knowledge on final payload before publication;exact-source CI after push remains mandatory;terminal evidence in GitHub and final report"
+      },
+      "applicationChanged": false,
+      "workflowTimeoutChanged": false,
+      "testsRemovedOrWeakened": false
+    }
   }
 }

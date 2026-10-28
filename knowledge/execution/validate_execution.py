@@ -8425,7 +8425,7 @@ def inert_ci_main():
 profile_previous_main=inert_ci_main
 profile_previous_guard=receipt_admission_successor_errors
 PROFILE_BASE='ef763404ea829c555fca6acbccaf08d0c9bb4214'
-PROFILE_HASHES={'backend/src/main/java/com/cinenest/identity/internal/CustomerProfileController.java': '3deed681129d15f6040b339b2d3e6f993236f42dc3c80b46d54649dfecd34e8e', 'backend/src/main/java/com/cinenest/identity/internal/CustomerProfileService.java': '0d9a982269f5372a517aa5f43d8a3b7051ce7e251e8af09a4d771b4c91a471f1', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'd24aa848dde291a9f1ab8a4024872dab720b4f5cde7f47c46e2fe1d12cbd8e44', 'backend/src/main/resources/application-local-synthetic.properties': '5c2c68628940529e675099791a36f37548925a94e99d5dc69163f5dd54d4c6aa', 'backend/src/main/resources/db/migration/V29__local_customer_profile.sql': '742ad5bd9714ddf7fdc5882fb268b64c8f5045fcd94afc27b0017cdefa1bf8af', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'e0b3057db2dc6143a733e31bbef5a8fdae8b7612326145d36fca6636a1abb409', 'backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java': 'f459fb7569f3135a982637bc746bf29e89811e74f70b420522d6ace95bfa9a94', 'backend/src/test/java/com/cinenest/FacebookSsoIntegrationTest.java': 'ff6b71dc5e7d58067893a164b5784ade5c769ec484eb8f5a7d5eab4cac3d4d2c', 'backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java': '6dd7fcf32de34530f963440acded14540d410d59c9c84f26840a5edfb649ecc8', 'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java': '60d78caef0fb129fe7566f6da3a3250a13f320b6324b1b2caec7565d9b0c1230', 'backend/src/test/java/com/cinenest/identity/internal/CustomerProfileRulesTest.java': '573889eec8f655ddca4745f4b04b71169eab2eaa133f0b4b88c86c3c8f134951', 'frontend/app/account/page.tsx': 'a357aed125f396cd9e63b128b2755ae88375aa83f551f0cc42efee84930fc65b', 'frontend/app/api/accounts/me/profile/route.ts': 'fcd2636df13fe074f96306e9f222e52fd57909878e4ef58252bc9e4bb13aba0a', 'frontend/components/customer-bookings.tsx': '03b3e7df8e761afa6456be38330796004fc4e53ed7d82416b1c7bb0dad82d725', 'frontend/components/customer-profile.tsx': 'a7daa578618881a3956f7d75cc76303bbf4fb0b1d0251ee7a1e6e7adca720e7b', 'frontend/components/session-panel.tsx': '2410ad88fa0104772f8859e7b8f2f3f8bee042e1bdf61bf9f84334eeb77bfb13', 'frontend/lib/customer-profile-backend.ts': 'de99c3ec7e2cd3cde3e2516ab77667cc3484e1c170022dc935a3653603576694', 'frontend/lib/customer-profile.ts': '4fac70ced3a01ce935f945bc3613e45be09e3d43bc41217ad464738e4f3ae616', 'frontend/package.json': '258d26277836b0f78a6a81d719e3d3fac67138f7ec4e568bf1a277b3ab0e5481', 'frontend/tests/customer-profile-e2e.mjs': '510243ecb0ccba43cbfe1b94f110ec5b559d16ca078b6c7fb3076138dcf8c834', 'frontend/tests/customer-profile.test.mjs': '0b7d46d7dd06ac4c65ebbf1f80daa9e796bbf9ebb5e1ba26eacd8eedd32b3fa2', 'knowledge/ARCHITECTURE.md': 'dc94ff554146cf4d08f29401cc8ae03d5e74861c48395df6a4724d3f52051ce2', 'knowledge/DESIGN.md': '91e40004e267f9e193dfcce491398751c67268be717ffad3d1e3f943e63364f1', 'knowledge/PROGRESS.md': '8daeecb2c32e853991edb28435492297fdf1813b7b255433cbbbd20dbb5ab6fa', 'knowledge/PROJECT.md': '66d5d98426d8b7d5c8bf66be8609dc8b30a8be4d4541928bcc4a9f5e0a614794', 'knowledge/execution/change-sets.json': '084229c3280ff9a98506661960d973127385fec99e80a83ca9e02308ddf4be82', 'knowledge/execution/requirements.json': '7003813fed707dab42fefd334a6bb1e9b8a3062909219b9cf66ce113da73a933', 'knowledge/execution/status.json': '17895516bb992a3f5d3748f5af204832bb16ef4b6e26d3887de935fa9ea3ed02', 'knowledge/execution/test-plan.json': '12bfe8b8813e686317e8517b3a240738e14fc5a2a18276db545389525324685f', 'knowledge/guides/USER_GUIDE.md': '5e557e1b59bd742415c431f8107e013835b9456eb97a88170cb1bb30ee239049', 'knowledge/product/FEATURE_CATALOG.md': 'c30e069339b4c11c9d5730d404c21ac039c0c4a858417f03c7026c1d3bf8e924'}
+PROFILE_HASHES={'backend/src/main/java/com/cinenest/identity/internal/CustomerProfileController.java': '3deed681129d15f6040b339b2d3e6f993236f42dc3c80b46d54649dfecd34e8e', 'backend/src/main/java/com/cinenest/identity/internal/CustomerProfileService.java': '0d9a982269f5372a517aa5f43d8a3b7051ce7e251e8af09a4d771b4c91a471f1', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'd24aa848dde291a9f1ab8a4024872dab720b4f5cde7f47c46e2fe1d12cbd8e44', 'backend/src/main/resources/application-local-synthetic.properties': '5c2c68628940529e675099791a36f37548925a94e99d5dc69163f5dd54d4c6aa', 'backend/src/main/resources/db/migration/V29__local_customer_profile.sql': '742ad5bd9714ddf7fdc5882fb268b64c8f5045fcd94afc27b0017cdefa1bf8af', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'e0b3057db2dc6143a733e31bbef5a8fdae8b7612326145d36fca6636a1abb409', 'backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java': 'f459fb7569f3135a982637bc746bf29e89811e74f70b420522d6ace95bfa9a94', 'backend/src/test/java/com/cinenest/FacebookSsoIntegrationTest.java': 'ff6b71dc5e7d58067893a164b5784ade5c769ec484eb8f5a7d5eab4cac3d4d2c', 'backend/src/test/java/com/cinenest/GoogleSsoIntegrationTest.java': '6dd7fcf32de34530f963440acded14540d410d59c9c84f26840a5edfb649ecc8', 'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java': '60d78caef0fb129fe7566f6da3a3250a13f320b6324b1b2caec7565d9b0c1230', 'backend/src/test/java/com/cinenest/identity/internal/CustomerProfileRulesTest.java': '573889eec8f655ddca4745f4b04b71169eab2eaa133f0b4b88c86c3c8f134951', 'frontend/app/account/page.tsx': 'a357aed125f396cd9e63b128b2755ae88375aa83f551f0cc42efee84930fc65b', 'frontend/app/api/accounts/me/profile/route.ts': 'fcd2636df13fe074f96306e9f222e52fd57909878e4ef58252bc9e4bb13aba0a', 'frontend/components/customer-bookings.tsx': '03b3e7df8e761afa6456be38330796004fc4e53ed7d82416b1c7bb0dad82d725', 'frontend/components/customer-profile.tsx': 'a7daa578618881a3956f7d75cc76303bbf4fb0b1d0251ee7a1e6e7adca720e7b', 'frontend/components/session-panel.tsx': '2410ad88fa0104772f8859e7b8f2f3f8bee042e1bdf61bf9f84334eeb77bfb13', 'frontend/lib/customer-profile-backend.ts': 'de99c3ec7e2cd3cde3e2516ab77667cc3484e1c170022dc935a3653603576694', 'frontend/lib/customer-profile.ts': '4fac70ced3a01ce935f945bc3613e45be09e3d43bc41217ad464738e4f3ae616', 'frontend/package.json': '258d26277836b0f78a6a81d719e3d3fac67138f7ec4e568bf1a277b3ab0e5481', 'frontend/tests/customer-profile-e2e.mjs': '510243ecb0ccba43cbfe1b94f110ec5b559d16ca078b6c7fb3076138dcf8c834', 'frontend/tests/customer-profile.test.mjs': '0b7d46d7dd06ac4c65ebbf1f80daa9e796bbf9ebb5e1ba26eacd8eedd32b3fa2', 'knowledge/ARCHITECTURE.md': 'dc94ff554146cf4d08f29401cc8ae03d5e74861c48395df6a4724d3f52051ce2', 'knowledge/DESIGN.md': '91e40004e267f9e193dfcce491398751c67268be717ffad3d1e3f943e63364f1', 'knowledge/PROGRESS.md': '934eaba893b2e5a81631c5e5ac9c6e196e8d9391341c45ac0e1e39a7870552ab', 'knowledge/PROJECT.md': '66d5d98426d8b7d5c8bf66be8609dc8b30a8be4d4541928bcc4a9f5e0a614794', 'knowledge/execution/change-sets.json': '084229c3280ff9a98506661960d973127385fec99e80a83ca9e02308ddf4be82', 'knowledge/execution/requirements.json': '7003813fed707dab42fefd334a6bb1e9b8a3062909219b9cf66ce113da73a933', 'knowledge/execution/status.json': 'd3ca1e9ac4b4c0c37f05970b7eb213c59e9bd00310c1dba3e010e997c7a35829', 'knowledge/execution/test-plan.json': '12bfe8b8813e686317e8517b3a240738e14fc5a2a18276db545389525324685f', 'knowledge/guides/USER_GUIDE.md': '5e557e1b59bd742415c431f8107e013835b9456eb97a88170cb1bb30ee239049', 'knowledge/product/FEATURE_CATALOG.md': 'c30e069339b4c11c9d5730d404c21ac039c0c4a858417f03c7026c1d3bf8e924'}
 PROFILE_PROSE_REPLACEMENTS={'Current S2-B:[local trusted HTTPS compatibility](#local-https-ingress);manual/Google/Facebook synthetic contracts verified;Meta callback registration and live qualification remain blocked. Historical Google denial attribution remains NOT_VERIFIED.': 'Current local customer profile:[bounded implementation and evidence](#local-customer-profile);manual/Google/Facebook synthetic compatibility preserved. Latest owner-reported Facebook capture remains INCONCLUSIVE;no new provider attempt. Historical Google denial attribution remains NOT_VERIFIED.', 'Current S2-B handoff:[local HTTPS evidence](#local-https-ingress). Next single unit:owner-authorized Meta HTTPS callback registration/acceptance check;no live execution or fixture authority implied.': 'Current profile handoff:[local self-profile evidence](#local-customer-profile). Next single unit:CN-R1-FACEBOOK-SSO-001 S2-B obtain separate bounded time-coordinated capture authorization;no retry,fixture or live-login authority implied.', 'Local trusted HTTPS auth compatibility VERIFIED_SYNTHETIC; Meta qualification blocked; Google historical audit attribution open; 3 of 6 criteria': 'Local self-profile/V29 VERIFIED_SYNTHETIC; manual/Google/Facebook contracts preserved; Meta live qualification blocked; Google historical audit attribution open; 3 of 6 criteria'}
 
 def profile_record_errors(e):
@@ -8446,6 +8446,8 @@ def profile_successor_errors():
     def before(n):return subprocess.check_output(['git','-C',str(R),'show',PROFILE_BASE+':'+n])
     for n,digest in PROFILE_HASHES.items():
         if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=digest:errors.append('PROFILE unadmitted payload '+n)
+    # A rejected exact-source envelope cannot be admitted by any later check.
+    if errors:return errors
     state=json.loads((K/'execution/status.json').read_text());e=state.pop('customerProfile',{});errors.extend(profile_record_errors(e))
     if state!=json.loads(before('knowledge/execution/status.json')):errors.append('PROFILE historical status drift')
     plan=json.loads((K/'execution/change-sets.json').read_text());record=plan.pop('customerProfileExecution',{})
@@ -8482,7 +8484,10 @@ def profile_successor_errors():
 
 profile_unchecked_errors=profile_successor_errors
 def profile_successor_errors():
-    try:return profile_unchecked_errors()
+    from unittest.mock import patch
+    try:
+        with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+            return profile_unchecked_errors()
     except (json.JSONDecodeError,UnicodeError,OSError,subprocess.CalledProcessError):return ['PROFILE malformed/unavailable protected payload']
 
 def profile_negative_controls():
@@ -8524,6 +8529,69 @@ def inert_ci_main():
     if result==0:print('PASS exact owner-authorized local PROFILE successor;history/provider gates/admission preserved')
     return result
 
+
+# Bounded memoization of immutable historical Git objects only. Current files,
+# changed-path queries, mutable refs and every positive/negative control stay fresh.
+PROFILE_GIT_OBJECT_CACHE={}
+PROFILE_GIT_OBJECT_CACHE_STATE={'bytes':0}
+PROFILE_GIT_OBJECT_CACHE_LIMIT=128*1024*1024
+
+def profile_immutable_git_reader(original):
+    if getattr(original,'_profile_immutable_reader',False) is True:return original
+    def output(argv,*args,**kwargs):
+        immutable=(isinstance(argv,list) and len(argv)==5 and argv[0]=='git' and argv[1]=='-C' and argv[3]=='show'
+                   and isinstance(argv[4],str) and re.fullmatch(r'[0-9a-f]{40}:.+',argv[4]) and not args
+                   and set(kwargs)<={'text','encoding','errors'})
+        if not immutable:return original(argv,*args,**kwargs)
+        # A different injected reader is a different trust context; never reuse its results.
+        key=(original,tuple(argv),tuple(sorted(kwargs.items())))
+        if key in PROFILE_GIT_OBJECT_CACHE:return PROFILE_GIT_OBJECT_CACHE[key]
+        value=original(argv,*args,**kwargs)
+        size=len(value.encode() if isinstance(value,str) else value)
+        if len(PROFILE_GIT_OBJECT_CACHE)<20000 and PROFILE_GIT_OBJECT_CACHE_STATE['bytes']+size<=PROFILE_GIT_OBJECT_CACHE_LIMIT:
+            PROFILE_GIT_OBJECT_CACHE[key]=value;PROFILE_GIT_OBJECT_CACHE_STATE['bytes']+=size
+        return value
+    output._profile_immutable_reader=True
+    return output
+
+def profile_git_reader_controls():
+    calls=[]
+    def fixture(argv,*a,**kw):
+        calls.append(tuple(argv));return 'fixture' if kw.get('text') else b'fixture'
+    read=profile_immutable_git_reader(fixture);fixed=['git','-C','/synthetic','show','0'*40+':fixture']
+    assert read(fixed)==read(fixed)==b'fixture' and len(calls)==1
+    assert read(fixed,text=True)=='fixture' and len(calls)==2
+    for command in [['git','-C','/synthetic','show','HEAD:fixture'],['git','-C','/synthetic','diff','--name-only']]:
+        before=len(calls);read(command);read(command);assert len(calls)==before+2
+    other_calls=[]
+    def different(argv,*a,**kw):other_calls.append(True);return b'different'
+    assert profile_immutable_git_reader(different)(fixed)==b'different' and len(other_calls)==1
+    failures=[]
+    def failed(argv,*a,**kw):failures.append(True);raise subprocess.CalledProcessError(1,argv)
+    for _ in range(2):
+        try:profile_immutable_git_reader(failed)(fixed)
+        except subprocess.CalledProcessError:pass
+        else:raise AssertionError('Failed Git read unexpectedly succeeded')
+    assert len(failures)==2
+    from unittest.mock import patch
+    budget_calls=[]
+    def bounded(argv,*a,**kw):budget_calls.append(True);return b'bounded'
+    with patch.dict(globals(),{'PROFILE_GIT_OBJECT_CACHE_LIMIT':PROFILE_GIT_OBJECT_CACHE_STATE['bytes']}):
+        limited=profile_immutable_git_reader(bounded);limited(fixed);limited(fixed)
+    assert len(budget_calls)==2
+    before=PROFILE_GIT_OBJECT_CACHE_STATE['bytes']
+    def nested(argv,*a,**kw):return b'nested'
+    with patch.dict(globals(),{'_profile_cache_accounting_test':True}):
+        assert profile_immutable_git_reader(nested)(fixed)==b'nested'
+    assert PROFILE_GIT_OBJECT_CACHE_STATE['bytes']==before+len(b'nested')
+    print('PASS PROFILE Git reader:immutable hits;bytes/text separation;mutable queries fresh;injected-reader isolation;failures not cached;bounded nested memory accounting')
+
+profile_full_validation=inert_ci_main
+def inert_ci_main():
+    from unittest.mock import patch
+    profile_git_reader_controls()
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        return profile_full_validation()
 
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
