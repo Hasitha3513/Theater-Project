@@ -16,23 +16,25 @@ import org.springframework.security.oauth2.core.user.*;
 import org.springframework.web.bind.annotation.*;
 import com.nimbusds.jose.util.JSONObjectUtils;
 
-/** Standard Meta Web code/token contract, exclusively against an isolated synthetic provider. */
+/** Meta Web registration composition, confined to local qualification. */
 @Configuration(proxyBeanMethods=false)
 @Profile("local-synthetic")
 @ConditionalOnProperty(name="cinenest.identity.facebook.enabled",havingValue="true")
 class FacebookLoginContract {
     @Bean Provider facebookProvider(Environment env) { return new Provider(env); }
     @Bean ClientRegistrationRepository facebookClients(Provider facebook,Environment env) {
+        return configuredClients(facebook,env,()->GoogleLiveProvider.discover(GoogleLiveProvider.discoveryClient()));
+    }
+    ClientRegistrationRepository configuredClients(Provider facebook,Environment env,java.util.function.Supplier<Map<String,Object>> discovery) {
         List<ClientRegistration> clients=new ArrayList<>();clients.add(facebook.registration());
         if(env.getProperty("cinenest.identity.google.enabled",Boolean.class,false)) {
-            if(!env.getProperty("cinenest.identity.google.mode","").equals("CONTRACT_TEST"))throw new IllegalStateException("Facebook S1 requires isolated Google coexistence");
-            var google=new GoogleOidcContract().configuredClient(env,()->{throw new IllegalStateException("Live discovery excluded from Facebook S1");});
+            var google=new GoogleOidcContract().configuredClient(env,discovery);
             clients.add(google.findByRegistrationId("google"));
         }
         return new InMemoryClientRegistrationRepository(clients);
     }
     @Bean AuthorizationRequestRepository<OAuth2AuthorizationRequest> facebookTransactions(Provider provider) {
-        return new Transactions(provider.origin+"/v26.0/dialog/oauth",provider.transactionSeconds,Clock.systemUTC());
+        return new Transactions(provider.registration().getProviderDetails().getAuthorizationUri(),provider.transactionSeconds,Clock.systemUTC());
     }
     static final class Transactions implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
         private final HttpSessionOAuth2AuthorizationRequestRepository delegate=new HttpSessionOAuth2AuthorizationRequestRepository();
@@ -53,23 +55,30 @@ class FacebookLoginContract {
         }
     }
     static final class Provider {
-        final String origin,frontend,appId,secret,namespace;final int transactionSeconds;
+        final String origin,frontend,appId,secret,namespace;final int transactionSeconds;final FacebookLiveProvider live;
         private final HttpClient http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).followRedirects(HttpClient.Redirect.NEVER).build();
-        Provider(Environment env) {
+        Provider(Environment env) {this(env,GoogleLiveProvider.discoveryClient());}
+        Provider(Environment env,org.springframework.web.client.RestClient transport) {
             try {
-                if(!env.getProperty("cinenest.identity.manual.enabled",Boolean.class,false) || !env.getProperty("cinenest.identity.facebook.mode","").equals("CONTRACT_TEST")
+                String mode=env.getProperty("cinenest.identity.facebook.mode","");
+                if(!env.getProperty("cinenest.identity.manual.enabled",Boolean.class,false) || !(mode.equals("CONTRACT_TEST") || mode.equals("LIVE_QUALIFICATION"))
                     || !env.getProperty("cinenest.identity.facebook.client-secret","").isEmpty() || !System.getProperty("jdk.httpclient.HttpClient.log","").isBlank())throw new IllegalStateException();
+                live=mode.equals("LIVE_QUALIFICATION")?new FacebookLiveProvider(env,transport):null;
+                if(live!=null){origin="https://www.facebook.com";frontend=live.frontend;appId=live.app;secret=live.secret;}
+                else {
                 origin=GoogleOidcContract.loopback(env.getRequiredProperty("cinenest.identity.facebook.contract-origin")).toString().replaceAll("/$","");
                 frontend=GoogleOidcContract.loopback(env.getRequiredProperty("cinenest.identity.facebook.frontend-origin")).toString().replaceAll("/$","");
                 appId=env.getRequiredProperty("cinenest.identity.facebook.client-id");if(!appId.matches("synthetic-[0-9a-f]{32}"))throw new IllegalStateException();
                 secret=GoogleLiveProvider.secret(env.getRequiredProperty("cinenest.identity.facebook.client-secret-file"));
+                }
                 namespace="urn:cinenest:identity:facebook:app:"+appId;
                 transactionSeconds=env.getProperty("cinenest.identity.facebook.transaction-seconds",Integer.class,180);
                 if(transactionSeconds<30 || transactionSeconds>300)throw new IllegalStateException();
-            }catch(Exception invalid){throw new IllegalStateException("Isolated Facebook S1 configuration required;live activation is excluded");}
+            }catch(Exception invalid){throw new IllegalStateException("Isolated Facebook qualification configuration invalid;execution requires separate authority");}
         }
-        @Override public String toString(){return "Facebook synthetic provider configuration [redacted]";}
+        @Override public String toString(){return "Facebook qualification configuration [redacted]";}
         ClientRegistration registration() {
+            if(live!=null)return live.registration();
             return ClientRegistration.withRegistrationId("facebook").clientId(appId).clientSecret(secret)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE).redirectUri(frontend+"/api/auth/facebook/callback")
                 .scope("public_profile").authorizationUri(origin+"/v26.0/dialog/oauth").tokenUri(origin+"/v26.0/oauth/access_token")
@@ -100,6 +109,7 @@ class FacebookLoginContract {
         OAuth2AccessTokenResponse exchange(OAuth2AuthorizationCodeGrantRequest request) {
             try {
                 if(!request.getClientRegistration().getRegistrationId().equals("facebook") || !request.getAuthorizationExchange().getAuthorizationRequest().getRedirectUri().equals(frontend+"/api/auth/facebook/callback"))throw denied();
+                if(live!=null)return live.exchange(request.getAuthorizationExchange().getAuthorizationResponse().getCode(),request.getAuthorizationExchange().getAuthorizationRequest().getRedirectUri());
                 var value=get(uri("/v26.0/oauth/access_token",Map.of("client_id",appId,"client_secret",secret,"redirect_uri",frontend+"/api/auth/facebook/callback","code",request.getAuthorizationExchange().getAuthorizationResponse().getCode())));
                 String token=(String)value.get("access_token");long lifetime=((Number)value.get("expires_in")).longValue();
                 if(token==null || token.isBlank() || token.length()>8192 || lifetime<=0 || !"bearer".equalsIgnoreCase(Objects.toString(value.get("token_type"),"")))throw denied();
@@ -109,6 +119,7 @@ class FacebookLoginContract {
         OAuth2User authenticate(OAuth2UserRequest request,IdentityStore store) {
             try {
                 if(!request.getClientRegistration().getRegistrationId().equals("facebook") || request.getAccessToken().getExpiresAt()==null || !request.getAccessToken().getExpiresAt().isAfter(Instant.now()))throw denied();
+                if(live!=null){String id=live.inspect(request.getAccessToken().getTokenValue());UUID account=store.associatedEligibleAccount(namespace,id).orElseThrow(FacebookLoginContract::denied);return new DefaultOAuth2User(List.of(),Map.of("account_id",account.toString()),"account_id");}
                 var value=get(uri("/debug_token",Map.of("input_token",request.getAccessToken().getTokenValue(),"access_token",appId+"|"+secret)));
                 if(!(value.get("data") instanceof Map<?,?> data) || !Boolean.TRUE.equals(data.get("is_valid")) || !appId.equals(Objects.toString(data.get("app_id"),"")) || !"USER".equals(data.get("type")))throw denied();
                 long expiry=((Number)data.get("expires_at")).longValue();if(expiry<=Instant.now().getEpochSecond())throw denied();
@@ -124,9 +135,11 @@ class FacebookLoginContract {
     @Profile("local-synthetic")
     @ConditionalOnProperty(name="cinenest.identity.facebook.enabled",havingValue="true")
     static class Status {
+        private final Provider provider;
+        Status(Provider provider){this.provider=provider;}
         @GetMapping("/api/auth/facebook/status") ResponseEntity<?> status(HttpServletRequest request) {
             if(!request.getParameterMap().isEmpty())return ResponseEntity.badRequest().header("Cache-Control","no-store").build();
-            return ResponseEntity.ok().header("Cache-Control","no-store").body(Map.of("mode","CONTRACT_TEST","liveProviderQualified",false,"syntheticOnly",true));
+            return ResponseEntity.ok().header("Cache-Control","no-store").body(Map.of("mode",provider.live==null?"CONTRACT_TEST":"LIVE_QUALIFICATION","liveProviderQualified",false,"syntheticOnly",provider.live==null,"executionEnabled",provider.live!=null && provider.live.execution,"callbackVerified",provider.live!=null && provider.live.callbackVerified));
         }
     }
 }

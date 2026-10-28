@@ -76,6 +76,7 @@ class IdentitySecurity {
         boolean facebook=env.getProperty("cinenest.identity.facebook.enabled",Boolean.class,false);
         var facebookProvider=facebookProviders.getIfAvailable();
         if(facebook && (!manual || facebookProvider==null || !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic"))))throw new IllegalStateException("Facebook S1 requires isolated manual coexistence");
+        if(facebook && facebookProvider.live!=null)http.addFilterBefore(new FacebookLiveExecutionGate(facebookProvider.live.execution && facebookProvider.live.callbackVerified),org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.class);
         boolean google=env.getProperty("cinenest.identity.google.enabled",Boolean.class,false);
         if(google && (!manual || !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic")))) throw new IllegalStateException("Google S1 requires isolated manual coexistence");
         if(google && env.getProperty("cinenest.identity.google.mode","").equals("LIVE_QUALIFICATION")) {

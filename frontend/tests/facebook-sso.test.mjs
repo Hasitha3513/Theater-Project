@@ -16,6 +16,90 @@ function configure() {
 	process.env.CINENEST_FACEBOOK_CONTRACT_ORIGIN = "http://127.0.0.1:9998";
 	process.env.CINENEST_AUTH_ORIGIN = "http://127.0.0.1:9999";
 }
+test("Facebook live mode requires both execution gates and a fixed HTTPS origin", async () => {
+	process.env.CINENEST_FACEBOOK_MODE = "LIVE_QUALIFICATION";
+	delete process.env.CINENEST_FACEBOOK_CONTRACT_ORIGIN;
+	delete process.env.CINENEST_FACEBOOK_LIVE_EXECUTION;
+	let calls = 0;
+	global.fetch = async () => {
+		calls++;
+		throw Error("private provider diagnostic");
+	};
+	try {
+		assert.equal((await request("", "start")).status, 503);
+		assert.equal((await request("?code=fixture&state=fixture")).status, 503);
+		process.env.CINENEST_FACEBOOK_LIVE_EXECUTION = "true";
+		process.env.CINENEST_FACEBOOK_FRONTEND_ORIGIN = "https://localhost:42137";
+		assert.equal((await request("", "start")).status, 503);
+		assert.equal(calls, 0);
+	} finally {
+		global.fetch = original;
+		delete process.env.CINENEST_FACEBOOK_LIVE_EXECUTION;
+		delete process.env.CINENEST_FACEBOOK_FRONTEND_ORIGIN;
+	}
+});
+test("Facebook live configured status never falsely enables execution or qualification", async () => {
+	process.env.CINENEST_FACEBOOK_MODE = "LIVE_QUALIFICATION";
+	delete process.env.CINENEST_FACEBOOK_CONTRACT_ORIGIN;
+	process.env.CINENEST_AUTH_ORIGIN = "http://127.0.0.1:9999";
+	global.fetch = async () =>
+		Response.json({
+			mode: "LIVE_QUALIFICATION",
+			syntheticOnly: false,
+			liveProviderQualified: false,
+			executionEnabled: true,
+			callbackVerified: true,
+		});
+	try {
+		const response = await request("", "status");
+		assert.equal(response.status, 200);
+		assert.equal((await response.json()).executionEnabled, false);
+	} finally {
+		global.fetch = original;
+	}
+});
+test("Facebook live redirect uses fixed Meta endpoint and exact configured callback", async () => {
+	process.env.CINENEST_FACEBOOK_MODE = "LIVE_QUALIFICATION";
+	process.env.CINENEST_FACEBOOK_LIVE_EXECUTION = "true";
+	process.env.CINENEST_FACEBOOK_FRONTEND_ORIGIN = "https://localhost:42137";
+	delete process.env.CINENEST_FACEBOOK_CONTRACT_ORIGIN;
+	const url = new URL("https://www.facebook.com/v26.0/dialog/oauth");
+	for (const [k, v] of Object.entries({
+		client_id: "fixture-app",
+		redirect_uri: "https://localhost:42137/api/auth/facebook/callback",
+		state: "opaque-fixture",
+		scope: "public_profile",
+		response_type: "code",
+	}))
+		url.searchParams.set(k, v);
+	global.fetch = async () =>
+		new Response(null, { status: 302, headers: { Location: url.toString() } });
+	try {
+		assert.equal(
+			(
+				await forwardFacebookSso(
+					new Request("https://localhost:42137/api/auth/facebook/start"),
+					"start",
+				)
+			).status,
+			303,
+		);
+		url.hostname = "evil.invalid";
+		assert.equal(
+			(
+				await forwardFacebookSso(
+					new Request("https://localhost:42137/api/auth/facebook/start"),
+					"start",
+				)
+			).status,
+			503,
+		);
+	} finally {
+		global.fetch = original;
+		delete process.env.CINENEST_FACEBOOK_LIVE_EXECUTION;
+		delete process.env.CINENEST_FACEBOOK_FRONTEND_ORIGIN;
+	}
+});
 test("Facebook defaults unavailable;live mode and mutation methods never reach provider", async () => {
 	let calls = 0;
 	global.fetch = async () => {
@@ -73,7 +157,10 @@ test("Facebook redirects stay in the fixture and bind exact frontend callback/mi
 		assert.equal((await request("", "start")).status, 303);
 		for (const [key, value] of [
 			["redirect_uri", "https://evil.invalid/callback"],
-			["redirect_uri", "http://user:password@127.0.0.1:3333/api/auth/facebook/callback"],
+			[
+				"redirect_uri",
+				"http://user:password@127.0.0.1:3333/api/auth/facebook/callback",
+			],
 			["scope", "email"],
 			["response_type", "token"],
 			["client_secret", "forbidden"],

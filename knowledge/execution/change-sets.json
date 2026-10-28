@@ -6985,5 +6985,27 @@
     ],
     "rollback": "Disable both S1 flags and restart;no schema rollback;retain audit/history",
     "nextSingleUnit": "CN-R1-FACEBOOK-SSO-001 S2 Meta configuration and bounded live-qualification admission"
+  },
+  "facebookSsoS2AExecution": {
+    "taskId": "CN-R1-FACEBOOK-SSO-001",
+    "slice": "S2A_DISABLED_LIVE_PROVIDER_ADAPTER",
+    "authorization": "EXPLICIT_OWNER_BOUNDED_FACEBOOK_S2A",
+    "status": "VERIFIED_OFFLINE_BOUNDARY",
+    "requirements": [
+      "CN-C02",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "definitionOfDone": "Disabled Meta boundary,existing identity/session/coexistence,isolated security/PG/browser and governance checks PASS;no real Meta execution",
+    "exclusions": [
+      "live Meta execution",
+      "new accounts/linking",
+      "migrations",
+      "runtime grants",
+      "financial/booking/access changes",
+      "production admission/deployment"
+    ],
+    "rollback": "Disable Facebook and both execution gates;restart;retain immutable identity/session/audit/history",
+    "nextSingleUnit": "CN-R1-FACEBOOK-SSO-001 S2-B owner configuration/callback/operator/identity admission"
   }
 }

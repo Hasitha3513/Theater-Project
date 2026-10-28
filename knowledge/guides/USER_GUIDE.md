@@ -431,3 +431,9 @@ Operator requirements:[exact backend/private-secret/frontend configuration](../A
 ### Facebook S1 local fixture qualification
 
 Default /login හි Facebook Login unavailable disabled වේ. Authorized isolated fixture configured නම් පමණක් Continue with Facebook — synthetic qualification දිස්වේ. මෙය real Facebook Login නොවේ. Existing eligible pre-associated test identity එක පමණක් /account වෙත යයි;unknown/suspended identity deny වේ. Account linking,new registration හෝ email matching සිදු නොවේ. Keyboard මඟින් button activate කළ හැක;failure එක sanitized alert එකක දැක්වේ. Existing Check session සහ Log out controls භාවිත කරන්න;manual/Google flows තවම පවතී. Real Meta credentials හෝ customer identifiers මේ fixture එකට දෙන්න එපා. [Exact configuration](../ARCHITECTURE.md#facebook-sso-s1),[verification](../PROGRESS.md#facebook-sso-s1).
+
+
+<a id="facebook-sso-s2a"></a>
+### Facebook S2-A configured boundary
+
+Facebook adapter configured; live execution remains disabled notice එක actual Facebook Login PASS බවක් නොවේ. Disabled button බලෙන් enable කිරීම owner authority නොවේ. Manual සහ separately configured Google login තවම පවතී. Callback origin independently qualified වී නැති බැවින් real Meta login නොකරන්න. [Exact private configuration](../ARCHITECTURE.md#facebook-sso-s2a);secrets,tokens,provider identifiers හෝ cookies chat/screenshots/Git වෙත නොදෙන්න. S1 synthetic mode භාවිත කළ විට එහි synthetic-only label රැකේ.

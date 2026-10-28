@@ -5,6 +5,7 @@ export function FacebookSso() {
 	const [available, setAvailable] = useState(false);
 	const [launching, setLaunching] = useState(false);
 	const [failed, setFailed] = useState(false);
+	const [liveConfigured, setLiveConfigured] = useState(false);
 	useEffect(() => {
 		let current = true;
 		const abort = new AbortController();
@@ -22,8 +23,11 @@ export function FacebookSso() {
 				if (!response.ok) return;
 				const value = await response.json();
 				if (current) {
+					setLiveConfigured(value.mode === "LIVE_QUALIFICATION");
 					setAvailable(
-						value.mode === "CONTRACT_TEST" &&
+						(value.mode === "CONTRACT_TEST" ||
+							(value.mode === "LIVE_QUALIFICATION" &&
+								value.executionEnabled === true)) &&
 							value.liveProviderQualified === false,
 					);
 				}
@@ -34,6 +38,7 @@ export function FacebookSso() {
 			abort.abort();
 			setAvailable(false);
 			setLaunching(false);
+			setLiveConfigured(false);
 		};
 		window.addEventListener("pagehide", clear);
 		return () => {
@@ -53,9 +58,15 @@ export function FacebookSso() {
 			{available ? (
 				<>
 					<p className="muted">
-						Synthetic Facebook Web Login qualification only. This is an isolated
-						provider fixture, not real Facebook Login. Only pre-associated
-						eligible test accounts are admitted.
+						{liveConfigured ? (
+							"Facebook local qualification only;production customer admission is disabled. Only pre-associated eligible test accounts are admitted."
+						) : (
+							<>
+								Synthetic Facebook Web Login qualification only. This is an
+								isolated provider fixture, not real Facebook Login. Only
+								pre-associated eligible test accounts are admitted.
+							</>
+						)}
 					</p>
 					<Button
 						variant="secondary"
@@ -71,12 +82,20 @@ export function FacebookSso() {
 						}}
 					>
 						{launching
-							? "Opening synthetic Facebook…"
-							: "Continue with Facebook — synthetic qualification"}
+							? "Opening Facebook qualification…"
+							: liveConfigured
+								? "Continue with Facebook — local qualification"
+								: "Continue with Facebook — synthetic qualification"}
 					</Button>
 				</>
 			) : (
 				<div>
+					{liveConfigured && (
+						<p className="muted">
+							Facebook adapter configured; live execution remains disabled.
+							Provider qualification is not established.
+						</p>
+					)}
 					<Button disabled>Facebook Login unavailable</Button>
 				</div>
 			)}

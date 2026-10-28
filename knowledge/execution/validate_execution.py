@@ -8241,5 +8241,97 @@ def inert_ci_main():
     if result==0:print('PASS exact owner-authorized Facebook S1 successor;unowned production/history/admission unchanged')
     return result
 
+
+# Explicit owner-authorized Facebook S2-A successor. Prior guards/history are replayed unchanged.
+facebook_s2a_prior_main=inert_ci_main
+facebook_s2a_prior_guard=receipt_admission_successor_errors
+FA_BASE='1d4bc7daa6809d57d63dd2ce7f621bc15bfee4d9'
+FA_HASHES={'backend/src/main/java/com/cinenest/identity/internal/FacebookLiveExecutionGate.java': '1be76f4685d5cf7300a8202d830a367d62aef6765ad35bb1b7fc3ccef875f55e', 'backend/src/main/java/com/cinenest/identity/internal/FacebookLiveProvider.java': '3aa7aba75bcc58d3f3f0863f651637922dd3abfc92d44b0d71f789532489145d', 'backend/src/main/java/com/cinenest/identity/internal/FacebookLoginContract.java': 'c58f156d5437a9436f480221701487b9517c95917bb6b7fdedccfe64f16fbb7a', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'ab3a3263db940e8a233beed28b6ebdf5e20ab7b874332133e074fc6112f746c2', 'backend/src/test/java/com/cinenest/identity/internal/FacebookLiveBoundaryIntegrationTest.java': 'b826e65e68c74e93fa200dcf6cc7ca0f608a22d43e7330e00a4b65fd753b6690', 'backend/src/test/java/com/cinenest/identity/internal/FacebookLiveProviderTest.java': '8a4084e8d9606a6b1444c4f9ccfb354326a53956c75f650e4239d85bbda7d09e', 'frontend/components/facebook-sso.tsx': 'f8f3c769cebb323008e416424891f62c4a4d933df4b657348ee75906a5fb153d', 'frontend/lib/facebook-sso-backend.ts': '4d29e7a410474a9b161d68e74bdf10482c20b2449f8aee6568457632f3fa6b29', 'frontend/tests/facebook-live-boundary-e2e.mjs': 'ba0e6d679411f88fe393c2f706e297920232708a0bcc9072bacdc228e32fde0f', 'frontend/tests/facebook-sso.test.mjs': '5f8297245c24f4526b0a92c205e257e0f3ad8e79bbc32ce8a88f43a356e38f58', 'knowledge/ARCHITECTURE.md': 'c3c76388c13f8a323266a0ad351c9fc452388d16d9bf6b6d8fcdbbc6fed5e020', 'knowledge/DESIGN.md': 'df804c8f8c231354fba7c5e907e4833fda5e0c2e46b76fc0c83e48bb649bd622', 'knowledge/PROGRESS.md': '7125e022a7afe02e913b100fd10e554b9d79bb026192aa951de626dd0da30183', 'knowledge/PROJECT.md': '31af7b33b6cca82111365d38f30660c0573ef7875615c76d366426a7fed11ea8', 'knowledge/backlog/FUTURE_FEATURES.md': 'c301d39c9937780e34d6ce00c1cfee759de97b855089af40927f7eaf84a836c0', 'knowledge/execution/change-sets.json': '5054bc0af158fd2027d494eec1f250f7449ef528fc8e851f3865c3f0147d61c0', 'knowledge/execution/status.json': 'caea55b07a14d1b87dc13e64ce903e0172893240ea3b77a4cad8939293f93746', 'knowledge/guides/USER_GUIDE.md': '01116d0e1aef532e259f210685ebfaa8a0fdfe1010615f7041aa5bae60789ff7', 'knowledge/product/FEATURE_CATALOG.md': '66c573af0ee364f0810ce046c2d622df151eeea0dfa38ef6b0f7fc962b1769e8'}
+FA_PROSE_REPLACEMENTS={'Current Facebook S1:[synthetic integration](#facebook-sso-s1);manual/Google preserved;live Facebook remains BLOCKED_PROVIDER. Historical Google denial attribution remains NOT_VERIFIED.': 'Current Facebook S2-A:[disabled live-provider boundary](#facebook-sso-s2a);manual/Google/S1 preserved;actual Meta qualification remains BLOCKED_PROVIDER. Historical Google denial attribution remains NOT_VERIFIED.', 'Current Facebook S1 handoff:[verified synthetic evidence](#facebook-sso-s1). Next single unit:Meta provider configuration and separately bounded S2 qualification admission;no live activation authority implied.': 'Current Facebook S2-A handoff:[bounded implementation](#facebook-sso-s2a). Next single unit:S2-B owner configuration/callback/operator/identity admission;live execution requires separate authority.', 'Facebook S1 VERIFIED_SYNTHETIC; Google historical live-audit attribution open; 3 of 6 criteria': 'Facebook S2-A disabled adapter implemented; S1 VERIFIED_SYNTHETIC; Google historical live-audit attribution open; 3 of 6 criteria'}
+
+def facebook_s2a_record_errors(e):
+    errors=[]
+    if e.get('taskId')!='CN-R1-FACEBOOK-SSO-001' or e.get('slice')!='S2A_DISABLED_LIVE_PROVIDER_ADAPTER' or e.get('authorization')!='EXPLICIT_OWNER_BOUNDED_FACEBOOK_S2A' or e.get('verification')!='VERIFIED_OFFLINE_BOUNDARY':errors.append('Facebook S2-A missing exact bounded authority/evidence')
+    for key in ['enabledByDefault','liveExecutionPerformed','newAccountAdmission','runtimeLinking','runtimeGrantsAssigned','migrationsChanged','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged','callbackProviderQualified']:
+        if e.get(key) is not False:errors.append('Facebook S2-A prohibited '+key)
+    if e.get('acceptance')!={'requirements':92,'criteria':74,'checkedCriteria':15,'formallyAcceptedRequirements':0}:errors.append('Facebook S2-A acceptance drift')
+    if e.get('historicalGoogleAuditCause')!='NOT_VERIFIED':errors.append('Facebook S2-A invented historical attribution')
+    tests=e.get('tests',{})
+    if tests.get('foundation')!={'total':966,'passed':958,'skipped':8,'failures':0,'errors':0} or tests.get('browserProvider')!='SYNTHETIC_S1_AND_DISABLED_LIVE_BOUNDARY_NOT_META' or tests.get('browserPhases')!=['disabled','associated','unassociated','configured_live_DENY'] or tests.get('frontend')!='PASS_BUILD_TYPECHECK_LINT_TEST_AUDIT_ZERO_VULNERABILITIES':errors.append('Facebook S2-A missing executed qualification evidence')
+    if e.get('liveProvider')!='NOT_RUN_BLOCKED_PROVIDER_AND_SEPARATE_AUTHORIZATION':errors.append('Facebook S2-A false live-provider qualification')
+    return errors
+
+def facebook_s2a_successor_errors():
+    errors=[];owned=set(FA_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',FA_BASE+':'+n])
+    for n,digest in FA_HASHES.items():
+        if not (R/n).is_file() or hashlib.sha256((R/n).read_bytes()).hexdigest()!=digest:errors.append('Facebook S2-A unadmitted payload '+n)
+    state=json.loads((K/'execution/status.json').read_text());e=state.pop('facebookSsoS2A',{});errors.extend(facebook_s2a_record_errors(e))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('Facebook S2-A historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());record=plan.pop('facebookSsoS2AExecution',{})
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('Facebook S2-A historical planning drift')
+    if record.get('authorization')!='EXPLICIT_OWNER_BOUNDED_FACEBOOK_S2A' or record.get('status')!='VERIFIED_OFFLINE_BOUNDARY':errors.append('Facebook S2-A missing planning authority')
+    for n in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/DESIGN.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md','knowledge/backlog/FUTURE_FEATURES.md']:
+        expected=before(n).decode()
+        if n=='knowledge/PROGRESS.md':
+            for old,new in FA_PROSE_REPLACEMENTS.items():expected=expected.replace(old,new,1)
+        if not (R/n).read_text().startswith(expected):errors.append('Facebook S2-A historical prose drift '+n)
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',FA_BASE],text=True),nul=True)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        if not (R/n).is_file() or (R/n).read_bytes()!=before(n):errors.append('Facebook S2-A unowned/production/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('Facebook S2-A unauthorized new source')
+    if {p.relative_to(R).as_posix() for p in (R/"backend/src/main/resources/db/migration").glob("V*.sql")}!={n for n in tracked if n.startswith("backend/src/main/resources/db/migration/V") and n.endswith(".sql")}:errors.append("Facebook S2-A migration drift")
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',FA_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('Facebook S2-A unauthorized paths')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('Facebook S2-A prior validator altered')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('Facebook S2-A manifest drift')
+    return errors
+
+facebook_s2a_unchecked_successor_errors=facebook_s2a_successor_errors
+def facebook_s2a_successor_errors():
+    try:return facebook_s2a_unchecked_successor_errors()
+    except (json.JSONDecodeError,UnicodeError,OSError,subprocess.CalledProcessError):return ["Facebook S2-A malformed or unavailable protected payload"]
+
+def facebook_s2a_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['facebookSsoS2A'];assert not facebook_s2a_record_errors(e)
+    for key in ['enabledByDefault','liveExecutionPerformed','newAccountAdmission','runtimeLinking','runtimeGrantsAssigned','migrationsChanged','financialMutations','physicalAccessMutations','productionQualified','acceptanceChanged','callbackProviderQualified']:
+        bad=copy.deepcopy(e);bad[key]=True;assert facebook_s2a_record_errors(bad);print('PASS Facebook S2-A rejects '+key)
+    bad=copy.deepcopy(e);bad['historicalGoogleAuditCause']='EXPLAINED';assert facebook_s2a_record_errors(bad);print('PASS Facebook S2-A rejects invented Google history')
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/java/com/cinenest/identity/internal/FacebookLoginContract.java','backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java','backend/src/main/java/com/cinenest/payments/internal/BankService.java','knowledge/decisions/cinenest-open-decisions.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert facebook_s2a_successor_errors(),n
+        print('PASS Facebook S2-A rejects changed/unowned payload '+n)
+
+receipt_admission_successor_errors=facebook_s2a_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    errors=facebook_s2a_successor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    facebook_s2a_negative_controls()
+    owned=set(FA_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',FA_BASE],text=True),nul=True)
+    added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',FA_BASE+':'+n]) for n in owned&tracked}
+    rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+    def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+    def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+    def output(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+            remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+            return text if isinstance(value,str) else text.encode()
+        return value
+    with patch.dict(globals(),{'receipt_admission_successor_errors':facebook_s2a_prior_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=facebook_s2a_prior_main()
+    if result==0:print('PASS exact owner-authorized Facebook S2-A successor;unowned production/history/admission unchanged')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

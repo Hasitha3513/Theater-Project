@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Current Facebook S1:[synthetic integration](#facebook-sso-s1);manual/Google preserved;live Facebook remains BLOCKED_PROVIDER. Historical Google denial attribution remains NOT_VERIFIED.
+Current Facebook S2-A:[disabled live-provider boundary](#facebook-sso-s2a);manual/Google/S1 preserved;actual Meta qualification remains BLOCKED_PROVIDER. Historical Google denial attribution remains NOT_VERIFIED.
 
 Current manual customer authentication:[local synthetic implementation and verification](#local-customer-auth);real-customer/provider admission remains disabled.
 
@@ -334,7 +334,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 flowchart TB
   G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; synthetic bank-only refunds VERIFIED; full refund acceptance OPEN; venue/reviewers PENDING; PayHere BLOCKED; Admin reads and bounded synthetic notifications VERIFIED"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
-  P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; Facebook S1 VERIFIED_SYNTHETIC; Google historical live-audit attribution open; 3 of 6 criteria (C01/C03/C06)<br/>Shell/discovery/original illustrative assets;bounded grant/capability policy + managed grant backend read and inspection UI; acceptance unchanged<br/>NOT_ACCEPTED"]
+  P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; Facebook S2-A disabled adapter implemented; S1 VERIFIED_SYNTHETIC; Google historical live-audit attribution open; 3 of 6 criteria (C01/C03/C06)<br/>Shell/discovery/original illustrative assets;bounded grant/capability policy + managed grant backend read and inspection UI; acceptance unchanged<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; landing-to-catalog connected; audit/version/capacity/duration evidence owner-approved; 4 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; bounded read-only calendar/customer UI and real calendar-to-hold E2E; guided booking sections, bounded synthetic customer history,exact request and simulated booking navigation; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P4["P4 Identity/bank/guest roster<br/>Synthetic identity/request/ledger,customer handoff,contextual receipts and exact staff review navigation within bounded scopes; partial real E2E, booking detail/URL safety/session,quotation,hold,identity rejection and lost receipt acknowledgement verified;staff roster read integrated; 24 synthetic groups PASS; full acceptance remains open<br/>0 of 8 full criteria; NOT_ACCEPTED"]
@@ -1062,7 +1062,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current Facebook S1 handoff:[verified synthetic evidence](#facebook-sso-s1). Next single unit:Meta provider configuration and separately bounded S2 qualification admission;no live activation authority implied.
+Current Facebook S2-A handoff:[bounded implementation](#facebook-sso-s2a). Next single unit:S2-B owner configuration/callback/operator/identity admission;live execution requires separate authority.
 
 Current owner-authentication handoff:[bounded evidence](#local-customer-auth). Next CN-R1-GOOGLE-SSO-001 requires separate provider-specific authority;historical handoffs below remain unchanged.
 
@@ -3241,3 +3241,13 @@ Focused Google/manual/Identity PostgreSQL regressions80tests:77PASS/3existing op
 Full Java25 foundation:956tests,948PASS,8existing opt-in SKIPPED,0failure/error;architecture,PostgreSQL and packaged startup PASS. Facebook integration19tests and boundary3tests PASS. Real Chromium→Next.js→Spring→PostgreSQL→loopback Meta-shaped provider:disabled,associated,unassociated phases PASS (9browser result groups);no interception/cookie injection. Session rotation,CSRF/logout,Google/manual coexistence,wrong app/expired/invalid token,provider failure,state/replay,suspension,audit failure,secret exclusion and cross-account denial verified. Disposable DB assertions preserve2fixture accounts/2associations,0runtime grants,0financial/booking/access mutations;no operational identity fixture or private Google evidence changed. Screenshots375/768/1280 captured and visually reviewed under ignored .cache/facebook-sso-e2e. Exact final frontend/governance evidence is in execution/status.json facebookSsoS1;unrelated next-env warning must remain distinguished from clean projection.
 
 P1/Identity software advances within S1 only. Original92requirements,74criteria,P0–P10,11workstreams,21dayRelease1 and proposedWeeks4–12 preserved;15/74checked(20.3%),59unchecked,0/92formal acceptance. Historical Google two-denial attribution remains NOT_VERIFIED and its parent closeout is unchanged. No actual Facebook qualification,production admission,real banking,privacy qualification or physical Smart Lock acceptance. November14 remains conditional on these gates. Next single unit:CN-R1-FACEBOOK-SSO-001 S2 owner-controlled Meta configuration and separately bounded live-qualification admission;do not activate it under S1 authority. [Policy](PROJECT.md#facebook-sso-s1),[configuration](ARCHITECTURE.md#facebook-sso-s1).
+
+
+<a id="facebook-sso-s2a"></a>
+## CN-R1-FACEBOOK-SSO-001 S2-A — disabled Meta boundary
+
+2026-10-28 baseline1d4bc7daa6809d57d63dd2ce7f621bc15bfee4d9;prerequisite CI40634484156 COMPLETED/SUCCESS. Owner attachment explicitly authorizes S2-A adapter/tests only;authorization hash and exact exclusions are recorded in execution/status.json facebookSsoS2A. Verified116-file ledger reuse:102byte-identical files,14controlled reviewed successors,no new/missing knowledge files;relevant canonical/Identity/security and diagram context freshly consulted. No general audit repeated.
+
+Implemented fixed Meta transport,private secret resolution,strict app-bound token inspection,independent default-DENY backend/frontend gates,truthful configured/unqualified UI and existing-account admission. No Meta login executed,no real credentials/app/association created,no V1–V28 change,no grants or domain mutation. Final backend/frontend/browser/security/governance totals are recorded in status.json facebookSsoS2A;tests are synthetic/offline provider evidence only. Candidate42137 callback is not independently Meta-qualified;HTTPS/origin choice,operator,identity evidence,fixture binding and live execution remain gated. Historical Google two-denial attribution remains NOT_VERIFIED;no retrospective explanation or parent closure.
+
+P1/Identity advances only in bounded software preparation;15/74checked(20.3%),59unchecked,0/92formal acceptance remain. P0–P10,11workstreams,conditional21dayRelease1 and proposedWeeks4–12 preserved. November14 remains conditional on Meta live qualification,production admission/privacy/commercial banking and physical hardware/emergency-egress evidence. Next single unit:CN-R1-FACEBOOK-SSO-001 S2-B owner-controlled Meta configuration and callback/operator/identity admission;no live execution authority implied. [Policy](PROJECT.md#facebook-sso-s2a),[configuration](ARCHITECTURE.md#facebook-sso-s2a).

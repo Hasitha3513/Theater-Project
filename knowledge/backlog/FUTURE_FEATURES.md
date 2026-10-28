@@ -197,3 +197,8 @@ Future implementation entries must link actual FF/execution IDs, commit SHAs, ex
 ## Controlled FF-0001 bounded S1 implementation evidence — 2026-10-28
 
 Owner explicitly authorized CN-R1-FACEBOOK-SSO-001 S1 local synthetic-only implementation after the original discovery. Existing IDEA/NOT_GRANTED lines above are frozen discovery history,not current S1 authority. Current whole-feature lifecycle:IN_PROGRESS;S1 VERIFIED_SYNTHETIC only. Live-provider scope remains unapproved/unqualified;no formal acceptance. Exact scope,tests,publication and next unit:execution/status.json facebookSsoS1 and PROGRESS.md#facebook-sso-s1. No requirement moved or count changed.
+
+
+## Controlled FF-0001 S2-A evidence — 2026-10-28
+
+Owner explicitly authorized disabled-by-default Meta adapter and isolated tests only. S2-A implemented software boundary does not complete live-provider qualification;whole-feature lifecycle remains IN_PROGRESS,not ACCEPTED. Actual scope/evidence:execution/status.json facebookSsoS2A and PROGRESS.md#facebook-sso-s2a. Original discovery/S1 history and all existing MVP obligations retained.

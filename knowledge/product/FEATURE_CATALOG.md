@@ -746,3 +746,8 @@ Identity now supports a separate default-disabled live Google qualification conf
 ### Facebook Login — S1 synthetic-only overlay (2026-10-28)
 
 CN-R1-FACEBOOK-SSO-001 implements a disabled-by-default local Facebook-shaped Web Login fixture adapter for pre-associated eligible synthetic accounts. Existing manual/Google/JDBC sessions remain. No account creation,email merging,linking,grants,migration or real Meta authentication. This dated overlay supersedes earlier Facebook-unavailable descriptions only when the isolated fixture is explicitly configured;default remains unavailable. FF-0001 remains incomplete for live-provider scope. [Evidence](../PROGRESS.md#facebook-sso-s1),[operator guide](../guides/USER_GUIDE.md#facebook-sso-s1). Requirement/DOC-F IDs and acceptance unchanged.
+
+
+### Facebook S2-A — configured adapter,live execution disabled
+
+Disabled-by-default Meta live-provider boundary implemented under explicit S2-A authority. Existing S1/manual/Google/session behavior preserved. Configured UI is not provider qualification;no real Meta account login,new-account/linking/grant/migration or production admission. [Evidence](../PROGRESS.md#facebook-sso-s2a),[guide](../guides/USER_GUIDE.md#facebook-sso-s2a). Existing feature/requirement identities and acceptance unchanged.

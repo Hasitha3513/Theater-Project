@@ -26055,5 +26055,112 @@
         "visualReview": "COMPLETE"
       }
     ]
+  },
+  "facebookSsoS2A": {
+    "taskId": "CN-R1-FACEBOOK-SSO-001",
+    "slice": "S2A_DISABLED_LIVE_PROVIDER_ADAPTER",
+    "baseline": "1d4bc7daa6809d57d63dd2ce7f621bc15bfee4d9",
+    "authorization": "EXPLICIT_OWNER_BOUNDED_FACEBOOK_S2A",
+    "authorizationReference": "Owner FACEBOOK LOGIN S2-A OWNER AUTHORIZATION attachment",
+    "authorizationSha256": "afa9f6cbfe1ee26bc382f340919600eb288f208ff97a56e1e2b2504f7b5d7dd7",
+    "verification": "VERIFIED_OFFLINE_BOUNDARY",
+    "enabledByDefault": false,
+    "liveExecutionPerformed": false,
+    "newAccountAdmission": false,
+    "runtimeLinking": false,
+    "runtimeGrantsAssigned": false,
+    "migrationsChanged": false,
+    "financialMutations": false,
+    "physicalAccessMutations": false,
+    "productionQualified": false,
+    "acceptanceChanged": false,
+    "callbackProviderQualified": false,
+    "acceptance": {
+      "requirements": 92,
+      "criteria": 74,
+      "checkedCriteria": 15,
+      "formallyAcceptedRequirements": 0
+    },
+    "module": "identity",
+    "requirements": [
+      "CN-C02",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ],
+    "feature": "FF-0001",
+    "tests": {
+      "frontendTestCount": 512,
+      "frontend": "PASS_BUILD_TYPECHECK_LINT_TEST_AUDIT_ZERO_VULNERABILITIES",
+      "foundation": {
+        "total": 966,
+        "passed": 958,
+        "skipped": 8,
+        "failures": 0,
+        "errors": 0
+      },
+      "governance": "PASS_FULL_POSITIVE_NEGATIVE_CONTROLS",
+      "facebookLiveProvider": 8,
+      "facebookLiveBoundary": 2,
+      "browserProvider": "SYNTHETIC_S1_AND_DISABLED_LIVE_BOUNDARY_NOT_META",
+      "browserPhases": [
+        "disabled",
+        "associated",
+        "unassociated",
+        "configured_live_DENY"
+      ],
+      "browserResultGroups": 12,
+      "visualReview": "ALL_THREE_SCREENSHOTS_REVIEWED",
+      "cleanProjection": "PASS_FULL_HISTORICAL_CHAIN_UNRELATED_BYTES_PRESERVED",
+      "executionWorktree": "FAIL_TWO_PREEXISTING_NEXT_ENV_INTEGRITY_FINDINGS",
+      "focused": {
+        "total": 106,
+        "passed": 104,
+        "skipped": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      "launchers": {
+        "total": 14,
+        "status": "PASS"
+      },
+      "ciClassifier": {
+        "total": 8,
+        "status": "PASS"
+      },
+      "knowledgeDesign": "PASS",
+      "whitespace": "PASS",
+      "cleanInstall": "PASS"
+    },
+    "reading": {
+      "ledger": "bankInstructionsRealStackE2E.reading.files;facebookSsoS1.reading",
+      "filesAccounted": 116,
+      "unchanged": 102,
+      "reviewedSuccessors": 14,
+      "newFiles": 0,
+      "missingFiles": 0,
+      "method": "Verified prior complete-content/visual coverage reuse plus fresh task-relevant review"
+    },
+    "historicalGoogleAuditCause": "NOT_VERIFIED",
+    "liveProvider": "NOT_RUN_BLOCKED_PROVIDER_AND_SEPARATE_AUTHORIZATION",
+    "rollback": "Disable Facebook and both execution gates;restart;retain immutable identity/session/audit/history",
+    "publication": "COMMIT_AND_EXACT_SOURCE_CI_PENDING",
+    "nextUnit": "CN-R1-FACEBOOK-SSO-001 S2-B owner configuration/callback/operator/identity admission",
+    "screenshots": [
+      {
+        "path": ".cache/facebook-live-boundary-e2e/login-1280.png",
+        "sha256": "bc9058c3c439748ff5a1c574e9c0b29e32a1358af37d2a941c31b2ea378873d7",
+        "visualReview": "COMPLETE"
+      },
+      {
+        "path": ".cache/facebook-live-boundary-e2e/login-375.png",
+        "sha256": "e7231aff9197e23199ea5c620754fc92b17b5f0fcf8a2d0c7607145b47b23c4a",
+        "visualReview": "COMPLETE"
+      },
+      {
+        "path": ".cache/facebook-live-boundary-e2e/login-768.png",
+        "sha256": "3c8ff07bb05b63bd16dee4aaa80e87b8acde83d569ae989e288edb62d10feeed",
+        "visualReview": "COMPLETE"
+      }
+    ]
   }
 }

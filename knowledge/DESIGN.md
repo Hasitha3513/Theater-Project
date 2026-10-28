@@ -1405,3 +1405,9 @@ Load/retry/clear are explicit;loading/status/alert messages are semantic and key
 ## Local Facebook S1 login presentation
 
 Existing /login manual form and Google control remain. FacebookSso shows a disabled Facebook Login unavailable button by default;the configured loopback fixture is explicitly labelled synthetic qualification,not qualified Facebook Login. Status loading,accessible error alerts,keyboard activation,abort/stale-response handling and no-store protected transport reuse existing patterns. Screenshots at375/768/1280 were captured and visually reviewed with no horizontal overflow;one main/h1 verified. This is responsive browser evidence,not a screen-reader or real-provider acceptance claim. [Actual results](PROGRESS.md#facebook-sso-s1).
+
+
+<a id="facebook-sso-s2a"></a>
+## Facebook configured/unqualified presentation
+
+/login retains manual and Google controls. A configured LIVE_QUALIFICATION adapter shows an explicitly disabled Facebook control and notice until both independent execution gates and callback prerequisites pass. Configured is not qualified. Existing synthetic-mode labels remain. Responsive375/768/1280 browser coverage,refresh/default-DENY,zero external browser requests and protected DB invariants are recorded in [PROGRESS](PROGRESS.md#facebook-sso-s2a);no real provider or exhaustive accessibility acceptance is implied.

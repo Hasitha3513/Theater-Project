@@ -14,12 +14,40 @@ export async function forwardFacebookSso(
 		request.method !== "GET"
 	)
 		return empty(405);
-	if (process.env.CINENEST_FACEBOOK_MODE !== "CONTRACT_TEST") return empty(503);
+	const live = process.env.CINENEST_FACEBOOK_MODE === "LIVE_QUALIFICATION";
+	if (!live && process.env.CINENEST_FACEBOOK_MODE !== "CONTRACT_TEST")
+		return empty(503);
+	const execution =
+		live && process.env.CINENEST_FACEBOOK_LIVE_EXECUTION === "true";
+	if (live && action !== "status" && !execution) return empty(503);
 	const input = new URL(request.url);
+	let approvedOrigin = "";
+	if (live && execution) {
+		try {
+			const fixed = new URL(
+				process.env.CINENEST_FACEBOOK_FRONTEND_ORIGIN ?? "",
+			);
+			if (
+				fixed.protocol !== "https:" ||
+				fixed.username ||
+				fixed.password ||
+				fixed.search ||
+				fixed.hash ||
+				fixed.pathname !== "/" ||
+				fixed.origin !== input.origin
+			)
+				return empty(503);
+			approvedOrigin = fixed.origin;
+		} catch {
+			return empty(503);
+		}
+	}
 	if (
-		input.protocol !== "http:" ||
-		!["127.0.0.1", "localhost", "[::1]"].includes(input.hostname) ||
-		!input.port
+		(!live && input.protocol !== "http:") ||
+		(live && execution && input.protocol !== "https:") ||
+		(!approvedOrigin &&
+			(!["127.0.0.1", "localhost", "[::1]"].includes(input.hostname) ||
+				!input.port))
 	)
 		return empty(503);
 	const query = input.searchParams;
@@ -43,9 +71,15 @@ export async function forwardFacebookSso(
 		return empty(400);
 	if (input.search.length > 8192) return empty(400);
 	try {
-		const issuer = new URL(process.env.CINENEST_FACEBOOK_CONTRACT_ORIGIN ?? "");
+		if (live && process.env.CINENEST_FACEBOOK_CONTRACT_ORIGIN)
+			return empty(503);
+		const issuer = new URL(
+			live
+				? "https://www.facebook.com"
+				: (process.env.CINENEST_FACEBOOK_CONTRACT_ORIGIN ?? ""),
+		);
 		const backend = new URL(process.env.CINENEST_AUTH_ORIGIN ?? "");
-		for (const u of [issuer, backend])
+		for (const u of live ? [backend] : [issuer, backend])
 			if (
 				u.protocol !== "http:" ||
 				!["127.0.0.1", "localhost", "[::1]"].includes(u.hostname) ||
@@ -91,15 +125,20 @@ export async function forwardFacebookSso(
 			if (response.status !== 200) return empty(503);
 			const value = await response.json();
 			if (
-				value.mode !== "CONTRACT_TEST" ||
+				value.mode !== (live ? "LIVE_QUALIFICATION" : "CONTRACT_TEST") ||
 				value.liveProviderQualified !== false ||
-				value.syntheticOnly !== true
+				value.syntheticOnly !== !live
 			)
 				return empty(503);
 			return Response.json(
 				{
 					mode: value.mode,
 					liveProviderQualified: false,
+					executionEnabled:
+						live &&
+						execution &&
+						value.executionEnabled === true &&
+						value.callbackVerified === true,
 				},
 				{ headers },
 			);
@@ -126,10 +165,13 @@ export async function forwardFacebookSso(
 			)
 				return empty(503);
 			const callback = new URL(location.searchParams.get("redirect_uri") ?? "");
-			const expected = `${input.protocol}//${request.headers.get("host") ?? input.host}`;
+			const expected =
+				approvedOrigin ||
+				`${input.protocol}//${request.headers.get("host") ?? input.host}`;
 			if (
 				callback.origin !== expected ||
-				callback.username || callback.password ||
+				callback.username ||
+				callback.password ||
 				callback.pathname !== "/api/auth/facebook/callback" ||
 				callback.search ||
 				callback.hash ||
