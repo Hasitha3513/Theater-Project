@@ -27766,6 +27766,34 @@
       "privateEvidenceReference": "cinenest-ads-owner-uat-2ca9db1073",
       "ownerEvidenceSha256": "d2d8b2423128800a0f4f0a29ab04711222d151a780d5d73019ec844461df0430",
       "shutdownEvidenceSha256": "39013989dbc40e0c701a7fb808c0eab53297f97dd90831662698945a56b1e370"
+    },
+    "publicMediaAdmissionPreparation": {
+      "authority": "CONTRACT_PREPARATION_ONLY",
+      "source": "825fc2adad79823d49d913f77a37de0b0068cc3f",
+      "baselineCi": 40827602886,
+      "status": "PROPOSED_OWNER_REVIEW",
+      "implementationAuthorized": false,
+      "cloudProvisioningAuthorized": false,
+      "uploadsEnabled": false,
+      "productionGrantsAuthorized": false,
+      "productionActivationAuthorized": false,
+      "providerSelected": false,
+      "awsDeferred": true,
+      "privateEvidenceStorageReused": false,
+      "applicationChanged": false,
+      "migrationsChanged": false,
+      "formalAcceptanceChanged": false,
+      "facebookS2B": "HOLD",
+      "units": {
+        "A": "NOT_GRANTED",
+        "B": "NOT_GRANTED",
+        "C": "NOT_GRANTED",
+        "D": "NOT_GRANTED",
+        "E": "NOT_GRANTED",
+        "F": "NOT_GRANTED"
+      },
+      "publicMediaTests": "NOT_RUN",
+      "next": "OWNER_AUTHORIZATION_A_LOCAL_SYNTHETIC_STORAGE_CONTRACT"
     }
   }
 }
