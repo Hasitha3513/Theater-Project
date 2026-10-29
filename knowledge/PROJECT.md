@@ -1071,3 +1071,12 @@ Staff can create/edit drafts, select fixed illustrations, schedule/order, previe
 | Activation | Production stays DENY until A–F gates,external evidence and explicit owner activation. | Separate implementation,resource/grant,production UAT and activation authorizations;local UAT never substitutes. |
 
 [Exact ports,proposed APIs/persistence,delivery and costs](ARCHITECTURE.md#advertising-public-media-admission). Existing92 requirements/74 criteria and formal acceptance remain unchanged;global privacy/banking/physical gates and Facebook HOLD remain.
+
+
+<a id="advertising-media-unit-a"></a>
+
+### Advertising public-media Unit A — bounded owner authority, 2026-10-29
+
+The owner explicitly authorizes only the isolated local synthetic storage foundation and the subsequent monitored-budget/exact-owned-cleanup addendum under CN-R1-ADMIN-ADVERTISING-001. This supersedes the earlier A NOT_GRANTED proposal only for this bounded implementation; preserve that historical preparation and B–F NOT_GRANTED. No format/publication/production policy is approved by implication.
+
+Per run: exactly one fresh cn-ads-a-32hex namespace/bucket/container/volume; at most10 cumulative object versions including retries/tamper/delete markers,2MiB each,20MiB cumulative submitted payload,128MiB monitored whole-test-data budget. The budget is not a kernel filesystem quota. Pre/post checks must fail closed when over budget or unmeasurable. Docker ceilings1CPU/1GiB/128PIDs; cached pinned image,loopback only;900s execution plus30s total cleanup. Exact manifest/labels/immutable run identity must positively establish ownership before removing versions,markers,bucket,container and fresh volume; verify absence on success/failure. Cleanup failure stops further execution and retains private sanitized unresolved-resource evidence. No adoption,prune,unowned/historical cleanup,cloud/paid resources,receipt data/keys/journal,uploads,public delivery,production media,grants,migrations or other-module changes. Facebook remains HOLD. Implementation/qualification outcomes belong in PROGRESS; authority is not qualification or acceptance.

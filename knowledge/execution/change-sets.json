@@ -7088,5 +7088,35 @@
     "fixtures": "ISOLATED_CONTENT_ONLY",
     "priorAdmission": "advertisingPriorityAdmission historical preparation retained",
     "contract": "knowledge/ARCHITECTURE.md#admin-advertising-s1"
+  },
+  "advertisingMediaUnitAAuthorization": {
+    "parentTask": "CN-R1-ADMIN-ADVERTISING-001",
+    "authority": "EXPLICIT_OWNER_UNIT_A_AND_MONITORED_BUDGET_ADDENDUM",
+    "unit": "A",
+    "implementation": "AUTHORIZED_LOCAL_SYNTHETIC_ONLY",
+    "resourceAddendum": "EXPLICIT_OWNER_MONITORED_BUDGET_AND_EXACT_OWNED_CLEANUP",
+    "bounds": {
+      "freshOwnedResourcesPerRun": 1,
+      "maxCumulativeVersions": 10,
+      "maxObjectBytes": 2097152,
+      "maxSubmittedBytes": 20971520,
+      "maxMonitoredBytes": 134217728,
+      "accounting": "DU_APPARENT_ALLOCATED_MAX_PLUS_9_MIB_BOUNDED_TMPFS_LOG_RESERVE",
+      "hardFilesystemQuota": false,
+      "cpus": 1,
+      "memoryBytes": 1073741824,
+      "pids": 128,
+      "executionSeconds": 900,
+      "cleanupSeconds": 30,
+      "cachedPinnedImageOnly": true,
+      "loopbackHostExposureOnly": true
+    },
+    "unitsBtoF": "NOT_GRANTED",
+    "production": false,
+    "uploads": false,
+    "publicDelivery": false,
+    "runtimeGrants": false,
+    "migrations": false,
+    "facebook": "HOLD"
   }
 }

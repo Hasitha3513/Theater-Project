@@ -27795,5 +27795,130 @@
       "publicMediaTests": "NOT_RUN",
       "next": "OWNER_AUTHORIZATION_A_LOCAL_SYNTHETIC_STORAGE_CONTRACT"
     }
+  },
+  "advertisingMediaUnitAExecution": {
+    "authority": "EXPLICIT_OWNER_UNIT_A_AND_MONITORED_BUDGET_ADDENDUM",
+    "status": "LOCAL_SYNTHETIC_STORAGE_QUALIFICATION_PASS",
+    "sourceBase": "98219e7e58981edc5e782e8624856b15a359b427",
+    "baselineCi": 40831832527,
+    "qualificationReference": "cn-ads-a-6d5e9e84898a00ac755e745d174e7c2f",
+    "sourceHashes": {
+      "backend/src/main/java/com/cinenest/rooms/internal/AdvertisingMediaStore.java": "0e840e9f8f22a7a6bcd9a936fdca7704b8833bbee82901fc50a1c3569b863926",
+      "backend/src/test/java/com/cinenest/rooms/internal/LocalAdvertisingMediaTestAdapter.java": "85ee2653febeb7b6cb5634c303127216003d75751033e5e7aea4fd460b60f57c",
+      "backend/src/test/java/com/cinenest/rooms/internal/AdvertisingMediaStorageContractTest.java": "bd0b97f95815e9178af5377e06debefb7b005eed3d3240704b6fea6b72f1dad7",
+      "scripts/verify-advertising-media-a.py": "479ae2c27935620e5e65ffd588065c8badb9464f9f8ba749fd49dec0934181f6",
+      "scripts/test-advertising-media-runner.py": "e47b88188f1d31e87b6d00fc61d0e1d5eb5c11c24d47c994de10c41ac2814404"
+    },
+    "enabledByDefault": false,
+    "runtimeAdapterWired": false,
+    "publicDelivery": false,
+    "adminUploads": false,
+    "productionQualified": false,
+    "awsQualified": false,
+    "cloudResources": false,
+    "privateReceiptStorageReused": false,
+    "migrationsChanged": false,
+    "runtimeGrants": false,
+    "otherModuleSourceChanged": false,
+    "formalAcceptanceChanged": false,
+    "facebookS2B": "HOLD",
+    "unitsBtoF": "NOT_GRANTED",
+    "jvmRestartCommandDurabilityClaimed": false,
+    "bounds": {
+      "freshOwnedResourcesPerRun": 1,
+      "maxCumulativeVersions": 10,
+      "maxObjectBytes": 2097152,
+      "maxSubmittedBytes": 20971520,
+      "maxMonitoredBytes": 134217728,
+      "accounting": "DU_APPARENT_ALLOCATED_MAX_PLUS_9_MIB_BOUNDED_TMPFS_LOG_RESERVE",
+      "hardFilesystemQuota": false,
+      "cpus": 1,
+      "memoryBytes": 1073741824,
+      "pids": 128,
+      "executionSeconds": 900,
+      "cleanupSeconds": 30,
+      "cachedPinnedImageOnly": true,
+      "loopbackHostExposureOnly": true
+    },
+    "containerContract": {
+      "potentialVersionCreations": 5,
+      "results": [
+        "private-write-exact-version-digest",
+        "immutable-intent-and-command-replay",
+        "concurrent-duplicate-one-version",
+        "integrity-missing-and-wrong-version-denied",
+        "anonymous-denied-no-public-delivery",
+        "dedicated-namespace-no-payments-path",
+        "injected-lost-reply-exact-reconciliation-no-second-put",
+        "native-historical-version-read-proven-unexpected-new-version-stale",
+        "outage-fail-closed-and-container-restart-persistence",
+        "restart-uncertain-write-read-only-reconciliation-no-second-put",
+        "delete-marker-counted-and-denied",
+        "exact-owned-version-removal",
+        "owned-versions-markers-bucket-cleanup-verified"
+      ],
+      "status": "PASS",
+      "storageBudgetKind": "MONITORED_NOT_FILESYSTEM_QUOTA",
+      "submittedBytes": 213253,
+      "objectsAndBucketAbsent": true
+    },
+    "cleanup": {
+      "verified": true,
+      "containerAbsent": true,
+      "volumeAbsent": true,
+      "ownedDataNamespaceAbsent": true,
+      "verification": "EXACT_S3_CLEANUP_WHEN_AVAILABLE_AND_OWNED_VOLUME_DATA_REMOVAL",
+      "seconds": 2.905
+    },
+    "monitoredHighWaterBytes": 9961472,
+    "offlineRunnerTests": {
+      "run": 9,
+      "passed": 9,
+      "providerTraffic": false
+    },
+    "backendRegression": {
+      "run": 996,
+      "passed": 983,
+      "skipped": 13,
+      "failures": 0,
+      "errors": 0,
+      "packagedStartupAndHttpDenial": "PASS",
+      "finalSourceRerun": "PASS"
+    },
+    "realContainerTests": {
+      "run": 7,
+      "passed": 7,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    "historicalFailedCampaigns": 14,
+    "historicalFailedCampaignsCleanupVerified": 14,
+    "restartFinding": "PUT_ACK_TIMEOUT_THEN_EXACT_READ_ONLY_RECONCILIATION_WITHOUT_SECOND_PUT",
+    "timeoutInternalCause": "NOT_VERIFIED",
+    "combinedModeSocketCause": "NOT_VERIFIED",
+    "publication": "PENDING_VALIDATION_COMMIT_AND_EXACT_SOURCE_CI",
+    "reading": {
+      "qualifiedFiles": 116,
+      "originalLedgerUnchangedFiles": 103,
+      "controlledSuccessorsReviewed": 13,
+      "newKnowledgeFiles": false,
+      "gaps": []
+    },
+    "traceability": {
+      "requirements": [
+        "CN-NFR-01",
+        "CN-NFR-02",
+        "CN-NFR-03"
+      ],
+      "testPlans": [
+        "T-CN-NFR-01",
+        "T-CN-NFR-02",
+        "T-CN-NFR-03"
+      ],
+      "fullRequirementVerified": false,
+      "formalAcceptance": "NOT_ACCEPTED"
+    },
+    "guideAssessment": "NO_NEW_USER_WORKFLOW;EXISTING_S1_GUIDE_UNCHANGED"
   }
 }

@@ -770,3 +770,6 @@ Existing Rooms module now supports explicitly enabled local synthetic venue-bann
 
 
 Owner-interactive local UAT is confirmed on2026-10-29 for draft privacy, independent publishing, homepage visibility, unpublishing and retained revision history; this is bounded local confirmation, not formal MVP or production acceptance. [Owner UAT evidence](../PROGRESS.md#admin-advertising-s1).
+
+
+Advertising public-media Unit A is an authorized backend-only qualification workstream,not an available customer/Admin upload feature. Rooms storage-port/test-adapter source passes the bounded local native-version/integrity/isolation/recovery/cleanup qualification;publication is pending source validation and exact-source CI. Existing fixed-illustration Advertising S1 and owner UAT remain unchanged;no public media delivery or production admission. See [scope](../PROJECT.md#advertising-media-unit-a) and [actual results](../PROGRESS.md#advertising-media-unit-a). Existing User Guide workflows require no new steps for this private test-only boundary.

@@ -8845,5 +8845,127 @@ def inert_ci_main():
         if result==0:print('PASS exact bounded local Advertising S1;history/provider gates/full acceptance preserved')
         return result
 
+
+
+# Exact owner-authorized Unit A successor. Historical validators replay against
+# immutable pre-Unit-A bytes; every newly admitted current payload is rehashed.
+AD_MEDIA_A_BASE='98219e7e58981edc5e782e8624856b15a359b427'
+AD_MEDIA_A_HASHES={'backend/src/main/java/com/cinenest/rooms/internal/AdvertisingMediaStore.java': '0e840e9f8f22a7a6bcd9a936fdca7704b8833bbee82901fc50a1c3569b863926', 'backend/src/test/java/com/cinenest/rooms/internal/LocalAdvertisingMediaTestAdapter.java': '85ee2653febeb7b6cb5634c303127216003d75751033e5e7aea4fd460b60f57c', 'backend/src/test/java/com/cinenest/rooms/internal/AdvertisingMediaStorageContractTest.java': 'bd0b97f95815e9178af5377e06debefb7b005eed3d3240704b6fea6b72f1dad7', 'scripts/verify-advertising-media-a.py': '479ae2c27935620e5e65ffd588065c8badb9464f9f8ba749fd49dec0934181f6', 'scripts/test-advertising-media-runner.py': 'e47b88188f1d31e87b6d00fc61d0e1d5eb5c11c24d47c994de10c41ac2814404', 'knowledge/PROJECT.md': 'd173cb48c300696b30e69c564df796a8124ad360ec0de563edee87173332761b', 'knowledge/ARCHITECTURE.md': 'ff6773fb8e8ce989c4cb62055d738e9f0e05109a704f8d8bc65391e8041bbd9c', 'knowledge/PROGRESS.md': 'aa6561148c2d18708a6df4c3ad0f87c318f27a5ed75f8e8295ff36b1fc69f66c', 'knowledge/product/FEATURE_CATALOG.md': '61e96f0b22d7bf064e698f3d616f6420cc8cff9fe33691945d5be7c5fedd8f10', 'knowledge/execution/status.json': '5e52c7a9d9359b9aad66198ea24e2e7416ad9e3a81f380a02fad9ab538754359', 'knowledge/execution/change-sets.json': '7ab5e185fa36c661e1c8a849c57002e862a614f821ec1fc150065eef7ae59736'}
+AD_MEDIA_A_PROGRESS={'Current priority:[local Admin Advertising S1](#admin-advertising-s1) owner walkthrough/UAT is verified for the bounded local scope; no formal MVP or production acceptance. Facebook S2-B remains HOLD. Local self-profile and historical provider/Google audit evidence remain unchanged.\n': 'Current priority:[Advertising public-media Unit A](#advertising-media-unit-a) bounded local storage qualification passes;final validation/publication pending. Existing S1 owner UAT remains verified. No public delivery,uploads,production or formal MVP acceptance. Facebook S2-B remains HOLD;historical provider/Google audit evidence unchanged.\n', '  P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; bounded read-only calendar/customer UI and real calendar-to-hold E2E; guided booking sections, bounded synthetic customer history,exact request and simulated booking navigation; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]\n': '  P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; bounded read-only calendar/customer UI and real calendar-to-hold E2E; guided booking sections, bounded synthetic customer history,exact request and simulated booking navigation; 2 of 6 criteria<br/>PARTIAL; Unit A local storage/version/integrity/recovery/cleanup13 scenarios PASS;no public delivery<br/>NOT_ACCEPTED"]\n'}
+ad_media_a_previous_main=inert_ci_main
+ad_media_a_previous_guard=receipt_admission_successor_errors
+
+def ad_media_a_record_errors(e):
+    errors=[]
+    if e.get('authority')!='EXPLICIT_OWNER_UNIT_A_AND_MONITORED_BUDGET_ADDENDUM' or e.get('status')!='LOCAL_SYNTHETIC_STORAGE_QUALIFICATION_PASS' or e.get('sourceBase')!=AD_MEDIA_A_BASE or e.get('baselineCi')!=40831832527:errors.append('MEDIA A authority/source/status drift')
+    for k in ['enabledByDefault','runtimeAdapterWired','publicDelivery','adminUploads','productionQualified','awsQualified','cloudResources','privateReceiptStorageReused','migrationsChanged','runtimeGrants','otherModuleSourceChanged','formalAcceptanceChanged','jvmRestartCommandDurabilityClaimed']:
+        if e.get(k) is not False:errors.append('MEDIA A excluded '+k)
+    if e.get('facebookS2B')!='HOLD' or e.get('unitsBtoF')!='NOT_GRANTED' or e.get('timeoutInternalCause')!='NOT_VERIFIED' or e.get('combinedModeSocketCause')!='NOT_VERIFIED':errors.append('MEDIA A inherited gate/history drift')
+    expected={'freshOwnedResourcesPerRun': 1, 'maxCumulativeVersions': 10, 'maxObjectBytes': 2097152, 'maxSubmittedBytes': 20971520, 'maxMonitoredBytes': 134217728, 'accounting': 'DU_APPARENT_ALLOCATED_MAX_PLUS_9_MIB_BOUNDED_TMPFS_LOG_RESERVE', 'hardFilesystemQuota': False, 'cpus': 1, 'memoryBytes': 1073741824, 'pids': 128, 'executionSeconds': 900, 'cleanupSeconds': 30, 'cachedPinnedImageOnly': True, 'loopbackHostExposureOnly': True}
+    if e.get('bounds')!=expected:errors.append('MEDIA A owner resource/cleanup bounds drift')
+    c=e.get('containerContract',{})
+    if c.get('status')!='PASS' or c.get('results')!=['private-write-exact-version-digest', 'immutable-intent-and-command-replay', 'concurrent-duplicate-one-version', 'integrity-missing-and-wrong-version-denied', 'anonymous-denied-no-public-delivery', 'dedicated-namespace-no-payments-path', 'injected-lost-reply-exact-reconciliation-no-second-put', 'native-historical-version-read-proven-unexpected-new-version-stale', 'outage-fail-closed-and-container-restart-persistence', 'restart-uncertain-write-read-only-reconciliation-no-second-put', 'delete-marker-counted-and-denied', 'exact-owned-version-removal', 'owned-versions-markers-bucket-cleanup-verified'] or c.get('potentialVersionCreations')!=5 or c.get('submittedBytes')!=213253 or c.get('objectsAndBucketAbsent') is not True or c.get('storageBudgetKind')!='MONITORED_NOT_FILESYSTEM_QUOTA':errors.append('MEDIA A missing actual provider/version/recovery evidence')
+    clean=e.get('cleanup',{})
+    if any(clean.get(k) is not True for k in ['verified','containerAbsent','volumeAbsent','ownedDataNamespaceAbsent']) or not 0<=clean.get('seconds',999)<=30:errors.append('MEDIA A cleanup unverified')
+    if e.get('monitoredHighWaterBytes')!=9961472 or e.get('offlineRunnerTests')!={'run':9,'passed':9,'providerTraffic':False} or e.get('realContainerTests')!={'run':7,'passed':7,'skipped':0,'failures':0,'errors':0}:errors.append('MEDIA A actual test/resource result drift')
+    if e.get('backendRegression')!={'run':996,'passed':983,'skipped':13,'failures':0,'errors':0,'packagedStartupAndHttpDenial':'PASS','finalSourceRerun':'PASS'}:errors.append('MEDIA A regression omission')
+    if e.get('historicalFailedCampaigns')!=14 or e.get('historicalFailedCampaignsCleanupVerified')!=14 or e.get('restartFinding')!='PUT_ACK_TIMEOUT_THEN_EXACT_READ_ONLY_RECONCILIATION_WITHOUT_SECOND_PUT':errors.append('MEDIA A historical failure/recovery evidence lost')
+    if e.get('reading')!={'qualifiedFiles':116,'originalLedgerUnchangedFiles':103,'controlledSuccessorsReviewed':13,'newKnowledgeFiles':False,'gaps':[]}:errors.append('MEDIA A reading gap')
+    if e.get('traceability')!={'requirements':['CN-NFR-01','CN-NFR-02','CN-NFR-03'],'testPlans':['T-CN-NFR-01','T-CN-NFR-02','T-CN-NFR-03'],'fullRequirementVerified':False,'formalAcceptance':'NOT_ACCEPTED'}:errors.append('MEDIA A false acceptance/traceability drift')
+    expected_sources={n:h for n,h in AD_MEDIA_A_HASHES.items() if n.startswith(('backend/','scripts/'))}
+    if e.get('sourceHashes')!=expected_sources:errors.append('MEDIA A source/result correlation drift')
+    return errors
+
+def ad_media_a_payload_errors():
+    errors=[];owned=set(AD_MEDIA_A_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    before=lambda n:subprocess.check_output(['git','-C',str(R),'show',AD_MEDIA_A_BASE+':'+n])
+    for n,h in AD_MEDIA_A_HASHES.items():
+        p=R/n
+        if p.is_symlink() or not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest()!=h:errors.append('MEDIA A unadmitted payload '+n)
+    if errors:return errors
+    state=json.loads((K/'execution/status.json').read_text());e=state.pop('advertisingMediaUnitAExecution',{});errors.extend(ad_media_a_record_errors(e))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('MEDIA A historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());a=plan.pop('advertisingMediaUnitAAuthorization',{})
+    if a!={'parentTask':'CN-R1-ADMIN-ADVERTISING-001','authority':e.get('authority'),'unit':'A','implementation':'AUTHORIZED_LOCAL_SYNTHETIC_ONLY','resourceAddendum':'EXPLICIT_OWNER_MONITORED_BUDGET_AND_EXACT_OWNED_CLEANUP','bounds':e.get('bounds'),'unitsBtoF':'NOT_GRANTED','production':False,'uploads':False,'publicDelivery':False,'runtimeGrants':False,'migrations':False,'facebook':'HOLD'}:errors.append('MEDIA A implementation authority drift')
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('MEDIA A historical plan drift')
+    for n in ['PROJECT.md','ARCHITECTURE.md','PROGRESS.md','product/FEATURE_CATALOG.md']:
+        expected=before('knowledge/'+n).decode()
+        if n=='PROGRESS.md':
+            for old,new in AD_MEDIA_A_PROGRESS.items():expected=expected.replace(old,new,1)
+        if not (K/n).read_text().startswith(expected):errors.append('MEDIA A historical prose drift '+n)
+    tree=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',AD_MEDIA_A_BASE]);blobs={}
+    for entry in tree.split(b'\0'):
+        if entry:
+            metadata,name=entry.split(b'\t',1);mode,kind,oid=metadata.split();blobs[name.decode()]=oid.decode()
+    tracked=set(blobs)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        p=R/n
+        if p.is_symlink() or not p.is_file():errors.append('MEDIA A missing/unowned '+n);continue
+        data=p.read_bytes()
+        if hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()!=blobs[n]:errors.append('MEDIA A unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('MEDIA A unauthorized new source')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',AD_MEDIA_A_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('MEDIA A unauthorized path')
+    migrations={p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}
+    if migrations!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}:errors.append('MEDIA A migration inventory drift')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('MEDIA A prior validator changed')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('MEDIA A manifest drift')
+    return errors
+
+def ad_media_a_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return ad_media_a_payload_errors()
+
+def ad_media_a_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['advertisingMediaUnitAExecution'];assert not ad_media_a_record_errors(e)
+    for key in ['enabledByDefault','runtimeAdapterWired','publicDelivery','adminUploads','productionQualified','awsQualified','cloudResources','privateReceiptStorageReused','migrationsChanged','runtimeGrants','otherModuleSourceChanged','formalAcceptanceChanged','jvmRestartCommandDurabilityClaimed']:
+        bad=copy.deepcopy(e);bad[key]=True;assert ad_media_a_record_errors(bad);print('PASS MEDIA A rejects '+key)
+    for key in ['maxCumulativeVersions','maxObjectBytes','maxSubmittedBytes','maxMonitoredBytes','cpus','memoryBytes','pids','executionSeconds','cleanupSeconds']:
+        bad=copy.deepcopy(e);bad['bounds'][key]+=1;assert ad_media_a_record_errors(bad);print('PASS MEDIA A preserves bound '+key)
+    for key in ['hardFilesystemQuota']:
+        bad=copy.deepcopy(e);bad['bounds'][key]=True;assert ad_media_a_record_errors(bad);print('PASS MEDIA A rejects false quota')
+    for key in ['verified','containerAbsent','volumeAbsent','ownedDataNamespaceAbsent']:
+        bad=copy.deepcopy(e);bad['cleanup'][key]=False;assert ad_media_a_record_errors(bad);print('PASS MEDIA A rejects cleanup omission '+key)
+    for key in ['facebookS2B','unitsBtoF','timeoutInternalCause','combinedModeSocketCause']:
+        bad=copy.deepcopy(e);bad[key]='APPROVED';assert ad_media_a_record_errors(bad);print('PASS MEDIA A preserves '+key)
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/resources/db/migration/V30__local_venue_banners.sql','backend/src/main/java/com/cinenest/payments/internal/BankService.java','backend/src/test/java/com/cinenest/rooms/internal/LocalAdvertisingMediaTestAdapter.java','knowledge/execution/requirements.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert ad_media_a_successor_errors(),n
+        print('PASS MEDIA A rejects changed/unowned payload '+n)
+
+receipt_admission_successor_errors=ad_media_a_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=ad_media_a_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        ad_media_a_negative_controls()
+        owned=set(AD_MEDIA_A_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+        tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',AD_MEDIA_A_BASE],text=True),nul=True)
+        added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',AD_MEDIA_A_BASE+':'+n]) for n in owned&tracked}
+        rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            value=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+                return text if isinstance(value,str) else text.encode()
+            return value
+        output._profile_immutable_reader=True
+        def glob(p,*a,**kw):return (x for x in glob0(p,*a,**kw) if x.relative_to(R).as_posix() not in added) if p==R/'backend/src/main/resources/db/migration' else glob0(p,*a,**kw)
+        with patch.dict(globals(),{'receipt_admission_successor_errors':ad_media_a_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ad_media_a_previous_main()
+        if result==0:print('PASS exact bounded public-media Unit A;native provider evidence;no uploads/public delivery/production or acceptance')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
