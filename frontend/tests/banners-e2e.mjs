@@ -226,6 +226,42 @@ try {
 	results.push(
 		"immutable published snapshot; history; unpublish; stale conflict",
 	);
+	// Real same-origin server logout, without injecting cookies or intercepted responses.
+	assert.equal(
+		await author.evaluate(async () => {
+			const r = await fetch("/api/session/csrf", { cache: "no-store" });
+			const csrf = await r.json();
+			return (
+				await fetch("/api/session/logout", {
+					method: "POST",
+					headers: { "X-CSRF-TOKEN": csrf.token },
+				})
+			).status;
+		}),
+		204,
+	);
+	await author.getByRole("button", { name: "Save draft", exact: true }).click();
+	await author
+		.getByText("Session or authority expired. Protected content cleared.", {
+			exact: true,
+		})
+		.waitFor();
+	assert.equal(
+		await author.getByLabel("Banner title", { exact: true }).inputValue(),
+		"",
+	);
+	assert.equal(
+		await author
+			.getByRole("button", {
+				name: "Private next revision · LIVE",
+				exact: true,
+			})
+			.count(),
+		0,
+	);
+	results.push(
+		"actual logout/CSRF-preflight expiry clears protected draft state",
+	);
 	await writeFile(
 		`${run}/results.json`,
 		JSON.stringify({

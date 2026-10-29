@@ -196,7 +196,13 @@ export function BannerAdmin() {
 		const headers: Record<string, string> = {};
 		if (method !== "GET") {
 			const r = await fetch("/api/session/csrf", { cache: "no-store" });
-			if (!r.ok) throw Error("Sign in with current content authority.");
+			if (!r.ok) {
+				if (r.status === 401 || r.status === 403) {
+					clear();
+					setNotice("Session or authority expired. Protected content cleared.");
+				}
+				throw Error("Sign in with current content authority.");
+			}
 			const c = await r.json();
 			headers["X-CSRF-TOKEN"] = c.token;
 			headers["Content-Type"] = "application/json";

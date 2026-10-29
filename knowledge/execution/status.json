@@ -27112,7 +27112,8 @@
         "packagedStartup": "PASS"
       },
       "migration": "CLEAN_V1_V30_AND_V29_UPGRADE_PASS",
-      "governance": "REQUIRED_BEFORE_PUBLICATION"
+      "governance": "REQUIRED_BEFORE_PUBLICATION",
+      "csrfPreflightStateClear": "PASS_ACTUAL_LOGOUT_AND_EXPIRED_SESSION"
     },
     "reading": {
       "baseline": "1f4a152eb35fc2bbd9c33d94f4849b7065074e23",
@@ -27702,6 +27703,12 @@
       "controlledSuccessors": 12,
       "newKnowledgeFiles": 0,
       "gaps": []
+    },
+    "firstPublication": {
+      "sha": "7c40e71fd54f30414b05ca9ba7854aa590d5bf20",
+      "ci": 40818419717,
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
     }
   }
 }
