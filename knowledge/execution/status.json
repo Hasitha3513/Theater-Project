@@ -27060,7 +27060,7 @@
   "advertisingS1Execution": {
     "taskId": "CN-R1-ADMIN-ADVERTISING-001",
     "authority": "EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1",
-    "status": "VERIFIED_LOCAL_SYNTHETIC_PENDING_PUBLICATION_CI",
+    "status": "VERIFIED_LOCAL_SYNTHETIC_OWNER_UAT",
     "baseline": "1f4a152eb35fc2bbd9c33d94f4849b7065074e23",
     "baselineCi": 40759539954,
     "module": "rooms",
@@ -27709,6 +27709,63 @@
       "ci": 40818419717,
       "status": "COMPLETED",
       "conclusion": "SUCCESS"
+    },
+    "implementationPublication": {
+      "commit": "7636b73f3d8d69df4cb89cb09e4d36b800de5624",
+      "ci": 40820922491,
+      "status": "COMPLETED",
+      "conclusion": "SUCCESS"
+    },
+    "ownerUat": {
+      "date": "2026-10-29",
+      "source": "7636b73f3d8d69df4cb89cb09e4d36b800de5624",
+      "status": "OWNER_CONFIRMED_LOCAL_PASS",
+      "ownerConfirmed": true,
+      "ownerActionsSimulated": false,
+      "draftPrivate": true,
+      "independentPublisher": true,
+      "homepageVisibleAfterPublish": true,
+      "homepageClearedAfterUnpublish": true,
+      "historyRetained": true,
+      "loggedOut": true,
+      "schema": "V30",
+      "accounts": 2,
+      "associations": 0,
+      "contentGrants": 4,
+      "banners": 1,
+      "published": 0,
+      "contentRevisions": 1,
+      "resourceRevision": 7,
+      "mutationAudits": {
+        "CREATE": 1,
+        "PUBLISH": 3,
+        "UNPUBLISH": 3
+      },
+      "authenticatedSessions": 0,
+      "financialMutations": 0,
+      "bookingAccessMutations": 0,
+      "screenshots": {
+        "kind": "AUTOMATED_READONLY_CAPTURE_OF_OWNER_PUBLISHED_STATE",
+        "count": 6,
+        "widths": [
+          375,
+          768,
+          1280
+        ],
+        "horizontalOverflow": false
+      },
+      "servicesStopped": true,
+      "portsClosed": [
+        8080,
+        42137
+      ],
+      "databaseRetained": true,
+      "privateDumpRetained": true,
+      "facebookLiveExecution": false,
+      "formalAcceptanceChanged": false,
+      "privateEvidenceReference": "cinenest-ads-owner-uat-2ca9db1073",
+      "ownerEvidenceSha256": "d2d8b2423128800a0f4f0a29ab04711222d151a780d5d73019ec844461df0430",
+      "shutdownEvidenceSha256": "39013989dbc40e0c701a7fb808c0eab53297f97dd90831662698945a56b1e370"
     }
   }
 }

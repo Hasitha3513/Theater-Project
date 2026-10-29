@@ -767,3 +767,6 @@ In an explicitly enabled isolated local-synthetic environment, an eligible signe
 ### Local Admin Advertising S1 — CN-R1-ADMIN-ADVERTISING-001 / FF-0002
 
 Existing Rooms module now supports explicitly enabled local synthetic venue-banner drafts, edits, fixed illustrations, schedules/order, protected preview, independent publishing/unpublishing, revision history and live homepage rendering. Existing manual/Google/Facebook software and financial workflows are unchanged; Facebook qualification stays HOLD. Production publishing/grants, uploads/cloud media and discounts remain excluded. This bounded result supersedes earlier not-implemented preview statements only for S1; no original requirement or formal acceptance is closed. [Evidence](../PROGRESS.md#admin-advertising-s1), [guide](../guides/USER_GUIDE.md#admin-advertising-s1).
+
+
+Owner-interactive local UAT is confirmed on2026-10-29 for draft privacy, independent publishing, homepage visibility, unpublishing and retained revision history; this is bounded local confirmation, not formal MVP or production acceptance. [Owner UAT evidence](../PROGRESS.md#admin-advertising-s1).

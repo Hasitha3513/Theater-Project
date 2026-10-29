@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Current priority:[local Admin Advertising S1](#admin-advertising-s1), owner-authorized and locally implemented/tested; exact-source publication CI is a separate receipt. Facebook S2-B remains HOLD. Local self-profile and historical provider/Google audit evidence remain unchanged.
+Current priority:[local Admin Advertising S1](#admin-advertising-s1) owner walkthrough/UAT is verified for the bounded local scope; no formal MVP or production acceptance. Facebook S2-B remains HOLD. Local self-profile and historical provider/Google audit evidence remain unchanged.
 
 Current manual customer authentication:[local synthetic implementation and verification](#local-customer-auth);real-customer/provider admission remains disabled.
 
@@ -334,7 +334,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 flowchart TB
   G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; synthetic bank-only refunds VERIFIED; full refund acceptance OPEN; venue/reviewers PENDING; PayHere BLOCKED; Admin reads and bounded synthetic notifications VERIFIED"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
-  P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; Local self-profile/V29 VERIFIED_SYNTHETIC; manual/Google/Facebook contracts preserved; Facebook S2-B HOLD; Admin advertising S1 locally verified (production disabled); Google historical audit attribution open; 3 of 6 criteria (C01/C03/C06)<br/>Shell/discovery/original illustrative assets;bounded grant/capability policy + managed grant backend read and inspection UI; acceptance unchanged<br/>NOT_ACCEPTED"]
+  P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; Local self-profile/V29 VERIFIED_SYNTHETIC; manual/Google/Facebook contracts preserved; Facebook S2-B HOLD; Admin advertising S1 owner UAT verified (production disabled); Google historical audit attribution open; 3 of 6 criteria (C01/C03/C06)<br/>Shell/discovery/original illustrative assets;bounded grant/capability policy + managed grant backend read and inspection UI; acceptance unchanged<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; landing-to-catalog connected; audit/version/capacity/duration evidence owner-approved; 4 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; bounded read-only calendar/customer UI and real calendar-to-hold E2E; guided booking sections, bounded synthetic customer history,exact request and simulated booking navigation; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P4["P4 Identity/bank/guest roster<br/>Synthetic identity/request/ledger,customer handoff,contextual receipts and exact staff review navigation within bounded scopes; partial real E2E, booking detail/URL safety/session,quotation,hold,identity rejection and lost receipt acknowledgement verified;staff roster read integrated; 24 synthetic groups PASS; full acceptance remains open<br/>0 of 8 full criteria; NOT_ACCEPTED"]
@@ -1062,7 +1062,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff:CN-R1-ADMIN-ADVERTISING-001 local S1 owner walkthrough/UAT after exact-source CI; use only approved isolated content fixtures. Facebook S2-B remains HOLD; no Meta attempt or production publication authorized.
+Current handoff:CN-R1-ADMIN-ADVERTISING-001 owner UAT completed; next prepare its bounded public-media/production-admission contract only. No implementation or production activation inferred. Facebook S2-B remains HOLD.
 
 Current owner-authentication handoff:[bounded evidence](#local-customer-auth). Next CN-R1-GOOGLE-SSO-001 requires separate provider-specific authority;historical handoffs below remain unchanged.
 
@@ -3315,3 +3315,14 @@ Full final backend run:989 tests,978 passed,11 opt-in exclusions,0 failures/erro
 Next single executable action after CI: owner walkthrough/UAT of the approved local S1 workflow under this same task. Production administrative authority/media/content admission and deployment remain separate; no new Meta activity.
 
 Advertising S1 follow-up: first publication7c40e71fd54f30414b05ca9ba7854aa590d5bf20 / CI40818419717 COMPLETED/SUCCESS verified. Final review found that a CSRF-preflight401/403 could retain an already loaded draft view despite backend denial. The bounded frontend correction clears protected state on that branch; actual same-origin server logout followed by Save proves the expired-session path clears the draft/list. No authentication handler or server authorization changed. Updated focused suite11/11 and frontend519 tests/build/typecheck/lint PASS. Six responsive screenshots regenerated at the correct workspace path. Follow-up exact-source publication CI remains required; earlier full backend989-test result remains distinct from the added focused browser assertion.
+
+
+### 2026-10-29 — Owner-interactive local Advertising S1 UAT
+
+Implementation source `7636b73f3d8d69df4cb89cb09e4d36b800de5624`, exact-source CI40820922491 COMPLETED/SUCCESS independently verified. The owner confirmed three distinct walkthrough stages: author saved/previewed a private draft with no homepage exposure; independent publisher published and confirmed homepage visibility; owner unpublished, confirmed disappearance and retained revision history, then logged out. This is actual owner confirmation, separate from automated S1 tests. No application code or schema changed during UAT.
+
+A new dedicated PostgreSQL18.6 Docker instance and database `cinenest_ads_owner_uat_20261029` migrated/validated V1–V30, without connecting to historical databases. Two accounts were created/verified through the existing private local manual workflow. Content-only exact-venue grants: author read/edit; independent publisher read/publish. No provider association or production grants. Current-stack negatives: missing session401, wrong venue403, missing CSRF403, author without publishing authority403, logged-out read401. Expired-session and wider security/concurrency/migration behavior retain prior exact-source automated evidence; these were not reclassified as owner-performed tests.
+
+Final persisted state:1 banner,0 published,1 immutable content revision,resource revision7; successful mutation audits CREATE1/PUBLISH3/UNPUBLISH3. These actual records are retained without asserting a single publish/unpublish cycle or inferring why additional commands occurred. Accounts2,associations0,content grants4,authenticated JDBC sessions0; Booking,bank requests,credits,allocations,Access credentials and IoT devices0. Public catalogue independently confirmed empty. Six responsive screenshots375/768/1280 were generated by a separate read-only Chromium session from owner-published state, visually reviewed with no horizontal overflow, and its session logged out; screenshots do not simulate owner actions. Private evidence/dump/screenshots remain outside Git under the opaque reference in `status.json.advertisingS1Execution.ownerUat`.
+
+Temporary Java/Next processes stopped on owner acknowledgement; ports8080/42137 independently verified closed. Dedicated database container stopped and retained with a private SQL dump; no retention period or destructive cleanup was invented. Facebook HOLD and normal Google/Facebook live gates DENY throughout. Existing unrelated next-env/DOCX bytes preserved; ordinary worktree validator findings remain explicitly separate from clean-source validation. Original92 requirements,74 criteria,15 checked,0 formal acceptance and Release1 checkpoints4/21 remain unchanged. Next executable unit under the same task: bounded public-media/production-admission contract preparation only; production policy/storage/authorization remain unresolved.
