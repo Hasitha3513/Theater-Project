@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PublishedBanners } from "../components/banners";
 import { CinemaIllustration } from "../components/cinema-imagery";
 import { Card, PageHeading } from "../components/primitives";
 export default function CustomerHome() {
@@ -53,6 +54,7 @@ export default function CustomerHome() {
 				</div>
 				<CinemaIllustration asset="hero" hero />
 			</div>
+			<PublishedBanners />
 			<div className="content-grid">
 				<Card title="1. Explore your room">
 					<p>

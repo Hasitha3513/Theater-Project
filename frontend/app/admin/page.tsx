@@ -1,7 +1,7 @@
-import { PopularSlotsSection } from "../../components/popular-slots";
-import { BookingConfirmationsSection } from "../../components/booking-confirmations";
 import Link from "next/link";
 import { AdminBankSummarySection } from "../../components/admin-bank-summary";
+import { BookingConfirmationsSection } from "../../components/booking-confirmations";
+import { PopularSlotsSection } from "../../components/popular-slots";
 import { Badge, Card, PageHeading } from "../../components/primitives";
 export default function AdminHome() {
 	return (
@@ -34,6 +34,13 @@ export default function AdminHome() {
 				</span>
 			</div>
 			<div className="content-grid">
+				<Card title="Venue advertising">
+					<p>
+						Manage local synthetic banners and scheduled publication with
+						separate content authority.
+					</p>
+					<Link href="/admin/advertising">Manage banners →</Link>
+				</Card>
 				<Card title="Rooms and packages">
 					<p>
 						Manage venue and room configuration, package drafts and indicative

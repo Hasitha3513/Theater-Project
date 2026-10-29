@@ -27056,5 +27056,652 @@
     "facebookResumed": false,
     "formalAcceptanceChanged": false,
     "tests": "ADVERTISING_NOT_RUN_AUTHORIZATION_MISSING"
+  },
+  "advertisingS1Execution": {
+    "taskId": "CN-R1-ADMIN-ADVERTISING-001",
+    "authority": "EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1",
+    "status": "VERIFIED_LOCAL_SYNTHETIC_PENDING_PUBLICATION_CI",
+    "baseline": "1f4a152eb35fc2bbd9c33d94f4849b7065074e23",
+    "baselineCi": 40759539954,
+    "module": "rooms",
+    "migration": "V30__local_venue_banners.sql",
+    "permissions": [
+      "content.banner.read",
+      "content.banner.edit",
+      "content.banner.publish"
+    ],
+    "enabledByDefault": false,
+    "productionActivated": false,
+    "productionGrants": false,
+    "ordinaryRuntimeGrants": false,
+    "isolatedContentFixtures": true,
+    "mediaUploads": false,
+    "cloudMedia": false,
+    "receiptStorageReused": false,
+    "financialMutations": false,
+    "bookingAccessMutations": false,
+    "authenticationBehaviorChanged": false,
+    "historicalMigrationsChanged": false,
+    "formalAcceptanceChanged": false,
+    "facebookS2B": "HOLD",
+    "facebookLiveExecution": false,
+    "googleHistoricalAuditCause": "NOT_VERIFIED",
+    "requirements": 92,
+    "criteria": 74,
+    "checkedCriteria": 15,
+    "formallyAccepted": 0,
+    "tests": {
+      "focused": {
+        "passed": 11,
+        "failed": 0
+      },
+      "browserRealStack": "PASS_SYNTHETIC_NO_INTERCEPTION_NO_COOKIE_INJECTION",
+      "screenshots": 6,
+      "widths": [
+        375,
+        768,
+        1280
+      ],
+      "frontend": "CLEAN_INSTALL_BUILD_TYPECHECK_LINT_REGRESSIONS_PASS",
+      "foundation": {
+        "total": 989,
+        "passed": 978,
+        "skipped": 11,
+        "failures": 0,
+        "errors": 0,
+        "packagedStartup": "PASS"
+      },
+      "migration": "CLEAN_V1_V30_AND_V29_UPGRADE_PASS",
+      "governance": "REQUIRED_BEFORE_PUBLICATION"
+    },
+    "reading": {
+      "baseline": "1f4a152eb35fc2bbd9c33d94f4849b7065074e23",
+      "files": [
+        {
+          "path": "knowledge/01_ActivityDiagram_Customer_Booking_and_Online_Payment.md",
+          "sha256": "c966f0290f7b3d00b3545f972a4481a6896f50411b5654a9c1e62083e7a5ac9b",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/01_Component Architecture Diagram_Platform_Components_and_Integration_Boundaries.md",
+          "sha256": "4780fb3f761cabd4be1748fa7cf67696564ac8a89b2a121a4f12026e9db1e662",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/01_ER_Diagrams_Core_Relationship_Overview.md",
+          "sha256": "5ace6f964b784bf7a4423e464baf92690f24cb93c83ce198fce15551c35857a1",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/01_Sequence_Diagrams_Customer_Booking_and_Online_Payment.md",
+          "sha256": "ea6150b4cd8912a98df55889a536bc7176c75208d9dfa8b785a59f5ffd8b51cc",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/01_System_Context_Overview.md",
+          "sha256": "1337d7c9cd0a8cd9a75f70cc15126fff0432f821958ddbc9a7749e4bf8aa3c1f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/01_Use case_Customer_Booking_and_Account.md",
+          "sha256": "e0e7632fbcefcdb46deb9bc864757328af339043939b3906cd5bff34ae159b05",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/02_ActivityDiagram_Bank_Deposit_Receipt_Review_and_Approval.md",
+          "sha256": "8caf610bb9080c45dced24b20e48045ee4eb582506b04d5e50d3d8a6bfeb7d2c",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/02_Component Architecture Diagram_Payments_Module_Hexagonal_Ports_and_Adapters.md",
+          "sha256": "a616e07fee58640ac3eb22c234372b520950fd3172ef3f8ba329fa572c7d4ec7",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/02_ER_Diagrams_Identity_Sessions_and_Scoped_RBAC_ABAC.md",
+          "sha256": "efb68d1da16443fe89da02257c39e9e40b353f850a16ebec0409f5084b10c5b3",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/02_Sequence_Diagrams_Bank_Deposit_Receipt_Review_and_Approval.md",
+          "sha256": "b572974e8d52a8467fac313efdf812e8badfcec6bdef7870841cfd32956ffb71",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/02_System_Context_External_Actors_and_Data_Exchanges.md",
+          "sha256": "f7bdd5ba48a5beef1c7fa8cf931e0bd078be08ba7f002495fdeaf007a130dd0e",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/02_Use case_Package_and_Venue_Administration.md",
+          "sha256": "1ce618104c6812a625984afaef72dad8083b2701bad25c6edd6b2148cc7104f0",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/03_ActivityDiagram_Package_Editing_Publication_and_Deactivation.md",
+          "sha256": "cf8da514f9618fac071c91aeffda019a47bd95aa6bf48e675c03c716613eb5fb",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/03_ER_Diagrams_Venues_Versioned_Packages_and_Add_Ons.md",
+          "sha256": "6d9ffe75f6e4941aed7f352240872d13429a0c27e8f27a428f5e5622690dd100",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/03_Sequence_Diagrams_Package_Editing_Publication_and_Deactivation.md",
+          "sha256": "45f65b9fbff49ba581e780805c016963f31724c66509ec45565634ce2c4d5533",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/03_Use case_Payments_Bank_Review_and_Refunds.md",
+          "sha256": "f943e4507e954ef5f9dbc0bf3e7a511e5dd75beca42dd0d4fdb2b928083d0b96",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/04_ActivityDiagram_Identity_Evidence_and_Eligibility_Review.md",
+          "sha256": "9c55c1bbb69e1f2f77170a483ceacffb95d83eaae115daa422b76f426325b41a",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/04_ER_Diagrams_Quotes_Reservation_Holds_and_Booking_Revisions.md",
+          "sha256": "97ab66bcaf7aa82bf5a1c6015f8d209e209d13e216d96340894f869c14b014da",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/04_Sequence_Diagrams_Identity_Evidence_and_Eligibility_Review.md",
+          "sha256": "db351d9357efe128f8a9ee19b0de1a9fb858881786447fe7d64224453a9d7642",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/04_Use case_Identity_Verification_and_Authorization.md",
+          "sha256": "02d007e2d4800106d8f565981063f1afb5e19500076ad0f3cd5f6cc2de399247",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/05_ActivityDiagram_Scoped_RBAC_and_ABAC_Authorization.md",
+          "sha256": "7c59f7f67fff37a7009be325d1097fdc1e8f4b9c8ca07b9b58d1abedf46f9a40",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/05_ER_Diagrams_Payments_Bank_Evidence_Allocations_and_Refunds.md",
+          "sha256": "1bcb6600d96f2205fc57fa60499caf53424d4109047b3a11cb7c2d873af9638e",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/05_Sequence_Diagrams_Scoped_RBAC_and_ABAC_Authorization.md",
+          "sha256": "2f50e2e2a1fd68439dff7344c2a5974853bec8dfa6a6161deec1d239baa5bb0b",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/05_Use case_Cinema_Access_and_IoT_Operations.md",
+          "sha256": "69e586cdff1e8e2aa1bbd0e8b73e6b417d0c862442600ac1cc3e3c9140330c54",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/06_ActivityDiagram_Booking_Amendment_and_Session_Extension.md",
+          "sha256": "f7e374edcd32caacd8efb11a6f9cfcd6e279b0ce4e2a08a7b8400411cae3a66a",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/06_ER_Diagrams_Identity_Evidence_Guest_Check_In_and_Access_Credentials.md",
+          "sha256": "2d91f322d22760a86b9e13db4883bd038b07779795ac6ba24cb73915b2015dd0",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/06_Sequence_Diagrams_Booking_Amendment_and_Session_Extension.md",
+          "sha256": "1aa3721afa0271e9cf29612344deaa0ae23d6683e8bf0a44b38351fd1dfab588",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/07_ActivityDiagram_Booking_Cancellation_and_Refund_Execution.md",
+          "sha256": "6c529adef0c63e6507878bf38a2887d3399de4d745a18f6d738e628ad2f05a44",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/07_ER_Diagrams_Sessions_Devices_Maintenance_and_Readiness.md",
+          "sha256": "ea8754a7b0acc0530a115ccaf08d2ec42361db684a5892c066fc718c81b2c497",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/07_Sequence_Diagrams_Cancellation_and_Refund_Execution.md",
+          "sha256": "0b42ef9c1eb756ca8dc5f406ad79c4118cd4587937dec6424b9d83b445a5b45a",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/08_ActivityDiagram_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+          "sha256": "94e17ac06403a52a622ab2943c32ef6a369f03add81259e58779584d77b63a34",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/08_ER_Diagrams_Durable_Work_Notifications_and_Audit.md",
+          "sha256": "5771f7abbfcc403aca0e638f92c0695bef5366aee431f5aa87e48320c1ce15ba",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/08_Sequence_Diagrams_Cinema_Entry_IoT_Control_and_Room_Reset.md",
+          "sha256": "3219d3fc2fa5b1e0fc2cb1eaf131ce37899b4dce00ba8a4bf3054b483b175ac2",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/09_ActivityDiagram_Room_Maintenance_and_Controlled_Closure.md",
+          "sha256": "041ae51c6712800d143512b04bad966340765a657bbda6ec5560d2b13da1504f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/09_Sequence_Diagrams_Room_Maintenance_and_Controlled_Closure.md",
+          "sha256": "5d65ef724b5687756a10584db66be165729d22f8502e89ad244f277821821da2",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/10_ActivityDiagram_Operational_Incident_and_Recovery.md",
+          "sha256": "3134b63a975314ed0989b332456fa9314944cd0e74f426c63c4c95678e04f19d",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/10_Sequence_Diagrams_Operational_Incident_and_Recovery.md",
+          "sha256": "f6c3bcb355afcf667616fb7f9723363a8cbe361490647971b2cfd9c21b4ebb31",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/ARCHITECTURE.md",
+          "sha256": "51f4420f0ce854c6581d7710393b4f41c9387dfce24ea5f63963798b7108fe56",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/Analysis output 1.png",
+          "sha256": "e4b6d0b2b7f56dbefb381e58f6e48ccadfc3bdb027a8e9f18bf4af89900a3045",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/Analysis output Component1.png",
+          "sha256": "dc56360810fc8b23f79465e61908a702a3acfffa92075d7f8737bbaaaafbff84",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Admin Dashboard Mockup-1.png",
+          "sha256": "52747e612b9b707ac573051d0004475d77ec4aae2dfae61abc7ce0256e38b70f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking Activity Diagrams.png",
+          "sha256": "7e2f8a66688f04791723d4ed6fc586b3a6c6d3327a730bc9318d6e5b8655f386",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking ERD Poster.png",
+          "sha256": "5de9cb08255fbf11816f5c5110f9f6cb7aec099c0ae136230b46961d12bded08",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Booking System Context Diagram-1.png",
+          "sha256": "d9ad0d359f72e23a2f9800a122954063224ca17a01e2a7e28ff16e6cd6d937fd",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Cinema Dashboard Showcase-2.png",
+          "sha256": "27b8ec2a308f905b39fcbf2f5d6c24db241628475f6c29e9fc6060da5b528ca7",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Component Architecture Diagram-2.png",
+          "sha256": "8c955cec4888b9c3082c329263977664301b08c2f93e7f172785c246e7b6a2c2",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest End-to-End Architecture Mind Map.png",
+          "sha256": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Modular Monolith Architecture Diagram-1.png",
+          "sha256": "ef0b7f4573fe6ee9ece71aeb442cf48393d3576e2d9cdbac7fe6cfd50e31e7b4",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Private Cinema Booking UI.png",
+          "sha256": "a8669e2d3d21df7eda45aba2c95608079f02f280ad0d106de779378a681d8852",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Sequence Diagrams Overview.png",
+          "sha256": "867cea5376ef3cf7e394074baa5474b3ab8e433ae1b6714c7afa4078e1e0da21",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest System Context Diagram-2.png",
+          "sha256": "a43214fd222f5c69fc7f836477824f0ea1caf9747a2e338febe8072088ffbdf0",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest Use Case Diagram Infographic.png",
+          "sha256": "5dbee4d681192108cc0620ba61b02639a0441777375ce3b1ec8fbdcfd28bfe61",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/CineNest_E2E_Mind_Map.md",
+          "sha256": "e1ad06318c4baa718a3ec0aae8194114dd409b7d47c853f764bf333a37b326b5",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/DESIGN.md",
+          "sha256": "f10d788c946867ab35777b5e9144fcc6704f78934de8a9de973025bd275c3389",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/Mini movie theater Ruels and Conditions.docx",
+          "sha256": "e72c5f997506d9c531819bc00b17acd5ffa2ec9ae05317875f684c696f611cbf",
+          "method": "REUSED_VERIFIED_EXTRACTION_AND_VISUAL_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/Mini movie theater Ruels and Conditions.pdf",
+          "sha256": "2d4961de671a356db2a6d81a0c2f9b185d969952fb9e656d19bcb6e97da6dea2",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/PROGRESS.md",
+          "sha256": "9c13e7d57c5e4546827422ca186649b08576fc8bf784d012bb4e5d29e5648a00",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/PROJECT.md",
+          "sha256": "30d0f4c65d7689be882b5df1e870314ecbdfdf9b13df40570097603df9b082fc",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/README.md",
+          "sha256": "4248b82a476d7f1291b26169b90e541fecc1a7d51d4239c9e0107ddd66244f4d",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/Smart_Cinema_Platform.pdf",
+          "sha256": "f414d822f6c5ce4f3c2e8fd9eb3558220ce9c82fa96ca3dfdab74b29da7e115f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/backlog/FUTURE_FEATURES.md",
+          "sha256": "c301d39c9937780e34d6ce00c1cfee759de97b855089af40927f7eaf84a836c0",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/decisions/cinenest-open-decisions.json",
+          "sha256": "66c2758e23389e962d3d92e71650c542950142e76628ba6adbb0bb5b38ec2fe2",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/decisions/cinenest-palette-comparison.json",
+          "sha256": "7c3927eb45669e1971d6edb341800228d8b5eebef8235c4f60ebb200cb330318",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/change-sets.json",
+          "sha256": "b59eaf7b67dae9850fca198208228f8337e8128a8a9f3e29f1f6bd6425bb61ed",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-checks.json",
+          "sha256": "284a6f2e7ece5f930ce157ec2dc6e7246336f681abfcf51b43bf4a240990cf79",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-inputs-and-sources.json",
+          "sha256": "76c6fd25617eb0662fc778643bdad694702dcf02dc474ccf594b69efba2faadb",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-publication.json",
+          "sha256": "b734a288a8452d1bc6a046a6bea08d119b4a6d8b772e57d867ce14bbc91aa911",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/evidence/CN-DEC-001-review.json",
+          "sha256": "8992bf0cbc6c313ba2201ecc60f7515bab4012c0e23c8a267c6940b46b217ec6",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/evidence/checks.json",
+          "sha256": "881c3efd81efa857bcb86e77ef89a840d9b6640e07d6adeb06a12a161338729f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/evidence/instruction-review.json",
+          "sha256": "c7c51a4dd1793f053af3d8b53f9444eca015a49ecb19eb80ea405fcc3f47a650",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/evidence/publication.json",
+          "sha256": "464768ddb38eed03c963e133bf70cd24c1e12be0c1970b3e1fefe6d45a290869",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/evidence/source-review.json",
+          "sha256": "8d608708fcdcbe78b318b1d98f2b913836d2ecbdf500f850682cbf5f72c96f35",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/omissions.json",
+          "sha256": "d2e0191515365f91ead58af9a35a8f061688f171d2791cf68ba6ff7142fc4c70",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/refresh_manifest.py",
+          "sha256": "5d3e650a258f669d4d44b354147ff4c25c7dbd61008fdec5269d681b2f59fb59",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/requirements.json",
+          "sha256": "7003813fed707dab42fefd334a6bb1e9b8a3062909219b9cf66ce113da73a933",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/source-ledger.json",
+          "sha256": "be3f7dff80bc0c5d321187c6b3df430a3f24e9c7c7cf80c7dab96bcabc68ad6a",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/status.json",
+          "sha256": "5d6711931ea76345c4bdea2a2d6b21556d43aebb62e3ee0168dff0f45f033701",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/test-plan.json",
+          "sha256": "12bfe8b8813e686317e8517b3a240738e14fc5a2a18276db545389525324685f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/execution/validate_execution.py",
+          "sha256": "1e27fbe74d4d9d326a100709d973b684c84b638d2118e6e725fca9808af3ad96",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/guides/USER_GUIDE.md",
+          "sha256": "5e557e1b59bd742415c431f8107e013835b9456eb97a88170cb1bb30ee239049",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/manifest.json",
+          "sha256": "9c261aa847d9e06f69a775c539fd006714873009d6911213572f54a73ea021c3",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/FEATURE_CATALOG.md",
+          "sha256": "c30e069339b4c11c9d5730d404c21ac039c0c4a858417f03c7026c1d3bf8e924",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/cinenest-bank-payment-lifecycles.json",
+          "sha256": "c12a0454905509c14cfad5eae94e83b861a36d3fe02bc3ad283d1afeb142599f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/cinenest-draft-rules.json",
+          "sha256": "1827c0410b9c366ea390e7c4b6c23e160901379cd8b739bd561a84dae1e486bc",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/cinenest-feature-catalog.json",
+          "sha256": "bee233202471451aa10716254c9001b3ea24992c962413883b87791322f33dce",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/analytics.png",
+          "sha256": "683c39bf5895f8f2870cd6517de7c4f5c94c398fd49a500b226e678275f89391",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-1280.png",
+          "sha256": "a3d5d3f3393ee4b4975cefb8dc2515f9079ef54381efbaca87ebbd479fd5d1a9",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-375.png",
+          "sha256": "7154478236c44104f5d435c109d5be5562b5b6b9e90a15116231d6b075440f77",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-customer-768.png",
+          "sha256": "b949db5629c70743d04e0de929c025f3e84285493b32d8a7835a32a012b7c0c1",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-1280.png",
+          "sha256": "3688eefcd87b254fc3d6e340174bd2d40eac5d168e7d1075ecc91aa2f4ed3940",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-375.png",
+          "sha256": "1281417320acc643c750b2082a5d20d42ef31c2852b2971720768d9ecc0af083",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-after-staff-768.png",
+          "sha256": "ccc6718b1621d5be4275f15647b7cae6133e39838ed7666a089cac9575a28f85",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-1280.png",
+          "sha256": "f46eac13c9f812ae96f8189802234511884da99ad25a218f998a5d6a3a97f8ab",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-375.png",
+          "sha256": "32ca69413c811ec0ae0b469ef7fa3ecd709bdcfef97ca3ae0629f298591b8300",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-customer-768.png",
+          "sha256": "8ee3696036b124ad092cf9146eea770017b58e8c9bc071f7fa7bba2b81b82a5b",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-1280.png",
+          "sha256": "5a774ebd61f42e38c7e830c6d5f68031b6fada97dc0d5e8f9a8478831c5869ce",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-375.png",
+          "sha256": "8ada010a739288d1ab85938ae3111a42e3976a7f8ef81dcf905cb55d2da4344b",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/cancellation-before-staff-768.png",
+          "sha256": "d56982e97a02ac6886a0fbaf6b33b5d0a876e0761f5bd4cdc9233e00ae6f6b9c",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/catalog.png",
+          "sha256": "4b1e661bfcd1698380978c5816ab9458ee25d9b8fa6d5d5dc7c5821dcdc0e51f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/grants.png",
+          "sha256": "5b6ad59619588dd97c6574e207f6d3f25b81bcfdaed8360d92303f250c62e596",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/operations.png",
+          "sha256": "4da2255fa9a602778bb05fda9041f89ad1a5ca10297ac34ae7c0344f176dae88",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-1280.png",
+          "sha256": "e3e7af64a17508f733a12cfe5f1148ececda37d03c7feadb15bb1b62d5cd5d89",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-375.png",
+          "sha256": "59d054602aa587dca1caec385824b49f853cc8e95902c33d59da9bf150a0c556",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/product/screenshots/popular-768.png",
+          "sha256": "d4f30f861dd8c5526274e906339d623be4532826dcc6928908dc814c87bc60ad",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/sources/CN-AGENT-SETUP-001-request.txt",
+          "sha256": "5069b092f2eb4b71e180e11d13e701b2a99a3c8f143a3e1f992bbcaf862e72f2",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/sources/CN-DEC-001-request.txt",
+          "sha256": "c13879ccf2719e8d1e36b813ad3c971f109514822fdae6da1e98ee1261943d0f",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/sources/CN-KB-BANK-PAYMENT-001-request.txt",
+          "sha256": "4c63f237b0bb3e67011efd2103ffc614b702f313fb2970ae1ceaf72d9e19c0b1",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/sources/CN-KB-FEATURES-TECH-001-request.txt",
+          "sha256": "9cf09c1dcbd849ddbd15449a0b76b9e21f478a33dc66439086ee93dad429f06d",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/sources/CN-KB-PACKAGE-CONFIGURATION-001-request.txt",
+          "sha256": "1cd916c41a310b49aae6daff7405ad5f2c1fd01bd52f5ff486feccf6b536ee84",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/sources/cinenest-source-register.json",
+          "sha256": "4fbbc5682f1f0070a3ee1b727cf92e49e6d8b6750eea24c51055a232273461f4",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/styles/cinenest-theme.css",
+          "sha256": "d3968b08519db0dea663f0336b40913207dd5a8613f1361c37f7a97b6c43533a",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/tokens/cinenest-chart-specs.json",
+          "sha256": "e4300304ba0aa0fcc6fa363cefe91b21da5150761fbe12ca9308315ba1f9c275",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/tokens/cinenest-design-tokens.json",
+          "sha256": "8c817e4f055eadb28ab556c868ff21cd899430001cb3d374d2265b2b8df74cea",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/validate_design_kb.py",
+          "sha256": "260a417b3201f3fb62a9a59009b62ad6d5e1e4c39d42b49859d411830045e803",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
+          "method": "REUSED_VERIFIED_EXTRACTION_AND_VISUAL_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        },
+        {
+          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
+          "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
+        }
+      ],
+      "originalByteIdentical": 104,
+      "controlledSuccessors": 12,
+      "newKnowledgeFiles": 0,
+      "gaps": []
+    }
   }
 }

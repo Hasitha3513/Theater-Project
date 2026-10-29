@@ -3253,6 +3253,13 @@
         "evidencePath": "PROGRESS.md#release1-customer-recovery",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED"
+      },
+      "localAdvertisingEvidence": {
+        "taskId": "CN-R1-ADMIN-ADVERTISING-001",
+        "scope": "LOCAL_SYNTHETIC_BANNER_S1_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "evidence": "knowledge/PROGRESS.md#admin-advertising-s1"
       }
     },
     {
@@ -3890,6 +3897,13 @@
           "frontend/tests/customer-profile-e2e.mjs"
         ],
         "limits": "Own name/optional unverified phone only;existing Booking transport reused with truthful unavailable state when policy disabled;no production admission,provider linking,grants or financial/booking/access changes"
+      },
+      "localAdvertisingEvidence": {
+        "taskId": "CN-R1-ADMIN-ADVERTISING-001",
+        "scope": "LOCAL_SYNTHETIC_BANNER_S1_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "evidence": "knowledge/PROGRESS.md#admin-advertising-s1"
       }
     },
     {
@@ -3985,6 +3999,13 @@
           "frontend/tests/customer-profile-e2e.mjs"
         ],
         "limits": "Own name/optional unverified phone only;existing Booking transport reused with truthful unavailable state when policy disabled;no production admission,provider linking,grants or financial/booking/access changes"
+      },
+      "localAdvertisingEvidence": {
+        "taskId": "CN-R1-ADMIN-ADVERTISING-001",
+        "scope": "LOCAL_SYNTHETIC_BANNER_S1_ONLY",
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "evidence": "knowledge/PROGRESS.md#admin-advertising-s1"
       }
     },
     {

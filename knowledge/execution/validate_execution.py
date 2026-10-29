@@ -8696,5 +8696,132 @@ def inert_ci_main():
         if result==0:print('PASS ADVERTISING documentation-only successor;Facebook HOLD;no implementation authority')
         return result
 
+
+# Exact owner-authorized local advertising S1 successor; no wider admission.
+ADS_S1_BASE='1f4a152eb35fc2bbd9c33d94f4849b7065074e23'
+ADS_S1_HASHES={'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '60a2721e136f4eb2cbaee8ac4a560fc97a7ca673a01fea00c4e9c2702abaca6d', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '1e809a7ac2be8ac9642cde7b4e552003fd5a0dd0d6eccb00782d75dc137d3f85', 'backend/src/main/java/com/cinenest/rooms/internal/BannerAssets.java': 'b06e70d2e930fdab95ffb3da9f6bb8f865ca18996d47b9f569deb7cc4cd46d37', 'backend/src/main/java/com/cinenest/rooms/internal/BannerController.java': '5aaee4ccf0069418d9b806b98b45cb4204513a6ecdd1de4c31d8790039102a31', 'backend/src/main/java/com/cinenest/rooms/internal/BannerPolicy.java': '1ebc00871d04855fde3fd7e7e0088ef4237393c3a48f0443056a7ddbe0fca17a', 'backend/src/main/java/com/cinenest/rooms/internal/BannerRepository.java': '66b6ccc8698260d061f17ec4c1b478e1766dee837b3fe439390e19d52d4c2865', 'backend/src/main/java/com/cinenest/rooms/internal/BannerService.java': '7db03cae9c101163e66e39a830c47a38eea7975023c33965193f09d64565e516', 'backend/src/main/java/com/cinenest/rooms/internal/JdbcBannerRepository.java': '98598116c5c5b2d323e0c4e6b4ee68538ccfce7c4856b9c10709d80df6e42503', 'backend/src/main/resources/db/migration/V30__local_venue_banners.sql': 'dd0dd41e961db65eb5c64ed029b5eb4553586789eff68db4934d9b05e4bdb6ce', 'backend/src/test/java/com/cinenest/AdvertisingArchitectureTest.java': 'a20f0643edb2845070662df0c7ac68f42f4c4711a20a031f6cd59c233ec20c28', 'backend/src/test/java/com/cinenest/AdvertisingIntegrationTest.java': 'a125b220fdf16c77fa4413d45184ffa9c8db98abde6490a489b066ecac92f6a2', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'f74260e828bafac2276736ff6206419ead13f28a79c954c1ca3c00d433a22c94', 'backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java': 'eb4b9cc9e554344a436d18da9bd36991f41153177d81d96d1c374ee64c7716ac', 'backend/src/test/java/com/cinenest/rooms/internal/BannerPolicyTest.java': '7f9b2547c8ba2bc4d1b1afb0c81310b9600ce27df7631dfaebe6b95ddfe78ccb', 'frontend/app/admin/advertising/page.tsx': 'cd8c38b0de112c8a31e7d5913e16c797c061e41c031565f0c2b93ee76053f21d', 'frontend/app/admin/page.tsx': '4c51940ec4bd2aacf31723e360152ada67b6b7eeddfcf30b625890ab4c734628', 'frontend/app/api/admin/venues/[venueId]/banner-assets/route.ts': '2a95c4fdcf460f8dd10048f42b18be26fc59d6bea86c0258e28a8332d1a95c12', 'frontend/app/api/admin/venues/[venueId]/banners/[bannerId]/preview/route.ts': '99cddf2913676eb7ca8fbc221293a93e0d7b07eb16a115e5eb9a2093f595fd38', 'frontend/app/api/admin/venues/[venueId]/banners/[bannerId]/publications/route.ts': 'd6be044f43b95af2329b45ed2a62cace8a70f1f92914f95076284978cd9e4726', 'frontend/app/api/admin/venues/[venueId]/banners/[bannerId]/revisions/route.ts': '99cddf2913676eb7ca8fbc221293a93e0d7b07eb16a115e5eb9a2093f595fd38', 'frontend/app/api/admin/venues/[venueId]/banners/[bannerId]/route.ts': 'd38c354ba31173ee6892e29ebca73f23f04b13fc3c9013588cf9044533bf2897', 'frontend/app/api/admin/venues/[venueId]/banners/[bannerId]/unpublish/route.ts': 'd6be044f43b95af2329b45ed2a62cace8a70f1f92914f95076284978cd9e4726', 'frontend/app/api/admin/venues/[venueId]/banners/route.ts': 'c6623a46a8c9715225950cb82a72076c715cbc7c72fa257fc098d44d49ada8d9', 'frontend/app/api/catalog/banners/route.ts': '84fd59fc48e379a167812935d6937ad7440a3c52f0bcd8f028cf7f994e5d3108', 'frontend/app/page.tsx': '54aeb4e010382b06862c0d4104d5eb9d5b362d028755ef9987b25603c28c734f', 'frontend/components/banners.tsx': '6a77f4c45c97f86136d477ef40f715bd5557f8a3ab406ca44f9532fd8e51c238', 'frontend/lib/navigation.ts': '0c966de45f2eaa2ea406a4bbede1f2dcc27b8412d60510245b28a81203ae015b', 'frontend/lib/room-backend.ts': 'ac23750c4b721ee3fbb6b71fa5c58fa3584555885067e77dd752d76bac89e57e', 'frontend/package.json': '1fab3ea5ff22716e19dddff06e9d9c171edcb29a53a30261137773734cfe0816', 'frontend/tests/banners-e2e.mjs': '05c661655349d8ec96c2888db09f9f1b01fb5bc5d0ead4ce9c178667503ceb35', 'frontend/tests/banners.test.mjs': 'e414b35821c947c7ef6b9c78494eb102b85ac875003cf36c0374c5c4f7417628', 'knowledge/ARCHITECTURE.md': 'c906927950352f57bf07b1a63e8d6dcee21e779faf899561a309309fdb892d1a', 'knowledge/DESIGN.md': '5dd8cee8e04bc853316eb4e4e461f1b9bb621b15a04b4741d1358940fbf3fe6b', 'knowledge/PROGRESS.md': 'bf26ce8be09c29cfbb0ba52ec0be580d2f8d4168a48e2da5a22f6284d773b9c7', 'knowledge/PROJECT.md': 'ff5501195742ee8f0033bbaf363d6b9a1f606aa1b1c32193a27b50280e370859', 'knowledge/backlog/FUTURE_FEATURES.md': 'b8ddd54dce703a99013ab3359ac4a4b766d5f675d62c7ec23df06d0e1d5a2946', 'knowledge/execution/change-sets.json': '829bb09085b5e8c89ab6424ede521ce6efdd2c817a926faba9e2833e74daa85d', 'knowledge/execution/requirements.json': 'a2396fabf6f852e84e008465b1a462bb5a9992208bb64d5ed6c60fcc0f031dd8', 'knowledge/execution/status.json': 'e86a7e97794686e62507ae99944338712fceb730bb7d219f56696a7232d31b8b', 'knowledge/execution/test-plan.json': '39e9618b5dea2236fa9599e477ef46c00bdb55cbacad4ce68ddc1362b73b323c', 'knowledge/guides/USER_GUIDE.md': '4ef6aec44d7825f334f97d19aa613070d230cc1af90f7c2754dde6f0aec8df46', 'knowledge/product/FEATURE_CATALOG.md': '922da166cf9b50bf648ea094c8de9323cdf8c9e4dc108bb2ff651357f352d91d'}
+ADS_S1_REPLACEMENTS={'Current priority:[Admin advertising admission](#admin-advertising-priority-admission). Facebook S2-B HOLD by owner direction; no provider/capture/live-login resumption. Local self-profile remains verified; historical provider evidence and Google denial uncertainty remain unchanged.': 'Current priority:[local Admin Advertising S1](#admin-advertising-s1), owner-authorized and locally implemented/tested; exact-source publication CI is a separate receipt. Facebook S2-B remains HOLD. Local self-profile and historical provider/Google audit evidence remain unchanged.', 'Current handoff:CN-R1-ADMIN-ADVERTISING-001; obtain exact bounded local advertising implementation approval described in [admission](#admin-advertising-priority-admission). Facebook S2-B remains HOLD; no Meta attempt authorized.': 'Current handoff:CN-R1-ADMIN-ADVERTISING-001 local S1 owner walkthrough/UAT after exact-source CI; use only approved isolated content fixtures. Facebook S2-B remains HOLD; no Meta attempt or production publication authorized.', 'Admin advertising admission priority (NOT_GRANTED)': 'Admin advertising S1 locally verified (production disabled)'}
+ads_s1_previous_main=inert_ci_main
+ads_s1_previous_guard=receipt_admission_successor_errors
+
+def ads_s1_record_errors(e):
+    errors=[]
+    if e.get('authority')!='EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1' or e.get('module')!='rooms':errors.append('ADS S1 missing bounded authority/ownership')
+    for key in ['enabledByDefault','productionActivated','productionGrants','ordinaryRuntimeGrants','mediaUploads','cloudMedia','receiptStorageReused','financialMutations','bookingAccessMutations','authenticationBehaviorChanged','historicalMigrationsChanged','formalAcceptanceChanged','facebookLiveExecution']:
+        if e.get(key) is not False:errors.append('ADS S1 unauthorized '+key)
+    if e.get('isolatedContentFixtures') is not True or e.get('facebookS2B')!='HOLD' or e.get('googleHistoricalAuditCause')!='NOT_VERIFIED':errors.append('ADS S1 fixture/provider history drift')
+    if [e.get(n) for n in ['requirements','criteria','checkedCriteria','formallyAccepted']]!=[92,74,15,0]:errors.append('ADS S1 requirements/acceptance drift')
+    if e.get('permissions')!=['content.banner.read','content.banner.edit','content.banner.publish'] or e.get('migration')!='V30__local_venue_banners.sql':errors.append('ADS S1 scope drift')
+    tests=e.get('tests',{})
+    if tests.get('focused')!={'passed':11,'failed':0} or tests.get('browserRealStack')!='PASS_SYNTHETIC_NO_INTERCEPTION_NO_COOKIE_INJECTION' or tests.get('screenshots')!=6 or tests.get('widths')!=[375,768,1280]:errors.append('ADS S1 missing real-stack evidence')
+    if tests.get('foundation')!={'total':989,'passed':978,'skipped':11,'failures':0,'errors':0,'packagedStartup':'PASS'}:errors.append('ADS S1 missing full backend evidence')
+    reading=e.get('reading',{})
+    if len(reading.get('files',[]))!=116 or reading.get('gaps')!=[] or reading.get('baseline')!=ADS_S1_BASE:errors.append('ADS S1 reading gap')
+    return errors
+
+def ads_s1_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        return ads_s1_payload_errors()
+
+def ads_s1_payload_errors():
+    errors=[];owned=set(ADS_S1_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    def before(n):return subprocess.check_output(['git','-C',str(R),'show',ADS_S1_BASE+':'+n])
+    for n,h in ADS_S1_HASHES.items():
+        p=R/n
+        if p.is_symlink() or not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest()!=h:errors.append('ADS S1 unadmitted payload '+n)
+    if errors:return errors
+    state=json.loads((K/'execution/status.json').read_text());record=state.pop('advertisingS1Execution',{});errors.extend(ads_s1_record_errors(record))
+    if state!=json.loads(before('knowledge/execution/status.json')):errors.append('ADS S1 historical status drift')
+    plan=json.loads((K/'execution/change-sets.json').read_text());e=plan.pop('advertisingS1Authorization',{})
+    if e.get('authority')!='EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1' or e.get('production') is not False or e.get('facebook')!='HOLD':errors.append('ADS S1 planning authority drift')
+    if plan!=json.loads(before('knowledge/execution/change-sets.json')):errors.append('ADS S1 historical plan drift')
+    for filename,key in [('requirements.json','requirements'),('test-plan.json','tests')]:
+        matrix=json.loads((K/'execution'/filename).read_text());expected=json.loads(before('knowledge/execution/'+filename));seen=[]
+        for row in matrix[key]:
+            if 'localAdvertisingEvidence' in row:
+                seen.append(row['id']);e=row.pop('localAdvertisingEvidence')
+                if e.get('fullRequirementVerified') is not False or e.get('fullRequirementAcceptance')!='NOT_ACCEPTED':errors.append('ADS S1 false full acceptance')
+        ids=['CN-NFR-01','CN-NFR-02','CN-NFR-03'];ids=ids if key=='requirements' else ['T-'+n for n in ids]
+        if set(seen)!=set(ids) or matrix!=expected:errors.append('ADS S1 traceability/history drift '+filename)
+    for n in ['PROJECT.md','ARCHITECTURE.md','DESIGN.md','PROGRESS.md','product/FEATURE_CATALOG.md','guides/USER_GUIDE.md','backlog/FUTURE_FEATURES.md']:
+        expected=before('knowledge/'+n).decode()
+        if n=='PROGRESS.md':
+            for old,new in ADS_S1_REPLACEMENTS.items():expected=expected.replace(old,new,1)
+        if not (K/n).read_text().startswith(expected):errors.append('ADS S1 historical prose drift '+n)
+    # Compare current bytes to immutable Git blob IDs without caching large historical
+    # media bytes in a second cache layer. Every current-file read remains fresh.
+    tree=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',ADS_S1_BASE])
+    blobs={}
+    for entry in tree.split(b'\0'):
+        if entry:
+            metadata,name=entry.split(b'\t',1);mode,kind,oid=metadata.split();blobs[name.decode()]=(mode.decode(),oid.decode())
+    tracked=set(blobs)
+    for n in tracked-owned-{'frontend/next-env.d.ts'}:
+        path=R/n
+        if path.is_symlink() or not path.is_file():errors.append('ADS S1 missing/unowned path '+n);continue
+        data=path.read_bytes();blob=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()
+        if blob!=blobs[n][1]:errors.append('ADS S1 unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification'],text=True))
+    if not current<=tracked|owned:errors.append('ADS S1 unauthorized new source')
+    migrations={p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}
+    if migrations!={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}|{'backend/src/main/resources/db/migration/V30__local_venue_banners.sql'}:errors.append('ADS S1 migration inventory drift')
+    knowledge={p.relative_to(R).as_posix() for p in K.rglob('*') if p.is_file() and '__pycache__' not in p.parts}
+    ledger={row['path']:row['sha256'] for row in record.get('reading',{}).get('files',[])}
+    if not knowledge<=set(ledger) or not {n for n in tracked if n.startswith('knowledge/')}<=knowledge:errors.append('ADS S1 new/missing Knowledge Base file')
+    # Two previously reviewed owner DOCX attachments are intentionally untracked;
+    # CI need not possess them, but any locally present bytes must stay qualified.
+    for n in knowledge-tracked:
+        if hashlib.sha256((R/n).read_bytes()).hexdigest()!=ledger.get(n):errors.append('ADS S1 unqualified optional knowledge attachment '+n)
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',ADS_S1_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned|{'frontend/next-env.d.ts'}:errors.append('ADS S1 unauthorized path')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('ADS S1 prior validator changed')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('ADS S1 manifest drift')
+    return errors
+
+def ads_s1_negative_controls():
+    from unittest.mock import patch
+    import copy
+    e=json.loads((K/'execution/status.json').read_text())['advertisingS1Execution'];assert not ads_s1_record_errors(e)
+    for key in ['enabledByDefault','productionActivated','productionGrants','ordinaryRuntimeGrants','mediaUploads','cloudMedia','receiptStorageReused','financialMutations','bookingAccessMutations','authenticationBehaviorChanged','historicalMigrationsChanged','formalAcceptanceChanged','facebookLiveExecution']:
+        bad=copy.deepcopy(e);bad[key]=True;assert ads_s1_record_errors(bad);print('PASS ADS S1 rejects '+key)
+    for key in ['facebookS2B','googleHistoricalAuditCause']:
+        bad=copy.deepcopy(e);bad[key]='CLOSED';assert ads_s1_record_errors(bad);print('PASS ADS S1 preserves '+key)
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/resources/db/migration/V29__local_customer_profile.sql','backend/src/main/resources/db/migration/V30__local_venue_banners.sql','backend/src/main/java/com/cinenest/rooms/internal/BannerService.java','backend/src/main/java/com/cinenest/payments/internal/BankService.java','knowledge/execution/requirements.json']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert ads_s1_successor_errors(),n
+        print('PASS ADS S1 rejects changed/unowned payload '+n)
+
+receipt_admission_successor_errors=ads_s1_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=ads_s1_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        ads_s1_negative_controls()
+        owned=set(ADS_S1_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+        tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',ADS_S1_BASE],text=True),nul=True)
+        added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',ADS_S1_BASE+':'+n]) for n in owned&tracked}
+        rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            value=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+                return text if isinstance(value,str) else text.encode()
+            return value
+        output._profile_immutable_reader=True
+        def glob(p,*a,**kw):return (x for x in glob0(p,*a,**kw) if x.relative_to(R).as_posix() not in added) if p==R/'backend/src/main/resources/db/migration' else glob0(p,*a,**kw)
+        with patch.dict(globals(),{'receipt_admission_successor_errors':ads_s1_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=ads_s1_previous_main()
+        if result==0:print('PASS exact bounded local Advertising S1;history/provider gates/full acceptance preserved')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -760,3 +760,10 @@ Development-only https://localhost:4443 ingress supports existing authentication
 ### Local own customer profile (CN-R1-CUSTOMER-PROFILE-001)
 
 In an explicitly enabled isolated local-synthetic environment, an eligible signed-in customer can read their profile and edit full name/optional unverified phone with conflict protection. Existing verified email, account status, ID and provider types are read-only. Existing session/logout and Booking-owned history are reused. No linking, eligibility changes, real-customer admission or new permissions. [Policy](../PROJECT.md#local-customer-profile), [contract](../ARCHITECTURE.md#local-customer-profile), [evidence](../PROGRESS.md#local-customer-profile).
+
+
+<a id="admin-advertising-s1"></a>
+
+### Local Admin Advertising S1 — CN-R1-ADMIN-ADVERTISING-001 / FF-0002
+
+Existing Rooms module now supports explicitly enabled local synthetic venue-banner drafts, edits, fixed illustrations, schedules/order, protected preview, independent publishing/unpublishing, revision history and live homepage rendering. Existing manual/Google/Facebook software and financial workflows are unchanged; Facebook qualification stays HOLD. Production publishing/grants, uploads/cloud media and discounts remain excluded. This bounded result supersedes earlier not-implemented preview statements only for S1; no original requirement or formal acceptance is closed. [Evidence](../PROGRESS.md#admin-advertising-s1), [guide](../guides/USER_GUIDE.md#admin-advertising-s1).

@@ -202,3 +202,10 @@ Owner explicitly authorized CN-R1-FACEBOOK-SSO-001 S1 local synthetic-only imple
 ## Controlled FF-0001 S2-A evidence — 2026-10-28
 
 Owner explicitly authorized disabled-by-default Meta adapter and isolated tests only. S2-A implemented software boundary does not complete live-provider qualification;whole-feature lifecycle remains IN_PROGRESS,not ACCEPTED. Actual scope/evidence:execution/status.json facebookSsoS2A and PROGRESS.md#facebook-sso-s2a. Original discovery/S1 history and all existing MVP obligations retained.
+
+
+<a id="admin-advertising-s1"></a>
+
+## Controlled FF-0002 bounded local S1 implementation evidence — 2026-10-29
+
+The earlier IDEA/preparation entry remains the historical wider-scope record. Owner attachment a0065c8f-08a9-44cb-a707-f4882e913892 explicitly grants CN-R1-ADMIN-ADVERTISING-001 local synthetic Rooms-owned S1, independent publisher, additive V30 and isolated content fixtures. This is the same unit F, not another backlog. Bounded local functionality and real-stack verification are recorded in [PROGRESS](../PROGRESS.md#admin-advertising-s1) and existing execution registries. Production media/publishing authority, uploads, commercial promotions and formal acceptance remain unapproved. Exact-source publication CI is separate; do not infer acceptance from implementation. Original requirement/roadmap counts are unchanged.

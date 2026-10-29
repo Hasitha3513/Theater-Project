@@ -205,3 +205,25 @@ export function quoteRoute(path: string, method: string) {
 export async function forwardQuotes(request: Request) {
 	return forwardConfigured(request, quoteRoute);
 }
+
+// Approved exact advertising routes; existing session/CSRF/upstream checks reused.
+export function bannerRoute(path: string, method: string) {
+	const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+	if (path === "/api/catalog/banners") return method === "GET";
+	const root = `/api/admin/venues/${uuid}`;
+	if (new RegExp(`^${root}/banner-assets$`).test(path)) return method === "GET";
+	if (new RegExp(`^${root}/banners$`).test(path))
+		return ["GET", "POST"].includes(method);
+	if (new RegExp(`^${root}/banners/${uuid}$`).test(path))
+		return ["GET", "PUT"].includes(method);
+	if (new RegExp(`^${root}/banners/${uuid}/(preview|revisions)$`).test(path))
+		return method === "GET";
+	return (
+		new RegExp(`^${root}/banners/${uuid}/(publications|unpublish)$`).test(
+			path,
+		) && method === "POST"
+	);
+}
+export async function forwardBanners(request: Request) {
+	return forwardConfigured(request, bannerRoute);
+}

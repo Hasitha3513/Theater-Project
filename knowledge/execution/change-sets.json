@@ -7075,5 +7075,18 @@
     "status": "BLOCKED_IMPLEMENTATION_AUTHORIZATION",
     "contract": "knowledge/ARCHITECTURE.md#admin-advertising-admission-contract",
     "acceptance": "UNCHANGED_NOT_ACCEPTED"
+  },
+  "advertisingS1Authorization": {
+    "taskId": "CN-R1-ADMIN-ADVERTISING-001",
+    "authority": "EXPLICIT_OWNER_LOCAL_SYNTHETIC_S1",
+    "status": "LOCALLY_IMPLEMENTED_TESTED_PUBLICATION_CI_REQUIRED",
+    "source": "owner attachment a0065c8f-08a9-44cb-a707-f4882e913892",
+    "module": "rooms",
+    "migration": "V30_SUBJECT_TO_HEAD_VALIDATION",
+    "production": false,
+    "facebook": "HOLD",
+    "fixtures": "ISOLATED_CONTENT_ONLY",
+    "priorAdmission": "advertisingPriorityAdmission historical preparation retained",
+    "contract": "knowledge/ARCHITECTURE.md#admin-advertising-s1"
   }
 }

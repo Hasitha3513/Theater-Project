@@ -5,7 +5,7 @@ This document owns execution guidance, derived coverage/status summaries, approv
 <a id="current-status"></a>
 ## Current status and approvals
 
-Current priority:[Admin advertising admission](#admin-advertising-priority-admission). Facebook S2-B HOLD by owner direction; no provider/capture/live-login resumption. Local self-profile remains verified; historical provider evidence and Google denial uncertainty remain unchanged.
+Current priority:[local Admin Advertising S1](#admin-advertising-s1), owner-authorized and locally implemented/tested; exact-source publication CI is a separate receipt. Facebook S2-B remains HOLD. Local self-profile and historical provider/Google audit evidence remain unchanged.
 
 Current manual customer authentication:[local synthetic implementation and verification](#local-customer-auth);real-customer/provider admission remains disabled.
 
@@ -334,7 +334,7 @@ Workstream accents are decorative; status is separate text and fill. Amber P0 me
 flowchart TB
   G["CN-PAY-BANK-002 synthetic ledger VERIFIED<br/>Manual-payment-first priority APPROVED<br/>Real payments DISABLED; documentation gate CLOSED; synthetic bank-only refunds VERIFIED; full refund acceptance OPEN; venue/reviewers PENDING; PayHere BLOCKED; Admin reads and bounded synthetic notifications VERIFIED"]
   P0["P0 Readiness<br/>6 of 8 preparation/authority checks<br/>NOT_ACCEPTED"]
-  P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; Local self-profile/V29 VERIFIED_SYNTHETIC; manual/Google/Facebook contracts preserved; Facebook S2-B HOLD; Admin advertising admission priority (NOT_GRANTED); Google historical audit attribution open; 3 of 6 criteria (C01/C03/C06)<br/>Shell/discovery/original illustrative assets;bounded grant/capability policy + managed grant backend read and inspection UI; acceptance unchanged<br/>NOT_ACCEPTED"]
+  P1["P1 Foundation/access<br/>Foundation + bounded auth + UI VERIFIED; local manual registration/login VERIFIED_SYNTHETIC; Local self-profile/V29 VERIFIED_SYNTHETIC; manual/Google/Facebook contracts preserved; Facebook S2-B HOLD; Admin advertising S1 locally verified (production disabled); Google historical audit attribution open; 3 of 6 criteria (C01/C03/C06)<br/>Shell/discovery/original illustrative assets;bounded grant/capability policy + managed grant backend read and inspection UI; acceptance unchanged<br/>NOT_ACCEPTED"]
   P2["P2 Catalog/discovery<br/>Room/draft/publication slices VERIFIED; landing-to-catalog connected; audit/version/capacity/duration evidence owner-approved; 4 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P3["P3 Quotes/reservations<br/>Inventory + synthetic quote VERIFIED; bounded read-only calendar/customer UI and real calendar-to-hold E2E; guided booking sections, bounded synthetic customer history,exact request and simulated booking navigation; 2 of 6 criteria<br/>PARTIAL; NOT_ACCEPTED"]
   P4["P4 Identity/bank/guest roster<br/>Synthetic identity/request/ledger,customer handoff,contextual receipts and exact staff review navigation within bounded scopes; partial real E2E, booking detail/URL safety/session,quotation,hold,identity rejection and lost receipt acknowledgement verified;staff roster read integrated; 24 synthetic groups PASS; full acceptance remains open<br/>0 of 8 full criteria; NOT_ACCEPTED"]
@@ -1062,7 +1062,7 @@ The mapping is derived from existing manifest.json. S14 owner authorization cove
 <a id="current-handoff"></a>
 ## Current handoff and exact next action
 
-Current handoff:CN-R1-ADMIN-ADVERTISING-001; obtain exact bounded local advertising implementation approval described in [admission](#admin-advertising-priority-admission). Facebook S2-B remains HOLD; no Meta attempt authorized.
+Current handoff:CN-R1-ADMIN-ADVERTISING-001 local S1 owner walkthrough/UAT after exact-source CI; use only approved isolated content fixtures. Facebook S2-B remains HOLD; no Meta attempt or production publication authorized.
 
 Current owner-authentication handoff:[bounded evidence](#local-customer-auth). Next CN-R1-GOOGLE-SSO-001 requires separate provider-specific authority;historical handoffs below remain unchanged.
 
@@ -3296,3 +3296,20 @@ Owner approval still needed: proposed Rooms/venue-only ownership; default-off lo
 Proposed owner wording: “I authorize the bounded disabled-by-default local synthetic Rooms-owned venue-banner slice in the existing advertising admission contract, including fixed original concept images, dedicated permission definitions, independent publisher, additive V30 after exact schema/DDL verification and clean/upgrade tests, and disposable exact-venue synthetic content-only fixtures for local inspection. No ordinary/production grants, uploads/cloud media, financial/authentication changes or deployment are authorized.”
 
 Original Release 1 checkpoints remain 4/21 (19.0%); MVP criteria remain 15/74 checked (20.3%), 0 formally accepted, 92 requirements unchanged. Priority is not completed functionality. Next single action: owner approve the exact bounded advertising slice; Facebook remains HOLD.
+
+
+<a id="admin-advertising-s1"></a>
+
+## Local Admin Advertising S1 evidence
+
+Source baseline main/upstream `1f4a152eb35fc2bbd9c33d94f4849b7065074e23`; CI40759539954 COMPLETED/SUCCESS verified. Owner explicitly authorizes this bounded S1 in attachment a0065c8f-08a9-44cb-a707-f4882e913892. Earlier NOT_GRANTED admission records are preserved historical preparation, not the current authority. Scope/limitations: [Project](PROJECT.md#admin-advertising-s1); [implementation](ARCHITECTURE.md#admin-advertising-s1); [UI](DESIGN.md#admin-advertising-s1). Same unit F / FF-0002; original92 requirements,74 criteria,15 checked,0 formally accepted and original Release1 checkpoints4/21 (19.0%) remain unchanged.
+
+Implemented default-off local Rooms-owned banner drafts/editing/fixed image selection/schedules/order/preview/independent publish/unpublish/history and server-authoritative homepage rendering. V30 is additive; V1–V29 unchanged. No ordinary runtime/production grants; content-only fixtures are confined to disposable test databases. No financial, booking, access, customer-admission, provider-linking or physical operations. Facebook HOLD and normal provider gates remain DENY; Google historical denial attribution remains NOT_VERIFIED and older Facebook capture uncertainties remain unchanged.
+
+Actual real-stack Chromium→Next.js→Spring Boot→PostgreSQL18.6 journey passed without response interception or cookie injection: private draft, same-author publication denial, independent publisher, anonymous scheduled live snapshot, unpublished edit isolation, immutable history, unpublish and stale revision conflict. Six screenshots at375/768/1280 were captured and visually reviewed. API/PostgreSQL/security tests cover CSRF, exact venue/revoked grants, simultaneous duplicate creation, changed-payload conflict, concurrent same-revision winner, revocation wait/fresh recheck, malformed image reference, immutable rows, mandatory audit rollback, future/expired visibility/order, clean migrations and V29→V30 preservation. Unit tests verify default DENY/outside-profile startup refusal and bounded content validation; architecture test enforces repository-port and module boundaries.
+
+Preserved failures: an initial synthetic venue fixture used an invalid lowercase code; corrected the fixture, not schema validation. A browser fixture initially omitted existing venue completeness prerequisites; corrected fixture data without weakening publication rules. The first full suite exposed legacy empty-table CASCADE resets hitting blanket TRUNCATE guards; tests now isolate banner history in a separate database and immutable guards permit only empty-table truncation. Nonempty history remains protected and is negatively tested. An initial screenshot URL pathname encoded the workspace space; the harness now uses fileURLToPath and evidence is in the correct workspace cache. None of these failures were reported as PASS.
+
+Full final backend run:989 tests,978 passed,11 opt-in exclusions,0 failures/errors; advertising real-stack browser scenario executed. Packaged startup/real HTTP denial PASS. Frontend clean npm ci,production build,typecheck,lint(--error-on-warnings) and all regressions PASS. Previous full-run failure at a legacy bank report test expected schema head29; only its expectation changed to30,with Payments production code untouched. Validation results are stored in `execution/status.json.advertisingS1Execution`; exact-source Git/CI publication receipt must be independently verified. Generated screenshots/logs remain outside managed KB content. Existing Feature Catalogue/User Guide updated; prior requirement/acceptance history retained. Reading reuse:116 accounted files,104 byte-identical original-ledger files and12 controlled committed successors freshly reconciled; no additional Knowledge Base files. Unrelated next-env bytes and two DOCX files preserved. Rollback retains V30/history and disables only the local flag.
+
+Next single executable action after CI: owner walkthrough/UAT of the approved local S1 workflow under this same task. Production administrative authority/media/content admission and deployment remain separate; no new Meta activity.
