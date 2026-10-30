@@ -1,0 +1,13 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import React from "react";
+import {renderToStaticMarkup} from "react-dom/server";
+import {blockPath,parseBlock,parseBlockList} from "../lib/room-blocks.ts";
+import {forwardRoomBlocks} from "../lib/room-backend.ts";
+import {RoomBlocking} from "../components/room-blocking.tsx";
+const venue="10000000-0000-4000-8000-000000000001",room="10000000-0000-4000-8000-000000000002",id="10000000-0000-4000-8000-000000000003";
+const block={blockId:id,venueId:venue,roomId:room,startAt:"2030-01-01T00:00:00Z",endAt:"2030-01-01T01:00:00Z",revision:0,createdAt:"2026-10-30T00:00:00Z",synthetic:true};
+test("Room Blocking binds exact scope and rejects unsafe references",()=>{assert.equal(blockPath(venue,room),`/api/admin/venues/${venue}/rooms/${room}/blocks`);for(const value of ["../payments",`${room}?actor=other`,"unknown"])assert.throws(()=>blockPath(venue,value));assert.throws(()=>parseBlock({...block,venueId:room},venue,room));assert.throws(()=>parseBlock({...block,endAt:block.startAt},venue,room));assert.throws(()=>parseBlock({...block,revision:1},venue,room));});
+test("allowlisted DTOs strip private fields and require synthetic evidence",()=>{assert.deepEqual(parseBlock({...block,actor_id:"PRIVATE",request_hash:"PRIVATE"},venue,room),block);const list={items:[block],page:0,size:24,configuration:"2:3:fixture",timezone:"Asia/Colombo",observedAt:block.createdAt,synthetic:true};assert.equal(parseBlockList(list,venue,room).items.length,1);for(const bad of [{...list,synthetic:false},{...list,timezone:"INVALID"},{...list,size:101},{...list,configuration:""}])assert.throws(()=>parseBlockList(bad,venue,room));});
+test("proxy rejects unsupported methods, details mutations and injected authority",async()=>{const path=`http://127.0.0.1${blockPath(venue,room)}`;assert.equal((await forwardRoomBlocks(new Request(path,{method:"DELETE"}))).status,404);assert.equal((await forwardRoomBlocks(new Request(`${path}/${id}`,{method:"POST"}))).status,404);assert.equal((await forwardRoomBlocks(new Request(path,{headers:{"x-role":"ADMIN"}}))).status,400);assert.equal((await forwardRoomBlocks(new Request(`${path}?accountId=other`))).status,400);});
+test("UI preserves disabled/default and no-reopening distinction",()=>{const html=renderToStaticMarkup(React.createElement(RoomBlocking));assert.match(html,/Room Blocking/);assert.match(html,/cannot reopen/);assert.match(html,/timestamp with offset/);assert.match(html,/Load room blocks/);assert.doesNotMatch(html,/Unblock room|Cancel booking|Publish/);});

@@ -15,6 +15,7 @@ export const adminNavigation = [
 	["/admin/rooms", "Room configuration"],
 	["/admin/advertising", "Venue advertising"],
 	["/admin/inventory", "Inventory inspection"],
+	["/admin/room-blocking", "Room Blocking"],
 	["/admin/bookings", "Bookings"],
 	["/admin/verification", "Verification review"],
 	["/admin/bank", "Bank review"],

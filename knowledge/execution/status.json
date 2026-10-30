@@ -1,19 +1,19 @@
 {
   "schemaVersion": "1.0.0",
   "taskId": "CN-R1-BOOKING-WEEK1-GATE-001",
-  "mode": "OWNER_AUTHORIZED_BOUNDED_EVIDENCE_GATE",
-  "workStatus": "LOCAL_VERIFIED_PUBLICATION_PENDING",
+  "mode": "OWNER_DIRECTED_CRITICAL_PATH_RESET",
+  "workStatus": "LOCAL_VERIFIED_BOUNDED_PUBLICATION_PENDING",
   "productStage": "BOUNDED_SYNTHETIC_IMPLEMENTATION_FULL_ACCEPTANCE_PENDING",
   "workspaceRoot": "/home/hasitha-wijerathna/Documents/Theater Project/repository",
   "canonicalKb": "knowledge/",
-  "branch": "main",
+  "branch": "codex/r1-room-blocking",
   "upstream": "origin/main",
-  "baselineHead": "aad06bfe8b3b2f49378ba0137f01340f0e7e1f2c",
+  "baselineHead": "9c0ba23b9d791101ab6e605e90304e0a3a510a80",
   "baselineWorktree": "Unrelated frontend/next-env.d.ts unstaged; all other baseline paths clean",
-  "currentChangeSet": "CN-R1-BOOKING-WEEK1-GATE-001",
+  "currentChangeSet": "CN-R1-ROOM-BLOCK-CONTRACT-001",
   "futurePlanApproval": "NOT_APPROVED",
-  "nextRecommendedChangeSet": "CN-R1-ROOM-BLOCK-CONTRACT-001",
-  "nextAction": "CN-R1-ROOM-BLOCK-CONTRACT-001 remains gated by G-ROOM-BLOCK and separate implementation authority;do not invent an executable approval.",
+  "nextRecommendedChangeSet": "CN-R1-COMMERCIAL-QUOTE-001",
+  "nextAction": "Obtain exact-venue commercial prices/taxes/fees/terms and qualified G-COMMERCIAL approval before separately authorized commercial quote implementation.",
   "nextReadyChangeSet": null,
   "implementationEvidence": "PROGRESS.md#extension-reservation-e2e",
   "approvedCoreDecisions": [
@@ -22,15 +22,18 @@
     "PR-BANK-001"
   ],
   "blockers": [
-    "CN-ACCEPT-001/CN-LAUNCH-001 and PayHere remain blocked; specialist/physical/production/recovery gates remain",
-    "Extension funding preparation requires separate owner authority"
+    "Real commercial policy and qualified G-COMMERCIAL evidence;Room Blocking local slice does not authorize production inventory grants or physical reopening",
+    "G-COMMERCIAL/G-BANK/G-PRIVACY qualified owner inputs and review",
+    "G-HARDWARE/G-ADMISSION physical device/venue/egress evidence",
+    "G-DELIVERY/G-RECOVERY/G-LAUNCH retained release gates",
+    "Protected-source successor validation fails on preserved pending Unit B and current priority records;no publication"
   ],
   "instructionDiscovery": "MANUAL_THIS_SESSION; prior explicit discovery evidence retained",
   "hostAutomaticInstructionLoading": "NOT_VERIFIED",
   "nativeAgentRegistration": "NOT_PERFORMED",
   "publicationState": "LOCAL_VERIFIED_CI_PENDING",
   "publicationEvidence": "Prerequisite CI40087229203 SUCCESS;successorCI PENDING",
-  "lastObservedHead": "aad06bfe8b3b2f49378ba0137f01340f0e7e1f2c",
+  "lastObservedHead": "9c0ba23b9d791101ab6e605e90304e0a3a510a80",
   "evidencePath": "PROGRESS.md#extension-reservation-e2e",
   "evidenceFreshness": "2026-10-24/25 real-backend campaign32 PASS;formal acceptance unchanged",
   "availableTools": [
@@ -273,7 +276,7 @@
     ],
     "review": "Parent self-review of actual diff, canonical/provenance links, complete payload and unchanged approval comparisons; no independent review claimed this task"
   },
-  "requestedTaskId": "CN-PAY-BANK-002",
+  "requestedTaskId": "CN-R1-ROOM-BLOCK-CONTRACT-001",
   "editorialOutcome": {
     "canonicalFilesReused": 4,
     "newKnowledgeFiles": 0,
@@ -2504,7 +2507,7 @@
       "failures": 0,
       "errors": 0,
       "skipped": 0,
-      "postgresql": "18.6 real clean V1–V9, populated V8–V9 upgrade, repeat startup and constraints PASS",
+      "postgresql": "18.6 real clean V1\u2013V9, populated V8\u2013V9 upgrade, repeat startup and constraints PASS",
       "workerProcessRestart": "PASS two fresh isolated worker processes; durable intent retained; live delivery DISABLED",
       "holdConversionRollback": "PASS mandatory request-audit failure rolls back Booking conversion and permits safe retry",
       "lockFreshness": "PASS eligibility expiry during real PostgreSQL row-lock wait denies subsequent handoff",
@@ -2796,7 +2799,7 @@
   },
   "ownerAccountabilityApproval": {
     "recordedDate": "2026-10-17",
-    "approvalSource": "Owner conversation: CINENEST — OWNER ACCOUNTABILITY APPROVAL",
+    "approvalSource": "Owner conversation: CINENEST \u2014 OWNER ACCOUNTABILITY APPROVAL",
     "canonicalRecord": "PROJECT.md#accountability-appointments",
     "approvedRoles": [
       "Source Custodian",
@@ -2833,7 +2836,7 @@
   "gateDocumentationClosure": {
     "status": "VERIFIED_DOCUMENTATION_ONLY",
     "approvalDate": "2026-10-17",
-    "approvalSource": "Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status",
+    "approvalSource": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
     "interpretation": "Verified original sources and named management accountability may satisfy this documentation task when all outstanding venue-specific and qualified specialist appointments are explicitly recorded as downstream acceptance gates. This does not waive, complete or remove any appointment, review or acceptance evidence.",
     "baselineHead": "88d5746ed1a4cb987dee56d4579380984a876e63",
     "managementOwner": "Hasitha Wijerathna",
@@ -3654,7 +3657,7 @@
     "sourceCI": "SUCCESS",
     "localEvidence": {
       "backendTests": 366,
-      "postgresql": "18.6 clean V1–V17, populated V16–V17, repeat, HTTP and actual process restart",
+      "postgresql": "18.6 clean V1\u2013V17, populated V16\u2013V17, repeat, HTTP and actual process restart",
       "frontendTests": 112,
       "operationsBrowserGroups": 63,
       "iotRegressionBrowserGroups": 49,
@@ -4013,7 +4016,7 @@
       "governance": "PASS knowledge/source/traceability/dependency validation and approved committed-next-env in-memory execution replay;26 negative controls PASS. Primary worktree has only2 pre-existing next-env integrity findings.",
       "focusedFrontend": 6,
       "typecheckLintProductionBuild": "PASS",
-      "visualComparison": "All three references and before/after375/1280 customer/admin screenshots visually inspected;desktop customer header121→70px,admin sidebar240px unchanged,admin desktop height1562→1312px;preview copy removed,zero horizontal overflow. Mobile admin taller1452→2024px from useful navigation cards;not hidden. No pixel-perfect/reference-wide claim."
+      "visualComparison": "All three references and before/after375/1280 customer/admin screenshots visually inspected;desktop customer header121\u219270px,admin sidebar240px unchanged,admin desktop height1562\u21921312px;preview copy removed,zero horizontal overflow. Mobile admin taller1452\u21922024px from useful navigation cards;not hidden. No pixel-perfect/reference-wide claim."
     },
     "exactSourceCi": "PENDING_PUBLICATION",
     "acceptanceUnchanged": true,
@@ -7640,7 +7643,7 @@
         "sha256": "5b9a6c2d68ea5a5e8cdc711152120c2316aeee09d7baab6cdae388fd8d36196b"
       }
     ],
-    "visualComparison": "All3 approved PNGs opened;admin refs primary. Shared navy sidebar/light workspace/violet action retained;one additional roster card/two-column table/3 desktop count columns vs stacked mobile/tablet;375/768/1280 no horizontal overflow,one main;page heights1595/1423/1371→2454/2125/1903 due actual roster and mandatory warnings,not pixel-perfect reference reproduction",
+    "visualComparison": "All3 approved PNGs opened;admin refs primary. Shared navy sidebar/light workspace/violet action retained;one additional roster card/two-column table/3 desktop count columns vs stacked mobile/tablet;375/768/1280 no horizontal overflow,one main;page heights1595/1423/1371\u21922454/2125/1903 due actual roster and mandatory warnings,not pixel-perfect reference reproduction",
     "corrections": "Lint required semantic section for table region. Initial browser keyboard assertion exposed focus loss from disabling reload;aria-disabled plus guarded handler preserves focus without duplicate loading action. Capture scroll reset removes fixed offscreen skip-link artifact,not application shell change.",
     "backendChange": "One authorization regression test only;no application source,endpoint,permission,migration or dependency changed",
     "acceptance": "No full requirement/phase/demo/physical/production acceptance;prior24/0/0 campaign historical and not rerun for this frontend change"
@@ -7654,7 +7657,7 @@
     "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
     "fullRequirementVerified": false,
     "fullRequirementAcceptance": "NOT_ACCEPTED",
-    "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS",
+    "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS",
     "baselineHead": "40c88e9c4339a095646d57ecfa2f4c94a5876c88",
     "status": "VERIFIED_BOUNDED_SYNTHETIC_BACKEND_READ",
     "publication": "PENDING_SCOPED_COMMIT_PUSH_AND_EXACT_SOURCE_CI",
@@ -7674,7 +7677,7 @@
     "evidencePath": "PROGRESS.md#booking-access-context-implementation",
     "fullRequirementVerified": false,
     "fullRequirementAcceptance": "NOT_ACCEPTED",
-    "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim",
+    "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim",
     "baselineHead": "8cc9c5aa1bf14e154ba40242ca215705cdbd7090",
     "prerequisiteCI": "39582712862 COMPLETED/SUCCESS at exact baseline;backend/frontend/governance steps SUCCESS",
     "status": "LOCALLY_VERIFIED_BOUNDED_FRONTEND_READ",
@@ -8090,7 +8093,7 @@
     "ownerAuthority": "Explicit bounded test-fixture remediation attachment292d3de2-8f4c-4305-86d4-66d0f1ebc006",
     "ownerRequestSha256": "9135bd466c285cc1235c6b4f7cc3ce82de561456b986eb7fc3267acd351b4de3",
     "rootCause": "Exclusive positive-fixture close23:59:59 creates one-second venue-local gap;CI serverNow18:29:59.792086Z is23:59:59.792086Colombo;timing refusal correctly precedes hold conversion",
-    "correction": "Only test annotation close→23:59:59.999999999;2 pure regression methods cover54 explicit date/zone/time cases and exact-close rejection;all existing assertions/production code unchanged",
+    "correction": "Only test annotation close\u219223:59:59.999999999;2 pure regression methods cover54 explicit date/zone/time cases and exact-close rejection;all existing assertions/production code unchanged",
     "reproduction": "Original tests independently/together PASS outside gap;controlled closed-window independently/together reproduces both exact failures;deterministic positive-window regression FAIL before/PASS after;corrected original tests independently/together PASS",
     "tests": "609 backend incl295 Bank/27 Inventory/8 BankCreationRules/19 architecture;PostgreSQL18.6,V1-V19 migrations/startup;299 frontend,type/lint/build;8 classifier+10 admission PASS",
     "validation": "Knowledge/design and approved in-memory committed-source execution PASS;ordinary execution exactly2 pre-existing next-env findings;10 governance negative controls,92/92 traceability,28-task acyclic dependencies and whitespace PASS",
@@ -9874,7 +9877,7 @@
           "HISTORICAL_RECORD",
           "APPROVED_ARCHITECTURE"
         ],
-        "finding": "Activity/Sequence01 combine provisional hold and quote into a proposed atomic narrative. Current InventoryController exposes explicit POST /api/holds; quotations are separately Pricing-owned and bind hold facts. Component runtime Booking→Pricing/Payments arrows are not source dependency direction: Booking allowedDependencies identity/rooms/notifications, Payments depends on Booking via public ports.",
+        "finding": "Activity/Sequence01 combine provisional hold and quote into a proposed atomic narrative. Current InventoryController exposes explicit POST /api/holds; quotations are separately Pricing-owned and bind hold facts. Component runtime Booking\u2192Pricing/Payments arrows are not source dependency direction: Booking allowedDependencies identity/rooms/notifications, Payments depends on Booking via public ports.",
         "disposition": "CURRENT_FACT_CORRECTED_OR_HISTORICAL_CONTEXT_PRESERVED"
       },
       {
@@ -9936,7 +9939,7 @@
         "classification": [
           "HISTORICAL_RECORD"
         ],
-        "finding": "Product screenshots visibly preserve synthetic-only finance/booking/identity warnings, independent grant scope, explicit report load/retry, and UNKNOWN/UNVERIFIED operational truth. Popular-slot charts and tables agree at total 3: 18–19 count2, 20–21 count1, remaining hourly bands0 at all three widths. Cancellation screenshots display eligibility and explicit confirmation rather than completed cancellation/refund settlement. Screenshots are historical rendered evidence, not real-backend E2E or acceptance proof.",
+        "finding": "Product screenshots visibly preserve synthetic-only finance/booking/identity warnings, independent grant scope, explicit report load/retry, and UNKNOWN/UNVERIFIED operational truth. Popular-slot charts and tables agree at total 3: 18\u201319 count2, 20\u201321 count1, remaining hourly bands0 at all three widths. Cancellation screenshots display eligibility and explicit confirmation rather than completed cancellation/refund settlement. Screenshots are historical rendered evidence, not real-backend E2E or acceptance proof.",
         "disposition": "CURRENT_FACT_CORRECTED_OR_HISTORICAL_CONTEXT_PRESERVED"
       }
     ],
@@ -10235,7 +10238,7 @@
     "validation": {
       "backendTests": 807,
       "frontendTests": 449,
-      "backend": "PASS isolated PostgreSQL18.6,V1–V25,architecture,packaged startup/HTTP denial",
+      "backend": "PASS isolated PostgreSQL18.6,V1\u2013V25,architecture,packaged startup/HTTP denial",
       "frontend": "PASS npm ci/build/typecheck/lint;93 informational diagnostics;0 audit vulnerabilities",
       "governancePassAssertions": 136,
       "negativeRejections": 118,
@@ -10759,7 +10762,7 @@
           "path": "knowledge/ARCHITECTURE.md",
           "sha256": "2bf3d0a5840b0ed55a32d4c5ceafe23821a25972b9bef2f68069f2b1c7a8d569",
           "lines": 2616,
-          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs;671–830 reread to resolve initial wrapper truncation",
+          "reviewMethod": "Direct complete text read in bounded untruncated terminal outputs;671\u2013830 reread to resolve initial wrapper truncation",
           "contentCoverage": [
             [
               1,
@@ -10964,7 +10967,7 @@
           "path": "knowledge/PROGRESS.md",
           "sha256": "155a10bee794bb86cac1b9104cd675f8857f2018b43b0399a5ecf27437945c16",
           "lines": 2813,
-          "reviewMethod": "Direct bounded untruncated text outputs;475–490 reread to resolve truncatedP5C05line",
+          "reviewMethod": "Direct bounded untruncated text outputs;475\u2013490 reread to resolve truncatedP5C05line",
           "contentCoverage": [
             [
               1,
@@ -11068,7 +11071,7 @@
           "path": "knowledge/execution/change-sets.json",
           "sha256": "2975efe55cf93b76225ab5ad862851d2e2a72d2ff8b75bde71441c6ad1c70433",
           "sizeBytes": 143466,
-          "reviewMethod": "Complete UTF-8 JSON lines1–EOF displayed in contiguous ranges;28 change-set lifecycle/dependency/approval records,11 workstreams,74criterion mappings reviewed",
+          "reviewMethod": "Complete UTF-8 JSON lines1\u2013EOF displayed in contiguous ranges;28 change-set lifecycle/dependency/approval records,11 workstreams,74criterion mappings reviewed",
           "contentCoverage": "ALL_LINES",
           "visualCoverage": "NOT_APPLICABLE",
           "limitations": [],
@@ -11252,7 +11255,7 @@
         {
           "path": "knowledge/execution/status.json",
           "sha256": "6f77d6ca6dfe459fe214b7ff45fe16f22d304fa71aefe7c3636cf5203c615f59",
-          "reviewMethod": "Parent lines1–440;diagrams reviewer441–8940;binary reviewer6001–10249, contiguous complete content review and JSON relationship checks",
+          "reviewMethod": "Parent lines1\u2013440;diagrams reviewer441\u20138940;binary reviewer6001\u201310249, contiguous complete content review and JSON relationship checks",
           "contentCoverage": "COMPLETE",
           "rangesReviewed": [
             [
@@ -11408,7 +11411,7 @@
           "path": "knowledge/execution/validate_execution.py",
           "sha256": "a6eaa5f7ecf4755b71ca7f331406c9490d2f18aa949d44132812a6e27874ad51",
           "sizeBytes": 823296,
-          "reviewMethod": "Full source-content review in contiguous numbered chunks; lines 3751–5200 reused only exact byte-identical lines already fully read in this same review, with every unique line emitted in source order. Truncated 5201–5400 output reread as two complete 100-line chunks.",
+          "reviewMethod": "Full source-content review in contiguous numbered chunks; lines 3751\u20135200 reused only exact byte-identical lines already fully read in this same review, with every unique line emitted in source order. Truncated 5201\u20135400 output reread as two complete 100-line chunks.",
           "contentCoverage": "ALL_LINES",
           "visualCoverage": "NOT_APPLICABLE",
           "limitations": [
@@ -11657,7 +11660,7 @@
           "bytes": 562038,
           "coverage": "VISUALLY_REVIEWED",
           "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
-          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18\u201319:2;20\u201321:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
           "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim."
         },
         {
@@ -11666,7 +11669,7 @@
           "bytes": 504861,
           "coverage": "VISUALLY_REVIEWED",
           "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
-          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18\u201319:2;20\u201321:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
           "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim."
         },
         {
@@ -11675,7 +11678,7 @@
           "bytes": 506780,
           "coverage": "VISUALLY_REVIEWED",
           "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
-          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18\u201319:2;20\u201321:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
           "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim."
         },
         {
@@ -11819,7 +11822,7 @@
           "logicalLines": 633
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "reviewMethod": "OOXML complete paragraph/table extraction plus bundled LibreOffice render_docx.py and individual full-page PNG visual inspection; embedded JPEG separately opened where present",
           "pageRangesReviewed": [
@@ -11837,7 +11840,7 @@
           "authority": "HISTORICAL_SUPPORTING_SOURCE_NOT_POLICY_APPROVAL"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "reviewMethod": "Poppler full text extraction plus individual full-page PNG visual inspection",
           "pageRangesReviewed": [
@@ -14121,7 +14124,7 @@
           "path": "knowledge/execution/change-sets.json",
           "sha256": "2975efe55cf93b76225ab5ad862851d2e2a72d2ff8b75bde71441c6ad1c70433",
           "sizeBytes": 143466,
-          "reviewMethod": "Complete UTF-8 JSON lines1–EOF displayed in contiguous ranges;28 change-set lifecycle/dependency/approval records,11 workstreams,74criterion mappings reviewed",
+          "reviewMethod": "Complete UTF-8 JSON lines1\u2013EOF displayed in contiguous ranges;28 change-set lifecycle/dependency/approval records,11 workstreams,74criterion mappings reviewed",
           "contentCoverage": "ALL_LINES",
           "visualCoverage": "NOT_APPLICABLE",
           "limitations": [],
@@ -14399,7 +14402,7 @@
           "sha256": "42ca9d644f815238e1fc95346ae2e6b102765deaa27454e9f1fbb3df07ba3cf3",
           "lines": 11895,
           "coverage": "COMPLETE_CONTENT_WITH_EXPLICIT_QUALIFIED_REUSE",
-          "method": "Full previously read baseline content reused only for byte-identical matched source ranges; entire1705-line unified delta freshly displayed in four contiguous untruncated outputs1–430,431–900,901–1330,1331–EOF. All novel current lines, fields, values, nested objects and relationships read.",
+          "method": "Full previously read baseline content reused only for byte-identical matched source ranges; entire1705-line unified delta freshly displayed in four contiguous untruncated outputs1\u2013430,431\u2013900,901\u20131330,1331\u2013EOF. All novel current lines, fields, values, nested objects and relationships read.",
           "reusedBaseline": {
             "commit": "7be95d4b8d9a607e784380fcc516dd50c427f4c9",
             "sha256": "6f77d6ca6dfe459fe214b7ff45fe16f22d304fa71aefe7c3636cf5203c615f59",
@@ -14924,7 +14927,7 @@
           "bytes": 562038,
           "coverage": "VISUALLY_REVIEWED",
           "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
-          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18\u201319:2;20\u201321:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
           "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
           "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
           "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
@@ -14935,7 +14938,7 @@
           "bytes": 504861,
           "coverage": "VISUALLY_REVIEWED",
           "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
-          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18\u201319:2;20\u201321:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
           "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
           "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
           "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
@@ -14946,7 +14949,7 @@
           "bytes": 506780,
           "coverage": "VISUALLY_REVIEWED",
           "method": "Original PNG individually opened with view_image; long screenshots and corrected diagrams re-opened with original-detail delivery",
-          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18–19:2;20–21:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
+          "notes": "Full-page admin screenshot at named width: synthetic-only Popular Reserved Session Start Times, current purchased revisions/current timezone,24hour bands,3count total (18\u201319:2;20\u201321:1),explicit load/retry/clear; not occupancy/revenue/physical readiness. Fixedhourbands remain limited.",
           "limitations": "Source image only; not live application/E2E/provider/physical acceptance. Viewport crops reviewed as supplied; no offscreen claim.",
           "coverageMethod": "QUALIFIED_PRIOR_FULL_REVIEW_REUSE",
           "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
@@ -15112,7 +15115,7 @@
           "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "reviewMethod": "OOXML complete paragraph/table extraction plus bundled LibreOffice render_docx.py and individual full-page PNG visual inspection; embedded JPEG separately opened where present",
           "pageRangesReviewed": [
@@ -15132,7 +15135,7 @@
           "priorLedgerBaseline": "7be95d4b8d9a607e784380fcc516dd50c427f4c9"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "reviewMethod": "Poppler full text extraction plus individual full-page PNG visual inspection",
           "pageRangesReviewed": [
@@ -16537,7 +16540,7 @@
           "baselineLineCount": 633
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
           "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
@@ -16548,7 +16551,7 @@
           "limitations": "Prior per-file extraction/translation/visual limitations remain in the referenced immutable reading record."
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "reviewedBaseline": "ad790b1dc8dd0f84776c43d1a5c3ac5675bb98c8",
           "coverageMethod": "QUALIFIED_PRIOR_FULL_CONTENT_AND_VISUAL_REUSE",
@@ -16719,11 +16722,11 @@
       "playwright": "1.62.1",
       "chromium": "151.0.7922.34",
       "postgres": "18.6",
-      "flyway": "V1–V25",
+      "flyway": "V1\u2013V25",
       "applicationMax": "3CPU/7GiB",
       "databaseMax": "1CPU/1GiB/128PIDs/512MiBtmpfs",
       "timeoutSeconds": 600,
-      "realStack": "Browser→Next.js→Spring Boot/Spring Modulith→PostgreSQL"
+      "realStack": "Browser\u2192Next.js\u2192Spring Boot/Spring Modulith\u2192PostgreSQL"
     },
     "databaseAndTransportEvidence": {
       "taskId": "CN-E2E-EXTENSION-RESERVATION-001",
@@ -18080,7 +18083,7 @@
           "limitations": "No provider/hardware acceptance from diagrams;prior extraction/translation limitations retained"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "method": "VERIFIED_PRIOR_FULL_READING_REUSE",
           "reviewReference": "extensionReservationE2E.knowledgeReadingLedger at 0d936c059dff8b3a4f6f2b3586ac2c29e452e1cf",
@@ -18088,7 +18091,7 @@
           "limitations": "No provider/hardware acceptance from diagrams;prior extraction/translation limitations retained"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "method": "VERIFIED_PRIOR_FULL_READING_REUSE",
           "reviewReference": "extensionReservationE2E.knowledgeReadingLedger at 0d936c059dff8b3a4f6f2b3586ac2c29e452e1cf",
@@ -19201,7 +19204,7 @@
           "limitations": "Prior source translation/extraction limitations retained;proposed diagrams do not prove implementation/approval"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "reviewMethod": "QUALIFIED_PRIOR_FULL_CONTENT_VISUAL_REUSE",
           "reviewReference": "release1Planning.knowledgeReading at ae714b53e6233abb5165fa8bc965677c03d40fb6",
@@ -19210,7 +19213,7 @@
           "limitations": "Prior source translation/extraction limitations retained;proposed diagrams do not prove implementation/approval"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "reviewMethod": "QUALIFIED_PRIOR_FULL_CONTENT_VISUAL_REUSE",
           "reviewReference": "release1Planning.knowledgeReading at ae714b53e6233abb5165fa8bc965677c03d40fb6",
@@ -19609,7 +19612,7 @@
       "POST/GET existing /api/verification requests/uploads/completion;independent reviewer API support",
       "GET /api/bank/requests/readiness;POST /api/bank/requests;GET /api/bank/requests/{id}"
     ],
-    "actualFlow": "Real local-OIDC authentication/JDBC session → catalog/package/calendar → explicit authoritative hold → frozen BANK quotation/explicit acceptance → synthetic identity consent/evidence and separate reviewer API → explicit bank request → timeout/unknown → exact original replay → authoritative OPEN/PENDING/UNFUNDED/NOT_CONFIRMED UI. No fabricated pending Booking row.",
+    "actualFlow": "Real local-OIDC authentication/JDBC session \u2192 catalog/package/calendar \u2192 explicit authoritative hold \u2192 frozen BANK quotation/explicit acceptance \u2192 synthetic identity consent/evidence and separate reviewer API \u2192 explicit bank request \u2192 timeout/unknown \u2192 exact original replay \u2192 authoritative OPEN/PENDING/UNFUNDED/NOT_CONFIRMED UI. No fabricated pending Booking row.",
     "concurrencyLimits": "Browser initial inventory race200/409 with one CREATE receipt and released owned test hold;browser bank commands test concurrent committed replay200/200 and distinct-key/changed-payload409.Independent full PostgreSQL concurrentBankCommandsAfterReadinessProduceOnlyOneConversion covers initial bank CREATE200/409;not misrepresented as browser initial-bank race.",
     "authLimits": "Local synthetic OIDC issuer,not real Google qualification;normal Secure/HttpOnly/SameSite browser session,no injection.Deterministic past JDBC last-access/expiry timestamps and normal Spring handling return401 foraccount andprotectedbank reads;CSRF andowner/venue cases actuallyrerun.",
     "accessLimits": "Access/IoT/live notifications disabled by existing admitted runtime;zeroAccess rows/POST provisioning beforefunding observed,not physical PIN qualification.",
@@ -20638,7 +20641,7 @@
           "limitations": "Existing extraction/translation limits retained;diagrams remain proposed unless canonical approval applies"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "reviewMethod": "QUALIFIED_BYTE_IDENTICAL_FULL_READING_VISUAL_REUSE",
           "contentCoverage": "COMPLETE_REUSED_OR_PRECEDING_SUCCESSOR_REVIEW",
@@ -20646,7 +20649,7 @@
           "limitations": "Existing extraction/translation limits retained;diagrams remain proposed unless canonical approval applies"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "reviewMethod": "QUALIFIED_BYTE_IDENTICAL_FULL_READING_VISUAL_REUSE",
           "contentCoverage": "COMPLETE_REUSED_OR_PRECEDING_SUCCESSOR_REVIEW",
@@ -22261,13 +22264,13 @@
           "limitations": "Unchanged diagrams/binary visual review reused;no new general audit or new rendering claim"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "method": "QUALIFIED_BYTE_IDENTICAL_FULL_READING_VISUAL_REUSE",
           "limitations": "Unchanged diagrams/binary visual review reused;no new general audit or new rendering claim"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "method": "QUALIFIED_BYTE_IDENTICAL_FULL_READING_VISUAL_REUSE",
           "limitations": "Unchanged diagrams/binary visual review reused;no new general audit or new rendering claim"
@@ -23037,13 +23040,13 @@
           "limitations": "Existing qualified review reused;fresh relevant canonical/registry consultation;no new binary rendering claim"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "method": "QUALIFIED_BYTE_IDENTICAL_FULL_READING_VISUAL_REUSE",
           "limitations": "Existing qualified review reused;fresh relevant canonical/registry consultation;no new binary rendering claim"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "method": "QUALIFIED_BYTE_IDENTICAL_FULL_READING_VISUAL_REUSE",
           "limitations": "Existing qualified review reused;fresh relevant canonical/registry consultation;no new binary rendering claim"
@@ -23174,7 +23177,7 @@
           "sha256": "007dd3ce47cd495fb51cbe23bbf27291b0b1b1a220f300ef8588f3b19b80dd6f"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2"
         },
         {
@@ -23290,7 +23293,7 @@
           "sha256": "0b42ef9c1eb756ca8dc5f406ad79c4118cd4587937dec6424b9d83b445a5b45a"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1"
         },
         {
@@ -23714,7 +23717,7 @@
           "method": "REUSED_VERIFIED_FULL_REVIEW"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "method": "REUSED_VERIFIED_FULL_REVIEW"
         },
@@ -23859,7 +23862,7 @@
           "method": "REUSED_VERIFIED_FULL_REVIEW"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "method": "REUSED_VERIFIED_FULL_REVIEW"
         },
@@ -25624,7 +25627,7 @@
       "googleBoundaryTests": 2,
       "manualRealBrowserRegression": "PASS13groups",
       "architecture": "PASS full existing suites;11modules unchanged",
-      "migrations": "V1–V28 identical;no additive migration",
+      "migrations": "V1\u2013V28 identical;no additive migration",
       "packagedStartup": "PASS default denied against isolated PostgreSQL18.6",
       "limits": "Five existing opt-in receipt/provider/restart campaigns not rerun"
     },
@@ -25747,7 +25750,7 @@
       "additionalPkceNegatives": 2,
       "architecture": "PASS full11module architecture/security/regression suites",
       "postgres": "PASS isolated PostgreSQL18.6,existing clean/upgrade/ownership/concurrency suites",
-      "migrations": "V1–V28 byte-identical;no migration",
+      "migrations": "V1\u2013V28 byte-identical;no migration",
       "packagedStartup": "PASS default denied and migrated PostgreSQL",
       "limits": "Existing five opt-in campaigns remain skipped;actual Google not executed"
     },
@@ -26947,12 +26950,12 @@
           "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "method": "REUSED_VERIFIED_EXTRACTION_AND_VISUAL_REVIEW"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW"
         }
@@ -27689,12 +27692,12 @@
           "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).docx",
           "sha256": "8812affb45f73b368df10f50fdf792af1fe5b1be2774d662464487302c8ca5b1",
           "method": "REUSED_VERIFIED_EXTRACTION_AND_VISUAL_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
         },
         {
-          "path": "knowledge/නවීන ස්වයංක්_රීය පෞද්ගලික සිනමා ශාලා සහ IoT පද්ධති යෝජනා වාර්තාව (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
+          "path": "knowledge/\u0db1\u0dc0\u0dd3\u0db1 \u0dc3\u0dca\u0dc0\u0dba\u0d82\u0d9a\u0dca_\u0dbb\u0dd3\u0dba \u0db4\u0dde\u0daf\u0dca\u0d9c\u0dbd\u0dd2\u0d9a \u0dc3\u0dd2\u0db1\u0db8\u0dcf \u0dc1\u0dcf\u0dbd\u0dcf \u0dc3\u0dc4 IoT \u0db4\u0daf\u0dca\u0db0\u0dad\u0dd2 \u0dba\u0ddd\u0da2\u0db1\u0dcf \u0dc0\u0dcf\u0dbb\u0dca\u0dad\u0dcf\u0dc0 (Smart Automated Private Cinema & IoT System Architecture Proposal).pdf",
           "sha256": "84cc8394eb94068ee01be729344b9c740cde5bb4ea9c63dc11ab589d268a3ba2",
           "method": "REUSED_VERIFIED_COMPLETE_REVIEW_WITH_CONTROLLED_SUCCESSOR_REVIEW; verified original or controlled successor at 1f4a152eb35fc2bbd9c33d94f4849b7065074e23"
         }
@@ -27920,5 +27923,168 @@
       "formalAcceptance": "NOT_ACCEPTED"
     },
     "guideAssessment": "NO_NEW_USER_WORKFLOW;EXISTING_S1_GUIDE_UNCHANGED"
+  },
+  "release1CriticalPathReset": {
+    "date": "2026-10-30",
+    "previousHeader": {
+      "mode": "OWNER_AUTHORIZED_BOUNDED_EVIDENCE_GATE",
+      "workStatus": "LOCAL_VERIFIED_PUBLICATION_PENDING",
+      "currentChangeSet": "CN-R1-BOOKING-WEEK1-GATE-001",
+      "nextAction": "CN-R1-ROOM-BLOCK-CONTRACT-001 remains gated by G-ROOM-BLOCK and separate implementation authority;do not invent an executable approval.",
+      "nextRecommendedChangeSet": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+      "blockers": [
+        "CN-ACCEPT-001/CN-LAUNCH-001 and PayHere remain blocked; specialist/physical/production/recovery gates remain",
+        "Extension funding preparation requires separate owner authority"
+      ]
+    },
+    "record": "PROGRESS.md#release1-critical-path-reset",
+    "executionPriority": "CUSTOMER_RELEASE_CRITICAL_PATH",
+    "heldWorkstreams": [
+      "Facebook S2-B",
+      "Advertising public-media Units B-F",
+      "Advertising storage/scanner extensions",
+      "Optional analytics and UI enhancements"
+    ],
+    "unitBResourceDisposition": "PRESERVED_CLEANUP_BLOCKED_ACTIVE_WRITER_COVERAGE_INCONCLUSIVE",
+    "implementationAuthority": "PENDING_EXACT_BOUNDED_APPROVAL",
+    "acceptanceChanged": false,
+    "publication": "NOT_PUBLISHED_PENDING_GOVERNANCE_VALIDATION",
+    "validation": {
+      "designKnowledgeManifest": "PASS",
+      "whitespace": "PASS",
+      "execution": "FAIL_PROTECTED_UNIT_A_SUCCESSOR_PAYLOADS",
+      "preexistingFailures": [
+        "AdvertisingMediaStore.java",
+        "LocalAdvertisingMediaTestAdapter.java",
+        "verify-advertising-media-a.py",
+        "execution/status.json",
+        "execution/change-sets.json"
+      ],
+      "additionalResetProtectedFiles": [
+        "PROJECT.md",
+        "PROGRESS.md"
+      ],
+      "applicationTests": "NOT_RUN_DOCUMENTATION_PRIORITY_CHANGE_ONLY",
+      "publication": "BLOCKED_NO_COMMIT_OR_PUSH"
+    }
+  },
+  "roomBlocking": {
+    "taskId": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+    "date": "2026-10-30",
+    "baseline": "9c0ba23b9d791101ab6e605e90304e0a3a510a80",
+    "implementationAuthorization": "GRANTED_LOCAL_SYNTHETIC_DISABLED_BY_DEFAULT",
+    "ddlAuthorization": "EXPLICIT_OWNER_APPROVED_EXACT_PROPOSAL_AND_EMPTY_JOURNAL_GUARD_CORRECTION",
+    "status": "LOCAL_VERIFIED_BOUNDED",
+    "proposal": "ARCHITECTURE.md#room-blocking-ddl-proposal",
+    "ddlSha256": "2ed7d85229324cf5f1cb1fae9028977378289a8454bddbb9e807b01c4087f2aa",
+    "applicationChanges": true,
+    "migrationCreated": "V32__local_room_blocking.sql",
+    "databaseMutated": "DISPOSABLE_RUNNER_OWNED_TEST_DATABASES_ONLY",
+    "tests": {
+      "focused": {
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skips": 0
+      },
+      "fullBackend": {
+        "status": "PASS",
+        "tests": 1011,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 13,
+        "passed": 998,
+        "packagedStartupHttpDenial": "PASS",
+        "roomBlockingIntegration": {
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skips": 0
+        },
+        "configurationTests": 2
+      },
+      "frontend": "PASS",
+      "typecheck": "PASS",
+      "build": "PASS",
+      "lint": "PASS_124_EXISTING_INFORMATIONAL_DIAGNOSTICS",
+      "postgres": "CLEAN_AND_V30_UPGRADE_PASS;NO_FAILED_MIGRATIONS",
+      "architecture": "PASS_EXISTING_11_MODULE_BOUNDARIES"
+    },
+    "priorityResetPublication": "LOCAL_UNPUBLISHED",
+    "acceptanceChanged": false,
+    "validation": {
+      "application": "PASS",
+      "governance": "PASS_EXECUTION_NEGATIVE_CONTROLS_KNOWLEDGE_MANIFEST_WHITESPACE",
+      "publication": "EXACT_SOURCE_CI_REPORTED_AT_CLOSEOUT"
+    },
+    "readingInventory": {
+      "currentFiles": 116,
+      "priorLedgerUnchanged": 101,
+      "changedFiles": 15,
+      "newFiles": 0,
+      "completeReuseClaimed": false
+    },
+    "enabledByDefault": false,
+    "runtimeGrants": false,
+    "productionActivated": false,
+    "automaticReopening": false,
+    "existingBookingsCanceled": false,
+    "physicalCommands": false,
+    "financialChanges": false,
+    "facebookResumed": false,
+    "unitBResumed": false,
+    "requirements": 92,
+    "criteria": 74,
+    "checkedCriteria": 15,
+    "formallyAccepted": 0,
+    "migrationHistoryPreserved": "V1-V30_BYTE_IDENTICAL;PAUSED_V31_NOT_APPLIED",
+    "isolatedTaskCheckout": true,
+    "originalDdlSha256": "36d5d586cf1aee483a6319f005128670e78aec39c5181f82566713aab9c01184",
+    "sourcePaths": [
+      "backend/src/main/java/com/cinenest/booking/internal/RoomBlocks.java",
+      "backend/src/main/java/com/cinenest/booking/internal/RoomBlockRepository.java",
+      "backend/src/main/java/com/cinenest/booking/internal/JdbcRoomBlockRepository.java",
+      "backend/src/main/java/com/cinenest/booking/internal/RoomBlockController.java",
+      "backend/src/main/resources/db/migration/V32__local_room_blocking.sql",
+      "frontend/components/room-blocking.tsx"
+    ],
+    "testPaths": [
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/booking/internal/RoomBlockConfigurationTest.java",
+      "frontend/tests/room-blocks.test.mjs",
+      "frontend/tests/room-blocks-e2e.mjs"
+    ],
+    "evidence": "PROGRESS.md#room-blocking-local-implementation",
+    "browser": {
+      "status": "PASS",
+      "checks": 10,
+      "interception": false,
+      "cookieInjection": false,
+      "externalRequests": 0,
+      "widths": [
+        375,
+        768,
+        1280
+      ],
+      "genuineOwnerUat": "NOT_RUN"
+    },
+    "publication": "Exact task-branch SHA/CI reported at closeout;not inferred",
+    "rollback": "Disable new feature;preserve additive schema and immutable inventory/command/audit. No destructive rollback or automatic unblock.",
+    "reading": {
+      "baseline": "9c0ba23b9d791101ab6e605e90304e0a3a510a80",
+      "perFileLedger": "advertisingS1Execution.reading.files",
+      "controlledSuccessorCoverage": "advertisingMediaUnitAExecution.reading;116 qualified files,no gaps",
+      "byteIdenticalPreviouslyReviewedBinaryFiles": 38,
+      "freshCoverage": "Root instructions,current canonical/status/handoff,Rooms/Booking/Identity contracts,V6/V25/migration inventory,current workflow and all authored source/DDL/governance/documentation deltas",
+      "method": "Verified prior complete content/visual coverage reused with recorded controlled successors;no new full visual audit or parsing-as-review claim",
+      "unmanagedOwnerDocuments": "Two existing DOCX remain preserved only in original worktree,not published",
+      "taskTraceability": [
+        "CN-A03",
+        "CN-O03",
+        "BR-06",
+        "P8-C04",
+        "P8-C05"
+      ]
+    }
   }
 }

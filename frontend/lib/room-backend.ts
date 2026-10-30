@@ -227,3 +227,62 @@ export function bannerRoute(path: string, method: string) {
 export async function forwardBanners(request: Request) {
 	return forwardConfigured(request, bannerRoute);
 }
+
+export async function forwardRoomBlocks(request: Request): Promise<Response> {
+	const url = new URL(request.url);
+	const match = new RegExp(
+		`^/api/admin/venues/(${id})/rooms/(${id})/blocks(?:/(${id}))?$`,
+	).exec(url.pathname);
+	const fail = (status: number) =>
+		new Response(null, {
+			status,
+			headers: { "Cache-Control": "private, no-store" },
+		});
+	if (
+		!match ||
+		!["GET", "POST"].includes(request.method) ||
+		(match[3] && request.method !== "GET")
+	)
+		return fail(404);
+	if (
+		[
+			"authorization",
+			"x-role",
+			"x-permission",
+			"x-venue-id",
+			"x-account-id",
+		].some((x) => request.headers.has(x))
+	)
+		return fail(400);
+	if (
+		[...url.searchParams.keys()].some(
+			(k) =>
+				request.method !== "GET" ||
+				match[3] ||
+				!["page", "size"].includes(k) ||
+				url.searchParams.getAll(k).length !== 1,
+		)
+	)
+		return fail(400);
+	const response = await forwardConfigured(
+		request,
+		(path, method) => path === url.pathname && method === request.method,
+	);
+	if (response.status !== 200) return response;
+	try {
+		const { parseBlock, parseBlockList } = await import("./room-blocks");
+		const value = await response.json();
+		const result =
+			request.method === "GET" && !match[3]
+				? parseBlockList(value, match[1], match[2])
+				: parseBlock(value, match[1], match[2]);
+		return Response.json(result, {
+			headers: {
+				"Cache-Control": "private, no-store",
+				"X-Content-Type-Options": "nosniff",
+			},
+		});
+	} catch {
+		return fail(502);
+	}
+}

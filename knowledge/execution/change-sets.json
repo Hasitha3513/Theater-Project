@@ -127,7 +127,7 @@
       ],
       "documentationClosureApproval": {
         "status": "OWNER_APPROVED_DOCUMENTATION_ONLY",
-        "source": "Owner conversation: CN-GATE-001 — Approve Documentation Closure Boundary and Reconcile Task Status",
+        "source": "Owner conversation: CN-GATE-001 \u2014 Approve Documentation Closure Boundary and Reconcile Task Status",
         "date": "2026-10-17",
         "canonicalSpecification": "PROJECT.md#accountability-appointments",
         "retainedDecisionGates": [
@@ -665,7 +665,7 @@
       "affectedFilesModules": "Pricing quotation domain/application/persistence/HTTP; public Booking hold port; Identity explicit route security; frontend quote transport/UI/tests; existing knowledge",
       "dbApiUiImpact": "Seven Pricing quotation tables; POST /api/quotes, GET /api/quotes/{quoteId}, POST /api/quotes/{quoteId}/revisions, POST /api/quotes/{quoteId}/accept; synthetic-only itemized review/acceptance",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1–V6; no production seed/down migration",
+      "migrationNeeds": "V7__synthetic_quotations.sql additive only; preserve V1\u2013V6; no production seed/down migration",
       "plannedChecks": "Exact unit/guest/included-extra/quote-expiry/snapshot fixture tests",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Accepted versioned quote and explicit channel basis preserved",
@@ -756,7 +756,7 @@
       "affectedFilesModules": "Verification module/private encrypted synthetic storage; Pricing public quotation context; Identity exact scoped permissions; customer/reviewer UI",
       "dbApiUiImpact": "Exactly eight approved tables and ten operations; synthetic manual review only",
       "securityIotRisks": "Owner/venue denial, evidence/secret leakage, financial integrity, safe egress/offline uncertainty; no live operation authorized",
-      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1–V7",
+      "migrationNeeds": "Additive V8 with eight Verification-owned tables; preserve V1\u2013V7",
       "plannedChecks": "Upload/private scope/retention/review/consent tests and operational gate",
       "rollback": "Revert only this reviewed documentation/isolated-code change via normal history-preserving revert; future data/external compensation requires explicit plan before READY",
       "definitionOfDone": "Restricted booker eligibility separate from on-site guest entry",
@@ -2052,7 +2052,7 @@
         "changeSets": [
           {
             "id": "CN-GRANT-COMMANDS-001",
-            "scope": "Proposal-creation command only under approved A–G policy; bootstrap/approver assignments and command authority still separately required",
+            "scope": "Proposal-creation command only under approved A\u2013G policy; bootstrap/approver assignments and command authority still separately required",
             "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
             "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
             "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
@@ -2202,7 +2202,7 @@
         "boundedImplementedAndVerified": "Synthetic bank requests/evidence/credit allocation/refund primitives; Release1 Day2 real-stack37PASS including pending bank request,original-command timeout recovery and PostgreSQL concurrency/zero premature finance/access evidence;not real-provider/physical acceptance",
         "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
         "missing": "Hosted gateway and real banking qualification; extension funding preparation",
-        "blockers": "PayHere deferred; extension A–P and V26 financial scope not approved",
+        "blockers": "PayHere deferred; extension A\u2013P and V26 financial scope not approved",
         "requirementIds": [
           "PR-BANK-001",
           "CN-C06",
@@ -2319,7 +2319,7 @@
         "boundedImplementedAndVerified": "Zero-delta reschedule,pre-start never-issued cancellation,extension preview and temporary tail reservation with customer UI,status/CREATE recovery/withdrawal;typed owner-only public context;real-backend browser preview/reservation/status/recovery/withdrawal,authorization,concurrency,expiry and fresh-backend reads verified",
         "partiallyImplemented": "All related full requirements remain unaccepted; bounded receipts do not establish full feature completion",
         "missing": "Policy-gated funding,purchased extension commit and wider commercial/issued-credential lifecycle;full acceptance",
-        "blockers": "Funding A–P/financial/migration authority remain open;bounded synthetic reservation E2E now verified",
+        "blockers": "Funding A\u2013P/financial/migration authority remain open;bounded synthetic reservation E2E now verified",
         "requirementIds": [
           "PR-PKG-001",
           "CN-C08",
@@ -3584,7 +3584,7 @@
         "W06": {
           "boundedImplementedAndVerified": "Zero-delta reschedule,pre-start never-issued cancellation,extension preview and temporary tail reservation with customer UI,status/CREATE recovery/withdrawal;typed owner-only public context",
           "missing": "Real-backend browser extension reservation/recovery/withdrawal evidence;policy-gated funding,purchased extension commit and wider commercial/issued-credential lifecycle",
-          "blockers": "Existing synthetic reservation contracts permit separately authorized E2E verification;funding A–P/financial/migration authority remain open"
+          "blockers": "Existing synthetic reservation contracts permit separately authorized E2E verification;funding A\u2013P/financial/migration authority remain open"
         },
         "W11": {
           "boundedImplementedAndVerified": "Historical real-backend campaign24 PASS; focused application/architecture CI",
@@ -5661,12 +5661,15 @@
         "approvalGates": [
           "G-ROOM-BLOCK"
         ],
-        "status": "PLANNED_SEPARATE_AUTHORIZATION_REQUIRED",
+        "status": "BOUNDED_LOCAL_SOFTWARE_VERIFIED_PRODUCTION_GATE_OPEN",
         "implementationScope": "One separately approved temporary room-block create command after exact permission/interval/conflict policy approval; reuse Booking-owned inventory/public Rooms constraints. No guessed write permission or automatic reopening; release/reopening remains separately scoped.",
         "tests": "PostgreSQL concurrent hold/confirmation/block conflicts, exact write authority, mandatory-audit rollback and denied reads/writes",
         "definitionOfDone": "One exact-room temporary block command and focused tests after separate authorization,or explicit BLOCKED;never infer physical clearance or reopen automatically",
         "releaseBlocker": "No implementation authority supplied by this schedule; all listed approval gates must have current exact-venue evidence",
-        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit."
+        "rollbackStrategy": "Planning: normal reviewed docs revert preserving history. Code: disable only newly approved mode/adapter, scoped revert/forward fix; retain immutable money/booking/audit/receipts and additive schema. Stop new sales/admission on uncertainty; no deletion of funds, blind resubmission or cloud-dependent exit.",
+        "implementationAuthority": "EXPLICIT_OWNER_GRANTED_LOCAL_SYNTHETIC_ONLY",
+        "ddlAuthority": "EXPLICIT_OWNER_APPROVED_EXACT_SCHEMA_AND_GUARD_CORRECTION",
+        "evidencePath": "PROGRESS.md#room-blocking-local-implementation"
       },
       {
         "day": 7,
@@ -6415,15 +6418,13 @@
     ],
     "postRelease1": "All mapped POST_RELEASE_1_RETAINED_MVP items and unfulfilled clauses remain in Full MVP:hosted PayHere/mixed methods,extension funding/commit,in-session/issued-credential lifecycle,advanced analytics/exports,loyalty/referrals/promotions,full device automation and wider grant/settings administration.No original dependency or demo gate waived.",
     "nextImplementationTask": {
-      "id": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+      "id": "CN-R1-COMMERCIAL-QUOTE-001",
       "priority": "P0",
-      "scope": "One separately approved temporary room-block create command after exact permission/interval/conflict policy approval; reuse Booking-owned inventory/public Rooms constraints. No guessed write permission or automatic reopening; release/reopening remains separately scoped.",
-      "authority": "REQUIRES_SEPARATE_BOUNDED_IMPLEMENTATION_AUTHORIZATION",
+      "requiredGate": "G-COMMERCIAL",
       "policyBlocked": true,
-      "requiredGate": "G-ROOM-BLOCK",
-      "definitionOfDone": "One exact-room temporary block command and focused tests after separate authorization,or explicit BLOCKED;never infer physical clearance or reopen automatically",
-      "tests": "PostgreSQL concurrent hold/confirmation/block conflicts, exact write authority, mandatory-audit rollback and denied reads/writes",
-      "limits": "Not currently executable:exact permission,interval/conflict/audit policy approval required;software gate does not waive it"
+      "authority": "SEPARATE_EXACT_SCOPE_AUTHORIZATION_REQUIRED",
+      "scope": "Existing scheduled commercial quote boundary only after exact venue prices,LKR taxes/fees,terms and qualified approval. Preserve synthetic policy and immutable purchased snapshots.",
+      "definitionOfDone": "One separately approved commercial policy boundary,or explicit BLOCKED;no fabricated rates,bank authority or admission."
     },
     "acceptanceUnchanged": {
       "criteriaChecked": 15,
@@ -6575,6 +6576,94 @@
       },
       "taskId": "CN-R1-BOOKING-WEEK1-GATE-001",
       "evidencePath": "PROGRESS.md#release1-week1-booking-gate"
+    },
+    "priorityReset20261030": {
+      "date": "2026-10-30",
+      "authority": "EXPLICIT_OWNER_CRITICAL_PATH_REPRIORITIZATION_ONLY",
+      "baseline": "9c0ba23b9d791101ab6e605e90304e0a3a510a80",
+      "baselineCi": {
+        "runId": 40850927882,
+        "status": "completed",
+        "conclusion": "success",
+        "headSha": "9c0ba23b9d791101ab6e605e90304e0a3a510a80"
+      },
+      "executionPriority": "CUSTOMER_BOOKING_REAL_MANUAL_BANK_INDEPENDENT_VERIFY_CONFIRM_PHYSICAL_ACCESS",
+      "hold": [
+        "Facebook S2-B",
+        "Advertising public-media Units B-F",
+        "Advertising storage/scanner extensions",
+        "Optional analytics and UI enhancements"
+      ],
+      "resumption": "NEW_OWNER_INSTRUCTION_REQUIRED",
+      "unitB": "PRESERVE_CODE_RESOURCES_MANIFESTS_PRIVATE_EVIDENCE_NO_CLEANUP",
+      "completedWork": "PRESERVED_NOT_REIMPLEMENTED_OR_PROMOTED_TO_PRODUCTION_ACCEPTANCE",
+      "release1Checkpoints": {
+        "complete": 4,
+        "denominator": 21
+      },
+      "fullMvpCriteria": {
+        "checked": 15,
+        "denominator": 74
+      },
+      "formalRequirements": {
+        "accepted": 0,
+        "denominator": 92
+      },
+      "supplementalScope": "Existing auth/profile/advertising evidence mapped separately;original21 unchanged",
+      "nextCandidate": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+      "implementationAuthority": "NOT_GRANTED_BY_PRIORITY_RESET",
+      "approvalRecord": "PROGRESS.md#release1-critical-path-reset",
+      "acceptanceChanged": false
+    },
+    "roomBlockingAuthorization": {
+      "date": "2026-10-30",
+      "taskId": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+      "implementationAuthority": "EXPLICIT_OWNER_GRANTED_LOCAL_SYNTHETIC_DISABLED_DEFAULT",
+      "ddlAuthority": "EXPLICIT_OWNER_APPROVED_EXACT_PROPOSAL_AND_EMPTY_JOURNAL_GUARD_CORRECTION",
+      "status": "LOCAL_VERIFIED_BOUNDED",
+      "ddlProposal": "ARCHITECTURE.md#room-blocking-ddl-proposal",
+      "ddlSha256": "36d5d586cf1aee483a6319f005128670e78aec39c5181f82566713aab9c01184",
+      "candidateMigration": "V32_RECHECK_HEAD_BEFORE_CREATION",
+      "publishedMigrationHead": "V30",
+      "pausedUnpublishedMigration": "V31_PRESERVE_DO_NOT_EXECUTE",
+      "scope": "CREATE_DETAIL_LIST_IDEMPOTENCY_OPTIMISTIC_REVISION_ATOMIC_AUDIT_ADMIN_UI_TESTS",
+      "permissionDefinition": "inventory.block.create",
+      "runtimeGrantAssignments": false,
+      "acceptanceChanged": false,
+      "newPersistenceIndispensable": "Existing inventory_command requires a customer reservation_hold;maintenance cannot reuse it safely.",
+      "approvedCorrection": "room_block_empty_truncate_guard AND two TRUNCATE bindings only",
+      "schema": {
+        "migration": "V32__local_room_blocking.sql",
+        "tables": [
+          "cinenest_booking.room_block_command",
+          "cinenest_booking.room_block_audit"
+        ],
+        "newFunctions": [
+          "cinenest_booking.room_block_empty_truncate_guard"
+        ],
+        "runtimeGrants": false
+      },
+      "evidence": "PROGRESS.md#room-blocking-local-implementation",
+      "approvedDdlSha256": "2ed7d85229324cf5f1cb1fae9028977378289a8454bddbb9e807b01c4087f2aa"
+    },
+    "roomBlockingExecution": {
+      "status": "LOCAL_SYNTHETIC_SOFTWARE_VERIFIED",
+      "originalCheckpointClosure": "NOT_INFERRED_FROM_LOCAL_SYNTHETIC_EVIDENCE",
+      "acceptanceChanged": false,
+      "nextTask": "CN-R1-COMMERCIAL-QUOTE-001",
+      "nextGate": "G-COMMERCIAL"
+    },
+    "roomBlockingPreviousNextTask": {
+      "id": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+      "priority": "P0",
+      "scope": "One separately approved temporary room-block create command after exact permission/interval/conflict policy approval; reuse Booking-owned inventory/public Rooms constraints. No guessed write permission or automatic reopening; release/reopening remains separately scoped.",
+      "authority": "EXPLICIT_OWNER_GRANTED_LOCAL_SYNTHETIC_IMPLEMENTATION_DDL_SEPARATE",
+      "policyBlocked": false,
+      "requiredGate": "G-ROOM-BLOCK",
+      "definitionOfDone": "One exact-room temporary block command and focused tests after separate authorization,or explicit BLOCKED;never infer physical clearance or reopen automatically",
+      "tests": "PostgreSQL concurrent hold/confirmation/block conflicts, exact write authority, mandatory-audit rollback and denied reads/writes",
+      "limits": "Implementation authority granted;new persistence indispensable, exact additive DDL approval pending. No application or migration changes yet.",
+      "ddlBlocked": true
     }
   },
   "release1Day2Evidence": {
@@ -6603,7 +6692,7 @@
     "weeks": [
       {
         "week": 1,
-        "label": "W1 · Oct 25–31",
+        "label": "W1 \u00b7 Oct 25\u201331",
         "target": "Online Booking",
         "focus": "Customer discovery, availability, holds, quotations, synthetic bank-pending booking and recovery. Bounded Week 1 gate already 15/15 PASS at commit `45145a71d53322e824d476927ac62314ec5f1ee6`.",
         "caveat": "Does not establish real commercial booking acceptance.",
@@ -6611,7 +6700,7 @@
       },
       {
         "week": 2,
-        "label": "W2 · Nov 1–7",
+        "label": "W2 \u00b7 Nov 1\u20137",
         "target": "Manual Bank Payment",
         "focus": "Approved bank instructions, private receipt intake, independent verified credit, allocation, guarded booking confirmation.",
         "caveat": "Finance/venue/privacy/commercial policy and authority gates.",
@@ -6619,7 +6708,7 @@
       },
       {
         "week": 3,
-        "label": "W3 · Nov 8–14",
+        "label": "W3 \u00b7 Nov 8\u201314",
         "target": "Physical Smart Lock",
         "focus": "Selected lock/firmware adapter, booking-bound PIN, staff-assisted ID check-in, real installed-door testing, offline/re-entry/expiry/egress, UAT and GO/NO-GO.",
         "caveat": "Physical safety, installer, reviewer and operational gates; target is conditional.",
@@ -6627,7 +6716,7 @@
       },
       {
         "week": 4,
-        "label": "W4 · Nov 15–21",
+        "label": "W4 \u00b7 Nov 15\u201321",
         "target": "Hosted Payment Gateway",
         "focus": "Provider sandbox, authenticated callback, payment-attempt durability, duplicate/late/unknown payments and notification reliability.",
         "caveat": "Provider and legal/financial approvals; existing gateway dependency not waived.",
@@ -6635,7 +6724,7 @@
       },
       {
         "week": 5,
-        "label": "W5 · Nov 22–28",
+        "label": "W5 \u00b7 Nov 22\u201328",
         "target": "Booking Lifecycle",
         "focus": "Reschedule, cancellation, funded purchased extension and revision consistency.",
         "caveat": "Funding and commercial policy gates remain.",
@@ -6643,7 +6732,7 @@
       },
       {
         "week": 6,
-        "label": "W6 · Nov 29–Dec 5",
+        "label": "W6 \u00b7 Nov 29\u2013Dec 5",
         "target": "Finance and Refunds",
         "focus": "Refund approval/repayment evidence, exceptions, reconciliation and financial audit.",
         "caveat": "Independent finance authority and live-provider policies.",
@@ -6651,7 +6740,7 @@
       },
       {
         "week": 7,
-        "label": "W7 · Dec 6–12",
+        "label": "W7 \u00b7 Dec 6\u201312",
         "target": "IoT and Room Operations",
         "focus": "Device observation, maintenance/room closure and reopening, cleaning readiness and incident recovery.",
         "caveat": "G-ROOM-BLOCK approval and independent physical readiness review.",
@@ -6659,7 +6748,7 @@
       },
       {
         "week": 8,
-        "label": "W8 · Dec 13–19",
+        "label": "W8 \u00b7 Dec 13\u201319",
         "target": "Admin and Customer Operations",
         "focus": "Scoped roles/grants, admin/customer interfaces, support, messaging.",
         "caveat": "Authorization and notification provider gates.",
@@ -6667,7 +6756,7 @@
       },
       {
         "week": 9,
-        "label": "W9 · Dec 20–26",
+        "label": "W9 \u00b7 Dec 20\u201326",
         "target": "Reporting and Analytics",
         "focus": "Revenue, bookings, utilization, payment/device/incident reporting and exports.",
         "caveat": "Authoritative metric reconciliation and privacy.",
@@ -6675,7 +6764,7 @@
       },
       {
         "week": 10,
-        "label": "W10 · Dec 27–Jan 2",
+        "label": "W10 \u00b7 Dec 27\u2013Jan 2",
         "target": "Hardening and Recovery",
         "focus": "Security/RBAC/ABAC, accessibility, performance, backup-restore, resilience and privacy.",
         "caveat": "Exact source/build evidence required.",
@@ -6683,7 +6772,7 @@
       },
       {
         "week": 11,
-        "label": "W11 · Jan 3–9",
+        "label": "W11 \u00b7 Jan 3\u20139",
         "target": "Integrated E2E and UAT",
         "focus": "Real-stack and physical-hardware flows, bank/payment exceptions, customer-led review.",
         "caveat": "Real reviewer signoff; simulator evidence is insufficient for hardware.",
@@ -6691,7 +6780,7 @@
       },
       {
         "week": 12,
-        "label": "W12 · Jan 10–16",
+        "label": "W12 \u00b7 Jan 10\u201316",
         "target": "Controlled Pilot and Handover",
         "focus": "Production readiness, limited approved pilot, support/training, signoff and handover.",
         "caveat": "Explicit deployment/launch authorization; no calendar-based automatic acceptance.",

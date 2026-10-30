@@ -8967,5 +8967,138 @@ def inert_ci_main():
         if result==0:print('PASS exact bounded public-media Unit A;native provider evidence;no uploads/public delivery/production or acceptance')
         return result
 
+
+# Exact owner-authorized Room Blocking successor; prior guards remain byte-preserved.
+ROOM_BLOCK_BASE='9c0ba23b9d791101ab6e605e90304e0a3a510a80'
+ROOM_BLOCK_HASHES = {'backend/src/main/java/com/cinenest/booking/internal/JdbcRoomBlockRepository.java': '4d6f6eeac57671cd07266f65c8f7a02f29f4b68acf018962f9b1a2d50452df75', 'backend/src/main/java/com/cinenest/booking/internal/RoomBlockController.java': '5a078b163ee7b7ab3c5b170738728fc7ceca13259d691f47c476a5e7925f7045', 'backend/src/main/java/com/cinenest/booking/internal/RoomBlockRepository.java': '8926e404102cfd3db0586aca72eae010d403caac9ae399aefd9c987e83a0fcd5', 'backend/src/main/java/com/cinenest/booking/internal/RoomBlocks.java': 'dbe4857d451089b6aa9cb41acefa15c41ce8033a9f78abee828451fc1d58b736', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '9218a9d80e700dbf33e05b529f965c1509617fe266fd68ce6d1ed4d4d33c0f90', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'fef5a34701dd1bd237bb3e63e00517a5f0ad43fd06bc1b21dfed591bc6556262', 'backend/src/main/resources/db/migration/V32__local_room_blocking.sql': '2ed7d85229324cf5f1cb1fae9028977378289a8454bddbb9e807b01c4087f2aa', 'backend/src/test/java/com/cinenest/AdvertisingIntegrationTest.java': 'deac38109fd7c2fc5b26654cc6dafbffd5eaeca4cb7cb802b3acee3cce49cb5a', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'bccdc05edd8206b643eee8e25faec0169867a74981f1b18aa75ef99367355cab', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '66b17cc4e11f10e65626ce54700da6c2869de3b9c438ef3b3cc9dae68ec5375c', 'backend/src/test/java/com/cinenest/booking/internal/RoomBlockConfigurationTest.java': '378e18289de468b689e084d60cb5360c31fec08d595a6b18176efa58466b136b', 'backend/src/test/java/com/cinenest/booking/internal/RoomBlockFaults.java': '42108a1d092e7c7e2eb06590a272f670e87460cdc08cfcda6cb0ef82a83e8f4d', 'frontend/app/admin/room-blocking/page.tsx': '72ee9a8e4077fa080c29ae83e39c6d98662d7c62d165aa73a4346d38b7a6e9fd', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/blocks/[blockId]/route.ts': '70c74f6a45e4db415a1a8f92a35b6d3ced7d243f9fe9b644cf360dec2bbbf9c5', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/blocks/route.ts': 'ba06eacf9e6d97e6b80ea785790ca46271bf01602a3991ef1ba627c7e77d1bfd', 'frontend/components/room-blocking.tsx': '141819dc8820ae597bae1bf5237ca2f638431e5b8760d370d967ef4ce452fd11', 'frontend/lib/navigation.ts': 'd95d4da0905a4d1356bf800ffe5a6c2408e3e09ddbccaee323fc7f7dda7e45e7', 'frontend/lib/room-backend.ts': '848caa1fa119bfc1439e3080c5ee72e12c43f899a7efc84e45d0ed6bf2c0a8a8', 'frontend/lib/room-blocks.ts': '53fc3c451f105fa843f5fdc92bf290f5e63cc78bd619911aa506c6cf18df5a08', 'frontend/package.json': '5f40ea3737e9692ef18ea291aaee5a075469ba25bdbfe487475e58253f0cd9d1', 'frontend/tests/room-blocks-e2e.mjs': '10dc0a8d6ec28a09c75a0f49fbe4803eec52ad7f04f21b6dafff57971e1e5f2d', 'frontend/tests/room-blocks.test.mjs': '1abc12bd4c3914a9d02ebc12dc2cf619bead703874b7c9dc800bbc3e799b1613', 'knowledge/ARCHITECTURE.md': '2a97f0a2d6b6b8f28a239e6d3cc1d2d1a2b264805fdccb47465aeb4a103b6042', 'knowledge/DESIGN.md': '0486b0f943feb0d9a8262d2e4ca164ae8abe4bbef8131d4f66a59dcfeebf8e65', 'knowledge/PROGRESS.md': '69d9d68ea3d0b3397c13b3f4df058d95a4d8abe4a6ceba19cb1bc30c276701d6', 'knowledge/PROJECT.md': '430b9da304182c2b875b22eff11c8c57c4bb4cb843254a2caa90f55285b68a6c', 'knowledge/execution/change-sets.json': 'd11b30e8b152f6de8a80f126c739af2270f97f314affe256bd45a67e9f7b6ed4', 'knowledge/execution/requirements.json': 'e161ed894d5763533e3263404761273e9f85ace7553889dabd7cfc4cfb3da498', 'knowledge/execution/status.json': 'a1483551659c5b22db841b41a27f4de4e29f117ad360afb00e5df8e9cbef60fb', 'knowledge/execution/test-plan.json': '8566ba15ee3c2783d564193bfd9a95f32bc52d50a06aae817ace11f89c938a71', 'knowledge/guides/USER_GUIDE.md': '32d5315c526c3115f99244a280b11b877a32a5acbdbf936d2dab7cd1fe26c102', 'knowledge/product/FEATURE_CATALOG.md': 'c7e01e57c54c6d8d111f6b8d9134b25b84a047b781765bde75d630cc4dda7b63'}
+room_block_previous_main=inert_ci_main
+room_block_previous_guard=receipt_admission_successor_errors
+
+def room_block_record_errors(e):
+    errors=[]
+    if e.get('ddlAuthorization')!='EXPLICIT_OWNER_APPROVED_EXACT_PROPOSAL_AND_EMPTY_JOURNAL_GUARD_CORRECTION':errors.append('ROOM BLOCK exact DDL authority missing')
+    if e.get('implementationAuthorization')!='GRANTED_LOCAL_SYNTHETIC_DISABLED_BY_DEFAULT':errors.append('ROOM BLOCK implementation authority missing')
+    for k in ['enabledByDefault','runtimeGrants','productionActivated','automaticReopening','existingBookingsCanceled','physicalCommands','financialChanges','facebookResumed','unitBResumed','acceptanceChanged']:
+        if e.get(k) is not False:errors.append('ROOM BLOCK exclusion drift '+k)
+    if [e.get(k) for k in ['requirements','criteria','checkedCriteria','formallyAccepted']]!=[92,74,15,0]:errors.append('ROOM BLOCK acceptance/count drift')
+    b=e.get('browser',{})
+    if b.get('status')!='PASS' or b.get('checks')!=10 or b.get('interception') is not False or b.get('cookieInjection') is not False or b.get('externalRequests')!=0 or b.get('widths')!=[375,768,1280] or b.get('genuineOwnerUat')!='NOT_RUN':errors.append('ROOM BLOCK browser evidence drift')
+    full=e.get('tests',{}).get('fullBackend',{})
+    if not isinstance(full,dict) or full.get('status')!='PASS' or full.get('failures')!=0 or full.get('errors')!=0:errors.append('ROOM BLOCK full backend evidence incomplete')
+    if e.get('migrationHistoryPreserved')!='V1-V30_BYTE_IDENTICAL;PAUSED_V31_NOT_APPLIED':errors.append('ROOM BLOCK migration boundary drift')
+    return errors
+
+def room_block_payload_errors():
+    errors=[];owned=set(ROOM_BLOCK_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    before=lambda n:subprocess.check_output(['git','-C',str(R),'show',ROOM_BLOCK_BASE+':'+n])
+    for n,h in ROOM_BLOCK_HASHES.items():
+        p=R/n
+        if p.is_symlink() or not p.is_file() or hashlib.sha256(p.read_bytes()).hexdigest()!=h:errors.append('ROOM BLOCK unadmitted payload '+n)
+    if errors:return errors
+    errors.extend(room_block_record_errors(json.loads((K/'execution/status.json').read_text()).get('roomBlocking',{})))
+    previous_state=json.loads(before('knowledge/execution/status.json'));current_state=json.loads((K/'execution/status.json').read_text())
+    for key in ['mode','workStatus','branch','baselineHead','currentChangeSet','nextRecommendedChangeSet','nextAction','blockers','lastObservedHead','requestedTaskId','release1CriticalPathReset','roomBlocking']:
+        previous_state.pop(key,None);current_state.pop(key,None)
+    if current_state!=previous_state:errors.append('ROOM BLOCK historical status/approval drift')
+    for name,ids in [('requirements',{'CN-A03','CN-O03','BR-06'}),('test-plan',{'T-CN-A03','T-CN-O03','T-BR-06'})]:
+        current=json.loads((K/('execution/'+name+'.json')).read_text())
+        for value in current.values():
+            if isinstance(value,list):
+                for row in value:
+                    if isinstance(row,dict) and row.get('id') in ids:row.pop('roomBlockingEvidence',None)
+        if current!=json.loads(before('knowledge/execution/'+name+'.json')):errors.append('ROOM BLOCK historical requirement/test/acceptance drift '+name)
+    old_plan=json.loads(before('knowledge/execution/change-sets.json'));new_plan=json.loads((K/'execution/change-sets.json').read_text())
+    old_plan.pop('release1DeliverySlice');new_plan.pop('release1DeliverySlice')
+    if old_plan!=new_plan:errors.append('ROOM BLOCK changed original task graph or unrelated authority')
+    previous_checkboxes=re.findall(r'^[ \t]*- \[[ x]\].*$',before('knowledge/PROGRESS.md').decode(),re.M)
+    current_checkboxes=re.findall(r'^[ \t]*- \[[ x]\].*$',(K/'PROGRESS.md').read_text(),re.M)
+    if len(previous_checkboxes)<74 or current_checkboxes!=previous_checkboxes:errors.append('ROOM BLOCK roadmap acceptance drift')
+    tree=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',ROOM_BLOCK_BASE]);blobs={}
+    for row in tree.split(b'\0'):
+        if row:
+            metadata,name=row.split(b'\t',1);mode,kind,oid=metadata.split();blobs[name.decode()]=oid.decode()
+    tracked=set(blobs)
+    for n in tracked-owned:
+        p=R/n
+        if p.is_symlink() or not p.is_file():errors.append('ROOM BLOCK unowned/history drift '+n);continue
+        data=p.read_bytes()
+        if hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()!=blobs[n]:errors.append('ROOM BLOCK unowned/history drift '+n)
+    current=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard','--','backend','frontend','scripts','qualification','knowledge'],text=True),nul=True)
+    if not current<=tracked|owned:errors.append('ROOM BLOCK unauthorized new path')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',ROOM_BLOCK_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned:errors.append('ROOM BLOCK unauthorized changed path')
+    migrations={p.relative_to(R).as_posix() for p in (R/'backend/src/main/resources/db/migration').glob('V*.sql')}
+    expected={n for n in tracked if n.startswith('backend/src/main/resources/db/migration/V') and n.endswith('.sql')}|{'backend/src/main/resources/db/migration/V32__local_room_blocking.sql'}
+    if migrations!=expected:errors.append('ROOM BLOCK V31/outside migration admission')
+    final="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    if not (K/'execution/validate_execution.py').read_text().startswith(before('knowledge/execution/validate_execution.py').decode().removesuffix(final)):errors.append('ROOM BLOCK prior validators changed')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('ROOM BLOCK manifest drift')
+    return errors
+
+def room_block_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return room_block_payload_errors()
+
+def room_block_negative_controls():
+    import copy
+    from unittest.mock import patch
+    e=json.loads((K/'execution/status.json').read_text())['roomBlocking'];assert not room_block_record_errors(e)
+    for k in ['enabledByDefault','runtimeGrants','productionActivated','automaticReopening','existingBookingsCanceled','physicalCommands','financialChanges','facebookResumed','unitBResumed','acceptanceChanged']:
+        bad=copy.deepcopy(e);bad[k]=True;assert room_block_record_errors(bad);print('PASS ROOM BLOCK rejects '+k)
+    for k in ['ddlAuthorization','implementationAuthorization','migrationHistoryPreserved']:
+        bad=copy.deepcopy(e);bad[k]='NOT_GRANTED';assert room_block_record_errors(bad);print('PASS ROOM BLOCK preserves '+k)
+    rb0=Path.read_bytes
+    for n in ['backend/src/main/resources/db/migration/V32__local_room_blocking.sql','backend/src/main/resources/db/migration/V30__local_venue_banners.sql','backend/src/main/java/com/cinenest/payments/internal/BankService.java']:
+        target=R/n
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert room_block_successor_errors(),n
+        print('PASS ROOM BLOCK rejects changed/unowned payload '+n)
+
+# Replay only the exact newly admitted scheduling overlay into historical plan controls.
+# The current source guard checks the real plan first; legacy fault tests mutate after projection.
+room_block_previous_bank_projection=bank_instruction_planning_projection
+def bank_instruction_planning_projection(plan):
+    import copy
+    p=copy.deepcopy(plan)
+    if p.get('roomBlockingAuthorization',{}).get('status')=='LOCAL_VERIFIED_BOUNDED':
+        original=json.loads(subprocess.check_output(['git','-C',str(R),'show',ROOM_BLOCK_BASE+':knowledge/execution/change-sets.json']))['release1DeliverySlice']
+        for key in ['priorityReset20261030','roomBlockingAuthorization','roomBlockingExecution','roomBlockingPreviousNextTask']:p.pop(key,None)
+        if p.get('nextImplementationTask',{}).get('id')=='CN-R1-COMMERCIAL-QUOTE-001':p['nextImplementationTask']=copy.deepcopy(original['nextImplementationTask'])
+        for row in p.get('schedule',[]):
+            if row.get('taskId')=='CN-R1-ROOM-BLOCK-CONTRACT-001' and row.get('status')=='BOUNDED_LOCAL_SOFTWARE_VERIFIED_PRODUCTION_GATE_OPEN':
+                previous=next(x for x in original['schedule'] if x['taskId']==row['taskId'])
+                for key in ['status','implementationAuthority','ddlAuthority','evidencePath']:
+                    if key in previous:row[key]=previous[key]
+                    else:row.pop(key,None)
+    return room_block_previous_bank_projection(p)
+
+receipt_admission_successor_errors=room_block_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=room_block_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        room_block_negative_controls()
+        owned=set(ROOM_BLOCK_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+        tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',ROOM_BLOCK_BASE],text=True),nul=True)
+        added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',ROOM_BLOCK_BASE+':'+n]) for n in owned&tracked}
+        rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            value=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+                return text if isinstance(value,str) else text.encode()
+            return value
+        output._profile_immutable_reader=True
+        def glob(p,*a,**kw):return (x for x in glob0(p,*a,**kw) if x.relative_to(R).as_posix() not in added) if p==R/'backend/src/main/resources/db/migration' else glob0(p,*a,**kw)
+        with patch.dict(globals(),{'receipt_admission_successor_errors':room_block_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=room_block_previous_main()
+        if result==0:print('PASS exact bounded local Room Blocking; V31 paused; no production/financial/physical/acceptance activation')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -104,6 +104,8 @@ class IdentitySecurity {
                 .requestMatchers("/api/admin/venues/*/banner-assets", "/api/admin/venues/*/banners", "/api/admin/venues/*/banners/*", "/api/admin/venues/*/banners/*/preview", "/api/admin/venues/*/banners/*/revisions", "/api/admin/venues/*/banners/*/publications", "/api/admin/venues/*/banners/*/unpublish").authenticated()
                 .requestMatchers("/api/admin/venues", "/api/admin/venues/*", "/api/admin/venues/*/rooms", "/api/admin/venues/*/rooms/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/rooms/*/availability", "/api/rooms/*/availability/calendar", "/api/holds/*", "/api/admin/venues/*/inventory", "/api/admin/venues/*/rooms/*/maintenance-impact").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/rooms/*/blocks","/api/admin/venues/*/rooms/*/blocks/*").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/rooms/*/blocks").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/holds", "/api/holds/*/release").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/bookings","/api/admin/venues/*/bookings/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/guest-roster","/api/admin/venues/*/bookings/*/guest-roster").authenticated()

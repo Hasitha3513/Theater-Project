@@ -773,3 +773,8 @@ Owner-interactive local UAT is confirmed on2026-10-29 for draft privacy, indepen
 
 
 Advertising public-media Unit A is an authorized backend-only qualification workstream,not an available customer/Admin upload feature. Rooms storage-port/test-adapter source passes the bounded local native-version/integrity/isolation/recovery/cleanup qualification;publication is pending source validation and exact-source CI. Existing fixed-illustration Advertising S1 and owner UAT remain unchanged;no public media delivery or production admission. See [scope](../PROJECT.md#advertising-media-unit-a) and [actual results](../PROGRESS.md#advertising-media-unit-a). Existing User Guide workflows require no new steps for this private test-only boundary.
+
+
+### Local synthetic Room Blocking — CN-R1-ROOM-BLOCK-CONTRACT-001
+
+Disabled-by-default Booking-owned temporary MAINTENANCE creation, protected scoped list/detail and /admin/room-blocking. Rooms remains configuration authority; existing inventory exclusion/calendar enforce overlap rejection including purchased cleaning coverage. Current exact-venue inventory.block.create and independent inventory.read, membership, CSRF, revision checks, immutable idempotent command/audit and audit rollback are required. No automatic reopening, canceled booking, financial/device mutation, production grants or physical-readiness qualification. [Boundary](../ARCHITECTURE.md#room-blocking-ddl-proposal),[local evidence](../PROGRESS.md#room-blocking-local-implementation).

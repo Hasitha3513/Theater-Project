@@ -463,3 +463,10 @@ Homepage shows only published snapshots admitted by server time and complete ena
 
 
 Owner walkthrough confirmed this sequence on2026-10-29 using separate author read/edit and publisher read/publish accounts. Log out between roles; after publishing compare the homepage, then unpublish, allow the bounded refresh interval, inspect Revision history and log out. Temporary UAT services are now stopped; the disposable synthetic database/evidence are retained privately. Published-state screenshots are automated read-only captures of owner-created state, separate from owner confirmation. Restart requires an approved isolated environment, not production grants. [Owner UAT evidence](../PROGRESS.md#admin-advertising-s1).
+
+
+### Local synthetic room-unavailability block
+
+In the separately configured isolated test environment, sign in through existing manual login and open /admin/room-blocking. Use exact venue/room references from existing administration, then select Load room blocks. Read and create authority are independent. Enter increasing start/end ISO timestamps with an explicit offset, for example2030-02-01T10:00:00+05:30 and2030-02-01T12:00:00+05:30. Select Create room block; only server confirmation means saved. Reload the list and Inspect block for protected detail. Pagination is explicit.
+
+A conflicting hold/confirmed session/maintenance interval is rejected; the tool does not cancel or move it. A stale configuration needs a fresh context load. An unknown response retains the exact original command for explicit retry; do not create a substitute command blindly. Disabled/unavailable/denied states do not imply success. Customer calendar marks overlapping maintenance coverage unavailable; a calendar observation still reserves nothing. No unblock/reopen action or physical-safety certification exists. Log out after inspection. [Current software evidence](../PROGRESS.md#room-blocking-local-implementation); no production use or genuine owner UAT is claimed here.

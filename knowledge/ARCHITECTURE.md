@@ -2927,3 +2927,166 @@ LocalAdvertisingMediaTestAdapter uses fixed127.0.0.1 HTTP,SigV4 for local Seawee
 The cached SeaweedFS4.50 digest c2658820e763294a9e9de7b36c81e59b879e3459148351aee4e31a126ca64860 runs master/volume/filer/S3 as supervised processes inside the one authorized container,using the one fresh Docker volume. Internal services bind loopback; only private S3 is mapped to host127.0.0.1. Native volume growth is bounded to one data volume;telemetry disabled;non-root,read-only root,capabilities dropped,no-new-privileges,1CPU/1GiB/128PIDs. Separate process mode replaces the observed combined-mode missing local RPC socket; its underlying cause is NOT_VERIFIED. Container restart can change Docker's random host port; test support rediscovery accepts only127.0.0.1 and preserves the same immutable object reference.
 
 verify-advertising-media-a.py requires explicit execution,qualified local Docker,Java25,a cached matching digest,no prior task-owned resources,an exclusive run lock,and positive manifest/label/image/volume binding. It measures apparent/allocated run-directory bytes pre/post operations and reserves9MiB conservatively for bounded8MiB tmpfs plus1MiB Docker logs outside that directory;total must remain within128MiB. This is monitored accounting,not a filesystem quota. Payload/version counters reserve uncertain writes before transport;no blind PUT retry.900s execution,shared30s cleanup deadline,owned child-process group termination and exact resource absence checks. Immutable failed-run evidence remains private/outside Git. No public image delivery,format admission,uploads,DB change,other-module access,cloud/provider production qualification or deployment. [Actual tests/blockers](PROGRESS.md#advertising-media-unit-a).
+
+
+<a id="room-blocking-ddl-proposal"></a>
+## CN-R1-ROOM-BLOCK-CONTRACT-001 — exact persistence admission proposal
+
+2026-10-30 explicit owner authority covers disabled-by-default local synthetic create/detail/list, inventory integration, current exact-venue authority, CSRF, idempotency, optimistic checks, atomic audit, inventory.block.create definition, minimal Admin UI and isolated tests. It explicitly withholds new DDL authority. Schema inspection establishes an indispensable boundary: V6 inventory_command has a NOT NULL reservation_hold FK, so it cannot safely record a maintenance command. Do not create a fake customer hold, encode payloads in unrelated audit text, bypass an audit or reuse another module's journal.
+
+Rooms remains authoritative through InventoryConstraints.venue/lock/inspect/observe; Booking owns inventory blocks and exclusions. Reuse the existing venue lock order and Identity ScopedAuthorization; no Rooms repository access from Booking. V6 inventory_block already accepts MAINTENANCE; InventoryCalendar already emits MAINTENANCE_BLOCK for overlapping purchased-window-plus-cleaning occupancy. Existing GiST exclusion remains the final race guard; no other booking/hold/confirmation row is canceled or repriced.
+
+Published head V30; worktree also contains paused unpublished Unit B V31. Proposed Room Blocking migration V32 must be rechecked after approval. Do not create, run, rename or publish V31 under this task. Qualification/build must use a clean task-only source projection with V1-V30 plus approved V32, leaving the preserved worktree intact. Flyway version gaps are not approval for out-of-order application: later resumption of Unit B needs a separately reviewed forward-version reconciliation of its unpublished migration. No production or historical database is a test target.
+
+### Proposed API/service boundary (not implemented)
+
+POST /api/admin/venues/{venueId}/rooms/{roomId}/blocks, with exactly idempotencyKey(UUID), startAt/endAt(explicit-offset ISO instants), expectedConfiguration(the exact Rooms-owned opaque configuration). Canonical request SHA-256 includes action, actor, path venue/room, normalized UTC interval and expected configuration. Require current eligible exact-venue inventory.block.create, current room/venue match and CSRF before disclosing any existing receipt. Same actor/key/payload replays the original block; changed payload returns409. After acquiring current authorization/venue locks, recheck receipt, room configuration and overlaps; stale expected configuration returns409. Zero maintenance cleaning buffer; use exact [start,end) interval. Start must precede end; reject nonfinite/unsupported timestamps. No end-time worker clears room readiness, alters blocking flags or declares physical safety.
+
+GET the same collection (page>=0,size1..100) and GET .../blocks/{blockId} require independent existing inventory.read and exact room/venue scope; current creation authority does not imply read or vice versa. Collection returns current Rooms configuration for optimistic creation plus only this slice's committed blocks. Data is no-store; read audit must commit before successful disclosure. Generic sanitized400/401/403/404/409/503; overlap409 exposes no competing customer/booking identity. Existing denial-audit boundary is reused. Proposed Admin route /admin/room-blocking uses existing venue/room selection, explicit timestamps, create, list/detail and unknown-result recovery with original key; no edit/delete/reopen action. No runtime grant assignment.
+
+Feature defaults false, admits only explicitly configured LOCAL_SYNTHETIC_ONLY mode and existing synthetic-quotation profile. No enabled ordinary/production bean or deployment path is authorized. Rollback disables the new feature, retains immutable block/command/audit records and schema; no destructive down migration or automatic unblock.
+
+### Exact additive DDL for separate owner approval
+
+Two Booking-owned tables, one additive composite unique index on existing inventory_block, two scope indexes, four immutability triggers and same-module FKs only. The composite inventory FK pins venue/room/interval/kind/buffer/blocking/revision; it prevents rewriting or deleting a bound block even under concurrent transactions, without relying solely on a snapshot-sensitive trigger. V1-V30 and unpublished V31 remain byte-identical. The two deferred cyclic FKs enforce a matching CREATE audit and command at commit; a command cannot commit without its attributable audit, and audit CREATE cannot point to an unrelated command. No foreign-key reference into Rooms/Identity ownership is introduced. Audit reads use the same new journal with checked action shape; no original request bodies or sensitive customer data are stored.
+
+```sql
+-- PROPOSED ONLY. No migration file created and no SQL executed.
+-- Candidate V32__local_room_blocking.sql; recheck migration head on approval.
+CREATE UNIQUE INDEX room_block_inventory_binding
+ ON cinenest_booking.inventory_block
+ (block_id,venue_id,room_id,session_start,session_end,buffer_minutes,
+  blocked_until,blocking,kind,revision);
+
+CREATE TABLE cinenest_booking.room_block_command (
+ actor_id UUID NOT NULL,
+ command_key UUID NOT NULL,
+ request_hash CHAR(64) NOT NULL CHECK(request_hash ~ '^[0-9a-f]{64}$'),
+ block_id UUID NOT NULL UNIQUE,
+ venue_id UUID NOT NULL,
+ room_id UUID NOT NULL,
+ start_at TIMESTAMPTZ NOT NULL,
+ end_at TIMESTAMPTZ NOT NULL,
+ expected_configuration TEXT NOT NULL
+  CHECK(length(expected_configuration) BETWEEN 1 AND 16384),
+ buffer_minutes INTEGER NOT NULL DEFAULT 0 CHECK(buffer_minutes=0),
+ blocked_until TIMESTAMPTZ NOT NULL,
+ blocking BOOLEAN NOT NULL DEFAULT TRUE CHECK(blocking),
+ kind VARCHAR(16) NOT NULL DEFAULT 'MAINTENANCE' CHECK(kind='MAINTENANCE'),
+ inventory_revision BIGINT NOT NULL DEFAULT 0 CHECK(inventory_revision=0),
+ audit_event_id UUID NOT NULL UNIQUE,
+ recorded_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
+ PRIMARY KEY(actor_id,command_key),
+ UNIQUE(actor_id,command_key,block_id,venue_id,room_id),
+ UNIQUE(block_id,venue_id,room_id),
+ CHECK(isfinite(start_at) AND isfinite(end_at) AND start_at<end_at),
+ CHECK(blocked_until=end_at),
+ FOREIGN KEY(block_id,venue_id,room_id,start_at,end_at,buffer_minutes,
+             blocked_until,blocking,kind,inventory_revision)
+ REFERENCES cinenest_booking.inventory_block
+ (block_id,venue_id,room_id,session_start,session_end,buffer_minutes,
+  blocked_until,blocking,kind,revision)
+ ON UPDATE RESTRICT ON DELETE RESTRICT
+);
+
+CREATE TABLE cinenest_booking.room_block_audit (
+ event_id UUID PRIMARY KEY,
+ actor_id UUID NOT NULL,
+ venue_id UUID NOT NULL,
+ room_id UUID NOT NULL,
+ block_id UUID,
+ command_key UUID,
+ action VARCHAR(24) NOT NULL
+  CHECK(action IN ('CREATE','BLOCK_DETAIL_READ','BLOCK_LIST_READ')),
+ correlation_id UUID NOT NULL,
+ occurred_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
+ CHECK((action='CREATE' AND block_id IS NOT NULL AND command_key IS NOT NULL)
+    OR (action='BLOCK_DETAIL_READ' AND block_id IS NOT NULL AND command_key IS NULL)
+    OR (action='BLOCK_LIST_READ' AND block_id IS NULL AND command_key IS NULL)),
+ UNIQUE(actor_id,command_key),
+ UNIQUE(event_id,actor_id,command_key,block_id,venue_id,room_id),
+ FOREIGN KEY(actor_id,command_key,block_id,venue_id,room_id)
+ REFERENCES cinenest_booking.room_block_command
+ (actor_id,command_key,block_id,venue_id,room_id)
+ DEFERRABLE INITIALLY DEFERRED,
+ FOREIGN KEY(block_id,venue_id,room_id)
+ REFERENCES cinenest_booking.room_block_command(block_id,venue_id,room_id)
+ DEFERRABLE INITIALLY DEFERRED
+);
+
+ALTER TABLE cinenest_booking.room_block_command
+ ADD CONSTRAINT room_block_required_create_audit
+ FOREIGN KEY(audit_event_id,actor_id,command_key,block_id,venue_id,room_id)
+ REFERENCES cinenest_booking.room_block_audit
+ (event_id,actor_id,command_key,block_id,venue_id,room_id)
+ DEFERRABLE INITIALLY DEFERRED;
+
+CREATE INDEX room_block_scope_list
+ ON cinenest_booking.room_block_command(venue_id,room_id,start_at,block_id);
+CREATE INDEX room_block_audit_scope_time
+ ON cinenest_booking.room_block_audit(venue_id,room_id,occurred_at,event_id);
+
+CREATE TRIGGER immutable_room_block_command
+ BEFORE UPDATE OR DELETE ON cinenest_booking.room_block_command
+ FOR EACH ROW EXECUTE FUNCTION cinenest_booking.reject_history_mutation();
+CREATE TRIGGER immutable_room_block_command_truncate
+ BEFORE TRUNCATE ON cinenest_booking.room_block_command
+ FOR EACH STATEMENT EXECUTE FUNCTION cinenest_booking.reject_history_mutation();
+CREATE TRIGGER immutable_room_block_audit
+ BEFORE UPDATE OR DELETE ON cinenest_booking.room_block_audit
+ FOR EACH ROW EXECUTE FUNCTION cinenest_booking.reject_history_mutation();
+CREATE TRIGGER immutable_room_block_audit_truncate
+ BEFORE TRUNCATE ON cinenest_booking.room_block_audit
+ FOR EACH STATEMENT EXECUTE FUNCTION cinenest_booking.reject_history_mutation();
+```
+
+### Verification required after DDL approval (NOT_RUN)
+
+Clean V1-V30+V32, populated V30-to-V32 and repeat validate/checksums; no execution of paused V31. PostgreSQL negative controls: missing/mismatched create audit, missing command, changed actor/venue/room/interval, wrong kind/buffer/blocking/revision, duplicate command/block, update/delete/truncate history and audit rollback. Two concurrent equal commands create once; changed payload rejects; overlapping blocks/active holds/confirmed and extension coverage reject; adjacency remains allowed under [start,end) with purchased cleaning coverage retained. Concurrent parent-row update must fail the exact FK binding. Current/revoked/suspended authority, wrong room/venue, CSRF, feature-off/profile-negative and no cross-customer conflict disclosure. Existing booking/architecture regressions and Chromium→Next→Spring→PostgreSQL create/list/detail/calendar/hold conflict and responsive375/768/1280 tests. No real bank, physical access, Facebook or advertising operations.
+
+
+### Room Blocking empty-journal test-reset correction — owner approved 2026-10-30
+
+Actual clean V1-V30+V32 and V30-to-V32 migration succeed. Approved unconditional TRUNCATE guards also reject legacy disposable inventory fixture reset when both new journals are empty. Replacing legacy truncate with DELETE is unsafe/incompatible with the existing extension-history guard; that attempted test-only workaround is reverted. Do not disable triggers, bypass immutable history or relax test assertions. The proposed correction adds only this Booking-owned function before the four approved triggers and changes only the two TRUNCATE trigger EXECUTE FUNCTION references to it. UPDATE/DELETE guards, tables, indexes, FKs, current authorization and all application behavior remain unchanged. This is outside the original exact approved object list and is NOT yet authorized or applied.
+
+```sql
+CREATE FUNCTION cinenest_booking.room_block_empty_truncate_guard()
+RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+ IF TG_OP<>'TRUNCATE' OR TG_LEVEL<>'STATEMENT'
+    OR TG_TABLE_SCHEMA<>'cinenest_booking'
+    OR TG_TABLE_NAME NOT IN ('room_block_command','room_block_audit')
+    OR current_setting('transaction_isolation')<>'read committed' THEN
+  RAISE EXCEPTION 'Immutable room block history';
+ END IF;
+ IF NOT EXISTS (SELECT 1 FROM pg_locks WHERE pid=pg_backend_pid()
+     AND locktype='relation' AND relation='cinenest_booking.room_block_command'::regclass
+     AND mode='AccessExclusiveLock' AND granted)
+    OR NOT EXISTS (SELECT 1 FROM pg_locks WHERE pid=pg_backend_pid()
+     AND locktype='relation' AND relation='cinenest_booking.room_block_audit'::regclass
+     AND mode='AccessExclusiveLock' AND granted) THEN
+  RAISE EXCEPTION 'Immutable room block history';
+ END IF;
+ IF EXISTS (SELECT 1 FROM cinenest_booking.room_block_command)
+    OR EXISTS (SELECT 1 FROM cinenest_booking.room_block_audit) THEN
+  RAISE EXCEPTION 'Immutable room block history';
+ END IF;
+ RETURN NULL;
+END $$;
+-- Only replace EXECUTE FUNCTION for immutable_room_block_command_truncate
+-- and immutable_room_block_audit_truncate with:
+-- EXECUTE FUNCTION cinenest_booking.room_block_empty_truncate_guard();
+```
+
+New negative tests must show stored history still rejects truncate/update/delete, stale REPEATABLE READ snapshots cannot bypass the check, both table locks are mandatory, and concurrent insert/truncate cannot delete committed command/audit history. Existing original migration bytes V1-V30 and paused V31 remain unchanged. The approved V32 has only run in disposable test databases, never production/historical storage; no destructive down migration is proposed.
+
+
+### Implemented local Room Blocking boundary — 2026-10-30
+
+Subsequent explicit owner approval admits the exact original two-table/index/FK/trigger proposal and the separately approved room_block_empty_truncate_guard function with the two TRUNCATE trigger bindings. Earlier NOT_GRANTED/NOT_IMPLEMENTED statements above describe preparation, not current authority. V32 is additive; V1-V30 bytes unchanged, paused unpublished V31 absent from task checkout and not applied. Its future workstream needs separate forward-version reconciliation.
+
+RoomBlockRepository/JdbcRoomBlockRepository own only Booking SQL; RoomBlocks consumes Rooms InventoryConstraints and Identity ScopedAuthorization. Current eligible operator, exact permission and active membership are transactionally checked/locked before scoped room observation. Venue lock serializes holds/blocks; existing GiST exclusion independently prevents overlapping blocking rows. expectedConfiguration is the exact Rooms venue/room/policy token, not a client-invented revision. Stable per-actor command identity plus canonical path/scope/interval/configuration hash prevents duplicate/changed-payload creation. A replay rechecks current write authority and returns its original bounded projection without adding another block or CREATE audit; it does not imply read permission. No independent room availability repository is introduced.
+
+Controller is absent by default. Enabling requires cinenest.booking.room-blocks.enabled=true, mode=LOCAL_SYNTHETIC_ONLY and synthetic-quotation profile, optionally alongside local-synthetic; other profiles/modes fail startup. Requests use bounded65536-byte parsing, strict duplicate-key detection, exact body fields, explicit offset times at PostgreSQL microsecond precision, and sanitized errors. Empty query delimiters from the existing Next proxy are equivalent to no query; actual unexpected parameters remain rejected. List/detail require independent inventory.read; read audit commits before disclosure. Next transport validates exact routes/methods/origin/CSRF, strips authority hints and allowlists scoped DTOs. No actor IDs, payload hashes or internal audit references enter customer-facing projections.
+
+No unblock/update/delete route or timer is added; immutable bound records retain their explicitly purchased maintenance interval without certifying physical clearance. Full-stack synthetic tests and current limitations belong to [PROGRESS](PROGRESS.md#room-blocking-local-implementation). Physical readiness, independent release review, production grants, real bank/receipts, PINs and customer admission remain separate gates.

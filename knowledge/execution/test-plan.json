@@ -123,7 +123,7 @@
       "requirementIds": [
         "PR-PKG-001"
       ],
-      "acceptanceCriteria": "PK-AC01–13, after supporting policy decisions; core editing and bought-term protection distinct",
+      "acceptanceCriteria": "PK-AC01\u201313, after supporting policy decisions; core editing and bought-term protection distinct",
       "owningChangeSetIds": [
         "CN-PKG-001",
         "CN-PKG-002",
@@ -192,7 +192,7 @@
       "requirementIds": [
         "PR-BANK-001"
       ],
-      "acceptanceCriteria": "BP-AC01–13, no receipt/funds/booking/access conflation, online path retained",
+      "acceptanceCriteria": "BP-AC01\u201313, no receipt/funds/booking/access conflation, online path retained",
       "owningChangeSetIds": [
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002",
@@ -662,7 +662,7 @@
         "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       },
       "bookingAccessContextEvidence": {
         "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
@@ -671,7 +671,7 @@
         "evidencePath": "PROGRESS.md#booking-access-context-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim"
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
       }
     },
     {
@@ -998,7 +998,7 @@
         "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       },
       "bookingAccessContextEvidence": {
         "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
@@ -1007,7 +1007,7 @@
         "evidencePath": "PROGRESS.md#booking-access-context-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim"
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
       },
       "staffBookingRefundReadEvidence": {
         "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
@@ -1172,6 +1172,28 @@
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Independent inventory.read;advisory counts only;no closure/reopening or physical authority",
         "tests": "PASS:675 backend tests/PostgreSQL18.6 authorization,audit,snapshot/architecture regressions;394 frontend tests incl41 focused;TypeScript,lint,production build;63 focused browser groups at375/768/1280;63 Operations,11 real Next/local upstream pagination,20 booking-operations browser regressions;8 classifier;knowledge,isolated execution,29 governance negative controls,92/92 traceability,28-task unchanged dependencies,whitespace. Browser fixtures are not real-backend E2E. Ordinary execution only2 pre-existing next-env findings."
+      },
+      "roomBlockingEvidence": {
+        "taskId": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+        "status": "LOCAL_SYNTHETIC_SOFTWARE_VERIFIED_BOUNDED",
+        "evidencePath": "PROGRESS.md#room-blocking-local-implementation",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlocks.java",
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlockRepository.java",
+          "backend/src/main/java/com/cinenest/booking/internal/JdbcRoomBlockRepository.java",
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlockController.java",
+          "backend/src/main/resources/db/migration/V32__local_room_blocking.sql",
+          "frontend/components/room-blocking.tsx"
+        ],
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/RoomBlockConfigurationTest.java",
+          "frontend/tests/room-blocks.test.mjs",
+          "frontend/tests/room-blocks-e2e.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No automatic reopening, physical readiness, real banking/customer admission or production assignments;global gates retained."
       }
     },
     {
@@ -1671,7 +1693,7 @@
         "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       },
       "bookingAccessContextEvidence": {
         "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
@@ -1680,7 +1702,7 @@
         "evidencePath": "PROGRESS.md#booking-access-context-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim"
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
       },
       "syntheticCancellationEvidence": {
         "taskId": "CN-BOOKING-CANCELLATION-001",
@@ -1835,6 +1857,28 @@
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Independent inventory.read;advisory counts only;no closure/reopening or physical authority",
         "tests": "PASS:675 backend tests/PostgreSQL18.6 authorization,audit,snapshot/architecture regressions;394 frontend tests incl41 focused;TypeScript,lint,production build;63 focused browser groups at375/768/1280;63 Operations,11 real Next/local upstream pagination,20 booking-operations browser regressions;8 classifier;knowledge,isolated execution,29 governance negative controls,92/92 traceability,28-task unchanged dependencies,whitespace. Browser fixtures are not real-backend E2E. Ordinary execution only2 pre-existing next-env findings."
+      },
+      "roomBlockingEvidence": {
+        "taskId": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+        "status": "LOCAL_SYNTHETIC_SOFTWARE_VERIFIED_BOUNDED",
+        "evidencePath": "PROGRESS.md#room-blocking-local-implementation",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlocks.java",
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlockRepository.java",
+          "backend/src/main/java/com/cinenest/booking/internal/JdbcRoomBlockRepository.java",
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlockController.java",
+          "backend/src/main/resources/db/migration/V32__local_room_blocking.sql",
+          "frontend/components/room-blocking.tsx"
+        ],
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/RoomBlockConfigurationTest.java",
+          "frontend/tests/room-blocks.test.mjs",
+          "frontend/tests/room-blocks-e2e.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No automatic reopening, physical readiness, real banking/customer admission or production assignments;global gates retained."
       }
     },
     {
@@ -1912,7 +1956,7 @@
       "requirementIds": [
         "CN-A12"
       ],
-      "acceptanceCriteria": "PK-AC01–13 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
+      "acceptanceCriteria": "PK-AC01\u201313 in canonical package specification; no code/deploy per authorized edit, sold/valid-quote protections",
       "owningChangeSetIds": [
         "CN-PKG-001",
         "CN-PKG-002"
@@ -1958,7 +2002,7 @@
       "requirementIds": [
         "CN-C10"
       ],
-      "acceptanceCriteria": "BP-AC01–13; independent bank credit and guarded one-booking result; not tests run",
+      "acceptanceCriteria": "BP-AC01\u201313; independent bank credit and guarded one-booking result; not tests run",
       "owningChangeSetIds": [
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002"
@@ -2057,7 +2101,7 @@
       "requirementIds": [
         "CN-A13"
       ],
-      "acceptanceCriteria": "BP-AC01–13; alert failure retains queue; approval alone no completed booking/access/refund",
+      "acceptanceCriteria": "BP-AC01\u201313; alert failure retains queue; approval alone no completed booking/access/refund",
       "owningChangeSetIds": [
         "CN-PAY-BANK-001",
         "CN-PAY-BANK-002",
@@ -2522,7 +2566,7 @@
         "permission": "Existing venue-scoped access.synthetic.review; booking-read and SELF grants cannot substitute",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1–V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
+        "tests": "536 backend tests PASS;263 BankIntegrationTest,11 StaffBookingAccessTest,17 architecture;PostgreSQL18.6,V1\u2013V19 clean/repeat/retained upgrades and packaged startup/HTTP denial PASS;258 frontend tests,typecheck,lint,build PASS;8 classifier and10 inert admission checks PASS;16 in-memory governance negative controls,92/92 traceability,28-task graph,knowledge and whitespace PASS;ordinary execution only2 pre-existing next-env findings,approved in-memory committed-source projection PASS"
       },
       "bookingAccessContextEvidence": {
         "changeSetId": "CN-BOOKING-ACCESS-CONTEXT-001",
@@ -2531,7 +2575,7 @@
         "evidencePath": "PROGRESS.md#booking-access-context-implementation",
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
-        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1–V19/startup/denial PASS;no new full E2E campaign claim"
+        "tests": "8 new focused tests;266 frontend tests,typecheck,lint,build PASS;20 focused intercepted browser groups plus30 staff booking/17 roster regression groups PASS;536 backend tests(263 Bank,11 staff contract,17 architecture),real PostgreSQL18.6,V1\u2013V19/startup/denial PASS;no new full E2E campaign claim"
       },
       "staffBookingRefundReadEvidence": {
         "scope": "Finance-owned exact booking/originating bank-request synthetic refund read only; independent venue refund.synthetic.read; no repayment eligibility or commands",
@@ -3157,6 +3201,28 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
+      },
+      "roomBlockingEvidence": {
+        "taskId": "CN-R1-ROOM-BLOCK-CONTRACT-001",
+        "status": "LOCAL_SYNTHETIC_SOFTWARE_VERIFIED_BOUNDED",
+        "evidencePath": "PROGRESS.md#room-blocking-local-implementation",
+        "sourcePaths": [
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlocks.java",
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlockRepository.java",
+          "backend/src/main/java/com/cinenest/booking/internal/JdbcRoomBlockRepository.java",
+          "backend/src/main/java/com/cinenest/booking/internal/RoomBlockController.java",
+          "backend/src/main/resources/db/migration/V32__local_room_blocking.sql",
+          "frontend/components/room-blocking.tsx"
+        ],
+        "actualTestPaths": [
+          "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+          "backend/src/test/java/com/cinenest/booking/internal/RoomBlockConfigurationTest.java",
+          "frontend/tests/room-blocks.test.mjs",
+          "frontend/tests/room-blocks-e2e.mjs"
+        ],
+        "fullRequirementVerified": false,
+        "fullRequirementAcceptance": "NOT_ACCEPTED",
+        "limits": "No automatic reopening, physical readiness, real banking/customer admission or production assignments;global gates retained."
       }
     },
     {
@@ -3775,7 +3841,7 @@
       "requirementIds": [
         "BP-AC01"
       ],
-      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility → one confirmed snapshot, separate acknowledged access",
+      "acceptanceCriteria": "Successful bank approval | Own request, independent receiving credit, full allocation/current valid inventory/eligibility \u2192 one confirmed snapshot, separate acknowledged access",
       "owningChangeSetIds": [
         "CN-PAY-BANK-002"
       ],
@@ -4242,7 +4308,7 @@
       "requirementIds": [
         "CN-M-ROOM-OCCUPANCY"
       ],
-      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts × 100. Zero rooms → N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Population = all enabled rooms in authorized selected venue/room scope at snapshotAt, each exactly once in occupied/available/cleaning/maintenance/unknown. Donut center = booking-based occupied count / sum all five slice counts \u00d7 100. Zero rooms \u2192 N/A. Unknown stays in population and is labelled; center is not physical occupancy. Slice percent and center share scope/asOf/denominator. Proposed state projection uses policy-versioned precedence maintenance > unknown/stale readiness > cleaning_required/cleaning > occupied by noncancelled confirmed session covering snapshotAt > available with physical clearance and no active session. Conflicting booking/readiness facts also raise an incident; state is not proof of physical presence.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -4308,7 +4374,7 @@
       "requirementIds": [
         "CN-M-ROOM-UTILIZATION"
       ],
-      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range × 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator → N/A; unknown/incomplete inputs → unavailable.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Per room: union noncancelled confirmed session intervals (customer minutes only, never cleaning) clipped to range and sellable intervals / union defined sellable intervals in range \u00d7 100. Sellable intervals = operating windows minus versioned maintenance/blackouts and non-sellable cleaning buffers under approved denominator policy. Avoid double subtraction; report sellablePolicyVersion. Zero denominator \u2192 N/A; unknown/incomplete inputs \u2192 unavailable.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -4323,7 +4389,7 @@
       "requirementIds": [
         "CN-M-BOOKING-STATISTICS"
       ],
-      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort × 100; zero cohort → N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Cohort = distinct booking IDs with createdAt within range; snapshot state at asOf partitions cohort once. Total = sum all mutually exclusive state counts including other. Cancellation rate = cancelled cohort / total cohort \u00d7 100; zero cohort \u2192 N/A. Separate confirmedAt KPI is not interchangeable with this creation cohort.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -4349,7 +4415,7 @@
       "requirementIds": [
         "CN-M-FINANCIAL-KPIS"
       ],
-      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator → N/A; prior zero/missing → N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Gateway captured collections = deduped authenticated capture amounts by capturedAt. Bank collections = independently verified unique credits by bank_credited_at, verified by asOf. Total incoming collections = gateway captures + bank collections; net collections = total incoming - confirmed gateway/bank outgoing refunds and separately verified bank reversal movements (never duplicate the same reversal/refund). Claims and allocation events add no collections. Recognized revenue remains separate approved recognition ledger/service policy only, null if unavailable. Average booking value = finalized purchased quote total / distinct eligible confirmedAt bookings at asOf, unchanged purchased snapshots; zero denominator \u2192 N/A; prior zero/missing \u2192 N/A. Incoming excess/unmatched funds are real received money, never automatic booking or recognized revenue; disclose their balances separately.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -4364,7 +4430,7 @@
       "requirementIds": [
         "CN-M-SYSTEM-IOT-STATUS"
       ],
-      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices ×100, unknown included; 0 devices → N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "Device state from authoritative health policy and lastSeen: stale after per-type threshold, unknown when never observed; connectivity alone does not imply command success. Fleet online rate = online / registered enabled scoped devices \u00d7100, unknown included; 0 devices \u2192 N/A. System operational only when all required checks explicitly healthy and fresh; missing/degraded checks forbid operational claim.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
@@ -4394,7 +4460,7 @@
       "requirementIds": [
         "CN-M-BANK-PAYMENT-REVIEW-FINANCES"
       ],
-      "acceptanceCriteria": "BN-M01–08 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
+      "acceptanceCriteria": "BN-M01\u201308 defined in bankMetrics; request count/elapsed age/money flows and snapshot balances have distinct populations/time bases. Never count receipt claims, verification and allocation as duplicate incoming money; N/A zero denominator and unavailable not zero.; scoped backend data/export and freshness/a11y fixtures",
       "owningChangeSetIds": [
         "CN-REPORT-001"
       ],
