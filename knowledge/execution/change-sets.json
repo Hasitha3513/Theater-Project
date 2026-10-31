@@ -6672,6 +6672,15 @@
       "scope": "Exact QuoteService allowed-profile predicate and focused tests only; additive protected successor; no DDL or commercial activation",
       "evidencePath": "PROGRESS.md#quote-profile-compatibility",
       "acceptanceUnchanged": true
+    },
+    "paymentsProfileCompatibility": {
+      "taskId": "CN-R1-PAYMENTS-PROFILE-COMPAT-001",
+      "sourceAuthorization": "EXPLICIT_OWNER_TWO_PREDICATES_AND_FOCUSED_OFFLINE_TESTS",
+      "successorAuthorization": "EXPLICIT_OWNER_EXACT_ADDITIVE_PAYMENTS_SUCCESSOR",
+      "status": "OFFLINE_TECHNICALLY_VERIFIED_PUBLICATION_PENDING",
+      "scope": "Two Payments profile predicates and focused offline tests; exact additive successor only; no API/DDL/runtime/production changes",
+      "evidencePath": "PROGRESS.md#payments-profile-compatibility",
+      "acceptanceUnchanged": true
     }
   },
   "release1Day2Evidence": {

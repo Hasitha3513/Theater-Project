@@ -13,7 +13,7 @@ class BankPolicy {
  record Policy(String version,String hash,UUID id,Duration lead,Duration request,Duration initiation,Duration submission,Duration review,Duration hold,Duration escalation,Duration upload,Duration retention,Duration cleanup,LocalTime opens,LocalTime closes,Set<String> fixtures){}
  Policy current(){return load(true);}Policy maintenance(){return load(false);}
  private Policy load(boolean commands){try{
-  if((commands&&!env.getProperty("cinenest.bank.enabled",Boolean.class,false))||!Set.of(env.getActiveProfiles()).equals(Set.of("synthetic-quotation")))throw new IllegalArgumentException();
+  var profiles=Set.of(env.getActiveProfiles());if((commands&&!env.getProperty("cinenest.bank.enabled",Boolean.class,false))||!(profiles.equals(Set.of("synthetic-quotation"))||profiles.equals(Set.of("local-synthetic","synthetic-quotation"))))throw new IllegalArgumentException();
   if(!java.nio.file.Path.of(env.getRequiredProperty("cinenest.bank.storage-root")).isAbsolute()||Base64.getDecoder().decode(env.getRequiredProperty("cinenest.bank.encryption-key")).length!=32)throw new IllegalArgumentException();
   String version=env.getRequiredProperty("cinenest.bank.policy-version");if(!version.matches("SYNTHETIC-[A-Za-z0-9_-]{1,80}"))throw new IllegalArgumentException();
   List<Duration> v=new ArrayList<>();for(String n:List.of("lead","request","initiation","submission","review","hold","escalation","upload","retention","cleanup")){long seconds=Long.parseLong(env.getRequiredProperty("cinenest.bank."+n+"-seconds"));if(seconds<=0||seconds>Integer.MAX_VALUE)throw new IllegalArgumentException();v.add(Duration.ofSeconds(seconds));}

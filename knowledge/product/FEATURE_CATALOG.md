@@ -156,6 +156,8 @@ Calendar discovery maps to P3-C02; explicit reservation holds additionally map t
 <a id="doc-f008"></a>
 ## DOC-F008 — Bank request and receipt claim
 
+Backend configuration compatibility update: the two approved Payments policy/instruction boundaries can coexist with the existing local manual-auth synthetic profile. This does not establish a complete manual-auth banking journey; later credit/booking guards and real-money/receipt restrictions remain. [Scope and tests](../PROGRESS.md#payments-profile-compatibility).
+
 | Field | Evidence-backed value |
 |---|---|
 | Category / module | Payments and Refunds / Payments |

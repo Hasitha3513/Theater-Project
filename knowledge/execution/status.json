@@ -28164,5 +28164,80 @@
       "binaryAssetsFreshlyRendered": false,
       "scope": "Prior verified ledger plus controlled Unit A/Room Blocking successors; current focused source/test and written deltas reviewed; two unmanaged owner DOCX remain in original workspace."
     }
+  },
+  "paymentsProfileCompatibility": {
+    "taskId": "CN-R1-PAYMENTS-PROFILE-COMPAT-001",
+    "baselineHead": "3cd3f0a015e8fae30f9d1a93f5f4e9832a03a96d",
+    "sourceAuthorization": "EXPLICIT_OWNER_TWO_PREDICATES_AND_FOCUSED_OFFLINE_TESTS",
+    "successorAuthorization": "EXPLICIT_OWNER_EXACT_ADDITIVE_PAYMENTS_SUCCESSOR",
+    "status": "OFFLINE_TECHNICALLY_VERIFIED_PUBLICATION_PENDING",
+    "approvedProfileSets": [
+      [
+        "synthetic-quotation"
+      ],
+      [
+        "local-synthetic",
+        "synthetic-quotation"
+      ]
+    ],
+    "profileOrdering": "SET_EQUALITY",
+    "otherProfiles": "DENIED",
+    "sourcePaths": [
+      "backend/src/main/java/com/cinenest/payments/internal/BankPolicy.java",
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructions.java"
+    ],
+    "testPath": "backend/src/test/java/com/cinenest/payments/internal/PaymentsProfileConfigurationTest.java",
+    "evidencePath": "PROGRESS.md#payments-profile-compatibility",
+    "tests": {
+      "paymentsProfile": 21,
+      "paymentsSyntheticEvidence": 10,
+      "verificationSyntheticEvidence": 9,
+      "bankCreationRules": 8,
+      "architecture": 20,
+      "quoteProfileRegression": 41,
+      "totalExecutions": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "redBeforeFix": {
+        "tests": 21,
+        "failures": 0,
+        "errors": 4
+      }
+    },
+    "httpE2E": "NOT_RUN_NO_RUNTIME_AUTHORITY",
+    "security": {
+      "stagingOnly": "ENFORCED",
+      "realReceiptAdmission": "DENY",
+      "syntheticAllowlistAndEncryption": "FOCUSED_TESTS_PASS",
+      "eligibilityAndExactVenuePermissions": "FOCUSED_TESTS_PASS",
+      "csrfAndImmutableAudit": "UNCHANGED_SOURCE;PRIOR_EXACT_SOURCE_CI_EVIDENCE;NO_NEW_HTTP_OR_DB_CLAIM",
+      "independentCreditAndAllocation": "UNCHANGED;NO_RUNTIME_OPERATIONS"
+    },
+    "laterProfileBarriers": [
+      "SyntheticCreditSource",
+      "booking-management singleton guards"
+    ],
+    "migrationInventory": "EXACT_PUBLISHED_V1-V30+V32;V31_NOT_APPLIED",
+    "databaseWrites": 0,
+    "applicationServiceStarts": 0,
+    "providerRequests": 0,
+    "runtimeGrants": false,
+    "realPayments": false,
+    "realInstructionsPublished": false,
+    "realReceiptsProcessed": false,
+    "bookingConfirmationChanged": false,
+    "productionEnabled": false,
+    "facebookResumed": false,
+    "advertisingResumed": false,
+    "acceptanceChanged": false,
+    "requirements": 92,
+    "criteria": 74,
+    "checkedCriteria": 15,
+    "formallyAccepted": 0,
+    "release1Completed": 4,
+    "release1Total": 21,
+    "publication": "PREPUBLICATION_SNAPSHOT;ACTUAL_COMMIT_AND_CI_RECEIPT_REPORTED_SEPARATELY",
+    "readingReuse": "Existing verified full-reading ledger plus controlled Unit A,Room Blocking,QuoteService successors;114task-checkout KB files accounted;2unchanged ownerDOCX preserved in original workspace;no fresh binary visual review claimed"
   }
 }

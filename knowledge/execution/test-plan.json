@@ -234,6 +234,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Customer bank/readiness/claim/receipt presentation only;existing financial policies,protected APIs,ownership,CSRF,quote binding,command identities and upload recovery unchanged."
+      },
+      "paymentsProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-PAYMENTS-PROFILE-COMPAT-001",
+        "boundedStatus": "OFFLINE_PROFILE_CONFIGURATION_VERIFIED",
+        "evidencePath": "PROGRESS.md#payments-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/payments/internal/PaymentsProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED",
+        "bankingHttpE2E": "NOT_RUN"
       }
     },
     {
@@ -2101,6 +2109,14 @@
         "taskId": "CN-R1-BANK-INSTRUCTIONS-E2E-001",
         "reference": "PROGRESS.md#bank-instructions-real-stack-e2e",
         "formalAcceptanceChanged": false
+      },
+      "paymentsProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-PAYMENTS-PROFILE-COMPAT-001",
+        "boundedStatus": "OFFLINE_PROFILE_CONFIGURATION_VERIFIED",
+        "evidencePath": "PROGRESS.md#payments-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/payments/internal/PaymentsProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED",
+        "bankingHttpE2E": "NOT_RUN"
       }
     },
     {
@@ -2162,6 +2178,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "scope": "Real browser/Next/authenticated proxy/Boot/PostgreSQL payment-receipt lost acknowledgement,QUARANTINED reload and explicit same-allocation completion without byte resend;24 PASS/0 FAIL/0 NOT_RUN. Bounded synthetic campaign only,not full requirement acceptance."
+      },
+      "paymentsProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-PAYMENTS-PROFILE-COMPAT-001",
+        "boundedStatus": "OFFLINE_PROFILE_CONFIGURATION_VERIFIED",
+        "evidencePath": "PROGRESS.md#payments-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/payments/internal/PaymentsProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED",
+        "bankingHttpE2E": "NOT_RUN"
       }
     },
     {
@@ -3871,6 +3895,14 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "deferred": "Real bank/commercial/gateway-provider/refund/access/notification/physical/customer acceptance remains incomplete"
+      },
+      "paymentsProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-PAYMENTS-PROFILE-COMPAT-001",
+        "boundedStatus": "OFFLINE_PROFILE_CONFIGURATION_VERIFIED",
+        "evidencePath": "PROGRESS.md#payments-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/payments/internal/PaymentsProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED",
+        "bankingHttpE2E": "NOT_RUN"
       }
     },
     {
@@ -4072,6 +4104,14 @@
         "taskId": "CN-R1-BANK-INSTRUCTIONS-E2E-001",
         "reference": "PROGRESS.md#bank-instructions-real-stack-e2e",
         "formalAcceptanceChanged": false
+      },
+      "paymentsProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-PAYMENTS-PROFILE-COMPAT-001",
+        "boundedStatus": "OFFLINE_PROFILE_CONFIGURATION_VERIFIED",
+        "evidencePath": "PROGRESS.md#payments-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/payments/internal/PaymentsProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED",
+        "bankingHttpE2E": "NOT_RUN"
       }
     },
     {
@@ -4161,6 +4201,14 @@
         "taskId": "CN-R1-BANK-INSTRUCTIONS-E2E-001",
         "reference": "PROGRESS.md#bank-instructions-real-stack-e2e",
         "formalAcceptanceChanged": false
+      },
+      "paymentsProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-PAYMENTS-PROFILE-COMPAT-001",
+        "boundedStatus": "OFFLINE_PROFILE_CONFIGURATION_VERIFIED",
+        "evidencePath": "PROGRESS.md#payments-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/payments/internal/PaymentsProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED",
+        "bankingHttpE2E": "NOT_RUN"
       }
     },
     {
