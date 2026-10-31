@@ -846,6 +846,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "Existing actual hold-before-quote sequence;local OIDC/JDBC session and real Next/Spring/PostgreSQL;no real Google/bank/identity/lock or customer-launch qualification"
+      },
+      "quoteProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-QUOTE-PROFILE-COMPAT-001",
+        "boundedStatus": "TECHNICALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#quote-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/pricing/internal/QuoteProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -3948,6 +3955,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "evidence": "knowledge/PROGRESS.md#admin-advertising-s1"
+      },
+      "quoteProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-QUOTE-PROFILE-COMPAT-001",
+        "boundedStatus": "TECHNICALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#quote-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/pricing/internal/QuoteProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {

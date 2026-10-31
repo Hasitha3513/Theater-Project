@@ -28086,5 +28086,83 @@
         "P8-C05"
       ]
     }
+  },
+  "quoteProfileCompatibility": {
+    "taskId": "CN-R1-QUOTE-PROFILE-COMPAT-001",
+    "baselineHead": "c8ae5a38f27e570dd3b94a6602490f51fd5e0aa4",
+    "authorization": "EXPLICIT_OWNER_BOUNDED_PREDICATE_TESTS_RUNTIME_AND_ADDITIVE_SUCCESSOR",
+    "status": "TECHNICALLY_VERIFIED_PUBLICATION_PENDING",
+    "approvedProfileSets": [
+      [
+        "synthetic-quotation"
+      ],
+      [
+        "local-synthetic",
+        "synthetic-quotation"
+      ]
+    ],
+    "profileOrdering": "SET_EQUALITY",
+    "additionalProfiles": "DENIED_503",
+    "applicationSourcePaths": [
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteService.java"
+    ],
+    "focusedTestPath": "backend/src/test/java/com/cinenest/pricing/internal/QuoteProfileConfigurationTest.java",
+    "evidencePath": "PROGRESS.md#quote-profile-compatibility",
+    "tests": {
+      "profileConfiguration": 41,
+      "verificationHandoff": 17,
+      "architecture": 20,
+      "pricingRules": 6,
+      "manualAuthBoundary": 4,
+      "roomBlockConfiguration": 2,
+      "postgresqlQuotation": 13,
+      "privateHttpAndBrowserJUnit": 2,
+      "totalJUnitExecutions": 105,
+      "browserChecks": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "manualHttp": {
+      "registration": 202,
+      "login": 204,
+      "hold": 200,
+      "quotation": 200,
+      "logout": 204,
+      "afterLogout": 401
+    },
+    "oidcBrowser": "PASS_LOCAL_SYNTHETIC_ONLY",
+    "runtime": {
+      "startUtc": "2026-10-31T08:33:23.679726+00:00",
+      "stopUtc": "2026-10-31T08:33:59.426710+00:00",
+      "maxSeconds": 1800,
+      "containerStopped": true,
+      "verifiedClosedPorts": 6,
+      "remainingOwnedJavaNode": 0,
+      "privateEvidence": "/tmp/cn-quote-profile-5dedaef26e5a",
+      "preservedDatabasesAccessed": false
+    },
+    "migrations": "V1-V30_AND_V32_BYTE_IDENTICAL_V31_ABSENT",
+    "commercialGate": "BLOCKED_OWNER_FINANCE_LEGAL_INPUTS",
+    "sourceCommit": "PENDING_PUBLICATION",
+    "exactSourceCI": "PENDING_PUBLICATION",
+    "productionEnabled": false,
+    "realPayments": false,
+    "commercialPublication": false,
+    "bookingConfirmation": false,
+    "facebookResumed": false,
+    "advertisingResumed": false,
+    "acceptanceChanged": false,
+    "requirements": 92,
+    "criteria": 74,
+    "checkedCriteria": 15,
+    "formallyAccepted": 0,
+    "readingReuse": {
+      "baseline": "c8ae5a38f27e570dd3b94a6602490f51fd5e0aa4",
+      "existingLedger": "advertisingS1Execution.reading.files",
+      "taskCheckoutNewKnowledgePaths": 0,
+      "binaryAssetsFreshlyRendered": false,
+      "scope": "Prior verified ledger plus controlled Unit A/Room Blocking successors; current focused source/test and written deltas reviewed; two unmanaged owner DOCX remain in original workspace."
+    }
   }
 }

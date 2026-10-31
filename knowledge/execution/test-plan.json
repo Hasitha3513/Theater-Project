@@ -546,6 +546,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "limits": "One existing24-scenario campaign;actual calendar/explicit point/hold/quote handoff verified with persisted SELECT evidence;no new rules,production qualification or full acceptance"
+      },
+      "quoteProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-QUOTE-PROFILE-COMPAT-001",
+        "boundedStatus": "TECHNICALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#quote-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/pricing/internal/QuoteProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {
@@ -2768,6 +2775,13 @@
         "fullRequirementVerified": false,
         "fullRequirementAcceptance": "NOT_ACCEPTED",
         "evidence": "knowledge/PROGRESS.md#admin-advertising-s1"
+      },
+      "quoteProfileCompatibilityEvidence": {
+        "taskId": "CN-R1-QUOTE-PROFILE-COMPAT-001",
+        "boundedStatus": "TECHNICALLY_VERIFIED",
+        "evidencePath": "PROGRESS.md#quote-profile-compatibility",
+        "testPath": "backend/src/test/java/com/cinenest/pricing/internal/QuoteProfileConfigurationTest.java",
+        "fullAcceptance": "NOT_ACCEPTED"
       }
     },
     {

@@ -6664,6 +6664,14 @@
       "tests": "PostgreSQL concurrent hold/confirmation/block conflicts, exact write authority, mandatory-audit rollback and denied reads/writes",
       "limits": "Implementation authority granted;new persistence indispensable, exact additive DDL approval pending. No application or migration changes yet.",
       "ddlBlocked": true
+    },
+    "quoteProfileCompatibility": {
+      "taskId": "CN-R1-QUOTE-PROFILE-COMPAT-001",
+      "authorization": "EXPLICIT_OWNER_BOUNDED_PREDICATE_TESTS_RUNTIME_AND_ADDITIVE_SUCCESSOR",
+      "workStatus": "TECHNICALLY_VERIFIED_PUBLICATION_PENDING",
+      "scope": "Exact QuoteService allowed-profile predicate and focused tests only; additive protected successor; no DDL or commercial activation",
+      "evidencePath": "PROGRESS.md#quote-profile-compatibility",
+      "acceptanceUnchanged": true
     }
   },
   "release1Day2Evidence": {
