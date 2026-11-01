@@ -785,3 +785,7 @@ Disabled-by-default Booking-owned temporary MAINTENANCE creation, protected scop
 ### Synthetic credit profile compatibility
 
 The closed synthetic-credit source now permits exactly synthetic-quotation alone or alongside local-synthetic,independent of ordering. Other sets remain denied;no credit,allocation,booking or real-banking authority is granted. No UI workflow changes. [Contract](../ARCHITECTURE.md#synthetic-credit-profile-compatibility),[offline evidence and publication gate](../PROGRESS.md#synthetic-credit-profile-compatibility).
+
+### Room → Lock Assignment — qualified local backend, publication pending
+
+CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001 now has protected exact-venue create/list/detail, current Rooms/device revision checks, stable command replay, mandatory immutable audit and exact owner-approved V33 persistence. Clean/upgrade and real local HTTP/PostgreSQL qualification PASS; feature remains disabled by default and unpublished pending governance. Every binding remains UNQUALIFIED/customerAccessEnabled=false; it neither makes rooms available nor provisions locks. No Admin screen,production grant,PIN or provider connection. [Scope and DDL](../ARCHITECTURE.md#qualification-room-lock-assignment); [actual qualification](../PROGRESS.md#room-lock-assignment-v33).

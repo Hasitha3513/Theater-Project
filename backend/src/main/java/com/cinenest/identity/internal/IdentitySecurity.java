@@ -133,6 +133,8 @@ class IdentitySecurity {
                 .requestMatchers("/api/admin/venues/*/operations/cases", "/api/admin/venues/*/operations/cases/**").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/iot/lock-devices","/api/admin/venues/*/iot/lock-devices/*","/api/admin/venues/*/iot/lock-devices/*/revisions","/api/admin/venues/*/iot/lock-devices/*/revisions/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/iot/lock-devices").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/rooms/*/lock-assignments","/api/admin/venues/*/rooms/*/lock-assignments/*").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/rooms/*/lock-assignments").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/iot/devices","/api/admin/venues/*/iot/devices/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/iot/devices/*/commands","/api/admin/venues/*/iot/devices/*/commands/*/simulations","/api/admin/venues/*/iot/devices/*/commands/*/reconciliations").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-reservations/*","/api/bookings/*/extension-reservations/commands/*").authenticated()

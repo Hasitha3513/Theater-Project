@@ -9593,5 +9593,191 @@ def inert_ci_main():
         if result==0:print('PASS exact SyntheticCreditSource profile compatibility; Payments/QuoteService/historical controls preserved; real banking remains disabled')
         return result
 
+
+# CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001: exact owner-approved additive publication successor.
+ROOM_ASSIGNMENT_BASE = '1d36de7dcec9ce38281f92cd94e5d05a94f63356'
+ROOM_ASSIGNMENT_SUFFIX_SHA256 = '91b384b7aa0eb0a5314b50f4de650a9f5c3e1c5b7c65b010f152626f89633c9f'
+ROOM_ASSIGNMENT_HASHES = {'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '94509a49c586b163a5f67d8a2d9a604084657103d78da022e712ffe6d82e9faa', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '123866b96d34cafb30cacae2a2b2f8823c634bac165f528a57be451e95cad001', 'backend/src/main/java/com/cinenest/iot/internal/JdbcLockRoomAssignmentRepository.java': 'eb870b575e80f28ada46b01b4fa2d527bd029f4e6283375fb348f22aee5966b1', 'backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentController.java': '868fb9d4e2e3fe3e01c13432d5c44ff86d30a8bc873124059723bc9667a51052', 'backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentPolicy.java': '4c8d56607e86c66bff96a96d1b4dff258284645bae1807eecf4b97bf829e5527', 'backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentRepository.java': 'e9a3f80d82b5436e5b7ce42da712af5f38a6331bc5fca567ca1e7e9d5e5b0146', 'backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentService.java': '482f20c8c8aad0f80e0765320b7699e67af82209a6880918ec196014cc001fd5', 'backend/src/main/resources/db/migration/V33__qualification_room_lock_assignments.sql': '401aeeefc90e6721a5e4b48adb621ebea9c779b286c01315eb2b9c1a81cf390c', 'backend/src/test/java/com/cinenest/LockRoomAssignmentArchitectureTest.java': '5fdf09e2e04b9c156aab21f09e71229c2337c0de615ec7ffb86e970bce8d04ca', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': 'f8464bb2716530fcd7902fe84f5d57ed1eaf873b406c099b152196f0e8647714', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': 'fbab0f398d74b3a89d1d567b898aecdc70c64dc4fb0e2cc27aaca960bd062933', 'backend/src/test/java/com/cinenest/identity/internal/LockRoomAssignmentSecurityTest.java': '8ebb42b65bd6fcbcf56901e29e55f7a8bbd19027412713b151f660dc945418b2', 'backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentControllerTest.java': 'fdf7a10b1eab3855e1a4904a4bb0b13e09db326901d6238f05770d33a4fea48d', 'backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentPolicyTest.java': '2266bd65b9f6fcbb3d52fe4246ef90ff9a8ba9c615b95f2d7064ddb418caca37', 'backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentServiceTest.java': '23c4047d6eeeea1b7d88e2d89547b7fd4c07fe08f6d41b766b87251943a00769', 'knowledge/ARCHITECTURE.md': 'a9b8a735455fe46bf53bf9b3cb32763c3417780077ed79b109dd999048f1bea0', 'knowledge/PROGRESS.md': '81e7f4d0c86e2003c15cb2ab0f716f32b60c4d4595425a8ab7317c5f1a65f02f', 'knowledge/PROJECT.md': '90cc34783afa1a1e698f8ba88073bbc706566ccb35bb79bda1a0d3d571232d4a', 'knowledge/execution/status.json': 'b1017a41ba50be534e9035bdf852df8f664aa4f71f5caca37ab1e2ebc1c02766', 'knowledge/guides/USER_GUIDE.md': 'fed3dc5cbf85254e5fbd12d52bab56db4d9ac7b7e293fd212fb236179956115f', 'knowledge/product/FEATURE_CATALOG.md': 'c24516abaff8c992ef3bd8617aad1d1b1eeb768282bccf552992b06a383cd60d'}
+ROOM_ASSIGNMENT_PATHS = ['backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/iot/internal/JdbcLockRoomAssignmentRepository.java', 'backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentController.java', 'backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentPolicy.java', 'backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentRepository.java', 'backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentService.java', 'backend/src/main/resources/db/migration/V33__qualification_room_lock_assignments.sql', 'backend/src/test/java/com/cinenest/LockRoomAssignmentArchitectureTest.java', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java', 'backend/src/test/java/com/cinenest/identity/internal/LockRoomAssignmentSecurityTest.java', 'backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentControllerTest.java', 'backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentPolicyTest.java', 'backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentServiceTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/PROJECT.md', 'knowledge/execution/status.json', 'knowledge/guides/USER_GUIDE.md', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md']
+ROOM_ASSIGNMENT_EVIDENCE = {'privateReceipt': '/tmp/cinenest-assignment-pg-v9h9gg8h/qualification-summary.json', 'receiptSha256': '212046d534fd66a63076929b8276cef0527d3689b5db1f59cdb17679d22c2acf', 'migrationHistorySha256': 'bfa5740e592801cd01095d9f3b0af55c2454cd58e060c32a70b811b4f38a87da', 'sanitizedAuditSha256': '2a8ff93583ffb32324395fc82202428f4da7c1f97d62ebe9812791447fa12cfe'}
+ROOM_ASSIGNMENT_V33 = 'backend/src/main/resources/db/migration/V33__qualification_room_lock_assignments.sql'
+ROOM_ASSIGNMENT_V33_SHA256 = '401aeeefc90e6721a5e4b48adb621ebea9c779b286c01315eb2b9c1a81cf390c'
+room_assignment_previous_main = inert_ci_main
+room_assignment_previous_guard = receipt_admission_successor_errors
+
+def room_assignment_tree():
+    raw=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',ROOM_ASSIGNMENT_BASE]);blobs={}
+    for entry in raw.split(b'\0'):
+        if entry:
+            metadata,name=entry.split(b'\t',1);mode,kind,oid=metadata.split()
+            if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsupported baseline entry')
+            blobs[name.decode()]=oid.decode()
+    return blobs
+
+def room_assignment_migration_errors():
+    errors=[];folder=R/'backend/src/main/resources/db/migration'
+    try:
+        if folder.is_symlink() or folder.resolve()!=folder:return ['ROOM ASSIGNMENT unsafe migration directory']
+        expected={n:h for n,h in room_assignment_tree().items() if n.startswith('backend/src/main/resources/db/migration/')}
+        versions=[re.fullmatch(r'V([0-9]+)__[^/]+\.sql',Path(n).name) for n in expected]
+        if len(expected)!=31 or any(v is None for v in versions) or {int(v.group(1)) for v in versions if v}!=set(range(1,31))|{32}:return ['ROOM ASSIGNMENT invalid immutable migration baseline']
+        names=set(expected)|{ROOM_ASSIGNMENT_V33};actual=[];seen=[]
+        for path in folder.glob('*'):
+            name=path.relative_to(R).as_posix();actual.append(name)
+            match=re.fullmatch(r'V([0-9]+)__[^/]+\.sql',path.name)
+            if match:seen.append(int(match.group(1)))
+            if name not in names:errors.append('ROOM ASSIGNMENT unexpected migration path');continue
+            if path.is_symlink() or not path.is_file() or path.resolve()!=path or path.parent!=folder:errors.append('ROOM ASSIGNMENT unsafe migration path');continue
+            data=path.read_bytes()
+            if name==ROOM_ASSIGNMENT_V33:
+                if hashlib.sha256(data).hexdigest()!=ROOM_ASSIGNMENT_V33_SHA256:errors.append('ROOM ASSIGNMENT V33 fingerprint mismatch')
+            elif hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()!=expected[name]:errors.append('ROOM ASSIGNMENT historical migration drift')
+        if set(actual)!=names or len(actual)!=32:errors.append('ROOM ASSIGNMENT exact migration inventory mismatch')
+        if len(seen)!=len(set(seen)) or set(seen)!=set(range(1,31))|{32,33}:errors.append('ROOM ASSIGNMENT invalid migration versions')
+    except (OSError,ValueError):errors.append('ROOM ASSIGNMENT migration inventory inaccessible/unsafe')
+    return errors
+
+def room_assignment_payload_errors():
+    errors=[];owned=set(ROOM_ASSIGNMENT_PATHS)|{'knowledge/execution/validate_execution.py'}
+    if len(ROOM_ASSIGNMENT_PATHS)!=22 or len(set(ROOM_ASSIGNMENT_PATHS))!=22:return ['ROOM ASSIGNMENT invalid admitted path inventory']
+    if set(ROOM_ASSIGNMENT_HASHES)!=set(ROOM_ASSIGNMENT_PATHS)-{'knowledge/manifest.json'}:return ['ROOM ASSIGNMENT incomplete fingerprint inventory']
+    before=lambda n:subprocess.check_output(['git','-C',str(R),'show',ROOM_ASSIGNMENT_BASE+':'+n])
+    try:
+        for name in owned:
+            path=R/name
+            if Path(name).as_posix()!=name or Path(name).is_absolute() or '..' in Path(name).parts or path.is_symlink() or not path.is_file() or path.resolve()!=path:errors.append('ROOM ASSIGNMENT unsafe/missing payload '+name);continue
+            if name in ROOM_ASSIGNMENT_HASHES and hashlib.sha256(path.read_bytes()).hexdigest()!=ROOM_ASSIGNMENT_HASHES[name]:errors.append('ROOM ASSIGNMENT unadmitted payload '+name)
+        if errors:return errors
+        current=(K/'execution/validate_execution.py').read_text();ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        if not current.startswith(prefix):errors.append('ROOM ASSIGNMENT historical validator modified')
+        suffix=current[len(prefix):]
+        normalized=suffix.replace("ROOM_ASSIGNMENT_SUFFIX_SHA256 = '"+ROOM_ASSIGNMENT_SUFFIX_SHA256+"'", "ROOM_ASSIGNMENT_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normalized.encode()).hexdigest()!=ROOM_ASSIGNMENT_SUFFIX_SHA256:errors.append('ROOM ASSIGNMENT successor modified')
+        errors.extend(room_assignment_migration_errors())
+        state=json.loads((K/'execution/status.json').read_text());e=state.get('roomLockAssignmentPublicationReconciliation',{});q=state.get('roomLockAssignmentV33Qualification',{})
+        if e.get('taskId')!='CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001' or e.get('baseline')!=ROOM_ASSIGNMENT_BASE or e.get('successorAuthorization')!='EXPLICIT_OWNER_EXACT_ASSIGNMENT_SUCCESSOR_AND_TWO_LEGACY_EXPECTATIONS':errors.append('ROOM ASSIGNMENT task/authority mismatch')
+        if e.get('payloadPaths')!=ROOM_ASSIGNMENT_PATHS or e.get('approvedV33Sha256')!=ROOM_ASSIGNMENT_V33_SHA256:errors.append('ROOM ASSIGNMENT scope mismatch')
+        if e.get('qualifiedEvidenceBinding')!=ROOM_ASSIGNMENT_EVIDENCE or q.get('evidence')!=ROOM_ASSIGNMENT_EVIDENCE:errors.append('ROOM ASSIGNMENT evidence binding mismatch')
+        if q.get('status')!='ROOM_LOCK_ASSIGNMENT_PG_PASS' or q.get('tests')!={'tests':2,'failures':0,'errors':0,'skipped':0}:errors.append('ROOM ASSIGNMENT PostgreSQL qualification missing')
+        if q.get('fixtureTotals')!={'accounts':2,'venues':2,'rooms':5,'registeredDevices':5}:errors.append('ROOM ASSIGNMENT fixture scope mismatch')
+        if q.get('auditBindingProof')!={'assignments':3,'receipts':3,'createAudits':3,'matchedCreateAudits':3,'invalidState':0}:errors.append('ROOM ASSIGNMENT audit/state evidence mismatch')
+        if q.get('assignmentState')!='UNQUALIFIED' or q.get('assignmentRevision')!=1 or q.get('customerAccessEnabled') is not False:errors.append('ROOM ASSIGNMENT customer-access invariant drift')
+        if q.get('runtime',{}).get('noDeadlineExtension') is not True or q.get('runtime',{}).get('wholeWindowSeconds',601)>600:errors.append('ROOM ASSIGNMENT runtime evidence drift')
+        source_evidence=q.get('sourceTestMigrationFingerprints',{})
+        expected_backend={n:h for n,h in ROOM_ASSIGNMENT_HASHES.items() if n.startswith('backend/') and n!='backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java'}
+        if source_evidence!=expected_backend:errors.append('ROOM ASSIGNMENT qualified source fingerprints mismatch')
+        for key in ['customerAccessEnabled','providerCommands','productionEnabled','acceptanceChanged','facebookResumed','advertisingResumed']:
+            if e.get(key) is not False:errors.append('ROOM ASSIGNMENT exclusion drift '+key)
+        if [e.get(k) for k in ['requirements','criteria','checkedCriteria','formallyAccepted','completedReleaseCheckpoints','newRuntimeServices']]!=[92,74,15,0,4,0]:errors.append('ROOM ASSIGNMENT acceptance/runtime drift')
+        legacy='backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java';old=before(legacy).decode()
+        replacements=[('.isEqualTo("32");assertThat(Arrays.stream(f.info().all())','.isEqualTo("33");assertThat(Arrays.stream(f.info().all())'),('var latest=Flyway.configure().dataSource(url,user,password).load();assertThat(latest.migrate()','var latest=Flyway.configure().dataSource(url,user,password).target("32").load();assertThat(latest.migrate()')]
+        for a,b in replacements:
+            if old.count(a)!=1:errors.append('ROOM ASSIGNMENT legacy baseline mismatch')
+            old=old.replace(a,b,1)
+        if (R/legacy).read_bytes()!=old.encode() or hashlib.sha256(old.encode()).hexdigest()!='fbab0f398d74b3a89d1d567b898aecdc70c64dc4fb0e2cc27aaca960bd062933':errors.append('ROOM ASSIGNMENT unauthorized legacy test edit')
+        blobs=room_assignment_tree();tracked=set(blobs)
+        for name in tracked-owned:
+            path=R/name
+            if path.is_symlink() or not path.is_file():errors.append('ROOM ASSIGNMENT unowned/history drift '+name);continue
+            data=path.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()!=blobs[name]:errors.append('ROOM ASSIGNMENT unowned/history drift '+name)
+        actual=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        if not actual<=tracked|owned:errors.append('ROOM ASSIGNMENT unauthorized new path')
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',ROOM_ASSIGNMENT_BASE,'--name-only','-z'],text=True),nul=True)
+        if not changed<=owned:errors.append('ROOM ASSIGNMENT unauthorized changed path')
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json' and 'sha256' in row:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('ROOM ASSIGNMENT manifest drift')
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,ensure_ascii=True,indent=2)+'\n').encode():errors.append('ROOM ASSIGNMENT manifest byte drift')
+    except (OSError,ValueError,KeyError,TypeError):errors.append('ROOM ASSIGNMENT inaccessible/invalid payload')
+    return errors
+
+def room_assignment_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return room_assignment_payload_errors()
+
+def room_assignment_negative_controls():
+    from unittest.mock import patch
+    assert not room_assignment_successor_errors()
+    print('PASS ROOM ASSIGNMENT exact successor positive control')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    assert not room_assignment_migration_errors()
+    print('PASS ROOM ASSIGNMENT exact32 migration inventory/fingerprints')
+    for label,inventory in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31',original+[folder/'V31__held.sql']),('missing migration',[p for p in original if p!=first]),('missing V33',[p for p in original if p!=R/ROOM_ASSIGNMENT_V33]),('renamed migration',[first.with_name(first.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__duplicate.sql')]),('duplicate path',original+[first]),('traversal migration',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(inventory) if p==folder else glob0(p,*a,**kw)):assert room_assignment_migration_errors(),label
+        print('PASS ROOM ASSIGNMENT rejects '+label)
+    rb0=Path.read_bytes
+    for name in ROOM_ASSIGNMENT_HASHES:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert room_assignment_successor_errors(),name
+        print('PASS ROOM ASSIGNMENT rejects payload mutation '+name)
+    for target in [first,R/ROOM_ASSIGNMENT_V33]:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert room_assignment_migration_errors()
+        print('PASS ROOM ASSIGNMENT rejects migration checksum mutation '+target.name)
+    target=R/ROOM_ASSIGNMENT_PATHS[0];file0=Path.is_file;link0=Path.is_symlink;resolve0=Path.resolve
+    with patch.object(Path,'is_file',lambda p:False if p==target else file0(p)):assert room_assignment_successor_errors()
+    print('PASS ROOM ASSIGNMENT rejects missing admitted path')
+    with patch.object(Path,'is_symlink',lambda p:True if p==target else link0(p)):assert room_assignment_successor_errors()
+    print('PASS ROOM ASSIGNMENT rejects substituted/symlink admitted path')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.java' if p==target else resolve0(p,*a,**kw)):assert room_assignment_successor_errors()
+    print('PASS ROOM ASSIGNMENT rejects resolved payload escape')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert room_assignment_migration_errors()
+    print('PASS ROOM ASSIGNMENT rejects migration symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.sql' if p==first else resolve0(p,*a,**kw)):assert room_assignment_migration_errors()
+    print('PASS ROOM ASSIGNMENT rejects resolved migration escape')
+    rt0=Path.read_text;target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical validator mutation',lambda t:t.replace('Read-only execution/coverage validator.','Unauthorized historical change.',1)),('successor mutation',lambda t:t+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert room_assignment_successor_errors(),label
+        print('PASS ROOM ASSIGNMENT rejects '+label)
+    target=K/'execution/status.json'
+    for label,field,value in [('unknown task','taskId','UNAUTHORIZED_TASK'),('forged approval','successorAuthorization','UNAPPROVED')]:
+        def altered(p,*a,**kw):
+            text=rt0(p,*a,**kw)
+            if p==target:
+                data=json.loads(text);data['roomLockAssignmentPublicationReconciliation'][field]=value;return json.dumps(data)
+            return text
+        with patch.object(Path,'read_text',altered):assert room_assignment_successor_errors(),label
+        print('PASS ROOM ASSIGNMENT rejects '+label)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def unknown(argv,*a,**kw):
+            value=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-assignment.java\0';return value+extra if isinstance(value,str) else value+extra.encode()
+            return value
+        with patch.object(subprocess,'check_output',unknown):assert room_assignment_successor_errors()
+        print('PASS ROOM ASSIGNMENT rejects unauthorized '+command+' path')
+    target=K/'manifest.json'
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert room_assignment_successor_errors()
+    print('PASS ROOM ASSIGNMENT rejects manifest byte drift')
+
+receipt_admission_successor_errors=room_assignment_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=room_assignment_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        room_assignment_negative_controls()
+        owned=set(ROOM_ASSIGNMENT_PATHS)|{'knowledge/execution/validate_execution.py'}
+        tracked=set(room_assignment_tree());added=owned-tracked
+        replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',ROOM_ASSIGNMENT_BASE+':'+n]) for n in owned&tracked}
+        rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (v for v in glob0(p,*a,**kw) if v!=R/ROOM_ASSIGNMENT_V33)
+        def output(argv,*a,**kw):
+            value=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+                return text if isinstance(value,str) else text.encode()
+            return value
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':room_assignment_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=room_assignment_previous_main()
+        if result==0:print('PASS exact Room Lock Assignment publication; all historical admissions/controls retained; customer access disabled')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

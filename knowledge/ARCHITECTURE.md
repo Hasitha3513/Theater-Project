@@ -3100,3 +3100,173 @@ No unblock/update/delete route or timer is added; immutable bound records retain
 ### Synthetic credit profile compatibility — 2026-11-01
 
 Owner-authorized CN-R1-SYNTHETIC-CREDIT-PROFILE-COMPAT-001 changes only SyntheticCreditSource.load profile admission to exact {synthetic-quotation} or {local-synthetic,synthetic-quotation}, order-independent. Every other set fails closed. This narrowly supersedes the earlier singleton-only credit-source restriction, not the separate local-Docker receipt qualification boundary. Command flag, maintenance semantics, required venue/time/resolution, closed fixture catalogue/amounts/duplicate identity, independent review/allocation, immutable audit, funding/active-hold guards and real receipt DENY are unchanged. No LedgerService, LedgerController or SyntheticBookingAdapter changes. [Verification/publication limits](PROGRESS.md#synthetic-credit-profile-compatibility).
+
+<a id="qualification-room-lock-assignment"></a>
+## CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001 — prepared qualification-only assignment
+
+Owner authorization covers IoT source/ports/adapters, protected create/list/detail, focused tests and this exact DDL proposal only. It does **not** authorize a migration file, migration execution, runtime infrastructure, grants, provider calls or activation. Source baseline `1d36de7dcec9ce38281f92cd94e5d05a94f63356`; published Flyway head V32, exact inventory V1–V30+V32 (31 files); HOLD-state V31 is not admitted. Source preparation is not PostgreSQL/integrated completion.
+
+IoT owns the assignment repository and application transaction. Rooms remains authoritative through `InventoryConstraints.lock/inspect`; no IoT SQL reads Rooms tables. Identity public authorization checks eligible actor, exact membership and independently scoped `iot.lock.assignment.create` / `iot.lock.assignment.read`. Minimal Identity action recognition and exact GET/POST routing are required inbound-security integration; no grants, broad matchers, CSRF exceptions or read-to-create inheritance are added. Lock order: current actor/membership/grants, Rooms venue, stable registry device; grants are rechecked after waits. Existing V27 metadata-insert guard locks the same device before advancing metadata, so current-revision validation participates in that lock boundary.
+
+Feature is absent by default: `cinenest.iot.lock-room-assignment.enabled` must explicitly be true, mode exactly `QUALIFICATION_ONLY`, active profiles exactly `local-synthetic` or `local-synthetic` plus `synthetic-quotation` (order-independent). Other sets fail closed. Default controller/service/JDBC adapter beans are absent. Enabling before separately approved persistence exists fails unavailable; it must not be advertised as ready.
+
+API: POST and GET `/api/admin/venues/{venue}/rooms/{room}/lock-assignments`; GET the same path plus `/{assignment}`. POST JSON has exactly `commandKey` UUID, `deviceId` UUID, `expectedAssignmentRevision` integer zero, `expectedRoomConfiguration` exact Rooms token (not an assumed hexadecimal hash), and positive integer `expectedDeviceMetadataRevision`. Bounded 32768-byte input, strict duplicate members/unknown fields/trailing JSON rejection. Creation returns201; stable actor/command replay returns200 after current authorization and scope checks; changed payload409. A replay returns original committed configuration, not a new assignment. New commands compare current room configuration and latest locked metadata revision. Assignment revision is1; no replacement/reassignment/update/release API is authorized. Create-only uniqueness deliberately prevents any second assignment for the same room or device, including an unqualified one.
+
+List accepts only one optional page0–10000, fixed25 with26-row lookahead and truthful hasNext; no snapshot guarantee across pages. Protected reads have atomic mandatory audit, no-store responses and exact room/venue predicates. Errors400/401/403/404/409/503 reveal no conflicting identities; denial audit uses fixed reasons only and cannot turn audit failure into success. Disabled configuration does not touch persistence. DTO exposes assignment/device/room/venue references, revision, expected configuration/metadata revision, attributable creator/time and replay status; never provider locators, secrets or PINs. State always UNQUALIFIED, physicalAcceptance NOT_VERIFIED, customerAccessEnabled=false. No Access/SmartLock worker wiring, provider dependency or change to inventory, money, lighting or admission.
+
+### Exact DDL — original proposal retained; approved and locally qualified
+
+Subsequent explicit Owner V33 approval admits this exact SQL (SHA-256 `401aeeefc90e6721a5e4b48adb621ebea9c779b286c01315eb2b9c1a81cf390c`). The matching V33 migration now exists and was applied only in the separately authorized disposable qualification databases. Published baseline remains V32 until validated publication. The preceding source-only restriction records the earlier preparation boundary, not a new denial of this later exact approval. No historical migration was edited.
+
+### Exact DDL proposal — NOT APPROVED / NOT CREATED / NOT EXECUTED
+
+Candidate filename **`V33__qualification_room_lock_assignments.sql`**, conditional on a fresh head check before future migration creation. All three tables and six triggers are IoT-owned; reuse existing V16 `cinenest_iot.immutable_history()` (P0001). No new function, role, grant, extension or changes to V1–V30/V32. No cross-module database foreign keys: Rooms public-port lock/inspection establishes room/venue and revision facts; IoT-local FKs bind exact registered identity/metadata. This SQL is an approval proposal inside this existing canonical document, not a Flyway resource.
+
+```sql
+CREATE TABLE cinenest_iot.lock_room_assignment (
+ assignment_id UUID PRIMARY KEY,
+ venue_id UUID NOT NULL,
+ room_id UUID NOT NULL UNIQUE,
+ device_id UUID NOT NULL UNIQUE,
+ assignment_revision BIGINT NOT NULL DEFAULT 1 CHECK(assignment_revision=1),
+ state TEXT NOT NULL DEFAULT 'UNQUALIFIED' CHECK(state='UNQUALIFIED'),
+ customer_access_enabled BOOLEAN NOT NULL DEFAULT FALSE CHECK(NOT customer_access_enabled),
+ room_configuration TEXT NOT NULL CHECK(length(room_configuration) BETWEEN 1 AND 16384),
+ device_metadata_revision BIGINT NOT NULL CHECK(device_metadata_revision>0),
+ created_by UUID NOT NULL,
+ command_key UUID NOT NULL,
+ audit_event_id UUID NOT NULL UNIQUE,
+ audit_action TEXT NOT NULL DEFAULT 'CREATE' CHECK(audit_action='CREATE'),
+ created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp() CHECK(isfinite(created_at)),
+ UNIQUE(created_by,command_key),
+ UNIQUE(assignment_id,venue_id,room_id),
+ UNIQUE(assignment_id,venue_id,room_id,device_id),
+ UNIQUE(assignment_id,venue_id,room_id,device_id,created_by,command_key,audit_event_id),
+ FOREIGN KEY(device_id,venue_id)
+  REFERENCES cinenest_iot.lock_registry_device(device_id,venue_id),
+ FOREIGN KEY(device_id,venue_id,device_metadata_revision)
+  REFERENCES cinenest_iot.lock_registry_revision(device_id,venue_id,revision)
+);
+
+CREATE TABLE cinenest_iot.lock_room_assignment_command (
+ actor_id UUID NOT NULL,
+ command_key UUID NOT NULL,
+ assignment_id UUID NOT NULL UNIQUE,
+ venue_id UUID NOT NULL,
+ room_id UUID NOT NULL,
+ device_id UUID NOT NULL,
+ audit_event_id UUID NOT NULL,
+ request_sha256 BYTEA NOT NULL CHECK(octet_length(request_sha256)=32),
+ recorded_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp() CHECK(isfinite(recorded_at)),
+ PRIMARY KEY(actor_id,command_key),
+ FOREIGN KEY(assignment_id,venue_id,room_id,device_id,actor_id,command_key,audit_event_id)
+  REFERENCES cinenest_iot.lock_room_assignment
+   (assignment_id,venue_id,room_id,device_id,created_by,command_key,audit_event_id)
+  DEFERRABLE INITIALLY DEFERRED
+);
+
+CREATE TABLE cinenest_iot.lock_room_assignment_audit (
+ event_id UUID PRIMARY KEY,
+ actor_id UUID,
+ venue_id UUID,
+ room_id UUID,
+ assignment_id UUID,
+ command_key UUID,
+ action TEXT NOT NULL CHECK(action IN('CREATE','REPLAY','LIST_READ','DETAIL_READ','DENIED')),
+ outcome TEXT NOT NULL CHECK(outcome IN('ALLOW','DENY')),
+ denial_code TEXT CHECK(denial_code IN('INVALID_REQUEST','ACCESS_DENIED','NOT_FOUND','CONFLICT','UNAVAILABLE')),
+ correlation_id UUID NOT NULL,
+ occurred_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp() CHECK(isfinite(occurred_at)),
+ CHECK(
+  (action='DENIED' AND outcome='DENY' AND denial_code IS NOT NULL
+   AND venue_id IS NULL AND room_id IS NULL AND assignment_id IS NULL AND command_key IS NULL)
+  OR
+  (action IN('CREATE','REPLAY','LIST_READ','DETAIL_READ') AND outcome='ALLOW'
+   AND denial_code IS NULL AND actor_id IS NOT NULL AND venue_id IS NOT NULL AND room_id IS NOT NULL
+   AND ((action='CREATE' AND assignment_id IS NOT NULL AND command_key IS NOT NULL)
+     OR (action IN('REPLAY','DETAIL_READ') AND assignment_id IS NOT NULL AND command_key IS NULL)
+     OR (action='LIST_READ' AND assignment_id IS NULL AND command_key IS NULL)))
+ ),
+ UNIQUE(event_id,actor_id,venue_id,room_id,assignment_id,command_key,action),
+ FOREIGN KEY(assignment_id,venue_id,room_id)
+  REFERENCES cinenest_iot.lock_room_assignment(assignment_id,venue_id,room_id)
+  DEFERRABLE INITIALLY DEFERRED
+);
+
+ALTER TABLE cinenest_iot.lock_room_assignment
+ ADD CONSTRAINT lock_assignment_required_command
+ FOREIGN KEY(created_by,command_key)
+ REFERENCES cinenest_iot.lock_room_assignment_command(actor_id,command_key)
+ DEFERRABLE INITIALLY DEFERRED,
+ ADD CONSTRAINT lock_assignment_required_audit
+ FOREIGN KEY(audit_event_id,created_by,venue_id,room_id,assignment_id,command_key,audit_action)
+ REFERENCES cinenest_iot.lock_room_assignment_audit
+  (event_id,actor_id,venue_id,room_id,assignment_id,command_key,action)
+ DEFERRABLE INITIALLY DEFERRED;
+
+CREATE UNIQUE INDEX lock_assignment_one_create_audit
+ ON cinenest_iot.lock_room_assignment_audit(assignment_id) WHERE action='CREATE';
+CREATE INDEX lock_assignment_scope_page
+ ON cinenest_iot.lock_room_assignment(venue_id,room_id,created_at DESC,assignment_id DESC);
+CREATE INDEX lock_assignment_audit_scope
+ ON cinenest_iot.lock_room_assignment_audit(venue_id,room_id,occurred_at DESC,event_id);
+
+CREATE TRIGGER lock_assignment_history BEFORE UPDATE OR DELETE
+ ON cinenest_iot.lock_room_assignment FOR EACH ROW EXECUTE FUNCTION cinenest_iot.immutable_history();
+CREATE TRIGGER lock_assignment_no_truncate BEFORE TRUNCATE
+ ON cinenest_iot.lock_room_assignment FOR EACH STATEMENT EXECUTE FUNCTION cinenest_iot.immutable_history();
+CREATE TRIGGER lock_assignment_command_history BEFORE UPDATE OR DELETE
+ ON cinenest_iot.lock_room_assignment_command FOR EACH ROW EXECUTE FUNCTION cinenest_iot.immutable_history();
+CREATE TRIGGER lock_assignment_command_no_truncate BEFORE TRUNCATE
+ ON cinenest_iot.lock_room_assignment_command FOR EACH STATEMENT EXECUTE FUNCTION cinenest_iot.immutable_history();
+CREATE TRIGGER lock_assignment_audit_history BEFORE UPDATE OR DELETE
+ ON cinenest_iot.lock_room_assignment_audit FOR EACH ROW EXECUTE FUNCTION cinenest_iot.immutable_history();
+CREATE TRIGGER lock_assignment_audit_no_truncate BEFORE TRUNCATE
+ ON cinenest_iot.lock_room_assignment_audit FOR EACH STATEMENT EXECUTE FUNCTION cinenest_iot.immutable_history();
+```
+
+Rollback: disable the new flag/controller/adapter and retain all additive rows/history. No down-migration, truncate, deletion, automatic reassignment or physical command. A future replacement/unassignment lifecycle requires its own contract/authorization and forward migration, not a relaxation of these triggers.
+
+Upgrade qualification after separate SQL/runtime approval: clean V1–V30+V32+V33; populated V32→V33; repeat Flyway validation; exact existing checksums; database-level orphan/cross-venue/metadata-revision/receipt/audit rejection; concurrent room/device/actor-command races; current metadata and Rooms configuration lock-wait races; auth expiry/revocation while waiting; mandatory audit/commit failure rollback; immutable UPDATE/DELETE/TRUNCATE SQLSTATE P0001; read/list scope/CSRF; zero provider, inventory, payment, Access/lighting mutations. None of those PostgreSQL results is inferred from offline tests.
+
+<a id="room-lock-assignment-publication"></a>
+### Exact publication-reconciliation proposal — separate authorization required
+
+No protected validator or historical Room Blocking test has been modified. Proposed next bounded authorization has only two implementation deltas:
+
+1. `knowledge/execution/validate_execution.py`: an additive task-specific successor for CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001. Admit only the following21 current task payloads plus the explicitly proposed historical test below (22 payload paths total), with matching task/source/test/manifest fingerprints. Preserve the complete historical validator prefix and all existing admissions/assertions/negative controls. New successor inventory admits only exact V1–V30+V32+V33; the31 historical migration fingerprints stay frozen, V33 must equal its approved401aeeef…390c digest, V31/unknown/duplicate/renamed/substituted/symlink migrations reject. No broad directory exemptions.
+
+- `backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java`
+- `backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java`
+- `backend/src/main/java/com/cinenest/iot/internal/JdbcLockRoomAssignmentRepository.java`
+- `backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentController.java`
+- `backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentPolicy.java`
+- `backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentRepository.java`
+- `backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentService.java`
+- `backend/src/main/resources/db/migration/V33__qualification_room_lock_assignments.sql`
+- `backend/src/test/java/com/cinenest/LockRoomAssignmentArchitectureTest.java`
+- `backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java`
+- `backend/src/test/java/com/cinenest/identity/internal/LockRoomAssignmentSecurityTest.java`
+- `backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentControllerTest.java`
+- `backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentPolicyTest.java`
+- `backend/src/test/java/com/cinenest/iot/internal/LockRoomAssignmentServiceTest.java`
+- `knowledge/ARCHITECTURE.md`
+- `knowledge/PROGRESS.md`
+- `knowledge/PROJECT.md`
+- `knowledge/execution/status.json`
+- `knowledge/guides/USER_GUIDE.md`
+- `knowledge/manifest.json`
+- `knowledge/product/FEATURE_CATALOG.md`
+
+2. `backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java`: change only the current approved-head expectation from32 to33 and explicitly target32 in its existing populated V30→V32 upgrade check. Keep its expected one original migration,repeat-zero assertion,data preservation,all old concurrency/audit checks unchanged. New V32→V33 upgrade is independently qualified by LockRoomAssignmentPostgresTest. This prevents an unrelated approved migration from changing the historical Room Blocking-only upgrade's scope. It is a source-evidenced future CI incompatibility,not an executed failing test in this bounded window;no extra database was created to run it.
+
+Proposed exact replacements (not yet applied):
+```java
+// Before: current().getVersion().toString() ... isEqualTo("32")
+// After:  current().getVersion().toString() ... isEqualTo("33")
+// Before: var latest=Flyway.configure().dataSource(url,user,password).load();
+// After:  var latest=Flyway.configure().dataSource(url,user,password).target("32").load();
+```
+Original historical-test SHA-256 `66b17cc4e11f10e65626ce54700da6c2869de3b9c438ef3b3cc9dae68ec5375c`; exact proposed-after SHA-256 `fbab0f398d74b3a89d1d567b898aecdc70c64dc4fb0e2cc27aaca960bd062933`.
+
+Required prepublication checks after authorization:exact admitted payload review;successor positive/negative controls;all historical positive/negative controls and QuoteService/Payments/Credit admission regressions;migration inventory/fingerprint and unknown-path injections;KB/manifest/whitespace;affected tests/architecture. No application/provider/production expansion,new runtime window or formal acceptance follows from this proposal. Commit/push/remote exact-source CI only after applicable gates pass.
