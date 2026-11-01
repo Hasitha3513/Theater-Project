@@ -9932,5 +9932,158 @@ def inert_ci_main():
         if result==0:print('PASS exact Bank test V33 head successor;all historical controls preserved;no application/runtime change')
         return result
 
+
+# CN-R1-IOT-PLUG-AND-PLAY-P1-001: exact owner-approved inert foundation successor.
+P1_BASE = '7fa2fe70e9ad61faab0b82e1d0af9fabe8a74df0'
+P1_SUFFIX_SHA256 = '77e0db7accd009c2885a3710e4e92c9adcb53142501362bbf854637dffaa3a91'
+P1_PATHS = ['backend/src/main/java/com/cinenest/iot/LockIntegration.java', 'backend/src/main/java/com/cinenest/iot/internal/LockAdapterCatalog.java', 'backend/src/main/java/com/cinenest/iot/internal/LockCompatibilityPolicy.java', 'backend/src/test/java/com/cinenest/iot/LockIntegrationContractTest.java', 'backend/src/test/java/com/cinenest/iot/internal/LockAdapterCatalogTest.java', 'backend/src/test/java/com/cinenest/iot/internal/LockCompatibilityPolicyTest.java', 'backend/src/test/java/com/cinenest/LockIntegrationArchitectureTest.java', 'knowledge/PROJECT.md', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json']
+P1_HASHES = {'backend/src/main/java/com/cinenest/iot/LockIntegration.java': '69f9c46958354f226af458960fd500e590880979d7b231c503064e927399149d', 'backend/src/main/java/com/cinenest/iot/internal/LockAdapterCatalog.java': '21911dfac316ed7f38d53375515f94129c34b219cc1b704d35917e35eaf56663', 'backend/src/main/java/com/cinenest/iot/internal/LockCompatibilityPolicy.java': 'd8e98e9b8463d07866d8b54b8efb36b9e2f01ade4ee40e266f4f60617deda79f', 'backend/src/test/java/com/cinenest/iot/LockIntegrationContractTest.java': '193794e5a4c912d9ee4f0acd5a20217c730198cf6aa62540d25bf11ba84e5e76', 'backend/src/test/java/com/cinenest/iot/internal/LockAdapterCatalogTest.java': '2f9563184ac4b903c55db754971381f0cd32c8c0eb87b7a52f31ad46b2823758', 'backend/src/test/java/com/cinenest/iot/internal/LockCompatibilityPolicyTest.java': 'bfe30d178a8f6c5f4b0d7631f440f833b15b0852e43198a56c75a16667fa6fb8', 'backend/src/test/java/com/cinenest/LockIntegrationArchitectureTest.java': '77421d1a47d2ea2382e1e5f5be3e4bb5951f520724e11f6234374daef22afecd', 'knowledge/PROJECT.md': 'a3903db94bc735ea66cd91c5f9b5beb4e387112b62866e2f1a1f1f994485ff51', 'knowledge/ARCHITECTURE.md': 'f009ef36c387dc36c14309140da59f797d5031477697b3f95b076581b08a5a6f', 'knowledge/PROGRESS.md': '88fe6de6745b244ccce540c6bc2016a90063032094f6241af778372e9ed98c01', 'knowledge/product/FEATURE_CATALOG.md': 'ef20a8f9149b6f543173086204e58d5dc6890723bb4ccc24c684a87e26527644', 'knowledge/guides/USER_GUIDE.md': '9bbb4773e09b0d3fa8955f8aaff1184fecc792ac23933b11892128b28cfc9ca7', 'knowledge/execution/status.json': '20332b59e2d171d6c3c180367759ad03c2dc38a1593674c2e68bc052afdc10eb'}
+P1_EVIDENCE = {'receipt': '/home/hasitha-wijerathna/Documents/Theater Project/room-blocking-r1/.cache/private-plug-play-p1-oe4oi389/qualification.json', 'sha256': 'be7e10119979eff6a998f7f4c253674426326e92a2e35d69d6813ef4ca73ed44', 'testLogSha256': '79822ec0db74bbbca3d28e533f43c84ece703e90fe69464332a81405c06f1e7d'}
+p1_previous_main = inert_ci_main
+p1_previous_guard = receipt_admission_successor_errors
+
+def p1_tree():
+    data=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',P1_BASE]);result={}
+    for row in data.split(b'\0'):
+        if row:
+            meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+            if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsupported immutable baseline entry')
+            result[name.decode()]=oid.decode()
+    return result
+
+def p1_migration_errors():
+    errors=[];folder=R/'backend/src/main/resources/db/migration'
+    try:
+        if folder.is_symlink() or folder.resolve()!=folder:return ['P1 unsafe migration folder']
+        expected={n:h for n,h in p1_tree().items() if n.startswith('backend/src/main/resources/db/migration/')};actual=[];versions=[]
+        for path in folder.glob('*'):
+            name=path.relative_to(R).as_posix();actual.append(name);match=re.fullmatch(r'V([0-9]+)__[^/]+\.sql',path.name)
+            if match:versions.append(int(match.group(1)))
+            if name not in expected:errors.append('P1 unexpected migration');continue
+            if path.is_symlink() or not path.is_file() or path.resolve()!=path or path.parent!=folder:errors.append('P1 unsafe migration');continue
+            b=path.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=expected[name]:errors.append('P1 migration fingerprint drift')
+        if len(expected)!=32 or len(actual)!=32 or set(actual)!=set(expected):errors.append('P1 exact migration inventory drift')
+        if len(set(versions))!=32 or set(versions)!=set(range(1,31))|{32,33}:errors.append('P1 migration version conflict')
+    except (OSError,ValueError):errors.append('P1 inaccessible/unsafe migration inventory')
+    return errors
+
+def p1_payload_errors():
+    errors=[];owned=set(P1_PATHS)|{'knowledge/execution/validate_execution.py'}
+    before=lambda n:subprocess.check_output(['git','-C',str(R),'show',P1_BASE+':'+n])
+    try:
+        if len(P1_PATHS)!=14 or len(set(P1_PATHS))!=14 or set(P1_HASHES)!=set(P1_PATHS)-{'knowledge/manifest.json'}:return ['P1 incomplete exact payload inventory']
+        for name in owned:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('P1 unsafe/missing payload '+name);continue
+            if name in P1_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=P1_HASHES[name]:errors.append('P1 unauthorized payload '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n";prefix=before('knowledge/execution/validate_execution.py').decode().removesuffix(ending);current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('P1 historical validator prefix changed')
+        suffix=current[len(prefix):];normalized=suffix.replace("P1_SUFFIX_SHA256 = '"+P1_SUFFIX_SHA256+"'","P1_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normalized.encode()).hexdigest()!=P1_SUFFIX_SHA256:errors.append('P1 successor changed')
+        state=json.loads((K/'execution/status.json').read_text());e=state.pop('lockPlugAndPlayP1',{})
+        if state!=json.loads(before('knowledge/execution/status.json')):errors.append('P1 historical registry changed')
+        if e.get('taskId')!='CN-R1-IOT-PLUG-AND-PLAY-P1-001' or e.get('baseline')!=P1_BASE or e.get('authorization')!='EXPLICIT_OWNER_EXACT_14_PAYLOADS_AND_ADDITIVE_SUCCESSOR':errors.append('P1 task/authority mismatch')
+        if e.get('payloadPaths')!=P1_PATHS or e.get('sourceTestFingerprints')!={p:h for p,h in P1_HASHES.items() if p.startswith('backend/')}:errors.append('P1 source ownership/evidence mismatch')
+        if e.get('evidence')!=P1_EVIDENCE or e.get('tests')!={'passed':100,'failed':0,'errors':0,'skipped':0,'newP1':34,'existingRegressions':66}:errors.append('P1 executed evidence mismatch')
+        for field in ['runtimeActivation','providerTraffic','pinGeneration','databaseWrites','migrationsChanged','customerAccessEnabled','formalAcceptanceChanged','facebookResumed','advertisingResumed']:
+            if e.get(field) is not False:errors.append('P1 exclusion drift '+field)
+        if e.get('assignmentState')!='UNQUALIFIED' or e.get('hardwareQualification')!='BLOCKED_DEFERRED_MODEL_SPECIFIC_EVIDENCE' or e.get('progress')!={'releaseCompleted':4,'releaseTotal':21,'criteriaCompleted':15,'criteriaTotal':74,'formalAccepted':0,'requirementsTotal':92}:errors.append('P1 acceptance/invariant drift')
+        for name in ['PROJECT.md','ARCHITECTURE.md','PROGRESS.md','product/FEATURE_CATALOG.md','guides/USER_GUIDE.md']:
+            if not (K/name).read_bytes().startswith(before('knowledge/'+name)):errors.append('P1 historical prose changed '+name)
+        errors.extend(p1_migration_errors());tree=p1_tree()
+        for name in set(tree)-owned:
+            p=R/name
+            if p.is_symlink() or not p.is_file():errors.append('P1 missing/substituted unowned file');continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=tree[name]:errors.append('P1 unowned/history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        if paths!=set(tree)|owned:errors.append('P1 unauthorized/missing repository path')
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',P1_BASE,'--name-only','-z'],text=True),nul=True)
+        if not changed<=owned:errors.append('P1 unauthorized changed path')
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json' and 'sha256' in row:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if json.loads((K/'manifest.json').read_text())!=manifest or (K/'manifest.json').read_bytes()!=(json.dumps(manifest,ensure_ascii=True,indent=2)+'\n').encode():errors.append('P1 manifest drift')
+    except (OSError,ValueError,KeyError,TypeError):errors.append('P1 inaccessible/invalid payload')
+    return errors
+
+def p1_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return p1_payload_errors()
+
+def p1_negative_controls():
+    from unittest.mock import patch
+    assert not p1_successor_errors();print('PASS P1 exact successor positive control')
+    assert not p1_migration_errors();print('PASS P1 exact32 migration inventory/fingerprints')
+    rb0,rt0=Path.read_bytes,Path.read_text
+    for name in list(P1_HASHES)+['knowledge/manifest.json','backend/src/main/java/com/cinenest/access/SmartLock.java','backend/src/main/java/com/cinenest/iot/internal/LockRoomAssignmentService.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert p1_successor_errors(),name
+        print('PASS P1 rejects payload/history mutation '+name)
+    target=R/P1_PATHS[0];file0,link0,resolve0=Path.is_file,Path.is_symlink,Path.resolve
+    with patch.object(Path,'is_file',lambda p:False if p==target else file0(p)):assert p1_successor_errors()
+    print('PASS P1 rejects missing admitted source')
+    with patch.object(Path,'is_symlink',lambda p:True if p==target else link0(p)):assert p1_successor_errors()
+    print('PASS P1 rejects admitted symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.java' if p==target else resolve0(p,*a,**kw)):assert p1_successor_errors()
+    print('PASS P1 rejects admitted traversal')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:s.replace('Read-only execution/coverage validator.','Unauthorized history.',1)),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert p1_successor_errors(),label
+        print('PASS P1 rejects '+label+' mutation')
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('authorization','UNAPPROVED'),('customerAccessEnabled',True),('assignmentState','QUALIFIED'),('evidence',{})]:
+        def bad_record(p,*a,**kw):
+            text=rt0(p,*a,**kw)
+            if p==target:
+                data=json.loads(text);data['lockPlugAndPlayP1'][field]=value;return json.dumps(data)
+            return text
+        with patch.object(Path,'read_text',bad_record):assert p1_successor_errors(),field
+        print('PASS P1 rejects task/evidence mutation '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-p1.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert p1_successor_errors()
+        print('PASS P1 rejects unknown '+command+' path')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('duplicate path',original+[first]),('traversal migration',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert p1_migration_errors(),label
+        print('PASS P1 rejects '+label)
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert p1_migration_errors()
+    print('PASS P1 rejects migration symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.sql' if p==first else resolve0(p,*a,**kw)):assert p1_migration_errors()
+    print('PASS P1 rejects migration resolved escape')
+    for target in [first,R/'backend/src/main/resources/db/migration/V33__qualification_room_lock_assignments.sql']:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert p1_migration_errors()
+        print('PASS P1 rejects migration checksum mutation '+target.name)
+
+receipt_admission_successor_errors=p1_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=p1_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        p1_negative_controls();owned=set(P1_PATHS)|{'knowledge/execution/validate_execution.py'};tracked=set(p1_tree());added=owned-tracked
+        replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',P1_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=data if isinstance(data,str) else data.decode();items=[n for n in text.split(sep) if n and n not in remove];text=sep.join(items)+(sep if items else '')
+                return text if isinstance(data,str) else text.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':p1_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=p1_previous_main()
+        if result==0:print('PASS exact inert Plug Play P1;all historical admissions retained;no runtime or customer access')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

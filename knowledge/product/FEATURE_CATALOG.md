@@ -789,3 +789,8 @@ The closed synthetic-credit source now permits exactly synthetic-quotation alone
 ### Room → Lock Assignment — qualified local backend, publication pending
 
 CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001 now has protected exact-venue create/list/detail, current Rooms/device revision checks, stable command replay, mandatory immutable audit and exact owner-approved V33 persistence. Clean/upgrade and real local HTTP/PostgreSQL qualification PASS; feature remains disabled by default and unpublished pending governance. Every binding remains UNQUALIFIED/customerAccessEnabled=false; it neither makes rooms available nor provisions locks. No Admin screen,production grant,PIN or provider connection. [Scope and DDL](../ARCHITECTURE.md#qualification-room-lock-assignment); [actual qualification](../PROGRESS.md#room-lock-assignment-v33).
+
+<a id="plug-play-lock-p1"></a>
+### Provider-independent Smart Lock P1 — offline foundation only
+
+Implemented inert IoT declarations,exact descriptor catalogue and fail-closed compatibility/replay/read-retry policy;existing S1/V33 reused. No runtime adapter,device discovery,onboarding,connection monitoring,provider traffic,PINs or customer-access activation. Capability declarations do not prove physical support;all assignments remain UNQUALIFIED/customerAccessEnabled=false. Exact model-specific integration and physical egress remain unqualified. [Contract](../ARCHITECTURE.md#plug-play-lock-p1);[execution](../PROGRESS.md#plug-play-lock-p1).

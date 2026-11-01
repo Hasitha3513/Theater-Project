@@ -476,3 +476,8 @@ A conflicting hold/confirmed session/maintenance interval is rejected; the tool 
 ### Room-to-lock assignment availability
 
 The qualification-only room-to-lock assignment backend passed isolated PostgreSQL integration checks. It remains disabled by default and has not been published; there is no new Admin screen or enabled workflow to use. Registration/assignment does not certify installation or enable customer access; do not treat either as physical lock readiness. [Current scope and status](../PROGRESS.md#room-lock-assignment-v33).
+
+<a id="plug-play-lock-p1"></a>
+### Smart Lock Plug & Play P1 availability
+
+P1 supplies offline software contracts only;there is no new Admin screen,device-discovery/onboarding action or usable provider connection. Do not treat registered metadata,room assignment or a compatible declaration as qualified physical access. PIN provisioning/revocation remain disabled and customer access stays false. Actual model selection/vendor integration and installed-door safety qualification are deferred gates. [Execution and limits](../PROGRESS.md#plug-play-lock-p1).

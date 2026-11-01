@@ -28697,5 +28697,68 @@
     "testCompilation": "PASS",
     "localPostgresIntegration": "NOT_EXECUTED_NO_RUNTIME_AUTHORITY",
     "publication": "PENDING_GATES_COMMIT_PUSH_EXACT_SOURCE_CI"
+  },
+  "lockPlugAndPlayP1": {
+    "taskId": "CN-R1-IOT-PLUG-AND-PLAY-P1-001",
+    "baseline": "7fa2fe70e9ad61faab0b82e1d0af9fabe8a74df0",
+    "authorization": "EXPLICIT_OWNER_EXACT_14_PAYLOADS_AND_ADDITIVE_SUCCESSOR",
+    "payloadPaths": [
+      "backend/src/main/java/com/cinenest/iot/LockIntegration.java",
+      "backend/src/main/java/com/cinenest/iot/internal/LockAdapterCatalog.java",
+      "backend/src/main/java/com/cinenest/iot/internal/LockCompatibilityPolicy.java",
+      "backend/src/test/java/com/cinenest/iot/LockIntegrationContractTest.java",
+      "backend/src/test/java/com/cinenest/iot/internal/LockAdapterCatalogTest.java",
+      "backend/src/test/java/com/cinenest/iot/internal/LockCompatibilityPolicyTest.java",
+      "backend/src/test/java/com/cinenest/LockIntegrationArchitectureTest.java",
+      "knowledge/PROJECT.md",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/execution/status.json",
+      "knowledge/manifest.json"
+    ],
+    "sourceTestFingerprints": {
+      "backend/src/main/java/com/cinenest/iot/LockIntegration.java": "69f9c46958354f226af458960fd500e590880979d7b231c503064e927399149d",
+      "backend/src/main/java/com/cinenest/iot/internal/LockAdapterCatalog.java": "21911dfac316ed7f38d53375515f94129c34b219cc1b704d35917e35eaf56663",
+      "backend/src/main/java/com/cinenest/iot/internal/LockCompatibilityPolicy.java": "d8e98e9b8463d07866d8b54b8efb36b9e2f01ade4ee40e266f4f60617deda79f",
+      "backend/src/test/java/com/cinenest/iot/LockIntegrationContractTest.java": "193794e5a4c912d9ee4f0acd5a20217c730198cf6aa62540d25bf11ba84e5e76",
+      "backend/src/test/java/com/cinenest/iot/internal/LockAdapterCatalogTest.java": "2f9563184ac4b903c55db754971381f0cd32c8c0eb87b7a52f31ad46b2823758",
+      "backend/src/test/java/com/cinenest/iot/internal/LockCompatibilityPolicyTest.java": "bfe30d178a8f6c5f4b0d7631f440f833b15b0852e43198a56c75a16667fa6fb8",
+      "backend/src/test/java/com/cinenest/LockIntegrationArchitectureTest.java": "77421d1a47d2ea2382e1e5f5be3e4bb5951f520724e11f6234374daef22afecd"
+    },
+    "evidence": {
+      "receipt": "/home/hasitha-wijerathna/Documents/Theater Project/room-blocking-r1/.cache/private-plug-play-p1-oe4oi389/qualification.json",
+      "sha256": "be7e10119979eff6a998f7f4c253674426326e92a2e35d69d6813ef4ca73ed44",
+      "testLogSha256": "79822ec0db74bbbca3d28e533f43c84ece703e90fe69464332a81405c06f1e7d"
+    },
+    "tests": {
+      "passed": 100,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "newP1": 34,
+      "existingRegressions": 66
+    },
+    "runtimeActivation": false,
+    "providerTraffic": false,
+    "pinGeneration": false,
+    "databaseWrites": false,
+    "migrationsChanged": false,
+    "customerAccessEnabled": false,
+    "formalAcceptanceChanged": false,
+    "facebookResumed": false,
+    "advertisingResumed": false,
+    "assignmentState": "UNQUALIFIED",
+    "hardwareQualification": "BLOCKED_DEFERRED_MODEL_SPECIFIC_EVIDENCE",
+    "progress": {
+      "releaseCompleted": 4,
+      "releaseTotal": 21,
+      "criteriaCompleted": 15,
+      "criteriaTotal": 74,
+      "formalAccepted": 0,
+      "requirementsTotal": 92
+    },
+    "publication": "PREPUBLICATION_SNAPSHOT_PENDING_GATES_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
   }
 }
