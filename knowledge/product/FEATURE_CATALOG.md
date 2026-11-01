@@ -780,3 +780,8 @@ Advertising public-media Unit A is an authorized backend-only qualification work
 ### Local synthetic Room Blocking — CN-R1-ROOM-BLOCK-CONTRACT-001
 
 Disabled-by-default Booking-owned temporary MAINTENANCE creation, protected scoped list/detail and /admin/room-blocking. Rooms remains configuration authority; existing inventory exclusion/calendar enforce overlap rejection including purchased cleaning coverage. Current exact-venue inventory.block.create and independent inventory.read, membership, CSRF, revision checks, immutable idempotent command/audit and audit rollback are required. No automatic reopening, canceled booking, financial/device mutation, production grants or physical-readiness qualification. [Boundary](../ARCHITECTURE.md#room-blocking-ddl-proposal),[local evidence](../PROGRESS.md#room-blocking-local-implementation).
+
+
+### Synthetic credit profile compatibility
+
+The closed synthetic-credit source now permits exactly synthetic-quotation alone or alongside local-synthetic,independent of ordering. Other sets remain denied;no credit,allocation,booking or real-banking authority is granted. No UI workflow changes. [Contract](../ARCHITECTURE.md#synthetic-credit-profile-compatibility),[offline evidence and publication gate](../PROGRESS.md#synthetic-credit-profile-compatibility).

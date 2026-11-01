@@ -9426,5 +9426,172 @@ def inert_ci_main():
         if result==0:print('PASS exact Payments profile compatibility; QuoteService/historical controls preserved; real banking remains disabled')
         return result
 
+# CN-R1-SYNTHETIC-CREDIT-PROFILE-COMPAT-001: exact owner-approved additive successor.
+CREDIT_PROFILE_BASE = '5262171becfc57900ca5c4a3c76e200d50449550'
+CREDIT_PROFILE_SUFFIX_SHA256 = '358ac2c553091ef73718b5b64fa846d742da850f6a47339846b3039eb39683cf'
+CREDIT_PROFILE_HASHES = {'backend/src/main/java/com/cinenest/payments/internal/SyntheticCreditSource.java': '5fb138d45638f1631c40ad6ca9435b3449592eb7c2e49600cadbc91bf7e8a329', 'backend/src/test/java/com/cinenest/payments/internal/SyntheticCreditSourceProfileTest.java': 'b3b12ff58cb1372b9b38aea2f75a6f5432a1a085a18fe0a6cfa166478fa9d1ef', 'knowledge/ARCHITECTURE.md': '968a3866c2dd2e85b44a2bf197770b38c7ce7ec3726db7c42b22bbf493bce354', 'knowledge/PROGRESS.md': 'faf3f7f2bafd6fe7a4e8d77c5c155fd3d86ec5a565093760de0e05d3d0c9b5c9', 'knowledge/product/FEATURE_CATALOG.md': '6f2078a6fd82cd51ecce43e1bc67e65b0f8542410b05da6640257a03d81e6f56', 'knowledge/execution/status.json': 'b96ba7811d1d04aea93c26cf6b6759f1c12ceb446bc60af1da15288e937e3cc0'}
+credit_profile_previous_main = inert_ci_main
+credit_profile_previous_guard = receipt_admission_successor_errors
+
+def credit_profile_migration_errors():
+    """Exact published filenames/blob identities; never infer filenames from versions."""
+    folder=R/'backend/src/main/resources/db/migration';errors=[]
+    tree=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',CREDIT_PROFILE_BASE,'--',str(folder.relative_to(R))])
+    expected={}
+    for row in tree.split(b'\0'):
+        if row:
+            metadata,name=row.split(b'\t',1);mode,kind,oid=metadata.split()
+            if mode not in (b'100644',b'100755') or kind!=b'blob':errors.append('CREDIT PROFILE invalid baseline migration type')
+            expected[name.decode()]=oid.decode()
+    versions=[re.fullmatch(r'V([0-9]+)__[^/]+\.sql',Path(n).name) for n in expected]
+    if len(expected)!=31 or any(v is None for v in versions) or {int(v.group(1)) for v in versions if v}!=set(range(1,31))|{32}:errors.append('CREDIT PROFILE invalid published migration inventory')
+    actual=[];seen_versions=[]
+    try:
+        for path in folder.glob('*'):
+            name=path.relative_to(R).as_posix();actual.append(name)
+            match=re.fullmatch(r'V([0-9]+)__[^/]+\.sql',path.name)
+            if match:seen_versions.append(int(match.group(1)))
+            if name not in expected:errors.append('CREDIT PROFILE unexpected migration path');continue
+            if path.is_symlink() or not path.is_file() or path.resolve()!=path or path.parent!=folder:errors.append('CREDIT PROFILE unsafe migration path');continue
+            data=path.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()!=expected[name]:errors.append('CREDIT PROFILE migration checksum drift')
+        if set(actual)!=set(expected) or len(actual)!=len(expected):errors.append('CREDIT PROFILE exact migration inventory mismatch')
+        if len(seen_versions)!=len(set(seen_versions)):errors.append('CREDIT PROFILE duplicate migration version')
+    except (OSError,ValueError):errors.append('CREDIT PROFILE migration inventory inaccessible/unsafe')
+    return errors
+
+def credit_profile_payload_errors():
+    errors=[]
+    owned=set(CREDIT_PROFILE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+    before=lambda n:subprocess.check_output(['git','-C',str(R),'show',CREDIT_PROFILE_BASE+':'+n])
+    for n,h in CREDIT_PROFILE_HASHES.items():
+        p=R/n
+        if Path(n).as_posix()!=n or '..' in Path(n).parts or p.is_symlink() or not p.is_file() or p.resolve()!=p or hashlib.sha256(p.read_bytes()).hexdigest()!=h:errors.append('CREDIT PROFILE unadmitted payload '+n)
+    if errors:return errors
+    errors.extend(credit_profile_migration_errors())
+    e=json.loads((K/'execution/status.json').read_text()).get('syntheticCreditProfileCompatibility',{})
+    if e.get('taskId')!='CN-R1-SYNTHETIC-CREDIT-PROFILE-COMPAT-001' or (e.get('sourceAuthorization')!='EXPLICIT_OWNER_SINGLE_PREDICATE_AND_FOCUSED_OFFLINE_TESTS' or e.get('successorAuthorization')!='EXPLICIT_OWNER_EXACT_ADDITIVE_CREDIT_SUCCESSOR'):errors.append('CREDIT PROFILE task/authority missing')
+    if e.get('approvedProfileSets')!=[['synthetic-quotation'],['local-synthetic','synthetic-quotation']]:errors.append('CREDIT PROFILE exact profile scope drift')
+    for key in ['productionEnabled','realPayments','realInstructionsPublished','realReceiptsProcessed','bookingConfirmationChanged','runtimeGrants','facebookResumed','advertisingResumed','acceptanceChanged']:
+        if e.get(key) is not False:errors.append('CREDIT PROFILE exclusion drift '+key)
+    for key in ['databaseWrites','applicationServiceStarts','providerRequests']:
+        if e.get(key)!=0:errors.append('CREDIT PROFILE unauthorized runtime operation '+key)
+    if [e.get(k) for k in ['requirements','criteria','checkedCriteria','formallyAccepted']]!=[92,74,15,0]:errors.append('CREDIT PROFILE acceptance drift')
+    current=(K/'execution/validate_execution.py').read_text()
+    ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+    prefix=before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+    if not current.startswith(prefix):errors.append('CREDIT PROFILE historical validator modified')
+    tail=current[len(prefix):]
+    normalized=tail.replace("CREDIT_PROFILE_SUFFIX_SHA256 = \'"+CREDIT_PROFILE_SUFFIX_SHA256+"\'", "CREDIT_PROFILE_SUFFIX_SHA256 = \'"+'0'*64+"\'",1)
+    if hashlib.sha256(normalized.encode()).hexdigest()!=CREDIT_PROFILE_SUFFIX_SHA256:errors.append('CREDIT PROFILE successor implementation modified')
+    tree=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',CREDIT_PROFILE_BASE]);blobs={}
+    for row in tree.split(b'\0'):
+        if row:
+            metadata,name=row.split(b'\t',1);mode,kind,oid=metadata.split();blobs[name.decode()]=oid.decode()
+    tracked=set(blobs)
+    for n in tracked-owned:
+        p=R/n
+        if p.is_symlink() or not p.is_file():errors.append('CREDIT PROFILE unowned/history drift '+n);continue
+        data=p.read_bytes()
+        if hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()!=blobs[n]:errors.append('CREDIT PROFILE unowned/history drift '+n)
+    current_paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+    if not current_paths<=tracked|owned:errors.append('CREDIT PROFILE unauthorized new path')
+    changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',CREDIT_PROFILE_BASE,'--name-only','-z'],text=True),nul=True)
+    if not changed<=owned:errors.append('CREDIT PROFILE unauthorized changed path')
+    manifest=json.loads(before('knowledge/manifest.json'))
+    for row in manifest['files']:
+        if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json':row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+    if json.loads((K/'manifest.json').read_text())!=manifest:errors.append('CREDIT PROFILE manifest drift')
+    if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,ensure_ascii=True,indent=2)+'\n').encode():errors.append('CREDIT PROFILE manifest byte drift')
+    return errors
+
+def credit_profile_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return credit_profile_payload_errors()
+
+def credit_profile_negative_controls():
+    from unittest.mock import patch
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob
+    original=list(folder.glob('*'));first=sorted(original)[0]
+    assert not credit_profile_migration_errors()
+    print('PASS CREDIT PROFILE exact published migration inventory/checksums')
+    inventories=[('extra migration',original+[folder/'V27__unapproved.sql']),
+                 ('missing migration',[p for p in original if p!=first]),
+                 ('renamed migration',[first.with_name(first.stem+'_renamed.sql') if p==first else p for p in original]),
+                 ('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__duplicate.sql')]),
+                 ('duplicate path',original+[first]),
+                 ('traversal path',original+[folder/'..'/'outside.sql'])]
+    for label,inventory in inventories:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(inventory) if p==folder else glob0(p,*a,**kw)):assert credit_profile_migration_errors(),label
+        print('PASS CREDIT PROFILE rejects '+label)
+    symlink0=Path.is_symlink
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else symlink0(p)):assert credit_profile_migration_errors()
+    print('PASS CREDIT PROFILE rejects migration symlink')
+    resolve0=Path.resolve
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.sql' if p==first else resolve0(p,*a,**kw)):assert credit_profile_migration_errors()
+    print('PASS CREDIT PROFILE rejects migration resolved-path escape')
+    rb0=Path.read_bytes
+    cases=[('backend/src/main/java/com/cinenest/payments/internal/SyntheticCreditSource.java','approved source mutation'),
+           ('backend/src/main/java/com/cinenest/payments/internal/BankPolicy.java','unowned BankPolicy source mutation'),
+           ('backend/src/test/java/com/cinenest/payments/internal/SyntheticCreditSourceProfileTest.java','focused test mutation'),
+           ('knowledge/PROGRESS.md','historical acceptance mutation'),
+           ('knowledge/execution/status.json','task registry mutation'),
+           ('knowledge/manifest.json','manifest mutation'),
+           ('backend/src/main/java/com/cinenest/pricing/internal/QuoteService.java','unowned QuoteService source mutation')]
+    for name,label in cases:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert credit_profile_successor_errors(),label
+        print('PASS CREDIT PROFILE rejects '+label)
+    target=K/'execution/validate_execution.py';rt0=Path.read_text
+    for label,mutate in [('historical guard mutation',lambda t:t.replace('Read-only execution/coverage validator.','Changed historical validator.',1)),('successor mutation',lambda t:t+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert credit_profile_successor_errors(),label
+        print('PASS CREDIT PROFILE rejects '+label)
+    out0=subprocess.check_output
+    def unknown(argv,*a,**kw):
+        value=out0(argv,*a,**kw)
+        if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'ls-files' in argv:
+            extra='backend/unauthorized-profile-source.java\0';return value+extra if isinstance(value,str) else value+extra.encode()
+        return value
+    with patch.object(subprocess,'check_output',unknown):assert credit_profile_successor_errors()
+    print('PASS CREDIT PROFILE rejects unknown path')
+    target=K/'execution/status.json'
+    def unknown_task(p,*a,**kw):
+        data=rb0(p,*a,**kw)
+        if p==target:
+            state=json.loads(data);state['syntheticCreditProfileCompatibility']['taskId']='UNAUTHORIZED_TASK';return json.dumps(state).encode()
+        return data
+    with patch.object(Path,'read_bytes',unknown_task):assert credit_profile_successor_errors()
+    print('PASS CREDIT PROFILE rejects unknown task identity')
+    target=R/'backend/src/main/java/com/cinenest/payments/internal/SyntheticCreditSource.java';file0=Path.is_file;link0=Path.is_symlink
+    with patch.object(Path,'is_file',lambda p:False if p==target else file0(p)):assert credit_profile_successor_errors()
+    print('PASS CREDIT PROFILE rejects missing admitted source')
+    with patch.object(Path,'is_symlink',lambda p:True if p==target else link0(p)):assert credit_profile_successor_errors()
+    print('PASS CREDIT PROFILE rejects substituted admitted source')
+
+receipt_admission_successor_errors=credit_profile_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=credit_profile_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        credit_profile_negative_controls()
+        owned=set(CREDIT_PROFILE_HASHES)|{'knowledge/execution/validate_execution.py','knowledge/manifest.json'}
+        tracked=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-tree','-r','--name-only','-z',CREDIT_PROFILE_BASE],text=True),nul=True)
+        added=owned-tracked;replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',CREDIT_PROFILE_BASE+':'+n]) for n in owned&tracked}
+        rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            value=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=value if isinstance(value,str) else value.decode();paths=[n for n in text.split(sep) if n and n not in remove];text=sep.join(paths)+(sep if paths else '')
+                return text if isinstance(value,str) else text.encode()
+            return value
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':credit_profile_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=credit_profile_previous_main()
+        if result==0:print('PASS exact SyntheticCreditSource profile compatibility; Payments/QuoteService/historical controls preserved; real banking remains disabled')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

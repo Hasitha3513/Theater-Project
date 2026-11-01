@@ -28239,5 +28239,68 @@
     "release1Total": 21,
     "publication": "PREPUBLICATION_SNAPSHOT;ACTUAL_COMMIT_AND_CI_RECEIPT_REPORTED_SEPARATELY",
     "readingReuse": "Existing verified full-reading ledger plus controlled Unit A,Room Blocking,QuoteService successors;114task-checkout KB files accounted;2unchanged ownerDOCX preserved in original workspace;no fresh binary visual review claimed"
+  },
+  "syntheticCreditProfileCompatibility": {
+    "task": "CN-R1-SYNTHETIC-CREDIT-PROFILE-COMPAT-001",
+    "baseline": "5262171becfc57900ca5c4a3c76e200d50449550",
+    "status": "OFFLINE_VERIFIED_SUCCESSOR_VALIDATED_PUBLICATION_PENDING",
+    "sourcePath": "backend/src/main/java/com/cinenest/payments/internal/SyntheticCreditSource.java",
+    "testPath": "backend/src/test/java/com/cinenest/payments/internal/SyntheticCreditSourceProfileTest.java",
+    "approvedProfileSets": [
+      [
+        "synthetic-quotation"
+      ],
+      [
+        "local-synthetic",
+        "synthetic-quotation"
+      ]
+    ],
+    "tests": {
+      "total": 112,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "newFocused": 21,
+      "redFailures": 4,
+      "redErrors": 2
+    },
+    "httpE2E": "NOT_RUN_NO_RUNTIME_AUTHORITY",
+    "databaseBackedLedgerTests": "NOT_RERUN;UNCHANGED_SOURCE_AND_HISTORICAL_CI_ONLY",
+    "databaseWrites": 0,
+    "applicationServiceStarts": 0,
+    "providerRequests": 0,
+    "migrationInventory": "31_EXACT_PATHS_AND_BYTES_MATCH_BASELINE_V1-V30_PLUS_V32",
+    "publication": "PREPUBLICATION_SNAPSHOT;REMOTE_COMMIT_AND_CI_REPORTED_SEPARATELY",
+    "acceptanceChanged": false,
+    "evidencePath": "PROGRESS.md#synthetic-credit-profile-compatibility",
+    "taskId": "CN-R1-SYNTHETIC-CREDIT-PROFILE-COMPAT-001",
+    "sourceAuthorization": "EXPLICIT_OWNER_SINGLE_PREDICATE_AND_FOCUSED_OFFLINE_TESTS",
+    "successorAuthorization": "EXPLICIT_OWNER_EXACT_ADDITIVE_CREDIT_SUCCESSOR",
+    "requirements": 92,
+    "criteria": 74,
+    "checkedCriteria": 15,
+    "formallyAccepted": 0,
+    "productionEnabled": false,
+    "realPayments": false,
+    "realInstructionsPublished": false,
+    "realReceiptsProcessed": false,
+    "bookingConfirmationChanged": false,
+    "runtimeGrants": false,
+    "facebookResumed": false,
+    "advertisingResumed": false,
+    "publicationTests": {
+      "junit": 153,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "quoteProfileRegression": 41,
+      "governancePassRecords": 479,
+      "governanceFailRecords": 0,
+      "newSuccessorNegativeControls": 21,
+      "inheritedPassRecords": 456,
+      "kbManifest": "PASS",
+      "whitespace": "PASS",
+      "gitConnectivity": "PASS_DANGLING_OBJECTS_PRESERVED"
+    }
   }
 }
