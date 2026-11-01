@@ -143,6 +143,8 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/extension-quotes").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/cancellation","/api/admin/venues/*/bookings/*/cancellation").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/cancellations","/api/admin/venues/*/bookings/*/cancellations").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/bank/instruction-proposals/*").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/bank/instruction-proposals","/api/admin/venues/*/bank/instruction-proposals/*/review","/api/admin/venues/*/bank/instruction-proposals/*/publish").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/venues/*/bank/instructions/*","/api/admin/venues/*/bank/requests/*/instructions").authenticated()
                 .anyRequest().denyAll(); })
             .exceptionHandling(errors -> errors

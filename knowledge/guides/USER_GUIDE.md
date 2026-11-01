@@ -481,3 +481,12 @@ The qualification-only room-to-lock assignment backend passed isolated PostgreSQ
 ### Smart Lock Plug & Play P1 availability
 
 P1 supplies offline software contracts only;there is no new Admin screen,device-discovery/onboarding action or usable provider connection. Do not treat registered metadata,room assignment or a compatible declaration as qualified physical access. PIN provisioning/revocation remain disabled and customer access stays false. Actual model selection/vendor integration and installed-door safety qualification are deferred gates. [Execution and limits](../PROGRESS.md#plug-play-lock-p1).
+
+
+## Independent staging bank instruction publication — source preparation
+
+Backend-only preparation CN-R1-BANK-INSTRUCTION-PUBLICATION-001 is not an available production/operator workflow. No new UI or running URL is supplied. After separately approved persistence, runtime and grants, an eligible exact-venue proposer would submit the fixed non-payable snapshot; a different authorized publisher would review and publish that exact revision. Self-review/publication and stale revisions are denied. No bank details or customer receipts may be submitted. Current feature remains disabled and schema-blocked; [verified limits](../PROGRESS.md#bank-instruction-publication-preparation).
+
+V34 migration source has separate Owner schema approval and is prepared only. It has not been applied; do not attempt this workflow as a running feature. Runtime qualification and publication remain gated.
+
+Isolated V34 PostgreSQL qualification has passed. This does not make the backend feature publicly available: no operator runtime, UI, production grants or real-account workflow was activated. Publication/reconciliation remains gated; existing safety instructions unchanged.

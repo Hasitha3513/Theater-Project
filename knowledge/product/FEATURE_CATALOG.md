@@ -794,3 +794,12 @@ CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001 now has protected exact-venue create/list/det
 ### Provider-independent Smart Lock P1 — offline foundation only
 
 Implemented inert IoT declarations,exact descriptor catalogue and fail-closed compatibility/replay/read-retry policy;existing S1/V33 reused. No runtime adapter,device discovery,onboarding,connection monitoring,provider traffic,PINs or customer-access activation. Capability declarations do not prove physical support;all assignments remain UNQUALIFIED/customerAccessEnabled=false. Exact model-specific integration and physical egress remain unqualified. [Contract](../ARCHITECTURE.md#plug-play-lock-p1);[execution](../PROGRESS.md#plug-play-lock-p1).
+
+
+## Independent staging bank instruction publication — source preparation
+
+CN-R1-BANK-INSTRUCTION-PUBLICATION-001: backend-only proposed/reviewed/published staging snapshots, separate exact-venue proposer/publisher/read permissions, immutable receipts and audit. SOURCE_PREPARED_OFFLINE_TESTED; default disabled; persistence/runtime/publication admission pending. Only existing non-payable references; real banking/receipts remain denied. No Admin UI added. See [canonical technical scope](../ARCHITECTURE.md#bank-instruction-publication-ddl) and [actual test evidence](../PROGRESS.md#bank-instruction-publication-preparation). No requirement acceptance inferred.
+
+Persistence follow-up: exact approved V34 migration source now exists; no database execution/qualification or operational availability claimed. Existing non-payable/default-disabled boundaries unchanged.
+
+Latest V34 qualification: BANK_INSTRUCTION_V34_PG_PASS. Actual clean/populated migrations, committed fixture, independent publication, real database concurrency/idempotency/mandatory-audit rollback and immutable history verified. Feature remains default-disabled and unpublished pending repository admission; no real banking or formal acceptance. Canonical evidence in PROGRESS.

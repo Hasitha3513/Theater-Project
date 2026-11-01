@@ -3281,3 +3281,136 @@ Descriptor declares explicit device-family/firmware sets,without wildcard or man
 Provision/revoke policy methods return OPERATION_DISABLED before inspecting/invoking any adapter,including null requests. RetryPolicy is a caller-explicit finite declaration only;pure retry decisions permit bounded read-status/connectivity retries for timeout/unavailable within the deadline;registration,discovery,provisioning,revocation,unknown/rejected results and exhausted budgets stop. No timer/thread,sleep,scheduler,retry execution or transport qualification. AuditIntent is a validated redacted immutable reference/hash/reason DTO only,not a persisted journal;pure replay comparison preserves actor/command/correlation/binding/hash/reason and rejects changed payload. Existing V27/V33 audits remain unchanged;no new atomic database-audit claim.
 
 Tests prove immutable declarations,strict identities,capability states,missing firmware/metadata,scope/revision/clock boundaries,unsupported PINs,cloud-ack nonpromotion,S1 reuse,read-retry bounds,zero adapter invocations for credential operations,redacted audit intent and production dependency/Modulith boundaries. No DDL or changes to V1–V30/V32/V33;V31 remains HOLD. Real reference resolution,secure runtime onboarding,provider SDK/API/credentials,monitoring workers,qualified hardware/firmware/egress and any persistence extension require separate exact authority. [Owner limits](PROJECT.md#plug-play-lock-p1);[evidence](PROGRESS.md#plug-play-lock-p1).
+
+
+## Independent staging bank instruction publication — source preparation
+<a id="bank-instruction-publication-ddl"></a>
+
+CN-R1-BANK-INSTRUCTION-PUBLICATION-001; baseline be01cf6caf6af6fcf3d736401cae72e25d28a9fe. Exact approved source inventory: seven production/five test paths in private `.cache/private-bank-instruction-publication-816170119417/cinenest-instruction-pub-paths.json`. Payments owns the policy, application service, port and JDBC adapter; Identity only defines independent action checks and authenticated routes. No cross-module repositories, UI, runtime startup or provider integration added.
+
+Default-disabled `cinenest.bank.instruction-publication.enabled`; when enabled, mode must be STAGING_ONLY and profiles exactly synthetic-quotation or local-synthetic+synthetic-quotation (order-independent). POST `/api/admin/venues/{venueId}/bank/instruction-proposals`, GET `.../{proposalId}`, POST `.../{proposalId}/review`, POST `.../{proposalId}/publish`. PROPOSE fields: commandKey, expectedRevision=0, instructionVersion, reference, referenceVersion, contentSha256, effectiveFrom, effectiveUntil. REVIEW/PUBLISH: commandKey, expectedRevision, snapshotHash. Strict JSON/application-json, bounded actual request read ≤16KiB; extra/duplicate fields and query parameters denied. UUID/date/hash validation; immutable closed fixture resolution, no bank-account input. Dedicated bank.instructions.propose / bank.instructions.publish, existing bank.instructions.read; current eligibility/membership/grants and CSRF required. No grants assigned.
+
+Responses expose proposal/revision/state/hash/effective times and fixed non-payable fixture only, private no-store. 201 new proposal; 200 successful transitions/scoped reads/replays; sanitized 400 invalid request,403 scope/separation,404 disabled/not found,409 stale/conflict/changed replay,503 unavailable/audit failure. Unknown errors never expose SQL or credentials. Snapshot and canonical payload hashes bind venue/target/action/body. Actor/key replay returns its original receipt after current authorization. Review cannot be replaced by a different publisher. Account/grant/proposal locks plus unique constraints are designed to serialize mutations; actual PostgreSQL race qualification is pending. Mandatory success audit and publication are atomic; model rollback verified. Existing V26 revision insertion is append-only; existing request-bound versions are never rewritten.
+
+**Exact additive DDL proposal — NOT APPROVED / NOT EXECUTED.** Published inventory independently matches V1–V30+V32+V33 (32 exact files/fingerprints), head33. No migration file created. Candidate next version must be rechecked after separate schema approval. Proposal SHA-256 `50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98`. Three Payments-owned journals; two scope/time indexes; three new trigger functions; eight triggers; cyclic deferred command/audit identity FKs; existing immutable_history guard reused. No seeds, grants or historical schema edits. Empty-only journal reset requires all three pre-held ACCESS EXCLUSIVE locks, READ COMMITTED and all journals empty; all other TRUNCATE cases denied23514. Stored history is never removable by this mechanism.
+
+```sql
+-- PROPOSAL ONLY. Not a Flyway migration. NOT approved for execution.
+-- Three Payments-owned append-only journals; no account data, seeds, grants or historical rewrites.
+CREATE TABLE cinenest_payments.bank_instruction_proposal (
+ proposal_id UUID PRIMARY KEY, venue_id UUID NOT NULL, proposer_id UUID NOT NULL,
+ instruction_version TEXT NOT NULL CHECK(instruction_version ~ '^SYNTHETIC-[A-Za-z0-9_-]{1,80}$'),
+ reference_id UUID NOT NULL, reference_version UUID NOT NULL,
+ content_sha256 TEXT NOT NULL CHECK(content_sha256 ~ '^[0-9a-f]{64}$'),
+ effective_from TIMESTAMPTZ NOT NULL, effective_until TIMESTAMPTZ NOT NULL,
+ snapshot_sha256 TEXT NOT NULL CHECK(snapshot_sha256 ~ '^[0-9a-f]{64}$'),
+ created_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
+ CHECK(effective_from<effective_until), CHECK(created_at<=effective_from),
+ CHECK(reference_id='38c19812-2358-3b67-8f44-61cb0e4a51f2'::uuid AND ((reference_version='37dcd14c-03dc-3cb8-89b7-c193f189453f'::uuid AND content_sha256='a999aefc7ca927c04b5e94c040910ca4f789751b03491e5d15ad6a421e27f8d6') OR (reference_version='518a353d-1cdc-340a-8f10-9677dfe592f4'::uuid AND content_sha256='e90aa98fa5782e1a39554760dddef34c2e9c0c680d3043bf40e2d3addf871952'))),
+ UNIQUE(proposal_id,venue_id)
+);
+CREATE TABLE cinenest_payments.bank_instruction_publication_command (
+ command_id UUID PRIMARY KEY, actor_id UUID NOT NULL, command_key UUID NOT NULL,
+ venue_id UUID NOT NULL, proposal_id UUID NOT NULL, action TEXT NOT NULL CHECK(action IN ('PROPOSE','REVIEW','PUBLISH')),
+ payload_sha256 TEXT NOT NULL CHECK(payload_sha256 ~ '^[0-9a-f]{64}$'),
+ expected_revision BIGINT NOT NULL, revision BIGINT NOT NULL, state TEXT NOT NULL,
+ reviewer_id UUID, published_revision_id UUID REFERENCES cinenest_payments.bank_instruction_revision(instruction_revision_id),
+ occurred_at TIMESTAMPTZ NOT NULL, correlation_id UUID NOT NULL, audit_id UUID NOT NULL UNIQUE,
+ UNIQUE(actor_id,command_key), UNIQUE(proposal_id,revision), UNIQUE(published_revision_id),
+ UNIQUE(command_id,actor_id,venue_id,proposal_id,action,occurred_at,correlation_id,audit_id),
+ FOREIGN KEY(proposal_id,venue_id) REFERENCES cinenest_payments.bank_instruction_proposal(proposal_id,venue_id),
+ CHECK((action='PROPOSE' AND expected_revision=0 AND revision=1 AND state='PROPOSED' AND reviewer_id IS NULL AND published_revision_id IS NULL)
+ OR (action='REVIEW' AND expected_revision=1 AND revision=2 AND state='REVIEWED' AND reviewer_id IS NOT NULL AND reviewer_id=actor_id AND published_revision_id IS NULL)
+ OR (action='PUBLISH' AND expected_revision=2 AND revision=3 AND state='PUBLISHED' AND reviewer_id IS NOT NULL AND reviewer_id=actor_id AND published_revision_id IS NOT NULL))
+);
+CREATE TABLE cinenest_payments.bank_instruction_publication_audit (
+ audit_id UUID PRIMARY KEY, command_id UUID UNIQUE, actor_id UUID, venue_id UUID, proposal_id UUID,
+ action TEXT NOT NULL CHECK(action IN ('PROPOSE','REVIEW','PUBLISH','READ','INVALID')),
+ outcome TEXT NOT NULL CHECK(outcome IN ('ALLOW','DENY')),
+ reason_code TEXT NOT NULL CHECK(reason_code IN ('STAGING_COMMAND','SCOPED_READ','ACCESS_DENIED','CONFLICT','INVALID_REQUEST','UNAVAILABLE')),
+ occurred_at TIMESTAMPTZ NOT NULL, correlation_id UUID NOT NULL,
+ recorded_at TIMESTAMPTZ NOT NULL DEFAULT clock_timestamp(),
+ UNIQUE(audit_id,command_id,actor_id,venue_id,proposal_id,action,occurred_at,correlation_id),
+ FOREIGN KEY(proposal_id,venue_id) REFERENCES cinenest_payments.bank_instruction_proposal(proposal_id,venue_id),
+ CHECK((outcome='ALLOW' AND actor_id IS NOT NULL AND venue_id IS NOT NULL AND proposal_id IS NOT NULL AND
+ ((action IN ('PROPOSE','REVIEW','PUBLISH') AND reason_code='STAGING_COMMAND' AND command_id IS NOT NULL)
+ OR (action='READ' AND reason_code='SCOPED_READ' AND command_id IS NULL)))
+ OR (outcome='DENY' AND command_id IS NULL AND reason_code IN ('ACCESS_DENIED','CONFLICT','INVALID_REQUEST','UNAVAILABLE')))
+);
+ALTER TABLE cinenest_payments.bank_instruction_publication_command ADD CONSTRAINT publication_command_audit_fk
+ FOREIGN KEY(audit_id,command_id,actor_id,venue_id,proposal_id,action,occurred_at,correlation_id)
+ REFERENCES cinenest_payments.bank_instruction_publication_audit(audit_id,command_id,actor_id,venue_id,proposal_id,action,occurred_at,correlation_id)
+ DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE cinenest_payments.bank_instruction_publication_audit ADD CONSTRAINT publication_audit_command_fk
+ FOREIGN KEY(command_id,actor_id,venue_id,proposal_id,action,occurred_at,correlation_id,audit_id)
+ REFERENCES cinenest_payments.bank_instruction_publication_command(command_id,actor_id,venue_id,proposal_id,action,occurred_at,correlation_id,audit_id)
+ DEFERRABLE INITIALLY DEFERRED;
+CREATE INDEX instruction_proposal_scope ON cinenest_payments.bank_instruction_proposal(venue_id,created_at DESC,proposal_id);
+CREATE INDEX instruction_publication_audit_scope ON cinenest_payments.bank_instruction_publication_audit(venue_id,recorded_at DESC,audit_id);
+CREATE FUNCTION cinenest_payments.validate_instruction_publication_command() RETURNS trigger LANGUAGE plpgsql AS $$
+DECLARE p cinenest_payments.bank_instruction_proposal%ROWTYPE; previous cinenest_payments.bank_instruction_publication_command%ROWTYPE;
+BEGIN
+ SELECT * INTO p FROM cinenest_payments.bank_instruction_proposal WHERE proposal_id=NEW.proposal_id AND venue_id=NEW.venue_id FOR UPDATE;
+ IF NOT FOUND OR NEW.occurred_at>clock_timestamp() OR NEW.occurred_at>p.effective_from THEN RAISE EXCEPTION 'Invalid staging proposal context' USING ERRCODE='23514';END IF;
+ IF NEW.action='PROPOSE' THEN
+  IF NEW.actor_id<>p.proposer_id OR EXISTS(SELECT 1 FROM cinenest_payments.bank_instruction_publication_command WHERE proposal_id=p.proposal_id) THEN RAISE EXCEPTION 'Invalid staging proposal command' USING ERRCODE='23514';END IF;
+ ELSE
+  SELECT * INTO previous FROM cinenest_payments.bank_instruction_publication_command WHERE proposal_id=p.proposal_id ORDER BY revision DESC LIMIT 1;
+  IF NOT FOUND OR NEW.actor_id=p.proposer_id OR previous.revision<>NEW.expected_revision THEN RAISE EXCEPTION 'Independent current staging decision required' USING ERRCODE='23514';END IF;
+  IF NEW.action='REVIEW' AND previous.state<>'PROPOSED' THEN RAISE EXCEPTION 'Pending proposal required' USING ERRCODE='23514';END IF;
+  IF NEW.action='PUBLISH' THEN
+   IF previous.state<>'REVIEWED' OR previous.reviewer_id IS DISTINCT FROM NEW.actor_id THEN RAISE EXCEPTION 'Reviewed publisher required' USING ERRCODE='23514';END IF;
+   PERFORM 1 FROM cinenest_payments.bank_instruction_revision i WHERE i.instruction_revision_id=NEW.published_revision_id AND i.venue_id=p.venue_id
+    AND i.instruction_version=p.instruction_version AND i.mode='STAGING_ONLY' AND i.reference_id=p.reference_id AND i.reference_version=p.reference_version
+    AND i.content_sha256=p.content_sha256 AND i.effective_from=p.effective_from AND i.effective_until=p.effective_until
+    AND i.proposer_id=p.proposer_id AND i.approver_id=NEW.actor_id AND i.approval_reference=NEW.command_id AND i.approval_sha256=p.snapshot_sha256 AND i.approved_at=NEW.occurred_at;
+   IF NOT FOUND THEN RAISE EXCEPTION 'Published snapshot mismatch' USING ERRCODE='23514';END IF;
+  END IF;
+ END IF;
+ RETURN NEW;
+END $$;
+CREATE TRIGGER validate_publication_command BEFORE INSERT ON cinenest_payments.bank_instruction_publication_command
+ FOR EACH ROW EXECUTE FUNCTION cinenest_payments.validate_instruction_publication_command();
+CREATE FUNCTION cinenest_payments.require_instruction_proposal_receipt() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+ IF NOT EXISTS(SELECT 1 FROM cinenest_payments.bank_instruction_publication_command WHERE proposal_id=NEW.proposal_id AND venue_id=NEW.venue_id AND actor_id=NEW.proposer_id AND action='PROPOSE' AND revision=1)
+ THEN RAISE EXCEPTION 'Mandatory proposal receipt required' USING ERRCODE='23514';END IF;
+ RETURN NEW;
+END $$;
+CREATE CONSTRAINT TRIGGER instruction_proposal_receipt AFTER INSERT ON cinenest_payments.bank_instruction_proposal
+ DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION cinenest_payments.require_instruction_proposal_receipt();
+-- No stored history can be truncated. Empty reset is allowed only with pre-held locks on all three journals.
+CREATE FUNCTION cinenest_payments.instruction_publication_empty_truncate_guard() RETURNS trigger LANGUAGE plpgsql AS $$
+DECLARE locked INTEGER;
+BEGIN
+ SELECT count(DISTINCT relation) INTO locked FROM pg_locks WHERE pid=pg_backend_pid() AND granted AND mode='AccessExclusiveLock'
+ AND relation IN ('cinenest_payments.bank_instruction_proposal'::regclass,'cinenest_payments.bank_instruction_publication_command'::regclass,'cinenest_payments.bank_instruction_publication_audit'::regclass);
+ IF TG_OP<>'TRUNCATE' OR TG_LEVEL<>'STATEMENT' OR current_setting('transaction_isolation')<>'read committed' OR locked<>3
+ THEN RAISE EXCEPTION 'Empty journal reset requires all locks and read committed' USING ERRCODE='23514';END IF;
+ IF EXISTS(SELECT 1 FROM cinenest_payments.bank_instruction_proposal) OR EXISTS(SELECT 1 FROM cinenest_payments.bank_instruction_publication_command) OR EXISTS(SELECT 1 FROM cinenest_payments.bank_instruction_publication_audit)
+ THEN RAISE EXCEPTION 'Publication history immutable' USING ERRCODE='23514';END IF;
+ RETURN NULL;
+END $$;
+CREATE TRIGGER immutable_instruction_proposal BEFORE UPDATE OR DELETE ON cinenest_payments.bank_instruction_proposal FOR EACH STATEMENT EXECUTE FUNCTION cinenest_payments.immutable_history();
+CREATE TRIGGER immutable_instruction_publication_command BEFORE UPDATE OR DELETE ON cinenest_payments.bank_instruction_publication_command FOR EACH STATEMENT EXECUTE FUNCTION cinenest_payments.immutable_history();
+CREATE TRIGGER immutable_instruction_publication_audit BEFORE UPDATE OR DELETE ON cinenest_payments.bank_instruction_publication_audit FOR EACH STATEMENT EXECUTE FUNCTION cinenest_payments.immutable_history();
+CREATE TRIGGER instruction_proposal_no_history_truncate BEFORE TRUNCATE ON cinenest_payments.bank_instruction_proposal FOR EACH STATEMENT EXECUTE FUNCTION cinenest_payments.instruction_publication_empty_truncate_guard();
+CREATE TRIGGER instruction_command_no_history_truncate BEFORE TRUNCATE ON cinenest_payments.bank_instruction_publication_command FOR EACH STATEMENT EXECUTE FUNCTION cinenest_payments.instruction_publication_empty_truncate_guard();
+CREATE TRIGGER instruction_audit_no_history_truncate BEFORE TRUNCATE ON cinenest_payments.bank_instruction_publication_audit FOR EACH STATEMENT EXECUTE FUNCTION cinenest_payments.instruction_publication_empty_truncate_guard();
+```
+
+**Separate future compatibility scope, not edited/admitted now:** BankIntegrationTest current head33→future head and its empty fixture reset must account for the three new journal locks without deleting history; RoomBlockingIntegrationTest current-head assertion needs reconciliation while V30→V32 remains pinned32. LockRoomAssignmentPostgresTest must retain explicit historical V33 qualification when executing against a later head. These legacy files are outside the current twelve-path authorization. Schema approval does not automatically authorize them, protected-validator changes or a runtime window. PostgreSQL/HTTP migration, concurrency, audit rollback and upgrade evidence remain pending. [Outcomes](PROGRESS.md#bank-instruction-publication-preparation).
+
+### V34 DDL authorization and creation
+
+Owner separately approved the exact proposal above for CN-R1-BANK-INSTRUCTION-PUBLICATION-001. Migration `backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql` now contains the exact reviewed bytes, SHA-256 `50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98`. Original proposal comments are retained as provenance; this later approval authorizes migration creation, not runtime execution. Published main independently remains be01cf6caf6af6fcf3d736401cae72e25d28a9fe/head33. All32 historical filenames/fingerprints are identical; V34 was available; local prepared inventory is V1–V30+V32+V33+V34,33files. No additional objects, historical edits, grants or seeds. V31 absent/HOLD. V26 referenced columns/constraints and immutable_history existence reviewed statically; actual clean/populated upgrade compatibility NOT_EXECUTED pending runtime authority. Legacy head/reset reconciliation identified above remains separately gated; validator unchanged.
+
+V34 qualification observation: clean and populated V33→V34 migration executed successfully in the authorized disposable run; pre-existing revision/request/binding fingerprint preserved. Full PostgreSQL acceptance FAIL: one existing opt-in truncate assertion got55006 before expected23514, with source-evidenced pending deferred proposal triggers. Fixture must establish a complete proposal/command/audit and drain deferred checks before testing the nonempty truncate guard, without disabling constraints or weakening assertions. This is a test-fixture correction proposal only. No SQL changes authorized/needed by current evidence. Separate service checks remained unexecuted after private orchestration stopped volatile tmpfs between phases. See current PROGRESS and existing execution status; no runtime/production qualification inferred.
+
+The separately authorized existing PG test fixture is now corrected in source: complete command/audit/proposal, deferred validation then commit; protected-mutation phase uses separate committed state and all journal locks. No persistence behavior or migration SQL changed. Expected23514 remains exact. Runtime failure detail is not yet captured; PostgreSQL execution remains separately gated.
+
+V34 final technical qualification: BANK_INSTRUCTION_V34_PG_PASS, evidence `.cache/private-bank-v34-final-62dd6cce154c/qualification-result.json`. Corrected committed fixture passed actual PostgreSQL3tests; all9guard responses23514; real JDBC service30assertions and migration6assertions passed. Concurrent publication serialized one200/one409, missing mandatory audit rejected commit with no partial publication/event, old same-venue request-bound revision unchanged. CSRF3test security-chain evidence remains separate MockMvc. Both heads34 and0failedmigrations. No source/SQL behavior change needed; all staging-only/default-disabled and non-payable boundaries retained. Operational/production authority not implied.
+
+Publication reconciliation is proposal-only: admit current20task payloads plus3legacy test paths via an exact additive successor, keeping the historical validator prefix/admissions/controls and32baseline migration fingerprints unchanged while admitting approvedV34 only. Proposed BankIntegrationTest changes: current head33→34; include the three new journals in existing fixture TRUNCATE so all required locks are present and only empty journals can reset (nonempty history still denied). RoomBlockingIntegrationTest currenthead33→34 only, historicaltarget32 unchanged. LockRoomAssignmentPostgresTest current successful migration count32→33 and historicalV32→V33 upgrade explicitlytarget33, preserving one/repeat-zero/integrity assertions. No proposed legacy or protected-file modifications applied. Exact23paths and before/proposed hashes are in the private proposal; separate Owner authorization required.
+
+Owner approved the exact23path publication reconciliation on2026-11-02. The five proposed legacy replacements are applied exactly with pinned after hashes. Additive admission binds current source/tests, task identity, preserved real-PG evidence, canonical manifest, exact33migration inventory, baseline history, source ownership and safe normalized paths. Historical validator/admissions/controls retained verbatim through established projection mechanism; no broad path exemptions or runtime/business authority. Publication remains subject to executed gates and exact-source remote CI.

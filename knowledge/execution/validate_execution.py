@@ -10085,5 +10085,166 @@ def inert_ci_main():
         if result==0:print('PASS exact inert Plug Play P1;all historical admissions retained;no runtime or customer access')
         return result
 
+
+# CN-R1-BANK-INSTRUCTION-PUBLICATION-001: exact owner-approved V34 successor.
+BANKPUB_BASE = 'be01cf6caf6af6fcf3d736401cae72e25d28a9fe'
+BANKPUB_SUFFIX_SHA256 = '3770f8d2df4e60d3bd06368bb31e95d78add4227ac7a45cc4f01eefbddbd1d5f'
+BANKPUB_PATHS = ['backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationPolicy.java', 'backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationService.java', 'backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationRepository.java', 'backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java', 'backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationController.java', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationPolicyTest.java', 'backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java', 'backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java', 'backend/src/test/java/com/cinenest/BankInstructionPublicationPostgresTest.java', 'backend/src/test/java/com/cinenest/BankInstructionPublicationArchitectureTest.java', 'backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql', 'knowledge/PROJECT.md', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java']
+BANKPUB_HASHES = {'backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationPolicy.java': '11330fc591552af4cd12ed36f3c964cb5de7a3564cf71af446a15fd31234b6e0', 'backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationService.java': '2cf3f9c33119b8ed66f44d5fc84ecc26f1668d0503d1a15ece8015bd2867f81e', 'backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationRepository.java': '649620a6a39dd0fe72e80a4f3c43b7070fe541a0a4d1a5dc65429d4c94158837', 'backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java': '9367b8e5155d14bae4c5a60e21d114e5dad543ea1295eb7535b5ace5baaf776e', 'backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationController.java': '2a802c1de51d0683a2006066cb2b5202e7108384caf3d51fdf02d5483f7a4885', 'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '674ffde48f213a3b81f1668a3b4ad5a01271670eaabdf0350c7d24fa4b394bc9', 'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '19053ed66486d3539a266f0bd0a3c403e85d7a3229f6d47209ad322a45520f2f', 'backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationPolicyTest.java': 'dca4ca7994f29326df0800a2928ba05b43f52c97697c0a2b3ad0e2bbba2a8f7c', 'backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java': '687a37c8b86d5d1ba7f9d6bd8d30005e1a45eb20540f049c82c1daa0df2915b5', 'backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java': '844dd2db04e0618be17fa64ed802fefedbac68e57161992187cad70d8b419dc0', 'backend/src/test/java/com/cinenest/BankInstructionPublicationPostgresTest.java': '135fb49f1a8d118dcce535eddef8d2f5e9506a8261cc089e7719df0e4faa66b2', 'backend/src/test/java/com/cinenest/BankInstructionPublicationArchitectureTest.java': '23aa5b0d720365768fb91f5a1d9ad9f1c46283d7db10b47fdbcca935d32c9337', 'backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql': '50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98', 'knowledge/PROJECT.md': '4d88a6455360222d035aa380989f812d725cbae3d4e713b6c2f81a0834d827ab', 'knowledge/ARCHITECTURE.md': 'd3d795ad5c22697675f415f3b252101bea2d3f42f0870b86540b43047e1d8689', 'knowledge/PROGRESS.md': '26b5a14b57a80419485be6bb3b69fa3b6e4b9959dcd0fea64057bc7c44aaeb34', 'knowledge/product/FEATURE_CATALOG.md': '2d1e6cfa817e98c57301c2181cb357badaee0fc76d04dd4a40c77f8b0508bcb7', 'knowledge/guides/USER_GUIDE.md': '363a0606321ae081515c664c7038556f31c601d2bceab84a899b7c7e36bafc9a', 'knowledge/execution/status.json': 'ab74aee2bf397e101f1a331978822b04b59cfd4a688e0899d00cd054e3115fbe', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'e0f764e89bf4de59886d0d5ea9ca7006c3370c3546876b6b414334e996b95cfd', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': 'ea0b9127874128bbe4441d1ac6fa0a59e5a7ce7aeb4429553bcedd3849730cee', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': '1ee70f2b42b8c36d5a7a430b1c356eb039c4aa0a28634cc1b05275450e1ddda6'}
+BANKPUB_EVIDENCE_SHA256 = '5462686329a6663539e97586f76ede3ac2151ce4d690ea9cf6aed16b07a95764'
+BANKPUB_MIGRATION = 'backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql'
+bankpub_previous_main = inert_ci_main
+bankpub_previous_guard = receipt_admission_successor_errors
+
+def bankpub_tree():
+    rows=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',BANKPUB_BASE]);result={}
+    for row in rows.split(b'\0'):
+        if row:
+            meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+            if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Invalid baseline entry')
+            result[name.decode()]=oid.decode()
+    return result
+
+def bankpub_migration_errors():
+    errors=[];folder=R/'backend/src/main/resources/db/migration'
+    try:
+        if folder.is_symlink() or folder.resolve()!=folder:return ['BANKPUB unsafe migration folder']
+        expected={n:h for n,h in bankpub_tree().items() if n.startswith('backend/src/main/resources/db/migration/')}
+        b=(R/BANKPUB_MIGRATION).read_bytes();expected[BANKPUB_MIGRATION]=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+        if hashlib.sha256(b).hexdigest()!=BANKPUB_HASHES[BANKPUB_MIGRATION]:errors.append('BANKPUB V34 fingerprint drift')
+        actual=[];versions=[]
+        for p in folder.glob('*'):
+            name=p.relative_to(R).as_posix();actual.append(name);match=re.fullmatch(r'V([0-9]+)__[^/]+\.sql',p.name)
+            if match:versions.append(int(match[1]))
+            if name not in expected:errors.append('BANKPUB unexpected migration');continue
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p or p.parent!=folder:errors.append('BANKPUB unsafe migration');continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=expected[name]:errors.append('BANKPUB migration fingerprint drift')
+        if len(expected)!=33 or len(actual)!=33 or set(actual)!=set(expected):errors.append('BANKPUB exact migration inventory drift')
+        if len(set(versions))!=33 or set(versions)!=set(range(1,31))|{32,33,34}:errors.append('BANKPUB migration version conflict')
+    except (OSError,ValueError):errors.append('BANKPUB inaccessible migration inventory')
+    return errors
+
+def bankpub_payload_errors():
+    errors=[];owned=set(BANKPUB_PATHS)|{'knowledge/execution/validate_execution.py'}
+    before=lambda n:subprocess.check_output(['git','-C',str(R),'show',BANKPUB_BASE+':'+n])
+    try:
+        if len(BANKPUB_PATHS)!=23 or len(set(BANKPUB_PATHS))!=23 or set(BANKPUB_HASHES)!=set(BANKPUB_PATHS)-{'knowledge/manifest.json'}:return ['BANKPUB incomplete exact payload inventory']
+        for name in owned:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('BANKPUB unsafe/missing payload '+name);continue
+            if name in BANKPUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=BANKPUB_HASHES[name]:errors.append('BANKPUB unauthorized payload '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n";prefix=before('knowledge/execution/validate_execution.py').decode().removesuffix(ending);current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('BANKPUB historical validator prefix changed')
+        suffix=current[len(prefix):];normal=suffix.replace("BANKPUB_SUFFIX_SHA256 = '"+BANKPUB_SUFFIX_SHA256+"'","BANKPUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normal.encode()).hexdigest()!=BANKPUB_SUFFIX_SHA256:errors.append('BANKPUB successor suffix changed')
+        state=json.loads((K/'execution/status.json').read_text());canonical=(json.dumps(state,indent=2)+'\n').encode()
+        if hashlib.sha256(canonical).hexdigest()!=BANKPUB_HASHES['knowledge/execution/status.json']:errors.append('BANKPUB registry serialization/evidence drift')
+        e=state.pop('bankInstructionPublicationPreparation',{});admission=e.get('publicationReconciliation',{})
+        if state!=json.loads(before('knowledge/execution/status.json')):errors.append('BANKPUB historical registry changed')
+        if e.get('taskId')!='CN-R1-BANK-INSTRUCTION-PUBLICATION-001' or e.get('baseline')!=BANKPUB_BASE or e.get('status')!='BANK_INSTRUCTION_V34_PG_PASS_PUBLICATION_BLOCKED':errors.append('BANKPUB task/evidence identity drift')
+        if admission.get('taskId')!=e.get('taskId') or admission.get('baseline')!=BANKPUB_BASE or admission.get('authorization')!='EXPLICIT_OWNER_EXACT_23_PAYLOADS_AND_ADDITIVE_SUCCESSOR' or admission.get('payloadPaths')!=BANKPUB_PATHS:errors.append('BANKPUB exact authorization mismatch')
+        if admission.get('sourceTestFingerprints')!={n:h for n,h in BANKPUB_HASHES.items() if n.startswith('backend/')} or admission.get('evidenceSha256')!=BANKPUB_EVIDENCE_SHA256:errors.append('BANKPUB source/evidence binding mismatch')
+        final=e.get('postgresFinalRetest',{})
+        if final.get('classification')!='BANK_INSTRUCTION_V34_PG_PASS' or final.get('postgresTests')!={'passed':3,'failed':0,'errors':0,'skipped':0} or final.get('postgresServiceAssertions')!={'passed':30,'failed':0} or final.get('migrationAssertions')!={'passed':6,'failed':0} or final.get('immutableSqlstate23514Observations')!=9:errors.append('BANKPUB real PG evidence mismatch')
+        if final.get('mode')!='STAGING_ONLY' or final.get('realPaymentEnabled') is not False or final.get('realReceiptAdmission')!='DENY' or final.get('providerCalls')!=0:errors.append('BANKPUB safety drift')
+        if any(admission.get(n) is not False for n in ['runtimeStarted','applicationBehaviorChanged','formalAcceptanceChanged']):errors.append('BANKPUB publication authority drift')
+        for name in ['PROJECT.md','ARCHITECTURE.md','PROGRESS.md','product/FEATURE_CATALOG.md','guides/USER_GUIDE.md']:
+            if not (K/name).read_bytes().startswith(before('knowledge/'+name)):errors.append('BANKPUB historical prose changed '+name)
+        errors.extend(bankpub_migration_errors());tree=bankpub_tree()
+        for name in set(tree)-owned:
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('BANKPUB unsafe unowned path');continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=tree[name]:errors.append('BANKPUB unowned/history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        if paths!=set(tree)|owned:errors.append('BANKPUB unauthorized/missing repository path')
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',BANKPUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if not changed<=owned:errors.append('BANKPUB unauthorized changed path')
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json' and 'sha256' in row:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('BANKPUB manifest drift')
+    except (OSError,ValueError,KeyError,TypeError):errors.append('BANKPUB inaccessible/invalid payload')
+    return errors
+
+def bankpub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return bankpub_payload_errors()
+
+def bankpub_negative_controls():
+    from unittest.mock import patch
+    assert not bankpub_successor_errors();print('PASS BANKPUB exact23 successor positive control')
+    assert not bankpub_migration_errors();print('PASS BANKPUB exact33 migration positive control')
+    rb0,rt0=Path.read_bytes,Path.read_text
+    for name in BANKPUB_PATHS+['backend/src/main/java/com/cinenest/access/SmartLock.java','backend/src/main/java/com/cinenest/payments/internal/LedgerService.java','AGENTS.md']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert bankpub_successor_errors(),name
+        print('PASS BANKPUB rejects payload/history mutation '+name)
+    target=R/BANKPUB_PATHS[0];file0,link0,resolve0=Path.is_file,Path.is_symlink,Path.resolve
+    with patch.object(Path,'is_file',lambda p:False if p==target else file0(p)):assert bankpub_successor_errors()
+    print('PASS BANKPUB rejects missing source')
+    with patch.object(Path,'is_symlink',lambda p:True if p==target else link0(p)):assert bankpub_successor_errors()
+    print('PASS BANKPUB rejects source symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.java' if p==target else resolve0(p,*a,**kw)):assert bankpub_successor_errors()
+    print('PASS BANKPUB rejects resolved traversal')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:s.replace('Read-only execution/coverage validator.','Unauthorized history.',1)),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert bankpub_successor_errors(),label
+        print('PASS BANKPUB rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('baseline','INVALID'),('status','APPROVED'),('publicationReconciliation',{}),('postgresFinalRetest',{})]:
+        def bad_record(p,*a,**kw):
+            text=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(text);d['bankInstructionPublicationPreparation'][field]=value;return json.dumps(d)
+            return text
+        with patch.object(Path,'read_text',bad_record):assert bankpub_successor_errors(),field
+        print('PASS BANKPUB rejects task/evidence '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-bankpub.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert bankpub_successor_errors()
+        print('PASS BANKPUB rejects unknown '+command+' path')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('duplicate path',original+[first]),('traversal migration',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert bankpub_migration_errors(),label
+        print('PASS BANKPUB rejects '+label)
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert bankpub_migration_errors()
+    print('PASS BANKPUB rejects migration symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.sql' if p==first else resolve0(p,*a,**kw)):assert bankpub_migration_errors()
+    print('PASS BANKPUB rejects migration resolved escape')
+    for target in [first,R/BANKPUB_MIGRATION]:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert bankpub_migration_errors()
+        print('PASS BANKPUB rejects migration checksum '+target.name)
+
+receipt_admission_successor_errors=bankpub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=bankpub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        bankpub_negative_controls();owned=set(BANKPUB_PATHS)|{'knowledge/execution/validate_execution.py'};tracked=set(bankpub_tree());added=owned-tracked
+        replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',BANKPUB_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item!=R/BANKPUB_MIGRATION)
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=data if isinstance(data,str) else data.decode();items=[n for n in text.split(sep) if n and n not in remove];text=sep.join(items)+(sep if items else '')
+                return text if isinstance(data,str) else text.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':bankpub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=bankpub_previous_main()
+        if result==0:print('PASS exact V34 bank publication successor;all historical controls preserved;staging-only')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

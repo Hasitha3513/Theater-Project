@@ -28760,5 +28760,363 @@
       "requirementsTotal": 92
     },
     "publication": "PREPUBLICATION_SNAPSHOT_PENDING_GATES_COMMIT_PUSH_AND_EXACT_SOURCE_CI"
+  },
+  "bankInstructionPublicationPreparation": {
+    "taskId": "CN-R1-BANK-INSTRUCTION-PUBLICATION-001",
+    "baseline": "be01cf6caf6af6fcf3d736401cae72e25d28a9fe",
+    "status": "BANK_INSTRUCTION_V34_PG_PASS_PUBLICATION_BLOCKED",
+    "sourcePaths": [
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationPolicy.java",
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationService.java",
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationRepository.java",
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java",
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationController.java",
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java",
+      "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationPolicyTest.java",
+      "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java",
+      "backend/src/test/java/com/cinenest/BankInstructionPublicationPostgresTest.java",
+      "backend/src/test/java/com/cinenest/BankInstructionPublicationArchitectureTest.java"
+    ],
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationPolicy.java": "11330fc591552af4cd12ed36f3c964cb5de7a3564cf71af446a15fd31234b6e0",
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationService.java": "2cf3f9c33119b8ed66f44d5fc84ecc26f1668d0503d1a15ece8015bd2867f81e",
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationRepository.java": "649620a6a39dd0fe72e80a4f3c43b7070fe541a0a4d1a5dc65429d4c94158837",
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java": "9367b8e5155d14bae4c5a60e21d114e5dad543ea1295eb7535b5ace5baaf776e",
+      "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationController.java": "2a802c1de51d0683a2006066cb2b5202e7108384caf3d51fdf02d5483f7a4885",
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java": "674ffde48f213a3b81f1668a3b4ad5a01271670eaabdf0350c7d24fa4b394bc9",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "19053ed66486d3539a266f0bd0a3c403e85d7a3229f6d47209ad322a45520f2f",
+      "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationPolicyTest.java": "dca4ca7994f29326df0800a2928ba05b43f52c97697c0a2b3ad0e2bbba2a8f7c",
+      "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java": "687a37c8b86d5d1ba7f9d6bd8d30005e1a45eb20540f049c82c1daa0df2915b5",
+      "backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java": "844dd2db04e0618be17fa64ed802fefedbac68e57161992187cad70d8b419dc0",
+      "backend/src/test/java/com/cinenest/BankInstructionPublicationPostgresTest.java": "135fb49f1a8d118dcce535eddef8d2f5e9506a8261cc089e7719df0e4faa66b2",
+      "backend/src/test/java/com/cinenest/BankInstructionPublicationArchitectureTest.java": "23aa5b0d720365768fb91f5a1d9ad9f1c46283d7db10b47fdbcca935d32c9337"
+    },
+    "tests": {
+      "reported": 79,
+      "passed": 76,
+      "failed": 0,
+      "errors": 0,
+      "skippedPostgres": 3,
+      "newOfflinePassed": 24,
+      "existingRegressionsPassed": 52
+    },
+    "ddl": {
+      "status": "PROPOSED_NOT_APPROVED_NOT_EXECUTED",
+      "sha256": "50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98",
+      "publishedHead": 33,
+      "publishedFiles": 32,
+      "candidateHead": "RECHECK_BEFORE_SEPARATELY_APPROVED_MIGRATION"
+    },
+    "runtimeStarted": false,
+    "databaseWrites": false,
+    "migrationChanges": false,
+    "validatorChanged": false,
+    "grantsCreated": false,
+    "realPaymentEnabled": false,
+    "realReceiptAdmission": "DENY",
+    "mode": "STAGING_ONLY",
+    "publication": "BLOCKED_PENDING_DDL_RUNTIME_AND_PROTECTED_SUCCESSOR_AUTHORITY",
+    "evidenceDirectory": "/home/hasitha-wijerathna/Documents/Theater Project/room-blocking-r1/.cache/private-bank-instruction-publication-816170119417",
+    "progress": {
+      "release": "4/21",
+      "criteria": "15/74",
+      "formalAcceptance": "0/92"
+    },
+    "validation": {
+      "knowledgeDesign": "PASS_STRUCTURAL_ONLY",
+      "whitespace": "PASS",
+      "execution": "BLOCKED_P1_UNAUTHORIZED_PAYLOAD_NEW_SUCCESSOR_NOT_AUTHORIZED",
+      "validatorUnchangedSha256": "de17e1bb17461741b0b92f5dcc0e5583753ceaf96181d84de5c279adca48ab9b",
+      "historicalControls": "NOT_RERUN_NO_GUARD_MODIFICATION",
+      "postgres": "NOT_EXECUTED_3_SKIPPED"
+    },
+    "ddlImplementation": {
+      "ownerAuthorization": "EXACT_THREE_TABLE_TWO_INDEX_THREE_FUNCTION_EIGHT_TRIGGER_PROPOSAL_APPROVED",
+      "migrationPath": "backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql",
+      "sha256": "50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98",
+      "publishedBaselineHead": 33,
+      "localPreparedHead": 34,
+      "historicalFilesUnchanged": 32,
+      "localInventoryCount": 33,
+      "versionConflict": false,
+      "applied": false,
+      "cleanMigrationQualification": "NOT_EXECUTED_RUNTIME_NOT_AUTHORIZED",
+      "populatedUpgradeQualification": "NOT_EXECUTED_RUNTIME_NOT_AUTHORIZED",
+      "legacyTestReconciliation": "SEPARATE_AUTHORIZATION_REQUIRED",
+      "protectedSuccessor": "SEPARATE_AUTHORIZATION_REQUIRED",
+      "offlineTests": {
+        "reported": 79,
+        "passed": 76,
+        "failed": 0,
+        "errors": 0,
+        "postgresSkipped": 3,
+        "build": "SUCCESS",
+        "runtimeQualification": "NOT_EXECUTED"
+      },
+      "validation": {
+        "knowledge": "PASS_STRUCTURAL",
+        "whitespace": "PASS",
+        "execution": "BLOCKED_NO_AUTHORIZED_SUCCESSOR",
+        "historicalValidator": "BYTE_IDENTICAL"
+      }
+    },
+    "postgresQualification": {
+      "classification": "BANK_INSTRUCTION_V34_PG_FAIL",
+      "runId": "cn-bank-v34-ca95d832cab349959de2d311358ea0ca",
+      "containerId": "9719644139c1b63da57d907eb9b6fc09924c741c9efb654d89855bdb22cf2bd5",
+      "image": "sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336",
+      "resources": {
+        "cpu": 1,
+        "memoryBytes": 1073741824,
+        "pids": 128,
+        "pgdataTmpfsBytes": 536870912,
+        "databaseIdentities": [
+          "bank_instruction_pub_59ae3c5e1a514f66ab61d25f4682b3cf",
+          "bank_instruction_upgrade_7e55bcc81e6a45d1bc230633e5472070"
+        ]
+      },
+      "elapsedWindowSeconds": 177.434,
+      "cleanHead34": true,
+      "populatedUpgradeHead34": true,
+      "existingBindingFingerprintUnchanged": true,
+      "migrationAssertionsPassed": 6,
+      "postgresTests": {
+        "passed": 2,
+        "failed": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "securityChainTests": {
+        "passed": 3,
+        "failed": 0,
+        "postgresBackedHttpE2E": false
+      },
+      "failedAssertion": {
+        "expectedSQLSTATE": "23514",
+        "actualSQLSTATE": "55006",
+        "cause": "TRUNCATE rejected before guard because uncommitted fixture has pending deferred trigger events",
+        "causeClassification": "SOURCE_EVIDENCED_FIXTURE_PENDING_DEFERRED_TRIGGER; exact runtime error message not captured by existing assertion"
+      },
+      "concurrency": "NOT_EXECUTED",
+      "idempotency": "NOT_EXECUTED_PG",
+      "auditRollback": "NOT_EXECUTED_PG",
+      "applicationDefect": "NONE_CONFIRMED",
+      "harnessIssues": [
+        "initial temporary-server readiness race corrected privately",
+        "early per-phase closeout stopped tmpfs storage; later service check blocked by absent database"
+      ],
+      "sourceOrSqlChanges": false,
+      "containerStopped": true,
+      "portsClosed": {
+        "32768": true,
+        "32769": true,
+        "32770": true
+      },
+      "ownedPids": [
+        {
+          "pid": 1586030,
+          "absent": true
+        },
+        {
+          "pid": 1586222,
+          "absent": true
+        },
+        {
+          "pid": 1596045,
+          "absent": true
+        }
+      ],
+      "providersInvoked": 0,
+      "realPaymentActivation": false,
+      "realReceipts": 0,
+      "cleanup": "NO_CONTAINER_OR_VOLUME_DELETION; TMPFS_DATA_VOLATILE_ON_STOP",
+      "publication": "BLOCKED_NO_SUCCESSOR_AND_INCOMPLETE_QUALIFICATION"
+    },
+    "fixtureCorrection": {
+      "status": "TEST_FIXTURE_CORRECTED_PG_RETEST_NOT_AUTHORIZED",
+      "path": "backend/src/test/java/com/cinenest/BankInstructionPublicationPostgresTest.java",
+      "beforeSha256": "1dce4074b5d0d3c786a063eb3f8098e58a67173e70545daf0ac01e032d73ddb5",
+      "afterSha256": "135fb49f1a8d118dcce535eddef8d2f5e9506a8261cc089e7719df0e4faa66b2",
+      "oldObservedSQLSTATE": "55006",
+      "expectedSQLSTATE": "23514",
+      "priorExactErrorMessage": "NOT_CAPTURED",
+      "diagnosis": "INCOMPLETE_UNCOMMITTED_PROPOSAL_WITH_PENDING_DEFERRED_CHECKS_SOURCE_EVIDENCED_NOT_RUNTIME_CONFIRMED",
+      "fixture": "COMPLETE_PROPOSAL_COMMAND_AUDIT_SET_CONSTRAINTS_IMMEDIATE_COMMIT_SEPARATE_CONNECTION_VERIFICATION",
+      "historicalBindings": "PRE_POST_CANONICAL_FINGERPRINT_ASSERTIONS_PREPARED",
+      "testOrdering": "EMPTY_RESET_FIRST_COMMITTED_FIXTURE_LAST; fresh disposable database prerequisite",
+      "tests": {
+        "offlinePass": 24,
+        "fail": 0,
+        "error": 0,
+        "pgSkipped": 3,
+        "testCompile": "PASS"
+      },
+      "pgRetest": "NOT_EXECUTED",
+      "runtimeStarted": false,
+      "sourceChangesOtherThanApprovedTest": false,
+      "migrationChanged": false,
+      "publication": "BLOCKED_SUCCESSOR_AND_PG_QUALIFICATION"
+    },
+    "postgresFinalRetest": {
+      "classification": "BANK_INSTRUCTION_V34_PG_PASS",
+      "runtime": {
+        "runId": "cn-bank-v34-final-7420206a255e486cbc952c7e2b9b20cc",
+        "image": "sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336",
+        "databases": [
+          "bank_instruction_pub_2c38b176b8344cd8934d9fcf0ca41b00",
+          "bank_instruction_upgrade_d46cd255b31e4c0abef488cb9a6a3264"
+        ],
+        "processes": [
+          1836041,
+          1836147,
+          1836644
+        ],
+        "startedAt": "2026-11-01T18:29:39.846720+00:00",
+        "daemon": "unix:///var/run/docker.sock",
+        "containerId": "a73c0f5c371a4c397742b1d92c939c91001a467531f0423109f31497d6189333",
+        "port": 32771,
+        "resourcesVerified": true,
+        "result": "BANK_INSTRUCTION_V34_PG_PASS",
+        "containerStopped": true,
+        "restartCount": 0,
+        "portClosed": true,
+        "durationSeconds": 8.416,
+        "ownedChildrenExited": true,
+        "ownedPidsAbsent": true,
+        "finishedAt": "2026-11-01T18:29:48.263172+00:00"
+      },
+      "postgresTests": {
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "postgresServiceAssertions": {
+        "passed": 30,
+        "failed": 0
+      },
+      "migrationAssertions": {
+        "passed": 6,
+        "failed": 0
+      },
+      "securityChainMockMvcTests": {
+        "passed": 3,
+        "failed": 0,
+        "postgresHttpE2E": false
+      },
+      "immutableSqlstate23514Observations": 9,
+      "cleanAndPopulatedUpgradeHeads": 34,
+      "existingBoundVersionPreserved": true,
+      "concurrency": "ONE_SUCCESS_200_ONE_CONFLICT_409_REAL_DATABASE",
+      "auditFailureRollback": "MISSING_AUDIT_DEFERRED_COMMIT_REJECTED_503_AND_NO_PARTIAL_PUBLICATION",
+      "providerCalls": 0,
+      "realReceiptsProcessed": 0,
+      "realPaymentEnabled": false,
+      "realReceiptAdmission": "DENY",
+      "mode": "STAGING_ONLY",
+      "sourceAndMigrationChangesDuringRuntime": false,
+      "destructiveCleanup": false,
+      "volatileDatabaseData": "TMPFS_DISCARDED_ON_FINAL_STOP; sanitized integrity aggregates preserved",
+      "publication": "BLOCKED_SEPARATE_SUCCESSOR_AUTHORIZATION_AND_LEGACY_COMPATIBILITY_PENDING"
+    },
+    "latestEvidenceDirectory": "/home/hasitha-wijerathna/Documents/Theater Project/room-blocking-r1/.cache/private-bank-v34-final-62dd6cce154c",
+    "nextAuthorizationProposal": "/home/hasitha-wijerathna/Documents/Theater Project/room-blocking-r1/.cache/private-bank-v34-final-62dd6cce154c/publication-reconciliation-proposal.json",
+    "publicationReconciliation": {
+      "taskId": "CN-R1-BANK-INSTRUCTION-PUBLICATION-001",
+      "baseline": "be01cf6caf6af6fcf3d736401cae72e25d28a9fe",
+      "authorization": "EXPLICIT_OWNER_EXACT_23_PAYLOADS_AND_ADDITIVE_SUCCESSOR",
+      "approvedProposalSha256": "58c6f4e714bc74732173f7643d38aeda6537708efc40e6724d5128cebd5cd77b",
+      "payloadPaths": [
+        "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationPolicy.java",
+        "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationService.java",
+        "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationRepository.java",
+        "backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java",
+        "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationController.java",
+        "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java",
+        "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java",
+        "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationPolicyTest.java",
+        "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java",
+        "backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java",
+        "backend/src/test/java/com/cinenest/BankInstructionPublicationPostgresTest.java",
+        "backend/src/test/java/com/cinenest/BankInstructionPublicationArchitectureTest.java",
+        "backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql",
+        "knowledge/PROJECT.md",
+        "knowledge/ARCHITECTURE.md",
+        "knowledge/PROGRESS.md",
+        "knowledge/product/FEATURE_CATALOG.md",
+        "knowledge/guides/USER_GUIDE.md",
+        "knowledge/execution/status.json",
+        "knowledge/manifest.json",
+        "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+        "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+        "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java"
+      ],
+      "legacyFingerprints": {
+        "backend/src/test/java/com/cinenest/BankIntegrationTest.java": {
+          "before": "49272fbb9107be9b5e77d4a4b607cd72c9ecc2514792323a8c7ce35884166466",
+          "proposedAfter": "e0f764e89bf4de59886d0d5ea9ca7006c3370c3546876b6b414334e996b95cfd"
+        },
+        "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java": {
+          "before": "fbab0f398d74b3a89d1d567b898aecdc70c64dc4fb0e2cc27aaca960bd062933",
+          "proposedAfter": "ea0b9127874128bbe4441d1ac6fa0a59e5a7ce7aeb4429553bcedd3849730cee"
+        },
+        "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java": {
+          "before": "f8464bb2716530fcd7902fe84f5d57ed1eaf873b406c099b152196f0e8647714",
+          "proposedAfter": "1ee70f2b42b8c36d5a7a430b1c356eb039c4aa0a28634cc1b05275450e1ddda6"
+        }
+      },
+      "sourceTestFingerprints": {
+        "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationPolicy.java": "11330fc591552af4cd12ed36f3c964cb5de7a3564cf71af446a15fd31234b6e0",
+        "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationService.java": "2cf3f9c33119b8ed66f44d5fc84ecc26f1668d0503d1a15ece8015bd2867f81e",
+        "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationRepository.java": "649620a6a39dd0fe72e80a4f3c43b7070fe541a0a4d1a5dc65429d4c94158837",
+        "backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java": "9367b8e5155d14bae4c5a60e21d114e5dad543ea1295eb7535b5ace5baaf776e",
+        "backend/src/main/java/com/cinenest/payments/internal/BankInstructionPublicationController.java": "2a802c1de51d0683a2006066cb2b5202e7108384caf3d51fdf02d5483f7a4885",
+        "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java": "674ffde48f213a3b81f1668a3b4ad5a01271670eaabdf0350c7d24fa4b394bc9",
+        "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "19053ed66486d3539a266f0bd0a3c403e85d7a3229f6d47209ad322a45520f2f",
+        "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationPolicyTest.java": "dca4ca7994f29326df0800a2928ba05b43f52c97697c0a2b3ad0e2bbba2a8f7c",
+        "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java": "687a37c8b86d5d1ba7f9d6bd8d30005e1a45eb20540f049c82c1daa0df2915b5",
+        "backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java": "844dd2db04e0618be17fa64ed802fefedbac68e57161992187cad70d8b419dc0",
+        "backend/src/test/java/com/cinenest/BankInstructionPublicationPostgresTest.java": "135fb49f1a8d118dcce535eddef8d2f5e9506a8261cc089e7719df0e4faa66b2",
+        "backend/src/test/java/com/cinenest/BankInstructionPublicationArchitectureTest.java": "23aa5b0d720365768fb91f5a1d9ad9f1c46283d7db10b47fdbcca935d32c9337",
+        "backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql": "50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98",
+        "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "e0f764e89bf4de59886d0d5ea9ca7006c3370c3546876b6b414334e996b95cfd",
+        "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java": "ea0b9127874128bbe4441d1ac6fa0a59e5a7ce7aeb4429553bcedd3849730cee",
+        "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java": "1ee70f2b42b8c36d5a7a430b1c356eb039c4aa0a28634cc1b05275450e1ddda6"
+      },
+      "evidenceSha256": "5462686329a6663539e97586f76ede3ac2151ce4d690ea9cf6aed16b07a95764",
+      "postgresEvidence": "PRESERVED_NOT_RERUN_3_TESTS_30_JDBC_6_MIGRATION_9_IMMUTABILITY_PASS",
+      "runtimeStarted": false,
+      "applicationBehaviorChanged": false,
+      "formalAcceptanceChanged": false,
+      "publication": "PREPUBLICATION_PENDING_VALIDATION_COMMIT_PUSH_EXACT_SOURCE_CI",
+      "validation": {
+        "offlineTests": {
+          "reported": 83,
+          "passed": 80,
+          "failed": 0,
+          "errors": 0,
+          "skippedPg": 3
+        },
+        "newSuccessorControls": {
+          "passed": 51,
+          "failed": 0,
+          "positive": 2,
+          "negative": 49
+        },
+        "historicalChecks": {
+          "passed": 597,
+          "failed": 0
+        },
+        "knowledge": "PASS",
+        "manifest": "PASS",
+        "whitespace": "PASS",
+        "gitIntegrity": "PASS",
+        "legacyCompilation": "PASS",
+        "postgres": "PREVIOUS_QUALIFICATION_PRESERVED_NOT_RERUN",
+        "snapshot": "VALIDATED_PENDING_COMMIT_PUSH_EXACT_SOURCE_CI"
+      }
+    }
   }
 }

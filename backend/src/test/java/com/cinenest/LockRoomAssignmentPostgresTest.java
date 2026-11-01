@@ -65,7 +65,7 @@ class LockRoomAssignmentPostgresTest {
     @Test void exactScopeRacesReplayAndMandatoryAuditRollback()throws Exception{
         context.getAutowireCapableBeanFactory().autowireBean(helper);
         assertThat(jdbc.sql("SELECT count(*) FROM public.flyway_schema_history WHERE success AND version='33'").query(Integer.class).single()).isEqualTo(1);
-        assertThat(jdbc.sql("SELECT count(*) FROM public.flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(32);
+        assertThat(jdbc.sql("SELECT count(*) FROM public.flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(33);
         assertThat(jdbc.sql("SELECT count(*) FROM public.flyway_schema_history WHERE version='31'").query(Integer.class).single()).isZero();
         assertThat(count("lock_room_assignment")).isZero();
         assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.account").query(Integer.class).single()).isZero();
@@ -134,7 +134,7 @@ class LockRoomAssignmentPostgresTest {
                 q.execute("INSERT INTO cinenest_iot.lock_registry_command(actor_id,command_key,venue_id,device_id,request_sha256,audit_event_id) VALUES('"+actor+"','"+key+"','"+venue+"','"+d+"',decode(repeat('ab',32),'hex'),'"+event+"')");
             }c.commit();before=registryFingerprint(c);
         }
-        var upgrade=org.flywaydb.core.Flyway.configure().dataSource(url,user,password).load();assertThat(upgrade.migrate().migrationsExecuted).isEqualTo(1);upgrade.validate();assertThat(upgrade.migrate().migrationsExecuted).isZero();
+        var upgrade=org.flywaydb.core.Flyway.configure().dataSource(url,user,password).target("33").load();assertThat(upgrade.migrate().migrationsExecuted).isEqualTo(1);upgrade.validate();assertThat(upgrade.migrate().migrationsExecuted).isZero();
         try(var c=DriverManager.getConnection(url,user,password);var q=c.createStatement()){
             assertThat(registryFingerprint(c)).isEqualTo(before);
             for(String t:List.of("lock_room_assignment","lock_room_assignment_command","lock_room_assignment_audit")){try(var r=q.executeQuery("SELECT count(*) FROM cinenest_iot."+t)){r.next();assertThat(r.getInt(1)).isZero();}}
