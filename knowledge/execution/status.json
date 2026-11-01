@@ -28665,5 +28665,37 @@
       "newKnowledgeFiles": 0,
       "freshBinaryAuditClaimed": false
     }
+  },
+  "roomLockAssignmentBankCiReconciliation": {
+    "taskId": "CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001",
+    "slice": "V33_BANK_TEST_CI_RECONCILIATION",
+    "baseline": "306bbeb5754b8743d84c18379679768911c91c06",
+    "authorization": "EXPLICIT_OWNER_SINGLE_HEAD_ASSERTION_AND_EXACT_ADDITIVE_SUCCESSOR",
+    "payloadPaths": [
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/manifest.json"
+    ],
+    "priorCiRun": 41309660241,
+    "priorCiOutcome": "FAILURE_EXPECTED_32_ACTUAL_33",
+    "testBeforeSha256": "bccdc05edd8206b643eee8e25faec0169867a74981f1b18aa75ef99367355cab",
+    "testAfterSha256": "49272fbb9107be9b5e77d4a4b607cd72c9ecc2514792323a8c7ce35884166466",
+    "newLocalRuntime": false,
+    "applicationBehaviorChanged": false,
+    "migrationsChanged": false,
+    "realBankingEnabled": false,
+    "customerAccessEnabled": false,
+    "providerCommands": false,
+    "formalAcceptanceChanged": false,
+    "releaseCompleted": 4,
+    "releaseTotal": 21,
+    "criteriaCompleted": 15,
+    "criteriaTotal": 74,
+    "formalAccepted": 0,
+    "requirementsTotal": 92,
+    "testCompilation": "PASS",
+    "localPostgresIntegration": "NOT_EXECUTED_NO_RUNTIME_AUTHORITY",
+    "publication": "PENDING_GATES_COMMIT_PUSH_EXACT_SOURCE_CI"
   }
 }

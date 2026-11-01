@@ -9779,5 +9779,158 @@ def inert_ci_main():
         if result==0:print('PASS exact Room Lock Assignment publication; all historical admissions/controls retained; customer access disabled')
         return result
 
+
+# CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001: owner-approved single Bank test head reconciliation.
+BANK_HEAD_BASE = '306bbeb5754b8743d84c18379679768911c91c06'
+BANK_HEAD_SUFFIX_SHA256 = '91f4930cbbb17c7a24b66288e4a6f13b9bf5008fdc14e512f78ead233b67428c'
+BANK_HEAD_HASHES = {'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '49272fbb9107be9b5e77d4a4b607cd72c9ecc2514792323a8c7ce35884166466', 'knowledge/PROGRESS.md': '60c7dd7521b50d5db627202e8d003c9391b54cbcac536703b8370ec8090f4fcc', 'knowledge/execution/status.json': '89e82f7f6fc9709b06d64b3b7b4652e4d4b828b7dbc58c495117b059ec753145'}
+BANK_HEAD_PATHS = ['backend/src/test/java/com/cinenest/BankIntegrationTest.java','knowledge/PROGRESS.md','knowledge/execution/status.json','knowledge/manifest.json']
+BANK_HEAD_TEST = BANK_HEAD_PATHS[0]
+bank_head_previous_main = inert_ci_main
+bank_head_previous_guard = receipt_admission_successor_errors
+
+def bank_head_tree():
+    data=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',BANK_HEAD_BASE]);result={}
+    for row in data.split(b'\0'):
+        if row:
+            meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+            if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unexpected baseline entry')
+            result[name.decode()]=oid.decode()
+    return result
+
+def bank_head_migration_errors():
+    errors=[];folder=R/'backend/src/main/resources/db/migration'
+    try:
+        if folder.is_symlink() or folder.resolve()!=folder:return ['BANK HEAD unsafe migration directory']
+        expected={p:h for p,h in bank_head_tree().items() if p.startswith('backend/src/main/resources/db/migration/')}
+        actual=[];versions=[]
+        for path in folder.glob('*'):
+            name=path.relative_to(R).as_posix();actual.append(name)
+            match=re.fullmatch(r'V([0-9]+)__[^/]+\.sql',path.name)
+            if match:versions.append(int(match.group(1)))
+            if name not in expected:errors.append('BANK HEAD unexpected migration');continue
+            if path.is_symlink() or not path.is_file() or path.resolve()!=path or path.parent!=folder:errors.append('BANK HEAD unsafe migration');continue
+            b=path.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=expected[name]:errors.append('BANK HEAD migration checksum drift')
+        if len(expected)!=32 or len(actual)!=32 or set(actual)!=set(expected):errors.append('BANK HEAD exact inventory drift')
+        if len(set(versions))!=32 or set(versions)!=set(range(1,31))|{32,33}:errors.append('BANK HEAD version conflict')
+    except (OSError,ValueError):errors.append('BANK HEAD inaccessible/unsafe inventory')
+    return errors
+
+def bank_head_payload_errors():
+    errors=[];owned=set(BANK_HEAD_PATHS)|{'knowledge/execution/validate_execution.py'}
+    before=lambda n:subprocess.check_output(['git','-C',str(R),'show',BANK_HEAD_BASE+':'+n])
+    try:
+        if set(BANK_HEAD_HASHES)!=set(BANK_HEAD_PATHS)-{'knowledge/manifest.json'}:return ['BANK HEAD incomplete payload fingerprints']
+        for name in owned:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('BANK HEAD unsafe/missing payload '+name);continue
+            if name in BANK_HEAD_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=BANK_HEAD_HASHES[name]:errors.append('BANK HEAD unauthorized payload '+name)
+        if errors:return errors
+        current=(K/'execution/validate_execution.py').read_text();ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n";prefix=before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        if not current.startswith(prefix):errors.append('BANK HEAD historical validator changed')
+        suffix=current[len(prefix):];normalized=suffix.replace("BANK_HEAD_SUFFIX_SHA256 = '"+BANK_HEAD_SUFFIX_SHA256+"'","BANK_HEAD_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normalized.encode()).hexdigest()!=BANK_HEAD_SUFFIX_SHA256:errors.append('BANK HEAD successor changed')
+        original=before(BANK_HEAD_TEST).decode();lines=[x for x in original.splitlines(keepends=True) if 'void reportUsesExistingAuditWithoutMutatingFinancialSources()' in x]
+        if len(lines)!=1 or lines[0].count('.isEqualTo(32);')!=1:errors.append('BANK HEAD baseline assertion ambiguous')
+        elif (R/BANK_HEAD_TEST).read_bytes()!=original.replace(lines[0],lines[0].replace('.isEqualTo(32);','.isEqualTo(33);'),1).encode():errors.append('BANK HEAD test change exceeds one assertion')
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('roomLockAssignmentBankCiReconciliation',{})
+        if state!=json.loads(before('knowledge/execution/status.json')):errors.append('BANK HEAD historical task evidence changed')
+        expected={'taskId':'CN-R1-IOT-ROOM-LOCK-ASSIGNMENT-001','slice':'V33_BANK_TEST_CI_RECONCILIATION','baseline':BANK_HEAD_BASE,'authorization':'EXPLICIT_OWNER_SINGLE_HEAD_ASSERTION_AND_EXACT_ADDITIVE_SUCCESSOR','payloadPaths':BANK_HEAD_PATHS,'priorCiRun':41309660241,'priorCiOutcome':'FAILURE_EXPECTED_32_ACTUAL_33','testBeforeSha256':'bccdc05edd8206b643eee8e25faec0169867a74981f1b18aa75ef99367355cab','testAfterSha256':'49272fbb9107be9b5e77d4a4b607cd72c9ecc2514792323a8c7ce35884166466','newLocalRuntime':False,'applicationBehaviorChanged':False,'migrationsChanged':False,'realBankingEnabled':False,'customerAccessEnabled':False,'providerCommands':False,'formalAcceptanceChanged':False,'releaseCompleted':4,'releaseTotal':21,'criteriaCompleted':15,'criteriaTotal':74,'formalAccepted':0,'requirementsTotal':92,'testCompilation':'PASS','localPostgresIntegration':'NOT_EXECUTED_NO_RUNTIME_AUTHORITY','publication':'PENDING_GATES_COMMIT_PUSH_EXACT_SOURCE_CI'}
+        if entry!=expected:errors.append('BANK HEAD task/approval/evidence binding mismatch')
+        if not (K/'PROGRESS.md').read_bytes().startswith(before('knowledge/PROGRESS.md')):errors.append('BANK HEAD historical progress changed')
+        errors.extend(bank_head_migration_errors());tree=bank_head_tree()
+        for name in set(tree)-owned:
+            p=R/name
+            if p.is_symlink() or not p.is_file():errors.append('BANK HEAD missing/substituted unowned path');continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=tree[name]:errors.append('BANK HEAD unowned/history change '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        if paths!=set(tree):errors.append('BANK HEAD unauthorized/missing inventory path')
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',BANK_HEAD_BASE,'--name-only','-z'],text=True),nul=True)
+        if not changed<=owned:errors.append('BANK HEAD unauthorized changed path')
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json' and 'sha256' in row:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if json.loads((K/'manifest.json').read_text())!=manifest or (K/'manifest.json').read_bytes()!=(json.dumps(manifest,ensure_ascii=True,indent=2)+'\n').encode():errors.append('BANK HEAD manifest integrity drift')
+    except (OSError,ValueError,KeyError,TypeError):errors.append('BANK HEAD inaccessible/invalid payload')
+    return errors
+
+def bank_head_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return bank_head_payload_errors()
+
+def bank_head_negative_controls():
+    from unittest.mock import patch
+    assert not bank_head_successor_errors();print('PASS BANK HEAD exact successor positive control')
+    assert not bank_head_migration_errors();print('PASS BANK HEAD exact32 migration fingerprints')
+    rb0,rt0=Path.read_bytes,Path.read_text
+    for name in list(BANK_HEAD_HASHES)+['knowledge/manifest.json','backend/src/main/java/com/cinenest/payments/internal/BankPolicy.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert bank_head_successor_errors(),name
+        print('PASS BANK HEAD rejects mutation '+name)
+    target=R/BANK_HEAD_TEST;file0,link0,resolve0=Path.is_file,Path.is_symlink,Path.resolve
+    with patch.object(Path,'is_file',lambda p:False if p==target else file0(p)):assert bank_head_successor_errors()
+    print('PASS BANK HEAD rejects missing admitted test')
+    with patch.object(Path,'is_symlink',lambda p:True if p==target else link0(p)):assert bank_head_successor_errors()
+    print('PASS BANK HEAD rejects admitted symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.java' if p==target else resolve0(p,*a,**kw)):assert bank_head_successor_errors()
+    print('PASS BANK HEAD rejects payload traversal')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:s.replace('Read-only execution/coverage validator.','Unauthorized validator change.',1)),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert bank_head_successor_errors(),label
+        print('PASS BANK HEAD rejects '+label+' mutation')
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('authorization','UNAPPROVED'),('priorCiRun',0),('newLocalRuntime',True)]:
+        def bad_record(p,*a,**kw):
+            value0=rt0(p,*a,**kw)
+            if p==target:
+                data=json.loads(value0);data['roomLockAssignmentBankCiReconciliation'][field]=value;return json.dumps(data)
+            return value0
+        with patch.object(Path,'read_text',bad_record):assert bank_head_successor_errors(),field
+        print('PASS BANK HEAD rejects task/evidence mutation '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-bank-head.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert bank_head_successor_errors()
+        print('PASS BANK HEAD rejects unknown '+command+' path')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('duplicate path',original+[first]),('traversal migration',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert bank_head_migration_errors(),label
+        print('PASS BANK HEAD rejects '+label)
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert bank_head_migration_errors()
+    print('PASS BANK HEAD rejects migration symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.sql' if p==first else resolve0(p,*a,**kw)):assert bank_head_migration_errors()
+    print('PASS BANK HEAD rejects migration resolved escape')
+    for target in [first,R/'backend/src/main/resources/db/migration/V33__qualification_room_lock_assignments.sql']:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert bank_head_migration_errors()
+        print('PASS BANK HEAD rejects checksum mutation '+target.name)
+
+receipt_admission_successor_errors=bank_head_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=bank_head_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        bank_head_negative_controls();owned=set(BANK_HEAD_PATHS)|{'knowledge/execution/validate_execution.py'}
+        replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',BANK_HEAD_BASE+':'+n]) for n in owned};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+                sep='\0' if '-z' in argv else '\n';value=data if isinstance(data,str) else data.decode();items=[n for n in value.split(sep) if n and n not in owned];value=sep.join(items)+(sep if items else '')
+                return value if isinstance(data,str) else value.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':bank_head_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=bank_head_previous_main()
+        if result==0:print('PASS exact Bank test V33 head successor;all historical controls preserved;no application/runtime change')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
