@@ -53,4 +53,11 @@ class BankInstructionPublicationServiceTest {
   mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post(path+"?unapproved=1").principal(()->author.toString()).contentType("application/json").content(valid)).andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.status().isBadRequest());assertThat(model.proposals).hasSize(1);
  }
 
+
+ @org.junit.jupiter.api.Test void jdbcRepositorySupportsClassBasedExceptionTranslationProxy() {
+  var jdbc=org.springframework.jdbc.core.simple.JdbcClient.create(new org.springframework.jdbc.datasource.DriverManagerDataSource());
+  var factory=new org.springframework.aop.framework.ProxyFactory(new JdbcBankInstructionPublicationRepository(jdbc));
+  factory.setProxyTargetClass(true);
+  org.assertj.core.api.Assertions.assertThatCode(()->factory.getProxy()).doesNotThrowAnyException();
+ }
 }

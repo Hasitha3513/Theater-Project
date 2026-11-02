@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 /** Prepared adapter only: feature disabled by default; schema requires separate approval. */
 @Repository
-final class JdbcBankInstructionPublicationRepository implements BankInstructionPublicationRepository {
+class JdbcBankInstructionPublicationRepository implements BankInstructionPublicationRepository {
     private final JdbcClient jdbc;
     JdbcBankInstructionPublicationRepository(JdbcClient jdbc){this.jdbc=jdbc;}
     public Instant now(){return jdbc.sql("SELECT clock_timestamp()").query(OffsetDateTime.class).single().toInstant();}

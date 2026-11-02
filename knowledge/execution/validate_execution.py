@@ -10246,5 +10246,162 @@ def inert_ci_main():
         if result==0:print('PASS exact V34 bank publication successor;all historical controls preserved;staging-only')
         return result
 
+
+# CN-R1-BANK-INSTRUCTION-PUBLICATION-CI-FIX-001: exact owner-approved proxy recovery.
+PROXYCI_BASE = 'eadea90a3d7126243bfc40a32b28c82dc5a017ec'
+PROXYCI_SUFFIX_SHA256 = 'd0a9a5d745c9fbe96c2371f9c4040fda621de6e1506ef013a0d922616932ff28'
+PROXYCI_PATHS = ['backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java', 'backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/manifest.json']
+PROXYCI_HASHES = {'backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java': '6f04ebba63b2d54b908d5e97bbff19f757ce143670ba1df9e8c1afbab901cd82', 'backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java': '251275c16a6619053c8793171b917f50391de2eca39483b454e5e8cb71776c91', 'knowledge/ARCHITECTURE.md': '1e95e1b0ceea7c5cbfee2fb0d498a91b8647382a71109070853977cb4054c8db', 'knowledge/PROGRESS.md': 'e9b48316793ec41bdc9f05f230ce124f31f9e9f36d5b3e694c4c93195cd3d320', 'knowledge/execution/status.json': '5d4a4e7ee9c439a83d84ec90698933f9a3a0baf68967e0649a9440c729537186'}
+PROXYCI_EVIDENCE_SHA256 = '311434bb9efeb4cf431cccdb8bf457b2e9376f455cd498e5abb116f847055474'
+PROXYCI_MIGRATION = 'backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql'
+proxyci_previous_main = inert_ci_main
+proxyci_previous_guard = receipt_admission_successor_errors
+
+def proxyci_tree():
+    rows=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',PROXYCI_BASE]);result={}
+    for row in rows.split(b'\0'):
+        if row:
+            meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+            if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Invalid baseline entry')
+            result[name.decode()]=oid.decode()
+    return result
+
+def proxyci_migration_errors():
+    errors=[];folder=R/'backend/src/main/resources/db/migration'
+    try:
+        if folder.is_symlink() or folder.resolve()!=folder:return ['PROXYCI unsafe migration folder']
+        expected={n:h for n,h in proxyci_tree().items() if n.startswith('backend/src/main/resources/db/migration/')}
+        actual=[];versions=[]
+        for p in folder.glob('*'):
+            name=p.relative_to(R).as_posix();actual.append(name);match=re.fullmatch(r'V([0-9]+)__[^/]+\.sql',p.name)
+            if match:versions.append(int(match[1]))
+            if name not in expected:errors.append('PROXYCI unexpected migration');continue
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p or p.parent!=folder:errors.append('PROXYCI unsafe migration');continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=expected[name]:errors.append('PROXYCI migration fingerprint drift')
+        if len(expected)!=33 or len(actual)!=33 or set(actual)!=set(expected):errors.append('PROXYCI exact migration inventory drift')
+        if len(set(versions))!=33 or set(versions)!=set(range(1,31))|{32,33,34}:errors.append('PROXYCI migration version conflict')
+    except (OSError,ValueError):errors.append('PROXYCI inaccessible migration inventory')
+    return errors
+
+def proxyci_payload_errors():
+    errors=[];owned=set(PROXYCI_PATHS)|{'knowledge/execution/validate_execution.py'}
+    before=lambda n:subprocess.check_output(['git','-C',str(R),'show',PROXYCI_BASE+':'+n])
+    try:
+        if len(PROXYCI_PATHS)!=6 or len(set(PROXYCI_PATHS))!=6 or set(PROXYCI_HASHES)!=set(PROXYCI_PATHS)-{'knowledge/manifest.json'}:return ['PROXYCI incomplete exact payload inventory']
+        for name in owned:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('PROXYCI unsafe/missing payload '+name);continue
+            if name in PROXYCI_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=PROXYCI_HASHES[name]:errors.append('PROXYCI unauthorized payload '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n";prefix=before('knowledge/execution/validate_execution.py').decode().removesuffix(ending);current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('PROXYCI historical validator prefix changed')
+        suffix=current[len(prefix):];normal=suffix.replace("PROXYCI_SUFFIX_SHA256 = '"+PROXYCI_SUFFIX_SHA256+"'","PROXYCI_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normal.encode()).hexdigest()!=PROXYCI_SUFFIX_SHA256:errors.append('PROXYCI successor suffix changed')
+        state=json.loads((K/'execution/status.json').read_text());canonical=(json.dumps(state,indent=2)+'\n').encode()
+        if hashlib.sha256(canonical).hexdigest()!=PROXYCI_HASHES['knowledge/execution/status.json']:errors.append('PROXYCI registry evidence drift')
+        e=state.pop('bankInstructionPublicationProxyCiRecovery',{})
+        if state!=json.loads(before('knowledge/execution/status.json')):errors.append('PROXYCI historical registry changed')
+        if e.get('taskId')!='CN-R1-BANK-INSTRUCTION-PUBLICATION-CI-FIX-001' or e.get('parent')!='CN-R1-BANK-INSTRUCTION-PUBLICATION-001' or e.get('baseline')!=PROXYCI_BASE or e.get('authorization')!='EXPLICIT_OWNER_EXACT_6_PAYLOADS_AND_ADDITIVE_SUCCESSOR' or e.get('payloadPaths')!=PROXYCI_PATHS:errors.append('PROXYCI task/authority mismatch')
+        if e.get('sourceTestFingerprints')!={n:h for n,h in PROXYCI_HASHES.items() if n.startswith('backend/')} or e.get('contextProof',{}).get('sha256')!=PROXYCI_EVIDENCE_SHA256:errors.append('PROXYCI source/evidence mismatch')
+        if e.get('correction')!='REMOVE_FINAL_MODIFIER_ONLY' or e.get('afterOffline')!={'reported':84,'passed':81,'failed':0,'errors':0,'postgresSkipped':3}:errors.append('PROXYCI executed regression mismatch')
+        if e.get('mode')!='STAGING_ONLY' or e.get('realReceiptAdmission')!='DENY' or any(e.get(n) is not False for n in ['runtimeStarted','databaseWrites','migrationsChanged','businessBehaviorChanged','realPaymentEnabled','formalAcceptanceChanged']):errors.append('PROXYCI safety drift')
+        source='backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java'
+        if (R/source).read_bytes()!=before(source).replace(b'final class JdbcBankInstructionPublicationRepository',b'class JdbcBankInstructionPublicationRepository',1):errors.append('PROXYCI production change exceeds exact modifier')
+        for name in ['PROJECT.md','ARCHITECTURE.md','PROGRESS.md','product/FEATURE_CATALOG.md','guides/USER_GUIDE.md']:
+            if not (K/name).read_bytes().startswith(before('knowledge/'+name)):errors.append('PROXYCI historical prose changed '+name)
+        errors.extend(proxyci_migration_errors());tree=proxyci_tree()
+        for name in set(tree)-owned:
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('PROXYCI unsafe unowned path');continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=tree[name]:errors.append('PROXYCI unowned/history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        if paths!=set(tree)|owned:errors.append('PROXYCI unauthorized/missing repository path')
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',PROXYCI_BASE,'--name-only','-z'],text=True),nul=True)
+        if not changed<=owned:errors.append('PROXYCI unauthorized changed path')
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json' and 'sha256' in row:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('PROXYCI manifest drift')
+    except (OSError,ValueError,KeyError,TypeError):errors.append('PROXYCI inaccessible/invalid payload')
+    return errors
+
+def proxyci_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return proxyci_payload_errors()
+
+def proxyci_negative_controls():
+    from unittest.mock import patch
+    assert not proxyci_successor_errors();print('PASS PROXYCI exact6 successor positive control')
+    assert not proxyci_migration_errors();print('PASS PROXYCI exact33 migration positive control')
+    rb0,rt0=Path.read_bytes,Path.read_text
+    for name in PROXYCI_PATHS+['backend/src/main/java/com/cinenest/access/SmartLock.java','backend/src/main/java/com/cinenest/payments/internal/LedgerService.java','AGENTS.md']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert proxyci_successor_errors(),name
+        print('PASS PROXYCI rejects payload/history mutation '+name)
+    target=R/PROXYCI_PATHS[0];file0,link0,resolve0=Path.is_file,Path.is_symlink,Path.resolve
+    with patch.object(Path,'is_file',lambda p:False if p==target else file0(p)):assert proxyci_successor_errors()
+    print('PASS PROXYCI rejects missing source')
+    with patch.object(Path,'is_symlink',lambda p:True if p==target else link0(p)):assert proxyci_successor_errors()
+    print('PASS PROXYCI rejects source symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.java' if p==target else resolve0(p,*a,**kw)):assert proxyci_successor_errors()
+    print('PASS PROXYCI rejects resolved traversal')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:s.replace('Read-only execution/coverage validator.','Unauthorized history.',1)),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert proxyci_successor_errors(),label
+        print('PASS PROXYCI rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('baseline','INVALID'),('authorization','UNAPPROVED'),('contextProof',{}),('sourceTestFingerprints',{})]:
+        def bad_record(p,*a,**kw):
+            text=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(text);d['bankInstructionPublicationProxyCiRecovery'][field]=value;return json.dumps(d)
+            return text
+        with patch.object(Path,'read_text',bad_record):assert proxyci_successor_errors(),field
+        print('PASS PROXYCI rejects task/evidence '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-proxyci.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert proxyci_successor_errors()
+        print('PASS PROXYCI rejects unknown '+command+' path')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('duplicate path',original+[first]),('traversal migration',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert proxyci_migration_errors(),label
+        print('PASS PROXYCI rejects '+label)
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert proxyci_migration_errors()
+    print('PASS PROXYCI rejects migration symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside.sql' if p==first else resolve0(p,*a,**kw)):assert proxyci_migration_errors()
+    print('PASS PROXYCI rejects migration resolved escape')
+    for target in [first,R/PROXYCI_MIGRATION]:
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert proxyci_migration_errors()
+        print('PASS PROXYCI rejects migration checksum '+target.name)
+
+receipt_admission_successor_errors=proxyci_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=proxyci_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        proxyci_negative_controls();owned=set(PROXYCI_PATHS)|{'knowledge/execution/validate_execution.py'};tracked=set(proxyci_tree());added=owned-tracked
+        replacements={R/n:subprocess.check_output(['git','-C',str(R),'show',PROXYCI_BASE+':'+n]) for n in owned&tracked};rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=data if isinstance(data,str) else data.decode();items=[n for n in text.split(sep) if n and n not in remove];text=sep.join(items)+(sep if items else '')
+                return text if isinstance(data,str) else text.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':proxyci_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=proxyci_previous_main()
+        if result==0:print('PASS exact V34 bank publication successor;all historical controls preserved;staging-only')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

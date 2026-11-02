@@ -29118,5 +29118,64 @@
         "snapshot": "VALIDATED_PENDING_COMMIT_PUSH_EXACT_SOURCE_CI"
       }
     }
+  },
+  "bankInstructionPublicationProxyCiRecovery": {
+    "taskId": "CN-R1-BANK-INSTRUCTION-PUBLICATION-CI-FIX-001",
+    "parent": "CN-R1-BANK-INSTRUCTION-PUBLICATION-001",
+    "baseline": "eadea90a3d7126243bfc40a32b28c82dc5a017ec",
+    "authorization": "EXPLICIT_OWNER_EXACT_6_PAYLOADS_AND_ADDITIVE_SUCCESSOR",
+    "payloadPaths": [
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java",
+      "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/manifest.json"
+    ],
+    "proposalSha256": "610f12229a7c9a27c1bafebf13f19c2cb0e0f87848e33ae13f225c395e319fbf",
+    "sourceTestFingerprints": {
+      "backend/src/main/java/com/cinenest/payments/internal/JdbcBankInstructionPublicationRepository.java": "6f04ebba63b2d54b908d5e97bbff19f757ce143670ba1df9e8c1afbab901cd82",
+      "backend/src/test/java/com/cinenest/payments/internal/BankInstructionPublicationServiceTest.java": "251275c16a6619053c8793171b917f50391de2eca39483b454e5e8cb71776c91"
+    },
+    "priorFailedCi": 41341435347,
+    "correction": "REMOVE_FINAL_MODIFIER_ONLY",
+    "beforeRegression": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "expectedCause": "Cannot subclass final class"
+    },
+    "afterOffline": {
+      "reported": 84,
+      "passed": 81,
+      "failed": 0,
+      "errors": 0,
+      "postgresSkipped": 3
+    },
+    "contextProof": {
+      "refresh": "PASS",
+      "classBasedProxy": "PASS",
+      "repositoryInterface": "PASS",
+      "databaseCalls": 0,
+      "publicationCalls": 0,
+      "sha256": "311434bb9efeb4cf431cccdb8bf457b2e9376f455cd498e5abb116f847055474"
+    },
+    "runtimeStarted": false,
+    "databaseWrites": false,
+    "migrationsChanged": false,
+    "businessBehaviorChanged": false,
+    "realPaymentEnabled": false,
+    "realReceiptAdmission": "DENY",
+    "mode": "STAGING_ONLY",
+    "formalAcceptanceChanged": false,
+    "progress": {
+      "releaseCompleted": 4,
+      "releaseTotal": 21,
+      "criteriaCompleted": 15,
+      "criteriaTotal": 74,
+      "formalAccepted": 0,
+      "requirementsTotal": 92
+    },
+    "publication": "PREPUBLICATION_PENDING_GOVERNANCE_COMMIT_PUSH_EXACT_SOURCE_CI"
   }
 }
