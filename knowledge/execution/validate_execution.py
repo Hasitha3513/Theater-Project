@@ -10403,5 +10403,121 @@ def inert_ci_main():
         if result==0:print('PASS exact V34 bank publication successor;all historical controls preserved;staging-only')
         return result
 
+
+# CN-R1-GP03-RECEIPT-REGRESSION-001: exact offline-test successor; no runtime authority.
+GP03_BASE = '70d8aff64d0bc01354531014c6da33bb600033db'
+GP03_TASK = 'CN-R1-GP03-RECEIPT-REGRESSION-001'
+GP03_TEST = 'backend/src/test/java/com/cinenest/payments/internal/BankReadinessTest.java'
+GP03_VALIDATOR = 'knowledge/execution/validate_execution.py'
+GP03_MANIFEST = 'knowledge/manifest.json'
+GP03_TEST_SHA256 = 'c524accbcbdf24cc96544f8fffd06d8177180feebe5f56c985b5fb75a06e8a34'
+GP03_EVIDENCE = {
+    'taskId': GP03_TASK, 'baseline': GP03_BASE, 'focusedPassed': 8, 'relatedPassed': 51,
+    'focusedLogSha256': '67c871e439333678e9d35480a2ae858dec0aeffd98daff29507d32476f6c5733',
+    'relatedLogSha256': '36a9e1ced35a70c888421be0e11a7c8b69dce96f4516eedaefa63ac4c05f620d',
+    'realReceiptAdmission': 'DENY', 'gp03': 'BLOCKED', 'runtimeStarted': False,
+}
+GP03_SUFFIX_SHA256 = '7379da5233b80744b60f015d0d9b4512e2b8b95613464445a9810a00e0face80'
+gp03_previous_main = inert_ci_main
+gp03_previous_guard = receipt_admission_successor_errors
+
+def gp03_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',GP03_BASE+':'+name])
+
+def gp03_tree():
+    rows=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',GP03_BASE]);result={}
+    for row in rows.split(b'\0'):
+        if row:
+            meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+            if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe baseline')
+            result[name.decode()]=oid.decode()
+    return result
+
+def gp03_payload_errors():
+    errors=[];owned={GP03_TEST,GP03_VALIDATOR,GP03_MANIFEST}
+    try:
+        if GP03_TASK!='CN-R1-GP03-RECEIPT-REGRESSION-001' or GP03_EVIDENCE['taskId']!=GP03_TASK or GP03_EVIDENCE['baseline']!=GP03_BASE:errors.append('GP03 task/evidence mismatch')
+        tree=gp03_tree()
+        for name in owned:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('GP03 unsafe/missing path');continue
+        if errors:return errors
+        if hashlib.sha256((R/GP03_TEST).read_bytes()).hexdigest()!=GP03_TEST_SHA256:errors.append('GP03 test fingerprint drift')
+        old=gp03_before(GP03_TEST);new=(R/GP03_TEST).read_bytes()
+        if not old.endswith(b'}\n') or not new.startswith(old[:-2]):errors.append('GP03 existing test assertions changed')
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=gp03_before(GP03_VALIDATOR).decode().removesuffix(ending);current=(R/GP03_VALIDATOR).read_text()
+        if not current.startswith(prefix):errors.append('GP03 historical prefix changed')
+        suffix=current[len(prefix):];normal=suffix.replace("GP03_SUFFIX_SHA256 = '"+GP03_SUFFIX_SHA256+"'","GP03_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normal.encode()).hexdigest()!=GP03_SUFFIX_SHA256:errors.append('GP03 successor/evidence fingerprint drift')
+        manifest=json.loads(gp03_before(GP03_MANIFEST));matches=0
+        for row in manifest['files']:
+            if row['path']=='execution/validate_execution.py':row['sha256']=hashlib.sha256(current.encode()).hexdigest();matches+=1
+        if matches!=1 or (R/GP03_MANIFEST).read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('GP03 unauthorized manifest delta')
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('GP03 unsafe/missing historical path');continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('GP03 historical drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',GP03_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree) or not changed<=owned:errors.append('GP03 unauthorized/missing repository path')
+        errors.extend(proxyci_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('GP03 invalid/inaccessible payload')
+    return errors
+
+def gp03_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return gp03_payload_errors()
+
+def gp03_controls():
+    from unittest.mock import patch
+    assert not gp03_successor_errors();print('PASS GP03 exact three-file positive')
+    rb0,rt0,link0,file0,resolve0=Path.read_bytes,Path.read_text,Path.is_symlink,Path.is_file,Path.resolve
+    for name in [GP03_TEST,GP03_MANIFEST,'AGENTS.md','backend/src/main/java/com/cinenest/payments/internal/BankService.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert gp03_successor_errors()
+        print('PASS GP03 rejects changed '+name)
+    target=R/GP03_TEST
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert gp03_successor_errors()
+        print('PASS GP03 rejects '+label)
+    target=R/GP03_VALIDATOR
+    for label,mutate in [('prefix',lambda s:'UNAUTHORIZED\n'+s),('suffix',lambda s:s+'\n'),('task',lambda s:s.replace("GP03_TASK = 'CN-R1-GP03-RECEIPT-REGRESSION-001'","GP03_TASK = 'UNKNOWN'")),('evidence',lambda s:s.replace("'focusedPassed': 8","'focusedPassed': 999"))]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert gp03_successor_errors()
+        print('PASS GP03 rejects '+label)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-gp03.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert gp03_successor_errors()
+        print('PASS GP03 rejects unknown '+command)
+
+receipt_admission_successor_errors=gp03_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=gp03_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        gp03_controls();owned={GP03_TEST,GP03_VALIDATOR,GP03_MANIFEST}
+        replacements={R/n:gp03_before(n) for n in owned};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+                sep='\0' if '-z' in argv else '\n';text=data if isinstance(data,str) else data.decode();items=[n for n in text.split(sep) if n and n not in owned];text=sep.join(items)+(sep if items else '')
+                return text if isinstance(data,str) else text.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':gp03_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=gp03_previous_main()
+        if result==0:print('PASS GP03 offline receipt regression successor;historical controls preserved;real receipts DENY')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
