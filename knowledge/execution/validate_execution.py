@@ -10519,5 +10519,140 @@ def inert_ci_main():
         if result==0:print('PASS GP03 offline receipt regression successor;historical controls preserved;real receipts DENY')
         return result
 
+
+# CN-C02-LOCAL-SYNTHETIC-CREDENTIAL-RECOVERY-001 exact offline contract publication.
+C02_BASE = 'd65574c5bd50cb5eb00a2f30785eddbd27d634f4'
+C02_TASK = 'CN-C02-LOCAL-SYNTHETIC-CREDENTIAL-RECOVERY-001'
+C02_PATHS = ['backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecovery.java', 'backend/src/test/java/com/cinenest/identity/internal/LocalIdentityBoundaryTest.java', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json']
+C02_HASHES = {'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java': '236feab8a4f06828bd2939d7e9fd208874e0602317ddb407c156fd6e669fe462', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecovery.java': 'b59378afc59a1b4ae4a35b8470ae50f5f77d4700b9fb48f70855b6d8ec1f298e', 'backend/src/test/java/com/cinenest/identity/internal/LocalIdentityBoundaryTest.java': '88ffdd0496ee868c1e715d36464f4a51111aac2087b83e910f33702d979de50c', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryTest.java': '9d85add282a0f65152f9cc0e9231015dc24a764eb892337fb74177cc844d9f1a', 'knowledge/ARCHITECTURE.md': '6d10525267799adde6b1894892de080c6fc0251d02d3ae0079fdff31b721bd4f', 'knowledge/PROGRESS.md': 'c8601541eba2bee1a81161eabd3376448110d89d9c3a06e88a85725f824ea3c7', 'knowledge/product/FEATURE_CATALOG.md': '910b24e0d320deeead9f6c77011ac5d4885decd170e3b58baf7d17ae65fb808c', 'knowledge/guides/USER_GUIDE.md': 'c31819b658f9f6d20615ddd8ff5e580dfdfe9ff415c225cad6e6acfd5ba7c93d', 'knowledge/execution/status.json': 'ecc6f41dca40c62c405bb9ad031dbcbfc22c4612f2213a3abae21fb4e4d938ae'}
+C02_SUFFIX_SHA256 = '1fc8d4fa2de650aece6c8798058ed312296526f528ef6fba8c395875172e08be'
+c02_previous_main = inert_ci_main
+c02_previous_guard = receipt_admission_successor_errors
+
+def c02_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',C02_BASE+':'+name])
+
+def c02_tree():
+    rows=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',C02_BASE]);result={}
+    for row in rows.split(b'\0'):
+        if row:
+            meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+            if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe baseline')
+            result[name.decode()]=oid.decode()
+    return result
+
+def c02_payload_errors():
+    errors=[];owned=set(C02_PATHS)|{'knowledge/execution/validate_execution.py'}
+    try:
+        if len(C02_PATHS)!=10 or len(set(C02_PATHS))!=10 or set(C02_HASHES)!=set(C02_PATHS)-{'knowledge/manifest.json'}:return ['C02 exact inventory mismatch']
+        for name in owned:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('C02 unsafe/missing payload '+name);continue
+            if name in C02_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=C02_HASHES[name]:errors.append('C02 fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n";prefix=c02_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending);current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('C02 historical validator prefix changed')
+        suffix=current[len(prefix):];normal=suffix.replace("C02_SUFFIX_SHA256 = '"+C02_SUFFIX_SHA256+"'","C02_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normal.encode()).hexdigest()!=C02_SUFFIX_SHA256:errors.append('C02 successor suffix changed')
+        state=json.loads((K/'execution/status.json').read_text());canonical=(json.dumps(state,indent=2)+'\n').encode()
+        if hashlib.sha256(canonical).hexdigest()!=C02_HASHES['knowledge/execution/status.json']:errors.append('C02 registry evidence drift')
+        e=state.pop('localCredentialRecoveryContract',{})
+        if state!=json.loads(c02_before('knowledge/execution/status.json')):errors.append('C02 historical registry changed')
+        if C02_TASK!='CN-C02-LOCAL-SYNTHETIC-CREDENTIAL-RECOVERY-001' or e.get('taskId')!=C02_TASK or e.get('baseline')!=C02_BASE or e.get('payloadPaths')!=C02_PATHS or e.get('authorization')!='EXPLICIT_OWNER_EXACT_FOUR_SOURCE_SIX_KB_AND_ADDITIVE_SUCCESSOR':errors.append('C02 task/authority mismatch')
+        if e.get('sourceFingerprints')!={n:h for n,h in C02_HASHES.items() if n.startswith('backend/')} or e.get('tests')!={'recovery':18,'identity':5,'architecture':20,'failures':0,'errors':0,'skipped':0}:errors.append('C02 source/test evidence mismatch')
+        if e.get('contract')!='OFFLINE_DEFAULT_DISABLED_PLANNER_AND_ATOMIC_COMMIT_PORT_ONLY' or e.get('mode')!='LOCAL_SYNTHETIC_ONLY' or e.get('realReceiptAdmission')!='DENY' or e.get('ddlVersion')!='UNASSIGNED':errors.append('C02 contract boundary drift')
+        if any(e.get(n) is not False for n in ['persistenceImplemented','credentialRecoveryActivated','loginSelectionChanged','sessionValidationChanged','runtimeStarted','databaseWrites','migrationsChanged','realBankingEnabled','physicalAccessEnabled','acceptanceChanged']):errors.append('C02 activation/acceptance drift')
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(c02_before(name)):errors.append('C02 historical prose changed '+name)
+        test='backend/src/test/java/com/cinenest/identity/internal/LocalIdentityBoundaryTest.java'
+        if not (R/test).read_bytes().startswith(c02_before(test)[:-2]):errors.append('C02 historical test assertions changed')
+        tree=c02_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('C02 unsafe/missing historical path');continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('C02 historical drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',C02_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree)|owned or not changed<=owned:errors.append('C02 unauthorized/missing repository path')
+        manifest=json.loads(c02_before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in owned and row['path']!='manifest.json' and 'sha256' in row:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('C02 unauthorized manifest change')
+        errors.extend(proxyci_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('C02 invalid/inaccessible payload')
+    return errors
+
+def c02_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return c02_payload_errors()
+
+def c02_controls():
+    from unittest.mock import patch
+    assert not c02_successor_errors();print('PASS C02 exact10 successor positive')
+    assert not proxyci_migration_errors();print('PASS C02 exact33 migration positive')
+    rb0,rt0,link0,file0,resolve0=Path.read_bytes,Path.read_text,Path.is_symlink,Path.is_file,Path.resolve
+    for name in C02_PATHS+['AGENTS.md','backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert c02_successor_errors(),name
+        print('PASS C02 rejects payload/history mutation '+name)
+    target=R/C02_PATHS[1]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert c02_successor_errors()
+        print('PASS C02 rejects '+label)
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert c02_successor_errors()
+        print('PASS C02 rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceFingerprints',{}),('tests',{}),('credentialRecoveryActivated',True)]:
+        def bad(p,*a,**kw):
+            text=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(text);d['localCredentialRecoveryContract'][field]=value;return json.dumps(d)
+            return text
+        with patch.object(Path,'read_text',bad):assert c02_successor_errors()
+        print('PASS C02 rejects evidence '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-c02.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert c02_successor_errors()
+        print('PASS C02 rejects unknown '+command)
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('traversal migration',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert proxyci_migration_errors(),label
+        print('PASS C02 rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert proxyci_migration_errors()
+    print('PASS C02 rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert proxyci_migration_errors()
+    print('PASS C02 rejects migration symlink')
+
+receipt_admission_successor_errors=c02_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=c02_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        c02_controls();owned=set(C02_PATHS)|{'knowledge/execution/validate_execution.py'};tree=set(c02_tree());added=owned-tree
+        replacements={R/n:c02_before(n) for n in owned&tree};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=data if isinstance(data,str) else data.decode();items=[n for n in text.split(sep) if n and n not in remove];text=sep.join(items)+(sep if items else '')
+                return text if isinstance(data,str) else text.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':c02_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=c02_previous_main()
+        if result==0:print('PASS C02 offline recovery contract publication;historical controls preserved;recovery inactive')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

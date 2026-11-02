@@ -803,3 +803,8 @@ CN-R1-BANK-INSTRUCTION-PUBLICATION-001: backend-only proposed/reviewed/published
 Persistence follow-up: exact approved V34 migration source now exists; no database execution/qualification or operational availability claimed. Existing non-payable/default-disabled boundaries unchanged.
 
 Latest V34 qualification: BANK_INSTRUCTION_V34_PG_PASS. Actual clean/populated migrations, committed fixture, independent publication, real database concurrency/idempotency/mandatory-audit rollback and immutable history verified. Feature remains default-disabled and unpublished pending repository admission; no real banking or formal acceptance. Canonical evidence in PROGRESS.
+
+
+### DOC-F001 amendment — offline local credential recovery contracts
+
+CN-C02-LOCAL-SYNTHETIC-CREDENTIAL-RECOVERY-001 adds a default-disabled internal Identity planning contract and offline tests only. Exact synthetic account/actor/venue/capability/revision/expiry validation produces an append intent requiring audit and all-session invalidation. It does not reset a password or add a customer/operator workflow. Existing login still uses historical V28 credentials; there is no recovery endpoint, persistence adapter, issuer or session-epoch enforcement. Synthetic test PASS is not production authentication/recovery readiness. [Contract](../ARCHITECTURE.md#local-credential-recovery-contract),[tests and pending gates](../PROGRESS.md#local-credential-recovery-contract).

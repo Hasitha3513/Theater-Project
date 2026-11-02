@@ -25,4 +25,13 @@ class LocalIdentityBoundaryTest {
  @Test void credentialDiagnosticIsRedacted() {
   assertThat(new LocalCustomerIdentity.Credential(java.util.UUID.randomUUID(),"PRIVATE_HASH",true,"ELIGIBLE",true).toString()).isEqualTo("Credential[REDACTED]");
  }
+ @Test void sharedEncoderPreservesExistingV28FormatAndAlgorithm() {
+  String password="Synthetic encoder compatibility 2026!";
+  var existing=new org.springframework.security.crypto.password.Pbkdf2PasswordEncoder("",16,600000,256);
+  existing.setAlgorithm(org.springframework.security.crypto.password.Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
+  String old=existing.encode(password),fresh=LocalCustomerIdentity.credentialEncoder().encode(password);
+  assertThat(old).matches("[0-9a-f]{96}");assertThat(fresh).matches("[0-9a-f]{96}");
+  assertThat(LocalCustomerIdentity.credentialEncoder().matches(password,old)).isTrue();
+  assertThat(existing.matches(password,fresh)).isTrue();
+ }
 }

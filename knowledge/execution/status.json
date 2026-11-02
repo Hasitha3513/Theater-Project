@@ -29177,5 +29177,52 @@
       "requirementsTotal": 92
     },
     "publication": "PREPUBLICATION_PENDING_GOVERNANCE_COMMIT_PUSH_EXACT_SOURCE_CI"
+  },
+  "localCredentialRecoveryContract": {
+    "taskId": "CN-C02-LOCAL-SYNTHETIC-CREDENTIAL-RECOVERY-001",
+    "baseline": "d65574c5bd50cb5eb00a2f30785eddbd27d634f4",
+    "authorization": "EXPLICIT_OWNER_EXACT_FOUR_SOURCE_SIX_KB_AND_ADDITIVE_SUCCESSOR",
+    "payloadPaths": [
+      "backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java",
+      "backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecovery.java",
+      "backend/src/test/java/com/cinenest/identity/internal/LocalIdentityBoundaryTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryTest.java",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/execution/status.json",
+      "knowledge/manifest.json"
+    ],
+    "sourceFingerprints": {
+      "backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java": "236feab8a4f06828bd2939d7e9fd208874e0602317ddb407c156fd6e669fe462",
+      "backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecovery.java": "b59378afc59a1b4ae4a35b8470ae50f5f77d4700b9fb48f70855b6d8ec1f298e",
+      "backend/src/test/java/com/cinenest/identity/internal/LocalIdentityBoundaryTest.java": "88ffdd0496ee868c1e715d36464f4a51111aac2087b83e910f33702d979de50c",
+      "backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryTest.java": "9d85add282a0f65152f9cc0e9231015dc24a764eb892337fb74177cc844d9f1a"
+    },
+    "contract": "OFFLINE_DEFAULT_DISABLED_PLANNER_AND_ATOMIC_COMMIT_PORT_ONLY",
+    "tests": {
+      "recovery": 18,
+      "identity": 5,
+      "architecture": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "evidence": "PROGRESS.md#local-credential-recovery-contract",
+    "mode": "LOCAL_SYNTHETIC_ONLY",
+    "persistenceImplemented": false,
+    "credentialRecoveryActivated": false,
+    "loginSelectionChanged": false,
+    "sessionValidationChanged": false,
+    "runtimeStarted": false,
+    "databaseWrites": false,
+    "migrationsChanged": false,
+    "ddlVersion": "UNASSIGNED",
+    "realReceiptAdmission": "DENY",
+    "realBankingEnabled": false,
+    "physicalAccessEnabled": false,
+    "acceptanceChanged": false,
+    "publication": "PENDING_GATES_COMMIT_PUSH_EXACT_SOURCE_CI"
   }
 }

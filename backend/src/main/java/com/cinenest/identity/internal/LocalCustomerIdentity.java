@@ -32,7 +32,7 @@ class LocalCustomerIdentity {
     final JdbcClient jdbc;
     final IdentityStore store;
     final TransactionTemplate tx;
-    final Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder("",16,600000,256);
+    final Pbkdf2PasswordEncoder encoder = credentialEncoder();
     final Semaphore hashing = new Semaphore(2);
     final String dummy;
     final Path outbox;
@@ -50,8 +50,13 @@ class LocalCustomerIdentity {
         Files.createDirectories(this.outbox,PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------")));
         if(!Files.getPosixFilePermissions(this.outbox,LinkOption.NOFOLLOW_LINKS).equals(PosixFilePermissions.fromString("rwx------")))
             throw new IllegalArgumentException("Private outbox permissions required");
-        encoder.setAlgorithm(Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
         dummy=encoder.encode(UUID.randomUUID().toString());
+    }
+    /** Shared hashing parameters only; no credential persistence or recovery activation. */
+    static Pbkdf2PasswordEncoder credentialEncoder() {
+        var encoder=new Pbkdf2PasswordEncoder("",16,600000,256);
+        encoder.setAlgorithm(Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
+        return encoder;
     }
     static String email(String raw) {
         if(raw==null || raw.length()>254) throw new IllegalArgumentException();

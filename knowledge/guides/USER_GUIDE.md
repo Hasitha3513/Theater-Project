@@ -490,3 +490,8 @@ Backend-only preparation CN-R1-BANK-INSTRUCTION-PUBLICATION-001 is not an availa
 V34 migration source has separate Owner schema approval and is prepared only. It has not been applied; do not attempt this workflow as a running feature. Runtime qualification and publication remain gated.
 
 Isolated V34 PostgreSQL qualification has passed. This does not make the backend feature publicly available: no operator runtime, UI, production grants or real-account workflow was activated. Publication/reconciliation remains gated; existing safety instructions unchanged.
+
+
+## Local credential recovery — තවම භාවිත කළ නොහැක
+
+CN-C02 recovery source එක offline contract/tests පමණයි. Password reset button,endpoint,token issuance හෝ executable recovery workflow එකක් නැහැ. Existing password එක වෙනස් වී නැහැ;නව grants ලබාදී නැහැ. Private credential file එක නැති නම් direct hash rewrite,trigger disabling හෝ account recreation නොකරන්න. Separate DDL,persistence සහ session-epoch integration approval/qualification අවශ්‍යයි. මේ contract එක Day6 Owner UAT acceptance හෝ production recovery approval නොවේ. [සත්‍ය evidence සහ limits](../PROGRESS.md#local-credential-recovery-contract).
