@@ -10654,5 +10654,167 @@ def inert_ci_main():
         if result==0:print('PASS C02 offline recovery contract publication;historical controls preserved;recovery inactive')
         return result
 
+
+# CN-C02-V35-PUBLICATION-RECONCILIATION-001 exact qualified-schema successor.
+V35_BASE = '5eb9ed90387f8075f3506fcc9b1da95513e3d509'
+V35_TASK = 'CN-C02-V35-PUBLICATION-RECONCILIATION-001'
+V35_PATHS = ['backend/src/main/resources/db/migration/V35__local_synthetic_credential_recovery.sql', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryPostgresTest.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'knowledge/execution/validate_execution.py']
+V35_HASHES = {'backend/src/main/resources/db/migration/V35__local_synthetic_credential_recovery.sql': '2aca51352c8d3a8352e1df8bdbeea9661210a4b21a51ced5bb7046e25bd32aaa', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryPostgresTest.java': 'd28d7f785f86bfa220dc376e882460c8ea5e92b21dc734b3d923a28fd383aa37', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'ecfe76a06a62deb28536479b7510fb6d9d6f86ef807da01631715cd722be4fa6', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '74dc31576e2a2c8c737c0b4b1018ea971985484d0ade18ea743569514d7f1afe', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': '86f48ccaa663f269145e8e017c90c18bba32a8d201ba33e977afd569d07d78d0', 'knowledge/ARCHITECTURE.md': 'c9ca400a73b00a1d4b57ea99a9e1b00d9f98cb48d7cccdee405a6688e104e198', 'knowledge/PROGRESS.md': '634e7b92f2ff192c4acf72c04210046877ec0ac618a077627ac1b37d1bb7f31f', 'knowledge/product/FEATURE_CATALOG.md': '440f5482cd16e4bf32d39e1f4c2582cf57e7cda731bb3cbc90e34fa2bd710e31', 'knowledge/execution/status.json': 'd373b0960db59f4a9bda171fb084ceea6e84b03cd86b609de5758ff8c26e29f1'}
+V35_LEGACY = {'backend/src/test/java/com/cinenest/BankIntegrationTest.java': ['SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(34);', 'SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(35);'], 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': ['f.info().current().getVersion().toString()).isEqualTo("34")', 'f.info().current().getVersion().toString()).isEqualTo("35")'], 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': ['SELECT count(*) FROM public.flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(33)', 'SELECT count(*) FROM public.flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(34)']}
+V35_EVIDENCE = {'tests.log': 'ce7ab85c1e6b9b41223e9354a029f233fefd0a111fadc309e8d5f1ccf35dbe3d', 'summary.json': 'da19526bcc86078276aa2862501130bf942e4b6878ee731a2b8690838b0658f7', 'clean-history.txt': '09652bc6b0743e5e439e71a12a1ba217d82ccb4b1dbbed7c89ec7d08a451aed2', 'upgrade-history.txt': '09652bc6b0743e5e439e71a12a1ba217d82ccb4b1dbbed7c89ec7d08a451aed2'}
+V35_SUFFIX_SHA256 = '07fcb9d6f3f871c86b236d66f0d68a1dda099cd4d781e3f49ab7cfe1b51f5f1d'
+v35_previous_main = inert_ci_main
+v35_previous_guard = receipt_admission_successor_errors
+
+def v35_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',V35_BASE+':'+name])
+
+def v35_tree():
+    rows=subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',V35_BASE]);result={}
+    for row in rows.split(b'\0'):
+        if row:
+            meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+            if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe baseline')
+            result[name.decode()]=oid.decode()
+    return result
+
+def v35_migration_errors():
+    errors=[];folder=R/'backend/src/main/resources/db/migration'
+    try:
+        if folder.is_symlink() or folder.resolve()!=folder:return ['V35 unsafe migration folder']
+        expected={n:h for n,h in v35_tree().items() if n.startswith('backend/src/main/resources/db/migration/')}
+        migration=V35_PATHS[0];expected[migration]=None;actual=[];versions=[]
+        for p in folder.glob('*'):
+            name=p.relative_to(R).as_posix();actual.append(name);m=re.fullmatch(r'V([0-9]+)__[^/]+\.sql',p.name)
+            if m:versions.append(int(m[1]))
+            if name not in expected:errors.append('V35 unexpected migration');continue
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p or p.parent!=folder:errors.append('V35 unsafe migration');continue
+            b=p.read_bytes()
+            if name==migration:
+                if hashlib.sha256(b).hexdigest()!=V35_HASHES[name]:errors.append('V35 qualified migration drift')
+            elif hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=expected[name]:errors.append('V35 historical migration drift')
+        if len(expected)!=34 or len(actual)!=34 or set(actual)!=set(expected):errors.append('V35 exact migration inventory drift')
+        if len(versions)!=34 or len(set(versions))!=34 or set(versions)!=set(range(1,31))|{32,33,34,35}:errors.append('V35 migration version conflict')
+    except (OSError,ValueError):errors.append('V35 inaccessible migration inventory')
+    return errors
+
+def v35_payload_errors():
+    errors=[];owned=set(V35_PATHS)
+    try:
+        if V35_TASK!='CN-C02-V35-PUBLICATION-RECONCILIATION-001' or len(owned)!=11 or len(V35_PATHS)!=11 or set(V35_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['V35 exact task/inventory mismatch']
+        for name in owned:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('V35 unsafe/missing payload '+name);continue
+            if name in V35_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=V35_HASHES[name]:errors.append('V35 fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n";prefix=v35_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending);current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('V35 historical validator changed')
+        normal=current[len(prefix):].replace("V35_SUFFIX_SHA256 = '"+V35_SUFFIX_SHA256+"'","V35_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normal.encode()).hexdigest()!=V35_SUFFIX_SHA256:errors.append('V35 successor changed')
+        for name,(old,new) in V35_LEGACY.items():
+            before=v35_before(name)
+            if before.count(old.encode())!=1 or (R/name).read_bytes()!=before.replace(old.encode(),new.encode(),1):errors.append('V35 legacy delta exceeds authority '+name)
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md']:
+            if not (R/name).read_bytes().startswith(v35_before(name)):errors.append('V35 historical KB changed '+name)
+        state=json.loads((K/'execution/status.json').read_text());e=state.pop('localCredentialRecoveryV35',{})
+        if state!=json.loads(v35_before('knowledge/execution/status.json')):errors.append('V35 historical registry changed')
+        if e.get('taskId')!=V35_TASK or e.get('baseline')!=V35_BASE or e.get('payloadPaths')!=V35_PATHS or e.get('authorization')!='EXPLICIT_OWNER_EXACT_ELEVEN_FILES_PUBLICATION_ONLY':errors.append('V35 task/authority mismatch')
+        if e.get('qualifiedSourceFingerprints')!={n:V35_HASHES[n] for n in V35_PATHS[:2]} or e.get('qualificationEvidenceHashes')!=V35_EVIDENCE:errors.append('V35 source/evidence binding drift')
+        if e.get('postgresTests')!={'passed':26,'failures':0,'errors':0,'skipped':0} or e.get('sqlstates')!=['23514','23505','55P03','P0001'] or e.get('postgresVersion')!='18.6':errors.append('V35 qualification drift')
+        if any(e.get(n) is not False for n in ['preservedDatabasesAccessed','qualificationReexecuted','recoveryActivated','loginSelectionChanged','sessionValidationChanged','realBankingEnabled','physicalAccessEnabled','acceptanceChanged']) or e.get('realReceiptAdmission')!='DENY':errors.append('V35 activation/acceptance drift')
+        manifest=json.loads(v35_before('knowledge/manifest.json'))
+        allowed={'ARCHITECTURE.md','PROGRESS.md','product/FEATURE_CATALOG.md','execution/status.json','execution/validate_execution.py'}
+        for row in manifest['files']:
+            if row['path'] in allowed:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('V35 unauthorized manifest change')
+        tree=v35_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('V35 missing/unsafe history '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('V35 unowned history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',V35_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree)|owned or not changed<=owned:errors.append('V35 unauthorized/missing repository path')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('V35 invalid/inaccessible payload')
+    return errors
+
+def v35_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return v35_payload_errors()
+
+def v35_controls():
+    from unittest.mock import patch
+    assert not v35_successor_errors();print('PASS V35 exact11 successor positive')
+    assert not v35_migration_errors();print('PASS V35 exact34 migration positive')
+    rb0,rt0,link0,file0,resolve0=Path.read_bytes,Path.read_text,Path.is_symlink,Path.is_file,Path.resolve
+    for name in V35_PATHS+['AGENTS.md','backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert v35_successor_errors(),name
+        print('PASS V35 rejects payload/history mutation '+name)
+    target=R/V35_PATHS[1]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert v35_successor_errors()
+        print('PASS V35 rejects '+label)
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert v35_successor_errors()
+        print('PASS V35 rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('qualifiedSourceFingerprints',{}),('qualificationEvidenceHashes',{}),('recoveryActivated',True)]:
+        def bad(p,*a,**kw):
+            text=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(text);d['localCredentialRecoveryV35'][field]=value;return json.dumps(d)
+            return text
+        with patch.object(Path,'read_text',bad):assert v35_successor_errors()
+        print('PASS V35 rejects evidence '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-v35.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert v35_successor_errors()
+        print('PASS V35 rejects unknown '+command)
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('traversal migration',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert v35_migration_errors(),label
+        print('PASS V35 rejects '+label)
+    for name in [str(first.relative_to(R)),V35_PATHS[0]]:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert v35_migration_errors()
+        print('PASS V35 rejects migration fingerprint '+name)
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert v35_migration_errors()
+    print('PASS V35 rejects migration symlink')
+    with patch.object(Path,'resolve',lambda p,*a,**kw:R/'outside' if p==first else resolve0(p,*a,**kw)):assert v35_migration_errors()
+    print('PASS V35 rejects migration resolved escape')
+
+receipt_admission_successor_errors=v35_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=v35_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        v35_controls();owned=set(V35_PATHS);tree=set(v35_tree());added=owned-tree
+        replacements={R/n:v35_before(n) for n in owned&tree};rb0,rt0,out0,glob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item!=R/V35_PATHS[0])
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                remove=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';text=data if isinstance(data,str) else data.decode();items=[n for n in text.split(sep) if n and n not in remove];text=sep.join(items)+(sep if items else '')
+                return text if isinstance(data,str) else text.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':v35_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(subprocess,'check_output',output):result=v35_previous_main()
+        if result==0:print('PASS V35 qualified inert schema publication;historical controls preserved;recovery inactive')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

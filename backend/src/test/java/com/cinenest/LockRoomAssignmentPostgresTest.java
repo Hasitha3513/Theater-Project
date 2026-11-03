@@ -65,7 +65,7 @@ class LockRoomAssignmentPostgresTest {
     @Test void exactScopeRacesReplayAndMandatoryAuditRollback()throws Exception{
         context.getAutowireCapableBeanFactory().autowireBean(helper);
         assertThat(jdbc.sql("SELECT count(*) FROM public.flyway_schema_history WHERE success AND version='33'").query(Integer.class).single()).isEqualTo(1);
-        assertThat(jdbc.sql("SELECT count(*) FROM public.flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(33);
+        assertThat(jdbc.sql("SELECT count(*) FROM public.flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(34);
         assertThat(jdbc.sql("SELECT count(*) FROM public.flyway_schema_history WHERE version='31'").query(Integer.class).single()).isZero();
         assertThat(count("lock_room_assignment")).isZero();
         assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.account").query(Integer.class).single()).isZero();

@@ -808,3 +808,8 @@ Latest V34 qualification: BANK_INSTRUCTION_V34_PG_PASS. Actual clean/populated m
 ### DOC-F001 amendment — offline local credential recovery contracts
 
 CN-C02-LOCAL-SYNTHETIC-CREDENTIAL-RECOVERY-001 adds a default-disabled internal Identity planning contract and offline tests only. Exact synthetic account/actor/venue/capability/revision/expiry validation produces an append intent requiring audit and all-session invalidation. It does not reset a password or add a customer/operator workflow. Existing login still uses historical V28 credentials; there is no recovery endpoint, persistence adapter, issuer or session-epoch enforcement. Synthetic test PASS is not production authentication/recovery readiness. [Contract](../ARCHITECTURE.md#local-credential-recovery-contract),[tests and pending gates](../PROGRESS.md#local-credential-recovery-contract).
+
+
+### DOC-F001 amendment — CN-C02 V35 qualified persistence schema
+
+Recovery contracts are published;V35 Identity persistence schema is PostgreSQL18.6-qualified(26PASS),including immutable credential versions,single-use capabilities and mandatory audit/session-epoch persistence. Actual credential recovery remains unavailable:authentication/persistence-adapter integration,issuer endpoint and runtime session invalidation are pending and separately gated. No password reset or customer workflow is activated;production activation remains prohibited. This amends the earlier contract-only classification without changing historical evidence. [Architecture](../ARCHITECTURE.md#credential-recovery-v35),[qualification](../PROGRESS.md#credential-recovery-v35).

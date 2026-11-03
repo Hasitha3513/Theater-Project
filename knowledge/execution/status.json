@@ -29224,5 +29224,68 @@
     "physicalAccessEnabled": false,
     "acceptanceChanged": false,
     "publication": "PENDING_GATES_COMMIT_PUSH_EXACT_SOURCE_CI"
+  },
+  "localCredentialRecoveryV35": {
+    "taskId": "CN-C02-V35-PUBLICATION-RECONCILIATION-001",
+    "baseline": "5eb9ed90387f8075f3506fcc9b1da95513e3d509",
+    "authorization": "EXPLICIT_OWNER_EXACT_ELEVEN_FILES_PUBLICATION_ONLY",
+    "payloadPaths": [
+      "backend/src/main/resources/db/migration/V35__local_synthetic_credential_recovery.sql",
+      "backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryPostgresTest.java",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/execution/status.json",
+      "knowledge/manifest.json",
+      "knowledge/execution/validate_execution.py"
+    ],
+    "qualifiedSourceFingerprints": {
+      "backend/src/main/resources/db/migration/V35__local_synthetic_credential_recovery.sql": "2aca51352c8d3a8352e1df8bdbeea9661210a4b21a51ced5bb7046e25bd32aaa",
+      "backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryPostgresTest.java": "d28d7f785f86bfa220dc376e882460c8ea5e92b21dc734b3d923a28fd383aa37"
+    },
+    "qualificationEvidenceHashes": {
+      "tests.log": "ce7ab85c1e6b9b41223e9354a029f233fefd0a111fadc309e8d5f1ccf35dbe3d",
+      "summary.json": "da19526bcc86078276aa2862501130bf942e4b6878ee731a2b8690838b0658f7",
+      "clean-history.txt": "09652bc6b0743e5e439e71a12a1ba217d82ccb4b1dbbed7c89ec7d08a451aed2",
+      "upgrade-history.txt": "09652bc6b0743e5e439e71a12a1ba217d82ccb4b1dbbed7c89ec7d08a451aed2"
+    },
+    "qualificationRun": "0d16eb2df2b441338855561bfc0e510a",
+    "postgresVersion": "18.6",
+    "postgresTests": {
+      "passed": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "sqlstates": [
+      "23514",
+      "23505",
+      "55P03",
+      "P0001"
+    ],
+    "evidence": "PROGRESS.md#credential-recovery-v35",
+    "evidenceLocation": "/tmp/cinenest-v35-0d16eb2df2b441338855561bfc0e510a",
+    "qualificationSourceBinding": "PRE_RECORDED_SOURCE_HASHES_UNCHANGED_AND_MATCHING_EXECUTED_SQL_NOT_EMBEDDED_IN_RUNNER_SUMMARY",
+    "cleanMigration": "PASS",
+    "upgradeV34ToV35": "PASS",
+    "historicalMigrationsUnchanged": 33,
+    "migrationInventory": 34,
+    "v31": "HOLD_ABSENT",
+    "containerRemoved": true,
+    "portClosed": true,
+    "unrelatedContainerInventoryUnchanged": true,
+    "preservedDatabasesAccessed": false,
+    "qualificationReexecuted": false,
+    "recoveryActivated": false,
+    "loginSelectionChanged": false,
+    "sessionValidationChanged": false,
+    "realReceiptAdmission": "DENY",
+    "realBankingEnabled": false,
+    "physicalAccessEnabled": false,
+    "acceptanceChanged": false,
+    "publication": "PENDING_GATES_COMMIT_PUSH_EXACT_SOURCE_CI"
   }
 }
