@@ -10816,5 +10816,150 @@ def inert_ci_main():
         if result==0:print('PASS V35 qualified inert schema publication;historical controls preserved;recovery inactive')
         return result
 
+
+# Exact branch-only Phase 1 evidence successor. Published predecessors are immutable.
+PHASE1PUB_BASE = 'c78e225b454a2a58f96b56800f19bd47d1376203'
+PHASE1PUB_TASK = 'CN-PHASE1-TECHNICAL-EVIDENCE-PUBLICATION-001'
+PHASE1PUB_PATHS = ['backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'knowledge/execution/validate_execution.py']
+PHASE1PUB_HASHES = {'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java': '1bf98c5f9c4d0fb29975b4e79e5c59d55048f70229ab3f8e746526c2e9157cf4', 'knowledge/PROGRESS.md': '136210b8f31c2119b1401c070d7b369f875533212f8da747be5418beefd71d86', 'knowledge/execution/status.json': '85e9fcc38e1175da8872b8115576f051d306fab8635362a566d128124a080134'}
+PHASE1PUB_EVIDENCE = {'/tmp/cn-phase1-clean-offline.log': 'dc34792c278a6561b3b3e8a64331ebf25fab8364455c7e2518d08a3713809aea', '/tmp/cn-phase1-clean-frontend-retry.log': 'b6ddfa0bc0fe3a800620d74332c88b5504a7ee05c1f97e425bc064d7e824c363', '/tmp/cn-phase1-clean-typecheck.log': 'b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead', '/tmp/cn-phase1-clean-lint.log': 'b34cd711d94b47df8ea7bbbf90c2b4fbb9b004a230b13914e30b3faffbeb916c', '/tmp/cn-phase1-clean-build.log': 'f3659fba75b9252aaad934030ca1539efae4c1d0daf4b5402893445b6d8b568f', '/tmp/cn-phase1-4f9f6f7950a948698bfdfd7196ec6980/summary.json': '32caa809c07471bd5fd79126dde909b3723055d0972395d94c4eea7cb5e5befc', '/tmp/cn-phase1-4853a155fc7b4e1e865a92befe8e65e3/summary.json': '1e3c5261d36a0d8481dd81877b9748b5a6f6ee4d4f3925b8c27770ec1fd5d240', '/tmp/cinenest-manual-e2e-6823016328795950020/results.json': '8e54d048448657afffb325e4d072959edcb383545aa72c6e237a17161e803f76', '.cache/manual-auth-e2e/account-1280.png': '78d7255eb8fad586d39999a97f696eeea2c2d2e7f21c6f1907d67e6aee75f13c', '.cache/manual-auth-e2e/account-375.png': 'a3f6b3d6e96a34b3c432b103ca408523114124bc52229a6ebc10c70074db1dde', '.cache/manual-auth-e2e/account-768.png': '5abd7aa690bb21dae2e8b2c17d377eb84475e547372d34fbe9f2f9204c59df60', '.cache/manual-auth-e2e/login-1280.png': '5f105849fc3919e01691dc3f14c578be92b667c4b1524de3e8badf034a296724', '.cache/manual-auth-e2e/login-375.png': 'b6f008182fd8da1774b694191b65dd19d8a4ba12dde9e5bdca074e2b671d53dd', '.cache/manual-auth-e2e/login-768.png': 'b56093989081aa13c364a3c061ccac74a192fa2dd8627d2cd0db51ab377090bf', '.cache/manual-auth-e2e/register-1280.png': '2aa26d6002b525e5c2e259bdb94e6dd14f35f00b8351ac7e7acca092c0b8ea05', '.cache/manual-auth-e2e/register-375.png': 'ba086eb88887f922acd6a2acd441f2b564b59bb9166b8f057463602f7598b510', '.cache/manual-auth-e2e/register-768.png': 'd2fca2b696690d92508669b6cd5dce9d228a306895807f1c39a8a48ae392fc44'}
+PHASE1PUB_SUFFIX_SHA256 = '4d9e1a7c8961432cbe07a708adedde9e81342f5ab0228d38fa6566a8f97f60fa'
+phase1pub_previous_main = inert_ci_main
+phase1pub_previous_guard = receipt_admission_successor_errors
+
+def phase1pub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',PHASE1PUB_BASE+':'+name])
+
+def phase1pub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',PHASE1PUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def phase1pub_payload_errors():
+    errors=[];owned=set(PHASE1PUB_PATHS)
+    try:
+        expected={'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java','knowledge/PROGRESS.md','knowledge/execution/status.json','knowledge/manifest.json','knowledge/execution/validate_execution.py'}
+        if PHASE1PUB_TASK!='CN-PHASE1-TECHNICAL-EVIDENCE-PUBLICATION-001' or owned!=expected or len(PHASE1PUB_PATHS)!=5 or set(PHASE1PUB_HASHES)!=expected-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['PHASE1 exact task/path mismatch']
+        for name in owned:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('PHASE1 unsafe/missing payload '+name);continue
+            if name in PHASE1PUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=PHASE1PUB_HASHES[name]:errors.append('PHASE1 fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=phase1pub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('PHASE1 historical validator changed')
+        normal=current[len(prefix):].replace("PHASE1PUB_SUFFIX_SHA256 = '"+PHASE1PUB_SUFFIX_SHA256+"'","PHASE1PUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(normal.encode()).hexdigest()!=PHASE1PUB_SUFFIX_SHA256:errors.append('PHASE1 successor changed')
+        test=PHASE1PUB_PATHS[0];old=b'SELECT max(version::int) FROM flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(28);';before=phase1pub_before(test)
+        if before.count(old)!=1 or (R/test).read_bytes()!=before.replace(old,old.replace(b'isEqualTo(28)',b'isEqualTo(35)'),1):errors.append('PHASE1 test delta exceeds authority')
+        if not (K/'PROGRESS.md').read_bytes().startswith(phase1pub_before('knowledge/PROGRESS.md')):errors.append('PHASE1 historical progress changed')
+        state=json.loads((K/'execution/status.json').read_text());e=state.pop('phase1TechnicalQualification20261103',{})
+        if state!=json.loads(phase1pub_before('knowledge/execution/status.json')):errors.append('PHASE1 historical registry changed')
+        if e.get('publicationTaskId')!=PHASE1PUB_TASK or e.get('publicationAuthorization')!='EXPLICIT_OWNER_EXACT_FIVE_FILES_BRANCH_ONLY' or e.get('payloadPaths')!=PHASE1PUB_PATHS or e.get('baseline')!=PHASE1PUB_BASE:errors.append('PHASE1 task/authority mismatch')
+        if e.get('sourceSha256')!=PHASE1PUB_HASHES[test] or e.get('qualificationEvidenceHashes')!=PHASE1PUB_EVIDENCE:errors.append('PHASE1 evidence binding drift')
+        accounting={'officialP1Checked':3,'officialP1Total':6,'technicalCandidate':6,'release1Checked':4,'release1Total':21,'fullMvpChecked':15,'fullMvpTotal':74,'formalRequirementsAccepted':0,'formalRequirementsTotal':92}
+        if any(e.get(k)!=v for k,v in accounting.items()) or e.get('phaseAcceptance')!='NOT_ACCEPTED':errors.append('PHASE1 acceptance inflation')
+        if e.get('offlineTests')!={'passed':83,'failed':0,'skipped':0} or e.get('postgresInitial')!={'passed':79,'failed':0,'skipped':1} or e.get('browserOptInRetest')!={'passed':1,'failed':0,'skipped':0} or e.get('frontend')!={'passed':523,'failed':0,'skipped':0,'typecheck':'PASS','biome':'PASS','build':'PASS'} or e.get('browserGroups')!=13 or e.get('screenshots')!=9:errors.append('PHASE1 qualification drift')
+        if any(e.get(k) is not False for k in ['applicationSourceChanged','migrationsChanged','recoveryActivated','realPaymentActivated','physicalAccessActivated','interception','cookieInjection']) or e.get('realReceiptAdmission')!='DENY' or e.get('runtimeStopped') is not True or e.get('unrelatedPayloadsPreserved')!=28:errors.append('PHASE1 safety drift')
+        manifest=json.loads(phase1pub_before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if row['path'] in {'PROGRESS.md','execution/status.json','execution/validate_execution.py'}:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('PHASE1 unauthorized manifest change')
+        tree=phase1pub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('PHASE1 missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('PHASE1 unowned history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',PHASE1PUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree) or not changed<=owned:errors.append('PHASE1 unauthorized/missing repository path')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('PHASE1 invalid/inaccessible payload')
+    return errors
+
+def phase1pub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return phase1pub_payload_errors()
+
+def phase1pub_controls():
+    from unittest.mock import patch
+    assert not phase1pub_successor_errors();print('PASS PHASE1 exact five-file successor positive')
+    assert not v35_migration_errors();print('PASS PHASE1 exact34 migration positive')
+    rb0,rt0,link0,file0,resolve0=Path.read_bytes,Path.read_text,Path.is_symlink,Path.is_file,Path.resolve
+    for name in PHASE1PUB_PATHS+['AGENTS.md','backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert phase1pub_successor_errors(),name
+        print('PASS PHASE1 rejects payload/history mutation '+name)
+    target=R/PHASE1PUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('path traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert phase1pub_successor_errors()
+        print('PASS PHASE1 rejects '+label)
+    with patch.dict(globals(),{'PHASE1PUB_TASK':'UNKNOWN'}):assert phase1pub_successor_errors()
+    print('PASS PHASE1 rejects unknown task')
+    with patch.dict(globals(),{'PHASE1PUB_PATHS':PHASE1PUB_PATHS[:-1]+['knowledge/../unauthorized.py']}):assert phase1pub_successor_errors()
+    print('PASS PHASE1 rejects substituted path')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical validator prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert phase1pub_successor_errors()
+        print('PASS PHASE1 rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('publicationTaskId','UNKNOWN'),('sourceSha256','0'*64),('qualificationEvidenceHashes',{}),('phaseAcceptance','ACCEPTED'),('officialP1Checked',6),('formalRequirementsAccepted',92),('realPaymentActivated',True)]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['phase1TechnicalQualification20261103'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert phase1pub_successor_errors()
+        print('PASS PHASE1 rejects evidence/acceptance '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-phase1.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert phase1pub_successor_errors()
+        print('PASS PHASE1 rejects unknown '+command)
+    target=K/'manifest.json'
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert phase1pub_successor_errors()
+    print('PASS PHASE1 rejects unauthorized manifest bytes')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('traversal migration',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert phase1pub_successor_errors(),label
+        print('PASS PHASE1 rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert phase1pub_successor_errors()
+    print('PASS PHASE1 rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert phase1pub_successor_errors()
+    print('PASS PHASE1 rejects migration symlink')
+
+receipt_admission_successor_errors=phase1pub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=phase1pub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        phase1pub_controls();owned=set(PHASE1PUB_PATHS)
+        replacements={R/n:phase1pub_before(n) for n in owned};rb0,rt0,out0=Path.read_bytes,Path.read_text,subprocess.check_output
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and 'diff' in argv and '--name-only' in argv:
+                sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in owned];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':phase1pub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(subprocess,'check_output',output):result=phase1pub_previous_main()
+        if result==0:print('PASS PHASE1 evidence-only successor;historical controls preserved;acceptance unchanged')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

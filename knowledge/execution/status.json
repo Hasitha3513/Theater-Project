@@ -29288,4 +29288,96 @@
     "acceptanceChanged": false,
     "publication": "PENDING_GATES_COMMIT_PUSH_EXACT_SOURCE_CI"
   }
+,
+  "phase1TechnicalQualification20261103": {
+    "baseline": "c78e225b454a2a58f96b56800f19bd47d1376203",
+    "branch": "codex/phase1-completion-20261103",
+    "criteria": {
+      "P1-C02": "TECHNICALLY_VERIFIED_APPROVED_SYNTHETIC_SCOPE",
+      "P1-C04": "TECHNICALLY_VERIFIED_APPROVED_SYNTHETIC_SCOPE",
+      "P1-C05": "TECHNICALLY_VERIFIED_APPROVED_SYNTHETIC_SCOPE"
+    },
+    "phaseAcceptance": "NOT_ACCEPTED",
+    "officialP1Checked": 3,
+    "officialP1Total": 6,
+    "technicalCandidate": 6,
+    "fullMvpChecked": 15,
+    "fullMvpTotal": 74,
+    "release1Checked": 4,
+    "release1Total": 21,
+    "formalRequirementsAccepted": 0,
+    "formalRequirementsTotal": 92,
+    "offlineTests": {
+      "passed": 83,
+      "failed": 0,
+      "skipped": 0
+    },
+    "postgresInitial": {
+      "passed": 79,
+      "failed": 0,
+      "skipped": 1
+    },
+    "browserOptInRetest": {
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "browserGroups": 13,
+    "screenshots": 9,
+    "interception": false,
+    "cookieInjection": false,
+    "frontend": {
+      "passed": 523,
+      "failed": 0,
+      "skipped": 0,
+      "typecheck": "PASS",
+      "biome": "PASS",
+      "build": "PASS"
+    },
+    "sourceDelta": "LocalCustomerIdentityTest current Flyway head assertion28to35 only",
+    "sourceSha256": "1bf98c5f9c4d0fb29975b4e79e5c59d55048f70229ab3f8e746526c2e9157cf4",
+    "applicationSourceChanged": false,
+    "migrationsChanged": false,
+    "recoveryActivated": false,
+    "realReceiptAdmission": "DENY",
+    "realPaymentActivated": false,
+    "physicalAccessActivated": false,
+    "unrelatedPayloadsPreserved": 28,
+    "runtimeStopped": true,
+    "publication": "AUTHORIZED_PENDING_VALIDATION_BRANCH_CI",
+    "record": "knowledge/PROGRESS.md#phase1-technical-qualification-20261103",
+    "evidence": [
+      "/tmp/cn-phase1-4f9f6f7950a948698bfdfd7196ec6980/summary.json",
+      "/tmp/cn-phase1-4853a155fc7b4e1e865a92befe8e65e3/summary.json",
+      "/tmp/cinenest-manual-e2e-6823016328795950020/results.json"
+    ],
+    "publicationTaskId": "CN-PHASE1-TECHNICAL-EVIDENCE-PUBLICATION-001",
+    "publicationAuthorization": "EXPLICIT_OWNER_EXACT_FIVE_FILES_BRANCH_ONLY",
+    "payloadPaths": [
+      "backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/manifest.json",
+      "knowledge/execution/validate_execution.py"
+    ],
+    "qualificationEvidenceHashes": {
+      "/tmp/cn-phase1-clean-offline.log": "dc34792c278a6561b3b3e8a64331ebf25fab8364455c7e2518d08a3713809aea",
+      "/tmp/cn-phase1-clean-frontend-retry.log": "b6ddfa0bc0fe3a800620d74332c88b5504a7ee05c1f97e425bc064d7e824c363",
+      "/tmp/cn-phase1-clean-typecheck.log": "b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead",
+      "/tmp/cn-phase1-clean-lint.log": "b34cd711d94b47df8ea7bbbf90c2b4fbb9b004a230b13914e30b3faffbeb916c",
+      "/tmp/cn-phase1-clean-build.log": "f3659fba75b9252aaad934030ca1539efae4c1d0daf4b5402893445b6d8b568f",
+      "/tmp/cn-phase1-4f9f6f7950a948698bfdfd7196ec6980/summary.json": "32caa809c07471bd5fd79126dde909b3723055d0972395d94c4eea7cb5e5befc",
+      "/tmp/cn-phase1-4853a155fc7b4e1e865a92befe8e65e3/summary.json": "1e3c5261d36a0d8481dd81877b9748b5a6f6ee4d4f3925b8c27770ec1fd5d240",
+      "/tmp/cinenest-manual-e2e-6823016328795950020/results.json": "8e54d048448657afffb325e4d072959edcb383545aa72c6e237a17161e803f76",
+      ".cache/manual-auth-e2e/account-1280.png": "78d7255eb8fad586d39999a97f696eeea2c2d2e7f21c6f1907d67e6aee75f13c",
+      ".cache/manual-auth-e2e/account-375.png": "a3f6b3d6e96a34b3c432b103ca408523114124bc52229a6ebc10c70074db1dde",
+      ".cache/manual-auth-e2e/account-768.png": "5abd7aa690bb21dae2e8b2c17d377eb84475e547372d34fbe9f2f9204c59df60",
+      ".cache/manual-auth-e2e/login-1280.png": "5f105849fc3919e01691dc3f14c578be92b667c4b1524de3e8badf034a296724",
+      ".cache/manual-auth-e2e/login-375.png": "b6f008182fd8da1774b694191b65dd19d8a4ba12dde9e5bdca074e2b671d53dd",
+      ".cache/manual-auth-e2e/login-768.png": "b56093989081aa13c364a3c061ccac74a192fa2dd8627d2cd0db51ab377090bf",
+      ".cache/manual-auth-e2e/register-1280.png": "2aa26d6002b525e5c2e259bdb94e6dd14f35f00b8351ac7e7acca092c0b8ea05",
+      ".cache/manual-auth-e2e/register-375.png": "ba086eb88887f922acd6a2acd441f2b564b59bb9166b8f057463602f7598b510",
+      ".cache/manual-auth-e2e/register-768.png": "d2fca2b696690d92508669b6cd5dce9d228a306895807f1c39a8a48ae392fc44"
+    }
+  }
 }

@@ -196,7 +196,7 @@ class LocalCustomerIdentityTest {
    assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.manual_customer WHERE verified_at IS NOT NULL").query(Integer.class).single()).isEqualTo(1);
    assertThat(jdbc.sql("SELECT count(*) FROM cinenest_identity.manual_audit WHERE action='LOGIN' AND outcome='ALLOW'").query(Integer.class).single()).isPositive();
    for(var entry:business.entrySet())assertThat(jdbc.sql("SELECT count(*) FROM "+entry.getKey()).query(Long.class).single()).isEqualTo(entry.getValue());
-   assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(28);
+   assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success AND version IS NOT NULL").query(Integer.class).single()).isEqualTo(35);
   }finally{if(process.isAlive())process.destroy();}
  }
 }
