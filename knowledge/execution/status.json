@@ -29461,5 +29461,65 @@
       "formalAcceptance": "0/92"
     },
     "knownCiDependency": "Separate WP-02 suspended-session401 test corrections excluded;full CI outcome must be reported exactly."
+  },
+  "wp02QualifiedPublication20261104": {
+    "taskId": "CN-MVP-PART1-WP02-PUBLICATION-001",
+    "baseline": "238d6ec06fe40fcd56c542f8b63fe0b83021bfe4",
+    "authorization": "EXPLICIT_OWNER_EXACT_SEVEN_FILES_BRANCH_ONLY",
+    "payloadPaths": [
+      "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/PricingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/PublicationIntegrationTest.java",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/RoomsIntegrationTest.java": "7953f9ba6e2fbfb4f7702d8afd3d831ef6121785198c46ff61df5c6e8536f389",
+      "backend/src/test/java/com/cinenest/PricingIntegrationTest.java": "53b622035e829f5b3fa02e0e2f99c31d496e6880299556599b69c2217b2f552b",
+      "backend/src/test/java/com/cinenest/PublicationIntegrationTest.java": "63a89927136c5e41169be2e23d1c0cbf9ee794d68b4aa25c251c890c2f9262ec"
+    },
+    "qualificationEvidenceHashes": {
+      ".cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/qualification-summary.json": "265e9ff577e9b2cdc4b4f848d3e1d01789cc0f648c67281204ce786529c5c5f2",
+      ".cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/targeted-race-test-results.json": "77c7310a489f43dfbab75d6aa5f50f5f31f2458cd9a1f0e6e7cb6974878122cb",
+      ".cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/rooms-regressions-test-results.json": "2bff7a59301ff66a9fa1f6a470efe2b78f8aeee551ac0d79e52006c4b12e3602",
+      ".cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/offline-test-results.json": "23405a0753b5507186658fc6163e5fa577e5244923933234559f97534b2b1763",
+      ".cache/private-wp02-3558ec9470494cbd92f38b55221a10e9/corrected-wp02-test-results.json": "7eb7ed298891ac03b97c18bf4698a24c407899d349af9df528a978244d62ec22"
+    },
+    "historicalLatestQualification": {
+      "targetedRoomsPostgresPass": 1,
+      "relatedRoomsPostgresPass": 8,
+      "offlinePass": 88,
+      "failed": 0,
+      "skipped": 0,
+      "newlyExecuted": false,
+      "fullWp02SuitePassClaimed": false
+    },
+    "historicalEarlierThreeSuites": {
+      "roomsPassed": 18,
+      "roomsErrors": 1,
+      "pricingPassed": 16,
+      "publicationPassed": 17,
+      "sourceRevisionBeforeFinalRaceCorrection": true
+    },
+    "security": "Invalidated/stale sessions401;valid-session permission/venue denials403;CSRF and actual lock-wait assertions preserved",
+    "applicationSourceChanged": false,
+    "migrationsChanged": false,
+    "localRuntimeStarted": false,
+    "mainMergeAuthorized": false,
+    "recoveryActivated": false,
+    "realReceiptAdmission": "DENY",
+    "realPaymentsEnabled": false,
+    "physicalAccessEnabled": false,
+    "originalUnpublishedPreserved": 28,
+    "phaseAcceptance": "NOT_ACCEPTED",
+    "accounting": {
+      "originalPart1": "4/7",
+      "p1Planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    }
   }
 }

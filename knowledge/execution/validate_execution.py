@@ -11103,5 +11103,147 @@ def inert_ci_main():
         if result==0:print('PASS C02 qualified integration successor;historical controls preserved;recovery disabled')
         return result
 
+
+# Exact Owner-authorized WP-02 qualified test successor; predecessor bytes are immutable.
+WP02PUB_BASE = '238d6ec06fe40fcd56c542f8b63fe0b83021bfe4'
+WP02PUB_TASK = 'CN-MVP-PART1-WP02-PUBLICATION-001'
+WP02PUB_PATHS = ['backend/src/test/java/com/cinenest/RoomsIntegrationTest.java', 'backend/src/test/java/com/cinenest/PricingIntegrationTest.java', 'backend/src/test/java/com/cinenest/PublicationIntegrationTest.java', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json']
+WP02PUB_HASHES = {'backend/src/test/java/com/cinenest/RoomsIntegrationTest.java': '7953f9ba6e2fbfb4f7702d8afd3d831ef6121785198c46ff61df5c6e8536f389', 'backend/src/test/java/com/cinenest/PricingIntegrationTest.java': '53b622035e829f5b3fa02e0e2f99c31d496e6880299556599b69c2217b2f552b', 'backend/src/test/java/com/cinenest/PublicationIntegrationTest.java': '63a89927136c5e41169be2e23d1c0cbf9ee794d68b4aa25c251c890c2f9262ec', 'knowledge/PROGRESS.md': 'b2d447446c75eeb9b0acf40251d25b7e733ac5fc874b0e6d1c80637507f741c9', 'knowledge/execution/status.json': '25610489659cb10ed5a7e1a769dd57d22a2bc66da5f95f6858a7cfeaa8920f44'}
+WP02PUB_EVIDENCE = {'.cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/qualification-summary.json': '265e9ff577e9b2cdc4b4f848d3e1d01789cc0f648c67281204ce786529c5c5f2', '.cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/targeted-race-test-results.json': '77c7310a489f43dfbab75d6aa5f50f5f31f2458cd9a1f0e6e7cb6974878122cb', '.cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/rooms-regressions-test-results.json': '2bff7a59301ff66a9fa1f6a470efe2b78f8aeee551ac0d79e52006c4b12e3602', '.cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/offline-test-results.json': '23405a0753b5507186658fc6163e5fa577e5244923933234559f97534b2b1763', '.cache/private-wp02-3558ec9470494cbd92f38b55221a10e9/corrected-wp02-test-results.json': '7eb7ed298891ac03b97c18bf4698a24c407899d349af9df528a978244d62ec22'}
+WP02PUB_RECORD = {'taskId': 'CN-MVP-PART1-WP02-PUBLICATION-001', 'baseline': '238d6ec06fe40fcd56c542f8b63fe0b83021bfe4', 'authorization': 'EXPLICIT_OWNER_EXACT_SEVEN_FILES_BRANCH_ONLY', 'payloadPaths': ['backend/src/test/java/com/cinenest/RoomsIntegrationTest.java', 'backend/src/test/java/com/cinenest/PricingIntegrationTest.java', 'backend/src/test/java/com/cinenest/PublicationIntegrationTest.java', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'sourceSha256': {'backend/src/test/java/com/cinenest/RoomsIntegrationTest.java': '7953f9ba6e2fbfb4f7702d8afd3d831ef6121785198c46ff61df5c6e8536f389', 'backend/src/test/java/com/cinenest/PricingIntegrationTest.java': '53b622035e829f5b3fa02e0e2f99c31d496e6880299556599b69c2217b2f552b', 'backend/src/test/java/com/cinenest/PublicationIntegrationTest.java': '63a89927136c5e41169be2e23d1c0cbf9ee794d68b4aa25c251c890c2f9262ec'}, 'qualificationEvidenceHashes': {'.cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/qualification-summary.json': '265e9ff577e9b2cdc4b4f848d3e1d01789cc0f648c67281204ce786529c5c5f2', '.cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/targeted-race-test-results.json': '77c7310a489f43dfbab75d6aa5f50f5f31f2458cd9a1f0e6e7cb6974878122cb', '.cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/rooms-regressions-test-results.json': '2bff7a59301ff66a9fa1f6a470efe2b78f8aeee551ac0d79e52006c4b12e3602', '.cache/private-rooms-race-fix2-f582b73e34a24e6a80ad131cbc89ad89/offline-test-results.json': '23405a0753b5507186658fc6163e5fa577e5244923933234559f97534b2b1763', '.cache/private-wp02-3558ec9470494cbd92f38b55221a10e9/corrected-wp02-test-results.json': '7eb7ed298891ac03b97c18bf4698a24c407899d349af9df528a978244d62ec22'}, 'historicalLatestQualification': {'targetedRoomsPostgresPass': 1, 'relatedRoomsPostgresPass': 8, 'offlinePass': 88, 'failed': 0, 'skipped': 0, 'newlyExecuted': False, 'fullWp02SuitePassClaimed': False}, 'historicalEarlierThreeSuites': {'roomsPassed': 18, 'roomsErrors': 1, 'pricingPassed': 16, 'publicationPassed': 17, 'sourceRevisionBeforeFinalRaceCorrection': True}, 'security': 'Invalidated/stale sessions401;valid-session permission/venue denials403;CSRF and actual lock-wait assertions preserved', 'applicationSourceChanged': False, 'migrationsChanged': False, 'localRuntimeStarted': False, 'mainMergeAuthorized': False, 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'realPaymentsEnabled': False, 'physicalAccessEnabled': False, 'originalUnpublishedPreserved': 28, 'phaseAcceptance': 'NOT_ACCEPTED', 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}}
+WP02PUB_SUFFIX_SHA256 = 'ad82d6c5c9ffd571a607e70590b6f83576eb4cdca0687ec09e1cdcf6438097d9'
+wp02pub_previous_main = inert_ci_main
+wp02pub_previous_guard = receipt_admission_successor_errors
+
+def wp02pub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',WP02PUB_BASE+':'+name])
+
+def wp02pub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',WP02PUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def wp02pub_payload_errors():
+    errors=[]
+    try:
+        owned=set(WP02PUB_PATHS);expected=set(WP02PUB_RECORD['payloadPaths'])
+        if WP02PUB_TASK!='CN-MVP-PART1-WP02-PUBLICATION-001' or len(WP02PUB_PATHS)!=7 or owned!=expected or set(WP02PUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['WP02 exact task/path mismatch']
+        for name in WP02PUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('WP02 unsafe/missing payload '+name);continue
+            if name in WP02PUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=WP02PUB_HASHES[name]:errors.append('WP02 fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=wp02pub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('WP02 historical validator changed')
+        suffix=current[len(prefix):].replace("WP02PUB_SUFFIX_SHA256 = '"+WP02PUB_SUFFIX_SHA256+"'","WP02PUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=WP02PUB_SUFFIX_SHA256:errors.append('WP02 successor changed')
+        for name in ['knowledge/PROGRESS.md']:
+            if not (R/name).read_bytes().startswith(wp02pub_before(name)):errors.append('WP02 historical KB changed '+name)
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('wp02QualifiedPublication20261104',None)
+        if entry!=WP02PUB_RECORD or state!=json.loads(wp02pub_before('knowledge/execution/status.json')):errors.append('WP02 registry/task/evidence drift')
+        if entry is None or entry.get('taskId')!=WP02PUB_TASK or entry.get('qualificationEvidenceHashes')!=WP02PUB_EVIDENCE:errors.append('WP02 evidence binding drift')
+        manifest=json.loads(wp02pub_before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if row['path'] in {'PROGRESS.md','execution/status.json','execution/validate_execution.py'}:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('WP02 unauthorized manifest change')
+        tree=wp02pub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('WP02 missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('WP02 unowned history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',WP02PUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree)|owned or not changed<=owned:errors.append('WP02 unauthorized/missing repository path')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('WP02 invalid/inaccessible payload')
+    return errors
+
+def wp02pub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return wp02pub_payload_errors()
+
+def wp02pub_controls():
+    from unittest.mock import patch
+    assert not wp02pub_successor_errors();print('PASS WP02 exact7 successor positive')
+    assert not v35_migration_errors();print('PASS WP02 exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in WP02PUB_PATHS+['AGENTS.md','backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert wp02pub_successor_errors(),name
+        print('PASS WP02 rejects payload/history mutation '+name)
+    target=R/WP02PUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert wp02pub_successor_errors()
+        print('PASS WP02 rejects '+label)
+    with patch.dict(globals(),{'WP02PUB_TASK':'UNKNOWN'}):assert wp02pub_successor_errors()
+    print('PASS WP02 rejects unknown task')
+    with patch.dict(globals(),{'WP02PUB_PATHS':WP02PUB_PATHS[:-1]+['knowledge/../unauthorized.py']}):assert wp02pub_successor_errors()
+    print('PASS WP02 rejects substituted path')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert wp02pub_successor_errors()
+        print('PASS WP02 rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('recoveryActivated',True),('phaseAcceptance','ACCEPTED'),('realReceiptAdmission','ALLOW')]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['wp02QualifiedPublication20261104'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert wp02pub_successor_errors()
+        print('PASS WP02 rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-c02.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert wp02pub_successor_errors()
+        print('PASS WP02 rejects unknown '+command)
+    target=K/'manifest.json'
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert wp02pub_successor_errors()
+    print('PASS WP02 rejects manifest bytes')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert wp02pub_successor_errors(),label
+        print('PASS WP02 rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert wp02pub_successor_errors()
+    print('PASS WP02 rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert wp02pub_successor_errors()
+    print('PASS WP02 rejects migration symlink')
+
+receipt_admission_successor_errors=wp02pub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=wp02pub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        wp02pub_controls();owned=set(WP02PUB_PATHS);tree=set(wp02pub_tree());added=owned-tree
+        replacements={R/n:wp02pub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':wp02pub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=wp02pub_previous_main()
+        if result==0:print('PASS WP02 qualified integration successor;historical controls preserved;recovery disabled')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

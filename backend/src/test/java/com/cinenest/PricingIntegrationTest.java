@@ -157,7 +157,8 @@ class PricingIntegrationTest {
         if(mode.equals("REVOKED"))jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update();
         if(mode.equals("EXPIRED"))jdbc.sql("UPDATE cinenest_identity.access_grant SET valid_from=clock_timestamp()-INTERVAL '2 hours',valid_until=clock_timestamp()-INTERVAL '1 hour' WHERE grant_id=:g").param("g",g).update();
         if(mode.equals("SUSPENDED"))jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();
-        assertThat(write(b,"POST",collection(),draft("AFTER")).statusCode()).isEqualTo(403);
+        int expectedStatus = "SUSPENDED".equals(mode) ? 401 : 403;
+        assertThat(write(b,"POST",collection(),draft("AFTER")).statusCode()).isEqualTo(expectedStatus);
     }
     @Test void invalidMoneyDurationGuestsRoomsOptionsAndUnknownPropertiesFail()throws Exception {
         grant("package.edit","VENUE",VA);var b=signedIn("staff");

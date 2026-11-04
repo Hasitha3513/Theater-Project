@@ -169,7 +169,7 @@ class PublicationIntegrationTest {
     @Test void revokedSuspendedAndStitchedGrantsDenyDirectCalls()throws Exception {
         UUID pkg=setup(signedIn("staff"));var pub=signedIn("customer-a");grantTo(A,VB,"package.publish");grantTo(A,VA,"package.read");assertThat(write(pub,"POST",path(pkg)+"/publication-preview",JSONObjectUtils.toJSONString(request(false))).statusCode()).isEqualTo(403);
         UUID g=grantTo(A,VA,"package.publish");var req=reviewed(pub,pkg,request(false));jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update();assertThat(write(pub,"POST",path(pkg)+"/publications",JSONObjectUtils.toJSONString(req)).statusCode()).isEqualTo(403);
-        grantTo(A,VA,"package.publish");jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();assertThat(write(pub,"POST",path(pkg)+"/publications",JSONObjectUtils.toJSONString(req)).statusCode()).isEqualTo(403);
+        grantTo(A,VA,"package.publish");jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();assertThat(write(pub,"POST",path(pkg)+"/publications",JSONObjectUtils.toJSONString(req)).statusCode()).isEqualTo(401);
     }
     @Test void concurrentIndependentPublishersConflictWithoutMixedTerms()throws Exception {
         UUID pkg=setup(signedIn("staff"));grantTo(A,VA,"package.publish");grantTo(B,VA,"package.publish");var a=signedIn("customer-a");var b=signedIn("customer-b");var r1=reviewed(a,pkg,request(false));var r2=reviewed(b,pkg,request(false));

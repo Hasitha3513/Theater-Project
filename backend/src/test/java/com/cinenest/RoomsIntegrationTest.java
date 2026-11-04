@@ -156,7 +156,8 @@ class RoomsIntegrationTest {
         if(state.equals("REVOKED"))jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:id").param("id",g).update();
         if(state.equals("EXPIRED"))jdbc.sql("UPDATE cinenest_identity.access_grant SET valid_from=clock_timestamp()-INTERVAL '2 hours',valid_until=clock_timestamp()-INTERVAL '1 hour' WHERE grant_id=:id").param("id",g).update();
         if(state.equals("SUSPENDED"))jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:id").param("id",STAFF).update();
-        assertThat(write(b,"POST",collection(),roomJson("AFTER",4)).statusCode()).isEqualTo(403);
+        int expectedStatus = "SUSPENDED".equals(state) ? 401 : 403;
+        assertThat(write(b,"POST",collection(),roomJson("AFTER",4)).statusCode()).isEqualTo(expectedStatus);
     }
     @Test void validationUnknownPropertiesUnsafeImagesAndMediaClaimsRejected()throws Exception {
         grant("room.write","VENUE",VA);var b=signedIn("staff");
@@ -221,9 +222,30 @@ class RoomsIntegrationTest {
     }
     @Test void committedSuspensionWinsBeforeWaitingConfigurationAuthorization()throws Exception {
         grant("room.write","VENUE",VA);var b=signedIn("staff");
+        var csrf=b.get("/api/session/csrf");
+        System.out.println("ROOMS_RACE_CSRF status="+csrf.statusCode()+" contentType="+csrf.headers().firstValue("Content-Type").orElse("ABSENT"));
+        assertThat(csrf.statusCode()).isEqualTo(200);
+        assertThat(csrf.headers().firstValue("Content-Type").orElse("")).startsWith("application/json");
+        b.csrfToken=(String)JSONObjectUtils.parse(csrf.body()).get("token");
+        assertThat(b.csrfToken).isNotBlank();
         try(var connection=DriverManager.getConnection(environment.getRequiredProperty("spring.datasource.url"),environment.getRequiredProperty("spring.datasource.username"),environment.getRequiredProperty("spring.datasource.password"));var pool=java.util.concurrent.Executors.newSingleThreadExecutor()) {
+            int blocker;try(var statement=connection.createStatement();var result=statement.executeQuery("SELECT pg_backend_pid()")){result.next();blocker=result.getInt(1);}
             connection.setAutoCommit(false);try(var statement=connection.prepareStatement("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=?")){statement.setObject(1,STAFF);statement.executeUpdate();}
-            var waiting=pool.submit(()->write(b,"POST",collection(),roomJson("AFTER-SUSPEND",4)).statusCode());Thread.sleep(100);connection.commit();assertThat(waiting.get()).isEqualTo(403);
+            var waiting=pool.submit(()->write(b,"POST",collection(),roomJson("AFTER-SUSPEND",4)));
+            long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(10);
+            boolean blocked=false;
+            try {
+                while(System.nanoTime()<deadline&&!waiting.isDone()) {
+                    blocked=jdbc.sql("SELECT count(*) FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND :blocker=ANY(pg_blocking_pids(pid))").param("blocker",blocker).query(Integer.class).single()>0;
+                    if(blocked)break;
+                    Thread.sleep(10);
+                }
+                assertThat(blocked).as("room POST must wait on the uncommitted suspension before commit").isTrue();
+                System.out.println("ROOMS_RACE_LOCK_WAIT observed=true");
+            } finally {connection.commit();}
+            var response=waiting.get(10,java.util.concurrent.TimeUnit.SECONDS);
+            System.out.println("ROOMS_RACE_POST status="+response.statusCode()+" contentType="+response.headers().firstValue("Content-Type").orElse("ABSENT"));
+            assertThat(response.statusCode()).isEqualTo(401);
         }
         assertThat(jdbc.sql("SELECT count(*) FROM cinenest_rooms.room").query(Integer.class).single()).isZero();
     }
