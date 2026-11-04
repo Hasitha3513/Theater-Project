@@ -10961,5 +10961,147 @@ def inert_ci_main():
         if result==0:print('PASS PHASE1 evidence-only successor;historical controls preserved;acceptance unchanged')
         return result
 
+
+# Exact Owner-authorized CN-C02 integration successor; predecessor bytes are immutable.
+C02PUB_BASE = 'cff07b7b374a27f8149537e1770e6cd1194d81ec'
+C02PUB_TASK = 'CN-C02-QUALIFIED-INTEGRATION-PUBLICATION-001'
+C02PUB_PATHS = ['backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerController.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java', 'backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java', 'backend/src/test/java/com/cinenest/identity/internal/LockRoomAssignmentSecurityTest.java', 'backend/src/main/java/com/cinenest/identity/internal/CredentialEpochSessions.java', 'backend/src/main/java/com/cinenest/identity/internal/JdbcLocalCredentialRecoveryRepository.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecoveryController.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecoveryService.java', 'backend/src/test/java/com/cinenest/LocalCredentialRecoveryIntegrationTest.java', 'backend/src/test/java/com/cinenest/identity/internal/CredentialEpochSessionsTest.java', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryArchitectureTest.java', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryServiceTest.java', 'backend/src/test/java/com/cinenest/IdentityIntegrationTest.java', 'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'knowledge/execution/validate_execution.py']
+C02PUB_HASHES = {'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '9a69825c242af3d6dd91a98e14a9bbdf0e9c993dc3d67e117fcdaeba7da93a89', 'backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java': 'ade506027dbacda013cacd900ee4ade8fa9b28f302abbd7403dac34472ba4e08', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerController.java': 'd49ac1fc4ddef1d3564b8f77f3751b058d3287ed5de9a9357e2e1856ba14a294', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java': 'a8e3cce0830badea48d6c9e0c0d4a07ded7d2d148ba794b5a373fc4fb7dd7d4e', 'backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java': 'b92dd7e29a55a59a20f4b4bd4140211f7e4f075e3f5a075015be2d1ab2b4be9d', 'backend/src/test/java/com/cinenest/identity/internal/LockRoomAssignmentSecurityTest.java': 'bde6d57122cfb1f0303d01e4918aa0f5d8be1b2be22352ba3610856d3e3245f5', 'backend/src/main/java/com/cinenest/identity/internal/CredentialEpochSessions.java': 'fb4f97156bf50da9937d44615f569e42db6e63c14b585da6595d86622b031975', 'backend/src/main/java/com/cinenest/identity/internal/JdbcLocalCredentialRecoveryRepository.java': '18825800e2921e28a77d276b27f2e084673e43f56076732992f7e05a1c568b84', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecoveryController.java': 'b08ec6a3cf0132371448a5f3f42b9942b9a0b201844481ec881be352610e2878', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecoveryService.java': 'fa5ecb452ae6707f221b7aab9b0ab714dc1343781083e7ef5c404fa1ad1fbcf3', 'backend/src/test/java/com/cinenest/LocalCredentialRecoveryIntegrationTest.java': '1291e14c6e903aedb01722fd402593aa0f70c16beaaa43af045a6ad9da45cff9', 'backend/src/test/java/com/cinenest/identity/internal/CredentialEpochSessionsTest.java': '7f80824031a8d6dac544044359453b13e8bfa2c77e09518894bb533328a817e4', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryArchitectureTest.java': '1856de0a2e855de85be21badf99122f7bdf4f42e41c00b5cccb78bfa2ae4ce2d', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryServiceTest.java': '8993c0692130670f10423e6e87c14a2d2878bfd1b4ed8a5cd2f031c67577c323', 'backend/src/test/java/com/cinenest/IdentityIntegrationTest.java': '17cc70454509c069ef6de8d4e958a41fc06e71140ab6010e5a4f9b9d35d9d3f2', 'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java': '9ba7303c5a1b1f976eeb208c896705ab82fb9bbc9ace3cb0d21abbbe734d8bbd', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java': '7f0b6e9886dcec3468b4482b551d374172b1cd3ed1f1cd70b1ae94a1925464e1', 'knowledge/ARCHITECTURE.md': 'acb6a4162773714025d29c6a81476f24825d1baa80957f33fb955375c8a34b07', 'knowledge/PROGRESS.md': '3f6e7a77cfa1ae54a5bde58cff26fb8384d20bb886a0026d6a34150d65864f09', 'knowledge/product/FEATURE_CATALOG.md': 'b7a5312245869b30e1981395716879f717b3cbfc3fdc5d45f5d13d51d2ab1a11', 'knowledge/guides/USER_GUIDE.md': 'c6200032501d2004bd6bf63af75d769656601247af8396a1f6486d2961fedb36', 'knowledge/execution/status.json': '333e4b4c3846d7a711f9005b3f8dce0f7ce9630804274ce076325096fdd0b5d1'}
+C02PUB_EVIDENCE = {'.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/qualified-source-fingerprints.json': '9a491ca136b609ddc1cc93af4b86fb62afda10efff8b6149a31e51a765d3b84b', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/qualification-summary.json': 'c1396a81228bb1b6231793a21bfe05e6ef96e463f5a1d79ae60490fbab78895c', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/corrected-legacy-test-results.json': '51ea450933c87b06328be525c1bb5ac7391d716b2f96cb7197d9650a4cdb2087', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/cn-c02-integration-test-results.json': '7bf29eb0ce5077e47fac2132b0ffac342c5b9138cf3cabd70d06729560cfbef1', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/offline-test-results.json': '23405a0753b5507186658fc6163e5fa577e5244923933234559f97534b2b1763', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/migration-source-fingerprints.json': 'f835b21423edbc18415bb9dc03aed749046be3bc6d0f67d34261d2bd69dcdf86'}
+C02PUB_RECORD = {'taskId': 'CN-C02-QUALIFIED-INTEGRATION-PUBLICATION-001', 'baseline': 'cff07b7b374a27f8149537e1770e6cd1194d81ec', 'authorization': 'EXPLICIT_OWNER_EXACT_24_FILES_BRANCH_ONLY', 'payloadPaths': ['backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java', 'backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerController.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java', 'backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java', 'backend/src/test/java/com/cinenest/identity/internal/LockRoomAssignmentSecurityTest.java', 'backend/src/main/java/com/cinenest/identity/internal/CredentialEpochSessions.java', 'backend/src/main/java/com/cinenest/identity/internal/JdbcLocalCredentialRecoveryRepository.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecoveryController.java', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecoveryService.java', 'backend/src/test/java/com/cinenest/LocalCredentialRecoveryIntegrationTest.java', 'backend/src/test/java/com/cinenest/identity/internal/CredentialEpochSessionsTest.java', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryArchitectureTest.java', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryServiceTest.java', 'backend/src/test/java/com/cinenest/IdentityIntegrationTest.java', 'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'knowledge/execution/validate_execution.py'], 'sourceSha256': {'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '9a69825c242af3d6dd91a98e14a9bbdf0e9c993dc3d67e117fcdaeba7da93a89', 'backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java': 'ade506027dbacda013cacd900ee4ade8fa9b28f302abbd7403dac34472ba4e08', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerController.java': 'd49ac1fc4ddef1d3564b8f77f3751b058d3287ed5de9a9357e2e1856ba14a294', 'backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java': 'a8e3cce0830badea48d6c9e0c0d4a07ded7d2d148ba794b5a373fc4fb7dd7d4e', 'backend/src/test/java/com/cinenest/identity/internal/BankInstructionPublicationSecurityTest.java': 'b92dd7e29a55a59a20f4b4bd4140211f7e4f075e3f5a075015be2d1ab2b4be9d', 'backend/src/test/java/com/cinenest/identity/internal/LockRoomAssignmentSecurityTest.java': 'bde6d57122cfb1f0303d01e4918aa0f5d8be1b2be22352ba3610856d3e3245f5', 'backend/src/main/java/com/cinenest/identity/internal/CredentialEpochSessions.java': 'fb4f97156bf50da9937d44615f569e42db6e63c14b585da6595d86622b031975', 'backend/src/main/java/com/cinenest/identity/internal/JdbcLocalCredentialRecoveryRepository.java': '18825800e2921e28a77d276b27f2e084673e43f56076732992f7e05a1c568b84', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecoveryController.java': 'b08ec6a3cf0132371448a5f3f42b9942b9a0b201844481ec881be352610e2878', 'backend/src/main/java/com/cinenest/identity/internal/LocalCredentialRecoveryService.java': 'fa5ecb452ae6707f221b7aab9b0ab714dc1343781083e7ef5c404fa1ad1fbcf3', 'backend/src/test/java/com/cinenest/LocalCredentialRecoveryIntegrationTest.java': '1291e14c6e903aedb01722fd402593aa0f70c16beaaa43af045a6ad9da45cff9', 'backend/src/test/java/com/cinenest/identity/internal/CredentialEpochSessionsTest.java': '7f80824031a8d6dac544044359453b13e8bfa2c77e09518894bb533328a817e4', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryArchitectureTest.java': '1856de0a2e855de85be21badf99122f7bdf4f42e41c00b5cccb78bfa2ae4ce2d', 'backend/src/test/java/com/cinenest/identity/internal/LocalCredentialRecoveryServiceTest.java': '8993c0692130670f10423e6e87c14a2d2878bfd1b4ed8a5cd2f031c67577c323', 'backend/src/test/java/com/cinenest/IdentityIntegrationTest.java': '17cc70454509c069ef6de8d4e958a41fc06e71140ab6010e5a4f9b9d35d9d3f2', 'backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java': '9ba7303c5a1b1f976eeb208c896705ab82fb9bbc9ace3cb0d21abbbe734d8bbd', 'backend/src/test/java/com/cinenest/ManagedGrantReadIntegrationTest.java': '7f0b6e9886dcec3468b4482b551d374172b1cd3ed1f1cd70b1ae94a1925464e1'}, 'qualificationEvidenceHashes': {'.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/qualified-source-fingerprints.json': '9a491ca136b609ddc1cc93af4b86fb62afda10efff8b6149a31e51a765d3b84b', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/qualification-summary.json': 'c1396a81228bb1b6231793a21bfe05e6ef96e463f5a1d79ae60490fbab78895c', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/corrected-legacy-test-results.json': '51ea450933c87b06328be525c1bb5ac7391d716b2f96cb7197d9650a4cdb2087', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/cn-c02-integration-test-results.json': '7bf29eb0ce5077e47fac2132b0ffac342c5b9138cf3cabd70d06729560cfbef1', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/offline-test-results.json': '23405a0753b5507186658fc6163e5fa577e5244923933234559f97534b2b1763', '.cache/private-legacy-denial-4b8588e366c844df91c2e29f17870177/migration-source-fingerprints.json': 'f835b21423edbc18415bb9dc03aed749046be3bc6d0f67d34261d2bd69dcdf86'}, 'historicalQualification': {'legacyPostgresPassed': 79, 'cnC02PostgresPassed': 9, 'offlinePassed': 88, 'failed': 0, 'optionalBrowserSkipped': 1, 'newlyExecuted': False}, 'recoveryDefaultEnabled': False, 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'realPaymentsEnabled': False, 'physicalAccessEnabled': False, 'migrationsChanged': False, 'mainMergeAuthorized': False, 'originalUnpublishedPreserved': 28, 'phaseAcceptance': 'NOT_ACCEPTED', 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}, 'knownCiDependency': 'Separate WP-02 suspended-session401 test corrections excluded;full CI outcome must be reported exactly.'}
+C02PUB_SUFFIX_SHA256 = '40c4b4df6242cbaa32afa670cf42debe7d07a95a05163e45ebe881c28b64e0f2'
+c02pub_previous_main = inert_ci_main
+c02pub_previous_guard = receipt_admission_successor_errors
+
+def c02pub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',C02PUB_BASE+':'+name])
+
+def c02pub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',C02PUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def c02pub_payload_errors():
+    errors=[]
+    try:
+        owned=set(C02PUB_PATHS);expected=set(C02PUB_RECORD['payloadPaths'])
+        if C02PUB_TASK!='CN-C02-QUALIFIED-INTEGRATION-PUBLICATION-001' or len(C02PUB_PATHS)!=24 or owned!=expected or set(C02PUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['C02 exact task/path mismatch']
+        for name in C02PUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('C02 unsafe/missing payload '+name);continue
+            if name in C02PUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=C02PUB_HASHES[name]:errors.append('C02 fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=c02pub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('C02 historical validator changed')
+        suffix=current[len(prefix):].replace("C02PUB_SUFFIX_SHA256 = '"+C02PUB_SUFFIX_SHA256+"'","C02PUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=C02PUB_SUFFIX_SHA256:errors.append('C02 successor changed')
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(c02pub_before(name)):errors.append('C02 historical KB changed '+name)
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('cnC02QualifiedIntegrationPublication20261104',None)
+        if entry!=C02PUB_RECORD or state!=json.loads(c02pub_before('knowledge/execution/status.json')):errors.append('C02 registry/task/evidence drift')
+        if entry is None or entry.get('taskId')!=C02PUB_TASK or entry.get('qualificationEvidenceHashes')!=C02PUB_EVIDENCE:errors.append('C02 evidence binding drift')
+        manifest=json.loads(c02pub_before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if row['path'] in {'ARCHITECTURE.md','PROGRESS.md','product/FEATURE_CATALOG.md','guides/USER_GUIDE.md','execution/status.json','execution/validate_execution.py'}:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('C02 unauthorized manifest change')
+        tree=c02pub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('C02 missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('C02 unowned history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',C02PUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree)|owned or not changed<=owned:errors.append('C02 unauthorized/missing repository path')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('C02 invalid/inaccessible payload')
+    return errors
+
+def c02pub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return c02pub_payload_errors()
+
+def c02pub_controls():
+    from unittest.mock import patch
+    assert not c02pub_successor_errors();print('PASS C02 exact24 successor positive')
+    assert not v35_migration_errors();print('PASS C02 exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in C02PUB_PATHS+['AGENTS.md','backend/src/test/java/com/cinenest/RoomsIntegrationTest.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert c02pub_successor_errors(),name
+        print('PASS C02 rejects payload/history mutation '+name)
+    target=R/C02PUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert c02pub_successor_errors()
+        print('PASS C02 rejects '+label)
+    with patch.dict(globals(),{'C02PUB_TASK':'UNKNOWN'}):assert c02pub_successor_errors()
+    print('PASS C02 rejects unknown task')
+    with patch.dict(globals(),{'C02PUB_PATHS':C02PUB_PATHS[:-1]+['knowledge/../unauthorized.py']}):assert c02pub_successor_errors()
+    print('PASS C02 rejects substituted path')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert c02pub_successor_errors()
+        print('PASS C02 rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('recoveryActivated',True),('phaseAcceptance','ACCEPTED'),('realReceiptAdmission','ALLOW')]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['cnC02QualifiedIntegrationPublication20261104'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert c02pub_successor_errors()
+        print('PASS C02 rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-c02.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert c02pub_successor_errors()
+        print('PASS C02 rejects unknown '+command)
+    target=K/'manifest.json'
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert c02pub_successor_errors()
+    print('PASS C02 rejects manifest bytes')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert c02pub_successor_errors(),label
+        print('PASS C02 rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert c02pub_successor_errors()
+    print('PASS C02 rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert c02pub_successor_errors()
+    print('PASS C02 rejects migration symlink')
+
+receipt_admission_successor_errors=c02pub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=c02pub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        c02pub_controls();owned=set(C02PUB_PATHS);tree=set(c02pub_tree());added=owned-tree
+        replacements={R/n:c02pub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':c02pub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=c02pub_previous_main()
+        if result==0:print('PASS C02 qualified integration successor;historical controls preserved;recovery disabled')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

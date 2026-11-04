@@ -141,19 +141,22 @@ class LocalCustomerIdentity {
         if(!hashing.tryAcquire()) throw new Busy();
         try {
             return tx.execute(status -> {
-                if(!throttle("GLOBAL","LOGIN") || !throttle("LOGIN",email)) {audit("LOGIN",null,false);return new Login(429,null);}
+                if(!throttle("GLOBAL","LOGIN") || !throttle("LOGIN",email)) {audit("LOGIN",null,false);return new Login(429,null,0);}
                 var rows=jdbc.sql("SELECT m.account_id,m.password_hash,m.verified_at,a.eligibility,a.synthetic FROM cinenest_identity.manual_customer m JOIN cinenest_identity.account a USING(account_id) WHERE email=:email FOR SHARE OF m,a")
                     .param("email",email).query((rs,n)->new Credential(rs.getObject(1,UUID.class),rs.getString(2),rs.getObject(3)!=null,rs.getString(4),rs.getBoolean(5))).list();
-                String hash=rows.isEmpty()?dummy:rows.getFirst().hash().substring("{pbkdf2-v1}".length());
+                IdentityStore.CredentialState state=null;
+                boolean malformed=false;
+                if(!rows.isEmpty())try {state=store.credentialState(rows.getFirst().id(),true);}catch(CredentialEpochSessions.Denied invalid){malformed=true;}
+                String hash=state==null||state.hash()==null?dummy:state.hash().substring("{pbkdf2-v1}".length());
                 boolean correct=encoder.matches(password,hash);
                 UUID account=rows.isEmpty()?null:rows.getFirst().id();
-                boolean allowed=correct && !rows.isEmpty() && rows.getFirst().verified() && rows.getFirst().synthetic() && rows.getFirst().eligibility().equals("ELIGIBLE");
+                boolean allowed=correct && !malformed && state!=null && state.verified() && state.synthetic() && state.eligibility().equals("ELIGIBLE");
                 audit("LOGIN",account,allowed);
-                return new Login(allowed?204:401,allowed?account:null);
+                return new Login(allowed?204:401,allowed?account:null,allowed?state.epoch():0);
             });
         } finally {hashing.release();}
     }
     record Credential(UUID id,String hash,boolean verified,String eligibility,boolean synthetic) { @Override public String toString(){return "Credential[REDACTED]";} }
-    record Login(int status,UUID account) {}
+    record Login(int status,UUID account,long epoch) {}
     static class Busy extends RuntimeException {}
 }

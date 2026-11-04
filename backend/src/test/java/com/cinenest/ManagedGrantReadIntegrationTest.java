@@ -142,7 +142,8 @@ class ManagedGrantReadIntegrationTest {
             case "MEMBERSHIP"->jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:a AND venue_id=:v").param("a",STAFF).param("v",VA).update();
             default->jdbc.sql("UPDATE cinenest_identity.account SET eligibility=:e WHERE account_id=:a").param("a",STAFF).param("e",change).update();
         }
-        assertThat(b.get(endpoint()).statusCode()).isEqualTo(403);
+        int expectedStatus = (change.equals("SUSPENDED") || change.equals("INELIGIBLE")) ? 401 : 403;
+        assertThat(b.get(endpoint()).statusCode()).isEqualTo(expectedStatus);
     }
     @Test void missingAndExpiredSessionsDeny()throws Exception{permit();assertThat(new Browser().get(endpoint()).statusCode()).isEqualTo(401);var b=signedIn("staff");jdbc.sql("UPDATE cinenest_identity.http_session SET last_access_time=0, expiry_time=0").update();assertThat(b.get(endpoint()).statusCode()).isEqualTo(401);}
     @Test void missingNonMemberAndNonSyntheticTargetsAreOpaque()throws Exception{

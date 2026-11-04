@@ -116,7 +116,7 @@ class LocalCustomerIdentityTest {
  @Test void currentEligibilityAndSessionExpiryDenyProtectedData() throws Exception {
   var b=new Browser();verified(b,"eligibility@example.test");assertThat(b.login("eligibility@example.test",PASSWORD)).isEqualTo(204);
   assertThat(b.call("GET","/api/accounts/"+UUID.randomUUID(),null,false).statusCode()).isEqualTo(403);
-  jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=revision+1").update();assertThat(b.call("GET","/api/accounts/me",null,false).statusCode()).isEqualTo(403);
+  jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=revision+1").update();assertThat(b.call("GET","/api/accounts/me",null,false).statusCode()).isEqualTo(401);
   jdbc.sql("UPDATE cinenest_identity.http_session SET last_access_time=0,expiry_time=0").update();assertThat(b.call("GET","/api/accounts/me",null,false).statusCode()).isEqualTo(401);
  }
  @Test void mandatoryAuditFailureRollsBackRegistrationAndDeniesLogin() throws Exception {

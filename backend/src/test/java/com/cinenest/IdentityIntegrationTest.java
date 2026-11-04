@@ -170,8 +170,8 @@ class IdentityIntegrationTest {
     void changedAccountEligibilityAffectsNextRequest(String state) throws Exception {
         var browser = signedIn("customer-a");
         jdbc.sql("UPDATE cinenest_identity.account SET eligibility=:state,revision=revision+1 WHERE account_id=:id").param("state",state).param("id",A).update();
-        assertThat(browser.get("/api/accounts/me").statusCode()).isEqualTo(403);
-        assertThat(browser.get("/api/session/csrf").statusCode()).isEqualTo(403);
+        assertThat(browser.get("/api/accounts/me").statusCode()).isEqualTo(401);
+        assertThat(browser.get("/api/session/csrf").statusCode()).isEqualTo(401);
     }
     @Test void removedVenueAssignmentRemovesGrantAuthority() throws Exception {
         grant("account.read","VENUE",VA);var browser=signedIn("staff");

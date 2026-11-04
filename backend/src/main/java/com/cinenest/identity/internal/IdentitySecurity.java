@@ -36,6 +36,14 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 @EnableJdbcHttpSession(tableName = "cinenest_identity.http_session")
 class IdentitySecurity {
     @Bean
+    static org.springframework.beans.factory.config.BeanPostProcessor credentialEpochInfrastructure(
+            org.springframework.beans.factory.ObjectProvider<org.springframework.transaction.PlatformTransactionManager> managers,
+            org.springframework.beans.factory.ObjectProvider<IdentityStore> stores,
+            org.springframework.beans.factory.ObjectProvider<org.springframework.jdbc.core.simple.JdbcClient> clients) {
+        return CredentialEpochSessions.infrastructure(managers,stores,clients);
+    }
+
+    @Bean
     SessionRepositoryCustomizer<JdbcIndexedSessionRepository> sessionPolicy(
             @Value("${cinenest.identity.session-timeout-seconds:0}") int seconds) {
         if (seconds <= 0) throw new IllegalStateException("An explicit positive identity session expiry is required");
@@ -82,7 +90,8 @@ class IdentitySecurity {
         if(google && env.getProperty("cinenest.identity.google.mode","").equals("LIVE_QUALIFICATION")) {
             http.addFilterBefore(new GoogleLiveExecutionGate(env.getProperty("cinenest.identity.google.live-execution",Boolean.class,false)),org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.class);
         }
-        var contexts = new HttpSessionSecurityContextRepository();
+        var contexts = CredentialEpochSessions.contexts();
+        http.addFilterAfter(CredentialEpochSessions.requests(store),org.springframework.security.web.context.SecurityContextHolderFilter.class);
         var oidc = new OidcUserService();
         http.securityContext(context -> context.securityContextRepository(contexts))
             .requestCache(cache -> cache.disable())
@@ -91,6 +100,10 @@ class IdentitySecurity {
                 if(google) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/google/status","/oauth2/authorization/google","/login/oauth2/code/google").permitAll();
                 if(manual) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/csrf").permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/auth/registrations","/api/auth/email-verifications","/api/auth/login").permitAll();
+                if(env.getProperty("cinenest.identity.manual.recovery.enabled",Boolean.class,false))
+                    requests.requestMatchers(org.springframework.http.HttpMethod.POST,
+                        "/api/admin/venues/*/accounts/*/credential-recovery/capabilities",
+                        "/api/admin/venues/*/accounts/*/credential-recovery/commands").authenticated();
                 requests
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/accounts/me/profile").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/accounts/me/profile").authenticated()
@@ -186,10 +199,9 @@ class IdentitySecurity {
                     }
                     // Persist only the local principal; provider tokens/claims are not an application session DTO.
                     var context = SecurityContextHolder.createEmptyContext();
-                    context.setAuthentication(UsernamePasswordAuthenticationToken.authenticated(
-                        associated.get().toString(), null, List.of()));
-                    SecurityContextHolder.setContext(context);
                     try {
+                        context.setAuthentication(CredentialEpochSessions.authentication(associated.get(),store.credentialEpoch(associated.get(),false)));
+                        SecurityContextHolder.setContext(context);
                         store.audit(associated.get(), null, "AUTHENTICATION", true);
                         contexts.saveContext(context, request, response);
                         response.setStatus(204);

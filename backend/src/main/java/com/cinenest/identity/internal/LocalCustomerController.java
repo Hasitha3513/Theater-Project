@@ -57,9 +57,9 @@ class LocalCustomerController {
             if(result.status()!=204) return response(result.status());
             var session=request.getSession(true);request.changeSessionId();
             var context=SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(UsernamePasswordAuthenticationToken.authenticated(result.account().toString(),null,List.of()));
+            context.setAuthentication(CredentialEpochSessions.authentication(result.account(),result.epoch()));
             SecurityContextHolder.setContext(context);
-            new HttpSessionSecurityContextRepository().saveContext(context,request,response);
+            CredentialEpochSessions.contexts().saveContext(context,request,response);
             session.removeAttribute("org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN");
             return response(204);
         } catch(IllegalArgumentException failure) { return refusal(login?401:400,action); }

@@ -495,3 +495,10 @@ Isolated V34 PostgreSQL qualification has passed. This does not make the backend
 ## Local credential recovery — තවම භාවිත කළ නොහැක
 
 CN-C02 recovery source එක offline contract/tests පමණයි. Password reset button,endpoint,token issuance හෝ executable recovery workflow එකක් නැහැ. Existing password එක වෙනස් වී නැහැ;නව grants ලබාදී නැහැ. Private credential file එක නැති නම් direct hash rewrite,trigger disabling හෝ account recreation නොකරන්න. Separate DDL,persistence සහ session-epoch integration approval/qualification අවශ්‍යයි. මේ contract එක Day6 Owner UAT acceptance හෝ production recovery approval නොවේ. [සත්‍ය evidence සහ limits](../PROGRESS.md#local-credential-recovery-contract).
+
+
+## CN-C02 synthetic recovery and session restrictions
+
+No recovery activation is supplied by this publication. Operators must not attempt recovery against preserved or production accounts without separate environment, account, actor, venue and runtime authority. The backend recovery command is default-disabled; no public password-reset workflow is introduced. Where separately authorized, capability issuance/consumption uses the existing Identity contract, one-time expiry and expected revisions with mandatory audit. Never place passwords, capability secrets or session tokens in tickets or logs.
+
+After an authorized credential change, older manual/OIDC sessions are invalid and the account must authenticate again. Latest committed credential versions take precedence; an old password cannot be used as fallback. A401 means authentication/session renewal is required; a valid-session403 requires reviewing scoped permissions/venue rather than repeated login. Epoch-less sessions created before integration also require reauthentication. No production receipt/banking/physical-access policy is changed. [Technical restrictions](../ARCHITECTURE.md#cn-c02-qualified-identity-integration--publication-boundary).

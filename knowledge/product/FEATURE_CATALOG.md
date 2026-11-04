@@ -813,3 +813,8 @@ CN-C02-LOCAL-SYNTHETIC-CREDENTIAL-RECOVERY-001 adds a default-disabled internal 
 ### DOC-F001 amendment — CN-C02 V35 qualified persistence schema
 
 Recovery contracts are published;V35 Identity persistence schema is PostgreSQL18.6-qualified(26PASS),including immutable credential versions,single-use capabilities and mandatory audit/session-epoch persistence. Actual credential recovery remains unavailable:authentication/persistence-adapter integration,issuer endpoint and runtime session invalidation are pending and separately gated. No password reset or customer workflow is activated;production activation remains prohibited. This amends the earlier contract-only classification without changing historical evidence. [Architecture](../ARCHITECTURE.md#credential-recovery-v35),[qualification](../PROGRESS.md#credential-recovery-v35).
+
+
+## CN-C02 qualified local synthetic recovery integration
+
+Identity now provides the V35 transactional capability/consumption/version/audit adapter, latest committed credential selection and epoch-bound manual/OIDC session validation. Protected stale/epoch-less sessions fail401; valid authenticated sessions still require exact permissions/venue and fail403 when unauthorized. Recovery commands remain disabled by default and restricted to approved local synthetic accounts/actors/venues when separately enabled. This is branch publication of qualified software, not an operator password reset, public reset service, Owner UAT acceptance or production recovery approval. [Architecture](../ARCHITECTURE.md#cn-c02-qualified-identity-integration--publication-boundary), [evidence](../PROGRESS.md#cn-c02-qualified-publication).
