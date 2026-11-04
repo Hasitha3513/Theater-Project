@@ -29688,5 +29688,58 @@
       "formalAcceptance": "0/92"
     },
     "publicationCi": "PENDING_EXACT_SOURCE_VERIFICATION_NO_SUCCESS_INFERRED"
+  },
+  "ciBudgetRecovery20261104": {
+    "taskId": "CN-CI-BUDGET-RECOVERY-001",
+    "baseline": "6aa6ad87090eeb91711104bc4547132879020e29",
+    "authorization": "EXPLICIT_OWNER_EXACT_FIVE_FILES_BRANCH_ONLY",
+    "payloadPaths": [
+      ".github/workflows/foundation.yml",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "sourceSha256": {
+      ".github/workflows/foundation.yml": "8f70162161818d3830c229a6d9e9272e0e9df474dfd6c3348ecaea2c0406475d"
+    },
+    "qualificationEvidenceHashes": {
+      ".cache/private-anchor-ci-recovery-20261104/ci-budget-proposal.json": "d3d4d978962f3cb85e5810bce77d07f967c3ccceb5d6885be9d35b5e15ded6b8",
+      ".cache/private-anchor-ci-recovery-20261104/proposed-ci-budget.patch": "0a0dc9321d976dd9c352e021c5f5c3457c3d52944b172dc18c95cf5c0cb3e7c6",
+      ".cache/private-anchor-ci-recovery-20261104/ci-jobs.json": "3402cd8e82924d6ef01919f51bcc3a1a38f4379494d7a6cb757c03d8d29b9a7b",
+      ".cache/private-anchor-ci-recovery-20261104/ci-annotations.json": "8a80291a58d63fee9e4e68235b813a267c292c6a8c2361a3ea89c91754cebbfa",
+      ".cache/private-anchor-ci-recovery-20261104/ci-sanitized.log": "5fc4fcd7db6a88d7d8cb9abe45ece254d629d71aecb26130d9d3039d952ea663"
+    },
+    "workflowDelta": {
+      "beforeSha256": "a5aab623f3142b73843d703a53cb9bf0bf56fb11c0f3f47719e099e420ff6481",
+      "afterSha256": "8f70162161818d3830c229a6d9e9272e0e9df474dfd6c3348ecaea2c0406475d",
+      "onlyChange": "jobs.verify.timeout-minutes20->30"
+    },
+    "previousCi": {
+      "run": 41797743423,
+      "conclusion": "CANCELLED_JOB_EXCEEDED_20_MINUTES",
+      "backendPassed": 1240,
+      "backendFailures": 0,
+      "backendErrors": 0,
+      "backendSkipped": 54,
+      "frontendPassed": 523,
+      "executionValidator": "PASS",
+      "standaloneHistoricalGovernance": "INCOMPLETE_TIMEOUT_NOT_PASS"
+    },
+    "authorizedCiRuns": 1,
+    "automaticTimeoutIncreaseAllowed": false,
+    "recoveryActivated": false,
+    "realReceiptAdmission": "DENY",
+    "phaseAcceptance": "NOT_ACCEPTED",
+    "mainMergeAuthorized": false,
+    "localRuntimeStarted": false,
+    "accounting": {
+      "originalPart1": "4/7",
+      "p1Planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    },
+    "publicationCi": "PENDING_EXACT_SOURCE_VERIFICATION"
   }
 }

@@ -11533,5 +11533,150 @@ def inert_ci_main():
         if result==0:print('PASS ACI qualified integration successor;historical controls preserved;recovery disabled')
         return result
 
+
+
+# Exact Owner-authorized CI budget successor; predecessor bytes are immutable.
+CIBPUB_BASE = '6aa6ad87090eeb91711104bc4547132879020e29'
+CIBPUB_TASK = 'CN-CI-BUDGET-RECOVERY-001'
+CIBPUB_PATHS = ['.github/workflows/foundation.yml', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json']
+CIBPUB_HASHES = {'.github/workflows/foundation.yml': '8f70162161818d3830c229a6d9e9272e0e9df474dfd6c3348ecaea2c0406475d', 'knowledge/PROGRESS.md': '0369d820b89fe5257bda85e14dcc799456ecbe6d143524934d3f0d1a65070836', 'knowledge/execution/status.json': '3c88e6a13f3075e2ced146dc062809a804319da070d31405a364f305310297e3'}
+CIBPUB_EVIDENCE = {'.cache/private-anchor-ci-recovery-20261104/ci-budget-proposal.json': 'd3d4d978962f3cb85e5810bce77d07f967c3ccceb5d6885be9d35b5e15ded6b8', '.cache/private-anchor-ci-recovery-20261104/proposed-ci-budget.patch': '0a0dc9321d976dd9c352e021c5f5c3457c3d52944b172dc18c95cf5c0cb3e7c6', '.cache/private-anchor-ci-recovery-20261104/ci-jobs.json': '3402cd8e82924d6ef01919f51bcc3a1a38f4379494d7a6cb757c03d8d29b9a7b', '.cache/private-anchor-ci-recovery-20261104/ci-annotations.json': '8a80291a58d63fee9e4e68235b813a267c292c6a8c2361a3ea89c91754cebbfa', '.cache/private-anchor-ci-recovery-20261104/ci-sanitized.log': '5fc4fcd7db6a88d7d8cb9abe45ece254d629d71aecb26130d9d3039d952ea663'}
+CIBPUB_RECORD = {'taskId': 'CN-CI-BUDGET-RECOVERY-001', 'baseline': '6aa6ad87090eeb91711104bc4547132879020e29', 'authorization': 'EXPLICIT_OWNER_EXACT_FIVE_FILES_BRANCH_ONLY', 'payloadPaths': ['.github/workflows/foundation.yml', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'sourceSha256': {'.github/workflows/foundation.yml': '8f70162161818d3830c229a6d9e9272e0e9df474dfd6c3348ecaea2c0406475d'}, 'qualificationEvidenceHashes': {'.cache/private-anchor-ci-recovery-20261104/ci-budget-proposal.json': 'd3d4d978962f3cb85e5810bce77d07f967c3ccceb5d6885be9d35b5e15ded6b8', '.cache/private-anchor-ci-recovery-20261104/proposed-ci-budget.patch': '0a0dc9321d976dd9c352e021c5f5c3457c3d52944b172dc18c95cf5c0cb3e7c6', '.cache/private-anchor-ci-recovery-20261104/ci-jobs.json': '3402cd8e82924d6ef01919f51bcc3a1a38f4379494d7a6cb757c03d8d29b9a7b', '.cache/private-anchor-ci-recovery-20261104/ci-annotations.json': '8a80291a58d63fee9e4e68235b813a267c292c6a8c2361a3ea89c91754cebbfa', '.cache/private-anchor-ci-recovery-20261104/ci-sanitized.log': '5fc4fcd7db6a88d7d8cb9abe45ece254d629d71aecb26130d9d3039d952ea663'}, 'workflowDelta': {'beforeSha256': 'a5aab623f3142b73843d703a53cb9bf0bf56fb11c0f3f47719e099e420ff6481', 'afterSha256': '8f70162161818d3830c229a6d9e9272e0e9df474dfd6c3348ecaea2c0406475d', 'onlyChange': 'jobs.verify.timeout-minutes20->30'}, 'previousCi': {'run': 41797743423, 'conclusion': 'CANCELLED_JOB_EXCEEDED_20_MINUTES', 'backendPassed': 1240, 'backendFailures': 0, 'backendErrors': 0, 'backendSkipped': 54, 'frontendPassed': 523, 'executionValidator': 'PASS', 'standaloneHistoricalGovernance': 'INCOMPLETE_TIMEOUT_NOT_PASS'}, 'authorizedCiRuns': 1, 'automaticTimeoutIncreaseAllowed': False, 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'phaseAcceptance': 'NOT_ACCEPTED', 'mainMergeAuthorized': False, 'localRuntimeStarted': False, 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}, 'publicationCi': 'PENDING_EXACT_SOURCE_VERIFICATION'}
+CIBPUB_SUFFIX_SHA256 = '2bb3945150abf5f00cfb4af025e74af24981896fd8bde06c1b302cb94e97e768'
+cibpub_previous_main = inert_ci_main
+cibpub_previous_guard = receipt_admission_successor_errors
+
+def cibpub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',CIBPUB_BASE+':'+name])
+
+def cibpub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',CIBPUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def cibpub_payload_errors():
+    errors=[]
+    try:
+        owned=set(CIBPUB_PATHS);expected=set(CIBPUB_RECORD['payloadPaths'])
+        if CIBPUB_TASK!='CN-CI-BUDGET-RECOVERY-001' or len(CIBPUB_PATHS)!=5 or owned!=expected or set(CIBPUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['CIB exact task/path mismatch']
+        for name in CIBPUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('CIB unsafe/missing payload '+name);continue
+            if name in CIBPUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=CIBPUB_HASHES[name]:errors.append('CIB fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=cibpub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('CIB historical validator changed')
+        suffix=current[len(prefix):].replace("CIBPUB_SUFFIX_SHA256 = '"+CIBPUB_SUFFIX_SHA256+"'","CIBPUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=CIBPUB_SUFFIX_SHA256:errors.append('CIB successor changed')
+        for name in ['knowledge/PROGRESS.md']:
+            if not (R/name).read_bytes().startswith(cibpub_before(name)):errors.append('CIB historical KB changed '+name)
+        workflow='.github/workflows/foundation.yml';old_workflow=cibpub_before(workflow)
+        if old_workflow.count(b'    timeout-minutes: 20\n')!=1 or (R/workflow).read_bytes()!=old_workflow.replace(b'    timeout-minutes: 20\n',b'    timeout-minutes: 30\n',1):errors.append('CIB workflow exceeds exact timeout authority')
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('ciBudgetRecovery20261104',None)
+        if entry!=CIBPUB_RECORD or state!=json.loads(cibpub_before('knowledge/execution/status.json')):errors.append('CIB registry/task/evidence drift')
+        if entry is None or entry.get('taskId')!=CIBPUB_TASK or entry.get('qualificationEvidenceHashes')!=CIBPUB_EVIDENCE:errors.append('CIB evidence binding drift')
+        manifest=json.loads(cibpub_before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if row['path'] in {'PROGRESS.md','execution/status.json','execution/validate_execution.py'}:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('CIB unauthorized manifest change')
+        tree=cibpub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('CIB missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('CIB unowned history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',CIBPUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree)|owned or not changed<=owned:errors.append('CIB unauthorized/missing repository path')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('CIB invalid/inaccessible payload')
+    return errors
+
+def cibpub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return cibpub_payload_errors()
+
+def cibpub_controls():
+    from unittest.mock import patch
+    assert not cibpub_successor_errors();print('PASS CIB exact5 successor positive')
+    assert not v35_migration_errors();print('PASS CIB exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in CIBPUB_PATHS+['AGENTS.md','backend/src/test/java/com/cinenest/RoomsIntegrationTest.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert cibpub_successor_errors(),name
+        print('PASS CIB rejects payload/history mutation '+name)
+    target=R/CIBPUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert cibpub_successor_errors()
+        print('PASS CIB rejects '+label)
+    with patch.dict(globals(),{'CIBPUB_TASK':'UNKNOWN'}):assert cibpub_successor_errors()
+    print('PASS CIB rejects unknown task')
+    with patch.dict(globals(),{'CIBPUB_PATHS':CIBPUB_PATHS[:-1]+['knowledge/../unauthorized.py']}):assert cibpub_successor_errors()
+    print('PASS CIB rejects substituted path')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert cibpub_successor_errors()
+        print('PASS CIB rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('recoveryActivated',True),('phaseAcceptance','ACCEPTED'),('realReceiptAdmission','ALLOW')]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['ciBudgetRecovery20261104'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert cibpub_successor_errors()
+        print('PASS CIB rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-c02.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert cibpub_successor_errors()
+        print('PASS CIB rejects unknown '+command)
+    target=K/'manifest.json'
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert cibpub_successor_errors()
+    print('PASS CIB rejects manifest bytes')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert cibpub_successor_errors(),label
+        print('PASS CIB rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert cibpub_successor_errors()
+    print('PASS CIB rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert cibpub_successor_errors()
+    print('PASS CIB rejects migration symlink')
+
+receipt_admission_successor_errors=cibpub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=cibpub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        cibpub_controls();owned=set(CIBPUB_PATHS);tree=set(cibpub_tree());added=owned-tree
+        replacements={R/n:cibpub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':cibpub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=cibpub_previous_main()
+        if result==0:print('PASS CIB qualified integration successor;historical controls preserved;recovery disabled')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
