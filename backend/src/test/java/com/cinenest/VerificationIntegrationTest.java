@@ -222,7 +222,7 @@ class VerificationIntegrationTest {
         assertThat(write(a,"POST","/api/verification/requests",verificationBody(q)).statusCode()).isEqualTo(409);
         assertThat(json(a.get(quotePath(q))).get("state")).isEqualTo("ACCEPTED");
         jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:id").param("id",A).update();
-        assertThat(a.get(quotePath(q)).statusCode()).isEqualTo(403);
+        assertThat(a.get(quotePath(q)).statusCode()).isEqualTo(401);
     }
     @Test void ordinaryPublicationWithdrawalHonorsAcceptedFrozenQuote()throws Exception{
         var a=signedIn("customer-a");var q=acceptedQuote(a);
@@ -308,7 +308,7 @@ class VerificationIntegrationTest {
         var read=grant("verification.evidence.read","VENUE",VA);assertThat(staff.get(reviewPath(r)).statusCode()).isEqualTo(200);assertThat(staff.get(reviewPath(r).replace(VA.toString(),VB.toString())).statusCode()).isEqualTo(403);
         grantTo(A,VA,"verification.review");grantTo(A,VA,"verification.evidence.read");assertThat(a.get(reviewPath(r)).statusCode()).isEqualTo(403);
         jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:id").param("id",read).update();assertThat(staff.get(reviewPath(r)).statusCode()).isEqualTo(403);
-        jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:id").param("id",A).update();assertThat(a.get(casePath(r)).statusCode()).isEqualTo(403);
+        jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:id").param("id",A).update();assertThat(a.get(casePath(r)).statusCode()).isEqualTo(401);
     }
     @Test void privatePreviewRequiresCurrentReviewPurposeAndScan()throws Exception{
         var a=signedIn("customer-a");var staff=signedIn("staff");reviewerGrants();var allocated=allocate(a,createCase(a));String eid=allocated.get("uploadId").toString();String preview=reviewPath(allocated)+"/evidence/"+eid;

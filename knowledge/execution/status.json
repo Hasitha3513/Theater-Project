@@ -29521,5 +29521,112 @@
       "fullMvp": "15/74",
       "formalAcceptance": "0/92"
     }
+  },
+  "legacySessionCiClosure20261104": {
+    "taskId": "CN-MVP-PART1-LEGACY-SESSION-CI-CLOSURE-001",
+    "baseline": "b5fe1cc92815b8ac76de8e03eedec7064128f97e",
+    "authorization": "EXPLICIT_OWNER_EXACT_ELEVEN_FILES_BRANCH_ONLY",
+    "payloadPaths": [
+      "backend/src/test/java/com/cinenest/AdminReadIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/VerificationIntegrationTest.java",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/AdminReadIntegrationTest.java": "2c9704baa64f37e64e918618b72e64619682fbb7ad7320924fca23974f713c4d",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "54cc5bddccc410a7218099a6ebaaef904a3d17daebc0623877ca9d792681069e",
+      "backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java": "3a6e3ff166aab063339e6d5ecb7e841de20a9b0110d0100b0f87b87c788e9250",
+      "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java": "82239377ee4c76fb48c16938abcfde14b9dfa626c8dcb371c74dc8b3b50909bd",
+      "backend/src/test/java/com/cinenest/QuoteIntegrationTest.java": "abf11d4a965b39123c4fee18e631853db48f4dcddbb2f285abc9b41097120516",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java": "f7d99480d90e3927fa5166b92e798844da8dfb3fcff595fdb5102a1ad6f62a4a",
+      "backend/src/test/java/com/cinenest/VerificationIntegrationTest.java": "818e9a36053ecb2a304c36a316263ef3ba2def8b64cf3a3b3abe857b0113401d"
+    },
+    "qualificationEvidenceHashes": {
+      ".cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/run-manifest.json": "7376cf4d4f2cc4985aed267a461f3fc8666560e8361ff6f4ba5686904627bd87",
+      ".cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/qualification-summary.json": "af7318711eda12e13ec0c53306ba37e1b0d4c0f915457cdaf35be033fa667090",
+      ".cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/corrected32-test-results.json": "e1ebcb794540445c4413c01432c9ac3621376239d058714f905beceaf7981574",
+      ".cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-before.json": "20da62a00950b174bd218deb1a4e37a769aa9fac0e44a0ba9d5e2e620ae32f63",
+      ".cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-after.json": "ee1a6f02fd14487948228b622fe53922adcbd4a208f825ff5300e2801ef91ff5",
+      ".cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-comparison.json": "576292363e184a59441faf8fd840cd1a638aeea1594ae9217eb2647cc02a8eed",
+      ".cache/private-harness-recovery-20261104/offline-results.json": "bc150bc5eee556c2222d954e5537e4ceea7cb4642cedd08901b3d1b3ec16e181",
+      ".cache/private-legacy-session-closure-20261104/qualification-summary.json": "74d1d7c7bf09695b8495b057923b248687cf5d7cfcd5955c26968e47dfb7f30a"
+    },
+    "baselineCi": {
+      "run": 41783816135,
+      "passed": 1217,
+      "failures": 23,
+      "errors": 0,
+      "skipped": 54
+    },
+    "correctedLegacyQualification": {
+      "cases": 32,
+      "passed": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "uniqueMethods": 23,
+      "sourceTask": "CN-MVP-PART1-FINAL-COMPLETION-001",
+      "runId": "8286b91f62114b0d997a2f72b91715bd",
+      "runtimeSeconds": 23.01,
+      "databases": 2,
+      "mavenInvocations": 1,
+      "surefireJvms": 1,
+      "unrelatedInventoryUnchanged": true,
+      "containerRemoved": true,
+      "ownedPidsRemaining": 0,
+      "ownedPortsClosed": true
+    },
+    "offlineSecurityArchitecture": {
+      "passed": 88,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reusedUnchangedIdentityAndArchitectureSources": true
+    },
+    "harnessOffline": {
+      "passed": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "noPostgres": true
+    },
+    "previousNoncompliantRun": {
+      "databases": 7,
+      "authorizedCeiling": 4,
+      "status": "NONCOMPLIANT_PRESERVED_NOT_RETROACTIVELY_APPROVED"
+    },
+    "sourceScope": "Only23 failing method bodies in7 existing tests;no application source change",
+    "reauthenticationFixtures": 3,
+    "csrfBoundary": "Suspended authenticated GET401 invalidates session;subsequent unsafe stale-CSRF request403 preserved",
+    "recoveryActivated": false,
+    "realReceiptAdmission": "DENY",
+    "realPaymentsEnabled": false,
+    "physicalAccessEnabled": false,
+    "migrationsChanged": false,
+    "mainMergeAuthorized": false,
+    "originalUnpublishedPreserved": 28,
+    "phaseAcceptance": "NOT_ACCEPTED",
+    "accounting": {
+      "originalPart1": "4/7",
+      "p1Planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    },
+    "workPackages": {
+      "WP01": "IMPLEMENTED_SYNTHETIC_IDENTITY_QUALIFIED_FORMAL_ACCEPTANCE_PENDING",
+      "WP02": "IMPLEMENTED_FULL_THREE_SUITE_CI52PASS",
+      "WP03": "IMPLEMENTED_SYNTHETIC_BOOKING_QUALIFIED_FINAL_CI_PENDING",
+      "WP04": "IMPLEMENTED_BOUNDED_ADMIN_ROOM_BLOCKING_OWNER_UAT_PENDING_HARDWARE_M1_UNPUBLISHED",
+      "WP05": "SCOPED_SECURITY_QUALIFIED_FINAL_CI_PENDING"
+    },
+    "ciPublication": "PENDING_EXACT_SOURCE_RESULT_NO_SUCCESS_INFERRED"
   }
 }

@@ -199,7 +199,7 @@ class QuoteIntegrationTest {
         var wrong=new HashMap<>(req);wrong.put("idempotencyKey",UUID.randomUUID().toString());assertThat(write(b,"POST","/api/quotes",JSONObjectUtils.toJSONString(wrong)).statusCode()).isEqualTo(404);
         assertThat(a.call("POST",quotePath(q)+"/accept",Map.of()).statusCode()).isEqualTo(403);
         assertThat(new Browser().get(quotePath(q)).statusCode()).isEqualTo(401);
-        jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:id").param("id",A).update();assertThat(a.get(quotePath(q)).statusCode()).isEqualTo(403);
+        jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:id").param("id",A).update();assertThat(a.get(quotePath(q)).statusCode()).isEqualTo(401);
     }
     @Test void exactRevisionsMethodsIdempotencyAndReviewBinding()throws Exception {
         var a=signedIn("customer-a");var h=held(a,request(a,local()));var req=issueRequest(a,h);var q=quote(a,req);assertThat(quote(a,req).get("quoteId")).isEqualTo(q.get("quoteId"));

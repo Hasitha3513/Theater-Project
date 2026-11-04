@@ -88,7 +88,7 @@ class RoomBlockingIntegrationTest {
         c.put("expectedConfiguration","stale");assertThat(create(f,c).statusCode()).isEqualTo(409);c.put("expectedConfiguration",configuration(f));
         jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED',revision=revision+1 WHERE account_id=:a AND permission='inventory.block.create'").param("a",f.actor()).update();assertThat(create(f,c).statusCode()).isEqualTo(403);assertThat(f.browser().call("GET",path(f),null,false).statusCode()).isEqualTo(200);
         grant(f.actor(),f.venue(),"inventory.block.create");jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:a").param("a",f.actor()).update();assertThat(create(f,c).statusCode()).isEqualTo(403);
-        jdbc.sql("INSERT INTO cinenest_identity.account_scope VALUES(:a,:v)").param("a",f.actor()).param("v",f.venue()).update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=revision+1 WHERE account_id=:a").param("a",f.actor()).update();assertThat(create(f,c).statusCode()).isEqualTo(403);assertThat(count("room_block_command",f.venue())).isZero();
+        jdbc.sql("INSERT INTO cinenest_identity.account_scope VALUES(:a,:v)").param("a",f.actor()).param("v",f.venue()).update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=revision+1 WHERE account_id=:a").param("a",f.actor()).update();assertThat(create(f,c).statusCode()).isEqualTo(401);assertThat(count("room_block_command",f.venue())).isZero();
     }
     @Test void calendarAndExistingHoldAdmissionRespectBlockAndCleaning()throws Exception{
         var f=fixture();var c=command(f);assertThat(create(f,c).statusCode()).isEqualTo(200);

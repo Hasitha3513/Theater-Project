@@ -11245,5 +11245,147 @@ def inert_ci_main():
         if result==0:print('PASS WP02 qualified integration successor;historical controls preserved;recovery disabled')
         return result
 
+
+# Exact Owner-authorized legacy session test successor; predecessor bytes are immutable.
+LSPUB_BASE = 'b5fe1cc92815b8ac76de8e03eedec7064128f97e'
+LSPUB_TASK = 'CN-MVP-PART1-LEGACY-SESSION-CI-CLOSURE-001'
+LSPUB_PATHS = ['backend/src/test/java/com/cinenest/AdminReadIntegrationTest.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java', 'backend/src/test/java/com/cinenest/QuoteIntegrationTest.java', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json']
+LSPUB_HASHES = {'backend/src/test/java/com/cinenest/AdminReadIntegrationTest.java': '2c9704baa64f37e64e918618b72e64619682fbb7ad7320924fca23974f713c4d', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '54cc5bddccc410a7218099a6ebaaef904a3d17daebc0623877ca9d792681069e', 'backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java': '3a6e3ff166aab063339e6d5ecb7e841de20a9b0110d0100b0f87b87c788e9250', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java': '82239377ee4c76fb48c16938abcfde14b9dfa626c8dcb371c74dc8b3b50909bd', 'backend/src/test/java/com/cinenest/QuoteIntegrationTest.java': 'abf11d4a965b39123c4fee18e631853db48f4dcddbb2f285abc9b41097120516', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': 'f7d99480d90e3927fa5166b92e798844da8dfb3fcff595fdb5102a1ad6f62a4a', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java': '818e9a36053ecb2a304c36a316263ef3ba2def8b64cf3a3b3abe857b0113401d', 'knowledge/PROGRESS.md': 'a2893a98826a54293cbbb80f783aabfca1386ef99890ba6a44606383c02dc1c7', 'knowledge/execution/status.json': '84825c4b044662d8636005f3314ea7049cedc7c9ad6f88c9f8ace2d2680e6ecb'}
+LSPUB_EVIDENCE = {'.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/run-manifest.json': '7376cf4d4f2cc4985aed267a461f3fc8666560e8361ff6f4ba5686904627bd87', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/qualification-summary.json': 'af7318711eda12e13ec0c53306ba37e1b0d4c0f915457cdaf35be033fa667090', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/corrected32-test-results.json': 'e1ebcb794540445c4413c01432c9ac3621376239d058714f905beceaf7981574', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-before.json': '20da62a00950b174bd218deb1a4e37a769aa9fac0e44a0ba9d5e2e620ae32f63', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-after.json': 'ee1a6f02fd14487948228b622fe53922adcbd4a208f825ff5300e2801ef91ff5', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-comparison.json': '576292363e184a59441faf8fd840cd1a638aeea1594ae9217eb2647cc02a8eed', '.cache/private-harness-recovery-20261104/offline-results.json': 'bc150bc5eee556c2222d954e5537e4ceea7cb4642cedd08901b3d1b3ec16e181', '.cache/private-legacy-session-closure-20261104/qualification-summary.json': '74d1d7c7bf09695b8495b057923b248687cf5d7cfcd5955c26968e47dfb7f30a'}
+LSPUB_RECORD = {'taskId': 'CN-MVP-PART1-LEGACY-SESSION-CI-CLOSURE-001', 'baseline': 'b5fe1cc92815b8ac76de8e03eedec7064128f97e', 'authorization': 'EXPLICIT_OWNER_EXACT_ELEVEN_FILES_BRANCH_ONLY', 'payloadPaths': ['backend/src/test/java/com/cinenest/AdminReadIntegrationTest.java', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java', 'backend/src/test/java/com/cinenest/QuoteIntegrationTest.java', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'sourceSha256': {'backend/src/test/java/com/cinenest/AdminReadIntegrationTest.java': '2c9704baa64f37e64e918618b72e64619682fbb7ad7320924fca23974f713c4d', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '54cc5bddccc410a7218099a6ebaaef904a3d17daebc0623877ca9d792681069e', 'backend/src/test/java/com/cinenest/CustomerProfileIntegrationTest.java': '3a6e3ff166aab063339e6d5ecb7e841de20a9b0110d0100b0f87b87c788e9250', 'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java': '82239377ee4c76fb48c16938abcfde14b9dfa626c8dcb371c74dc8b3b50909bd', 'backend/src/test/java/com/cinenest/QuoteIntegrationTest.java': 'abf11d4a965b39123c4fee18e631853db48f4dcddbb2f285abc9b41097120516', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': 'f7d99480d90e3927fa5166b92e798844da8dfb3fcff595fdb5102a1ad6f62a4a', 'backend/src/test/java/com/cinenest/VerificationIntegrationTest.java': '818e9a36053ecb2a304c36a316263ef3ba2def8b64cf3a3b3abe857b0113401d'}, 'qualificationEvidenceHashes': {'.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/run-manifest.json': '7376cf4d4f2cc4985aed267a461f3fc8666560e8361ff6f4ba5686904627bd87', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/qualification-summary.json': 'af7318711eda12e13ec0c53306ba37e1b0d4c0f915457cdaf35be033fa667090', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/corrected32-test-results.json': 'e1ebcb794540445c4413c01432c9ac3621376239d058714f905beceaf7981574', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-before.json': '20da62a00950b174bd218deb1a4e37a769aa9fac0e44a0ba9d5e2e620ae32f63', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-after.json': 'ee1a6f02fd14487948228b622fe53922adcbd4a208f825ff5300e2801ef91ff5', '.cache/private-final-part1-8286b91f62114b0d997a2f72b91715bd/container-inventory-comparison.json': '576292363e184a59441faf8fd840cd1a638aeea1594ae9217eb2647cc02a8eed', '.cache/private-harness-recovery-20261104/offline-results.json': 'bc150bc5eee556c2222d954e5537e4ceea7cb4642cedd08901b3d1b3ec16e181', '.cache/private-legacy-session-closure-20261104/qualification-summary.json': '74d1d7c7bf09695b8495b057923b248687cf5d7cfcd5955c26968e47dfb7f30a'}, 'baselineCi': {'run': 41783816135, 'passed': 1217, 'failures': 23, 'errors': 0, 'skipped': 54}, 'correctedLegacyQualification': {'cases': 32, 'passed': 32, 'failures': 0, 'errors': 0, 'skipped': 0, 'uniqueMethods': 23, 'sourceTask': 'CN-MVP-PART1-FINAL-COMPLETION-001', 'runId': '8286b91f62114b0d997a2f72b91715bd', 'runtimeSeconds': 23.01, 'databases': 2, 'mavenInvocations': 1, 'surefireJvms': 1, 'unrelatedInventoryUnchanged': True, 'containerRemoved': True, 'ownedPidsRemaining': 0, 'ownedPortsClosed': True}, 'offlineSecurityArchitecture': {'passed': 88, 'failures': 0, 'errors': 0, 'skipped': 0, 'reusedUnchangedIdentityAndArchitectureSources': True}, 'harnessOffline': {'passed': 19, 'failures': 0, 'errors': 0, 'skipped': 0, 'noPostgres': True}, 'previousNoncompliantRun': {'databases': 7, 'authorizedCeiling': 4, 'status': 'NONCOMPLIANT_PRESERVED_NOT_RETROACTIVELY_APPROVED'}, 'sourceScope': 'Only23 failing method bodies in7 existing tests;no application source change', 'reauthenticationFixtures': 3, 'csrfBoundary': 'Suspended authenticated GET401 invalidates session;subsequent unsafe stale-CSRF request403 preserved', 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'realPaymentsEnabled': False, 'physicalAccessEnabled': False, 'migrationsChanged': False, 'mainMergeAuthorized': False, 'originalUnpublishedPreserved': 28, 'phaseAcceptance': 'NOT_ACCEPTED', 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}, 'workPackages': {'WP01': 'IMPLEMENTED_SYNTHETIC_IDENTITY_QUALIFIED_FORMAL_ACCEPTANCE_PENDING', 'WP02': 'IMPLEMENTED_FULL_THREE_SUITE_CI52PASS', 'WP03': 'IMPLEMENTED_SYNTHETIC_BOOKING_QUALIFIED_FINAL_CI_PENDING', 'WP04': 'IMPLEMENTED_BOUNDED_ADMIN_ROOM_BLOCKING_OWNER_UAT_PENDING_HARDWARE_M1_UNPUBLISHED', 'WP05': 'SCOPED_SECURITY_QUALIFIED_FINAL_CI_PENDING'}, 'ciPublication': 'PENDING_EXACT_SOURCE_RESULT_NO_SUCCESS_INFERRED'}
+LSPUB_SUFFIX_SHA256 = 'a98942a760b6620ce01dc0defc9a952478070e2df2089a0ba99540c59832b435'
+lspub_previous_main = inert_ci_main
+lspub_previous_guard = receipt_admission_successor_errors
+
+def lspub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',LSPUB_BASE+':'+name])
+
+def lspub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',LSPUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def lspub_payload_errors():
+    errors=[]
+    try:
+        owned=set(LSPUB_PATHS);expected=set(LSPUB_RECORD['payloadPaths'])
+        if LSPUB_TASK!='CN-MVP-PART1-LEGACY-SESSION-CI-CLOSURE-001' or len(LSPUB_PATHS)!=11 or owned!=expected or set(LSPUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['LS exact task/path mismatch']
+        for name in LSPUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('LS unsafe/missing payload '+name);continue
+            if name in LSPUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=LSPUB_HASHES[name]:errors.append('LS fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=lspub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('LS historical validator changed')
+        suffix=current[len(prefix):].replace("LSPUB_SUFFIX_SHA256 = '"+LSPUB_SUFFIX_SHA256+"'","LSPUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=LSPUB_SUFFIX_SHA256:errors.append('LS successor changed')
+        for name in ['knowledge/PROGRESS.md']:
+            if not (R/name).read_bytes().startswith(lspub_before(name)):errors.append('LS historical KB changed '+name)
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('legacySessionCiClosure20261104',None)
+        if entry!=LSPUB_RECORD or state!=json.loads(lspub_before('knowledge/execution/status.json')):errors.append('LS registry/task/evidence drift')
+        if entry is None or entry.get('taskId')!=LSPUB_TASK or entry.get('qualificationEvidenceHashes')!=LSPUB_EVIDENCE:errors.append('LS evidence binding drift')
+        manifest=json.loads(lspub_before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if row['path'] in {'PROGRESS.md','execution/status.json','execution/validate_execution.py'}:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('LS unauthorized manifest change')
+        tree=lspub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('LS missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('LS unowned history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',LSPUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree)|owned or not changed<=owned:errors.append('LS unauthorized/missing repository path')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('LS invalid/inaccessible payload')
+    return errors
+
+def lspub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return lspub_payload_errors()
+
+def lspub_controls():
+    from unittest.mock import patch
+    assert not lspub_successor_errors();print('PASS LS exact11 successor positive')
+    assert not v35_migration_errors();print('PASS LS exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in LSPUB_PATHS+['AGENTS.md','backend/src/test/java/com/cinenest/RoomsIntegrationTest.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert lspub_successor_errors(),name
+        print('PASS LS rejects payload/history mutation '+name)
+    target=R/LSPUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert lspub_successor_errors()
+        print('PASS LS rejects '+label)
+    with patch.dict(globals(),{'LSPUB_TASK':'UNKNOWN'}):assert lspub_successor_errors()
+    print('PASS LS rejects unknown task')
+    with patch.dict(globals(),{'LSPUB_PATHS':LSPUB_PATHS[:-1]+['knowledge/../unauthorized.py']}):assert lspub_successor_errors()
+    print('PASS LS rejects substituted path')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert lspub_successor_errors()
+        print('PASS LS rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('recoveryActivated',True),('phaseAcceptance','ACCEPTED'),('realReceiptAdmission','ALLOW')]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['legacySessionCiClosure20261104'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert lspub_successor_errors()
+        print('PASS LS rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-c02.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert lspub_successor_errors()
+        print('PASS LS rejects unknown '+command)
+    target=K/'manifest.json'
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert lspub_successor_errors()
+    print('PASS LS rejects manifest bytes')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert lspub_successor_errors(),label
+        print('PASS LS rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert lspub_successor_errors()
+    print('PASS LS rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert lspub_successor_errors()
+    print('PASS LS rejects migration symlink')
+
+receipt_admission_successor_errors=lspub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=lspub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        lspub_controls();owned=set(LSPUB_PATHS);tree=set(lspub_tree());added=owned-tree
+        replacements={R/n:lspub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':lspub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=lspub_previous_main()
+        if result==0:print('PASS LS qualified integration successor;historical controls preserved;recovery disabled')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

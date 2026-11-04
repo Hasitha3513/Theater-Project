@@ -131,7 +131,7 @@ class AdminReadIntegrationTest {
         grant("account.read","VENUE",VA);grant("package.publish","VENUE",VB);var browser=signedIn("staff");
         assertThat(browser.get(accounts(VB)).statusCode()).isEqualTo(403);assertThat(browser.get(accounts(VA)+"/"+B).statusCode()).isEqualTo(404);
         jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE account_id=:a").param("a",STAFF).update();assertThat(browser.get(accounts(VA)).statusCode()).isEqualTo(403);
-        jdbc.sql("UPDATE cinenest_identity.access_grant SET state='ACTIVE' WHERE account_id=:a").param("a",STAFF).update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();assertThat(browser.get(accounts(VA)).statusCode()).isEqualTo(403);
+        jdbc.sql("UPDATE cinenest_identity.access_grant SET state='ACTIVE' WHERE account_id=:a").param("a",STAFF).update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();assertThat(browser.get(accounts(VA)).statusCode()).isEqualTo(401);
         assertThat(new Browser().get(accounts(VA)).statusCode()).isEqualTo(401);
     }
     @Test void paginationFiltersAndCursorBinding() throws Exception {

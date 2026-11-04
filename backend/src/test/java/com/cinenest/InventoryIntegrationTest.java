@@ -187,7 +187,7 @@ class InventoryIntegrationTest {
     @Test void calendarParameterEligibilityAndDiscoveryFailuresAreSanitized()throws Exception{
         var a=signedIn("customer-a");String path=calendarPath(calendarDate(),180,4);assertThat(new Browser().get(path).statusCode()).isEqualTo(401);
         for(String q:new String[]{path+"&date="+calendarDate(),path+"&ownerId=secret",path.replace("durationMinutes=180","durationMinutes=0"),path.replace("guests=4","guests=6"),path.replace(calendarDate(),"2027-02-30"),path.replace("&guests=4",""),path.replace(RID.toString(),"bad")})assertThat(a.get(q).statusCode()).as(q).isEqualTo(400);
-        jdbc.sql("UPDATE cinenest_rooms.room SET enabled=false").update();assertThat(a.get(path).statusCode()).isEqualTo(404);jdbc.sql("UPDATE cinenest_rooms.room SET enabled=true").update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();assertThat(a.get(path).statusCode()).isEqualTo(403);
+        jdbc.sql("UPDATE cinenest_rooms.room SET enabled=false").update();assertThat(a.get(path).statusCode()).isEqualTo(404);jdbc.sql("UPDATE cinenest_rooms.room SET enabled=true").update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();assertThat(a.get(path).statusCode()).isEqualTo(401);
     }
     @Test void calendarMinimumClosingMidnightAndKnownFuturePolicyApply()throws Exception{
         var a=signedIn("customer-a");var d=calendar(a,calendarDate(),180,4);assertThat(calendarItem(d,1261).get("available")).isEqualTo(false);assertThat(calendarItem(d,1260).get("reasons").toString()).contains("OUTSIDE_OPERATING_HOURS");assertThat(calendarItem(calendar(a,calendarDate(),179,4),600).get("reasons").toString()).contains("MINIMUM_DURATION");
@@ -281,7 +281,7 @@ class InventoryIntegrationTest {
         grant("inventory.read","VENUE",VB);grant("room.write","VENUE",VA);assertThat(staff.get(inventory).statusCode()).isEqualTo(403);
         UUID g=grant("inventory.read","VENUE",VA);var response=staff.get(inventory);assertThat(response.statusCode()).isEqualTo(200);assertThat(response.body()).doesNotContain("owner_id",A.toString(),"expiresAt");
         jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",g).update();assertThat(staff.get(inventory).statusCode()).isEqualTo(403);
-        jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();assertThat(a.get(holdPath(h)).statusCode()).isEqualTo(403);
+        jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();assertThat(a.get(holdPath(h)).statusCode()).isEqualTo(401);
     }
     @Test void unauthenticatedCsrfMalformedAndClientAuthorityFailClosed()throws Exception {
         var a=signedIn("customer-a");var req=request(a,local());assertThat(new Browser().get("/api/rooms/"+RID+"/availability?sessionStartLocal="+local()+"&durationMinutes=180&guests=4").statusCode()).isEqualTo(401);
@@ -357,7 +357,8 @@ class InventoryIntegrationTest {
         if(change.equals("EXPIRED"))jdbc.sql("UPDATE cinenest_identity.access_grant SET valid_from=clock_timestamp()-INTERVAL '2 hours',valid_until=clock_timestamp()-INTERVAL '1 hour' WHERE grant_id=:g").param("g",g).update();
         if(change.equals("MEMBERSHIP"))jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:a AND venue_id=:v").param("a",STAFF).param("v",VA).update();
         var b=signedIn("staff");if(change.equals("SUSPENDED"))jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",STAFF).update();
-        assertThat(b.get(impact()).statusCode()).isEqualTo(403);
+        int expectedStatus = "SUSPENDED".equals(change) ? 401 : 403;
+        assertThat(b.get(impact()).statusCode()).isEqualTo(expectedStatus);
     }
     @Test void impactMissingSessionAndNoStitchingAndExpiredSession()throws Exception{
         assertThat(new Browser().get(impact()).statusCode()).isEqualTo(401);var b=signedIn("staff");assertThat(b.get(impact()).statusCode()).isEqualTo(403);grant("inventory.read","VENUE",VB);grant("operations.synthetic.read","VENUE",VA);assertThat(b.get(impact()).statusCode()).isEqualTo(403);
