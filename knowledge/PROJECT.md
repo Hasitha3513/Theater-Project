@@ -1117,3 +1117,20 @@ No runtime adapters,discovery/onboarding activation,HTTP endpoints,grants,provid
 CN-R1-BANK-INSTRUCTION-PUBLICATION-001: Owner-authorized backend-only PROPOSED → REVIEWED → PUBLISHED preparation for the existing closed non-payable fixture catalogue. Dedicated exact-venue proposer and publisher authority are independent; the proposer cannot review or publish their own revision. The reviewing independent publisher must publish that same immutable snapshot. No real receiving-account authority is established. STAGING_ONLY, realPaymentEnabled=false and realReceiptAdmission=DENY remain mandatory. Source is prepared/offline tested; persistence, runtime and protected successor admission remain separately gated. [Exact technical proposal](ARCHITECTURE.md#bank-instruction-publication-ddl); [verified outcomes](PROGRESS.md#bank-instruction-publication-preparation). Original requirements and formal acceptance remain unchanged.
 
 Owner separately approved the exact additive persistence proposal; V34 migration source is prepared, not applied. No runtime, real-bank or production authority accompanies this schema approval. Technical and commercial acceptance remain unchanged.
+
+
+<a id="day06-sole-owner-assurance-policy"></a>
+## Day 06 limited sole-owner synthetic-preparation assurance — 2026-11-04
+
+Decision CN-DAY06-SOLE-OWNER-ASSURANCE-EXCEPTION-001 is explicitly approved by Hasitha Wijerathna as accountable Owner and Technical Setup Operator,subject to canonical governance admission. Classification: OWNER_OPERATED_AUTOMATED_VERIFIED. This label identifies the approved assurance model;it does not claim that a future run has passed automated verification. Scope is temporary synthetic-only Day 06 Room Blocking UAT preparation in a separately authorized disposable environment. This decision is not independent human approval and does not replace independent release review or formal acceptance.
+
+Owner explicitly accepts these residual risks:
+- Combined Owner/Setup Operator responsibilities.
+- Absence of independent human review during synthetic preparation.
+- Owner-controlled evidence and signing-key risks.
+- Limitations of automated security tests.
+- Synthetic testing not establishing production or physical readiness.
+
+Required controls remain exact approved execution manifests,automated security and negative-authorization tests,time-limited exact-venue permissions,cryptographically protected evidence,independently anchored receipts only where separately approved,complete before/after state verification,explicit risk acceptance,strict production separation,and shutdown/cleanup verification. No external anchoring,signing keys or immutable custody is established by this record. Exact signing/integrity mechanism,key custody,protected storage,access restrictions,retention deadline,and external anchoring approval/implementation remain unresolved.
+
+Non-waivable controls:legitimate issuer authentication,exact-venue RBAC/ABAC,CSRF,credential epochs,V28 credential immutability,V35 append-only recovery history,attributable audit,preserved-database protection,independent release review,and commercial/privacy/physical-safety gates. Existing accountability and separation-of-duties requirements remain unchanged. G-ROOM-BLOCK independent release review remains NOT_SATISFIED;Day 06 acceptance PENDING. Stages A–E NOT_AUTHORIZED;production authorization NONE. No snapshot,clone,migration,account,grant,recovery,password,provider,physical-access or deployment authority is supplied. Each stage still requires separate bounded execution approval. Policy publication on a dedicated branch does not make it effective on main. [Admission evidence](PROGRESS.md#day06-assurance-governance-admission).

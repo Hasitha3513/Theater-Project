@@ -11678,5 +11678,148 @@ def inert_ci_main():
         if result==0:print('PASS CIB qualified integration successor;historical controls preserved;recovery disabled')
         return result
 
+
+
+# Exact Owner-authorized Day06 assurance policy successor; predecessor bytes are immutable.
+D06PUB_BASE = '5be599474ad51f9e376350496f969d2ae55478f2'
+D06PUB_TASK = 'CN-DAY06-SOLE-OWNER-ASSURANCE-GOVERNANCE-001'
+D06PUB_PATHS = ['knowledge/PROJECT.md', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json']
+D06PUB_HASHES = {'knowledge/PROJECT.md': '3057cfe07a5fbe57740c2411c1edb768882b03955827f7463202bffe0ea40bfc', 'knowledge/PROGRESS.md': '033e38dab67181e52d2eca14b654c88b597f3cfa5a106b619d3bf9e2614f515f', 'knowledge/execution/status.json': 'f2c0a6414ea654f7f58e04452ac2383f86681887b07a5deaef26b96b87c22224'}
+D06PUB_EVIDENCE = {'/home/hasitha-wijerathna/.codex/attachments/314b81ba-fb54-4738-a1fb-b2972b4e45a9/Pasted text.txt': '0700bb0f7346941101c326aab435a3ecfaed9b2644ad56f4e9450e7dff9c6b9e', '.cache/private-day06-issuer-blocker-20261104/summary.json': '3b4dd9f3a596c26b7feef47e08eeb86f99b4f1afe14318d5cfbebeb6b3d57b6c'}
+D06PUB_RECORD = {'taskId': 'CN-DAY06-SOLE-OWNER-ASSURANCE-GOVERNANCE-001', 'decisionId': 'CN-DAY06-SOLE-OWNER-ASSURANCE-EXCEPTION-001', 'baseline': '5be599474ad51f9e376350496f969d2ae55478f2', 'authorization': 'EXPLICIT_OWNER_EXACT_FIVE_FILES_BRANCH_ONLY', 'payloadPaths': ['knowledge/PROJECT.md', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'accountableOwner': 'Hasitha Wijerathna', 'technicalSetupOperator': 'Hasitha Wijerathna', 'assuranceClassification': 'OWNER_OPERATED_AUTOMATED_VERIFIED', 'policyDecision': 'APPROVED_LIMITED_SYNTHETIC_PREPARATION_ONLY', 'canonicalAdmission': 'PENDING_GOVERNANCE_PUBLICATION_AND_EXACT_SOURCE_CI', 'mainEffectiveness': 'NOT_INFERRED_FROM_BRANCH_PUBLICATION', 'evidence': 'PROGRESS.md#day06-assurance-governance-admission', 'sourceSha256': {'knowledge/PROJECT.md': '3057cfe07a5fbe57740c2411c1edb768882b03955827f7463202bffe0ea40bfc'}, 'qualificationEvidenceHashes': {'/home/hasitha-wijerathna/.codex/attachments/314b81ba-fb54-4738-a1fb-b2972b4e45a9/Pasted text.txt': '0700bb0f7346941101c326aab435a3ecfaed9b2644ad56f4e9450e7dff9c6b9e', '.cache/private-day06-issuer-blocker-20261104/summary.json': '3b4dd9f3a596c26b7feef47e08eeb86f99b4f1afe14318d5cfbebeb6b3d57b6c'}, 'residualRisksAccepted': ['Combined Owner/Setup Operator responsibilities', 'Absence of independent human review during synthetic preparation', 'Owner-controlled evidence and signing-key risks', 'Limitations of automated security tests', 'Synthetic testing not establishing production or physical readiness'], 'independent_release_review': 'NOT_SATISFIED', 'day06_acceptance': 'PENDING', 'stages_A_to_E': 'NOT_AUTHORIZED', 'production_authorization': 'NONE', 'preservedDatabaseAuthority': 'NONE', 'independentHumanApproval': False, 'externalAnchoringExists': False, 'evidenceIntegrityDecisions': 'UNRESOLVED', 'issuerAuthority': 'UNRESOLVED', 'operatorGrantsProvisioned': False, 'grantValidityTimestamps': 'UNRESOLVED', 'snapshotCustody': 'UNRESOLVED', 'auditCustody': 'UNRESOLVED', 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'phaseAcceptance': 'NOT_ACCEPTED', 'mainMergeAuthorized': False, 'runtimeStarted': False, 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}, 'publicationCi': 'PENDING_EXACT_SOURCE_VERIFICATION'}
+D06PUB_SUFFIX_SHA256 = 'e521ecf340a8375ef72f65e330531e995a6624f6d76909935b175db88b307b33'
+d06pub_previous_main = inert_ci_main
+d06pub_previous_guard = receipt_admission_successor_errors
+
+def d06pub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',D06PUB_BASE+':'+name])
+
+def d06pub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',D06PUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def d06pub_payload_errors():
+    errors=[]
+    try:
+        owned=set(D06PUB_PATHS);expected=set(D06PUB_RECORD['payloadPaths'])
+        if D06PUB_TASK!='CN-DAY06-SOLE-OWNER-ASSURANCE-GOVERNANCE-001' or len(D06PUB_PATHS)!=5 or owned!=expected or set(D06PUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['D06 exact task/path mismatch']
+        for name in D06PUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('D06 unsafe/missing payload '+name);continue
+            if name in D06PUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=D06PUB_HASHES[name]:errors.append('D06 fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=d06pub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('D06 historical validator changed')
+        suffix=current[len(prefix):].replace("D06PUB_SUFFIX_SHA256 = '"+D06PUB_SUFFIX_SHA256+"'","D06PUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=D06PUB_SUFFIX_SHA256:errors.append('D06 successor changed')
+        for name in ['knowledge/PROJECT.md','knowledge/PROGRESS.md']:
+            if not (R/name).read_bytes().startswith(d06pub_before(name)):errors.append('D06 historical KB changed '+name)
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('day06SoleOwnerAssurance20261104',None)
+        if entry!=D06PUB_RECORD or state!=json.loads(d06pub_before('knowledge/execution/status.json')):errors.append('D06 registry/task/evidence drift')
+        if entry is None or entry.get('taskId')!=D06PUB_TASK or entry.get('qualificationEvidenceHashes')!=D06PUB_EVIDENCE:errors.append('D06 evidence binding drift')
+        manifest=json.loads(d06pub_before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if row['path'] in {'PROJECT.md','PROGRESS.md','execution/status.json','execution/validate_execution.py'}:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('D06 unauthorized manifest change')
+        tree=d06pub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('D06 missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('D06 unowned history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',D06PUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree)|owned or not changed<=owned:errors.append('D06 unauthorized/missing repository path')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('D06 invalid/inaccessible payload')
+    return errors
+
+def d06pub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return d06pub_payload_errors()
+
+def d06pub_controls():
+    from unittest.mock import patch
+    assert not d06pub_successor_errors();print('PASS D06 exact5 successor positive')
+    assert not v35_migration_errors();print('PASS D06 exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in D06PUB_PATHS+['AGENTS.md','backend/src/test/java/com/cinenest/RoomsIntegrationTest.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert d06pub_successor_errors(),name
+        print('PASS D06 rejects payload/history mutation '+name)
+    target=R/D06PUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert d06pub_successor_errors()
+        print('PASS D06 rejects '+label)
+    with patch.dict(globals(),{'D06PUB_TASK':'UNKNOWN'}):assert d06pub_successor_errors()
+    print('PASS D06 rejects unknown task')
+    with patch.dict(globals(),{'D06PUB_PATHS':D06PUB_PATHS[:-1]+['knowledge/../unauthorized.py']}):assert d06pub_successor_errors()
+    print('PASS D06 rejects substituted path')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert d06pub_successor_errors()
+        print('PASS D06 rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('recoveryActivated',True),('phaseAcceptance','ACCEPTED'),('realReceiptAdmission','ALLOW'),('decisionId','UNKNOWN'),('assuranceClassification','INDEPENDENTLY_REVIEWED'),('residualRisksAccepted',[]),('independent_release_review','SATISFIED'),('day06_acceptance','ACCEPTED'),('stages_A_to_E','AUTHORIZED'),('production_authorization','GRANTED'),('preservedDatabaseAuthority','GRANTED'),('independentHumanApproval',True),('externalAnchoringExists',True),('operatorGrantsProvisioned',True)]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['day06SoleOwnerAssurance20261104'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert d06pub_successor_errors()
+        print('PASS D06 rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-c02.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert d06pub_successor_errors()
+        print('PASS D06 rejects unknown '+command)
+    target=K/'manifest.json'
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert d06pub_successor_errors()
+    print('PASS D06 rejects manifest bytes')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert d06pub_successor_errors(),label
+        print('PASS D06 rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert d06pub_successor_errors()
+    print('PASS D06 rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert d06pub_successor_errors()
+    print('PASS D06 rejects migration symlink')
+
+receipt_admission_successor_errors=d06pub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=d06pub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        d06pub_controls();owned=set(D06PUB_PATHS);tree=set(d06pub_tree());added=owned-tree
+        replacements={R/n:d06pub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':d06pub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=d06pub_previous_main()
+        if result==0:print('PASS D06 qualified integration successor;historical controls preserved;recovery disabled')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
