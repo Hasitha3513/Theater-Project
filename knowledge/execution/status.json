@@ -29628,5 +29628,65 @@
       "WP05": "SCOPED_SECURITY_QUALIFIED_FINAL_CI_PENDING"
     },
     "ciPublication": "PENDING_EXACT_SOURCE_RESULT_NO_SUCCESS_INFERRED"
+  },
+  "cnC02AnchorCiRecovery20261104": {
+    "taskId": "CN-C02-CI-RECOVERY-001",
+    "baseline": "ef71c5c45ac1ba547f0e35e05d1627de54d1092b",
+    "authorization": "EXPLICIT_OWNER_EXACT_FIVE_FILES_BRANCH_ONLY",
+    "payloadPaths": [
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "architectureDelta": {
+      "beforeSha256": "acb6a4162773714025d29c6a81476f24825d1baa80957f33fb955375c8a34b07",
+      "afterSha256": "3002a68ce69a4fd9180316d59703b419ae4d648860ec56f3af5d7c0c1b687ef7",
+      "onlyChange": "Add explicit cn-c02-qualified-identity-integration--publication-boundary anchor before existing CN-C02 heading"
+    },
+    "qualificationEvidenceHashes": {
+      ".cache/private-legacy-session-closure-20261104/anchor-correction-proposal.json": "fae77aec6b7ebe623e843e33737c9f52cbb92fec91512174e8821d938645025d",
+      ".cache/private-legacy-session-closure-20261104/proposed-anchor-correction.patch": "2403c00c807813eac6796bbee767a7b81d0c344fdbc120969bcdc27ba5e5d3b2",
+      ".cache/private-legacy-session-closure-20261104/anchor-proposal-check.json": "8b0882e8ed60428eb11a87bd48c23b17a69571436514e9dc6ec7c1ea5c06b4bb",
+      ".cache/private-legacy-session-closure-20261104/ci-jobs.json": "9458e9dc6ad2a8184bc2f4889be9fc145f8cf295e9b6b1b2a4e37a239d03fb96",
+      ".cache/private-legacy-session-closure-20261104/ci-sanitized.log": "2bcb0ed63cf686e441d70767abccf8b4b06eb3c08f9b8a4edbba4fb8189c8348"
+    },
+    "sourceSha256": {
+      "knowledge/ARCHITECTURE.md": "3002a68ce69a4fd9180316d59703b419ae4d648860ec56f3af5d7c0c1b687ef7"
+    },
+    "previousCi": {
+      "run": 41794235554,
+      "backendTests": 1294,
+      "backendPassed": 1240,
+      "backendFailures": 0,
+      "backendErrors": 0,
+      "backendSkipped": 54,
+      "frontendPassed": 523,
+      "typecheck": "PASS",
+      "biome": "PASS",
+      "productionBuild": "PASS",
+      "conclusion": "FAILURE_MISSING_EXPLICIT_ANCHOR_TWO_REFERENCES"
+    },
+    "localKbReportingCorrection": "Earlier local KB PASS claim was incorrect:compound command masked preceding exit1;same2 failures reproduced;now each mandatory exit status checked separately",
+    "applicationSourceChanged": false,
+    "testSourceChanged": false,
+    "migrationsChanged": false,
+    "runtimeStarted": false,
+    "recoveryActivated": false,
+    "realReceiptAdmission": "DENY",
+    "realPaymentsEnabled": false,
+    "physicalAccessEnabled": false,
+    "mainMergeAuthorized": false,
+    "originalUnpublishedPreserved": 28,
+    "phaseAcceptance": "NOT_ACCEPTED",
+    "accounting": {
+      "originalPart1": "4/7",
+      "p1Planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    },
+    "publicationCi": "PENDING_EXACT_SOURCE_VERIFICATION_NO_SUCCESS_INFERRED"
   }
 }

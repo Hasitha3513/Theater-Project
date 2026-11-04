@@ -11387,5 +11387,151 @@ def inert_ci_main():
         if result==0:print('PASS LS qualified integration successor;historical controls preserved;recovery disabled')
         return result
 
+
+# Exact Owner-authorized CN-ACI explicit anchor successor; predecessor bytes are immutable.
+ACIPUB_BASE = 'ef71c5c45ac1ba547f0e35e05d1627de54d1092b'
+ACIPUB_TASK = 'CN-C02-CI-RECOVERY-001'
+ACIPUB_PATHS = ['knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json']
+ACIPUB_HASHES = {'knowledge/ARCHITECTURE.md': '3002a68ce69a4fd9180316d59703b419ae4d648860ec56f3af5d7c0c1b687ef7', 'knowledge/PROGRESS.md': 'b52a619d844e6b73315f6d64199b5720bc59fcabd9662d8842bf21498b60485f', 'knowledge/execution/status.json': '92ce56166f29cc3f12e77ca9f7e5ac60100ea019d901e59a19db3ba25edbc7ce'}
+ACIPUB_EVIDENCE = {'.cache/private-legacy-session-closure-20261104/anchor-correction-proposal.json': 'fae77aec6b7ebe623e843e33737c9f52cbb92fec91512174e8821d938645025d', '.cache/private-legacy-session-closure-20261104/proposed-anchor-correction.patch': '2403c00c807813eac6796bbee767a7b81d0c344fdbc120969bcdc27ba5e5d3b2', '.cache/private-legacy-session-closure-20261104/anchor-proposal-check.json': '8b0882e8ed60428eb11a87bd48c23b17a69571436514e9dc6ec7c1ea5c06b4bb', '.cache/private-legacy-session-closure-20261104/ci-jobs.json': '9458e9dc6ad2a8184bc2f4889be9fc145f8cf295e9b6b1b2a4e37a239d03fb96', '.cache/private-legacy-session-closure-20261104/ci-sanitized.log': '2bcb0ed63cf686e441d70767abccf8b4b06eb3c08f9b8a4edbba4fb8189c8348'}
+ACIPUB_RECORD = {'taskId': 'CN-C02-CI-RECOVERY-001', 'baseline': 'ef71c5c45ac1ba547f0e35e05d1627de54d1092b', 'authorization': 'EXPLICIT_OWNER_EXACT_FIVE_FILES_BRANCH_ONLY', 'payloadPaths': ['knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'architectureDelta': {'beforeSha256': 'acb6a4162773714025d29c6a81476f24825d1baa80957f33fb955375c8a34b07', 'afterSha256': '3002a68ce69a4fd9180316d59703b419ae4d648860ec56f3af5d7c0c1b687ef7', 'onlyChange': 'Add explicit cn-c02-qualified-identity-integration--publication-boundary anchor before existing CN-C02 heading'}, 'qualificationEvidenceHashes': {'.cache/private-legacy-session-closure-20261104/anchor-correction-proposal.json': 'fae77aec6b7ebe623e843e33737c9f52cbb92fec91512174e8821d938645025d', '.cache/private-legacy-session-closure-20261104/proposed-anchor-correction.patch': '2403c00c807813eac6796bbee767a7b81d0c344fdbc120969bcdc27ba5e5d3b2', '.cache/private-legacy-session-closure-20261104/anchor-proposal-check.json': '8b0882e8ed60428eb11a87bd48c23b17a69571436514e9dc6ec7c1ea5c06b4bb', '.cache/private-legacy-session-closure-20261104/ci-jobs.json': '9458e9dc6ad2a8184bc2f4889be9fc145f8cf295e9b6b1b2a4e37a239d03fb96', '.cache/private-legacy-session-closure-20261104/ci-sanitized.log': '2bcb0ed63cf686e441d70767abccf8b4b06eb3c08f9b8a4edbba4fb8189c8348'}, 'sourceSha256': {'knowledge/ARCHITECTURE.md': '3002a68ce69a4fd9180316d59703b419ae4d648860ec56f3af5d7c0c1b687ef7'}, 'previousCi': {'run': 41794235554, 'backendTests': 1294, 'backendPassed': 1240, 'backendFailures': 0, 'backendErrors': 0, 'backendSkipped': 54, 'frontendPassed': 523, 'typecheck': 'PASS', 'biome': 'PASS', 'productionBuild': 'PASS', 'conclusion': 'FAILURE_MISSING_EXPLICIT_ANCHOR_TWO_REFERENCES'}, 'localKbReportingCorrection': 'Earlier local KB PASS claim was incorrect:compound command masked preceding exit1;same2 failures reproduced;now each mandatory exit status checked separately', 'applicationSourceChanged': False, 'testSourceChanged': False, 'migrationsChanged': False, 'runtimeStarted': False, 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'realPaymentsEnabled': False, 'physicalAccessEnabled': False, 'mainMergeAuthorized': False, 'originalUnpublishedPreserved': 28, 'phaseAcceptance': 'NOT_ACCEPTED', 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}, 'publicationCi': 'PENDING_EXACT_SOURCE_VERIFICATION_NO_SUCCESS_INFERRED'}
+ACIPUB_SUFFIX_SHA256 = 'd5a6fe1e662a80234800ced6fd18a5e0bde44e0abb426adc3fb8abcc6dd40d25'
+acipub_previous_main = inert_ci_main
+acipub_previous_guard = receipt_admission_successor_errors
+
+def acipub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',ACIPUB_BASE+':'+name])
+
+def acipub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',ACIPUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def acipub_payload_errors():
+    errors=[]
+    try:
+        owned=set(ACIPUB_PATHS);expected=set(ACIPUB_RECORD['payloadPaths'])
+        if ACIPUB_TASK!='CN-C02-CI-RECOVERY-001' or len(ACIPUB_PATHS)!=5 or owned!=expected or set(ACIPUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['ACI exact task/path mismatch']
+        for name in ACIPUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('ACI unsafe/missing payload '+name);continue
+            if name in ACIPUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=ACIPUB_HASHES[name]:errors.append('ACI fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=acipub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('ACI historical validator changed')
+        suffix=current[len(prefix):].replace("ACIPUB_SUFFIX_SHA256 = '"+ACIPUB_SUFFIX_SHA256+"'","ACIPUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=ACIPUB_SUFFIX_SHA256:errors.append('ACI successor changed')
+        for name in ['knowledge/PROGRESS.md']:
+            if not (R/name).read_bytes().startswith(acipub_before(name)):errors.append('ACI historical KB changed '+name)
+        arch='knowledge/ARCHITECTURE.md';old_arch=acipub_before(arch)
+        heading='## CN-C02 qualified Identity integration — publication boundary'.encode()
+        anchor=b'<a id="cn-c02-qualified-identity-integration--publication-boundary"></a>\n'
+        if old_arch.count(heading)!=1 or (R/arch).read_bytes()!=old_arch.replace(heading,anchor+heading,1):errors.append('ACI architecture delta exceeds exact one-line authority')
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('cnC02AnchorCiRecovery20261104',None)
+        if entry!=ACIPUB_RECORD or state!=json.loads(acipub_before('knowledge/execution/status.json')):errors.append('ACI registry/task/evidence drift')
+        if entry is None or entry.get('taskId')!=ACIPUB_TASK or entry.get('qualificationEvidenceHashes')!=ACIPUB_EVIDENCE:errors.append('ACI evidence binding drift')
+        manifest=json.loads(acipub_before('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if row['path'] in {'ARCHITECTURE.md','PROGRESS.md','execution/status.json','execution/validate_execution.py'}:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('ACI unauthorized manifest change')
+        tree=acipub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('ACI missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('ACI unowned history drift '+name)
+        paths=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',ACIPUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if paths!=set(tree)|owned or not changed<=owned:errors.append('ACI unauthorized/missing repository path')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('ACI invalid/inaccessible payload')
+    return errors
+
+def acipub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return acipub_payload_errors()
+
+def acipub_controls():
+    from unittest.mock import patch
+    assert not acipub_successor_errors();print('PASS ACI exact5 successor positive')
+    assert not v35_migration_errors();print('PASS ACI exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in ACIPUB_PATHS+['AGENTS.md','backend/src/test/java/com/cinenest/RoomsIntegrationTest.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert acipub_successor_errors(),name
+        print('PASS ACI rejects payload/history mutation '+name)
+    target=R/ACIPUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert acipub_successor_errors()
+        print('PASS ACI rejects '+label)
+    with patch.dict(globals(),{'ACIPUB_TASK':'UNKNOWN'}):assert acipub_successor_errors()
+    print('PASS ACI rejects unknown task')
+    with patch.dict(globals(),{'ACIPUB_PATHS':ACIPUB_PATHS[:-1]+['knowledge/../unauthorized.py']}):assert acipub_successor_errors()
+    print('PASS ACI rejects substituted path')
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert acipub_successor_errors()
+        print('PASS ACI rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('recoveryActivated',True),('phaseAcceptance','ACCEPTED'),('realReceiptAdmission','ALLOW')]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['cnC02AnchorCiRecovery20261104'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert acipub_successor_errors()
+        print('PASS ACI rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='backend/unauthorized-c02.java\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert acipub_successor_errors()
+        print('PASS ACI rejects unknown '+command)
+    target=K/'manifest.json'
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert acipub_successor_errors()
+    print('PASS ACI rejects manifest bytes')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert acipub_successor_errors(),label
+        print('PASS ACI rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert acipub_successor_errors()
+    print('PASS ACI rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert acipub_successor_errors()
+    print('PASS ACI rejects migration symlink')
+
+receipt_admission_successor_errors=acipub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=acipub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        acipub_controls();owned=set(ACIPUB_PATHS);tree=set(acipub_tree());added=owned-tree
+        replacements={R/n:acipub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':acipub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=acipub_previous_main()
+        if result==0:print('PASS ACI qualified integration successor;historical controls preserved;recovery disabled')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
