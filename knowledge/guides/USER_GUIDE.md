@@ -475,12 +475,12 @@ A conflicting hold/confirmed session/maintenance interval is rejected; the tool 
 
 ### Room-to-lock assignment availability
 
-The qualification-only room-to-lock assignment backend passed isolated PostgreSQL integration checks. It remains disabled by default and has not been published; there is no new Admin screen or enabled workflow to use. Registration/assignment does not certify installation or enable customer access; do not treat either as physical lock readiness. [Current scope and status](../PROGRESS.md#room-lock-assignment-v33).
+The qualification-only room-to-lock assignment backend passed isolated PostgreSQL integration checks. It remains disabled by default. Hardware Management M1 adds a separately authorized synthetic qualification interface at /admin/hardware; published backend availability does not enable it or provision permissions automatically. Registration/assignment does not certify installation or enable customer access; do not treat either as physical lock readiness. [Current scope and status](../PROGRESS.md#room-lock-assignment-v33).
 
 <a id="plug-play-lock-p1"></a>
 ### Smart Lock Plug & Play P1 availability
 
-P1 supplies offline software contracts only;there is no new Admin screen,device-discovery/onboarding action or usable provider connection. Do not treat registered metadata,room assignment or a compatible declaration as qualified physical access. PIN provisioning/revocation remain disabled and customer access stays false. Actual model selection/vendor integration and installed-door safety qualification are deferred gates. [Execution and limits](../PROGRESS.md#plug-play-lock-p1).
+P1 supplies offline software contracts only. The separate M1 Admin screen consumes existing registry/assignment APIs, not runtime P1 adapters; no device-discovery/onboarding action or usable provider connection is enabled. Do not treat registered metadata,room assignment or a compatible declaration as qualified physical access. PIN provisioning/revocation remain disabled and customer access stays false. Actual model selection/vendor integration and installed-door safety qualification are deferred gates. [Execution and limits](../PROGRESS.md#plug-play-lock-p1).
 
 
 ## Independent staging bank instruction publication — source preparation
@@ -502,3 +502,15 @@ CN-C02 recovery source එක offline contract/tests පමණයි. Password r
 No recovery activation is supplied by this publication. Operators must not attempt recovery against preserved or production accounts without separate environment, account, actor, venue and runtime authority. The backend recovery command is default-disabled; no public password-reset workflow is introduced. Where separately authorized, capability issuance/consumption uses the existing Identity contract, one-time expiry and expected revisions with mandatory audit. Never place passwords, capability secrets or session tokens in tickets or logs.
 
 After an authorized credential change, older manual/OIDC sessions are invalid and the account must authenticate again. Latest committed credential versions take precedence; an old password cannot be used as fallback. A401 means authentication/session renewal is required; a valid-session403 requires reviewing scoped permissions/venue rather than repeated login. Epoch-less sessions created before integration also require reauthentication. No production receipt/banking/physical-access policy is changed. [Technical restrictions](../ARCHITECTURE.md#cn-c02-qualified-identity-integration--publication-boundary).
+
+
+<a id="hardware-management-m1"></a>
+### Hardware Management M1 — synthetic-only workflow
+
+Use only a separately authorized isolated synthetic runtime and legitimate session. Open Administration → Hardware Management (/admin/hardware); the existing Lighting Simulator remains /admin/iot. Choose Smart Door Locks and enter the exact venue reference supplied by authorized administration. Other categories are explicitly unsupported. Select Load device registry; inspect a device, Load revision history and View revision to see declared metadata and immutable history. Firmware may remain UNKNOWN; a declaration never proves support.
+
+Synthetic Smart Lock Registration accepts only the existing approved versioned synthetic reference ID/version plus declared manufacturer/model, optional SKU/hardware/firmware and allowed declarations. Do not enter real provider credentials or secrets. Register synthetic device requires independent registration permission and CSRF. Server confirmation or an explicitly labelled original replay is the only saved result; there is no activation. For an uncertain outcome inspect authoritative state, then retry unchanged commands only; Start new registration command is an explicit reset, never an automatic retry.
+
+For a room binding, inspect the current device, enter the exact room reference and Load room assignments. The returned room configuration and device metadata revision bind the new qualification assignment. Select Create qualification assignment only with separately authorized exact-venue permissions; stale/conflict/denial responses require fresh authoritative context. Reload/inspect the assignment; a registry device alone does not prove room binding or absence of an assignment elsewhere. Existing assignments cannot be replaced or released by M1.
+
+All assignments remain UNQUALIFIED and customer access disabled. Connection tests, compatibility verification and activation controls are disabled. No provider discovery, monitoring, PIN generation, lock command or physical safety qualification exists. Log out when finished; scope/session changes clear protected state. [Technical evidence and limits](../PROGRESS.md#hardware-management-m1-publication).

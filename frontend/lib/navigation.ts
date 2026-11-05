@@ -22,6 +22,7 @@ export const adminNavigation = [
 	["/admin/refunds", "Refund review"],
 	["/admin/access", "Access simulator"],
 	["/admin/iot", "Lighting simulator"],
+	["/admin/hardware", "Hardware Management"],
 	["/admin/operations", "Room operations"],
 	["/admin/reports/bank", "Bank report"],
 	["/admin/notifications", "Notification queue"],

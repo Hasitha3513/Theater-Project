@@ -12108,5 +12108,157 @@ def inert_ci_main():
         if result==0:print('PASS LR qualified7 frontend successor;historical controls preserved;no runtime activation')
         return result
 
+
+
+# Exact Owner-authorized Hardware M1 publication successor; historical predecessor immutable.
+M1PUB_BASE = '0e19261a07b460f4e2608ed72442776caf952a76'
+M1PUB_TASK = 'CN-IOT-ADMIN-PLUG-AND-PLAY-M1-001'
+M1PUB_PATHS = ['frontend/lib/navigation.ts', 'frontend/lib/room-backend.ts', 'frontend/package.json', 'frontend/app/admin/hardware/page.tsx', 'frontend/components/hardware-management.tsx', 'frontend/lib/hardware.ts', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/route.ts', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/route.ts', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/route.ts', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/[revision]/route.ts', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/route.ts', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/[assignmentId]/route.ts', 'frontend/tests/hardware.test.mjs', 'frontend/tests/hardware-browser.mjs', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'knowledge/execution/validate_execution.py']
+M1PUB_HASHES = {'frontend/lib/navigation.ts': 'bd740e678bb9563fbea3240f9c41af0c6ed0e5cc0bea0023c7ab2fffa037c6ba', 'frontend/lib/room-backend.ts': 'fd7ce8451a0b11749913a2d9dd04880b2b0dd208991703a9b77f837495c2177a', 'frontend/package.json': 'b85ed35f170cc2e9fc171a753129a8a533b7e6d50f6c225369347647919545cd', 'frontend/app/admin/hardware/page.tsx': 'dfbf98374e9ceb7e8fc33fc1af09f75eb214b32aa364f278c75da5af11e40987', 'frontend/components/hardware-management.tsx': 'c808b619ecbdf4ef92860ffbd091a5d52a0a9953369fda0e046ee875051e4abd', 'frontend/lib/hardware.ts': '648a67071d955c111c1fa659e56c256a2a5396dd3bfc00b5de23a1e3c0e04856', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/route.ts': 'e08c279ca3e718f946e068fb50f6fa9544f0e9bb91c64aad46db69346cd44a97', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/route.ts': '58d39e55472280ac366aeea9b6e07a9a831df3e141887649653730c8d744a095', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/route.ts': '5af6da3b6f3625ea8c7b04d74731153fe3d5844852953bfdfb7d232c6115f8f9', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/[revision]/route.ts': 'b91ed62a3f5b5668db29ea23f3e62c9197dfbc71799fef68fad645b4f039a7f5', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/route.ts': '54f75990b2f87a41256e390c127ccf41ab2346053cb1bda4420b25feaca8b7fd', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/[assignmentId]/route.ts': '5af6da3b6f3625ea8c7b04d74731153fe3d5844852953bfdfb7d232c6115f8f9', 'frontend/tests/hardware.test.mjs': '34109c78dc7a3d9438cb1c93576921508c19678d7104f0f0fc63099a3b6f94e4', 'frontend/tests/hardware-browser.mjs': '8ce008809de483ef3ba77d182b50b9bc4aca491f12f6a2c8ce6471974b0ad010', 'knowledge/DESIGN.md': '56dada6b771690c12d06dee14ffd1908a3268a6aa9fb89d4ff53a01d0d2b4b0f', 'knowledge/PROGRESS.md': '811f34404343df3573550d561a7a65f0f1df529df00b768db088e2755b021589', 'knowledge/product/FEATURE_CATALOG.md': '7473fd3c6f2bb85b9cbef3e70ee673b444cf06fd00752a247f72559d437361f1', 'knowledge/guides/USER_GUIDE.md': 'cf31d70c915464ef244801bc9e2f6d3ea03506e408c0c17cb1617d3a95b404bb', 'knowledge/execution/status.json': '4f1f1b555a23aa9f06b3cbdb82c5821ec90f82920c22a9bfa4e9e5000b54a174'}
+M1PUB_RECORD = {'taskId': 'CN-IOT-ADMIN-PLUG-AND-PLAY-M1-001', 'baseline': '0e19261a07b460f4e2608ed72442776caf952a76', 'authorization': 'OWNER_APPROVED_EXACT_21_FILE_M1_PUBLICATION_SCOPE', 'payloadPaths': ['frontend/lib/navigation.ts', 'frontend/lib/room-backend.ts', 'frontend/package.json', 'frontend/app/admin/hardware/page.tsx', 'frontend/components/hardware-management.tsx', 'frontend/lib/hardware.ts', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/route.ts', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/route.ts', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/route.ts', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/[revision]/route.ts', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/route.ts', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/[assignmentId]/route.ts', 'frontend/tests/hardware.test.mjs', 'frontend/tests/hardware-browser.mjs', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'knowledge/execution/validate_execution.py'], 'sourceSha256': {'frontend/lib/navigation.ts': 'bd740e678bb9563fbea3240f9c41af0c6ed0e5cc0bea0023c7ab2fffa037c6ba', 'frontend/lib/room-backend.ts': 'fd7ce8451a0b11749913a2d9dd04880b2b0dd208991703a9b77f837495c2177a', 'frontend/package.json': 'b85ed35f170cc2e9fc171a753129a8a533b7e6d50f6c225369347647919545cd', 'frontend/app/admin/hardware/page.tsx': 'dfbf98374e9ceb7e8fc33fc1af09f75eb214b32aa364f278c75da5af11e40987', 'frontend/components/hardware-management.tsx': 'c808b619ecbdf4ef92860ffbd091a5d52a0a9953369fda0e046ee875051e4abd', 'frontend/lib/hardware.ts': '648a67071d955c111c1fa659e56c256a2a5396dd3bfc00b5de23a1e3c0e04856', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/route.ts': 'e08c279ca3e718f946e068fb50f6fa9544f0e9bb91c64aad46db69346cd44a97', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/route.ts': '58d39e55472280ac366aeea9b6e07a9a831df3e141887649653730c8d744a095', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/route.ts': '5af6da3b6f3625ea8c7b04d74731153fe3d5844852953bfdfb7d232c6115f8f9', 'frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/[revision]/route.ts': 'b91ed62a3f5b5668db29ea23f3e62c9197dfbc71799fef68fad645b4f039a7f5', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/route.ts': '54f75990b2f87a41256e390c127ccf41ab2346053cb1bda4420b25feaca8b7fd', 'frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/[assignmentId]/route.ts': '5af6da3b6f3625ea8c7b04d74731153fe3d5844852953bfdfb7d232c6115f8f9', 'frontend/tests/hardware.test.mjs': '34109c78dc7a3d9438cb1c93576921508c19678d7104f0f0fc63099a3b6f94e4', 'frontend/tests/hardware-browser.mjs': '8ce008809de483ef3ba77d182b50b9bc4aca491f12f6a2c8ce6471974b0ad010'}, 'qualificationEvidenceHashes': {'/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/publication-proposal.json': '91345c56d6a65ace14ff4df3e41b8ca074e160596578660311e1b21520774cbd', '/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/source-transfer.json': 'b7fd5a1a7febb445061b7feeeda71aa9ebe0cb6547ec50331f486bf35f70718d', '/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/offline-results.json': '68b55ec90b24c151518ae26d95c9afcf316393673ed59f3e7f5949df25d6a5d0', '/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/batch-closeout.json': 'b0f4a4240ed502524c5cf61300d1cb6ed450e06de779973c17ab2d5c74fd3b59', '/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/reading-coverage.json': 'c982bd6402613597aebb6b38bed802595ce5b2864526a603bd333adb92f75af0'}, 'evidence': 'PROGRESS.md#hardware-management-m1-publication', 'offlineTests': {'pass': 436, 'fail': 0, 'skipped': 0, 'suites': 45, 'hardwareFocused': 24}, 'runtimeSuites': '14_NOT_EXECUTED_LOCAL', 'liveBrowserE2E': 'NOT_EXECUTED', 'ownerUat': 'PENDING', 'independent_release_review': 'NOT_SATISFIED', 'day06_acceptance': 'PENDING', 'production_authorization': 'NONE', 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'phaseAcceptance': 'NOT_ACCEPTED', 'hardwareQualification': 'UNQUALIFIED', 'customerAccessEnabled': False, 'physicalAcceptance': 'NOT_VERIFIED', 'providerCalls': 0, 'publicationCi': 'PENDING_EXACT_SOURCE_VERIFICATION', 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}}
+M1PUB_SUFFIX_SHA256 = '4796f448b6065a24af54f3c3c03ac219b7a3bc80424084f521d742d99a888fc2'
+m1pub_previous_main = inert_ci_main
+m1pub_previous_guard = receipt_admission_successor_errors
+
+def m1pub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',M1PUB_BASE+':'+name])
+
+def m1pub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',M1PUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def m1pub_payload_errors():
+    errors=[]
+    try:
+        owned=set(M1PUB_PATHS)
+        if M1PUB_BASE!='0e19261a07b460f4e2608ed72442776caf952a76' or M1PUB_TASK!='CN-IOT-ADMIN-PLUG-AND-PLAY-M1-001' or len(M1PUB_PATHS)!=21 or owned!=set(M1PUB_RECORD['payloadPaths']) or set(M1PUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['M1 exact task/baseline/path mismatch']
+        for name in M1PUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('M1 unsafe/missing payload '+name);continue
+            if name in M1PUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=M1PUB_HASHES[name]:errors.append('M1 fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=m1pub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('M1 historical validator changed')
+        suffix=current[len(prefix):].replace("M1PUB_SUFFIX_SHA256 = '"+M1PUB_SUFFIX_SHA256+"'","M1PUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=M1PUB_SUFFIX_SHA256:errors.append('M1 successor changed')
+        if not (K/'PROGRESS.md').read_bytes().startswith(m1pub_before('knowledge/PROGRESS.md')):errors.append('M1 historical progress changed')
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('hardwareManagementM120261105',None)
+        if entry!=M1PUB_RECORD or state!=json.loads(m1pub_before('knowledge/execution/status.json')):errors.append('M1 registry/evidence/acceptance drift')
+        if M1PUB_RECORD['sourceSha256']!={n:M1PUB_HASHES[n] for n in M1PUB_RECORD['sourceSha256']}:errors.append('M1 source evidence mismatch')
+        manifest=json.loads(m1pub_before('knowledge/manifest.json'))
+        refresh={n.removeprefix('knowledge/') for n in owned if n.startswith('knowledge/') and n!='knowledge/manifest.json'}
+        if refresh!={row['path'] for row in manifest['files'] if row['path'] in refresh}:errors.append('M1 missing manifest entries')
+        for row in manifest['files']:
+            if row['path'] in refresh:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('M1 unauthorized manifest change')
+        tree=m1pub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('M1 missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('M1 unowned history drift '+name)
+        actual=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',M1PUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if actual!=set(tree)|owned or changed|(actual-set(tree))!=owned:errors.append('M1 exact twenty-one-file inventory required')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('M1 invalid/inaccessible payload')
+    return errors
+
+def m1pub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return m1pub_payload_errors()
+
+def m1pub_controls():
+    from unittest.mock import patch
+    assert not m1pub_successor_errors();print('PASS M1 exact21 successor positive')
+    assert not v35_migration_errors();print('PASS M1 exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in M1PUB_PATHS+['AGENTS.md','backend/src/test/java/com/cinenest/RoomsIntegrationTest.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert m1pub_successor_errors(),name
+        print('PASS M1 rejects payload/history mutation '+name)
+    target=R/M1PUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert m1pub_successor_errors()
+        print('PASS M1 rejects '+label)
+    for key,value in [('M1PUB_TASK','UNKNOWN'),('M1PUB_BASE','0'*40),('M1PUB_PATHS',M1PUB_PATHS[:-1]+['knowledge/../unauthorized.py'])]:
+        with patch.dict(globals(),{key:value}):assert m1pub_successor_errors()
+        print('PASS M1 rejects '+key)
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert m1pub_successor_errors()
+        print('PASS M1 rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('ownerUat','PASS'),('offlineTests',{'pass':9999}),('liveBrowserE2E','PASS'),('runtimeSuites','PASS'),('production_authorization','GRANTED'),('recoveryActivated',True),('realReceiptAdmission','ALLOW'),('independent_release_review','SATISFIED'),('day06_acceptance','ACCEPTED'),('phaseAcceptance','ACCEPTED'),('hardwareQualification','QUALIFIED'),('customerAccessEnabled',True),('physicalAcceptance','VERIFIED'),('providerCalls',1)]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['hardwareManagementM120261105'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert m1pub_successor_errors()
+        print('PASS M1 rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='frontend/unauthorized.tsx\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert m1pub_successor_errors()
+        print('PASS M1 rejects unknown '+command)
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert m1pub_successor_errors(),label
+        print('PASS M1 rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert m1pub_successor_errors()
+    print('PASS M1 rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert m1pub_successor_errors()
+    print('PASS M1 rejects migration symlink')
+
+receipt_admission_successor_errors=m1pub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=m1pub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        m1pub_controls();owned=set(M1PUB_PATHS);tree=set(m1pub_tree());added=owned-tree
+        replacements={R/n:m1pub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                # Replay the predecessor commit's actual inventory, including its
+                # own admitted changes; filtering new paths loses overlapping deltas.
+                if 'diff' in argv:
+                    after=argv[argv.index('diff')+1:]
+                    refs=[x for x in after if re.fullmatch(r'[0-9a-f]{40}',x)]
+                    if len(refs)==1:
+                        sep='\0' if '-z' in argv else '\n'
+                        raw=out0(['git','-C',str(R),'diff',refs[0],M1PUB_BASE,'--name-only']+(['-z'] if '-z' in argv else []))
+                        return raw.decode() if isinstance(data,str) else raw
+                    if len(refs)==2:
+                        # An explicit immutable commit-to-commit comparison already
+                        # describes the historical source, never the current worktree.
+                        return data
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':m1pub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=m1pub_previous_main()
+        if result==0:print('PASS M1 qualified21 frontend successor;historical controls preserved;no runtime activation')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

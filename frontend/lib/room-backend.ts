@@ -286,3 +286,144 @@ export async function forwardRoomBlocks(request: Request): Promise<Response> {
 		return fail(502);
 	}
 }
+
+// Hardware M1 reuses the bounded transport; no activation/provider/configuration proxy.
+export async function forwardHardware(request: Request): Promise<Response> {
+	const {
+		hardwareContext,
+		validateRegistration,
+		validateAssignment,
+		parseHardwarePage,
+		parseDevice,
+		parseAssignment,
+		parseRegistration,
+	} = await import("./hardware");
+	const fail = (status: number) =>
+		new Response(null, {
+			status,
+			headers: {
+				"Cache-Control": "private, no-store",
+				"X-Content-Type-Options": "nosniff",
+			},
+		});
+	const url = new URL(request.url);
+	let context: ReturnType<typeof hardwareContext>;
+	try {
+		context = hardwareContext(url.pathname, request.method);
+	} catch {
+		return fail(404);
+	}
+	if (
+		[
+			"authorization",
+			"x-role",
+			"x-permission",
+			"x-venue-id",
+			"x-account-id",
+		].some((k) => request.headers.has(k))
+	)
+		return fail(400);
+	const cookies = (request.headers.get("cookie") ?? "")
+		.split(";")
+		.map((c) => c.trim())
+		.filter((c) => c.startsWith("CINENEST_SESSION="));
+	if (cookies.length !== 1 || !/^CINENEST_SESSION=[^;\s]+$/.test(cookies[0]))
+		return fail(401);
+	if (
+		[...url.searchParams.keys()].some(
+			(k) =>
+				request.method !== "GET" ||
+				!context.collection ||
+				k !== "page" ||
+				url.searchParams.getAll(k).length !== 1,
+		)
+	)
+		return fail(400);
+	const page = url.searchParams.get("page");
+	if (
+		page !== null &&
+		(!/^(0|[1-9][0-9]{0,4})$/.test(page) || Number(page) > 10000)
+	)
+		return fail(400);
+	let forwarded = request;
+	if (request.method === "POST") {
+		if (
+			request.headers
+				.get("content-type")
+				?.split(";", 1)[0]
+				.trim()
+				.toLowerCase() !== "application/json"
+		)
+			return fail(400);
+		try {
+			const reader = request.body?.getReader();
+			if (!reader) return fail(400);
+			const maximum = context.kind === "assignment" ? 32768 : 16384;
+			const chunks: Uint8Array[] = [];
+			let size = 0;
+			for (;;) {
+				const item = await reader.read();
+				if (item.done) break;
+				size += item.value.byteLength;
+				if (size > maximum) {
+					await reader.cancel();
+					return fail(413);
+				}
+				chunks.push(item.value);
+			}
+			const bytes = new Uint8Array(size);
+			let offset = 0;
+			for (const chunk of chunks) {
+				bytes.set(chunk, offset);
+				offset += chunk.byteLength;
+			}
+			const raw = new TextDecoder("utf-8", { fatal: true }).decode(bytes),
+				value = JSON.parse(raw);
+			if (context.kind === "assignment") validateAssignment(value);
+			else validateRegistration(value);
+			// Preserve original JSON so the backend's strict duplicate-member check remains effective.
+			forwarded = new Request(url, {
+				method: "POST",
+				headers: request.headers,
+				body: raw,
+			});
+		} catch {
+			return fail(400);
+		}
+	} else if (request.body) return fail(400);
+	const response = await forwardConfigured(
+		forwarded,
+		(path, method) => path === url.pathname && method === request.method,
+	);
+	if (!response.ok) return response;
+	try {
+		const value = await response.json();
+		const parsed =
+			request.method === "POST" && context.kind !== "assignment"
+				? parseRegistration(value, context.venue)
+				: request.method === "GET" && context.collection
+					? parseHardwarePage(value, context)
+					: context.kind === "assignment"
+						? parseAssignment(
+								value,
+								context.venue,
+								context.room as string,
+								request.method === "GET" ? context.device : undefined,
+							)
+						: parseDevice(
+								value,
+								context.venue,
+								context.device,
+								context.revision,
+							);
+		return Response.json(parsed, {
+			status: response.status,
+			headers: {
+				"Cache-Control": "private, no-store",
+				"X-Content-Type-Options": "nosniff",
+			},
+		});
+	} catch {
+		return fail(502);
+	}
+}

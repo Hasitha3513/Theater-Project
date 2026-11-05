@@ -29906,5 +29906,85 @@
       "fullMvp": "15/74",
       "formalAcceptance": "0/92"
     }
+  },
+  "hardwareManagementM120261105": {
+    "taskId": "CN-IOT-ADMIN-PLUG-AND-PLAY-M1-001",
+    "baseline": "0e19261a07b460f4e2608ed72442776caf952a76",
+    "authorization": "OWNER_APPROVED_EXACT_21_FILE_M1_PUBLICATION_SCOPE",
+    "payloadPaths": [
+      "frontend/lib/navigation.ts",
+      "frontend/lib/room-backend.ts",
+      "frontend/package.json",
+      "frontend/app/admin/hardware/page.tsx",
+      "frontend/components/hardware-management.tsx",
+      "frontend/lib/hardware.ts",
+      "frontend/app/api/admin/venues/[venueId]/iot/lock-devices/route.ts",
+      "frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/route.ts",
+      "frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/route.ts",
+      "frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/[revision]/route.ts",
+      "frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/route.ts",
+      "frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/[assignmentId]/route.ts",
+      "frontend/tests/hardware.test.mjs",
+      "frontend/tests/hardware-browser.mjs",
+      "knowledge/DESIGN.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/execution/status.json",
+      "knowledge/manifest.json",
+      "knowledge/execution/validate_execution.py"
+    ],
+    "sourceSha256": {
+      "frontend/lib/navigation.ts": "bd740e678bb9563fbea3240f9c41af0c6ed0e5cc0bea0023c7ab2fffa037c6ba",
+      "frontend/lib/room-backend.ts": "fd7ce8451a0b11749913a2d9dd04880b2b0dd208991703a9b77f837495c2177a",
+      "frontend/package.json": "b85ed35f170cc2e9fc171a753129a8a533b7e6d50f6c225369347647919545cd",
+      "frontend/app/admin/hardware/page.tsx": "dfbf98374e9ceb7e8fc33fc1af09f75eb214b32aa364f278c75da5af11e40987",
+      "frontend/components/hardware-management.tsx": "c808b619ecbdf4ef92860ffbd091a5d52a0a9953369fda0e046ee875051e4abd",
+      "frontend/lib/hardware.ts": "648a67071d955c111c1fa659e56c256a2a5396dd3bfc00b5de23a1e3c0e04856",
+      "frontend/app/api/admin/venues/[venueId]/iot/lock-devices/route.ts": "e08c279ca3e718f946e068fb50f6fa9544f0e9bb91c64aad46db69346cd44a97",
+      "frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/route.ts": "58d39e55472280ac366aeea9b6e07a9a831df3e141887649653730c8d744a095",
+      "frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/route.ts": "5af6da3b6f3625ea8c7b04d74731153fe3d5844852953bfdfb7d232c6115f8f9",
+      "frontend/app/api/admin/venues/[venueId]/iot/lock-devices/[deviceId]/revisions/[revision]/route.ts": "b91ed62a3f5b5668db29ea23f3e62c9197dfbc71799fef68fad645b4f039a7f5",
+      "frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/route.ts": "54f75990b2f87a41256e390c127ccf41ab2346053cb1bda4420b25feaca8b7fd",
+      "frontend/app/api/admin/venues/[venueId]/rooms/[roomId]/lock-assignments/[assignmentId]/route.ts": "5af6da3b6f3625ea8c7b04d74731153fe3d5844852953bfdfb7d232c6115f8f9",
+      "frontend/tests/hardware.test.mjs": "34109c78dc7a3d9438cb1c93576921508c19678d7104f0f0fc63099a3b6f94e4",
+      "frontend/tests/hardware-browser.mjs": "8ce008809de483ef3ba77d182b50b9bc4aca491f12f6a2c8ce6471974b0ad010"
+    },
+    "qualificationEvidenceHashes": {
+      "/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/publication-proposal.json": "91345c56d6a65ace14ff4df3e41b8ca074e160596578660311e1b21520774cbd",
+      "/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/source-transfer.json": "b7fd5a1a7febb445061b7feeeda71aa9ebe0cb6547ec50331f486bf35f70718d",
+      "/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/offline-results.json": "68b55ec90b24c151518ae26d95c9afcf316393673ed59f3e7f5949df25d6a5d0",
+      "/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/batch-closeout.json": "b0f4a4240ed502524c5cf61300d1cb6ed450e06de779973c17ab2d5c74fd3b59",
+      "/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification/.cache/m1-qualification/reading-coverage.json": "c982bd6402613597aebb6b38bed802595ce5b2864526a603bd333adb92f75af0"
+    },
+    "evidence": "PROGRESS.md#hardware-management-m1-publication",
+    "offlineTests": {
+      "pass": 436,
+      "fail": 0,
+      "skipped": 0,
+      "suites": 45,
+      "hardwareFocused": 24
+    },
+    "runtimeSuites": "14_NOT_EXECUTED_LOCAL",
+    "liveBrowserE2E": "NOT_EXECUTED",
+    "ownerUat": "PENDING",
+    "independent_release_review": "NOT_SATISFIED",
+    "day06_acceptance": "PENDING",
+    "production_authorization": "NONE",
+    "recoveryActivated": false,
+    "realReceiptAdmission": "DENY",
+    "phaseAcceptance": "NOT_ACCEPTED",
+    "hardwareQualification": "UNQUALIFIED",
+    "customerAccessEnabled": false,
+    "physicalAcceptance": "NOT_VERIFIED",
+    "providerCalls": 0,
+    "publicationCi": "PENDING_EXACT_SOURCE_VERIFICATION",
+    "accounting": {
+      "originalPart1": "4/7",
+      "p1Planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    }
   }
 }
