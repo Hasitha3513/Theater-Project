@@ -818,3 +818,8 @@ Recovery contracts are published;V35 Identity persistence schema is PostgreSQL18
 ## CN-C02 qualified local synthetic recovery integration
 
 Identity now provides the V35 transactional capability/consumption/version/audit adapter, latest committed credential selection and epoch-bound manual/OIDC session validation. Protected stale/epoch-less sessions fail401; valid authenticated sessions still require exact permissions/venue and fail403 when unauthorized. Recovery commands remain disabled by default and restricted to approved local synthetic accounts/actors/venues when separately enabled. This is branch publication of qualified software, not an operator password reset, public reset service, Owner UAT acceptance or production recovery approval. [Architecture](../ARCHITECTURE.md#cn-c02-qualified-identity-integration--publication-boundary), [evidence](../PROGRESS.md#cn-c02-qualified-publication).
+
+<a id="day05-commercial-offline-planning"></a>
+## Day05 commercial configuration — internal offline planning only
+
+Pricing now includes an immutable versioned commercial planning contract and fail-closed assessment rules. This is source-level offline capability only:no Admin/customer UI,commercial quote issuance,endpoint,persistence or activation. Pending approvals and caller-supplied review references never establish commercial authority;known package components are not payable totals. Existing synthetic quotations and accepted/purchased history are preserved. [Owner preferences](../PROJECT.md#day05-commercial-owner-preferences),[architecture](../ARCHITECTURE.md#day05-commercial-offline-contract),[evidence](../PROGRESS.md#day05-commercial-offline-publication).

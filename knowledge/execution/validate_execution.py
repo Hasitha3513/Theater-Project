@@ -12260,5 +12260,169 @@ def inert_ci_main():
         if result==0:print('PASS M1 qualified21 frontend successor;historical controls preserved;no runtime activation')
         return result
 
+
+
+# Exact Owner-authorized Day05 offline publication successor; all predecessors remain immutable.
+D5_BASE = '2fa758d60c181ab3975700eece60d4dbcfd2f351'
+D5_TASK = 'CN-R1-COMMERCIAL-QUOTE-001'
+D5_PATHS = ['backend/src/main/java/com/cinenest/pricing/internal/CommercialConfiguration.java', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialConfigurationRules.java', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationTest.java', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationRulesTest.java', 'knowledge/PROJECT.md', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json']
+D5_HASHES = {'backend/src/main/java/com/cinenest/pricing/internal/CommercialConfiguration.java': '97fa8a57c7e184177bb0598257e9ca4fb07f10839416bcca6aaf4bf7a1552a93', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialConfigurationRules.java': '3775954043517a0209d8ed569acc747e178be20696c51a0a672384f90b09302c', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationTest.java': '954c9989f4c8481dbe43ab98d1f9f49fd08463e3c8bf6cea8b0e6931c03a117b', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationRulesTest.java': '8ac5179d9b41d0e72fbd29e063aea2b4e846942f1ca960893da068e1bfe32fe9', 'knowledge/PROJECT.md': '9736c15b9894ac9a44931702c3c12fa7f5756311bc6875e5698a93c789c2115c', 'knowledge/ARCHITECTURE.md': 'fb28692485811fb553f5a059b4c5fc9ff26af7aa93908c4e2c33b0a85419134e', 'knowledge/PROGRESS.md': '66e3506a780f9f669f99852fb45220043a7b906d7601a56ad569733f5541342e', 'knowledge/product/FEATURE_CATALOG.md': 'c74fe15e755c4f9aec652e6f3bd16bfe451a4d9590a48229d5dc5cc08c781b73', 'knowledge/execution/status.json': '383f1fe83bcc0c5286083a9b1c505f56c9231a66ae8e7a00e0951eae1e547af7'}
+D5_RECORD = {'taskId': 'CN-R1-COMMERCIAL-QUOTE-001', 'baseline': '2fa758d60c181ab3975700eece60d4dbcfd2f351', 'authorization': 'OWNER_APPROVED_EXACT_11_FILE_OFFLINE_PUBLICATION', 'payloadPaths': ['backend/src/main/java/com/cinenest/pricing/internal/CommercialConfiguration.java', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialConfigurationRules.java', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationTest.java', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationRulesTest.java', 'knowledge/PROJECT.md', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'sourceSha256': {'backend/src/main/java/com/cinenest/pricing/internal/CommercialConfiguration.java': '97fa8a57c7e184177bb0598257e9ca4fb07f10839416bcca6aaf4bf7a1552a93', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialConfigurationRules.java': '3775954043517a0209d8ed569acc747e178be20696c51a0a672384f90b09302c', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationTest.java': '954c9989f4c8481dbe43ab98d1f9f49fd08463e3c8bf6cea8b0e6931c03a117b', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationRulesTest.java': '8ac5179d9b41d0e72fbd29e063aea2b4e846942f1ca960893da068e1bfe32fe9'}, 'evidenceReportSha256': {'backend/target/surefire-reports/TEST-com.cinenest.FoundationArchitectureTest.xml': '3d5699fe89298f64dc3911b9b0385ee0291009b024ba7ccd75b4c28419e8df0f', 'backend/target/surefire-reports/TEST-com.cinenest.identity.internal.LocalCredentialRecoveryArchitectureTest.xml': 'bd356e367d6c42a795ee91f3c37faea8afa29ee45602d91e542273fdff3e04e8', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.BankQuotationObservationTest.xml': '4e9eca66fc90ed740148a5c6b7ef0dbea639d3337d61a8b80f3e42839ea8f9fa', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.CommercialConfigurationRulesTest.xml': '846dad0fddfe6363401955aacdb03e56b498de5af360602459faee77f9881b35', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.CommercialConfigurationTest.xml': '3bd0c651a2fb684c9ec5fdf05a3964947942c1bd4eb1a93c0d89a5e703e450bf', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.DraftRulesTest.xml': '0976a9432c397b1e0b822c2a782669a3f6e302a7e9e6af74d9a6b7237d29b514', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.ExtensionPricingTest.xml': '6691b132c9d53bb5b6f14b2b2d2a51160557c755efdf00475cb06304cc3d8b94', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.PublicationTimeTest.xml': '1efedb3d199b742e067d412f03e0339e400ba96ca1eda5389f2aa73b872b450f', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.QuoteProfileConfigurationTest.xml': '575702d0d1a0bd0b4cbe3aefe18394fc7c3d3a26f163b76d37bb5cc2e85d6bc5', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.QuoteRulesTest.xml': '5eecc537bfb27b078cd15e8ec2eda55194ce36fc604423b06e63e982ecc684c2', 'backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.VerificationHandoffTest.xml': 'ca485f61f0421952cbc3c689b1df09ac01f4ec1d8524ed6acb85341bbd9acba6'}, 'evidenceReportOrigin': '/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification', 'historicalQualification': {'newPass': 13, 'pricingPass': 80, 'architecturePass': 24, 'totalPass': 117, 'fail': 0, 'error': 0, 'skipped': 0, 'compilation': 'PASS'}, 'initialSandboxExecution': {'pass': 54, 'fail': 0, 'error': 63, 'skipped': 0, 'cause': 'MOCKITO_AGENT_ATTACHMENT_RESTRICTION'}, 'evidence': 'PROGRESS.md#day05-commercial-offline-publication', 'postgresqlQualification': 'NOT_EXECUTED', 'browserQualification': 'NOT_EXECUTED', 'commercialEligibility': False, 'commercialIssuance': False, 'realPaymentsEnabled': False, 'customerAccessEnabled': False, 'productionAuthorization': 'NONE', 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'hardwareQualification': 'UNQUALIFIED', 'ownerUat': 'PENDING', 'independentGRoomBlockReview': 'NOT_SATISFIED', 'day05': 'INCOMPLETE', 'publicationCi': 'PENDING_EXACT_SOURCE_VERIFICATION', 'accounting': {'part1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}}
+D5_SUFFIX_SHA256 = '537af413d95f3762891e832088496c130f11a8950111b75786b89742a064f9eb'
+d5_previous_main = inert_ci_main
+d5_previous_guard = receipt_admission_successor_errors
+
+def d5_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',D5_BASE+':'+name])
+
+def d5_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',D5_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe Day05 baseline tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def d5_payload_errors():
+    errors=[]
+    try:
+        owned=set(D5_PATHS)
+        if D5_BASE!='2fa758d60c181ab3975700eece60d4dbcfd2f351' or D5_TASK!='CN-R1-COMMERCIAL-QUOTE-001' or len(D5_PATHS)!=11 or owned!=set(D5_RECORD['payloadPaths']) or set(D5_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:
+            return ['Day05 exact task/baseline/path mismatch']
+        subprocess.check_output(['git','-C',str(R),'merge-base','--is-ancestor',D5_BASE,'HEAD'])
+        for name in D5_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:
+                errors.append('Day05 unsafe/missing payload '+name);continue
+            if name in D5_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=D5_HASHES[name]:errors.append('Day05 fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        historical=d5_before('knowledge/execution/validate_execution.py')
+        if hashlib.sha256(historical).hexdigest()!='585adbae1f6041ce4ff8d8f466088befe5429b511869bc9c2260e43a775d0cca':return ['Day05 historical validator baseline mismatch']
+        prefix=historical.decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('Day05 historical validator changed')
+        suffix=current[len(prefix):].replace("D5_SUFFIX_SHA256 = '"+D5_SUFFIX_SHA256+"'","D5_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=D5_SUFFIX_SHA256:errors.append('Day05 successor changed')
+        for name in ['knowledge/PROJECT.md','knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md']:
+            if not (R/name).read_bytes().startswith(d5_before(name)):errors.append('Day05 historical narrative changed '+name)
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('day05CommercialConfigurationPublication20261105',None)
+        if entry!=D5_RECORD or state!=json.loads(d5_before('knowledge/execution/status.json')):errors.append('Day05 registry/evidence/approval drift')
+        if D5_RECORD['sourceSha256']!={n:D5_HASHES[n] for n in D5_RECORD['sourceSha256']}:errors.append('Day05 qualified source binding mismatch')
+        manifest=json.loads(d5_before('knowledge/manifest.json'))
+        refresh={n.removeprefix('knowledge/') for n in owned if n.startswith('knowledge/') and n!='knowledge/manifest.json'}
+        if len(refresh)!=6 or refresh!={row['path'] for row in manifest['files'] if row['path'] in refresh}:errors.append('Day05 exact six manifest entries required')
+        for row in manifest['files']:
+            if row['path'] in refresh:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('Day05 unauthorized manifest change')
+        tree=d5_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('Day05 missing/unsafe historical file '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('Day05 unowned historical drift '+name)
+        actual=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',D5_BASE,'--name-only','-z'],text=True),nul=True)
+        if actual!=set(tree)|owned or changed|(actual-set(tree))!=owned:errors.append('Day05 exact eleven-file inventory required')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError):errors.append('Day05 invalid/inaccessible payload or ancestry')
+    return errors
+
+def d5_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return d5_payload_errors()
+
+def d5_controls():
+    from unittest.mock import patch
+    assert not d5_successor_errors();print('PASS Day05 exact11 successor positive')
+    assert not v35_migration_errors();print('PASS Day05 exact34 migrations positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in D5_PATHS+['AGENTS.md','backend/src/main/java/com/cinenest/pricing/internal/QuoteService.java','backend/src/main/java/com/cinenest/pricing/internal/QuoteRules.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert d5_successor_errors(),name
+        print('PASS Day05 rejects payload/history mutation '+name)
+    target=R/D5_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert d5_successor_errors()
+        print('PASS Day05 rejects '+label)
+    for key,value in [('D5_TASK','UNKNOWN'),('D5_BASE','0'*40),('D5_PATHS',D5_PATHS[:-1]+['knowledge/../unauthorized.py'])]:
+        with patch.dict(globals(),{key:value}):assert d5_successor_errors()
+        print('PASS Day05 rejects '+key)
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert d5_successor_errors()
+        print('PASS Day05 rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('evidenceReportSha256',{}),('historicalQualification',{'totalPass':9999}),('initialSandboxExecution',{}),('postgresqlQualification','PASS'),('browserQualification','PASS'),('commercialEligibility',True),('commercialIssuance',True),('realPaymentsEnabled',True),('customerAccessEnabled',True),('productionAuthorization','GRANTED'),('recoveryActivated',True),('realReceiptAdmission','ALLOW'),('hardwareQualification','QUALIFIED'),('ownerUat','PASS'),('independentGRoomBlockReview','SATISFIED'),('day05','COMPLETE'),('accounting',{'part1':'7/7'})]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['day05CommercialConfigurationPublication20261105'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert d5_successor_errors()
+        print('PASS Day05 rejects registry '+field)
+    target=K/'manifest.json'
+    def bad_manifest(p,*a,**kw):
+        b=rb0(p,*a,**kw)
+        if p==target:
+            d=json.loads(b);d['kbVersion']='UNAUTHORIZED';return json.dumps(d).encode()
+        return b
+    with patch.object(Path,'read_bytes',bad_manifest):assert d5_successor_errors()
+    print('PASS Day05 rejects unrelated manifest metadata')
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='frontend/unauthorized.tsx\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert d5_successor_errors()
+        print('PASS Day05 rejects unknown '+command)
+    def unrelated_ancestry(argv,*a,**kw):
+        if isinstance(argv,list) and 'merge-base' in argv:raise subprocess.CalledProcessError(1,argv)
+        return out0(argv,*a,**kw)
+    with patch.object(subprocess,'check_output',unrelated_ancestry):assert d5_successor_errors()
+    print('PASS Day05 rejects non-descendant HEAD')
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V36__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert d5_successor_errors(),label
+        print('PASS Day05 rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert d5_successor_errors()
+    print('PASS Day05 rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert d5_successor_errors()
+    print('PASS Day05 rejects migration symlink')
+
+receipt_admission_successor_errors=d5_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=d5_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        d5_controls();owned=set(D5_PATHS);tree=set(d5_tree());added=owned-tree
+        replacements={R/n:d5_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                if 'diff' in argv:
+                    after=argv[argv.index('diff')+1:];refs=[x for x in after if re.fullmatch(r'[0-9a-f]{40}',x)]
+                    if len(refs)==1:
+                        raw=out0(['git','-C',str(R),'diff',refs[0],D5_BASE,'--name-only']+(['-z'] if '-z' in argv else []))
+                        return raw.decode() if isinstance(data,str) else raw
+                    if len(refs)==2:return data
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':d5_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=d5_previous_main()
+        if result==0:print('PASS Day05 exact11 offline successor;historical M1 and all predecessors preserved')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

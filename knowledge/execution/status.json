@@ -29986,5 +29986,82 @@
       "fullMvp": "15/74",
       "formalAcceptance": "0/92"
     }
+  },
+  "day05CommercialConfigurationPublication20261105": {
+    "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+    "baseline": "2fa758d60c181ab3975700eece60d4dbcfd2f351",
+    "authorization": "OWNER_APPROVED_EXACT_11_FILE_OFFLINE_PUBLICATION",
+    "payloadPaths": [
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialConfiguration.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialConfigurationRules.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationRulesTest.java",
+      "knowledge/PROJECT.md",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialConfiguration.java": "97fa8a57c7e184177bb0598257e9ca4fb07f10839416bcca6aaf4bf7a1552a93",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialConfigurationRules.java": "3775954043517a0209d8ed569acc747e178be20696c51a0a672384f90b09302c",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationTest.java": "954c9989f4c8481dbe43ab98d1f9f49fd08463e3c8bf6cea8b0e6931c03a117b",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialConfigurationRulesTest.java": "8ac5179d9b41d0e72fbd29e063aea2b4e846942f1ca960893da068e1bfe32fe9"
+    },
+    "evidenceReportSha256": {
+      "backend/target/surefire-reports/TEST-com.cinenest.FoundationArchitectureTest.xml": "3d5699fe89298f64dc3911b9b0385ee0291009b024ba7ccd75b4c28419e8df0f",
+      "backend/target/surefire-reports/TEST-com.cinenest.identity.internal.LocalCredentialRecoveryArchitectureTest.xml": "bd356e367d6c42a795ee91f3c37faea8afa29ee45602d91e542273fdff3e04e8",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.BankQuotationObservationTest.xml": "4e9eca66fc90ed740148a5c6b7ef0dbea639d3337d61a8b80f3e42839ea8f9fa",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.CommercialConfigurationRulesTest.xml": "846dad0fddfe6363401955aacdb03e56b498de5af360602459faee77f9881b35",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.CommercialConfigurationTest.xml": "3bd0c651a2fb684c9ec5fdf05a3964947942c1bd4eb1a93c0d89a5e703e450bf",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.DraftRulesTest.xml": "0976a9432c397b1e0b822c2a782669a3f6e302a7e9e6af74d9a6b7237d29b514",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.ExtensionPricingTest.xml": "6691b132c9d53bb5b6f14b2b2d2a51160557c755efdf00475cb06304cc3d8b94",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.PublicationTimeTest.xml": "1efedb3d199b742e067d412f03e0339e400ba96ca1eda5389f2aa73b872b450f",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.QuoteProfileConfigurationTest.xml": "575702d0d1a0bd0b4cbe3aefe18394fc7c3d3a26f163b76d37bb5cc2e85d6bc5",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.QuoteRulesTest.xml": "5eecc537bfb27b078cd15e8ec2eda55194ce36fc604423b06e63e982ecc684c2",
+      "backend/target/surefire-reports/TEST-com.cinenest.pricing.internal.VerificationHandoffTest.xml": "ca485f61f0421952cbc3c689b1df09ac01f4ec1d8524ed6acb85341bbd9acba6"
+    },
+    "evidenceReportOrigin": "/home/hasitha-wijerathna/Documents/Theater Project/mvp-hardware-m1-qualification",
+    "historicalQualification": {
+      "newPass": 13,
+      "pricingPass": 80,
+      "architecturePass": 24,
+      "totalPass": 117,
+      "fail": 0,
+      "error": 0,
+      "skipped": 0,
+      "compilation": "PASS"
+    },
+    "initialSandboxExecution": {
+      "pass": 54,
+      "fail": 0,
+      "error": 63,
+      "skipped": 0,
+      "cause": "MOCKITO_AGENT_ATTACHMENT_RESTRICTION"
+    },
+    "evidence": "PROGRESS.md#day05-commercial-offline-publication",
+    "postgresqlQualification": "NOT_EXECUTED",
+    "browserQualification": "NOT_EXECUTED",
+    "commercialEligibility": false,
+    "commercialIssuance": false,
+    "realPaymentsEnabled": false,
+    "customerAccessEnabled": false,
+    "productionAuthorization": "NONE",
+    "recoveryActivated": false,
+    "realReceiptAdmission": "DENY",
+    "hardwareQualification": "UNQUALIFIED",
+    "ownerUat": "PENDING",
+    "independentGRoomBlockReview": "NOT_SATISFIED",
+    "day05": "INCOMPLETE",
+    "publicationCi": "PENDING_EXACT_SOURCE_VERIFICATION",
+    "accounting": {
+      "part1": "4/7",
+      "p1Planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    }
   }
 }
