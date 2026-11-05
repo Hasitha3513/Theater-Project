@@ -15,13 +15,11 @@ export function bankDate(value?: string) {
 	const parsed = Date.parse(value);
 	if (!Number.isFinite(parsed)) return value;
 	// Bank request DTO has no venue timezone: label UTC rather than invent one.
-	return (
-		new Intl.DateTimeFormat("en-GB", {
-			dateStyle: "medium",
-			timeStyle: "short",
-			timeZone: "UTC",
-		}).format(new Date(parsed)) + " UTC"
-	);
+	return `${new Intl.DateTimeFormat("en-GB", {
+		dateStyle: "medium",
+		timeStyle: "short",
+		timeZone: "UTC",
+	}).format(new Date(parsed))} UTC`;
 }
 export function BankSections() {
 	return (

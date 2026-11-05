@@ -11960,5 +11960,153 @@ def inert_ci_main():
         if result==0:print('PASS UX qualified12 frontend successor;historical controls preserved;no runtime activation')
         return result
 
+
+
+# Exact Owner-authorized clean-CI lint recovery successor; historical predecessor immutable.
+LRPUB_BASE = '651da1db3d6586d177b77ddb5b215a8cbf12483b'
+LRPUB_TASK = 'CN-MVP-PART1-DAY06-UX-CI-LINT-RECOVERY-001'
+LRPUB_PATHS = ['frontend/components/bank-experience.tsx', 'frontend/components/bank.tsx', 'frontend/components/verification.tsx', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json']
+LRPUB_HASHES = {'frontend/components/bank-experience.tsx': '8e3996b185420a2486eeb2ab2e855dac4070622399ca96ea039a7d14be89239c', 'frontend/components/bank.tsx': '0dbb3b4c8f11ee433853d636fbdf0467fa87cf4d10d4a1439b425a406c9b917b', 'frontend/components/verification.tsx': '1e53cb18ae726ba7ef3565e2dc61a8d6e990d3bd1588364c667e903e4a15be74', 'knowledge/PROGRESS.md': 'b1c39b28daa0b3c1c648abc0acf5b57ce7001ffde7d358ecd604ff66863974df', 'knowledge/execution/status.json': 'b83339795f328b8726acbc9a81230c5e4af318b50e123a4f710afa93c8f5b29d'}
+LRPUB_RECORD = {'taskId': 'CN-MVP-PART1-DAY06-UX-CI-LINT-RECOVERY-001', 'baseline': '651da1db3d6586d177b77ddb5b215a8cbf12483b', 'authorization': 'EXPLICIT_OWNER_SIX_FILES_PLUS_EXACT_SEVENTH_FILE_AND_SEVEN_PATH_SUCCESSOR', 'payloadPaths': ['frontend/components/bank-experience.tsx', 'frontend/components/bank.tsx', 'frontend/components/verification.tsx', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'sourceSha256': {'frontend/components/bank-experience.tsx': '8e3996b185420a2486eeb2ab2e855dac4070622399ca96ea039a7d14be89239c', 'frontend/components/bank.tsx': '0dbb3b4c8f11ee433853d636fbdf0467fa87cf4d10d4a1439b425a406c9b917b', 'frontend/components/verification.tsx': '1e53cb18ae726ba7ef3565e2dc61a8d6e990d3bd1588364c667e903e4a15be74'}, 'qualificationEvidenceHashes': {'/home/hasitha-wijerathna/Documents/Theater Project/day06-room-blocking-ux-publication/.cache/ux-publication/ci-job.log': 'c8756561605781cf7f68617685b85ff7b1ecff948f6c037f34ba17fecfdfd8ae'}, 'evidence': 'PROGRESS.md#day06-ux-clean-ci-lint-recovery', 'failedCiRun': 41984766431, 'cleanInstall': 'npm ci --offline; lockfile unchanged; Node24.22.0/npm11.19.1/Biome2.5.15', 'lintCommand': 'npm run lint', 'discrepancy': 'Clean genuine Git worktree reproduces CI; earlier ignored nested snapshot had different repository/project context. Exact causal mechanism NOT_PROVEN. Final command is checked in real worktree, not ignored snapshot.', 'changes': 'UTC-only template expression and two element-specific privacy suppressions; no global rule disablement', 'suppressionDocumentation': 'https://biomejs.dev/analyzer/suppressions/', 'offlineTests': {'pass': 54, 'fail': 0, 'skipped': 0}, 'runtimeSuites': 'NOT_EXECUTED_LOCAL', 'liveBrowserE2E': 'NOT_EXECUTED', 'ownerUat': 'PENDING', 'independent_release_review': 'NOT_SATISFIED', 'day06_acceptance': 'PENDING', 'production_authorization': 'NONE', 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'phaseAcceptance': 'NOT_ACCEPTED', 'publicationCi': 'PENDING_EXACT_SOURCE_VERIFICATION', 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}}
+LRPUB_SUFFIX_SHA256 = '1f1d4614f561f2c0631dbcf8d3246575e94a00b0c4129871ab1911d0d45e865b'
+lrpub_previous_main = inert_ci_main
+lrpub_previous_guard = receipt_admission_successor_errors
+
+def lrpub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',LRPUB_BASE+':'+name])
+
+def lrpub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',LRPUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def lrpub_payload_errors():
+    errors=[]
+    try:
+        owned=set(LRPUB_PATHS)
+        if LRPUB_BASE!='651da1db3d6586d177b77ddb5b215a8cbf12483b' or LRPUB_TASK!='CN-MVP-PART1-DAY06-UX-CI-LINT-RECOVERY-001' or len(LRPUB_PATHS)!=7 or owned!=set(LRPUB_RECORD['payloadPaths']) or set(LRPUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['LR exact task/baseline/path mismatch']
+        for name in LRPUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('LR unsafe/missing payload '+name);continue
+            if name in LRPUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=LRPUB_HASHES[name]:errors.append('LR fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=lrpub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('LR historical validator changed')
+        suffix=current[len(prefix):].replace("LRPUB_SUFFIX_SHA256 = '"+LRPUB_SUFFIX_SHA256+"'","LRPUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=LRPUB_SUFFIX_SHA256:errors.append('LR successor changed')
+        if not (K/'PROGRESS.md').read_bytes().startswith(lrpub_before('knowledge/PROGRESS.md')):errors.append('LR historical progress changed')
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('day06UxCleanCiLintRecovery20261105',None)
+        if entry!=LRPUB_RECORD or state!=json.loads(lrpub_before('knowledge/execution/status.json')):errors.append('LR registry/evidence/acceptance drift')
+        if LRPUB_RECORD['sourceSha256']!={n:LRPUB_HASHES[n] for n in LRPUB_RECORD['sourceSha256']}:errors.append('LR source evidence mismatch')
+        manifest=json.loads(lrpub_before('knowledge/manifest.json'))
+        refresh={n.removeprefix('knowledge/') for n in owned if n.startswith('knowledge/') and n!='knowledge/manifest.json'}
+        if refresh!={row['path'] for row in manifest['files'] if row['path'] in refresh}:errors.append('LR missing manifest entries')
+        for row in manifest['files']:
+            if row['path'] in refresh:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('LR unauthorized manifest change')
+        tree=lrpub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('LR missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('LR unowned history drift '+name)
+        actual=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',LRPUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if actual!=set(tree) or changed!=owned:errors.append('LR exact seven-file inventory required')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('LR invalid/inaccessible payload')
+    return errors
+
+def lrpub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return lrpub_payload_errors()
+
+def lrpub_controls():
+    from unittest.mock import patch
+    assert not lrpub_successor_errors();print('PASS LR exact7 successor positive')
+    assert not v35_migration_errors();print('PASS LR exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in LRPUB_PATHS+['AGENTS.md','backend/src/test/java/com/cinenest/RoomsIntegrationTest.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert lrpub_successor_errors(),name
+        print('PASS LR rejects payload/history mutation '+name)
+    target=R/LRPUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert lrpub_successor_errors()
+        print('PASS LR rejects '+label)
+    for key,value in [('LRPUB_TASK','UNKNOWN'),('LRPUB_BASE','0'*40),('LRPUB_PATHS',LRPUB_PATHS[:-1]+['knowledge/../unauthorized.py'])]:
+        with patch.dict(globals(),{key:value}):assert lrpub_successor_errors()
+        print('PASS LR rejects '+key)
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert lrpub_successor_errors()
+        print('PASS LR rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('ownerUat','PASS'),('offlineTests',{'pass':9999}),('liveBrowserE2E','PASS'),('runtimeSuites','PASS'),('production_authorization','GRANTED'),('recoveryActivated',True),('realReceiptAdmission','ALLOW'),('independent_release_review','SATISFIED'),('day06_acceptance','ACCEPTED'),('phaseAcceptance','ACCEPTED')]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['day06UxCleanCiLintRecovery20261105'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert lrpub_successor_errors()
+        print('PASS LR rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='frontend/unauthorized.tsx\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert lrpub_successor_errors()
+        print('PASS LR rejects unknown '+command)
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert lrpub_successor_errors(),label
+        print('PASS LR rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert lrpub_successor_errors()
+    print('PASS LR rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert lrpub_successor_errors()
+    print('PASS LR rejects migration symlink')
+
+receipt_admission_successor_errors=lrpub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=lrpub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        lrpub_controls();owned=set(LRPUB_PATHS);tree=set(lrpub_tree());added=owned-tree
+        replacements={R/n:lrpub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                # Replay the predecessor commit's actual inventory, including its
+                # own admitted changes; filtering new paths loses overlapping deltas.
+                if 'diff' in argv:
+                    after=argv[argv.index('diff')+1:]
+                    refs=[x for x in after if re.fullmatch(r'[0-9a-f]{40}',x)]
+                    if len(refs)==1:
+                        sep='\0' if '-z' in argv else '\n'
+                        raw=out0(['git','-C',str(R),'diff',refs[0],LRPUB_BASE,'--name-only']+(['-z'] if '-z' in argv else []))
+                        return raw.decode() if isinstance(data,str) else raw
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':lrpub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=lrpub_previous_main()
+        if result==0:print('PASS LR qualified7 frontend successor;historical controls preserved;no runtime activation')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

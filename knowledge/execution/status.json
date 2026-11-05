@@ -29855,5 +29855,56 @@
       "fullMvp": "15/74",
       "formalAcceptance": "0/92"
     }
+  },
+  "day06UxCleanCiLintRecovery20261105": {
+    "taskId": "CN-MVP-PART1-DAY06-UX-CI-LINT-RECOVERY-001",
+    "baseline": "651da1db3d6586d177b77ddb5b215a8cbf12483b",
+    "authorization": "EXPLICIT_OWNER_SIX_FILES_PLUS_EXACT_SEVENTH_FILE_AND_SEVEN_PATH_SUCCESSOR",
+    "payloadPaths": [
+      "frontend/components/bank-experience.tsx",
+      "frontend/components/bank.tsx",
+      "frontend/components/verification.tsx",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "sourceSha256": {
+      "frontend/components/bank-experience.tsx": "8e3996b185420a2486eeb2ab2e855dac4070622399ca96ea039a7d14be89239c",
+      "frontend/components/bank.tsx": "0dbb3b4c8f11ee433853d636fbdf0467fa87cf4d10d4a1439b425a406c9b917b",
+      "frontend/components/verification.tsx": "1e53cb18ae726ba7ef3565e2dc61a8d6e990d3bd1588364c667e903e4a15be74"
+    },
+    "qualificationEvidenceHashes": {
+      "/home/hasitha-wijerathna/Documents/Theater Project/day06-room-blocking-ux-publication/.cache/ux-publication/ci-job.log": "c8756561605781cf7f68617685b85ff7b1ecff948f6c037f34ba17fecfdfd8ae"
+    },
+    "evidence": "PROGRESS.md#day06-ux-clean-ci-lint-recovery",
+    "failedCiRun": 41984766431,
+    "cleanInstall": "npm ci --offline; lockfile unchanged; Node24.22.0/npm11.19.1/Biome2.5.15",
+    "lintCommand": "npm run lint",
+    "discrepancy": "Clean genuine Git worktree reproduces CI; earlier ignored nested snapshot had different repository/project context. Exact causal mechanism NOT_PROVEN. Final command is checked in real worktree, not ignored snapshot.",
+    "changes": "UTC-only template expression and two element-specific privacy suppressions; no global rule disablement",
+    "suppressionDocumentation": "https://biomejs.dev/analyzer/suppressions/",
+    "offlineTests": {
+      "pass": 54,
+      "fail": 0,
+      "skipped": 0
+    },
+    "runtimeSuites": "NOT_EXECUTED_LOCAL",
+    "liveBrowserE2E": "NOT_EXECUTED",
+    "ownerUat": "PENDING",
+    "independent_release_review": "NOT_SATISFIED",
+    "day06_acceptance": "PENDING",
+    "production_authorization": "NONE",
+    "recoveryActivated": false,
+    "realReceiptAdmission": "DENY",
+    "phaseAcceptance": "NOT_ACCEPTED",
+    "publicationCi": "PENDING_EXACT_SOURCE_VERIFICATION",
+    "accounting": {
+      "originalPart1": "4/7",
+      "p1Planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    }
   }
 }
