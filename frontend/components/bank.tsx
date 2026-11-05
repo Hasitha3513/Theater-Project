@@ -738,7 +738,7 @@ export function BankWorkspace({
 									))}
 								{preview && (
 									<>
-										{/* biome-ignore lint/performance/noImgElement: Private ephemeral blob must bypass shared image optimization. */}
+										{/* Private ephemeral blob must bypass shared image optimization. */}
 										<img
 											src={preview}
 											className="private-evidence-preview"

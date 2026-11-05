@@ -591,7 +591,7 @@ export function VerificationWorkspace({
 									))}
 								{preview && (
 									<>
-										{/* biome-ignore lint/performance/noImgElement: Private ephemeral blob must never enter shared image optimization/cache. */}
+										{/* Private ephemeral blob must never enter shared image optimization/cache. */}
 										<img
 											src={preview}
 											alt="Private explicitly synthetic fixture for current manual review"

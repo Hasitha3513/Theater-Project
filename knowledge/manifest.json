@@ -404,7 +404,7 @@
       "path": "DESIGN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "0486b0f943feb0d9a8262d2e4ca164ae8abe4bbef8131d4f66a59dcfeebf8e65",
+      "sha256": "a9a0c8ef10c189148e581db3af6b18d824fab58c8f52d7e19c28f2de428567b7",
       "authority": "canonical-prose"
     },
     {
@@ -418,7 +418,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "033e38dab67181e52d2eca14b654c88b597f3cfa5a106b619d3bf9e2614f515f",
+      "sha256": "9c1972db0635642e16f87ed46b0d1a96993256e796b7fecfcda89280787149fd",
       "authority": "canonical-prose"
     },
     {
@@ -558,7 +558,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "f2c0a6414ea654f7f58e04452ac2383f86681887b07a5deaef26b96b87c22224",
+      "sha256": "b54482377124daf745763670a1b78bc0afb0e6fbe323871409973f4a4061ceba",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -572,14 +572,14 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "edde11a34d2d954df874b7ee8e41d78ca00e900024b9e095474cdaf2e545780d",
+      "sha256": "877cc3e57a5ac1dee0f5c33ed4e12a6bb7e7ed0db333b0826040cd8620376a3b",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "guides/USER_GUIDE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c6200032501d2004bd6bf63af75d769656601247af8396a1f6486d2961fedb36",
+      "sha256": "8a4d6f02fa3b2329f85b9e1c04f29a6feeae8a54e0c4682b43d357f49cfd124d",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -592,7 +592,7 @@
       "path": "product/FEATURE_CATALOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b7a5312245869b30e1981395716879f717b3cbfc3fdc5d45f5d13d51d2ab1a11",
+      "sha256": "96bd4e94edd54fd8dcedef36072c4cd2da091beef4aa951362705c8ccd025cd2",
       "authority": "structured-asset-or-evidence"
     },
     {

@@ -11821,5 +11821,144 @@ def inert_ci_main():
         if result==0:print('PASS D06 qualified integration successor;historical controls preserved;recovery disabled')
         return result
 
+
+
+# Exact Owner-authorized Room Blocking UX successor; immutable historical predecessor.
+UXPUB_BASE = 'c91236aa788d5d033230ef7f72c98d71d9c8a319'
+UXPUB_TASK = 'CN-MVP-PART1-DAY06-UX-QUALIFIED-PUBLICATION-001'
+UXPUB_PATHS = ['frontend/components/room-blocking.tsx', 'frontend/tests/room-blocks.test.mjs', 'frontend/tests/room-blocks-e2e.mjs', 'frontend/components/bank.tsx', 'frontend/components/verification.tsx', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'knowledge/execution/validate_execution.py']
+UXPUB_HASHES = {'frontend/components/room-blocking.tsx': '2e5de9b7c6774f802737f7ea427020d94c87db58acbad2e0ec1e308214298d45', 'frontend/tests/room-blocks.test.mjs': '277f2150b40e2a2b250003cbc4ca229cbe251af70feeb76ee78543ed062469d2', 'frontend/tests/room-blocks-e2e.mjs': '9843afeb145dea6cb57e563031c047ee99510c097430bc8f152a867c1c308707', 'frontend/components/bank.tsx': 'b3df7eb83df03261ae0788a3c69a3f779266d14f0d867d35d4ea7bd1428475ed', 'frontend/components/verification.tsx': 'cf808eb303a75b27abcc169c58f0b03a9218a42f823a206d024e54a9d5cb999f', 'knowledge/DESIGN.md': 'a9a0c8ef10c189148e581db3af6b18d824fab58c8f52d7e19c28f2de428567b7', 'knowledge/PROGRESS.md': '9c1972db0635642e16f87ed46b0d1a96993256e796b7fecfcda89280787149fd', 'knowledge/product/FEATURE_CATALOG.md': '96bd4e94edd54fd8dcedef36072c4cd2da091beef4aa951362705c8ccd025cd2', 'knowledge/guides/USER_GUIDE.md': '8a4d6f02fa3b2329f85b9e1c04f29a6feeae8a54e0c4682b43d357f49cfd124d', 'knowledge/execution/status.json': 'b54482377124daf745763670a1b78bc0afb0e6fbe323871409973f4a4061ceba'}
+UXPUB_RECORD = {'taskId': 'CN-MVP-PART1-DAY06-UX-QUALIFIED-PUBLICATION-001', 'baseline': 'c91236aa788d5d033230ef7f72c98d71d9c8a319', 'authorization': 'EXPLICIT_OWNER_EXACT_TWELVE_FILES_BRANCH_ONLY', 'payloadPaths': ['frontend/components/room-blocking.tsx', 'frontend/tests/room-blocks.test.mjs', 'frontend/tests/room-blocks-e2e.mjs', 'frontend/components/bank.tsx', 'frontend/components/verification.tsx', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/manifest.json', 'knowledge/execution/validate_execution.py'], 'sourceSha256': {'frontend/components/room-blocking.tsx': '2e5de9b7c6774f802737f7ea427020d94c87db58acbad2e0ec1e308214298d45', 'frontend/tests/room-blocks.test.mjs': '277f2150b40e2a2b250003cbc4ca229cbe251af70feeb76ee78543ed062469d2', 'frontend/tests/room-blocks-e2e.mjs': '9843afeb145dea6cb57e563031c047ee99510c097430bc8f152a867c1c308707', 'frontend/components/bank.tsx': 'b3df7eb83df03261ae0788a3c69a3f779266d14f0d867d35d4ea7bd1428475ed', 'frontend/components/verification.tsx': 'cf808eb303a75b27abcc169c58f0b03a9218a42f823a206d024e54a9d5cb999f'}, 'qualificationEvidenceHashes': {'/home/hasitha-wijerathna/Documents/Theater Project/day06-assurance-governance/.cache/private-room-blocking-ux-reconciliation-20261105/report.json': 'f9373d1a136c603308957575218cf13d64e61115df6409ac0844ab4c58a44231', '/home/hasitha-wijerathna/Documents/Theater Project/day06-assurance-governance/.cache/private-room-blocking-ux-20261105/final-offline-results.json': '2d22774f96b9196fd859ec08f0ece41ebb4aaef201d3ef48a1d3ffd9e45c445e'}, 'evidence': 'PROGRESS.md#day06-room-blocking-ux-publication', 'offlineTests': {'pass': 412, 'fail': 0, 'skipped': 0, 'suites': 44}, 'runtimeSuites': '14_NOT_EXECUTED', 'liveBrowserE2E': 'NOT_EXECUTED', 'ownerUat': 'PENDING', 'independent_release_review': 'NOT_SATISFIED', 'day06_acceptance': 'PENDING', 'production_authorization': 'NONE', 'recoveryActivated': False, 'realReceiptAdmission': 'DENY', 'phaseAcceptance': 'NOT_ACCEPTED', 'publicationCi': 'PENDING_EXACT_SOURCE_VERIFICATION', 'accounting': {'originalPart1': '4/7', 'p1Planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}}
+UXPUB_SUFFIX_SHA256 = '58244231158353e8759749b159939a96e2df883dcbd728356a6d1a69a64c163f'
+uxpub_previous_main = inert_ci_main
+uxpub_previous_guard = receipt_admission_successor_errors
+
+def uxpub_before(name):
+    return subprocess.check_output(['git','-C',str(R),'show',UXPUB_BASE+':'+name])
+
+def uxpub_tree():
+    result={}
+    for row in subprocess.check_output(['git','-C',str(R),'ls-tree','-r','-z',UXPUB_BASE]).split(b'\0'):
+        if not row:continue
+        meta,name=row.split(b'\t',1);mode,kind,oid=meta.split()
+        if kind!=b'blob' or mode not in (b'100644',b'100755'):raise ValueError('Unsafe predecessor tree')
+        result[name.decode()]=oid.decode()
+    return result
+
+def uxpub_payload_errors():
+    errors=[]
+    try:
+        owned=set(UXPUB_PATHS)
+        if UXPUB_BASE!='c91236aa788d5d033230ef7f72c98d71d9c8a319' or UXPUB_TASK!='CN-MVP-PART1-DAY06-UX-QUALIFIED-PUBLICATION-001' or len(UXPUB_PATHS)!=12 or owned!=set(UXPUB_RECORD['payloadPaths']) or set(UXPUB_HASHES)!=owned-{'knowledge/manifest.json','knowledge/execution/validate_execution.py'}:return ['UX exact task/baseline/path mismatch']
+        for name in UXPUB_PATHS:
+            p=R/name
+            if Path(name).is_absolute() or '..' in Path(name).parts or Path(name).as_posix()!=name or p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('UX unsafe/missing payload '+name);continue
+            if name in UXPUB_HASHES and hashlib.sha256(p.read_bytes()).hexdigest()!=UXPUB_HASHES[name]:errors.append('UX fingerprint drift '+name)
+        if errors:return errors
+        ending="if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix=uxpub_before('knowledge/execution/validate_execution.py').decode().removesuffix(ending)
+        current=(K/'execution/validate_execution.py').read_text()
+        if not current.startswith(prefix):errors.append('UX historical validator changed')
+        suffix=current[len(prefix):].replace("UXPUB_SUFFIX_SHA256 = '"+UXPUB_SUFFIX_SHA256+"'","UXPUB_SUFFIX_SHA256 = '"+'0'*64+"'",1)
+        if hashlib.sha256(suffix.encode()).hexdigest()!=UXPUB_SUFFIX_SHA256:errors.append('UX successor changed')
+        if not (K/'PROGRESS.md').read_bytes().startswith(uxpub_before('knowledge/PROGRESS.md')):errors.append('UX historical progress changed')
+        state=json.loads((K/'execution/status.json').read_text());entry=state.pop('day06RoomBlockingUx20261105',None)
+        if entry!=UXPUB_RECORD or state!=json.loads(uxpub_before('knowledge/execution/status.json')):errors.append('UX registry/evidence/acceptance drift')
+        if UXPUB_RECORD['sourceSha256']!={n:UXPUB_HASHES[n] for n in UXPUB_RECORD['sourceSha256']}:errors.append('UX source evidence mismatch')
+        manifest=json.loads(uxpub_before('knowledge/manifest.json'))
+        refresh={n.removeprefix('knowledge/') for n in owned if n.startswith('knowledge/') and n!='knowledge/manifest.json'}
+        if refresh!={row['path'] for row in manifest['files'] if row['path'] in refresh}:errors.append('UX missing manifest entries')
+        for row in manifest['files']:
+            if row['path'] in refresh:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():errors.append('UX unauthorized manifest change')
+        tree=uxpub_tree()
+        for name,oid in tree.items():
+            if name in owned:continue
+            p=R/name
+            if p.is_symlink() or not p.is_file() or p.resolve()!=p:errors.append('UX missing/unsafe predecessor '+name);continue
+            b=p.read_bytes()
+            if hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()!=oid:errors.append('UX unowned history drift '+name)
+        actual=parse_git_paths(subprocess.check_output(['git','-C',str(R),'ls-files','-z','--cached','--others','--exclude-standard'],text=True),nul=True)
+        changed=parse_git_paths(subprocess.check_output(['git','-C',str(R),'diff',UXPUB_BASE,'--name-only','-z'],text=True),nul=True)
+        if actual!=set(tree) or changed!=owned:errors.append('UX exact twelve-file inventory required')
+        errors.extend(v35_migration_errors())
+    except (OSError,ValueError,KeyError,TypeError):errors.append('UX invalid/inaccessible payload')
+    return errors
+
+def uxpub_successor_errors():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):return uxpub_payload_errors()
+
+def uxpub_controls():
+    from unittest.mock import patch
+    assert not uxpub_successor_errors();print('PASS UX exact12 successor positive')
+    assert not v35_migration_errors();print('PASS UX exact34 migration positive')
+    rb0,rt0,file0,link0,resolve0=Path.read_bytes,Path.read_text,Path.is_file,Path.is_symlink,Path.resolve
+    for name in UXPUB_PATHS+['AGENTS.md','backend/src/test/java/com/cinenest/RoomsIntegrationTest.java']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==target else rb0(p,*a,**kw)):assert uxpub_successor_errors(),name
+        print('PASS UX rejects payload/history mutation '+name)
+    target=R/UXPUB_PATHS[0]
+    for label,method,replacement in [('missing','is_file',lambda p:False if p==target else file0(p)),('symlink','is_symlink',lambda p:True if p==target else link0(p)),('traversal','resolve',lambda p,*a,**kw:R/'outside' if p==target else resolve0(p,*a,**kw))]:
+        with patch.object(Path,method,replacement):assert uxpub_successor_errors()
+        print('PASS UX rejects '+label)
+    for key,value in [('UXPUB_TASK','UNKNOWN'),('UXPUB_BASE','0'*40),('UXPUB_PATHS',UXPUB_PATHS[:-1]+['knowledge/../unauthorized.py'])]:
+        with patch.dict(globals(),{key:value}):assert uxpub_successor_errors()
+        print('PASS UX rejects '+key)
+    target=K/'execution/validate_execution.py'
+    for label,mutate in [('historical prefix',lambda s:'UNAUTHORIZED\n'+s),('successor suffix',lambda s:s+'\n')]:
+        with patch.object(Path,'read_text',lambda p,*a,**kw:mutate(rt0(p,*a,**kw)) if p==target else rt0(p,*a,**kw)):assert uxpub_successor_errors()
+        print('PASS UX rejects '+label)
+    target=K/'execution/status.json'
+    for field,value in [('taskId','UNKNOWN'),('sourceSha256',{}),('qualificationEvidenceHashes',{}),('ownerUat','PASS'),('offlineTests',{'pass':9999}),('liveBrowserE2E','PASS'),('runtimeSuites','PASS'),('production_authorization','GRANTED'),('recoveryActivated',True),('realReceiptAdmission','ALLOW'),('independent_release_review','SATISFIED'),('day06_acceptance','ACCEPTED'),('phaseAcceptance','ACCEPTED')]:
+        def bad(p,*a,**kw):
+            s=rt0(p,*a,**kw)
+            if p==target:
+                d=json.loads(s);d['day06RoomBlockingUx20261105'][field]=value;return json.dumps(d)
+            return s
+        with patch.object(Path,'read_text',bad):assert uxpub_successor_errors()
+        print('PASS UX rejects registry '+field)
+    out0=subprocess.check_output
+    for command in ['ls-files','diff']:
+        def injected(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and command in argv:
+                extra='frontend/unauthorized.tsx\0';return data+extra if isinstance(data,str) else data+extra.encode()
+            return data
+        with patch.object(subprocess,'check_output',injected):assert uxpub_successor_errors()
+        print('PASS UX rejects unknown '+command)
+    folder=R/'backend/src/main/resources/db/migration';glob0=Path.glob;original=list(folder.glob('*'));first=sorted(original)[0]
+    for label,items in [('extra migration',original+[folder/'V27__unapproved.sql']),('V31 HOLD',original+[folder/'V31__hold.sql']),('missing migration',[p for p in original if p!=first]),('renamed migration',[p.with_name(p.stem+'_renamed.sql') if p==first else p for p in original]),('duplicate version',original+[first.with_name(first.name.split('__')[0]+'__other.sql')]),('migration traversal',original+[folder/'..'/'outside.sql'])]:
+        with patch.object(Path,'glob',lambda p,*a,**kw:iter(items) if p==folder else glob0(p,*a,**kw)):assert uxpub_successor_errors(),label
+        print('PASS UX rejects '+label)
+    with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb0(p,*a,**kw)+b'\n' if p==first else rb0(p,*a,**kw)):assert uxpub_successor_errors()
+    print('PASS UX rejects migration fingerprint')
+    with patch.object(Path,'is_symlink',lambda p:True if p==first else link0(p)):assert uxpub_successor_errors()
+    print('PASS UX rejects migration symlink')
+
+receipt_admission_successor_errors=uxpub_successor_errors
+
+def inert_ci_main():
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',profile_immutable_git_reader(subprocess.check_output)):
+        errors=uxpub_successor_errors()
+        if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+        uxpub_controls();owned=set(UXPUB_PATHS);tree=set(uxpub_tree());added=owned-tree
+        replacements={R/n:uxpub_before(n) for n in owned if n in tree};rb0,rt0,out0,glob0,rglob0=Path.read_bytes,Path.read_text,subprocess.check_output,Path.glob,Path.rglob
+        def rb(p,*a,**kw):return replacements[p] if p in replacements else rb0(p,*a,**kw)
+        def rt(p,*a,**kw):return replacements[p].decode() if p in replacements else rt0(p,*a,**kw)
+        def glob(p,*a,**kw):return (item for item in glob0(p,*a,**kw) if item not in {R/n for n in added})
+        def rglob(p,*a,**kw):return (item for item in rglob0(p,*a,**kw) if item not in {R/n for n in added})
+        def output(argv,*a,**kw):
+            data=out0(argv,*a,**kw)
+            if isinstance(argv,list) and argv[:3]==['git','-C',str(R)] and (('diff' in argv and '--name-only' in argv) or 'ls-files' in argv):
+                hidden=owned if 'diff' in argv else added;sep='\0' if '-z' in argv else '\n';s=data if isinstance(data,str) else data.decode();items=[n for n in s.split(sep) if n and n not in hidden];s=sep.join(items)+(sep if items else '')
+                return s if isinstance(data,str) else s.encode()
+            return data
+        output._profile_immutable_reader=True
+        with patch.dict(globals(),{'receipt_admission_successor_errors':uxpub_previous_guard}),patch.object(Path,'read_bytes',rb),patch.object(Path,'read_text',rt),patch.object(Path,'glob',glob),patch.object(Path,'rglob',rglob),patch.object(subprocess,'check_output',output):result=uxpub_previous_main()
+        if result==0:print('PASS UX qualified12 frontend successor;historical controls preserved;no runtime activation')
+        return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
