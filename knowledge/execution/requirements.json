@@ -12236,19 +12236,19 @@
             "method": "GET",
             "path": "/api/quotes/{quoteId}",
             "source": "backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java",
-            "line": 20
+            "line": 21
           },
           {
             "method": "POST",
             "path": "/api/quotes/{quoteId}/revisions",
             "source": "backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java",
-            "line": 21
+            "line": 22
           },
           {
             "method": "POST",
             "path": "/api/quotes/{quoteId}/accept",
             "source": "backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java",
-            "line": 22
+            "line": 23
           }
         ],
         "publicPorts": [

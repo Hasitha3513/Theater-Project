@@ -30425,7 +30425,8 @@
       "independentReview": "NOT_SATISFIED",
       "day05": "INCOMPLETE",
       "priorFailedAndNoncompliantExecutions": "PRESERVED_SEPARATELY_NOT_AGGREGATED",
-      "unrelatedListenerChanges": "Two new UDP listeners in prior browser run; current audit inventory difference retained in private evidence; no unrelated resources stopped"
+      "unrelatedListenerChanges": "Two new UDP listeners in prior browser run; current audit inventory difference retained in private evidence; no unrelated resources stopped",
+      "supplementalGovernanceFaultInjection": "Initial positive traceability fixture failed due exact line drift; corrected within authorized requirements/validator scope"
     },
     "migrationInventory": [
       {
@@ -30583,6 +30584,29 @@
       "release1": "4/21",
       "fullMvp": "15/74",
       "formalAcceptance": "0/92"
-    }
+    },
+    "traceabilityLineReconciliation": [
+      {
+        "method": "GET",
+        "path": "/api/quotes/{quoteId}",
+        "source": "backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java",
+        "line": 21,
+        "oldLine": 20
+      },
+      {
+        "method": "POST",
+        "path": "/api/quotes/{quoteId}/revisions",
+        "source": "backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java",
+        "line": 22,
+        "oldLine": 21
+      },
+      {
+        "method": "POST",
+        "path": "/api/quotes/{quoteId}/accept",
+        "source": "backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java",
+        "line": 23,
+        "oldLine": 22
+      }
+    ]
   }
 }
