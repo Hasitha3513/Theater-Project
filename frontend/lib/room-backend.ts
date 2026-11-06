@@ -74,6 +74,7 @@ export async function forwardRooms(request: Request): Promise<Response> {
 async function forwardConfigured(
 	request: Request,
 	allowed: (path: string, method: string) => boolean,
+	allowedQuery?: readonly string[],
 ): Promise<Response> {
 	const url = new URL(request.url);
 	if (!allowed(url.pathname, request.method))
@@ -117,7 +118,7 @@ async function forwardConfigured(
 		const body = write ? await request.text() : undefined;
 		if (body && body.length > 65536) return new Response(null, { status: 413 });
 		const query = new URLSearchParams();
-		for (const key of [
+		for (const key of allowedQuery ?? [
 			"venueId",
 			"roomId",
 			"sessionStartLocal",
@@ -200,6 +201,7 @@ export async function forwardInventory(request: Request) {
 }
 
 export function quoteRoute(path: string, method: string) {
+	if (path === "/api/quotes/preview") return method === "GET";
 	if (path === "/api/quotes") return method === "POST";
 	if (new RegExp(`^/api/quotes/${id}$`).test(path)) return method === "GET";
 	return (
@@ -208,6 +210,37 @@ export function quoteRoute(path: string, method: string) {
 	);
 }
 export async function forwardQuotes(request: Request) {
+	const url = new URL(request.url);
+	if (url.pathname === "/api/quotes/preview") {
+		if (request.method !== "GET") return new Response(null, { status: 404 });
+		const required = [
+			"holdId",
+			"expectedHoldRevision",
+			"packageId",
+			"packageVersionId",
+			"paymentMethod",
+			"optionalServiceIds",
+		];
+		const pins = ["policyId", "policyRevision", "policyContentHash"];
+		const keys = [...required, ...pins];
+		if (
+			url.search.length > 4096 ||
+			[...url.searchParams.keys()].some((key) => !keys.includes(key)) ||
+			keys.some((key) => url.searchParams.getAll(key).length > 1) ||
+			required.some((key) => !url.searchParams.has(key)) ||
+			(pins.some((key) => url.searchParams.has(key)) &&
+				!pins.every((key) => url.searchParams.has(key))) ||
+			[
+				"authorization",
+				"x-role",
+				"x-permission",
+				"x-venue-id",
+				"x-account-id",
+			].some((key) => request.headers.has(key))
+		)
+			return new Response(null, { status: 400 });
+		return forwardConfigured(request, quoteRoute, keys);
+	}
 	return forwardConfigured(request, quoteRoute);
 }
 

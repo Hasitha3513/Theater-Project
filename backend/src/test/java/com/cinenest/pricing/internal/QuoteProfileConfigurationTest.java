@@ -38,6 +38,12 @@ class QuoteProfileConfigurationTest extends VerificationHandoffTest {
         assertThatThrownBy(()->service.read(actor,id)).isInstanceOfSatisfying(DraftFailure.class,e->assertThat(e.status).isEqualTo(503));
         verifyNoInteractions(identity,store,holds,publications);
     }
+    @ParameterizedTest @MethodSource("deniedProfiles")
+    void previewCannotBroadenTheExistingSyntheticProfileBoundary(String[] profiles) {
+        when(env.getActiveProfiles()).thenReturn(profiles);
+        assertThatThrownBy(()->service.preview(actor,java.util.Map.of())).isInstanceOfSatisfying(DraftFailure.class,e->assertThat(e.status).isEqualTo(503));
+        verifyNoInteractions(identity,store,holds,publications);
+    }
     @ParameterizedTest @MethodSource("approvedProfiles")
     void approvedProfilesDoNotBypassCurrentEligibility(String[] profiles) {
         when(env.getActiveProfiles()).thenReturn(profiles);

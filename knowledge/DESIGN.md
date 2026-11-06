@@ -1470,3 +1470,10 @@ Independent read/register/assignment permissions remain backend-enforced. Labell
 Existing Administration navigation exposes Settings → Commercial Policies. The bounded form reuses existing shell/components, exact authorized venue selection/reference fallback, structured policy fields and explicit unresolved choices, UTC effective-period proposals, revision-bound domain reviews and immutable history. Venue data uses the actual array response. Fieldsets and native selects constrain intrinsic width without clipping controls; 375/768/1280 rendered checks pass. Stale/denied/expired/error and uncertain-write states remain explicit; uncertain writes are not automatically retried. No Publish/Activate control. Automated browser evidence is not Owner usability acceptance.
 
 [Technical evidence](PROGRESS.md#day05-commercial-policy-drafts).
+
+<a id="commercial-preview-room-qa"></a>
+## Synthetic commercial preview and Room Blocking QA — 2026-11-06
+
+Existing Room → inventory hold → Package choices & quotation UI now provides an explicit read-only commercial-readiness preview. Known component amounts are separated from unresolved tax/fees and never labelled payable. Exact scope/revision and blockers remain visible; changing package, method, add-ons or loaded context clears preview and pins, including away-and-back changes. No commercial acceptance control is added. Real-stack QA uses genuine login and one browser/context for Room Blocking and preview, no cookie injection or fabricated same-origin responses. Native Tab/Shift+Tab logical order and visible focus, plus 375/768/1280 no-overflow screenshots, are automated technical evidence, not Owner usability acceptance.
+
+[Technical evidence](PROGRESS.md#commercial-preview-room-qa).

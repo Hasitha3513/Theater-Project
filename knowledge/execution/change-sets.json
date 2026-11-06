@@ -7280,5 +7280,42 @@
       "backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java",
       "backend/src/test/java/com/cinenest/BankIntegrationTest.java"
     ]
+  },
+  "consolidatedPreviewRoomQa20261106": {
+    "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+    "requirementIds": [
+      "CN-A12"
+    ],
+    "evidence": "PROGRESS.md#commercial-preview-room-qa",
+    "implementationStatus": "VERIFIED_BOUNDED_SYNTHETIC_PREVIEW_AND_ROOM_QA",
+    "acceptanceStatus": "NOT_ACCEPTED",
+    "sourcePaths": [
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteService.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteController.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/QuoteRules.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyDraftRepository.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyDraftRepository.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialQuotePreview.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/QuoteProfileConfigurationTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialQuotePreviewTest.java",
+      "backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java",
+      "frontend/lib/quotes.ts",
+      "frontend/components/quotes.tsx",
+      "frontend/lib/room-backend.ts",
+      "frontend/app/api/quotes/preview/route.ts",
+      "frontend/tests/quotes.test.mjs",
+      "frontend/tests/quotes-browser.mjs",
+      "frontend/tests/room-blocks-e2e.mjs"
+    ],
+    "testPaths": [
+      "backend/src/test/java/com/cinenest/pricing/internal/QuoteRulesTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/QuoteProfileConfigurationTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialQuotePreviewTest.java",
+      "backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java",
+      "frontend/tests/quotes.test.mjs",
+      "frontend/tests/quotes-browser.mjs",
+      "frontend/tests/room-blocks-e2e.mjs"
+    ]
   }
 }

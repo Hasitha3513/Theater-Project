@@ -4,8 +4,13 @@ import type { Hold } from "../lib/inventory";
 import { venueTime } from "../lib/inventory";
 import { displayMoney } from "../lib/packages";
 import { catalogItems } from "../lib/publications";
-import type { Quote } from "../lib/quotes";
-import { quoteDisclosures, validateQuote } from "../lib/quotes";
+import type { CommercialQuotePreview, Quote } from "../lib/quotes";
+import {
+	commercialPreviewQuery,
+	quoteDisclosures,
+	validateCommercialPreview,
+	validateQuote,
+} from "../lib/quotes";
 import { RoomRequestError, roomRequest, stateFor } from "../lib/rooms";
 import { Button, Card, Field, SelectField, StateMessage } from "./primitives";
 import { QuoteContinuation } from "./quote-handoff";
@@ -16,6 +21,83 @@ type Choice = {
 	name: string;
 	options: { serviceId: string; label: string; mode: string }[];
 };
+export function CommercialPreviewSummary({
+	preview,
+}: {
+	preview: CommercialQuotePreview;
+}) {
+	return (
+		<section
+			aria-label="Commercial policy preview — not an offer"
+			style={{ minWidth: 0, overflowWrap: "anywhere" }}
+		>
+			<h3>Commercial policy preview — not an offer</h3>
+			<p>
+				<strong>{preview.classification}</strong>
+			</p>
+			<p>
+				Read-only synthetic explanation. No quotation, hold, booking, acceptance
+				or payment is created by this preview.
+			</p>
+			<p>
+				{preview.durationMinutes} minutes · {preview.guests} guests ·{" "}
+				{preview.paymentMethod} · {preview.timezone}
+			</p>
+			<p>
+				Venue {preview.venueId} · Room {preview.roomId} · Package{" "}
+				{preview.packageId} · Version {preview.packageVersionId}
+			</p>
+			<p>
+				{venueTime(preview.sessionStart, preview.timezone)} –{" "}
+				{venueTime(preview.sessionEnd, preview.timezone)}
+			</p>
+			<p>
+				Selected add-ons:{" "}
+				{preview.optionalServiceIds.length
+					? preview.optionalServiceIds.join(", ")
+					: "None"}
+			</p>
+			<h4>Known configured components</h4>
+			<dl className="account-summary">
+				{preview.lines.map((line) => (
+					<div key={line.lineId}>
+						<dt>{line.label}</dt>
+						<dd>
+							Quantity {line.quantity} · LKR {displayMoney(line.amountMinor)}
+						</dd>
+					</div>
+				))}
+			</dl>
+			<p>
+				<strong>
+					Known components only: LKR{" "}
+					{displayMoney(preview.knownComponentsMinor)} — not payable.
+				</strong>
+			</p>
+			<p>
+				Missing tax and fees are unresolved, not zero. Reviewed draft values do
+				not establish commercial authority.
+			</p>
+			{preview.policyCandidate ? (
+				<p>
+					Policy candidate {preview.policyCandidate.policyId} · Revision{" "}
+					{preview.policyCandidate.revision} · Draft review status{" "}
+					{preview.policyCandidate.draftReviewStatus} · Hash{" "}
+					{preview.policyCandidate.contentHash}. This draft is not active.
+				</p>
+			) : (
+				<p>No unique applicable policy candidate is available.</p>
+			)}
+			<h4>Commercial readiness blockers</h4>
+			<ul>
+				{preview.blockers.map((blocker) => (
+					<li key={blocker}>{blocker.replaceAll("_", " ")}</li>
+				))}
+			</ul>
+			<p>Commercial issuance, checkout and customer access remain disabled.</p>
+		</section>
+	);
+}
 export function QuoteSummary({ quote }: { quote: Quote }) {
 	return (
 		<section
@@ -74,14 +156,34 @@ export function SyntheticQuotation({
 	const [reviewed, setReviewed] = useState(false);
 	const [busy, setBusy] = useState(false);
 	const [error, setError] = useState<unknown>();
+	const [preview, setPreview] = useState<{
+		context: string;
+		value: CommercialQuotePreview;
+	}>();
 	const pending = useRef<{ path: string; body: string } | undefined>(undefined);
 	const selected = choices?.find((c) => c.versionId === selection);
+	const previewContext = JSON.stringify([
+		venueId,
+		hold.holdId,
+		hold.revision,
+		hold.roomId,
+		hold.sessionStart,
+		hold.sessionEnd,
+		selection,
+		method,
+		[...optional].sort(),
+	]);
+	const currentPreviewContext = useRef(previewContext);
+	currentPreviewContext.current = previewContext;
+	const currentPreview =
+		preview?.context === previewContext ? preview.value : undefined;
 	const changed =
 		!!quote &&
 		(quote.paymentMethod !== method ||
 			JSON.stringify([...quote.optionalServiceIds].sort()) !==
 				JSON.stringify([...optional].sort()));
 	async function load() {
+		setPreview(undefined);
 		setBusy(true);
 		setError(undefined);
 		try {
@@ -110,6 +212,7 @@ export function SyntheticQuotation({
 		}
 	}
 	async function command(action: "create" | "revise" | "accept" | "retry") {
+		setPreview(undefined);
 		if (!pending.current) {
 			if (action === "create" && !selected) return;
 			const path =
@@ -185,6 +288,53 @@ export function SyntheticQuotation({
 			setBusy(false);
 		}
 	}
+	async function inspectCommercialPreview() {
+		if (!selected || pending.current || busy) return;
+		const context = previewContext;
+		const pin = currentPreview?.policyCandidate;
+		setBusy(true);
+		setError(undefined);
+		setPreview(undefined);
+		try {
+			const query = commercialPreviewQuery(
+				{
+					holdId: hold.holdId,
+					expectedHoldRevision: hold.revision,
+					packageId: selected.packageId,
+					packageVersionId: selection,
+					paymentMethod: method,
+					optionalServiceIds: optional,
+				},
+				pin,
+			);
+			const value = validateCommercialPreview(
+				await roomRequest(`/api/quotes/preview?${query}`),
+			);
+			if (currentPreviewContext.current !== context) return;
+			if (
+				value.holdId !== hold.holdId ||
+				value.holdRevision !== hold.revision ||
+				value.venueId !== venueId ||
+				value.roomId !== hold.roomId ||
+				value.packageId !== selected.packageId ||
+				value.packageVersionId !== selection ||
+				value.paymentMethod !== method ||
+				JSON.stringify([...value.optionalServiceIds].sort()) !==
+					JSON.stringify([...optional].sort()) ||
+				Date.parse(value.sessionStart) !== Date.parse(hold.sessionStart) ||
+				Date.parse(value.sessionEnd) !== Date.parse(hold.sessionEnd)
+			)
+				throw new Error("Preview does not match the current selection");
+			setPreview({ context, value });
+		} catch (e) {
+			if (currentPreviewContext.current !== context) return;
+			if (e instanceof RoomRequestError && [401, 403, 404].includes(e.status))
+				setQuote(undefined);
+			setError(e);
+		} finally {
+			setBusy(false);
+		}
+	}
 	return (
 		<Card title="Package choices & quotation" className="booking-quotation">
 			<section id="booking-packages">
@@ -217,6 +367,7 @@ export function SyntheticQuotation({
 							disabled={busy || !!pending.current || !!quote}
 							onChange={(e) => {
 								setSelection(e.target.value);
+								setPreview(undefined);
 								setOptional([]);
 								setReviewed(false);
 							}}
@@ -237,6 +388,7 @@ export function SyntheticQuotation({
 							}
 							onChange={(e) => {
 								setMethod(e.target.value);
+								setPreview(undefined);
 								setReviewed(false);
 							}}
 						>
@@ -262,6 +414,7 @@ export function SyntheticQuotation({
 													: optional.filter((id) => id !== o.serviceId),
 											);
 											setReviewed(false);
+											setPreview(undefined);
 										}}
 									/>
 									{o.label}
@@ -274,6 +427,17 @@ export function SyntheticQuotation({
 						<p>No optional add-ons are listed for this package.</p>
 					)}
 			</section>
+			{!quote && selected && (
+				<Button
+					disabled={busy || !!pending.current}
+					onClick={() => void inspectCommercialPreview()}
+				>
+					Preview commercial policy readiness (read-only)
+				</Button>
+			)}
+			{!quote && currentPreview && (
+				<CommercialPreviewSummary preview={currentPreview} />
+			)}
 			{!quote && selected && (
 				<Button
 					disabled={busy || !!pending.current}

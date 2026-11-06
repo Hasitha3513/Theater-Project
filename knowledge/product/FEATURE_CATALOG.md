@@ -830,3 +830,10 @@ Pricing now includes an immutable versioned commercial planning contract and fai
 Commercial policy drafts: synthetic Admin create/list/read/revise, complete-revision submission, separately authorized domain review and immutable history, with exact venue grants, CSRF, credential epochs, idempotency and audit rollback. Versioned policy proposals do not activate customer issuance, checkout or payments. Technical evidence is linked below; genuine commercial acceptance and human review remain pending.
 
 [Technical evidence](../PROGRESS.md#day05-commercial-policy-drafts).
+
+<a id="commercial-preview-room-qa"></a>
+## Synthetic commercial preview and Room Blocking QA — 2026-11-06
+
+Read-only synthetic commercial-readiness preview reuses the existing room/hold/package workflow, scoped current policy-candidate resolution and checked component arithmetic. It exposes missing commercial decisions without payable totals, new quotes/bookings or payment initiation. Existing synthetic quote create/history/accept remains separate and qualified. Room Blocking QA now records HTTP traces, exact unavailable interval, conflicts, scope denials, focus and responsive evidence. These are technical capabilities, not commercial or Owner acceptance.
+
+[Technical evidence](../PROGRESS.md#commercial-preview-room-qa).

@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -21,11 +22,13 @@ class QuoteService {
     private final PackageConstraints rooms;
     private final ScopedAuthorization identity;
     private final TransactionTemplate tx;
+    private final TransactionTemplate previewTx;
     private final Environment environment;
     private final boolean enabled;
     private final String profile,reference;
     private final long tax;
     private final int rate,seconds;
+    private CommercialPolicyDraftRepository previewPolicies;
     QuoteService(QuoteRepository store,PublicationRepository publications,DraftRepository drafts,QuotationHolds holds,PackageConstraints rooms,ScopedAuthorization identity,PlatformTransactionManager transactions,Environment environment,
         @Value("${cinenest.pricing.synthetic-quotes.enabled:false}") boolean enabled,
         @Value("${cinenest.pricing.synthetic-quotes.tax-profile:}") String profile,
@@ -33,18 +36,20 @@ class QuoteService {
         @Value("${cinenest.pricing.synthetic-quotes.approval-reference:}") String reference,
         @Value("${cinenest.pricing.synthetic-quotes.rate-count:0}") int rate,
         @Value("${cinenest.pricing.synthetic-quotes.rate-seconds:0}") int seconds) {
-        this.store=store;this.publications=publications;this.drafts=drafts;this.holds=holds;this.rooms=rooms;this.identity=identity;this.tx=new TransactionTemplate(transactions);this.environment=environment;this.enabled=enabled;this.profile=profile;this.tax=tax;this.reference=reference;this.rate=rate;this.seconds=seconds;
+        this.store=store;this.publications=publications;this.drafts=drafts;this.holds=holds;this.rooms=rooms;this.identity=identity;this.tx=new TransactionTemplate(transactions);this.previewTx=new TransactionTemplate(transactions);this.previewTx.setReadOnly(true);this.previewTx.setIsolationLevel(org.springframework.transaction.TransactionDefinition.ISOLATION_REPEATABLE_READ);this.environment=environment;this.enabled=enabled;this.profile=profile;this.tax=tax;this.reference=reference;this.rate=rate;this.seconds=seconds;
     }
+    @Autowired void previewPolicies(CommercialPolicyDraftRepository repository){this.previewPolicies=Objects.requireNonNull(repository);}
     private void configured(){var profiles=Set.of(environment.getActiveProfiles());if(!enabled||!(profiles.equals(Set.of("synthetic-quotation"))||profiles.equals(Set.of("local-synthetic","synthetic-quotation")))||!profile.equals("SYNTHETIC_FIXED_MINOR_V1")||tax<0||reference.isBlank()||rate<=0||seconds<=0)throw new DraftFailure(503,"Synthetic quotation profile unavailable; commercial issuance disabled");}
     private void eligible(UUID actor){if(!identity.eligible(actor,true))throw new DraftFailure(403,"Access denied");}
     private QuotationHolds.Facts ownedHold(UUID actor,UUID id,boolean lock){var h=(lock?holds.lockAndInspect(actor,id):holds.locate(id)).orElseThrow(()->new DraftFailure(404,"Hold not found"));if(!h.owner().equals(actor))throw new DraftFailure(404,"Hold not found");return h;}
     private QuoteRepository.Quote owned(UUID actor,UUID id,boolean lock){var q=store.quote(id,lock).orElseThrow(()->new DraftFailure(404,"Quote not found"));if(!q.owner().equals(actor))throw new DraftFailure(404,"Quote not found");return q;}
     private void active(QuotationHolds.Facts h){if(!h.state().equals("ACTIVE")||!store.now().isBefore(h.expires()))throw new DraftFailure(409,"Hold expired or invalidated; select inventory again");}
-    private void compatible(QuotationHolds.Facts h,Map<String,Object> snapshot){
+    private void compatible(QuotationHolds.Facts h,Map<String,Object> snapshot){compatible(h,snapshot,false);}
+    private void compatible(QuotationHolds.Facts h,Map<String,Object> snapshot,boolean preview){
         if(!PublicationService.rooms(snapshot).contains(h.room()))throw new DraftFailure(409,"Package does not cover held room");
         var facts=rooms.inspect(h.venue(),Set.of(h.room()),false,false).orElseThrow(()->new DraftFailure(409,"Room/package configuration invalidated"));
         if(h.guests()>facts.rooms().getFirst().capacity())throw new DraftFailure(409,"Room capacity changed");
-        var rates=drafts.options(h.venue());
+        var rates=preview?previewPolicies.previewOptions(h.venue()):drafts.options(h.venue());
         for(var option:DraftRules.objects(snapshot,"options")) {
             var found=rates.stream().filter(r->r.get("serviceId").toString().equals(option.get("serviceId").toString())&&r.get("rateVersionId").toString().equals(option.get("rateVersionId").toString())).findFirst().orElseThrow(()->new DraftFailure(409,"Service unavailable"));
             if(!facts.rooms().getFirst().facilities().contains(found.get("requiredFacilityCode")))throw new DraftFailure(409,"Service incompatible with held room");
@@ -52,6 +57,27 @@ class QuoteService {
     }
     private Map<String,Object> published(QuotationHolds.Facts h,UUID pkg,UUID version){return publications.catalog(h.venue()).stream().filter(p->p.get("packageId").equals(pkg)&&p.get("versionId").equals(version)&&!h.start().isBefore(Instant.parse(p.get("sessionFrom").toString()))&&!h.end().isAfter(Instant.parse(p.get("sessionTo").toString()))).findFirst().orElseThrow(()->new DraftFailure(409,"Published version no longer applicable"));}
     private UUID policy(){UUID id=UUID.nameUUIDFromBytes((profile+":"+tax+":BANK=0:GATEWAY=0:"+reference).getBytes(StandardCharsets.UTF_8));store.policy(id,profile,tax,reference);return id;}
+    Map<String,Object> preview(UUID actor,Map<String,List<String>> query){
+        configured();
+        var request=CommercialQuotePreview.parse(query);
+        if(previewPolicies==null)throw new DraftFailure(503,"Policy preview unavailable");
+        return previewTx.execute(status->{
+            if(!identity.eligible(actor,false))throw new DraftFailure(403,"Access denied");
+            var h=holds.observe(actor,request.hold()).filter(value->actor.equals(value.owner()))
+                    .orElseThrow(()->new DraftFailure(404,"Hold not found"));
+            active(h);
+            if(h.revision()!=request.holdRevision())throw new DraftFailure(409,"Hold changed; reload inventory");
+            var publication=published(h,request.pkg(),request.version());
+            var snapshot=PublicationService.object(publication,"snapshot");compatible(h,snapshot,true);
+            var candidates=previewPolicies.previewCandidates(h.venue(),request.pkg(),h.start(),h.end());
+            var current=holds.observe(actor,request.hold()).orElseThrow(()->new DraftFailure(409,"Hold changed; reload inventory"));
+            if(!h.equals(current))throw new DraftFailure(409,"Hold changed; reload inventory");
+            active(current);
+            // A preview has no issuance transaction; recheck mutable publication/room facts before the observation returns.
+            published(current,request.pkg(),request.version());compatible(current,snapshot,true);active(current);
+            return CommercialQuotePreview.result(request,current,snapshot,candidates,store.now());
+        });
+    }
     private static String hash(String action,UUID id,Map<String,Object> input){return PublicationService.hash(Map.of("action",action,"target",id==null?"NEW":id.toString(),"input",input));}
     Map<String,Object> command(UUID actor,UUID id,String action,Map<String,Object> input){
         configured();

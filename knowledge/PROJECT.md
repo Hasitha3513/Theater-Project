@@ -1146,3 +1146,12 @@ CN-R1-COMMERCIAL-QUOTE-001: Hasitha Wijerathna selected LKR base250000 minor uni
 Pricing-owned Commercial Policy Draft Management provides venue/package-scoped versioned policy proposals and revision-bound synthetic Finance/Legal/Operations review. Draft review status is not commercial activation or proof of professional approval. Tax, fees, cancellation/refund and effective-period proposals remain inactive; actual venue scope and genuine approvals remain required. commercialIssuanceEnabled=false, checkoutEnabled=false, customerAccessEnabled=false. Existing synthetic quotes, historical accepted quotations and purchases remain preserved. Day05 INCOMPLETE; official acceptance accounting unchanged.
 
 [Technical evidence](PROGRESS.md#day05-commercial-policy-drafts).
+
+<a id="commercial-preview-room-qa"></a>
+## Synthetic commercial preview and Room Blocking QA — 2026-11-06
+
+Synthetic commercial preview is an observation, classified SYNTHETIC_PREVIEW_NOT_OFFER. It shows exact held scope, selected package/add-ons, safe policy-candidate revision/hash and known monetary components; no payable total or commercial authority. Missing or ambiguous policy, tax/fee decisions, equipment/rights and genuine approvals remain explicit blockers. Reviewed V36 drafts are not active commercial policy. No quotation, hold, booking, payment or acceptance is created by preview.
+
+Business readiness matrix: OWNER_SELECTED — existing LKR2500/180minutes/four included guests/max five, additional60minutes LKR1000 and fifth guest LKR800 preferences remain scope-pending. PENDING_OPERATIONAL_VERIFICATION — actual operational venue/room identities, capacities, hours, cleaning/staffing and PS4 availability/rights. PENDING_SPECIALIST_REVIEW — tax, payment fees, cancellation/refunds, privacy/identity duties, banking responsibilities and qualified Finance/Legal/Operations evidence. APPROVED_WITH_EVIDENCE — this exact synthetic-only software implementation authority, not business activation. DEFERRED — production/customer/physical operation until their separate gates. No new business rejection or approval is inferred. Independent release review and emergency egress obligations remain mandatory.
+
+[Technical evidence](PROGRESS.md#commercial-preview-room-qa).

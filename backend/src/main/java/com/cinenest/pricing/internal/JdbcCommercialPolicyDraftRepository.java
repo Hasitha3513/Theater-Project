@@ -1,6 +1,8 @@
 package com.cinenest.pricing.internal;
 
 import com.cinenest.identity.ScopedAuthorization.MatchedGrant;
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.*;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -10,6 +12,32 @@ import com.nimbusds.jose.util.JSONObjectUtils;
 class JdbcCommercialPolicyDraftRepository implements CommercialPolicyDraftRepository {
     private final JdbcClient jdbc;
     JdbcCommercialPolicyDraftRepository(JdbcClient jdbc){this.jdbc=jdbc;}
+ public List<Map<String,Object>> previewOptions(UUID venue){return jdbc.sql("SELECT s.service_id,s.code,s.label,s.required_facility_code,r.rate_version_id,r.revision,r.unit_price_minor FROM cinenest_pricing.service_definition s JOIN cinenest_pricing.service_rate_version r USING(service_id) WHERE s.venue_id=:v AND s.approved=TRUE ORDER BY s.code,r.revision").param("v",venue).query((rs,n)->Map.<String,Object>of("serviceId",rs.getObject(1,UUID.class),"code",rs.getString(2),"label",rs.getString(3),"requiredFacilityCode",rs.getString(4),"rateVersionId",rs.getObject(5,UUID.class),"revision",rs.getLong(6),"unitPriceMinor",Long.toString(rs.getLong(7)),"currency","LKR","pricingBasis","PER_SESSION")).list();}
+    /** One scoped statement over current immutable revisions; never exposes private approval evidence. */
+    public List<CommercialQuotePreview.PolicyCandidate> previewCandidates(UUID venue,UUID packageId,Instant start,Instant end){
+        return jdbc.sql("""
+            SELECT h.policy_id,h.package_id,h.current_revision,r.content_hash,r.effective_from_proposal,
+              r.effective_until_proposal,r.submitted_for_review,cinenest_pricing.commercial_policy_is_complete(r) AS complete,
+              CASE WHEN NOT cinenest_pricing.commercial_policy_is_complete(r) THEN 'INCOMPLETE'
+                WHEN NOT r.submitted_for_review THEN 'DRAFT'
+                WHEN EXISTS(SELECT 1 FROM cinenest_pricing.commercial_policy_review v WHERE v.policy_id=h.policy_id
+                  AND v.revision=h.current_revision AND v.outcome<>'APPROVE') THEN 'REJECTED'
+                WHEN (SELECT count(*) FROM cinenest_pricing.commercial_policy_review v WHERE v.policy_id=h.policy_id
+                  AND v.revision=h.current_revision)=3 THEN 'APPROVED' ELSE 'PENDING_REVIEW' END AS draft_status
+            FROM cinenest_pricing.commercial_policy_draft h JOIN cinenest_pricing.commercial_policy_revision r
+              ON r.policy_id=h.policy_id AND r.revision=h.current_revision
+            WHERE h.venue_id=:venue AND (h.package_id IS NULL OR h.package_id=:package)
+              AND (r.effective_from_proposal IS NULL OR r.effective_from_proposal<=:start)
+              AND (r.effective_until_proposal IS NULL OR r.effective_until_proposal>=:end)
+            ORDER BY h.policy_id LIMIT 2
+            """).param("venue",venue).param("package",packageId).param("start",OffsetDateTime.ofInstant(start,java.time.ZoneOffset.UTC))
+                .param("end",OffsetDateTime.ofInstant(end,java.time.ZoneOffset.UTC)).query((rs,n)->{
+                    OffsetDateTime from=rs.getObject("effective_from_proposal",OffsetDateTime.class),until=rs.getObject("effective_until_proposal",OffsetDateTime.class);
+                    return new CommercialQuotePreview.PolicyCandidate(rs.getObject("policy_id",UUID.class),rs.getLong("current_revision"),
+                            rs.getString("content_hash"),rs.getObject("package_id",UUID.class),from==null?null:from.toInstant(),
+                            until==null?null:until.toInstant(),rs.getString("draft_status"),rs.getBoolean("complete"),rs.getBoolean("submitted_for_review"));
+                }).list();
+    }
     static Map<String,Object> parse(String s){try{return JSONObjectUtils.parse(s);}catch(java.text.ParseException e){throw new IllegalStateException("Invalid persisted policy");}}
     Map<String,Object> row(String sql,Map<String,?> params){return jdbc.sql(sql).params(params).query(String.class).optional().map(JdbcCommercialPolicyDraftRepository::parse).orElseThrow(()->new CommercialPolicyDraft.Failure(404,"Policy unavailable in this venue"));}
     public Optional<Map<String,Object>> replay(UUID actor,UUID venue,UUID key){return jdbc.sql("SELECT to_jsonb(c)::text FROM cinenest_pricing.commercial_policy_command c WHERE actor_id=:a AND venue_id=:v AND idempotency_key=:k").param("a",actor).param("v",venue).param("k",key).query(String.class).optional().map(JdbcCommercialPolicyDraftRepository::parse);}

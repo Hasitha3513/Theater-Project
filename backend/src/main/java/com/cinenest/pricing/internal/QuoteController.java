@@ -17,6 +17,7 @@ class QuoteController {
     private UUID actor(Principal principal){if(principal==null)throw new DraftFailure(401,"Sign-in required");return DraftRules.id(principal.getName());}
     private ResponseEntity<?> ok(Object body){return ResponseEntity.ok().header("Cache-Control","no-store").body(body);}
     @PostMapping("/api/quotes") ResponseEntity<?> create(Principal p,@RequestBody Map<String,Object> body){return ok(service.command(actor(p),null,"CREATE",body));}
+    @GetMapping("/api/quotes/preview") ResponseEntity<?> preview(Principal p,@RequestParam org.springframework.util.MultiValueMap<String,String> query){return ok(service.preview(actor(p),query));}
     @GetMapping("/api/quotes/{quoteId}") ResponseEntity<?> read(Principal p,@PathVariable String quoteId){return ok(service.read(actor(p),DraftRules.id(quoteId)));}
     @PostMapping("/api/quotes/{quoteId}/revisions") ResponseEntity<?> revise(Principal p,@PathVariable String quoteId,@RequestBody Map<String,Object> body){return ok(service.command(actor(p),DraftRules.id(quoteId),"REVISE",body));}
     @PostMapping("/api/quotes/{quoteId}/accept") ResponseEntity<?> accept(Principal p,@PathVariable String quoteId,@RequestBody Map<String,Object> body){return ok(service.command(actor(p),DraftRules.id(quoteId),"ACCEPT",body));}

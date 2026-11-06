@@ -17,6 +17,15 @@ final class QuoteRules {
     }
     static Map<String,Object> calculate(Map<String,Object> pkg,QuotationHolds.Facts hold,Set<UUID> selected,String method,long tax) {
         if(!Set.of("BANK","GATEWAY").contains(method)||tax<0||!"LKR".equals(pkg.get("currency")))throw DraftRules.invalid("synthetic policy");
+        var lines=knownComponents(pkg,hold,selected);
+        line(lines,"METHOD_FEE","CineNest-added "+method+" surcharge (external provider costs not represented)",1,0,Map.of("method",method));
+        line(lines,"SYNTHETIC_TAX","SYNTHETIC FIXED TAX FIXTURE — not Sri Lankan tax policy",1,tax,Map.of("profile","SYNTHETIC_FIXED_MINOR_V1"));
+        long total=0;for(var line:lines)total=DraftRules.add(total,Long.parseLong(line.get("amountMinor").toString()));
+        var result=new LinkedHashMap<String,Object>();result.put("lines",lines);result.put("totalMinor",Long.toString(total));result.put("currency","LKR");result.put("package",pkg);result.put("optionalServiceIds",selected.stream().map(UUID::toString).toList());result.put("paymentMethod",method);result.put("disclosures",DISCLOSURES);result.put("synthetic",true);result.put("commercialIssuance",false);result.put("bookingConfirmed",false);result.put("checkoutEnabled",false);return result;
+    }
+    /** Same package arithmetic and line order used by legacy synthetic quotations; excludes all taxes/fees. */
+    static ArrayList<Map<String,Object>> knownComponents(Map<String,Object> pkg,QuotationHolds.Facts hold,Set<UUID> selected) {
+        if(!"LKR".equals(pkg.get("currency")))throw DraftRules.invalid("package currency");
         long duration=Duration.between(hold.start(),hold.end()).toMinutes();
         if(!hold.start().plusSeconds(Math.multiplyExact(duration,60)).equals(hold.end()))throw DraftRules.invalid("whole-minute duration");
         int included=number(pkg,"includedMinutes"),maximum=number(pkg,"maximumMinutes"),minimum=number(pkg,"minimumMinutes");
@@ -36,10 +45,7 @@ final class QuoteRules {
             line(lines,mode,option.get("label").toString(),quantity,mode.equals("INCLUDED")?0:DraftRules.minor(option.get("unitPriceMinor"),false),option);
         }
         if(!available.containsAll(selected))throw DraftRules.invalid("unavailable optional service");
-        line(lines,"METHOD_FEE","CineNest-added "+method+" surcharge (external provider costs not represented)",1,0,Map.of("method",method));
-        line(lines,"SYNTHETIC_TAX","SYNTHETIC FIXED TAX FIXTURE — not Sri Lankan tax policy",1,tax,Map.of("profile","SYNTHETIC_FIXED_MINOR_V1"));
-        long total=0;for(var line:lines)total=DraftRules.add(total,Long.parseLong(line.get("amountMinor").toString()));
-        var result=new LinkedHashMap<String,Object>();result.put("lines",lines);result.put("totalMinor",Long.toString(total));result.put("currency","LKR");result.put("package",pkg);result.put("optionalServiceIds",selected.stream().map(UUID::toString).toList());result.put("paymentMethod",method);result.put("disclosures",DISCLOSURES);result.put("synthetic",true);result.put("commercialIssuance",false);result.put("bookingConfirmed",false);result.put("checkoutEnabled",false);return result;
+        return lines;
     }
     private static int number(Map<String,Object> pkg,String field){return Math.toIntExact(((Number)pkg.get(field)).longValue());}
     private static void line(List<Map<String,Object>> lines,String kind,String label,long quantity,long unit,Map<String,Object> reference){lines.add(Map.of("lineId",kind+":"+reference.getOrDefault("serviceId",kind),"kind",kind,"label",label,"quantity",quantity,"unitMinor",Long.toString(unit),"amountMinor",Long.toString(DraftRules.multiply(quantity,unit)),"reference",reference));}

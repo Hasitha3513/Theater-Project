@@ -2,8 +2,17 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { createElement as h } from "react";
 import { renderToStaticMarkup as render } from "react-dom/server";
-import { QuoteSummary, SyntheticQuotation } from "../components/quotes.tsx";
-import { quoteDisclosures, validateQuote } from "../lib/quotes.ts";
+import {
+	CommercialPreviewSummary,
+	QuoteSummary,
+	SyntheticQuotation,
+} from "../components/quotes.tsx";
+import {
+	commercialPreviewQuery,
+	quoteDisclosures,
+	validateCommercialPreview,
+	validateQuote,
+} from "../lib/quotes.ts";
 import { forwardQuotes, quoteRoute } from "../lib/room-backend.ts";
 
 const id = "00000000-0000-4000-8000-000000000001";
@@ -132,6 +141,22 @@ test("transport rejects cross-origin writes and preserves scoped cookie CSRF and
 		assert.equal(observed.headers["x-csrf-token"], "SYNTHETIC");
 		assert.equal(observed.body, '{"holdId":"SYNTHETIC"}');
 		assert.doesNotMatch(await result.text(), /private upstream diagnostic/);
+		const previewQuery = commercialPreviewQuery(selection, pin);
+		const previewResult = await forwardQuotes(
+			new Request(`http://localhost/api/quotes/preview?${previewQuery}`, {
+				headers: { cookie: "unrelated=secret; CINENEST_SESSION=SYNTHETIC" },
+			}),
+		);
+		assert.equal(previewResult.status, 409);
+		assert.equal(previewResult.headers.get("cache-control"), "no-store");
+		assert.equal(observed.url, `/api/quotes/preview?${previewQuery}`);
+		assert.equal(observed.body, "");
+		assert.equal(observed.headers.cookie, "CINENEST_SESSION=SYNTHETIC");
+		assert.equal(observed.headers["x-csrf-token"], undefined);
+		assert.doesNotMatch(
+			await previewResult.text(),
+			/private upstream diagnostic/,
+		);
 	} finally {
 		if (before === undefined) delete process.env.CINENEST_AUTH_ORIGIN;
 		else process.env.CINENEST_AUTH_ORIGIN = before;
@@ -246,4 +271,151 @@ test("session, denied, wrong-owner/missing and backend failures return no quote 
 	} finally {
 		globalThis.fetch = before;
 	}
+});
+
+const preview = {
+	classification: "SYNTHETIC_PREVIEW_NOT_OFFER",
+	synthetic: true,
+	commercialIssuanceEnabled: false,
+	checkoutEnabled: false,
+	customerAccessEnabled: false,
+	commerciallyEligible: false,
+	currency: "LKR",
+	holdId: id,
+	holdRevision: 0,
+	venueId: id,
+	roomId: id,
+	packageId: id,
+	packageVersionId: id,
+	paymentMethod: "BANK",
+	optionalServiceIds: [],
+	durationMinutes: 180,
+	guests: 4,
+	sessionStart: "2030-02-02T04:30:00Z",
+	sessionEnd: "2030-02-02T07:30:00Z",
+	timezone: "Asia/Colombo",
+	holdExpiresAt: "2026-11-06T12:10:00Z",
+	serverNow: "2026-11-06T12:00:00Z",
+	knownComponentsMinor: "250000",
+	lines: [
+		{
+			lineId: "BASE",
+			kind: "BASE",
+			label: "Synthetic package component",
+			quantity: 1,
+			unitMinor: "250000",
+			amountMinor: "250000",
+		},
+	],
+	policyCandidate: null,
+	blockers: ["POLICY_NOT_CONFIGURED", "COMMERCIAL_ISSUANCE_DISABLED"],
+};
+const pin = {
+	policyId: id,
+	revision: "3",
+	contentHash: "b".repeat(64),
+	draftReviewStatus: "APPROVED",
+	scopeKind: "VENUE",
+	packageId: null,
+	effectiveFromProposal: null,
+	effectiveUntilProposal: null,
+};
+const selection = {
+	holdId: id,
+	expectedHoldRevision: 0,
+	packageId: id,
+	packageVersionId: id,
+	paymentMethod: "BANK",
+	optionalServiceIds: [],
+};
+test("read-only preview selection binds hold, package, add-ons and optional exact policy revision/hash", () => {
+	const query = commercialPreviewQuery(selection, pin);
+	assert.equal(query.get("expectedHoldRevision"), "0");
+	assert.equal(query.get("optionalServiceIds"), "");
+	assert.equal(query.get("policyRevision"), "3");
+	assert.equal(query.get("policyContentHash"), pin.contentHash);
+	for (const bad of [
+		{ ...selection, expectedHoldRevision: -1 },
+		{ ...selection, paymentMethod: "CASH" },
+		{ ...selection, optionalServiceIds: [id, id] },
+		{ ...selection, packageVersionId: "unknown" },
+	])
+		assert.throws(() => commercialPreviewQuery(bad));
+	assert.throws(() =>
+		commercialPreviewQuery(selection, { ...pin, contentHash: "bad" }),
+	);
+});
+test("non-offer preview validates exact components and unresolved policy without issuing quotation", () => {
+	assert.equal(validateCommercialPreview(preview), preview);
+	assert.equal(
+		validateCommercialPreview({ ...preview, policyCandidate: pin })
+			.commerciallyEligible,
+		false,
+	);
+	for (const bad of [
+		{ ...preview, quoteId: id },
+		{ ...preview, totalMinor: "250000" },
+		{ ...preview, commerciallyEligible: true },
+		{ ...preview, commercialIssuanceEnabled: true },
+		{ ...preview, checkoutEnabled: true },
+		{ ...preview, customerAccessEnabled: true },
+		{ ...preview, blockers: [] },
+		{ ...preview, knownComponentsMinor: "250001" },
+		{ ...preview, lines: [{ ...preview.lines[0], quantity: 2 }] },
+		{ ...preview, knownComponentsMinor: "9223372036854775808" },
+		{ ...preview, policyCandidate: { ...pin, grantId: id } },
+		{
+			...preview,
+			policyCandidate: {
+				...pin,
+				scopeKind: "PACKAGE",
+				packageId: "00000000-0000-4000-8000-000000000002",
+			},
+		},
+		{ ...preview, durationMinutes: 181 },
+		{ ...preview, timezone: "invalid" },
+	])
+		assert.throws(() => validateCommercialPreview(bad));
+});
+test("preview review separates known components from unknown fees and activation authority", () => {
+	const html = render(
+		h(CommercialPreviewSummary, {
+			preview: { ...preview, policyCandidate: pin },
+		}),
+	);
+	for (const text of [
+		"SYNTHETIC_PREVIEW_NOT_OFFER",
+		"not payable",
+		"unresolved, not zero",
+		"This draft is not active",
+		"POLICY NOT CONFIGURED",
+		"Revision 3",
+		pin.contentHash,
+	])
+		assert.ok(html.includes(text));
+	assert.doesNotMatch(html, /<button|Accept synthetic|Pay now|Confirm booking/);
+});
+test("preview proxy accepts only exact read-only selection keys and never supplied authority", async () => {
+	const valid = `http://localhost/api/quotes/preview?${commercialPreviewQuery(selection)}`;
+	assert.equal(quoteRoute("/api/quotes/preview", "GET"), true);
+	assert.equal(quoteRoute("/api/quotes/preview", "POST"), false);
+	for (const url of [
+		`${valid}&unknown=1`,
+		`${valid}&holdId=${id}`,
+		valid.replace("expectedHoldRevision=0&", ""),
+		`${valid}&policyId=${id}`,
+	])
+		assert.equal((await forwardQuotes(new Request(url))).status, 400);
+	assert.equal(
+		(
+			await forwardQuotes(
+				new Request(valid, { headers: { "x-role": "ADMIN" } }),
+			)
+		).status,
+		400,
+	);
+	assert.equal(
+		(await forwardQuotes(new Request(valid, { method: "POST" }))).status,
+		404,
+	);
 });
