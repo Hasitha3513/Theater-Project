@@ -144,7 +144,12 @@ async function forwardConfigured(
 		});
 		const out = new Headers({ "Cache-Control": "no-store" });
 		if (
-			![200, 201, 400, 401, 403, 404, 409, 429, 503].includes(response.status)
+			![200, 201, 400, 401, 403, 404, 409, 429, 503].includes(
+				response.status,
+			) &&
+			!(
+				response.status === 413 && url.pathname.includes("/commercial-policies")
+			)
 		)
 			return new Response(null, { status: 502, headers: out });
 		if (!response.ok)
@@ -426,4 +431,30 @@ export async function forwardHardware(request: Request): Promise<Response> {
 	} catch {
 		return fail(502);
 	}
+}
+
+// Exact non-activating Commercial Policy routes; existing session/CSRF transport only.
+export async function forwardCommercialPolicies(
+	request: Request,
+): Promise<Response> {
+	const { policyRoute } = await import("./commercial-policies");
+	const url = new URL(request.url);
+	if (!policyRoute(url.pathname, request.method))
+		return new Response(null, { status: 404 });
+	if (
+		[...url.searchParams].some(([k]) => !["q", "page", "size"].includes(k)) ||
+		["q", "page", "size"].some((k) => url.searchParams.getAll(k).length > 1)
+	)
+		return new Response(null, { status: 400 });
+	if (
+		[
+			"authorization",
+			"x-role",
+			"x-permission",
+			"x-venue-id",
+			"x-account-id",
+		].some((k) => request.headers.has(k))
+	)
+		return new Response(null, { status: 400 });
+	return forwardConfigured(request, policyRoute);
 }

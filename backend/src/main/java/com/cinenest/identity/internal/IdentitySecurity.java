@@ -113,6 +113,7 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.GET,
                     "/api/accounts/me", "/api/accounts/{accountId}", "/api/session/csrf").authenticated()
                 .requestMatchers("/api/admin/venues/*/packages/*/publication-preview", "/api/admin/venues/*/packages/*/publications", "/api/admin/venues/*/packages/*/publications/*", "/api/admin/venues/*/packages/*/publications/*/deactivate", "/api/admin/venues/*/packages/*/publications/*/retry").authenticated()
+                .requestMatchers("/api/admin/venues/*/commercial-policies", "/api/admin/venues/*/commercial-policies/*", "/api/admin/venues/*/commercial-policies/*/history", "/api/admin/venues/*/commercial-policies/*/reviews").authenticated()
                 .requestMatchers("/api/admin/venues/*/packages", "/api/admin/venues/*/packages/*", "/api/admin/venues/*/packages/*/draft", "/api/admin/venues/*/packages/*/duplicate", "/api/admin/venues/*/packages/*/preview", "/api/admin/venues/*/packages/*/history", "/api/admin/venues/*/package-options").authenticated()
                 .requestMatchers("/api/admin/venues/*/banner-assets", "/api/admin/venues/*/banners", "/api/admin/venues/*/banners/*", "/api/admin/venues/*/banners/*/preview", "/api/admin/venues/*/banners/*/revisions", "/api/admin/venues/*/banners/*/publications", "/api/admin/venues/*/banners/*/unpublish").authenticated()
                 .requestMatchers("/api/admin/venues", "/api/admin/venues/*", "/api/admin/venues/*/rooms", "/api/admin/venues/*/rooms/*").authenticated()

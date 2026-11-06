@@ -27,6 +27,7 @@ export const adminNavigation = [
 	["/admin/reports/bank", "Bank report"],
 	["/admin/notifications", "Notification queue"],
 	["/admin/settings/packages", "Package drafts"],
+	["/admin/settings/commercial-policies", "Commercial policy drafts"],
 ] as const;
 
 export function adminSection(path: string) {

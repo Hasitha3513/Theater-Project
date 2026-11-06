@@ -7224,5 +7224,61 @@
     "runtimeGrants": false,
     "migrations": false,
     "facebook": "HOLD"
+  },
+  "commercialPolicyDraftManagement20261106": {
+    "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+    "requirementIds": [
+      "CN-A12"
+    ],
+    "evidence": "PROGRESS.md#day05-commercial-policy-drafts",
+    "implementationStatus": "VERIFIED_BOUNDED_SYNTHETIC_DRAFT_MANAGEMENT",
+    "acceptanceStatus": "NOT_ACCEPTED",
+    "sourcePaths": [
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyDraft.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyDraftRules.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyDraftRepository.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyDraftRepository.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyDraftService.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyDraftController.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/DeniedCommercialPolicyAudit.java",
+      "backend/src/main/java/com/cinenest/identity/ScopedAuthorization.java",
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java",
+      "frontend/app/admin/settings/commercial-policies/page.tsx",
+      "frontend/components/commercial-policies.tsx",
+      "frontend/lib/commercial-policies.ts",
+      "frontend/app/api/admin/venues/[venueId]/commercial-policies/route.ts",
+      "frontend/app/api/admin/venues/[venueId]/commercial-policies/[policyId]/route.ts",
+      "frontend/app/api/admin/venues/[venueId]/commercial-policies/[policyId]/history/route.ts",
+      "frontend/app/api/admin/venues/[venueId]/commercial-policies/[policyId]/reviews/route.ts",
+      "frontend/lib/navigation.ts",
+      "frontend/lib/room-backend.ts",
+      "frontend/package.json",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyDraftRulesTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyDraftServiceTest.java",
+      "backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java",
+      "backend/src/test/java/com/cinenest/CommercialPolicyDraftArchitectureTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CommercialPolicyDraftSecurityTest.java",
+      "frontend/tests/commercial-policies.test.mjs",
+      "frontend/tests/commercial-policies-browser.mjs",
+      "backend/src/main/resources/db/migration/V36__commercial_policy_drafts.sql",
+      "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java"
+    ],
+    "testPaths": [
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyDraftRulesTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyDraftServiceTest.java",
+      "backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java",
+      "backend/src/test/java/com/cinenest/CommercialPolicyDraftArchitectureTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CommercialPolicyDraftSecurityTest.java",
+      "frontend/tests/commercial-policies.test.mjs",
+      "frontend/tests/commercial-policies-browser.mjs",
+      "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/LocalCustomerIdentityTest.java",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java"
+    ]
   }
 }

@@ -292,7 +292,7 @@
       "path": "ARCHITECTURE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "fb28692485811fb553f5a059b4c5fc9ff26af7aa93908c4e2c33b0a85419134e",
+      "sha256": "bfb14f1fbd83f349c8aa28d3e079b4527d158a21f8357961dea00d31c520100b",
       "authority": "canonical-prose"
     },
     {
@@ -404,7 +404,7 @@
       "path": "DESIGN.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "56dada6b771690c12d06dee14ffd1908a3268a6aa9fb89d4ff53a01d0d2b4b0f",
+      "sha256": "c69ef939bb96335c4cf76e9cf04ae7e2357518612be220a16b61459b807865aa",
       "authority": "canonical-prose"
     },
     {
@@ -418,14 +418,14 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "66e3506a780f9f669f99852fb45220043a7b906d7601a56ad569733f5541342e",
+      "sha256": "3943c0a70831d456c14e88fc8265779ba477015cbfb613a3991c101e2a86334a",
       "authority": "canonical-prose"
     },
     {
       "path": "PROJECT.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "9736c15b9894ac9a44931702c3c12fa7f5756311bc6875e5698a93c789c2115c",
+      "sha256": "2b497b9b32afcb5ac7bbe4279d0da2928543342762ae0e919368bf2b582adcb3",
       "authority": "canonical-prose"
     },
     {
@@ -467,7 +467,7 @@
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "b0249241321cf2762c01e153d24f06366e5890049b7b518b425ed30a36b01cc8",
+      "sha256": "19fb6a7bec2b8dd09e9a08b2065496ed9990118408f9fa9484aa9ebec79cf358",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -544,7 +544,7 @@
       "path": "execution/requirements.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "87aec117dae7c8aa37de6e46d23c2d76763f2dd545e7239505db7a348f4a89f8",
+      "sha256": "26046628f04a7419e26e39ffe2d47e829c73ed380fa675ab837e3b896f525570",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -558,28 +558,28 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "383f1fe83bcc0c5286083a9b1c505f56c9231a66ae8e7a00e0951eae1e547af7",
+      "sha256": "b03e9a598d69e6514a9444952dad212d122187fd84d8209e4148f973b08dff67",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/test-plan.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "63f2dd1237a222dfe9f6c4d9d27dc0db7de88f096da59357d050685357f83f9f",
+      "sha256": "94a279919fbb6969f4c9f54d2c51390ae32a7ede6a4bb46b0e48bec57eab8a1c",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "7634ef76edeb240c872fa923ebe211a7f5188f735c878dc0655790d8071823ab",
+      "sha256": "65f39f56f3e5286c22c2a1e4c73d4baad9e3fc8033105655ba1b57689b374846",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "guides/USER_GUIDE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "cf31d70c915464ef244801bc9e2f6d3ea03506e408c0c17cb1617d3a95b404bb",
+      "sha256": "3496dd66a91b11f6b0a684d2aa0043b0cc1d6bee5d97733a8c2b2c1c5250db80",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -592,7 +592,7 @@
       "path": "product/FEATURE_CATALOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "c74fe15e755c4f9aec652e6f3bd16bfe451a4d9590a48229d5dc5cc08c781b73",
+      "sha256": "a00a5065210983de146b0aecba28a90e1b3cd39f05790532b124fb1167ae672c",
       "authority": "structured-asset-or-evidence"
     },
     {

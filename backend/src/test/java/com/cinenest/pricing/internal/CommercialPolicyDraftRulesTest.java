@@ -1,0 +1,17 @@
+package com.cinenest.pricing.internal;
+import java.util.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import static org.assertj.core.api.Assertions.*;
+class CommercialPolicyDraftRulesTest {
+ static Map<String,Object> draft(){var d=new LinkedHashMap<String,Object>();for(String k:CommercialPolicyDraft.FIELDS)d.put(k,null);d.put("title","Synthetic policy");for(String k:List.of("taxApplicability","taxType","taxTreatment","taxBasis","taxRounding","cancellationEligibility","noShowTreatment","exceptionHandling","refundEligibility","refundCalculation","refundBasis","refundDestination"))d.put(k,"UNRESOLVED");d.put("exceptionNotes","");d.put("cancellationTimeBasis","VENUE_TIMEZONE");for(String k:List.of("paymentMethods","feeChannels","fees","suppliedReferences"))d.put(k,List.of());d.put("submittedForReview",false);return d;}
+ @Test void unresolvedDraftIsNotAnApproval(){var d=CommercialPolicyDraftRules.document(draft());assertThat(d.get("taxApplicability")).isEqualTo("UNRESOLVED");assertThat(CommercialPolicyDraft.flags()).containsEntry("commercialIssuanceEnabled",false).containsEntry("checkoutEnabled",false).containsEntry("customerAccessEnabled",false);}
+ @ParameterizedTest @ValueSource(strings={"actorId","grantId","revision","contentHash","commercialIssuanceEnabled","script","formula"}) void rejectsUntrustedFields(String field){var d=draft();d.put(field,"forged");assertThatThrownBy(()->CommercialPolicyDraftRules.document(d)).isInstanceOf(CommercialPolicyDraft.Failure.class);}
+ @ParameterizedTest @ValueSource(strings={"-1","1.5","01","1e2","9223372036854775808",""," ","NaN"}) void rejectsUnsafeMoney(String value){var d=draft();d.put("taxAmountMinor",value);assertThatThrownBy(()->CommercialPolicyDraftRules.document(d)).isInstanceOf(CommercialPolicyDraft.Failure.class);}
+ @Test void preservesLargestExactMinorUnitValue(){var d=draft();d.put("taxAmountMinor","9223372036854775807");assertThat(CommercialPolicyDraftRules.document(d).get("taxAmountMinor")).isEqualTo("9223372036854775807");}
+ @Test void rejectsFeeExpression(){var d=draft();d.put("paymentMethods",List.of("BANK"));d.put("feeChannels",List.of("ONLINE"));d.put("fees",List.of(Map.of("method","BANK","channel","ONLINE","type","NONE","amountMinor","0","currency","LKR","refundability","REFUNDABLE","expression","execute")));assertThatThrownBy(()->CommercialPolicyDraftRules.document(d)).isInstanceOf(CommercialPolicyDraft.Failure.class);}
+ @Test void rejectsDuplicateFeesAndMethods(){var d=draft();d.put("paymentMethods",List.of("BANK","BANK"));assertThatThrownBy(()->CommercialPolicyDraftRules.document(d)).isInstanceOf(CommercialPolicyDraft.Failure.class);}
+ @Test void rejectsReversedInterval(){var d=draft();d.put("effectiveFromProposal","2030-01-02T00:00:00Z");d.put("effectiveUntilProposal","2030-01-01T00:00:00Z");assertThatThrownBy(()->CommercialPolicyDraftRules.document(d)).isInstanceOf(CommercialPolicyDraft.Failure.class);}
+ @Test void keyOrderDoesNotChangeIdempotencyHash(){var a=new LinkedHashMap<String,Object>();a.put("a","1");a.put("b",draft());var b=new LinkedHashMap<String,Object>();b.put("b",draft());b.put("a","1");assertThat(CommercialPolicyDraftRules.hash(a)).isEqualTo(CommercialPolicyDraftRules.hash(b));b.put("a","2");assertThat(CommercialPolicyDraftRules.hash(a)).isNotEqualTo(CommercialPolicyDraftRules.hash(b));}
+}

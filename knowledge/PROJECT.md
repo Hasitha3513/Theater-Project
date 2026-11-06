@@ -1139,3 +1139,10 @@ Non-waivable controls:legitimate issuer authentication,exact-venue RBAC/ABAC,CSR
 ## Day05 initial venue commercial preferences — bounded planning
 
 CN-R1-COMMERCIAL-QUOTE-001: Hasitha Wijerathna selected LKR base250000 minor units, included180minutes/four guests, maximum five guests, each additional60minutes100000minor, fifth guest80000minor and optional PS4 per-session100000minor subject to equipment availability and applicable usage rights. Online fee10000minor is subject to Finance review;cleaning buffer15minutes is subject to approved operating constraints. These are Owner preferences for the initial venue,not active commercial prices. Configuration DAY05_INITIAL_VENUE_COMMERCIAL_V1/version1 remains OWNER_PREFERENCES_APPROVED_SCOPE_PENDING. Actual venue/room IDs,maximum selectable duration,effective date,tax,cancellation/refund/legal terms,required Finance/Legal/operational approvals and PS4 equipment/rights remain unresolved. No synthetic UAT identity is promoted to the commercial venue. Existing bounded arithmetic/add-on policies remain;no historical global decision is closed. [Offline contract](ARCHITECTURE.md#day05-commercial-offline-contract),[evidence](PROGRESS.md#day05-commercial-offline-publication).
+
+<a id="day05-commercial-policy-drafts"></a>
+## Day05 commercial policy drafts — bounded synthetic implementation
+
+Pricing-owned Commercial Policy Draft Management provides venue/package-scoped versioned policy proposals and revision-bound synthetic Finance/Legal/Operations review. Draft review status is not commercial activation or proof of professional approval. Tax, fees, cancellation/refund and effective-period proposals remain inactive; actual venue scope and genuine approvals remain required. commercialIssuanceEnabled=false, checkoutEnabled=false, customerAccessEnabled=false. Existing synthetic quotes, historical accepted quotations and purchases remain preserved. Day05 INCOMPLETE; official acceptance accounting unchanged.
+
+[Technical evidence](PROGRESS.md#day05-commercial-policy-drafts).

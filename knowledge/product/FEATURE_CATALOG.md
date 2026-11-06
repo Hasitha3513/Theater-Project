@@ -823,3 +823,10 @@ Identity now provides the V35 transactional capability/consumption/version/audit
 ## Day05 commercial configuration — internal offline planning only
 
 Pricing now includes an immutable versioned commercial planning contract and fail-closed assessment rules. This is source-level offline capability only:no Admin/customer UI,commercial quote issuance,endpoint,persistence or activation. Pending approvals and caller-supplied review references never establish commercial authority;known package components are not payable totals. Existing synthetic quotations and accepted/purchased history are preserved. [Owner preferences](../PROJECT.md#day05-commercial-owner-preferences),[architecture](../ARCHITECTURE.md#day05-commercial-offline-contract),[evidence](../PROGRESS.md#day05-commercial-offline-publication).
+
+<a id="day05-commercial-policy-drafts"></a>
+## Day05 commercial policy drafts — bounded synthetic implementation
+
+Commercial policy drafts: synthetic Admin create/list/read/revise, complete-revision submission, separately authorized domain review and immutable history, with exact venue grants, CSRF, credential epochs, idempotency and audit rollback. Versioned policy proposals do not activate customer issuance, checkout or payments. Technical evidence is linked below; genuine commercial acceptance and human review remain pending.
+
+[Technical evidence](../PROGRESS.md#day05-commercial-policy-drafts).

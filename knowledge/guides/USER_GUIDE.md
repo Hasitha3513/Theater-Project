@@ -514,3 +514,10 @@ Synthetic Smart Lock Registration accepts only the existing approved versioned s
 For a room binding, inspect the current device, enter the exact room reference and Load room assignments. The returned room configuration and device metadata revision bind the new qualification assignment. Select Create qualification assignment only with separately authorized exact-venue permissions; stale/conflict/denial responses require fresh authoritative context. Reload/inspect the assignment; a registry device alone does not prove room binding or absence of an assignment elsewhere. Existing assignments cannot be replaced or released by M1.
 
 All assignments remain UNQUALIFIED and customer access disabled. Connection tests, compatibility verification and activation controls are disabled. No provider discovery, monitoring, PIN generation, lock command or physical safety qualification exists. Log out when finished; scope/session changes clear protected state. [Technical evidence and limits](../PROGRESS.md#hardware-management-m1-publication).
+
+<a id="day05-commercial-policy-drafts"></a>
+## Day05 commercial policy drafts — bounded synthetic implementation
+
+In an explicitly authorized synthetic environment, log in legitimately, open Administration → Settings → Commercial Policies, select an authorized venue, then Load policy drafts. Choose New draft, enter supported structured fields and an attributable reason; unresolved values are not approvals. Save draft; reload to inspect the server revision and immutable history. Submit a complete revision for review, then an independently authorized synthetic domain reviewer may record a revision/hash-bound outcome with evidence reference. Authors cannot approve their own policy. A reference string alone grants no authority. On conflict reload and compare; after session expiry log in again. For an uncertain write inspect saved history before another command. Reviewed draft remains inactive; no Publish/Activate action exists. Synthetic reviewer outcomes are test evidence, not genuine Finance/Legal/Operations approval.
+
+[Technical evidence](../PROGRESS.md#day05-commercial-policy-drafts).
