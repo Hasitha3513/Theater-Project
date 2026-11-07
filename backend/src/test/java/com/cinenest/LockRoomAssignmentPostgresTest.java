@@ -102,7 +102,7 @@ class LockRoomAssignmentPostgresTest {
             String replay=command(UUID.randomUUID(),devices[3]);var x=pool.submit(()->post(operator,venue,rooms[2],replay,true));var y=pool.submit(()->post(operator,venue,rooms[2],replay,true));var xx=x.get(10,TimeUnit.SECONDS);var yy=y.get(10,TimeUnit.SECONDS);assertThat(List.of(xx.statusCode(),yy.statusCode())).containsExactlyInAnyOrder(201,200);assertThat(JSONObjectUtils.parse(xx.body()).get("assignmentId")).isEqualTo(JSONObjectUtils.parse(yy.body()).get("assignmentId"));
         }finally{pool.shutdownNow();}
         jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=revision+1 WHERE account_id=:actor").param("actor",LockRegistryIntegrationTest.A).update();
-        assertThat(reader.get(path(venue,rooms[0])).statusCode()).isEqualTo(403);
+        assertThat(reader.get(path(venue,rooms[0])).statusCode()).isEqualTo(401);
         jdbc.sql("UPDATE cinenest_identity.account SET eligibility='ELIGIBLE',revision=revision+1 WHERE account_id=:actor").param("actor",LockRegistryIntegrationTest.A).update();
         int before=count("lock_room_assignment"),receipts=count("lock_room_assignment_command"),audits=count("lock_room_assignment_audit");
         UUID unusedDevice=Arrays.stream(devices).filter(d -> jdbc.sql("SELECT count(*) FROM cinenest_iot.lock_room_assignment WHERE device_id=:d").param("d",d).query(Integer.class).single()==0).findFirst().orElseThrow();

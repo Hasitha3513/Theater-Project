@@ -218,10 +218,15 @@ class CommercialQuotePreviewPostgresTest {
         var protectedInterval=json(authenticated.request("GET","/api/rooms/"+id("room")+"/availability?sessionStartLocal=2030-02-03T10:00&durationMinutes=180&guests=4",null,false),200);assertThat(protectedInterval.get("available")).isEqualTo(false);
         assertThat(authenticated.write("POST","/api/holds",Map.of("roomId",ids.get("room"),"sessionStartLocal","2030-02-03T10:00","durationMinutes",180,"guests",4,"expectedConfiguration",protectedInterval.get("configuration"),"idempotencyKey",UUID.randomUUID().toString())).statusCode()).isEqualTo(409);
         String noWriteBefore=quoteCounts();String bookingBefore=scalar("SELECT count(*) FROM cinenest_booking.booking");
-        var previewHold=hold(authenticated,"2030-02-02T10:00");String holdCountBefore=scalar("SELECT count(*) FROM cinenest_booking.reservation_hold");
-        flags(json(authenticated.request("GET",query(previewHold),null,false),200));
+        String browserHoldSnapshot="SELECT coalesce(jsonb_agg(to_jsonb(h) ORDER BY hold_id),'[]'::jsonb)::text FROM cinenest_booking.reservation_hold h WHERE owner_id='"+id("creator")+"' AND state='ACTIVE'";
+        String browserHoldBefore=scalar(browserHoldSnapshot);
+        var auditCustomer=new Browser();
+        auditCustomer.login("finance");
+        var previewHold=hold(auditCustomer,"2030-02-04T10:00");String holdCountBefore=scalar("SELECT count(*) FROM cinenest_booking.reservation_hold");
+        flags(json(auditCustomer.request("GET",query(previewHold),null,false),200));
         assertThat(quoteCounts()).isEqualTo(noWriteBefore);assertThat(scalar("SELECT count(*) FROM cinenest_booking.booking")).isEqualTo(bookingBefore);assertThat(scalar("SELECT count(*) FROM cinenest_booking.reservation_hold")).isEqualTo(holdCountBefore);
-        release(authenticated,previewHold);
+        release(auditCustomer,previewHold);
+        assertThat(scalar(browserHoldSnapshot)).isEqualTo(browserHoldBefore);
         String policyBefore=scalar("SELECT jsonb_build_array((SELECT count(*) FROM cinenest_pricing.commercial_policy_draft),(SELECT count(*) FROM cinenest_pricing.commercial_policy_revision),(SELECT count(*) FROM cinenest_pricing.commercial_policy_command),(SELECT count(*) FROM cinenest_pricing.commercial_policy_audit))::text");
         sql("ALTER TABLE cinenest_pricing.commercial_policy_audit ADD CONSTRAINT task_preview_audit_fault CHECK(FALSE) NOT VALID");
         try{assertThat(authenticated.write("POST",path(null),create()).statusCode()).isEqualTo(503);}finally{sql("ALTER TABLE cinenest_pricing.commercial_policy_audit DROP CONSTRAINT task_preview_audit_fault");}

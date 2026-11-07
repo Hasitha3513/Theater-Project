@@ -156,12 +156,24 @@ class CommercialPolicyDraftPostgresTest {
         try{rejected(repeatable,tables("TRUNCATE TABLE "),"23514");rejected(serializable,tables("TRUNCATE TABLE "),"23514");assertThat(cleanHistorySnapshot()).isEqualTo(snapshot);}finally{repeatable.close();repeatable=null;serializable.close();serializable=null;}
     }
     @Test @Order(5) void populatedTruncateCascadeUpdateAndDeleteRejectedWithoutLoss()throws Exception {
-        String before=historySnapshot();
-        try(var c=db()){
+        String upgradeBefore=historySnapshot();
+        String protectedBefore=cleanHistorySnapshot();
+        assertThat(protectedBefore).isEqualTo(snapshot);
+        try(var c=connection(cleanUrl)){
+            assertThat(scalar(c,"SELECT current_database()")).isEqualTo("cinenest_test");
+            assertThat(scalar(c,"SELECT max(version::int) FROM flyway_schema_history WHERE success")).isEqualTo("36");
+            var counts=new LinkedHashMap<String,String>();
+            for(String table:List.of("draft","revision","review","command","audit")){
+                counts.put(table,scalar(c,"SELECT count(*) FROM cinenest_pricing.commercial_policy_"+table));
+            }
+            assertThat(counts).containsEntry("audit","1");
+            observe("Populated V36 clean database protected history","one committed audit row",counts);
             rejected(c,tables("TRUNCATE TABLE "),"23514");rejected(c,"TRUNCATE cinenest_identity.account CASCADE","23514");
             for(String t:List.of("revision","review","command","audit")){rejected(c,"UPDATE cinenest_pricing.commercial_policy_"+t+" SET "+(t.equals("revision")?"title=title":"reason=reason"),"23514");rejected(c,"DELETE FROM cinenest_pricing.commercial_policy_"+t,"23514");}
         }
-        assertThat(historySnapshot()).isEqualTo(before);assertThat(scalar("SELECT count(*) FROM cinenest_identity.manual_customer")).isEqualTo("5");
+        assertThat(cleanHistorySnapshot()).isEqualTo(protectedBefore);
+        assertThat(historySnapshot()).isEqualTo(upgradeBefore);
+        assertThat(scalar("SELECT count(*) FROM cinenest_identity.manual_customer")).isEqualTo("5");
     }
     @Test @Order(6) void authenticatedCrudReplayConcurrencyAndReview()throws Exception {
         var b=browser("creator");var request=create();var receipt=json(b.write("POST",path(null),request),201);var p=UUID.fromString(receipt.get("policyId").toString());
@@ -206,7 +218,10 @@ class CommercialPolicyDraftPostgresTest {
         var browser=new ProcessBuilder(node,"tests/commercial-policies-browser.mjs").directory(repo.resolve("frontend").toFile()).redirectErrorStream(true).redirectOutput(run.resolve("browser.log").toFile());browser.environment().put("CINENEST_COMMERCIAL_BROWSER","AUTHORIZED");browser.environment().put("CINENEST_COMMERCIAL_ORIGIN",origin);browserProcess=browser.start();assertThat(browserProcess.waitFor(240,TimeUnit.SECONDS)).as("Bounded browser deadline").isTrue();assertThat(browserProcess.exitValue()).as(Files.readString(run.resolve("browser.log"))).isZero();
     }
     @Test @Order(10) void sessionExpiryAndFinalFlagsPreserveExistingSnapshots()throws Exception {
-        var b=browser("outsider");assertThat(b.request("GET","/api/admin/venues/"+ids.get("otherVenue")+"/commercial-policies",null,false).statusCode()).isEqualTo(200);
+        ensureBackend();
+        var b=new Browser();
+        b.login("outsider");
+        assertThat(b.request("GET","/api/admin/venues/"+ids.get("otherVenue")+"/commercial-policies",null,false).statusCode()).isEqualTo(200);
         String beforeExpiry=scalar("SELECT jsonb_build_array((SELECT count(*) FROM cinenest_pricing.commercial_policy_revision),(SELECT count(*) FROM cinenest_pricing.commercial_policy_review),(SELECT count(*) FROM cinenest_pricing.commercial_policy_command))::text");
         long expiryStarted=System.nanoTime();Thread.sleep(125000);
         assertThat(b.request("GET","/api/admin/venues/"+ids.get("otherVenue")+"/commercial-policies",null,false).statusCode()).isEqualTo(401);

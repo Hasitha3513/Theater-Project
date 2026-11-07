@@ -3738,3 +3738,9 @@ The subsequent corrected run `cn-v37-bkkst07t` passed clean V37 and populated V3
 ## V37 Bank schema-head CI correction
 
 CI run 42387848051 on the original V37 candidate reported 1,393 tests, one failure, zero errors and 73 skips. The Bank synthetic-report test expected current Flyway head V36 and observed V37 after its audit and allocation assertions. The test now expects V37 for this current-schema check. Historical targets, financial assertions and migration bytes are preserved. Test compilation and 151 service-free regressions passed. The corrected Bank PostgreSQL method was not executed locally. Candidate CI and opt-in compatibility coverage remain separate. The original V37 record and acceptance accounting are unchanged.
+
+<a id="day05-v37-optin-recovery"></a>
+
+## V37 opt-in regression recovery
+
+Run cn-v37-optin-c1e15299a87e passed Commercial Preview 7/7, with zero failures, errors or skips. Retained run cn-v37-optin-fb98699d5c94 passed Commercial Draft 10/10 and 24 browser checks. Draft verified fresh-login idle-session expiry, expired and revoked grant denial, populated audit-history protection and mandatory audit rollback. Preview verified a separate Finance-account hold, preserved browser and historical snapshots and reached mandatory audit rollback. The private gate verified loopback listener ownership before readiness requests. One disposable PostgreSQL instance and one application database were accounted for. Recorded process and port cleanup passed and unrelated container inventory matched. Unattributed system process differences remain in the evidence. Lock Assignment and V37 each contribute two reused passing methods. Earlier incomplete runs remain separate. All migrations and acceptance accounting are unchanged. Candidate CI awaits exact-source verification.

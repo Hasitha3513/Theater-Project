@@ -13193,5 +13193,160 @@ def inert_ci_main():
     return result
 
 
+
+# Exact V37 opt-in regression recovery successor.
+V37_OPTIN_BASE = '47c09b7c2600b3267f2b231e686b66c5854e47b4'
+V37_OPTIN_KEY = 'day05V37OptInRecovery'
+V37_OPTIN_RECORD = {'taskId': 'CN-R1-COMMERCIAL-QUOTE-001', 'baseline': '47c09b7c2600b3267f2b231e686b66c5854e47b4', 'mainBaseline': 'effd6769362a39bcd06004b8bde0121fbb4578ee', 'payloadPaths': ['backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'cumulativePaths': ['backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBinding.java', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBindingRepository.java', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyBindingRepository.java', 'backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyBindingPostgresTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/PROJECT.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md'], 'sourceSha256': {'backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java': 'b84151430e499014a604450aecd55d9a309ae776cdd2729e9d675ecf9671b503', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java': '75bfadf50dc5d00360c8dfe33ebeb0aac65bdfd73734bd36f17d65b69d711c99', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': '146e2ef826e4c4b589eeb2673e0feb191ae537da8bb5e115728ffc718d8339e1'}, 'run': 'cn-v37-optin-c1e15299a87e', 'offlinePass': 151, 'reusedEvidence': {'lock': {'pass': 2, 'run': 'cn-v37-optin-7d36b5f5405e', 'logSha256': '80514dae72c18698bfb15cba962c864b6c8695bc24a96d3d259c4c8cf7cf37b8'}, 'v37': {'pass': 2, 'run': 'cn-v37-bkkst07t', 'manifestSha256': '310b4483ddccc2ad226ec886c2c91380719a0a7191806c64a224980b99a4bbfc'}, 'previousCandidateCi': 42398631830}, 'retainedDraft': {'pass': 10, 'fail': 0, 'error': 0, 'skip': 0, 'browserPass': 24, 'run': 'cn-v37-optin-fb98699d5c94', 'manifestSha256': '74c19453185bfdef0babb80ea0de9a72c65f87e9aeebc117d404111e1cd80f37'}, 'postgres': {'preview': {'pass': 7, 'fail': 0, 'error': 0, 'skip': 0}}, 'previousInterruptedRun': 'cn-v37-optin-acb0f852b244', 'v37Sha256': '5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5', 'evidenceSha256': {'SHA256SUMS': '6fec511c84350c4d49e04e5b7a3a588c9989986f3141c42c77d3188815549b21', 'source-sha256.txt': '76bc3f898dc955277f99c3aa440324a57b0bd849fe78a3ab139cf3eae17de93f', 'preview.log': 'ffd43d41a5610a541b24f596e464c387d8759b314829650f37ab48cad384e4cb', 'preview-audit-integration.json': '13fb412cf2fe4c470e8acca4950960f1e47f47a4ca4947351d6ecc615a4854e2', 'cleanup.json': '5d70120c4a993a30f3421f0cac2bf82c65f42a8dde030dd5f2c33ebe841b58b7', 'database-inventory.json': '3f7803922d1d41734eb54ed964d92faec35488bad83d5ee5feae96f4879aecdf', 'migration-sha256.txt': 'a39e9bef589848e322f03c0eb6cb504aadd770b1d174de87f27559f72df9b7aa', 'process-differences.json': '09dbb935c6ec14c913f767b440dd8c858f91c09ca803b5b6f86e4ec3abeba186'}, 'ownerUat': 'PENDING', 'independentReview': 'NOT_SATISFIED', 'productionAuthorization': 'NONE', 'accounting': {'part1': '4/7', 'planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}}
+V37_OPTIN_HASHES = {'backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java': 'b84151430e499014a604450aecd55d9a309ae776cdd2729e9d675ecf9671b503', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java': '75bfadf50dc5d00360c8dfe33ebeb0aac65bdfd73734bd36f17d65b69d711c99', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': '146e2ef826e4c4b589eeb2673e0feb191ae537da8bb5e115728ffc718d8339e1', 'knowledge/PROGRESS.md': '821d93db5af0ceb7925710b1e128d54d15bbffa03dd63807c8eca699f9e62328', 'knowledge/execution/status.json': '3d870132b8d44006c007b8d5393f3dc536d9f5c4ea68ee8260dab7681e5e947c'}
+V37_OPTIN_SUFFIX_SHA = '874a04c50407300ae06c7eac2fe148fe7931079971b7a794111acc8697df75aa'
+
+v37_optin_previous_main = inert_ci_main
+v37_optin_previous_guard = receipt_admission_successor_errors
+
+
+def v37_optin_before(name):
+    return subprocess.check_output(['git', '-C', str(R), 'show', V37_OPTIN_BASE + ':' + name])
+
+
+def v37_optin_errors():
+    owned = set(V37_OPTIN_RECORD['payloadPaths'])
+    try:
+        if len(owned) != 7 or set(V37_OPTIN_HASHES) != owned - {
+            'knowledge/manifest.json', 'knowledge/execution/validate_execution.py'
+        }:
+            return ['V37 opt-in recovery inventory definition mismatch']
+        subprocess.check_output(['git', '-C', str(R), 'merge-base', '--is-ancestor', V37_OPTIN_BASE, 'HEAD'])
+        end = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        validator = 'knowledge/execution/validate_execution.py'
+        prefix = v37_optin_before(validator).decode().removesuffix(end)
+        current = (R / validator).read_text()
+        suffix = current[len(prefix):].replace(
+            "V37_OPTIN_SUFFIX_SHA = '" + V37_OPTIN_SUFFIX_SHA + "'", "V37_OPTIN_SUFFIX_SHA = '" + '0' * 64 + "'", 1
+        )
+        if not current.startswith(prefix) or hashlib.sha256(suffix.encode()).hexdigest() != V37_OPTIN_SUFFIX_SHA:
+            return ['V37 opt-in recovery validator prefix/successor drift']
+        git = ['git', '-C', str(R)]
+        baseline = parse_git_paths(subprocess.check_output(
+            git + ['ls-tree', '-r', '--name-only', '-z', V37_OPTIN_BASE], text=True), nul=True)
+        actual = parse_git_paths(subprocess.check_output(
+            git + ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], text=True), nul=True)
+        changed = parse_git_paths(subprocess.check_output(
+            git + ['diff', V37_OPTIN_BASE, '--name-only', '-z'], text=True), nul=True)
+        if actual != baseline or changed != owned or not owned <= baseline:
+            return ['V37 opt-in recovery exact seven successor paths required']
+        full = parse_git_paths(subprocess.check_output(
+            git + ['diff', V37_OPTIN_RECORD['mainBaseline'], '--name-only', '-z'], text=True), nul=True)
+        if len(full) != 17 or full != set(V37_OPTIN_RECORD['cumulativePaths']):
+            return ['V37 opt-in recovery exact seventeen cumulative paths required']
+        for name in owned:
+            p = R / name
+            if p.is_symlink() or not p.is_file() or p.resolve() != p:
+                return ['V37 opt-in recovery unsafe payload ' + name]
+            if name in V37_OPTIN_HASHES and hashlib.sha256(p.read_bytes()).hexdigest() != V37_OPTIN_HASHES[name]:
+                return ['V37 opt-in recovery fingerprint drift ' + name]
+        status = json.loads((K / 'execution/status.json').read_text())
+        record = status.pop(V37_OPTIN_KEY, None)
+        if record != V37_OPTIN_RECORD or status != json.loads(v37_optin_before('knowledge/execution/status.json')):
+            return ['V37 opt-in recovery evidence or historical status drift']
+        if record['ownerUat'] != 'PENDING' or record['independentReview'] != 'NOT_SATISFIED' or record['productionAuthorization'] != 'NONE':
+            return ['V37 opt-in recovery acceptance or activation inflation']
+        manifest = json.loads(v37_optin_before('knowledge/manifest.json'))
+        refresh = {name.removeprefix('knowledge/') for name in owned
+                   if name.startswith('knowledge/') and name != 'knowledge/manifest.json'}
+        if len(refresh) != 3 or refresh != {row['path'] for row in manifest['files'] if row['path'] in refresh}:
+            return ['V37 opt-in recovery exact three checksum entries required']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (K / 'manifest.json').read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V37 opt-in recovery unauthorized manifest change']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V37 opt-in recovery invalid payload or ancestry']
+    return []
+
+
+def v37_optin_controls():
+    from unittest.mock import patch
+
+    def reject(path, mutate):
+        read_bytes = Path.read_bytes
+        read_text = Path.read_text
+        with patch.object(Path, 'read_bytes', lambda p: mutate(read_bytes(p)) if p == path else read_bytes(p)), patch.object(
+            Path, 'read_text', lambda p, *a, **kw: mutate(read_text(p, *a, **kw).encode()).decode()
+            if p == path else read_text(p, *a, **kw)
+        ):
+            assert v37_optin_errors(), path
+
+    assert not v37_optin_errors()
+    for name in V37_OPTIN_RECORD['sourceSha256']:
+        reject(R / name, lambda data: data + b'\n')
+    reject(K / 'execution/status.json', lambda data: data.replace(
+        b'"ownerUat": "PENDING"', b'"ownerUat": "ACCEPTED"'))
+    reject(K / 'execution/status.json', lambda data: data.replace(
+        b'"independentReview": "NOT_SATISFIED"', b'"independentReview": "SATISFIED"'))
+    output = subprocess.check_output
+
+    def extra(argv, *a, **kw):
+        data = output(argv, *a, **kw)
+        if argv == ['git', '-C', str(R), 'diff', V37_OPTIN_BASE, '--name-only', '-z']:
+            return data + 'frontend/unapproved.tsx\0'
+        return data
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert v37_optin_errors()
+    print('PASS V37 opt-in recovery exact scope and source/acceptance negative controls')
+
+
+def v37_optin_historical_view(check):
+    from unittest.mock import patch
+
+    previous = {R / name: v37_optin_before(name) for name in V37_OPTIN_RECORD['payloadPaths']}
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+
+    def baseline_bytes(p, *a, **kw):
+        return previous[p] if p in previous else read_bytes(p, *a, **kw)
+
+    def baseline_text(p, *a, **kw):
+        return previous[p].decode() if p in previous else read_text(p, *a, **kw)
+
+    def baseline_output(argv, *a, **kw):
+        if isinstance(argv, list) and argv[:3] == ['git', '-C', str(R)] and 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [V37_OPTIN_BASE] + argv[index + 1:]
+            else:
+                return '' if kw.get('text') else b''
+        return output(argv, *a, **kw)
+
+    with patch.object(Path, 'read_bytes', baseline_bytes), patch.object(
+        Path, 'read_text', baseline_text
+    ), patch.object(subprocess, 'check_output', baseline_output), patch.dict(
+        globals(), {'receipt_admission_successor_errors': v37_optin_previous_guard}
+    ):
+        return check()
+
+
+def v37_optin_successor_errors():
+    errors = v37_optin_errors()
+    return errors or v37_optin_historical_view(v37_optin_previous_guard)
+
+
+receipt_admission_successor_errors = v37_optin_successor_errors
+
+
+def inert_ci_main():
+    errors = v37_optin_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v37_optin_controls()
+    result = v37_optin_historical_view(v37_optin_previous_main)
+    if result == 0:
+        print('PASS V37 opt-in recovery successor; historical controls preserved')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

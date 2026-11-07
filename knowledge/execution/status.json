@@ -30944,5 +30944,97 @@
       "fullMvp": "15/74",
       "formalAcceptance": "0/92"
     }
+  },
+  "day05V37OptInRecovery": {
+    "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+    "baseline": "47c09b7c2600b3267f2b231e686b66c5854e47b4",
+    "mainBaseline": "effd6769362a39bcd06004b8bde0121fbb4578ee",
+    "payloadPaths": [
+      "backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java",
+      "backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java",
+      "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "cumulativePaths": [
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBinding.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBindingRepository.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyBindingRepository.java",
+      "backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java",
+      "backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java",
+      "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyBindingPostgresTest.java",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/PROJECT.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md"
+    ],
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java": "b84151430e499014a604450aecd55d9a309ae776cdd2729e9d675ecf9671b503",
+      "backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java": "75bfadf50dc5d00360c8dfe33ebeb0aac65bdfd73734bd36f17d65b69d711c99",
+      "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java": "146e2ef826e4c4b589eeb2673e0feb191ae537da8bb5e115728ffc718d8339e1"
+    },
+    "run": "cn-v37-optin-c1e15299a87e",
+    "offlinePass": 151,
+    "reusedEvidence": {
+      "lock": {
+        "pass": 2,
+        "run": "cn-v37-optin-7d36b5f5405e",
+        "logSha256": "80514dae72c18698bfb15cba962c864b6c8695bc24a96d3d259c4c8cf7cf37b8"
+      },
+      "v37": {
+        "pass": 2,
+        "run": "cn-v37-bkkst07t",
+        "manifestSha256": "310b4483ddccc2ad226ec886c2c91380719a0a7191806c64a224980b99a4bbfc"
+      },
+      "previousCandidateCi": 42398631830
+    },
+    "retainedDraft": {
+      "pass": 10,
+      "fail": 0,
+      "error": 0,
+      "skip": 0,
+      "browserPass": 24,
+      "run": "cn-v37-optin-fb98699d5c94",
+      "manifestSha256": "74c19453185bfdef0babb80ea0de9a72c65f87e9aeebc117d404111e1cd80f37"
+    },
+    "postgres": {
+      "preview": {
+        "pass": 7,
+        "fail": 0,
+        "error": 0,
+        "skip": 0
+      }
+    },
+    "previousInterruptedRun": "cn-v37-optin-acb0f852b244",
+    "v37Sha256": "5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5",
+    "evidenceSha256": {
+      "SHA256SUMS": "6fec511c84350c4d49e04e5b7a3a588c9989986f3141c42c77d3188815549b21",
+      "source-sha256.txt": "76bc3f898dc955277f99c3aa440324a57b0bd849fe78a3ab139cf3eae17de93f",
+      "preview.log": "ffd43d41a5610a541b24f596e464c387d8759b314829650f37ab48cad384e4cb",
+      "preview-audit-integration.json": "13fb412cf2fe4c470e8acca4950960f1e47f47a4ca4947351d6ecc615a4854e2",
+      "cleanup.json": "5d70120c4a993a30f3421f0cac2bf82c65f42a8dde030dd5f2c33ebe841b58b7",
+      "database-inventory.json": "3f7803922d1d41734eb54ed964d92faec35488bad83d5ee5feae96f4879aecdf",
+      "migration-sha256.txt": "a39e9bef589848e322f03c0eb6cb504aadd770b1d174de87f27559f72df9b7aa",
+      "process-differences.json": "09dbb935c6ec14c913f767b440dd8c858f91c09ca803b5b6f86e4ec3abeba186"
+    },
+    "ownerUat": "PENDING",
+    "independentReview": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "accounting": {
+      "part1": "4/7",
+      "planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    }
   }
 }
