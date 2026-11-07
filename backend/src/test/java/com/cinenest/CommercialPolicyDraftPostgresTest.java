@@ -39,7 +39,7 @@ class CommercialPolicyDraftPostgresTest {
         if(Files.exists(run.resolve("legacy-snapshot.sha256")))legacySnapshot=Files.readString(run.resolve("legacy-snapshot.sha256")).trim();
         if(Files.exists(run.resolve("protected-snapshot.json")))snapshot=Files.readString(run.resolve("protected-snapshot.json"));
         if("TARGETED_FINAL".equals(System.getenv("CINENEST_COMMERCIAL_SELECTION")) && !Files.exists(run.resolve("legacy-snapshot.sha256"))){
-            flyway(cleanUrl,null).migrate();
+            flyway(cleanUrl,"36").migrate();
             try(var c=connection(cleanUrl)){execute(c,"CREATE DATABASE commercial_upgrade");}
             flyway(appUrl,"35").migrate();seedFixtures();legacySnapshot=oldSnapshots();
             Files.writeString(run.resolve("legacy-snapshot.sha256"),legacySnapshot);flyway(appUrl,"36").migrate();
@@ -61,7 +61,7 @@ class CommercialPolicyDraftPostgresTest {
     }
     Flyway flyway(String url,String target){var b=Flyway.configure().dataSource(url,user,password);if(target!=null)b.target(target);return b.load();}
     @Test @Order(1) void cleanFlywayAndEmptyResetOnlyAtReadCommitted()throws Exception {
-        var f=flyway(cleanUrl,null);assertThat(f.migrate().migrationsExecuted).isEqualTo(35);f.validate();assertThat(f.info().current().getVersion().toString()).isEqualTo("36");assertThat(f.migrate().migrationsExecuted).isZero();
+        var f=flyway(cleanUrl,"36");assertThat(f.migrate().migrationsExecuted).isEqualTo(35);f.validate();assertThat(f.info().current().getVersion().toString()).isEqualTo("36");assertThat(f.migrate().migrationsExecuted).isZero();
         try(var c=connection(cleanUrl)){assertThat(scalar(c,"SELECT count(*) FROM public.flyway_schema_history WHERE version='31'")).isEqualTo("0");execute(c,"TRUNCATE cinenest_identity.account CASCADE");observe("A empty READ COMMITTED account reset","SUCCESS","SUCCESS");
             rejected(c,"TRUNCATE cinenest_pricing.commercial_policy_revision","0A000");
             c.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);rejected(c,tables("TRUNCATE TABLE "),"23514");
@@ -124,7 +124,7 @@ class CommercialPolicyDraftPostgresTest {
     void ensureBackend()throws Exception {
         if(backend!=null && backend.isAlive())return;
         var repo=Path.of(System.getProperty("user.dir"));
-        var args=new ArrayList<String>(List.of(Path.of(System.getProperty("java.home"),"bin","java").toString(),"-Xmx512m","-jar",repo.resolve("target/cinenest-0.0.1-SNAPSHOT.jar").toString(),"--spring.datasource.url="+appUrl,"--server.port="+manifest.get("backendPort"),"--spring.profiles.active=local-synthetic","--cinenest.identity.enabled=true","--cinenest.identity.manual.enabled=true","--cinenest.identity.session-timeout-seconds=120","--server.address=127.0.0.1","--cinenest.identity.manual.attempt-limit=5","--cinenest.identity.manual.window-seconds=900","--cinenest.identity.manual.verification-seconds=900","--cinenest.identity.manual.recovery.enabled=false","--cinenest.identity.google.enabled=false","--cinenest.identity.facebook.enabled=false","--cinenest.identity.manual.outbox="+run.resolve("outbox"),"--spring.datasource.hikari.maximum-pool-size=6","--spring.datasource.hikari.minimum-idle=0"));
+        var args=new ArrayList<String>(List.of(Path.of(System.getProperty("java.home"),"bin","java").toString(),"-Xmx512m","-jar",repo.resolve("target/cinenest-0.0.1-SNAPSHOT.jar").toString(),"--spring.flyway.target=36","--spring.datasource.url="+appUrl,"--server.port="+manifest.get("backendPort"),"--spring.profiles.active=local-synthetic","--cinenest.identity.enabled=true","--cinenest.identity.manual.enabled=true","--cinenest.identity.session-timeout-seconds=120","--server.address=127.0.0.1","--cinenest.identity.manual.attempt-limit=5","--cinenest.identity.manual.window-seconds=900","--cinenest.identity.manual.verification-seconds=900","--cinenest.identity.manual.recovery.enabled=false","--cinenest.identity.google.enabled=false","--cinenest.identity.facebook.enabled=false","--cinenest.identity.manual.outbox="+run.resolve("outbox"),"--spring.datasource.hikari.maximum-pool-size=6","--spring.datasource.hikari.minimum-idle=0"));
         backend=new ProcessBuilder(args).redirectErrorStream(true).redirectOutput(run.resolve("backend.log").toFile()).start();
         Files.writeString(run.resolve("backend-owned.json"),JSONObjectUtils.toJSONString(Map.of("pid",backend.pid(),"port",manifest.get("backendPort"))));
         boolean ready=false;var probe=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(1)).build();

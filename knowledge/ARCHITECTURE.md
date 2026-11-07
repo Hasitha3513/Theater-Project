@@ -3467,3 +3467,11 @@ Pricing owns CommercialPolicyDraft contracts/rules, transactional service, repos
 GET /api/quotes/preview reuses Pricing QuoteService, checked QuoteRules components, the existing public QuotationHolds observation port and an Identity non-locking eligibility check. Its read-only REPEATABLE_READ transaction matches Inventory observation contracts. Preview-specific non-locking service-option/candidate queries live in the existing Pricing-owned CommercialPolicyDraftRepository/JDBC adapter; command locking and legacy quote policy/acceptance paths are preserved. Current immutable policy revisions are exact-venue/package/date filtered, ambiguous candidates are not arbitrarily chosen, and supplied policy pins must match identity/revision/hash. Safe projections exclude private approval/grant evidence. Successful preview has no quotation/audit/inventory writes; rejected requests can retain existing mandatory denial audit. All commercial/customer activation flags remain false; migrations unchanged.
 
 [Technical evidence](PROGRESS.md#commercial-preview-room-qa).
+
+<a id="day05-v37-policy-binding"></a>
+
+## Day 05 V37 commercial policy binding foundation
+
+The internal JDBC binding repository has no operational caller. PostgreSQL validates exact scope and complete V36 terms, checks the synthetic reviewer authority, and excludes overlapping effective intervals for the same scope. A transaction serializes same-key commands, persists a binding and attributable audit, and rejects changed-payload reuse. The audit is mandatory and both histories are immutable. V7 and V36 are unchanged. [Technical evidence](PROGRESS.md#day05-v37-policy-binding).
+
+V37 permits a fixture reset only when both protected tables are empty at READ COMMITTED. PostgreSQL acquires the truncate set locks before invoking the volatile guards. Populated history, higher isolation, UPDATE and DELETE remain denied.

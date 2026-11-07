@@ -1155,3 +1155,9 @@ Synthetic commercial preview is an observation, classified SYNTHETIC_PREVIEW_NOT
 Business readiness matrix: OWNER_SELECTED — existing LKR2500/180minutes/four included guests/max five, additional60minutes LKR1000 and fifth guest LKR800 preferences remain scope-pending. PENDING_OPERATIONAL_VERIFICATION — actual operational venue/room identities, capacities, hours, cleaning/staffing and PS4 availability/rights. PENDING_SPECIALIST_REVIEW — tax, payment fees, cancellation/refunds, privacy/identity duties, banking responsibilities and qualified Finance/Legal/Operations evidence. APPROVED_WITH_EVIDENCE — this exact synthetic-only software implementation authority, not business activation. DEFERRED — production/customer/physical operation until their separate gates. No new business rejection or approval is inferred. Independent release review and emergency egress obligations remain mandatory.
 
 [Technical evidence](PROGRESS.md#commercial-preview-room-qa).
+
+<a id="day05-v37-policy-binding"></a>
+
+## Day 05 V37 commercial policy binding foundation
+
+V37 adds a Pricing-owned, non-issuing binding foundation. It pins exact venue, room and package version to an immutable V36 revision and hash. Synthetic review records are qualification evidence. Operational approval intake, commercial issuance, checkout and customer access remain disabled. [Technical evidence](PROGRESS.md#day05-v37-policy-binding).

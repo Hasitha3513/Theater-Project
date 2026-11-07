@@ -843,3 +843,9 @@ Read-only synthetic commercial-readiness preview reuses the existing room/hold/p
 ## Day 06 Room Blocking room identification
 
 The synthetic Room Blocking view identifies the authorized room after exact-reference recovery and in saved block details. It shows a matching catalogue name when available, or the confirmed room reference. [Qualification](../PROGRESS.md#day06-room-blocking-ux-recovery).
+
+<a id="day05-v37-policy-binding"></a>
+
+## Day 05 V37 commercial policy binding foundation
+
+The internal commercial-policy binding foundation supports synthetic qualification of exact scope, immutable policy revisions and mandatory audit. Operational approval intake and customer-facing issuance remain unavailable. [Qualification](../PROGRESS.md#day05-v37-policy-binding).

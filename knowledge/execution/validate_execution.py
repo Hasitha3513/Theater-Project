@@ -12846,5 +12846,192 @@ def inert_ci_main():
         print('PASS Room Blocking UX successor; historical controls preserved')
     return result
 
+
+# Exact V37 commercial policy binding successor.
+V37_BASE = 'effd6769362a39bcd06004b8bde0121fbb4578ee'
+V37_KEY = 'day05V37PolicyBinding'
+V37_RECORD = {'taskId': 'CN-R1-COMMERCIAL-QUOTE-001', 'baseline': 'effd6769362a39bcd06004b8bde0121fbb4578ee', 'payloadPaths': ['backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBinding.java', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBindingRepository.java', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyBindingRepository.java', 'backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyBindingPostgresTest.java', 'knowledge/PROJECT.md', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'sourceSha256': {'backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java': '3e8ecd4dabae1a836ce2125fc80217525d3605158a36ea68eaea36f385ee5f67', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java': '2f8e01860b4e6e6a3a62b2ce34c4bcb3d5096998e4092632b63cbb191e75bca4', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': '9477589b3a44cb1e8d3476d18362d10317c86554e01077d8ea8979748d77a62f', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '57a08051ec216d5aaa7e077238d5786721341e30ed23035b88b48fe28f088f9d', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBinding.java': 'b650e3108a7a30133589d94b9854eb24a1ceb557bd4959d01a0e864dadfd6b93', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBindingRepository.java': '8ff475774190dbb69c55ba748026e5763854690e70fdf64514912af9d6ed304e', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyBindingRepository.java': 'c4c109336d58cb71a914004d16400d96f2c4f98cc94cb943238a5133173ba45d', 'backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql': '5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyBindingPostgresTest.java': '6e2519446c662a25ffcd9a3b66b91ad31ed1bca20bb58892981aee5a1156103e'}, 'migrationInventory': [{'path': 'backend/src/main/resources/db/migration/V1__foundation_namespace.sql', 'sha256': 'fd31a33e9a5fbcdfa61ef619559a1669d6674b76036b129631b19ac3293b92f1'}, {'path': 'backend/src/main/resources/db/migration/V2__identity_accounts_grants_sessions.sql', 'sha256': '6794628d83c27062205d473a84808a293592ec8c31f9e9b50f26038e13f1e2c1'}, {'path': 'backend/src/main/resources/db/migration/V3__venue_room_catalog.sql', 'sha256': 'f2b25430b30177ffc90f1daf0dbaff415ca5bc8102536aee5a46a4c32ec4fc54'}, {'path': 'backend/src/main/resources/db/migration/V4__package_drafts_and_minimum_policy.sql', 'sha256': 'a4897ec35d1e351df4d5902a71d247226cdfbb42c87c95e682e451240a30a298'}, {'path': 'backend/src/main/resources/db/migration/V5__indicative_package_publication.sql', 'sha256': '825350b732a8f9e1bab0a958a42bcc08ed35a12f163cffe0297f52819112dac8'}, {'path': 'backend/src/main/resources/db/migration/V6__inventory_holds.sql', 'sha256': 'a93ae6f188d672c674b061319dc0e89063f8c4872a0a46afc29359483c72386f'}, {'path': 'backend/src/main/resources/db/migration/V7__synthetic_quotations.sql', 'sha256': '22e67f40702d78b4914a64d854767d38e86d447251e0bb1e2cb713125f0f63ff'}, {'path': 'backend/src/main/resources/db/migration/V8__synthetic_verification.sql', 'sha256': '5454a1af6c2b03687d1f6ee7ac038d55685e10710812e71910f87ab1dc8db2e3'}, {'path': 'backend/src/main/resources/db/migration/V9__synthetic_bank_requests.sql', 'sha256': 'da0ed3f446a2b44782d3550a37c25db0fe7e94f9804d5d6107bb728109da5b48'}, {'path': 'backend/src/main/resources/db/migration/V10__synthetic_credit_allocation.sql', 'sha256': '766b5e1cfaf93727937a13549705ef6c14d18dcd86c33e8b0ca7188b64f7f493'}, {'path': 'backend/src/main/resources/db/migration/V11__scoped_admin_read_audit.sql', 'sha256': '21896b150a5a15c65dd5f17f865192d44a726e1f195163a08daad2e792558e29'}, {'path': 'backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql', 'sha256': 'e9383d0f67240bcb50bea0cfed3b20e6897489e4b9ec23e80fb22a70f1b8465f'}, {'path': 'backend/src/main/resources/db/migration/V13__synthetic_access.sql', 'sha256': '479c711653a1dce5010c930a11db432c4acdbcc0208f7f8a5d0dc0bd02633d8b'}, {'path': 'backend/src/main/resources/db/migration/V14__synthetic_notifications.sql', 'sha256': '8b821fe4df26b21d996d3da097fc77fd36b27afaf0abbc3a0de0f2248d20118f'}, {'path': 'backend/src/main/resources/db/migration/V15__synthetic_booking_amendments.sql', 'sha256': '74c68f2b0b1e4fb91f8a266db97f74e9578375d04429fd6bea605ca237344b55'}, {'path': 'backend/src/main/resources/db/migration/V16__synthetic_lighting.sql', 'sha256': 'a632d18ac7602951e40016f544886055072f11457385933228c27726f55a43df'}, {'path': 'backend/src/main/resources/db/migration/V17__synthetic_room_turnover.sql', 'sha256': 'd353b1e7258aed6cb1bb647cb3124dfdfd874e030a43fdcd028b25a995894ea3'}, {'path': 'backend/src/main/resources/db/migration/V18__synthetic_guest_roster.sql', 'sha256': '9f5a2b064f382a8e22f9bd58d8c4ff69972ed7f21a7edd2d882507abb74af29c'}, {'path': 'backend/src/main/resources/db/migration/V19__staff_booking_read_audit.sql', 'sha256': '67064d3b6939dc717b8c2d9d4d99f3b740004e6c4ee731841108c7a8acd02df6'}, {'path': 'backend/src/main/resources/db/migration/V20__managed_grant_read_audit.sql', 'sha256': '82ec3c777478332258339f85898473b1f6a1e1c0749eef4d1ba97ed69e395ed6'}, {'path': 'backend/src/main/resources/db/migration/V21__maintenance_impact_read_audit.sql', 'sha256': '3bb99640aaee87ecceea74d13a3bad543fc2c6fa17ee0a28969b54531dfae3c7'}, {'path': 'backend/src/main/resources/db/migration/V22__booking_confirmation_report_read_audit.sql', 'sha256': 'ed5a1c482744d76d8a2acb4054859f2902d71f849e49eff4eb53929c2d1b563e'}, {'path': 'backend/src/main/resources/db/migration/V23__popular_session_starts_read_audit.sql', 'sha256': '13ddd9296f2e31c5db62425303a6b48609a8d0624ecc86efba0026a54f1693bb'}, {'path': 'backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql', 'sha256': 'aa79391ae3cfa07f7b32f248055d321471eddb5ccdb839b6a108097da11344c4'}, {'path': 'backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql', 'sha256': 'b90cbb93256b8b89d9dcf88e9925a251b4f5842aeca229e7417297359d912223'}, {'path': 'backend/src/main/resources/db/migration/V26__staging_bank_instruction_reads.sql', 'sha256': 'e23d528454e17f1bb9d9cff2dd2536a1b6543c6d73b37056b4ff3eba57faed42'}, {'path': 'backend/src/main/resources/db/migration/V27__inactive_smart_lock_registry.sql', 'sha256': 'c9164abae01706f23588aeae077bdfd5810b5c14af54ba471156d27785566533'}, {'path': 'backend/src/main/resources/db/migration/V28__local_manual_customer_identity.sql', 'sha256': 'f7f18489b2d73fdbe164bc43581e286f77f70b5c67407140267080e0d579b4a8'}, {'path': 'backend/src/main/resources/db/migration/V29__local_customer_profile.sql', 'sha256': '742ad5bd9714ddf7fdc5882fb268b64c8f5045fcd94afc27b0017cdefa1bf8af'}, {'path': 'backend/src/main/resources/db/migration/V30__local_venue_banners.sql', 'sha256': 'dd0dd41e961db65eb5c64ed029b5eb4553586789eff68db4934d9b05e4bdb6ce'}, {'path': 'backend/src/main/resources/db/migration/V32__local_room_blocking.sql', 'sha256': '2ed7d85229324cf5f1cb1fae9028977378289a8454bddbb9e807b01c4087f2aa'}, {'path': 'backend/src/main/resources/db/migration/V33__qualification_room_lock_assignments.sql', 'sha256': '401aeeefc90e6721a5e4b48adb621ebea9c779b286c01315eb2b9c1a81cf390c'}, {'path': 'backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql', 'sha256': '50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98'}, {'path': 'backend/src/main/resources/db/migration/V35__local_synthetic_credential_recovery.sql', 'sha256': '2aca51352c8d3a8352e1df8bdbeea9661210a4b21a51ced5bb7046e25bd32aaa'}, {'path': 'backend/src/main/resources/db/migration/V36__commercial_policy_drafts.sql', 'sha256': 'bee769c1bed44bd52d4887975760f8775308945794c94c00b30e546ec39e7505'}, {'path': 'backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql', 'sha256': '5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5'}], 'run': 'cn-v37-bkkst07t', 'evidenceSha256': {'SHA256SUMS': '310b4483ddccc2ad226ec886c2c91380719a0a7191806c64a224980b99a4bbfc', 'source-sha256.txt': '75677c2ad6783220528d9b99defd97c6d1fe9af416030ae73925f6c5a5af8124', 'tests-1.log': '62d5094cf8c4feef2759433fec58e0e1394239ed9431499e839aa2e572f67bfd', 'offline.log': 'ceb46425830d26ccd5933b49fb58d0efaac1270f7fd07231fd36e2c5fb138e2e', 'cleanup.json': 'd823053d577bc804b1e9be35da83b51cc0e2ac2243efe3b60bdbc088c6e50937', 'runtime.json': '954fc48eef09e7482b852f874fd1db208c80cc256d7a1225daa9d981eaa7d860'}, 'offlinePass': 151, 'postgresPass': 2, 'compatibilityPostgresLocal': 'NOT_EXECUTED', 'ownerUat': 'PENDING', 'independentReview': 'NOT_SATISFIED', 'commercialIssuanceEnabled': False, 'checkoutEnabled': False, 'customerAccessEnabled': False, 'productionAuthorization': 'NONE', 'accounting': {'part1': '4/7', 'planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}, 'previousCandidate': {'run': 'cn-v37-7hvoau3p', 'sourceSha256': {'backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java': '3e8ecd4dabae1a836ce2125fc80217525d3605158a36ea68eaea36f385ee5f67', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java': '2f8e01860b4e6e6a3a62b2ce34c4bcb3d5096998e4092632b63cbb191e75bca4', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': '9477589b3a44cb1e8d3476d18362d10317c86554e01077d8ea8979748d77a62f', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '57a08051ec216d5aaa7e077238d5786721341e30ed23035b88b48fe28f088f9d', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBinding.java': 'b650e3108a7a30133589d94b9854eb24a1ceb557bd4959d01a0e864dadfd6b93', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBindingRepository.java': '8ff475774190dbb69c55ba748026e5763854690e70fdf64514912af9d6ed304e', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyBindingRepository.java': 'c4c109336d58cb71a914004d16400d96f2c4f98cc94cb943238a5133173ba45d', 'backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql': 'd77e0f0d1cfba22df5d47d60860d86cbe03883b59741f17ea7fb82e2cc82a4e1', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyBindingPostgresTest.java': 'd70a56ea67095c90999dcf95241e3e422e5aa9a5e67c4841b8153fee196d3a10'}, 'evidenceSha256': {'SHA256SUMS': '51311d233f98e121e5f99734a8d29129265b4a5b6220f13d029958b6ceec6c1b', 'source-sha256.txt': 'd35ef05d4343da2b8f12ad225eb0581c7615d2a1dd260ff19f956dfce46359a9', 'tests-1.log': '5ed30cd29e8e850f0c4d321c9a1aa411b2ec381720854e45b8f4316c59591a44', 'cn-v37-offline-final.log': '13f833df3c4a7b726933c5687e4c8314321e684ceeabaf03dcde204a96744b1b', 'cleanup.json': '44a0f02010fce70358b784cc7bd54b45b8f6211510fb72fdf885766db4c49e4d', 'runtime.json': '9a986196f78cce4144bae7078fbfcc7b6f79b6d45ba5037d8b460b3cacfdb0c9'}, 'offlinePass': 151, 'postgresPass': 2}, 'truncateQualification': {'emptyReadCommittedCascade': 'PASS', 'repeatableRead': '23514', 'serializable': '23514', 'populatedCascade': '23514', 'waitingInsertAndTruncate': 'PASS', 'immutableUpdateDelete': '23514'}}
+V37_HASHES = {'backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java': '3e8ecd4dabae1a836ce2125fc80217525d3605158a36ea68eaea36f385ee5f67', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java': '2f8e01860b4e6e6a3a62b2ce34c4bcb3d5096998e4092632b63cbb191e75bca4', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java': '9477589b3a44cb1e8d3476d18362d10317c86554e01077d8ea8979748d77a62f', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '57a08051ec216d5aaa7e077238d5786721341e30ed23035b88b48fe28f088f9d', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBinding.java': 'b650e3108a7a30133589d94b9854eb24a1ceb557bd4959d01a0e864dadfd6b93', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBindingRepository.java': '8ff475774190dbb69c55ba748026e5763854690e70fdf64514912af9d6ed304e', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyBindingRepository.java': 'c4c109336d58cb71a914004d16400d96f2c4f98cc94cb943238a5133173ba45d', 'backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql': '5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyBindingPostgresTest.java': '6e2519446c662a25ffcd9a3b66b91ad31ed1bca20bb58892981aee5a1156103e', 'knowledge/PROJECT.md': '876eac0d9d2c125202e73edd04f4ef9239969db3cc1206099450dd133fd0ca74', 'knowledge/ARCHITECTURE.md': '98379bb9d4c15895799063783859007fd65d4f3de56382710a348e557178b025', 'knowledge/PROGRESS.md': '6a92528580b92070eda0befa7ca0f09ed423b6ef62cefc8f79a7c936834ec318', 'knowledge/product/FEATURE_CATALOG.md': '2be3e386319f9f38a3b04df670135e7745bcafb9eb4c0c76fb9c70979739ab10', 'knowledge/execution/status.json': '11605ec5e0c075e285709400ed3f9b29839bd461fee4303216f05c5e3bbed0e9'}
+V37_SUFFIX_SHA = 'ad00d8013915b477d001769b235bba49e9088516dd6643041f65e10babdfa426'
+v37_previous_main = inert_ci_main
+v37_previous_guard = receipt_admission_successor_errors
+
+
+def v37_before(name):
+    return subprocess.check_output(['git', '-C', str(R), 'show', V37_BASE + ':' + name])
+
+
+def v37_errors():
+    owned = set(V37_RECORD['payloadPaths'])
+    try:
+        if len(owned) != 16 or set(V37_HASHES) != owned - {
+            'knowledge/manifest.json', 'knowledge/execution/validate_execution.py'
+        }:
+            return ['V37 policy binding inventory definition mismatch']
+        subprocess.check_output(['git', '-C', str(R), 'merge-base', '--is-ancestor', V37_BASE, 'HEAD'])
+        end = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        validator = 'knowledge/execution/validate_execution.py'
+        prefix = v37_before(validator).decode().removesuffix(end)
+        current = (R / validator).read_text()
+        suffix = current[len(prefix):].replace(
+            "V37_SUFFIX_SHA = '" + V37_SUFFIX_SHA + "'", "V37_SUFFIX_SHA = '" + '0' * 64 + "'", 1
+        )
+        if not current.startswith(prefix) or hashlib.sha256(suffix.encode()).hexdigest() != V37_SUFFIX_SHA:
+            return ['V37 policy binding validator prefix/successor drift']
+        git = ['git', '-C', str(R)]
+        baseline = parse_git_paths(subprocess.check_output(
+            git + ['ls-tree', '-r', '--name-only', '-z', V37_BASE], text=True), nul=True)
+        actual = parse_git_paths(subprocess.check_output(
+            git + ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], text=True), nul=True)
+        changed = parse_git_paths(subprocess.check_output(
+            git + ['diff', V37_BASE, '--name-only', '-z'], text=True), nul=True)
+        added = owned - baseline
+        if len(added) != 5 or actual != baseline | owned or changed | added != owned:
+            return ['V37 policy binding exact sixteen changed paths required']
+        for name in owned:
+            p = R / name
+            if p.is_symlink() or not p.is_file() or p.resolve() != p:
+                return ['V37 policy binding unsafe payload ' + name]
+            if name in V37_HASHES and hashlib.sha256(p.read_bytes()).hexdigest() != V37_HASHES[name]:
+                return ['V37 policy binding fingerprint drift ' + name]
+        migration_root = R / 'backend/src/main/resources/db/migration'
+        migrations = V37_RECORD['migrationInventory']
+        if len(migrations) != 36 or any('/V31__' in entry['path'] for entry in migrations):
+            return ['V37 migration inventory invalid']
+        if {str(path.relative_to(R)) for path in migration_root.glob('*')} != {entry['path'] for entry in migrations}:
+            return ['V37 migration inventory drift']
+        for entry in migrations:
+            path = R / entry['path']
+            if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != entry['sha256']:
+                return ['V37 migration fingerprint drift ' + entry['path']]
+        status = json.loads((K / 'execution/status.json').read_text())
+        record = status.pop(V37_KEY, None)
+        if record != V37_RECORD or status != json.loads(v37_before('knowledge/execution/status.json')):
+            return ['V37 policy binding evidence or historical status drift']
+        if record['ownerUat'] != 'PENDING' or record['independentReview'] != 'NOT_SATISFIED' or record['productionAuthorization'] != 'NONE' or any(record[key] for key in ('commercialIssuanceEnabled', 'checkoutEnabled', 'customerAccessEnabled')):
+            return ['V37 policy binding acceptance or activation inflation']
+        manifest = json.loads(v37_before('knowledge/manifest.json'))
+        refresh = {name.removeprefix('knowledge/') for name in owned
+                   if name.startswith('knowledge/') and name != 'knowledge/manifest.json'}
+        if len(refresh) != 6 or refresh != {row['path'] for row in manifest['files'] if row['path'] in refresh}:
+            return ['V37 policy binding exact six checksum entries required']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (K / 'manifest.json').read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V37 policy binding unauthorized manifest change']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V37 policy binding invalid payload or ancestry']
+    return []
+
+
+def v37_controls():
+    from unittest.mock import patch
+
+    def reject(path, mutate):
+        read_bytes = Path.read_bytes
+        read_text = Path.read_text
+        with patch.object(Path, 'read_bytes', lambda p: mutate(read_bytes(p)) if p == path else read_bytes(p)), patch.object(
+            Path, 'read_text', lambda p, *a, **kw: mutate(read_text(p, *a, **kw).encode()).decode()
+            if p == path else read_text(p, *a, **kw)
+        ):
+            assert v37_errors(), path
+
+    assert not v37_errors()
+    for name in V37_RECORD['sourceSha256']:
+        reject(R / name, lambda data: data + b'\n')
+    reject(K / 'execution/status.json', lambda data: data.replace(
+        b'"ownerUat": "PENDING"', b'"ownerUat": "ACCEPTED"'))
+    reject(K / 'execution/status.json', lambda data: data.replace(
+        b'"independentReview": "NOT_SATISFIED"', b'"independentReview": "SATISFIED"'))
+    reject(R / V37_RECORD['migrationInventory'][0]['path'], lambda data: data + b'\n')
+    output = subprocess.check_output
+
+    def extra(argv, *a, **kw):
+        data = output(argv, *a, **kw)
+        if argv == ['git', '-C', str(R), 'diff', V37_BASE, '--name-only', '-z']:
+            return data + 'frontend/unapproved.tsx\0'
+        return data
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert v37_errors()
+    def missing(argv, *a, **kw):
+        data = output(argv, *a, **kw)
+        if argv == ['git', '-C', str(R), 'diff', V37_BASE, '--name-only', '-z']:
+            return data.replace('knowledge/PROGRESS.md\0', '')
+        return data
+
+    with patch.object(subprocess, 'check_output', missing):
+        assert v37_errors()
+    print('PASS V37 policy binding exact scope and source/acceptance negative controls')
+
+
+def v37_historical_view(check):
+    from unittest.mock import patch
+
+    git = ['git', '-C', str(R)]
+    tree = parse_git_paths(subprocess.check_output(
+        git + ['ls-tree', '-r', '--name-only', '-z', V37_BASE], text=True), nul=True)
+    owned = set(V37_RECORD['payloadPaths'])
+    added = owned - tree
+    previous = {R / name: v37_before(name) for name in owned & tree}
+    glob, rglob = Path.glob, Path.rglob
+
+    def historical_paths(paths):
+        return (path for path in paths if path not in {R / name for name in added})
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+
+    def baseline_bytes(p, *a, **kw):
+        return previous[p] if p in previous else read_bytes(p, *a, **kw)
+
+    def baseline_text(p, *a, **kw):
+        return previous[p].decode() if p in previous else read_text(p, *a, **kw)
+
+    def baseline_output(argv, *a, **kw):
+        if isinstance(argv, list) and argv[:3] == ['git', '-C', str(R)] and 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [V37_BASE] + argv[index + 1:]
+            else:
+                return '' if kw.get('text') else b''
+        data = output(argv, *a, **kw)
+        if isinstance(argv, list) and argv[:3] == git and 'ls-files' in argv:
+            separator = '\0' if '-z' in argv else '\n'
+            raw = data if isinstance(data, str) else data.decode()
+            value = ''.join(name + separator for name in raw.split(separator) if name and name not in added)
+            return value if isinstance(data, str) else value.encode()
+        return data
+
+    with patch.object(Path, 'glob', lambda p, *a, **kw: historical_paths(glob(p, *a, **kw))), patch.object(
+        Path, 'rglob', lambda p, *a, **kw: historical_paths(rglob(p, *a, **kw))
+    ), patch.object(Path, 'read_bytes', baseline_bytes), patch.object(
+        Path, 'read_text', baseline_text
+    ), patch.object(subprocess, 'check_output', baseline_output), patch.dict(
+        globals(), {'receipt_admission_successor_errors': v37_previous_guard}
+    ):
+        return check()
+
+
+def v37_successor_errors():
+    errors = v37_errors()
+    return errors or v37_historical_view(v37_previous_guard)
+
+
+receipt_admission_successor_errors = v37_successor_errors
+
+
+def inert_ci_main():
+    errors = v37_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v37_controls()
+    result = v37_historical_view(v37_previous_main)
+    if result == 0:
+        print('PASS V37 policy binding successor; historical controls preserved')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
