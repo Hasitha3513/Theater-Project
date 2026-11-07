@@ -30889,5 +30889,60 @@
       "waitingInsertAndTruncate": "PASS",
       "immutableUpdateDelete": "23514"
     }
+  },
+  "day05V37BankSchemaHeadRecovery": {
+    "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+    "baseline": "ebe424e1ae83831c7840c3e8769d53e15e4ece20",
+    "mainBaseline": "effd6769362a39bcd06004b8bde0121fbb4578ee",
+    "payloadPaths": [
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "cumulativePaths": [
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBinding.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBindingRepository.java",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyBindingRepository.java",
+      "backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java",
+      "backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java",
+      "backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyBindingPostgresTest.java",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/PROJECT.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md"
+    ],
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "8fba0f573ec3f0b7f923460c52bbc6c59b4cc6276c0f2df00e3bab1293db591b"
+    },
+    "failedCi": 42387848051,
+    "failedMethod": "BankIntegrationTest.reportUsesExistingAuditWithoutMutatingFinancialSources",
+    "previousExpectedHead": 36,
+    "correctedExpectedHead": 37,
+    "offlinePass": 151,
+    "bankRuntime": "NOT_EXECUTED_LOCALLY",
+    "v37Sha256": "5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5",
+    "evidenceSha256": {
+      "offline.log": "2a75cfbe5eb5a96f4c5f7f3fd18204fbff89166acc2144d79f12fdc02fc62fa3",
+      "failed-ci-excerpt.log": "44dc2984a56a5336991b41702f53f327718452923f005a31357e63922d4b5394"
+    },
+    "ownerUat": "PENDING",
+    "independentReview": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "accounting": {
+      "part1": "4/7",
+      "planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    }
   }
 }

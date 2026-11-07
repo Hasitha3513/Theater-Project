@@ -13033,5 +13033,165 @@ def inert_ci_main():
     return result
 
 
+
+# Exact V37 Bank compatibility successor.
+V37_BANK_BASE = 'ebe424e1ae83831c7840c3e8769d53e15e4ece20'
+V37_BANK_KEY = 'day05V37BankSchemaHeadRecovery'
+V37_BANK_RECORD = {'taskId': 'CN-R1-COMMERCIAL-QUOTE-001', 'baseline': 'ebe424e1ae83831c7840c3e8769d53e15e4ece20', 'mainBaseline': 'effd6769362a39bcd06004b8bde0121fbb4578ee', 'payloadPaths': ['backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'knowledge/PROGRESS.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'cumulativePaths': ['backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBinding.java', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyBindingRepository.java', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyBindingRepository.java', 'backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'backend/src/test/java/com/cinenest/CommercialPolicyDraftPostgresTest.java', 'backend/src/test/java/com/cinenest/CommercialQuotePreviewPostgresTest.java', 'backend/src/test/java/com/cinenest/LockRoomAssignmentPostgresTest.java', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyBindingPostgresTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/PROJECT.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md'], 'sourceSha256': {'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '8fba0f573ec3f0b7f923460c52bbc6c59b4cc6276c0f2df00e3bab1293db591b'}, 'failedCi': 42387848051, 'failedMethod': 'BankIntegrationTest.reportUsesExistingAuditWithoutMutatingFinancialSources', 'previousExpectedHead': 36, 'correctedExpectedHead': 37, 'offlinePass': 151, 'bankRuntime': 'NOT_EXECUTED_LOCALLY', 'v37Sha256': '5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5', 'evidenceSha256': {'offline.log': '2a75cfbe5eb5a96f4c5f7f3fd18204fbff89166acc2144d79f12fdc02fc62fa3', 'failed-ci-excerpt.log': '44dc2984a56a5336991b41702f53f327718452923f005a31357e63922d4b5394'}, 'ownerUat': 'PENDING', 'independentReview': 'NOT_SATISFIED', 'productionAuthorization': 'NONE', 'accounting': {'part1': '4/7', 'planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}}
+V37_BANK_HASHES = {'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '8fba0f573ec3f0b7f923460c52bbc6c59b4cc6276c0f2df00e3bab1293db591b', 'knowledge/PROGRESS.md': 'c41ba71981b912babfdfc35536ae18a3a144ec8fec964ac06d068d269360dc64', 'knowledge/execution/status.json': '452eb9c3ee057fa950e5d90c3c34c0a8938976a514ca5b4b16f3e7211434f372'}
+V37_BANK_SUFFIX_SHA = '4df237561e820d185f4c7d1b01cba5193e08029db625a67f7b5d170532f4350c'
+
+v37_bank_previous_main = inert_ci_main
+v37_bank_previous_guard = receipt_admission_successor_errors
+
+
+def v37_bank_before(name):
+    return subprocess.check_output(['git', '-C', str(R), 'show', V37_BANK_BASE + ':' + name])
+
+
+def v37_bank_errors():
+    owned = set(V37_BANK_RECORD['payloadPaths'])
+    try:
+        if len(owned) != 5 or set(V37_BANK_HASHES) != owned - {
+            'knowledge/manifest.json', 'knowledge/execution/validate_execution.py'
+        }:
+            return ['V37 Bank recovery inventory definition mismatch']
+        subprocess.check_output(['git', '-C', str(R), 'merge-base', '--is-ancestor', V37_BANK_BASE, 'HEAD'])
+        end = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        validator = 'knowledge/execution/validate_execution.py'
+        prefix = v37_bank_before(validator).decode().removesuffix(end)
+        current = (R / validator).read_text()
+        suffix = current[len(prefix):].replace(
+            "V37_BANK_SUFFIX_SHA = '" + V37_BANK_SUFFIX_SHA + "'", "V37_BANK_SUFFIX_SHA = '" + '0' * 64 + "'", 1
+        )
+        if not current.startswith(prefix) or hashlib.sha256(suffix.encode()).hexdigest() != V37_BANK_SUFFIX_SHA:
+            return ['V37 Bank recovery validator prefix/successor drift']
+        git = ['git', '-C', str(R)]
+        baseline = parse_git_paths(subprocess.check_output(
+            git + ['ls-tree', '-r', '--name-only', '-z', V37_BANK_BASE], text=True), nul=True)
+        actual = parse_git_paths(subprocess.check_output(
+            git + ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], text=True), nul=True)
+        changed = parse_git_paths(subprocess.check_output(
+            git + ['diff', V37_BANK_BASE, '--name-only', '-z'], text=True), nul=True)
+        if actual != baseline or changed != owned or not owned <= baseline:
+            return ['V37 Bank recovery exact five successor paths required']
+        full = parse_git_paths(subprocess.check_output(
+            git + ['diff', V37_BANK_RECORD['mainBaseline'], '--name-only', '-z'], text=True), nul=True)
+        if len(full) != 17 or full != set(V37_BANK_RECORD['cumulativePaths']):
+            return ['V37 Bank recovery exact seventeen cumulative paths required']
+        for name in owned:
+            p = R / name
+            if p.is_symlink() or not p.is_file() or p.resolve() != p:
+                return ['V37 Bank recovery unsafe payload ' + name]
+            if name in V37_BANK_HASHES and hashlib.sha256(p.read_bytes()).hexdigest() != V37_BANK_HASHES[name]:
+                return ['V37 Bank recovery fingerprint drift ' + name]
+        bank = next(iter(V37_BANK_RECORD['sourceSha256']))
+        old = b'SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(36)'
+        baseline_bank = v37_bank_before(bank)
+        if baseline_bank.count(old) != 1 or (R / bank).read_bytes() != baseline_bank.replace(old, old[:-3] + b'37)'):
+            return ['V37 Bank recovery must change only the current schema head assertion']
+        status = json.loads((K / 'execution/status.json').read_text())
+        record = status.pop(V37_BANK_KEY, None)
+        if record != V37_BANK_RECORD or status != json.loads(v37_bank_before('knowledge/execution/status.json')):
+            return ['V37 Bank recovery evidence or historical status drift']
+        if record['ownerUat'] != 'PENDING' or record['independentReview'] != 'NOT_SATISFIED' or record['productionAuthorization'] != 'NONE':
+            return ['V37 Bank recovery acceptance or activation inflation']
+        manifest = json.loads(v37_bank_before('knowledge/manifest.json'))
+        refresh = {name.removeprefix('knowledge/') for name in owned
+                   if name.startswith('knowledge/') and name != 'knowledge/manifest.json'}
+        if len(refresh) != 3 or refresh != {row['path'] for row in manifest['files'] if row['path'] in refresh}:
+            return ['V37 Bank recovery exact three checksum entries required']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (K / 'manifest.json').read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V37 Bank recovery unauthorized manifest change']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V37 Bank recovery invalid payload or ancestry']
+    return []
+
+
+def v37_bank_controls():
+    from unittest.mock import patch
+
+    def reject(path, mutate):
+        read_bytes = Path.read_bytes
+        read_text = Path.read_text
+        with patch.object(Path, 'read_bytes', lambda p: mutate(read_bytes(p)) if p == path else read_bytes(p)), patch.object(
+            Path, 'read_text', lambda p, *a, **kw: mutate(read_text(p, *a, **kw).encode()).decode()
+            if p == path else read_text(p, *a, **kw)
+        ):
+            assert v37_bank_errors(), path
+
+    assert not v37_bank_errors()
+    for name in V37_BANK_RECORD['sourceSha256']:
+        reject(R / name, lambda data: data + b'\n')
+    reject(K / 'execution/status.json', lambda data: data.replace(
+        b'"ownerUat": "PENDING"', b'"ownerUat": "ACCEPTED"'))
+    reject(K / 'execution/status.json', lambda data: data.replace(
+        b'"independentReview": "NOT_SATISFIED"', b'"independentReview": "SATISFIED"'))
+    output = subprocess.check_output
+
+    def extra(argv, *a, **kw):
+        data = output(argv, *a, **kw)
+        if argv == ['git', '-C', str(R), 'diff', V37_BANK_BASE, '--name-only', '-z']:
+            return data + 'frontend/unapproved.tsx\0'
+        return data
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert v37_bank_errors()
+    print('PASS V37 Bank recovery exact scope and source/acceptance negative controls')
+
+
+def v37_bank_historical_view(check):
+    from unittest.mock import patch
+
+    previous = {R / name: v37_bank_before(name) for name in V37_BANK_RECORD['payloadPaths']}
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+
+    def baseline_bytes(p, *a, **kw):
+        return previous[p] if p in previous else read_bytes(p, *a, **kw)
+
+    def baseline_text(p, *a, **kw):
+        return previous[p].decode() if p in previous else read_text(p, *a, **kw)
+
+    def baseline_output(argv, *a, **kw):
+        if isinstance(argv, list) and argv[:3] == ['git', '-C', str(R)] and 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [V37_BANK_BASE] + argv[index + 1:]
+            else:
+                return '' if kw.get('text') else b''
+        return output(argv, *a, **kw)
+
+    with patch.object(Path, 'read_bytes', baseline_bytes), patch.object(
+        Path, 'read_text', baseline_text
+    ), patch.object(subprocess, 'check_output', baseline_output), patch.dict(
+        globals(), {'receipt_admission_successor_errors': v37_bank_previous_guard}
+    ):
+        return check()
+
+
+def v37_bank_successor_errors():
+    errors = v37_bank_errors()
+    return errors or v37_bank_historical_view(v37_bank_previous_guard)
+
+
+receipt_admission_successor_errors = v37_bank_successor_errors
+
+
+def inert_ci_main():
+    errors = v37_bank_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v37_bank_controls()
+    result = v37_bank_historical_view(v37_bank_previous_main)
+    if result == 0:
+        print('PASS V37 Bank recovery successor; historical controls preserved')
+    return result
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
