@@ -30608,5 +30608,50 @@
         "oldLine": 22
       }
     ]
+  },
+  "day06RoomBlockingUxRecovery": {
+    "baseline": "bf67d9b110e8646fb24a1d4541ad5fb04383dca5",
+    "payloadPaths": [
+      "frontend/components/room-blocking.tsx",
+      "frontend/tests/room-blocks.test.mjs",
+      "knowledge/DESIGN.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "sourceSha256": {
+      "frontend/components/room-blocking.tsx": "e73202c0e3a857e12cb48fafb0a6c2358e5666f5f0d1b5efbc15347ce163c7ee",
+      "frontend/tests/room-blocks.test.mjs": "e37572a930b2dd46727978a849f7a6038853f3980fa975ec8d47e2a1416daa6c"
+    },
+    "run": "cinenest-day06-b1d3bc296d0e",
+    "evidenceSha256": {
+      "SHA256SUMS": "d1a4beedac11448aaecb81e40758332cc5c0a9d287c224ce8066e95d84ea2d8c",
+      "execution-manifest.json": "52b7c3be73b57e00a066bbe18e16591b963cbb1c0f0792891622ef2c3e82ef2e",
+      "provisioning-intent.json": "0ae9785ac2c26ad30379accd41ea01b55de1a0317f9ad6a593bb08beacce32ac",
+      "provisioning-commit.json": "547f69f1e07c0d897bc970ce13c2d316348f1fa81a8a6d1d5064c60f9141f992",
+      "room-blocks-results.json": "a653d7dfacd25a92c406f53c8e9aed3db11c26de5a288f9afacff2a8be164e61",
+      "technical-closeout.json": "0ae2e3323c2be004e188cf9ff921635442dcee84193f8c30a49a99dc744d19b1",
+      "cleanup.json": "2c53c972b177a20cd8c7b6f78832a0b464bc0e2ff47819096fa91996f2f3ceed",
+      "owner-observation-status.json": "ec11128877e7f325aea16d23dc17848c0d6729ca4e87da708c0a2835a190c2aa"
+    },
+    "historicalEvidence": "PROGRESS.md#commercial-preview-room-qa",
+    "baselineCi": 42365522967,
+    "offlinePass": 105,
+    "focusedPass": 31,
+    "excludedTransport": 2,
+    "browserPass": 15,
+    "ownerUat": "PENDING",
+    "independentReview": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "accounting": {
+      "part1": "4/7",
+      "planning": "3/6",
+      "release1": "4/21",
+      "fullMvp": "15/74",
+      "formalAcceptance": "0/92"
+    }
   }
 }

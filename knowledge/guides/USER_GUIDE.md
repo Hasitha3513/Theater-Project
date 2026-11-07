@@ -528,3 +528,9 @@ In an explicitly authorized synthetic environment, log in legitimately, open Adm
 In a separately authorized synthetic environment, log in legitimately, choose an authorized room and explicitly create an inventory hold using the existing workflow. Load applicable synthetic package choices, select the published package, intended method and approved compatible add-ons, then choose Preview commercial policy readiness (read-only). Review known components, exact policy revision/hash and unresolved blockers. This action creates no hold/quotation/booking/payment and displays no payable total. Changing any selection clears the old preview; request a fresh observation. Existing synthetic quotation controls remain distinct, and their disclosures do not authorize commercial use. A missing/ambiguous/stale policy is not approval. Keyboard users can Tab and Shift+Tab through package, method, add-on and preview controls. Error/denied/expired states require the stated corrective action; uncertain writes are never automatically retried. Day06 Owner acceptance and independent human review remain pending.
 
 [Technical evidence](../PROGRESS.md#commercial-preview-room-qa).
+
+<a id="day06-room-blocking-ux-recovery"></a>
+
+## Day 06 Room Blocking room identification
+
+For synthetic Room Blocking, enter the approved venue and room references and load room blocks. The room selector shows the confirmed reference when no current catalogue name is available. Inspect a saved block to see its room name or confirmed reference, interval and revision. [Qualification](../PROGRESS.md#day06-room-blocking-ux-recovery).

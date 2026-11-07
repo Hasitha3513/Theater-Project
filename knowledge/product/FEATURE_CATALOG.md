@@ -837,3 +837,9 @@ Commercial policy drafts: synthetic Admin create/list/read/revise, complete-revi
 Read-only synthetic commercial-readiness preview reuses the existing room/hold/package workflow, scoped current policy-candidate resolution and checked component arithmetic. It exposes missing commercial decisions without payable totals, new quotes/bookings or payment initiation. Existing synthetic quote create/history/accept remains separate and qualified. Room Blocking QA now records HTTP traces, exact unavailable interval, conflicts, scope denials, focus and responsive evidence. These are technical capabilities, not commercial or Owner acceptance.
 
 [Technical evidence](../PROGRESS.md#commercial-preview-room-qa).
+
+<a id="day06-room-blocking-ux-recovery"></a>
+
+## Day 06 Room Blocking room identification
+
+The synthetic Room Blocking view identifies the authorized room after exact-reference recovery and in saved block details. It shows a matching catalogue name when available, or the confirmed room reference. [Qualification](../PROGRESS.md#day06-room-blocking-ux-recovery).

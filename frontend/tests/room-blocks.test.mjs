@@ -16,6 +16,7 @@ import {
 	readBlockContext,
 	sendBlockCommand,
 	SavedBlockDetail,
+	findRoomChoice,
 } from "../components/room-blocking.tsx";
 const venue = "10000000-0000-4000-8000-000000000001",
 	room = "10000000-0000-4000-8000-000000000002",
@@ -236,6 +237,39 @@ test("saved detail renders local time plus untouched timestamps, identifier and 
 	assert.match(html, /Creator identity is not supplied/);
 	assert.match(blockLocalTime(block.startAt, "Asia/Colombo"), /05:30/);
 });
+test("named selection and UUID recovery match both venue and room", () => {
+	const named = { venueId: venue, roomId: room, name: "Room A1", capacity: 5 };
+	const stale = { ...named, venueId: id, name: "Other venue room" };
+	assert.equal(findRoomChoice([stale, named], venue, room), named);
+	assert.equal(findRoomChoice([stale], venue, room), undefined);
+	assert.equal(findRoomChoice([named], venue, id), undefined);
+});
+
+test("saved block shows its exact catalogue name or confirmed reference", () => {
+	const stale = {
+		venueId: id,
+		roomId: room,
+		name: "Other venue room",
+		capacity: 5,
+	};
+	const render = (rooms) =>
+		renderToStaticMarkup(
+			React.createElement(SavedBlockDetail, {
+				block,
+				timezone: "Asia/Colombo",
+				rooms,
+			}),
+		);
+	const fallback = render([stale]);
+	assert.ok(
+		fallback.includes(`Confirmed room reference: <code>${room}</code>`),
+	);
+	assert.doesNotMatch(fallback, /Other venue room/);
+	const named = render([stale, { ...stale, venueId: venue, name: "Room A1" }]);
+	assert.match(named, /Room: Room A1/);
+	assert.doesNotMatch(named, /Confirmed room reference|Other venue room/);
+});
+
 test("actual response classifications distinguish authentication, permission, stale context and inventory conflicts", () => {
 	assert.match(
 		blockFeedback(new RoomRequestError(401, "ignored")),

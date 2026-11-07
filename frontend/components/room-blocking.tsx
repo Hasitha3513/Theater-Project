@@ -228,15 +228,37 @@ export async function sendBlockCommand(
 		room,
 	);
 }
+export function findRoomChoice(
+	rooms: readonly RoomChoice[],
+	venueId: string,
+	roomId: string,
+) {
+	return rooms.find(
+		(room) => room.venueId === venueId && room.roomId === roomId,
+	);
+}
+
 export function SavedBlockDetail({
 	block,
 	timezone,
+	rooms = [],
 }: {
 	block: RoomBlock;
 	timezone: string;
+	rooms?: readonly RoomChoice[];
 }) {
+	const room = findRoomChoice(rooms, block.venueId, block.roomId);
 	return (
 		<Card title="Saved block detail">
+			<p>
+				{room ? (
+					<>Room: {room.name}</>
+				) : (
+					<>
+						Confirmed room reference: <code>{block.roomId}</code>
+					</>
+				)}
+			</p>
 			<p>
 				{blockLocalTime(block.startAt, timezone)} –{" "}
 				{blockLocalTime(block.endAt, timezone)}
@@ -514,7 +536,8 @@ export function RoomBlocking() {
 		}
 	}
 	const selectedVenue = venues.find((v) => v.venueId === venue),
-		selectedRoom = rooms.find((r) => r.roomId === room && r.venueId === venue);
+		selectedRoom = findRoomChoice(rooms, venue, room);
+	const confirmedReference = list && !selectedRoom ? room : "";
 	const formTimezone = pending.current?.timezone ?? list?.timezone;
 	const validation = validateBlockInputs(
 		{ venue, room, startDate, startTime, endDate, endTime },
@@ -559,11 +582,16 @@ export function RoomBlocking() {
 				<SelectField
 					id="block-room-name"
 					label="Room"
-					value={selectedRoom ? room : ""}
+					value={selectedRoom ? room : confirmedReference}
 					disabled={frozen}
 					onChange={(e) => scope(() => setRoom(e.target.value))}
 				>
 					<option value="">Choose a room</option>
+					{confirmedReference && (
+						<option value={confirmedReference}>
+							Confirmed room reference: {confirmedReference}
+						</option>
+					)}
 					{rooms.map((r) => (
 						<option key={r.roomId} value={r.roomId}>
 							{r.name} · up to {r.capacity} guests
@@ -715,7 +743,11 @@ export function RoomBlocking() {
 				</Card>
 			)}
 			{detail && (
-				<SavedBlockDetail block={detail.block} timezone={detail.timezone} />
+				<SavedBlockDetail
+					block={detail.block}
+					timezone={detail.timezone}
+					rooms={rooms}
+				/>
 			)}
 		</>
 	);

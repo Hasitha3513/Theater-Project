@@ -12696,5 +12696,155 @@ def inert_ci_main():
         if result==0:print('PASS Preview exact29 successor; all historical controls preserved')
         return result
 
+
+# Exact Day 06 Room Blocking UX successor.
+UX_BASE = 'bf67d9b110e8646fb24a1d4541ad5fb04383dca5'
+UX_KEY = 'day06RoomBlockingUxRecovery'
+UX_RECORD = {'baseline': 'bf67d9b110e8646fb24a1d4541ad5fb04383dca5', 'payloadPaths': ['frontend/components/room-blocking.tsx', 'frontend/tests/room-blocks.test.mjs', 'knowledge/DESIGN.md', 'knowledge/PROGRESS.md', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'sourceSha256': {'frontend/components/room-blocking.tsx': 'e73202c0e3a857e12cb48fafb0a6c2358e5666f5f0d1b5efbc15347ce163c7ee', 'frontend/tests/room-blocks.test.mjs': 'e37572a930b2dd46727978a849f7a6038853f3980fa975ec8d47e2a1416daa6c'}, 'run': 'cinenest-day06-b1d3bc296d0e', 'evidenceSha256': {'SHA256SUMS': 'd1a4beedac11448aaecb81e40758332cc5c0a9d287c224ce8066e95d84ea2d8c', 'execution-manifest.json': '52b7c3be73b57e00a066bbe18e16591b963cbb1c0f0792891622ef2c3e82ef2e', 'provisioning-intent.json': '0ae9785ac2c26ad30379accd41ea01b55de1a0317f9ad6a593bb08beacce32ac', 'provisioning-commit.json': '547f69f1e07c0d897bc970ce13c2d316348f1fa81a8a6d1d5064c60f9141f992', 'room-blocks-results.json': 'a653d7dfacd25a92c406f53c8e9aed3db11c26de5a288f9afacff2a8be164e61', 'technical-closeout.json': '0ae2e3323c2be004e188cf9ff921635442dcee84193f8c30a49a99dc744d19b1', 'cleanup.json': '2c53c972b177a20cd8c7b6f78832a0b464bc0e2ff47819096fa91996f2f3ceed', 'owner-observation-status.json': 'ec11128877e7f325aea16d23dc17848c0d6729ca4e87da708c0a2835a190c2aa'}, 'historicalEvidence': 'PROGRESS.md#commercial-preview-room-qa', 'baselineCi': 42365522967, 'offlinePass': 105, 'focusedPass': 31, 'excludedTransport': 2, 'browserPass': 15, 'ownerUat': 'PENDING', 'independentReview': 'NOT_SATISFIED', 'productionAuthorization': 'NONE', 'accounting': {'part1': '4/7', 'planning': '3/6', 'release1': '4/21', 'fullMvp': '15/74', 'formalAcceptance': '0/92'}}
+UX_HASHES = {'frontend/components/room-blocking.tsx': 'e73202c0e3a857e12cb48fafb0a6c2358e5666f5f0d1b5efbc15347ce163c7ee', 'frontend/tests/room-blocks.test.mjs': 'e37572a930b2dd46727978a849f7a6038853f3980fa975ec8d47e2a1416daa6c', 'knowledge/DESIGN.md': 'bd724c3ccacc85f919580345b1dc01c3e2b35a4c20315089cb62755a6c996008', 'knowledge/PROGRESS.md': 'b9a0bd6a21610bc74ef7db7cb1c659ef64c76dbeefedd9d76823773a13c2c82e', 'knowledge/product/FEATURE_CATALOG.md': 'fd317e35866405497c575b3e3bf00576aa1f58495d1a93b7ae828bb277234c8c', 'knowledge/guides/USER_GUIDE.md': '89c0680051d657fac25399e7b56946c79e2369ca0cde211adda39330566575c7', 'knowledge/execution/status.json': 'e7b95c74a1b6ce038a9ef9dd2029b6b5e6547d2f8d1da99530931ebfd40fd142'}
+UX_SUFFIX_SHA = '757bad2650b9ed34d6d1bb669e944865038d3b67395ebf2bc1ee48930688480d'
+
+ux_previous_main = inert_ci_main
+ux_previous_guard = receipt_admission_successor_errors
+
+
+def ux_before(name):
+    return subprocess.check_output(['git', '-C', str(R), 'show', UX_BASE + ':' + name])
+
+
+def ux_errors():
+    owned = set(UX_RECORD['payloadPaths'])
+    try:
+        if len(owned) != 9 or set(UX_HASHES) != owned - {
+            'knowledge/manifest.json', 'knowledge/execution/validate_execution.py'
+        }:
+            return ['Room Blocking UX inventory definition mismatch']
+        subprocess.check_output(['git', '-C', str(R), 'merge-base', '--is-ancestor', UX_BASE, 'HEAD'])
+        end = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        validator = 'knowledge/execution/validate_execution.py'
+        prefix = ux_before(validator).decode().removesuffix(end)
+        current = (R / validator).read_text()
+        suffix = current[len(prefix):].replace(
+            "UX_SUFFIX_SHA = '" + UX_SUFFIX_SHA + "'", "UX_SUFFIX_SHA = '" + '0' * 64 + "'", 1
+        )
+        if not current.startswith(prefix) or hashlib.sha256(suffix.encode()).hexdigest() != UX_SUFFIX_SHA:
+            return ['Room Blocking UX validator prefix/successor drift']
+        git = ['git', '-C', str(R)]
+        baseline = parse_git_paths(subprocess.check_output(
+            git + ['ls-tree', '-r', '--name-only', '-z', UX_BASE], text=True), nul=True)
+        actual = parse_git_paths(subprocess.check_output(
+            git + ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], text=True), nul=True)
+        changed = parse_git_paths(subprocess.check_output(
+            git + ['diff', UX_BASE, '--name-only', '-z'], text=True), nul=True)
+        if actual != baseline or changed != owned or not owned <= baseline:
+            return ['Room Blocking UX exact nine changed paths required']
+        for name in owned:
+            p = R / name
+            if p.is_symlink() or not p.is_file() or p.resolve() != p:
+                return ['Room Blocking UX unsafe payload ' + name]
+            if name in UX_HASHES and hashlib.sha256(p.read_bytes()).hexdigest() != UX_HASHES[name]:
+                return ['Room Blocking UX fingerprint drift ' + name]
+        status = json.loads((K / 'execution/status.json').read_text())
+        record = status.pop(UX_KEY, None)
+        if record != UX_RECORD or status != json.loads(ux_before('knowledge/execution/status.json')):
+            return ['Room Blocking UX evidence or historical status drift']
+        if record['ownerUat'] != 'PENDING' or record['independentReview'] != 'NOT_SATISFIED' or record['productionAuthorization'] != 'NONE':
+            return ['Room Blocking UX acceptance or activation inflation']
+        manifest = json.loads(ux_before('knowledge/manifest.json'))
+        refresh = {name.removeprefix('knowledge/') for name in owned
+                   if name.startswith('knowledge/') and name != 'knowledge/manifest.json'}
+        if len(refresh) != 6 or refresh != {row['path'] for row in manifest['files'] if row['path'] in refresh}:
+            return ['Room Blocking UX exact six checksum entries required']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (K / 'manifest.json').read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Room Blocking UX unauthorized manifest change']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Room Blocking UX invalid payload or ancestry']
+    return []
+
+
+def ux_controls():
+    from unittest.mock import patch
+
+    def reject(path, mutate):
+        read_bytes = Path.read_bytes
+        read_text = Path.read_text
+        with patch.object(Path, 'read_bytes', lambda p: mutate(read_bytes(p)) if p == path else read_bytes(p)), patch.object(
+            Path, 'read_text', lambda p, *a, **kw: mutate(read_text(p, *a, **kw).encode()).decode()
+            if p == path else read_text(p, *a, **kw)
+        ):
+            assert ux_errors(), path
+
+    assert not ux_errors()
+    for name in UX_RECORD['sourceSha256']:
+        reject(R / name, lambda data: data + b'\n')
+    reject(K / 'execution/status.json', lambda data: data.replace(
+        b'"ownerUat": "PENDING"', b'"ownerUat": "ACCEPTED"'))
+    reject(K / 'execution/status.json', lambda data: data.replace(
+        b'"independentReview": "NOT_SATISFIED"', b'"independentReview": "SATISFIED"'))
+    output = subprocess.check_output
+
+    def extra(argv, *a, **kw):
+        data = output(argv, *a, **kw)
+        if argv == ['git', '-C', str(R), 'diff', UX_BASE, '--name-only', '-z']:
+            return data + 'frontend/unapproved.tsx\0'
+        return data
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert ux_errors()
+    print('PASS Room Blocking UX exact scope and source/acceptance negative controls')
+
+
+def ux_historical_view(check):
+    from unittest.mock import patch
+
+    previous = {R / name: ux_before(name) for name in UX_RECORD['payloadPaths']}
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+
+    def baseline_bytes(p, *a, **kw):
+        return previous[p] if p in previous else read_bytes(p, *a, **kw)
+
+    def baseline_text(p, *a, **kw):
+        return previous[p].decode() if p in previous else read_text(p, *a, **kw)
+
+    def baseline_output(argv, *a, **kw):
+        if isinstance(argv, list) and argv[:3] == ['git', '-C', str(R)] and 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [UX_BASE] + argv[index + 1:]
+            else:
+                return '' if kw.get('text') else b''
+        return output(argv, *a, **kw)
+
+    with patch.object(Path, 'read_bytes', baseline_bytes), patch.object(
+        Path, 'read_text', baseline_text
+    ), patch.object(subprocess, 'check_output', baseline_output), patch.dict(
+        globals(), {'receipt_admission_successor_errors': ux_previous_guard}
+    ):
+        return check()
+
+
+def ux_successor_errors():
+    errors = ux_errors()
+    return errors or ux_historical_view(ux_previous_guard)
+
+
+receipt_admission_successor_errors = ux_successor_errors
+
+
+def inert_ci_main():
+    errors = ux_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    ux_controls()
+    result = ux_historical_view(ux_previous_main)
+    if result == 0:
+        print('PASS Room Blocking UX successor; historical controls preserved')
+    return result
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -1477,3 +1477,9 @@ Existing Administration navigation exposes Settings → Commercial Policies. The
 Existing Room → inventory hold → Package choices & quotation UI now provides an explicit read-only commercial-readiness preview. Known component amounts are separated from unresolved tax/fees and never labelled payable. Exact scope/revision and blockers remain visible; changing package, method, add-ons or loaded context clears preview and pins, including away-and-back changes. No commercial acceptance control is added. Real-stack QA uses genuine login and one browser/context for Room Blocking and preview, no cookie injection or fabricated same-origin responses. Native Tab/Shift+Tab logical order and visible focus, plus 375/768/1280 no-overflow screenshots, are automated technical evidence, not Owner usability acceptance.
 
 [Technical evidence](PROGRESS.md#commercial-preview-room-qa).
+
+<a id="day06-room-blocking-ux-recovery"></a>
+
+## Day 06 Room Blocking room identification
+
+The Room Blocking selector displays a confirmed room reference after authorized UUID recovery when the current catalogue has no exact venue and room match. Saved details use the matching name or confirmed reference. Venue and authorization changes clear protected context. The view continues to withhold creator identity.
