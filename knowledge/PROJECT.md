@@ -1171,3 +1171,8 @@ V38 admits signed commercial-policy approval evidence in synthetic qualification
 ## V39 policy activation and V40 internal quotation fixtures
 
 V39 and V40 add local fixture-only policy activation and quotation issuance foundations for CN-R1-COMMERCIAL-QUOTE-001. Issued fixtures are non-offers, isolated from V7 quotations and payment or booking operations. Actual Finance, Legal and Operations decisions, operating scope, trust roots and activation authority remain external gates. Commercial issuance, checkout and customer access stay disabled.
+
+
+## V41 customer commercial quotation foundation
+
+The V41 customer quotation foundation for CN-R1-COMMERCIAL-QUOTE-001 is default-disabled. An authenticated customer request with valid CSRF receives an unavailable response. Isolated tests may exercise synthetic qualification snapshots, which are non-offers. Commercial issuance requires genuine specialist authority, approved trust roots and separate activation. Checkout and customer access remain disabled.

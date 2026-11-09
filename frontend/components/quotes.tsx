@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
+import { commercialIssuanceUnavailable } from "../lib/commercial-quotes";
 import type { Hold } from "../lib/inventory";
 import { venueTime } from "../lib/inventory";
 import { displayMoney } from "../lib/packages";
@@ -21,6 +22,10 @@ type Choice = {
 	name: string;
 	options: { serviceId: string; label: string; mode: string }[];
 };
+export function CommercialIssuanceNotice() {
+	return <p>{commercialIssuanceUnavailable}</p>;
+}
+
 export function CommercialPreviewSummary({
 	preview,
 }: {
@@ -32,6 +37,7 @@ export function CommercialPreviewSummary({
 			style={{ minWidth: 0, overflowWrap: "anywhere" }}
 		>
 			<h3>Commercial policy preview — not an offer</h3>
+			<CommercialIssuanceNotice />
 			<p>
 				<strong>{preview.classification}</strong>
 			</p>

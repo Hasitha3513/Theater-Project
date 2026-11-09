@@ -31188,5 +31188,81 @@
     "customerAccessEnabled": false,
     "operationalTrustEnabled": false,
     "publication": "NOT_AUTHORIZED"
+  },
+  "day05V41CustomerQuotation": {
+    "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+    "baseline": "fc6ccaa21e6a304ea9cb971bee86ad9c6c6f36d8",
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "cc6e558f0b4e37da90a43b14018e58e05984d1c76cb65d422c27773148d25683",
+      "backend/src/main/java/com/cinenest/pricing/internal/CustomerCommercialQuoteConfiguration.java": "2aaa0ba45058ba6de86d5231ab5162eca9658fb41906fc771fed0944e08fdc99",
+      "backend/src/main/java/com/cinenest/pricing/internal/CustomerCommercialQuoteController.java": "de9695fbf2f8d912d053a432da34903f3d9593ec42a540d97fa175557b627e4a",
+      "backend/src/main/java/com/cinenest/pricing/internal/CustomerCommercialQuoteService.java": "a438f5b4d9d81f0150d646343f502220f8d4423865f9e65aa081e9ec7f597baa",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcCustomerCommercialQuoteRepository.java": "94a7c1639b38a6379b4dc8a734fbbfefebb0ddce6923414186436f50b981de48",
+      "backend/src/main/resources/db/migration/V41__customer_commercial_quotation.sql": "bcd02dccaf20e08e0e8cb70106b65eaa6f6fa64ee1a1533d6d0d563426f8dd6b",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "ffc251c1762ad4e4ba60412afbb0eaa4d6328a59d3d76470ac777d870665e72b",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java": "37ea4ad8aa357e8b54f6d6fd79fbad4dc803fefdd15f18cc50f64f1bb771f457",
+      "backend/src/test/java/com/cinenest/pricing/internal/CustomerCommercialQuotePostgresTest.java": "acbef8faedcad72fde5e89f2786adb6e38097494ce87e3d2243622a254db176f",
+      "backend/src/test/java/com/cinenest/pricing/internal/CustomerCommercialQuoteServiceTest.java": "0ccf62f8d3f929c34e0ac74f0a3b16304b4bb419c9acf9f8f22203b7dd2fb611",
+      "frontend/app/api/commercial-quotes/route.ts": "7344151202d9256a7978da97787123a1eccbb985d05014a7e0caeb4ea2fa7862",
+      "frontend/components/quotes.tsx": "4862b71400eaed5bc617f5189c633849266bc2073406525cf347a01a8abbceb8",
+      "frontend/lib/commercial-quotes.ts": "8d75bf48eefe7e871ae917479e240be77715081756dfb2160d9f58557d283255",
+      "frontend/lib/room-backend.ts": "8082a93ec0dc08dd3be3d2d91b7dec3e78e5c29851400f0e43d56e86fb929125",
+      "frontend/package.json": "148beb4ee007a81782b4d75e5bb5fdc984f3845ab0b73a0753f9b7e7066a4cfb",
+      "frontend/tests/commercial-quotes.test.mjs": "6f26c71057a5a877864d3c1340d5b2cb6debb806c029fc3b897e53c9dab7254a"
+    },
+    "postgres": {
+      "run": "cn-v41-3420d5bcd75e4a71",
+      "passed": 2,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cleanMigrations": 40,
+      "historicalMigrationsUnchanged": 39,
+      "upgrade": "V40_TO_V41",
+      "durationSeconds": 13.93,
+      "applicationDatabases": 2,
+      "containerRemoved": true,
+      "portClosed": true,
+      "processGroupAbsent": true,
+      "unrelatedInventoryMatches": true,
+      "evidenceSha256": {
+        "summary.json": "4c4b263cd92b8425622e3a9cf13710e255b2d3a9d20874fbdfd0cb4662f9fc64",
+        "postgres-tests.log": "0e0c656609a7e0108a87ebf84c95e0fcc700c0e4cc2bce00f3a87427a0da7f63"
+      }
+    },
+    "offline": {
+      "backendPassed": 66,
+      "backendFailures": 0,
+      "backendErrors": 0,
+      "backendSkipped": 2,
+      "frontendPassed": 2,
+      "frontendFailed": 0,
+      "frontendSkipped": 0,
+      "lint": "PASS",
+      "typecheck": "PASS",
+      "build": "PASS"
+    },
+    "knowledgeCoverage": {
+      "reused": 105,
+      "deltasReviewed": 9,
+      "receiptRecovered": true,
+      "receiptVerificationTiming": "AFTER_DRAFT_BEFORE_POSTGRES",
+      "sha256": "11dd74132952033cc83f36c876fc95645b772aa0c410ba30efd01415aed8fb78"
+    },
+    "accounting": {
+      "part1": "4/7",
+      "planning": "3/6",
+      "release1": "4/21",
+      "mvp": "15/74",
+      "formal": "0/92"
+    },
+    "ownerUat": "PENDING",
+    "independentReview": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "commercialIssuanceEnabled": false,
+    "checkoutEnabled": false,
+    "customerAccessEnabled": false,
+    "operationalTrustEnabled": false,
+    "publication": "NOT_AUTHORIZED"
   }
 }

@@ -3485,3 +3485,8 @@ Pricing verifies canonical Ed25519 envelopes against configured synthetic trust.
 ## V39 policy activation and V40 internal quotation fixtures
 
 Pricing owns the V39 fixture activation and revocation ledgers and the V40 immutable quote ledger. Internal fixture entry points require verified appointments and Ed25519 proof sets. They have no Spring bean or HTTP route. Transactions bind exact V36 policy revision and hash to venue, room and package version. A shared transaction lock orders revocation checkpoints, activation and issuance. PostgreSQL excludes overlapping activations and enforces mandatory audit through deferred foreign keys. Issuance uses the Booking hold port and revalidates room and publication facts. Fixture tests use port doubles for Booking, Identity and room/publication inputs. V7 and V36 through V38 remain unchanged.
+
+
+## V41 customer commercial quotation foundation
+
+Pricing owns the V41 qualification quote and audit tables. A deferred foreign key makes an attributable audit mandatory at commit and database triggers protect immutable history. The unwired qualification service checks the Identity and Booking ports, locked hold ownership and revision, the published package version, and three distinct current approval facts with fresh revocation evidence from a test-only authority. It calculates LKR amounts on the server and binds replay to the command and exact policy revision. The V41 route always denies issuance while operational authority is absent. Identity adds one authenticated POST matcher and the frontend reuses the existing cookie, origin and CSRF forwarding. No V38–V40 fixture ledger is treated as operational authority.

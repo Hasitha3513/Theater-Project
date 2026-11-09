@@ -200,6 +200,14 @@ export async function forwardInventory(request: Request) {
 	return forwardConfigured(request, inventoryRoute);
 }
 
+export function forwardCustomerCommercialQuote(request: Request) {
+	return forwardConfigured(
+		request,
+		(path, method) => path === "/api/commercial-quotes" && method === "POST",
+		[],
+	);
+}
+
 export function quoteRoute(path: string, method: string) {
 	if (path === "/api/quotes/preview") return method === "GET";
 	if (path === "/api/quotes") return method === "POST";

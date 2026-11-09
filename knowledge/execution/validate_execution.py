@@ -13898,5 +13898,174 @@ def inert_ci_main():
     return v40_historical_view(v40_prior_main)
 
 
+
+
+
+V41_BASE = 'fc6ccaa21e6a304ea9cb971bee86ad9c6c6f36d8'
+V41_SUFFIX = 'bffaf8e00dd2177f113545a4db43d8072aea4a0fadeba11cec001da0345a045f'
+V41_HASHES = {'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'cc6e558f0b4e37da90a43b14018e58e05984d1c76cb65d422c27773148d25683', 'backend/src/main/java/com/cinenest/pricing/internal/CustomerCommercialQuoteConfiguration.java': '2aaa0ba45058ba6de86d5231ab5162eca9658fb41906fc771fed0944e08fdc99', 'backend/src/main/java/com/cinenest/pricing/internal/CustomerCommercialQuoteController.java': 'de9695fbf2f8d912d053a432da34903f3d9593ec42a540d97fa175557b627e4a', 'backend/src/main/java/com/cinenest/pricing/internal/CustomerCommercialQuoteService.java': 'a438f5b4d9d81f0150d646343f502220f8d4423865f9e65aa081e9ec7f597baa', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCustomerCommercialQuoteRepository.java': '94a7c1639b38a6379b4dc8a734fbbfefebb0ddce6923414186436f50b981de48', 'backend/src/main/resources/db/migration/V41__customer_commercial_quotation.sql': 'bcd02dccaf20e08e0e8cb70106b65eaa6f6fa64ee1a1533d6d0d563426f8dd6b', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'ffc251c1762ad4e4ba60412afbb0eaa4d6328a59d3d76470ac777d870665e72b', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '37ea4ad8aa357e8b54f6d6fd79fbad4dc803fefdd15f18cc50f64f1bb771f457', 'backend/src/test/java/com/cinenest/pricing/internal/CustomerCommercialQuotePostgresTest.java': 'acbef8faedcad72fde5e89f2786adb6e38097494ce87e3d2243622a254db176f', 'backend/src/test/java/com/cinenest/pricing/internal/CustomerCommercialQuoteServiceTest.java': '0ccf62f8d3f929c34e0ac74f0a3b16304b4bb419c9acf9f8f22203b7dd2fb611', 'frontend/app/api/commercial-quotes/route.ts': '7344151202d9256a7978da97787123a1eccbb985d05014a7e0caeb4ea2fa7862', 'frontend/components/quotes.tsx': '4862b71400eaed5bc617f5189c633849266bc2073406525cf347a01a8abbceb8', 'frontend/lib/commercial-quotes.ts': '8d75bf48eefe7e871ae917479e240be77715081756dfb2160d9f58557d283255', 'frontend/lib/room-backend.ts': '8082a93ec0dc08dd3be3d2d91b7dec3e78e5c29851400f0e43d56e86fb929125', 'frontend/package.json': '148beb4ee007a81782b4d75e5bb5fdc984f3845ab0b73a0753f9b7e7066a4cfb', 'frontend/tests/commercial-quotes.test.mjs': '6f26c71057a5a877864d3c1340d5b2cb6debb806c029fc3b897e53c9dab7254a', 'knowledge/ARCHITECTURE.md': '7761877421daab8147c4e9c0dd85a9afb5de6919c2d26bdc1090f637f3469fa6', 'knowledge/PROGRESS.md': 'dd757be1c44ea0fbdfecb2eb781b6547df1052880c0ac60badbafee1911503a3', 'knowledge/PROJECT.md': 'c1d2950fb5c444aac34d04a4fd725708c47e14350fbf5846c44c1252cd679d01', 'knowledge/execution/status.json': 'b9c672b2006cf935b7dda117799bfb8ce0b680f383c050e7da958109a049a140', 'knowledge/guides/USER_GUIDE.md': '79eae88a8dbb9c4fac3271f015b6c0b41a3e0379dc7c51d614cad0ebc0069be3', 'knowledge/product/FEATURE_CATALOG.md': 'afb5ebfa26f5547d0e5342ac846dbd65bacf423b8b5d9ac6028bfea4189e82d3'}
+
+v41_prior_main = inert_ci_main
+v41_prior_guard = receipt_admission_successor_errors
+V41_VALIDATOR = 'knowledge/execution/validate_execution.py'
+V41_MANIFEST = 'knowledge/manifest.json'
+V41_OWNED = set(V41_HASHES) | {V41_VALIDATOR, V41_MANIFEST}
+
+
+def v41_git(*args, **kwargs):
+    return subprocess.check_output(['git', '-C', str(R), *args], **kwargs)
+
+
+def v41_before(name):
+    return v41_git('show', V41_BASE + ':' + name)
+
+
+def v41_tree():
+    return parse_git_paths(v41_git('ls-tree', '-r', '--name-only', '-z', V41_BASE, text=True), nul=True)
+
+
+def v41_errors():
+    try:
+        if len(V41_OWNED) != 24:
+            return ['V41 expected 24 exact paths']
+        v41_git('merge-base', '--is-ancestor', V41_BASE, 'HEAD')
+        tree = v41_tree()
+        actual = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard', text=True), nul=True)
+        changed = parse_git_paths(v41_git('diff', V41_BASE, '--name-only', '-z', text=True), nul=True)
+        if actual != tree | V41_OWNED or changed | (actual - tree) != V41_OWNED:
+            return ['V41 unexpected path inventory']
+        for name in V41_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['V41 unsafe path ' + name]
+            if name in V41_HASHES and hashlib.sha256(path.read_bytes()).hexdigest() != V41_HASHES[name]:
+                return ['V41 fingerprint mismatch ' + name]
+        end = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix = v41_before(V41_VALIDATOR).decode().removesuffix(end)
+        current = (R / V41_VALIDATOR).read_text()
+        tail = current[len(prefix):].replace("V41_SUFFIX = '" + V41_SUFFIX + "'", "V41_SUFFIX = '" + '0' * 64 + "'", 1)
+        if not current.startswith(prefix) or hashlib.sha256(tail.encode()).hexdigest() != V41_SUFFIX:
+            return ['V41 historical validator or successor changed']
+        folder = R / 'backend/src/main/resources/db/migration'
+        migrations = {str(p.relative_to(R)) for p in folder.glob('V*.sql')}
+        expected = {n for n in tree | V41_OWNED if n.startswith(str(folder.relative_to(R)) + '/')}
+        if migrations != expected or len(migrations) != 40 or any(Path(n).name.startswith('V31__') for n in migrations):
+            return ['V41 migration inventory mismatch']
+        if any((R / n).read_bytes() != v41_before(n) for n in migrations & tree):
+            return ['V41 historical migration changed']
+        state = json.loads((K / 'execution/status.json').read_text())
+        evidence = state.pop('day05V41CustomerQuotation')
+        if state != json.loads(v41_before('knowledge/execution/status.json')):
+            return ['V41 historical execution state changed']
+        if evidence['sourceSha256'] != {n: h for n, h in V41_HASHES.items() if not n.startswith('knowledge/')}:
+            return ['V41 qualification source mismatch']
+        pg = evidence['postgres']
+        if (pg['passed'], pg['failed'], pg['errors'], pg['skipped']) != (2, 0, 0, 0):
+            return ['V41 PostgreSQL qualification missing']
+        if (pg['cleanMigrations'], pg['historicalMigrationsUnchanged'], pg['applicationDatabases'],
+                pg['upgrade']) != (40, 39, 2, 'V40_TO_V41'):
+            return ['V41 qualification inventory mismatch']
+        if not all(pg[n] is True for n in ('containerRemoved', 'portClosed', 'processGroupAbsent')):
+            return ['V41 qualification cleanup missing']
+        if not 0 < pg['durationSeconds'] <= 600:
+            return ['V41 qualification runtime exceeded']
+        if evidence['publication'] != 'NOT_AUTHORIZED':
+            return ['V41 publication authority inflated']
+        if (evidence['ownerUat'], evidence['independentReview'], evidence['productionAuthorization']) != ('PENDING', 'NOT_SATISFIED', 'NONE'):
+            return ['V41 acceptance boundary changed']
+        if any(evidence[n] is not False for n in ('commercialIssuanceEnabled', 'checkoutEnabled', 'customerAccessEnabled', 'operationalTrustEnabled')):
+            return ['V41 activation boundary changed']
+        manifest = json.loads(v41_before(V41_MANIFEST))
+        refresh = {n.removeprefix('knowledge/') for n in V41_OWNED if n.startswith('knowledge/')} - {'manifest.json'}
+        if refresh != {row['path'] for row in manifest['files'] if row['path'] in refresh}:
+            return ['V41 manifest refresh incomplete']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V41 manifest changed outside authorized hashes']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V41 admission evidence inaccessible or invalid']
+    return []
+
+
+def v41_controls():
+    from unittest.mock import patch
+
+    assert not v41_errors()
+    read_bytes = Path.read_bytes
+    for target in (R / n for n in V41_HASHES):
+        with patch.object(Path, 'read_bytes', lambda p: read_bytes(p) + b'\n' if p == target else read_bytes(p)):
+            assert v41_errors(), target
+    output = subprocess.check_output
+
+    def extra(argv, *a, **kw):
+        result = output(argv, *a, **kw)
+        return result + 'frontend/unapproved.tsx\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert v41_errors()
+    print('PASS V41 exact path, fingerprint and evidence controls')
+
+
+def v41_historical_view(check):
+    from unittest.mock import patch
+
+    tree = v41_tree()
+    previous = {R / n: v41_before(n) for n in V41_OWNED & tree}
+    added = V41_OWNED - tree
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+    glob, rglob = Path.glob, Path.rglob
+
+    def baseline_bytes(p, *a, **kw):
+        return previous[p] if p in previous else read_bytes(p, *a, **kw)
+
+    def baseline_text(p, *a, **kw):
+        return previous[p].decode() if p in previous else read_text(p, *a, **kw)
+
+    def baseline_output(argv, *a, **kw):
+        if not isinstance(argv, list) or argv[:3] != ['git', '-C', str(R)]:
+            return output(argv, *a, **kw)
+        if 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [V41_BASE] + argv[index + 1:]
+            else:
+                return '' if kw.get('text') else b''
+        result = output(argv, *a, **kw)
+        if 'ls-files' in argv:
+            text = result if isinstance(result, str) else result.decode()
+            sep = '\0' if '-z' in argv else '\n'
+            text = ''.join(name + sep for name in text.split(sep) if name and name not in added)
+            return text if isinstance(result, str) else text.encode()
+        return result
+
+    with patch.object(Path, 'read_bytes', baseline_bytes), patch.object(Path, 'read_text', baseline_text), patch.object(
+        Path, 'glob', lambda p, *a, **kw: (item for item in glob(p, *a, **kw) if item not in {R / n for n in added})
+    ), patch.object(
+        Path, 'rglob', lambda p, *a, **kw: (item for item in rglob(p, *a, **kw) if item not in {R / n for n in added})
+    ), patch.object(subprocess, 'check_output', baseline_output), patch.dict(
+        globals(), {'receipt_admission_successor_errors': v41_prior_guard}
+    ):
+        return check()
+
+
+def v41_successor_errors():
+    return v41_errors() or v41_historical_view(v41_prior_guard)
+
+
+receipt_admission_successor_errors = v41_successor_errors
+
+
+def inert_ci_main():
+    errors = v41_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v41_controls()
+    return v41_historical_view(v41_prior_main)
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -3764,3 +3764,8 @@ CI run 42571036540 verified the pinned Temurin archive and completed Java and No
 ## V39 policy activation and V40 internal quotation fixtures
 
 V39/V40 fixture qualification cn-v40-9a6445e1c7d64cc1 completed with 2 PostgreSQL methods passed, 0 failed, 0 errors and 0 skipped. Clean Flyway applied 39 migrations through V40. Populated V38 upgraded by two migrations and preserved historical migration checksums and quote/booking snapshots. Focused offline backend and architecture tests reported 36 passed. The Bank and Room Blocking current-head assertions advanced to V40 and compiled. Their full integration classes were not executed in this bounded window. Two disposable databases were accounted for in 12.553 seconds, with container and process shutdown, port closure and matching unrelated container IDs. Formal acceptance and production authorization are unchanged.
+
+
+## V41 customer commercial quotation foundation
+
+The exact 24-path V41 local scope is based on fc6ccaa21e6a304ea9cb971bee86ad9c6c6f36d8. Backend 66 passed with two opt-in skips during offline checks. Frontend focused tests, lint, typecheck and production build passed. One PostgreSQL 18.6 window passed both opt-in tests, clean 40-migration V41 and populated V40→V41. Synthetic authority and hold/publication port doubles were used. Two databases were reconciled, the container removed and listener closed in 13.93 seconds. The Knowledge Base receipt was verified after draft edits and before PostgreSQL startup. Owner UAT remains pending with RETEST and independent review not satisfied. Publication awaits separate authorization. Accounting and operational restrictions remain unchanged.

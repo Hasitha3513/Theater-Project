@@ -539,3 +539,8 @@ For synthetic Room Blocking, enter the approved venue and room references and lo
 ## V38 trusted commercial approval intake
 
 For authorized synthetic qualification, open the commercial policy workspace and submit an envelope signed for the selected policy. A receipt records evidence intake. Commercial issuance, checkout and customer access remain disabled.
+
+
+## V41 customer commercial quotation foundation
+
+Open the existing commercial policy preview to inspect its non-offer information. The preview displays the issuance-unavailable notice. There is no customer commercial issuance, checkout or payment action in this flow.

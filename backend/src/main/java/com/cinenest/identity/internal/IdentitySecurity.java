@@ -125,7 +125,7 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/guest-roster","/api/admin/venues/*/bookings/*/guest-roster").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/guest-roster","/api/bookings/*/guest-roster/companions").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/quotes/*").authenticated()
-                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/quotes", "/api/quotes/*/revisions", "/api/quotes/*/accept").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/quotes", "/api/commercial-quotes", "/api/quotes/*/revisions", "/api/quotes/*/accept").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/verification/requests/*", "/api/admin/venues/*/verification/requests", "/api/admin/venues/*/verification/requests/*", "/api/admin/venues/*/verification/requests/*/evidence/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/verification/requests", "/api/verification/requests/*/uploads", "/api/verification/uploads/*/complete", "/api/verification/requests/*/resubmissions", "/api/admin/venues/*/verification/requests/*/decisions").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/verification/uploads/*/content").authenticated()

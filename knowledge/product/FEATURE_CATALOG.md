@@ -854,3 +854,8 @@ The internal commercial-policy binding foundation supports synthetic qualificati
 ## V38 trusted commercial approval intake
 
 V38 trusted commercial approval intake is a qualified synthetic-only capability with signed scope verification and immutable audited history. Operational trust and commercial activation remain disabled.
+
+
+## V41 customer commercial quotation foundation
+
+The quotation preview explains that customer commercial issuance is unavailable. V41 qualification verifies scoped, audited, immutable synthetic snapshots independently of checkout and customer admission.
