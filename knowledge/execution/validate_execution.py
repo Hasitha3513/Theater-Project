@@ -13348,5 +13348,164 @@ def inert_ci_main():
     return result
 
 
+
+
+V38_BASE = 'ed27d2bdddd20b8d877a4f2e3ec23621c210acdb'
+V38_SUFFIX = '1f232af4bd0378cbc2920eccabc98a1db79eb5067bbea5e3cf55e28ce28bb186'
+V38_HASHES = {'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApproval.java': '1d86d45f2e6295f568a6d6c0aa7359de574d4e76bca59961abd665ab217b478b', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApprovalController.java': '03084439afde221977e9628ae3f10ac19bd7f50f7586a3d987b445e9052408c2', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApprovalService.java': 'b201953cfc5b8f22f27782b13988601044c47fc845a0b93bd8b3157f9473b593', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApprovalTrustProperties.java': 'f7e82b061ee4df4ddcdffce989caaff3f98b611943ec93615208b9b81fd68b48', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApprovalVerifier.java': 'bb53488758c563f561d74b8c662df461829bcab76287b33818b51227e65c23a0', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyApprovalRepository.java': '53691a56e3c54bd9dc4d8af0706ff5ad735f4e54ee6a577bd05cf80a53a44ea9', 'backend/src/main/resources/db/migration/V38__commercial_policy_trusted_approval_intake.sql': '8673fae44f1b365225777650e7a2815bcbeac7ad5a5404eeeb13d8995f7509fa', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '476b8c1a7e07a3d9cb25f5b83a184b1d47d96308b17e6850985aae164227e87d', 'backend/src/test/java/com/cinenest/CommercialPolicyApprovalArchitectureTest.java': 'eadc329eaf465226e708e5f6ebe2d5639734f317e5a5d6892ea6eac0392d89fe', 'backend/src/test/java/com/cinenest/CommercialPolicyApprovalPostgresTest.java': '6c9ee0860a0126b86a261c784dfaff7c73c2094ef130ace824ea9f87c07c50e0', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '83261b0b394f81b951670d30ef748f2ef9c12a5334652f24f905974cf3a84a51', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyApprovalVerifierTest.java': '479cc339a3f35358c1143bd6093464e47d4a2224cc026ef86970855898c4ee42', 'frontend/app/api/admin/venues/[venueId]/commercial-policies/[policyId]/trusted-approvals/route.ts': '2eca6739fbf9b9cb9605b903e66c197700e15ad7b091a6eee65835fc2e8d71b9', 'frontend/components/commercial-policies.tsx': '704291b822d7331bdcd2939f4de348f5e3ff3510b4a7704fb08172f59672d297', 'frontend/lib/commercial-policies.ts': '30d7bb58f4ffe2ffcc10176e7f4501f4a022c52d4407400a95389aadbd46c12a', 'frontend/tests/commercial-policies.test.mjs': 'f6c77889437828034f1d2ef38222c130bb17b9ee810e1da21de014a26062e1ac', 'knowledge/product/FEATURE_CATALOG.md': '05f6b5335ee6eb7bff02c357c4cd30f034ed3f4a7d81e7d2baf40a2bf006602a', 'knowledge/guides/USER_GUIDE.md': 'd21059c5620119cffd1822216936408cd9d132fb0a24bb9b11349a32fe6e9588', 'knowledge/PROJECT.md': '2363cd050fecc9c47f07ffdf09f63567c0c25bb3f4c3e8ee054710a692222aff', 'knowledge/DESIGN.md': '90f5725d1658fb56d6e1da1c95230175b42919953ffcb040b0dc01c718c17a5f', 'knowledge/execution/status.json': 'ac561090dcf998965c25f63e89660dfd6b65f660e52aec6b9bf775f7b22b0cd2', 'knowledge/PROGRESS.md': '08162aed5776bd808c37af5cd26badebd603d821a0756c2dbe3fee51b852fc70', 'knowledge/ARCHITECTURE.md': '995cfa2905ab48c480892a2093753ad022ba130a51bb8a842dcd133d1900d272'}
+
+v38_prior_main = inert_ci_main
+v38_prior_guard = receipt_admission_successor_errors
+V38_VALIDATOR = 'knowledge/execution/validate_execution.py'
+V38_MANIFEST = 'knowledge/manifest.json'
+V38_OWNED = set(V38_HASHES) | {V38_VALIDATOR, V38_MANIFEST}
+
+
+def v38_git(*args, **kwargs):
+    return subprocess.check_output(['git', '-C', str(R), *args], **kwargs)
+
+
+def v38_before(name):
+    return v38_git('show', V38_BASE + ':' + name)
+
+
+def v38_tree():
+    return parse_git_paths(v38_git('ls-tree', '-r', '--name-only', '-z', V38_BASE, text=True), nul=True)
+
+
+def v38_errors():
+    try:
+        if len(V38_OWNED) != 25:
+            return ['V38 expected 25 exact paths']
+        v38_git('merge-base', '--is-ancestor', V38_BASE, 'HEAD')
+        tree = v38_tree()
+        actual = parse_git_paths(v38_git('ls-files', '-z', '--cached', '--others', '--exclude-standard', text=True), nul=True)
+        changed = parse_git_paths(v38_git('diff', V38_BASE, '--name-only', '-z', text=True), nul=True)
+        if actual != tree | V38_OWNED or changed | (actual - tree) != V38_OWNED:
+            return ['V38 unexpected path inventory']
+        for name in V38_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['V38 unsafe path ' + name]
+            if name in V38_HASHES and hashlib.sha256(path.read_bytes()).hexdigest() != V38_HASHES[name]:
+                return ['V38 fingerprint mismatch ' + name]
+        end = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix = v38_before(V38_VALIDATOR).decode().removesuffix(end)
+        current = (R / V38_VALIDATOR).read_text()
+        tail = current[len(prefix):].replace("V38_SUFFIX = '" + V38_SUFFIX + "'", "V38_SUFFIX = '" + '0' * 64 + "'", 1)
+        if not current.startswith(prefix) or hashlib.sha256(tail.encode()).hexdigest() != V38_SUFFIX:
+            return ['V38 historical validator or successor changed']
+        folder = R / 'backend/src/main/resources/db/migration'
+        migrations = {str(p.relative_to(R)) for p in folder.glob('V*.sql')}
+        expected = {n for n in tree | V38_OWNED if n.startswith(str(folder.relative_to(R)) + '/')}
+        if migrations != expected or len(migrations) != 37 or any(Path(n).name.startswith('V31__') for n in migrations):
+            return ['V38 migration inventory mismatch']
+        if any((R / n).read_bytes() != v38_before(n) for n in migrations & tree):
+            return ['V38 historical migration changed']
+        state = json.loads((K / 'execution/status.json').read_text())
+        evidence = state.pop('day05V38TrustedApproval')
+        if state != json.loads(v38_before('knowledge/execution/status.json')):
+            return ['V38 historical execution state changed']
+        if evidence['sourceSha256'] != {n: h for n, h in V38_HASHES.items() if not n.startswith('knowledge/')}:
+            return ['V38 qualification source mismatch']
+        pg = evidence['postgres']
+        if (pg['passed'], pg['failed'], pg['errors'], pg['skipped']) != (2, 0, 0, 0):
+            return ['V38 PostgreSQL qualification missing']
+        if (evidence['ownerUat'], evidence['independentReview'], evidence['productionAuthorization']) != ('PENDING', 'NOT_SATISFIED', 'NONE'):
+            return ['V38 acceptance boundary changed']
+        if any(evidence[n] is not False for n in ('commercialIssuanceEnabled', 'checkoutEnabled', 'customerAccessEnabled')):
+            return ['V38 activation boundary changed']
+        manifest = json.loads(v38_before(V38_MANIFEST))
+        refresh = {n.removeprefix('knowledge/') for n in V38_OWNED if n.startswith('knowledge/')} - {'manifest.json'}
+        if refresh != {row['path'] for row in manifest['files'] if row['path'] in refresh}:
+            return ['V38 manifest refresh incomplete']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V38_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V38 manifest changed outside authorized hashes']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V38 admission evidence inaccessible or invalid']
+    return []
+
+
+def v38_controls():
+    from unittest.mock import patch
+
+    assert not v38_errors()
+    read_bytes = Path.read_bytes
+    for target in (R / n for n in V38_HASHES):
+        with patch.object(Path, 'read_bytes', lambda p: read_bytes(p) + b'\n' if p == target else read_bytes(p)):
+            assert v38_errors(), target
+    output = subprocess.check_output
+
+    def extra(argv, *a, **kw):
+        result = output(argv, *a, **kw)
+        return result + 'frontend/unapproved.tsx\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert v38_errors()
+    print('PASS V38 exact path, fingerprint and evidence controls')
+
+
+def v38_historical_view(check):
+    from unittest.mock import patch
+
+    tree = v38_tree()
+    previous = {R / n: v38_before(n) for n in V38_OWNED & tree}
+    added = V38_OWNED - tree
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+    glob, rglob = Path.glob, Path.rglob
+
+    def baseline_bytes(p, *a, **kw):
+        return previous[p] if p in previous else read_bytes(p, *a, **kw)
+
+    def baseline_text(p, *a, **kw):
+        return previous[p].decode() if p in previous else read_text(p, *a, **kw)
+
+    def baseline_output(argv, *a, **kw):
+        if not isinstance(argv, list) or argv[:3] != ['git', '-C', str(R)]:
+            return output(argv, *a, **kw)
+        if 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [V38_BASE] + argv[index + 1:]
+            else:
+                return '' if kw.get('text') else b''
+        result = output(argv, *a, **kw)
+        if 'ls-files' in argv:
+            text = result if isinstance(result, str) else result.decode()
+            sep = '\0' if '-z' in argv else '\n'
+            text = ''.join(name + sep for name in text.split(sep) if name and name not in added)
+            return text if isinstance(result, str) else text.encode()
+        return result
+
+    with patch.object(Path, 'read_bytes', baseline_bytes), patch.object(Path, 'read_text', baseline_text), patch.object(
+        Path, 'glob', lambda p, *a, **kw: (item for item in glob(p, *a, **kw) if item not in {R / n for n in added})
+    ), patch.object(
+        Path, 'rglob', lambda p, *a, **kw: (item for item in rglob(p, *a, **kw) if item not in {R / n for n in added})
+    ), patch.object(subprocess, 'check_output', baseline_output), patch.dict(
+        globals(), {'receipt_admission_successor_errors': v38_prior_guard}
+    ):
+        return check()
+
+
+def v38_successor_errors():
+    return v38_errors() or v38_historical_view(v38_prior_guard)
+
+
+receipt_admission_successor_errors = v38_successor_errors
+
+
+def inert_ci_main():
+    errors = v38_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v38_controls()
+    return v38_historical_view(v38_prior_main)
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

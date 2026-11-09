@@ -3,6 +3,42 @@ import { RoomRequestError, roomRequest } from "./rooms";
 export { RoomRequestError };
 export const policyNotice =
 	"Reviewed draft — not active; commercial issuance disabled.";
+export const maxApprovalEnvelopeBytes = 4 * 1024;
+const policyIdPattern =
+	"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+const approvalPath = new RegExp(
+	`^(/api/admin/venues/${policyIdPattern}/commercial-policies)/(${policyIdPattern})/trusted-approvals$`,
+);
+const approvalUpstreamPath = new RegExp(
+	`^/api/admin/venues/${policyIdPattern}/commercial-policies/trusted-approvals$`,
+);
+
+export function approvalTarget(path: string) {
+	const match = approvalPath.exec(path);
+	return match
+		? { upstream: `${match[1]}/trusted-approvals`, policyId: match[2] }
+		: null;
+}
+
+export function validApprovalEnvelope(value: unknown): value is string {
+	return (
+		typeof value === "string" &&
+		value.trim().length > 0 &&
+		new TextEncoder().encode(value).length <= maxApprovalEnvelopeBytes
+	);
+}
+
+export function approvalMessage(error: unknown): string {
+	if (error instanceof RoomRequestError) {
+		if (error.status === 404)
+			return "Synthetic signed approval intake is disabled or unavailable.";
+		if (error.status === 503)
+			return "Synthetic signed approval intake is unavailable. Verify the outcome before submitting again.";
+		if (error.status === 400 || error.status === 413)
+			return "The signed envelope was rejected. Check the format, size and selected revision.";
+	}
+	return policyMessage(error);
+}
 export type PolicyDocument = Record<
 	string,
 	string | null | boolean | string[] | Fee[]
@@ -179,7 +215,9 @@ export function validateDocument(d: PolicyDocument): Record<string, string> {
 	return errors;
 }
 export function policyRoute(path: string, method: string): boolean {
-	const id = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+	if (approvalPath.test(path) || approvalUpstreamPath.test(path))
+		return method === "POST";
+	const id = policyIdPattern;
 	const match = new RegExp(
 		`^/api/admin/venues/${id}/commercial-policies(?:/(${id})(?:/(history|reviews))?)?$`,
 	).exec(path);

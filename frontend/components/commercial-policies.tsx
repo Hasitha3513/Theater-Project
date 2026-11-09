@@ -1,7 +1,9 @@
 "use client";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import {
+	approvalMessage,
 	emptyDocument,
+	maxApprovalEnvelopeBytes,
 	type Fee,
 	type Policy,
 	type PolicyDocument,
@@ -11,6 +13,7 @@ import {
 	policyVenues,
 	RoomRequestError,
 	sections,
+	validApprovalEnvelope,
 	validateDocument,
 } from "../lib/commercial-policies";
 import { roomRequest } from "../lib/rooms";
@@ -35,6 +38,7 @@ export function CommercialPolicies() {
 	const [domain, setDomain] = useState("FINANCE"),
 		[outcome, setOutcome] = useState("APPROVE"),
 		[reference, setReference] = useState("");
+	const [approvalEnvelope, setApprovalEnvelope] = useState("");
 	const key = useRef<string>("");
 	const base = `/api/admin/venues/${encodeURIComponent(venue)}/commercial-policies`;
 	useEffect(() => {
@@ -53,12 +57,24 @@ export function CommercialPolicies() {
 			live = false;
 		};
 	}, []);
+	useEffect(() => {
+		const clearEnvelope = () => setApprovalEnvelope("");
+		const events = ["cinenest-session-change", "pagehide", "popstate"];
+		for (const event of events) window.addEventListener(event, clearEnvelope);
+		window.document.addEventListener("visibilitychange", clearEnvelope);
+		return () => {
+			for (const event of events)
+				window.removeEventListener(event, clearEnvelope);
+			window.document.removeEventListener("visibilitychange", clearEnvelope);
+		};
+	}, []);
 	function change(field: string, value: PolicyDocument[string]) {
 		setDocument((d) => ({ ...d, [field]: value }));
 		setErrors({});
 		key.current = "";
 	}
 	function selectVenue(value: string) {
+		setApprovalEnvelope("");
 		setVenue(value);
 		setPolicy(undefined);
 		setItems([]);
@@ -85,6 +101,7 @@ export function CommercialPolicies() {
 		}
 	}
 	async function inspect(id: string) {
+		setApprovalEnvelope("");
 		setBusy(true);
 		try {
 			const next = await policyRequest<Policy>(`${base}/${id}`);
@@ -101,6 +118,7 @@ export function CommercialPolicies() {
 		}
 	}
 	function startDraft() {
+		setApprovalEnvelope("");
 		setPolicy(undefined);
 		setDocument(emptyDocument());
 		setPackage("");
@@ -110,6 +128,34 @@ export function CommercialPolicies() {
 		setErrors({});
 		key.current = "";
 		setMessage("New draft. Unresolved selections are not approvals.");
+	}
+	async function submitApproval(event: FormEvent) {
+		event.preventDefault();
+		if (
+			busy ||
+			uncertain ||
+			!policy ||
+			policy.venueId !== venue ||
+			!validApprovalEnvelope(approvalEnvelope)
+		)
+			return;
+		setBusy(true);
+		setApprovalEnvelope("");
+		try {
+			await policyRequest(`${base}/${policy.policyId}/trusted-approvals`, {
+				method: "POST",
+				body: JSON.stringify({ envelope: approvalEnvelope }),
+			});
+			setMessage(
+				"Signed synthetic decision accepted. Commercial issuance remains disabled.",
+			);
+		} catch (error) {
+			setMessage(approvalMessage(error));
+			if (!(error instanceof RoomRequestError) || error.status >= 500)
+				setUncertain(true);
+		} finally {
+			setBusy(false);
+		}
 	}
 	async function write(
 		path: string,
@@ -600,6 +646,53 @@ export function CommercialPolicies() {
 									Record review
 								</Button>
 							</fieldset>
+							<Card title="Signed approval intake (synthetic only)">
+								<p>
+									Intake is disabled by default. Use only a pre-signed synthetic
+									envelope. Never enter a signing key or other secret.
+								</p>
+								<p style={{ overflowWrap: "anywhere" }}>
+									Venue {policy.venueId} · Policy {policy.policyId} · Revision{" "}
+									{policy.revision} · Draft package {policy.packageId ?? "none"}
+								</p>
+								<p id="policy-envelope-hint">
+									The server checks the signed room and package version, revision,
+									and content hash. This action cannot enable commercial issuance.
+								</p>
+								<form onSubmit={submitApproval}>
+									<label htmlFor="policy-envelope">Signed synthetic envelope</label>
+									<textarea
+										id="policy-envelope"
+										aria-describedby="policy-envelope-hint policy-envelope-error"
+										aria-invalid={
+											approvalEnvelope !== "" &&
+											!validApprovalEnvelope(approvalEnvelope)
+										}
+										autoComplete="off"
+										spellCheck={false}
+										maxLength={maxApprovalEnvelopeBytes}
+										value={approvalEnvelope}
+										disabled={locked}
+										onChange={(event) => setApprovalEnvelope(event.target.value)}
+										style={{ display: "block", maxWidth: "100%", width: "100%" }}
+									/>
+									<p id="policy-envelope-error">
+										{approvalEnvelope !== "" &&
+											!validApprovalEnvelope(approvalEnvelope) &&
+											"Enter a non-empty signed envelope of at most 4 KiB."}
+									</p>
+									<Button
+										type="submit"
+										disabled={
+											locked ||
+											policy.venueId !== venue ||
+											!validApprovalEnvelope(approvalEnvelope)
+										}
+									>
+										Submit signed synthetic decision
+									</Button>
+								</form>
+							</Card>
 							<Card title="Current revision review history">
 								{policy.reviews.length === 0 ? (
 									<p>No reviews recorded for this revision.</p>

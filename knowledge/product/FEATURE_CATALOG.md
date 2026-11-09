@@ -849,3 +849,8 @@ The synthetic Room Blocking view identifies the authorized room after exact-refe
 ## Day 05 V37 commercial policy binding foundation
 
 The internal commercial-policy binding foundation supports synthetic qualification of exact scope, immutable policy revisions and mandatory audit. Operational approval intake and customer-facing issuance remain unavailable. [Qualification](../PROGRESS.md#day05-v37-policy-binding).
+
+
+## V38 trusted commercial approval intake
+
+V38 trusted commercial approval intake is a qualified synthetic-only capability with signed scope verification and immutable audited history. Operational trust and commercial activation remain disabled.

@@ -2,13 +2,17 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { POST as submitTrustedApproval } from "../app/api/admin/venues/[venueId]/commercial-policies/[policyId]/trusted-approvals/route.ts";
 import { CommercialPolicies } from "../components/commercial-policies.tsx";
 import {
+	approvalMessage,
 	emptyDocument,
+	maxApprovalEnvelopeBytes,
 	policyMessage,
 	policyRoute,
 	policyVenues,
 	RoomRequestError,
+	validApprovalEnvelope,
 	validateDocument,
 } from "../lib/commercial-policies.ts";
 import { forwardCommercialPolicies } from "../lib/room-backend.ts";
@@ -16,6 +20,7 @@ import { forwardCommercialPolicies } from "../lib/room-backend.ts";
 const venue = "10000000-0000-4000-8000-000000000001",
 	policy = "10000000-0000-4000-8000-000000000002";
 const path = `/api/admin/venues/${venue}/commercial-policies`;
+const approvalPath = `${path}/${policy}/trusted-approvals`;
 test("draft defaults preserve unresolved business decisions", () => {
 	const d = emptyDocument();
 	assert.equal(d.taxApplicability, "UNRESOLVED");
@@ -81,6 +86,99 @@ test("exact six API operations reject activation and traversal", () => {
 		["/../payments", "GET"],
 	])
 		assert.equal(policyRoute(path + suffix, method), false);
+});
+test("signed approval allows only the exact intake POST and bounds opaque input", () => {
+	assert.equal(policyRoute(approvalPath, "POST"), true);
+	assert.equal(policyRoute(`${path}/trusted-approvals`, "POST"), true);
+	for (const method of ["GET", "PUT", "DELETE"])
+		assert.equal(policyRoute(approvalPath, method), false);
+	assert.equal(policyRoute(`${approvalPath}/revoke`, "POST"), false);
+	assert.equal(validApprovalEnvelope(""), false);
+	assert.equal(validApprovalEnvelope({ signature: "synthetic" }), false);
+	assert.equal(validApprovalEnvelope("a".repeat(maxApprovalEnvelopeBytes)), true);
+	assert.equal(validApprovalEnvelope("é".repeat(maxApprovalEnvelopeBytes)), false);
+	assert.match(
+		approvalMessage(new RoomRequestError(404, "private")),
+		/disabled or unavailable/,
+	);
+	assert.match(
+		approvalMessage(new RoomRequestError(503, "private")),
+		/Verify the outcome/,
+	);
+});
+
+test("signed approval proxy binds the exact route policy and preserves existing Origin, session and CSRF guards", async () => {
+	const old = global.fetch,
+		origin = process.env.CINENEST_AUTH_ORIGIN;
+	process.env.CINENEST_AUTH_ORIGIN = "http://127.0.0.1:9999";
+	const captured = [];
+	global.fetch = async (url, init) => {
+		captured.push({ url: String(url), ...init });
+		return Response.json({ commercialIssuanceEnabled: false }, { status: 201 });
+	};
+	const headers = {
+		"Content-Type": "application/json",
+		Origin: "http://localhost",
+		Cookie: "other=omit; CINENEST_SESSION=synthetic",
+		"X-CSRF-TOKEN": "synthetic",
+	};
+	const envelope = 'synthetic signed bytes + / = " escaped';
+	const body = JSON.stringify({ envelope });
+	function request(payload = body, overrides = {}, route = approvalPath) {
+		return new Request(`http://localhost${route}`, {
+			method: "POST",
+			headers: { ...headers, ...overrides },
+			body: payload,
+		});
+	}
+	try {
+		assert.equal(
+			(await submitTrustedApproval(request(body, { Origin: "http://evil.test" })))
+				.status,
+			403,
+		);
+		assert.equal(
+			(await submitTrustedApproval(request(body, { "X-CSRF-TOKEN": "" })))
+				.status,
+			403,
+		);
+		assert.equal(
+			(await submitTrustedApproval(request(body, { "X-Permission": "admin" })))
+				.status,
+			400,
+		);
+		for (const invalid of [
+			JSON.stringify({ policyId: venue, envelope }),
+			JSON.stringify({ envelope, review: "APPROVE" }),
+			'{"envelope":"one","envelope":"two"}',
+			'{"envelope":[]}',
+			JSON.stringify({ envelope: "a".repeat(maxApprovalEnvelopeBytes + 1) }),
+		])
+			assert.equal((await submitTrustedApproval(request(invalid))).status, 400);
+		assert.equal(
+			(await submitTrustedApproval(request(" ".repeat(32769)))).status,
+			413,
+		);
+		assert.equal(
+			(await submitTrustedApproval(request(body, {}, `${approvalPath}?q=forged`)))
+				.status,
+			400,
+		);
+		assert.equal(captured.length, 0);
+
+		assert.equal((await submitTrustedApproval(request())).status, 201);
+		assert.equal(captured.length, 1);
+		assert.equal(new URL(captured[0].url).pathname, `${path}/trusted-approvals`);
+		assert.deepEqual(JSON.parse(captured[0].body), { policyId: policy, envelope });
+		assert.equal(captured[0].headers.get("Cookie"), "CINENEST_SESSION=synthetic");
+		assert.equal(captured[0].headers.get("X-CSRF-TOKEN"), "synthetic");
+		assert.equal(captured[0].redirect, "manual");
+		assert.equal(captured[0].cache, "no-store");
+	} finally {
+		global.fetch = old;
+		if (origin === undefined) delete process.env.CINENEST_AUTH_ORIGIN;
+		else process.env.CINENEST_AUTH_ORIGIN = origin;
+	}
 });
 test("status messaging distinguishes authentication,authority and conflicts", () => {
 	assert.match(

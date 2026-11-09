@@ -1483,3 +1483,8 @@ Existing Room → inventory hold → Package choices & quotation UI now provides
 ## Day 06 Room Blocking room identification
 
 The Room Blocking selector displays a confirmed room reference after authorized UUID recovery when the current catalogue has no exact venue and room match. Saved details use the matching name or confirmed reference. Venue and authorization changes clear protected context. The view continues to withhold creator identity.
+
+
+## V38 trusted commercial approval intake
+
+The commercial policy workspace accepts a signed envelope scoped to the current venue and policy. The interface distinguishes rejected submissions from unavailable or uncertain outcomes and does not treat intake as activation.

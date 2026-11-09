@@ -1161,3 +1161,8 @@ Business readiness matrix: OWNER_SELECTED — existing LKR2500/180minutes/four i
 ## Day 05 V37 commercial policy binding foundation
 
 V37 adds a Pricing-owned, non-issuing binding foundation. It pins exact venue, room and package version to an immutable V36 revision and hash. Synthetic review records are qualification evidence. Operational approval intake, commercial issuance, checkout and customer access remain disabled. [Technical evidence](PROGRESS.md#day05-v37-policy-binding).
+
+
+## V38 trusted commercial approval intake
+
+V38 admits signed commercial-policy approval evidence in synthetic qualification only. Real specialist appointments, trust roots and commercial issuance require separate approval.

@@ -31036,5 +31036,68 @@
       "fullMvp": "15/74",
       "formalAcceptance": "0/92"
     }
+  },
+  "day05V38TrustedApproval": {
+    "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+    "baseline": "ed27d2bdddd20b8d877a4f2e3ec23621c210acdb",
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApproval.java": "1d86d45f2e6295f568a6d6c0aa7359de574d4e76bca59961abd665ab217b478b",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApprovalController.java": "03084439afde221977e9628ae3f10ac19bd7f50f7586a3d987b445e9052408c2",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApprovalService.java": "b201953cfc5b8f22f27782b13988601044c47fc845a0b93bd8b3157f9473b593",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApprovalTrustProperties.java": "f7e82b061ee4df4ddcdffce989caaff3f98b611943ec93615208b9b81fd68b48",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyApprovalVerifier.java": "bb53488758c563f561d74b8c662df461829bcab76287b33818b51227e65c23a0",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyApprovalRepository.java": "53691a56e3c54bd9dc4d8af0706ff5ad735f4e54ee6a577bd05cf80a53a44ea9",
+      "backend/src/main/resources/db/migration/V38__commercial_policy_trusted_approval_intake.sql": "8673fae44f1b365225777650e7a2815bcbeac7ad5a5404eeeb13d8995f7509fa",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "476b8c1a7e07a3d9cb25f5b83a184b1d47d96308b17e6850985aae164227e87d",
+      "backend/src/test/java/com/cinenest/CommercialPolicyApprovalArchitectureTest.java": "eadc329eaf465226e708e5f6ebe2d5639734f317e5a5d6892ea6eac0392d89fe",
+      "backend/src/test/java/com/cinenest/CommercialPolicyApprovalPostgresTest.java": "6c9ee0860a0126b86a261c784dfaff7c73c2094ef130ace824ea9f87c07c50e0",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java": "83261b0b394f81b951670d30ef748f2ef9c12a5334652f24f905974cf3a84a51",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyApprovalVerifierTest.java": "479cc339a3f35358c1143bd6093464e47d4a2224cc026ef86970855898c4ee42",
+      "frontend/app/api/admin/venues/[venueId]/commercial-policies/[policyId]/trusted-approvals/route.ts": "2eca6739fbf9b9cb9605b903e66c197700e15ad7b091a6eee65835fc2e8d71b9",
+      "frontend/components/commercial-policies.tsx": "704291b822d7331bdcd2939f4de348f5e3ff3510b4a7704fb08172f59672d297",
+      "frontend/lib/commercial-policies.ts": "30d7bb58f4ffe2ffcc10176e7f4501f4a022c52d4407400a95389aadbd46c12a",
+      "frontend/tests/commercial-policies.test.mjs": "f6c77889437828034f1d2ef38222c130bb17b9ee810e1da21de014a26062e1ac"
+    },
+    "postgres": {
+      "run": "cn-v38-69386333838e4166",
+      "passed": 2,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cleanMigrations": 37,
+      "historicalMigrationsUnchanged": 36,
+      "upgrade": "V37_TO_V38",
+      "durationSeconds": 11.659,
+      "applicationDatabases": 2,
+      "containerRemoved": true,
+      "portClosed": true,
+      "unrelatedInventoryMatches": false,
+      "evidenceSha256": {
+        "summary.json": "937fc0e3295184c31359e537aa6cef145e0d57fd2430b3564841478d3c022efb",
+        "postgres-tests.log": "dd87ee4971f8c00b7d93d84450bb58d43aa996ac1b727a183b0213f7179ec01e"
+      }
+    },
+    "offline": {
+      "backendPassed": 105,
+      "preflightPassed": 6,
+      "frontendPassed": 12,
+      "lint": "PASS",
+      "typecheck": "PASS",
+      "build": "PASS",
+      "priorInvalidInvocationErrors": 463
+    },
+    "accounting": {
+      "part1": "4/7",
+      "planning": "3/6",
+      "release1": "4/21",
+      "mvp": "15/74",
+      "formal": "0/92"
+    },
+    "ownerUat": "PENDING",
+    "independentReview": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "commercialIssuanceEnabled": false,
+    "checkoutEnabled": false,
+    "customerAccessEnabled": false
   }
 }

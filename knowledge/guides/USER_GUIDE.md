@@ -534,3 +534,8 @@ In a separately authorized synthetic environment, log in legitimately, choose an
 ## Day 06 Room Blocking room identification
 
 For synthetic Room Blocking, enter the approved venue and room references and load room blocks. The room selector shows the confirmed reference when no current catalogue name is available. Inspect a saved block to see its room name or confirmed reference, interval and revision. [Qualification](../PROGRESS.md#day06-room-blocking-ux-recovery).
+
+
+## V38 trusted commercial approval intake
+
+For authorized synthetic qualification, open the commercial policy workspace and submit an envelope signed for the selected policy. A receipt records evidence intake. Commercial issuance, checkout and customer access remain disabled.

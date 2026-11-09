@@ -3475,3 +3475,8 @@ GET /api/quotes/preview reuses Pricing QuoteService, checked QuoteRules componen
 The internal JDBC binding repository has no operational caller. PostgreSQL validates exact scope and complete V36 terms, checks the synthetic reviewer authority, and excludes overlapping effective intervals for the same scope. A transaction serializes same-key commands, persists a binding and attributable audit, and rejects changed-payload reuse. The audit is mandatory and both histories are immutable. V7 and V36 are unchanged. [Technical evidence](PROGRESS.md#day05-v37-policy-binding).
 
 V37 permits a fixture reset only when both protected tables are empty at READ COMMITTED. PostgreSQL acquires the truncate set locks before invoking the volatile guards. Populated history, higher isolation, UPDATE and DELETE remain denied.
+
+
+## V38 trusted commercial approval intake
+
+Pricing verifies canonical Ed25519 envelopes against configured synthetic trust. The submitter must have the exact venue and domain grant and be distinct from the signer. V38 binds the evidence to room, package version, policy revision and hash. Appointment and nonce locks serialize revocation and replay checks. Event, receipt and audit commit atomically. V38 supplies no operational trust or issuance authority.
