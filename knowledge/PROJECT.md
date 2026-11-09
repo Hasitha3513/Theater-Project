@@ -1166,3 +1166,8 @@ V37 adds a Pricing-owned, non-issuing binding foundation. It pins exact venue, r
 ## V38 trusted commercial approval intake
 
 V38 admits signed commercial-policy approval evidence in synthetic qualification only. Real specialist appointments, trust roots and commercial issuance require separate approval.
+
+
+## V39 policy activation and V40 internal quotation fixtures
+
+V39 and V40 add local fixture-only policy activation and quotation issuance foundations for CN-R1-COMMERCIAL-QUOTE-001. Issued fixtures are non-offers, isolated from V7 quotations and payment or booking operations. Actual Finance, Legal and Operations decisions, operating scope, trust roots and activation authority remain external gates. Commercial issuance, checkout and customer access stay disabled.

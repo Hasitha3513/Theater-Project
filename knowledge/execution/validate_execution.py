@@ -13739,5 +13739,164 @@ def inert_ci_main():
     return v38_toolchain_historical_view(v38_toolchain_prior_main)
 
 
+
+
+V40_BASE = '342095de49d411c4250d55daeedf402d33fde5c4'
+V40_SUFFIX = 'cad87b3541f820f84c1b53c525b7497b3824f71dac66588b02791555658231e1'
+V40_HASHES = {'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyActivationService.java': '3b7111d2bde2c7b7e77a06a8c531079d1fd0621552e700be8ad9a67fa036be8d', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyTrustVerifier.java': '4023c803aa87b962614e21d026e06989086110f991ded631f19a021043f224a5', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialQuotationIssuanceService.java': 'b5615a295292811fd933ef6c29832e2726f9b676f8218d96751cba580b88b68a', 'backend/src/main/java/com/cinenest/pricing/internal/CommercialQuotationRules.java': '2da61d260a37fb818fbd336a3a4ad2484d3cd0f741f3c93664c8f76147c7dd18', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialPolicyActivationRepository.java': '05f1688d55e980289d116ff38c354f32b359e954a31cbffbfc15fa4ffbe61b3e', 'backend/src/main/java/com/cinenest/pricing/internal/JdbcCommercialQuotationRepository.java': '3dafdb9c2611c89fcffcbd1034a8dfdb00a5b044b4124be1e68ad87e43eadc46', 'backend/src/main/resources/db/migration/V39__commercial_policy_activation.sql': '9c8ded0d5b787b6e9db8127bb3c7887826e7f6c0bb957e3f96bcf1fdc79074ce', 'backend/src/main/resources/db/migration/V40__commercial_quotation_issuance.sql': 'e9c6b2c02d7134d5eeab64d409019f906be6ade58cf5733f18e12228c4a3621e', 'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'dbb4f994149b0aeb4087983289d1a52c012d9b575c1abbb8f279fb587221dc00', 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '0e652a36d5bbbf89cb6335be35d091f91beaa0b400058550725548b99f24e7a1', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyActivationPostgresTest.java': 'fb9165665bd4cd20300b3fa6d4d5f3e5f8b0a949640759693b052bd717d2dd85', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyTrustVerifierTest.java': '5c94d29af0aa664d09eefdbdc226cc4bd73e3f61f5476a2b480b58e59efcd7d8', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialQuotationIssuancePostgresTest.java': 'e5ae90c7aeae46550c0e95d3831557cb34cc37cd9da8cc2cfa7fdb2943865dd2', 'backend/src/test/java/com/cinenest/pricing/internal/CommercialQuotationRulesTest.java': '83486956d673d106998e7d92082d5ef4a1a2ced41a29883bc14beb3440d89ada', 'knowledge/PROJECT.md': '631069992b2cbd72ca49adb989ffdf41e19351d93f660af4b8a1a6f93379ebe2', 'knowledge/ARCHITECTURE.md': '602007f4d9fce4215652231cf95a1d9c70e331236d4ddd428b0126273ea7e5f7', 'knowledge/PROGRESS.md': '460af52a0ad4f06fadeedcb3b7d208b535cebf9fb8edc0824775aa0bd39acd93', 'knowledge/execution/status.json': '27232129dcdc6dfe1f047a39e0eabf690e60c8dc636f665612ac85eca84cb4ac'}
+
+v40_prior_main = inert_ci_main
+v40_prior_guard = receipt_admission_successor_errors
+V40_VALIDATOR = 'knowledge/execution/validate_execution.py'
+V40_MANIFEST = 'knowledge/manifest.json'
+V40_OWNED = set(V40_HASHES) | {V40_VALIDATOR, V40_MANIFEST}
+
+
+def v40_git(*args, **kwargs):
+    return subprocess.check_output(['git', '-C', str(R), *args], **kwargs)
+
+
+def v40_before(name):
+    return v40_git('show', V40_BASE + ':' + name)
+
+
+def v40_tree():
+    return parse_git_paths(v40_git('ls-tree', '-r', '--name-only', '-z', V40_BASE, text=True), nul=True)
+
+
+def v40_errors():
+    try:
+        if len(V40_OWNED) != 20:
+            return ['V40 expected 20 exact paths']
+        v40_git('merge-base', '--is-ancestor', V40_BASE, 'HEAD')
+        tree = v40_tree()
+        actual = parse_git_paths(v40_git('ls-files', '-z', '--cached', '--others', '--exclude-standard', text=True), nul=True)
+        changed = parse_git_paths(v40_git('diff', V40_BASE, '--name-only', '-z', text=True), nul=True)
+        if actual != tree | V40_OWNED or changed | (actual - tree) != V40_OWNED:
+            return ['V40 unexpected path inventory']
+        for name in V40_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['V40 unsafe path ' + name]
+            if name in V40_HASHES and hashlib.sha256(path.read_bytes()).hexdigest() != V40_HASHES[name]:
+                return ['V40 fingerprint mismatch ' + name]
+        end = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix = v40_before(V40_VALIDATOR).decode().removesuffix(end)
+        current = (R / V40_VALIDATOR).read_text()
+        tail = current[len(prefix):].replace("V40_SUFFIX = '" + V40_SUFFIX + "'", "V40_SUFFIX = '" + '0' * 64 + "'", 1)
+        if not current.startswith(prefix) or hashlib.sha256(tail.encode()).hexdigest() != V40_SUFFIX:
+            return ['V40 historical validator or successor changed']
+        folder = R / 'backend/src/main/resources/db/migration'
+        migrations = {str(p.relative_to(R)) for p in folder.glob('V*.sql')}
+        expected = {n for n in tree | V40_OWNED if n.startswith(str(folder.relative_to(R)) + '/')}
+        if migrations != expected or len(migrations) != 39 or any(Path(n).name.startswith('V31__') for n in migrations):
+            return ['V40 migration inventory mismatch']
+        if any((R / n).read_bytes() != v40_before(n) for n in migrations & tree):
+            return ['V40 historical migration changed']
+        state = json.loads((K / 'execution/status.json').read_text())
+        evidence = state.pop('day05V40FixtureFoundations')
+        if state != json.loads(v40_before('knowledge/execution/status.json')):
+            return ['V40 historical execution state changed']
+        if evidence['sourceSha256'] != {n: h for n, h in V40_HASHES.items() if not n.startswith('knowledge/')}:
+            return ['V40 qualification source mismatch']
+        pg = evidence['postgres']
+        if (pg['passed'], pg['failed'], pg['errors'], pg['skipped']) != (2, 0, 0, 0):
+            return ['V40 PostgreSQL qualification missing']
+        if (evidence['ownerUat'], evidence['independentReview'], evidence['productionAuthorization']) != ('PENDING', 'NOT_SATISFIED', 'NONE'):
+            return ['V40 acceptance boundary changed']
+        if any(evidence[n] is not False for n in ('commercialIssuanceEnabled', 'checkoutEnabled', 'customerAccessEnabled')):
+            return ['V40 activation boundary changed']
+        manifest = json.loads(v40_before(V40_MANIFEST))
+        refresh = {n.removeprefix('knowledge/') for n in V40_OWNED if n.startswith('knowledge/')} - {'manifest.json'}
+        if refresh != {row['path'] for row in manifest['files'] if row['path'] in refresh}:
+            return ['V40 manifest refresh incomplete']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V40_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V40 manifest changed outside authorized hashes']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V40 admission evidence inaccessible or invalid']
+    return []
+
+
+def v40_controls():
+    from unittest.mock import patch
+
+    assert not v40_errors()
+    read_bytes = Path.read_bytes
+    for target in (R / n for n in V40_HASHES):
+        with patch.object(Path, 'read_bytes', lambda p: read_bytes(p) + b'\n' if p == target else read_bytes(p)):
+            assert v40_errors(), target
+    output = subprocess.check_output
+
+    def extra(argv, *a, **kw):
+        result = output(argv, *a, **kw)
+        return result + 'frontend/unapproved.tsx\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert v40_errors()
+    print('PASS V40 exact path, fingerprint and evidence controls')
+
+
+def v40_historical_view(check):
+    from unittest.mock import patch
+
+    tree = v40_tree()
+    previous = {R / n: v40_before(n) for n in V40_OWNED & tree}
+    added = V40_OWNED - tree
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+    glob, rglob = Path.glob, Path.rglob
+
+    def baseline_bytes(p, *a, **kw):
+        return previous[p] if p in previous else read_bytes(p, *a, **kw)
+
+    def baseline_text(p, *a, **kw):
+        return previous[p].decode() if p in previous else read_text(p, *a, **kw)
+
+    def baseline_output(argv, *a, **kw):
+        if not isinstance(argv, list) or argv[:3] != ['git', '-C', str(R)]:
+            return output(argv, *a, **kw)
+        if 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [V40_BASE] + argv[index + 1:]
+            else:
+                return '' if kw.get('text') else b''
+        result = output(argv, *a, **kw)
+        if 'ls-files' in argv:
+            text = result if isinstance(result, str) else result.decode()
+            sep = '\0' if '-z' in argv else '\n'
+            text = ''.join(name + sep for name in text.split(sep) if name and name not in added)
+            return text if isinstance(result, str) else text.encode()
+        return result
+
+    with patch.object(Path, 'read_bytes', baseline_bytes), patch.object(Path, 'read_text', baseline_text), patch.object(
+        Path, 'glob', lambda p, *a, **kw: (item for item in glob(p, *a, **kw) if item not in {R / n for n in added})
+    ), patch.object(
+        Path, 'rglob', lambda p, *a, **kw: (item for item in rglob(p, *a, **kw) if item not in {R / n for n in added})
+    ), patch.object(subprocess, 'check_output', baseline_output), patch.dict(
+        globals(), {'receipt_admission_successor_errors': v40_prior_guard}
+    ):
+        return check()
+
+
+def v40_successor_errors():
+    return v40_errors() or v40_historical_view(v40_prior_guard)
+
+
+receipt_admission_successor_errors = v40_successor_errors
+
+
+def inert_ci_main():
+    errors = v40_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v40_controls()
+    return v40_historical_view(v40_prior_main)
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

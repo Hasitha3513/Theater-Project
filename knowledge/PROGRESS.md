@@ -3759,3 +3759,8 @@ CI run 42568433152 attempts 1 and 2 failed on HTTP 504 before Java setup. The re
 ## V38 CI toolchain property recovery
 
 CI run 42571036540 verified the pinned Temurin archive and completed Java and Node setup. Verify toolchain failed because its anchored regex omitted the -LTS suffix. Running the SHA-256-verified official archive locally confirmed java.runtime.version 25.0.4.1+1-LTS and vendor Eclipse Adoptium. The workflow now asserts both exact properties. Live successor CI is pending. All prior V38 evidence and accounting are retained.
+
+
+## V39 policy activation and V40 internal quotation fixtures
+
+V39/V40 fixture qualification cn-v40-9a6445e1c7d64cc1 completed with 2 PostgreSQL methods passed, 0 failed, 0 errors and 0 skipped. Clean Flyway applied 39 migrations through V40. Populated V38 upgraded by two migrations and preserved historical migration checksums and quote/booking snapshots. Focused offline backend and architecture tests reported 36 passed. The Bank and Room Blocking current-head assertions advanced to V40 and compiled. Their full integration classes were not executed in this bounded window. Two disposable databases were accounted for in 12.553 seconds, with container and process shutdown, port closure and matching unrelated container IDs. Formal acceptance and production authorization are unchanged.

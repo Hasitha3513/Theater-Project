@@ -3480,3 +3480,8 @@ V37 permits a fixture reset only when both protected tables are empty at READ CO
 ## V38 trusted commercial approval intake
 
 Pricing verifies canonical Ed25519 envelopes against configured synthetic trust. The submitter must have the exact venue and domain grant and be distinct from the signer. V38 binds the evidence to room, package version, policy revision and hash. Appointment and nonce locks serialize revocation and replay checks. Event, receipt and audit commit atomically. V38 supplies no operational trust or issuance authority.
+
+
+## V39 policy activation and V40 internal quotation fixtures
+
+Pricing owns the V39 fixture activation and revocation ledgers and the V40 immutable quote ledger. Internal fixture entry points require verified appointments and Ed25519 proof sets. They have no Spring bean or HTTP route. Transactions bind exact V36 policy revision and hash to venue, room and package version. A shared transaction lock orders revocation checkpoints, activation and issuance. PostgreSQL excludes overlapping activations and enforces mandatory audit through deferred foreign keys. Issuance uses the Booking hold port and revalidates room and publication facts. Fixture tests use port doubles for Booking, Identity and room/publication inputs. V7 and V36 through V38 remain unchanged.
