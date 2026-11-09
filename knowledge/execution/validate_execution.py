@@ -13623,5 +13623,121 @@ def inert_ci_main():
     return v38_ci_historical_view(v38_ci_prior_main)
 
 
+
+
+V38_TOOLCHAIN_BASE = '8b0734c0d83db5b23fffbce1d7c14e7c5e5cc547'
+V38_TOOLCHAIN_SUFFIX = '509422dff8ea23bb15b5dc190d7b5e1ebdae871d412bae3a85a22daff45fd4e2'
+V38_TOOLCHAIN_HASHES = {'.github/workflows/foundation.yml': 'f402b8d35503347face3f2b785554755c191f878479a2e0a58fd97d2379c6171', 'knowledge/PROGRESS.md': '0f0d5688a273d09a7433b26f76a05490d2fa51bcdb39a86f09f05358d8c9cf1a', 'knowledge/execution/status.json': '4c02a64e51a9d534d19cc3c37449ad2280dfae2fe487dfefd3eebfbe2059ac2f'}
+
+v38_toolchain_prior_main = inert_ci_main
+v38_toolchain_prior_guard = receipt_admission_successor_errors
+V38_TOOLCHAIN_OWNED = set(V38_TOOLCHAIN_HASHES) | {V38_VALIDATOR, V38_MANIFEST}
+
+
+def v38_toolchain_before(name):
+    return v38_git('show', V38_TOOLCHAIN_BASE + ':' + name)
+
+
+def v38_toolchain_errors():
+    try:
+        v38_git('merge-base', '--is-ancestor', V38_TOOLCHAIN_BASE, 'HEAD')
+        tree = parse_git_paths(v38_git('ls-tree', '-r', '--name-only', '-z', V38_TOOLCHAIN_BASE, text=True), nul=True)
+        actual = parse_git_paths(v38_git('ls-files', '-z', '--cached', '--others', '--exclude-standard', text=True), nul=True)
+        changed = parse_git_paths(v38_git('diff', V38_TOOLCHAIN_BASE, '--name-only', '-z', text=True), nul=True)
+        if len(V38_TOOLCHAIN_OWNED) != 5 or actual != tree or changed != V38_TOOLCHAIN_OWNED:
+            return ['V38 toolchain recovery requires exactly five existing paths']
+        for name in V38_TOOLCHAIN_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['V38 toolchain recovery unsafe path ' + name]
+            if name in V38_TOOLCHAIN_HASHES and hashlib.sha256(path.read_bytes()).hexdigest() != V38_TOOLCHAIN_HASHES[name]:
+                return ['V38 toolchain recovery fingerprint mismatch ' + name]
+        end = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix = v38_toolchain_before(V38_VALIDATOR).decode().removesuffix(end)
+        current = (R / V38_VALIDATOR).read_text()
+        tail = current[len(prefix):].replace("V38_TOOLCHAIN_SUFFIX = '" + V38_TOOLCHAIN_SUFFIX + "'", "V38_TOOLCHAIN_SUFFIX = '" + '0' * 64 + "'", 1)
+        if not current.startswith(prefix) or hashlib.sha256(tail.encode()).hexdigest() != V38_TOOLCHAIN_SUFFIX:
+            return ['V38 toolchain recovery historical validator or successor changed']
+        state = json.loads((K / 'execution/status.json').read_text())
+        evidence = state.pop('day05V38CiToolchainRecovery')
+        if state != json.loads(v38_toolchain_before('knowledge/execution/status.json')):
+            return ['V38 toolchain recovery historical execution state changed']
+        if evidence['workflowSha256'] != V38_TOOLCHAIN_HASHES['.github/workflows/foundation.yml']:
+            return ['V38 toolchain recovery workflow evidence mismatch']
+        manifest = json.loads(v38_toolchain_before(V38_MANIFEST))
+        for row in manifest['files']:
+            name = 'knowledge/' + row['path']
+            if name in V38_TOOLCHAIN_OWNED - {V38_MANIFEST}:
+                row['sha256'] = hashlib.sha256((R / name).read_bytes()).hexdigest()
+        if (R / V38_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V38 toolchain recovery manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V38 toolchain recovery evidence inaccessible or invalid']
+    return []
+
+
+def v38_toolchain_controls():
+    from unittest.mock import patch
+
+    assert not v38_toolchain_errors()
+    read_bytes = Path.read_bytes
+    for target in (R / name for name in V38_TOOLCHAIN_HASHES):
+        with patch.object(Path, 'read_bytes', lambda p: read_bytes(p) + b'\n' if p == target else read_bytes(p)):
+            assert v38_toolchain_errors(), target
+    output = subprocess.check_output
+
+    def extra(argv, *args, **kwargs):
+        result = output(argv, *args, **kwargs)
+        return result + 'frontend/unapproved.tsx\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert v38_toolchain_errors()
+    print('PASS V38 toolchain recovery exact scope, fingerprint and negative controls')
+
+
+def v38_toolchain_historical_view(check):
+    from unittest.mock import patch
+
+    previous = {R / n: v38_toolchain_before(n) for n in V38_TOOLCHAIN_OWNED}
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+
+    def baseline_bytes(path, *args, **kwargs):
+        return previous[path] if path in previous else read_bytes(path, *args, **kwargs)
+
+    def baseline_text(path, *args, **kwargs):
+        return previous[path].decode() if path in previous else read_text(path, *args, **kwargs)
+
+    def baseline_output(argv, *args, **kwargs):
+        if isinstance(argv, list) and argv[:3] == ['git', '-C', str(R)] and 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [V38_TOOLCHAIN_BASE] + argv[index + 1:]
+            else:
+                return '' if kwargs.get('text') else b''
+        return output(argv, *args, **kwargs)
+
+    with patch.object(Path, 'read_bytes', baseline_bytes), patch.object(Path, 'read_text', baseline_text), patch.object(
+        subprocess, 'check_output', baseline_output
+    ), patch.dict(globals(), {'receipt_admission_successor_errors': v38_toolchain_prior_guard}):
+        return check()
+
+
+def v38_toolchain_successor_errors():
+    return v38_toolchain_errors() or v38_toolchain_historical_view(v38_toolchain_prior_guard)
+
+
+receipt_admission_successor_errors = v38_toolchain_successor_errors
+
+
+def inert_ci_main():
+    errors = v38_toolchain_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v38_toolchain_controls()
+    return v38_toolchain_historical_view(v38_toolchain_prior_main)
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -86,7 +86,9 @@ jobs:
         run: |
           java -version
           java_properties="$(java -XshowSettings:properties -version 2>&1)"
-          grep -Eq '^[[:space:]]*java.runtime.version = 25\.0\.4\.1\+1$' <<< "$java_properties"
+          grep -E '^[[:space:]]*java\.(runtime\.version|vendor) = ' <<< "$java_properties"
+          grep -Eq '^[[:space:]]*java\.runtime\.version = 25\.0\.4\.1\+1-LTS$' <<< "$java_properties"
+          grep -Eq '^[[:space:]]*java\.vendor = Eclipse Adoptium$' <<< "$java_properties"
           node --version
           test "$(npm --version)" = "11.19.1"
       - name: Backend build, isolated PostgreSQL, architecture, HTTP denial and packaged startup

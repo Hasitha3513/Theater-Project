@@ -3754,3 +3754,8 @@ V38 synthetic qualification: PostgreSQL 18.6 retest cn-v38-69386333838e4166 pass
 ## V38 CI archive download recovery
 
 CI run 42568433152 attempts 1 and 2 failed on HTTP 504 before Java setup. The recovery adds the official Releases API fallback for the pinned Temurin archive, with mandatory SHA-256 verification before setup. Service-free workflow validation and simulated transport cases passed. Candidate CI is pending verification. The original V38 25-path qualification and accounting remain unchanged. The local retest recorded an unattributed unrelated-container inventory difference.
+
+
+## V38 CI toolchain property recovery
+
+CI run 42571036540 verified the pinned Temurin archive and completed Java and Node setup. Verify toolchain failed because its anchored regex omitted the -LTS suffix. Running the SHA-256-verified official archive locally confirmed java.runtime.version 25.0.4.1+1-LTS and vendor Eclipse Adoptium. The workflow now asserts both exact properties. Live successor CI is pending. All prior V38 evidence and accounting are retained.
