@@ -47,8 +47,30 @@ jobs:
       - name: Fetch exact Temurin archive (setup-java v5 cannot parse four-part patch strings)
         if: steps.classify.outputs.category != 'INERT_ONLY'
         run: |
-          curl --fail --location --retry 3 'https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_linux_hotspot_25.0.4.1_1.tar.gz' --output "$RUNNER_TEMP/cinenest-jdk.tar.gz"
-          echo 'dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e  '"$RUNNER_TEMP/cinenest-jdk.tar.gz" | sha256sum --check --strict
+          archive="$RUNNER_TEMP/cinenest-jdk.tar.gz"
+          partial="$(mktemp "$RUNNER_TEMP/cinenest-jdk.XXXXXXXX")"
+          trap 'rm -f -- "$partial"' EXIT
+          download() {
+            local host status
+            if host="$(curl --fail --silent --show-error --location --retry 3 \
+                --connect-timeout 10 --max-time 90 --retry-max-time 120 \
+                --proto '=https' --proto-redir '=https' --write-out '%{urle.host}' \
+                --output "$partial" "$@")"; then
+              test -s "$partial" || return 1
+              printf 'Archive received from %s\n' "$host"
+            else
+              status=$?
+              printf 'Download failed (curl %s, final host %s)\n' "$status" "$host" >&2
+              return "$status"
+            fi
+          }
+          if ! download 'https://github.com/adoptium/temurin25-binaries/releases/download/jdk-25.0.4.1%2B1/OpenJDK25U-jdk_x64_linux_hotspot_25.0.4.1_1.tar.gz'; then
+            echo 'Trying the official GitHub Releases API for asset 523665086'
+            download --header 'Accept: application/octet-stream' \
+              'https://api.github.com/repos/adoptium/temurin25-binaries/releases/assets/523665086'
+          fi
+          echo 'dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e  '"$partial" | sha256sum --check --strict
+          mv -- "$partial" "$archive"
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         if: steps.classify.outputs.category != 'INERT_ONLY'
         with:
@@ -63,6 +85,8 @@ jobs:
         if: steps.classify.outputs.category != 'INERT_ONLY'
         run: |
           java -version
+          java_properties="$(java -XshowSettings:properties -version 2>&1)"
+          grep -Eq '^[[:space:]]*java.runtime.version = 25\.0\.4\.1\+1$' <<< "$java_properties"
           node --version
           test "$(npm --version)" = "11.19.1"
       - name: Backend build, isolated PostgreSQL, architecture, HTTP denial and packaged startup

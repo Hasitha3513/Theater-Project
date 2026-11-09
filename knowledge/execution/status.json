@@ -31099,5 +31099,21 @@
     "commercialIssuanceEnabled": false,
     "checkoutEnabled": false,
     "customerAccessEnabled": false
+  },
+  "day05V38CiArchiveRecovery": {
+    "baseline": "346642386443a9789cc8cf621339b096e7018b80",
+    "failedRun": 42568433152,
+    "failedAttempts": [
+      1,
+      2
+    ],
+    "httpStatus": 504,
+    "releaseAsset": 523665086,
+    "jdkVersion": "25.0.4.1+1",
+    "jdkSha256": "dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e",
+    "workflowSha256": "3dba7326fe9c14940d045c7b008e572a3df5fdf0e086dab9a3cd11c8644c47da",
+    "candidateCi": "PENDING_VERIFICATION",
+    "qualificationRun": "cn-v38-69386333838e4166",
+    "unrelatedContainerInventory": "DIFFERENCE_UNATTRIBUTED"
   }
 }

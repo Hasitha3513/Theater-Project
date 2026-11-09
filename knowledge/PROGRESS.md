@@ -3749,3 +3749,8 @@ Run cn-v37-optin-c1e15299a87e passed Commercial Preview 7/7, with zero failures,
 ## V38 trusted commercial approval intake
 
 V38 synthetic qualification: PostgreSQL 18.6 retest cn-v38-69386333838e4166 passed 2 methods, including clean 37-migration V38, populated V37 to V38, exact appointment lock observation, revocation, rollback and history preservation. Earlier PostgreSQL lock observation failure and invalid offline invocation (463 initialization errors) are retained separately. Corrected offline backend 105 passed, focused preflight 6 passed, frontend 12 passed with lint/typecheck/build passing. Two disposable databases, 11.659 seconds, container removed and port closed. Unrelated container inventory differed; attribution unavailable. Formal acceptance and activation gates remain open.
+
+
+## V38 CI archive download recovery
+
+CI run 42568433152 attempts 1 and 2 failed on HTTP 504 before Java setup. The recovery adds the official Releases API fallback for the pinned Temurin archive, with mandatory SHA-256 verification before setup. Service-free workflow validation and simulated transport cases passed. Candidate CI is pending verification. The original V38 25-path qualification and accounting remain unchanged. The local retest recorded an unattributed unrelated-container inventory difference.
