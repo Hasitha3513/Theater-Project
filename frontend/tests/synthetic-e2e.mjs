@@ -9,6 +9,7 @@ import {
 	safeLoopbackResource,
 } from "./safe-navigation.mjs";
 import { spawn } from "node:child_process";
+import { createHash } from "node:crypto";
 import { once } from "node:events";
 import { createServer } from "node:net";
 import {
@@ -18,9 +19,14 @@ import {
 	unlink,
 	mkdir,
 	chmod,
+	realpath,
+	lstat,
 } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
+const mode = process.env.CINENEST_E2E_MODE ?? "campaign";
+assert.ok(["campaign", "h1"].includes(mode), "unknown browser journey mode");
+const h1 = mode === "h1";
 const run = process.env.CINENEST_E2E_RUN;
 assert.match(run ?? "", /^\/tmp\/cinenest-e2e-[^/]+$/);
 const config = JSON.parse(await readFile(`${run}/config.json`, "utf8"));
@@ -48,8 +54,12 @@ const diagnostics = new URL(
 	import.meta.url,
 );
 await mkdir(diagnostics, { recursive: true, mode: 0o700 });
+const diagnosticPath = decodeURIComponent(diagnostics.pathname).replace(/\/$/, "");
+const diagnosticStat = await lstat(diagnosticPath);
+assert.ok(diagnosticStat.isDirectory() && diagnosticStat.uid === process.getuid());
+assert.equal(await realpath(diagnosticPath), diagnosticPath);
 await chmod(diagnostics, 0o700);
-const planned = [
+const campaignPlan = [
  ...extensionScenarios,
  ...release1Scenarios,
  ...recoveryScenarios,
@@ -78,6 +88,60 @@ const planned = [
 	"F-rejected-verification",
 	"N-uncertain-upload",
 ];
+const planned = h1 ? [
+	"startup", "customer-discovery-auth", "hold-quote-accept",
+	"verification-explicit-consent", "E-pending-verification",
+	"independent-verification-api-support", "explicit-bank-request",
+	"H1-pending-recovery", "H1-admin-review", "H-missing-CSRF",
+	"I-invalid-CSRF", "J-cross-origin", "L-idempotent-replay",
+	"M-changed-body-key", "C-wrong-owner", "D-wrong-venue-grant",
+	"O-malformed-reference", "P-safe-URLs", "G-expired-session",
+] : campaignPlan;
+const screenshots = [];
+async function captureH1(page, name, width) {
+	const targets = {
+		customer: ["/bank", "UNFUNDED · NOT_CONFIRMED"],
+		admin: ["/admin/verification", "Synthetic manual review queue"],
+	};
+	assert.ok(h1 && Object.hasOwn(targets, name) && [375, 1280].includes(width));
+	const [pathname, label] = targets[name];
+	const url = new URL(page.url());
+	assert.equal(url.origin, base);
+	assert.equal(url.pathname, pathname);
+	await page.setViewportSize({ width, height: 900 });
+	assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+	const target = page.getByText(label, { exact: true });
+	await target.waitFor({ state: "visible" });
+	assert.equal(await target.count(), 1);
+	assert.ok(await target.evaluate((element, expected) => {
+		const style = getComputedStyle(element);
+		return element.textContent.trim() === expected &&
+			element.childElementCount === 0 &&
+			!element.closest("form input, iframe, [contenteditable]") &&
+			style.backgroundImage === "none" &&
+			getComputedStyle(element, "::before").content === "none" &&
+			getComputedStyle(element, "::after").content === "none";
+	}, label), "screenshot target contains unapproved content");
+	const filename = `${name}-${width}.png`;
+	// Isolate the approved label during rasterization. Visibility preserves layout
+	// while suppressing overlays, ancestor text, controls and private previews.
+	assert.equal(await page.locator("[data-h1-evidence-label]").count(), 0);
+	await target.evaluate(element => element.setAttribute("data-h1-evidence-label", ""));
+	let bytes;
+	try {
+		bytes = await target.screenshot({
+			animations: "disabled",
+			style: `*, *::before, *::after { visibility: hidden !important; }
+				[data-h1-evidence-label] { visibility: visible !important;
+					color: #fff !important; background: #161616 !important; }`,
+		});
+	} finally {
+		await target.evaluate(element => element.removeAttribute("data-h1-evidence-label"));
+	}
+	await writeFile(new URL(filename, diagnostics), bytes, { mode: 0o600, flag: "wx" });
+	screenshots.push({ filename, width, sha256: createHash("sha256").update(bytes).digest("hex") });
+}
+
 let apiFailure;
 
 const notRun = (id, reason) => results.push({ id, status: "NOT_RUN", reason });
@@ -165,6 +229,34 @@ async function clickResponse(page, name, path, method = "POST") {
 	assert.equal(r.status(), 200);
 	return r.json();
 }
+async function reloadH1BankRequest(page, requestId) {
+	const detail = page.getByRole("region", { name: "Owned bank request detail", exact: true });
+	await detail.getByRole("region", { name: "Current bank request summary", exact: true })
+		.waitFor({ state: "visible" });
+	const button = detail.getByRole("button", { name: "Reload current request", exact: true });
+	assert.equal(await button.count(), 1, "expected one request-detail reload button");
+	assert.ok(await button.isVisible(), "request-detail reload button must be visible");
+	assert.ok(await button.isEnabled(), "request-detail reload button must be enabled");
+	const path = "/api/bank/requests/" + requestId;
+	const [response] = await Promise.all([
+		page.waitForResponse(r => new URL(r.url()).pathname === path && r.request().method() === "GET"),
+		button.click(),
+	]);
+	assert.equal(response.status(), 200);
+	const current = await response.json();
+	assert.equal(current.id, requestId);
+	return current;
+}
+
+function ownedH1EvidenceUrl(href, origin, requestId) {
+	assert.equal(typeof href, "string");
+	const url = new URL(href, origin);
+	assert.ok(safeCustomerNavigation(url.href, origin));
+	assert.equal(url.pathname, "/bank");
+	assert.deepEqual([...url.searchParams], [["evidence", requestId]]);
+	return url.href;
+}
+
 async function login(page, subject) {
 	await control({ op: "subject", subject });
 	// A normal browser OIDC redirect creates the session. Never addCookies/storageState.
@@ -190,11 +282,11 @@ await once(socket, "listening");
 const port = socket.address().port;
 await new Promise((r) => socket.close(r));
 const base = `http://127.0.0.1:${port}`;
-const faultTransport = await uploadFaultProxy(config.backend);
+const faultTransport = h1 ? null : await uploadFaultProxy(config.backend);
 await writeFile(
 	`${run}/frontend-port.json`,
 	JSON.stringify({
-		ports: [port, Number(new URL(faultTransport.origin).port)],
+		ports: faultTransport ? [port, Number(new URL(faultTransport.origin).port)] : [port],
 	}),
 );
 try {
@@ -212,7 +304,7 @@ try {
 			cwd: new URL("..", import.meta.url),
 			env: {
 				...process.env,
-				CINENEST_AUTH_ORIGIN: faultTransport.origin,
+				CINENEST_AUTH_ORIGIN: faultTransport?.origin ?? config.backend,
 				NEXT_TELEMETRY_DISABLED: "1",
 			},
 			stdio: "ignore",
@@ -469,15 +561,63 @@ try {
 				new URL(r.url()).pathname === "/api/bank/requests" &&
 				r.method() === "POST",
 		);
-        faultTransport.armBankCreate();
+        if (faultTransport) faultTransport.armBankCreate();
         const timedOut=page.waitForResponse(r=>new URL(r.url()).pathname==="/api/bank/requests"&&r.request().method()==="POST",{timeout:25000});
         await page.getByRole("button",{name:"Create synthetic request",exact:true}).click();
         creationBody=(await observed).postDataJSON();
-        assert.equal((await timedOut).status(),502);
-        assert.equal(faultTransport.bankCreateReceipt.upstreamStatus,200);
-        assert.equal(faultTransport.bankCreateReceipt.stalled,1);
+        const response = await timedOut;
+        if (h1) {
+            assert.equal(response.status(), 200);
+            bank = await response.json();
+        } else {
+            assert.equal(response.status(), 502);
+            assert.equal(faultTransport.bankCreateReceipt.upstreamStatus, 200);
+            assert.equal(faultTransport.bankCreateReceipt.stalled, 1);
+        }
 	});
- bank=await release1PendingJourney({page,browser,base,config,api,json,login,control,scenario,bank,quote,creationBody,calendarObservation,faultTransport,diagnostics,requests});
+	if (h1) {
+		await scenario("H1-pending-recovery", async () => {
+			const before = requests.filter(r => r.method === "POST").length;
+			await page.goto(base + "/bank?request=" + bank.id);
+			const current = await reloadH1BankRequest(page, bank.id);
+			assert.equal(current.quoteId, quote.quoteId);
+			assert.equal(current.requestState, "OPEN");
+			assert.equal(current.reviewState, "PENDING");
+			assert.equal(current.paymentVerified, false);
+			assert.equal(current.bookingConfirmed, false);
+			assert.equal(current.financial.syntheticFundingStatus, "UNFUNDED");
+			assert.equal(current.financial.syntheticBookingStatus, "NOT_CONFIRMED");
+			assert.equal(current.financial.allocatedMinor, 0);
+			assert.equal(current.financial.bookingId, null);
+			assert.equal(requests.filter(r => r.method === "POST").length, before);
+			const evidence = await control({ op: "r1-pending-inspect", quoteId: quote.quoteId,
+				requestId: bank.id, commandKey: creationBody.commandKey });
+			for (const key of ["credits", "verifications", "allocations", "bookings", "credentials", "provisioningWork"])
+				assert.equal(evidence[key], 0, key);
+			assert.equal(evidence.requests, 1);
+			assert.equal(evidence.commandReceipts, 1);
+			assert.equal(evidence.bindingVerified, true);
+			for (const width of [375, 1280]) await captureH1(page, "customer", width);
+		});
+		await scenario("H1-admin-review", async () => {
+			const staff = await browser.newContext();
+			try {
+				const review = await staff.newPage();
+				await login(review, "staff");
+				await review.goto(base + "/admin/verification?venue=" + config.venue);
+				const route = `/api/admin/venues/${config.venue}/verification/requests/${verification.id}`;
+				await review.getByLabel("Existing request ID").fill(verification.id);
+				const record = await clickResponse(review, "Refresh current request and history", route, "GET");
+				assert.equal(record.id, verification.id);
+				assert.equal(record.state, "VERIFIED");
+				assert.equal((await api(review,
+					`/api/admin/venues/${config.otherVenue}/verification/requests/${verification.id}`)).status, 403);
+				for (const width of [375, 1280]) await captureH1(review, "admin", width);
+			} finally {
+				await staff.close();
+			}
+		});
+	} else bank=await release1PendingJourney({page,browser,base,config,api,json,login,control,scenario,bank,quote,creationBody,calendarObservation,faultTransport,diagnostics,requests});
 	await scenario("H-missing-CSRF", async () => {
 		assert.equal(
 			(await api(page, "/api/bank/requests", "POST", creationBody, false))
@@ -515,6 +655,7 @@ try {
 		});
 		assert.ok([400, 409].includes(r.status));
 	});
+	if (!h1) {
 	await scenario("K-stale-readiness", async () => {
 		const r = await api(page, "/api/bank/requests", "POST", {
 			...creationBody,
@@ -743,12 +884,24 @@ try {
 		);
 	});
  await extensionReservationJourney({browser,page,base,booking:financeObservation.bookingId,api,json,login,control,scenario,transport:faultTransport,diagnostics,observations});
+	}
 	await scenario("C-wrong-owner", async () => {
 		const other = await browser.newContext();
 		const p = await other.newPage();
 		try {
 			await login(p, "customer-b");
 			assert.equal((await api(p, "/api/bank/requests/" + bank.id)).status, 404);
+			if (h1) {
+				const denied = p.waitForResponse(r =>
+					new URL(r.url()).pathname === "/api/bank/requests/" + bank.id &&
+					r.request().method() === "GET");
+				await p.goto(base + "/bank?evidence=" + bank.id);
+				assert.equal((await denied).status(), 404);
+				await p.getByRole("alert").filter({ hasText: "Request unavailable" }).waitFor();
+				assert.equal(await p.getByRole("region", { name: "Current bank request summary" }).count(), 0);
+				assert.equal(await p.getByRole("button", { name: "Submit synthetic claim", exact: true }).count(), 0);
+				observations.push({ check: "wrong-owner-evidence-route", status: 404, protectedUiAbsent: true });
+			}
 		} finally {
 			await other.close();
 		}
@@ -769,6 +922,11 @@ try {
 					).status,
 				),
 			);
+			if (h1) {
+				const denied = await api(p, `/api/admin/venues/${config.otherVenue}/bank/requests/${bank.id}`);
+				assert.ok([403, 404].includes(denied.status));
+				observations.push({ check: "wrong-venue-bank-reference", status: denied.status });
+			}
 		} finally {
 			await other.close();
 		}
@@ -800,15 +958,49 @@ try {
 			200,
 			"protected request reload must succeed",
 		);
-		await page
-			.getByRole("link", {
-				name: "View simulated booking details",
-				exact: true,
-			})
-			.waitFor({ state: "visible" });
+		if (h1) {
+			await page.getByText("UNFUNDED · NOT_CONFIRMED", { exact: true }).waitFor();
+		} else {
+			await page
+				.getByRole("link", {
+					name: "View simulated booking details",
+					exact: true,
+				})
+				.waitFor({ state: "visible" });
+		}
 		assert.equal(page.url(), base + "/bank?request=" + bank.id);
 		assert.equal(safeCustomerNavigation(page.url(), base), true);
 		assert.ok(!page.url().includes(creationBody.contentHash));
+		if (h1) {
+			const detail = page.getByRole("region", { name: "Owned bank request detail", exact: true });
+			const link = detail.getByRole("link", { name: "Open synthetic claim and receipt workflow", exact: true });
+			assert.equal(await link.count(), 1);
+			assert.ok(await link.isVisible());
+			const destination = ownedH1EvidenceUrl(await link.getAttribute("href"), base, bank.id);
+			const path = "/api/bank/requests/" + bank.id;
+			const before = requests.length;
+			const [response] = await Promise.all([
+				page.waitForResponse(r => new URL(r.url()).pathname === path && r.request().method() === "GET"),
+				link.click(),
+			]);
+			await page.waitForURL(destination);
+			assert.equal(response.status(), 200);
+			const owned = await response.json();
+			assert.equal(owned.id, bank.id);
+			assert.equal(owned.venueId, config.venue);
+			assert.equal(owned.quoteId, quote.quoteId);
+			assert.equal(owned.claimId, null);
+			assert.deepEqual(owned.evidence, []);
+			assert.equal(owned.paymentVerified, false);
+			assert.equal(owned.bookingConfirmed, false);
+			await page.getByRole("region", { name: "Current bank request summary", exact: true }).waitFor();
+			await page.getByText("UNFUNDED · NOT_CONFIRMED", { exact: true }).waitFor();
+			assert.equal(await page.locator('img[src^="blob:"], iframe[src^="blob:"], embed').count(), 0);
+			assert.ok(requests.slice(before).every(r =>
+				r.method === "GET" && !/\/(uploads|evidence|credentials)(\/|$)/.test(r.path)));
+			observations.push({ check: "owned-evidence-handoff", status: 200,
+				sameRequest: true, sameVenue: true, privateEvidenceAbsent: true, readOnly: true });
+		}
 		assert.ok(
 			navigations.some((n) => n.queryKeys.includes("evidence") && n.safe),
 			"actual opaque evidence handoff must be covered",
@@ -822,6 +1014,7 @@ try {
 			"all legitimate customer navigation must satisfy the explicit route/reference allowlist",
 		);
 	});
+	if (!h1) {
 	await scenario("A-expired-quote", async () => {
 		// Independent non-overlapping session; do not alter the positive journey's purchase.
 		await page.goto(base + "/rooms/" + config.room);
@@ -1452,12 +1645,13 @@ try {
 			await reviewer.close();
 		}
 	});
+	}
 	await scenario("G-expired-session", async () => {
         const expired=await control({op:"expire-session"});assert.equal(expired.sessionDeadlineExpired,true);assert.ok(expired.expiredSessions>0);
 		assert.equal((await api(page, "/api/accounts/me")).status, 401);
         assert.equal((await api(page, `/api/bank/requests/${bank.id}`)).status,401);
 	});
- await expiredSessionRecovery({page,base,bank,scenario,diagnostics,login,api});
+ if (!h1) await expiredSessionRecovery({page,base,bank,scenario,diagnostics,login,api});
 } catch (failure) {
 	assertionFailure = {
 		name: failure.name,
@@ -1515,7 +1709,7 @@ try {
 		{ mode: 0o600 },
 	);
 	if (browser) await browser.close();
-	await faultTransport.close();
+	if (faultTransport) await faultTransport.close();
 	if (frontend && frontend.exitCode === null) {
 		frontend.kill("SIGTERM");
 		await Promise.race([
@@ -1531,6 +1725,8 @@ try {
 		`${run}/result.json`,
 		JSON.stringify({
 			syntheticOnly: true,
+            mode,
+            screenshots,
             calendarObservation,
 			results,
 			environment: {

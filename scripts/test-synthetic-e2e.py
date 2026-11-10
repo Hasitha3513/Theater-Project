@@ -86,11 +86,138 @@ class AdmissionTests(unittest.TestCase):
 
     def test_bank_instruction_scenario_is_explicit_and_bounded(self):
         self.assertEqual(journey.journey_test('campaign'),'SyntheticJourneyIT')
+        self.assertEqual(journey.journey_test('h1'),'SyntheticJourneyIT')
         self.assertEqual(journey.journey_test('bank-instructions'),'BankInstructionsJourneyIT')
         with self.assertRaises(RuntimeError):journey.journey_test('arbitrary')
         source=(journey.ROOT/'frontend/tests/bank-instructions-e2e.mjs').read_text()
         for forbidden in ['page.route(', 'route.fulfill(', 'addCookies(', 'storageState:']:
             self.assertNotIn(forbidden,source)
+
+    def test_h1_uses_direct_transport_and_crops_allowlisted_labels(self):
+        source = (journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()
+        self.assertIn('h1 ? null : await uploadFaultProxy(config.backend)', source)
+        self.assertIn('faultTransport?.origin ?? config.backend', source)
+        self.assertIn('h1 && Object.hasOwn(targets, name)', source)
+        self.assertIn('element.textContent.trim() === expected', source)
+        self.assertIn('element.childElementCount === 0', source)
+        self.assertIn('target.screenshot(', source)
+        self.assertIn('mode: 0o600, flag: "wx"', source)
+        self.assertIn('createHash("sha256")', source)
+
+    def test_h1_reload_uses_the_owned_detail_control(self):
+        frontend = journey.ROOT / 'frontend'
+        component = (frontend / 'components/bank-request-detail.tsx').read_text()
+        self.assertRegex(component, r'<Button busy=\{busy\} variant="secondary" onClick=\{\(\) => void load\(\)\}>\s+Reload current request\s+</Button>')
+        self.assertIn('loadBankRequest(reference, controller.signal)', component)
+        source = (frontend / 'tests/synthetic-e2e.mjs').read_text()
+        helper = source[source.index('async function reloadH1BankRequest('):
+                        source.index('async function login(')]
+        self.assertIn('const current = await reloadH1BankRequest(page, bank.id);', source)
+        subprocess.run(['node', '--input-type=module', '-'], input=
+            'import assert from "node:assert/strict";\n' + helper + r"""
+const path = "/api/bank/requests/owned";
+async function check(count, visible, enabled, responseId = "owned", status = 200) {
+    let clicks = 0;
+    const page = {
+        getByRole(role, options) {
+            assert.equal(role, "region");
+            assert.deepEqual(options, {name: "Owned bank request detail", exact: true});
+            return {getByRole(role, options) {
+                if (role === "region") {
+                    assert.deepEqual(options, {name: "Current bank request summary", exact: true});
+                    return {waitFor: async options => assert.deepEqual(options, {state: "visible"})};
+                }
+                assert.equal(role, "button");
+                assert.deepEqual(options, {name: "Reload current request", exact: true});
+                return {count: async () => count, isVisible: async () => visible,
+                    isEnabled: async () => enabled, click: async () => { clicks++; }};
+            }};
+        },
+        async waitForResponse(match) {
+            const response = (pathname, method) => ({
+                url: () => "http://127.0.0.1" + pathname, request: () => ({method: () => method}),
+                status: () => status, json: async () => ({id: responseId}),
+            });
+            assert.equal(clicks, 0);
+            assert.ok(!match(response(path + "-other", "GET")));
+            assert.ok(!match(response(path, "POST")));
+            assert.ok(match(response(path, "GET")));
+            return response(path, "GET");
+        },
+    };
+    if (count !== 1 || !visible || !enabled) {
+        await assert.rejects(reloadH1BankRequest(page, "owned"), /reload button/);
+        assert.equal(clicks, 0);
+    } else {
+        if (responseId !== "owned" || status !== 200) {
+            await assert.rejects(reloadH1BankRequest(page, "owned"), assert.AssertionError);
+        } else {
+            assert.deepEqual(await reloadH1BankRequest(page, "owned"), {id: "owned"});
+        }
+        assert.equal(clicks, 1);
+    }
+}
+await check(0, true, true);
+await check(2, true, true);
+await check(1, false, true);
+await check(1, true, false);
+await check(1, true, true, "other");
+await check(1, true, true, "owned", 403);
+await check(1, true, true);
+""", text=True, check=True)
+
+    def test_h1_opaque_evidence_route_requires_exact_owned_reference(self):
+        frontend = journey.ROOT / 'frontend'
+        source = (frontend / 'tests/synthetic-e2e.mjs').read_text()
+        helper = source[source.index('function ownedH1EvidenceUrl('):
+                        source.index('async function login(')]
+        nav = (frontend / 'tests/safe-navigation.mjs').as_uri()
+        subprocess.run(['node', '--input-type=module', '-'], input=
+            'import assert from "node:assert/strict";\n'
+            + f'import {{ safeCustomerNavigation }} from {json.dumps(nav)};\n'
+            + helper + r"""
+const base = "http://127.0.0.1:4443";
+const id = "11111111-2222-4333-8444-555555555555";
+const other = "11111111-2222-4333-8444-555555555556";
+const href = "/bank?evidence=" + id;
+assert.equal(ownedH1EvidenceUrl(href, base, id), base + href);
+for (const invalid of [null, "/bank?evidence=malformed", "/bank?evidence=" + other,
+    "/bank?request=" + id, href + "&evidence=" + id, href + "&token=secret",
+    href + "#fragment", "https://outside.invalid" + href]) {
+    assert.throws(() => ownedH1EvidenceUrl(invalid, base, id));
+}
+""", text=True, check=True)
+        start = source.index('await scenario("P-safe-URLs"')
+        expiry = source.index('await scenario("G-expired-session"', start)
+        positive = source[start:source.index('await scenario("A-expired-quote"', start)]
+        self.assertIn('link.click()', positive)
+        self.assertIn('assert.deepEqual(owned.evidence, []);', positive)
+        self.assertIn('navigations.some((n) => n.queryKeys.includes("evidence") && n.safe)', positive)
+        self.assertIn('navigations.some((n) => n.expectedNegative && !n.safe)', positive)
+        expired = source[expiry:source.index('await expiredSessionRecovery(', expiry)]
+        self.assertIn('control({op:"expire-session"})', expired)
+        self.assertIn('expired.sessionDeadlineExpired,true', expired)
+        self.assertIn('"/api/accounts/me")).status, 401', expired)
+        self.assertIn('`/api/bank/requests/${bank.id}`)).status,401', expired)
+        self.assertIn('if (!h1) {\n\tawait scenario("A-expired-quote"', source[start:expiry])
+
+    def test_postgres_budget_rejects_mismatched_live_configuration(self):
+        host = dict(NanoCpus=10**9, Memory=1024**3, MemorySwap=1024**3,
+                    PidsLimit=128, ShmSize=64*1024**2,
+                    Tmpfs={'/var/lib/postgresql': 'rw,size=496m'})
+        with tempfile.TemporaryDirectory(prefix='cinenest-e2e-') as name:
+            root = Path(name)
+            (root/'ownership.json').write_text(json.dumps({'name':root.name,'scenario':'h1'}))
+            with patch.object(journey, 'runtime_limits'), patch.object(
+                journey, 'call', side_effect=['owned',json.dumps([{'HostConfig':host}])]
+            ) as call:
+                with self.assertRaisesRegex(RuntimeError, 'Database limits not effective'):
+                    journey.inside(root)
+                args = call.call_args_list[0].args[0]
+                self.assertIn('--shm-size=16m', args)
+                self.assertIn('/var/lib/postgresql:rw,size=496m', args)
+                self.assertEqual(call.call_args_list[0].kwargs['env']['CINENEST_E2E_MODE'], 'h1')
+                self.assertEqual(call.call_count, 2)
 
     def test_workflow_untouched_and_offline_runtime(self):
         source=Path(journey.__file__).read_text()

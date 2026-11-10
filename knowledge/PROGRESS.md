@@ -3769,3 +3769,10 @@ V39/V40 fixture qualification cn-v40-9a6445e1c7d64cc1 completed with 2 PostgreSQ
 ## V41 customer commercial quotation foundation
 
 The exact 24-path V41 local scope is based on fc6ccaa21e6a304ea9cb971bee86ad9c6c6f36d8. Backend 66 passed with two opt-in skips during offline checks. Frontend focused tests, lint, typecheck and production build passed. One PostgreSQL 18.6 window passed both opt-in tests, clean 40-migration V41 and populated V40→V41. Synthetic authority and hold/publication port doubles were used. Two databases were reconciled, the container removed and listener closed in 13.93 seconds. The Knowledge Base receipt was verified after draft edits and before PostgreSQL startup. Owner UAT remains pending with RETEST and independent review not satisfied. Publication awaits separate authorization. Accounting and operational restrictions remain unchanged.
+
+<a id="h1-demo-harness-001"></a>
+## H1 synthetic demonstration harness
+
+CN-H1-DEMO-HARNESS-001 adds a direct, synthetic-only rehearsal on the V41 baseline. The campaign retains its real upload acknowledgement loss and original-allocation recovery. The H1 browser checks pending payment without creating verified funds, a confirmed booking or an access credential. Evidence captures are limited to allowlisted customer and staff labels in private storage. H1 requests 496 MiB of PostgreSQL data tmpfs and 16 MiB of shared memory and checks the effective limits before running the journey.
+
+This source admission records an unexecuted rehearsal. It grants no production or publication authority and does not change historical acceptance.

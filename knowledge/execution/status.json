@@ -31264,5 +31264,22 @@
     "customerAccessEnabled": false,
     "operationalTrustEnabled": false,
     "publication": "NOT_AUTHORIZED"
+  },
+  "h1DemoHarness": {
+    "taskId": "CN-H1-DEMO-HARNESS-001",
+    "baseline": "86dada95a3c0df30c00e511488445224937bd764",
+    "preEditReviewSha256": "052b6806af3b374552547c98de7ff73a285d251cffbddbd9b4be3f3dcf8d748c",
+    "scope": "SYNTHETIC_ONLY",
+    "rehearsal": "NOT_RUN",
+    "publication": "NOT_AUTHORIZED",
+    "productionAuthorization": "NONE",
+    "postgresDataTmpfsMiB": 496,
+    "postgresShmMiB": 16,
+    "maxMinutesIncludingCleanup": 30,
+    "sourceSha256": {
+      "frontend/tests/synthetic-e2e.mjs": "6a3f1f9c8d2984225c0210e094d7abc373748517075f1e38371af3b5be621c18",
+      "scripts/test-synthetic-e2e.py": "9860faff50b72de9695b7c5c56128d36ec51db1d276ceaa5e2df667dd393e7d6",
+      "scripts/verify-synthetic-e2e.py": "faa7aa7754e5700f9de1626850539c12dcc2d35f0df4869c1b969708179d2783"
+    }
   }
 }

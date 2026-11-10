@@ -132,7 +132,7 @@ def cleanup(path):
 
 
 def journey_test(scenario):
-    tests={'campaign':'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
+    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
     if scenario not in tests:raise RuntimeError('Unsupported synthetic scenario')
     return tests[scenario]
 
@@ -142,19 +142,23 @@ def inside(path):
     runtime_limits()
     state = json.loads((path / 'ownership.json').read_text())
     name = state['name']
+    scenario = state.get('scenario', 'campaign')
+    test = journey_test(scenario)
     (path/'next-env.original').write_bytes((ROOT/'frontend/next-env.d.ts').read_bytes())
     password = secrets.token_urlsafe(32)
     env = {k: v for k, v in os.environ.items() if k in {'PATH','HOME','USER','JAVA_HOME','PLAYWRIGHT_MODULE_PATH','DOCKER_HOST','DBUS_SESSION_BUS_ADDRESS','XDG_RUNTIME_DIR','LANG'}}
-    env.update(POSTGRES_PASSWORD=password)
+    env.update(POSTGRES_PASSWORD=password, CINENEST_E2E_MODE="h1" if scenario == "h1" else "campaign")
     call(['docker', 'run', '--pull=never', '--detach', '--rm', '--name', name, '--label', LABEL+'='+name,
-          '--cpus=1', '--memory=1g', '--memory-swap=1g', '--pids-limit=128', '--tmpfs',
-          '/var/lib/postgresql:rw,size=512m', '--publish', '127.0.0.1::5432', '--env', 'POSTGRES_DB=cinenest_test',
+          '--cpus=1', '--memory=1g', '--memory-swap=1g', '--pids-limit=128', '--shm-size=16m', '--tmpfs',
+          '/var/lib/postgresql:rw,size=496m', '--publish', '127.0.0.1::5432', '--env', 'POSTGRES_DB=cinenest_test',
           '--env', 'POSTGRES_USER=cinenest_test', '--env', 'POSTGRES_PASSWORD', IMAGE], env=env, timeout=25)
     config = json.loads(call(['docker', 'inspect', name]))[0]
     host = config['HostConfig']
-    if (host['NanoCpus'], host['Memory'], host['MemorySwap'], host['PidsLimit']) != (10**9, 1024**3, 1024**3, 128) or host['Tmpfs'].get('/var/lib/postgresql') != 'rw,size=512m':
+    if (host['NanoCpus'], host['Memory'], host['MemorySwap'], host['PidsLimit'], host['ShmSize']) != (
+            10**9, 1024**3, 1024**3, 128, 16 * 1024**2
+    ) or host['Tmpfs'].get('/var/lib/postgresql') != 'rw,size=496m':
         raise RuntimeError('Database limits not effective')
-    print(json.dumps({'admission': 'LIMITS_VERIFIED', 'applicationCpuMax': 3, 'applicationMemoryGiBMax': 7, 'postgresCpuMax': 1, 'postgresMemoryGiBMax': 1, 'postgresPidsMax': 128, 'postgresTmpfsMiBMax': 512, 'run': name}), flush=True)
+    print(json.dumps({'admission': 'LIMITS_VERIFIED', 'applicationCpuMax': 3, 'applicationMemoryGiBMax': 7, 'postgresCpuMax': 1, 'postgresMemoryGiBMax': 1, 'postgresPidsMax': 128, 'postgresTmpfsMiBMax': 496, 'postgresShmMiBMax': 16, 'run': name}), flush=True)
     for _ in range(100):
         ready = subprocess.run(['docker', 'exec', name, 'pg_isready', '-U', 'cinenest_test'], capture_output=True, timeout=3)
         if ready.returncode == 0:
@@ -173,7 +177,7 @@ def inside(path):
     with (path / 'private-build.log').open('w') as log:
         for args, cwd in [(['npm', 'run', 'build'], ROOT/'frontend'),
                           ([str(ROOT/'backend/mvnw'), '-o', '-B', '-Dmaven.repo.local='+str(ROOT/'.cache/m2'),
-                            '-Dtest='+journey_test(state.get('scenario','campaign')), 'test'], ROOT/'backend')]:
+                            '-Dtest='+test, 'test'], ROOT/'backend')]:
             result = subprocess.run(args, cwd=cwd, env=env, stdout=log, stderr=subprocess.STDOUT, timeout=540)
             if result.returncode:
                 if (path/'result.json').is_file():
@@ -189,7 +193,7 @@ def inside(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
-    parser.add_argument('--scenario', choices=['campaign','bank-instructions'], default='campaign')
+    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1'], default='campaign')
     parser.add_argument('--inside', type=Path)
     parser.add_argument('--cleanup', type=Path)
     args = parser.parse_args()

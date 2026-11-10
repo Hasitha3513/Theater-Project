@@ -14067,5 +14067,123 @@ def inert_ci_main():
     return v41_historical_view(v41_prior_main)
 
 
+
+H1_BASE = '86dada95a3c0df30c00e511488445224937bd764'
+H1_RECEIPT = '052b6806af3b374552547c98de7ff73a285d251cffbddbd9b4be3f3dcf8d748c'
+H1_SOURCES = {'frontend/tests/synthetic-e2e.mjs', 'scripts/test-synthetic-e2e.py',
+              'scripts/verify-synthetic-e2e.py'}
+H1_KNOWLEDGE = {'PROGRESS.md', 'execution/status.json', 'execution/validate_execution.py'}
+H1_OWNED = H1_SOURCES | {'knowledge/' + name for name in H1_KNOWLEDGE} | {V41_MANIFEST}
+h1_prior_main = inert_ci_main
+h1_prior_guard = receipt_admission_successor_errors
+
+
+def h1_before(name):
+    return v41_git('show', H1_BASE + ':' + name)
+
+
+def h1_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', H1_BASE, 'HEAD')
+        tracked = parse_git_paths(v41_git('ls-tree', '-r', '--name-only', '-z', H1_BASE, text=True), nul=True)
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard', text=True), nul=True)
+        changed = parse_git_paths(v41_git('diff', H1_BASE, '--name-only', '-z', text=True), nul=True)
+        if len(H1_OWNED) != 7 or live != tracked or changed != H1_OWNED:
+            return ['H1 exact seven-path inventory mismatch']
+        for name in H1_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['H1 unsafe file ' + name]
+        if not (K / 'PROGRESS.md').read_bytes().startswith(h1_before('knowledge/PROGRESS.md')):
+            return ['H1 altered progress history']
+        end = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prefix = h1_before(V41_VALIDATOR)
+        if not prefix.endswith(end) or not (R / V41_VALIDATOR).read_bytes().startswith(prefix[:-len(end)]):
+            return ['H1 altered historical validator']
+        state = json.loads((K / 'execution/status.json').read_text())
+        evidence = state.pop('h1DemoHarness')
+        expected = {
+            'taskId': 'CN-H1-DEMO-HARNESS-001', 'baseline': H1_BASE,
+            'preEditReviewSha256': H1_RECEIPT, 'scope': 'SYNTHETIC_ONLY',
+            'rehearsal': 'NOT_RUN', 'publication': 'NOT_AUTHORIZED',
+            'productionAuthorization': 'NONE', 'postgresDataTmpfsMiB': 496,
+            'postgresShmMiB': 16, 'maxMinutesIncludingCleanup': 30,
+            'sourceSha256': {n: hashlib.sha256((R / n).read_bytes()).hexdigest() for n in H1_SOURCES},
+        }
+        if evidence != expected or state != json.loads(h1_before('knowledge/execution/status.json')):
+            return ['H1 evidence or historical status mismatch']
+        manifest = json.loads(h1_before(V41_MANIFEST))
+        refresh = {row['path'] for row in manifest['files']} & H1_KNOWLEDGE
+        if refresh != H1_KNOWLEDGE:
+            return ['H1 manifest refresh incomplete']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['H1 manifest checksum or scope mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['H1 admission inputs inaccessible or invalid']
+    return []
+
+
+def h1_historical_view(check):
+    from unittest.mock import patch
+
+    previous = {R / name: h1_before(name) for name in H1_OWNED}
+    read_bytes, read_text, output = Path.read_bytes, Path.read_text, subprocess.check_output
+
+    def baseline_output(argv, *args, **kwargs):
+        if isinstance(argv, list) and argv[:3] == ['git', '-C', str(R)] and 'diff' in argv and '--name-only' in argv:
+            index = argv.index('diff') + 1
+            if index < len(argv) and re.fullmatch(r'[0-9a-f]{40}', argv[index]):
+                if index + 1 == len(argv) or not re.fullmatch(r'[0-9a-f]{40}', argv[index + 1]):
+                    argv = argv[:index + 1] + [H1_BASE] + argv[index + 1:]
+            else:
+                return '' if kwargs.get('text') else b''
+        return output(argv, *args, **kwargs)
+
+    with patch.object(Path, 'read_bytes', lambda p, *a, **kw: previous[p] if p in previous else read_bytes(p, *a, **kw)), patch.object(
+        Path, 'read_text', lambda p, *a, **kw: previous[p].decode() if p in previous else read_text(p, *a, **kw)
+    ), patch.object(subprocess, 'check_output', baseline_output), patch.dict(
+        globals(), {'receipt_admission_successor_errors': h1_prior_guard}
+    ):
+        return check()
+
+
+def h1_successor_errors():
+    return h1_errors() or h1_historical_view(h1_prior_guard)
+
+
+receipt_admission_successor_errors = h1_successor_errors
+
+
+def h1_controls():
+    from unittest.mock import patch
+
+    assert not h1_errors()
+    original = Path.read_bytes
+    for name in H1_SOURCES | {V41_VALIDATOR, V41_MANIFEST}:
+        with patch.object(Path, 'read_bytes', lambda p: original(p) + b'\n' if p == R / name else original(p)):
+            assert h1_errors(), name
+    output = subprocess.check_output
+
+    def extra(argv, *args, **kwargs):
+        result = output(argv, *args, **kwargs)
+        return result + 'frontend/unapproved.tsx\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert h1_errors()
+    print('PASS H1 exact inventory, scope, history and fingerprint controls')
+
+
+def inert_ci_main():
+    errors = h1_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    h1_controls()
+    return h1_historical_view(h1_prior_main)
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
