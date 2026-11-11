@@ -1,18 +1,23 @@
 "use client";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import {
+	activationReceipt,
 	approvalMessage,
+	activationScope,
+	type ActivationScope,
 	emptyDocument,
 	maxApprovalEnvelopeBytes,
 	type Fee,
 	type Policy,
 	type PolicyDocument,
+	policyActivationPath,
 	policyMessage,
 	policyNotice,
 	policyRequest,
 	policyVenues,
 	RoomRequestError,
 	sections,
+	validActivationSelection,
 	validApprovalEnvelope,
 	validateDocument,
 } from "../lib/commercial-policies";
@@ -20,6 +25,197 @@ import { roomRequest } from "../lib/rooms";
 import { Button, Card, Field, PageHeading } from "./primitives";
 
 type Summary = { policyId: string; title: string; revision: string };
+export function OperationalPolicyActivation({
+	policy,
+	venue,
+	disabled,
+}: {
+	policy?: ActivationScope;
+	venue: string;
+	disabled: boolean;
+}) {
+	const [roomId, setRoomId] = useState("");
+	const [packageVersionId, setPackageVersionId] = useState("");
+	const [effectiveFrom, setEffectiveFrom] = useState(
+		policy?.effectiveFrom ?? "",
+	);
+	const [effectiveUntil, setEffectiveUntil] = useState(
+		policy?.effectiveUntil ?? "",
+	);
+	const [busy, setBusy] = useState(false);
+	const [message, setMessage] = useState("");
+	const pending = useRef<string | undefined>(undefined);
+	const inFlight = useRef(false);
+	const [outcomeUnknown, setOutcomeUnknown] = useState(false);
+	const [recorded, setRecorded] = useState(false);
+	const path =
+		policy && policy.venueId === venue
+			? policyActivationPath(venue, policy.policyId)
+			: undefined;
+	const valid = validActivationSelection(
+		roomId,
+		packageVersionId,
+		effectiveFrom,
+		effectiveUntil,
+	);
+
+	async function activate(event: FormEvent) {
+		event.preventDefault();
+		if (disabled || inFlight.current || recorded || !valid || !policy || !path)
+			return;
+		pending.current ??= JSON.stringify({
+			commandKey: crypto.randomUUID(),
+			roomId,
+			packageVersionId,
+			policyRevision: policy.policyRevision,
+			policyHash: policy.policyHash,
+			effectiveFrom,
+			effectiveUntil,
+		});
+		inFlight.current = true;
+		setBusy(true);
+		try {
+			const receipt = activationReceipt(
+				await policyRequest(path, { method: "POST", body: pending.current }),
+			);
+			setRecorded(true);
+			setOutcomeUnknown(false);
+			setMessage(`Activation recorded: ${receipt.activationId}.`);
+		} catch (error) {
+			if (
+				error instanceof RoomRequestError &&
+				error.status < 500 &&
+				!outcomeUnknown
+			)
+				pending.current = undefined;
+			else setOutcomeUnknown(true);
+			setMessage(policyMessage(error));
+		} finally {
+			inFlight.current = false;
+			setBusy(false);
+		}
+	}
+
+	if (!policy || !path) return null;
+	return (
+		<Card title="Operational policy activation">
+			<p>
+				The server verifies current specialist authority for revision{" "}
+				{policy.policyRevision}.
+			</p>
+			<form onSubmit={activate}>
+				<fieldset disabled={disabled || busy || outcomeUnknown || recorded}>
+					<legend>Activation scope</legend>
+					<Field
+						id="activation-room"
+						label="Room reference"
+						value={roomId}
+						onChange={(event) => setRoomId(event.target.value)}
+						required
+						maxLength={36}
+					/>
+					<Field
+						id="activation-package-version"
+						label="Published package version"
+						value={packageVersionId}
+						onChange={(event) => setPackageVersionId(event.target.value)}
+						required
+						maxLength={36}
+					/>
+					<Field
+						id="activation-from"
+						label="Effective start (UTC)"
+						hint="Example: 2030-01-01T00:00:00Z"
+						value={effectiveFrom}
+						onChange={(event) => setEffectiveFrom(event.target.value)}
+						required
+						maxLength={30}
+					/>
+					<Field
+						id="activation-until"
+						label="Effective end (UTC)"
+						value={effectiveUntil}
+						onChange={(event) => setEffectiveUntil(event.target.value)}
+						required
+						maxLength={30}
+					/>
+				</fieldset>
+				<Button type="submit" disabled={disabled || busy || recorded || !valid}>
+					{outcomeUnknown
+						? "Retry same activation command"
+						: "Activate this policy revision"}
+				</Button>
+			</form>
+			<p role="status">{message}</p>
+		</Card>
+	);
+}
+
+function OperationalPolicyLookup({
+	venue,
+	disabled,
+}: {
+	venue: string;
+	disabled: boolean;
+}) {
+	const [policyId, setPolicyId] = useState("");
+	const [scope, setScope] = useState<ActivationScope>();
+	const [busy, setBusy] = useState(false);
+	const [message, setMessage] = useState("");
+	const path = policyActivationPath(venue, policyId);
+
+	async function inspect(event: FormEvent) {
+		event.preventDefault();
+		if (disabled || busy || !path) return;
+		setScope(undefined);
+		setBusy(true);
+		try {
+			const next = activationScope(await policyRequest(path), venue, policyId);
+			setScope(next);
+			setMessage(
+				next ? "" : "Activation is unavailable for this policy and venue.",
+			);
+		} catch (error) {
+			setMessage(policyMessage(error));
+		} finally {
+			setBusy(false);
+		}
+	}
+
+	return (
+		<>
+			<Card title="Check operational activation permission">
+				<form onSubmit={inspect}>
+					<Field
+						id="activation-policy"
+						label="Exact policy reference"
+						value={policyId}
+						maxLength={36}
+						disabled={disabled || busy}
+						onChange={(event) => {
+							setScope(undefined);
+							setPolicyId(event.target.value);
+							setMessage("");
+						}}
+					/>
+					<Button type="submit" disabled={disabled || busy || !path}>
+						Check policy permission
+					</Button>
+				</form>
+				<p role="status">{message}</p>
+			</Card>
+			{scope && (
+				<OperationalPolicyActivation
+					key={`${scope.policyId}:${scope.policyRevision}:${scope.policyHash}`}
+					policy={scope}
+					venue={venue}
+					disabled={disabled || busy}
+				/>
+			)}
+		</>
+	);
+}
+
 export function CommercialPolicies() {
 	const [venues, setVenues] = useState<
 			import("../lib/commercial-policies").PolicyVenue[]
@@ -39,6 +235,7 @@ export function CommercialPolicies() {
 		[outcome, setOutcome] = useState("APPROVE"),
 		[reference, setReference] = useState("");
 	const [approvalEnvelope, setApprovalEnvelope] = useState("");
+	const [sessionGeneration, setSessionGeneration] = useState(0);
 	const key = useRef<string>("");
 	const base = `/api/admin/venues/${encodeURIComponent(venue)}/commercial-policies`;
 	useEffect(() => {
@@ -59,10 +256,19 @@ export function CommercialPolicies() {
 	}, []);
 	useEffect(() => {
 		const clearEnvelope = () => setApprovalEnvelope("");
-		const events = ["cinenest-session-change", "pagehide", "popstate"];
+		const events = ["pagehide", "popstate"];
+		const resetSessionProjection = () => {
+			clearEnvelope();
+			setSessionGeneration((value) => value + 1);
+		};
+		window.addEventListener("cinenest-session-change", resetSessionProjection);
 		for (const event of events) window.addEventListener(event, clearEnvelope);
 		window.document.addEventListener("visibilitychange", clearEnvelope);
 		return () => {
+			window.removeEventListener(
+				"cinenest-session-change",
+				resetSessionProjection,
+			);
 			for (const event of events)
 				window.removeEventListener(event, clearEnvelope);
 			window.document.removeEventListener("visibilitychange", clearEnvelope);
@@ -302,6 +508,13 @@ export function CommercialPolicies() {
 					New draft
 				</Button>
 			</Card>
+			{venue && (
+				<OperationalPolicyLookup
+					key={`${venue}:${sessionGeneration}`}
+					venue={venue}
+					disabled={locked}
+				/>
+			)}
 			<Card title="Saved drafts">
 				<ul>
 					{items.map((item) => (

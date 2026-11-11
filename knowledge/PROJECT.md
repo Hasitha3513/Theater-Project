@@ -1176,3 +1176,8 @@ V39 and V40 add local fixture-only policy activation and quotation issuance foun
 ## V41 customer commercial quotation foundation
 
 The V41 customer quotation foundation for CN-R1-COMMERCIAL-QUOTE-001 is default-disabled. An authenticated customer request with valid CSRF receives an unavailable response. Isolated tests may exercise synthetic qualification snapshots, which are non-offers. Commercial issuance requires genuine specialist authority, approved trust roots and separate activation. Checkout and customer access remain disabled.
+
+
+## V42 operational commercial policy and quotation
+
+V42 extends Day 05 with default-disabled operational policy activation and quotation issuance. Genuine specialist authority, approved trust roots and release authorization remain separate Day 05 gates.

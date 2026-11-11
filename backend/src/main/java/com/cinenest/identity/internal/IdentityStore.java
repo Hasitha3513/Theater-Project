@@ -13,6 +13,41 @@ class IdentityStore {
 
     IdentityStore(JdbcClient jdbc) { this.jdbc = jdbc; }
 
+    @org.springframework.beans.factory.annotation.Value("${cinenest.identity.operational-enabled:false}")
+    private boolean operationalEnabled;
+
+    record OperationalCredential(UUID account, String issuer, String subject, long epoch, long revision,
+                                 String accountClass) {}
+
+    Optional<OperationalCredential> operationalAssociation(String issuer, String subject) {
+        if (!operationalEnabled) return Optional.empty();
+        return operationalCredentials("c.issuer = :issuer AND c.subject = :subject")
+            .param("issuer", issuer).param("subject", subject).query(IdentityStore::mapOperationalCredential).optional();
+    }
+
+    Optional<OperationalCredential> operationalCredential(UUID account, boolean lock) {
+        if (!operationalEnabled) return Optional.empty();
+        return operationalCredentials("c.account_id = :account" + (lock ? " FOR SHARE OF a, c" : ""))
+            .param("account", account).query(IdentityStore::mapOperationalCredential).optional();
+    }
+
+    private JdbcClient.StatementSpec operationalCredentials(String condition) {
+        return jdbc.sql("""
+            SELECT a.account_id, c.issuer, c.subject, c.epoch, a.revision, c.account_class
+            FROM cinenest_identity.operational_credential c
+            JOIN cinenest_identity.account a ON a.account_id = c.account_id
+            WHERE NOT a.synthetic AND a.eligibility = 'ELIGIBLE' AND c.revoked_at IS NULL
+              AND c.verified_at <= clock_timestamp() AND c.expires_at > clock_timestamp()
+              AND
+            """ + condition);
+    }
+
+    private static OperationalCredential mapOperationalCredential(java.sql.ResultSet row, int index)
+        throws java.sql.SQLException {
+        return new OperationalCredential(row.getObject("account_id", UUID.class), row.getString("issuer"),
+            row.getString("subject"), row.getLong("epoch"), row.getLong("revision"), row.getString("account_class"));
+    }
+
     Optional<UUID> associatedEligibleAccount(String issuer, String subject) {
         return jdbc.sql("""
             SELECT a.account_id FROM cinenest_identity.account a

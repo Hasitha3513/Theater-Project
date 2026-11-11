@@ -3,15 +3,25 @@ import test from "node:test";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { POST as submitTrustedApproval } from "../app/api/admin/venues/[venueId]/commercial-policies/[policyId]/trusted-approvals/route.ts";
-import { CommercialPolicies } from "../components/commercial-policies.tsx";
 import {
+	GET as inspectActivation,
+	POST as activatePolicy,
+} from "../app/api/admin/venues/[venueId]/commercial-policies/[policyId]/activation/route.ts";
+import {
+	CommercialPolicies,
+	OperationalPolicyActivation,
+} from "../components/commercial-policies.tsx";
+import {
+	activationReceipt,
 	approvalMessage,
+	activationScope,
 	emptyDocument,
 	maxApprovalEnvelopeBytes,
 	policyMessage,
 	policyRoute,
 	policyVenues,
 	RoomRequestError,
+	validActivationSelection,
 	validApprovalEnvelope,
 	validateDocument,
 } from "../lib/commercial-policies.ts";
@@ -68,7 +78,7 @@ test("UTC interval must be ordered and valid", () => {
 		}).effectiveUntilProposal,
 	);
 });
-test("exact six API operations reject activation and traversal", () => {
+test("policy route allows exact operations and rejects unsupported paths", () => {
 	for (const [suffix, method] of [
 		["", "GET"],
 		["", "POST"],
@@ -76,6 +86,8 @@ test("exact six API operations reject activation and traversal", () => {
 		[`/${policy}`, "PUT"],
 		[`/${policy}/history`, "GET"],
 		[`/${policy}/reviews`, "POST"],
+		[`/${policy}/activation`, "GET"],
+		[`/${policy}/activation`, "POST"],
 	])
 		assert.equal(policyRoute(path + suffix, method), true);
 	for (const [suffix, method] of [
@@ -305,4 +317,156 @@ test("existing authorized venues API is an array, not a paginated wrapper", () =
 	]);
 	assert.throws(() => policyVenues({ items: result }));
 	assert.throws(() => policyVenues([{ venueId: "wrong" }]));
+});
+
+test("activation controls require a current exact-policy permission projection", () => {
+	const item = {
+		permitted: true,
+		policyId: policy,
+		venueId: venue,
+		policyRevision: 2,
+		policyHash: "a".repeat(64),
+		effectiveFrom: "2030-01-01T00:00:00Z",
+		effectiveUntil: null,
+	};
+	const scope = activationScope(item, venue, policy);
+	assert.ok(scope);
+	const render = (policy, selectedVenue) =>
+		renderToStaticMarkup(
+			React.createElement(OperationalPolicyActivation, {
+				policy,
+				venue: selectedVenue,
+				disabled: false,
+			}),
+		);
+	assert.match(render(scope, venue), /Activate this policy revision/);
+	assert.equal(render(scope, policy), "");
+	for (const override of [
+		{ permitted: false },
+		{ permitted: "true" },
+		{ venueId: policy },
+		{ policyId: venue },
+		{ policyRevision: "2" },
+		{ policyHash: "invalid" },
+		{ effectiveUntil: "invalid" },
+	])
+		assert.equal(
+			render(activationScope({ ...item, ...override }, venue, policy), venue),
+			"",
+		);
+	assert.equal(
+		validActivationSelection(
+			venue,
+			policy,
+			"2030-01-01T00:00:00Z",
+			"2030-01-02T00:00:00Z",
+		),
+		true,
+	);
+	assert.equal(
+		validActivationSelection(
+			venue,
+			policy,
+			"2030-01-01T00:00:00",
+			"2030-01-02T00:00:00Z",
+		),
+		false,
+	);
+	assert.equal(
+		validActivationSelection(
+			venue,
+			policy,
+			"2030-01-03T00:00:00Z",
+			"2030-01-02T00:00:00Z",
+		),
+		false,
+	);
+	assert.deepEqual(activationReceipt({ activationId: policy }), {
+		activationId: policy,
+	});
+	assert.throws(() => activationReceipt({ activationId: "invalid" }));
+});
+
+test("activation route rejects altered paths, spoofed authority, wrong origin and missing CSRF", async (t) => {
+	const old = process.env.CINENEST_AUTH_ORIGIN;
+	process.env.CINENEST_AUTH_ORIGIN = "http://127.0.0.1:9999";
+	t.after(() => {
+		if (old === undefined) delete process.env.CINENEST_AUTH_ORIGIN;
+		else process.env.CINENEST_AUTH_ORIGIN = old;
+	});
+	const url = `${path}/${policy}/activation`;
+	const body = JSON.stringify({
+		policyRevision: 2,
+		policyHash: "a".repeat(64),
+	});
+	const origin = "http://localhost";
+	const headers = {
+		Origin: origin,
+		"X-CSRF-TOKEN": "synthetic",
+		Cookie: "other=omit; CINENEST_SESSION=synthetic",
+	};
+	const request = (route = url, values = headers) =>
+		new Request(origin + route, {
+			method: "POST",
+			headers: values,
+			body,
+		});
+	const upstream = t.mock.method(globalThis, "fetch", async (target, init) => {
+		assert.equal(target.pathname, url);
+		assert.equal(target.search, "");
+		assert.equal(init.headers.get("cookie"), "CINENEST_SESSION=synthetic");
+		assert.equal(init.headers.get("x-csrf-token"), "synthetic");
+		assert.equal(init.body, body);
+		return Response.json({ activationId: policy }, { status: 201 });
+	});
+	assert.equal((await activatePolicy(request(`${url}/other`))).status, 404);
+	assert.equal((await activatePolicy(request(`${url}?page=0`))).status, 400);
+	assert.equal(
+		(await activatePolicy(request(url, { ...headers, "X-Role": "admin" })))
+			.status,
+		400,
+	);
+	assert.equal(
+		(
+			await activatePolicy(
+				request(url, { ...headers, Origin: "https://other.test" }),
+			)
+		).status,
+		403,
+	);
+	assert.equal(
+		(await activatePolicy(request(url, { Origin: origin }))).status,
+		403,
+	);
+	assert.equal(upstream.mock.callCount(), 0);
+	const accepted = await activatePolicy(request());
+	assert.equal(accepted.status, 201);
+	assert.equal(accepted.headers.get("cache-control"), "no-store");
+	assert.deepEqual(await accepted.json(), { activationId: policy });
+	assert.equal(upstream.mock.callCount(), 1);
+});
+
+test("activation permission read forwards only the configured session and stays uncached", async (t) => {
+	const old = process.env.CINENEST_AUTH_ORIGIN;
+	process.env.CINENEST_AUTH_ORIGIN = "http://127.0.0.1:9999";
+	t.after(() => {
+		if (old === undefined) delete process.env.CINENEST_AUTH_ORIGIN;
+		else process.env.CINENEST_AUTH_ORIGIN = old;
+	});
+	const pathname = `${path}/${policy}/activation`;
+	const upstream = t.mock.method(globalThis, "fetch", async (target, init) => {
+		assert.equal(target.pathname, pathname);
+		assert.equal(init.method, "GET");
+		assert.equal(init.headers.get("cookie"), "CINENEST_SESSION=synthetic");
+		assert.equal(init.body, undefined);
+		return Response.json({ permitted: false });
+	});
+	const response = await inspectActivation(
+		new Request(`http://localhost${pathname}`, {
+			headers: { Cookie: "other=omit; CINENEST_SESSION=synthetic" },
+		}),
+	);
+	assert.equal(response.headers.get("cache-control"), "no-store");
+	assert.deepEqual(await response.json(), { permitted: false });
+	assert.equal(upstream.mock.callCount(), 1);
 });

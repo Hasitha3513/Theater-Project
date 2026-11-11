@@ -38,12 +38,42 @@ final class CredentialEpochSessions {
         var result=UsernamePasswordAuthenticationToken.authenticated(account.toString(),null,List.of());
         result.setDetails(new Binding(account,epoch));return result;
     }
+    private record OperationalBinding(UUID account, String issuer, String subject, long epoch)
+        implements Serializable {
+        private static final long serialVersionUID = 1L;
+    }
+
+    static Authentication operationalAuthentication(IdentityStore.OperationalCredential credential) {
+        var auth = UsernamePasswordAuthenticationToken.authenticated(credential.account().toString(), null, List.of());
+        auth.setDetails(new OperationalBinding(credential.account(), credential.issuer(), credential.subject(),
+            credential.epoch()));
+        return auth;
+    }
+
+    static boolean operational(Authentication auth) {
+        return auth != null && auth.isAuthenticated() && auth.getDetails() instanceof OperationalBinding binding
+            && binding.account().toString().equals(auth.getName());
+    }
+
+    static IdentityStore.OperationalCredential operationalCredential(Authentication auth, IdentityStore store, boolean lock) {
+        if (!operational(auth)) throw new Denied();
+        var binding = (OperationalBinding) auth.getDetails();
+        var credential = store.operationalCredential(binding.account(), lock).orElseThrow(Denied::new);
+        if (credential.epoch() != binding.epoch() || !credential.issuer().equals(binding.issuer())
+            || !credential.subject().equals(binding.subject())) throw new Denied();
+        return credential;
+    }
+
     static Binding binding(Authentication authentication) {
         if(authentication==null||!authentication.isAuthenticated()||!(authentication.getDetails() instanceof Binding b)
                 || !b.account().toString().equals(authentication.getName()))throw new Denied();
         return b;
     }
     static void check(Authentication authentication,IdentityStore store,boolean lock) {
+        if (operational(authentication)) {
+            operationalCredential(authentication, store, lock);
+            return;
+        }
         var b=binding(authentication);if(store.credentialEpoch(b.account(),lock)!=b.epoch())throw new Denied();
     }
     static HttpSessionSecurityContextRepository contexts() {
@@ -53,7 +83,7 @@ final class CredentialEpochSessions {
                 // Provider authentication is transient; only the existing success handler's
                 // locally associated, epoch-bound principal may enter durable application state.
                 if(a instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken)return;
-                if(a!=null&&a.isAuthenticated())binding(a);
+                if(a!=null&&a.isAuthenticated()&&!operational(a))binding(a);
                 super.saveContext(context,request,response);
                 if(a!=null&&a.isAuthenticated()) {
                     var session=request.getSession(false);var access=CURRENT.get();
@@ -72,11 +102,34 @@ final class CredentialEpochSessions {
                         try {check(a,store,false);}
                         catch(RuntimeException denied){SecurityContextHolder.clearContext();var s=request.getSession(false);if(s!=null)s.invalidate();response.setHeader("Cache-Control","no-store");response.setStatus(401);return;}
                     }
+                    if (operational(a) && !operationalRoute(request.getMethod(), request.getServletPath())) {
+                        response.setHeader("Cache-Control", "no-store");
+                        response.setStatus(403);
+                        return;
+                    }
                     chain.doFilter(request,response);
                 } finally {clear();}
             }
         };
     }
+    static boolean operationalRoute(String method, String path) {
+        return switch (method) {
+            case "GET" -> path.equals("/api/accounts/me") || path.equals("/api/session/csrf")
+                || path.matches("/api/catalog/(?:banners|venues|rooms(?:/[a-f0-9-]{36})?)")
+                || path.matches("/api/venues/[a-f0-9-]{36}/packages(?:/[a-f0-9-]{36})?")
+                || path.matches("/api/rooms/[a-f0-9-]{36}/availability(?:/calendar)?")
+                || path.matches("/api/holds/[a-f0-9-]{36}") || activationPath(path);
+            case "POST" -> path.equals("/api/session/logout") || path.equals("/api/holds")
+                || path.equals("/api/commercial-quotes") || path.matches("/api/holds/[a-f0-9-]{36}/release")
+                || activationPath(path);
+            default -> false;
+        };
+    }
+
+    private static boolean activationPath(String path) {
+        return path.matches("/api/admin/venues/[a-f0-9-]{36}/commercial-policies/[a-f0-9-]{36}/activation");
+    }
+
     static void clear(){CURRENT.remove();}
     static TransactionTemplate transaction(PlatformTransactionManager manager) {
         var tx=new TransactionTemplate(manager);tx.setIsolationLevel(Connection.TRANSACTION_READ_COMMITTED);

@@ -31281,5 +31281,68 @@
       "scripts/test-synthetic-e2e.py": "9860faff50b72de9695b7c5c56128d36ec51db1d276ceaa5e2df667dd393e7d6",
       "scripts/verify-synthetic-e2e.py": "faa7aa7754e5700f9de1626850539c12dcc2d35f0df4869c1b969708179d2783"
     }
+  },
+  "operationalCommercialV42": {
+    "taskId": "CN-R1-COMMERCIAL-QUOTE-001",
+    "baseline": "f3b7c1bc9bc4f7ed09ceb34afcb2ecbc30c362bf",
+    "orderedPathsSha256": "796bd4eb7090b6d9bd4453d0f263be3d4afb3a16f88953690901a9602674dc48",
+    "preEditReviewSha256": "5c29b107ea53a8de9aab6082c7e0490c693efe5ded41f7f5071c7af84a93b19a",
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/pricing/internal/OperationalCommercialAuthority.java": "7d7b2be6a1df78497ed1ac5d4c7f5348bed571777a120df3374741d44e7ecefc",
+      "backend/src/main/java/com/cinenest/pricing/internal/OperationalCommercialAuthorityAdapter.java": "c11f1d9877c4a7a188e1908371090a4a7ba3b278dfcf1020e33567937a5fec07",
+      "backend/src/main/java/com/cinenest/pricing/internal/OperationalCommercialPolicyService.java": "1fa997da34875ef24a40627e83ca15a106125d35fe0836322e37d74fbbbe9dc3",
+      "backend/src/main/java/com/cinenest/pricing/internal/OperationalCommercialPolicyController.java": "7e053fd7fbbed6f4fecaec7e90f0cf065d1f8ea787def01083d51c87b7976f1a",
+      "backend/src/main/java/com/cinenest/pricing/internal/JdbcOperationalCommercialRepository.java": "a98c4237be0c35bb7d10e8963571671ab04718f370285882701fd88c6b1c9b4d",
+      "backend/src/main/java/com/cinenest/pricing/internal/OperationalCustomerQuoteService.java": "c18bcbb7f5fd0f6566fd405793ad0c6753692c4baef8f0b7cdfe7b8c4df46a3e",
+      "backend/src/main/java/com/cinenest/pricing/internal/CustomerCommercialQuoteConfiguration.java": "4360eeca27945ec236431bbca2c656f927e38d2b4cd6424a3a53160e9543b800",
+      "backend/src/main/java/com/cinenest/pricing/internal/CustomerCommercialQuoteController.java": "fa9989104abba24ae7bd42b17fe2e1acf91ac71c24f88469f19a7da1ca5ac544",
+      "backend/src/main/resources/db/migration/V42__operational_commercial_policy_and_quotation.sql": "ecc551549d4c6dfaafe99e9d0c676f6163121a82ebd9380bab1009e1f3236ab2",
+      "backend/src/test/java/com/cinenest/pricing/internal/OperationalCommercialAuthorityTest.java": "334fe067c04ea0d6154a08d80d3e31e20cae228904d57fc7bc2e8646415a676b",
+      "backend/src/test/java/com/cinenest/pricing/internal/OperationalCommercialPostgresTest.java": "87180e221cf30d26524f72375c0ae9de70fa64d9a182a341837d4a3b1ac2ff13",
+      "backend/src/test/java/com/cinenest/pricing/internal/CustomerCommercialQuoteServiceTest.java": "d5ace84c88a6d27a25724a99c5e21e12d89fe1172d1588ad1ff9731edeec6f0d",
+      "frontend/lib/commercial-quotes.ts": "024c0f0731d04c71e9433c49b9b0c7c4068153cec822ead48240341fded84d4e",
+      "frontend/components/quotes.tsx": "604f05def4a0643286957c8e39bc47d39508629f31dd5f411d82d84173708f60",
+      "frontend/components/commercial-policies.tsx": "058b5dc2a067b8cdd0a962b6463945ea335c2a171f75b51144095c10dbc05bc0",
+      "frontend/tests/commercial-quotes.test.mjs": "ecab440b28347c79c92fc5639a4a18d66df34aafc09cb4ce9afccfbb869ae8bd",
+      "frontend/tests/commercial-policies.test.mjs": "c15a41f6d88842291f12eae8c931844fd90c70868e05850a57c1a61e54731dd0",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "fcaf5e192303f7aba43669c8916644eac683f97c0c9a8e6bb31644ae2ab3bf45",
+      "frontend/app/api/admin/venues/[venueId]/commercial-policies/[policyId]/activation/route.ts": "7c0e763e932519d1c4ed276d0f4c76f460e1c8c66bac8a8be1f3788082a0e55a",
+      "frontend/lib/room-backend.ts": "81be167111abf034968463751e008d474fb0a5380ad7fa27956add3c83fc13d1",
+      "frontend/lib/commercial-policies.ts": "d1d2aaf316e7dac1e4962bbdbb533eebf3c912013ca17a7f73ad18d8768181ad",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "7f80f38dcb21bd39c8672d222cb8309555c0e172d64bc62e493b1f43f7206116",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java": "0c41a36c35bb9fd440c025124dbe54cc135f3e9b76042430d98315864d4b08d3",
+      "backend/src/main/java/com/cinenest/identity/ScopedAuthorization.java": "7ec7177d22264835876e8b63e9f79c771fd62be9f23848b42b7e8e1d2664bbe7",
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java": "65dc6ec5a16e894880b98712c45a6112294842eb66ce5f4f75724b8c8b346f55",
+      "backend/src/main/java/com/cinenest/pricing/internal/CommercialPolicyDraftService.java": "6f86f90bcb56efbada9ffa0f7f7a1ae98517c858b81cc37d71e7f11b81dfa974",
+      "backend/src/main/java/com/cinenest/booking/QuotationHolds.java": "69bea50d4b1ef7e613d9d9c8a0250d647dd47fc0f96a032ece5e2e9786ab1f6c",
+      "backend/src/main/java/com/cinenest/booking/internal/InventoryService.java": "52d27199a277bd124c43eaaa50edbc80c210f0867697f94e459a7837ee702426",
+      "backend/src/main/java/com/cinenest/booking/internal/InventoryRepository.java": "b70a7bd42f4f5442c7d777fa7b5d100ce06a9c251ab624bf6f9e1d5f8ed7bb2f",
+      "backend/src/main/java/com/cinenest/booking/internal/JdbcInventoryRepository.java": "cbf840cebd71f05994bfda2a1c9c1f4d496f40e5c32a4356adfd222712e01967",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java": "f06f195d9d75274b2479d87033da856f47f379de8fafd46cabff67cf997c7cf9",
+      "backend/src/main/java/com/cinenest/identity/internal/CredentialEpochSessions.java": "e2da239d300fbdd88155be0085b99bed9f1c254947ab4ba96141fb6a7b9f479d",
+      "backend/src/main/java/com/cinenest/identity/internal/AccountController.java": "44ad176a52e3d98db3dc55f16dea139a04c2c245be59f0ef21243a6a8bd41c07",
+      "frontend/components/inventory.tsx": "6c9d061add64f4df72b2467f86b065721453619016720aa39956764416964c7c"
+    },
+    "migrationSha256": "ecc551549d4c6dfaafe99e9d0c676f6163121a82ebd9380bab1009e1f3236ab2",
+    "qualification": "PENDING",
+    "postgresql": "PASS",
+    "publication": "NOT_AUTHORIZED",
+    "postgresEvidence": {
+      "tests": {
+        "passed": 2,
+        "failed": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "cleanMigrations": 41,
+      "upgradeMigrations": 1,
+      "elapsedSeconds": 11.961,
+      "containerRemoved": true,
+      "portClosed": true,
+      "processGroupAbsent": true,
+      "summarySha256": "639879617647bd288b68c29bdf53cbb8849a04986bd9c5b62076dea9e0b0af62",
+      "testsSha256": "838204025a2b6b74c16adc1f6cad2133b003eb97b47759ed87f41a73bd566baa"
+    },
+    "productionAuthorization": "NONE"
   }
 }

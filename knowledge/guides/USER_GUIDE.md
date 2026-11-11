@@ -544,3 +544,8 @@ For authorized synthetic qualification, open the commercial policy workspace and
 ## V41 customer commercial quotation foundation
 
 Open the existing commercial policy preview to inspect its non-offer information. The preview displays the issuance-unavailable notice. There is no customer commercial issuance, checkout or payment action in this flow.
+
+
+## V42 operational commercial policy and quotation
+
+V42 activation is available only when the server reports a current venue-scoped permission. The command checks authority again. In the default configuration, operational issuance is unavailable. A qualification quotation cannot be used for checkout or admission.

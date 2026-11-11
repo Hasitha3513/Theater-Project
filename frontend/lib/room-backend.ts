@@ -149,7 +149,9 @@ async function forwardConfigured(
 				response.status,
 			) &&
 			!(
-				response.status === 413 && url.pathname.includes("/commercial-policies")
+				response.status === 413 &&
+				(url.pathname.includes("/commercial-policies") ||
+					url.pathname === "/api/commercial-quotes")
 			)
 		)
 			return new Response(null, { status: 502, headers: out });
@@ -200,7 +202,24 @@ export async function forwardInventory(request: Request) {
 	return forwardConfigured(request, inventoryRoute);
 }
 
+function hasCommercialAuthorityHeaders(request: Request) {
+	return [
+		"authorization",
+		"x-role",
+		"x-permission",
+		"x-venue-id",
+		"x-account-id",
+		"x-customer-id",
+		"x-commercial-authority",
+	].some((header) => request.headers.has(header));
+}
+
 export function forwardCustomerCommercialQuote(request: Request) {
+	const url = new URL(request.url);
+	if (url.pathname !== "/api/commercial-quotes" || request.method !== "POST")
+		return new Response(null, { status: 404 });
+	if (url.search || hasCommercialAuthorityHeaders(request))
+		return new Response(null, { status: 400 });
 	return forwardConfigured(
 		request,
 		(path, method) => path === "/api/commercial-quotes" && method === "POST",
@@ -474,28 +493,24 @@ export async function forwardHardware(request: Request): Promise<Response> {
 	}
 }
 
-// Exact non-activating Commercial Policy routes; existing session/CSRF transport only.
+// Commercial writes use the existing same-origin session and CSRF transport.
 export async function forwardCommercialPolicies(
 	request: Request,
 ): Promise<Response> {
-	const { policyRoute } = await import("./commercial-policies");
+	const { isPolicyActivationPath, policyRoute } = await import(
+		"./commercial-policies"
+	);
 	const url = new URL(request.url);
 	if (!policyRoute(url.pathname, request.method))
 		return new Response(null, { status: 404 });
+	const activation = isPolicyActivationPath(url.pathname);
 	if (
+		(activation && url.search !== "") ||
 		[...url.searchParams].some(([k]) => !["q", "page", "size"].includes(k)) ||
 		["q", "page", "size"].some((k) => url.searchParams.getAll(k).length > 1)
 	)
 		return new Response(null, { status: 400 });
-	if (
-		[
-			"authorization",
-			"x-role",
-			"x-permission",
-			"x-venue-id",
-			"x-account-id",
-		].some((k) => request.headers.has(k))
-	)
+	if (hasCommercialAuthorityHeaders(request))
 		return new Response(null, { status: 400 });
 	return forwardConfigured(request, policyRoute);
 }

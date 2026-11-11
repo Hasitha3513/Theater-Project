@@ -21,7 +21,7 @@ class AccountController {
     @GetMapping("/api/accounts/me")
     ResponseEntity<AccountView> own(Principal principal) {
         UUID actor = UUID.fromString(principal.getName());
-        return response(store.read(actor, actor));
+        return ownAccount(actor);
     }
 
     @GetMapping("/api/accounts/{accountId}")
@@ -40,12 +40,35 @@ class AccountController {
     @GetMapping("/api/session/csrf")
     ResponseEntity<Map<String, String>> csrf(Principal principal, HttpServletRequest request) {
         UUID actor = UUID.fromString(principal.getName());
-        if (!store.eligible(actor)) {
+        if (!csrfEligible(actor)) {
             store.audit(actor, null, "HTTP_DENIAL", false);
             return ResponseEntity.status(403).build();
         }
         CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         return ResponseEntity.ok(Map.of("token", token.getToken(), "headerName", token.getHeaderName()));
+    }
+
+    private ResponseEntity<AccountView> ownAccount(UUID actor) {
+        var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (CredentialEpochSessions.operational(auth)) {
+            var current = CredentialEpochSessions.operationalCredential(auth, store, false);
+            if (!current.account().equals(actor)) return ResponseEntity.status(403).build();
+            store.audit(actor, actor, "ACCOUNT_READ", true);
+            return response(java.util.Optional.of(new AccountView(actor, "ELIGIBLE")));
+        }
+        return response(store.read(actor, actor));
+    }
+
+    private boolean csrfEligible(UUID actor) {
+        var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        return CredentialEpochSessions.operational(auth)
+            ? CredentialEpochSessions.operationalCredential(auth, store, false).account().equals(actor)
+            : store.eligible(actor);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CredentialEpochSessions.Denied.class)
+    ResponseEntity<Void> staleCredential() {
+        return ResponseEntity.status(401).header("Cache-Control", "no-store").build();
     }
 
     private ResponseEntity<AccountView> response(java.util.Optional<AccountView> result) {

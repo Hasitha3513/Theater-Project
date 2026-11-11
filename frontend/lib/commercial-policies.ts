@@ -6,6 +6,99 @@ export const policyNotice =
 export const maxApprovalEnvelopeBytes = 4 * 1024;
 const policyIdPattern =
 	"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
+const activationPath = new RegExp(
+	`^/api/admin/venues/${policyIdPattern}/commercial-policies/${policyIdPattern}/activation$`,
+);
+const exactPolicyId = new RegExp(`^${policyIdPattern}$`);
+
+export function isPolicyActivationPath(path: string) {
+	return activationPath.test(path);
+}
+
+export type ActivationScope = {
+	venueId: string;
+	policyId: string;
+	policyRevision: number;
+	policyHash: string;
+	effectiveFrom: string;
+	effectiveUntil: string | null;
+};
+
+export function policyActivationPath(venueId: string, policyId: string) {
+	if (!exactPolicyId.test(venueId) || !exactPolicyId.test(policyId))
+		return undefined;
+	return `/api/admin/venues/${venueId}/commercial-policies/${policyId}/activation`;
+}
+
+export function activationScope(
+	value: unknown,
+	venueId: string,
+	policyId: string,
+): ActivationScope | undefined {
+	if (
+		!value ||
+		typeof value !== "object" ||
+		!("permitted" in value) ||
+		value.permitted !== true
+	)
+		return undefined;
+	const projected = value as Partial<ActivationScope>;
+	if (
+		!policyActivationPath(venueId, policyId) ||
+		projected.venueId !== venueId ||
+		projected.policyId !== policyId ||
+		typeof projected.policyRevision !== "number" ||
+		!Number.isSafeInteger(projected.policyRevision) ||
+		projected.policyRevision < 0 ||
+		typeof projected.policyHash !== "string" ||
+		!/^[a-f0-9]{64}$/.test(projected.policyHash) ||
+		typeof projected.effectiveFrom !== "string" ||
+		!Number.isFinite(Date.parse(projected.effectiveFrom)) ||
+		(projected.effectiveUntil !== null &&
+			(typeof projected.effectiveUntil !== "string" ||
+				Date.parse(projected.effectiveUntil) <=
+					Date.parse(projected.effectiveFrom) ||
+				!Number.isFinite(Date.parse(projected.effectiveUntil))))
+	)
+		return undefined;
+	return {
+		venueId,
+		policyId,
+		policyRevision: projected.policyRevision,
+		policyHash: projected.policyHash,
+		effectiveFrom: projected.effectiveFrom,
+		effectiveUntil: projected.effectiveUntil,
+	};
+}
+
+export function validActivationSelection(
+	roomId: string,
+	packageVersionId: string,
+	effectiveFrom: string,
+	effectiveUntil: string,
+) {
+	const utc = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?Z$/;
+	return (
+		exactPolicyId.test(roomId) &&
+		exactPolicyId.test(packageVersionId) &&
+		utc.test(effectiveFrom) &&
+		utc.test(effectiveUntil) &&
+		Date.parse(effectiveFrom) < Date.parse(effectiveUntil)
+	);
+}
+
+export function activationReceipt(value: unknown) {
+	if (
+		!value ||
+		typeof value !== "object" ||
+		!("activationId" in value) ||
+		typeof value.activationId !== "string" ||
+		!exactPolicyId.test(value.activationId)
+	)
+		throw new Error("Invalid activation receipt");
+	return { activationId: value.activationId };
+}
+
 const approvalPath = new RegExp(
 	`^(/api/admin/venues/${policyIdPattern}/commercial-policies)/(${policyIdPattern})/trusted-approvals$`,
 );
@@ -215,6 +308,8 @@ export function validateDocument(d: PolicyDocument): Record<string, string> {
 	return errors;
 }
 export function policyRoute(path: string, method: string): boolean {
+	if (isPolicyActivationPath(path))
+		return method === "GET" || method === "POST";
 	if (approvalPath.test(path) || approvalUpstreamPath.test(path))
 		return method === "POST";
 	const id = policyIdPattern;

@@ -8,6 +8,11 @@ interface InventoryRepository {
     record Hold(UUID id,UUID owner,UUID block,UUID venue,UUID room,Instant start,Instant end,int buffer,
                 Instant until,Instant created,Instant expires,String state,long revision,int guests,
                 String timezone,String configuration,String minimumIds) {}
+    record OperationalProvenance(UUID packageId, UUID versionId, UUID grantId,
+                                 long grantRevision, long credentialEpoch) {}
+    void lockOperationalOwner(UUID owner);
+    Optional<OperationalProvenance> provenance(UUID hold);
+    void provenance(UUID hold, OperationalProvenance provenance);
     record Command(String hash,UUID hold,String action) {}
     Instant now();
     Optional<Hold> hold(UUID id);

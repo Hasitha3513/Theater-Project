@@ -113,6 +113,10 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.GET,
                     "/api/accounts/me", "/api/accounts/{accountId}", "/api/session/csrf").authenticated()
                 .requestMatchers("/api/admin/venues/*/packages/*/publication-preview", "/api/admin/venues/*/packages/*/publications", "/api/admin/venues/*/packages/*/publications/*", "/api/admin/venues/*/packages/*/publications/*/deactivate", "/api/admin/venues/*/packages/*/publications/*/retry").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,
+                    "/api/admin/venues/*/commercial-policies/*/activation").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,
+                    "/api/admin/venues/*/commercial-policies/*/activation").authenticated()
                 .requestMatchers("/api/admin/venues/*/commercial-policies", "/api/admin/venues/*/commercial-policies/*", "/api/admin/venues/*/commercial-policies/*/history", "/api/admin/venues/*/commercial-policies/*/reviews").authenticated()
                 .requestMatchers("/api/admin/venues/*/packages", "/api/admin/venues/*/packages/*", "/api/admin/venues/*/packages/*/draft", "/api/admin/venues/*/packages/*/duplicate", "/api/admin/venues/*/packages/*/preview", "/api/admin/venues/*/packages/*/history", "/api/admin/venues/*/package-options").authenticated()
                 .requestMatchers("/api/admin/venues/*/banner-assets", "/api/admin/venues/*/banners", "/api/admin/venues/*/banners/*", "/api/admin/venues/*/banners/*/preview", "/api/admin/venues/*/banners/*/revisions", "/api/admin/venues/*/banners/*/publications", "/api/admin/venues/*/banners/*/unpublish").authenticated()
@@ -177,7 +181,9 @@ class IdentitySecurity {
                 .tokenEndpoint(token -> {if(google || facebook)token.accessTokenResponseClient(request -> request.getClientRegistration().getRegistrationId().equals("facebook") && facebook ? facebookProvider.exchange(request) : GoogleOidcContract.tokenClient().getTokenResponse(request));})
                 .userInfoEndpoint(info -> info.userService(request -> {if(!facebook)throw new OAuth2AuthenticationException(new OAuth2Error("access_denied"));return facebookProvider.authenticate(request,store);}).oidcUserService(request -> {
                     var user = oidc.loadUser(request);
-                    if (store.associatedEligibleAccount(user.getIssuer().toString(), user.getSubject()).isEmpty())
+                    if (store.associatedEligibleAccount(user.getIssuer().toString(), user.getSubject()).isEmpty()
+                        && (!"cinenest".equals(request.getClientRegistration().getRegistrationId())
+                            || store.operationalAssociation(user.getIssuer().toString(), user.getSubject()).isEmpty()))
                         throw new OAuth2AuthenticationException(new OAuth2Error("access_denied"));
                     return user;
                 }))
@@ -192,7 +198,12 @@ class IdentitySecurity {
                     else if(facebook && authentication instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth && oauth.getAuthorizedClientRegistrationId().equals("facebook")) {
                         try {UUID account=UUID.fromString(authentication.getName());if(store.eligible(account))associated=java.util.Optional.of(account);}catch(IllegalArgumentException rejected){/* fail closed */}
                     }
-                    if (associated.isEmpty()) {
+                    var operational = associated.isEmpty() && authentication.getPrincipal() instanceof OidcUser user
+                        && authentication instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth
+                        && "cinenest".equals(oauth.getAuthorizedClientRegistrationId())
+                        ? store.operationalAssociation(user.getIssuer().toString(), user.getSubject())
+                        : java.util.Optional.<IdentityStore.OperationalCredential>empty();
+                    if (associated.isEmpty() && operational.isEmpty()) {
                         clear(request);
                         store.audit(null, null, "AUTHENTICATION", false);
                         response.setStatus(403);
@@ -201,9 +212,15 @@ class IdentitySecurity {
                     // Persist only the local principal; provider tokens/claims are not an application session DTO.
                     var context = SecurityContextHolder.createEmptyContext();
                     try {
-                        context.setAuthentication(CredentialEpochSessions.authentication(associated.get(),store.credentialEpoch(associated.get(),false)));
+                        var syntheticAccount = associated;
+                        var local = operational.map(CredentialEpochSessions::operationalAuthentication)
+                            .orElseGet(() -> {
+                                UUID id = syntheticAccount.orElseThrow();
+                                return CredentialEpochSessions.authentication(id, store.credentialEpoch(id, false));
+                            });
+                        context.setAuthentication(local);
                         SecurityContextHolder.setContext(context);
-                        store.audit(associated.get(), null, "AUTHENTICATION", true);
+                        store.audit(actor(local), null, "AUTHENTICATION", true);
                         contexts.saveContext(context, request, response);
                         response.setStatus(204);
                     } catch (RuntimeException failure) {

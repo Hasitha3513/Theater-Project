@@ -35,6 +35,32 @@ class JdbcInventoryRepository implements InventoryRepository {
         jdbc.sql("INSERT INTO cinenest_booking.reservation_hold(hold_id,owner_id,block_id,policy_id,guests,configuration,timezone,minimum_policy_ids,created_at,expires_at,state) VALUES(:id,:owner,:b,:p,:guests,:cfg,:zone,:minimum,:created,:expires,'ACTIVE')")
             .param("id",h.id()).param("owner",h.owner()).param("b",h.block()).param("p",policy).param("guests",h.guests()).param("cfg",h.configuration()).param("zone",h.timezone()).param("minimum",h.minimumIds()).param("created",h.created().atOffset(ZoneOffset.UTC)).param("expires",h.expires().atOffset(ZoneOffset.UTC)).update();
     }
+    @Override
+    public void lockOperationalOwner(UUID owner) {
+        jdbc.sql("SELECT pg_advisory_xact_lock(hashtextextended(:name, 42))")
+            .param("name","cinenest:operational-hold-owner:" + owner)
+            .query((rs,n)->true).single();
+    }
+
+    @Override
+    public Optional<OperationalProvenance> provenance(UUID hold) {
+        return jdbc.sql("""
+            SELECT package_id, version_id, grant_id, grant_revision, credential_epoch
+            FROM cinenest_booking.operational_hold_provenance WHERE hold_id=:hold
+            """).param("hold",hold)
+            .query((rs,n)->new OperationalProvenance(rs.getObject(1,UUID.class),rs.getObject(2,UUID.class),
+                rs.getObject(3,UUID.class),rs.getLong(4),rs.getLong(5))).optional();
+    }
+    @Override
+    public void provenance(UUID hold, OperationalProvenance proof) {
+        jdbc.sql("""
+            INSERT INTO cinenest_booking.operational_hold_provenance
+                (hold_id, package_id, version_id, grant_id, grant_revision, credential_epoch)
+            VALUES (:hold,:packageId,:versionId,:grantId,:revision,:epoch)
+            """).param("hold",hold).param("packageId",proof.packageId()).param("versionId",proof.versionId())
+            .param("grantId",proof.grantId()).param("revision",proof.grantRevision())
+            .param("epoch",proof.credentialEpoch()).update();
+    }
     public void transition(Hold h,String state,UUID actor) {
         if(jdbc.sql("UPDATE cinenest_booking.reservation_hold SET state=:state,revision=revision+1 WHERE hold_id=:id AND state='ACTIVE' AND revision=:rev").param("id",h.id()).param("state",state).param("rev",h.revision()).update()!=1)throw new InventoryFailure(409,"Inventory changed");
         jdbc.sql("UPDATE cinenest_booking.inventory_block SET blocking=FALSE,revision=revision+1 WHERE block_id=:b AND kind='HOLD'").param("b",h.block()).update();

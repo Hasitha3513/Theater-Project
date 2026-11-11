@@ -11,7 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 class DatabaseScopedAuthorization implements ScopedAuthorization {
     private final JdbcClient jdbc;
-    DatabaseScopedAuthorization(JdbcClient jdbc) { this.jdbc = jdbc; }
+    private final IdentityStore identityStore;
+    DatabaseScopedAuthorization(JdbcClient jdbc) {
+        this.jdbc = jdbc;
+        this.identityStore = new IdentityStore(jdbc);
+    }
+    @org.springframework.beans.factory.annotation.Autowired
+    DatabaseScopedAuthorization(JdbcClient jdbc, IdentityStore identityStore) {
+        this.jdbc = jdbc;
+        this.identityStore = identityStore;
+    }
     public boolean member(UUID actor,UUID venue,boolean lock) {
         if(actor==null||venue==null)return false;
         return !jdbc.sql("SELECT account_id FROM cinenest_identity.account_scope WHERE account_id=:a AND venue_id=:v"+(lock?" FOR UPDATE":"")).param("a",actor).param("v",venue).query(UUID.class).list().isEmpty();
@@ -93,4 +102,61 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
         } catch(CredentialEpochSessions.Denied stale) {throw new org.springframework.security.authentication.CredentialsExpiredException("Session expired");}
     }
 
+    @Override
+    public boolean operationalPrincipal(UUID actor, boolean lock) {
+        if (actor == null || (lock && !org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())) {
+            return false;
+        }
+        try {
+            return currentOperationalCredential(lock).account().equals(actor);
+        } catch (CredentialEpochSessions.Denied denied) {
+            return false;
+        }
+    }
+
+    @Override
+    public java.util.Optional<MatchedGrant> matchedOperationalGrant(
+        UUID actor, UUID venue, String permission, boolean lock) {
+        if (actor == null || venue == null || permission == null
+            || (lock && !org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())) {
+            return java.util.Optional.empty();
+        }
+        String accountClass = switch (permission) {
+            case "commercial.policy.activate", "commercial.policy.approval.intake" -> "STAFF";
+            case "commercial.hold.create", "commercial.quote.issue" -> "CUSTOMER";
+            default -> null;
+        };
+        if (accountClass == null) return java.util.Optional.empty();
+        try {
+            var credential = currentOperationalCredential(lock);
+            if (!actor.equals(credential.account()) || !accountClass.equals(credential.accountClass())
+                || !member(actor, venue, lock)) return java.util.Optional.empty();
+            if (lock) {
+                jdbc.sql("""
+                    SELECT grant_id FROM cinenest_identity.access_grant
+                    WHERE account_id = :actor AND venue_id = :venue AND permission = :permission
+                    ORDER BY grant_id FOR UPDATE
+                    """).param("actor", actor).param("venue", venue).param("permission", permission)
+                    .query(UUID.class).list();
+            }
+            var grant = jdbc.sql("""
+                SELECT grant_id, revision FROM cinenest_identity.access_grant
+                WHERE account_id = :actor AND venue_id = :venue AND permission = :permission
+                  AND scope_kind = 'VENUE' AND state = 'ACTIVE'
+                  AND valid_from <= clock_timestamp() AND valid_until > clock_timestamp()
+                ORDER BY grant_id LIMIT 1
+                """).param("actor", actor).param("venue", venue).param("permission", permission)
+                .query((row, n) -> new MatchedGrant(actor, credential.revision(), credential.epoch(), venue,
+                    row.getObject("grant_id", UUID.class), row.getLong("revision"), permission)).optional();
+            currentOperationalCredential(lock);
+            return grant;
+        } catch (CredentialEpochSessions.Denied denied) {
+            return java.util.Optional.empty();
+        }
+    }
+
+    private IdentityStore.OperationalCredential currentOperationalCredential(boolean lock) {
+        var authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        return CredentialEpochSessions.operationalCredential(authentication, identityStore, lock);
+    }
 }

@@ -10,11 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 class CommercialPolicyDraftService {
     private final ScopedAuthorization authorization;
     private final CommercialPolicyDraftRepository repository;
+    private OperationalCommercialPolicyService operationalPolicies;
+
+    @org.springframework.beans.factory.annotation.Autowired
+    void configureOperationalPolicies(OperationalCommercialPolicyService policies) {
+        this.operationalPolicies = policies;
+    }
     CommercialPolicyDraftService(ScopedAuthorization authorization,CommercialPolicyDraftRepository repository){this.authorization=authorization;this.repository=repository;}
     MatchedGrant require(UUID actor,UUID venue,String permission,boolean lock){if(actor==null)throw new CommercialPolicyDraft.Failure(401,"Sign-in required");return authorization.matchedGrant(actor,venue,permission,lock).filter(g->g.account().equals(actor)&&g.venue().equals(venue)&&g.permission().equals(permission)).orElseThrow(()->new CommercialPolicyDraft.Failure(403,"This venue requires "+permission));}
     void pagination(int page,int size){if(page<0||page>10000||size<1||size>100)throw CommercialPolicyDraft.invalid();}
     @Transactional(readOnly=true) public Map<String,Object> list(UUID actor,UUID venue,String query,int page,int size){require(actor,venue,"commercial.policy.read",false);pagination(page,size);CommercialPolicyDraftRules.text(query,100,true);var result=new LinkedHashMap<String,Object>(CommercialPolicyDraft.flags());result.putAll(Map.of("items",repository.list(venue,query,page,size),"page",page,"size",size));return result;}
-    @Transactional(readOnly=true) public Map<String,Object> detail(UUID actor,UUID venue,UUID policy){require(actor,venue,"commercial.policy.read",false);var result=repository.detail(venue,policy);var actions=new ArrayList<String>();for(String p:List.of("commercial.policy.edit","commercial.policy.review.finance","commercial.policy.review.legal","commercial.policy.review.operations"))if(authorization.matchedGrant(actor,venue,p,false).isPresent())actions.add(p);result.put("permittedActions",actions);return result;}
+    @Transactional(readOnly=true) public Map<String,Object> detail(UUID actor,UUID venue,UUID policy){require(actor,venue,"commercial.policy.read",false);var result=repository.detail(venue,policy);var actions=new ArrayList<String>();for(String p:List.of("commercial.policy.edit","commercial.policy.review.finance","commercial.policy.review.legal","commercial.policy.review.operations"))if(authorization.matchedGrant(actor,venue,p,false).isPresent())actions.add(p);if(operationalPolicies!=null&&operationalPolicies.mayActivate(actor,venue))actions.add(OperationalCommercialPolicyService.ACTIVATE);result.put("permittedActions",actions);return result;}
     @Transactional(readOnly=true) public Map<String,Object> history(UUID actor,UUID venue,UUID policy,int page,int size){require(actor,venue,"commercial.policy.read",false);pagination(page,size);return Map.of("items",repository.history(venue,policy,page,size),"page",page,"size",size);}
     @Transactional public Map<String,Object> mutate(UUID actor,UUID venue,UUID policy,String operation,Map<String,Object> payload){
         Set<String> fields=operation.equals("CREATE")?Set.of("idempotencyKey","reason","scopeKind","packageId","document"):operation.equals("REVISE")?Set.of("idempotencyKey","reason","expectedRevision","document"):Set.of("idempotencyKey","reason","expectedRevision","expectedContentHash","domain","outcome","evidenceReference");

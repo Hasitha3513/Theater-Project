@@ -859,3 +859,8 @@ V38 trusted commercial approval intake is a qualified synthetic-only capability 
 ## V41 customer commercial quotation foundation
 
 The quotation preview explains that customer commercial issuance is unavailable. V41 qualification verifies scoped, audited, immutable synthetic snapshots independently of checkout and customer admission.
+
+
+## V42 operational commercial policy and quotation
+
+Operational policy activation and quotation issuance are gated V42 capabilities under qualification. A quotation has no payment, checkout, confirmed-booking or admission effect.

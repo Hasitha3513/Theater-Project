@@ -4,10 +4,35 @@ import { BookingStepGuide, AwaitingBookingQuote } from "./booking-steps";
 import { SyntheticQuotation } from "./quotes";
 import type { FormEvent } from "react";
 import { useEffect, useRef, useState } from "react";
+import { operationalQuoteHold } from "../lib/commercial-quotes";
+import { catalogItems, type PublicPackage } from "../lib/publications";
 import type { Candidate, Hold } from "../lib/inventory";
 import { remainingSeconds, validateHold, venueTime } from "../lib/inventory";
 import { RoomRequestError, roomRequest, stateFor } from "../lib/rooms";
-import { Button, Card, Field, StateMessage } from "./primitives";
+import { Button, Card, Field, SelectField, StateMessage } from "./primitives";
+
+type HoldCandidate = Candidate & { mode?: "OPERATIONAL" };
+const packageReference = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/;
+
+export function operationalHoldPackage(
+	candidate: HoldCandidate,
+	items: PublicPackage[],
+	selectedVersion: string,
+) {
+	if (candidate.mode !== "OPERATIONAL") return {};
+	const matches = items.filter((item) => item.versionId === selectedVersion);
+	const selected = matches[0];
+	if (
+		matches.length !== 1 ||
+		!packageReference.test(selected.packageId) ||
+		!packageReference.test(selected.versionId)
+	)
+		throw new Error("Choose a published package for this interval.");
+	return {
+		packageId: selected.packageId,
+		packageVersionId: selected.versionId,
+	};
+}
 
 export function HoldStatus({
 	hold,
@@ -55,7 +80,9 @@ export function InventoryHold({
 	const [local, setLocal] = useState("");
 	const [duration, setDuration] = useState("");
 	const [guests, setGuests] = useState("");
-	const [candidate, setCandidate] = useState<Candidate>();
+	const [candidate, setCandidate] = useState<HoldCandidate>();
+	const [packages, setPackages] = useState<PublicPackage[]>([]);
+	const [packageVersion, setPackageVersion] = useState("");
 	const [hold, setHold] = useState<Hold>();
 	const [error, setError] = useState<unknown>();
 	const [busy, setBusy] = useState(false);
@@ -71,8 +98,22 @@ export function InventoryHold({
 		);
 		return () => clearInterval(id);
 	}, [hold]);
-	function accept(value: unknown) {
+	function accept(
+		value: unknown,
+		expected?: { packageId?: string; packageVersionId?: string },
+	) {
 		const h = validateHold(value);
+		const operational = operationalQuoteHold(h, venueId);
+		if (
+			h.roomId !== roomId ||
+			("mode" in h && !operational) ||
+			(expected?.packageId &&
+				(operational?.packageId !== expected.packageId ||
+					operational?.packageVersionId !== expected.packageVersionId))
+		)
+			throw new Error(
+				"The server returned a hold outside the requested scope.",
+			);
 		received.current = performance.now();
 		setElapsed(0);
 		setHold(h);
@@ -82,21 +123,39 @@ export function InventoryHold({
 		setBusy(true);
 		setError(undefined);
 		setCandidate(undefined);
+		setPackages([]);
+		setPackageVersion("");
 		try {
 			const query = new URLSearchParams({
 				sessionStartLocal: local,
 				durationMinutes: duration,
 				guests,
 			});
-			const c = await roomRequest<Candidate>(
+			const c = await roomRequest<HoldCandidate>(
 				`/api/rooms/${roomId}/availability?${query}`,
 			);
 			if (
 				c.evidenceLevel !== "INVENTORY_ONLY" ||
+				c.roomId !== roomId ||
+				(c.mode !== undefined && c.mode !== "OPERATIONAL") ||
 				typeof c.available !== "boolean" ||
 				typeof c.configuration !== "string"
 			)
 				throw new Error("Invalid inventory response");
+			if (c.available && c.mode === "OPERATIONAL") {
+				const scope = new URLSearchParams({
+					roomId,
+					sessionStart: c.sessionStart,
+					sessionEnd: c.sessionEnd,
+				});
+				setPackages(
+					catalogItems(
+						await roomRequest(
+							`/api/venues/${encodeURIComponent(venueId)}/packages?${scope}`,
+						),
+					),
+				);
+			}
 			setCandidate(c);
 		} catch (e) {
 			if (e instanceof RoomRequestError && [401, 403].includes(e.status))
@@ -117,6 +176,9 @@ export function InventoryHold({
 					method: "POST",
 					body: pending.current.body,
 				}),
+				pending.current.path === "/api/holds"
+					? JSON.parse(pending.current.body)
+					: undefined,
 			);
 			pending.current = undefined;
 			setCandidate(undefined);
@@ -131,6 +193,27 @@ export function InventoryHold({
 			setError(e);
 		} finally {
 			setBusy(false);
+		}
+	}
+	function createHold() {
+		if (!candidate?.available || pending.current) return;
+		try {
+			const selection = operationalHoldPackage(
+				candidate,
+				packages,
+				packageVersion,
+			);
+			void command("/api/holds", {
+				roomId,
+				sessionStartLocal: local,
+				durationMinutes: Number(duration),
+				guests: Number(guests),
+				expectedConfiguration: candidate.configuration,
+				idempotencyKey: crypto.randomUUID(),
+				...selection,
+			});
+		} catch (failure) {
+			setError(failure);
 		}
 	}
 	async function refresh() {
@@ -152,7 +235,7 @@ export function InventoryHold({
 			<BookingStepGuide />
 			<Card title="Plan your cinema session">
 				<p>
-					Associated eligible test accounts only. Venue timezone: {timezone}.
+					Eligible signed-in customers only. Venue timezone: {timezone}.
 					Inventory is separate from booking and physical readiness.
 				</p>
 				<CustomerAvailabilityCalendar
@@ -252,19 +335,41 @@ export function InventoryHold({
 									cleaning {candidate.bufferMinutes} minutes; blocked until{" "}
 									{venueTime(candidate.blockedUntil, candidate.timezone)}.
 								</p>
+								<p>
+									{candidate.mode === "OPERATIONAL"
+										? "Operational availability"
+										: "Synthetic availability"}
+								</p>
+								{candidate.available && candidate.mode === "OPERATIONAL" && (
+									<SelectField
+										id={`inventory-package-${roomId}`}
+										label="Published package"
+										value={packageVersion}
+										disabled={
+											busy || !!pending.current || packages.length === 0
+										}
+										onChange={(event) => setPackageVersion(event.target.value)}
+									>
+										<option value="">
+											{packages.length
+												? "Choose a package"
+												: "No packages for this interval"}
+										</option>
+										{packages.map((item) => (
+											<option key={item.versionId} value={item.versionId}>
+												{item.name}
+											</option>
+										))}
+									</SelectField>
+								)}
 								{candidate.available && (
 									<Button
-										disabled={busy || !!pending.current}
-										onClick={() =>
-											command("/api/holds", {
-												roomId,
-												sessionStartLocal: local,
-												durationMinutes: Number(duration),
-												guests: Number(guests),
-												expectedConfiguration: candidate.configuration,
-												idempotencyKey: crypto.randomUUID(),
-											})
+										disabled={
+											busy ||
+											!!pending.current ||
+											(candidate.mode === "OPERATIONAL" && !packageVersion)
 										}
+										onClick={createHold}
 									>
 										Create temporary inventory hold
 									</Button>

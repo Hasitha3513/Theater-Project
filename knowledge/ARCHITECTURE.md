@@ -3490,3 +3490,8 @@ Pricing owns the V39 fixture activation and revocation ledgers and the V40 immut
 ## V41 customer commercial quotation foundation
 
 Pricing owns the V41 qualification quote and audit tables. A deferred foreign key makes an attributable audit mandatory at commit and database triggers protect immutable history. The unwired qualification service checks the Identity and Booking ports, locked hold ownership and revision, the published package version, and three distinct current approval facts with fresh revocation evidence from a test-only authority. It calculates LKR amounts on the server and binds replay to the command and exact policy revision. The V41 route always denies issuance while operational authority is absent. Identity adds one authenticated POST matcher and the frontend reuses the existing cookie, origin and CSRF forwarding. No V38–V40 fixture ledger is treated as operational authority.
+
+
+## V42 operational commercial policy and quotation
+
+Identity owns operational credential association, session epochs and venue capabilities. Booking owns operational hold provenance. Pricing owns signed authority verification, policy activation, quotation snapshots and attributable audit. Booking validates package publication through a public contract implemented by Pricing.

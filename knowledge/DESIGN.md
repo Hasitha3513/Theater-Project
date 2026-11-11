@@ -1488,3 +1488,8 @@ The Room Blocking selector displays a confirmed room reference after authorized 
 ## V38 trusted commercial approval intake
 
 The commercial policy workspace accepts a signed envelope scoped to the current venue and policy. The interface distinguishes rejected submissions from unavailable or uncertain outcomes and does not treat intake as activation.
+
+
+## V42 operational commercial policy and quotation
+
+Activation and quotation commands use exact venue, room, package-version and policy revision scope. Operational authority and issuance require explicit server configuration. Synthetic qualification is labelled and separate from operational offers. Checkout, payment and admission are outside the slice.

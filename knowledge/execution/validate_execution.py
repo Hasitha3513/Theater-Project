@@ -14185,5 +14185,154 @@ def inert_ci_main():
     return h1_historical_view(h1_prior_main)
 
 
+# V42 authorization extends the exact H1 baseline without changing historical admissions.
+V42_BASE = 'f3b7c1bc9bc4f7ed09ceb34afcb2ecbc30c362bf'
+V42_INVENTORY = '796bd4eb7090b6d9bd4453d0f263be3d4afb3a16f88953690901a9602674dc48'
+V42_RECEIPT = '5c29b107ea53a8de9aab6082c7e0490c693efe5ded41f7f5071c7af84a93b19a'
+V42_SQL = 'backend/src/main/resources/db/migration/V42__operational_commercial_policy_and_quotation.sql'
+V42_STATUS = 'knowledge/execution/status.json'
+V42_CHANGE_SETS = 'knowledge/execution/change-sets.json'
+def v42_before(name):
+    return v41_git('show', V42_BASE + ':' + name)
+
+
+def v42_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', V42_BASE, 'HEAD')
+        entries = v41_git('ls-tree', '-r', '-z', V42_BASE)
+        baseline_blobs = {}
+        for entry in entries.split(b'\0'):
+            if entry:
+                metadata, name = entry.split(b'\t', 1)
+                _, kind, oid = metadata.split()
+                if kind != b'blob':
+                    return ['V42 unsupported baseline entry']
+                baseline_blobs[name.decode()] = oid.decode()
+        tracked = set(baseline_blobs)
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard', text=True), nul=True)
+        changed = parse_git_paths(v41_git('diff', V42_BASE, '--name-only', '-z', text=True), nul=True) | (live - tracked)
+        change_sets = json.loads((R / V42_CHANGE_SETS).read_bytes())
+        admission = change_sets.pop('operationalCommercialV42')
+        ordered = admission['orderedPaths']
+        if (len(ordered) != 44 or len(set(ordered)) != 44
+                or hashlib.sha256(('\n'.join(ordered) + '\n').encode()).hexdigest() != V42_INVENTORY
+                or admission['orderedPathsSha256'] != V42_INVENTORY
+                or admission['baseline'] != V42_BASE
+                or admission['taskId'] != 'CN-R1-COMMERCIAL-QUOTE-001'
+                or change_sets != json.loads(v42_before(V42_CHANGE_SETS))):
+            return ['V42 approved inventory or change-set history mismatch']
+        owned = set(ordered)
+        if changed != owned or live != tracked | owned:
+            return ['V42 exact 44-path inventory mismatch']
+        for name in live:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['V42 unsafe file ' + name]
+            if name not in owned:
+                data = path.read_bytes()
+                header = f'blob {len(data)}\0'.encode()
+                if hashlib.sha1(header + data).hexdigest() != baseline_blobs[name]:
+                    return ['V42 unowned history drift: ' + name]
+        ending = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prior = v42_before(V41_VALIDATOR)
+        if not prior.endswith(ending) or not (R / V41_VALIDATOR).read_bytes().startswith(prior[:-len(ending)]):
+            return ['V42 historical validator changed']
+        for name in owned:
+            if name.startswith('knowledge/') and name.endswith('.md'):
+                if not (R / name).read_bytes().startswith(v42_before(name)):
+                    return ['V42 historical documentation changed: ' + name]
+        folder = R / 'backend/src/main/resources/db/migration'
+        migrations = {name for name in tracked if name.startswith(folder.relative_to(R).as_posix() + '/')}
+        live_migrations = {path.relative_to(R).as_posix() for path in folder.glob('V*.sql')}
+        if (len(migrations) != 40 or live_migrations != migrations | {V42_SQL}
+                or any('/V31__' in name or (R / name).read_bytes() != v42_before(name) for name in migrations)):
+            return ['V42 historical migration inventory or fingerprint drift']
+        state = json.loads((R / V42_STATUS).read_bytes())
+        evidence = state.pop('operationalCommercialV42')
+        if state != json.loads(v42_before(V42_STATUS)):
+            return ['V42 historical status changed']
+        source_hashes = {name: hashlib.sha256((R / name).read_bytes()).hexdigest()
+                         for name in ordered if not name.startswith('knowledge/')}
+        source_digest = hashlib.sha256(
+            json.dumps(source_hashes, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+        if source_digest != '07cb33b550b77d81c528debb7e5b0ba8c3687afc2dfc0053e46c8297ef192ba3':
+            return ['V42 qualified source bytes differ']
+        if evidence != {
+            'taskId': 'CN-R1-COMMERCIAL-QUOTE-001', 'baseline': V42_BASE,
+            'orderedPathsSha256': V42_INVENTORY, 'preEditReviewSha256': V42_RECEIPT,
+            'sourceSha256': source_hashes, 'migrationSha256': source_hashes[V42_SQL],
+            'qualification': 'PENDING', 'postgresql': 'PASS', 'publication': 'NOT_AUTHORIZED',
+            'postgresEvidence': {
+                'tests': {'passed': 2, 'failed': 0, 'errors': 0, 'skipped': 0},
+                'cleanMigrations': 41, 'upgradeMigrations': 1, 'elapsedSeconds': 11.961,
+                'containerRemoved': True, 'portClosed': True, 'processGroupAbsent': True,
+                'summarySha256': '639879617647bd288b68c29bdf53cbb8849a04986bd9c5b62076dea9e0b0af62',
+                'testsSha256': '838204025a2b6b74c16adc1f6cad2133b003eb97b47759ed87f41a73bd566baa',
+            },
+            'productionAuthorization': 'NONE',
+        }:
+            return ['V42 evidence or source fingerprint mismatch']
+        manifest = json.loads(v42_before(V41_MANIFEST))
+        refresh = {name.removeprefix('knowledge/') for name in owned if name.startswith('knowledge/')} - {'manifest.json'}
+        if {row['path'] for row in manifest['files']} & refresh != refresh:
+            return ['V42 manifest refresh incomplete']
+        for row in manifest['files']:
+            if row['path'] in refresh:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V42 manifest checksum or scope mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V42 admission inputs inaccessible or invalid']
+    return []
+
+
+def v42_replay_history():
+    """Run the untouched H1 validator with its own exact index and working tree."""
+    import sys
+    import tempfile
+
+    try:
+        common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+        with tempfile.TemporaryDirectory(prefix='cinenest-v42-history-') as directory:
+            checkout = Path(directory) / 'baseline'
+            subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', '--', common, str(checkout)],
+                           check=True)
+            subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', V42_BASE], check=True)
+            return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+    except (OSError, subprocess.SubprocessError):
+        print('FAIL V42 could not replay the exact H1 baseline')
+        return 1
+
+
+receipt_admission_successor_errors = v42_errors
+
+
+def v42_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+    for name in (V42_SQL, V42_STATUS, V42_CHANGE_SETS, V41_MANIFEST):
+        with patch.object(Path, 'read_bytes', lambda p: original(p) + b'X' if p == R / name else original(p)):
+            assert v42_errors(), name
+    output = subprocess.check_output
+
+    def extra(argv, *args, **kwargs):
+        result = output(argv, *args, **kwargs)
+        return result + 'frontend/unapproved.tsx\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert v42_errors()
+    print('PASS V42 exact inventory, historical migration, source fingerprint and manifest controls')
+
+
+def inert_ci_main():
+    errors = v42_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v42_controls()
+    return v42_replay_history()
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

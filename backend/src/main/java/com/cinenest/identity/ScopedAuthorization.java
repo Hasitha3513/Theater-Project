@@ -12,6 +12,13 @@ public interface ScopedAuthorization {
     default java.util.Optional<MatchedGrant> matchedGrant(UUID actor, UUID venue, String permission, boolean lock) {
         return java.util.Optional.empty();
     }
+    default boolean operationalPrincipal(UUID actor, boolean lock) { return false; }
+
+    default java.util.Optional<MatchedGrant> matchedOperationalGrant(
+        UUID actor, UUID venue, String permission, boolean lock) {
+        return java.util.Optional.empty();
+    }
+
     default boolean permitsSelf(UUID actor,String action,boolean lock){return false;}
     /** Current venue membership; default denies for adapters without this read contract. */
     default boolean member(UUID actor,UUID venue,boolean lock){return false;}

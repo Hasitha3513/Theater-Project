@@ -3776,3 +3776,10 @@ The exact 24-path V41 local scope is based on fc6ccaa21e6a304ea9cb971bee86ad9c6c
 CN-H1-DEMO-HARNESS-001 adds a direct, synthetic-only rehearsal on the V41 baseline. The campaign retains its real upload acknowledgement loss and original-allocation recovery. The H1 browser checks pending payment without creating verified funds, a confirmed booking or an access credential. Evidence captures are limited to allowlisted customer and staff labels in private storage. H1 requests 496 MiB of PostgreSQL data tmpfs and 16 MiB of shared memory and checks the effective limits before running the journey.
 
 This source admission records an unexecuted rehearsal. It grants no production or publication authority and does not change historical acceptance.
+
+
+## V42 operational commercial policy and quotation
+
+V42 local implementation is under qualification on the authorized 44-path branch. Formal Day 03, Day 05 and Day 06 accounting is unchanged. See the V42 execution record for source fingerprints and gate status.
+
+The bounded V42 PostgreSQL qualification passed two tests. Clean Flyway applied 41 migrations; the populated V41 database applied V42 alone and retained historical data. Verified owned-container, port and process-group cleanup took 11.961 seconds including execution. Focused backend passed 121 with two database tests skipped in that offline run; the separate PostgreSQL run executed both. Frontend passed 597. The broad backend suite was not rerun against the disposable database, and formal acceptance remains open.

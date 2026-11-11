@@ -1,6 +1,12 @@
 "use client";
 import { useRef, useState } from "react";
-import { commercialIssuanceUnavailable } from "../lib/commercial-quotes";
+import {
+	commercialIssuanceUnavailable,
+	issueOperationalQuote,
+	operationalQuoteBody,
+	operationalQuoteHold,
+	operationalQuoteMessage,
+} from "../lib/commercial-quotes";
 import type { Hold } from "../lib/inventory";
 import { venueTime } from "../lib/inventory";
 import { displayMoney } from "../lib/packages";
@@ -148,6 +154,110 @@ export function QuoteSummary({ quote }: { quote: Quote }) {
 	);
 }
 export function SyntheticQuotation({
+	hold,
+	venueId,
+}: {
+	hold: Hold;
+	venueId: string;
+}) {
+	if ("mode" in hold && hold.mode === "OPERATIONAL") {
+		const operational = operationalQuoteHold(hold, venueId);
+		return operational ? (
+			<OperationalQuotation
+				key={`${operational.holdId}:${operational.revision}`}
+				hold={operational}
+			/>
+		) : (
+			<CommercialIssuanceNotice />
+		);
+	}
+	return <SyntheticQuotationWorkflow hold={hold} venueId={venueId} />;
+}
+
+function OperationalQuotation({
+	hold,
+}: {
+	hold: NonNullable<ReturnType<typeof operationalQuoteHold>>;
+}) {
+	const [method, setMethod] = useState<"BANK" | "GATEWAY">("BANK");
+	const [receipt, setReceipt] = useState<string>();
+	const [message, setMessage] = useState("");
+	const [busy, setBusy] = useState(false);
+	const [outcomeUnknown, setOutcomeUnknown] = useState(false);
+	const pending = useRef<string | undefined>(undefined);
+	const inFlight = useRef(false);
+
+	async function issue() {
+		if (
+			inFlight.current ||
+			receipt ||
+			!hold.commercialQuotationPermitted ||
+			hold.state !== "ACTIVE"
+		)
+			return;
+		inFlight.current = true;
+		setBusy(true);
+		try {
+			pending.current ??= operationalQuoteBody(
+				hold,
+				crypto.randomUUID(),
+				method,
+			);
+			const result = await issueOperationalQuote(pending.current);
+			setReceipt(result.quoteId);
+			setOutcomeUnknown(false);
+			setMessage("");
+		} catch (error) {
+			if (
+				error instanceof RoomRequestError &&
+				error.status < 500 &&
+				!outcomeUnknown
+			)
+				pending.current = undefined;
+			else setOutcomeUnknown(true);
+			setMessage(operationalQuoteMessage(error));
+		} finally {
+			inFlight.current = false;
+			setBusy(false);
+		}
+	}
+
+	return (
+		<Card title="Commercial quotation">
+			{receipt ? (
+				<p role="status">
+					Quotation reference {receipt}. No payment or booking confirmation was
+					recorded.
+				</p>
+			) : hold.state === "ACTIVE" && hold.commercialQuotationPermitted ? (
+				<>
+					<SelectField
+						id={`commercial-method-${hold.holdId}`}
+						label="Method for fee calculation"
+						value={method}
+						disabled={busy || outcomeUnknown}
+						onChange={(event) =>
+							setMethod(event.target.value === "GATEWAY" ? "GATEWAY" : "BANK")
+						}
+					>
+						<option value="BANK">Bank transfer</option>
+						<option value="GATEWAY">Online payment</option>
+					</SelectField>
+					<Button type="button" disabled={busy} onClick={() => void issue()}>
+						{outcomeUnknown
+							? "Retry same quotation request"
+							: "Request commercial quotation"}
+					</Button>
+				</>
+			) : (
+				<CommercialIssuanceNotice />
+			)}
+			<p role="status">{message}</p>
+		</Card>
+	);
+}
+
+function SyntheticQuotationWorkflow({
 	hold,
 	venueId,
 }: {
