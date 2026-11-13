@@ -333,75 +333,11 @@ async function login(page, subject) {
 	);
 	return me.accountId;
 }
-async function checkSupervisedCatalog(page, base, config, record) {
-	const announce = id => page.evaluate(testId => {
-		document.title = `${testId} · CineNest synthetic QA`;
-	}, id);
-	const listPath = `/api/venues/${config.venue}/packages`;
-	const matches = (response, path) => {
-		const url = new URL(response.url());
-		return url.origin === base && url.pathname === path &&
-			url.searchParams.get("roomId") === config.room &&
-			response.request().method() === "GET";
-	};
-	const packages = page.getByRole("region", { name: "Room packages" });
-	await page.bringToFront();
-	await announce("CT-002");
-	await page.getByRole("heading", { name: "Explore our rooms" }).waitFor();
-	await record({ id: "CT-002", status: "PASS" });
-	const room = page.locator(`a[href="/rooms/${config.room}"]`);
-	await room.waitFor();
-	const listPromise = page.waitForResponse(response => matches(response, listPath), { timeout: 10000 });
-	await room.click();
-	await page.waitForURL(base + "/rooms/" + config.room);
-	await announce("CT-003");
-	await packages.getByRole("heading", { name: "Indicative published packages" }).waitFor();
-	await record({ id: "CT-003", status: "PASS" });
-	await announce("CT-004");
-	const list = await listPromise;
-	const payload = list.ok() ? await list.json() : null;
-	const item = payload?.items?.[0];
-	const listed = list.status() === 200 && payload?.purchasable === false &&
-		typeof item?.packageId === "string" && typeof item?.versionId === "string";
-	await record({ id: "CT-004", status: listed ? "PASS" : "FAIL", httpStatus: list.status() });
-
-	if (listed) {
-		await announce("CT-006");
-		const button = packages.getByRole("button", { name: `Package details ${item.name}`, exact: true });
-		const detailPromise = page.waitForResponse(
-			response => matches(response, `${listPath}/${item.packageId}`), { timeout: 10000 },
-		);
-		await button.click();
-		const detail = await detailPromise;
-		const value = detail.ok() ? await detail.json() : null;
-		const versionMatches = detail.status() === 200 && value?.purchasable === false &&
-			value.items?.some(row => row.packageId === item.packageId && row.versionId === item.versionId);
-		const displayed = versionMatches && await packages.getByText(item.description, { exact: true })
-			.waitFor({ timeout: 5000 }).then(() => true, () => false);
-		await record({ id: "CT-006", status: displayed ? "PASS" : "FAIL", httpStatus: detail.status(),
-			scope: "Indicative detail and published version only" });
-	}
-
-	const retry = packages.getByRole("button", { name: "Retry catalog", exact: true });
-	if (await retry.isVisible()) {
-		await announce("CT-005");
-		const retryPromise = page.waitForResponse(response => matches(response, listPath), { timeout: 10000 });
-		await retry.click();
-		const response = await retryPromise;
-		const recovered = response.status() === 200 &&
-			await packages.getByRole("button", { name: /^Package details / }).first()
-				.waitFor({ timeout: 5000 }).then(() => true, () => false);
-		await record({ id: "CT-005", status: recovered ? "PASS" : "FAIL", httpStatus: response.status() });
-	} else {
-		await record({ id: "CT-005", status: "NOT_RUN", reason: "No genuine catalog error exposed a retry control" });
-	}
-}
-
 async function supervisedReadFailure(page, base, path, kind) {
 	const allowed = kind === "catalog"
 		? /^\/api\/venues\/[a-f0-9-]{36}\/packages$/
 		: kind === "staff-bookings" && /^\/api\/admin\/venues\/[a-f0-9-]{36}\/bookings$/;
-	assert.ok(allowed && allowed.test(path) && new URL(base).hostname === "127.0.0.1");
+	assert.ok(allowed?.test(path) && new URL(base).hostname === "127.0.0.1");
 	const matcher = url => url.origin === base && url.pathname === path;
 	let injected = false;
 	const handler = async route => {

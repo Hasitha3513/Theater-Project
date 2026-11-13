@@ -31361,5 +31361,10 @@
       "scripts/test-synthetic-e2e.py": "57a62e4665a84b5e83fc335d7fe65e28fc690a2dce868102f26d930c63782eac",
       "scripts/verify-synthetic-e2e.py": "518b0ffe8885c19ca93c75789a061f3427a38c5c8cd6e9c47f3f5a2211f4e8c4"
     }
+  },
+  "supervisedH1V42LintRecovery": {
+    "predecessor": "b4bfdac3d14744a07f947a9a44894004f336cd03",
+    "failedCi": 43416182767,
+    "browserSourceSha256": "06e091d414eeacd797136ca4406f970109a007a97345ada89f2ce10f25b77e04"
   }
 }

@@ -14374,6 +14374,21 @@ def supervised_errors():
             if not path.is_file() or path.is_symlink() or path.resolve() != path:
                 return ['Supervised H1 unsafe path: ' + name]
         fingerprints = supervised_record()['sourceSha256']
+        state = json.loads((K / 'execution/status.json').read_text())
+        recovery = state.pop('supervisedH1V42LintRecovery', None)
+        if recovery is not None:
+            predecessor = 'b4bfdac3d14744a07f947a9a44894004f336cd03'
+            browser = 'frontend/tests/synthetic-e2e.mjs'
+            expected = {'predecessor': predecessor, 'failedCi': 43416182767,
+                        'browserSourceSha256': '06e091d414eeacd797136ca4406f970109a007a97345ada89f2ce10f25b77e04'}
+            v41_git('merge-base', '--is-ancestor', predecessor, 'HEAD')
+            recovery_paths = parse_git_paths(
+                v41_git('diff', predecessor, '--name-only', '-z', text=True), nul=True)
+            if (recovery != expected or fingerprints[browser] != expected['browserSourceSha256']
+                    or recovery_paths != {browser, V41_VALIDATOR, V41_MANIFEST, 'knowledge/execution/status.json'}):
+                return ['Supervised V42 lint recovery admission mismatch']
+            prior_status = json.loads(v41_git('show', predecessor + ':knowledge/execution/status.json'))
+            fingerprints[browser] = prior_status['supervisedH1V42']['sourceSha256'][browser]
         digest = hashlib.sha256(json.dumps(fingerprints, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
         if digest != SUPERVISED_SOURCE_DIGEST:
             return ['Supervised V42 source fingerprint mismatch']
@@ -14383,8 +14398,9 @@ def supervised_errors():
             return ['Supervised H1 altered historical validator']
         if not (K / 'PROGRESS.md').read_bytes().startswith(supervised_before('knowledge/PROGRESS.md')):
             return ['Supervised H1 altered progress history']
-        state = json.loads((K / 'execution/status.json').read_text())
-        if state.pop('supervisedH1V42', None) != supervised_record() or state != json.loads(supervised_before('knowledge/execution/status.json')):
+        record = supervised_record()
+        record['sourceSha256'] = fingerprints
+        if state.pop('supervisedH1V42', None) != record or state != json.loads(supervised_before('knowledge/execution/status.json')):
             return ['Supervised H1 evidence or historical status mismatch']
         manifest = json.loads(supervised_before(V41_MANIFEST))
         for row in manifest['files']:
