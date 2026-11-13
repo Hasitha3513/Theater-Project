@@ -1,3 +1,9 @@
+# Leave capacity for direct JDBC connections while Spring test contexts are cached.
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 4
+      minimum-idle: 0
 # Tests explicitly drive transactional activation; cached contexts must not race fixtures.
 cinenest:
   pricing:

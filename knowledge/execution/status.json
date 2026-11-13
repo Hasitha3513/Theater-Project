@@ -31366,5 +31366,17 @@
     "predecessor": "b4bfdac3d14744a07f947a9a44894004f336cd03",
     "failedCi": 43416182767,
     "browserSourceSha256": "06e091d414eeacd797136ca4406f970109a007a97345ada89f2ce10f25b77e04"
+  },
+  "supervisedH1V42PostgresRecovery": {
+    "predecessor": "7131090734fba5e56054814d3f564c4624888fe6",
+    "failedCi": 43419440084,
+    "testConfigSha256": "8c5f9e8e9cf5e133a3b99249e4371230279d051785ea67ce2e114c0be0679105",
+    "diagnosticEvidenceIndexSha256": "a7ce8592a0e43fc06eef68c90fd0c194194d0e212d423fc1413e637f013c571b",
+    "diagnosticBaselinePeak": 92,
+    "diagnosticBudgetPeak": 22,
+    "diagnosticServerLimit": 100,
+    "diagnosticBackendPassed": 1353,
+    "diagnosticBackendSkipped": 81,
+    "diagnosticLockRegistryPassed": 17
   }
 }

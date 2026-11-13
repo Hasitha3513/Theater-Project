@@ -14460,5 +14460,98 @@ def inert_ci_main():
     return supervised_replay_v42()
 
 
+
+PG_RECOVERY_BASE = '7131090734fba5e56054814d3f564c4624888fe6'
+PG_RECOVERY_CONFIG = 'backend/src/test/resources/application.yaml'
+PG_RECOVERY_PROGRESS = 'knowledge/PROGRESS.md'
+PG_RECOVERY_STATUS = 'knowledge/execution/status.json'
+PG_RECOVERY_OWNED = {PG_RECOVERY_CONFIG, PG_RECOVERY_PROGRESS, PG_RECOVERY_STATUS,
+                     V41_VALIDATOR, V41_MANIFEST}
+PG_RECOVERY_RECORD = {
+    'predecessor': PG_RECOVERY_BASE, 'failedCi': 43419440084,
+    'testConfigSha256': '8c5f9e8e9cf5e133a3b99249e4371230279d051785ea67ce2e114c0be0679105',
+    'diagnosticEvidenceIndexSha256': 'a7ce8592a0e43fc06eef68c90fd0c194194d0e212d423fc1413e637f013c571b',
+    'diagnosticBaselinePeak': 92, 'diagnosticBudgetPeak': 22,
+    'diagnosticServerLimit': 100, 'diagnosticBackendPassed': 1353,
+    'diagnosticBackendSkipped': 81, 'diagnosticLockRegistryPassed': 17,
+}
+
+
+def pg_recovery_before(name):
+    return v41_git('show', PG_RECOVERY_BASE + ':' + name)
+
+
+def pg_recovery_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', PG_RECOVERY_BASE, 'HEAD')
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        if (paths('diff', PG_RECOVERY_BASE, '--name-only', '-z') != PG_RECOVERY_OWNED
+                or paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+                != paths('ls-tree', '-r', '--name-only', '-z', PG_RECOVERY_BASE)):
+            return ['PostgreSQL recovery exact five-path inventory mismatch']
+        for name in PG_RECOVERY_OWNED:
+            p = R / name
+            if not p.is_file() or p.is_symlink() or p.resolve() != p:
+                return ['PostgreSQL recovery unsafe path: ' + name]
+        if hashlib.sha256((R / PG_RECOVERY_CONFIG).read_bytes()).hexdigest() != PG_RECOVERY_RECORD['testConfigSha256']:
+            return ['PostgreSQL recovery test configuration mismatch']
+        state = json.loads((R / PG_RECOVERY_STATUS).read_bytes())
+        if (state.pop('supervisedH1V42PostgresRecovery', None) != PG_RECOVERY_RECORD
+                or state != json.loads(pg_recovery_before(PG_RECOVERY_STATUS))):
+            return ['PostgreSQL recovery evidence or historical status mismatch']
+        entrypoint = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prior_validator = pg_recovery_before(V41_VALIDATOR)
+        if (not prior_validator.endswith(entrypoint)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(prior_validator[:-len(entrypoint)])
+                or not (R / PG_RECOVERY_PROGRESS).read_bytes().startswith(pg_recovery_before(PG_RECOVERY_PROGRESS))):
+            return ['PostgreSQL recovery altered historical governance']
+        manifest = json.loads(pg_recovery_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in PG_RECOVERY_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['PostgreSQL recovery manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['PostgreSQL recovery admission inputs inaccessible or invalid']
+    return []
+
+
+def pg_recovery_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+    for name in PG_RECOVERY_OWNED:
+        with patch.object(Path, 'read_bytes', lambda p: b'altered\n' + original(p) if p == R / name else original(p)):
+            assert pg_recovery_errors(), name
+    output = subprocess.check_output
+
+    def extra(argv, *args, **kwargs):
+        result = output(argv, *args, **kwargs)
+        return result + 'unapproved.txt\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert pg_recovery_errors()
+    print('PASS PostgreSQL recovery exact inventory, source, evidence and manifest controls')
+
+
+def pg_recovery_main():
+    import sys
+    import tempfile
+
+    errors = pg_recovery_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    pg_recovery_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-pg-recovery-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', PG_RECOVERY_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
 if __name__ == '__main__':
-    raise SystemExit(inert_ci_main())
+    raise SystemExit(pg_recovery_main())
