@@ -20,6 +20,16 @@ class SyntheticJourneyIT {
     @Autowired ConfigurableApplicationContext context;
     @DynamicPropertySource static void properties(DynamicPropertyRegistry p) {
         BankIntegrationTest.properties(p);
+        if ("supervised-h1".equals(System.getenv("CINENEST_E2E_MODE"))) {
+            p.add("server.address", () -> "127.0.0.1");
+            p.add("cinenest.booking.staff-read.enabled", () -> "true");
+            p.add("cinenest.booking.room-blocks.enabled", () -> "true");
+            p.add("cinenest.booking.room-blocks.mode", () -> "LOCAL_SYNTHETIC_ONLY");
+            p.add("cinenest.identity.session-timeout-seconds", () -> "1800");
+            for (String flag : List.of("enabled", "issuance-enabled", "bundle-enabled")) {
+                p.add("cinenest.commercial.operational." + flag, () -> "false");
+            }
+        }
         for(String flag:List.of("cinenest.iot.enabled","cinenest.access.enabled","cinenest.notifications.enabled","cinenest.reporting.synthetic-bank.enabled","cinenest.rooms.turnover.enabled"))p.add(flag,()->"false");
     }
     @Test void realBrowserJourney() throws Exception {
@@ -27,10 +37,26 @@ class SyntheticJourneyIT {
         var fixture=new BankIntegrationTest();
         context.getAutowireCapableBeanFactory().autowireBean(fixture);
         fixture.fixtures();
-        var staff=fixture.signedIn("staff");
-        var pkg=fixture.setup(staff);
-        fixture.grantTo(BankIntegrationTest.B,BankIntegrationTest.VA,"package.publish");
-        fixture.published(fixture.signedIn("customer-b"),pkg,fixture.request(false));
+        boolean supervised = "supervised-h1".equals(System.getenv("CINENEST_E2E_MODE"));
+        var staff = fixture.signedIn("staff");
+        var pkg = fixture.setup(staff);
+        fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.publish");
+        fixture.published(fixture.signedIn("customer-b"), pkg, fixture.request(false));
+        if (supervised) {
+            fixture.jdbc.sql("DELETE FROM cinenest_identity.access_grant").update();
+            fixture.jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:staff AND venue_id=:venue")
+                .param("staff", BankIntegrationTest.STAFF).param("venue", BankIntegrationTest.VB).update();
+            var activeHolds = fixture.jdbc.sql("""
+                SELECT count(*) FROM cinenest_booking.reservation_hold
+                WHERE owner_id=:actor AND state='ACTIVE' AND expires_at>clock_timestamp()
+                """).param("actor", BankIntegrationTest.A).query(Long.class).single();
+            assertThat(activeHolds).as("supervised customer starts without an active hold").isZero();
+            fixture.reviewerGrants();
+            fixture.grant("booking.synthetic.read", "VENUE", BankIntegrationTest.VA);
+            fixture.grant("inventory.read", "VENUE", BankIntegrationTest.VA);
+            fixture.grant("inventory.block.create", "VENUE", BankIntegrationTest.VA);
+        }
+        var supervisedCustomer = supervised ? fixture.signedIn("customer-a") : null;
         BankIntegrationTest.IDP.subject="customer-a";
         Files.write(run.resolve("identity.png"),BankIntegrationTest.IMAGE);
         Files.write(run.resolve("receipt.png"),BankIntegrationTest.RECEIPT);
@@ -53,15 +79,61 @@ class SyntheticJourneyIT {
             var builder=new ProcessBuilder("node",Path.of("../frontend/tests/synthetic-e2e.mjs").toAbsolutePath().toString());
             builder.redirectErrorStream(true);builder.redirectOutput(run.resolve("private-browser.log").toFile());
             browser=builder.start();
-            long until=System.nanoTime()+java.time.Duration.ofMinutes(7).toNanos();
+            long until=System.nanoTime()+java.time.Duration.ofMinutes(supervised ? 28 : 7).toNanos();
+            boolean supervisedAuthSealed = false;
             while(browser.isAlive()&&System.nanoTime()<until){
                 Path command=run.resolve("command.json");
                 if(Files.exists(command)){
                     var body=JSONObjectUtils.parse(Files.readString(command));Files.delete(command);
+                    if (supervised && !List.of("subject", "seal-supervised-auth", "expire-session", "supervised-expire-hold", "supervised-booking-audit", "supervised-conflict-inspect", "supervised-block-inspect", "supervised-booking-count", "review", "r1-pending-inspect").contains(body.get("op"))) {
+                        throw new IllegalStateException("Unsupported supervised fixture command");
+                    }
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if(op.equals("r1-no-request")){
+                        if(supervised && op.equals("supervised-expire-hold")){
+                            UUID holdId = UUID.fromString(body.get("holdId").toString());
+                            int changed = fixture.jdbc.sql("""
+                                UPDATE cinenest_booking.reservation_hold
+                                SET created_at=clock_timestamp()-interval '20 minutes',
+                                    expires_at=clock_timestamp()-interval '1 minute'
+                                WHERE hold_id=:hold AND owner_id=:actor AND state='ACTIVE'
+                                """).param("hold", holdId).param("actor", BankIntegrationTest.A).update();
+                            assertThat(changed).isEqualTo(1);
+                        }else if(supervised && op.equals("supervised-conflict-inspect")){
+                            UUID hold = UUID.fromString(body.get("holdId").toString());
+                            var holds = fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.reservation_hold").query(Long.class).single();
+                            var original = fixture.jdbc.sql("""
+                                SELECT count(*) FROM cinenest_booking.reservation_hold h
+                                JOIN cinenest_booking.inventory_block b ON b.block_id=h.block_id
+                                WHERE h.hold_id=:hold AND h.owner_id=:actor AND h.state='ACTIVE' AND b.blocking
+                                """).param("hold", hold).param("actor", BankIntegrationTest.A).query(Long.class).single();
+                            assertThat(holds).isEqualTo(1L);
+                            assertThat(original).isEqualTo(1L);
+                        }else if(supervised && op.equals("supervised-block-inspect")){
+                            UUID block = UUID.fromString(body.get("blockId").toString());
+                            var saved = fixture.jdbc.sql("""
+                                SELECT count(*) FROM cinenest_booking.room_block_audit a
+                                JOIN cinenest_booking.inventory_block b ON b.block_id=a.block_id
+                                WHERE a.block_id=:block AND a.actor_id=:actor AND a.venue_id=:venue
+                                  AND a.room_id=:room AND a.action='CREATE' AND b.blocking AND b.kind='MAINTENANCE'
+                                """).param("block", block).param("actor", BankIntegrationTest.STAFF)
+                                .param("venue", BankIntegrationTest.VA).param("room", BankIntegrationTest.RID)
+                                .query(Long.class).single();
+                            assertThat(saved).isEqualTo(1L);
+                        }else if(supervised && op.equals("supervised-booking-count")){
+                            response.put("bookings", fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking")
+                                .query(Long.class).single());
+                        }else if(supervised && op.equals("supervised-booking-audit")){
+                            var correlation = UUID.fromString(body.get("correlation").toString());
+                            var count = fixture.jdbc.sql("""
+                                SELECT count(*) FROM cinenest_booking.staff_booking_read_audit
+                                WHERE correlation_id=:correlation AND actor_id=:actor AND venue_id=:venue
+                                  AND action='LIST' AND outcome='ALLOW'
+                                """).param("correlation", correlation).param("actor", BankIntegrationTest.STAFF)
+                                .param("venue", BankIntegrationTest.VA).query(Long.class).single();
+                            assertThat(count).isEqualTo(1);
+                        }else if(op.equals("r1-no-request")){
  UUID q=UUID.fromString(body.get("quoteId").toString());assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_payment_request WHERE quote_id=:q").param("q",q).query(Long.class).single()).isZero();
  assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_command").query(Long.class).single()).isZero();response.put("noRequestOrReceipt",true);
  }else if(op.equals("r1-pending-inspect")){
@@ -118,8 +190,11 @@ class SyntheticJourneyIT {
                                 response.putAll(counts);
                             }else throw new IllegalArgumentException("Unknown calendar observation phase");
                         }else if(op.equals("review")){
-                            fixture.work();fixture.reviewerGrants();
-                            var r=fixture.json(fixture.signedIn("customer-a").get("/api/verification/requests/"+body.get("id")));
+                            if (supervised && !"VERIFIED".equals(body.get("verdict"))) throw new IllegalArgumentException("Supervised review only verifies its fixture");
+                            fixture.work();
+                            if (!supervised) fixture.reviewerGrants();
+                            var customer = supervised ? supervisedCustomer : fixture.signedIn("customer-a");
+                            var r=fixture.json(customer.get("/api/verification/requests/"+body.get("id")));
                             response=fixture.json(fixture.write(staff,"POST",fixture.reviewPath(r)+"/decisions",JSONObjectUtils.toJSONString(fixture.decision(r,body.get("verdict").toString()))));
                         }else if(op.equals("prepare-upload-fault")){
                             if(uploadRequest!=null)throw new IllegalArgumentException("One upload fault fixture only");
@@ -185,9 +260,12 @@ class SyntheticJourneyIT {
                             var quote=fixture.jdbc.sql("SELECT quote_id FROM cinenest_verification.verification_request WHERE request_id=:r").param("r",rejectedRequest).query(UUID.class).single();
                             assertThat(context.getBean(com.cinenest.verification.BankEligibility.class).observe(BankIntegrationTest.B,quote,BankIntegrationTest.VA)).isFalse();
                             response.put("state","REJECTED");response.put("rejectedDecisions",1);response.put("verifiedDecisions",0);response.put("bankEligible",false);response.put("bankRequests",actual.get("requests"));response.put("bookings",actual.get("bookings"));response.put("protectedStateUnchanged",true);
+                        }else if(supervised && op.equals("seal-supervised-auth")){
+                            supervisedAuthSealed = true;
+                            BankIntegrationTest.IDP.subject = "unassociated-supervised-subject";
                         }else if(op.equals("subject")){
                             String subject=body.get("subject").toString();
-                            if(!List.of("customer-a","customer-b","staff").contains(subject))throw new IllegalArgumentException();
+                            if(supervisedAuthSealed || !(supervised ? List.of("customer-a","customer-b","staff") : List.of("customer-a","customer-b","staff")).contains(subject))throw new IllegalArgumentException();
                             BankIntegrationTest.IDP.subject=subject;
                         }else if(op.equals("expire-session")){
                             int expired=fixture.jdbc.sql("UPDATE cinenest_identity.http_session SET last_access_time=0,expiry_time=0 WHERE principal_name=:p AND max_inactive_interval>0").param("p",BankIntegrationTest.A.toString()).update();

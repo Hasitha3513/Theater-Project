@@ -31344,5 +31344,22 @@
       "testsSha256": "838204025a2b6b74c16adc1f6cad2133b003eb97b47759ed87f41a73bd566baa"
     },
     "productionAuthorization": "NONE"
+  },
+  "supervisedH1V42": {
+    "taskId": "CN-H1-SUPERVISED-V42",
+    "baseline": "ad02637b4f13c6731df29cc2b8a246324a6f983a",
+    "preEditReviewSha256": "c1446fe738f114eb47d22c929531eda7cfaf639016884990d3211c43a1a4b4d8",
+    "scope": "SYNTHETIC_ONLY",
+    "portedFromBaseline": "f3b7c1bc9bc4f7ed09ceb34afcb2ecbc30c362bf",
+    "maxMinutesIncludingCleanup": 30,
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED",
+    "rehearsal": "NOT_RUN",
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "cca0e6ec50920f69a62f72c057e51b942fd8bc13a102fc8428b8a21385b83edf",
+      "frontend/tests/synthetic-e2e.mjs": "5f003538267a9aba715b30bec639099a9d2d946e83f097907ef4a180c684613a",
+      "scripts/test-synthetic-e2e.py": "57a62e4665a84b5e83fc335d7fe65e28fc690a2dce868102f26d930c63782eac",
+      "scripts/verify-synthetic-e2e.py": "518b0ffe8885c19ca93c75789a061f3427a38c5c8cd6e9c47f3f5a2211f4e8c4"
+    }
   }
 }

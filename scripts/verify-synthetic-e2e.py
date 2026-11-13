@@ -48,13 +48,21 @@ def private_root(path):
         raise RuntimeError("Run directory outside owned temporary namespace")
 
 
+def current_cgroup():
+    return Path('/sys/fs/cgroup') / Path('/proc/self/cgroup').read_text().strip().split('::')[1].lstrip('/')
+
+
 def runtime_limits():
-    group = Path('/sys/fs/cgroup') / Path('/proc/self/cgroup').read_text().strip().split('::')[1].lstrip('/')
+    group = current_cgroup()
     if not limits((group / 'cpu.max').read_text(), (group / 'memory.max').read_text()):
         raise RuntimeError("Application cgroup must enforce <=3 CPU and <=7 GiB before provisioning")
 
 
-def preflight():
+SUPERVISED = "supervised-h1"
+SUPERVISED_ACTIVE_SECONDS = 1710
+
+
+def preflight(supervised=False):
     if any(os.environ.get(k) for k in ['NODE_OPTIONS','JAVA_TOOL_OPTIONS','JDK_JAVA_OPTIONS','_JAVA_OPTIONS','MAVEN_OPTS','MAVEN_ARGS']):
         raise RuntimeError('Unset tool option-injection variables before qualification')
     java = Path(os.environ.get('JAVA_HOME', '')) / 'bin/java'
@@ -80,6 +88,17 @@ def preflight():
         binary = Path.home() / '.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell'
     if not binary.is_file():
         raise RuntimeError('Pinned Chromium not installed; no download authorized')
+    if supervised:
+        if os.environ.get('DOCKER_CONTEXT') or os.environ.get('DOCKER_HOST') != 'unix:///var/run/docker.sock':
+            raise RuntimeError('Supervised mode requires the approved local Docker socket')
+        if not (os.environ.get('DISPLAY') or os.environ.get('WAYLAND_DISPLAY')):
+            raise RuntimeError('Supervised mode requires an existing desktop display')
+        headed = next(b for b in browsers if b['name'] == 'chromium')
+        executable = Path(call([node, '--input-type=module', '-e',
+                                'const { chromium } = await import(process.argv[1]); console.log(chromium.executablePath());',
+                                (pw / 'index.mjs').as_uri()]))
+        if (headed['revision'], headed['browserVersion']) != ('1234', '151.0.7922.34') or not executable.is_file() or not os.access(executable, os.X_OK):
+            raise RuntimeError('Pinned headed Chromium not installed; no download authorized')
     wrapper = (ROOT / 'backend/.mvn/wrapper/maven-wrapper.properties').read_text()
     if '/3.9.16/' not in wrapper:
         raise RuntimeError('Qualified Maven wrapper changed')
@@ -104,6 +123,19 @@ def cleanup(path):
         if container['Config']['Labels'].get(LABEL) != name:
             raise RuntimeError('Refusing to stop unowned container')
         call(['docker', 'stop', '--time', '5', container['Id']], timeout=10)
+        if state.get('scenario') == SUPERVISED:
+            deadline = time.monotonic() + 5
+            while True:
+                absence = subprocess.run(
+                    ['docker', 'container', 'inspect', name], capture_output=True, text=True, timeout=2,
+                )
+                if absence.returncode != 0:
+                    if any(msg in absence.stderr for msg in ('No such container', 'No such object')):
+                        break
+                    raise RuntimeError('Supervised container removal unverified')
+                if time.monotonic() >= deadline:
+                    raise RuntimeError('Supervised container removal unverified')
+                time.sleep(.1)
     elif 'No such container' not in result.stderr and 'No such object' not in result.stderr:
         raise RuntimeError('Container absence unverified; retaining private run directory')
     for metadata in ['database-port.json', 'config.json', 'frontend-port.json']:
@@ -119,6 +151,20 @@ def cleanup(path):
                 else:
                     connection.close()
                     raise RuntimeError('Recorded test port remains occupied; no unrelated process stopped')
+    cgroup_file = path / 'application-cgroup'
+    if state.get('scenario') == SUPERVISED and cgroup_file.is_file():
+        group = Path(cgroup_file.read_text())
+        if group.resolve() != group or not group.is_relative_to('/sys/fs/cgroup') or group.name != name + '.service':
+            raise RuntimeError('Owned supervised cgroup evidence is invalid')
+        try:
+            live = {int(pid) for pid in (group / 'cgroup.procs').read_text().split()}
+        except FileNotFoundError:
+            if group.exists():
+                raise RuntimeError('Owned supervised process absence unverified') from None
+            live = set()
+        if live - {os.getpid()}:
+            raise RuntimeError('Owned supervised processes remain')
+        print('PASS supervised application cgroup contains no surviving task processes', flush=True)
     saved = path/'next-env.original'
     if saved.is_file():
         target = ROOT/'frontend/next-env.d.ts'
@@ -132,9 +178,45 @@ def cleanup(path):
 
 
 def journey_test(scenario):
-    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
+    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
     if scenario not in tests:raise RuntimeError('Unsupported synthetic scenario')
     return tests[scenario]
+
+
+def run_stage(stage, args, cwd, env, path, timeout):
+    log_path = path / f'private-{stage}.log'
+    with log_path.open('w') as log:
+        try:
+            result = subprocess.run(args, cwd=cwd, env=env, stdout=log,
+                                    stderr=subprocess.STDOUT, timeout=timeout)
+        except subprocess.TimeoutExpired as error:
+            raise RuntimeError(f'{stage} exceeded its {timeout}s timeout') from error
+        except OSError as error:
+            raise RuntimeError(f'{stage} could not start (errno {error.errno})') from error
+    if result.returncode:
+        # Emit only fixed markers. Maven and Chromium output can contain fixture secrets.
+        raw = log_path.read_text(errors='replace')
+        markers = (
+            "Could not parse output from TypeScript's --showConfig",
+            'COMPILATION ERROR', 'Failed to load ApplicationContext',
+            'FlywayValidateException', 'PSQLException', 'TimeoutError',
+            'TargetClosedError', 'Missing X server or $DISPLAY',
+            'Permission denied', 'No space left on device',
+        )
+        locations = sorted(set(re.findall(
+            r'(?:SyntheticJourneyIT\.java:[0-9]+|synthetic-e2e\.mjs:[0-9]+:[0-9]+)', raw)))[:10]
+        report = {'failedStage': stage, 'returnCode': result.returncode,
+                  'markers': [marker for marker in markers if marker in raw],
+                  'sourceLocations': locations}
+        if any(arg == '-Dtest=BankInstructionsJourneyIT' for arg in args):
+            report['holdStatuses'] = re.findall(r'BI_SAFE_HOLD_STATUS=([0-9]{3})', raw)
+            report['sourceLocations'] += sorted(set(re.findall(
+                r'(?:BankInstructionsJourneyIT|BankIntegrationTest)\.java:[0-9]+', raw)))[:10]
+        print(json.dumps(report), flush=True)
+        if (path / 'result.json').is_file():
+            print((path / 'result.json').read_text(), flush=True)
+        status = f'signal {-result.returncode}' if result.returncode < 0 else f'exit {result.returncode}'
+        raise RuntimeError(f'{stage} failed ({status})')
 
 
 def inside(path):
@@ -144,10 +226,27 @@ def inside(path):
     name = state['name']
     scenario = state.get('scenario', 'campaign')
     test = journey_test(scenario)
+    supervised = scenario == SUPERVISED
     (path/'next-env.original').write_bytes((ROOT/'frontend/next-env.d.ts').read_bytes())
     password = secrets.token_urlsafe(32)
     env = {k: v for k, v in os.environ.items() if k in {'PATH','HOME','USER','JAVA_HOME','PLAYWRIGHT_MODULE_PATH','DOCKER_HOST','DBUS_SESSION_BUS_ADDRESS','XDG_RUNTIME_DIR','LANG'}}
-    env.update(POSTGRES_PASSWORD=password, CINENEST_E2E_MODE="h1" if scenario == "h1" else "campaign")
+    env.update(POSTGRES_PASSWORD=password, CINENEST_E2E_MODE=scenario if scenario in {'h1', SUPERVISED} else 'campaign')
+    if supervised:
+        group = current_cgroup()
+        if group.name != name + '.service':
+            raise RuntimeError('Supervised run must be in its owned service cgroup')
+        (path / 'application-cgroup').write_text(str(group))
+        env['SERVER_ADDRESS'] = '127.0.0.1'
+        env['TMPDIR'] = str(path)
+        for key in ('DISPLAY', 'WAYLAND_DISPLAY', 'XAUTHORITY'):
+            if key in os.environ:
+                env[key] = os.environ[key]
+    env['NEXT_TELEMETRY_DISABLED'] = '1'
+    timeout = SUPERVISED_ACTIVE_SECONDS if supervised else 540
+    run_stage('frontend-build', ['npm', 'run', 'build'], ROOT/'frontend', env, path, timeout)
+    env['MAVEN_USER_HOME'] = str(ROOT/'.cache/maven')
+    maven = [str(ROOT/'backend/mvnw'), '-o', '-B', '-Dmaven.repo.local='+str(ROOT/'.cache/m2')]
+    run_stage('backend-test-compile', [*maven, 'test-compile'], ROOT/'backend', env, path, timeout)
     call(['docker', 'run', '--pull=never', '--detach', '--rm', '--name', name, '--label', LABEL+'='+name,
           '--cpus=1', '--memory=1g', '--memory-swap=1g', '--pids-limit=128', '--shm-size=16m', '--tmpfs',
           '/var/lib/postgresql:rw,size=496m', '--publish', '127.0.0.1::5432', '--env', 'POSTGRES_DB=cinenest_test',
@@ -174,26 +273,14 @@ def inside(path):
                CINENEST_DB_USER='cinenest_test', CINENEST_DB_PASSWORD=password,
                CINENEST_E2E_RUN=str(path), CINENEST_E2E_SOURCE=call(['git','rev-parse','HEAD']), MAVEN_USER_HOME=str(ROOT/'.cache/maven'), NEXT_TELEMETRY_DISABLED='1')
     # Only local caches; no npm install, Maven download or image pull.
-    with (path / 'private-build.log').open('w') as log:
-        for args, cwd in [(['npm', 'run', 'build'], ROOT/'frontend'),
-                          ([str(ROOT/'backend/mvnw'), '-o', '-B', '-Dmaven.repo.local='+str(ROOT/'.cache/m2'),
-                            '-Dtest='+test, 'test'], ROOT/'backend')]:
-            result = subprocess.run(args, cwd=cwd, env=env, stdout=log, stderr=subprocess.STDOUT, timeout=540)
-            if result.returncode:
-                if (path/'result.json').is_file():
-                    print((path/'result.json').read_text(), flush=True)
-                if state.get('scenario')=='bank-instructions':
-                    raw=(path/'private-build.log').read_text(errors='replace')
-                    safe={'holdStatuses':re.findall(r'BI_SAFE_HOLD_STATUS=([0-9]{3})',raw),'classes':sorted(set(re.findall(r'\b[A-Za-z]+(?:Exception|Error)\b',raw))), 'sourceLocations':sorted(set(re.findall(r'(?:BankInstructionsJourneyIT|BankIntegrationTest)\.java:[0-9]+',raw)))}
-                    print(json.dumps({'sanitizedFailure':safe}),flush=True)
-                raise RuntimeError('Build/journey failed; raw private diagnostics are not published')
+    run_stage('backend-journey', [*maven, '-Dtest='+test, 'test'], ROOT/'backend', env, path, timeout)
     print((path/'result.json').read_text(), flush=True)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
-    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1'], default='campaign')
+    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED], default='campaign')
     parser.add_argument('--inside', type=Path)
     parser.add_argument('--cleanup', type=Path)
     args = parser.parse_args()
@@ -204,7 +291,8 @@ def main():
         if args.inside:
             inside(args.inside)
             return 0
-        versions = preflight()
+        supervised = args.scenario == SUPERVISED
+        versions = preflight(supervised=True) if supervised else preflight()
         print(json.dumps({'preflight': 'TOOLS_PRESENT', 'versions': versions,
                           'execution': 'NOT_RUN', 'resourceEnforcement': 'NOT_YET_VERIFIED'}), flush=True)
         if not args.execute:
@@ -219,11 +307,17 @@ def main():
                    '--property=MemorySwapMax=0', '--property=TasksMax=1024', '--property=RuntimeMaxSec=600',
                    '--property=TimeoutStopSec=30', '--property=KillMode=control-group',
                    '--property=ExecStopPost='+sys.executable+' "'+script+'" --cleanup "'+str(path)+'"']
-        for key in ['PATH', 'JAVA_HOME', 'PLAYWRIGHT_MODULE_PATH', 'DOCKER_HOST']:
+        if supervised:
+            command[command.index('--property=RuntimeMaxSec=600')] = f'--property=RuntimeMaxSec={SUPERVISED_ACTIVE_SECONDS}'
+            print('Supervised synthetic session: close the Rooms or Admin tab to finish early.', flush=True)
+        keys = ['PATH', 'JAVA_HOME', 'PLAYWRIGHT_MODULE_PATH', 'DOCKER_HOST']
+        if supervised:
+            keys += ['DISPLAY', 'WAYLAND_DISPLAY', 'XAUTHORITY', 'XDG_RUNTIME_DIR']
+        for key in keys:
             if key in os.environ:
                 command += ['--setenv='+key+'='+os.environ[key]]
         command += [sys.executable, '-B', script, '--inside', str(path)]
-        result = subprocess.run(command, timeout=640)
+        result = subprocess.run(command, timeout=1800 if supervised else 640)
         if path.exists():
             # No application service may remain before fallback cleanup.
             active = subprocess.run(['systemctl', '--user', 'is-active', path.name], capture_output=True, text=True, timeout=5).stdout.strip()

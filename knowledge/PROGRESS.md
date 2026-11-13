@@ -3783,3 +3783,10 @@ This source admission records an unexecuted rehearsal. It grants no production o
 V42 local implementation is under qualification on the authorized 44-path branch. Formal Day 03, Day 05 and Day 06 accounting is unchanged. See the V42 execution record for source fingerprints and gate status.
 
 The bounded V42 PostgreSQL qualification passed two tests. Clean Flyway applied 41 migrations; the populated V41 database applied V42 alone and retained historical data. Verified owned-container, port and process-group cleanup took 11.961 seconds including execution. Focused backend passed 121 with two database tests skipped in that offline run; the separate PostgreSQL run executed both. Frontend passed 597. The broad backend suite was not rerun against the disposable database, and formal acceptance remains open.
+
+
+## Supervised H1 Owner demo on V42
+
+CN-H1-SUPERVISED-V42 carries the four supervised harness paths onto the exact V42 baseline. The additional four governance paths admit this bounded synthetic slice and replay the exact V42 validator. The headed launcher opens separate Customer and venue-scoped Staff sessions, verifies pending and unfunded payment state, and reserves time for teardown within the 30-minute limit. Operational trust, commercial issuance, checkout and production customer access remain disabled. Formal acceptance and MVP accounting are unchanged. This admission records source scope before the separate runtime qualification.
+
+The supervised V42 follow-up adds visible catalog list, detail and conditional retry diagnostics. Offline launcher controls cover a brief Docker auto-remove delay while retaining the ownership and removal checks. This records local harness changes. The visible probe and cleanup correction require fresh runtime verification.

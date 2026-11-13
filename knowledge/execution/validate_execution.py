@@ -14334,5 +14334,115 @@ def inert_ci_main():
     return v42_replay_history()
 
 
+SUPERVISED_SOURCE_DIGEST = 'c3f1fe098b9c59c8f5ed752e8ff6991f8a0f2c4ea04c85535eb92fce45be15e0'
+SUPERVISED_BASE = 'ad02637b4f13c6731df29cc2b8a246324a6f983a'
+SUPERVISED_RECEIPT = 'c1446fe738f114eb47d22c929531eda7cfaf639016884990d3211c43a1a4b4d8'
+SUPERVISED_SOURCES = H1_SOURCES | {'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java'}
+SUPERVISED_OWNED = H1_OWNED | SUPERVISED_SOURCES
+
+
+def supervised_before(name):
+    return v41_git('show', SUPERVISED_BASE + ':' + name)
+
+
+def supervised_record():
+    return {
+        'taskId': 'CN-H1-SUPERVISED-V42',
+        'baseline': SUPERVISED_BASE,
+        'preEditReviewSha256': SUPERVISED_RECEIPT,
+        'scope': 'SYNTHETIC_ONLY',
+        'portedFromBaseline': 'f3b7c1bc9bc4f7ed09ceb34afcb2ecbc30c362bf',
+        'maxMinutesIncludingCleanup': 30,
+        'productionAuthorization': 'NONE',
+        'publication': 'NOT_AUTHORIZED',
+        'rehearsal': 'NOT_RUN',
+        'sourceSha256': {n: hashlib.sha256((R / n).read_bytes()).hexdigest()
+                         for n in sorted(SUPERVISED_SOURCES)},
+    }
+
+
+def supervised_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', SUPERVISED_BASE, 'HEAD')
+        tracked = parse_git_paths(v41_git('ls-tree', '-r', '--name-only', '-z', SUPERVISED_BASE, text=True), nul=True)
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard', text=True), nul=True)
+        changed = parse_git_paths(v41_git('diff', SUPERVISED_BASE, '--name-only', '-z', text=True), nul=True)
+        if len(SUPERVISED_OWNED) != 8 or live != tracked or changed != SUPERVISED_OWNED:
+            return ['Supervised H1 exact eight-path inventory mismatch']
+        for name in SUPERVISED_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Supervised H1 unsafe path: ' + name]
+        fingerprints = supervised_record()['sourceSha256']
+        digest = hashlib.sha256(json.dumps(fingerprints, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+        if digest != SUPERVISED_SOURCE_DIGEST:
+            return ['Supervised V42 source fingerprint mismatch']
+        end = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prior = supervised_before(V41_VALIDATOR)
+        if not prior.endswith(end) or not (R / V41_VALIDATOR).read_bytes().startswith(prior[:-len(end)]):
+            return ['Supervised H1 altered historical validator']
+        if not (K / 'PROGRESS.md').read_bytes().startswith(supervised_before('knowledge/PROGRESS.md')):
+            return ['Supervised H1 altered progress history']
+        state = json.loads((K / 'execution/status.json').read_text())
+        if state.pop('supervisedH1V42', None) != supervised_record() or state != json.loads(supervised_before('knowledge/execution/status.json')):
+            return ['Supervised H1 evidence or historical status mismatch']
+        manifest = json.loads(supervised_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if row['path'] in H1_KNOWLEDGE:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Supervised H1 manifest checksum or scope mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Supervised H1 admission inputs inaccessible or invalid']
+    return []
+
+
+def supervised_replay_v42():
+    import sys
+    import tempfile
+
+    try:
+        common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+        with tempfile.TemporaryDirectory(prefix='cinenest-supervised-v42-history-') as directory:
+            checkout = Path(directory) / 'baseline'
+            subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', '--', common, str(checkout)], check=True)
+            subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', SUPERVISED_BASE], check=True)
+            return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+    except (OSError, subprocess.SubprocessError):
+        print('FAIL supervised demo could not replay exact V42 history')
+        return 1
+
+
+receipt_admission_successor_errors = supervised_errors
+
+
+def supervised_controls():
+    from unittest.mock import patch
+
+    assert not supervised_errors()
+    original = Path.read_bytes
+    for name in SUPERVISED_SOURCES | {V41_VALIDATOR, V41_MANIFEST, 'knowledge/PROGRESS.md'}:
+        with patch.object(Path, 'read_bytes', lambda p: b'altered\n' + original(p) if p == R / name else original(p)):
+            assert supervised_errors(), name
+    output = subprocess.check_output
+
+    def extra(argv, *args, **kwargs):
+        result = output(argv, *args, **kwargs)
+        return result + 'unapproved.txt\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert supervised_errors()
+    print('PASS supervised V42 exact inventory, source and historical preservation controls')
+
+
+def inert_ci_main():
+    errors = supervised_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    supervised_controls()
+    return supervised_replay_v42()
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

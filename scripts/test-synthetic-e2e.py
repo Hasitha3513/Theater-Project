@@ -1,5 +1,7 @@
 """Inert admission/cleanup negative controls; never starts Docker, Java or a browser."""
+import contextlib
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -72,9 +74,52 @@ class AdmissionTests(unittest.TestCase):
                 self.assertTrue((root/'next-env.original').exists())
 
     def test_no_business_interception_or_cookie_injection(self):
-        source=(journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/extension-reservation-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/release1-booking-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/release1-recovery-e2e.mjs').read_text()
+        source=(journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()
+        start=source.index('async function supervisedReadFailure(')
+        end=source.index('function supervisedOrigins(', start)
+        source=source[:start]+source[end:]
+        source+=(journey.ROOT/'frontend/tests/extension-reservation-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/release1-booking-e2e.mjs').read_text()+(journey.ROOT/'frontend/tests/release1-recovery-e2e.mjs').read_text()
         for forbidden in ['page.route(', 'route.fulfill(', 'context.addCookies(', 'storageState:', 'ignoreHTTPSErrors:']:
             self.assertNotIn(forbidden,source)
+
+    def test_supervised_read_failure_is_local_read_only_and_one_shot(self):
+        source=(journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()
+        start=source.index('async function supervisedReadFailure(')
+        end=source.index('function supervisedOrigins(', start)
+        script="import assert from 'node:assert/strict';\n"+source[start:end]+"""
+const base = "http://127.0.0.1:1234";
+const path = "/api/venues/00000000-0000-4000-8000-000000000001/packages";
+let handler, matches, failures = 0, forwarded = 0;
+const page = {
+  route: async (match, handle) => { matches = match; handler = handle; },
+  unroute: async () => { handler = undefined; },
+};
+await assert.rejects(supervisedReadFailure(page, "http://example.com", path, "catalog"));
+await assert.rejects(supervisedReadFailure(page, base, "/api/holds", "catalog"));
+const disarm = await supervisedReadFailure(page, base, path, "catalog");
+assert.ok(matches(new URL(base + path)));
+assert.ok(!matches(new URL("http://example.com" + path)));
+const route = method => ({
+  request: () => ({ method: () => method }),
+  fallback: () => forwarded++,
+  fulfill: async response => {
+    assert.equal(response.status, 503);
+    assert.equal(response.contentType, "application/json");
+    assert.equal(JSON.parse(response.body).message, "Synthetic service unavailable");
+    assert.ok(handler, "Route must still be registered during fulfillment");
+    failures++;
+  },
+});
+await handler(route("POST"));
+assert.equal(forwarded, 1);
+await handler(route("GET"));
+await handler(route("GET"));
+assert.equal(forwarded, 2);
+assert.equal(failures, 1);
+await disarm();
+assert.equal(handler, undefined);
+"""
+        subprocess.run(['node','--input-type=module'],input=script,text=True,check=True)
 
     def test_diagnostics_never_capture_raw_browser_secrets(self):
         source=(journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()
@@ -92,6 +137,90 @@ class AdmissionTests(unittest.TestCase):
         source=(journey.ROOT/'frontend/tests/bank-instructions-e2e.mjs').read_text()
         for forbidden in ['page.route(', 'route.fulfill(', 'addCookies(', 'storageState:']:
             self.assertNotIn(forbidden,source)
+
+    def test_supervised_preflight_does_not_start_resources(self):
+        with patch.object(journey.sys, 'argv', ['verify', '--scenario', journey.SUPERVISED]), \
+                patch.object(journey, 'preflight', return_value={}) as preflight, \
+                patch.object(journey.tempfile, 'mkdtemp') as provision:
+            self.assertEqual(journey.main(), 0)
+            preflight.assert_called_once_with(supervised=True)
+            provision.assert_not_called()
+
+    def test_supervised_supervisor_reserves_time_for_cleanup(self):
+        with tempfile.TemporaryDirectory(prefix='cinenest-e2e-') as run, \
+                patch.object(journey.sys, 'argv', ['verify', '--scenario', journey.SUPERVISED, '--execute']), \
+                patch.object(journey, 'preflight', return_value={}), \
+                patch.object(journey.tempfile, 'mkdtemp', return_value=run), \
+                patch.object(journey, 'cleanup') as cleanup, \
+                patch.object(journey.subprocess, 'run', side_effect=[
+                    subprocess.CompletedProcess([], 0),
+                    subprocess.CompletedProcess([], 3, 'inactive'),
+                ]) as execute:
+            self.assertEqual(journey.main(), 0)
+            command = execute.call_args_list[0].args[0]
+            self.assertIn('--property=RuntimeMaxSec=1710', command)
+            self.assertIn('--property=TimeoutStopSec=30', command)
+            self.assertIn('--property=KillMode=control-group', command)
+            self.assertTrue(any(arg.startswith('--property=ExecStopPost=') for arg in command))
+            self.assertLessEqual(1710 + 2 * 30, execute.call_args_list[0].kwargs['timeout'])
+            cleanup.assert_called_once_with(Path(run))
+
+    def test_supervised_cleanup_requires_container_removal(self):
+        with tempfile.TemporaryDirectory(prefix='cinenest-e2e-') as run:
+            root = Path(run)
+            (root / 'ownership.json').write_text(json.dumps({'name': root.name, 'scenario': journey.SUPERVISED}))
+            present = subprocess.CompletedProcess([], 0, json.dumps([
+                {'Config': {'Labels': {journey.LABEL: root.name}}, 'Id': 'owned'}
+            ]), '')
+            with patch.object(journey.subprocess, 'run', side_effect=[present, present]), \
+                    patch.object(journey.time, 'monotonic', side_effect=[0, 5]), \
+                    patch.object(journey, 'call') as stop:
+                with self.assertRaisesRegex(RuntimeError, 'removal unverified'):
+                    journey.cleanup(root)
+                stop.assert_called_once_with(['docker', 'stop', '--time', '5', 'owned'], timeout=10)
+                self.assertTrue(root.exists())
+
+    def test_supervised_cleanup_waits_for_auto_remove(self):
+        with tempfile.TemporaryDirectory(prefix='cinenest-e2e-') as run:
+            root = Path(run)
+            (root / 'ownership.json').write_text(json.dumps({'name': root.name, 'scenario': journey.SUPERVISED}))
+            present = subprocess.CompletedProcess([], 0, json.dumps([
+                {'Config': {'Labels': {journey.LABEL: root.name}}, 'Id': 'owned'}
+            ]), '')
+            absent = subprocess.CompletedProcess([], 1, '', 'No such container')
+            with patch.object(journey.subprocess, 'run', side_effect=[present, present, absent]), \
+                    patch.object(journey, 'call'), patch.object(journey.time, 'sleep'):
+                journey.cleanup(root)
+            self.assertFalse(root.exists())
+
+    def test_supervised_browser_loopback_and_exit_controls(self):
+        source = (journey.ROOT / 'frontend/tests/synthetic-e2e.mjs').read_text()
+        helper = source[source.index('function supervisedOrigins('):source.index('const socket = createServer();')]
+        subprocess.run(['node', '--input-type=module', '-'], check=True, input=
+            'import assert from "node:assert/strict"; import { EventEmitter, once } from "node:events";\n'
+            + helper + r"""
+const base = "http://127.0.0.1:4000";
+assert.deepEqual([...supervisedOrigins({backend: "http://127.0.0.1:4001", ports: [4001, 4002]}, base)],
+    [base, "http://127.0.0.1:4001", "http://127.0.0.1:4002"]);
+assert.throws(() => supervisedOrigins({backend: "http://0.0.0.0:4001", ports: [4001]}, base));
+assert.throws(() => supervisedOrigins({backend: "http://127.0.0.1:4003", ports: [4001]}, base));
+const page = Object.assign(new EventEmitter(), {isClosed: () => false});
+const browser = new EventEmitter(), frontend = new EventEmitter();
+const closed = waitForSupervisedExit([{page}], browser, frontend);
+page.emit("close");
+await closed;
+const failed = waitForSupervisedExit([{page}], browser, frontend);
+frontend.emit("exit", 1);
+await assert.rejects(failed, /frontend exited early/);
+""", text=True, timeout=10)
+        self.assertIn('assert.equal(new Set(pages.map(({ accountId }) => accountId)).size, pages.length)', source)
+        self.assertIn('await control({ op: "seal-supervised-auth" })', source)
+        ready = source[source.index('await writeFile(`${run}/supervised-ready.json`'):source.index('await waitForSupervisedExit(pages, browser, frontend);')]
+        self.assertIn('customerUrl: supervisedOutcome.routes[0]', ready)
+        self.assertIn('staffUrl: supervisedOutcome.routes[1]', ready)
+        self.assertNotIn('pendingRequest', ready)
+        self.assertIn('mode: 0o600', ready)
+        self.assertIn('browser.newContext({ viewport: null, serviceWorkers: "block" })', source)
 
     def test_h1_uses_direct_transport_and_crops_allowlisted_labels(self):
         source = (journey.ROOT/'frontend/tests/synthetic-e2e.mjs').read_text()
@@ -201,6 +330,26 @@ for (const invalid of [null, "/bank?evidence=malformed", "/bank?evidence=" + oth
         self.assertIn('`/api/bank/requests/${bank.id}`)).status,401', expired)
         self.assertIn('if (!h1) {\n\tawait scenario("A-expired-quote"', source[start:expiry])
 
+    def test_frontend_failure_precedes_database_and_reports_safe_markers(self):
+        def failed_build(args, **kwargs):
+            kwargs['stdout'].write("Could not parse output from TypeScript's --showConfig\nsecret=value\n")
+            return subprocess.CompletedProcess(args, 47)
+        with tempfile.TemporaryDirectory(prefix='cinenest-e2e-') as name:
+            root = Path(name)
+            (root/'ownership.json').write_text(json.dumps({'name':root.name,'scenario':'h1'}))
+            output = io.StringIO()
+            with patch.object(journey, 'runtime_limits'), patch.object(journey, 'call') as call, patch.object(
+                journey.subprocess, 'run', side_effect=failed_build
+            ), contextlib.redirect_stdout(output):
+                with self.assertRaisesRegex(RuntimeError, r'frontend-build failed \(exit 47\)'):
+                    journey.inside(root)
+                call.assert_not_called()
+            report = json.loads(output.getvalue())
+            self.assertEqual(report['failedStage'], 'frontend-build')
+            self.assertEqual(report['returnCode'], 47)
+            self.assertEqual(report['markers'], ["Could not parse output from TypeScript's --showConfig"])
+            self.assertNotIn('secret', output.getvalue())
+
     def test_postgres_budget_rejects_mismatched_live_configuration(self):
         host = dict(NanoCpus=10**9, Memory=1024**3, MemorySwap=1024**3,
                     PidsLimit=128, ShmSize=64*1024**2,
@@ -208,7 +357,7 @@ for (const invalid of [null, "/bank?evidence=malformed", "/bank?evidence=" + oth
         with tempfile.TemporaryDirectory(prefix='cinenest-e2e-') as name:
             root = Path(name)
             (root/'ownership.json').write_text(json.dumps({'name':root.name,'scenario':'h1'}))
-            with patch.object(journey, 'runtime_limits'), patch.object(
+            with patch.object(journey, 'runtime_limits'), patch.object(journey, 'run_stage'), patch.object(
                 journey, 'call', side_effect=['owned',json.dumps([{'HostConfig':host}])]
             ) as call:
                 with self.assertRaisesRegex(RuntimeError, 'Database limits not effective'):

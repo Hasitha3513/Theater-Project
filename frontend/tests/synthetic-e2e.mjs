@@ -1,4 +1,4 @@
-// Opt-in REAL backend journey. No page.route, route.fulfill, session injection or business stubs.
+// Real backend journey. Supervised QA can inject one failure on an allowlisted loopback read.
 import assert from "node:assert/strict";
 import { recoveryScenarios, expiredSessionRecovery } from "./release1-recovery-e2e.mjs";
 import {extensionScenarios,extensionReservationJourney} from "./extension-reservation-e2e.mjs";
@@ -25,8 +25,10 @@ import {
 import { pathToFileURL } from "node:url";
 
 const mode = process.env.CINENEST_E2E_MODE ?? "campaign";
-assert.ok(["campaign", "h1"].includes(mode), "unknown browser journey mode");
-const h1 = mode === "h1";
+assert.ok(["campaign", "h1", "supervised-h1"].includes(mode), "unknown browser journey mode");
+const supervised = mode === "supervised-h1";
+const h1 = mode === "h1" || supervised;
+let supervisedOutcome;
 const run = process.env.CINENEST_E2E_RUN;
 assert.match(run ?? "", /^\/tmp\/cinenest-e2e-[^/]+$/);
 const config = JSON.parse(await readFile(`${run}/config.json`, "utf8"));
@@ -220,15 +222,69 @@ async function json(page, path) {
 	return r.value;
 }
 async function clickResponse(page, name, path, method = "POST") {
-	const response = page.waitForResponse(
-		(r) =>
-			new URL(r.url()).pathname === path && r.request().method() === method,
-	);
-	await page.getByRole("button", { name, exact: true }).click();
-	const r = await response;
+	const [r] = await Promise.all([
+		page.waitForResponse(
+			response => new URL(response.url()).pathname === path && response.request().method() === method,
+		),
+		page.getByRole("button", { name, exact: true }).click(),
+	]);
 	assert.equal(r.status(), 200);
 	return r.json();
 }
+async function startSupervisedVerification(page, base, quote) {
+	const path = "/api/verification/requests";
+	const quotePath = `/api/quotes/${quote.quoteId}`;
+	const matches = (request, pathname, method) => {
+		const url = new URL(request.url());
+		return url.origin === base && url.pathname === pathname && request.method() === method;
+	};
+	const events = [];
+	let submitted;
+	const onRequest = request => {
+		if (matches(request, path, "POST")) {
+			submitted = request;
+			events.push("verification-post-sent");
+		}
+	};
+	const onFailed = request => {
+		if (matches(request, path, "POST") || matches(request, quotePath, "GET"))
+			events.push(request === submitted ? "verification-post-failed" : "quote-refresh-failed");
+	};
+	const onResponse = response => {
+		if (matches(response.request(), quotePath, "GET"))
+			events.push(`quote-refresh-http-${response.status()}`);
+	};
+	page.on("request", onRequest);
+	page.on("requestfailed", onFailed);
+	page.on("response", onResponse);
+	try {
+		const [response] = await Promise.all([
+			page.waitForResponse(response => submitted !== undefined && response.request() === submitted, { timeout: 12000 }),
+			page.getByRole("button", { name: "Start synthetic request", exact: true }).click({ timeout: 10000 }),
+		]);
+		events.push(`verification-post-http-${response.status()}`);
+		assert.equal(response.status(), 200);
+		const payload = submitted.postDataJSON();
+		assert.equal(payload.quoteId, quote.quoteId);
+		assert.equal(payload.policyVersion, "SYNTHETIC-V1");
+		assert.equal(payload.consent, true);
+		const verification = await response.json();
+		assert.equal(verification.quoteId, quote.quoteId);
+		assert.ok(verification.id);
+		return verification;
+	} catch (error) {
+		const changed = await page.getByText("Quotation context changed. Review the refreshed quotation and consent again.", { exact: true })
+			.isVisible().catch(() => false);
+		if (changed) events.push("ui-quote-context-changed");
+		error.verificationEvents = events;
+		throw error;
+	} finally {
+		page.off("request", onRequest);
+		page.off("requestfailed", onFailed);
+		page.off("response", onResponse);
+	}
+}
+
 async function reloadH1BankRequest(page, requestId) {
 	const detail = page.getByRole("region", { name: "Owned bank request detail", exact: true });
 	await detail.getByRole("region", { name: "Current bank request summary", exact: true })
@@ -275,7 +331,111 @@ async function login(page, subject) {
 		session?.secure && session.httpOnly && session.sameSite === "Lax",
 		"normal Secure browser cookie required",
 	);
+	return me.accountId;
 }
+async function checkSupervisedCatalog(page, base, config, record) {
+	const announce = id => page.evaluate(testId => {
+		document.title = `${testId} · CineNest synthetic QA`;
+	}, id);
+	const listPath = `/api/venues/${config.venue}/packages`;
+	const matches = (response, path) => {
+		const url = new URL(response.url());
+		return url.origin === base && url.pathname === path &&
+			url.searchParams.get("roomId") === config.room &&
+			response.request().method() === "GET";
+	};
+	const packages = page.getByRole("region", { name: "Room packages" });
+	await page.bringToFront();
+	await announce("CT-002");
+	await page.getByRole("heading", { name: "Explore our rooms" }).waitFor();
+	await record({ id: "CT-002", status: "PASS" });
+	const room = page.locator(`a[href="/rooms/${config.room}"]`);
+	await room.waitFor();
+	const listPromise = page.waitForResponse(response => matches(response, listPath), { timeout: 10000 });
+	await room.click();
+	await page.waitForURL(base + "/rooms/" + config.room);
+	await announce("CT-003");
+	await packages.getByRole("heading", { name: "Indicative published packages" }).waitFor();
+	await record({ id: "CT-003", status: "PASS" });
+	await announce("CT-004");
+	const list = await listPromise;
+	const payload = list.ok() ? await list.json() : null;
+	const item = payload?.items?.[0];
+	const listed = list.status() === 200 && payload?.purchasable === false &&
+		typeof item?.packageId === "string" && typeof item?.versionId === "string";
+	await record({ id: "CT-004", status: listed ? "PASS" : "FAIL", httpStatus: list.status() });
+
+	if (listed) {
+		await announce("CT-006");
+		const button = packages.getByRole("button", { name: `Package details ${item.name}`, exact: true });
+		const detailPromise = page.waitForResponse(
+			response => matches(response, `${listPath}/${item.packageId}`), { timeout: 10000 },
+		);
+		await button.click();
+		const detail = await detailPromise;
+		const value = detail.ok() ? await detail.json() : null;
+		const versionMatches = detail.status() === 200 && value?.purchasable === false &&
+			value.items?.some(row => row.packageId === item.packageId && row.versionId === item.versionId);
+		const displayed = versionMatches && await packages.getByText(item.description, { exact: true })
+			.waitFor({ timeout: 5000 }).then(() => true, () => false);
+		await record({ id: "CT-006", status: displayed ? "PASS" : "FAIL", httpStatus: detail.status(),
+			scope: "Indicative detail and published version only" });
+	}
+
+	const retry = packages.getByRole("button", { name: "Retry catalog", exact: true });
+	if (await retry.isVisible()) {
+		await announce("CT-005");
+		const retryPromise = page.waitForResponse(response => matches(response, listPath), { timeout: 10000 });
+		await retry.click();
+		const response = await retryPromise;
+		const recovered = response.status() === 200 &&
+			await packages.getByRole("button", { name: /^Package details / }).first()
+				.waitFor({ timeout: 5000 }).then(() => true, () => false);
+		await record({ id: "CT-005", status: recovered ? "PASS" : "FAIL", httpStatus: response.status() });
+	} else {
+		await record({ id: "CT-005", status: "NOT_RUN", reason: "No genuine catalog error exposed a retry control" });
+	}
+}
+
+async function supervisedReadFailure(page, base, path, kind) {
+	const allowed = kind === "catalog"
+		? /^\/api\/venues\/[a-f0-9-]{36}\/packages$/
+		: kind === "staff-bookings" && /^\/api\/admin\/venues\/[a-f0-9-]{36}\/bookings$/;
+	assert.ok(allowed && allowed.test(path) && new URL(base).hostname === "127.0.0.1");
+	const matcher = url => url.origin === base && url.pathname === path;
+	let injected = false;
+	const handler = async route => {
+		if (injected || route.request().method() !== "GET") return route.fallback();
+		injected = true;
+		await route.fulfill({
+			status: 503,
+			contentType: "application/json",
+			body: JSON.stringify({ message: "Synthetic service unavailable" }),
+		});
+	};
+	await page.route(matcher, handler);
+	return () => page.unroute(matcher, handler);
+}
+
+function supervisedOrigins(config, base) {
+	const backend = new URL(config.backend);
+	assert.equal(backend.hostname, "127.0.0.1");
+	const origins = new Set([base, ...config.ports.map(port => {
+		assert.ok(Number.isInteger(port) && port > 0 && port <= 65535);
+		return `http://127.0.0.1:${port}`;
+	})]);
+	assert.ok(origins.has(backend.origin));
+	return origins;
+}
+
+function waitForSupervisedExit(pages, browser, frontend) {
+	return Promise.race([
+		...pages.map(({ page }) => page.isClosed() ? Promise.resolve() : once(page, "close")),
+		once(browser, "disconnected"),
+		once(frontend, "exit").then(() => { throw new Error("Supervised frontend exited early"); }),
+	]);
+}
+
 const socket = createServer();
 socket.listen(0, "127.0.0.1");
 await once(socket, "listening");
@@ -321,8 +481,262 @@ try {
 		}
 		throw new Error("Next startup timeout");
 	});
-	browser = await chromium.launch({ headless: true });
+	browser = await chromium.launch({ headless: !supervised });
 	assert.equal(browser.version(), "151.0.7922.34");
+	if (supervised) {
+		const origins = supervisedOrigins(config, base);
+		const pages = [];
+		for (const [subject, route] of [["customer-a", "/rooms"], ["staff", "/admin"], ["customer-b", "/rooms"]]) {
+			const context = await browser.newContext({ viewport: null, serviceWorkers: "block" });
+			let authenticating = true;
+			await context.route("**/*", (route) => {
+				const url = new URL(route.request().url());
+				return origins.has(url.origin) && (url.origin === base || authenticating)
+					? route.continue() : route.abort();
+			});
+			const page = await context.newPage();
+			const accountId = await login(page, subject);
+			authenticating = false;
+			await page.goto(base + route);
+
+			pages.push({ page, accountId, route });
+		}
+		await control({ op: "seal-supervised-auth" });
+		assert.equal(new Set(pages.map(({ accountId }) => accountId)).size, pages.length);
+		assert.equal(await json(pages[0].page, "/api/accounts/me").then(me => me.accountId), pages[0].accountId);
+		const customer = pages[0].page;
+		const staff = pages[1].page;
+		const report = [];
+		const evidenceFile = `${run}/remaining-results.json`;
+		const save = async () => {
+			await writeFile(`${evidenceFile}.tmp`, JSON.stringify(report), { mode: 0o600 });
+			await rename(`${evidenceFile}.tmp`, evidenceFile);
+		};
+		const test = async (id, page, action) => {
+			const check = { id, status: "ERROR", http: [], timestamp: new Date().toISOString() };
+			const response = r => {
+				const url = new URL(r.url());
+				if (url.origin === base && url.pathname.startsWith("/api/")) {
+					check.http.push({ method: r.request().method(), status: r.status(),
+						path: url.pathname.replace(/[0-9a-f]{8}-[0-9a-f-]{27,}/gi, "{id}") });
+				}
+			};
+			page.on("response", response);
+			try {
+				await page.bringToFront();
+				await page.evaluate(label => { document.title = label + " · CineNest synthetic QA"; }, id);
+				check.actual = await action();
+				check.status = "PASS";
+			} catch (error) {
+				check.status = error.name === "AssertionError" ? "FAIL" : "ERROR";
+				check.reason = error.name;
+				if (error.verificationEvents) check.verificationEvents = error.verificationEvents;
+				check.source = String(error.stack).split("\n").find(line => line.includes("synthetic-e2e.mjs:"))?.trim();
+			} finally {
+				page.off("response", response);
+			}
+			report.push(check);
+			results.push({ id, status: check.status });
+			await save();
+			return check.status === "PASS";
+		};
+		const roomUrl = base + "/rooms/" + config.room;
+		const catalogPath = `/api/venues/${config.venue}/packages`;
+		const respond = (page, path, method = "GET") => page.waitForResponse(r =>
+			new URL(r.url()).pathname === path && r.request().method() === method, { timeout: 10000 });
+		await test("CT-005", customer, async () => {
+			const disarm = await supervisedReadFailure(customer, base, catalogPath, "catalog");
+			try {
+				const initial = respond(customer, catalogPath);
+				await customer.goto(roomUrl);
+				assert.equal((await initial).status(), 503);
+				await customer.getByText("Package catalog unavailable.", { exact: true }).waitFor();
+				const recovered = await clickResponse(customer, "Retry catalog", catalogPath, "GET");
+				const item = recovered.items[0];
+				assert.ok(item.packageId && item.versionId && item.description);
+				const detail = await clickResponse(customer, `Package details ${item.name}`, `${catalogPath}/${item.packageId}`, "GET");
+				assert.ok(detail.items.some(row => row.packageId === item.packageId && row.versionId === item.versionId));
+				await customer.getByText(item.description, { exact: true }).waitFor();
+				return "One injected catalog 503, then real list and published-version detail recovered";
+			} finally { await disarm(); }
+		});
+		await customer.goto(roomUrl);
+		let selected;
+		let hold;
+		const slotReady = await test("CT-007", customer, async () => {
+			const date = config.local.split("T")[0];
+			await customer.getByLabel("Calendar date (venue local)").fill(date);
+			await customer.getByLabel("Calendar duration (minutes)").fill("180");
+			await customer.getByLabel("Calendar guests", { exact: true }).fill("4");
+			const calendarResponse = respond(customer, `/api/rooms/${config.room}/availability/calendar`);
+			await customer.getByRole("button", { name: "Load availability calendar", exact: true }).click();
+			const r = await calendarResponse;
+			assert.equal(r.status(), 200);
+			const calendar = await r.json();
+			assert.equal(calendar.roomId, config.room);
+			assert.equal(calendar.venueId, config.venue);
+			assert.equal(calendar.date, date);
+			assert.equal(calendar.durationMinutes, 180);
+			assert.equal(calendar.guests, 4);
+			assert.equal(calendar.complete, true);
+			selected = calendar.items.find(item => item.available && item.startLocal === config.local) ?? calendar.items.find(item => item.available);
+			assert.ok(selected);
+			await customer.getByLabel(`Session start (${calendar.timezone})`).selectOption(selected.startLocal);
+			await customer.getByRole("button", { name: "Use selected time", exact: true }).click();
+			assert.equal(await customer.getByLabel("Customer start in venue local time").inputValue(), selected.startLocal);
+			return "Available slot selected and copied to the inventory form";
+		});
+		const holdReady = slotReady && await test("CT-008", customer, async () => {
+			await clickResponse(customer, "Check inventory (no hold)", `/api/rooms/${config.room}/availability`, "GET");
+			hold = await clickResponse(customer, "Create temporary inventory hold", "/api/holds");
+			assert.equal(hold.state, "ACTIVE");
+			assert.equal(hold.sessionStart, selected.sessionStart);
+			assert.ok(Number.isInteger(hold.revision));
+			assert.ok(Date.parse(hold.expiresAt) > Date.now());
+			await customer.getByText("Temporary inventory hold", { exact: true }).waitFor();
+			await customer.getByText(/^Server expiry:/).waitFor();
+			const panel = customer.getByRole("region", { name: "Inventory hold status" });
+			await writeFile(`${run}/ct-008.png`, await panel.screenshot({ animations: "disabled" }), { mode: 0o600 });
+			return "Active hold matched selected start and rendered its expiry";
+		});
+		if (holdReady) await test("CT-010", pages[2].page, async () => {
+			const contender = pages[2].page;
+			await contender.goto(roomUrl);
+			const inquiry = await api(contender, `/api/rooms/${config.room}/availability?${new URLSearchParams({
+				sessionStartLocal: selected.startLocal, durationMinutes: "180", guests: "4",
+			})}`);
+			assert.equal(inquiry.status, 200);
+			assert.equal(inquiry.value.available, false);
+			const conflict = await api(contender, "/api/holds", "POST", {
+				roomId: config.room, sessionStartLocal: selected.startLocal, durationMinutes: 180, guests: 4,
+				expectedConfiguration: inquiry.value.configuration, idempotencyKey: crypto.randomUUID(),
+			});
+			assert.equal(conflict.status, 409);
+			assert.equal(conflict.value.message, "Inventory conflict or changed configuration. Inquire again; no booking is confirmed.");
+			await control({ op: "supervised-conflict-inspect", holdId: hold.holdId });
+			return "Second customer received an overlap 409 and the original hold remained active";
+		});
+		if (holdReady) await test("CT-012", customer, async () => {
+			await customer.getByRole("button", { name: "Load applicable synthetic package choices", exact: true }).click();
+			const packageChoice = customer.getByLabel("Published package");
+			await packageChoice.selectOption({ index: 1 });
+			await customer.getByLabel("Intended method (no payment)").selectOption("BANK");
+			const quote = await clickResponse(customer, "Calculate synthetic quotation", "/api/quotes");
+			assert.equal(quote.state, "ISSUED");
+			assert.equal(quote.revision, 1);
+			assert.equal(quote.lines.reduce((sum, line) => sum + BigInt(line.amountMinor), 0n), BigInt(quote.totalMinor));
+			await customer.getByText(/^Total: LKR/).waitFor();
+			await customer.getByLabel("I reviewed this exact synthetic revision and all three disclosures").check();
+			const accepted = await clickResponse(customer, "Accept synthetic revision only", `/api/quotes/${quote.quoteId}/accept`);
+			for (const field of ["quoteId", "revision", "contentHash", "totalMinor"]) {
+				assert.equal(accepted[field], quote[field]);
+			}
+			assert.equal(accepted.state, "ACCEPTED");
+			await customer.getByRole("link", { name: "Continue to Verification", exact: true }).waitFor();
+			await customer.getByRole("link", { name: "Continue to Verification", exact: true }).click();
+			await customer.waitForURL(`${base}/verification?quote=${quote.quoteId}`);
+			const handoff = await json(customer, `/api/quotes/${quote.quoteId}`);
+			assert.equal(handoff.contentHash, accepted.contentHash);
+			assert.equal(handoff.revision, accepted.revision);
+			assert.equal(handoff.verificationHandoff.eligible, true);
+			await customer.getByLabel("Operator-provided synthetic policy version").fill("SYNTHETIC-V1");
+			await customer.getByLabel("I consent to this versioned synthetic test processing; no real documents").check();
+			const verification = await startSupervisedVerification(customer, base, quote);
+			await customer.getByLabel("Approved synthetic image only (JPEG/PNG, 5 MiB, 20 MP)").setInputFiles(`${run}/identity.png`);
+			const [completed] = await Promise.all([
+				customer.waitForResponse(r => /\/api\/verification\/uploads\/[^/]+\/complete$/.test(new URL(r.url()).pathname) && r.request().method() === "POST"),
+				customer.getByRole("button", { name: "Upload and request simulated scan", exact: true }).click(),
+			]);
+			assert.equal(completed.status(), 200);
+			assert.equal((await control({ op: "review", id: verification.id, verdict: "VERIFIED" })).state, "VERIFIED");
+			await customer.reload();
+			await customer.getByLabel("Existing request ID").fill(verification.id);
+			await customer.getByRole("button", { name: "Refresh current request and history", exact: true }).click();
+			await customer.getByRole("link", { name: "Continue to Bank Request", exact: true }).click();
+			await customer.getByLabel("I reviewed this synthetic quotation and explicitly request creation. No money transfer or booking confirmation is authorized.").check();
+			const [request, bank] = await Promise.all([
+				customer.waitForRequest(r => new URL(r.url()).pathname === "/api/bank/requests" && r.method() === "POST"),
+				clickResponse(customer, "Create synthetic request", "/api/bank/requests"),
+			]);
+			assert.ok(bank.id);
+			await customer.goto(`${base}/bank?request=${bank.id}`);
+			const current = await reloadH1BankRequest(customer, bank.id);
+			assert.equal(current.quoteId, quote.quoteId);
+			assert.equal(current.requestState, "OPEN");
+			assert.equal(current.reviewState, "PENDING");
+			assert.equal(current.paymentVerified, false);
+			assert.equal(current.bookingConfirmed, false);
+			assert.equal(current.financial.syntheticFundingStatus, "UNFUNDED");
+			assert.equal(current.financial.syntheticBookingStatus, "NOT_CONFIRMED");
+			const pending = customer.getByRole("region", { name: "Current bank request summary", exact: true });
+			await pending.getByText(/UNFUNDED/).first().waitFor();
+			await pending.getByText(/NOT_CONFIRMED/).first().waitFor();
+			await control({ op: "r1-pending-inspect", quoteId: quote.quoteId, requestId: bank.id,
+				commandKey: request.postDataJSON().commandKey });
+			return "Bank request remained OPEN / PENDING / UNFUNDED / NOT_CONFIRMED with no credit, booking or admission effects";
+		});
+		const bookingSearch = async (page, venue) => {
+			await page.goto(base + "/admin/bookings");
+			await page.getByLabel("Assigned venue reference").fill(venue);
+			const [response] = await Promise.all([
+				respond(page, `/api/admin/venues/${venue}/bookings`),
+				page.getByRole("button", { name: "Apply booking filters", exact: true }).click(),
+			]);
+			return response;
+		};
+		await test("CT-023", staff, async () => {
+			const path = `/api/admin/venues/${config.venue}/bookings`;
+			const before = await control({ op: "supervised-booking-count" });
+			const disarm = await supervisedReadFailure(staff, base, path, "staff-bookings");
+			try {
+				assert.equal((await bookingSearch(staff, config.venue)).status(), 503);
+				await staff.getByText(/Booking unavailable, missing, changed or refused/).waitFor();
+				assert.equal(await staff.getByText(/^Server observation:/).count(), 0);
+				assert.equal((await bookingSearch(staff, config.venue)).status(), 200);
+				await staff.getByText(/^Server observation:/).waitFor();
+				assert.equal((await control({ op: "supervised-booking-count" })).bookings, before.bookings);
+				return "One injected read-only booking 503 cleared results and a real refresh restored them";
+			} finally { await disarm(); }
+		});
+		await test("CT-017", staff, async () => {
+			const path = `/api/admin/venues/${config.venue}/rooms/${config.room}/blocks`;
+			await staff.goto(base + "/admin/room-blocking");
+			await staff.getByRole("button", { name: "Find venues by name", exact: true }).click();
+			await staff.getByLabel("Venue", { exact: true }).selectOption(config.venue);
+			await staff.getByRole("button", { name: "Find rooms", exact: true }).click();
+			await staff.getByLabel("Room", { exact: true }).selectOption(config.room);
+			await clickResponse(staff, "Load room blocks", path, "GET");
+			const date = new Date(Date.parse(config.local.slice(0, 10) + "T00:00:00Z") + 86400000).toISOString().slice(0, 10);
+			await staff.getByLabel("Start date", { exact: true }).fill(date);
+			await staff.getByLabel("End date", { exact: true }).fill(date);
+			await staff.getByLabel("Start time (24-hour)", { exact: true }).fill("01:00");
+			await staff.getByLabel("End time (24-hour)", { exact: true }).fill("02:00");
+			const block = await clickResponse(staff, "Create room block", path);
+			await staff.getByText(/Room block saved/).waitFor();
+			const saved = await clickResponse(staff, "Load room blocks", path, "GET");
+			assert.equal(Date.parse(block.startAt), Date.parse(date + "T01:00:00+05:30"));
+			assert.equal(Date.parse(block.endAt), Date.parse(date + "T02:00:00+05:30"));
+			assert.equal(block.revision, 0);
+			assert.deepEqual(saved.items.find(item => item.blockId === block.blockId), block);
+			await staff.getByRole("button", { name: "Inspect block", exact: true }).waitFor();
+			await writeFile(`${run}/ct-017.png`, await staff.getByRole("button", { name: "Inspect block", exact: true })
+				.locator("..").screenshot({ animations: "disabled" }), { mode: 0o600 });
+			assert.equal((await api(customer, path)).status, 403);
+			await control({ op: "supervised-block-inspect", blockId: block.blockId });
+			return "Staff created and reloaded one maintenance block with attributable audit; customer denied";
+		});
+		await pages[0].page.goto(base + "/rooms");
+		await pages[0].page.bringToFront();
+		supervisedOutcome = { routes: pages.slice(0, 2).map(({ route }) => base + route), ready: true };
+		await writeFile(`${run}/supervised-ready.json`, JSON.stringify({
+			syntheticOnly: true,
+			customerUrl: supervisedOutcome.routes[0],
+			staffUrl: supervisedOutcome.routes[1],
+		}), { mode: 0o600, flag: "wx" });
+		await waitForSupervisedExit(pages, browser, frontend);
+		supervisedOutcome.finished = true;
+		results.push({ id: "supervised-session", status: "PASS" });
+	} else {
 	const context = await browser.newContext({
 		viewport: { width: 1280, height: 900 },
 	});
@@ -1652,6 +2066,7 @@ try {
         assert.equal((await api(page, `/api/bank/requests/${bank.id}`)).status,401);
 	});
  if (!h1) await expiredSessionRecovery({page,base,bank,scenario,diagnostics,login,api});
+	}
 } catch (failure) {
 	assertionFailure = {
 		name: failure.name,
@@ -1680,7 +2095,7 @@ try {
 	});
 	process.exitCode = 1;
 } finally {
-	for (const id of planned)
+	if (!supervised) for (const id of planned)
 		if (!results.some((r) => r.id === id))
 			notRun(
 				id,
@@ -1726,6 +2141,7 @@ try {
 		JSON.stringify({
 			syntheticOnly: true,
             mode,
+            supervisedOutcome,
             screenshots,
             calendarObservation,
 			results,
