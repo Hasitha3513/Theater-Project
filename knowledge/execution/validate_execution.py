@@ -14491,6 +14491,28 @@ def pg_recovery_errors():
                 or paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
                 != paths('ls-tree', '-r', '--name-only', '-z', PG_RECOVERY_BASE)):
             return ['PostgreSQL recovery exact five-path inventory mismatch']
+        baseline_tree = v41_git('ls-tree', '-r', '-z', PG_RECOVERY_BASE)
+        migrations = set()
+        for entry in baseline_tree.split(b'\0'):
+            if not entry:
+                continue
+            metadata, name_bytes = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            name = name_bytes.decode()
+            if name.startswith('backend/src/main/resources/db/migration/'):
+                migrations.add(name)
+            if name in PG_RECOVERY_OWNED:
+                continue
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['PostgreSQL recovery unsafe predecessor path: ' + name]
+            data = path.read_bytes()
+            header = f'blob {len(data)}\0'.encode()
+            if hashlib.sha1(header + data).hexdigest().encode() != oid:
+                return ['PostgreSQL recovery unowned predecessor drift: ' + name]
+        folder = R / 'backend/src/main/resources/db/migration'
+        if {p.relative_to(R).as_posix() for p in folder.glob('*.sql')} != migrations:
+            return ['PostgreSQL recovery migration inventory mismatch']
         for name in PG_RECOVERY_OWNED:
             p = R / name
             if not p.is_file() or p.is_symlink() or p.resolve() != p:
@@ -14553,5 +14575,10 @@ def pg_recovery_main():
         return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
 
 
+# Standalone governance controls use the same successor admission as the CLI.
+receipt_admission_successor_errors = pg_recovery_errors
+inert_ci_main = pg_recovery_main
+
+
 if __name__ == '__main__':
-    raise SystemExit(pg_recovery_main())
+    raise SystemExit(inert_ci_main())
