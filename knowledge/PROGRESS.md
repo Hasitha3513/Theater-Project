@@ -3794,3 +3794,7 @@ The supervised V42 follow-up adds visible catalog list, detail and conditional r
 ## Supervised V42 PostgreSQL connection recovery
 
 CI 43419440084 on 7131090734fba5e56054814d3f564c4624888fe6 reported two Lock Registry connection-acquisition errors. In the disposable PostgreSQL 18.6 comparison on that predecessor, the test-only Hikari budget of maximum four connections and minimum zero idle reduced the observed peak from 92 to 22 of 100 server slots. Both runs passed 1,353 backend tests with 81 skipped, including all 17 Lock Registry tests. The local baseline did not reproduce the hosted error. The successor persists only the test defaults and preserves explicit class overrides, production configuration, migration bytes and prior acceptance evidence. Exact-source hosted qualification is pending at this source checkpoint.
+
+## Supervised V42 Admin QA
+
+The isolated Admin QA successor adds synthetic fixture and browser coverage for twelve criterion checks. Its browser cases remain NOT_RUN and require a separately authorized rehearsal and the explicit supervised-admin launcher scenario. Prior visual evidence and formal acceptance remain unchanged.

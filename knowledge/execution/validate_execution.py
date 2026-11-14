@@ -14580,5 +14580,117 @@ receipt_admission_successor_errors = pg_recovery_errors
 inert_ci_main = pg_recovery_main
 
 
+ADMIN_QA_BASE = '125f662c08ce43b4aef3ecd7e07082c275d49437'
+ADMIN_QA_PROGRESS = 'knowledge/PROGRESS.md'
+ADMIN_QA_STATUS = 'knowledge/execution/status.json'
+ADMIN_QA_RECORD = {'baseline': '125f662c08ce43b4aef3ecd7e07082c275d49437', 'scope': 'OFFLINE_SYNTHETIC_ADMIN_QA', 'integrated': 'NOT_RUN', 'productionAuthorization': 'NONE', 'sourceSha256': {'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '89fd1268e56a9838fad8d1398eac96022db19e4199233bad5c85c308aaf615dd', 'frontend/tests/synthetic-e2e.mjs': 'bfa5a7c8b7d30c0a9622358fe5e3ff6c0c01794fe0d1bf8e7345b1974add7f03', 'scripts/verify-synthetic-e2e.py': 'a6fb54e9cea827eb35ec9a78bfdb4376f76f698713d2244cb69ed973b832f991', 'scripts/test-synthetic-e2e.py': 'e4a78783e10b305e005a7066155031ed20e1b721ff76a2ef40dadeafd56181f8'}}
+ADMIN_QA_OWNED = set(ADMIN_QA_RECORD['sourceSha256']) | {
+    ADMIN_QA_PROGRESS, ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+
+
+def admin_qa_before(name):
+    return v41_git('show', ADMIN_QA_BASE + ':' + name)
+
+
+def admin_qa_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', ADMIN_QA_BASE, 'HEAD')
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        if (paths('diff', ADMIN_QA_BASE, '--name-only', '-z') != ADMIN_QA_OWNED
+                or paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+                != paths('ls-tree', '-r', '--name-only', '-z', ADMIN_QA_BASE)):
+            return ['Admin QA exact eight-path inventory mismatch']
+        baseline_tree = v41_git('ls-tree', '-r', '-z', ADMIN_QA_BASE)
+        migrations = set()
+        for entry in baseline_tree.split(b'\0'):
+            if not entry:
+                continue
+            metadata, name_bytes = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            name = name_bytes.decode()
+            if name.startswith('backend/src/main/resources/db/migration/'):
+                migrations.add(name)
+            if name in ADMIN_QA_OWNED:
+                continue
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Admin QA unsafe predecessor path: ' + name]
+            data = path.read_bytes()
+            header = f'blob {len(data)}\0'.encode()
+            if hashlib.sha1(header + data).hexdigest().encode() != oid:
+                return ['Admin QA unowned predecessor drift: ' + name]
+        folder = R / 'backend/src/main/resources/db/migration'
+        if {p.relative_to(R).as_posix() for p in folder.glob('*.sql')} != migrations:
+            return ['Admin QA migration inventory mismatch']
+        for name in ADMIN_QA_OWNED:
+            p = R / name
+            if not p.is_file() or p.is_symlink() or p.resolve() != p:
+                return ['Admin QA unsafe path: ' + name]
+        for name, expected in ADMIN_QA_RECORD['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Admin QA source fingerprint mismatch: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop('supervisedV42AdminQa', None) != ADMIN_QA_RECORD
+                or state != json.loads(admin_qa_before(ADMIN_QA_STATUS))):
+            return ['Admin QA evidence or historical status mismatch']
+        entrypoint = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prior_validator = admin_qa_before(V41_VALIDATOR)
+        if (not prior_validator.endswith(entrypoint)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(prior_validator[:-len(entrypoint)])
+                or not (R / ADMIN_QA_PROGRESS).read_bytes().startswith(admin_qa_before(ADMIN_QA_PROGRESS))):
+            return ['Admin QA altered historical governance']
+        manifest = json.loads(admin_qa_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in ADMIN_QA_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Admin QA manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Admin QA admission inputs inaccessible or invalid']
+    return []
+
+
+def admin_qa_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+    for name in ADMIN_QA_OWNED:
+        with patch.object(Path, 'read_bytes', lambda p: b'altered\n' + original(p) if p == R / name else original(p)):
+            assert admin_qa_errors(), name
+    output = subprocess.check_output
+
+    def extra(argv, *args, **kwargs):
+        result = output(argv, *args, **kwargs)
+        return result + 'unapproved.txt\0' if 'ls-files' in argv else result
+
+    with patch.object(subprocess, 'check_output', extra):
+        assert admin_qa_errors()
+    print('PASS Admin QA exact inventory, source, evidence and manifest controls')
+
+
+def admin_qa_main():
+    import sys
+    import tempfile
+
+    errors = admin_qa_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    admin_qa_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-admin-qa-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', ADMIN_QA_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = admin_qa_errors
+inert_ci_main = admin_qa_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

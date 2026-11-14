@@ -59,6 +59,8 @@ def runtime_limits():
 
 
 SUPERVISED = "supervised-h1"
+ADMIN_QA = "supervised-admin"
+SUPERVISED_SCENARIOS = {SUPERVISED, ADMIN_QA}
 SUPERVISED_ACTIVE_SECONDS = 1710
 
 
@@ -123,7 +125,7 @@ def cleanup(path):
         if container['Config']['Labels'].get(LABEL) != name:
             raise RuntimeError('Refusing to stop unowned container')
         call(['docker', 'stop', '--time', '5', container['Id']], timeout=10)
-        if state.get('scenario') == SUPERVISED:
+        if state.get('scenario') in SUPERVISED_SCENARIOS:
             deadline = time.monotonic() + 5
             while True:
                 absence = subprocess.run(
@@ -152,7 +154,7 @@ def cleanup(path):
                     connection.close()
                     raise RuntimeError('Recorded test port remains occupied; no unrelated process stopped')
     cgroup_file = path / 'application-cgroup'
-    if state.get('scenario') == SUPERVISED and cgroup_file.is_file():
+    if state.get('scenario') in SUPERVISED_SCENARIOS and cgroup_file.is_file():
         group = Path(cgroup_file.read_text())
         if group.resolve() != group or not group.is_relative_to('/sys/fs/cgroup') or group.name != name + '.service':
             raise RuntimeError('Owned supervised cgroup evidence is invalid')
@@ -173,12 +175,33 @@ def cleanup(path):
         if target.read_bytes() not in (original, generated):
             raise RuntimeError('Concurrent next-env change; retaining original snapshot for owner recovery')
         target.write_bytes(original)
+    if state.get('scenario') == ADMIN_QA:
+        evidence = ROOT / '.cache' / (name + '-admin-evidence')
+        evidence.mkdir(mode=0o700, exist_ok=True)
+        if evidence.resolve() != evidence or evidence.stat().st_mode & 0o077:
+            raise RuntimeError('Unsafe Admin evidence directory')
+        results = path / 'remaining-results.json'
+        if results.is_file() and not results.is_symlink():
+            data = json.loads(results.read_text())
+            safe = [{k: row[k] for k in ('id', 'status', 'http', 'actual', 'reason', 'source') if k in row}
+                    for row in data]
+            (evidence / 'results.json').write_text(json.dumps(safe, indent=2))
+        for screenshot in path.glob('admin-case-*.png'):
+            if screenshot.is_file() and not screenshot.is_symlink():
+                shutil.copyfile(screenshot, evidence / screenshot.name)
+        (evidence / 'cleanup.json').write_text(json.dumps({'ownedContainerAbsent': True,
+            'recordedPortsClosed': True, 'cgroupVerified': cgroup_file.is_file()}))
+        print('Admin evidence: ' + str(evidence), flush=True)
     print('PASS owned PostgreSQL absent/stopped; original next-env bytes restored; private fixture storage removed', flush=True)
     shutil.rmtree(path)  # Root verified by uid/mode/namespace; rmtree does not follow child symlinks.
 
 
+def admin_qa_options(scenario):
+    return ["-Dcinenest.test.admin-qa=true"] if scenario == ADMIN_QA else []
+
+
 def journey_test(scenario):
-    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
+    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT',ADMIN_QA:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
     if scenario not in tests:raise RuntimeError('Unsupported synthetic scenario')
     return tests[scenario]
 
@@ -193,6 +216,10 @@ def run_stage(stage, args, cwd, env, path, timeout):
             raise RuntimeError(f'{stage} exceeded its {timeout}s timeout') from error
         except OSError as error:
             raise RuntimeError(f'{stage} could not start (errno {error.errno})') from error
+    if "-Dcinenest.test.admin-qa=true" in args:
+        raw = log_path.read_text(errors='replace')
+        for stage_status in re.findall(r'ADMIN_SETUP [a-z-]+ expected=[0-9]{3} actual=[0-9]{3}', raw):
+            print(stage_status, flush=True)
     if result.returncode:
         # Emit only fixed markers. Maven and Chromium output can contain fixture secrets.
         raw = log_path.read_text(errors='replace')
@@ -226,11 +253,11 @@ def inside(path):
     name = state['name']
     scenario = state.get('scenario', 'campaign')
     test = journey_test(scenario)
-    supervised = scenario == SUPERVISED
+    supervised = scenario in SUPERVISED_SCENARIOS
     (path/'next-env.original').write_bytes((ROOT/'frontend/next-env.d.ts').read_bytes())
     password = secrets.token_urlsafe(32)
     env = {k: v for k, v in os.environ.items() if k in {'PATH','HOME','USER','JAVA_HOME','PLAYWRIGHT_MODULE_PATH','DOCKER_HOST','DBUS_SESSION_BUS_ADDRESS','XDG_RUNTIME_DIR','LANG'}}
-    env.update(POSTGRES_PASSWORD=password, CINENEST_E2E_MODE=scenario if scenario in {'h1', SUPERVISED} else 'campaign')
+    env.update(POSTGRES_PASSWORD=password, CINENEST_E2E_MODE=SUPERVISED if supervised else ('h1' if scenario == 'h1' else 'campaign'))
     if supervised:
         group = current_cgroup()
         if group.name != name + '.service':
@@ -273,14 +300,14 @@ def inside(path):
                CINENEST_DB_USER='cinenest_test', CINENEST_DB_PASSWORD=password,
                CINENEST_E2E_RUN=str(path), CINENEST_E2E_SOURCE=call(['git','rev-parse','HEAD']), MAVEN_USER_HOME=str(ROOT/'.cache/maven'), NEXT_TELEMETRY_DISABLED='1')
     # Only local caches; no npm install, Maven download or image pull.
-    run_stage('backend-journey', [*maven, '-Dtest='+test, 'test'], ROOT/'backend', env, path, timeout)
+    run_stage('backend-journey', [*maven, *admin_qa_options(scenario), '-Dtest='+test, 'test'], ROOT/'backend', env, path, timeout)
     print((path/'result.json').read_text(), flush=True)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
-    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED], default='campaign')
+    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED,ADMIN_QA], default='campaign')
     parser.add_argument('--inside', type=Path)
     parser.add_argument('--cleanup', type=Path)
     args = parser.parse_args()
@@ -291,7 +318,7 @@ def main():
         if args.inside:
             inside(args.inside)
             return 0
-        supervised = args.scenario == SUPERVISED
+        supervised = args.scenario in SUPERVISED_SCENARIOS
         versions = preflight(supervised=True) if supervised else preflight()
         print(json.dumps({'preflight': 'TOOLS_PRESENT', 'versions': versions,
                           'execution': 'NOT_RUN', 'resourceEnforcement': 'NOT_YET_VERIFIED'}), flush=True)

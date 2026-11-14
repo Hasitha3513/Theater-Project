@@ -31378,5 +31378,17 @@
     "diagnosticBackendPassed": 1353,
     "diagnosticBackendSkipped": 81,
     "diagnosticLockRegistryPassed": 17
+  },
+  "supervisedV42AdminQa": {
+    "baseline": "125f662c08ce43b4aef3ecd7e07082c275d49437",
+    "scope": "OFFLINE_SYNTHETIC_ADMIN_QA",
+    "integrated": "NOT_RUN",
+    "productionAuthorization": "NONE",
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "89fd1268e56a9838fad8d1398eac96022db19e4199233bad5c85c308aaf615dd",
+      "frontend/tests/synthetic-e2e.mjs": "bfa5a7c8b7d30c0a9622358fe5e3ff6c0c01794fe0d1bf8e7345b1974add7f03",
+      "scripts/verify-synthetic-e2e.py": "a6fb54e9cea827eb35ec9a78bfdb4376f76f698713d2244cb69ed973b832f991",
+      "scripts/test-synthetic-e2e.py": "e4a78783e10b305e005a7066155031ed20e1b721ff76a2ef40dadeafd56181f8"
+    }
   }
 }

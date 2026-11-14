@@ -138,6 +138,22 @@ assert.equal(handler, undefined);
         for forbidden in ['page.route(', 'route.fulfill(', 'addCookies(', 'storageState:']:
             self.assertNotIn(forbidden,source)
 
+    def test_admin_venue_b_grants_use_the_scoped_subject(self):
+        source = (journey.ROOT / 'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java').read_text()
+        setup = source.split('private static Map<String, Object> prepareAdminQa', 1)[1].split('@Test void', 1)[0]
+        self.assertIn('role.equals("wrong-venue") ? BankIntegrationTest.VB : BankIntegrationTest.VA', setup)
+        self.assertIn('fixture.scope(account, venue)', setup)
+        self.assertIn('.param("actor", adminId("wrong-venue"))', setup)
+        self.assertIn('.param("venue", BankIntegrationTest.VB).update()', setup)
+        self.assertNotIn('fixture.grantTo(adminId("wrong-venue")', setup)
+
+    def test_admin_qa_requires_explicit_selection(self):
+        self.assertEqual(journey.journey_test(journey.ADMIN_QA), 'SyntheticJourneyIT')
+        self.assertIn(journey.ADMIN_QA, journey.SUPERVISED_SCENARIOS)
+        self.assertEqual(journey.admin_qa_options(journey.ADMIN_QA), ['-Dcinenest.test.admin-qa=true'])
+        for scenario in ('campaign', 'bank-instructions', 'h1', journey.SUPERVISED):
+            self.assertEqual(journey.admin_qa_options(scenario), [])
+
     def test_supervised_preflight_does_not_start_resources(self):
         with patch.object(journey.sys, 'argv', ['verify', '--scenario', journey.SUPERVISED]), \
                 patch.object(journey, 'preflight', return_value={}) as preflight, \

@@ -333,6 +333,163 @@ async function login(page, subject) {
 	);
 	return me.accountId;
 }
+async function runAdminQualification({ base, roles, test, respond }) {
+	const qa = config.adminQa;
+	const { customer, staff, administrator, publisher, wrong, ungranted, revoked } = roles;
+	const venue = `/api/admin/venues/${config.venue}`;
+	const room = `${venue}/rooms/${config.room}`;
+	const pkg = `${venue}/packages/${qa.packageId}`;
+	const detail = `${venue}/bookings/${qa.bookingId}`;
+	const bank = `${venue}/bank/requests/${qa.requestId}`;
+	const read = async (page, path) => {
+		const result = await api(page, path);
+		assert.equal(result.status, 200);
+		return result.value;
+	};
+	const show = async (page, route, heading) => {
+		await page.goto(base + route);
+		await page.getByRole("heading", { name: heading, exact: true }).waitFor();
+	};
+	const venueBody = v => ({
+		code: v.code, displayName: "Synthetic Venue Admin QA", timezone: v.timezone,
+		cleaningBufferMinutes: v.cleaningBufferMinutes,
+		postCloseCleaningApproved: v.postCloseCleaningApproved,
+		operationalApprovalReference: v.operationalApprovalReference ?? "",
+		enabled: v.enabled, windows: v.windows, expectedVersion: v.version,
+	});
+	const bookingRoute = `/admin/bookings/venues/${config.venue}/${qa.bookingId}`;
+	await test("T-CN-A03/venue", administrator, async () => {
+		await show(administrator, "/admin/venues", "Venue configuration");
+		await administrator.getByRole("heading", { name: "Synthetic Venue A", exact: true }).waitFor();
+		const old = await read(administrator, venue);
+		await administrator.getByRole("button", { name: "Edit venue", exact: true }).click();
+		await administrator.getByRole("dialog").getByLabel("Name", { exact: true }).fill(venueBody(old).displayName);
+		const updated = await clickResponse(administrator, "Save venue", venue, "PUT");
+		assert.equal(updated.version, old.version + 1);
+		await administrator.reload();
+		await administrator.getByRole("heading", { name: updated.displayName, exact: true }).waitFor();
+		assert.equal((await read(administrator, venue)).version, updated.version);
+		return "Venue metadata persisted at the next version";
+	});
+	await test("T-CN-A04/room", administrator, async () => {
+		await show(administrator, "/admin/rooms", "Room configuration");
+		await administrator.getByLabel("Venue", { exact: true }).selectOption(config.venue);
+		await administrator.getByRole("heading", { name: "Synthetic room", exact: true }).waitFor();
+		const old = await read(administrator, room);
+		assert.equal(old.venueId, config.venue);
+		const payload = { code: old.code, name: old.name, description: old.description ?? "",
+			capacity: 0, facilities: old.facilities, images: old.images, enabled: old.enabled, expectedVersion: old.version };
+		assert.equal((await api(administrator, room, "PUT", payload)).status, 400);
+		assert.equal((await read(administrator, room)).version, old.version);
+		const saved = await api(administrator, room, "PUT", { ...payload, capacity: old.capacity + 1 });
+		assert.equal(saved.status, 200);
+		assert.equal((await read(administrator, room)).version, old.version + 1);
+		assert.equal((await read(administrator, room)).capacity, old.capacity + 1);
+		return "Scoped room update persisted; invalid capacity was rejected";
+	});
+	await test("T-CN-A12/package", administrator, async () => {
+		await show(administrator, "/admin/settings/packages", "Package drafts");
+		const before = await read(publisher, pkg + "/publications");
+		assert.equal(before.items.length, 1);
+		const previous = before.items[0];
+		const draft = await read(administrator, pkg);
+		const body = { ...qa.draft, description: "SYNTHETIC Admin QA package revision", expectedRevision: draft.revision };
+		assert.equal((await api(wrong, pkg + "/draft", "PUT", body)).status, 403);
+		const saved = await api(administrator, pkg + "/draft", "PUT", body);
+		assert.equal(saved.status, 200);
+		assert.equal(saved.value.revision, draft.revision + 1);
+		const publication = { ...qa.publication, expectedRevision: saved.value.revision,
+			replacesPublicationId: previous.publicationId, replacesRevision: previous.revision };
+		assert.equal((await api(administrator, pkg + "/publication-preview", "POST", publication)).status, 403);
+		const preview = await api(publisher, pkg + "/publication-preview", "POST", publication);
+		assert.equal(preview.status, 200);
+		const published = await api(publisher, pkg + "/publications", "POST", { ...publication, contentHash: preview.value.contentHash });
+		assert.equal(published.status, 200);
+		assert.notEqual(published.value.versionId, previous.versionId);
+		const history = (await read(publisher, pkg + "/publications")).items;
+		assert.ok(history.some(item => item.versionId === previous.versionId && item.state === "INACTIVE"));
+		assert.ok(history.some(item => item.versionId === published.value.versionId && item.state === "ACTIVE"));
+		return "Separate editor and publisher produced a new version and preserved history";
+	});
+	await test("T-CN-A02/details", staff, async () => {
+		await staff.goto(base + "/admin/bookings");
+		await staff.getByLabel("Assigned venue reference").fill(config.venue);
+		await staff.getByLabel("Exact booking reference (optional)").fill(qa.bookingId);
+		const response = respond(staff, venue + "/bookings");
+		await staff.getByRole("button", { name: "Apply booking filters", exact: true }).click();
+		const list = await response;
+		assert.equal(list.status(), 200);
+		assert.deepEqual((await list.json()).items.map(item => item.bookingId), [qa.bookingId]);
+		await show(staff, bookingRoute, "Staff booking details");
+		assert.equal((await read(staff, detail)).booking.bookingId, qa.bookingId);
+		return "Scoped search and persisted detail matched";
+	});
+	await test("T-CN-A02/revision", staff, async () => {
+		await show(staff, bookingRoute, "Staff booking details");
+		const { booking } = await read(staff, detail);
+		assert.equal(booking.revision, 1);
+		assert.equal(booking.roomId, config.room);
+		assert.equal(booking.venueId, config.venue);
+		assert.equal(booking.state, "SIMULATED_CONFIRMED");
+		return "Persisted synthetic booking revision and scope matched";
+	});
+	await test("T-CN-A13/payment", staff, async () => {
+		const before = await control({ op: "admin-financial" });
+		for (const key of ["credits", "allocations", "verified", "credentials"]) assert.equal(before.effects[key], 0);
+		await show(staff, `/admin/bank/venues/${config.venue}/requests/${qa.requestId}`, "Bank review details");
+		const request = await read(staff, bank);
+		assert.equal(request.requestState, "OPEN");
+		assert.equal(request.reviewState, "PENDING");
+		assert.equal(request.financial.syntheticBookingStatus, "NOT_CONFIRMED");
+		assert.equal(request.financial.syntheticFundingStatus, "UNFUNDED");
+		assert.equal(request.bookingConfirmed, false);
+		assert.equal(request.paymentVerified, false);
+		assert.equal((await api(ungranted, bank)).status, 403);
+		assert.deepEqual((await control({ op: "admin-financial" })).effects, before.effects);
+		return "Scoped payment view stayed pending and unfunded without side effects";
+	});
+	await test("T-CN-A06/staff", staff, async () => {
+		await show(staff, bookingRoute, "Staff booking details");
+		await read(staff, detail);
+		assert.equal((await api(ungranted, detail)).status, 403);
+		return "Venue membership alone did not grant booking access";
+	});
+	await test("T-CN-A06/wrong-venue", wrong, async () => {
+		await show(wrong, "/admin/venues", "Venue configuration");
+		await read(wrong, `/api/admin/venues/${config.otherVenue}`);
+		assert.equal((await api(wrong, venue)).status, 403);
+		assert.equal((await api(wrong, detail)).status, 403);
+		assert.equal((await api(wrong, room)).status, 403);
+		return "Venue B staff could read B but could not read Venue A";
+	});
+	await test("T-CN-A06/customer", customer, async () => {
+		await show(customer, bookingRoute, "Staff booking details");
+		assert.equal((await api(customer, detail)).status, 403);
+		return "The authenticated booking owner was denied the staff route";
+	});
+	await test("T-CN-A06/revocation", revoked, async () => {
+		await show(revoked, bookingRoute, "Staff booking details");
+		await read(revoked, detail);
+		await control({ op: "admin-revoke" });
+		assert.equal((await api(revoked, detail)).status, 401);
+		await read(staff, detail);
+		return "Only the dedicated revoked session lost access";
+	});
+	await test("T-CN-A06/csrf", administrator, async () => {
+		const before = await read(administrator, venue);
+		const audit = await control({ op: "admin-audit" });
+		assert.equal((await api(administrator, venue, "PUT", venueBody(before), false)).status, 403);
+		assert.equal((await read(administrator, venue)).version, before.version);
+		assert.equal((await control({ op: "admin-audit" })).writes, audit.writes);
+		return "Missing CSRF was denied without a write or success audit";
+	});
+	await test("T-CN-A11/audit", administrator, async () => {
+		await show(administrator, "/admin/venues", "Venue configuration");
+		assert.equal((await control({ op: "admin-audit" })).writes, 1);
+		return "Exactly one successful venue update was attributed to the scoped administrator";
+	});
+}
+
 async function supervisedReadFailure(page, base, path, kind) {
 	const allowed = kind === "catalog"
 		? /^\/api\/venues\/[a-f0-9-]{36}\/packages$/
@@ -422,7 +579,13 @@ try {
 	if (supervised) {
 		const origins = supervisedOrigins(config, base);
 		const pages = [];
-		for (const [subject, route] of [["customer-a", "/rooms"], ["staff", "/admin"], ["customer-b", "/rooms"]]) {
+		const subjects = [["customer-a", "/rooms"], ["staff", "/admin"], ["customer-b", "/rooms"]];
+		if (config.adminQa) {
+			for (const role of ["administrator", "publisher", "wrong-venue", "ungranted", "revoked"]) {
+				subjects.push([`qa-admin-${role}`, "/admin"]);
+			}
+		}
+		for (const [subject, route] of subjects) {
 			const context = await browser.newContext({ viewport: null, serviceWorkers: "block" });
 			let authenticating = true;
 			await context.route("**/*", (route) => {
@@ -471,6 +634,16 @@ try {
 			} finally {
 				page.off("response", response);
 			}
+			if (config.adminQa) {
+				console.log(`${id} ${check.status}`);
+				const heading = page.locator("main h1").first();
+				if (await heading.isVisible()) {
+					const label = await heading.innerText();
+					if (["Venue configuration", "Room configuration", "Package drafts", "Staff booking details", "Bank review details"].includes(label)) {
+						await writeFile(`${run}/admin-case-${report.length + 1}.png`, await heading.screenshot({ timeout: 2000 }), { mode: 0o600 }).catch(() => {});
+					}
+				}
+			}
 			report.push(check);
 			results.push({ id, status: check.status });
 			await save();
@@ -480,6 +653,14 @@ try {
 		const catalogPath = `/api/venues/${config.venue}/packages`;
 		const respond = (page, path, method = "GET") => page.waitForResponse(r =>
 			new URL(r.url()).pathname === path && r.request().method() === method, { timeout: 10000 });
+		if (config.adminQa) {
+			const [admin, publish, other, denied, revoke] = pages.slice(3).map(({ page }) => page);
+			await runAdminQualification({ base, test, respond, roles: {
+				customer, staff, administrator: admin, publisher: publish, wrong: other, ungranted: denied, revoked: revoke,
+			} });
+			assert.equal(report.length, 12);
+			assert.ok(report.every(item => item.status === "PASS"), "Admin qualification has failures");
+		} else {
 		await test("CT-005", customer, async () => {
 			const disarm = await supervisedReadFailure(customer, base, catalogPath, "catalog");
 			try {
@@ -661,6 +842,7 @@ try {
 			await control({ op: "supervised-block-inspect", blockId: block.blockId });
 			return "Staff created and reloaded one maintenance block with attributable audit; customer denied";
 		});
+		}
 		await pages[0].page.goto(base + "/rooms");
 		await pages[0].page.bringToFront();
 		supervisedOutcome = { routes: pages.slice(0, 2).map(({ route }) => base + route), ready: true };
@@ -669,7 +851,7 @@ try {
 			customerUrl: supervisedOutcome.routes[0],
 			staffUrl: supervisedOutcome.routes[1],
 		}), { mode: 0o600, flag: "wx" });
-		await waitForSupervisedExit(pages, browser, frontend);
+		if (!config.adminQa) await waitForSupervisedExit(pages, browser, frontend);
 		supervisedOutcome.finished = true;
 		results.push({ id: "supervised-session", status: "PASS" });
 	} else {
