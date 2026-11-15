@@ -31426,5 +31426,31 @@
       "total": 7
     },
     "productionAuthorization": "NONE"
+  },
+  "v42CommercialPostgresCi": {
+    "baseline": "8a35ae1a5edd4875508e266942d79d7b421f096f",
+    "scope": "MANUAL_DEFAULT_OFF_SYNTHETIC_V42_POSTGRES_CI",
+    "retainedKnowledgeReviewSha256": "c1fe2cb2c040f317f6883736378a6708d2b6a9d234a49ef8bac0fd2248135b76",
+    "knowledgeFiles": 114,
+    "sourceSha256": {
+      ".github/workflows/foundation.yml": "179b939dbb0d77a12dfab661593c6e8881a4adf9d6b902fbd98732738d7df685",
+      "scripts/verify-foundation.py": "d7be0991bbd99f95b866354eca7ef9a4affcd393f20a35ac99650f2f2912c9fc",
+      "scripts/test-v42-postgres-ci.py": "73a16e93fd0daf488a21e2aa6c3765d46ec57672459c8d676820e57a8fbf2803"
+    },
+    "unchangedTestSha256": {
+      "backend/src/test/java/com/cinenest/pricing/internal/OperationalCommercialPostgresTest.java": "87180e221cf30d26524f72375c0ae9de70fa64d9a182a341837d4a3b1ac2ff13",
+      "backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyActivationPostgresTest.java": "fb9165665bd4cd20300b3fa6d4d5f3e5f8b0a949640759693b052bd717d2dd85"
+    },
+    "hostedQualification": "NOT_RUN",
+    "publication": "NOT_AUTHORIZED",
+    "commercialIssuanceEnabled": false,
+    "checkoutEnabled": false,
+    "customerAccessEnabled": false,
+    "operationalTrustEnabled": false,
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE"
   }
 }

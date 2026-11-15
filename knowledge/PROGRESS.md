@@ -3803,3 +3803,8 @@ The isolated Admin QA successor adds synthetic fixture and browser coverage for 
 ## Day 06 cross-venue Room Blocking regression
 
 The synthetic PostgreSQL 18.6 qualification on the Admin QA main baseline plus the pinned test returned HTTP 404 for a Venue A principal targeting Venue B's room and HTTP 200 for the same command in the authorized room. Existing hold and inventory snapshots and Venue A grants stayed unchanged. No unauthorized booking, command, inventory or CREATE audit was persisted. The suite recorded 13 passes and one opt-in browser skip. Cleanup passed. The private verified disposition corrects the raw TestReporter case-name lookup without altering the captured run. Fixture UUIDs were not retained. The previously unattributed V40 Docker inventory discrepancy remains unresolved. Owner UAT remains ACCEPT, the independent human finding remains NOT_RECEIVED, OD-10/13/29 remain pending, and G-ROOM-BLOCK remains NOT_SATISFIED. Official PART 1 remains 4/7 (57.14%). Production authorization remains NONE.
+
+
+## V42 commercial PostgreSQL opt-in CI
+
+The manual, default-off foundation mode qualifies only the existing two V42 PostgreSQL methods. It verifies the exact checkout SHA, isolates two synthetic databases in one bounded loopback-only PostgreSQL 18.6 container, requires two fresh Surefire passes without omissions or extra cases, and verifies teardown. Ordinary foundation behavior and the default-denied operational boundary are preserved. Local qualification is offline only. Hosted focused qualification is NOT_RUN, and publication is not authorized. Day 03 remains blocked, Day 05 and Day 06 formal acceptance remain pending, production authorization is NONE, and official PART 1 remains 4/7 (57.14%).

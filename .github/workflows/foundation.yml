@@ -4,17 +4,32 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      v42_postgres:
+        description: Run only the two disposable V42 commercial PostgreSQL tests
+        type: boolean
+        default: false
+      expected_sha:
+        description: Exact checkout SHA required for V42 mode
+        type: string
+        required: false
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    env:
+      V42_FOCUSED: ${{ github.event_name == 'workflow_dispatch' && inputs.v42_postgres }}
+      V42_EXPECTED_SHA: ${{ inputs.expected_sha }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           fetch-depth: 0 # Existing knowledge validators verify immutable historical commits
           persist-credentials: false
+      - name: Verify focused checkout before runtime
+        if: env.V42_FOCUSED == 'true'
+        run: python3 scripts/verify-foundation.py --verify-v42-source
       - name: Classify exact diff using comparison-base policy
         id: classify
         env:
@@ -45,7 +60,7 @@ jobs:
           test -f scripts/test-recovery.py
           python3 -B scripts/test-recovery.py
       - name: Fetch exact Temurin archive (setup-java v5 cannot parse four-part patch strings)
-        if: steps.classify.outputs.category != 'INERT_ONLY'
+        if: env.V42_FOCUSED == 'true' || steps.classify.outputs.category != 'INERT_ONLY'
         run: |
           archive="$RUNNER_TEMP/cinenest-jdk.tar.gz"
           partial="$(mktemp "$RUNNER_TEMP/cinenest-jdk.XXXXXXXX")"
@@ -72,30 +87,32 @@ jobs:
           echo 'dbb698396d478e7fa2b1e50f4103324b2a99b90569ee27c33f2261f9215cf41e  '"$partial" | sha256sum --check --strict
           mv -- "$partial" "$archive"
       - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
-        if: steps.classify.outputs.category != 'INERT_ONLY'
+        if: env.V42_FOCUSED == 'true' || steps.classify.outputs.category != 'INERT_ONLY'
         with:
           distribution: jdkfile
           java-version: '25' # Cache label only: archive URL/checksum pins 25.0.4.1+1 exactly
           jdkFile: ${{ runner.temp }}/cinenest-jdk.tar.gz
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
-        if: steps.classify.outputs.category != 'INERT_ONLY'
+        if: env.V42_FOCUSED != 'true' && steps.classify.outputs.category != 'INERT_ONLY'
         with:
           node-version-file: frontend/.node-version
       - name: Verify toolchain
-        if: steps.classify.outputs.category != 'INERT_ONLY'
+        if: env.V42_FOCUSED == 'true' || steps.classify.outputs.category != 'INERT_ONLY'
         run: |
           java -version
           java_properties="$(java -XshowSettings:properties -version 2>&1)"
           grep -E '^[[:space:]]*java\.(runtime\.version|vendor) = ' <<< "$java_properties"
           grep -Eq '^[[:space:]]*java\.runtime\.version = 25\.0\.4\.1\+1-LTS$' <<< "$java_properties"
           grep -Eq '^[[:space:]]*java\.vendor = Eclipse Adoptium$' <<< "$java_properties"
-          node --version
-          test "$(npm --version)" = "11.19.1"
+          if [[ "$V42_FOCUSED" != true ]]; then
+            node --version
+            test "$(npm --version)" = "11.19.1"
+          fi
       - name: Backend build, isolated PostgreSQL, architecture, HTTP denial and packaged startup
-        if: steps.classify.outputs.category != 'INERT_ONLY'
+        if: env.V42_FOCUSED != 'true' && steps.classify.outputs.category != 'INERT_ONLY'
         run: python3 scripts/verify-foundation.py
       - name: Frontend clean install and verification
-        if: steps.classify.outputs.category != 'INERT_ONLY'
+        if: env.V42_FOCUSED != 'true' && steps.classify.outputs.category != 'INERT_ONLY'
         working-directory: frontend
         env:
           NEXT_TELEMETRY_DISABLED: '1'
@@ -107,11 +124,21 @@ jobs:
           npm test
           npm audit --audit-level=high
       - name: Local launcher contracts
-        if: steps.classify.outputs.category != 'INERT_ONLY'
+        if: env.V42_FOCUSED != 'true' && steps.classify.outputs.category != 'INERT_ONLY'
         run: |
           python3 scripts/test-launchers.py
           node --test scripts/test-local-https-ingress.mjs
+      - name: V42 opt-in qualification
+        if: env.V42_FOCUSED == 'true'
+        run: python3 scripts/verify-foundation.py --v42-postgres
+      - name: V42 opt-in safety cleanup
+        if: always() && env.V42_FOCUSED == 'true'
+        run: python3 scripts/verify-foundation.py --cleanup-v42
+      - name: V42 offline runner contracts
+        if: success() || (!cancelled() && env.V42_FOCUSED == 'true')
+        run: python3 -B scripts/test-v42-postgres-ci.py
       - name: Knowledge and whitespace
+        if: success() || (!cancelled() && env.V42_FOCUSED == 'true')
         run: |
           python3 knowledge/validate_design_kb.py
           python3 knowledge/execution/validate_execution.py

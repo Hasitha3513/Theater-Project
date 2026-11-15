@@ -14856,5 +14856,161 @@ receipt_admission_successor_errors = cross_venue_errors
 inert_ci_main = cross_venue_main
 
 
+
+
+V42_CI_RECORD = {'baseline': '8a35ae1a5edd4875508e266942d79d7b421f096f',
+ 'scope': 'MANUAL_DEFAULT_OFF_SYNTHETIC_V42_POSTGRES_CI',
+ 'retainedKnowledgeReviewSha256': 'c1fe2cb2c040f317f6883736378a6708d2b6a9d234a49ef8bac0fd2248135b76',
+ 'knowledgeFiles': 114,
+ 'sourceSha256': {'.github/workflows/foundation.yml': '179b939dbb0d77a12dfab661593c6e8881a4adf9d6b902fbd98732738d7df685',
+                  'scripts/verify-foundation.py': 'd7be0991bbd99f95b866354eca7ef9a4affcd393f20a35ac99650f2f2912c9fc',
+                  'scripts/test-v42-postgres-ci.py': '73a16e93fd0daf488a21e2aa6c3765d46ec57672459c8d676820e57a8fbf2803'},
+ 'unchangedTestSha256': {'backend/src/test/java/com/cinenest/pricing/internal/OperationalCommercialPostgresTest.java': '87180e221cf30d26524f72375c0ae9de70fa64d9a182a341837d4a3b1ac2ff13',
+                         'backend/src/test/java/com/cinenest/pricing/internal/CommercialPolicyActivationPostgresTest.java': 'fb9165665bd4cd20300b3fa6d4d5f3e5f8b0a949640759693b052bd717d2dd85'},
+ 'hostedQualification': 'NOT_RUN',
+ 'publication': 'NOT_AUTHORIZED',
+ 'commercialIssuanceEnabled': False,
+ 'checkoutEnabled': False,
+ 'customerAccessEnabled': False,
+ 'operationalTrustEnabled': False,
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE'}
+V42_CI_BASE = V42_CI_RECORD['baseline']
+V42_CI_KEY = 'v42CommercialPostgresCi'
+V42_CI_ADDED = 'scripts/test-v42-postgres-ci.py'
+V42_CI_PROGRESS_SHA = '42956ff753d5ce1e14d3fbc09968aac57dee57f201cb8674e81ac279b9eb8e4a'
+V42_CI_OWNED = set(V42_CI_RECORD['sourceSha256']) | {
+    ADMIN_QA_PROGRESS, ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+
+
+def v42_ci_before(name):
+    return v41_git('show', V42_CI_BASE + ':' + name)
+
+
+def v42_ci_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', V42_CI_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        migration_dir = 'backend/src/main/resources/db/migration/'
+        baseline_tree = paths('ls-tree', '-r', '--name-only', '-z', V42_CI_BASE)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        untracked = paths('ls-files', '-z', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', V42_CI_BASE, '--name-only', '-z') | untracked
+        migrations = {name for name in baseline_tree if name.startswith(migration_dir)}
+        current_migrations = {p.relative_to(R).as_posix() for p in (R / migration_dir).glob('*')}
+        if len(migrations) != 41 or migrations != current_migrations or changed & migrations:
+            return ['V42 CI historical migration mismatch']
+        for name in migrations:
+            path = R / name
+            if path.is_symlink() or path.read_bytes() != v42_ci_before(name):
+                return ['V42 CI historical migration mismatch']
+        if changed != V42_CI_OWNED or live != baseline_tree | {V42_CI_ADDED}:
+            return ['V42 CI exact seven-path inventory mismatch']
+        for entry in v41_git('ls-tree', '-r', '-z', V42_CI_BASE).split(b'\0'):
+            if not entry:
+                continue
+            metadata, encoded_name = entry.split(b'\t', 1)
+            _, kind, oid = metadata.split()
+            name = encoded_name.decode()
+            if name in V42_CI_OWNED or name in migrations:
+                continue
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['V42 CI unsafe predecessor path: ' + name]
+            data = path.read_bytes()
+            header = f'blob {len(data)}\0'.encode()
+            if hashlib.sha1(header + data).hexdigest().encode() != oid:
+                return ['V42 CI unowned predecessor drift: ' + name]
+        for name in V42_CI_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['V42 CI unsafe source path']
+        fingerprints = V42_CI_RECORD['sourceSha256'] | V42_CI_RECORD['unchangedTestSha256']
+        for name, expected in fingerprints.items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['V42 CI source fingerprint mismatch: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(V42_CI_KEY, None) != V42_CI_RECORD
+                or state != json.loads(v42_ci_before(ADMIN_QA_STATUS))):
+            return ['V42 CI review evidence or acceptance accounting mismatch']
+        progress = (R / ADMIN_QA_PROGRESS).read_bytes()
+        if (not progress.startswith(v42_ci_before(ADMIN_QA_PROGRESS))
+                or hashlib.sha256(progress).hexdigest() != V42_CI_PROGRESS_SHA):
+            return ['V42 CI progress or accounting mismatch']
+        entrypoint = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        predecessor = v42_ci_before(V41_VALIDATOR)
+        if not predecessor.endswith(entrypoint) or not (R / V41_VALIDATOR).read_bytes().startswith(predecessor[:-len(entrypoint)]):
+            return ['V42 CI altered historical validator']
+        manifest = json.loads(v42_ci_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in V42_CI_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['V42 CI manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['V42 CI admission inputs inaccessible or invalid']
+    return []
+
+
+def v42_ci_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in v42_ci_errors()):
+                raise ValueError('V42 CI negative control failed: ' + reason)
+
+    for name in V42_CI_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'V42 CI source fingerprint mismatch')
+    migration = R / 'backend/src/main/resources/db/migration/V32__local_room_blocking.sql'
+    reject(migration, b'drift', 'V42 CI historical migration mismatch')
+    reject(K / 'execution/requirements.json', b'changed', 'V42 CI unowned predecessor drift')
+    reject(R / V41_MANIFEST, b'drift', 'V42 CI manifest mismatch')
+    state_path = R / ADMIN_QA_STATUS
+    state = json.loads(original(state_path))
+    state[V42_CI_KEY]['part1']['completed'] = 5
+    reject(state_path, json.dumps(state).encode(), 'V42 CI review evidence or acceptance accounting mismatch')
+    state = json.loads(original(state_path))
+    state[V42_CI_KEY].pop('retainedKnowledgeReviewSha256')
+    reject(state_path, json.dumps(state).encode(), 'V42 CI review evidence or acceptance accounting mismatch')
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if v42_ci_errors() != ['V42 CI exact seven-path inventory mismatch']:
+            raise ValueError('V42 CI unauthorized path negative control failed')
+    print('PASS V42 CI exact paths, fingerprints, migration history, review and acceptance controls')
+
+
+def v42_ci_main():
+    import sys
+    import tempfile
+
+    errors = v42_ci_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    v42_ci_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-v42-ci-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', V42_CI_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = v42_ci_errors
+inert_ci_main = v42_ci_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
