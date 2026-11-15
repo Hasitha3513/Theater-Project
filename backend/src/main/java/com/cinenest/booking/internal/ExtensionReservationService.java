@@ -142,14 +142,19 @@ class ExtensionReservationService implements ExtensionReservationContext {
  }
  private void finish(Map<String,Object> r,String state,UUID actor){
   if(jdbc.sql("UPDATE cinenest_booking.inventory_block SET blocking=false,revision=revision+1 WHERE block_id=:b AND kind='EXTENSION_HOLD' AND blocking").param("b",r.get("tail_block")).update()!=1)throw new InventoryFailure(503,"Extension inventory inconsistent");
-  jdbc.sql("UPDATE cinenest_booking.booking_extension_reservation SET state=:s,revision=revision+1 WHERE reservation_id=:r AND state='ACTIVE'").param("s",state).param("r",r.get("reservation_id")).update();
+  if(jdbc.sql("UPDATE cinenest_booking.booking_extension_reservation SET state=:s,revision=revision+1 WHERE reservation_id=:r AND state='ACTIVE'").param("s",state).param("r",r.get("reservation_id")).update()!=1)throw new InventoryFailure(503,"Extension reservation inconsistent");
   audit(actor,(UUID)r.get("booking_id"),(UUID)r.get("reservation_id"),state,"ALLOW",((Number)r.get("revision")).longValue()+1);
  }
  void maintenance(){if(!Set.of(environment.getActiveProfiles()).equals(Set.of("synthetic-quotation")))return;for(var candidate:jdbc.sql("SELECT booking_id,reservation_id,owner_id FROM cinenest_booking.booking_extension_reservation WHERE state='ACTIVE' ORDER BY expires_at,reservation_id LIMIT 100").query().listOfRows())tx.executeWithoutResult(status->{
   UUID booking=(UUID)candidate.get("booking_id");access.lock(booking);
   var b=jdbc.sql("SELECT venue_id FROM cinenest_booking.booking WHERE booking_id=:b FOR UPDATE").param("b",booking).query(UUID.class).single();rooms.lock(b);var r=row(booking,(UUID)candidate.get("reservation_id"));if(!"ACTIVE".equals(r.get("state")))return;
-  var f=rooms.inspect((UUID)r.get("room_id")).orElseThrow(()->new InventoryFailure(503,"Room unavailable"));Instant time=now();
-  if(!time.isBefore(instant(r.get("expires_at"))))finish(r,"EXPIRED",null);else if(!valid(r,f))finish(r,"INVALIDATED",null);
+  Instant time=now();
+  if(!time.isBefore(instant(r.get("expires_at")))){
+   finish(r,"EXPIRED",null);
+   return;
+  }
+  var f=rooms.inspect((UUID)r.get("room_id")).orElseThrow(()->new InventoryFailure(503,"Room unavailable"));
+  if(!valid(r,f))finish(r,"INVALIDATED",null);
  });}
  static boolean valid(Map<String,Object> r,InventoryConstraints.Facts f){try{
   var c=InventoryRules.candidate(f,instant(r.get("original_start")),Math.toIntExact(Duration.between(instant(r.get("original_start")),instant(r.get("proposed_end"))).toMinutes()),((Number)r.get("guests")).intValue());

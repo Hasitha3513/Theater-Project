@@ -15363,5 +15363,185 @@ receipt_admission_successor_errors = extension_funding_errors
 inert_ci_main = extension_funding_main
 
 
+# CN-EXTENSION-EXPIRY-RECONCILIATION-001
+EXTENSION_EXPIRY_BASE = 'f0523ecf3611e45484c758e0322fa739849700b7'
+EXTENSION_EXPIRY_KEY = 'bookingExtensionExpiryReconciliation'
+EXTENSION_EXPIRY_OWNED = {
+    'backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java',
+    'backend/src/test/java/com/cinenest/BankIntegrationTest.java',
+    'knowledge/PROGRESS.md',
+    'knowledge/execution/change-sets.json',
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+EXTENSION_EXPIRY_RECORD = {
+    "baseline": "f0523ecf3611e45484c758e0322fa739849700b7",
+    "changeSet": "CN-EXTENSION-EXPIRY-RECONCILIATION-001",
+    "scope": "SYNTHETIC_BOOKING_EXPIRY_RECONCILIATION",
+    "requirements": [
+        "CN-A02",
+        "CN-C08",
+        "PK-AC08",
+        "PK-AC12",
+        "BR-04"
+    ],
+    "knowledgeReview": {
+        "trackedFiles": 114,
+        "reused": 103,
+        "deltaReviewed": 11,
+        "sha256": "5ba5b306d7d8ae68671010d70888f80a7cfe790a302f7ce4a2b33f051044b29d"
+    },
+    "sourceSha256": {
+        "backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java": "1c845f18f1accab4650305fbaedcc5523e17f4db6fe295d50cece19d87bcdf04",
+        "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "facbfd4f5a85c0fdfb54fe588d35a14b9697c7e182754b30367354e5afccef97",
+        "knowledge/PROGRESS.md": "e7b772548eabe69c6a55a09d74ffe4a10d43e665b51004804dcd129c19046e96",
+        "knowledge/execution/change-sets.json": "8310842810db20cdf62d781ece766f30fa1d9d30e333639248bdd96ede4924d3"
+    },
+    "postgresql": {
+        "version": "18.6",
+        "resultSha256": "605033b16de32794b70aad55ceb62387e717043a31197678c1a4377eb9545118",
+        "counts": {
+            "PASS": 6,
+            "FAIL": 0,
+            "ERROR": 0,
+            "SKIPPED": 0
+        },
+        "cleanup": "PASS"
+    },
+    "part1": {
+        "completed": 4,
+        "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED"
+}
+EXTENSION_EXPIRY_ENTRYPOINT = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+
+def extension_expiry_before(name):
+    return v41_git('show', EXTENSION_EXPIRY_BASE + ':' + name)
+
+
+def extension_expiry_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', EXTENSION_EXPIRY_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        baseline_entries = v41_git('ls-tree', '-r', '-z', EXTENSION_EXPIRY_BASE).split(b'\0')
+        baseline = {}
+        for entry in filter(None, baseline_entries):
+            metadata, name = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            baseline[name.decode()] = (mode, kind, oid)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', EXTENSION_EXPIRY_BASE, '--name-only', '-z')
+        if changed != EXTENSION_EXPIRY_OWNED or live != set(baseline):
+            return ['Extension expiry exact seven-path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        migrations = {name for name in baseline if name.startswith(migration_prefix)}
+        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).iterdir()}
+        if len(migrations) != 42 or actual_migrations != migrations:
+            return ['Extension expiry migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Extension expiry unsafe path: ' + name]
+            if name in EXTENSION_EXPIRY_OWNED:
+                if mode != b'100644' or path.stat().st_mode & 0o111:
+                    return ['Extension expiry unauthorized file mode: ' + name]
+                continue
+            data = path.read_bytes()
+            if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                return ['Extension expiry predecessor drift: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(EXTENSION_EXPIRY_KEY, None) != EXTENSION_EXPIRY_RECORD
+                or state != json.loads(extension_expiry_before(ADMIN_QA_STATUS))):
+            return ['Extension expiry review or acceptance accounting mismatch']
+        for name, expected in EXTENSION_EXPIRY_RECORD['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Extension expiry source fingerprint mismatch: ' + name]
+        old_validator = extension_expiry_before(V41_VALIDATOR)
+        if (not old_validator.endswith(EXTENSION_EXPIRY_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(EXTENSION_EXPIRY_ENTRYPOINT)])):
+            return ['Extension expiry altered historical validator']
+        manifest = json.loads(extension_expiry_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in EXTENSION_EXPIRY_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Extension expiry manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Extension expiry admission inputs inaccessible or invalid']
+    return []
+
+
+def extension_expiry_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in extension_expiry_errors()):
+                raise ValueError('Extension expiry negative control failed: ' + reason)
+
+    for name in EXTENSION_EXPIRY_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Extension expiry source fingerprint mismatch')
+    reject(R / V41_MANIFEST, b'drift', 'Extension expiry manifest mismatch')
+    reject(K / 'execution/requirements.json', b'drift', 'Extension expiry predecessor drift')
+    reject(R / EXTENSION_FUNDING_MIGRATION, b'drift', 'Extension expiry predecessor drift')
+    path = R / ADMIN_QA_STATUS
+    state = json.loads(original(path))
+    state[EXTENSION_EXPIRY_KEY]['part1']['completed'] = 5
+    reject(path, json.dumps(state).encode(), 'Extension expiry review or acceptance accounting mismatch')
+    state = json.loads(original(path))
+    state[EXTENSION_EXPIRY_KEY].pop('knowledgeReview')
+    reject(path, json.dumps(state).encode(), 'Extension expiry review or acceptance accounting mismatch')
+
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if extension_expiry_errors() != ['Extension expiry exact seven-path inventory mismatch']:
+            raise ValueError('Extension expiry unauthorized path negative control failed')
+    iter_dir = Path.iterdir
+
+    def inject_migration(directory):
+        yield from iter_dir(directory)
+        if directory == R / 'backend/src/main/resources/db/migration':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'iterdir', inject_migration):
+        if extension_expiry_errors() != ['Extension expiry migration inventory mismatch']:
+            raise ValueError('Extension expiry extra migration negative control failed')
+    print('PASS Extension expiry inventory, fingerprints, migration, review and acceptance controls', flush=True)
+
+
+def extension_expiry_main():
+    import sys
+    import tempfile
+
+    errors = extension_expiry_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    extension_expiry_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-extension-expiry-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', EXTENSION_EXPIRY_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = extension_expiry_errors
+inert_ci_main = extension_expiry_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

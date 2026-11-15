@@ -31574,5 +31574,47 @@
       "path": "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
       "authority": "Owner approval for direct authenticated synthetic V43 funding regression only"
     }
+  },
+  "bookingExtensionExpiryReconciliation": {
+    "baseline": "f0523ecf3611e45484c758e0322fa739849700b7",
+    "changeSet": "CN-EXTENSION-EXPIRY-RECONCILIATION-001",
+    "scope": "SYNTHETIC_BOOKING_EXPIRY_RECONCILIATION",
+    "requirements": [
+      "CN-A02",
+      "CN-C08",
+      "PK-AC08",
+      "PK-AC12",
+      "BR-04"
+    ],
+    "knowledgeReview": {
+      "trackedFiles": 114,
+      "reused": 103,
+      "deltaReviewed": 11,
+      "sha256": "5ba5b306d7d8ae68671010d70888f80a7cfe790a302f7ce4a2b33f051044b29d"
+    },
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/booking/internal/ExtensionReservationService.java": "1c845f18f1accab4650305fbaedcc5523e17f4db6fe295d50cece19d87bcdf04",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "facbfd4f5a85c0fdfb54fe588d35a14b9697c7e182754b30367354e5afccef97",
+      "knowledge/PROGRESS.md": "e7b772548eabe69c6a55a09d74ffe4a10d43e665b51004804dcd129c19046e96",
+      "knowledge/execution/change-sets.json": "8310842810db20cdf62d781ece766f30fa1d9d30e333639248bdd96ede4924d3"
+    },
+    "postgresql": {
+      "version": "18.6",
+      "resultSha256": "605033b16de32794b70aad55ceb62387e717043a31197678c1a4377eb9545118",
+      "counts": {
+        "PASS": 6,
+        "FAIL": 0,
+        "ERROR": 0,
+        "SKIPPED": 0
+      },
+      "cleanup": "PASS"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED"
   }
 }

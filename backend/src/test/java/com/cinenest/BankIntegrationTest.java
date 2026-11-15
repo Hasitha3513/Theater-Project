@@ -1774,6 +1774,68 @@ class BankIntegrationTest {
       var c=accessCase();var r=expiringReservation(c);awaitReservationExpiry(r);var observed=json(c.customer().get(reservationPath(c,r)));assertThat(observed).containsEntry("state","ACTIVE").containsEntry("effective",false).containsEntry("pendingReconciliation",true);assertThat(jdbc.sql("SELECT blocking FROM cinenest_booking.inventory_block WHERE kind='EXTENSION_HOLD'").query(Boolean.class).single()).isTrue();
       extensionMaintenance();assertThat(json(c.customer().get(reservationPath(c,r)))).containsEntry("state","EXPIRED");assertThat(jdbc.sql("SELECT blocking FROM cinenest_booking.inventory_block WHERE kind='CONFIRMED'").query(Boolean.class).single()).isTrue();assertThat(jdbc.sql("SELECT blocking FROM cinenest_booking.inventory_block WHERE kind='EXTENSION_HOLD'").query(Boolean.class).single()).isFalse();
     }
+    @Test void reservationReconcilesAtExactDeadlineWithoutRoomFacts() throws Exception {
+        var c = accessCase();
+        var reservation = reservation(c);
+        var reservationId = UUID.fromString(reservation.get("reservationId").toString());
+        var deadline = java.time.Instant.parse(reservation.get("expiresAt").toString());
+        Object service = context.getBean("extensionReservationService");
+        Object originalClock = org.springframework.test.util.ReflectionTestUtils.getField(service, "clock");
+        var originalRooms = (com.cinenest.rooms.InventoryConstraints) org.springframework.test.util.ReflectionTestUtils.getField(service, "rooms");
+        var unavailable = org.mockito.Mockito.mock(com.cinenest.rooms.InventoryConstraints.class);
+        org.mockito.Mockito.doAnswer(call -> {
+            originalRooms.lock(call.getArgument(0));
+            return null;
+        }).when(unavailable).lock(VA);
+        org.mockito.Mockito.when(unavailable.inspect(RID)).thenReturn(java.util.Optional.empty());
+        var unchanged = extensionUnchangedSources();
+        String original = jdbc.sql("SELECT to_jsonb(i)::text FROM cinenest_booking.inventory_block i WHERE kind='CONFIRMED'")
+                .query(String.class).single();
+        try {
+            org.springframework.test.util.ReflectionTestUtils.setField(service, "clock", (java.util.function.Supplier<java.time.Instant>) () -> deadline.minusNanos(1_000));
+            extensionMaintenance();
+            assertThat(jdbc.sql("SELECT state FROM cinenest_booking.booking_extension_reservation").query(String.class).single())
+                    .isEqualTo("ACTIVE");
+            assertThat(jdbc.sql("SELECT blocking FROM cinenest_booking.inventory_block WHERE kind='EXTENSION_HOLD'")
+                    .query(Boolean.class).single()).isTrue();
+
+            org.springframework.test.util.ReflectionTestUtils.setField(service, "rooms", unavailable);
+            org.springframework.test.util.ReflectionTestUtils.setField(service, "clock", (java.util.function.Supplier<java.time.Instant>) () -> deadline);
+            var start = new java.util.concurrent.CyclicBarrier(2);
+            try (var pool = java.util.concurrent.Executors.newFixedThreadPool(2)) {
+                java.util.concurrent.Callable<Void> reconcile = () -> {
+                    start.await(5, java.util.concurrent.TimeUnit.SECONDS);
+                    extensionMaintenance();
+                    return null;
+                };
+                var first = pool.submit(reconcile);
+                var second = pool.submit(reconcile);
+                first.get(15, java.util.concurrent.TimeUnit.SECONDS);
+                second.get(15, java.util.concurrent.TimeUnit.SECONDS);
+            }
+            extensionMaintenance();
+            org.mockito.Mockito.verify(unavailable, org.mockito.Mockito.never()).inspect(RID);
+        } finally {
+            org.springframework.test.util.ReflectionTestUtils.setField(service, "rooms", originalRooms);
+            org.springframework.test.util.ReflectionTestUtils.setField(service, "clock", originalClock);
+        }
+        assertThat(jdbc.sql("SELECT state,revision FROM cinenest_booking.booking_extension_reservation WHERE reservation_id=:id")
+                .param("id", reservationId).query().singleRow()).containsEntry("state", "EXPIRED").containsEntry("revision", 1L);
+        assertThat(jdbc.sql("SELECT blocking,revision FROM cinenest_booking.inventory_block WHERE kind='EXTENSION_HOLD'")
+                .query().singleRow()).containsEntry("blocking", false).containsEntry("revision", 1L);
+        assertThat(jdbc.sql("SELECT to_jsonb(i)::text FROM cinenest_booking.inventory_block i WHERE kind='CONFIRMED'")
+                .query(String.class).single()).isEqualTo(original);
+        assertThat(jdbc.sql("""
+                SELECT booking_id,owner_id,reservation_revision,correlation_id
+                FROM cinenest_booking.booking_extension_audit
+                WHERE reservation_id=:id AND action='EXPIRED' AND outcome='ALLOW'
+                """).param("id", reservationId).query().singleRow())
+                .containsEntry("booking_id", c.booking()).containsEntry("owner_id", null)
+                .containsEntry("reservation_revision", 1L).hasEntrySatisfying("correlation_id", value -> assertThat(value).isNotNull());
+        assertThatThrownBy(() -> jdbc.sql("UPDATE cinenest_booking.booking_extension_reservation SET state='ACTIVE'").update())
+                .hasStackTraceContaining("Extension transition invalid");
+        assertThat(extensionUnchangedSources()).isEqualTo(unchanged);
+    }
     @Test void reservationConfigurationInvalidationIsAuditedAndTailOnly()throws Exception{
       var c=accessCase();var r=reservation(c);jdbc.sql("UPDATE cinenest_rooms.venue SET version=version+1 WHERE venue_id=:v").param("v",VA).update();assertThat(json(c.customer().get(reservationPath(c,r)))).containsEntry("pendingReconciliation",true);extensionMaintenance();assertThat(json(c.customer().get(reservationPath(c,r)))).containsEntry("state","INVALIDATED");assertThat(jdbc.sql("SELECT state FROM cinenest_booking.booking").query(String.class).single()).isEqualTo("SIMULATED_CONFIRMED");
     }

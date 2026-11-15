@@ -2259,6 +2259,13 @@
             "status": "LOCAL_TECHNICAL_QUALIFICATION_PASS_PUBLICATION_PENDING",
             "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
             "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          },
+          {
+            "id": "CN-EXTENSION-EXPIRY-RECONCILIATION-001",
+            "scope": "Booking-owned synthetic expiry checks database time before current room facts, then commits tail release, terminal state and attributable audit together.",
+            "status": "LOCAL_TECHNICAL_QUALIFICATION_PASS_PUBLICATION_PENDING",
+            "definitionOfDone": "Exact deadline and unavailable room facts, concurrent and duplicate reconciliation, transactional rollback, immutable history and original-key UNFUNDED recovery verified. Formal acceptance remains unchanged.",
+            "rollback": "Scoped forward fix or code revert preserving terminal reservation and audit history"
           }
         ]
       },
