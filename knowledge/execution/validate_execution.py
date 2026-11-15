@@ -14742,7 +14742,7 @@ def cross_venue_errors():
         changed = paths('diff', '--no-ext-diff', CROSS_VENUE_BASE, '--name-only', '-z')
         migrations = {name for name in baseline_tree if name.startswith(migration_dir)}
         current_migrations = {
-            p.relative_to(R).as_posix() for p in (R / migration_dir).iterdir()
+            p.relative_to(R).as_posix() for p in (R / migration_dir).glob('*')
         }
         if migrations != current_migrations or changed & migrations:
             return ['Cross-venue historical migration mismatch']
@@ -14752,6 +14752,21 @@ def cross_venue_errors():
                 return ['Cross-venue historical migration mismatch']
         if changed != CROSS_VENUE_OWNED or live != baseline_tree:
             return ['Cross-venue exact five-path inventory mismatch']
+        for entry in v41_git('ls-tree', '-r', '-z', CROSS_VENUE_BASE).split(b'\0'):
+            if not entry:
+                continue
+            metadata, encoded_name = entry.split(b'\t', 1)
+            _, kind, oid = metadata.split()
+            name = encoded_name.decode()
+            if name in CROSS_VENUE_OWNED or name in migrations:
+                continue
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Cross-venue unsafe predecessor path: ' + name]
+            data = path.read_bytes()
+            header = f'blob {len(data)}\0'.encode()
+            if hashlib.sha1(header + data).hexdigest().encode() != oid:
+                return ['Cross-venue unowned predecessor drift: ' + name]
         for name in CROSS_VENUE_OWNED:
             p = R / name
             if not p.is_file() or p.is_symlink() or p.resolve() != p:
