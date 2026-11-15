@@ -1014,7 +1014,7 @@ class BankIntegrationTest {
  @Test void reportGrantDoesNotPermitFinancialMutationsExportsOrDrilldown()throws Exception{reportGrant();var b=signedIn("staff");assertThat(b.get("/api/admin/venues/"+VA+"/bank/credits").statusCode()).isEqualTo(403);assertThat(b.get(report()+"&export=csv").statusCode()).isEqualTo(400);assertThat(write(b,"POST",report(),"{}").statusCode()).isBetween(403,405);var deniedBody=financial(0);deniedBody.put("fixtureKey","SYNTHETIC-BANK-100");assertThat(write(b,"POST","/api/admin/venues/"+VA+"/bank/credits",JSONObjectUtils.toJSONString(deniedBody)).statusCode()).isEqualTo(403);}
  @Test void reportCurrenciesRemainSeparateAndDatesAreValidated()throws Exception{reportGrant();var b=signedIn("staff");assertThat(reportSummary(json(b.get(report().replace("LKR","USD"))))).containsEntry("c","0");for(String suffix:java.util.List.of("&from=2026-01-01","&from=2026-01-02&to=2026-01-01","&from=2020-01-01&to=2026-01-01","&page=-1","&size=101","&asOf=2020-01-01"))assertThat(b.get(report()+suffix).statusCode()).as(suffix).isEqualTo(400);}
  @Test void reportCreditedCohortIncludesLaterVisibleEffects()throws Exception{var c=refundCase(100);approveRefund(c);reportGrant();String date=java.time.Instant.parse(CREDIT_TIME).atZone(java.time.ZoneId.of("Asia/Colombo")).toLocalDate().toString();var r=json(c.reviewer().get(report()+"&from="+date+"&to="+java.time.LocalDate.parse(date).plusDays(1)));assertThat(reportSummary(r)).containsEntry("c","50000").containsEntry("r","100");var empty=json(c.reviewer().get(report()+"&from="+java.time.LocalDate.parse(date).plusDays(1)+"&to="+java.time.LocalDate.parse(date).plusDays(2)));assertThat(reportSummary(empty)).containsEntry("c","0");}
- @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(42);}
+ @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(43);assertThat(jdbc.sql("SELECT script FROM flyway_schema_history WHERE success AND version='43'").query(String.class).single()).isEqualTo("V43__synthetic_extension_funding_requests.sql");}
 
 
  @Test void reportSnapshotCannotSplitConcurrentAllocation()throws Exception{financeGrants();reportGrant();var customer=signedIn("customer-a");var staff=signedIn("staff");var allocator=signedIn("customer-b");var request=bank(customer);var credit=credit(staff,"SYNTHETIC-BANK-50000");var matched=match(allocator,request,credit);Object old=com.cinenest.payments.internal.ReportFaults.afterSummary(context,()->{try{json(allocateCredit(allocator,matched,credit,Long.parseLong(matched.get("amountMinor").toString())));}catch(Exception e){throw new IllegalStateException(e);}});try{var report=json(staff.get(report()));assertThat(reportSummary(report).get("a")).isEqualTo("0");var row=(Map<?,?>)((java.util.List<?>)snapshot(report).get("rows")).getFirst();assertThat(((Map<?,?>)row.get("amounts")).get("a")).isEqualTo("0");}finally{com.cinenest.payments.internal.ReportFaults.restore(context,old);}assertThat(reportSummary(json(staff.get(report()))).get("a")).isEqualTo(matched.get("amountMinor").toString());}
@@ -1891,6 +1891,168 @@ class BankIntegrationTest {
        assertThat(o.state()).isIn(com.cinenest.booking.ExtensionReservationContext.State.ACTIVE,com.cinenest.booking.ExtensionReservationContext.State.WITHDRAWN);assertThat(o.effective()).isEqualTo(o.state()==com.cinenest.booking.ExtensionReservationContext.State.ACTIVE);
       }assertThat(reservationContext(A,c,r).state()).isEqualTo(com.cinenest.booking.ExtensionReservationContext.State.WITHDRAWN);
     }
+    private Map<String,Object> fundingCommand(Map<String,Object> reservation) {
+        return new HashMap<>(Map.of(
+                "commandKey", UUID.randomUUID().toString(), "venueId", VA.toString(),
+                "purchasedRevision", reservation.get("purchasedRevision"),
+                "reservationRevision", reservation.get("proposalRevision"),
+                "packageVersionId", reservation.get("packageVersionId"),
+                "termsVersion", reservation.get("termsVersion"),
+                "amountMinor", reservation.get("additionalMinor"),
+                "currency", reservation.get("currency"), "acknowledged", true));
+    }
+
+    private HttpResponse<String> requestFunding(Browser actor, String path, Map<String,Object> command)
+            throws Exception {
+        return write(actor, "POST", path, JSONObjectUtils.toJSONString(command));
+    }
+
+    private Map<String,String> fundingProtectedDomain() {
+        var fingerprint = recoveryDomain();
+        fingerprint.remove("cinenest_payments.extension_funding_request");
+        fingerprint.remove("cinenest_payments.extension_funding_audit");
+        return fingerprint;
+    }
+
+    private Map<String,Object> persistedFunding(UUID key) {
+        return jdbc.sql("""
+                SELECT to_jsonb(r)::text AS request
+                FROM cinenest_payments.extension_funding_request r WHERE command_key=:key
+                """).param("key", key).query().singleRow();
+    }
+
+    @Test
+    @org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable(
+            named="CINENEST_EXTENSION_FUNDING_QUALIFICATION", matches="AUTHORIZED_DISPOSABLE")
+    void v43FundingOwnerHttpRecoversOriginalUnfundedRequestAndDeniesOtherScope() throws Exception {
+        var c = accessCase();
+        var reservation = reservation(c);
+        String path = reservationPath(c, reservation) + "/funding-request";
+        var command = fundingCommand(reservation);
+        UUID key = UUID.fromString(command.get("commandKey").toString());
+        String recovery = path + "/commands/" + key;
+        var other = signedIn("customer-b");
+        var before = fundingProtectedDomain();
+
+        assertThat(new Browser().get(path).statusCode()).isEqualTo(401);
+        assertThat(new Browser().get(recovery).statusCode()).isEqualTo(401);
+        assertThat(c.customer().call("POST", path, Map.of()).statusCode()).isEqualTo(403);
+        assertThat(requestFunding(other, path, command).statusCode()).isEqualTo(404);
+        var wrongVenue = new HashMap<>(command);
+        wrongVenue.put("venueId", VB.toString());
+        assertThat(requestFunding(c.customer(), path, wrongVenue).statusCode()).isEqualTo(404);
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.extension_funding_request WHERE command_key=:key")
+                .param("key", key).query(Long.class).single()).isZero();
+
+        // Discard the initial response body and recover the committed request using the original key.
+        assertThat(requestFunding(c.customer(), path, command).statusCode()).isEqualTo(200);
+        var response = c.customer().get(recovery);
+        var recovered = json(response);
+        assertThat(response.headers().firstValue("Cache-Control")).hasValueSatisfying(
+                value -> assertThat(value.split(", *")).contains("private", "no-store"));
+        assertThat(recovered).containsEntry("bookingId", c.booking().toString())
+                .containsEntry("reservationId", reservation.get("reservationId")).containsEntry("commandKey", key.toString())
+                .containsEntry("venueId", VA.toString()).containsEntry("amountMinor", command.get("amountMinor"))
+                .containsEntry("packageVersionId", command.get("packageVersionId"))
+                .containsEntry("termsVersion", command.get("termsVersion"))
+                .containsEntry("state", "PENDING").containsEntry("synthetic", true).containsEntry("funded", false);
+        assertThat(recovered).doesNotContainKeys("ownerId", "commandHash", "paymentInstructions", "creditId");
+        var stored = persistedFunding(key);
+        assertThat(json(requestFunding(c.customer(), path, command)).get("requestId")).isEqualTo(recovered.get("requestId"));
+        assertThat(json(c.customer().get(path)).get("requestId")).isEqualTo(recovered.get("requestId"));
+        assertThat(other.get(path).statusCode()).isEqualTo(404);
+        assertThat(other.get(recovery).statusCode()).isEqualTo(404);
+        assertThat(c.customer().get(path + "/commands/" + UUID.randomUUID()).statusCode()).isEqualTo(404);
+
+        var changed = new HashMap<>(command);
+        changed.put("amountMinor", "1");
+        assertThat(requestFunding(c.customer(), path, changed).statusCode()).isEqualTo(409);
+        assertThat(persistedFunding(key)).isEqualTo(stored);
+        assertThat(jdbc.sql("""
+                SELECT count(*) FROM cinenest_payments.extension_funding_audit
+                WHERE request_id=:request AND actor_id=:actor
+                """).param("request", UUID.fromString(recovered.get("requestId").toString()))
+                .param("actor", A).query(Long.class).single()).isEqualTo(1L);
+        assertThat(fundingProtectedDomain()).isEqualTo(before);
+    }
+
+    @Test
+    @org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable(
+            named="CINENEST_EXTENSION_FUNDING_QUALIFICATION", matches="AUTHORIZED_DISPOSABLE")
+    void v43FundingExpiredHttpRetainsImmutableUnfundedRecovery() throws Exception {
+        var c = accessCase();
+        var reserve = reservationBody(c);
+        Object bookingService = context.getBean("extensionReservationService");
+        Object clock = org.springframework.test.util.ReflectionTestUtils.getField(bookingService, "clock");
+        var fixture = jdbc.sql("SELECT clock_timestamp()-INTERVAL '590 seconds'")
+                .query(java.time.OffsetDateTime.class).single().toInstant();
+        Map<String,Object> reservation;
+        try {
+            org.springframework.test.util.ReflectionTestUtils.setField(bookingService, "clock",
+                    (java.util.function.Supplier<java.time.Instant>) () -> fixture);
+            reservation = json(reserve(c, reserve));
+        } finally {
+            org.springframework.test.util.ReflectionTestUtils.setField(bookingService, "clock", clock);
+        }
+        var command = fundingCommand(reservation);
+        UUID key = UUID.fromString(command.get("commandKey").toString());
+        String path = reservationPath(c, reservation) + "/funding-request";
+        var before = fundingProtectedDomain();
+        var created = json(requestFunding(c.customer(), path, command));
+        var stored = persistedFunding(key);
+        var expires = java.time.Instant.parse(reservation.get("expiresAt").toString());
+        long expiryWait = System.nanoTime() + java.time.Duration.ofSeconds(20).toNanos();
+        while (jdbc.sql("SELECT clock_timestamp()").query(java.time.OffsetDateTime.class).single().toInstant()
+                .isBefore(expires) && System.nanoTime() < expiryWait) Thread.sleep(25);
+        var freshKey = new HashMap<>(command);
+        freshKey.put("commandKey", UUID.randomUUID().toString());
+        assertThat(requestFunding(c.customer(), path, freshKey).statusCode()).isEqualTo(409);
+        assertThat(json(c.customer().get(path + "/commands/" + key)))
+                .containsEntry("requestId", created.get("requestId")).containsEntry("state", "EXPIRED")
+                .containsEntry("funded", false);
+        assertThat(json(requestFunding(c.customer(), path, command))).containsEntry("state", "EXPIRED");
+        assertThatThrownBy(() -> jdbc.sql("""
+                UPDATE cinenest_payments.extension_funding_request SET amount_minor=1 WHERE command_key=:key
+                """).param("key", key).update()).isInstanceOf(DataAccessException.class);
+        assertThat(persistedFunding(key)).isEqualTo(stored);
+        assertThat(fundingProtectedDomain()).isEqualTo(before);
+    }
+
+    @Test
+    @org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable(
+            named="CINENEST_EXTENSION_FUNDING_QUALIFICATION", matches="AUTHORIZED_DISPOSABLE")
+    void v43FundingHttpAuditDenialRollsBackAndOriginalCommandCanRetry() throws Exception {
+        var c = accessCase();
+        var reservation = reservation(c);
+        var command = fundingCommand(reservation);
+        UUID key = UUID.fromString(command.get("commandKey").toString());
+        String path = reservationPath(c, reservation) + "/funding-request";
+        var before = extensionDomainFingerprint();
+        jdbc.sql("""
+                CREATE FUNCTION cinenest_payments.test_v43_funding_audit_failure()
+                RETURNS trigger LANGUAGE plpgsql AS $$
+                BEGIN RAISE EXCEPTION 'Synthetic funding audit fault' USING ERRCODE = '23514'; END; $$
+                """).update();
+        try {
+            jdbc.sql("""
+                    CREATE TRIGGER test_v43_funding_audit_failure BEFORE INSERT ON cinenest_payments.extension_funding_audit
+                    FOR EACH ROW EXECUTE FUNCTION cinenest_payments.test_v43_funding_audit_failure()
+                    """).update();
+            try {
+                assertThat(requestFunding(c.customer(), path, command).statusCode()).isEqualTo(409);
+                assertThat(c.customer().get(path + "/commands/" + key).statusCode()).isEqualTo(404);
+                assertThat(extensionDomainFingerprint()).isEqualTo(before);
+            } finally {
+                jdbc.sql("DROP TRIGGER test_v43_funding_audit_failure ON cinenest_payments.extension_funding_audit").update();
+            }
+        } finally {
+            jdbc.sql("DROP FUNCTION cinenest_payments.test_v43_funding_audit_failure()").update();
+        }
+        var protectedBefore = fundingProtectedDomain();
+        assertThat(json(requestFunding(c.customer(), path, command))).containsEntry("funded", false);
+        assertThat(fundingProtectedDomain()).isEqualTo(protectedBefore);
+    }
+
     String recoveryPath(AccessCase c,Object key){return extensionReservations(c)+"/commands/"+key;}
     Map<String,String> recoveryDomain(){var f=extensionDomainFingerprint();f.remove("cinenest_booking.booking_extension_audit");f.remove("cinenest_booking.inventory_audit");return f;}
     @Test void recoveryLostCreateResponseResolvesCommittedReferenceThenFreshStatus()throws Exception{

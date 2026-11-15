@@ -17,6 +17,10 @@ import {
 	reservationPath,
 	reservationResult,
 	recoveryResult,
+	fundingPath,
+	fundingResult,
+	type FundingCommand,
+	type FundingStatus,
 	type Reservation,
 	type WithdrawReservation,
 } from "../lib/extension-reservation";
@@ -407,6 +411,8 @@ export function ExtensionReservationPanel({
 	}, [identity]);
 
 	const shown = loaded === identity ? value : undefined;
+	const currentOwner = loaded === identity ? owner.current : undefined;
+	const currentReservation = reference.current?.reservationId;
 	return (
 		<section
 			aria-label="Extension reservation"
@@ -558,6 +564,160 @@ export function ExtensionReservationPanel({
 						</>
 					)}
 				</div>
+			)}
+			{currentOwner && currentReservation && (
+				<ExtensionFundingPanel
+					key={JSON.stringify([identity, currentOwner, currentReservation])}
+					owner={currentOwner}
+					booking={b}
+					reservationId={currentReservation}
+					reservation={shown}
+					reservationBusy={busy}
+				/>
+			)}
+		</section>
+	);
+}
+
+function ExtensionFundingPanel({
+	owner,
+	booking,
+	reservationId,
+	reservation,
+	reservationBusy,
+}: {
+	owner: string;
+	booking: ExtensionBooking;
+	reservationId: string;
+	reservation?: Reservation;
+	reservationBusy: boolean;
+}) {
+	const [status, setStatus] = useState<FundingStatus>();
+	const [message, setMessage] = useState("");
+	const [busy, setBusy] = useState(false);
+	const [consent, setConsent] = useState(false);
+	const [hasKey, setHasKey] = useState(false);
+	const [storageReady, setStorageReady] = useState(false);
+	const controller = useRef<AbortController | undefined>(undefined);
+	const keyName = `cinenest.extension-funding.v1:${owner}:${booking.id}:${reservationId}`;
+
+	useEffect(() => {
+		try {
+			setHasKey(sessionStorage.getItem(keyName) !== null);
+			setStorageReady(true);
+		} catch {
+			setMessage("This browser cannot save a recovery reference.");
+		}
+		const reset = () => {
+			controller.current?.abort();
+			controller.current = undefined;
+			setBusy(false);
+			setConsent(false);
+			setStatus(undefined);
+			setMessage("");
+		};
+		window.addEventListener("cinenest-session-change", reset);
+		window.addEventListener("pagehide", reset);
+		return () => {
+			controller.current?.abort();
+			window.removeEventListener("cinenest-session-change", reset);
+			window.removeEventListener("pagehide", reset);
+		};
+	}, [keyName]);
+
+	async function run(create: boolean) {
+		if (controller.current || reservationBusy) return;
+		const c = new AbortController();
+		controller.current = c;
+		const signal = AbortSignal.any([c.signal, AbortSignal.timeout(15000)]);
+		setBusy(true);
+		setMessage("");
+		setStatus(undefined);
+		let key: string | undefined;
+		try {
+			if ((await reservationAccount(signal)) !== owner)
+				throw new ExtensionError(401);
+			const saved = storageReady ? sessionStorage.getItem(keyName) : null;
+			if (saved !== null && !uuid.test(saved)) throw new ExtensionError(400);
+			key = saved ?? undefined;
+			let body: FundingCommand | undefined;
+			if (create) {
+				if (!storageReady || key || !reservation?.effective || !consent)
+					throw new ExtensionError(409);
+				body = {
+					commandKey: crypto.randomUUID(),
+					venueId: booking.venueId,
+					purchasedRevision: reservation.purchasedRevision,
+					reservationRevision: reservation.proposalRevision,
+					packageVersionId: reservation.packageVersionId,
+					termsVersion: reservation.termsVersion,
+					amountMinor: reservation.additionalMinor,
+					currency: reservation.currency,
+					acknowledged: true,
+				};
+				key = body.commandKey;
+				sessionStorage.setItem(keyName, key);
+				setHasKey(true);
+			}
+			const raw = await reservationFetch(
+				fundingPath(booking.id, reservationId, create ? undefined : key),
+				signal,
+				owner,
+				body,
+			);
+			const result = fundingResult(raw, booking.id, reservationId, key, booking.venueId);
+			if (result.packageVersionId !== booking.purchase.packageVersionId)
+				throw new ExtensionError(409);
+			signal.throwIfAborted();
+			setStatus(result);
+			setConsent(false);
+		} catch (error) {
+			if (c.signal.aborted) return;
+			const code = error instanceof ExtensionError ? error.status : 503;
+			setMessage(
+				code === 401 || code === 403
+					? "Current owner authorization is required. Sign in and reload."
+					: key
+						? "Request status could not be verified. Reload using the original reference. No funds are confirmed."
+						: code === 404
+							? "No funding request is available for this reservation."
+							: "Funding request status is unavailable.",
+			);
+		} finally {
+			if (controller.current === c && !c.signal.aborted) {
+				controller.current = undefined;
+				setBusy(false);
+			}
+		}
+	}
+
+	return (
+		<section aria-label="Synthetic extension funding request" aria-busy={busy}>
+			<h4>Synthetic extension funding request</h4>
+			<p>Request tracking only. No payment is collected or confirmed.</p>
+			<Button disabled={busy || reservationBusy} onClick={() => void run(false)}>
+				Reload Funding Request
+			</Button>
+			{!hasKey && !status && storageReady && reservation?.effective && (
+				<>
+					<Field
+						id={`extension-funding-consent-${reservationId}`}
+						type="checkbox"
+						label="I request synthetic bank funding tracking for these frozen terms."
+						checked={consent}
+						onChange={(event) => setConsent(event.target.checked)}
+					/>
+					<Button disabled={busy || reservationBusy || !consent} onClick={() => void run(true)}>
+						Create Synthetic Funding Request
+					</Button>
+				</>
+			)}
+			{busy && <p role="status">Checking funding request status.</p>}
+			{message && <p role="status">{message}</p>}
+			{status && (
+				<p role="status">
+					{status.state} · UNFUNDED · {extensionMoney(status.amountMinor)}
+				</p>
 			)}
 		</section>
 	);

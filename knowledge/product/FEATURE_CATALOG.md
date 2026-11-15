@@ -864,3 +864,7 @@ The quotation preview explains that customer commercial issuance is unavailable.
 ## V42 operational commercial policy and quotation
 
 Operational policy activation and quotation issuance are gated V42 capabilities under qualification. A quotation has no payment, checkout, confirmed-booking or admission effect.
+
+### Synthetic extension funding request tracking
+
+The owner-only reservation panel supports synthetic BANK request creation and owner-scoped status and original-key recovery. Pending, expired, inactive and temporarily unavailable results all keep funding unconfirmed. The local scope uses the Payments migration and existing Booking eligibility context, with four focused PostgreSQL cases and three direct authenticated funding HTTP regressions passed. [Policy](../PROJECT.md#synthetic-extension-funding-request-policy) · [Frontend](../../frontend/components/extension-reservation.tsx).

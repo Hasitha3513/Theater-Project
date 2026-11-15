@@ -68,7 +68,9 @@ try {
 			releaseCalendar,
 			createCount = 0,
 			withdrawCount = 0,
-			recoveryCount = 0;
+			recoveryCount = 0,
+			fundingKey,
+			fundingCount = 0;
 		const mutations = [];
 		const quote = () => ({
 			bookingId,
@@ -178,6 +180,25 @@ try {
 				recoveryCount++;
 				return json(recovery(p.split("/").at(-1)), recoveryCode);
 			}
+			const funding = `/api/bookings/${bookingId}/extension-reservations/${reserveId}/funding-request`;
+			if (p === funding && req.method() === "POST") {
+				fundingCount++;
+				const input = req.postDataJSON();
+				assert.equal(req.headers()["x-csrf-token"], "SYNTHETIC-CSRF");
+				assert.equal(input.amountMinor, "12345");
+				assert.equal(input.venueId, venueId);
+				fundingKey = input.commandKey;
+				return route.abort("failed");
+			}
+			if (fundingKey && p === `${funding}/commands/${fundingKey}`) {
+				return json({
+					requestId, bookingId, reservationId: reserveId, venueId, commandKey: fundingKey,
+					amountMinor: v.additionalMinor, currency: v.currency, termsVersion: v.termsVersion,
+					purchasedRevision: v.purchasedRevision, reservationRevision: v.proposalRevision,
+					packageVersionId: v.packageVersionId, expiresAt: v.expiresAt, observedAt: v.observedAt,
+					state: "PENDING", synthetic: true, funded: false,
+				});
+			}
 			if (p.endsWith("/withdrawals")) {
 				withdrawCount++;
 				assert.equal(req.headers()["x-csrf-token"], "SYNTHETIC-CSRF");
@@ -258,6 +279,19 @@ try {
 		assert.ok((await panel.innerText()).includes("ACTIVE"));
 		assert.equal(await withdrawConsent().isChecked(), false);
 		checks++;
+		const funding = panel.getByRole("region", { name: "Synthetic extension funding request" });
+		const createFunding = funding.getByRole("button", { name: "Create Synthetic Funding Request" });
+		assert.equal(await createFunding.isDisabled(), true);
+		await funding.getByRole("checkbox").check();
+		await createFunding.click();
+		await funding.getByRole("status").filter({ hasText: "using the original reference" }).waitFor();
+		assert.equal(fundingCount, 1);
+		await page.reload();
+		await funding.getByRole("button", { name: "Reload Funding Request" }).click();
+		await funding.getByRole("status").filter({ hasText: "PENDING · UNFUNDED" }).waitFor();
+		assert.equal(fundingCount, 1);
+		checks += 2;
+
 		assert.equal(await page.locator("main").count(), 1);
 		assert.equal(
 			await page.evaluate(
@@ -423,13 +457,14 @@ try {
 				(x) =>
 					!x.path.endsWith("/extension-quotes") &&
 					!x.path.endsWith("/extension-reservations") &&
-					!x.path.endsWith("/withdrawals"),
+					!x.path.endsWith("/withdrawals") &&
+					!x.path.endsWith("/funding-request"),
 			),
 			false,
 		);
 		assert.equal(
 			mutations.some((x) =>
-				/funding|payments|allocations|credentials|cancellations/.test(x.path),
+				/payments|allocations|credentials|cancellations/.test(x.path),
 			),
 			false,
 		);

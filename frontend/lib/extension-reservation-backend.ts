@@ -2,6 +2,9 @@ import {
 	reservationCommand,
 	reservationResult,
 	recoveryResult,
+	fundingCommand,
+	fundingResult,
+	type FundingCommand,
 } from "./extension-reservation";
 import { ExtensionError } from "./extension-preview";
 import { cancellationUuid } from "./booking-cancellation";
@@ -40,23 +43,27 @@ export async function forwardReservation(request: Request): Promise<Response> {
 	const fail = (status: number) => new Response(null, { status, headers });
 	try {
 		const url = new URL(request.url);
+		const funding = /^\/api\/bookings\/([^/]+)\/extension-reservations\/([^/]+)\/funding-request(?:\/commands\/([^/]+))?$/.exec(url.pathname);
+		if (funding && (!funding.slice(1).filter(Boolean).every((id) => cancellationUuid.test(id))
+			|| (request.method !== "GET" && (request.method !== "POST" || !!funding[3]))))
+			return fail(404);
 		const route =
 			/^\/api\/bookings\/([^/]+)\/extension-reservations(?:\/(commands)\/([^/]+)|\/([^/]+)(\/withdrawals)?)?$/.exec(
 				url.pathname,
 			);
 		if (
-			!route ||
+			!funding && (!route ||
 			!cancellationUuid.test(route[1]) ||
 			((route[3] || route[4]) &&
 				!cancellationUuid.test(route[3] || route[4])) ||
-			request.method !== ((!route[3] && !route[4]) || route[5] ? "POST" : "GET")
+			request.method !== ((!route[3] && !route[4]) || route[5] ? "POST" : "GET"))
 		)
 			return fail(404);
-		const recovery = !!route[2],
-			withdraw = !!route[5],
-			reference = route[3] || route[4];
+		const recovery = !!route?.[2],
+			withdraw = !!route?.[5],
+			reference = route?.[3] || route?.[4];
 		if (url.search) return fail(400);
-		const bookingId = route[1];
+		const bookingId = funding?.[1] ?? route?.[1] ?? "";
 		const cookies =
 			request.headers
 				.get("cookie")
@@ -73,6 +80,7 @@ export async function forwardReservation(request: Request): Promise<Response> {
 			Cookie: cookies[0],
 		});
 		let body: string | undefined;
+		let fundingInput: FundingCommand | undefined;
 		if (request.method === "POST") {
 			if (
 				request.headers.get("origin") !==
@@ -86,9 +94,9 @@ export async function forwardReservation(request: Request): Promise<Response> {
 			)
 				return fail(400);
 			try {
-				body = JSON.stringify(
-					reservationCommand(await bounded(request.body), withdraw),
-				);
+				const raw = await bounded(request.body);
+				if (funding) fundingInput = fundingCommand(raw);
+				body = JSON.stringify(fundingInput ?? reservationCommand(raw, withdraw));
 			} catch {
 				return fail(400);
 			}
@@ -128,9 +136,22 @@ export async function forwardReservation(request: Request): Promise<Response> {
 		if (!response.headers.get("content-type")?.startsWith("application/json"))
 			return fail(503);
 		const raw = await bounded(response.body);
+		if (funding) {
+			const safe = fundingResult(raw, bookingId, funding[2],
+				fundingInput?.commandKey ?? funding[3], fundingInput?.venueId);
+			if (fundingInput && (
+				safe.amountMinor !== fundingInput.amountMinor ||
+				safe.packageVersionId !== fundingInput.packageVersionId ||
+				safe.purchasedRevision !== fundingInput.purchasedRevision ||
+				safe.reservationRevision !== fundingInput.reservationRevision ||
+				safe.termsVersion !== fundingInput.termsVersion
+			)) return fail(503);
+			request.signal.throwIfAborted();
+			return Response.json(safe, { headers });
+		}
 		const safe = recovery
-			? recoveryResult(raw, bookingId, reference)
-			: reservationResult(raw, bookingId, route[4]);
+			? recoveryResult(raw, bookingId, reference ?? "")
+			: reservationResult(raw, bookingId, route?.[4]);
 		if (body && !withdraw) {
 			const c = reservationCommand(
 				JSON.parse(body),

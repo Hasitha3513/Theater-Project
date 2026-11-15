@@ -549,3 +549,7 @@ Open the existing commercial policy preview to inspect its non-offer information
 ## V42 operational commercial policy and quotation
 
 V42 activation is available only when the server reports a current venue-scoped permission. The command checks authority again. In the default configuration, operational issuance is unavailable. A qualification quotation cannot be used for checkout or admission.
+
+### Recover a synthetic extension funding request
+
+Open an owned extension reservation. For effective coverage, review the frozen amount and acknowledge the synthetic tracking request before selecting **Create Synthetic Funding Request**. The label **UNFUNDED** remains visible on a verified result. If the result is uncertain, use **Reload Funding Request** in the same browser session. The original opaque request key is preserved, including after expiry. Never interpret an unavailable response as successful creation or payment. [Policy](../PROJECT.md#synthetic-extension-funding-request-policy).

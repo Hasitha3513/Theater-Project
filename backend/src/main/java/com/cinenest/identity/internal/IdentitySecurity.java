@@ -157,6 +157,11 @@ class IdentitySecurity {
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/admin/venues/*/iot/devices/*/commands","/api/admin/venues/*/iot/devices/*/commands/*/simulations","/api/admin/venues/*/iot/devices/*/commands/*/reconciliations").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-reservations/*","/api/bookings/*/extension-reservations/commands/*").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/extension-reservations","/api/bookings/*/extension-reservations/*/withdrawals").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,
+                        "/api/bookings/*/extension-reservations/*/funding-request",
+                        "/api/bookings/*/extension-reservations/*/funding-request/commands/*").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.POST,
+                        "/api/bookings/*/extension-reservations/*/funding-request").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/extension-eligibility").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/bookings/*/extension-quotes").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/bookings/*/cancellation","/api/admin/venues/*/bookings/*/cancellation").authenticated()

@@ -3495,3 +3495,10 @@ Pricing owns the V41 qualification quote and audit tables. A deferred foreign ke
 ## V42 operational commercial policy and quotation
 
 Identity owns operational credential association, session epochs and venue capabilities. Booking owns operational hold provenance. Pricing owns signed authority verification, policy activation, quotation snapshots and attributable audit. Booking validates package publication through a public contract implemented by Pricing.
+
+<a id="synthetic-extension-funding-request"></a>
+## Payments-owned extension request and recovery
+
+Payments exposes POST and GET at `/api/bookings/{booking}/extension-reservations/{reservation}/funding-request` and GET at its `/commands/{key}` subresource. The current eligible owner is derived from the authenticated session. CSRF remains required for POST. The proxy uses an exact route allowlist, one session cookie, bounded payloads and a redacted response. Responses are private and no-store.
+
+Creation calls Booking's transaction-bound owner observation before a Payments write and compares venue and the frozen terms presented. V43 stores a request and attributable audit with a local foreign key, unique reservation and owner-key constraints, a domain-bound command digest, immutable history and a deferred deadline/audit guard. It contains no cross-schema writes. Audit failure rolls back creation. Exact recovery is keyed to the immutable owner, booking and reservation binding. Rollback disables new creation and keeps authenticated reads and history. Only the exact synthetic profile can serve these routes. [Policy](PROJECT.md#synthetic-extension-funding-request-policy).

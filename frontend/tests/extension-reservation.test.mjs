@@ -13,6 +13,9 @@ import {
 	reservationPath,
 	reservationFetch,
 	reservationWarning,
+	fundingCommand,
+	fundingResult,
+	fundingPath,
 } from "../lib/extension-reservation.ts";
 import { forwardReservation } from "../lib/extension-reservation-backend.ts";
 import {
@@ -321,6 +324,21 @@ test("actual HTTP proxy exact forwarding, CSRF, sanitized denials and strict que
 			).status,
 			200,
 		);
+		const funding = fundingPath(bookingId, reserveId);
+		const input = fundingFixture();
+		body = fundingResponse();
+		const initialCount = calls.length;
+		assert.equal((await forwardReservation(req(funding, "POST", input, { "x-csrf-token": "" }))).status, 403);
+		assert.equal((await forwardReservation(req(funding, "POST", { ...input, venueId: "invalid" }))).status, 400);
+		assert.equal(calls.length, initialCount);
+		const created = await forwardReservation(req(funding, "POST", input));
+		assert.equal(created.status, 200);
+		assert.equal((await created.json()).internal, undefined);
+		assert.equal(calls.at(-1).csrf, "synthetic-csrf");
+		assert.equal((await forwardReservation(req(fundingPath(bookingId, reserveId, requestId)))).status, 200);
+		assert.equal((await forwardReservation(req(fundingPath(bookingId, reserveId, accountId)))).status, 503);
+		body = { ...fundingResponse(), amountMinor: "99" };
+		assert.equal((await forwardReservation(req(funding, "POST", input))).status, 503);
 		for (const code of [400, 401, 403, 404, 409, 429, 503, 500, 302]) {
 			status = code;
 			body = { message: "PRIVATE EVIDENCE" };
@@ -369,4 +387,67 @@ test("actual HTTP proxy exact forwarding, CSRF, sanitized denials and strict que
 		server.closeAllConnections();
 		await new Promise((r) => server.close(r));
 	}
+});
+
+function fundingFixture() {
+	const v = reservation();
+	return {
+		commandKey: requestId,
+		venueId,
+		amountMinor: v.additionalMinor,
+		currency: v.currency,
+		termsVersion: v.termsVersion,
+		purchasedRevision: v.purchasedRevision,
+		reservationRevision: v.proposalRevision,
+		packageVersionId: v.packageVersionId,
+		acknowledged: true,
+	};
+}
+
+function fundingResponse() {
+	const { acknowledged, ...fields } = fundingFixture();
+	const v = reservation();
+	return {
+		...fields,
+		requestId,
+		bookingId,
+		reservationId: reserveId,
+		expiresAt: v.expiresAt,
+		observedAt: v.observedAt,
+		state: "PENDING",
+		synthetic: true,
+		funded: false,
+		internal: "must not leak",
+	};
+}
+
+test("funding request binds the exact owner route, frozen references and strict minor units", () => {
+	assert.deepEqual(fundingCommand(fundingFixture()), fundingFixture());
+	for (const patch of [
+		{ amountMinor: "0001" },
+		{ amountMinor: "9223372036854775808" },
+		{ amountMinor: 1 },
+		{ currency: "USD" },
+		{ acknowledged: false },
+		{ reservationRevision: -1 },
+		{ ownerId: accountId },
+	]) {
+		assert.throws(() => fundingCommand({ ...fundingFixture(), ...patch }));
+	}
+	assert.equal(
+		fundingPath(bookingId, reserveId, requestId),
+		`/api/bookings/${bookingId}/extension-reservations/${reserveId}/funding-request/commands/${requestId}`,
+	);
+});
+
+test("recovery rejects cross-scope data, funded labels and premature expiry", () => {
+	const read = (value) => fundingResult(value, bookingId, reserveId, requestId, venueId);
+	assert.equal(read(fundingResponse()).internal, undefined);
+	for (const patch of [
+		{ funded: true }, { bookingId: accountId }, { venueId: accountId },
+		{ commandKey: accountId }, { synthetic: false }, { state: "EXPIRED" },
+	]) assert.throws(() => read({ ...fundingResponse(), ...patch }));
+	const expiresAt = "2026-10-24T04:10:00.000001Z";
+	assert.equal(read({ ...fundingResponse(), expiresAt, observedAt: "2026-10-24T04:10:00Z" }).state, "PENDING");
+	assert.equal(read({ ...fundingResponse(), state: "EXPIRED", expiresAt, observedAt: expiresAt }).state, "EXPIRED");
 });

@@ -1493,3 +1493,7 @@ The commercial policy workspace accepts a signed envelope scoped to the current 
 ## V42 operational commercial policy and quotation
 
 Activation and quotation commands use exact venue, room, package-version and policy revision scope. Operational authority and issuance require explicit server configuration. Synthetic qualification is labelled and separate from operational offers. Checkout, payment and admission are outside the slice.
+
+## Synthetic extension funding request states
+
+The existing reservation panel presents the captured price and a separate explicit checkbox before offering request creation. Pending, expired, inactive and unavailable observations are shown with UNFUNDED. Recovery uses an explicit reload and the original opaque command key stored for the owner, booking and reservation in this browser session. No financial evidence is stored in browser state for recovery. An uncertain response preserves the key and does not trigger another create. Session changes clear displayed protected data. [Contract](ARCHITECTURE.md#synthetic-extension-funding-request).

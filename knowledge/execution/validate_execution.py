@@ -15162,5 +15162,206 @@ receipt_admission_successor_errors = reporting_form_errors
 inert_ci_main = reporting_form_main
 
 
+EXTENSION_FUNDING_RECORD = {'baseline': 'e63fd4a615694ebf80fac444028672063bfe434f',
+ 'scope': 'OWNER_ONLY_SYNTHETIC_EXTENSION_FUNDING_REQUEST',
+ 'boundedOwnerDecisions': ['OD-07', 'OD-20', 'OD-28'],
+ 'requirements': ['CN-C08', 'PK-AC08', 'PK-AC12', 'BR-04'],
+ 'retainedKnowledgeReviewSha256': 'b52e995a295f2fdd311c97b61c459badc43d9b9459abda10eb4cf6275fff7d82',
+ 'knowledgeFiles': 114,
+ 'sourceSha256': {'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': '94fa275ef46086938f6c2519bce6743699895714ba630fdc28e0d305b33542b1',
+                  'backend/src/main/java/com/cinenest/payments/internal/ExtensionFundingController.java': 'de9fff7085b377c20b667ad1b53d75e77f3f5a2d961d8ce1062cf8f0f775d4f0',
+                  'backend/src/main/java/com/cinenest/payments/internal/ExtensionFundingRepository.java': 'de85ae4c281847f575fb0456ef87348bcb840e3e7af3ede201a22de518ec7200',
+                  'backend/src/main/java/com/cinenest/payments/internal/ExtensionFundingService.java': '7be3c8087f9bd7d71b74037de25032880d430b3769fb762dc9b88ca739a74dbc',
+                  'backend/src/main/resources/db/migration/V43__synthetic_extension_funding_requests.sql': '86974955cb6607d25cbaee0841ebd8558fcac07aa9d68eda85b42ee6a5104488',
+                  'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '632e9cb2c73047e299ccffba346fbef721b18e2348c128fb31593f1aed350675',
+                  'backend/src/test/java/com/cinenest/ExtensionFundingArchitectureTest.java': '704f56921d85ea3c8e0db188522f77a0064f65fd27cf9fb5a164c5d6e73cbfdb',
+                  'backend/src/test/java/com/cinenest/ExtensionFundingIntegrationTest.java': 'd8354b90ab5d86f656f3c701279564ca36880f129b956fbb7dd69357882f7f2a',
+                  'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': 'c40c0bb9b59488b9423062277d922019d6faa41f7eaeb45c58d0d628d412faa1',
+                  'frontend/app/api/bookings/[id]/extension-reservations/[reservation]/funding-request/commands/[commandKey]/route.ts': 'cd58f77615f62c32ced08979b54ad217ade90c7373e81f9c659c4351b5676217',
+                  'frontend/app/api/bookings/[id]/extension-reservations/[reservation]/funding-request/route.ts': '367904e0e7bddb882c55ad35ef819c4ddd8713c2fb8a9a366f96434cdabcdffd',
+                  'frontend/components/extension-reservation.tsx': '079917a01b0fb99e76c071edbb0364eea89cb5638038991706fb249d31126690',
+                  'frontend/lib/extension-reservation-backend.ts': '479fe00f8532a7f9c0db764ece57a4d14da82706403fdd2b93e2fb0e7aadd55a',
+                  'frontend/lib/extension-reservation.ts': '0e7f9f0a8fd603657cefabdb9bbd9bd00c65fb37574000eb386b3297b9fd81c4',
+                  'frontend/tests/extension-reservation-browser.mjs': '70b6b837e53fb5a3335e7272d7c0ef717839f23f8be092cd58bf1d8960d85ac3',
+                  'frontend/tests/extension-reservation.test.mjs': '57acfa28bdf57e8913055b87edfb061157828c2a860d9de736607c896020da17',
+                  'knowledge/ARCHITECTURE.md': 'f5b8d9e2653274c81c0230c78a25ab2599f794607fdcd43870eb3c2392526f69',
+                  'knowledge/DESIGN.md': 'bf4332aa2bb0cd091bf07bb2137f45aab8b9d175f90e50dc2524c9736e9dad10',
+                  'knowledge/PROGRESS.md': 'd490aa11c15f4f1468b17c82438030852bdfaeafdd58c4a10c8f8aec511da65e',
+                  'knowledge/PROJECT.md': '232f79f5794488b9744f6712225acd73b5c4ca01efdf40f855c7edcac785b667',
+                  'knowledge/decisions/cinenest-open-decisions.json': 'ca48718328d361cbfe911a571e4258ef31afdbb755d1d20155cb48d616528cb0',
+                  'knowledge/execution/change-sets.json': 'dc9a6f17bf96b84d52d93ef2fa0d1d42cef9d9bdc892bee9f371682e4c8c8c1d',
+                  'knowledge/guides/USER_GUIDE.md': '720c23e5eac6c5f39f5acd0ca1f5ce1c2bf19d58c11f426e73d7603d33a9232d',
+                  'knowledge/product/FEATURE_CATALOG.md': 'b3135f02e9703dce9850297decc4f0a7a9b5152377a6776730c86b9c1fc65ce2'},
+ 'postgresql': 'PASS',
+ 'publication': 'NOT_AUTHORIZED',
+ 'advisoryEnabled': False,
+ 'allocationEnabled': False,
+ 'purchasedExtensionCommitEnabled': False,
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'flywayTestAmendment': ['backend/src/test/java/com/cinenest/BankIntegrationTest.java',
+                         'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java'],
+ 'postgresqlQualification': {'version': '18.6',
+                             'resultSha256': '5dcd115056f416d4a9878efc285a59a1dea0889786feb3810718f5bb007348b3',
+                             'migrationHistoriesSha256': '5ad17d6145c3d160c61f80d12ea97cd46057ddcc59fe452e828caac8d68e3407',
+                             'counts': {'PASS': 13, 'FAIL': 0, 'ERROR': 0, 'SKIPPED': 0},
+                             'directFundingHttp': 'PASS',
+                             'directCases': ['v43FundingExpiredHttpRetainsImmutableUnfundedRecovery',
+                                             'v43FundingHttpAuditDenialRollsBackAndOriginalCommandCanRetry',
+                                             'v43FundingOwnerHttpRecoversOriginalUnfundedRequestAndDeniesOtherScope'],
+                             'recoveredBankCases': ['extensionOwnerSessionCsrfAndStrictParameters',
+                                                    'recoveryCurrentSuspensionDenied',
+                                                    'recoveryInvalidatedSessionDenied',
+                                                    'typedReservationContextDeniesWrongOwnerMissingAndMismatchedReservation',
+                                                    'typedReservationContextReadAuditParticipatesInCallerRollbackAndFailsClosed'],
+                             'cleanup': 'PASS'},
+ 'previousPostgresqlQualification': {'version': '18.6',
+                                     'resultSha256': '235944c30f5ec27440f1bdfb62ed1880a81f49221b30907b6ab6357dd7581ce3',
+                                     'fixtureCleanupSha256': '112f308eec251e27b8d78f71f2ab6656c09989163cf64430f40bdf6eebc5dfb9',
+                                     'counts': {'PASS': 18, 'FAIL': 5, 'ERROR': 0, 'SKIPPED': 1},
+                                     'directFundingHttp': 'NOT_RUN'},
+ 'directFundingHttpTestAmendment': {'path': 'backend/src/test/java/com/cinenest/BankIntegrationTest.java',
+                                    'authority': 'Owner approval for direct authenticated synthetic V43 '
+                                                 'funding regression only'}}
+EXTENSION_FUNDING_BASE = EXTENSION_FUNDING_RECORD['baseline']
+EXTENSION_FUNDING_KEY = 'ownerOnlyExtensionFunding'
+EXTENSION_FUNDING_ADDED = {'backend/src/main/java/com/cinenest/payments/internal/ExtensionFundingController.java',
+ 'backend/src/main/java/com/cinenest/payments/internal/ExtensionFundingRepository.java',
+ 'backend/src/main/java/com/cinenest/payments/internal/ExtensionFundingService.java',
+ 'backend/src/main/resources/db/migration/V43__synthetic_extension_funding_requests.sql',
+ 'backend/src/test/java/com/cinenest/ExtensionFundingArchitectureTest.java',
+ 'backend/src/test/java/com/cinenest/ExtensionFundingIntegrationTest.java',
+ 'frontend/app/api/bookings/[id]/extension-reservations/[reservation]/funding-request/commands/[commandKey]/route.ts',
+ 'frontend/app/api/bookings/[id]/extension-reservations/[reservation]/funding-request/route.ts'}
+EXTENSION_FUNDING_MIGRATION = 'backend/src/main/resources/db/migration/V43__synthetic_extension_funding_requests.sql'
+EXTENSION_FUNDING_OWNED = set(EXTENSION_FUNDING_RECORD['sourceSha256']) | {
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+
+
+def extension_funding_before(name):
+    return v41_git('show', EXTENSION_FUNDING_BASE + ':' + name)
+
+
+def extension_funding_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', EXTENSION_FUNDING_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        migration_dir = 'backend/src/main/resources/db/migration/'
+        baseline_tree = paths('ls-tree', '-r', '--name-only', '-z', EXTENSION_FUNDING_BASE)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        untracked = paths('ls-files', '-z', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', EXTENSION_FUNDING_BASE, '--name-only', '-z') | untracked
+        migrations = {name for name in baseline_tree if name.startswith(migration_dir)}
+        current_migrations = {p.relative_to(R).as_posix() for p in (R / migration_dir).glob('*')}
+        if len(migrations) != 41 or current_migrations != migrations | {EXTENSION_FUNDING_MIGRATION} or changed & migrations:
+            return ['Extension funding historical migration mismatch']
+        for name in migrations:
+            path = R / name
+            if path.is_symlink() or path.read_bytes() != extension_funding_before(name):
+                return ['Extension funding historical migration mismatch']
+        if changed != EXTENSION_FUNDING_OWNED or live != baseline_tree | EXTENSION_FUNDING_ADDED:
+            return ['Extension funding exact 27-path inventory mismatch']
+        for entry in v41_git('ls-tree', '-r', '-z', EXTENSION_FUNDING_BASE).split(b'\0'):
+            if not entry:
+                continue
+            metadata, encoded_name = entry.split(b'\t', 1)
+            _, kind, oid = metadata.split()
+            name = encoded_name.decode()
+            if name in EXTENSION_FUNDING_OWNED or name in migrations:
+                continue
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Extension funding unsafe predecessor path: ' + name]
+            data = path.read_bytes()
+            header = f'blob {len(data)}\0'.encode()
+            if hashlib.sha1(header + data).hexdigest().encode() != oid:
+                return ['Extension funding unowned predecessor drift: ' + name]
+        for name in EXTENSION_FUNDING_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Extension funding unsafe source path']
+        fingerprints = EXTENSION_FUNDING_RECORD['sourceSha256']
+        for name, expected in fingerprints.items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Extension funding source fingerprint mismatch: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(EXTENSION_FUNDING_KEY, None) != EXTENSION_FUNDING_RECORD
+                or state != json.loads(extension_funding_before(ADMIN_QA_STATUS))):
+            return ['Extension funding review evidence or acceptance accounting mismatch']
+        entrypoint = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        predecessor = extension_funding_before(V41_VALIDATOR)
+        if not predecessor.endswith(entrypoint) or not (R / V41_VALIDATOR).read_bytes().startswith(predecessor[:-len(entrypoint)]):
+            return ['Extension funding altered historical validator']
+        manifest = json.loads(extension_funding_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in EXTENSION_FUNDING_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Extension funding manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Extension funding admission inputs inaccessible or invalid']
+    return []
+
+
+def extension_funding_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in extension_funding_errors()):
+                raise ValueError('Extension funding negative control failed: ' + reason)
+
+    for name in EXTENSION_FUNDING_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Extension funding source fingerprint mismatch')
+    migration = R / 'backend/src/main/resources/db/migration/V32__local_room_blocking.sql'
+    reject(migration, b'drift', 'Extension funding historical migration mismatch')
+    reject(K / 'execution/requirements.json', b'changed', 'Extension funding unowned predecessor drift')
+    reject(R / V41_MANIFEST, b'drift', 'Extension funding manifest mismatch')
+    state_path = R / ADMIN_QA_STATUS
+    state = json.loads(original(state_path))
+    state[EXTENSION_FUNDING_KEY]['part1']['completed'] = 5
+    reject(state_path, json.dumps(state).encode(), 'Extension funding review evidence or acceptance accounting mismatch')
+    state = json.loads(original(state_path))
+    state[EXTENSION_FUNDING_KEY].pop('retainedKnowledgeReviewSha256')
+    reject(state_path, json.dumps(state).encode(), 'Extension funding review evidence or acceptance accounting mismatch')
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if extension_funding_errors() != ['Extension funding exact 27-path inventory mismatch']:
+            raise ValueError('Extension funding unauthorized path negative control failed')
+    print('PASS Extension funding exact paths, fingerprints, migration history, review and acceptance controls')
+
+
+def extension_funding_main():
+    import sys
+    import tempfile
+
+    errors = extension_funding_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    extension_funding_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-extension-funding-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', EXTENSION_FUNDING_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = extension_funding_errors
+inert_ci_main = extension_funding_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

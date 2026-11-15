@@ -2255,8 +2255,8 @@
         "changeSets": [
           {
             "id": "CN-EXTENSION-FUNDING-PREP-001",
-            "scope": "Funding request/read/advisory matching only after explicit bounded financial policy and V26 authority",
-            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "scope": "Owner-only synthetic BANK request, status and original-command-key recovery under bounded OD-07/20/28 and forward Payments V43. Advisory matching requires separate approval.",
+            "status": "LOCAL_TECHNICAL_QUALIFICATION_PASS_PUBLICATION_PENDING",
             "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
             "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
           }

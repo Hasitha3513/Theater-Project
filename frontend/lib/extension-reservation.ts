@@ -288,13 +288,14 @@ export async function reservationFetch(
 	path: string,
 	signal: AbortSignal,
 	owner: string,
-	body?: CreateReservation | WithdrawReservation,
+	body?: CreateReservation | WithdrawReservation | FundingCommand,
 ) {
 	if ((await reservationAccount(signal)) !== owner)
 		throw new ExtensionError(401);
 	const headers = new Headers({ Accept: "application/json" });
 	if (body) {
-		reservationCommand(body, "expectedRevision" in body);
+		if ("amountMinor" in body) fundingCommand(body);
+		else reservationCommand(body, "expectedRevision" in body);
 		const r = await fetch("/api/session/csrf", {
 			credentials: "same-origin",
 			cache: "no-store",
@@ -350,4 +351,114 @@ export function createFromPreview(
 		termsVersion: reservationTerms,
 		acknowledged: true,
 	}) as CreateReservation;
+}
+
+export type FundingCommand = {
+	commandKey: string;
+	venueId: string;
+	purchasedRevision: number;
+	reservationRevision: number;
+	packageVersionId: string;
+	termsVersion: string;
+	amountMinor: string;
+	currency: "LKR";
+	acknowledged: true;
+};
+
+export type FundingStatus = Omit<FundingCommand, "acknowledged"> & {
+	requestId: string;
+	bookingId: string;
+	reservationId: string;
+	expiresAt: string;
+	observedAt: string;
+	state: "PENDING" | "EXPIRED" | "INACTIVE" | "UNAVAILABLE";
+	synthetic: true;
+	funded: false;
+};
+
+export function fundingPath(booking: string, reservation: string, key?: string) {
+	if (key !== undefined && !uuid.test(key)) throw new ExtensionError(400);
+	return `${reservationPath(booking, reservation)}/funding-request${key ? `/commands/${key}` : ""}`;
+}
+
+export function fundingCommand(raw: unknown): FundingCommand {
+	const v = raw as FundingCommand;
+	if (
+		!v ||
+		typeof v !== "object" ||
+		Object.keys(v).sort().join() !==
+			"acknowledged,amountMinor,commandKey,currency,packageVersionId,purchasedRevision,reservationRevision,termsVersion,venueId" ||
+		v.acknowledged !== true ||
+		![v.commandKey, v.venueId, v.packageVersionId].every(
+			(id) => typeof id === "string" && uuid.test(id),
+		) ||
+		!integer(v.purchasedRevision) ||
+		v.purchasedRevision < 1 ||
+		!integer(v.reservationRevision) ||
+		v.termsVersion !== reservationTerms ||
+		typeof v.amountMinor !== "string" ||
+		!/^[1-9][0-9]{0,18}$/.test(v.amountMinor) ||
+		BigInt(v.amountMinor) > 9223372036854775807n ||
+		v.currency !== "LKR"
+	)
+		throw new ExtensionError(400);
+	return v;
+}
+
+function instantOrder(value: string) {
+	const [seconds, fraction = ""] = value.slice(0, -1).split(".");
+	return `${seconds}.${fraction.padEnd(9, "0")}`;
+}
+
+export function fundingResult(
+	raw: unknown,
+	booking: string,
+	reservation: string,
+	key?: string,
+	venue?: string,
+): FundingStatus {
+	const v = raw as FundingStatus;
+	if (
+		!v ||
+		typeof v.requestId !== "string" ||
+		!uuid.test(v.requestId) ||
+		v.bookingId !== booking ||
+		v.reservationId !== reservation ||
+		(key !== undefined && v.commandKey !== key) ||
+		(venue !== undefined && v.venueId !== venue) ||
+		v.synthetic !== true ||
+		v.funded !== false ||
+		!timestamp(v.expiresAt) ||
+		!timestamp(v.observedAt) ||
+		!["PENDING", "EXPIRED", "INACTIVE", "UNAVAILABLE"].includes(v.state) ||
+		(v.state === "EXPIRED") !==
+			(instantOrder(v.observedAt) >= instantOrder(v.expiresAt))
+	)
+		return fail();
+	const fields = {
+		commandKey: v.commandKey,
+		venueId: v.venueId,
+		purchasedRevision: v.purchasedRevision,
+		reservationRevision: v.reservationRevision,
+		packageVersionId: v.packageVersionId,
+		termsVersion: v.termsVersion,
+		amountMinor: v.amountMinor,
+		currency: v.currency,
+	};
+	try {
+		fundingCommand({ ...fields, acknowledged: true });
+	} catch {
+		return fail();
+	}
+	return {
+		...fields,
+		requestId: v.requestId,
+		bookingId: booking,
+		reservationId: reservation,
+		expiresAt: v.expiresAt,
+		observedAt: v.observedAt,
+		state: v.state,
+		synthetic: true,
+		funded: false,
+	};
 }

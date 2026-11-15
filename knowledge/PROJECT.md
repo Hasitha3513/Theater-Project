@@ -1181,3 +1181,10 @@ The V41 customer quotation foundation for CN-R1-COMMERCIAL-QUOTE-001 is default-
 ## V42 operational commercial policy and quotation
 
 V42 extends Day 05 with default-disabled operational policy activation and quotation issuance. Genuine specialist authority, approved trust roots and release authorization remain separate Day 05 gates.
+
+<a id="synthetic-extension-funding-request-policy"></a>
+## Bounded owner-only synthetic extension funding requests
+
+The eligible owner may explicitly record one synthetic BANK funding request for effective reserved extension coverage. Bind the current venue, reservation and purchase revisions, package version, frozen commercial terms, exact positive LKR amount and existing exclusive database-time deadline. Use the existing frozen reservation references. Owner recovery uses the original command key and remains available after expiry, withdrawal or invalidation. Identical replay returns the same request. A changed command conflicts.
+
+The approved OD-07/20/28 implementation scope keeps the request unfunded. Late, disputed, unmatched and excess credit require separate Finance handling. Staff advisory, allocation, refunds, purchased extension confirmation, automatic inventory revival and admission remain outside the scope. This scope gives no operational Finance, Legal or commercial-release approval. [Architecture](ARCHITECTURE.md#synthetic-extension-funding-request).

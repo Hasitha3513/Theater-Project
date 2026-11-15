@@ -332,6 +332,13 @@
     },
     {
       "id": "OD-07",
+      "ownerOnlyExtensionFundingApproval": {
+        "scope": "CN-EXTENSION-FUNDING-PREP-001",
+        "status": "OWNER_APPROVED_BOUNDED_IMPLEMENTATION",
+        "source": "Owner chat confirmation for the exact 25-path local slice",
+        "decision": "Synthetic BANK request tracking only; late, excess, disputed and unmatched credit stay in separate Finance handling.",
+        "formalOperationalApproval": false
+      },
       "conflict": "Refund fees/taxes/cancellation and card re-billing not finalized",
       "source": "S1 and historical screenshot ambiguity",
       "impact": "Purchased terms, financial disputes and compensation",
@@ -1012,6 +1019,13 @@
     },
     {
       "id": "OD-20",
+      "ownerOnlyExtensionFundingApproval": {
+        "scope": "CN-EXTENSION-FUNDING-PREP-001",
+        "status": "OWNER_APPROVED_BOUNDED_IMPLEMENTATION",
+        "source": "Owner chat confirmation for the exact 25-path local slice",
+        "decision": "Use existing frozen amount, currency, terms, package version and purchase/reservation revisions. Apply the exclusive database-time deadline and retain owner recovery.",
+        "formalOperationalApproval": false
+      },
       "conflict": "Valid quote honor, deactivation/emergency withdrawal and payment-timing evidence",
       "source": "S8 vs older generic revalidation language",
       "impact": "Fair accepted prices and late capture/expired-hold recovery",
@@ -1403,6 +1417,13 @@
     },
     {
       "id": "OD-28",
+      "ownerOnlyExtensionFundingApproval": {
+        "scope": "CN-EXTENSION-FUNDING-PREP-001",
+        "status": "OWNER_APPROVED_BOUNDED_IMPLEMENTATION",
+        "source": "Owner chat confirmation for the exact 25-path local slice",
+        "decision": "Current eligible exact reservation owner only. Staff advisory, Finance authority and grant changes are deferred.",
+        "formalOperationalApproval": false
+      },
       "conflict": "Bank-review/account-change/refund role separation and high-risk approval controls",
       "source": "S9; existing roles absent",
       "impact": "Unauthorized credit approvals/account redirection/refund abuse",
