@@ -15441,7 +15441,7 @@ def extension_expiry_errors():
             return ['Extension expiry exact seven-path inventory mismatch']
         migration_prefix = 'backend/src/main/resources/db/migration/'
         migrations = {name for name in baseline if name.startswith(migration_prefix)}
-        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).iterdir()}
+        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
         if len(migrations) != 42 or actual_migrations != migrations:
             return ['Extension expiry migration inventory mismatch']
         for name, (mode, kind, oid) in baseline.items():
@@ -15509,14 +15509,14 @@ def extension_expiry_controls():
     with patch.dict(globals(), {'v41_git': add_unapproved}):
         if extension_expiry_errors() != ['Extension expiry exact seven-path inventory mismatch']:
             raise ValueError('Extension expiry unauthorized path negative control failed')
-    iter_dir = Path.iterdir
+    glob = Path.glob
 
-    def inject_migration(directory):
-        yield from iter_dir(directory)
-        if directory == R / 'backend/src/main/resources/db/migration':
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
             yield directory / 'V44__unauthorized.sql'
 
-    with patch.object(Path, 'iterdir', inject_migration):
+    with patch.object(Path, 'glob', inject_migration):
         if extension_expiry_errors() != ['Extension expiry migration inventory mismatch']:
             raise ValueError('Extension expiry extra migration negative control failed')
     print('PASS Extension expiry inventory, fingerprints, migration, review and acceptance controls', flush=True)

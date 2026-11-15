@@ -572,7 +572,7 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "89283a85f0e5bb38385e873e60da7590610d5dcf8f0cb9b530bbbc318feabfe5",
+      "sha256": "2d78946c65ab8cf663c1423520b2eba034668ddef6662e8c93ed92a022553f12",
       "authority": "structured-asset-or-evidence"
     },
     {
