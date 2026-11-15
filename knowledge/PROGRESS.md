@@ -3798,3 +3798,8 @@ CI 43419440084 on 7131090734fba5e56054814d3f564c4624888fe6 reported two Lock Reg
 ## Supervised V42 Admin QA
 
 The isolated Admin QA successor adds synthetic fixture and browser coverage for twelve criterion checks. Its browser cases remain NOT_RUN and require a separately authorized rehearsal and the explicit supervised-admin launcher scenario. Prior visual evidence and formal acceptance remain unchanged.
+
+
+## Day 06 cross-venue Room Blocking regression
+
+The synthetic PostgreSQL 18.6 qualification on the Admin QA main baseline plus the pinned test returned HTTP 404 for a Venue A principal targeting Venue B's room and HTTP 200 for the same command in the authorized room. Existing hold and inventory snapshots and Venue A grants stayed unchanged. No unauthorized booking, command, inventory or CREATE audit was persisted. The suite recorded 13 passes and one opt-in browser skip. Cleanup passed. The private verified disposition corrects the raw TestReporter case-name lookup without altering the captured run. Fixture UUIDs were not retained. The previously unattributed V40 Docker inventory discrepancy remains unresolved. Owner UAT remains ACCEPT, the independent human finding remains NOT_RECEIVED, OD-10/13/29 remain pending, and G-ROOM-BLOCK remains NOT_SATISFIED. Official PART 1 remains 4/7 (57.14%). Production authorization remains NONE.

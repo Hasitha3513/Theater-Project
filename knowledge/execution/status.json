@@ -31390,5 +31390,41 @@
       "scripts/verify-synthetic-e2e.py": "a6fb54e9cea827eb35ec9a78bfdb4376f76f698713d2244cb69ed973b832f991",
       "scripts/test-synthetic-e2e.py": "e4a78783e10b305e005a7066155031ed20e1b721ff76a2ef40dadeafd56181f8"
     }
+  },
+  "day06CrossVenueRegression": {
+    "baseline": "e7b964513d250394c9da03ebcf1a266744d672f6",
+    "scope": "SYNTHETIC_ROOM_BLOCKING_TEST_ONLY",
+    "testSha256": "d55d81978232314d9cb85cb12176bf4f28a631ad16fa27dc1a217375b62ae7c3",
+    "preEditReviewSha256": "56c5ac0e27edbfe25d4a412dae504cc9814eaf7546ec944a7c14b737cf191c32",
+    "evidenceSha256": {
+      "result.json": "9cc42e0491c873d0afa37c10712f0ba7775fc31be685d6695f55a6f903a8a6a0",
+      "verified-disposition.json": "988866e843bc9120c2be4a5b58f55f87a088f8602b639a8fc50a918b3e55eeeb",
+      "sanitized-test-log.txt": "3b95395f333cd8d7b5cd69060dbb9ccdba83dc5ca0e520c4693a2b8b5d55b4cf"
+    },
+    "retainedPostgres": {
+      "version": "18.6",
+      "passed": 13,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 1,
+      "cleanup": "PASS",
+      "crossVenueHttp": 404,
+      "sameVenueHttp": 200,
+      "unauthorizedWrites": 0
+    },
+    "fixtureUuids": "NOT_RETAINED",
+    "ownerUat": "ACCEPT",
+    "independentHumanFinding": "NOT_RECEIVED",
+    "roomBlockGate": "NOT_SATISFIED",
+    "scopedDecisions": {
+      "OD-10": "PENDING",
+      "OD-13": "PENDING",
+      "OD-29": "PENDING"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE"
   }
 }

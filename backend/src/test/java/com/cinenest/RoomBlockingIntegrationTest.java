@@ -90,6 +90,54 @@ class RoomBlockingIntegrationTest {
         grant(f.actor(),f.venue(),"inventory.block.create");jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:a").param("a",f.actor()).update();assertThat(create(f,c).statusCode()).isEqualTo(403);
         jdbc.sql("INSERT INTO cinenest_identity.account_scope VALUES(:a,:v)").param("a",f.actor()).param("v",f.venue()).update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED',revision=revision+1 WHERE account_id=:a").param("a",f.actor()).update();assertThat(create(f,c).statusCode()).isEqualTo(401);assertThat(count("room_block_command",f.venue())).isZero();
     }
+    @Test
+    void venueScopedStaffCannotBlockAnotherVenuesRoom(TestReporter evidence) throws Exception {
+        var venueA = fixture();
+        var venueB = fixture();
+        assertThat(venueA.venue()).isNotEqualTo(venueB.venue());
+        assertThat(jdbc.sql("SELECT venue_id FROM cinenest_rooms.room WHERE room_id=:room")
+                .param("room", venueB.room()).query(UUID.class).single()).isEqualTo(venueB.venue());
+        var request = command(venueA);
+        assertThat(venueA.browser().call("GET", path(venueB), null, false).statusCode()).isEqualTo(403);
+
+        var hold = Map.of("roomId", venueB.room().toString(), "sessionStartLocal", "2030-01-01T10:00",
+                "durationMinutes", 180, "guests", 1, "expectedConfiguration", configuration(venueB),
+                "idempotencyKey", UUID.randomUUID().toString());
+        assertThat(venueB.browser().call("POST", "/api/holds", json(hold), true).statusCode()).isEqualTo(200);
+        UUID heldBlock = jdbc.sql("SELECT block_id FROM cinenest_booking.reservation_hold WHERE owner_id=:actor")
+                .param("actor", venueB.actor()).query(UUID.class).single();
+        String holdSnapshot = "SELECT to_jsonb(h)::text FROM cinenest_booking.reservation_hold h WHERE block_id=:block";
+        String inventorySnapshot = "SELECT to_jsonb(i)::text FROM cinenest_booking.inventory_block i WHERE block_id=:block";
+        String grantsSnapshot = "SELECT to_jsonb(g)::text FROM cinenest_identity.access_grant g WHERE account_id=:actor ORDER BY to_jsonb(g)::text";
+        String holdBefore = jdbc.sql(holdSnapshot).param("block", heldBlock).query(String.class).single();
+        String inventoryBefore = jdbc.sql(inventorySnapshot).param("block", heldBlock).query(String.class).single();
+        var grantsBefore = jdbc.sql(grantsSnapshot).param("actor", venueA.actor()).query(String.class).list();
+
+        String mismatchedPath = "/api/admin/venues/" + venueA.venue() + "/rooms/" + venueB.room() + "/blocks";
+        var rejected = venueA.browser().call("POST", mismatchedPath, json(request), true);
+        assertThat(rejected.statusCode()).isEqualTo(404);
+        assertThat(JSONObjectUtils.parse(rejected.body()).get("message")).isEqualTo("Room not found");
+        assertThat(count("inventory_block", venueA.venue())).isZero();
+        assertThat(count("inventory_block", venueB.venue())).isEqualTo(1);
+        for (var scoped : List.of(venueA, venueB)) {
+            assertThat(count("room_block_command", scoped.venue())).isZero();
+            assertThat(count("booking", scoped.venue())).isZero();
+            assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.room_block_audit WHERE venue_id=:venue AND action='CREATE'")
+                    .param("venue", scoped.venue()).query(Integer.class).single()).isZero();
+        }
+        assertThat(jdbc.sql(holdSnapshot).param("block", heldBlock).query(String.class).single()).isEqualTo(holdBefore);
+        assertThat(jdbc.sql(inventorySnapshot).param("block", heldBlock).query(String.class).single()).isEqualTo(inventoryBefore);
+        assertThat(jdbc.sql(grantsSnapshot).param("actor", venueA.actor()).query(String.class).list()).isEqualTo(grantsBefore);
+
+        assertThat(create(venueA, request).statusCode()).isEqualTo(200);
+        assertThat(count("room_block_command", venueA.venue())).isEqualTo(1);
+        assertThat(count("inventory_block", venueB.venue())).isEqualTo(1);
+        evidence.publishEntry(Map.of("venueA", venueA.venue().toString(), "roomA", venueA.room().toString(),
+                "venueB", venueB.venue().toString(), "roomB", venueB.room().toString(),
+                "heldBlock", heldBlock.toString(), "http", "404 Room not found",
+                "persistence", "Zero unauthorized writes or CREATE audits; hold, inventory and grants unchanged"));
+    }
+
     @Test void calendarAndExistingHoldAdmissionRespectBlockAndCleaning()throws Exception{
         var f=fixture();var c=command(f);assertThat(create(f,c).statusCode()).isEqualTo(200);
         var result=f.browser().call("GET","/api/rooms/"+f.room()+"/availability/calendar?date=2030-01-01&durationMinutes=180&guests=1",null,false);assertThat(result.statusCode()).isEqualTo(200);assertThat(result.body()).contains("MAINTENANCE_BLOCK");

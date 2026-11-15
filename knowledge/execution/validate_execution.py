@@ -14692,5 +14692,154 @@ receipt_admission_successor_errors = admin_qa_errors
 inert_ci_main = admin_qa_main
 
 
+
+CROSS_VENUE_BASE = 'e7b964513d250394c9da03ebcf1a266744d672f6'
+CROSS_VENUE_TEST = 'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java'
+CROSS_VENUE_KEY = 'day06CrossVenueRegression'
+CROSS_VENUE_RECORD = {'baseline': 'e7b964513d250394c9da03ebcf1a266744d672f6',
+ 'scope': 'SYNTHETIC_ROOM_BLOCKING_TEST_ONLY',
+ 'testSha256': 'd55d81978232314d9cb85cb12176bf4f28a631ad16fa27dc1a217375b62ae7c3',
+ 'preEditReviewSha256': '56c5ac0e27edbfe25d4a412dae504cc9814eaf7546ec944a7c14b737cf191c32',
+ 'evidenceSha256': {'result.json': '9cc42e0491c873d0afa37c10712f0ba7775fc31be685d6695f55a6f903a8a6a0',
+                    'verified-disposition.json': '988866e843bc9120c2be4a5b58f55f87a088f8602b639a8fc50a918b3e55eeeb',
+                    'sanitized-test-log.txt': '3b95395f333cd8d7b5cd69060dbb9ccdba83dc5ca0e520c4693a2b8b5d55b4cf'},
+ 'retainedPostgres': {'version': '18.6',
+                      'passed': 13,
+                      'failed': 0,
+                      'errors': 0,
+                      'skipped': 1,
+                      'cleanup': 'PASS',
+                      'crossVenueHttp': 404,
+                      'sameVenueHttp': 200,
+                      'unauthorizedWrites': 0},
+ 'fixtureUuids': 'NOT_RETAINED',
+ 'ownerUat': 'ACCEPT',
+ 'independentHumanFinding': 'NOT_RECEIVED',
+ 'roomBlockGate': 'NOT_SATISFIED',
+ 'scopedDecisions': {'OD-10': 'PENDING', 'OD-13': 'PENDING', 'OD-29': 'PENDING'},
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE'}
+CROSS_VENUE_PROGRESS_SHA = '849e91c6c53d6660d960697cd42a70562353025def3cd53304dcf4bfa2a74cc0'
+CROSS_VENUE_OWNED = {
+    CROSS_VENUE_TEST, ADMIN_QA_PROGRESS, ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+
+
+def cross_venue_before(name):
+    return v41_git('show', CROSS_VENUE_BASE + ':' + name)
+
+
+def cross_venue_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', CROSS_VENUE_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        migration_dir = 'backend/src/main/resources/db/migration/'
+        baseline_tree = paths('ls-tree', '-r', '--name-only', '-z', CROSS_VENUE_BASE)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', CROSS_VENUE_BASE, '--name-only', '-z')
+        migrations = {name for name in baseline_tree if name.startswith(migration_dir)}
+        current_migrations = {
+            p.relative_to(R).as_posix() for p in (R / migration_dir).iterdir()
+        }
+        if migrations != current_migrations or changed & migrations:
+            return ['Cross-venue historical migration mismatch']
+        for name in migrations:
+            p = R / name
+            if p.is_symlink() or p.read_bytes() != cross_venue_before(name):
+                return ['Cross-venue historical migration mismatch']
+        if changed != CROSS_VENUE_OWNED or live != baseline_tree:
+            return ['Cross-venue exact five-path inventory mismatch']
+        for name in CROSS_VENUE_OWNED:
+            p = R / name
+            if not p.is_file() or p.is_symlink() or p.resolve() != p:
+                return ['Cross-venue unsafe source path']
+        if hashlib.sha256((R / CROSS_VENUE_TEST).read_bytes()).hexdigest() != CROSS_VENUE_RECORD['testSha256']:
+            return ['Cross-venue qualified source fingerprint mismatch']
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(CROSS_VENUE_KEY, None) != CROSS_VENUE_RECORD
+                or state != json.loads(cross_venue_before(ADMIN_QA_STATUS))):
+            return ['Cross-venue review evidence or acceptance accounting mismatch']
+        progress = (R / ADMIN_QA_PROGRESS).read_bytes()
+        if (not progress.startswith(cross_venue_before(ADMIN_QA_PROGRESS))
+                or hashlib.sha256(progress).hexdigest() != CROSS_VENUE_PROGRESS_SHA):
+            return ['Cross-venue progress or accounting mismatch']
+        entrypoint = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        prior_validator = cross_venue_before(V41_VALIDATOR)
+        if not prior_validator.endswith(entrypoint) or not (R / V41_VALIDATOR).read_bytes().startswith(prior_validator[:-len(entrypoint)]):
+            return ['Cross-venue altered historical validator']
+        manifest = json.loads(cross_venue_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in CROSS_VENUE_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Cross-venue manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Cross-venue admission inputs inaccessible or invalid']
+    return []
+
+
+def cross_venue_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+    state_path = R / ADMIN_QA_STATUS
+    state = json.loads(original(state_path))
+
+    def reject_file(path, data, expected):
+        with patch.object(Path, 'read_bytes', lambda p: data if p == path else original(p)):
+            if cross_venue_errors() != [expected]:
+                raise ValueError('Cross-venue negative control failed: ' + expected)
+
+    reject_file(R / CROSS_VENUE_TEST, b'wrong', 'Cross-venue qualified source fingerprint mismatch')
+    reject_file(R / V41_MANIFEST, b'wrong', 'Cross-venue manifest mismatch')
+    migration = R / 'backend/src/main/resources/db/migration/V32__local_room_blocking.sql'
+    reject_file(migration, b'wrong', 'Cross-venue historical migration mismatch')
+    for key in ('preEditReviewSha256', 'evidenceSha256', 'part1'):
+        altered = json.loads(json.dumps(state))
+        altered[CROSS_VENUE_KEY].pop(key)
+        reject_file(state_path, json.dumps(altered).encode(),
+                    'Cross-venue review evidence or acceptance accounting mismatch')
+    altered = json.loads(json.dumps(state))
+    altered[CROSS_VENUE_KEY]['part1']['completed'] = 5
+    reject_file(state_path, json.dumps(altered).encode(),
+                'Cross-venue review evidence or acceptance accounting mismatch')
+    reject_file(R / ADMIN_QA_PROGRESS, b'wrong', 'Cross-venue progress or accounting mismatch')
+
+    original_git = v41_git
+
+    def add_unapproved_path(*args, **kwargs):
+        value = original_git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved_path}):
+        if cross_venue_errors() != ['Cross-venue exact five-path inventory mismatch']:
+            raise ValueError('Cross-venue unauthorized-path negative control failed')
+    print('PASS cross-venue exact inventory, migration, fingerprint, review, accounting and manifest controls')
+
+
+def cross_venue_main():
+    import sys
+    import tempfile
+
+    errors = cross_venue_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    cross_venue_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-cross-venue-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', CROSS_VENUE_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = cross_venue_errors
+inert_ci_main = cross_venue_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
