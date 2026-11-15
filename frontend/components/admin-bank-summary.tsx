@@ -166,9 +166,9 @@ export function AdminBankSummarySection() {
 							Load Bank Summary
 						</Button>
 						<Button
+							type="submit"
 							variant="secondary"
 							disabled={busy}
-							onClick={() => void load()}
 						>
 							Reload Bank Summary
 						</Button>

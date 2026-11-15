@@ -3808,3 +3808,9 @@ The synthetic PostgreSQL 18.6 qualification on the Admin QA main baseline plus t
 ## V42 commercial PostgreSQL opt-in CI
 
 The manual, default-off foundation mode qualifies only the existing two V42 PostgreSQL methods. It verifies the exact checkout SHA, isolates two synthetic databases in one bounded loopback-only PostgreSQL 18.6 container, requires two fresh Surefire passes without omissions or extra cases, and verifies teardown. Ordinary foundation behavior and the default-denied operational boundary are preserved. Local qualification is offline only. Hosted focused qualification is NOT_RUN, and publication is not authorized. Day 03 remains blocked, Day 05 and Day 06 formal acceptance remain pending, production authorization is NONE, and official PART 1 remains 4/7 (57.14%).
+
+## Reporting form submission validation
+
+On the integrated V42 CI baseline, Popular Slots Retry and Synthetic Bank Summary Reload use the same native form submission as their Load buttons. Missing required fields and invalid currency syntax stop submission and focus the first invalid field. Existing request validation, protected read scope, loading, error recovery and reporting contracts are preserved. The [Popular Slots](../frontend/tests/popular-slots-browser.mjs) and [Bank Summary](../frontend/tests/admin-bank-summary-browser.mjs) synthetic browser regressions exercise invalid input and valid recovery.
+
+This is a local frontend correction for CN-M-POPULAR-TIME-SLOTS and CN-M-BANK-PAYMENT-REVIEW-FINANCES under P9-C02. Configured business bands and full reporting acceptance remain outstanding. No milestone or formal acceptance changed. Official PART 1 remains 4/7 (57.14%) and production authorization remains NONE.

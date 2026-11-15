@@ -140,6 +140,31 @@ try {
 				.getByLabel("Credited to", { exact: false })
 				.fill("2026-10-02");
 		};
+		const venueField = section.getByLabel("Venue ID", { exact: true });
+		const requestsBeforeInvalidReload = requests.length;
+		await reload.click();
+		assert(
+			await venueField.evaluate(
+				(field) =>
+					field.validity.valueMissing && field === document.activeElement,
+			),
+		);
+		assert.equal(requests.length, requestsBeforeInvalidReload);
+		assert.equal(apiCount, 0);
+		groups++;
+		await fill();
+		const currency = section.getByLabel("Currency code", { exact: true });
+		await currency.fill("lkr");
+		await reload.click();
+		assert(
+			await currency.evaluate(
+				(field) =>
+					field.validity.patternMismatch && field === document.activeElement,
+			),
+		);
+		assert.equal(requests.length, requestsBeforeInvalidReload);
+		assert.equal(apiCount, 0);
+		groups++;
 		await fill();
 		await section
 			.getByLabel("Credited to", { exact: false })

@@ -80,6 +80,21 @@ try {
 			.waitFor();
 		assert.equal(reads, 0);
 		groups++;
+		const retry = section.getByRole("button", { name: "Retry", exact: true });
+		const venueField = section.getByLabel("Popular slots venue reference", {
+			exact: true,
+		});
+		const requestsBeforeInvalidRetry = requests.length;
+		await retry.click();
+		assert(
+			await venueField.evaluate(
+				(field) =>
+					field.validity.valueMissing && field === document.activeElement,
+			),
+		);
+		assert.equal(requests.length, requestsBeforeInvalidRetry);
+		assert.equal(reads, 0);
+		groups++;
 		await section
 			.getByLabel("Popular slots venue reference", { exact: true })
 			.fill(context.venue);
@@ -162,10 +177,12 @@ try {
 			groups++;
 		}
 		mode = "OK";
-		await section.getByRole("button", { name: "Retry", exact: true }).click();
+		const readsBeforeRecovery = reads;
+		await retry.click();
 		await section
 			.getByRole("region", { name: "Popular slots report", exact: true })
 			.waitFor();
+		assert.equal(reads, readsBeforeRecovery + 1);
 		const table = await section.locator("tbody td").allTextContents();
 		const bars = await section
 			.locator(".popular-bars strong")

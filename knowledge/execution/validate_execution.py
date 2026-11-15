@@ -15012,5 +15012,155 @@ receipt_admission_successor_errors = v42_ci_errors
 inert_ci_main = v42_ci_main
 
 
+REPORTING_FORM_RECORD = {'baseline': '588febd88164c8ffdff7ded9d95bd363ce9351ab',
+ 'scope': 'REPORTING_NATIVE_FORM_VALIDATION',
+ 'retainedKnowledgeReviewSha256': '6ef1f3ccc1c3bed910194c3c5b7eeae2180e1355fd2d2a5f719e1918423ce412',
+ 'knowledgeFiles': 114,
+ 'sourceSha256': {'frontend/components/popular-slots.tsx': 'feb016e0e20de76f43827af879be91fd1a94bade5840cab016d03adc81893094',
+                  'frontend/tests/popular-slots-browser.mjs': 'b7d0ca889d8f4e02ebbf359923fc68ea7912f3b7d7f93c05ae021de9ca262236',
+                  'frontend/components/admin-bank-summary.tsx': '67461556002ff4a5d657cf3dfaa684e65e913e1d305dc616f61c89c25121abc3',
+                  'frontend/tests/admin-bank-summary-browser.mjs': '64c93646562d802ab2d674f8bd4ea8568b1930f9ce33b209cb0d78e85ea9be91',
+                  'knowledge/product/FEATURE_CATALOG.md': '0b99eec7c5831eeac772c95fea379546c1db80baae446679875c707be3773bea',
+                  'knowledge/guides/USER_GUIDE.md': 'de45b097c759bb81ad98abff3e0f090ced653d5e76e5cf54071cd635e401126d'},
+ 'requirements': ['CN-M-POPULAR-TIME-SLOTS', 'CN-M-BANK-PAYMENT-REVIEW-FINANCES'],
+ 'publication': 'NOT_AUTHORIZED',
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE'}
+REPORTING_FORM_BASE = REPORTING_FORM_RECORD['baseline']
+REPORTING_FORM_KEY = 'reportingNativeFormValidation'
+REPORTING_FORM_PROGRESS_SHA = '2f591bd696f14f8ff4f4e3376cca50f32e0f54e3ac3350ee72d96913bfc143b6'
+REPORTING_FORM_OWNED = set(REPORTING_FORM_RECORD['sourceSha256']) | {
+    ADMIN_QA_PROGRESS, ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+
+
+def reporting_form_before(name):
+    return v41_git('show', REPORTING_FORM_BASE + ':' + name)
+
+
+def reporting_form_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', REPORTING_FORM_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        migration_dir = 'backend/src/main/resources/db/migration/'
+        baseline_tree = paths('ls-tree', '-r', '--name-only', '-z', REPORTING_FORM_BASE)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        untracked = paths('ls-files', '-z', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', REPORTING_FORM_BASE, '--name-only', '-z') | untracked
+        migrations = {name for name in baseline_tree if name.startswith(migration_dir)}
+        current_migrations = {p.relative_to(R).as_posix() for p in (R / migration_dir).glob('*')}
+        if len(migrations) != 41 or migrations != current_migrations or changed & migrations:
+            return ['Reporting form historical migration mismatch']
+        for name in migrations:
+            path = R / name
+            if path.is_symlink() or path.read_bytes() != reporting_form_before(name):
+                return ['Reporting form historical migration mismatch']
+        if changed != REPORTING_FORM_OWNED or live != baseline_tree:
+            return ['Reporting form exact ten-path inventory mismatch']
+        for entry in v41_git('ls-tree', '-r', '-z', REPORTING_FORM_BASE).split(b'\0'):
+            if not entry:
+                continue
+            metadata, encoded_name = entry.split(b'\t', 1)
+            _, kind, oid = metadata.split()
+            name = encoded_name.decode()
+            if name in REPORTING_FORM_OWNED or name in migrations:
+                continue
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Reporting form unsafe predecessor path: ' + name]
+            data = path.read_bytes()
+            header = f'blob {len(data)}\0'.encode()
+            if hashlib.sha1(header + data).hexdigest().encode() != oid:
+                return ['Reporting form unowned predecessor drift: ' + name]
+        for name in REPORTING_FORM_OWNED:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Reporting form unsafe source path']
+        fingerprints = REPORTING_FORM_RECORD['sourceSha256']
+        for name, expected in fingerprints.items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Reporting form source fingerprint mismatch: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(REPORTING_FORM_KEY, None) != REPORTING_FORM_RECORD
+                or state != json.loads(reporting_form_before(ADMIN_QA_STATUS))):
+            return ['Reporting form review evidence or acceptance accounting mismatch']
+        progress = (R / ADMIN_QA_PROGRESS).read_bytes()
+        if (not progress.startswith(reporting_form_before(ADMIN_QA_PROGRESS))
+                or hashlib.sha256(progress).hexdigest() != REPORTING_FORM_PROGRESS_SHA):
+            return ['Reporting form progress or accounting mismatch']
+        entrypoint = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+        predecessor = reporting_form_before(V41_VALIDATOR)
+        if not predecessor.endswith(entrypoint) or not (R / V41_VALIDATOR).read_bytes().startswith(predecessor[:-len(entrypoint)]):
+            return ['Reporting form altered historical validator']
+        manifest = json.loads(reporting_form_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in REPORTING_FORM_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Reporting form manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Reporting form admission inputs inaccessible or invalid']
+    return []
+
+
+def reporting_form_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in reporting_form_errors()):
+                raise ValueError('Reporting form negative control failed: ' + reason)
+
+    for name in REPORTING_FORM_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Reporting form source fingerprint mismatch')
+    migration = R / 'backend/src/main/resources/db/migration/V32__local_room_blocking.sql'
+    reject(migration, b'drift', 'Reporting form historical migration mismatch')
+    reject(K / 'execution/requirements.json', b'changed', 'Reporting form unowned predecessor drift')
+    reject(R / V41_MANIFEST, b'drift', 'Reporting form manifest mismatch')
+    state_path = R / ADMIN_QA_STATUS
+    state = json.loads(original(state_path))
+    state[REPORTING_FORM_KEY]['part1']['completed'] = 5
+    reject(state_path, json.dumps(state).encode(), 'Reporting form review evidence or acceptance accounting mismatch')
+    state = json.loads(original(state_path))
+    state[REPORTING_FORM_KEY].pop('retainedKnowledgeReviewSha256')
+    reject(state_path, json.dumps(state).encode(), 'Reporting form review evidence or acceptance accounting mismatch')
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if reporting_form_errors() != ['Reporting form exact ten-path inventory mismatch']:
+            raise ValueError('Reporting form unauthorized path negative control failed')
+    print('PASS Reporting form exact paths, fingerprints, migration history, review and acceptance controls')
+
+
+def reporting_form_main():
+    import sys
+    import tempfile
+
+    errors = reporting_form_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    reporting_form_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-reporting-form-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', REPORTING_FORM_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = reporting_form_errors
+inert_ci_main = reporting_form_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

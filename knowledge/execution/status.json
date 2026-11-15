@@ -31452,5 +31452,29 @@
       "total": 7
     },
     "productionAuthorization": "NONE"
+  },
+  "reportingNativeFormValidation": {
+    "baseline": "588febd88164c8ffdff7ded9d95bd363ce9351ab",
+    "scope": "REPORTING_NATIVE_FORM_VALIDATION",
+    "retainedKnowledgeReviewSha256": "6ef1f3ccc1c3bed910194c3c5b7eeae2180e1355fd2d2a5f719e1918423ce412",
+    "knowledgeFiles": 114,
+    "sourceSha256": {
+      "frontend/components/popular-slots.tsx": "feb016e0e20de76f43827af879be91fd1a94bade5840cab016d03adc81893094",
+      "frontend/tests/popular-slots-browser.mjs": "b7d0ca889d8f4e02ebbf359923fc68ea7912f3b7d7f93c05ae021de9ca262236",
+      "frontend/components/admin-bank-summary.tsx": "67461556002ff4a5d657cf3dfaa684e65e913e1d305dc616f61c89c25121abc3",
+      "frontend/tests/admin-bank-summary-browser.mjs": "64c93646562d802ab2d674f8bd4ea8568b1930f9ce33b209cb0d78e85ea9be91",
+      "knowledge/product/FEATURE_CATALOG.md": "0b99eec7c5831eeac772c95fea379546c1db80baae446679875c707be3773bea",
+      "knowledge/guides/USER_GUIDE.md": "de45b097c759bb81ad98abff3e0f090ced653d5e76e5cf54071cd635e401126d"
+    },
+    "requirements": [
+      "CN-M-POPULAR-TIME-SLOTS",
+      "CN-M-BANK-PAYMENT-REVIEW-FINANCES"
+    ],
+    "publication": "NOT_AUTHORIZED",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE"
   }
 }

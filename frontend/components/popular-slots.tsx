@@ -150,10 +150,9 @@ export function PopularSlotsSection() {
 							{busy ? "Loading report…" : "Load Report"}
 						</Button>
 						<Button
-							type="button"
+							type="submit"
 							variant="secondary"
 							disabled={busy}
-							onClick={() => void load()}
 						>
 							Retry
 						</Button>
