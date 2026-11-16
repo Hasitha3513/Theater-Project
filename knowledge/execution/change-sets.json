@@ -2572,6 +2572,13 @@
             "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
             "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
             "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
+          },
+          {
+            "id": "CN-POPULAR-SLOTS-SORTING-001",
+            "scope": "Client-side numeric sorting of the complete validated synthetic hourly table; chart chronology and existing protected reads unchanged.",
+            "status": "LOCAL_TECHNICAL_QUALIFICATION_PASS_PUBLICATION_PENDING",
+            "definitionOfDone": "Exact numeric ordering, chronological ties, keyboard and accessible sort feedback, stale data clearing, build, focused regression and governance verification.",
+            "rollback": "Revert the bounded frontend change while preserving the existing report and native Retry validation"
           }
         ]
       },

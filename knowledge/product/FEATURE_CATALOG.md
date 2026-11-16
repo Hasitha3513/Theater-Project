@@ -583,7 +583,7 @@ For every user-visible change, review this catalogue and the corresponding guide
 |---|---|
 | Category / module | Reports and Analytics / Reporting and Booking |
 | Intended user | Independently authorized venue reporting staff; job titles confer no authority |
-| Description / available functionality | Explicitly load a source-backed distribution of synthetic reserved starting hours from latest committed purchased booking revisions;24 local-hour bands and equivalent table. Load and Retry both validate the required filters before requesting data. |
+| Description / available functionality | Explicitly load a source-backed distribution of synthetic reserved starting hours from latest committed purchased booking revisions;24 local-hour bands and an equivalent table. The Synthetic reservations column sorts the validated counts in either direction, with ties ordered by local hour. The chart stays chronological. Load and Retry both validate the required filters before requesting data. |
 | Implementation status | PARTIAL |
 | Operational classification | SIMULATED / synthetic test data;not attendance,occupancy,revenue or physical readiness |
 | Demo availability | CONDITIONAL on authorized isolated synthetic fixtures/session;no grants assigned |

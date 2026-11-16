@@ -110,6 +110,22 @@ export function parsePopular(
 export function bandLabel(start: number, end: number) {
 	return `${String(start).padStart(2, "0")}:00–${String(end).padStart(2, "0")}:00`;
 }
+export type PopularCountOrder = "ascending" | "descending";
+
+export function orderPopularBuckets(
+	buckets: readonly PopularReport["buckets"][number][],
+	order: PopularCountOrder | "none",
+) {
+	if (order === "none") return buckets;
+	return buckets.toSorted((left, right) => {
+		const leftCount = BigInt(left.count);
+		const rightCount = BigInt(right.count);
+		if (leftCount === rightCount) return left.startHour - right.startHour;
+		const ascending = leftCount < rightCount ? -1 : 1;
+		return order === "ascending" ? ascending : -ascending;
+	});
+}
+
 export function barPercent(value: string, maximum: string) {
 	return maximum === "0"
 		? 0

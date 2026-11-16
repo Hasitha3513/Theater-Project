@@ -60,6 +60,16 @@ try {
 					body: "PRIVATE",
 				});
 			const f = fixture();
+			if (mode === "OK") {
+				f.buckets[2].count = "9007199254740992";
+				f.buckets[4].count = "9007199254740993";
+				f.buckets[6].count = "9007199254740992";
+				f.buckets[18].count = "10";
+				f.buckets[20].count = "2";
+				f.total = f.buckets
+					.reduce((sum, row) => sum + BigInt(row.count), 0n)
+					.toString();
+			}
 			if (mode === "EMPTY") {
 				f.total = "0";
 				f.buckets.forEach((d) => {
@@ -118,6 +128,54 @@ try {
 		assert((await section.innerText()).includes("Not actual attendance"));
 		assert.equal(await section.locator(".popular-bars li").count(), 24);
 		groups++;
+		const countHeader = section.getByRole("columnheader", {
+			name: "Synthetic reservations",
+		});
+		const sort = countHeader.getByRole("button");
+		const chronologicalLabels = await section
+			.getByRole("rowheader")
+			.allTextContents();
+		const chart = section.locator(".popular-bars li");
+		const chartBefore = await chart.allTextContents();
+		const chronologicalCounts = await section
+			.locator("tbody td")
+			.allTextContents();
+		const expectHours = async (hours) => {
+			assert.deepEqual(
+				await section.getByRole("rowheader").allTextContents(),
+				hours.map((hour) => chronologicalLabels[hour]),
+			);
+			assert.deepEqual(
+				await section.locator("tbody td").allTextContents(),
+				hours.map((hour) => chronologicalCounts[hour]),
+			);
+		};
+		const zeroHours = Array.from({ length: 24 }, (_, hour) => hour).filter(
+			(hour) => ![2, 4, 6, 18, 20].includes(hour),
+		);
+		const readsBeforeSort = reads;
+		assert.equal(await countHeader.getAttribute("aria-sort"), "none");
+		await section.getByRole("button", { name: "Clear", exact: true }).focus();
+		await page.keyboard.press("Tab");
+		assert(await sort.evaluate((el) => el === document.activeElement));
+		await page.keyboard.press("Enter");
+		const announcement = section
+			.getByRole("status")
+			.filter({ hasText: "ascending" });
+		await announcement.waitFor();
+		assert.equal(await announcement.getAttribute("aria-live"), "polite");
+		assert.equal(await countHeader.getAttribute("aria-sort"), "ascending");
+		await expectHours([...zeroHours, 20, 18, 2, 6, 4]);
+		await page.keyboard.press("Space");
+		await section
+			.getByRole("status")
+			.filter({ hasText: "descending" })
+			.waitFor();
+		assert.equal(await countHeader.getAttribute("aria-sort"), "descending");
+		await expectHours([4, 2, 6, 18, 20, ...zeroHours]);
+		assert.deepEqual(await chart.allTextContents(), chartBefore);
+		assert.equal(reads, readsBeforeSort);
+		groups++;
 		const measurements = await page.evaluate(() => ({
 			overflow: document.documentElement.scrollWidth > innerWidth,
 			mains: document.querySelectorAll("main").length,
@@ -174,6 +232,7 @@ try {
 					.count(),
 				next === "EMPTY" ? 1 : 0,
 			);
+			if (next !== "EMPTY") assert.equal(await sort.count(), 0);
 			groups++;
 		}
 		mode = "OK";
@@ -189,6 +248,19 @@ try {
 			.allTextContents();
 		assert.deepEqual(table, bars);
 		groups++;
+		assert.equal(await countHeader.getAttribute("aria-sort"), "none");
+		await sort.click();
+		await venueField.fill("");
+		assert.equal(await sort.count(), 0);
+		const requestsBeforeClearedRetry = requests.length;
+		await retry.click();
+		assert.equal(requests.length, requestsBeforeClearedRetry);
+		assert.equal(await sort.count(), 0);
+		await venueField.fill(context.venue);
+		await button.click();
+		await countHeader.waitFor();
+		assert.equal(await countHeader.getAttribute("aria-sort"), "none");
+		groups++;
 		await section.getByRole("button", { name: "Clear", exact: true }).click();
 		assert.equal(
 			await section
@@ -197,8 +269,14 @@ try {
 			0,
 		);
 		groups++;
+		assert.equal(await sort.count(), 0);
 		mode = "LATE";
 		await button.click();
+		await section
+			.getByRole("status")
+			.filter({ hasText: "Loading protected statistics" })
+			.waitFor();
+		assert.equal(await sort.count(), 0);
 		for (let n = 0; n < 100 && !release; n++) await page.waitForTimeout(10);
 		assert(release);
 		await section

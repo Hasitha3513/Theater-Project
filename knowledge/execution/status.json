@@ -31616,5 +31616,45 @@
     "roomBlockingGate": "NOT_SATISFIED",
     "productionAuthorization": "NONE",
     "publication": "NOT_AUTHORIZED"
+  },
+  "popularSlotsSorting": {
+    "baseline": "a7641d4a52dbc6abbc77a49deac6024c5b7420dc",
+    "changeSet": "CN-POPULAR-SLOTS-SORTING-001",
+    "scope": "SYNTHETIC_POPULAR_SLOTS_TABLE_ORDER_ONLY",
+    "requirements": [
+      "CN-A08",
+      "CN-M-POPULAR-TIME-SLOTS"
+    ],
+    "knowledgeReview": {
+      "trackedFiles": 114,
+      "reused": 109,
+      "deltaReviewed": 5,
+      "sha256": "7c35c8313ae206256e3b79ea804f3cf7289c267e774243762a5e063edfeb63f4"
+    },
+    "sourceSha256": {
+      "frontend/components/popular-slots.tsx": "892cc93573295981e6e0b4b5d838ca1905146eddec9beef6d28e43946036a19e",
+      "frontend/lib/popular-slots.ts": "d0c867a2a62d058583d34cad847ea739c657bf5e8ce637541ae239a295d44a74",
+      "frontend/tests/popular-slots.test.mjs": "99ef3e7b69d5a918edd67b59c678d5e911160f46ba086b0612279af5cfdd76df",
+      "frontend/tests/popular-slots-browser.mjs": "e8e504199fafda87f73283f1344a6ce76efe4a90704d5c33b11a5880473ac7ea",
+      "knowledge/product/FEATURE_CATALOG.md": "3c474c87ae5c4ff76402a2e542929f1ef628ebc0f2137070ed25fa2d19cafbc3",
+      "knowledge/guides/USER_GUIDE.md": "9ac4b38a4ed801ef5bfd01b873dbe04ffafd3c0d3206683f5f5a2d66b28f5fd9",
+      "knowledge/PROGRESS.md": "fc9830fcd60a0f18823fb0e37c37d6c558c9b704d7778fb3bbc8c656ee48942b",
+      "knowledge/execution/change-sets.json": "3992bd37ac1dd286ef6357f7ba6101c3b25fee8a8027ded130d5246b3ad40e76"
+    },
+    "qualification": {
+      "focusedUnitPass": 12,
+      "interceptedBrowserGroupsPass": 48,
+      "build": "PASS",
+      "typecheck": "PASS",
+      "lint": "PASS",
+      "browserObservationsSha256": "5c77e50f8b29893fd5d3102f391573605e12f4003b79f26b8a3f52b643d5d29e"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED"
   }
 }

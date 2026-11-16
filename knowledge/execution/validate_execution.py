@@ -15543,5 +15543,187 @@ receipt_admission_successor_errors = extension_expiry_errors
 inert_ci_main = extension_expiry_main
 
 
+# CN-POPULAR-SLOTS-SORTING-001
+POPULAR_SORT_BASE = 'a7641d4a52dbc6abbc77a49deac6024c5b7420dc'
+POPULAR_SORT_KEY = 'popularSlotsSorting'
+POPULAR_SORT_OWNED = {
+    'frontend/components/popular-slots.tsx',
+    'frontend/lib/popular-slots.ts',
+    'frontend/tests/popular-slots.test.mjs',
+    'frontend/tests/popular-slots-browser.mjs',
+    'knowledge/product/FEATURE_CATALOG.md',
+    'knowledge/guides/USER_GUIDE.md',
+    'knowledge/PROGRESS.md',
+    'knowledge/execution/change-sets.json',
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+POPULAR_SORT_RECORD = {
+    "baseline": "a7641d4a52dbc6abbc77a49deac6024c5b7420dc",
+    "changeSet": "CN-POPULAR-SLOTS-SORTING-001",
+    "scope": "SYNTHETIC_POPULAR_SLOTS_TABLE_ORDER_ONLY",
+    "requirements": [
+        "CN-A08",
+        "CN-M-POPULAR-TIME-SLOTS"
+    ],
+    "knowledgeReview": {
+        "trackedFiles": 114,
+        "reused": 109,
+        "deltaReviewed": 5,
+        "sha256": "7c35c8313ae206256e3b79ea804f3cf7289c267e774243762a5e063edfeb63f4"
+    },
+    "sourceSha256": {
+        "frontend/components/popular-slots.tsx": "892cc93573295981e6e0b4b5d838ca1905146eddec9beef6d28e43946036a19e",
+        "frontend/lib/popular-slots.ts": "d0c867a2a62d058583d34cad847ea739c657bf5e8ce637541ae239a295d44a74",
+        "frontend/tests/popular-slots.test.mjs": "99ef3e7b69d5a918edd67b59c678d5e911160f46ba086b0612279af5cfdd76df",
+        "frontend/tests/popular-slots-browser.mjs": "e8e504199fafda87f73283f1344a6ce76efe4a90704d5c33b11a5880473ac7ea",
+        "knowledge/product/FEATURE_CATALOG.md": "3c474c87ae5c4ff76402a2e542929f1ef628ebc0f2137070ed25fa2d19cafbc3",
+        "knowledge/guides/USER_GUIDE.md": "9ac4b38a4ed801ef5bfd01b873dbe04ffafd3c0d3206683f5f5a2d66b28f5fd9",
+        "knowledge/PROGRESS.md": "fc9830fcd60a0f18823fb0e37c37d6c558c9b704d7778fb3bbc8c656ee48942b",
+        "knowledge/execution/change-sets.json": "3992bd37ac1dd286ef6357f7ba6101c3b25fee8a8027ded130d5246b3ad40e76"
+    },
+    "qualification": {
+        "focusedUnitPass": 12,
+        "interceptedBrowserGroupsPass": 48,
+        "build": "PASS",
+        "typecheck": "PASS",
+        "lint": "PASS",
+        "browserObservationsSha256": "5c77e50f8b29893fd5d3102f391573605e12f4003b79f26b8a3f52b643d5d29e"
+    },
+    "part1": {
+        "completed": 4,
+        "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED"
+}
+POPULAR_SORT_ENTRYPOINT = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+
+def popular_sort_before(name):
+    return v41_git('show', POPULAR_SORT_BASE + ':' + name)
+
+
+def popular_sort_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', POPULAR_SORT_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        baseline_entries = v41_git('ls-tree', '-r', '-z', POPULAR_SORT_BASE).split(b'\0')
+        baseline = {}
+        for entry in filter(None, baseline_entries):
+            metadata, name = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            baseline[name.decode()] = (mode, kind, oid)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', POPULAR_SORT_BASE, '--name-only', '-z')
+        if changed != POPULAR_SORT_OWNED or live != set(baseline):
+            return ['Popular Slots sorting exact eleven-path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        migrations = {name for name in baseline if name.startswith(migration_prefix)}
+        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(migrations) != 42 or actual_migrations != migrations:
+            return ['Popular Slots sorting migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Popular Slots sorting unsafe path: ' + name]
+            if name in POPULAR_SORT_OWNED:
+                if mode != b'100644' or path.stat().st_mode & 0o111:
+                    return ['Popular Slots sorting unauthorized file mode: ' + name]
+                continue
+            data = path.read_bytes()
+            if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                return ['Popular Slots sorting predecessor drift: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(POPULAR_SORT_KEY, None) != POPULAR_SORT_RECORD
+                or state != json.loads(popular_sort_before(ADMIN_QA_STATUS))):
+            return ['Popular Slots sorting review or acceptance accounting mismatch']
+        for name, expected in POPULAR_SORT_RECORD['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Popular Slots sorting source fingerprint mismatch: ' + name]
+        old_validator = popular_sort_before(V41_VALIDATOR)
+        if (not old_validator.endswith(POPULAR_SORT_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(POPULAR_SORT_ENTRYPOINT)])):
+            return ['Popular Slots sorting altered historical validator']
+        manifest = json.loads(popular_sort_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in POPULAR_SORT_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Popular Slots sorting manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Popular Slots sorting admission inputs inaccessible or invalid']
+    return []
+
+
+def popular_sort_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in popular_sort_errors()):
+                raise ValueError('Popular Slots sorting negative control failed: ' + reason)
+
+    for name in POPULAR_SORT_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Popular Slots sorting source fingerprint mismatch')
+    reject(R / V41_MANIFEST, b'drift', 'Popular Slots sorting manifest mismatch')
+    reject(K / 'execution/requirements.json', b'drift', 'Popular Slots sorting predecessor drift')
+    reject(R / EXTENSION_FUNDING_MIGRATION, b'drift', 'Popular Slots sorting predecessor drift')
+    path = R / ADMIN_QA_STATUS
+    state = json.loads(original(path))
+    state[POPULAR_SORT_KEY]['part1']['completed'] = 5
+    reject(path, json.dumps(state).encode(), 'Popular Slots sorting review or acceptance accounting mismatch')
+    state = json.loads(original(path))
+    state[POPULAR_SORT_KEY].pop('knowledgeReview')
+    reject(path, json.dumps(state).encode(), 'Popular Slots sorting review or acceptance accounting mismatch')
+
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if popular_sort_errors() != ['Popular Slots sorting exact eleven-path inventory mismatch']:
+            raise ValueError('Popular Slots sorting unauthorized path negative control failed')
+    glob = Path.glob
+
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if popular_sort_errors() != ['Popular Slots sorting migration inventory mismatch']:
+            raise ValueError('Popular Slots sorting extra migration negative control failed')
+    print('PASS Popular Slots sorting inventory, fingerprints, migration, review and acceptance controls', flush=True)
+
+
+def popular_sort_main():
+    import sys
+    import tempfile
+
+    errors = popular_sort_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    popular_sort_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-popular-sort-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', POPULAR_SORT_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = popular_sort_errors
+inert_ci_main = popular_sort_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

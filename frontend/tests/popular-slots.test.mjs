@@ -6,6 +6,7 @@ import {
 	popularPath,
 	parsePopular,
 	loadPopular,
+	orderPopularBuckets,
 } from "../lib/popular-slots.ts";
 import { forwardPopularSlots } from "../lib/popular-slots-backend.ts";
 import { PopularSlotsSection } from "../components/popular-slots.tsx";
@@ -233,4 +234,40 @@ test("response size cap,redirects and malformed JSON fail closed", async () => {
 		if (origin === undefined) delete process.env.CINENEST_AUTH_ORIGIN;
 		else process.env.CINENEST_AUTH_ORIGIN = origin;
 	}
+});
+
+test("table count sorting is exact, non-mutating, and chronological on ties", () => {
+	const f = fixture();
+	f.buckets[2].count = "9007199254740992";
+	f.buckets[4].count = "9007199254740993";
+	f.buckets[6].count = "9007199254740992";
+	f.buckets[18].count = "10";
+	f.buckets[20].count = "2";
+	f.total = f.buckets
+		.reduce((sum, row) => sum + BigInt(row.count), 0n)
+		.toString();
+	const { buckets } = parsePopular(f, context);
+	const hours = (rows) => rows.map((row) => row.startHour);
+	const chronological = Array.from({ length: 24 }, (_, hour) => hour);
+	const zeroHours = chronological.filter(
+		(hour) => ![2, 4, 6, 18, 20].includes(hour),
+	);
+	assert.deepEqual(hours(orderPopularBuckets(buckets, "none")), chronological);
+	assert.deepEqual(hours(orderPopularBuckets(buckets, "ascending")), [
+		...zeroHours,
+		20,
+		18,
+		2,
+		6,
+		4,
+	]);
+	assert.deepEqual(hours(orderPopularBuckets(buckets, "descending")), [
+		4,
+		2,
+		6,
+		18,
+		20,
+		...zeroHours,
+	]);
+	assert.deepEqual(hours(buckets), chronological);
 });

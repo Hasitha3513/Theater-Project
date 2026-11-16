@@ -2,10 +2,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
 	type PopularContext,
+	type PopularCountOrder,
 	type PopularReport,
 	loadPopular,
 	bandLabel,
 	barPercent,
+	orderPopularBuckets,
 } from "../lib/popular-slots";
 import { RoomRequestError } from "../lib/rooms";
 import { Badge, Button, Card, Field } from "./primitives";
@@ -17,6 +19,9 @@ export function PopularSlotsSection() {
 		to: "",
 	});
 	const [report, setReport] = useState<PopularReport>();
+	const [countOrder, setCountOrder] = useState<PopularCountOrder | "none">(
+		"none",
+	);
 	const [busy, setBusy] = useState(false);
 	const [message, setMessage] = useState(
 		"Choose an authorized venue and date range, then load statistics explicitly.",
@@ -27,6 +32,7 @@ export function PopularSlotsSection() {
 		epoch.current++;
 		controller.current?.abort();
 		setReport(undefined);
+		setCountOrder("none");
 		setBusy(false);
 	}, []);
 	useEffect(() => {
@@ -149,11 +155,7 @@ export function PopularSlotsSection() {
 						<Button type="submit" disabled={busy}>
 							{busy ? "Loading report…" : "Load Report"}
 						</Button>
-						<Button
-							type="submit"
-							variant="secondary"
-							disabled={busy}
-						>
+						<Button type="submit" variant="secondary" disabled={busy}>
 							Retry
 						</Button>
 						<Button
@@ -236,16 +238,33 @@ export function PopularSlotsSection() {
 							className="table-wrap"
 							aria-label="Hourly reserved session starts data"
 						>
+							<p role="status" aria-live="polite">
+								{countOrder === "none"
+									? "Table ordered by local hour."
+									: `Table sorted by synthetic reservations, ${countOrder}. Ties are in local-hour order.`}
+							</p>
 							<table className="confirmation-table">
 								<caption>Equivalent hourly counts · {report.timezone}</caption>
 								<thead>
 									<tr>
 										<th scope="col">Local-hour band</th>
-										<th scope="col">Synthetic reservations</th>
+										<th scope="col" aria-sort={countOrder}>
+											<Button
+												type="button"
+												variant="secondary"
+												onClick={() =>
+													setCountOrder((order) =>
+														order === "ascending" ? "descending" : "ascending",
+													)
+												}
+											>
+												Synthetic reservations
+											</Button>
+										</th>
 									</tr>
 								</thead>
 								<tbody>
-									{report.buckets.map((b) => (
+									{orderPopularBuckets(report.buckets, countOrder).map((b) => (
 										<tr key={b.bandId}>
 											<th scope="row">{bandLabel(b.startHour, b.endHour)}</th>
 											<td>{b.count}</td>
