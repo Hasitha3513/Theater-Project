@@ -15942,5 +15942,199 @@ receipt_admission_successor_errors = cancellation_e2e_errors
 inert_ci_main = cancellation_e2e_main
 
 
+# CN-E2E-EXTENSION-FUNDING-001
+FUNDING_E2E_BASE = 'ac677196d7edfd6a9ca6a158b8eb355a093fcdf2'
+FUNDING_E2E_KEY = 'syntheticExtensionFundingBrowserJourney'
+FUNDING_E2E_OWNED = {
+    'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java',
+    'frontend/tests/synthetic-e2e.mjs',
+    'knowledge/PROGRESS.md',
+    'knowledge/execution/change-sets.json',
+    'knowledge/execution/status.json',
+    'knowledge/execution/validate_execution.py',
+    'knowledge/guides/USER_GUIDE.md',
+    'knowledge/manifest.json',
+    'knowledge/product/FEATURE_CATALOG.md',
+    'scripts/test-synthetic-e2e.py',
+    'scripts/verify-synthetic-e2e.py',
+}
+FUNDING_E2E_RECORD = {
+  "baseline": "ac677196d7edfd6a9ca6a158b8eb355a093fcdf2",
+  "changeSet": "CN-E2E-EXTENSION-FUNDING-001",
+  "scope": "SYNTHETIC_EXTENSION_FUNDING_E2E_ONLY",
+  "requirements": [
+    "CN-C08"
+  ],
+  "knowledgeReview": {
+    "trackedFiles": 114,
+    "deltaReviewed": 7,
+    "sha256": "e7f3918eb5517ca76705afb1555d7aa872d9c328c082700d4ccf559249a2a317"
+  },
+  "sourceSha256": {
+    "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "c96daafc45a2ad0c58bd727c16a7a79b62ad2a29cea90052861cffe3f5d7f392",
+    "frontend/tests/synthetic-e2e.mjs": "b4cb292e8c78715d213d9b60ae0db202b24373b4cc6352d185c87540b795e7e4",
+    "scripts/verify-synthetic-e2e.py": "89603b4ca10e25d7266cfb247ee82a2b7bd32aca7285fe5c0d076b3642fae462",
+    "scripts/test-synthetic-e2e.py": "b054cd19f04075f57e0e725cd73bccf815b56c7cb96f5970cd66bccf8d680235",
+    "knowledge/product/FEATURE_CATALOG.md": "02d5869e932c1e9b9e6106901935855d81879432775656a98920f2be226e1681",
+    "knowledge/guides/USER_GUIDE.md": "843bbf58b1fad24045ef7bf3d1fab510feed9701bc2298032e8c2dd5b58a1ec8",
+    "knowledge/PROGRESS.md": "38e4b8c198bb93545831239ea73fde43a9fe4c11f39563113fad23b69f610994",
+    "knowledge/execution/change-sets.json": "8d10a06d59b5edee05dd7630cf859568bcf23191a633f78ab6b73926adfe1ab6"
+  },
+  "qualification": {
+    "browser": {
+      "pass": 4,
+      "fail": 0,
+      "error": 0,
+      "skipped": 0,
+      "notRun": 0
+    },
+    "backendJourneyPass": 1,
+    "architecturePass": 7,
+    "frontendPass": 33,
+    "launcherPass": 29,
+    "postgresql": "18.6",
+    "migrationHead": "V43",
+    "migrationCount": 42,
+    "cleanup": "PASS",
+    "funding": "UNFUNDED",
+    "runtimeLogSha256": "f1c616c2d2a0026f14c560e8fa3b56ca0f4961c9f98f22022dc2d095abe2a0b0",
+    "observationsSha256": "8f7050283b2a088b3c881da4880961f305e127fc321c92946bbbe003461241e8"
+  },
+  "part1": {
+    "completed": 4,
+    "total": 7
+  },
+  "roomBlockingGate": "NOT_SATISFIED",
+  "productionAuthorization": "NONE",
+  "publication": "NOT_AUTHORIZED"
+}
+FUNDING_E2E_ENTRYPOINT = CANCELLATION_E2E_ENTRYPOINT
+
+
+def funding_e2e_before(name):
+    return v41_git('show', FUNDING_E2E_BASE + ':' + name)
+
+
+def funding_e2e_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', FUNDING_E2E_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        baseline_entries = v41_git('ls-tree', '-r', '-z', FUNDING_E2E_BASE).split(b'\0')
+        baseline = {}
+        for entry in filter(None, baseline_entries):
+            metadata, name = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            baseline[name.decode()] = (mode, kind, oid)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', FUNDING_E2E_BASE, '--name-only', '-z')
+        if changed != FUNDING_E2E_OWNED or live != set(baseline):
+            return ['Funding E2E exact eleven-path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        migrations = {name for name in baseline if name.startswith(migration_prefix)}
+        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(migrations) != 42 or actual_migrations != migrations:
+            return ['Funding E2E migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Funding E2E unsafe path: ' + name]
+            if name in FUNDING_E2E_OWNED:
+                if mode != b'100644' or path.stat().st_mode & 0o111:
+                    return ['Funding E2E unauthorized file mode: ' + name]
+                continue
+            data = path.read_bytes()
+            if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                return ['Funding E2E predecessor drift: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(FUNDING_E2E_KEY, None) != FUNDING_E2E_RECORD
+                or state != json.loads(funding_e2e_before(ADMIN_QA_STATUS))):
+            return ['Funding E2E review or acceptance accounting mismatch']
+        for name, expected in FUNDING_E2E_RECORD['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Funding E2E source fingerprint mismatch: ' + name]
+        old_validator = funding_e2e_before(V41_VALIDATOR)
+        if (not old_validator.endswith(FUNDING_E2E_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(FUNDING_E2E_ENTRYPOINT)])):
+            return ['Funding E2E altered historical validator']
+        manifest = json.loads(funding_e2e_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in FUNDING_E2E_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Funding E2E manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Funding E2E admission inputs inaccessible or invalid']
+    return []
+
+
+def funding_e2e_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in funding_e2e_errors()):
+                raise ValueError('Funding E2E negative control failed: ' + reason)
+
+    for name in FUNDING_E2E_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Funding E2E source fingerprint mismatch')
+    reject(R / V41_MANIFEST, b'drift', 'Funding E2E manifest mismatch')
+    reject(K / 'execution/requirements.json', b'drift', 'Funding E2E predecessor drift')
+    reject(R / EXTENSION_FUNDING_MIGRATION, b'drift', 'Funding E2E predecessor drift')
+    path = R / ADMIN_QA_STATUS
+    state = json.loads(original(path))
+    state[FUNDING_E2E_KEY]['part1']['completed'] = 5
+    reject(path, json.dumps(state).encode(), 'Funding E2E review or acceptance accounting mismatch')
+    state = json.loads(original(path))
+    state[FUNDING_E2E_KEY].pop('knowledgeReview')
+    reject(path, json.dumps(state).encode(), 'Funding E2E review or acceptance accounting mismatch')
+
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if funding_e2e_errors() != ['Funding E2E exact eleven-path inventory mismatch']:
+            raise ValueError('Funding E2E unauthorized path negative control failed')
+    glob = Path.glob
+
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if funding_e2e_errors() != ['Funding E2E migration inventory mismatch']:
+            raise ValueError('Funding E2E extra migration negative control failed')
+    print('PASS Funding E2E inventory, fingerprints, migration, review and acceptance controls', flush=True)
+
+
+def funding_e2e_main():
+    import sys
+    import tempfile
+
+    errors = funding_e2e_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    funding_e2e_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-funding-e2e-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', FUNDING_E2E_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = funding_e2e_errors
+inert_ci_main = funding_e2e_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -70,6 +70,21 @@ class AdmissionTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 journey.verify_cancellation_results(changed)
 
+    def test_funding_mode_and_required_pass_inventory(self):
+        self.assertEqual(journey.browser_mode(journey.FUNDING), 'extension-funding')
+        self.assertIn(journey.FUNDING, journey.VERIFIED_CLEANUP_SCENARIOS)
+        ids = ['startup', 'funding-scope-denials', 'funding-ui-recovery', 'funding-replay-expiry']
+        rows = [{'id': name, 'status': 'PASS'} for name in ids]
+        result = {'mode': 'extension-funding', 'syntheticOnly': True, 'results': rows}
+        journey.verify_funding_results(result)
+        for changed in (
+            dict(result, mode='cancellation'), dict(result, syntheticOnly=False),
+            dict(result, results=rows[:-1]), dict(result, results=rows[:-1] + rows[:1]),
+            dict(result, results=rows[:-1] + [{'id': ids[-1], 'status': 'NOT_RUN'}]),
+        ):
+            with self.assertRaisesRegex(RuntimeError, 'Funding browser result inventory'):
+                journey.verify_funding_results(changed)
+
     def test_aggregate_application_limits(self):
         self.assertTrue(journey.limits('300000 100000', str(7*1024**3)))
         for cpu, memory in [('max 100000', '1'), ('300001 100000', '1'), ('1 100000', 'max'),

@@ -7383,5 +7383,34 @@
       "frontend/components/inventory.tsx"
     ],
     "orderedPathsSha256": "796bd4eb7090b6d9bd4453d0f263be3d4afb3a16f88953690901a9602674dc48"
+  },
+  "syntheticExtensionFundingBrowserJourney": {
+    "id": "CN-E2E-EXTENSION-FUNDING-001",
+    "baseline": "ac677196d7edfd6a9ca6a158b8eb355a093fcdf2",
+    "requirements": [
+      "CN-C08"
+    ],
+    "scope": "Opt-in real-backend synthetic owner funding and original-key recovery; no operational payment or admission.",
+    "authorizedPaths": [
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java",
+      "frontend/tests/synthetic-e2e.mjs",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "scripts/test-synthetic-e2e.py",
+      "scripts/verify-synthetic-e2e.py"
+    ],
+    "localQualification": {
+      "pass": 4,
+      "fail": 0,
+      "error": 0,
+      "skipped": 0,
+      "notRun": 0
+    },
+    "publication": "NOT_AUTHORIZED"
   }
 }

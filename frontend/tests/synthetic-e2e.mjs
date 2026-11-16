@@ -25,8 +25,9 @@ import {
 import { pathToFileURL } from "node:url";
 
 const mode = process.env.CINENEST_E2E_MODE ?? "campaign";
-assert.ok(["campaign", "h1", "supervised-h1", "cancellation"].includes(mode), "unknown browser journey mode");
+assert.ok(["campaign", "h1", "supervised-h1", "cancellation", "extension-funding"].includes(mode), "unknown browser journey mode");
 const cancellation = mode === "cancellation";
+const funding = mode === "extension-funding";
 const supervised = mode === "supervised-h1";
 const h1 = mode === "h1" || supervised;
 let supervisedOutcome;
@@ -95,7 +96,8 @@ const cancellationPlan = [
 	"startup", "cancellation-owner-venue-denials", "cancellation-customer",
 	"cancellation-replay-persistence", "cancellation-staff-view",
 ];
-const planned = cancellation ? cancellationPlan : h1 ? [
+const fundingPlan = ["startup", "funding-scope-denials", "funding-ui-recovery", "funding-replay-expiry"];
+const planned = funding ? fundingPlan : cancellation ? cancellationPlan : h1 ? [
 	"startup", "customer-discovery-auth", "hold-quote-accept",
 	"verification-explicit-consent", "E-pending-verification",
 	"independent-verification-api-support", "explicit-bank-request",
@@ -654,13 +656,129 @@ async function runCancellationQualification(base) {
 	}
 }
 
+async function runFundingQualification(base) {
+	const booking = config.fundingBooking;
+	assert.match(booking, /^[0-9a-f-]{36}$/);
+	const origins = supervisedOrigins(config, base);
+	const open = async () => {
+		const context = await browser.newContext({ serviceWorkers: "block" });
+		await context.route("**/*", (route) => origins.has(new URL(route.request().url()).origin)
+			? route.continue() : route.abort());
+		return context.newPage();
+	};
+	const owner = await open(), other = await open();
+	let path, panel, command, committed, posts = 0;
+	const inspect = async (op, commandKey) => {
+		const result = await control({ op, commandKey });
+		const { controlOk, ...evidence } = result;
+		assert.equal(controlOk, true);
+		observations.push({ stage, ...evidence });
+		return evidence;
+	};
+	try {
+		await scenario("funding-scope-denials", async () => {
+			const ownerId = await login(owner, "customer-a");
+			assert.notEqual(await login(other, "customer-b"), ownerId);
+			await owner.goto(`${base}/bookings/${booking}`);
+			await owner.getByRole("button", { name: "Refresh booking history", exact: true }).click();
+			const reload = owner.getByRole("button", { name: "Reload Extension Reservation", exact: true });
+			await reload.waitFor();
+			const { reservation, reservationKey } = await control({ op: "funding-prepare" });
+			assert.equal(reservation.state, "ACTIVE");
+			path = `/api/bookings/${booking}/extension-reservations/${reservation.reservationId}/funding-request`;
+			const reference = { commandKey: reservationKey, reservationId: reservation.reservationId };
+			// Seed only the opaque reference for the reservation created by the synthetic fixture.
+			await owner.evaluate(({ key, reference }) => sessionStorage.setItem(key, JSON.stringify(reference)),
+				{ key: `cinenest.extension.reference.v1:${ownerId}:${booking}`, reference });
+			await reload.click();
+			panel = owner.getByRole("region", { name: "Synthetic extension funding request", exact: true });
+			await panel.waitFor();
+			const candidate = {
+				commandKey: crypto.randomUUID(), venueId: config.venue, purchasedRevision: reservation.purchasedRevision,
+				reservationRevision: reservation.proposalRevision, packageVersionId: reservation.packageVersionId,
+				termsVersion: reservation.termsVersion, amountMinor: reservation.additionalMinor,
+				currency: reservation.currency, acknowledged: true,
+			};
+			assert.equal((await api(other, path, "POST", candidate)).status, 404);
+			assert.equal((await api(owner, path, "POST", { ...candidate, venueId: config.otherVenue })).status, 404);
+			assert.equal((await api(owner, path, "POST", candidate, false)).status, 403);
+			assert.equal((await api(other, path)).status, 404);
+			assert.deepEqual(await inspect("funding-before"), { requests: 0, audits: 0, protectedStateUnchanged: true });
+		});
+		await scenario("funding-ui-recovery", async () => {
+			owner.on("request", (request) => {
+				if (new URL(request.url()).pathname === path && request.method() === "POST") posts++;
+			});
+			const create = panel.getByRole("button", { name: "Create Synthetic Funding Request", exact: true });
+			assert.equal(await create.isDisabled(), true);
+			await panel.getByRole("checkbox").check();
+			const routed = Promise.withResolvers();
+			await owner.route(base + path, async (route) => {
+				try {
+					assert.equal(route.request().method(), "POST");
+					command = route.request().postDataJSON();
+					await panel.getByText("Checking funding request status.", { exact: true }).waitFor();
+					const response = await route.fetch({ maxRedirects: 0, maxRetries: 0 });
+					assert.equal(response.status(), 200);
+					committed = await response.json();
+					assert.equal(committed.funded, false);
+					await route.abort("failed");
+					routed.resolve();
+				} catch (error) {
+					await route.abort("failed").catch(() => {});
+					routed.reject(error);
+				}
+			}, { times: 1 });
+			await Promise.all([routed.promise, create.click()]);
+			await panel.getByText(/Request status could not be verified.*original reference/).waitFor();
+			const recoveryPath = `${path}/commands/${command.commandKey}`;
+			const recovered = owner.waitForResponse((r) => new URL(r.url()).pathname === recoveryPath && r.request().method() === "GET");
+			await panel.getByRole("button", { name: "Reload Funding Request", exact: true }).click();
+			const response = await recovered;
+			assert.equal(response.status(), 200);
+			assert.equal((await response.json()).requestId, committed.requestId);
+			await panel.getByText(/PENDING · UNFUNDED/).waitFor();
+			assert.equal(posts, 1);
+			for (const name of ["packageVersionId", "purchasedRevision", "reservationRevision", "termsVersion", "amountMinor", "currency", "commandKey"])
+				assert.equal(committed[name], command[name]);
+			assert.deepEqual(await inspect("funding-committed", command.commandKey), { requests: 1, audits: 1, protectedStateUnchanged: true });
+		});
+		await scenario("funding-replay-expiry", async () => {
+			const recovery = `${path}/commands/${command.commandKey}`;
+			assert.equal((await api(other, recovery)).status, 404);
+			assert.equal((await json(owner, path)).requestId, committed.requestId);
+			const replay = await api(owner, path, "POST", command);
+			assert.equal(replay.status, 200);
+			assert.equal(replay.value.requestId, committed.requestId);
+			assert.equal(replay.value.funded, false);
+			assert.equal((await api(owner, path, "POST", { ...command, amountMinor: (BigInt(command.amountMinor) + 1n).toString() })).status, 409);
+			const until = Date.now() + 52_000;
+			let status;
+			do {
+				status = await json(owner, recovery);
+				if (status.state === "EXPIRED") break;
+				await new Promise((resolve) => setTimeout(resolve, 500));
+			} while (Date.now() < until);
+			assert.equal(status.state, "EXPIRED");
+			assert.equal(status.requestId, committed.requestId);
+			assert.equal(status.funded, false);
+			assert.equal((await api(owner, path, "POST", { ...command, commandKey: crypto.randomUUID() })).status, 409);
+			await panel.getByRole("button", { name: "Reload Funding Request", exact: true }).click();
+			await panel.getByText(/EXPIRED · UNFUNDED/).waitFor();
+			assert.deepEqual(await inspect("funding-expired", command.commandKey), { requests: 1, audits: 1, protectedStateUnchanged: true });
+		});
+	} finally {
+		await Promise.all([owner.context().close(), other.context().close()]);
+	}
+}
+
 const socket = createServer();
 socket.listen(0, "127.0.0.1");
 await once(socket, "listening");
 const port = socket.address().port;
 await new Promise((r) => socket.close(r));
 const base = `http://127.0.0.1:${port}`;
-const faultTransport = cancellation ? null : h1 ? null : await uploadFaultProxy(config.backend);
+const faultTransport = cancellation || funding ? null : h1 ? null : await uploadFaultProxy(config.backend);
 await writeFile(
 	`${run}/frontend-port.json`,
 	JSON.stringify({
@@ -701,7 +819,9 @@ try {
 	});
 	browser = await chromium.launch({ headless: !supervised });
 	assert.equal(browser.version(), "151.0.7922.34");
-	if (cancellation) {
+	if (funding) {
+		await runFundingQualification(base);
+	} else if (cancellation) {
 		await runCancellationQualification(base);
 	} else if (supervised) {
 		const origins = supervisedOrigins(config, base);

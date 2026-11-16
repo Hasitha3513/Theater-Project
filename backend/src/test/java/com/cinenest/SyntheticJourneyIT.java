@@ -22,6 +22,10 @@ class SyntheticJourneyIT {
         return "cancellation".equals(System.getenv("CINENEST_E2E_MODE"));
     }
 
+    private static boolean fundingJourney() {
+        return "extension-funding".equals(System.getenv("CINENEST_E2E_MODE"));
+    }
+
     @DynamicPropertySource static void properties(DynamicPropertyRegistry p) {
         BankIntegrationTest.properties(p);
         if ("supervised-h1".equals(System.getenv("CINENEST_E2E_MODE"))) {
@@ -33,6 +37,10 @@ class SyntheticJourneyIT {
             for (String flag : List.of("enabled", "issuance-enabled", "bundle-enabled")) {
                 p.add("cinenest.commercial.operational." + flag, () -> "false");
             }
+        }
+        if (fundingJourney()) {
+            p.add("server.address", () -> "127.0.0.1");
+            p.add("cinenest.payments.extension-funding.enabled", () -> "true");
         }
         if (cancellationJourney()) {
             p.add("server.address", () -> "127.0.0.1");
@@ -241,6 +249,96 @@ class SyntheticJourneyIT {
         }
     }
 
+    private final class FundingFixture {
+        private final BankIntegrationTest.AccessCase purchase;
+        private Map<String, Object> reservation;
+        private Map<String, String> protectedDomain;
+        private Map<String, Object> committed;
+
+        FundingFixture(BankIntegrationTest fixture) throws Exception {
+            purchase = fixture.accessCase();
+        }
+
+        Map<String, Object> prepare(BankIntegrationTest fixture) throws Exception {
+            assertThat(reservation).isNull();
+            var command = fixture.reservationBody(purchase);
+            var service = context.getBean("extensionReservationService");
+            var clock = org.springframework.test.util.ReflectionTestUtils.getField(service, "clock");
+            var now = fixture.jdbc.sql("SELECT clock_timestamp() - INTERVAL '555 seconds'")
+                .query(java.time.OffsetDateTime.class).single().toInstant();
+            try {
+                org.springframework.test.util.ReflectionTestUtils.setField(service, "clock",
+                    (java.util.function.Supplier<java.time.Instant>) () -> now);
+                var result = fixture.reserve(purchase, command);
+                assertThat(result.statusCode()).isEqualTo(200);
+                reservation = fixture.json(result);
+            } finally {
+                org.springframework.test.util.ReflectionTestUtils.setField(service, "clock", clock);
+            }
+            protectedDomain = protectedState(fixture);
+            return Map.of("reservation", reservation, "reservationKey", command.get("commandKey"));
+        }
+
+        private static Map<String, String> protectedState(BankIntegrationTest fixture) {
+            var state = fixture.recoveryDomain();
+            state.remove("cinenest_payments.extension_funding_request");
+            state.remove("cinenest_payments.extension_funding_audit");
+            return state;
+        }
+
+        Map<String, Object> inspect(BankIntegrationTest fixture, String op, Object commandKey) {
+            assertThat(protectedState(fixture)).isEqualTo(protectedDomain);
+            var requests = fixture.jdbc.sql("""
+                SELECT request_id, owner_id, venue_id, booking_id, reservation_id, command_key,
+                       purchased_revision, lifecycle_version, reservation_revision, package_version_id,
+                       terms_version, amount_minor, currency, expires_at,
+                       to_jsonb(r)::text AS row_snapshot
+                FROM cinenest_payments.extension_funding_request r
+                """).query().listOfRows();
+            var audits = fixture.jdbc.sql("""
+                SELECT request_id, actor_id, venue_id, to_jsonb(a)::text AS row_snapshot
+                FROM cinenest_payments.extension_funding_audit a
+                """).query().listOfRows();
+            if (op.equals("funding-before")) {
+                assertThat(requests).isEmpty();
+                assertThat(audits).isEmpty();
+            } else {
+                assertThat(requests).hasSize(1);
+                assertThat(audits).hasSize(1);
+                var request = requests.getFirst();
+                var audit = audits.getFirst();
+                assertThat(request).containsEntry("owner_id", BankIntegrationTest.A)
+                    .containsEntry("venue_id", BankIntegrationTest.VA)
+                    .containsEntry("booking_id", purchase.booking())
+                    .containsEntry("reservation_id", UUID.fromString(reservation.get("reservationId").toString()))
+                    .containsEntry("command_key", UUID.fromString(commandKey.toString()))
+                    .containsEntry("purchased_revision", ((Number) reservation.get("purchasedRevision")).longValue())
+                    .containsEntry("reservation_revision", ((Number) reservation.get("proposalRevision")).longValue())
+                    .containsEntry("lifecycle_version", 0L)
+                    .containsEntry("package_version_id", UUID.fromString(reservation.get("packageVersionId").toString()))
+                    .containsEntry("terms_version", reservation.get("termsVersion"))
+                    .containsEntry("amount_minor", Long.parseLong(reservation.get("additionalMinor").toString()))
+                    .containsEntry("currency", "LKR");
+                assertThat(audit).containsEntry("request_id", request.get("request_id"))
+                    .containsEntry("actor_id", BankIntegrationTest.A).containsEntry("venue_id", BankIntegrationTest.VA);
+                var snapshot = Map.of("request", request.get("row_snapshot"), "audit", audit.get("row_snapshot"));
+                if (committed == null) committed = snapshot;
+                assertThat(snapshot).isEqualTo(committed);
+                if (op.equals("funding-expired")) {
+                    assertThat(fixture.jdbc.sql("SELECT clock_timestamp() >= expires_at FROM cinenest_payments.extension_funding_request")
+                        .query(Boolean.class).single()).isTrue();
+                    org.assertj.core.api.Assertions.assertThatThrownBy(() -> fixture.jdbc.sql(
+                        "UPDATE cinenest_payments.extension_funding_request SET amount_minor=amount_minor").update())
+                        .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+                    org.assertj.core.api.Assertions.assertThatThrownBy(() -> fixture.jdbc.sql(
+                        "DELETE FROM cinenest_payments.extension_funding_audit").update())
+                        .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+                }
+            }
+            return Map.of("requests", requests.size(), "audits", audits.size(), "protectedStateUnchanged", true);
+        }
+    }
+
     @Test void realBrowserJourney() throws Exception {
         Path run=Path.of(System.getenv("CINENEST_E2E_RUN"));
         var fixture=new BankIntegrationTest();
@@ -251,7 +349,7 @@ class SyntheticJourneyIT {
         BankIntegrationTest.Browser staff = null;
         UUID pkg = null;
         Map<String,Object> publication = null;
-        if (!cancellationJourney()) {
+        if (!cancellationJourney() && !fundingJourney()) {
             staff = fixture.signedIn("staff");
             pkg = fixture.setup(staff);
             fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.publish");
@@ -273,6 +371,7 @@ class SyntheticJourneyIT {
         }
         var supervisedCustomer = supervised ? fixture.signedIn("customer-a") : null;
         var cancellation = cancellationJourney() ? CancellationFixture.prepare(fixture) : null;
+        var funding = fundingJourney() ? new FundingFixture(fixture) : null;
         BankIntegrationTest.IDP.subject="customer-a";
         Files.write(run.resolve("identity.png"),BankIntegrationTest.IMAGE);
         Files.write(run.resolve("receipt.png"),BankIntegrationTest.RECEIPT);
@@ -281,6 +380,7 @@ class SyntheticJourneyIT {
         config.put("ports",List.of(java.net.URI.create(fixture.base()).getPort(),java.net.URI.create(BankIntegrationTest.IDP.issuer()).getPort()));config.put("backendPid",ProcessHandle.current().pid());
         config.put("otherVenue",BankIntegrationTest.VB.toString());config.put("venue",BankIntegrationTest.VA.toString());config.put("local",fixture.local());
         if (cancellation != null) config.put("cancellationBooking", cancellation.booking().toString());
+        if (funding != null) config.put("fundingBooking", funding.purchase.booking().toString());
         if (adminQa) config.put("adminQa", prepareAdminQa(fixture, pkg, publication.get("versionId")));
         Files.writeString(run.resolve("config.json"),JSONObjectUtils.toJSONString(config));
         Process browser=null,extensionChild=null;
@@ -309,7 +409,13 @@ class SyntheticJourneyIT {
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if (cancellation != null && List.of("cancellation-before", "cancellation-committed").contains(op)) {
+                        if (funding != null && op.equals("funding-prepare")) {
+                            response.putAll(funding.prepare(fixture));
+                        } else if (funding != null && List.of("funding-before", "funding-committed", "funding-expired").contains(op)) {
+                            response.putAll(funding.inspect(fixture, op, body.get("commandKey")));
+                        } else if (funding != null && !op.equals("subject")) {
+                            throw new IllegalArgumentException("Unsupported funding fixture command");
+                        } else if (cancellation != null && List.of("cancellation-before", "cancellation-committed").contains(op)) {
                             response.putAll(cancellation.inspect(fixture, op, body.get("commandKey")));
                         } else if (cancellation != null && !op.equals("subject")) {
                             throw new IllegalArgumentException("Unsupported cancellation fixture command");

@@ -31729,5 +31729,55 @@
       "runtimeLogSha256": "4001a17b7cfa606b77e8d0502a0123d71e64d1d3f42bc1f91d8dadac98611a0a",
       "observationsSha256": "b5647eb6fd7d289d97a9e5fd0d00436487e24b6451d1fec241c2f0b1cba7c178"
     }
+  },
+  "syntheticExtensionFundingBrowserJourney": {
+    "baseline": "ac677196d7edfd6a9ca6a158b8eb355a093fcdf2",
+    "changeSet": "CN-E2E-EXTENSION-FUNDING-001",
+    "scope": "SYNTHETIC_EXTENSION_FUNDING_E2E_ONLY",
+    "requirements": [
+      "CN-C08"
+    ],
+    "knowledgeReview": {
+      "trackedFiles": 114,
+      "deltaReviewed": 7,
+      "sha256": "e7f3918eb5517ca76705afb1555d7aa872d9c328c082700d4ccf559249a2a317"
+    },
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "c96daafc45a2ad0c58bd727c16a7a79b62ad2a29cea90052861cffe3f5d7f392",
+      "frontend/tests/synthetic-e2e.mjs": "b4cb292e8c78715d213d9b60ae0db202b24373b4cc6352d185c87540b795e7e4",
+      "scripts/verify-synthetic-e2e.py": "89603b4ca10e25d7266cfb247ee82a2b7bd32aca7285fe5c0d076b3642fae462",
+      "scripts/test-synthetic-e2e.py": "b054cd19f04075f57e0e725cd73bccf815b56c7cb96f5970cd66bccf8d680235",
+      "knowledge/product/FEATURE_CATALOG.md": "02d5869e932c1e9b9e6106901935855d81879432775656a98920f2be226e1681",
+      "knowledge/guides/USER_GUIDE.md": "843bbf58b1fad24045ef7bf3d1fab510feed9701bc2298032e8c2dd5b58a1ec8",
+      "knowledge/PROGRESS.md": "38e4b8c198bb93545831239ea73fde43a9fe4c11f39563113fad23b69f610994",
+      "knowledge/execution/change-sets.json": "8d10a06d59b5edee05dd7630cf859568bcf23191a633f78ab6b73926adfe1ab6"
+    },
+    "qualification": {
+      "browser": {
+        "pass": 4,
+        "fail": 0,
+        "error": 0,
+        "skipped": 0,
+        "notRun": 0
+      },
+      "backendJourneyPass": 1,
+      "architecturePass": 7,
+      "frontendPass": 33,
+      "launcherPass": 29,
+      "postgresql": "18.6",
+      "migrationHead": "V43",
+      "migrationCount": 42,
+      "cleanup": "PASS",
+      "funding": "UNFUNDED",
+      "runtimeLogSha256": "f1c616c2d2a0026f14c560e8fa3b56ca0f4961c9f98f22022dc2d095abe2a0b0",
+      "observationsSha256": "8f7050283b2a088b3c881da4880961f305e127fc321c92946bbbe003461241e8"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED"
   }
 }
