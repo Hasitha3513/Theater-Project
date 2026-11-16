@@ -18,6 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnabledIfEnvironmentVariable(named="CINENEST_E2E_RUN", matches="/tmp/cinenest-e2e-[^/]+")
 class SyntheticJourneyIT {
     @Autowired ConfigurableApplicationContext context;
+    private static boolean cancellationJourney() {
+        return "cancellation".equals(System.getenv("CINENEST_E2E_MODE"));
+    }
+
     @DynamicPropertySource static void properties(DynamicPropertyRegistry p) {
         BankIntegrationTest.properties(p);
         if ("supervised-h1".equals(System.getenv("CINENEST_E2E_MODE"))) {
@@ -29,6 +33,10 @@ class SyntheticJourneyIT {
             for (String flag : List.of("enabled", "issuance-enabled", "bundle-enabled")) {
                 p.add("cinenest.commercial.operational." + flag, () -> "false");
             }
+        }
+        if (cancellationJourney()) {
+            p.add("server.address", () -> "127.0.0.1");
+            p.add("cinenest.booking.staff-read.enabled", () -> "true");
         }
         for(String flag:List.of("cinenest.iot.enabled","cinenest.access.enabled","cinenest.notifications.enabled","cinenest.reporting.synthetic-bank.enabled","cinenest.rooms.turnover.enabled"))p.add(flag,()->"false");
     }
@@ -160,6 +168,79 @@ class SyntheticJourneyIT {
             "publication", fixture.request(false), "roomB", roomB);
     }
 
+    private record CancellationFixture(UUID booking, UUID block, long revision, Map<String, String> protectedState) {
+        static CancellationFixture prepare(BankIntegrationTest fixture) throws Exception {
+            var booking = fixture.accessCase().booking();
+            fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VA, "booking.synthetic.read");
+            fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VA, "booking.synthetic.cancel");
+            fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VB, "booking.synthetic.cancel");
+            var purchasedBlock = fixture.jdbc.sql("""
+                SELECT i.block_id, i.revision, i.kind, i.blocking
+                FROM cinenest_booking.booking b
+                JOIN cinenest_booking.reservation_hold h ON h.hold_id=b.hold_id
+                JOIN cinenest_booking.inventory_block i USING (block_id)
+                WHERE b.booking_id=:booking AND b.owner_id=:owner AND b.venue_id=:venue
+                  AND b.synthetic AND b.state='SIMULATED_CONFIRMED'
+                """).param("booking", booking).param("owner", BankIntegrationTest.A)
+                .param("venue", BankIntegrationTest.VA).query().singleRow();
+            assertThat(purchasedBlock).containsEntry("kind", "CONFIRMED").containsEntry("blocking", true);
+            return new CancellationFixture(booking, (UUID)purchasedBlock.get("block_id"),
+                ((Number)purchasedBlock.get("revision")).longValue(), protectedState(fixture));
+        }
+
+        private static Map<String,String> protectedState(BankIntegrationTest fixture) {
+            var state = fixture.extensionDomainFingerprint();
+            state.keySet().removeIf(key -> !(key.equals("cinenest_booking.booking_revision")
+                || key.startsWith("cinenest_access.")
+                || key.startsWith("cinenest_payments.refund_")
+                || key.equals("cinenest_payments.payment_allocation")
+                || key.equals("cinenest_payments.incoming_payment_credit")));
+            return state;
+        }
+
+        Map<String,Object> inspect(BankIntegrationTest fixture, String operation, Object rawKey) {
+            assertThat(protectedState(fixture)).isEqualTo(protectedState);
+            boolean cancelled = operation.equals("cancellation-committed");
+            var bookingStatus = fixture.jdbc.sql("""
+                SELECT state,lifecycle_version FROM cinenest_booking.booking WHERE booking_id=:booking
+                """).param("booking", booking).query().singleRow();
+            assertThat(bookingStatus).containsEntry("state", cancelled ? "SIMULATED_CANCELLED" : "SIMULATED_CONFIRMED")
+                .containsEntry("lifecycle_version", cancelled ? 1L : 0L);
+            var blockStatus = fixture.jdbc.sql("""
+                SELECT blocking,revision,kind FROM cinenest_booking.inventory_block WHERE block_id=:block
+                """).param("block", block).query().singleRow();
+            assertThat(blockStatus).containsEntry("kind", "CONFIRMED").containsEntry("blocking", !cancelled)
+                .containsEntry("revision", revision + (cancelled ? 1 : 0));
+            var counts = fixture.jdbc.sql("""
+                SELECT
+                  (SELECT count(*) FROM cinenest_booking.booking_cancellation WHERE booking_id=:booking) AS cancellations,
+                  (SELECT count(*) FROM cinenest_booking.cancellation_audit WHERE booking_id=:booking) AS audits,
+                  (SELECT count(*) FROM cinenest_payments.cancellation_refund_obligation WHERE booking_id=:booking) AS obligations
+                """).param("booking", booking).query().singleRow();
+            assertThat(counts).containsEntry("cancellations", cancelled ? 1L : 0L)
+                .containsEntry("audits", cancelled ? 1L : 0L).containsEntry("obligations", cancelled ? 1L : 0L);
+            if (cancelled) {
+                var committed = fixture.jdbc.sql("""
+                    SELECT c.actor_id, c.block_id, a.actor_id AS audit_actor, a.venue_id,
+                           cmd.actor_id AS command_actor, cmd.command_key, r.state AS obligation
+                    FROM cinenest_booking.booking_cancellation c
+                    JOIN cinenest_booking.cancellation_audit a USING (cancellation_id,booking_id)
+                    JOIN cinenest_booking.cancellation_command cmd USING (cancellation_id)
+                    JOIN cinenest_payments.cancellation_refund_obligation r USING (cancellation_id,booking_id)
+                    WHERE c.booking_id=:booking
+                    """).param("booking", booking).query().singleRow();
+                assertThat(committed).containsEntry("actor_id", BankIntegrationTest.A)
+                    .containsEntry("audit_actor", BankIntegrationTest.A).containsEntry("command_actor", BankIntegrationTest.A)
+                    .containsEntry("command_key", UUID.fromString(rawKey.toString()))
+                    .containsEntry("block_id", block).containsEntry("venue_id", BankIntegrationTest.VA)
+                    .containsEntry("obligation", "RESERVED_REVIEW_REQUIRED");
+            }
+            return Map.of("state", bookingStatus.get("state"), "blocking", blockStatus.get("blocking"),
+                "audits", counts.get("audits"), "obligations", counts.get("obligations"),
+                "protectedStateUnchanged", true);
+        }
+    }
+
     @Test void realBrowserJourney() throws Exception {
         Path run=Path.of(System.getenv("CINENEST_E2E_RUN"));
         var fixture=new BankIntegrationTest();
@@ -167,10 +248,15 @@ class SyntheticJourneyIT {
         fixture.fixtures();
         boolean supervised = "supervised-h1".equals(System.getenv("CINENEST_E2E_MODE"));
         boolean adminQa = supervised && Boolean.getBoolean("cinenest.test.admin-qa");
-        var staff = fixture.signedIn("staff");
-        var pkg = fixture.setup(staff);
-        fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.publish");
-        var publication = fixture.published(fixture.signedIn("customer-b"), pkg, fixture.request(false));
+        BankIntegrationTest.Browser staff = null;
+        UUID pkg = null;
+        Map<String,Object> publication = null;
+        if (!cancellationJourney()) {
+            staff = fixture.signedIn("staff");
+            pkg = fixture.setup(staff);
+            fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.publish");
+            publication = fixture.published(fixture.signedIn("customer-b"), pkg, fixture.request(false));
+        }
         if (supervised) {
             fixture.jdbc.sql("DELETE FROM cinenest_identity.access_grant").update();
             fixture.jdbc.sql("DELETE FROM cinenest_identity.account_scope WHERE account_id=:staff AND venue_id=:venue")
@@ -186,6 +272,7 @@ class SyntheticJourneyIT {
             fixture.grant("inventory.block.create", "VENUE", BankIntegrationTest.VA);
         }
         var supervisedCustomer = supervised ? fixture.signedIn("customer-a") : null;
+        var cancellation = cancellationJourney() ? CancellationFixture.prepare(fixture) : null;
         BankIntegrationTest.IDP.subject="customer-a";
         Files.write(run.resolve("identity.png"),BankIntegrationTest.IMAGE);
         Files.write(run.resolve("receipt.png"),BankIntegrationTest.RECEIPT);
@@ -193,6 +280,7 @@ class SyntheticJourneyIT {
         config.put("backend",fixture.base());config.put("room",BankIntegrationTest.RID.toString());
         config.put("ports",List.of(java.net.URI.create(fixture.base()).getPort(),java.net.URI.create(BankIntegrationTest.IDP.issuer()).getPort()));config.put("backendPid",ProcessHandle.current().pid());
         config.put("otherVenue",BankIntegrationTest.VB.toString());config.put("venue",BankIntegrationTest.VA.toString());config.put("local",fixture.local());
+        if (cancellation != null) config.put("cancellationBooking", cancellation.booking().toString());
         if (adminQa) config.put("adminQa", prepareAdminQa(fixture, pkg, publication.get("versionId")));
         Files.writeString(run.resolve("config.json"),JSONObjectUtils.toJSONString(config));
         Process browser=null,extensionChild=null;
@@ -221,7 +309,11 @@ class SyntheticJourneyIT {
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if (adminQa && op.equals("admin-revoke")) {
+                        if (cancellation != null && List.of("cancellation-before", "cancellation-committed").contains(op)) {
+                            response.putAll(cancellation.inspect(fixture, op, body.get("commandKey")));
+                        } else if (cancellation != null && !op.equals("subject")) {
+                            throw new IllegalArgumentException("Unsupported cancellation fixture command");
+                        } else if (adminQa && op.equals("admin-revoke")) {
                             int changed = fixture.jdbc.sql("""
                                 DELETE FROM cinenest_identity.http_session WHERE principal_name=:actor
                                 """).param("actor", adminId("revoked").toString()).update();

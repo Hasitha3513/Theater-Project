@@ -16,6 +16,60 @@ spec.loader.exec_module(journey)
 
 
 class AdmissionTests(unittest.TestCase):
+    def test_cancellation_mode_uses_existing_journey_and_strict_cleanup(self):
+        self.assertEqual(journey.journey_test(journey.CANCELLATION), 'SyntheticJourneyIT')
+        self.assertEqual(journey.browser_mode(journey.CANCELLATION), 'cancellation')
+        self.assertIn(journey.CANCELLATION, journey.VERIFIED_CLEANUP_SCENARIOS)
+        self.assertNotIn(journey.CANCELLATION, journey.SUPERVISED_SCENARIOS)
+        self.assertEqual(journey.browser_mode(journey.ADMIN_QA), 'supervised-h1')
+
+    def test_cancellation_fault_drops_only_one_real_loopback_post_response(self):
+        source = (journey.ROOT / 'frontend/tests/synthetic-e2e.mjs').read_text()
+        setup = source.split('async function runCancellationQualification(base)', 1)[1].split('const socket', 1)[0]
+        self.assertIn('const intercept = base + commandPath;', setup)
+        self.assertIn('assert.equal(route.request().method(), "POST")', setup)
+        self.assertIn('route.fetch({ maxRedirects: 0, maxRetries: 0 })', setup)
+        self.assertIn('await route.abort("failed")', setup)
+        self.assertIn('}, { times: 1 });', setup)
+        self.assertIn('assert.equal(committed?.status, 200)', setup)
+        self.assertIn('origins.has(new URL(route.request().url()).origin)', setup)
+        self.assertNotIn('route.fulfill(', setup)
+
+    def test_cancellation_waits_for_authenticated_postgresql_18_6_tcp(self):
+        env = {'POSTGRES_PASSWORD': 'synthetic-only-test-secret'}
+        failure = subprocess.CompletedProcess([], 2, stdout='', stderr='sample bootstrap failure')
+        success = subprocess.CompletedProcess([], 0, stdout='18.6 (test)\n', stderr='')
+        with patch.object(journey.subprocess, 'run', side_effect=[failure, success]) as probe, \
+                patch.object(journey.time, 'sleep'):
+            self.assertEqual(journey.cancellation_database_version('owned', env, attempts=2), '18.6 (test)')
+        args = probe.call_args.args[0]
+        self.assertIn('127.0.0.1', args)
+        self.assertNotIn(env['POSTGRES_PASSWORD'], args)
+        self.assertEqual(probe.call_args.kwargs['env']['PGPASSWORD'], env['POSTGRES_PASSWORD'])
+        with patch.object(journey.subprocess, 'run', return_value=failure), patch.object(journey.time, 'sleep'):
+            with self.assertRaisesRegex(RuntimeError, 'authenticated TCP readiness'):
+                journey.cancellation_database_version('owned', env, attempts=1)
+        bad_version = subprocess.CompletedProcess([], 0, stdout='18.5\n', stderr='')
+        with patch.object(journey.subprocess, 'run', return_value=bad_version):
+            with self.assertRaisesRegex(RuntimeError, 'Unexpected cancellation qualification PostgreSQL version'):
+                journey.cancellation_database_version('owned', env, attempts=1)
+
+    def test_cancellation_results_require_exact_synthetic_pass_inventory(self):
+        ids = ['startup', 'cancellation-owner-venue-denials', 'cancellation-customer',
+               'cancellation-replay-persistence', 'cancellation-staff-view']
+        rows = [{'id': case, 'status': 'PASS'} for case in ids]
+        result = {'mode': 'cancellation', 'syntheticOnly': True, 'results': rows}
+        journey.verify_cancellation_results(result)
+        for changed in (
+            dict(result, syntheticOnly=False),
+            dict(result, mode='campaign'),
+            dict(result, results=rows[:-1]),
+            dict(result, results=rows[:-1] + [rows[0]]),
+            dict(result, results=rows[:-1] + [dict(rows[-1], status='NOT_RUN')]),
+        ):
+            with self.assertRaises(RuntimeError):
+                journey.verify_cancellation_results(changed)
+
     def test_aggregate_application_limits(self):
         self.assertTrue(journey.limits('300000 100000', str(7*1024**3)))
         for cpu, memory in [('max 100000', '1'), ('300001 100000', '1'), ('1 100000', 'max'),

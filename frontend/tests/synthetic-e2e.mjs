@@ -25,7 +25,8 @@ import {
 import { pathToFileURL } from "node:url";
 
 const mode = process.env.CINENEST_E2E_MODE ?? "campaign";
-assert.ok(["campaign", "h1", "supervised-h1"].includes(mode), "unknown browser journey mode");
+assert.ok(["campaign", "h1", "supervised-h1", "cancellation"].includes(mode), "unknown browser journey mode");
+const cancellation = mode === "cancellation";
 const supervised = mode === "supervised-h1";
 const h1 = mode === "h1" || supervised;
 let supervisedOutcome;
@@ -90,7 +91,11 @@ const campaignPlan = [
 	"F-rejected-verification",
 	"N-uncertain-upload",
 ];
-const planned = h1 ? [
+const cancellationPlan = [
+	"startup", "cancellation-owner-venue-denials", "cancellation-customer",
+	"cancellation-replay-persistence", "cancellation-staff-view",
+];
+const planned = cancellation ? cancellationPlan : h1 ? [
 	"startup", "customer-discovery-auth", "hold-quote-accept",
 	"verification-explicit-consent", "E-pending-verification",
 	"independent-verification-api-support", "explicit-bank-request",
@@ -529,13 +534,133 @@ function waitForSupervisedExit(pages, browser, frontend) {
 	]);
 }
 
+async function runCancellationQualification(base) {
+	const booking = config.cancellationBooking;
+	assert.match(booking, /^[0-9a-f-]{36}$/);
+	const customerPath = `/api/bookings/${booking}/cancellation`;
+	const commandPath = `${customerPath}s`;
+	const staffPath = (venue) => `/api/admin/venues/${venue}/bookings/${booking}`;
+	const origins = supervisedOrigins(config, base);
+	const open = async () => {
+		const context = await browser.newContext({ serviceWorkers: "block" });
+		await context.route("**/*", (route) => origins.has(new URL(route.request().url()).origin)
+			? route.continue() : route.abort());
+		return context.newPage();
+	};
+	const customer = await open();
+	const other = await open();
+	const staff = await open();
+	let submitted = 0;
+	customer.on("request", (request) => {
+		if (new URL(request.url()).pathname === commandPath && request.method() === "POST") submitted++;
+	});
+	const click = (page, name) => page.getByRole("button", { name, exact: true }).click();
+	const inspect = async (op, commandKey) => {
+		const { controlOk, ...evidence } = await control({ op, commandKey });
+		observations.push({ stage, ...evidence });
+		return evidence;
+	};
+	let command, committed;
+	try {
+		await scenario("cancellation-owner-venue-denials", async () => {
+			const ownerId = await login(customer, "customer-a");
+			const otherId = await login(other, "customer-b");
+			const staffId = await login(staff, "staff");
+			assert.equal(new Set([ownerId, otherId, staffId]).size, 3);
+			assert.equal((await api(other, customerPath)).status, 404);
+			assert.equal((await api(staff, `${staffPath(config.otherVenue)}/cancellation`)).status, 404);
+			const current = await json(customer, customerPath);
+			assert.equal(current.eligible, true);
+			const stale = {
+				reason: "Synthetic stale cancellation", commandKey: crypto.randomUUID(),
+				expectedPurchasedRevision: current.purchasedRevision + 1,
+				expectedLifecycleVersion: current.lifecycleVersion,
+			};
+			const staleResponse = await api(customer, commandPath, "POST", stale);
+			observations.push({
+				check: "stale-cancellation", status: staleResponse.status,
+				parsedResponseBody: staleResponse.value === undefined ? "ABSENT_OR_NOT_JSON" : "REDACTED_JSON",
+				origin: base, contentType: "application/json", csrfRequested: true,
+				expectedPurchasedRevision: stale.expectedPurchasedRevision,
+				actualPurchasedRevision: current.purchasedRevision,
+				expectedLifecycleVersion: stale.expectedLifecycleVersion,
+			});
+			assert.equal(staleResponse.status, 409);
+			assert.equal((await api(other, commandPath, "POST", stale)).status, 404);
+			assert.equal((await api(customer, commandPath, "POST", stale, false)).status, 403);
+			assert.deepEqual(await inspect("cancellation-before"), {
+				state: "SIMULATED_CONFIRMED", blocking: true, audits: 0, obligations: 0,
+				protectedStateUnchanged: true,
+			});
+		});
+		await scenario("cancellation-customer", async () => {
+			const beforeSubmit = submitted;
+			await customer.goto(`${base}/bookings/${booking}`);
+			await click(customer, "Refresh booking history");
+			await customer.getByRole("heading", { name: "Booking cancellation", exact: true }).waitFor();
+			await click(customer, "Check Cancellation Eligibility");
+			const confirm = customer.getByRole("button", { name: "Confirm synthetic cancellation", exact: true });
+			await confirm.waitFor();
+			assert.equal(await confirm.isEnabled(), false);
+			await customer.getByLabel("Cancellation reason").fill("Synthetic pre-start cancellation");
+			await customer.getByRole("checkbox", { name: /I understand the synthetic cancellation/ }).check();
+			// Let the real backend commit once, then replace only the browser-visible response.
+			const intercept = base + commandPath;
+			await customer.route(intercept, async (route) => {
+				assert.equal(route.request().method(), "POST");
+				command = route.request().postDataJSON();
+				const response = await route.fetch({ maxRedirects: 0, maxRetries: 0 });
+				committed = { status: response.status(), value: await response.json() };
+				await route.abort("failed");
+			}, { times: 1 });
+			const lost = customer.waitForEvent("requestfailed", (request) =>
+				request.url() === intercept && request.method() === "POST");
+			await confirm.click();
+			await lost;
+			assert.equal(committed?.status, 200);
+			assert.equal(committed.value.state, "SIMULATED_CANCELLED");
+			assert.equal(committed.value.realRepayment, false);
+			assert.equal(committed.value.refundStatus, "RESERVED_REVIEW_REQUIRED");
+			assert.equal(committed.value.inventoryReleased, true);
+			await customer.getByRole("alert").filter({ hasText: "Cancellation outcome is uncertain" }).waitFor();
+			await click(customer, "Check Cancellation Eligibility");
+			await customer.getByRole("heading", { name: "Refund obligation — separate from repayment" }).waitFor();
+			await customer.getByText("Reserved for financial review.", { exact: true }).waitFor();
+			assert.equal(await confirm.count(), 0);
+			assert.equal(submitted, beforeSubmit + 1, "recovery must not automatically resubmit");
+		});
+		await scenario("cancellation-replay-persistence", async () => {
+			const stable = await inspect("cancellation-committed", command.commandKey);
+			assert.deepEqual(stable, {
+				state: "SIMULATED_CANCELLED", blocking: false, audits: 1, obligations: 1,
+				protectedStateUnchanged: true,
+			});
+			assert.deepEqual(await api(customer, commandPath, "POST", command), committed);
+			assert.equal((await api(customer, commandPath, "POST", { ...command, reason: "Changed reason" })).status, 409);
+			assert.deepEqual(await inspect("cancellation-committed", command.commandKey), stable);
+		});
+		await scenario("cancellation-staff-view", async () => {
+			await staff.goto(`${base}/admin/bookings/venues/${config.venue}/${booking}`);
+			await click(staff, "Reload booking detail");
+			const detail = staff.getByRole("region", { name: "Authorized staff booking detail" });
+			await detail.getByText("SIMULATED_CANCELLED / SYNTHETIC ONLY", { exact: true }).waitFor();
+			assert.equal(await detail.getByText("SIMULATED_CONFIRMED / SYNTHETIC ONLY", { exact: true }).count(), 0);
+			await click(staff, "Check Cancellation Eligibility");
+			await staff.getByText(/Current purchased block released; physical readiness remains/).waitFor();
+			assert.equal((await inspect("cancellation-committed", command.commandKey)).audits, 1);
+		});
+	} finally {
+		await Promise.all([customer.context().close(), other.context().close(), staff.context().close()]);
+	}
+}
+
 const socket = createServer();
 socket.listen(0, "127.0.0.1");
 await once(socket, "listening");
 const port = socket.address().port;
 await new Promise((r) => socket.close(r));
 const base = `http://127.0.0.1:${port}`;
-const faultTransport = h1 ? null : await uploadFaultProxy(config.backend);
+const faultTransport = cancellation ? null : h1 ? null : await uploadFaultProxy(config.backend);
 await writeFile(
 	`${run}/frontend-port.json`,
 	JSON.stringify({
@@ -576,7 +701,9 @@ try {
 	});
 	browser = await chromium.launch({ headless: !supervised });
 	assert.equal(browser.version(), "151.0.7922.34");
-	if (supervised) {
+	if (cancellation) {
+		await runCancellationQualification(base);
+	} else if (supervised) {
 		const origins = supervisedOrigins(config, base);
 		const pages = [];
 		const subjects = [["customer-a", "/rooms"], ["staff", "/admin"], ["customer-b", "/rooms"]];

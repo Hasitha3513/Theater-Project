@@ -31656,5 +31656,78 @@
     "roomBlockingGate": "NOT_SATISFIED",
     "productionAuthorization": "NONE",
     "publication": "NOT_AUTHORIZED"
+  },
+  "syntheticCancellationBrowserJourney": {
+    "baseline": "83ba580219ae94d7d22c13370361ae9cf4b6eda9",
+    "changeSet": "CN-E2E-CANCELLATION-001",
+    "scope": "SYNTHETIC_CANCELLATION_REAL_BACKEND_E2E_ONLY",
+    "requirements": [
+      "CN-C08",
+      "CN-A02",
+      "CN-A07",
+      "BR-10",
+      "BP-AC12"
+    ],
+    "knowledgeReview": {
+      "trackedFiles": 114,
+      "reused": 107,
+      "deltaReviewed": 7,
+      "sha256": "e16cf25cf6c7fb134e0b5746eaa87aefa9f05eeb17b17aa18b7a2cf830eec881"
+    },
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "b3765dd4bd09feb0e3bdc0199b4dac2f690dafd96c900c9812bf754b77045e44",
+      "frontend/tests/synthetic-e2e.mjs": "525b88d6c8d59ff2ec53c35607683e709b5dc0e11f71719a19b23db70431a4b3",
+      "scripts/verify-synthetic-e2e.py": "12f41652633e8f9c79802a58d7cdad58dc207af5cdaadd7eda4f1ba4189fdef8",
+      "scripts/test-synthetic-e2e.py": "30c6a3f25db867aad730893450b05c2fbc3699dd3472c780225a300428bcfafa",
+      "knowledge/product/FEATURE_CATALOG.md": "c28a67f65d9be25f62dd31929a725b3de27868dc43d2863583613b1bfa56b7f8",
+      "knowledge/guides/USER_GUIDE.md": "4538c03a42fa3b6b209259f016f9abf68cdd0c351e8046387dd50dd0b7e5a6c7",
+      "knowledge/PROGRESS.md": "a8a3253bf1eb5c662ad717635d8bd8e8646ac5da7d7cc166b443ed52f15f5b58",
+      "knowledge/execution/change-sets.json": "98fb4e82f3775767f4638dfec6a0ba56f5ed58250c1b5cde1859fddc344fadba",
+      "frontend/lib/booking-cancellation-backend.ts": "01ff834d76bb623284b4ff79e314079c28e7575a85476139fd069f665de6dd14",
+      "frontend/tests/booking-cancellation.test.mjs": "eb772d2f98283603cda5399ba646578b8f931ef854dcd2dcf4deebf01d128e9f"
+    },
+    "qualification": {
+      "backendCompile": "PASS",
+      "architecturePass": 3,
+      "frontendPass": 12,
+      "harnessPass": 28,
+      "runtimeStartup": "ERROR",
+      "browser": "NOT_RUN",
+      "postgresqlAssertions": "NOT_RUN",
+      "containerProcessFixtureCleanup": "PASS",
+      "listenerProbe": "NOT_RUN_UNRECORDED_PORT",
+      "runtimeLogSha256": "e199a5b03fd9ebe7ba86531f566f5b656f92c0da7e13af77a730a8ce377c9ef3"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED",
+    "proxyQualification": {
+      "frontendPass": 13,
+      "harnessPass": 28,
+      "typecheck": "PASS",
+      "focusedLint": "PASS",
+      "build": "PASS",
+      "backendJourneyPass": 1,
+      "browser": {
+        "pass": 5,
+        "fail": 0,
+        "error": 0,
+        "skipped": 0,
+        "notRun": 0
+      },
+      "staleCommandStatus": 409,
+      "postgresql": "18.6",
+      "migrationHead": "V43",
+      "migrationCount": 42,
+      "postgresqlAssertions": "PASS",
+      "cleanup": "PASS",
+      "previousLiveAttemptSha256": "34f5d40ee5ce5060e801e80da624a693821cb9b6a31a2b78316d365bd5739cb2",
+      "runtimeLogSha256": "4001a17b7cfa606b77e8d0502a0123d71e64d1d3f42bc1f91d8dadac98611a0a",
+      "observationsSha256": "b5647eb6fd7d289d97a9e5fd0d00436487e24b6451d1fec241c2f0b1cba7c178"
+    }
   }
 }

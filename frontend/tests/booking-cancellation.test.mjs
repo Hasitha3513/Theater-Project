@@ -369,3 +369,87 @@ test("real HTTP proxy preserves independent backend denial,sanitizes errors and 
 		await new Promise((r) => server.close(r));
 	}
 });
+
+test("cancellation POST uses the incoming authority and rejects foreign origins before forwarding", async () => {
+	const original = globalThis.fetch;
+	const previous = process.env.CINENEST_AUTH_ORIGIN;
+	process.env.CINENEST_AUTH_ORIGIN = "http://127.0.0.1:8080";
+	const requests = [];
+	globalThis.fetch = async (url, options) => {
+		requests.push({ url, options });
+		return new Response('{"detail":"private stale-command evidence"}', {
+			status: 409,
+		});
+	};
+	const path = `${cancellationPath(context)}s`;
+	const submit = (base, origin, extra = {}) =>
+		forwardCancellation(
+			new Request(base + path, {
+				method: "POST",
+				headers: {
+					Cookie: "CINENEST_SESSION=SYNTHETIC_ONLY",
+					"Content-Type": "application/json",
+					"X-CSRF-TOKEN": "SYNTHETIC",
+					...(origin === undefined ? {} : { Origin: origin }),
+					...extra,
+				},
+				body: JSON.stringify(command()),
+			}),
+		);
+	const normalized = "http://localhost:43227";
+	const loopback = "http://127.0.0.1:43227";
+	const host = { Host: "127.0.0.1:43227" };
+	try {
+		for (const response of [
+			await submit("https://customer.test", "https://customer.test"),
+			await submit(normalized, loopback, host),
+			await submit(normalized, normalized),
+		]) {
+			assert.equal(response.status, 409);
+			assert.equal(await response.text(), "");
+		}
+		assert.equal(requests.length, 3);
+		for (const { url, options } of requests) {
+			assert.equal(url.href, `http://127.0.0.1:8080${path}`);
+			assert.equal(
+				options.headers.get("cookie"),
+				"CINENEST_SESSION=SYNTHETIC_ONLY",
+			);
+			assert.equal(options.headers.get("x-csrf-token"), "SYNTHETIC");
+			assert.deepEqual(JSON.parse(options.body), command());
+		}
+
+		for (const origin of [
+			undefined,
+			"null",
+			`${loopback}/`,
+			"https://127.0.0.1:43227",
+			normalized,
+			"http://127.0.0.1:43228",
+			"http://evil.test:43227",
+		]) {
+			assert.equal((await submit(normalized, origin, host)).status, 403);
+		}
+		assert.equal(
+			(
+				await submit(normalized, "https://evil.test", {
+					...host,
+					Forwarded: "host=evil.test;proto=https",
+					"X-Forwarded-Host": "evil.test",
+					"X-Forwarded-Proto": "https",
+				})
+			).status,
+			403,
+		);
+		assert.equal(
+			(await submit(normalized, loopback, { ...host, "X-CSRF-TOKEN": "" }))
+				.status,
+			403,
+		);
+		assert.equal(requests.length, 3);
+	} finally {
+		globalThis.fetch = original;
+		if (previous === undefined) delete process.env.CINENEST_AUTH_ORIGIN;
+		else process.env.CINENEST_AUTH_ORIGIN = previous;
+	}
+});

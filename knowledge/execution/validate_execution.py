@@ -15725,5 +15725,222 @@ receipt_admission_successor_errors = popular_sort_errors
 inert_ci_main = popular_sort_main
 
 
+# CN-E2E-CANCELLATION-001
+CANCELLATION_E2E_BASE = '83ba580219ae94d7d22c13370361ae9cf4b6eda9'
+CANCELLATION_E2E_KEY = 'syntheticCancellationBrowserJourney'
+CANCELLATION_E2E_OWNED = {
+    'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java',
+    'frontend/tests/synthetic-e2e.mjs',
+    'scripts/verify-synthetic-e2e.py',
+    'scripts/test-synthetic-e2e.py',
+    'knowledge/product/FEATURE_CATALOG.md',
+    'knowledge/guides/USER_GUIDE.md',
+    'knowledge/PROGRESS.md',
+    'knowledge/execution/change-sets.json',
+    'frontend/lib/booking-cancellation-backend.ts',
+    'frontend/tests/booking-cancellation.test.mjs',
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+CANCELLATION_E2E_RECORD = {
+  "baseline": "83ba580219ae94d7d22c13370361ae9cf4b6eda9",
+  "changeSet": "CN-E2E-CANCELLATION-001",
+  "scope": "SYNTHETIC_CANCELLATION_REAL_BACKEND_E2E_ONLY",
+  "requirements": [
+    "CN-C08",
+    "CN-A02",
+    "CN-A07",
+    "BR-10",
+    "BP-AC12"
+  ],
+  "knowledgeReview": {
+    "trackedFiles": 114,
+    "reused": 107,
+    "deltaReviewed": 7,
+    "sha256": "e16cf25cf6c7fb134e0b5746eaa87aefa9f05eeb17b17aa18b7a2cf830eec881"
+  },
+  "sourceSha256": {
+    "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "b3765dd4bd09feb0e3bdc0199b4dac2f690dafd96c900c9812bf754b77045e44",
+    "frontend/tests/synthetic-e2e.mjs": "525b88d6c8d59ff2ec53c35607683e709b5dc0e11f71719a19b23db70431a4b3",
+    "scripts/verify-synthetic-e2e.py": "12f41652633e8f9c79802a58d7cdad58dc207af5cdaadd7eda4f1ba4189fdef8",
+    "scripts/test-synthetic-e2e.py": "30c6a3f25db867aad730893450b05c2fbc3699dd3472c780225a300428bcfafa",
+    "knowledge/product/FEATURE_CATALOG.md": "c28a67f65d9be25f62dd31929a725b3de27868dc43d2863583613b1bfa56b7f8",
+    "knowledge/guides/USER_GUIDE.md": "4538c03a42fa3b6b209259f016f9abf68cdd0c351e8046387dd50dd0b7e5a6c7",
+    "knowledge/PROGRESS.md": "a8a3253bf1eb5c662ad717635d8bd8e8646ac5da7d7cc166b443ed52f15f5b58",
+    "knowledge/execution/change-sets.json": "98fb4e82f3775767f4638dfec6a0ba56f5ed58250c1b5cde1859fddc344fadba",
+    "frontend/lib/booking-cancellation-backend.ts": "01ff834d76bb623284b4ff79e314079c28e7575a85476139fd069f665de6dd14",
+    "frontend/tests/booking-cancellation.test.mjs": "eb772d2f98283603cda5399ba646578b8f931ef854dcd2dcf4deebf01d128e9f"
+  },
+  "qualification": {
+    "backendCompile": "PASS",
+    "architecturePass": 3,
+    "frontendPass": 12,
+    "harnessPass": 28,
+    "runtimeStartup": "ERROR",
+    "browser": "NOT_RUN",
+    "postgresqlAssertions": "NOT_RUN",
+    "containerProcessFixtureCleanup": "PASS",
+    "listenerProbe": "NOT_RUN_UNRECORDED_PORT",
+    "runtimeLogSha256": "e199a5b03fd9ebe7ba86531f566f5b656f92c0da7e13af77a730a8ce377c9ef3"
+  },
+  "part1": {
+    "completed": 4,
+    "total": 7
+  },
+  "roomBlockingGate": "NOT_SATISFIED",
+  "productionAuthorization": "NONE",
+  "publication": "NOT_AUTHORIZED",
+  "proxyQualification": {
+    "frontendPass": 13,
+    "harnessPass": 28,
+    "typecheck": "PASS",
+    "focusedLint": "PASS",
+    "build": "PASS",
+    "backendJourneyPass": 1,
+    "browser": {
+      "pass": 5,
+      "fail": 0,
+      "error": 0,
+      "skipped": 0,
+      "notRun": 0
+    },
+    "staleCommandStatus": 409,
+    "postgresql": "18.6",
+    "migrationHead": "V43",
+    "migrationCount": 42,
+    "postgresqlAssertions": "PASS",
+    "cleanup": "PASS",
+    "previousLiveAttemptSha256": "34f5d40ee5ce5060e801e80da624a693821cb9b6a31a2b78316d365bd5739cb2",
+    "runtimeLogSha256": "4001a17b7cfa606b77e8d0502a0123d71e64d1d3f42bc1f91d8dadac98611a0a",
+    "observationsSha256": "b5647eb6fd7d289d97a9e5fd0d00436487e24b6451d1fec241c2f0b1cba7c178"
+  }
+}
+CANCELLATION_E2E_ENTRYPOINT = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+
+def cancellation_e2e_before(name):
+    return v41_git('show', CANCELLATION_E2E_BASE + ':' + name)
+
+
+def cancellation_e2e_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', CANCELLATION_E2E_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        baseline_entries = v41_git('ls-tree', '-r', '-z', CANCELLATION_E2E_BASE).split(b'\0')
+        baseline = {}
+        for entry in filter(None, baseline_entries):
+            metadata, name = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            baseline[name.decode()] = (mode, kind, oid)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', CANCELLATION_E2E_BASE, '--name-only', '-z')
+        if changed != CANCELLATION_E2E_OWNED or live != set(baseline):
+            return ['Cancellation E2E exact thirteen-path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        migrations = {name for name in baseline if name.startswith(migration_prefix)}
+        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(migrations) != 42 or actual_migrations != migrations:
+            return ['Cancellation E2E migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Cancellation E2E unsafe path: ' + name]
+            if name in CANCELLATION_E2E_OWNED:
+                if mode != b'100644' or path.stat().st_mode & 0o111:
+                    return ['Cancellation E2E unauthorized file mode: ' + name]
+                continue
+            data = path.read_bytes()
+            if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                return ['Cancellation E2E predecessor drift: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(CANCELLATION_E2E_KEY, None) != CANCELLATION_E2E_RECORD
+                or state != json.loads(cancellation_e2e_before(ADMIN_QA_STATUS))):
+            return ['Cancellation E2E review or acceptance accounting mismatch']
+        for name, expected in CANCELLATION_E2E_RECORD['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Cancellation E2E source fingerprint mismatch: ' + name]
+        old_validator = cancellation_e2e_before(V41_VALIDATOR)
+        if (not old_validator.endswith(CANCELLATION_E2E_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(CANCELLATION_E2E_ENTRYPOINT)])):
+            return ['Cancellation E2E altered historical validator']
+        manifest = json.loads(cancellation_e2e_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in CANCELLATION_E2E_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Cancellation E2E manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Cancellation E2E admission inputs inaccessible or invalid']
+    return []
+
+
+def cancellation_e2e_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in cancellation_e2e_errors()):
+                raise ValueError('Cancellation E2E negative control failed: ' + reason)
+
+    for name in CANCELLATION_E2E_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Cancellation E2E source fingerprint mismatch')
+    reject(R / V41_MANIFEST, b'drift', 'Cancellation E2E manifest mismatch')
+    reject(K / 'execution/requirements.json', b'drift', 'Cancellation E2E predecessor drift')
+    reject(R / EXTENSION_FUNDING_MIGRATION, b'drift', 'Cancellation E2E predecessor drift')
+    path = R / ADMIN_QA_STATUS
+    state = json.loads(original(path))
+    state[CANCELLATION_E2E_KEY]['part1']['completed'] = 5
+    reject(path, json.dumps(state).encode(), 'Cancellation E2E review or acceptance accounting mismatch')
+    state = json.loads(original(path))
+    state[CANCELLATION_E2E_KEY].pop('knowledgeReview')
+    reject(path, json.dumps(state).encode(), 'Cancellation E2E review or acceptance accounting mismatch')
+
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if cancellation_e2e_errors() != ['Cancellation E2E exact thirteen-path inventory mismatch']:
+            raise ValueError('Cancellation E2E unauthorized path negative control failed')
+    glob = Path.glob
+
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if cancellation_e2e_errors() != ['Cancellation E2E migration inventory mismatch']:
+            raise ValueError('Cancellation E2E extra migration negative control failed')
+    print('PASS Cancellation E2E inventory, fingerprints, migration, review and acceptance controls', flush=True)
+
+
+def cancellation_e2e_main():
+    import sys
+    import tempfile
+
+    errors = cancellation_e2e_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    cancellation_e2e_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-cancellation-e2e-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', CANCELLATION_E2E_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = cancellation_e2e_errors
+inert_ci_main = cancellation_e2e_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -60,8 +60,10 @@ def runtime_limits():
 
 SUPERVISED = "supervised-h1"
 ADMIN_QA = "supervised-admin"
+CANCELLATION = "cancellation"
 SUPERVISED_SCENARIOS = {SUPERVISED, ADMIN_QA}
 SUPERVISED_ACTIVE_SECONDS = 1710
+VERIFIED_CLEANUP_SCENARIOS = SUPERVISED_SCENARIOS | {CANCELLATION}
 
 
 def preflight(supervised=False):
@@ -125,7 +127,7 @@ def cleanup(path):
         if container['Config']['Labels'].get(LABEL) != name:
             raise RuntimeError('Refusing to stop unowned container')
         call(['docker', 'stop', '--time', '5', container['Id']], timeout=10)
-        if state.get('scenario') in SUPERVISED_SCENARIOS:
+        if state.get('scenario') in VERIFIED_CLEANUP_SCENARIOS:
             deadline = time.monotonic() + 5
             while True:
                 absence = subprocess.run(
@@ -154,7 +156,7 @@ def cleanup(path):
                     connection.close()
                     raise RuntimeError('Recorded test port remains occupied; no unrelated process stopped')
     cgroup_file = path / 'application-cgroup'
-    if state.get('scenario') in SUPERVISED_SCENARIOS and cgroup_file.is_file():
+    if state.get('scenario') in VERIFIED_CLEANUP_SCENARIOS and cgroup_file.is_file():
         group = Path(cgroup_file.read_text())
         if group.resolve() != group or not group.is_relative_to('/sys/fs/cgroup') or group.name != name + '.service':
             raise RuntimeError('Owned supervised cgroup evidence is invalid')
@@ -201,7 +203,7 @@ def admin_qa_options(scenario):
 
 
 def journey_test(scenario):
-    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT',ADMIN_QA:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
+    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT',ADMIN_QA:'SyntheticJourneyIT',CANCELLATION:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
     if scenario not in tests:raise RuntimeError('Unsupported synthetic scenario')
     return tests[scenario]
 
@@ -246,6 +248,46 @@ def run_stage(stage, args, cwd, env, path, timeout):
         raise RuntimeError(f'{stage} failed ({status})')
 
 
+def browser_mode(scenario):
+    if scenario in SUPERVISED_SCENARIOS:
+        return SUPERVISED
+    return scenario if scenario in {'h1', CANCELLATION} else 'campaign'
+
+
+def verify_cancellation_results(result):
+    expected = {
+        'startup', 'cancellation-owner-venue-denials', 'cancellation-customer',
+        'cancellation-replay-persistence', 'cancellation-staff-view',
+    }
+    rows = result.get('results', [])
+    if (result.get('mode') != CANCELLATION or result.get('syntheticOnly') is not True
+            or len(rows) != len(expected) or {row['id'] for row in rows} != expected
+            or any(row['status'] != 'PASS' for row in rows)):
+        raise RuntimeError('Cancellation browser result inventory incomplete or failed')
+
+
+def cancellation_database_version(name, env, attempts=100):
+    # The entrypoint's temporary initialization server accepts Unix sockets before
+    # the final TCP listener is ready. Authenticate against the final listener.
+    args = ['docker', 'exec', '--env', 'PGPASSWORD', name, 'psql', '-XAt', '-w',
+            '-h', '127.0.0.1', '-U', 'cinenest_test', '-d', 'cinenest_test',
+            '-c', 'SHOW server_version']
+    probe_env = dict(env, PGPASSWORD=env['POSTGRES_PASSWORD'])
+    for _ in range(attempts):
+        try:
+            result = subprocess.run(args, capture_output=True, text=True, timeout=3, env=probe_env)
+        except subprocess.TimeoutExpired:
+            pass
+        else:
+            if result.returncode == 0:
+                version = result.stdout.strip()
+                if not version or version.split()[0] != '18.6':
+                    raise RuntimeError('Unexpected cancellation qualification PostgreSQL version')
+                return version
+        time.sleep(.2)
+    raise RuntimeError('Cancellation PostgreSQL authenticated TCP readiness and version check failed')
+
+
 def inside(path):
     private_root(path)
     runtime_limits()
@@ -257,13 +299,14 @@ def inside(path):
     (path/'next-env.original').write_bytes((ROOT/'frontend/next-env.d.ts').read_bytes())
     password = secrets.token_urlsafe(32)
     env = {k: v for k, v in os.environ.items() if k in {'PATH','HOME','USER','JAVA_HOME','PLAYWRIGHT_MODULE_PATH','DOCKER_HOST','DBUS_SESSION_BUS_ADDRESS','XDG_RUNTIME_DIR','LANG'}}
-    env.update(POSTGRES_PASSWORD=password, CINENEST_E2E_MODE=SUPERVISED if supervised else ('h1' if scenario == 'h1' else 'campaign'))
-    if supervised:
+    env.update(POSTGRES_PASSWORD=password, CINENEST_E2E_MODE=browser_mode(scenario))
+    if scenario in VERIFIED_CLEANUP_SCENARIOS:
         group = current_cgroup()
         if group.name != name + '.service':
             raise RuntimeError('Supervised run must be in its owned service cgroup')
         (path / 'application-cgroup').write_text(str(group))
         env['SERVER_ADDRESS'] = '127.0.0.1'
+    if supervised:
         env['TMPDIR'] = str(path)
         for key in ('DISPLAY', 'WAYLAND_DISPLAY', 'XAUTHORITY'):
             if key in os.environ:
@@ -285,29 +328,35 @@ def inside(path):
     ) or host['Tmpfs'].get('/var/lib/postgresql') != 'rw,size=496m':
         raise RuntimeError('Database limits not effective')
     print(json.dumps({'admission': 'LIMITS_VERIFIED', 'applicationCpuMax': 3, 'applicationMemoryGiBMax': 7, 'postgresCpuMax': 1, 'postgresMemoryGiBMax': 1, 'postgresPidsMax': 128, 'postgresTmpfsMiBMax': 496, 'postgresShmMiBMax': 16, 'run': name}), flush=True)
-    for _ in range(100):
-        ready = subprocess.run(['docker', 'exec', name, 'pg_isready', '-U', 'cinenest_test'], capture_output=True, timeout=3)
-        if ready.returncode == 0:
-            break
-        time.sleep(.2)
-    else:
-        raise RuntimeError('Owned database startup timeout')
     port = call(['docker', 'port', name, '5432/tcp']).removeprefix('127.0.0.1:')
     if not port.isdigit():
         raise RuntimeError('Database must have one loopback binding')
     (path/'database-port.json').write_text(json.dumps({'ports': [int(port)]}))
+    if scenario == CANCELLATION:
+        print(json.dumps({'postgresql': cancellation_database_version(name, env)}), flush=True)
+    else:
+        for _ in range(100):
+            ready = subprocess.run(['docker', 'exec', name, 'pg_isready', '-U', 'cinenest_test'], capture_output=True, timeout=3)
+            if ready.returncode == 0:
+                break
+            time.sleep(.2)
+        else:
+            raise RuntimeError('Owned database startup timeout')
     env.update(CINENEST_DB_URL='jdbc:postgresql://127.0.0.1:'+port+'/cinenest_test',
                CINENEST_DB_USER='cinenest_test', CINENEST_DB_PASSWORD=password,
                CINENEST_E2E_RUN=str(path), CINENEST_E2E_SOURCE=call(['git','rev-parse','HEAD']), MAVEN_USER_HOME=str(ROOT/'.cache/maven'), NEXT_TELEMETRY_DISABLED='1')
     # Only local caches; no npm install, Maven download or image pull.
     run_stage('backend-journey', [*maven, *admin_qa_options(scenario), '-Dtest='+test, 'test'], ROOT/'backend', env, path, timeout)
-    print((path/'result.json').read_text(), flush=True)
+    browser_result = (path/'result.json').read_text()
+    if scenario == CANCELLATION:
+        verify_cancellation_results(json.loads(browser_result))
+    print(browser_result, flush=True)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
-    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED,ADMIN_QA], default='campaign')
+    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED,ADMIN_QA,CANCELLATION], default='campaign')
     parser.add_argument('--inside', type=Path)
     parser.add_argument('--cleanup', type=Path)
     args = parser.parse_args()

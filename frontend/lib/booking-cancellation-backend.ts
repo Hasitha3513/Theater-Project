@@ -31,6 +31,19 @@ async function bounded(stream: ReadableStream<Uint8Array> | null) {
 	}
 	return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
 }
+function isSameOrigin(request: Request, url: URL) {
+	// Next may normalize a loopback URL to localhost. Use the incoming
+	// authority with the request scheme, never a forwarded header.
+	const authority = request.headers.get("host") ?? url.host;
+	const origin = request.headers.get("origin");
+	const expected = `${url.protocol}//${authority}`;
+	return (
+		origin === expected &&
+		URL.canParse(origin) &&
+		new URL(origin).origin === origin
+	);
+}
+
 export async function forwardCancellation(request: Request): Promise<Response> {
 	const headers = {
 		"Cache-Control": "private, no-store",
@@ -69,10 +82,7 @@ export async function forwardCancellation(request: Request): Promise<Response> {
 		});
 		let body: string | undefined;
 		if (request.method === "POST") {
-			if (
-				request.headers.get("origin") !== url.origin ||
-				!request.headers.get("x-csrf-token")
-			)
+			if (!isSameOrigin(request, url) || !request.headers.get("x-csrf-token"))
 				return fail(403);
 			if (
 				request.headers.get("content-type")?.split(";")[0].trim() !==

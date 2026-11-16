@@ -2687,7 +2687,7 @@
           {
             "id": "CN-E2E-CANCELLATION-001",
             "scope": "One real-backend synthetic cancellation browser scenario using existing approved cancellation contracts",
-            "status": "PROPOSED_SEPARATE_SCOPE_REQUIRED",
+            "status": "IMPLEMENTED_BOUNDED_LIVE_QUALIFICATION_PASS_PUBLICATION_PENDING",
             "definitionOfDone": "One reviewed bounded slice; authorization/negative/architecture/appropriate integration tests and exact-source CI; catalogue/guide/evidence updated; no acceptance inference",
             "rollback": "Scoped code revert/forward fix retaining all durable history; never destructive schema rollback"
           }
