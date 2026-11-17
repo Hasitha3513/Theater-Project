@@ -26,6 +26,10 @@ class SyntheticJourneyIT {
         return "extension-funding".equals(System.getenv("CINENEST_E2E_MODE"));
     }
 
+    private static boolean twoJourneys() {
+        return "reschedule-refund".equals(System.getenv("CINENEST_E2E_MODE"));
+    }
+
     @DynamicPropertySource static void properties(DynamicPropertyRegistry p) {
         BankIntegrationTest.properties(p);
         if ("supervised-h1".equals(System.getenv("CINENEST_E2E_MODE"))) {
@@ -42,7 +46,7 @@ class SyntheticJourneyIT {
             p.add("server.address", () -> "127.0.0.1");
             p.add("cinenest.payments.extension-funding.enabled", () -> "true");
         }
-        if (cancellationJourney()) {
+        if (cancellationJourney() || twoJourneys()) {
             p.add("server.address", () -> "127.0.0.1");
             p.add("cinenest.booking.staff-read.enabled", () -> "true");
         }
@@ -339,6 +343,153 @@ class SyntheticJourneyIT {
         }
     }
 
+    private static final class TwoJourneyFixture {
+        private Map<String, String> protectedState;
+        private UUID booking;
+        private UUID originalBlock;
+        private String originalRevision;
+        private Map<String, Object> refundCredit;
+
+        private static Map<String, String> protectedState(BankIntegrationTest fixture, boolean refund) {
+            var snapshot = fixture.extensionDomainFingerprint();
+            snapshot.keySet().removeIf(name -> refund
+                ? name.startsWith("cinenest_payments.refund_") || name.endsWith(".bank_audit")
+                    || name.endsWith(".financial_audit")
+                : name.equals("cinenest_payments.bank_audit")
+                    || (!name.startsWith("cinenest_payments.") && !name.startsWith("cinenest_access.")));
+            return snapshot;
+        }
+
+        private void verifyProtectedState(BankIntegrationTest fixture, boolean refund, Map<String, Object> evidence) {
+            var current = protectedState(fixture, refund);
+            var changed = new java.util.TreeSet<>(protectedState.keySet());
+            changed.addAll(current.keySet());
+            changed.removeIf(table -> java.util.Objects.equals(current.get(table), protectedState.get(table)));
+            evidence.put("changedTables", changed);
+            assertThat(changed).as("Protected synthetic domain table fingerprints").isEmpty();
+        }
+
+        Map<String, Object> run(BankIntegrationTest fixture, String operation, Map<String, Object> evidence) throws Exception {
+            return switch (operation) {
+                case "two-reschedule-prepare" -> {
+                    var purchase = fixture.accessCase();
+                    booking = purchase.booking();
+                    fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VA, "booking.synthetic.read");
+                    fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VB, "booking.synthetic.read");
+                    originalBlock = fixture.jdbc.sql("""
+                        SELECT block_id FROM cinenest_booking.inventory_block WHERE blocking AND kind='CONFIRMED'
+                        """).query(UUID.class).single();
+                    originalRevision = originalRevision(fixture);
+                    protectedState = protectedState(fixture, false);
+                    yield Map.of("booking", booking.toString(), "targetLocal",
+                        java.time.LocalDateTime.parse(fixture.local()).plusHours(4).toString());
+                }
+                case "two-reschedule-inspect" -> {
+                    verifyProtectedState(fixture, false, evidence);
+                    assertThat(originalRevision(fixture)).isEqualTo(originalRevision);
+                    assertThat(fixture.jdbc.sql("SELECT revision FROM cinenest_booking.booking_revision WHERE booking_id=:b ORDER BY revision")
+                        .param("b", booking).query(Long.class).list()).containsExactly(1L, 2L);
+                    assertThat(fixture.jdbc.sql("SELECT blocking FROM cinenest_booking.inventory_block WHERE block_id=:old")
+                        .param("old", originalBlock).query(Boolean.class).single()).isFalse();
+                    var blocks = fixture.jdbc.sql("""
+                        SELECT i.block_id FROM cinenest_booking.booking_amendment a
+                        JOIN cinenest_booking.reservation_hold h ON h.hold_id=a.target_hold
+                        JOIN cinenest_booking.inventory_block i ON i.block_id=h.block_id
+                        WHERE a.booking_id=:b AND a.state='CONFIRMED' AND a.committed_revision=2
+                          AND i.blocking AND i.kind='CONFIRMED' AND h.state='CONSUMED'
+                        """).param("b", booking).query(UUID.class).list();
+                    assertThat(blocks).hasSize(1).doesNotContain(originalBlock);
+                    assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_block WHERE blocking")
+                        .query(Long.class).single()).isEqualTo(1L);
+                    assertThat(fixture.jdbc.sql("""
+                        SELECT actor_id FROM cinenest_booking.booking_amendment_audit
+                        WHERE booking_id=:b AND action='CONFIRMED' AND outcome='APPLIED'
+                        """).param("b", booking).query(UUID.class).list()).containsExactly(BankIntegrationTest.A);
+                    org.assertj.core.api.Assertions.assertThatThrownBy(() -> fixture.jdbc.sql(
+                        "UPDATE cinenest_booking.booking_revision SET amount_minor=amount_minor WHERE booking_id=:b")
+                        .param("b", booking).update()).isInstanceOf(org.springframework.dao.DataAccessException.class);
+                    yield Map.of("revisions", 2, "blocking", 1, "confirmationAudits", 1, "paymentUnchanged", true);
+                }
+                case "two-refund-prepare" -> {
+                    // Prior scenario contexts are closed before resetting this disposable database.
+                    fixture.fixtures();
+                    fixture.financeGrants();
+                    var owner = fixture.signedIn("customer-a");
+                    var reviewer = fixture.signedIn("staff");
+                    var executor = fixture.signedIn("customer-b");
+                    var request = fixture.bank(owner);
+                    refundCredit = fixture.credit(reviewer, "SYNTHETIC-BANK-50000");
+                    request = fixture.match(executor, request, refundCredit);
+                    for (String p : List.of("read", "review", "destination.verify", "approve", "reconcile"))
+                        fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VA, "refund.synthetic." + p);
+                    for (String p : List.of("read", "execute"))
+                        fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "refund.synthetic." + p);
+                    protectedState = protectedState(fixture, true);
+                    yield Map.of("request", request.get("id"), "revision", request.get("revision"), "credit", refundCredit.get("id"));
+                }
+                case "two-refund-inspect" -> {
+                    verifyProtectedState(fixture, true, evidence);
+                    var state = fixture.jdbc.sql("""
+                        SELECT r.state, r.amount_minor, r.approver_id, a.executor_id, a.attempt_id
+                        FROM cinenest_payments.refund_obligation r
+                        JOIN cinenest_payments.refund_attempt a USING(refund_id)
+                        """).query().singleRow();
+                    assertThat(state).containsEntry("state", "SIMULATED_CONFIRMED").containsEntry("amount_minor", 100L)
+                        .containsEntry("approver_id", BankIntegrationTest.STAFF).containsEntry("executor_id", BankIntegrationTest.B);
+                    var attempt = state.get("attempt_id");
+                    var rows = fixture.jdbc.sql("""
+                        SELECT fixture_key, phase, recorder_id, verifier_id
+                        FROM cinenest_payments.refund_outgoing_evidence WHERE attempt_id=:id
+                        """).param("id", attempt).query().listOfRows();
+                    assertThat(rows).hasSize(4);
+                    for (String outcome : List.of("SYNTHETIC-UNKNOWN", "SYNTHETIC-CONFIRMED")) {
+                        assertThat(rows.stream().filter(row -> outcome.equals(row.get("fixture_key"))).toList())
+                            .hasSize(2).allSatisfy(row -> {
+                                assertThat(row.get("recorder_id")).isEqualTo(BankIntegrationTest.B);
+                                if ("VERIFIED".equals(row.get("phase"))) assertThat(row.get("verifier_id")).isEqualTo(BankIntegrationTest.STAFF);
+                            });
+                    }
+                    // Destination verification appends its own REVIEW decision.
+                    var decisions = fixture.jdbc.sql("""
+                        SELECT action, actor_id FROM cinenest_payments.refund_decision ORDER BY recorded_at, decision_id
+                        """).query().listOfRows();
+                    assertThat(decisions.stream().map(row -> row.get("action")).toList())
+                        .as("Review, destination verification and approval decisions")
+                        .containsExactly("REVIEW", "REVIEW", "APPROVE");
+                    assertThat(decisions.stream().map(row -> row.get("actor_id")).toList())
+                        .as("Decision attribution")
+                        .containsExactly(BankIntegrationTest.STAFF, BankIntegrationTest.STAFF, BankIntegrationTest.STAFF);
+                    assertThat(fixture.jdbc.sql("""
+                        SELECT actor_id FROM cinenest_payments.bank_audit
+                        WHERE action='REFUND_DESTINATION' AND venue_id=:venue
+                        """).param("venue", BankIntegrationTest.VA).query(UUID.class).list()).containsExactly(BankIntegrationTest.STAFF);
+                    assertThat(fixture.jdbc.sql("""
+                        SELECT actor_id FROM cinenest_payments.bank_audit
+                        WHERE action='REFUND_ATTEMPT' AND venue_id=:venue
+                        """).param("venue", BankIntegrationTest.VA).query(UUID.class).list()).containsExactly(BankIntegrationTest.B);
+                    assertThat(fixture.jdbc.sql("""
+                        SELECT actor_id FROM cinenest_payments.bank_audit
+                        WHERE action='REFUND_DECISION' AND venue_id=:venue
+                        """).param("venue", BankIntegrationTest.VA).query(UUID.class).list())
+                        .containsExactly(BankIntegrationTest.STAFF, BankIntegrationTest.STAFF);
+                    assertThat(fixture.jdbc.sql("SELECT cinenest_payments.refund_committed(:credit)")
+                        .param("credit", UUID.fromString(refundCredit.get("id").toString())).query(Long.class).single()).isEqualTo(100L);
+                    org.assertj.core.api.Assertions.assertThatThrownBy(() -> fixture.jdbc.sql(
+                        "DELETE FROM cinenest_payments.refund_outgoing_evidence WHERE attempt_id=:id")
+                        .param("id", attempt).update()).isInstanceOf(org.springframework.dao.DataAccessException.class);
+                    yield Map.of("attempts", 1, "immutableEvidence", 4, "simulatedMinor", 100, "protectedStateUnchanged", true);
+                }
+                default -> throw new IllegalArgumentException("Unsupported two-journey fixture command");
+            };
+        }
+
+        private String originalRevision(BankIntegrationTest fixture) {
+            return fixture.jdbc.sql("""
+                SELECT to_jsonb(r)::text FROM cinenest_booking.booking_revision r WHERE booking_id=:b AND revision=1
+                """).param("b", booking).query(String.class).single();
+        }
+    }
+
     @Test void realBrowserJourney() throws Exception {
         Path run=Path.of(System.getenv("CINENEST_E2E_RUN"));
         var fixture=new BankIntegrationTest();
@@ -349,7 +500,7 @@ class SyntheticJourneyIT {
         BankIntegrationTest.Browser staff = null;
         UUID pkg = null;
         Map<String,Object> publication = null;
-        if (!cancellationJourney() && !fundingJourney()) {
+        if (!cancellationJourney() && !fundingJourney() && !twoJourneys()) {
             staff = fixture.signedIn("staff");
             pkg = fixture.setup(staff);
             fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.publish");
@@ -371,6 +522,7 @@ class SyntheticJourneyIT {
         }
         var supervisedCustomer = supervised ? fixture.signedIn("customer-a") : null;
         var cancellation = cancellationJourney() ? CancellationFixture.prepare(fixture) : null;
+        var pair = twoJourneys() ? new TwoJourneyFixture() : null;
         var funding = fundingJourney() ? new FundingFixture(fixture) : null;
         BankIntegrationTest.IDP.subject="customer-a";
         Files.write(run.resolve("identity.png"),BankIntegrationTest.IMAGE);
@@ -409,7 +561,10 @@ class SyntheticJourneyIT {
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if (funding != null && op.equals("funding-prepare")) {
+                        if (pair != null && !op.equals("subject")) {
+                            response.putAll(pair.run(fixture, op, response));
+                            response.remove("changedTables");
+                        } else if (funding != null && op.equals("funding-prepare")) {
                             response.putAll(funding.prepare(fixture));
                         } else if (funding != null && List.of("funding-before", "funding-committed", "funding-expired").contains(op)) {
                             response.putAll(funding.inspect(fixture, op, body.get("commandKey")));
@@ -621,7 +776,19 @@ class SyntheticJourneyIT {
                             assertThat(expired).isPositive();response.put("sessionDeadlineExpired",true);response.put("expiredSessions",expired);
                         }else throw new IllegalArgumentException("Unsupported test control");
                         response.put("controlOk",true);
-                    }catch(Exception|AssertionError failure){response=Map.of("controlOk",false,"changedTables",response.getOrDefault("changedTables",List.of()),"newAuditActions",response.getOrDefault("newAuditActions",List.of()));}
+                    }catch(Exception|AssertionError failure){
+                        var diagnostic = new HashMap<String,Object>();
+                        diagnostic.put("controlOk", false);
+                        diagnostic.put("changedTables", response.getOrDefault("changedTables", List.of()));
+                        diagnostic.put("newAuditActions", response.getOrDefault("newAuditActions", List.of()));
+                        if (pair != null) {
+                            diagnostic.put("fixtureError", failure.getClass().getSimpleName());
+                            java.util.Arrays.stream(failure.getStackTrace())
+                                .filter(frame -> frame.getClassName().startsWith(TwoJourneyFixture.class.getName()))
+                                .findFirst().ifPresent(frame -> diagnostic.put("fixtureLine", frame.getLineNumber()));
+                        }
+                        response = diagnostic;
+                    }
                     Path tmp=run.resolve("reply.tmp");Files.writeString(tmp,JSONObjectUtils.toJSONString(response));Files.move(tmp,run.resolve("reply.json"),StandardCopyOption.ATOMIC_MOVE);
                 }
                 Thread.sleep(25);

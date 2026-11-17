@@ -62,9 +62,10 @@ SUPERVISED = "supervised-h1"
 ADMIN_QA = "supervised-admin"
 CANCELLATION = "cancellation"
 FUNDING = "extension-funding"
+TWO_JOURNEYS = "reschedule-refund"
 SUPERVISED_SCENARIOS = {SUPERVISED, ADMIN_QA}
 SUPERVISED_ACTIVE_SECONDS = 1710
-VERIFIED_CLEANUP_SCENARIOS = SUPERVISED_SCENARIOS | {CANCELLATION, FUNDING}
+VERIFIED_CLEANUP_SCENARIOS = SUPERVISED_SCENARIOS | {CANCELLATION, FUNDING, TWO_JOURNEYS}
 
 
 def preflight(supervised=False):
@@ -204,7 +205,7 @@ def admin_qa_options(scenario):
 
 
 def journey_test(scenario):
-    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT',ADMIN_QA:'SyntheticJourneyIT',CANCELLATION:'SyntheticJourneyIT',FUNDING:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
+    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT',ADMIN_QA:'SyntheticJourneyIT',CANCELLATION:'SyntheticJourneyIT',FUNDING:'SyntheticJourneyIT',TWO_JOURNEYS:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
     if scenario not in tests:raise RuntimeError('Unsupported synthetic scenario')
     return tests[scenario]
 
@@ -252,7 +253,7 @@ def run_stage(stage, args, cwd, env, path, timeout):
 def browser_mode(scenario):
     if scenario in SUPERVISED_SCENARIOS:
         return SUPERVISED
-    return scenario if scenario in {'h1', CANCELLATION, FUNDING} else 'campaign'
+    return scenario if scenario in {'h1', CANCELLATION, FUNDING, TWO_JOURNEYS} else 'campaign'
 
 
 def verify_cancellation_results(result):
@@ -274,6 +275,15 @@ def verify_funding_results(result):
             or len(rows) != len(expected) or {row['id'] for row in rows} != expected
             or any(row['status'] != 'PASS' for row in rows)):
         raise RuntimeError('Funding browser result inventory incomplete or failed')
+
+
+def verify_two_journey_results(result):
+    expected = {'startup', 'two-reschedule', 'two-refund'}
+    rows = result.get('results', [])
+    if (result.get('mode') != TWO_JOURNEYS or result.get('syntheticOnly') is not True
+            or len(rows) != len(expected) or {row['id'] for row in rows} != expected
+            or any(row['status'] != 'PASS' for row in rows)):
+        raise RuntimeError('Two-journey browser result inventory incomplete or failed')
 
 
 def cancellation_database_version(name, env, attempts=100):
@@ -342,7 +352,7 @@ def inside(path):
     if not port.isdigit():
         raise RuntimeError('Database must have one loopback binding')
     (path/'database-port.json').write_text(json.dumps({'ports': [int(port)]}))
-    if scenario in {CANCELLATION, FUNDING}:
+    if scenario in {CANCELLATION, FUNDING, TWO_JOURNEYS}:
         print(json.dumps({'postgresql': cancellation_database_version(name, env)}), flush=True)
     else:
         for _ in range(100):
@@ -362,13 +372,15 @@ def inside(path):
         verify_cancellation_results(json.loads(browser_result))
     elif scenario == FUNDING:
         verify_funding_results(json.loads(browser_result))
+    elif scenario == TWO_JOURNEYS:
+        verify_two_journey_results(json.loads(browser_result))
     print(browser_result, flush=True)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
-    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED,ADMIN_QA,CANCELLATION,FUNDING], default='campaign')
+    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED,ADMIN_QA,CANCELLATION,FUNDING,TWO_JOURNEYS], default='campaign')
     parser.add_argument('--inside', type=Path)
     parser.add_argument('--cleanup', type=Path)
     args = parser.parse_args()

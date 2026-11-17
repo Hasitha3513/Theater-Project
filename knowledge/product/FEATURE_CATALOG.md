@@ -870,3 +870,5 @@ Operational policy activation and quotation issuance are gated V42 capabilities 
 The owner-only reservation panel supports synthetic BANK request creation and owner-scoped status and original-key recovery. Pending, expired, inactive and temporarily unavailable results all keep funding unconfirmed. The local scope uses the Payments migration and existing Booking eligibility context, with four focused PostgreSQL cases and three direct authenticated funding HTTP regressions passed. [Policy](../PROJECT.md#synthetic-extension-funding-request-policy) · [Frontend](../../frontend/components/extension-reservation.tsx).
 
 [Real-backend funding journey evidence](../PROGRESS.md#funding-recovery-real-backend-journey).
+
+[Real-backend reschedule and synthetic refund journey disposition](../PROGRESS.md#reschedule-refund-browser-journeys).

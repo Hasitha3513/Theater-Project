@@ -16136,5 +16136,210 @@ receipt_admission_successor_errors = funding_e2e_errors
 inert_ci_main = funding_e2e_main
 
 
+# CN-E2E-RESCHEDULE-REFUND-001
+RESCHEDULE_REFUND_E2E_BASE = 'e1e0cc09af379a355ab775f598c03016d585298a'
+RESCHEDULE_REFUND_E2E_KEY = 'syntheticRescheduleRefundBrowserJourneys'
+RESCHEDULE_REFUND_E2E_OWNED = {
+    'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java',
+    'frontend/tests/synthetic-e2e.mjs',
+    'knowledge/PROGRESS.md',
+    'knowledge/execution/change-sets.json',
+    'knowledge/execution/status.json',
+    'knowledge/execution/validate_execution.py',
+    'knowledge/guides/USER_GUIDE.md',
+    'knowledge/manifest.json',
+    'knowledge/product/FEATURE_CATALOG.md',
+    'scripts/test-synthetic-e2e.py',
+    'scripts/verify-synthetic-e2e.py',
+}
+RESCHEDULE_REFUND_E2E_RECORD = {
+  "baseline": "e1e0cc09af379a355ab775f598c03016d585298a",
+  "changeSet": "CN-E2E-RESCHEDULE-REFUND-001",
+  "scope": "SYNTHETIC_RESCHEDULE_REFUND_E2E_ONLY",
+  "requirements": [
+    "CN-C08",
+    "CN-A02",
+    "CN-A07",
+    "BP-AC12"
+  ],
+  "knowledgeReview": {
+    "trackedFiles": 114,
+    "deltaReviewed": 7,
+    "sha256": "2999d3a2eee9d1492e949e49049946d9f2421d32987010eb94d6e939bb759226"
+  },
+  "sourceSha256": {
+    "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "1a48e7f4b563035a0f21575afa36a9f2359a25a6f97690ba666640f70ebd13ee",
+    "frontend/tests/synthetic-e2e.mjs": "f3f9d2a17fbf24220815d8beb11d013df61fea58b791d6db23c7bc282aa9063c",
+    "scripts/verify-synthetic-e2e.py": "6469b3fe63094f35c7c3532694a6d46706474c45dcce860ee07b660a345883e9",
+    "scripts/test-synthetic-e2e.py": "e097af30c1f160af1d76bee1bbd9bb938d474da7eaa1886a99d46a4dfaa4cd5f",
+    "knowledge/product/FEATURE_CATALOG.md": "49771059796cd7ffd7f480859e46a3e3bcf671506cbaa5745931f2eb416fc7ce",
+    "knowledge/guides/USER_GUIDE.md": "08af35677080cd5f503462c14f2499413fff399cec69c7608f393430ee845075",
+    "knowledge/PROGRESS.md": "e85ab3e132b3a9f58cd8e84dd0774009b5168a720e036e0ecb40ea72dfc40da6",
+    "knowledge/execution/change-sets.json": "6f6bc08635c1fa71d4d15b9d082b0e5bf55518af7a646817e80d92fdd225db4b"
+  },
+  "qualification": {
+    "browser": {
+      "pass": 3,
+      "fail": 0,
+      "error": 0,
+      "skipped": 0,
+      "notRun": 0
+    },
+    "initialAttempt": {
+      "pass": 2,
+      "fail": 1,
+      "notRun": 0
+    },
+    "backendJourneyPass": 1,
+    "retainedOfflineBackendPass": 24,
+    "retainedOfflineFrontendPass": 15,
+    "launcherPass": 30,
+    "postgresql": "18.6",
+    "migrationHead": "V43",
+    "migrationCount": 42,
+    "cleanup": "PASS",
+    "persistence": "PASS",
+    "readyForPublication": "LOCALLY_QUALIFIED",
+    "runtimeLogSha256": "f877bd7458592f3625c61da47d048c3446d7a8eb97df754e9cefafec6620c6b9",
+    "observationsSha256": "3b59c3e04083fe68499efdbd22c52a14874fd2229f900b78d8f2e861c806f4c0",
+    "firstAttemptSha256": "af8fead5fd700fbce5809a85e3953609b58170e3866ef592a5c5776410155afc",
+    "refundDecisionDiagnosticSha256": "b65824102f55eba921f7d38f7bf6886c823f4ace9d296410be4775f2754b4663"
+  },
+  "part1": {
+    "completed": 4,
+    "total": 7
+  },
+  "roomBlockingGate": "NOT_SATISFIED",
+  "productionAuthorization": "NONE",
+  "publication": "NOT_AUTHORIZED"
+}
+RESCHEDULE_REFUND_E2E_ENTRYPOINT = FUNDING_E2E_ENTRYPOINT
+
+
+def reschedule_refund_e2e_before(name):
+    return v41_git('show', RESCHEDULE_REFUND_E2E_BASE + ':' + name)
+
+
+def reschedule_refund_e2e_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', RESCHEDULE_REFUND_E2E_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        baseline_entries = v41_git('ls-tree', '-r', '-z', RESCHEDULE_REFUND_E2E_BASE).split(b'\0')
+        baseline = {}
+        for entry in filter(None, baseline_entries):
+            metadata, name = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            baseline[name.decode()] = (mode, kind, oid)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', RESCHEDULE_REFUND_E2E_BASE, '--name-only', '-z')
+        if changed != RESCHEDULE_REFUND_E2E_OWNED or live != set(baseline):
+            return ['Reschedule/refund E2E exact eleven-path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        migrations = {name for name in baseline if name.startswith(migration_prefix)}
+        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(migrations) != 42 or actual_migrations != migrations:
+            return ['Reschedule/refund E2E migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Reschedule/refund E2E unsafe path: ' + name]
+            if name in RESCHEDULE_REFUND_E2E_OWNED:
+                if mode != b'100644' or path.stat().st_mode & 0o111:
+                    return ['Reschedule/refund E2E unauthorized file mode: ' + name]
+                continue
+            data = path.read_bytes()
+            if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                return ['Reschedule/refund E2E predecessor drift: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(RESCHEDULE_REFUND_E2E_KEY, None) != RESCHEDULE_REFUND_E2E_RECORD
+                or state != json.loads(reschedule_refund_e2e_before(ADMIN_QA_STATUS))):
+            return ['Reschedule/refund E2E review or acceptance accounting mismatch']
+        for name, expected in RESCHEDULE_REFUND_E2E_RECORD['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Reschedule/refund E2E source fingerprint mismatch: ' + name]
+        old_validator = reschedule_refund_e2e_before(V41_VALIDATOR)
+        if (not old_validator.endswith(RESCHEDULE_REFUND_E2E_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(RESCHEDULE_REFUND_E2E_ENTRYPOINT)])):
+            return ['Reschedule/refund E2E altered historical validator']
+        manifest = json.loads(reschedule_refund_e2e_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in RESCHEDULE_REFUND_E2E_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Reschedule/refund E2E manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Reschedule/refund E2E admission inputs inaccessible or invalid']
+    return []
+
+
+def reschedule_refund_e2e_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in reschedule_refund_e2e_errors()):
+                raise ValueError('Reschedule/refund E2E negative control failed: ' + reason)
+
+    for name in RESCHEDULE_REFUND_E2E_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Reschedule/refund E2E source fingerprint mismatch')
+    reject(R / V41_MANIFEST, b'drift', 'Reschedule/refund E2E manifest mismatch')
+    reject(K / 'execution/requirements.json', b'drift', 'Reschedule/refund E2E predecessor drift')
+    reject(R / EXTENSION_FUNDING_MIGRATION, b'drift', 'Reschedule/refund E2E predecessor drift')
+    path = R / ADMIN_QA_STATUS
+    state = json.loads(original(path))
+    state[RESCHEDULE_REFUND_E2E_KEY]['part1']['completed'] = 5
+    reject(path, json.dumps(state).encode(), 'Reschedule/refund E2E review or acceptance accounting mismatch')
+    state = json.loads(original(path))
+    state[RESCHEDULE_REFUND_E2E_KEY].pop('knowledgeReview')
+    reject(path, json.dumps(state).encode(), 'Reschedule/refund E2E review or acceptance accounting mismatch')
+
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if reschedule_refund_e2e_errors() != ['Reschedule/refund E2E exact eleven-path inventory mismatch']:
+            raise ValueError('Reschedule/refund E2E unauthorized path negative control failed')
+    glob = Path.glob
+
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if reschedule_refund_e2e_errors() != ['Reschedule/refund E2E migration inventory mismatch']:
+            raise ValueError('Reschedule/refund E2E extra migration negative control failed')
+    print('PASS Reschedule/refund E2E inventory, fingerprints, migration, review and acceptance controls', flush=True)
+
+
+def reschedule_refund_e2e_main():
+    import sys
+    import tempfile
+
+    errors = reschedule_refund_e2e_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    reschedule_refund_e2e_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-reschedule-refund-e2e-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', RESCHEDULE_REFUND_E2E_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = reschedule_refund_e2e_errors
+inert_ci_main = reschedule_refund_e2e_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

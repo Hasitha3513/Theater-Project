@@ -31779,5 +31779,66 @@
     "roomBlockingGate": "NOT_SATISFIED",
     "productionAuthorization": "NONE",
     "publication": "NOT_AUTHORIZED"
+  },
+  "syntheticRescheduleRefundBrowserJourneys": {
+    "baseline": "e1e0cc09af379a355ab775f598c03016d585298a",
+    "changeSet": "CN-E2E-RESCHEDULE-REFUND-001",
+    "scope": "SYNTHETIC_RESCHEDULE_REFUND_E2E_ONLY",
+    "requirements": [
+      "CN-C08",
+      "CN-A02",
+      "CN-A07",
+      "BP-AC12"
+    ],
+    "knowledgeReview": {
+      "trackedFiles": 114,
+      "deltaReviewed": 7,
+      "sha256": "2999d3a2eee9d1492e949e49049946d9f2421d32987010eb94d6e939bb759226"
+    },
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "1a48e7f4b563035a0f21575afa36a9f2359a25a6f97690ba666640f70ebd13ee",
+      "frontend/tests/synthetic-e2e.mjs": "f3f9d2a17fbf24220815d8beb11d013df61fea58b791d6db23c7bc282aa9063c",
+      "scripts/verify-synthetic-e2e.py": "6469b3fe63094f35c7c3532694a6d46706474c45dcce860ee07b660a345883e9",
+      "scripts/test-synthetic-e2e.py": "e097af30c1f160af1d76bee1bbd9bb938d474da7eaa1886a99d46a4dfaa4cd5f",
+      "knowledge/product/FEATURE_CATALOG.md": "49771059796cd7ffd7f480859e46a3e3bcf671506cbaa5745931f2eb416fc7ce",
+      "knowledge/guides/USER_GUIDE.md": "08af35677080cd5f503462c14f2499413fff399cec69c7608f393430ee845075",
+      "knowledge/PROGRESS.md": "e85ab3e132b3a9f58cd8e84dd0774009b5168a720e036e0ecb40ea72dfc40da6",
+      "knowledge/execution/change-sets.json": "6f6bc08635c1fa71d4d15b9d082b0e5bf55518af7a646817e80d92fdd225db4b"
+    },
+    "qualification": {
+      "browser": {
+        "pass": 3,
+        "fail": 0,
+        "error": 0,
+        "skipped": 0,
+        "notRun": 0
+      },
+      "initialAttempt": {
+        "pass": 2,
+        "fail": 1,
+        "notRun": 0
+      },
+      "backendJourneyPass": 1,
+      "retainedOfflineBackendPass": 24,
+      "retainedOfflineFrontendPass": 15,
+      "launcherPass": 30,
+      "postgresql": "18.6",
+      "migrationHead": "V43",
+      "migrationCount": 42,
+      "cleanup": "PASS",
+      "persistence": "PASS",
+      "readyForPublication": "LOCALLY_QUALIFIED",
+      "runtimeLogSha256": "f877bd7458592f3625c61da47d048c3446d7a8eb97df754e9cefafec6620c6b9",
+      "observationsSha256": "3b59c3e04083fe68499efdbd22c52a14874fd2229f900b78d8f2e861c806f4c0",
+      "firstAttemptSha256": "af8fead5fd700fbce5809a85e3953609b58170e3866ef592a5c5776410155afc",
+      "refundDecisionDiagnosticSha256": "b65824102f55eba921f7d38f7bf6886c823f4ace9d296410be4775f2754b4663"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED"
   }
 }

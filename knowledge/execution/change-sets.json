@@ -7412,5 +7412,37 @@
       "notRun": 0
     },
     "publication": "NOT_AUTHORIZED"
+  },
+  "syntheticRescheduleRefundBrowserJourneys": {
+    "id": "CN-E2E-RESCHEDULE-REFUND-001",
+    "baseline": "e1e0cc09af379a355ab775f598c03016d585298a",
+    "requirements": [
+      "CN-C08",
+      "CN-A02",
+      "CN-A07",
+      "BP-AC12"
+    ],
+    "scope": "Opt-in zero-delta synthetic reschedule and synthetic bank refund review/recovery browser tests; no production behavior or migrations.",
+    "authorizedPaths": [
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java",
+      "frontend/tests/synthetic-e2e.mjs",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "scripts/test-synthetic-e2e.py",
+      "scripts/verify-synthetic-e2e.py"
+    ],
+    "localQualification": {
+      "pass": 3,
+      "fail": 0,
+      "error": 0,
+      "skipped": 0,
+      "notRun": 0
+    },
+    "publication": "NOT_AUTHORIZED"
   }
 }

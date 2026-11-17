@@ -25,9 +25,10 @@ import {
 import { pathToFileURL } from "node:url";
 
 const mode = process.env.CINENEST_E2E_MODE ?? "campaign";
-assert.ok(["campaign", "h1", "supervised-h1", "cancellation", "extension-funding"].includes(mode), "unknown browser journey mode");
+assert.ok(["campaign", "h1", "supervised-h1", "cancellation", "extension-funding", "reschedule-refund"].includes(mode), "unknown browser journey mode");
 const cancellation = mode === "cancellation";
 const funding = mode === "extension-funding";
+const twoJourneys = mode === "reschedule-refund";
 const supervised = mode === "supervised-h1";
 const h1 = mode === "h1" || supervised;
 let supervisedOutcome;
@@ -97,7 +98,7 @@ const cancellationPlan = [
 	"cancellation-replay-persistence", "cancellation-staff-view",
 ];
 const fundingPlan = ["startup", "funding-scope-denials", "funding-ui-recovery", "funding-replay-expiry"];
-const planned = funding ? fundingPlan : cancellation ? cancellationPlan : h1 ? [
+const planned = twoJourneys ? ["startup", "two-reschedule", "two-refund"] : funding ? fundingPlan : cancellation ? cancellationPlan : h1 ? [
 	"startup", "customer-discovery-auth", "hold-quote-accept",
 	"verification-explicit-consent", "E-pending-verification",
 	"independent-verification-api-support", "explicit-bank-request",
@@ -176,7 +177,7 @@ async function control(body) {
 		try {
 			const result = JSON.parse(await readFile(`${run}/reply.json`, "utf8"));
 			await unlink(`${run}/reply.json`);
- if(!result.controlOk)await writeFile(new URL("last-control.json",diagnostics),JSON.stringify({changedTables:result.changedTables,newAuditActions:result.newAuditActions}),{mode:0o600});
+ if(!result.controlOk)await writeFile(new URL("last-control.json",diagnostics),JSON.stringify({changedTables:result.changedTables,newAuditActions:result.newAuditActions,fixtureError:result.fixtureError,fixtureLine:result.fixtureLine}),{mode:0o600});
 			assert.equal(
 				result.controlOk,
 				true,
@@ -772,13 +773,173 @@ async function runFundingQualification(base) {
 	}
 }
 
+async function runTwoJourneys(base) {
+	const origins = supervisedOrigins(config, base);
+	const attempt = async (id, body) => {
+		const opened = [];
+		const open = async (subject) => {
+			const context = await browser.newContext({ serviceWorkers: "block" });
+			opened.push(context);
+			await context.route("**/*", (route) => origins.has(new URL(route.request().url()).origin)
+				? route.continue() : route.abort());
+			const page = await context.newPage();
+			await login(page, subject);
+			return page;
+		};
+		try {
+			await scenario(id, () => body(open));
+			return true;
+		} catch (error) {
+			const diagnostic = new URL("last-control.json", diagnostics);
+			const fixture = await readFile(diagnostic, "utf8").then(JSON.parse).catch(() => undefined);
+			await unlink(diagnostic).catch(() => {});
+			observations.push({ stage: id, status: "FAIL", type: error.name, fixture,
+				location: error.stack?.split("\n").find(line => line.includes("synthetic-e2e.mjs"))?.trim() });
+			results.push({ id, status: "FAIL", reason: "Inspect the bounded journey assertion location" });
+			return false;
+		} finally {
+			await Promise.all(opened.map(context => context.close()));
+		}
+	};
+	const click = (page, name) => page.getByRole("button", { name, exact: true }).click();
+	const mutation = async (page, name, path, suffix = false) => {
+		const response = page.waitForResponse(r => {
+			const pathname = new URL(r.url()).pathname;
+			return r.request().method() === "POST" && (suffix ? pathname.endsWith(path) : pathname === path);
+		});
+		await click(page, name);
+		const observed = await response;
+		observations.push({ stage, status: observed.status(), action: name });
+		assert.equal(observed.status(), 200);
+		return { body: observed.request().postDataJSON(), data: await observed.json() };
+	};
+	const inspect = async (op, expected) => {
+		const { controlOk, ...actual } = await control({ op });
+		assert.equal(controlOk, true);
+		assert.deepEqual(actual, expected);
+		observations.push({ stage, ...actual });
+	};
+	const reschedule = await attempt("two-reschedule", async (open) => {
+		const { booking, targetLocal } = await control({ op: "two-reschedule-prepare" });
+		const owner = await open("customer-a"), other = await open("customer-b"), staff = await open("staff");
+		const root = `/api/bookings/${booking}`;
+		const path = root + "/amendments";
+		const staffPath = venue => `/api/admin/venues/${venue}/bookings/${booking}`;
+		await owner.goto(`${base}/bookings/${booking}`);
+		await click(owner, "Refresh booking history");
+		await owner.getByText("History: retained immutable revision 1,", { exact: false }).waitFor();
+		await owner.getByLabel("Replacement session start (venue local)", { exact: true }).fill(targetLocal);
+		const { data: proposal } = await mutation(owner, "Prepare synthetic proposal", path);
+		assert.equal(proposal.state, "PROPOSED");
+		await owner.getByText(/Financial difference: LKR 0.00/).waitFor();
+		const confirmPath = `${path}/${proposal.id}/confirm`;
+		const stale = { expectedBookingRevision: 2, expectedAmendmentRevision: proposal.revision,
+			proposalHash: proposal.proposalHash, commandKey: crypto.randomUUID(), reason: "Synthetic stale revision" };
+		assert.equal((await api(owner, confirmPath, "POST", { ...stale, expectedBookingRevision: 1 }, false)).status, 403);
+		assert.equal((await api(other, confirmPath, "POST", { ...stale, expectedBookingRevision: 1 })).status, 404);
+		assert.equal((await api(owner, confirmPath, "POST", stale)).status, 409);
+		assert.equal((await api(staff, staffPath(config.otherVenue))).status, 404);
+		assert.equal(await owner.getByRole("button", { name: "Confirm synthetic reschedule", exact: true }).isDisabled(), true);
+		await owner.getByLabel(/I accept this exact replacement interval/).check();
+		const confirmed = await mutation(owner, "Confirm synthetic reschedule", confirmPath);
+		assert.equal(confirmed.data.state, "CONFIRMED");
+		assert.equal((await api(owner, confirmPath, "POST", confirmed.body)).value.state, "CONFIRMED");
+		assert.equal((await api(owner, confirmPath, "POST", { ...confirmed.body, reason: "Synthetic changed replay" })).status, 409);
+		const updated = await json(owner, root);
+		assert.equal(updated.revision, 2);
+		assert.equal(updated.purchase.sessionStart, proposal.proposed.sessionStart);
+		await click(owner, "Refresh booking history");
+		await owner.getByText("History: retained immutable revision 2,", { exact: false }).waitFor();
+		await staff.goto(`${base}/admin/bookings/venues/${config.venue}/${booking}`);
+		await click(staff, "Reload booking detail");
+		const details = staff.getByRole("region", { name: "Authorized staff booking detail" });
+		await details.getByText("Server revision", { exact: true }).waitFor();
+		await details.locator("dt").filter({ hasText: /^Server revision$/ }).locator("xpath=following-sibling::dd[1]").filter({ hasText: /^2$/ }).waitFor();
+		assert.equal((await json(staff, staffPath(config.venue))).booking.revision, 2);
+		await inspect("two-reschedule-inspect", { revisions: 2, blocking: 1, confirmationAudits: 1, paymentUnchanged: true });
+	});
+	const refund = await attempt("two-refund", async (open) => {
+		const setup = await control({ op: "two-refund-prepare" });
+		const owner = await open("customer-a"), reviewer = await open("staff"), executor = await open("customer-b");
+		const requestPath = `/api/bank/requests/${setup.request}/refunds`;
+		const unauthorised = { creditId: setup.credit, amountMinor: "100", currency: "LKR",
+			expectedRevision: setup.revision, commandKey: crypto.randomUUID(), reason: "Synthetic denial" };
+		assert.equal((await api(executor, requestPath, "POST", unauthorised)).status, 403);
+		assert.equal((await api(owner, requestPath, "POST", unauthorised, false)).status, 403);
+		await owner.goto(base + "/refunds");
+		const target = "Refund ID to inspect or owned bank request ID to request a refund";
+		const reason = "Reason (synthetic information only)";
+		await owner.getByLabel(target, { exact: true }).fill(setup.request);
+		await owner.getByLabel("Controlled-matched synthetic credit ID").fill(setup.credit);
+		await owner.getByLabel("Requested LKR minor units").fill("100");
+		await owner.getByLabel("Current bank request revision").fill(String(setup.revision));
+		await owner.getByLabel(reason, { exact: true }).fill("Synthetic customer request");
+		const created = await mutation(owner, "Request synthetic return", requestPath);
+		assert.equal(created.data.state, "REQUESTED");
+		assert.equal(created.data.realRepayment, false);
+		const replay = await api(owner, requestPath, "POST", created.body);
+		assert.equal(replay.status, 200);
+		assert.equal(replay.value.id, created.data.id);
+		const id = created.data.id;
+		const path = `/api/admin/venues/${config.venue}/refunds/${id}`;
+		const readPath = `/api/refunds/${id}`;
+		const staffAction = { expectedRevision: created.data.revision, commandKey: crypto.randomUUID(),
+			reason: "Synthetic restricted request", action: "REVIEW" };
+		assert.equal((await api(executor, path + "/decisions", "POST", staffAction)).status, 403);
+		assert.equal((await api(owner, path + "/decisions", "POST", staffAction)).status, 403);
+		assert.equal((await api(reviewer, path.replace(config.venue, config.otherVenue) + "/decisions", "POST", staffAction)).status, 403);
+		async function load(page) {
+			await page.goto(base + "/admin/refunds");
+			await page.getByLabel("Finance venue ID").fill(config.venue);
+			await page.getByLabel(target, { exact: true }).fill(id);
+			await page.getByLabel(reason, { exact: true }).fill("Synthetic staff action");
+			const response = page.waitForResponse(r => new URL(r.url()).pathname === readPath && r.request().method() === "GET");
+			await click(page, "Load refund status");
+			assert.equal((await response).status(), 200);
+		}
+		await load(reviewer);
+		assert.equal((await mutation(reviewer, "Begin independent review", path + "/decisions")).data.state, "UNDER_REVIEW");
+		assert.equal((await mutation(reviewer, "Verify controlled original-payer destination", path + "/destination-verifications")).data.destinationVerified, true);
+		const { data: approved } = await mutation(reviewer, "Approve and reserve synthetic funds", path + "/decisions");
+		assert.equal(approved.state, "APPROVED");
+		const start = { expectedRevision: approved.revision, commandKey: crypto.randomUUID(), reason: "Synthetic denied execution" };
+		assert.equal((await api(reviewer, path + "/attempts", "POST", start)).status, 403);
+		await load(executor);
+		const prepared = await mutation(executor, "Prepare independent simulated attempt", path + "/attempts");
+		assert.equal(prepared.data.state, "AWAITING_EVIDENCE");
+		const attemptId = prepared.data.attempts.at(-1).id;
+		const evidencePath = `${path}/attempts/${attemptId}/evidence`;
+		const recorded = await mutation(executor, "Record simulated UNKNOWN", evidencePath);
+		assert.equal(recorded.data.state, "AWAITING_EVIDENCE");
+		assert.equal((await api(executor, evidencePath, "POST", { ...recorded.body, expectedRevision: recorded.data.revision, commandKey: crypto.randomUUID() })).status, 403);
+		await load(reviewer);
+		const unknown = await mutation(reviewer, "Independently verify simulated UNKNOWN", evidencePath);
+		assert.equal(unknown.data.state, "UNKNOWN_RECONCILIATION_REQUIRED");
+		await reviewer.getByRole("heading", { name: "UNKNOWN RECONCILIATION REQUIRED", exact: true }).waitFor();
+		assert.equal((await api(executor, path + "/attempts", "POST", { ...prepared.body, expectedRevision: unknown.data.revision, commandKey: crypto.randomUUID() })).status, 409);
+		await load(executor);
+		await mutation(executor, "Record simulated CONFIRMED", path + "/reconciliations");
+		await load(reviewer);
+		const completed = await mutation(reviewer, "Independently verify simulated CONFIRMED", path + "/reconciliations");
+		assert.equal(completed.data.state, "SIMULATED_CONFIRMED");
+		assert.equal(completed.data.realRepayment, false);
+		assert.equal((await api(reviewer, path + "/reconciliations", "POST", completed.body)).value.state, "SIMULATED_CONFIRMED");
+		await reviewer.getByRole("heading", { name: "SIMULATED CONFIRMED", exact: true }).waitFor();
+		await owner.getByLabel(target, { exact: true }).fill(id);
+		await click(owner, "Load refund status");
+		await owner.getByRole("heading", { name: "SIMULATED CONFIRMED", exact: true }).waitFor();
+		await inspect("two-refund-inspect", { attempts: 1, immutableEvidence: 4, simulatedMinor: 100, protectedStateUnchanged: true });
+	});
+	if (!reschedule || !refund) process.exitCode = 1;
+}
+
 const socket = createServer();
 socket.listen(0, "127.0.0.1");
 await once(socket, "listening");
 const port = socket.address().port;
 await new Promise((r) => socket.close(r));
 const base = `http://127.0.0.1:${port}`;
-const faultTransport = cancellation || funding ? null : h1 ? null : await uploadFaultProxy(config.backend);
+const faultTransport = cancellation || funding || twoJourneys ? null : h1 ? null : await uploadFaultProxy(config.backend);
 await writeFile(
 	`${run}/frontend-port.json`,
 	JSON.stringify({
@@ -819,7 +980,9 @@ try {
 	});
 	browser = await chromium.launch({ headless: !supervised });
 	assert.equal(browser.version(), "151.0.7922.34");
-	if (funding) {
+	if (twoJourneys) {
+		await runTwoJourneys(base);
+	} else if (funding) {
 		await runFundingQualification(base);
 	} else if (cancellation) {
 		await runCancellationQualification(base);

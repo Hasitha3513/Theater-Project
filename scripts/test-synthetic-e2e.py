@@ -85,6 +85,20 @@ class AdmissionTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'Funding browser result inventory'):
                 journey.verify_funding_results(changed)
 
+    def test_two_journeys_require_both_passes_and_verified_cleanup(self):
+        mode = journey.TWO_JOURNEYS
+        self.assertEqual(journey.browser_mode(mode), mode)
+        self.assertEqual(journey.journey_test(mode), 'SyntheticJourneyIT')
+        self.assertIn(mode, journey.VERIFIED_CLEANUP_SCENARIOS)
+        rows = [dict(id=name, status='PASS') for name in ('startup', 'two-reschedule', 'two-refund')]
+        result = dict(mode=mode, syntheticOnly=True, results=rows)
+        journey.verify_two_journey_results(result)
+        for altered in (dict(result, syntheticOnly=False), dict(result, mode='cancellation'),
+                        dict(result, results=rows[:-1]), dict(result, results=rows[:-1]+rows[:1]),
+                        dict(result, results=rows[:-1]+[dict(rows[-1], status='FAIL')])):
+            with self.assertRaisesRegex(RuntimeError, 'Two-journey browser result inventory'):
+                journey.verify_two_journey_results(altered)
+
     def test_aggregate_application_limits(self):
         self.assertTrue(journey.limits('300000 100000', str(7*1024**3)))
         for cpu, memory in [('max 100000', '1'), ('300001 100000', '1'), ('1 100000', 'max'),
