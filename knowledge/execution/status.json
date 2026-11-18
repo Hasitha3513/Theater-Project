@@ -31840,5 +31840,54 @@
     "roomBlockingGate": "NOT_SATISFIED",
     "productionAuthorization": "NONE",
     "publication": "NOT_AUTHORIZED"
+  },
+  "syntheticPackageBookingBrowserJourney": {
+    "baseline": "c3dbcd704629565cbdf749c605a0a91e5663ca9e",
+    "changeSet": "CN-E2E-PACKAGE-BOOKING-001",
+    "scope": "SYNTHETIC_PACKAGE_BOOKING_E2E_ONLY",
+    "requirements": [
+      "PK-AC01",
+      "PK-AC06",
+      "PK-AC07",
+      "PK-AC11"
+    ],
+    "runtimeDisposition": "PASS",
+    "correctedRuntimeDisposition": "PASS",
+    "browserCounts": {
+      "PASS": 4,
+      "FAIL": 0,
+      "NOT_RUN": 0
+    },
+    "cleanupVerified": true,
+    "knowledgeReview": {
+      "baseline": "c3dbcd704629565cbdf749c605a0a91e5663ca9e",
+      "comparison": "Prior Knowledge Base inventory and PR #9 successor delta",
+      "unchangedPaths": 107,
+      "changedPaths": 7
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "publication": "NOT_AUTHORIZED",
+    "evidence": {
+      "runtimeLogSha256": "fdfa43ba0b7927d2608b7bc1a50757ec138caa095ec5ece406a039219eafb56b",
+      "browserResultsSha256": "10982403ba83715a850d241c6b4526881aa794b26f83869dc582ca53672d61a9",
+      "observationsSha256": "268b6a972cbd48e85bd7b6d299fbd3468b3c78df41f3a65cdae8bb18cd898671",
+      "executedSourceManifestSha256": "cb9d92d2141cb2d340464476ab0f82ea30cc5a901c321e9a84a5ce14eb97d23d",
+      "cleanupSha256": "3e4b0cc06b767534325aaa6b9875793b9f2e360915fe418c512b6d934fc4a66d"
+    },
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "c85e31d35265e708f7d066fde7f23740ac4bc47d9b4b3c18d60573ce53ea2cc0",
+      "frontend/tests/synthetic-e2e.mjs": "2aef77714133f5bec0390f9c7c91c780a2c83f8bf32aa321ca97e470ac871002",
+      "knowledge/PROGRESS.md": "4760b8edabf904615ef6e5fdacca570834782365312dfa475368b23481fb33a8",
+      "knowledge/execution/change-sets.json": "9cfcbef163104a37d22638dc59a135dd882433fc8075aac171f09bb0d65a22db",
+      "knowledge/guides/USER_GUIDE.md": "d6bb8b833b256eb23f6fca0a2cf19c08ce7a972c58015ac47cb7fa6e9bcabfa2",
+      "knowledge/product/FEATURE_CATALOG.md": "60340d8763164cec383812ba8ad822cf1c9c41fe27b80e2e9a61d4d2f7f95bea",
+      "scripts/test-synthetic-e2e.py": "fdf3134cd6c819d34e46b51f11ad42bcecbb9f6ae2dd2029c53a7c94a1569867",
+      "scripts/verify-synthetic-e2e.py": "75f136ab919396f28778530ff74f27cc81082302ffd03f4dd0ff5ee7bca47dca"
+    }
   }
 }

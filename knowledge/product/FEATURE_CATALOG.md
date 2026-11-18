@@ -872,3 +872,5 @@ The owner-only reservation panel supports synthetic BANK request creation and ow
 [Real-backend funding journey evidence](../PROGRESS.md#funding-recovery-real-backend-journey).
 
 [Real-backend reschedule and synthetic refund journey disposition](../PROGRESS.md#reschedule-refund-browser-journeys).
+
+[Package-to-booking browser qualification status](../PROGRESS.md#package-booking-browser-journey) records the qualified synthetic lifecycle, including new booking confirmation, selective withdrawal, and retained booking history.

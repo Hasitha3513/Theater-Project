@@ -25,9 +25,10 @@ import {
 import { pathToFileURL } from "node:url";
 
 const mode = process.env.CINENEST_E2E_MODE ?? "campaign";
-assert.ok(["campaign", "h1", "supervised-h1", "cancellation", "extension-funding", "reschedule-refund"].includes(mode), "unknown browser journey mode");
+assert.ok(["campaign", "h1", "supervised-h1", "cancellation", "extension-funding", "reschedule-refund", "package-booking"].includes(mode), "unknown browser journey mode");
 const cancellation = mode === "cancellation";
 const funding = mode === "extension-funding";
+const packageBooking = mode === "package-booking";
 const twoJourneys = mode === "reschedule-refund";
 const supervised = mode === "supervised-h1";
 const h1 = mode === "h1" || supervised;
@@ -98,7 +99,7 @@ const cancellationPlan = [
 	"cancellation-replay-persistence", "cancellation-staff-view",
 ];
 const fundingPlan = ["startup", "funding-scope-denials", "funding-ui-recovery", "funding-replay-expiry"];
-const planned = twoJourneys ? ["startup", "two-reschedule", "two-refund"] : funding ? fundingPlan : cancellation ? cancellationPlan : h1 ? [
+const planned = packageBooking ? ["startup", "package-publish", "package-customer-quote", "package-history"] : twoJourneys ? ["startup", "two-reschedule", "two-refund"] : funding ? fundingPlan : cancellation ? cancellationPlan : h1 ? [
 	"startup", "customer-discovery-auth", "hold-quote-accept",
 	"verification-explicit-consent", "E-pending-verification",
 	"independent-verification-api-support", "explicit-bank-request",
@@ -933,13 +934,211 @@ async function runTwoJourneys(base) {
 	if (!reschedule || !refund) process.exitCode = 1;
 }
 
+async function runPackageBooking(base) {
+	const { booking, packageId, original, publication, unrelated } = config.packageBooking;
+	const root = `/api/admin/venues/${config.venue}/packages/${packageId}`;
+	const replacementName = "SYNTHETIC revised customer offer";
+	const contexts = [];
+	const click = (page, name) => page.getByRole("button", { name, exact: true }).click();
+	const open = async (subject) => {
+		const context = await browser.newContext({ serviceWorkers: "block" });
+		contexts.push(context);
+		const origins = supervisedOrigins(config, base);
+		await context.route("**/*", route => origins.has(new URL(route.request().url()).origin)
+			? route.continue() : route.abort());
+		const page = await context.newPage();
+		await login(page, subject);
+		return page;
+	};
+	const admin = async (page) => {
+		await page.goto(base + "/admin/settings/packages");
+		await page.getByLabel("Assigned venue ID").fill(config.venue);
+		await page.getByRole("heading", { name: "Package drafts" }).waitFor();
+	};
+	const loadChoices = async (page) => {
+		const [response] = await Promise.all([
+			page.waitForResponse(r => r.request().method() === "GET" && new URL(r.url()).pathname === `/api/venues/${config.venue}/packages`),
+			click(page, "Load applicable synthetic package choices"),
+		]);
+		assert.equal(response.status(), 200);
+		return page.getByLabel("Published package");
+	};
+	const choices = async (page, time, expiring = false) => {
+		await page.goto(base + "/rooms/" + config.room);
+		await page.getByLabel("Customer start in venue local time").fill(config.local.replace(/T\d\d:\d\d/, time));
+		await page.getByLabel("Customer duration (minutes)").fill("180");
+		await page.getByLabel("Guests", { exact: true }).fill("4");
+		await click(page, "Check inventory (no hold)");
+		const hold = await clickResponse(page, "Create temporary inventory hold", "/api/holds");
+		if (expiring) await control({ op: "prepare-expiring-quote", holdId: hold.holdId });
+		return { hold, select: await loadChoices(page) };
+	};
+	const quote = async (page, select, version) => {
+		await select.selectOption(version);
+		await page.getByLabel("Intended method (no payment)").selectOption("BANK");
+		return clickResponse(page, "Calculate synthetic quotation", "/api/quotes");
+	};
+	const frozenTerms = value => [value.packageVersionId, value.contentHash, value.totalMinor, value.currency];
+
+	let editor, publisher, customer, first, firstHold, replacement, revised, newBooking;
+	try {
+		await scenario("package-publish", async () => {
+			editor = await open("staff");
+			publisher = await open("customer-b");
+			customer = await open("customer-a");
+			const initial = await choices(customer, "T14:00");
+			firstHold = initial.hold;
+			first = await quote(customer, initial.select, original.version_id);
+			assert.equal(first.packageVersionId, original.version_id);
+
+			await admin(editor);
+			await click(editor, "Edit PUBLIC");
+			await editor.getByLabel("Package name", { exact: true }).fill(replacementName);
+			await editor.getByLabel("Base price (LKR)").fill("95.79");
+			await editor.getByLabel("Business reason for this change").fill("SYNTHETIC qualification edit");
+			const saved = await clickResponse(editor, "Save unpublished draft", root + "/draft", "PUT");
+
+			const request = { ...publication, expectedRevision: saved.revision,
+				replacesPublicationId: original.publication_id, replacesRevision: original.revision };
+			assert.equal((await api(editor, root + "/publication-preview", "POST", request)).status, 403);
+			assert.equal((await api(publisher, root + "/publication-preview", "POST", request, false)).status, 403);
+			assert.equal((await api(publisher, root.replace(config.venue, config.otherVenue))).status, 403);
+
+			const catalog = await customer.context().newPage();
+			try {
+				await catalog.goto(base + "/rooms/" + config.room);
+				await catalog.getByRole("heading", { name: "SYNTHETIC package", exact: true }).waitFor();
+				assert.equal(await catalog.getByRole("heading", { name: replacementName, exact: true }).count(), 0);
+			} finally {
+				await catalog.close();
+			}
+
+			await admin(publisher);
+			await click(publisher, "Publications PUBLIC");
+			await publisher.getByLabel("Sales start — venue local", { exact: true }).fill(publication.salesFromLocal.slice(0, 16));
+			await publisher.getByLabel("Sales end (exclusive) — venue local", { exact: true }).fill(publication.salesToLocal.slice(0, 16));
+			await publisher.getByLabel("Session validity start — venue local", { exact: true }).fill(publication.sessionFromLocal.slice(0, 16));
+			await publisher.getByLabel("Session validity end (exclusive) — venue local", { exact: true }).fill(publication.sessionToLocal.slice(0, 16));
+			await publisher.getByLabel("Explicit schedule replacement (optional)").selectOption(original.publication_id);
+			await publisher.getByLabel("Publication reason").fill(publication.reason);
+			const reviewForm = publisher.getByRole("button", { name: "Review publication PUBLIC", exact: true });
+			assert.equal(await reviewForm.evaluate(button => button.form.checkValidity()), true);
+			await clickResponse(publisher, "Review publication PUBLIC", root + "/publication-preview");
+			replacement = await clickResponse(publisher, "Approve reviewed publication PUBLIC", root + "/publications");
+			assert.equal(replacement.state, "ACTIVE");
+			assert.notEqual(replacement.versionId, original.version_id);
+			const history = await json(publisher, root + "/publications");
+			assert.ok(history.items.some(row => row.versionId === original.version_id && row.state === "INACTIVE"));
+		});
+
+		await scenario("package-customer-quote", async () => {
+			assert.deepEqual(frozenTerms(await json(customer, `/api/quotes/${first.quoteId}`)), frozenTerms(first));
+			const released = await clickResponse(customer, "Release hold", `/api/holds/${firstHold.holdId}/release`);
+			assert.equal(released.state, "RELEASED");
+			const { select } = await choices(customer, "T18:00");
+			const revisedOption = select.locator(`option[value="${replacement.versionId}"]`);
+			await revisedOption.waitFor({ state: "attached" });
+			assert.equal(await revisedOption.textContent(), replacementName);
+			assert.equal(await select.locator(`option[value="${original.version_id}"]`).count(), 0);
+			revised = await quote(customer, select, replacement.versionId);
+			assert.equal(revised.packageVersionId, replacement.versionId);
+			assert.notEqual(revised.totalMinor, first.totalMinor);
+			await customer.getByLabel("I reviewed this exact synthetic revision and all three disclosures").check();
+			const accepted = await clickResponse(customer, "Accept synthetic revision only", `/api/quotes/${revised.quoteId}/accept`);
+			assert.equal(accepted.state, "ACCEPTED");
+			assert.deepEqual(frozenTerms(accepted), frozenTerms(revised));
+			const confirmed = await control({ op: "package-confirm", quoteId: revised.quoteId, versionId: replacement.versionId });
+			assert.equal(confirmed.syntheticPurchasedVersionVerified, true);
+			newBooking = confirmed.booking;
+
+			const expiryChoice = await choices(customer, "T14:00", true);
+			const expiring = await quote(customer, expiryChoice.select, replacement.versionId);
+			assert.equal((await control({ op: "await-quote-expiry", quoteId: expiring.quoteId })).serverExpired, true);
+			const expired = await api(customer, `/api/quotes/${expiring.quoteId}/accept`, "POST", {
+				expectedRevision: expiring.revision, contentHash: expiring.contentHash,
+				disclosures: expiring.disclosures, idempotencyKey: crypto.randomUUID(),
+			});
+			assert.equal(expired.status, 409);
+			assert.equal((await control({ op: "inspect-expired-quote" })).snapshotAndFinancialStateUnchanged, true);
+			const persisted = await control({ op: "package-inspect", versionId: replacement.versionId, quoteId: revised.quoteId });
+			assert.equal(persisted.attributablePublicationAudit, true);
+			observations.push({ stage: "package-customer-quote", ...persisted, expiredStatus: expired.status });
+		});
+
+		await scenario("package-history", async () => {
+			await publisher.getByLabel("State-change reason").fill("SYNTHETIC lifecycle withdrawal");
+			const retired = await clickResponse(publisher, "Withdraw publication " + replacement.versionNo,
+				root + "/publications/" + replacement.publicationId + "/deactivate");
+			assert.equal(retired.state, "INACTIVE");
+			assert.deepEqual(frozenTerms(await json(customer, `/api/quotes/${revised.quoteId}`)), frozenTerms(revised));
+			const persisted = await control({ op: "package-inspect", versionId: replacement.versionId,
+				quoteId: revised.quoteId, retired: true });
+			assert.equal(persisted.purchaseAndPaymentsUnchanged, true);
+			observations.push({ stage: "package-history-persistence", ...persisted });
+
+			const catalogResponse = customer.waitForResponse(response => {
+				const url = new URL(response.url());
+				return response.request().method() === "GET" &&
+					url.pathname === `/api/venues/${config.venue}/packages` &&
+					url.searchParams.get("roomId") === config.room;
+			});
+			await customer.goto(base + "/rooms/" + config.room);
+			const catalog = await catalogResponse;
+			assert.equal(catalog.status(), 200);
+			const visible = (await catalog.json()).items.map(row => ({ packageId: row.packageId, versionId: row.versionId }));
+			observations.push({ stage: "package-history-catalog", status: catalog.status(), visible,
+				withdrawnVersion: replacement.versionId });
+			assert.deepEqual(visible, [{ packageId: unrelated.packageId, versionId: unrelated.versionId }]);
+			const packages = customer.getByRole("region", { name: "Room packages" });
+			await packages.getByRole("heading", { name: "SYNTHETIC unrelated customer offer", exact: true }).waitFor();
+			assert.equal(await packages.getByRole("heading", { name: replacementName, exact: true }).count(), 0);
+			assert.equal(await packages.getByRole("heading", { name: "SYNTHETIC package", exact: true }).count(), 0);
+			const { hold, select } = await choices(customer, "T14:00");
+			await select.locator(`option[value="${unrelated.versionId}"]`).waitFor({ state: "attached" });
+			assert.equal(await select.locator(`option[value="${replacement.versionId}"]`).count(), 0);
+			const deniedQuote = await api(customer, "/api/quotes", "POST", {
+				holdId: hold.holdId, expectedHoldRevision: hold.revision, packageId,
+				packageVersionId: replacement.versionId, optionalServiceIds: [], paymentMethod: "BANK",
+				idempotencyKey: crypto.randomUUID(),
+			});
+			observations.push({ stage: "withdrawn-quote-rejection", status: deniedQuote.status });
+			assert.equal(deniedQuote.status, 409);
+			assert.equal((await clickResponse(customer, "Release hold", `/api/holds/${hold.holdId}/release`)).state, "RELEASED");
+
+			for (const [id, name, version] of [[newBooking, replacementName, replacement.versionId],
+				[booking, "SYNTHETIC package", original.version_id]]) {
+				await customer.goto(`${base}/bookings/${id}`);
+				await click(customer, "Refresh booking history");
+				await customer.getByRole("heading", { name, exact: true }).waitFor();
+				await customer.getByText("History: retained immutable revision 1,", { exact: false }).waitFor();
+				const purchase = await json(customer, `/api/bookings/${id}`);
+				assert.equal(purchase.revision, 1);
+				assert.equal(purchase.purchase.packageVersionId, version);
+				await editor.goto(`${base}/admin/bookings/venues/${config.venue}/${id}`);
+				await click(editor, "Reload booking detail");
+				const detail = editor.getByRole("region", { name: "Authorized staff booking detail" });
+				await detail.getByText("Server revision", { exact: true }).waitFor();
+				await detail.locator("dt").filter({ hasText: /^Purchased package$/ })
+					.locator("xpath=following-sibling::dd[1]").getByText(name, { exact: true }).waitFor();
+				const staffBooking = (await json(editor, `/api/admin/venues/${config.venue}/bookings/${id}`)).booking;
+				assert.equal(staffBooking.revision, 1);
+				assert.equal(staffBooking.packageName, name);
+				observations.push({ stage: "package-history-view", bookingId: id, packageVersionId: version,
+					customerRendered: true, staffRendered: true });
+			}
+		});
+	} finally {
+		await Promise.all(contexts.map(context => context.close()));
+	}
+}
+
 const socket = createServer();
 socket.listen(0, "127.0.0.1");
 await once(socket, "listening");
 const port = socket.address().port;
 await new Promise((r) => socket.close(r));
 const base = `http://127.0.0.1:${port}`;
-const faultTransport = cancellation || funding || twoJourneys ? null : h1 ? null : await uploadFaultProxy(config.backend);
+const faultTransport = cancellation || funding || twoJourneys || packageBooking ? null : h1 ? null : await uploadFaultProxy(config.backend);
 await writeFile(
 	`${run}/frontend-port.json`,
 	JSON.stringify({
@@ -980,7 +1179,9 @@ try {
 	});
 	browser = await chromium.launch({ headless: !supervised });
 	assert.equal(browser.version(), "151.0.7922.34");
-	if (twoJourneys) {
+	if (packageBooking) {
+		await runPackageBooking(base);
+	} else if (twoJourneys) {
 		await runTwoJourneys(base);
 	} else if (funding) {
 		await runFundingQualification(base);

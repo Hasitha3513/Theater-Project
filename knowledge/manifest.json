@@ -418,7 +418,7 @@
       "path": "PROGRESS.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "e85ab3e132b3a9f58cd8e84dd0774009b5168a720e036e0ecb40ea72dfc40da6",
+      "sha256": "4760b8edabf904615ef6e5fdacca570834782365312dfa475368b23481fb33a8",
       "authority": "canonical-prose"
     },
     {
@@ -467,7 +467,7 @@
       "path": "execution/change-sets.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "6f6bc08635c1fa71d4d15b9d082b0e5bf55518af7a646817e80d92fdd225db4b",
+      "sha256": "9cfcbef163104a37d22638dc59a135dd882433fc8075aac171f09bb0d65a22db",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -558,7 +558,7 @@
       "path": "execution/status.json",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "1290e757a1eb1c8c4dac99ae00d8a489d0b6fa91a185e5e2ac5e68316cc18be3",
+      "sha256": "3e8e34c3dd27c461f7660d5a68980a5930eacd120535a7f9526e74411d8ab998",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -572,14 +572,14 @@
       "path": "execution/validate_execution.py",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "24bb0b5831ab37205104229f47db2bfe815de5686b54c61c628e3fa7059ba9fa",
+      "sha256": "061d8eb779c1524e0d913aa656bd0b87f6bccc7400c890deee46261a9a02aa24",
       "authority": "structured-asset-or-evidence"
     },
     {
       "path": "guides/USER_GUIDE.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "08af35677080cd5f503462c14f2499413fff399cec69c7608f393430ee845075",
+      "sha256": "d6bb8b833b256eb23f6fca0a2cf19c08ce7a972c58015ac47cb7fa6e9bcabfa2",
       "authority": "structured-asset-or-evidence"
     },
     {
@@ -592,7 +592,7 @@
       "path": "product/FEATURE_CATALOG.md",
       "kind": "documentation-specification",
       "implementationStatus": "NOT_VERIFIED",
-      "sha256": "49771059796cd7ffd7f480859e46a3e3bcf671506cbaa5745931f2eb416fc7ce",
+      "sha256": "60340d8763164cec383812ba8ad822cf1c9c41fe27b80e2e9a61d4d2f7f95bea",
       "authority": "structured-asset-or-evidence"
     },
     {

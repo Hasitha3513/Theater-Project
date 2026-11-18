@@ -30,6 +30,10 @@ class SyntheticJourneyIT {
         return "reschedule-refund".equals(System.getenv("CINENEST_E2E_MODE"));
     }
 
+    private static boolean packageBookingJourney() {
+        return "package-booking".equals(System.getenv("CINENEST_E2E_MODE"));
+    }
+
     @DynamicPropertySource static void properties(DynamicPropertyRegistry p) {
         BankIntegrationTest.properties(p);
         if ("supervised-h1".equals(System.getenv("CINENEST_E2E_MODE"))) {
@@ -46,7 +50,7 @@ class SyntheticJourneyIT {
             p.add("server.address", () -> "127.0.0.1");
             p.add("cinenest.payments.extension-funding.enabled", () -> "true");
         }
-        if (cancellationJourney() || twoJourneys()) {
+        if (cancellationJourney() || twoJourneys() || packageBookingJourney()) {
             p.add("server.address", () -> "127.0.0.1");
             p.add("cinenest.booking.staff-read.enabled", () -> "true");
         }
@@ -490,6 +494,170 @@ class SyntheticJourneyIT {
         }
     }
 
+    private static final class PackageBookingFixture {
+        private final UUID booking;
+        private final UUID pkg;
+        private final Map<String, Object> original;
+        private final String purchased;
+        private final Map<String, Object> unrelated;
+        private final String originalVersionSnapshot;
+        private String revisedVersionSnapshot;
+        private Map<String, String> payments;
+        private UUID newBooking;
+        private String newPurchase;
+        private String revisedQuote;
+
+        PackageBookingFixture(BankIntegrationTest fixture) throws Exception {
+            booking = fixture.accessCase().booking();
+            fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VA, "package.read");
+            fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VA, "booking.synthetic.read");
+            fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.read");
+            fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.deactivate");
+            original = fixture.jdbc.sql("""
+                SELECT package_id, publication_id, version_id, revision
+                FROM cinenest_pricing.package_publication WHERE state='ACTIVE'
+                """).query().singleRow();
+            pkg = (UUID) original.get("package_id");
+            purchased = purchase(fixture, booking, original.get("version_id"));
+            originalVersionSnapshot = versionSnapshot(fixture, original.get("version_id"));
+            var editor = fixture.signedIn("staff");
+            var request = new HashMap<>(JSONObjectUtils.parse(fixture.draft("UNRELATED")));
+            request.put("name", "SYNTHETIC unrelated customer offer");
+            var created = fixture.write(editor, "POST", fixture.collection(), JSONObjectUtils.toJSONString(request));
+            assertThat(created.statusCode()).isEqualTo(201);
+            var unrelatedId = UUID.fromString(JSONObjectUtils.parse(created.body()).get("packageId").toString());
+            unrelated = fixture.published(fixture.signedIn("customer-b"), unrelatedId, fixture.request(false));
+            payments = paymentState(fixture);
+        }
+
+        private static String versionSnapshot(BankIntegrationTest fixture, Object version) {
+            return fixture.jdbc.sql("""
+                SELECT to_jsonb(v)::text FROM cinenest_pricing.package_version v WHERE version_id=:version
+                """).param("version", version).query(String.class).single();
+        }
+
+        Map<String, Object> configuration(BankIntegrationTest fixture) throws Exception {
+            return Map.of("booking", booking, "packageId", pkg, "original", original,
+                "publication", fixture.request(false), "unrelated", unrelated);
+        }
+
+        private String purchase(BankIntegrationTest fixture, UUID bookingId, Object version) {
+            return fixture.jdbc.sql("""
+                SELECT to_jsonb(r)::text FROM cinenest_booking.booking_revision r
+                JOIN cinenest_booking.booking b USING (booking_id)
+                JOIN cinenest_pricing.quotation_revision q
+                    ON q.quote_id=r.quote_id AND q.revision=r.quote_revision
+                WHERE b.booking_id=:booking AND b.owner_id=:owner AND b.venue_id=:venue
+                  AND b.synthetic AND b.state='SIMULATED_CONFIRMED' AND r.revision=1
+                  AND q.version_id=:version AND r.quote_hash=q.content_hash AND r.amount_minor=q.total_minor
+                """).param("booking", bookingId).param("owner", BankIntegrationTest.A)
+                .param("venue", BankIntegrationTest.VA).param("version", version)
+                .query(String.class).single();
+        }
+
+        private static Map<String, String> paymentState(BankIntegrationTest fixture) {
+            var fingerprints = fixture.extensionDomainFingerprint();
+            fingerprints.keySet().removeIf(key -> !key.startsWith("cinenest_payments."));
+            assertThat(fingerprints).containsKeys("cinenest_payments.payment_allocation",
+                "cinenest_payments.incoming_payment_credit");
+            return fingerprints;
+        }
+
+        Map<String, Object> confirm(BankIntegrationTest fixture, Map<String, Object> body) throws Exception {
+            assertThat(newBooking).isNull();
+            assertThat(paymentState(fixture)).isEqualTo(payments);
+            var customer = fixture.signedIn("customer-a");
+            var staff = fixture.signedIn("staff");
+            var allocator = fixture.signedIn("customer-b");
+            String quoteId = UUID.fromString(body.get("quoteId").toString()).toString();
+            String version = UUID.fromString(body.get("versionId").toString()).toString();
+            var quote = fixture.json(customer.get("/api/quotes/" + quoteId));
+            assertThat(quote).containsEntry("state", "ACCEPTED").containsEntry("packageVersionId", version);
+            var request = fixture.json(fixture.write(customer, "POST", "/api/verification/requests",
+                JSONObjectUtils.toJSONString(Map.of("commandKey", adminId("package-verify"),
+                    "quoteId", quoteId, "policyVersion", "SYNTHETIC-V1", "consent", true))));
+            var upload = fixture.allocate(customer, request);
+            String uploadId = upload.get("uploadId").toString();
+            assertThat(fixture.upload(customer, uploadId, BankIntegrationTest.IMAGE, "image/png").statusCode()).isEqualTo(200);
+            fixture.json(fixture.write(customer, "POST", "/api/verification/uploads/" + uploadId + "/complete",
+                JSONObjectUtils.toJSONString(fixture.cmd(((Number) upload.get("revision")).longValue()))));
+            fixture.work();
+            var ready = fixture.json(customer.get(fixture.casePath(request)));
+            fixture.json(fixture.write(staff, "POST", fixture.reviewPath(ready) + "/decisions",
+                JSONObjectUtils.toJSONString(fixture.decision(ready, "VERIFIED"))));
+            var pending = fixture.json(fixture.write(customer, "POST", "/api/bank/requests",
+                JSONObjectUtils.toJSONString(Map.of("quoteId", quoteId, "quoteRevision", quote.get("revision"),
+                    "contentHash", quote.get("contentHash"), "commandKey", adminId("package-bank")))));
+            long amount = Long.parseLong(pending.get("amountMinor").toString());
+            assertThat(amount).isPositive().isLessThanOrEqualTo(10000L);
+            var credit = fixture.credit(staff, "SYNTHETIC-BANK-10000");
+            var matched = fixture.match(allocator, pending, credit);
+            var confirmed = fixture.json(fixture.allocateCredit(allocator, matched, credit, amount));
+            newBooking = UUID.fromString(confirmed.get("bookingId").toString());
+            assertThat(newBooking).isNotEqualTo(booking);
+            newPurchase = purchase(fixture, newBooking, UUID.fromString(version));
+            assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation")
+                .query(Long.class).single()).isEqualTo(2L);
+            payments = paymentState(fixture);
+            return Map.of("booking", newBooking, "syntheticPurchasedVersionVerified", true);
+        }
+
+        Map<String, Object> inspect(BankIntegrationTest fixture, Map<String, Object> body) {
+            var version = UUID.fromString(body.get("versionId").toString());
+            var quote = UUID.fromString(body.get("quoteId").toString());
+            boolean retired = Boolean.TRUE.equals(body.get("retired"));
+            var persisted = fixture.jdbc.sql("""
+                SELECT to_jsonb(r)::text FROM cinenest_pricing.quotation_revision r
+                JOIN cinenest_pricing.quotation q USING (quote_id)
+                WHERE q.quote_id=:quote AND q.owner_id=:owner AND q.venue_id=:venue
+                  AND r.version_id=:version AND r.revision=1
+                """).param("quote", quote).param("owner", BankIntegrationTest.A)
+                .param("venue", BankIntegrationTest.VA).param("version", version).query(String.class).single();
+            var versionState = versionSnapshot(fixture, version);
+            assertThat(versionSnapshot(fixture, original.get("version_id"))).isEqualTo(originalVersionSnapshot);
+            if (retired) {
+                assertThat(versionState).isEqualTo(revisedVersionSnapshot);
+                assertThat(persisted).isEqualTo(revisedQuote);
+            } else {
+                revisedQuote = persisted;
+                revisedVersionSnapshot = versionState;
+            }
+            assertThat(purchase(fixture, booking, original.get("version_id"))).isEqualTo(purchased);
+            assertThat(purchase(fixture, newBooking, version)).isEqualTo(newPurchase);
+            assertThat(paymentState(fixture)).isEqualTo(payments);
+            assertThat(fixture.jdbc.sql("""
+                SELECT state FROM cinenest_pricing.package_publication
+                WHERE package_id=:pkg AND version_id=:version
+                """).param("pkg", pkg).param("version", version).query(String.class).single())
+                .isEqualTo(retired ? "INACTIVE" : "ACTIVE");
+            assertThat(fixture.jdbc.sql("""
+                SELECT count(*) FROM cinenest_pricing.configuration_audit
+                WHERE actor_id=:publisher AND package_id=:pkg AND venue_id=:venue
+                  AND publication_id IN (SELECT publication_id FROM cinenest_pricing.package_publication WHERE version_id=:version)
+                  AND outcome='ALLOW'
+                  AND action IN ('PUBLISH','DEACTIVATE')
+                """).param("publisher", BankIntegrationTest.B).param("pkg", pkg)
+                .param("venue", BankIntegrationTest.VA).param("version", version)
+                .query(Long.class).single()).isEqualTo(retired ? 2L : 1L);
+            assertThat(fixture.jdbc.sql("""
+                SELECT count(*) FROM cinenest_booking.inventory_block a JOIN cinenest_booking.inventory_block b
+                  ON a.room_id=b.room_id AND a.block_id<b.block_id
+                WHERE a.blocking AND b.blocking AND a.kind='CONFIRMED' AND b.kind='CONFIRMED'
+                  AND a.session_start<b.blocked_until AND b.session_start<a.blocked_until
+                """).query(Long.class).single()).isZero();
+            assertThat(fixture.jdbc.sql("""
+                SELECT count(*) FROM cinenest_pricing.package_publication
+                WHERE package_id=:pkg AND state='ACTIVE'
+                """).param("pkg", pkg).query(Long.class).single()).isEqualTo(retired ? 0L : 1L);
+            assertThat(fixture.jdbc.sql("""
+                SELECT state FROM cinenest_pricing.package_publication WHERE version_id=:version
+                """).param("version", UUID.fromString(unrelated.get("versionId").toString()))
+                .query(String.class).single()).isEqualTo("ACTIVE");
+            return Map.of("purchaseAndPaymentsUnchanged", true, "quoteVersionPersisted", true,
+                "attributablePublicationAudit", true);
+        }
+    }
+
     @Test void realBrowserJourney() throws Exception {
         Path run=Path.of(System.getenv("CINENEST_E2E_RUN"));
         var fixture=new BankIntegrationTest();
@@ -500,7 +668,7 @@ class SyntheticJourneyIT {
         BankIntegrationTest.Browser staff = null;
         UUID pkg = null;
         Map<String,Object> publication = null;
-        if (!cancellationJourney() && !fundingJourney() && !twoJourneys()) {
+        if (!cancellationJourney() && !fundingJourney() && !twoJourneys() && !packageBookingJourney()) {
             staff = fixture.signedIn("staff");
             pkg = fixture.setup(staff);
             fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.publish");
@@ -533,6 +701,8 @@ class SyntheticJourneyIT {
         config.put("otherVenue",BankIntegrationTest.VB.toString());config.put("venue",BankIntegrationTest.VA.toString());config.put("local",fixture.local());
         if (cancellation != null) config.put("cancellationBooking", cancellation.booking().toString());
         if (funding != null) config.put("fundingBooking", funding.purchase.booking().toString());
+        var packageJourney = packageBookingJourney() ? new PackageBookingFixture(fixture) : null;
+        if (packageJourney != null) config.put("packageBooking", packageJourney.configuration(fixture));
         if (adminQa) config.put("adminQa", prepareAdminQa(fixture, pkg, publication.get("versionId")));
         Files.writeString(run.resolve("config.json"),JSONObjectUtils.toJSONString(config));
         Process browser=null,extensionChild=null;
@@ -561,7 +731,14 @@ class SyntheticJourneyIT {
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if (pair != null && !op.equals("subject")) {
+                        if (packageJourney != null && op.equals("package-confirm")) {
+                            response.putAll(packageJourney.confirm(fixture, body));
+                        } else if (packageJourney != null && op.equals("package-inspect")) {
+                            response.putAll(packageJourney.inspect(fixture, body));
+                        } else if (packageJourney != null && !List.of("subject", "prepare-expiring-quote",
+                                "await-quote-expiry", "inspect-expired-quote").contains(op)) {
+                            throw new IllegalArgumentException("Unsupported package-to-booking fixture command");
+                        } else if (pair != null && !op.equals("subject")) {
                             response.putAll(pair.run(fixture, op, response));
                             response.remove("changedTables");
                         } else if (funding != null && op.equals("funding-prepare")) {

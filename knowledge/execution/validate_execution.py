@@ -16341,5 +16341,180 @@ receipt_admission_successor_errors = reschedule_refund_e2e_errors
 inert_ci_main = reschedule_refund_e2e_main
 
 
+
+# CN-E2E-PACKAGE-BOOKING-001
+PACKAGE_BOOKING_E2E_BASE = 'c3dbcd704629565cbdf749c605a0a91e5663ca9e'
+PACKAGE_BOOKING_E2E_KEY = 'syntheticPackageBookingBrowserJourney'
+PACKAGE_BOOKING_E2E_OWNED = {
+    'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java',
+    'frontend/tests/synthetic-e2e.mjs',
+    'knowledge/PROGRESS.md',
+    'knowledge/execution/change-sets.json',
+    'knowledge/execution/status.json',
+    'knowledge/execution/validate_execution.py',
+    'knowledge/guides/USER_GUIDE.md',
+    'knowledge/manifest.json',
+    'knowledge/product/FEATURE_CATALOG.md',
+    'scripts/test-synthetic-e2e.py',
+    'scripts/verify-synthetic-e2e.py',
+}
+PACKAGE_BOOKING_E2E_RECORD = {'baseline': 'c3dbcd704629565cbdf749c605a0a91e5663ca9e',
+ 'changeSet': 'CN-E2E-PACKAGE-BOOKING-001',
+ 'scope': 'SYNTHETIC_PACKAGE_BOOKING_E2E_ONLY',
+ 'requirements': ['PK-AC01', 'PK-AC06', 'PK-AC07', 'PK-AC11'],
+ 'runtimeDisposition': 'PASS',
+ 'correctedRuntimeDisposition': 'PASS',
+ 'browserCounts': {'PASS': 4, 'FAIL': 0, 'NOT_RUN': 0},
+ 'cleanupVerified': True,
+ 'knowledgeReview': {'baseline': 'c3dbcd704629565cbdf749c605a0a91e5663ca9e',
+                     'comparison': 'Prior Knowledge Base inventory and PR #9 '
+                                   'successor delta',
+                     'unchangedPaths': 107,
+                     'changedPaths': 7},
+ 'part1': {'completed': 4, 'total': 7},
+ 'roomBlockingGate': 'NOT_SATISFIED',
+ 'productionAuthorization': 'NONE',
+ 'publication': 'NOT_AUTHORIZED',
+ 'evidence': {'runtimeLogSha256': 'fdfa43ba0b7927d2608b7bc1a50757ec138caa095ec5ece406a039219eafb56b',
+              'browserResultsSha256': '10982403ba83715a850d241c6b4526881aa794b26f83869dc582ca53672d61a9',
+              'observationsSha256': '268b6a972cbd48e85bd7b6d299fbd3468b3c78df41f3a65cdae8bb18cd898671',
+              'executedSourceManifestSha256': 'cb9d92d2141cb2d340464476ab0f82ea30cc5a901c321e9a84a5ce14eb97d23d',
+              'cleanupSha256': '3e4b0cc06b767534325aaa6b9875793b9f2e360915fe418c512b6d934fc4a66d'},
+ 'sourceSha256': {'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': 'c85e31d35265e708f7d066fde7f23740ac4bc47d9b4b3c18d60573ce53ea2cc0',
+                  'frontend/tests/synthetic-e2e.mjs': '2aef77714133f5bec0390f9c7c91c780a2c83f8bf32aa321ca97e470ac871002',
+                  'knowledge/PROGRESS.md': '4760b8edabf904615ef6e5fdacca570834782365312dfa475368b23481fb33a8',
+                  'knowledge/execution/change-sets.json': '9cfcbef163104a37d22638dc59a135dd882433fc8075aac171f09bb0d65a22db',
+                  'knowledge/guides/USER_GUIDE.md': 'd6bb8b833b256eb23f6fca0a2cf19c08ce7a972c58015ac47cb7fa6e9bcabfa2',
+                  'knowledge/product/FEATURE_CATALOG.md': '60340d8763164cec383812ba8ad822cf1c9c41fe27b80e2e9a61d4d2f7f95bea',
+                  'scripts/test-synthetic-e2e.py': 'fdf3134cd6c819d34e46b51f11ad42bcecbb9f6ae2dd2029c53a7c94a1569867',
+                  'scripts/verify-synthetic-e2e.py': '75f136ab919396f28778530ff74f27cc81082302ffd03f4dd0ff5ee7bca47dca'}}
+PACKAGE_BOOKING_E2E_ENTRYPOINT = RESCHEDULE_REFUND_E2E_ENTRYPOINT
+
+
+def package_booking_e2e_before(name):
+    return v41_git('show', PACKAGE_BOOKING_E2E_BASE + ':' + name)
+
+
+def package_booking_e2e_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', PACKAGE_BOOKING_E2E_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        baseline_entries = v41_git('ls-tree', '-r', '-z', PACKAGE_BOOKING_E2E_BASE).split(b'\0')
+        baseline = {}
+        for entry in filter(None, baseline_entries):
+            metadata, name = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            baseline[name.decode()] = (mode, kind, oid)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', PACKAGE_BOOKING_E2E_BASE, '--name-only', '-z')
+        if changed != PACKAGE_BOOKING_E2E_OWNED or live != set(baseline):
+            return ['Package-to-booking E2E exact eleven-path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        migrations = {name for name in baseline if name.startswith(migration_prefix)}
+        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(migrations) != 42 or actual_migrations != migrations:
+            return ['Package-to-booking E2E migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Package-to-booking E2E unsafe path: ' + name]
+            if name in PACKAGE_BOOKING_E2E_OWNED:
+                if mode != b'100644' or path.stat().st_mode & 0o111:
+                    return ['Package-to-booking E2E unauthorized file mode: ' + name]
+                continue
+            data = path.read_bytes()
+            if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                return ['Package-to-booking E2E predecessor drift: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(PACKAGE_BOOKING_E2E_KEY, None) != PACKAGE_BOOKING_E2E_RECORD
+                or state != json.loads(package_booking_e2e_before(ADMIN_QA_STATUS))):
+            return ['Package-to-booking E2E review or acceptance accounting mismatch']
+        for name, expected in PACKAGE_BOOKING_E2E_RECORD['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Package-to-booking E2E source fingerprint mismatch: ' + name]
+        old_validator = package_booking_e2e_before(V41_VALIDATOR)
+        if (not old_validator.endswith(PACKAGE_BOOKING_E2E_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(PACKAGE_BOOKING_E2E_ENTRYPOINT)])):
+            return ['Package-to-booking E2E altered historical validator']
+        manifest = json.loads(package_booking_e2e_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in PACKAGE_BOOKING_E2E_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Package-to-booking E2E manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Package-to-booking E2E admission inputs inaccessible or invalid']
+    return []
+
+
+def package_booking_e2e_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in package_booking_e2e_errors()):
+                raise ValueError('Package-to-booking E2E negative control failed: ' + reason)
+
+    for name in PACKAGE_BOOKING_E2E_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Package-to-booking E2E source fingerprint mismatch')
+    reject(R / V41_MANIFEST, b'drift', 'Package-to-booking E2E manifest mismatch')
+    reject(K / 'execution/requirements.json', b'drift', 'Package-to-booking E2E predecessor drift')
+    reject(R / EXTENSION_FUNDING_MIGRATION, b'drift', 'Package-to-booking E2E predecessor drift')
+    path = R / ADMIN_QA_STATUS
+    state = json.loads(original(path))
+    state[PACKAGE_BOOKING_E2E_KEY]['part1']['completed'] = 5
+    reject(path, json.dumps(state).encode(), 'Package-to-booking E2E review or acceptance accounting mismatch')
+    state = json.loads(original(path))
+    state[PACKAGE_BOOKING_E2E_KEY].pop('knowledgeReview')
+    reject(path, json.dumps(state).encode(), 'Package-to-booking E2E review or acceptance accounting mismatch')
+
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if package_booking_e2e_errors() != ['Package-to-booking E2E exact eleven-path inventory mismatch']:
+            raise ValueError('Package-to-booking E2E unauthorized path negative control failed')
+    glob = Path.glob
+
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if package_booking_e2e_errors() != ['Package-to-booking E2E migration inventory mismatch']:
+            raise ValueError('Package-to-booking E2E extra migration negative control failed')
+    print('PASS Package-to-booking E2E inventory, fingerprints, migration, review and acceptance controls', flush=True)
+
+
+def package_booking_e2e_main():
+    import sys
+    import tempfile
+
+    errors = package_booking_e2e_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    package_booking_e2e_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-package-booking-e2e-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', PACKAGE_BOOKING_E2E_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = package_booking_e2e_errors
+inert_ci_main = package_booking_e2e_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

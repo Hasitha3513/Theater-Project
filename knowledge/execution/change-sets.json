@@ -7444,5 +7444,36 @@
       "notRun": 0
     },
     "publication": "NOT_AUTHORIZED"
+  },
+  "syntheticPackageBookingBrowserJourney": {
+    "id": "CN-E2E-PACKAGE-BOOKING-001",
+    "baseline": "c3dbcd704629565cbdf749c605a0a91e5663ca9e",
+    "requirements": [
+      "PK-AC01",
+      "PK-AC06",
+      "PK-AC07",
+      "PK-AC11"
+    ],
+    "scope": "SYNTHETIC_PACKAGE_BOOKING_E2E_ONLY",
+    "authorizedPaths": [
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java",
+      "frontend/tests/synthetic-e2e.mjs",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "scripts/test-synthetic-e2e.py",
+      "scripts/verify-synthetic-e2e.py"
+    ],
+    "runtimeDisposition": "PASS",
+    "browserCounts": {
+      "PASS": 4,
+      "FAIL": 0,
+      "NOT_RUN": 0
+    },
+    "publication": "NOT_AUTHORIZED"
   }
 }

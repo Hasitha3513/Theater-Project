@@ -557,3 +557,5 @@ Open an owned extension reservation. For effective coverage, review the frozen a
 [Real-backend funding journey evidence](../PROGRESS.md#funding-recovery-real-backend-journey).
 
 [Real-backend reschedule and synthetic refund journey disposition](../PROGRESS.md#reschedule-refund-browser-journeys).
+
+For a synthetic package lifecycle rehearsal, use separate accounts for editing and publication. Inspect the eligible catalog and the original quote before releasing an active hold to start another quote. After withdrawal, other eligible offers remain visible, while the withdrawn version drops out of the quote selector. The customer and staff booking views keep the purchased package names and historical terms. [Qualification status](../PROGRESS.md#package-booking-browser-journey).

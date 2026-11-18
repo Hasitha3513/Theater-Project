@@ -99,6 +99,22 @@ class AdmissionTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'Two-journey browser result inventory'):
                 journey.verify_two_journey_results(altered)
 
+    def test_package_booking_requires_exact_passing_inventory_and_cleanup(self):
+        mode = journey.PACKAGE_BOOKING
+        self.assertEqual(journey.browser_mode(mode), mode)
+        self.assertEqual(journey.journey_test(mode), 'SyntheticJourneyIT')
+        self.assertIn(mode, journey.VERIFIED_CLEANUP_SCENARIOS)
+        rows = [dict(id=name, status='PASS') for name in
+                ('startup', 'package-publish', 'package-customer-quote', 'package-history')]
+        result = dict(mode=mode, syntheticOnly=True, results=rows)
+        journey.verify_package_booking_results(result)
+        for changed in (dict(result, syntheticOnly=False), dict(result, mode=journey.FUNDING),
+                        dict(result, results=rows[:-1]), dict(result, results=rows[:-1]+rows[:1]),
+                        dict(result, results=rows[:-1]+[dict(rows[-1], status='SKIPPED')]),
+                        dict(result, results=rows[:-1]+[None])):
+            with self.assertRaisesRegex(RuntimeError, 'Package booking browser result inventory'):
+                journey.verify_package_booking_results(changed)
+
     def test_aggregate_application_limits(self):
         self.assertTrue(journey.limits('300000 100000', str(7*1024**3)))
         for cpu, memory in [('max 100000', '1'), ('300001 100000', '1'), ('1 100000', 'max'),
