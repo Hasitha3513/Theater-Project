@@ -7512,4 +7512,28 @@
     "scope": "SYNTHETIC_TEST_ONLY",
     "localQualification": "PASS"
   }
+,
+  "nextSecurityMaintenance": {
+    "id": "CN-SEC-NEXT-16-4-5-001",
+    "baseline": "cb88ac1fd4b9e22736783cf0af3f861bcf2ae522",
+    "requirements": [
+      "CN-NFR-02"
+    ],
+    "scope": "DEPENDENCY_SECURITY_PATCH_ONLY",
+    "ownerAuthorization": "EXPLICIT",
+    "admission": "READY",
+    "authorizedPaths": [
+      "frontend/package-lock.json",
+      "frontend/package.json",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "fromVersion": "16.4.1",
+    "toVersion": "16.4.5",
+    "rollback": "Restore the prior dependency artifacts in a reviewed revert while keeping affected exposure disabled.",
+    "publicationGate": "Exact-source foundation CI and applicable review and branch controls."
+  }
 }

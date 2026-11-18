@@ -16827,5 +16827,146 @@ receipt_admission_successor_errors = withdrawal_history_e2e_errors
 inert_ci_main = withdrawal_history_e2e_main
 
 
+NEXT_SECURITY_STATE = {'changeSet': 'CN-SEC-NEXT-16-4-5-001',
+ 'baseline': 'cb88ac1fd4b9e22736783cf0af3f861bcf2ae522',
+ 'status': 'LOCAL_VERIFIED_HOSTED_CI_PENDING',
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'frontendPassed': 601,
+ 'productionAuditFindings': 0,
+ 'fullAuditFindings': 0,
+ 'evidence': {'next-16.4.5.patch': 'd85a1b357218d318d7994734bd133a54171e167da3e263f670dd5af1252820c1',
+              'audit-after.json': 'd67a2c7df76f3c62d7d6b74b6d29c5c45ec1ee7265bcfeaeb7487a2ddec785ec',
+              'audit-all.json': 'd67a2c7df76f3c62d7d6b74b6d29c5c45ec1ee7265bcfeaeb7487a2ddec785ec',
+              'build-clone.log': '7ff3d5a77c7059234717fece7d6b85381de036fbb783e741baa2b5549ace1922',
+              'typecheck-clone.log': 'b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead',
+              'lint-clone.log': 'd81710ecfec9f2968e6570da07493150312fbb7dfee84e12bbc3507779b6dd2b',
+              'tests-clone.log': '5a6e6773a49f79d2bf6b1a51b7eee2215e677e01a3675165b8a774146bb11a8f'},
+ 'sourceSha256': {'frontend/package-lock.json': '2d14beef7afa27d9d1f27e0e6fb1d2279af4026d2a2ccb5e7fdaca12731cd201',
+                  'frontend/package.json': '70b62f816355b0d350f9b8e05f54aadb27d5d1de83a096f494f611c082ff542b',
+                  'knowledge/PROGRESS.md': '73b1fa77435fe2fe67eb43181ce399dd60a06afb97fce59d6a2f60cf299700a6',
+                  'knowledge/execution/change-sets.json': '59b2c49e884b8a22c078ffc01a591f61b98af11b90a2654522b080a99cf65213'}}
+NEXT_SECURITY_BASE = NEXT_SECURITY_STATE['baseline']
+NEXT_SECURITY_KEY = 'nextSecurityMaintenance'
+NEXT_SECURITY_OWNED = set(NEXT_SECURITY_STATE['sourceSha256']) | {
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+NEXT_SECURITY_ENTRYPOINT = WITHDRAWAL_HISTORY_E2E_ENTRYPOINT
+
+
+def next_security_before(name):
+    return v41_git('show', NEXT_SECURITY_BASE + ':' + name)
+
+
+def next_security_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', NEXT_SECURITY_BASE, 'HEAD')
+        baseline = {}
+        for entry in filter(None, v41_git('ls-tree', '-r', '-z', NEXT_SECURITY_BASE).split(b'\0')):
+            metadata, name = entry.split(b'\t', 1)
+            baseline[name.decode()] = metadata.split()
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard'), nul=True)
+        changed = parse_git_paths(v41_git('diff', '--no-ext-diff', NEXT_SECURITY_BASE, '--name-only', '-z'), nul=True)
+        if live != set(baseline) or changed != NEXT_SECURITY_OWNED:
+            return ['Next.js maintenance exact path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        recorded = {name for name in baseline if name.startswith(migration_prefix)}
+        actual = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(recorded) != 42 or actual != recorded:
+            return ['Next.js maintenance migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Next.js maintenance unsafe path: ' + name]
+            if bool(path.stat().st_mode & 0o111) != (mode == b'100755'):
+                return ['Next.js maintenance altered file mode: ' + name]
+            if name not in NEXT_SECURITY_OWNED:
+                data = path.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                    return ['Next.js maintenance predecessor drift: ' + name]
+        status = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (status.pop(NEXT_SECURITY_KEY, None) != NEXT_SECURITY_STATE
+                or status != json.loads(next_security_before(ADMIN_QA_STATUS))):
+            return ['Next.js maintenance status or acceptance accounting mismatch']
+        for name, expected in NEXT_SECURITY_STATE['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Next.js maintenance fingerprint mismatch: ' + name]
+        old_validator = next_security_before(V41_VALIDATOR)
+        if (not old_validator.endswith(NEXT_SECURITY_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(NEXT_SECURITY_ENTRYPOINT)])):
+            return ['Next.js maintenance altered historical validator']
+        manifest = json.loads(next_security_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in NEXT_SECURITY_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Next.js maintenance manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Next.js maintenance admission inputs inaccessible or invalid']
+    return []
+
+
+def next_security_controls():
+    from unittest.mock import patch
+
+    read = Path.read_bytes
+
+    def reject(name, data, reason):
+        path = R / name
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else read(current)):
+            if not any(error.startswith('Next.js maintenance ' + reason) for error in next_security_errors()):
+                raise ValueError('Next.js maintenance negative control failed: ' + reason)
+
+    for name in NEXT_SECURITY_STATE['sourceSha256']:
+        reject(name, b'drift', 'fingerprint mismatch')
+    for name in ('knowledge/execution/requirements.json', EXTENSION_FUNDING_MIGRATION):
+        reject(name, b'drift', 'predecessor drift')
+    reject(V41_MANIFEST, b'drift', 'manifest mismatch')
+    status = json.loads(read(R / ADMIN_QA_STATUS))
+    status[NEXT_SECURITY_KEY]['part1']['completed'] = 5
+    reject(ADMIN_QA_STATUS, json.dumps(status).encode(), 'status or acceptance accounting mismatch')
+
+    git = v41_git
+    def add_unapproved(*args, **kwargs):
+        result = git(*args, **kwargs)
+        return result + b'unapproved.txt\0' if args[0] == 'ls-files' else result
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if next_security_errors() != ['Next.js maintenance exact path inventory mismatch']:
+            raise ValueError('Next.js maintenance unauthorized path control failed')
+
+    glob = Path.glob
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if next_security_errors() != ['Next.js maintenance migration inventory mismatch']:
+            raise ValueError('Next.js maintenance migration inventory control failed')
+    print('PASS Next.js maintenance inventory, fingerprints, migrations and acceptance controls', flush=True)
+
+
+def next_security_main():
+    import sys
+    import tempfile
+
+    errors = next_security_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    next_security_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-next-security-replay-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', NEXT_SECURITY_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = next_security_errors
+inert_ci_main = next_security_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

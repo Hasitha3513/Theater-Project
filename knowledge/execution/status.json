@@ -31951,4 +31951,33 @@
       "knowledge/execution/change-sets.json": "ae49cb35e2e9ea3b626c1d73041ae80b7f143f103030b02aea9a0c1b0b1b1ca4"
     }
   }
+,
+  "nextSecurityMaintenance": {
+    "changeSet": "CN-SEC-NEXT-16-4-5-001",
+    "baseline": "cb88ac1fd4b9e22736783cf0af3f861bcf2ae522",
+    "status": "LOCAL_VERIFIED_HOSTED_CI_PENDING",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE",
+    "frontendPassed": 601,
+    "productionAuditFindings": 0,
+    "fullAuditFindings": 0,
+    "evidence": {
+      "next-16.4.5.patch": "d85a1b357218d318d7994734bd133a54171e167da3e263f670dd5af1252820c1",
+      "audit-after.json": "d67a2c7df76f3c62d7d6b74b6d29c5c45ec1ee7265bcfeaeb7487a2ddec785ec",
+      "audit-all.json": "d67a2c7df76f3c62d7d6b74b6d29c5c45ec1ee7265bcfeaeb7487a2ddec785ec",
+      "build-clone.log": "7ff3d5a77c7059234717fece7d6b85381de036fbb783e741baa2b5549ace1922",
+      "typecheck-clone.log": "b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead",
+      "lint-clone.log": "d81710ecfec9f2968e6570da07493150312fbb7dfee84e12bbc3507779b6dd2b",
+      "tests-clone.log": "5a6e6773a49f79d2bf6b1a51b7eee2215e677e01a3675165b8a774146bb11a8f"
+    },
+    "sourceSha256": {
+      "frontend/package-lock.json": "2d14beef7afa27d9d1f27e0e6fb1d2279af4026d2a2ccb5e7fdaca12731cd201",
+      "frontend/package.json": "70b62f816355b0d350f9b8e05f54aadb27d5d1de83a096f494f611c082ff542b",
+      "knowledge/PROGRESS.md": "73b1fa77435fe2fe67eb43181ce399dd60a06afb97fce59d6a2f60cf299700a6",
+      "knowledge/execution/change-sets.json": "59b2c49e884b8a22c078ffc01a591f61b98af11b90a2654522b080a99cf65213"
+    }
+  }
 }
