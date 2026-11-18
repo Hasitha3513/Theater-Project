@@ -31980,4 +31980,35 @@
       "knowledge/execution/change-sets.json": "59b2c49e884b8a22c078ffc01a591f61b98af11b90a2654522b080a99cf65213"
     }
   }
+,
+  "part1ContinuousHoursInventory": {
+    "changeSet": "CN-PART1-247-INVENTORY-001",
+    "baseline": "5b97f9c3433972f89506be66e4cbc7ea6aff3f15",
+    "status": "LOCAL_VERIFIED_HOSTED_CI_PENDING",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE",
+    "offlinePassed": 73,
+    "postgresPassed": 63,
+    "postgresSkipped": 1,
+    "cleanup": "PASS",
+    "evidence": {
+      "offline.log": "159d87f28799b343e99b4760088cd10b342cb0a10a5297cd2bec468fec643e21",
+      "postgres.log": "04dce441c42edcdaa303517d355d25826d45da981233523ee232cb7737dcdf44",
+      "cleanup.log": "92f3eade0674390e1fa4377980b137abb2e1c51d47f404316285dcf7b4d23e2e"
+    },
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/booking/internal/InventoryRules.java": "8b44ccbaf3f926fcc3223eea4c9242a08d099ee56f4dbeac9336fa38010a2b6b",
+      "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java": "2863a02c403e25115989682c819de744886954011e92bc801949c7cf82ef71ab",
+      "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java": "f5700a74e981d07601ae3ec677b50996b7a9e3c9bac9e7eedfb2ed61723b13fe",
+      "knowledge/PROGRESS.md": "d4fa3e8ce220f756c73cc3c421b6039191af70cec9c5358cb7e0f0d2afd323da",
+      "knowledge/PROJECT.md": "2017aae58863e0642f601442012a6ebc72e0d378f0e6cd52ce44f8f9ece182b3",
+      "knowledge/decisions/cinenest-open-decisions.json": "0f1544a9945b018657e51335834697ac510b17cc1516197772d9db0b25feac1b",
+      "knowledge/execution/change-sets.json": "595f154cdc484e12ea448b693ed649477bae98370d1b47a4fe4b2cdc690ef6f2",
+      "knowledge/guides/USER_GUIDE.md": "85ded4d1dfe7d5ba47e4c44753a6af5d86a7d573dec39747b15e3b1a2c865238",
+      "knowledge/product/FEATURE_CATALOG.md": "c0d930460db7263f9e8db3bb9e01a43a676a76b3e8a23c2316a3e4394f777750"
+    }
+  }
 }

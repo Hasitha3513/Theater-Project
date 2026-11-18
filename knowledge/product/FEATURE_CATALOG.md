@@ -874,3 +874,7 @@ The owner-only reservation panel supports synthetic BANK request creation and ow
 [Real-backend reschedule and synthetic refund journey disposition](../PROGRESS.md#reschedule-refund-browser-journeys).
 
 [Package-to-booking browser qualification status](../PROGRESS.md#package-booking-browser-journey) records the qualified synthetic lifecycle, including new booking confirmation, selective withdrawal, and retained booking history.
+
+### Continuous venue hours across midnight
+
+Calendar availability and reservation holds share the same Booking rule. Seven explicit full-day venue-local windows permit a session and its cleaning interval to cross midnight, subject to minimum duration, capacity, maintenance and inventory guards. Any other schedule keeps its actual closing restrictions. The isolated PostgreSQL qualification covered next-day overlap and exact buffer adjacency. [Verification and scope](../PROGRESS.md#part-1-continuous-hours-inventory)

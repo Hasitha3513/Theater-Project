@@ -2,6 +2,7 @@ package com.cinenest;
 
 import com.nimbusds.jose.util.JSONObjectUtils;
 import java.net.URI;
+import java.time.LocalDate;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -189,7 +190,27 @@ class InventoryIntegrationTest {
         for(String q:new String[]{path+"&date="+calendarDate(),path+"&ownerId=secret",path.replace("durationMinutes=180","durationMinutes=0"),path.replace("guests=4","guests=6"),path.replace(calendarDate(),"2027-02-30"),path.replace("&guests=4",""),path.replace(RID.toString(),"bad")})assertThat(a.get(q).statusCode()).as(q).isEqualTo(400);
         jdbc.sql("UPDATE cinenest_rooms.room SET enabled=false").update();assertThat(a.get(path).statusCode()).isEqualTo(404);jdbc.sql("UPDATE cinenest_rooms.room SET enabled=true").update();jdbc.sql("UPDATE cinenest_identity.account SET eligibility='SUSPENDED' WHERE account_id=:a").param("a",A).update();assertThat(a.get(path).statusCode()).isEqualTo(401);
     }
+    @Test void continuousHoursHoldBlocksOverlappingStartsOnTheNextDay() throws Exception {
+        jdbc.sql("UPDATE cinenest_rooms.venue SET cleaning_buffer_minutes=15").update();
+        var a=signedIn("customer-a");
+        var b=signedIn("customer-b");
+        var date=LocalDate.parse(calendarDate());
+        String start=date.atTime(23,0).toString();
+        var evening=calendarItem(calendar(a,date.toString(),180,4),23*60);
+        assertThat(evening.get("available")).isEqualTo(true);
+        held(a,request(a,start));
+        var nextMorning=calendar(b,date.plusDays(1).toString(),180,4);
+        assertThat(calendarItem(nextMorning,2*60+14).get("available")).isEqualTo(false);
+        assertThat(calendarItem(nextMorning,2*60+15).get("available")).isEqualTo(true);
+        var conflict=create(b,request(b,date.plusDays(1).atTime(2,14).toString()));
+        assertThat(conflict.statusCode()).isEqualTo(409);
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_block WHERE blocking")
+            .query(Integer.class).single()).isEqualTo(1);
+    }
     @Test void calendarMinimumClosingMidnightAndKnownFuturePolicyApply()throws Exception{
+        int closedDay=LocalDate.parse(calendarDate()).plusDays(1).getDayOfWeek().getValue();
+        jdbc.sql("DELETE FROM cinenest_rooms.venue_operating_window WHERE venue_id=:venue AND weekday=:day")
+            .param("venue",VA).param("day",closedDay).update();
         var a=signedIn("customer-a");var d=calendar(a,calendarDate(),180,4);assertThat(calendarItem(d,1261).get("available")).isEqualTo(false);assertThat(calendarItem(d,1260).get("reasons").toString()).contains("OUTSIDE_OPERATING_HOURS");assertThat(calendarItem(calendar(a,calendarDate(),179,4),600).get("reasons").toString()).contains("MINIMUM_DURATION");
         jdbc.sql("UPDATE cinenest_rooms.venue SET post_close_cleaning_approved=true,operational_approval_reference='SYNTHETIC approval'").update();assertThat(calendarItem(calendar(a,calendarDate(),180,4),1260).get("available")).isEqualTo(true);
         jdbc.sql("INSERT INTO cinenest_rooms.minimum_session_policy VALUES(:id,:v,2,240,CAST(:time AS timestamptz),'SYNTHETIC future',:a,clock_timestamp())").param("id",UUID.randomUUID()).param("v",VA).param("time",java.time.LocalDateTime.parse(local()).atZone(java.time.ZoneId.of("Asia/Colombo")).toInstant().plusSeconds(3600).toString()).param("a",STAFF).update();assertThat(calendarItem(calendar(a,calendarDate(),180,4),600).get("available")).isEqualTo(false);

@@ -559,3 +559,7 @@ Open an owned extension reservation. For effective coverage, review the frozen a
 [Real-backend reschedule and synthetic refund journey disposition](../PROGRESS.md#reschedule-refund-browser-journeys).
 
 For a synthetic package lifecycle rehearsal, use separate accounts for editing and publication. Inspect the eligible catalog and the original quote before releasing an active hold to start another quote. After withdrawal, other eligible offers remain visible, while the withdrawn version drops out of the quote selector. The customer and staff booking views keep the purchased package names and historical terms. [Qualification status](../PROGRESS.md#package-booking-browser-journey).
+
+### Booking across midnight at a continuously open venue
+
+For an approved continuously open venue, configure all seven operating days as full local-day windows in the existing venue settings. In the room calendar, select the date on which the session **starts**. A late-evening result can end the following morning. Review the returned session end and inventory blocked-until separately before creating a hold. For example, an 11 PM start with a three-hour session and a 15-minute reset ends at 2 AM and blocks the room until 2:15 AM the next day. Maintenance and competing inventory can make the interval unavailable. A calendar result does not certify staffing or room readiness. [Verified behavior](../PROGRESS.md#part-1-continuous-hours-inventory)

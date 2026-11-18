@@ -3890,3 +3890,10 @@ The final isolated PostgreSQL 18.6 retest passed four Chromium groups and one Ja
 ## Next.js dependency security maintenance
 
 CN-SEC-NEXT-16-4-5-001 updates the existing frontend dependency and its lockfile entries from 16.4.1 to 16.4.5 under explicit Owner authority. CN-NFR-02 remains subject to its existing full acceptance criteria. Clean install, production build, typecheck, lint and 601 frontend tests passed on the matching isolated patch. Production and full npm audits reported zero findings. Hosted qualification is required before integration. No application logic, migrations or formal acceptance changed. Official PART 1 remains 4/7; production authorization remains NONE.
+
+<a id="part-1-continuous-hours-inventory"></a>
+## PART 1 continuous-hours inventory
+
+The Owner's [commercial direction](PROJECT.md#part1-continuous-hours-direction) is recorded as a scoped successor. CN-PART1-247-INVENTORY-001 applies the existing seven full local day settings consistently in the shared Booking inventory rule. Midnight no longer imposes a synthetic closing boundary for that configuration. The reservation model, database conflict checks, maintenance exclusions, configured closing protections and distinct cleaning interval remain in force. Official PART 1 remains 4/7, and live production, banking and physical operation remain unauthorized.
+
+Focused local qualification passed 73 offline inventory and architecture tests. The isolated PostgreSQL 18.6 Inventory and Room Blocking suites recorded 63 passes and one existing opt-in skip. The authenticated inventory test verified an 11 PM hold, next-day conflict through the cleaning boundary and availability at 2:15 AM. Owned runtime cleanup passed. All 42 historical migrations remain unchanged. Hosted CI is pending at this source checkpoint.

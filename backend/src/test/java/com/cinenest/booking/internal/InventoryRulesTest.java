@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.*;
 class InventoryRulesTest {
     InventoryConstraints.Facts facts(String zone,Integer buffer,boolean post,List<InventoryConstraints.Minimum> policies) {
         return new InventoryConstraints.Facts(UUID.randomUUID(),UUID.randomUUID(),zone,true,5,buffer,post,"cfg",
-            java.util.stream.IntStream.rangeClosed(1,7).mapToObj(d->new InventoryConstraints.Window(d,0,1440)).toList(),policies);
+            java.util.stream.IntStream.rangeClosed(1,6).mapToObj(d->new InventoryConstraints.Window(d,0,1440)).toList(),policies);
     }
     List<InventoryConstraints.Minimum> minimum() {return List.of(new InventoryConstraints.Minimum(UUID.randomUUID(),180,Instant.parse("2026-01-01T00:00:00Z")));}
     @Test void closingSeparatesCustomerSessionAndApprovedPostCloseCleaning() {
@@ -16,6 +16,16 @@ class InventoryRulesTest {
         var approved=facts("Asia/Colombo",15,true,minimum());var c=InventoryRules.candidate(approved,start,180,4);
         assertThat(Duration.between(c.end(),c.blockedUntil()).toMinutes()).isEqualTo(15);
         assertThatThrownBy(()->InventoryRules.candidate(approved,start,181,4)).isInstanceOf(InventoryFailure.class);
+    }
+    @Test void sevenFullDaysAllowSessionAndResetAcrossMidnight() {
+        var fullWeek = java.util.stream.IntStream.rangeClosed(1,7)
+            .mapToObj(day -> new InventoryConstraints.Window(day,0,1440)).toList();
+        var facts = new InventoryConstraints.Facts(UUID.randomUUID(),UUID.randomUUID(),"Asia/Colombo",
+            true,5,15,false,"cfg",fullWeek,minimum());
+        var start = InventoryRules.local("2026-10-25T23:00",facts.timezone());
+        var candidate = InventoryRules.candidate(facts,start,180,4);
+        assertThat(candidate.end()).isEqualTo(InventoryRules.local("2026-10-26T02:00",facts.timezone()));
+        assertThat(candidate.blockedUntil()).isEqualTo(InventoryRules.local("2026-10-26T02:15",facts.timezone()));
     }
     @Test void capacityMissingPolicyBufferAndFuturePolicyFailClosed() {
         var f=facts("Asia/Colombo",0,false,minimum());var start=InventoryRules.local("2026-10-20T10:00",f.timezone());

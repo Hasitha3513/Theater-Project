@@ -7536,4 +7536,33 @@
     "rollback": "Restore the prior dependency artifacts in a reviewed revert while keeping affected exposure disabled.",
     "publicationGate": "Exact-source foundation CI and applicable review and branch controls."
   }
+,
+  "part1ContinuousHoursInventory": {
+    "id": "CN-PART1-247-INVENTORY-001",
+    "baseline": "5b97f9c3433972f89506be66e4cbc7ea6aff3f15",
+    "admission": "READY",
+    "ownerAuthorization": "EXPLICIT_PRODUCT_AND_BOUNDED_IMPLEMENTATION",
+    "scope": "Continuous inventory only when all seven venue-local days are explicitly full-day windows.",
+    "requirements": [
+      "CN-C03",
+      "BR-06",
+      "BR-07"
+    ],
+    "authorizedPaths": [
+      "backend/src/main/java/com/cinenest/booking/internal/InventoryRules.java",
+      "backend/src/test/java/com/cinenest/InventoryIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java",
+      "knowledge/PROGRESS.md",
+      "knowledge/PROJECT.md",
+      "knowledge/decisions/cinenest-open-decisions.json",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/product/FEATURE_CATALOG.md"
+    ],
+    "acceptance": "Across-midnight calendar and hold agree, next-day overlap denies, and genuine closing remains enforced.",
+    "rollback": "Review and revert the bounded rule change if needed; preserve all inventory, booking and financial history."
+  }
 }

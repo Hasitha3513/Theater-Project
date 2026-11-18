@@ -39,11 +39,7 @@ final class InventoryRules {
         try {
             Instant end=start.plusSeconds(Math.multiplyExact((long)duration,60));
             Instant until=end.plusSeconds(Math.multiplyExact((long)f.bufferMinutes(),60));
-            var zone=ZoneId.of(f.timezone());var date=start.atZone(zone).toLocalDate();
-            var window=f.windows().stream().filter(w->w.weekday()==date.getDayOfWeek().getValue()).findFirst().orElseThrow(()->new InventoryFailure(400,"Invalid inventory request","OUTSIDE_OPERATING_HOURS"));
-            Instant opening=local(date.atStartOfDay().plusMinutes(window.openingMinute()).toString(),f.timezone());
-            Instant closing=local(date.atStartOfDay().plusMinutes(window.closingMinute()).toString(),f.timezone());
-            if(start.isBefore(opening) || end.isAfter(closing) || !f.postCloseApproved() && until.isAfter(closing))throw new InventoryFailure(400,"Invalid inventory request","OUTSIDE_OPERATING_HOURS");
+            requireOperatingWindow(f,start,end,until);
             var first=f.minimums().stream().filter(m->!m.effectiveFrom().isAfter(start)).reduce((a,b)->b).orElseThrow(()->new InventoryFailure(409,"Minimum policy unavailable","CONFIGURATION_UNAVAILABLE"));
             var applicable=new ArrayList<InventoryConstraints.Minimum>();applicable.add(first);
             f.minimums().stream().filter(m->m.effectiveFrom().isAfter(start) && m.effectiveFrom().isBefore(end)).forEach(applicable::add);
@@ -51,4 +47,27 @@ final class InventoryRules {
             return new Candidate(start,end,until,f.bufferMinutes(),applicable.stream().map(m->m.id().toString()).reduce((a,b)->a+","+b).orElseThrow());
         } catch(DateTimeException|ArithmeticException e) {throw invalid();}
     }
+
+    private static void requireOperatingWindow(InventoryConstraints.Facts facts,Instant start,Instant end,Instant until) {
+        var zone = ZoneId.of(facts.timezone());
+        var windows = facts.windows();
+        // Seven explicit full-day windows have no local closing boundary at midnight.
+        if (windows.size() == 7 && windows.stream()
+                .filter(window -> window.openingMinute() == 0 && window.closingMinute() == 1440)
+                .map(InventoryConstraints.Window::weekday)
+                .collect(java.util.stream.Collectors.toSet()).equals(Set.of(1,2,3,4,5,6,7))) return;
+
+        var date = start.atZone(zone).toLocalDate();
+        var window = windows.stream().filter(w -> w.weekday() == date.getDayOfWeek().getValue())
+                .findFirst().orElseThrow(InventoryRules::outsideOperatingHours);
+        Instant opening = local(date.atStartOfDay().plusMinutes(window.openingMinute()).toString(),facts.timezone());
+        Instant closing = local(date.atStartOfDay().plusMinutes(window.closingMinute()).toString(),facts.timezone());
+        if (start.isBefore(opening) || end.isAfter(closing) || !facts.postCloseApproved() && until.isAfter(closing))
+            throw outsideOperatingHours();
+    }
+
+    private static InventoryFailure outsideOperatingHours() {
+        return new InventoryFailure(400,"Invalid inventory request","OUTSIDE_OPERATING_HOURS");
+    }
+
 }

@@ -1695,4 +1695,17 @@
     }
   ],
   "lastUpdatedTask": "CN-R1-PAYSLIP-BOUNDARY-001"
+,
+  "part1ContinuousHoursInventory": {
+    "status": "OWNER_APPROVED_PRODUCT_DIRECTION",
+    "source": "Owner directive CINENEST \u2014 MVP PART 1 COMMERCIAL IMPLEMENTATION",
+    "baseline": "5b97f9c3433972f89506be66e4cbc7ea6aff3f15",
+    "priorDecisions": [
+      "OD-04",
+      "OD-10"
+    ],
+    "specification": "PROJECT.md#part1-continuous-hours-direction",
+    "productionAuthorization": "NONE",
+    "formalAcceptanceChanged": false
+  }
 }

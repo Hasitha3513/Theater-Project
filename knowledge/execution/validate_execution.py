@@ -16968,5 +16968,148 @@ receipt_admission_successor_errors = next_security_errors
 inert_ci_main = next_security_main
 
 
+CONTINUOUS_HOURS_STATE = {'changeSet': 'CN-PART1-247-INVENTORY-001',
+ 'baseline': '5b97f9c3433972f89506be66e4cbc7ea6aff3f15',
+ 'status': 'LOCAL_VERIFIED_HOSTED_CI_PENDING',
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'offlinePassed': 73,
+ 'postgresPassed': 63,
+ 'postgresSkipped': 1,
+ 'cleanup': 'PASS',
+ 'evidence': {'offline.log': '159d87f28799b343e99b4760088cd10b342cb0a10a5297cd2bec468fec643e21',
+              'postgres.log': '04dce441c42edcdaa303517d355d25826d45da981233523ee232cb7737dcdf44',
+              'cleanup.log': '92f3eade0674390e1fa4377980b137abb2e1c51d47f404316285dcf7b4d23e2e'},
+ 'sourceSha256': {'backend/src/main/java/com/cinenest/booking/internal/InventoryRules.java': '8b44ccbaf3f926fcc3223eea4c9242a08d099ee56f4dbeac9336fa38010a2b6b',
+                  'backend/src/test/java/com/cinenest/InventoryIntegrationTest.java': '2863a02c403e25115989682c819de744886954011e92bc801949c7cf82ef71ab',
+                  'backend/src/test/java/com/cinenest/booking/internal/InventoryRulesTest.java': 'f5700a74e981d07601ae3ec677b50996b7a9e3c9bac9e7eedfb2ed61723b13fe',
+                  'knowledge/PROGRESS.md': 'd4fa3e8ce220f756c73cc3c421b6039191af70cec9c5358cb7e0f0d2afd323da',
+                  'knowledge/PROJECT.md': '2017aae58863e0642f601442012a6ebc72e0d378f0e6cd52ce44f8f9ece182b3',
+                  'knowledge/decisions/cinenest-open-decisions.json': '0f1544a9945b018657e51335834697ac510b17cc1516197772d9db0b25feac1b',
+                  'knowledge/execution/change-sets.json': '595f154cdc484e12ea448b693ed649477bae98370d1b47a4fe4b2cdc690ef6f2',
+                  'knowledge/guides/USER_GUIDE.md': '85ded4d1dfe7d5ba47e4c44753a6af5d86a7d573dec39747b15e3b1a2c865238',
+                  'knowledge/product/FEATURE_CATALOG.md': 'c0d930460db7263f9e8db3bb9e01a43a676a76b3e8a23c2316a3e4394f777750'}}
+CONTINUOUS_HOURS_BASE = CONTINUOUS_HOURS_STATE['baseline']
+CONTINUOUS_HOURS_KEY = 'part1ContinuousHoursInventory'
+CONTINUOUS_HOURS_OWNED = set(CONTINUOUS_HOURS_STATE['sourceSha256']) | {
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+CONTINUOUS_HOURS_ENTRYPOINT = NEXT_SECURITY_ENTRYPOINT
+
+
+def continuous_hours_before(name):
+    return v41_git('show', CONTINUOUS_HOURS_BASE + ':' + name)
+
+
+def continuous_hours_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', CONTINUOUS_HOURS_BASE, 'HEAD')
+        baseline = {}
+        for entry in filter(None, v41_git('ls-tree', '-r', '-z', CONTINUOUS_HOURS_BASE).split(b'\0')):
+            metadata, name = entry.split(b'\t', 1)
+            baseline[name.decode()] = metadata.split()
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard'), nul=True)
+        changed = parse_git_paths(v41_git('diff', '--no-ext-diff', CONTINUOUS_HOURS_BASE, '--name-only', '-z'), nul=True)
+        if live != set(baseline) or changed != CONTINUOUS_HOURS_OWNED:
+            return ['Continuous hours exact path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        recorded = {name for name in baseline if name.startswith(migration_prefix)}
+        actual = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(recorded) != 42 or actual != recorded:
+            return ['Continuous hours migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Continuous hours unsafe path: ' + name]
+            if bool(path.stat().st_mode & 0o111) != (mode == b'100755'):
+                return ['Continuous hours altered file mode: ' + name]
+            if name not in CONTINUOUS_HOURS_OWNED:
+                data = path.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                    return ['Continuous hours predecessor drift: ' + name]
+        status = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (status.pop(CONTINUOUS_HOURS_KEY, None) != CONTINUOUS_HOURS_STATE
+                or status != json.loads(continuous_hours_before(ADMIN_QA_STATUS))):
+            return ['Continuous hours status or acceptance accounting mismatch']
+        for name, expected in CONTINUOUS_HOURS_STATE['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Continuous hours fingerprint mismatch: ' + name]
+        old_validator = continuous_hours_before(V41_VALIDATOR)
+        if (not old_validator.endswith(CONTINUOUS_HOURS_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(CONTINUOUS_HOURS_ENTRYPOINT)])):
+            return ['Continuous hours altered historical validator']
+        manifest = json.loads(continuous_hours_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in CONTINUOUS_HOURS_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Continuous hours manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Continuous hours admission inputs inaccessible or invalid']
+    return []
+
+
+def continuous_hours_controls():
+    from unittest.mock import patch
+
+    read = Path.read_bytes
+
+    def reject(name, data, reason):
+        path = R / name
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else read(current)):
+            if not any(error.startswith('Continuous hours ' + reason) for error in continuous_hours_errors()):
+                raise ValueError('Continuous hours negative control failed: ' + reason)
+
+    for name in CONTINUOUS_HOURS_STATE['sourceSha256']:
+        reject(name, b'drift', 'fingerprint mismatch')
+    for name in ('knowledge/execution/requirements.json', EXTENSION_FUNDING_MIGRATION):
+        reject(name, b'drift', 'predecessor drift')
+    reject(V41_MANIFEST, b'drift', 'manifest mismatch')
+    status = json.loads(read(R / ADMIN_QA_STATUS))
+    status[CONTINUOUS_HOURS_KEY]['part1']['completed'] = 5
+    reject(ADMIN_QA_STATUS, json.dumps(status).encode(), 'status or acceptance accounting mismatch')
+
+    git = v41_git
+    def add_unapproved(*args, **kwargs):
+        result = git(*args, **kwargs)
+        return result + b'unapproved.txt\0' if args[0] == 'ls-files' else result
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if continuous_hours_errors() != ['Continuous hours exact path inventory mismatch']:
+            raise ValueError('Continuous hours unauthorized path control failed')
+
+    glob = Path.glob
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if continuous_hours_errors() != ['Continuous hours migration inventory mismatch']:
+            raise ValueError('Continuous hours migration inventory control failed')
+    print('PASS Continuous hours inventory, fingerprints, migrations and acceptance controls', flush=True)
+
+
+def continuous_hours_main():
+    import sys
+    import tempfile
+
+    errors = continuous_hours_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    continuous_hours_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-continuous-hours-replay-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', CONTINUOUS_HOURS_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = continuous_hours_errors
+inert_ci_main = continuous_hours_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
