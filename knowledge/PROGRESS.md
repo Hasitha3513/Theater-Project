@@ -3908,3 +3908,8 @@ Local qualification passed 25 backend checks, including two PostgreSQL HTTP case
 ## Synthetic staff check-in decision
 
 V44 preserves Booking-owned synthetic staff decisions with current booking and roster revision references, scoped actor attribution, database timestamps and actor-scoped idempotency. The command reuses the guest admission assessment and requires explicit current venue authority and the purchased session window. Exact replays return the existing decision. A changed payload or a different command for the same decision scope is rejected. The migration allows empty READ COMMITTED cleanup and protects existing decision history. The change-set registry records the exact SQL and retained qualification. Official PART 1 remains 4/7 and production authorization remains NONE.
+
+<a id="independent-synthetic-turnover-review"></a>
+## Independent synthetic turnover review
+
+Rooms reuses the existing V17 turnover workflow. The assigned cleaner and the reviewing actor must differ. The reviewer needs current scoped review authority, a complete checklist and resolved exceptions. Synthetic case resolution preserves occupancy UNKNOWN, physical readiness UNVERIFIED and existing inventory. Session start and check-out still require a separately admitted persistence contract. Official PART 1 remains 4/7, and production authorization remains NONE.

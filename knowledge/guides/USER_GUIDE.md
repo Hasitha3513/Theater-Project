@@ -571,3 +571,7 @@ On a scoped staff booking detail page, open **Guest admission assessment**. Chec
 ### Record a synthetic staff check-in decision
 
 On the scoped staff booking detail, review **Guest admission assessment** and **Synthetic staff check-in**. When **Record synthetic check-in** is available, it records the current synthetic decision. If the response is uncertain, retry from the same panel or reload check-in status to recover the recorded result. The panel shows staff attribution and the recorded time. This decision grants no physical entry. [Scope](../PROGRESS.md#synthetic-staff-check-in-v44)
+
+### Review synthetic cleaning completion
+
+In **Room operations**, have the assigned staff member acknowledge the case, record each required checklist item and assert completion. Resolve recorded exceptions through the existing exception controls. A different authorized staff member can then use **Review and resolve synthetic case**. The case records that review while physical readiness remains unverified. [Scope](../PROGRESS.md#independent-synthetic-turnover-review)

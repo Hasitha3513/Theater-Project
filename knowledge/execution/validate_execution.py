@@ -17448,5 +17448,149 @@ receipt_admission_successor_errors = staff_check_in_errors
 inert_ci_main = staff_check_in_main
 
 
+TURNOVER_REVIEW_STATE = {'baseline': 'c3d3ebaa7a9a1d5c005e3c89cbcaf7a864ce4998',
+ 'admissionStatus': 'READY',
+ 'qualification': 'SYNTHETIC_ONLY',
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'sourceSha256': {'backend/src/main/java/com/cinenest/rooms/internal/TurnoverService.java': '27e9e549e1ef684f083a2586ed0b69337b5bc044d4fbf7899260c48958f6f404',
+                  'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '81549abe50dd770f135de5a058a7c69ec3a7e83b91a3822165ecc304b7c316a2',
+                  'frontend/components/operations.tsx': '26263b6b6719cb82807957b802ba06fd4a30def33c54745613ffbfedfa9bd377',
+                  'frontend/tests/operations-browser.mjs': 'ff44ca527bab75ee1c1814cadfa29b34ba642b95a27712e9a5133fc378de6b63',
+                  'knowledge/PROGRESS.md': 'b6a884937648a92cb66de86e47a342971478aeaa4e0f3dcff2e5eed303532110',
+                  'knowledge/execution/change-sets.json': '1c04f9b0c860c71ea3a3c6c51a6f51bde48a17887c3e646f6f8bc4b5ff63a799',
+                  'knowledge/guides/USER_GUIDE.md': '51a9384b4626617554f05200ce2583b33313d954d5d64b5655b8d16a5b224663',
+                  'knowledge/product/FEATURE_CATALOG.md': '3760439b95bcf2e2eb74f842d22372d8ad05e2d454921d5a6a7ed84806a5b34c'},
+ 'evidenceSha256': {'lint.log': '670ffbc43a69f0e3d876b270071f5762de397c7b396edb9752af5a514f1ddc67',
+                    'turnover-qualification-cleanup.log': '9e5335f1e00c5f39a9087c570918207f1cf1adaf7a020366651672b430e0fa19',
+                    'turnover-qualification.log': '943b4e6fb52accf6d667e1fd8d17319fc6eb2bdc378f7562e990f5695513c88b',
+                    'typecheck.log': 'b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead'}}
+TURNOVER_REVIEW_BASE = TURNOVER_REVIEW_STATE['baseline']
+TURNOVER_REVIEW_KEY = 'independentSyntheticTurnoverReview'
+TURNOVER_REVIEW_OWNED = set(TURNOVER_REVIEW_STATE['sourceSha256']) | {
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+TURNOVER_REVIEW_ENTRYPOINT = STAFF_CHECK_IN_ENTRYPOINT
+TURNOVER_REVIEW_NEW = set()
+
+
+def turnover_review_before(name):
+    return v41_git('show', TURNOVER_REVIEW_BASE + ':' + name)
+
+
+def turnover_review_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', TURNOVER_REVIEW_BASE, 'HEAD')
+        baseline = {}
+        for entry in filter(None, v41_git('ls-tree', '-r', '-z', TURNOVER_REVIEW_BASE).split(b'\0')):
+            metadata, name = entry.split(b'\t', 1)
+            baseline[name.decode()] = metadata.split()
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard'), nul=True)
+        changed = parse_git_paths(v41_git('diff', '--no-ext-diff', TURNOVER_REVIEW_BASE, '--name-only', '-z'), nul=True)
+        if live != set(baseline) | TURNOVER_REVIEW_NEW or changed != TURNOVER_REVIEW_OWNED:
+            return ['Turnover review exact path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        recorded = {name for name in baseline if name.startswith(migration_prefix)}
+        actual = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(recorded) != 43 or actual != recorded:
+            return ['Turnover review migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Turnover review unsafe path: ' + name]
+            if bool(path.stat().st_mode & 0o111) != (mode == b'100755'):
+                return ['Turnover review altered file mode: ' + name]
+            if name not in TURNOVER_REVIEW_OWNED:
+                data = path.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                    return ['Turnover review predecessor drift: ' + name]
+        status = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (status.pop(TURNOVER_REVIEW_KEY, None) != TURNOVER_REVIEW_STATE
+                or status != json.loads(turnover_review_before(ADMIN_QA_STATUS))):
+            return ['Turnover review status or acceptance accounting mismatch']
+        for name in TURNOVER_REVIEW_NEW:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path or path.stat().st_mode & 0o111:
+                return ['Turnover review unsafe new path: ' + name]
+        for name, expected in TURNOVER_REVIEW_STATE['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Turnover review fingerprint mismatch: ' + name]
+        old_validator = turnover_review_before(V41_VALIDATOR)
+        if (not old_validator.endswith(TURNOVER_REVIEW_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(TURNOVER_REVIEW_ENTRYPOINT)])):
+            return ['Turnover review altered historical validator']
+        manifest = json.loads(turnover_review_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in TURNOVER_REVIEW_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Turnover review manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Turnover review admission inputs inaccessible or invalid']
+    return []
+
+
+def turnover_review_controls():
+    from unittest.mock import patch
+
+    read = Path.read_bytes
+
+    def reject(name, data, reason):
+        path = R / name
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else read(current)):
+            if not any(error.startswith('Turnover review ' + reason) for error in turnover_review_errors()):
+                raise ValueError('Turnover review negative control failed: ' + reason)
+
+    for name in TURNOVER_REVIEW_STATE['sourceSha256']:
+        reject(name, b'drift', 'fingerprint mismatch')
+    for name in ('knowledge/execution/requirements.json', EXTENSION_FUNDING_MIGRATION):
+        reject(name, b'drift', 'predecessor drift')
+    reject(V41_MANIFEST, b'drift', 'manifest mismatch')
+    status = json.loads(read(R / ADMIN_QA_STATUS))
+    status[TURNOVER_REVIEW_KEY]['part1']['completed'] = 5
+    reject(ADMIN_QA_STATUS, json.dumps(status).encode(), 'status or acceptance accounting mismatch')
+
+    git = v41_git
+    def add_unapproved(*args, **kwargs):
+        result = git(*args, **kwargs)
+        return result + b'unapproved.txt\0' if args[0] == 'ls-files' else result
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if turnover_review_errors() != ['Turnover review exact path inventory mismatch']:
+            raise ValueError('Turnover review unauthorized path control failed')
+
+    glob = Path.glob
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if turnover_review_errors() != ['Turnover review migration inventory mismatch']:
+            raise ValueError('Turnover review migration inventory control failed')
+    print('PASS Turnover review inventory, fingerprints, migrations and acceptance controls', flush=True)
+
+
+def turnover_review_main():
+    import sys
+    import tempfile
+
+    errors = turnover_review_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    turnover_review_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-turnover-review-replay-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', TURNOVER_REVIEW_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = turnover_review_errors
+inert_ci_main = turnover_review_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

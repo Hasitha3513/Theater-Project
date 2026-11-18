@@ -886,3 +886,7 @@ The booking detail panel reads a venue-scoped synthetic assessment separately fr
 ### Synthetic staff check-in decision
 
 The existing staff booking detail supports an attributable synthetic check-in decision when the isolated feature is enabled and staff have the explicit same-venue grant. Current confirmed booking and roster revisions, eligible synthetic decisions and PostgreSQL time within the purchased session are required. A recorded decision grants no physical entry. [Scope](../PROGRESS.md#synthetic-staff-check-in-v44)
+
+### Independent synthetic turnover review
+
+A different venue-authorized staff member reviews the assigned cleaner's completed checklist. The review records synthetic case resolution and attribution. Physical readiness and inventory controls remain separate. [Scope](../PROGRESS.md#independent-synthetic-turnover-review)

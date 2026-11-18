@@ -7673,5 +7673,39 @@
       "frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-check-in/route.ts",
       "frontend/components/staff-synthetic-check-in.tsx"
     ]
+  },
+  "independentSyntheticTurnoverReview": {
+    "id": "CN-PART1-SYNTHETIC-TURNOVER-REVIEW-001",
+    "baseline": "c3d3ebaa7a9a1d5c005e3c89cbcaf7a864ce4998",
+    "admission": "READY",
+    "authority": "Current Owner directive authorizes independent synthetic readiness review only.",
+    "previousTask": "CN-OPS-001",
+    "requirements": [
+      "CN-O03",
+      "CN-O04",
+      "CN-A05",
+      "CN-NFR-05"
+    ],
+    "scope": "Existing Rooms turnover case review requires a different actor from the assigned cleaner. Reuse V17 and existing scoped grants, audit and command receipts.",
+    "exclusions": [
+      "Session start and check-out persistence pending separate migration and policy admission",
+      "Real readiness, occupancy, inventory release and production activation"
+    ],
+    "rollback": "Revert this application guard and presentation under review. Preserve all historical cases, decisions and audit.",
+    "qualification": "Scoped HTTP, rollback, conflict, replay, Chromium guidance and historical replay.",
+    "authorizedPaths": [
+      "backend/src/main/java/com/cinenest/rooms/internal/TurnoverService.java",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "frontend/components/operations.tsx",
+      "frontend/tests/operations-browser.mjs",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md"
+    ],
+    "newSourcePaths": []
   }
 }

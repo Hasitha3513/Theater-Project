@@ -139,6 +139,7 @@ try {
 		await page
 			.getByRole("button", { name: "Assert synthetic cleaning completion" })
 			.click();
+		await page.getByText(/A different authorized staff member must review/).waitFor();
 		await page
 			.getByRole("button", { name: "Record exception", exact: true })
 			.click();

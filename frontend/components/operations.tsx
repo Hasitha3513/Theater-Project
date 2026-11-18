@@ -421,6 +421,12 @@ export function OperationsWorkspace() {
 							</Button>
 						</p>
 					))}
+					{current.state === "ASSERTED" && (
+						<p>
+							A different authorized staff member must review the cleaning
+							assertion. Synthetic resolution does not clear the room for use.
+						</p>
+					)}
 					<Button
 						disabled={
 							busy ||

@@ -32105,5 +32105,31 @@
       "migration-review-run.log": "2fc74e03022badbac1304e63c4dfd640c1f0fda27ca067c732cfc44f0886b772",
       "typecheck.log": "b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead"
     }
+  },
+  "independentSyntheticTurnoverReview": {
+    "baseline": "c3d3ebaa7a9a1d5c005e3c89cbcaf7a864ce4998",
+    "admissionStatus": "READY",
+    "qualification": "SYNTHETIC_ONLY",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE",
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/rooms/internal/TurnoverService.java": "27e9e549e1ef684f083a2586ed0b69337b5bc044d4fbf7899260c48958f6f404",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "81549abe50dd770f135de5a058a7c69ec3a7e83b91a3822165ecc304b7c316a2",
+      "frontend/components/operations.tsx": "26263b6b6719cb82807957b802ba06fd4a30def33c54745613ffbfedfa9bd377",
+      "frontend/tests/operations-browser.mjs": "ff44ca527bab75ee1c1814cadfa29b34ba642b95a27712e9a5133fc378de6b63",
+      "knowledge/PROGRESS.md": "b6a884937648a92cb66de86e47a342971478aeaa4e0f3dcff2e5eed303532110",
+      "knowledge/execution/change-sets.json": "1c04f9b0c860c71ea3a3c6c51a6f51bde48a17887c3e646f6f8bc4b5ff63a799",
+      "knowledge/guides/USER_GUIDE.md": "51a9384b4626617554f05200ce2583b33313d954d5d64b5655b8d16a5b224663",
+      "knowledge/product/FEATURE_CATALOG.md": "3760439b95bcf2e2eb74f842d22372d8ad05e2d454921d5a6a7ed84806a5b34c"
+    },
+    "evidenceSha256": {
+      "lint.log": "670ffbc43a69f0e3d876b270071f5762de397c7b396edb9752af5a514f1ddc67",
+      "turnover-qualification-cleanup.log": "9e5335f1e00c5f39a9087c570918207f1cf1adaf7a020366651672b430e0fa19",
+      "turnover-qualification.log": "943b4e6fb52accf6d667e1fd8d17319fc6eb2bdc378f7562e990f5695513c88b",
+      "typecheck.log": "b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead"
+    }
   }
 }
