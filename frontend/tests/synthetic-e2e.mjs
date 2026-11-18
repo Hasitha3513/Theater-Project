@@ -938,6 +938,7 @@ async function runPackageBooking(base) {
 	const { booking, packageId, original, publication, unrelated } = config.packageBooking;
 	const root = `/api/admin/venues/${config.venue}/packages/${packageId}`;
 	const replacementName = "SYNTHETIC revised customer offer";
+	const revisedDuration = 200;
 	const contexts = [];
 	const click = (page, name) => page.getByRole("button", { name, exact: true }).click();
 	const open = async (subject) => {
@@ -963,10 +964,10 @@ async function runPackageBooking(base) {
 		assert.equal(response.status(), 200);
 		return page.getByLabel("Published package");
 	};
-	const choices = async (page, time, expiring = false) => {
+	const choices = async (page, time, { expiring = false, duration = 180 } = {}) => {
 		await page.goto(base + "/rooms/" + config.room);
 		await page.getByLabel("Customer start in venue local time").fill(config.local.replace(/T\d\d:\d\d/, time));
-		await page.getByLabel("Customer duration (minutes)").fill("180");
+		await page.getByLabel("Customer duration (minutes)").fill(String(duration));
 		await page.getByLabel("Guests", { exact: true }).fill("4");
 		await click(page, "Check inventory (no hold)");
 		const hold = await clickResponse(page, "Create temporary inventory hold", "/api/holds");
@@ -995,8 +996,12 @@ async function runPackageBooking(base) {
 			await click(editor, "Edit PUBLIC");
 			await editor.getByLabel("Package name", { exact: true }).fill(replacementName);
 			await editor.getByLabel("Base price (LKR)").fill("95.79");
+			await editor.getByLabel("Included customer minutes").fill(String(revisedDuration));
+			await editor.getByLabel("Maximum selectable minutes").fill(String(revisedDuration + 60));
 			await editor.getByLabel("Business reason for this change").fill("SYNTHETIC qualification edit");
 			const saved = await clickResponse(editor, "Save unpublished draft", root + "/draft", "PUT");
+			assert.equal(saved.includedMinutes, revisedDuration);
+			assert.equal(saved.maximumMinutes, revisedDuration + 60);
 
 			const request = { ...publication, expectedRevision: saved.revision,
 				replacesPublicationId: original.publication_id, replacesRevision: original.revision };
@@ -1023,9 +1028,11 @@ async function runPackageBooking(base) {
 			await publisher.getByLabel("Publication reason").fill(publication.reason);
 			const reviewForm = publisher.getByRole("button", { name: "Review publication PUBLIC", exact: true });
 			assert.equal(await reviewForm.evaluate(button => button.form.checkValidity()), true);
-			await clickResponse(publisher, "Review publication PUBLIC", root + "/publication-preview");
+			const preview = await clickResponse(publisher, "Review publication PUBLIC", root + "/publication-preview");
+			assert.equal(preview.snapshot.includedMinutes, revisedDuration);
 			replacement = await clickResponse(publisher, "Approve reviewed publication PUBLIC", root + "/publications");
 			assert.equal(replacement.state, "ACTIVE");
+			assert.equal(replacement.snapshot.includedMinutes, revisedDuration);
 			assert.notEqual(replacement.versionId, original.version_id);
 			const history = await json(publisher, root + "/publications");
 			assert.ok(history.items.some(row => row.versionId === original.version_id && row.state === "INACTIVE"));
@@ -1035,7 +1042,7 @@ async function runPackageBooking(base) {
 			assert.deepEqual(frozenTerms(await json(customer, `/api/quotes/${first.quoteId}`)), frozenTerms(first));
 			const released = await clickResponse(customer, "Release hold", `/api/holds/${firstHold.holdId}/release`);
 			assert.equal(released.state, "RELEASED");
-			const { select } = await choices(customer, "T18:00");
+			const { select } = await choices(customer, "T18:00", { duration: revisedDuration });
 			const revisedOption = select.locator(`option[value="${replacement.versionId}"]`);
 			await revisedOption.waitFor({ state: "attached" });
 			assert.equal(await revisedOption.textContent(), replacementName);
@@ -1051,7 +1058,7 @@ async function runPackageBooking(base) {
 			assert.equal(confirmed.syntheticPurchasedVersionVerified, true);
 			newBooking = confirmed.booking;
 
-			const expiryChoice = await choices(customer, "T14:00", true);
+			const expiryChoice = await choices(customer, "T14:00", { expiring: true, duration: revisedDuration });
 			const expiring = await quote(customer, expiryChoice.select, replacement.versionId);
 			assert.equal((await control({ op: "await-quote-expiry", quoteId: expiring.quoteId })).serverExpired, true);
 			const expired = await api(customer, `/api/quotes/${expiring.quoteId}/accept`, "POST", {
@@ -1060,6 +1067,27 @@ async function runPackageBooking(base) {
 			});
 			assert.equal(expired.status, 409);
 			assert.equal((await control({ op: "inspect-expired-quote" })).snapshotAndFinancialStateUnchanged, true);
+			const freshChoice = await choices(customer, "T14:00", { duration: revisedDuration });
+			assert.notEqual(freshChoice.hold.holdId, expiryChoice.hold.holdId);
+			const refreshed = await quote(customer, freshChoice.select, replacement.versionId);
+			assert.notEqual(refreshed.quoteId, expiring.quoteId);
+			assert.equal(refreshed.state, "ISSUED");
+			const review = customer.getByLabel("I reviewed this exact synthetic revision and all three disclosures");
+			const accept = customer.getByRole("button", { name: "Accept synthetic revision only", exact: true });
+			assert.equal(await review.isChecked(), false);
+			assert.equal(await accept.isDisabled(), true);
+			const staleReview = await api(customer, `/api/quotes/${refreshed.quoteId}/accept`, "POST", {
+				expectedRevision: refreshed.revision, contentHash: expiring.contentHash,
+				disclosures: expiring.disclosures, idempotencyKey: crypto.randomUUID(),
+			});
+			assert.equal(staleReview.status, 409);
+			await review.check();
+			const freshAcceptance = await clickResponse(customer, "Accept synthetic revision only",
+				`/api/quotes/${refreshed.quoteId}/accept`);
+			assert.equal(freshAcceptance.state, "ACCEPTED");
+			assert.deepEqual(frozenTerms(freshAcceptance), frozenTerms(refreshed));
+			assert.equal((await clickResponse(customer, "Release hold",
+				`/api/holds/${freshChoice.hold.holdId}/release`)).state, "RELEASED");
 			const persisted = await control({ op: "package-inspect", versionId: replacement.versionId, quoteId: revised.quoteId });
 			assert.equal(persisted.attributablePublicationAudit, true);
 			observations.push({ stage: "package-customer-quote", ...persisted, expiredStatus: expired.status });

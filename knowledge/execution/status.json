@@ -31889,5 +31889,35 @@
       "scripts/test-synthetic-e2e.py": "fdf3134cd6c819d34e46b51f11ad42bcecbb9f6ae2dd2029c53a7c94a1569867",
       "scripts/verify-synthetic-e2e.py": "75f136ab919396f28778530ff74f27cc81082302ffd03f4dd0ff5ee7bca47dca"
     }
+  },
+  "syntheticDurationQuoteRefreshBrowserQualification": {
+    "baseline": "8ce8c3acdff477016f80f8658a4b5b62f72c0976",
+    "changeSet": "CN-E2E-DURATION-QUOTE-REFRESH-001",
+    "scope": "SYNTHETIC_TEST_ONLY",
+    "requirements": [
+      "PK-AC01",
+      "PK-AC07"
+    ],
+    "runtimeDisposition": "PASS",
+    "knowledgeReview": {
+      "baseline": "8ce8c3acdff477016f80f8658a4b5b62f72c0976",
+      "basis": "Verified predecessor inventory and package qualification delta"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "evidence": {
+      "runtime.log": "e64d3e9a395ea92a39a605e310893ad6b9f7cb253ba803397ba6b06758fa837e",
+      "browser-results.json": "695b7363f5eaf414e4da090df18b77aaba6386da64c1ae6b1071f06362eec2ed",
+      "cleanup.log": "e9cc496ff3d11a73d14428f6bc83527e538f7943b152315774707057661af5d9"
+    },
+    "sourceSha256": {
+      "frontend/tests/synthetic-e2e.mjs": "f548fadae157c44a995fb6e537bd618408607823aea7540f9738cb078e790db3",
+      "knowledge/PROGRESS.md": "f1a038fe9bf6d7a42714ee153a6dc6ccb6eba9c4fa319887f89e62588405fd45",
+      "knowledge/execution/change-sets.json": "255a2c8a9f963e5efb1a5e4c6d10334582dbfbe8ef02b2689d0ba92ceb6bb156"
+    }
   }
 }

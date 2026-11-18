@@ -7475,5 +7475,23 @@
       "NOT_RUN": 0
     },
     "publication": "NOT_AUTHORIZED"
+  },
+  "syntheticDurationQuoteRefreshBrowserQualification": {
+    "id": "CN-E2E-DURATION-QUOTE-REFRESH-001",
+    "baseline": "8ce8c3acdff477016f80f8658a4b5b62f72c0976",
+    "authorizedPaths": [
+      "frontend/tests/synthetic-e2e.mjs",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "requirements": [
+      "PK-AC01",
+      "PK-AC07"
+    ],
+    "scope": "SYNTHETIC_TEST_ONLY",
+    "localQualification": "PASS"
   }
 }
