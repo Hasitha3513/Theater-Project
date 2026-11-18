@@ -504,11 +504,18 @@ class SyntheticJourneyIT {
         private String revisedVersionSnapshot;
         private Map<String, String> payments;
         private UUID newBooking;
+        private UUID bankRequestId;
         private String newPurchase;
         private String revisedQuote;
 
         PackageBookingFixture(BankIntegrationTest fixture) throws Exception {
             booking = fixture.accessCase().booking();
+            UUID observer = adminId("history-observer");
+            fixture.jdbc.sql("INSERT INTO cinenest_identity.account VALUES (:id,TRUE,'ELIGIBLE',0)")
+                .param("id", observer).update();
+            fixture.jdbc.sql("INSERT INTO cinenest_identity.external_identity VALUES (:issuer,:subject,:id)")
+                .param("issuer", BankIntegrationTest.IDP.issuer()).param("subject", "qa-admin-history-observer")
+                .param("id", observer).update();
             fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VA, "package.read");
             fixture.grantTo(BankIntegrationTest.STAFF, BankIntegrationTest.VA, "booking.synthetic.read");
             fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.read");
@@ -555,11 +562,34 @@ class SyntheticJourneyIT {
                 .query(String.class).single();
         }
 
-        private static Map<String, String> paymentState(BankIntegrationTest fixture) {
+        private Map<String, String> paymentState(BankIntegrationTest fixture) {
             var fingerprints = fixture.extensionDomainFingerprint();
             fingerprints.keySet().removeIf(key -> !key.startsWith("cinenest_payments."));
             assertThat(fingerprints).containsKeys("cinenest_payments.payment_allocation",
                 "cinenest_payments.incoming_payment_credit");
+            if (bankRequestId != null) {
+                fingerprints.put("cinenest_payments.bank_audit", fixture.jdbc.sql("""
+                    SELECT md5(coalesce(string_agg(to_jsonb(a)::text, ',' ORDER BY to_jsonb(a)::text), ''))
+                    FROM cinenest_payments.bank_audit a
+                    WHERE (
+                        (request_id=:request AND outcome='PERMIT'
+                          AND ((action='STATUS' AND actor_id IN (:owner,:staff))
+                            OR (action='PREVIEW' AND actor_id=:staff)))
+                        OR (actor_id=:owner
+                            AND ((action='CUSTOMER_REFUNDS_READ' AND outcome='OWNED_SYNTHETIC_ONLY')
+                                OR (action='STATUS' AND outcome='PERMIT'))
+                            AND request_id IN (SELECT request_id FROM cinenest_booking.booking
+                                WHERE booking_id IN (:originalBooking,:newBooking)))
+                        OR (request_id IS NULL AND (
+                            (action='BOOKING_READ' AND actor_id=:owner AND outcome='SYNTHETIC_ONLY')
+                            OR (outcome='DENIED' AND (
+                                (action='LEDGER_DENIED' AND actor_id=:observer)
+                                OR (action='HTTP_DENIAL' AND actor_id IN (:owner,:staff,:observer))))))
+                    ) IS NOT TRUE
+                    """).param("request", bankRequestId).param("owner", BankIntegrationTest.A)
+                    .param("staff", BankIntegrationTest.STAFF).param("observer", adminId("history-observer"))
+                    .param("originalBooking", booking).param("newBooking", newBooking).query(String.class).single());
+            }
             return fingerprints;
         }
 
@@ -588,6 +618,21 @@ class SyntheticJourneyIT {
             var pending = fixture.json(fixture.write(customer, "POST", "/api/bank/requests",
                 JSONObjectUtils.toJSONString(Map.of("quoteId", quoteId, "quoteRevision", quote.get("revision"),
                     "contentHash", quote.get("contentHash"), "commandKey", adminId("package-bank")))));
+            bankRequestId = UUID.fromString(pending.get("id").toString());
+            fixture.bankGrants();
+            var claim = fixture.claim(customer, pending);
+            var receipt = fixture.json(fixture.write(customer, "POST",
+                "/api/bank/claims/" + claim.get("claimId") + "/uploads",
+                JSONObjectUtils.toJSONString(fixture.cmd(((Number) claim.get("revision")).longValue()))));
+            String receiptId = receipt.get("uploadId").toString();
+            assertThat(fixture.bankUpload(customer, receiptId, BankIntegrationTest.RECEIPT, "image/png")
+                .statusCode()).isEqualTo(200);
+            fixture.json(fixture.write(customer, "POST", "/api/bank/uploads/" + receiptId + "/complete",
+                JSONObjectUtils.toJSONString(fixture.cmd(((Number) receipt.get("revision")).longValue()))));
+            fixture.bankWork();
+            pending = fixture.json(customer.get(fixture.bankPath(pending)));
+            assertThat(pending.get("evidence").toString()).contains(receiptId, "READY");
+            assertThat(pending).containsEntry("paymentVerified", false).containsEntry("bookingConfirmed", false);
             long amount = Long.parseLong(pending.get("amountMinor").toString());
             assertThat(amount).isPositive().isLessThanOrEqualTo(10000L);
             var credit = fixture.credit(staff, "SYNTHETIC-BANK-10000");
@@ -599,7 +644,8 @@ class SyntheticJourneyIT {
             assertThat(fixture.jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation")
                 .query(Long.class).single()).isEqualTo(2L);
             payments = paymentState(fixture);
-            return Map.of("booking", newBooking, "syntheticPurchasedVersionVerified", true);
+            return Map.of("booking", newBooking, "syntheticPurchasedVersionVerified", true,
+                "bankRequest", pending.get("id"), "receiptId", receiptId);
         }
 
         Map<String, Object> inspect(BankIntegrationTest fixture, Map<String, Object> body) {
@@ -625,6 +671,13 @@ class SyntheticJourneyIT {
             assertThat(purchase(fixture, booking, original.get("version_id"))).isEqualTo(purchased);
             assertThat(purchase(fixture, newBooking, version)).isEqualTo(newPurchase);
             assertThat(paymentState(fixture)).isEqualTo(payments);
+            if (Boolean.TRUE.equals(body.get("previewed"))) {
+                assertThat(fixture.jdbc.sql("""
+                    SELECT count(*) FROM cinenest_payments.bank_audit
+                    WHERE request_id=:id AND actor_id=:staff AND action='PREVIEW' AND outcome='PERMIT'
+                    """).param("id", bankRequestId).param("staff", BankIntegrationTest.STAFF)
+                    .query(Long.class).single()).isEqualTo(1L);
+            }
             assertThat(fixture.jdbc.sql("""
                 SELECT state FROM cinenest_pricing.package_publication
                 WHERE package_id=:pkg AND version_id=:version
@@ -946,6 +999,7 @@ class SyntheticJourneyIT {
                         }else if(op.equals("subject")){
                             String subject=body.get("subject").toString();
                             if(supervisedAuthSealed || !(List.of("customer-a","customer-b","staff").contains(subject)
+                                    || (packageJourney != null && subject.equals("qa-admin-history-observer"))
                                     || (adminQa && ADMIN_ROLES.stream().map(role -> "qa-admin-" + role).anyMatch(subject::equals))))throw new IllegalArgumentException();
                             BankIntegrationTest.IDP.subject=subject;
                         }else if(op.equals("expire-session")){
@@ -958,10 +1012,11 @@ class SyntheticJourneyIT {
                         diagnostic.put("controlOk", false);
                         diagnostic.put("changedTables", response.getOrDefault("changedTables", List.of()));
                         diagnostic.put("newAuditActions", response.getOrDefault("newAuditActions", List.of()));
-                        if (pair != null) {
+                        if (pair != null || packageJourney != null) {
                             diagnostic.put("fixtureError", failure.getClass().getSimpleName());
+                            String fixtureClass = pair != null ? TwoJourneyFixture.class.getName() : PackageBookingFixture.class.getName();
                             java.util.Arrays.stream(failure.getStackTrace())
-                                .filter(frame -> frame.getClassName().startsWith(TwoJourneyFixture.class.getName()))
+                                .filter(frame -> frame.getClassName().startsWith(fixtureClass))
                                 .findFirst().ifPresent(frame -> diagnostic.put("fixtureLine", frame.getLineNumber()));
                         }
                         response = diagnostic;

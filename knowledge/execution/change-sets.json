@@ -7493,5 +7493,23 @@
     ],
     "scope": "SYNTHETIC_TEST_ONLY",
     "localQualification": "PASS"
+  },
+  "syntheticPackageWithdrawalHistoryBrowserQualification": {
+    "id": "CN-E2E-PACKAGE-WITHDRAWAL-HISTORY-001",
+    "baseline": "e5a306281baefe8e7812adb7497753a4487a3ffa",
+    "authorizedPaths": [
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java",
+      "frontend/tests/synthetic-e2e.mjs",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "requirements": [
+      "PK-AC06"
+    ],
+    "scope": "SYNTHETIC_TEST_ONLY",
+    "localQualification": "PASS"
   }
 }

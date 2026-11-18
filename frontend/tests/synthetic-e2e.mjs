@@ -981,7 +981,7 @@ async function runPackageBooking(base) {
 	};
 	const frozenTerms = value => [value.packageVersionId, value.contentHash, value.totalMinor, value.currency];
 
-	let editor, publisher, customer, first, firstHold, replacement, revised, newBooking;
+	let editor, publisher, customer, first, firstHold, replacement, revised, newBooking, receiptContext;
 	try {
 		await scenario("package-publish", async () => {
 			editor = await open("staff");
@@ -1057,6 +1057,12 @@ async function runPackageBooking(base) {
 			const confirmed = await control({ op: "package-confirm", quoteId: revised.quoteId, versionId: replacement.versionId });
 			assert.equal(confirmed.syntheticPurchasedVersionVerified, true);
 			newBooking = confirmed.booking;
+			const requestPath = `/api/bank/requests/${confirmed.bankRequest}`;
+			const before = await json(customer, requestPath);
+			assert.equal(before.amountMinor, revised.totalMinor);
+			assert.equal(before.evidence.find(row => row.id === confirmed.receiptId)?.state, "READY");
+			receiptContext = { request: confirmed.bankRequest, evidence: confirmed.receiptId,
+				metadata: before.evidence, amount: before.amountMinor };
 
 			const expiryChoice = await choices(customer, "T14:00", { expiring: true, duration: revisedDuration });
 			const expiring = await quote(customer, expiryChoice.select, replacement.versionId);
@@ -1094,10 +1100,24 @@ async function runPackageBooking(base) {
 		});
 
 		await scenario("package-history", async () => {
+			const stranger = await open("qa-admin-history-observer");
+			const publicationPath = id => `${root}/publications/${id}`;
+			const originalRecord = await json(publisher, publicationPath(original.publication_id));
+			const replacementRecord = await json(publisher, publicationPath(replacement.publicationId));
+			assert.equal(originalRecord.state, "INACTIVE");
+			assert.equal(originalRecord.snapshot.includedMinutes, 180);
+			assert.equal(replacementRecord.snapshot.includedMinutes, revisedDuration);
 			await publisher.getByLabel("State-change reason").fill("SYNTHETIC lifecycle withdrawal");
 			const retired = await clickResponse(publisher, "Withdraw publication " + replacement.versionNo,
 				root + "/publications/" + replacement.publicationId + "/deactivate");
 			assert.equal(retired.state, "INACTIVE");
+			const withdrawnHistory = await json(publisher, publicationPath(replacement.publicationId));
+			assert.equal(withdrawnHistory.state, "INACTIVE");
+			assert.deepEqual(withdrawnHistory.snapshot, replacementRecord.snapshot);
+			assert.deepEqual((await json(publisher, publicationPath(original.publication_id))).snapshot, originalRecord.snapshot);
+			assert.equal((await api(customer, publicationPath(replacement.publicationId))).status, 403);
+			assert.equal((await api(publisher, publicationPath(replacement.publicationId).replace(config.venue, config.otherVenue))).status, 403);
+
 			assert.deepEqual(frozenTerms(await json(customer, `/api/quotes/${revised.quoteId}`)), frozenTerms(revised));
 			const persisted = await control({ op: "package-inspect", versionId: replacement.versionId,
 				quoteId: revised.quoteId, retired: true });
@@ -1133,8 +1153,8 @@ async function runPackageBooking(base) {
 			assert.equal(deniedQuote.status, 409);
 			assert.equal((await clickResponse(customer, "Release hold", `/api/holds/${hold.holdId}/release`)).state, "RELEASED");
 
-			for (const [id, name, version] of [[newBooking, replacementName, replacement.versionId],
-				[booking, "SYNTHETIC package", original.version_id]]) {
+			for (const [id, name, version, amount, minutes] of [[newBooking, replacementName, replacement.versionId, revised.totalMinor, revisedDuration],
+				[booking, "SYNTHETIC package", original.version_id, first.totalMinor, 180]]) {
 				await customer.goto(`${base}/bookings/${id}`);
 				await click(customer, "Refresh booking history");
 				await customer.getByRole("heading", { name, exact: true }).waitFor();
@@ -1142,6 +1162,10 @@ async function runPackageBooking(base) {
 				const purchase = await json(customer, `/api/bookings/${id}`);
 				assert.equal(purchase.revision, 1);
 				assert.equal(purchase.purchase.packageVersionId, version);
+				assert.equal(purchase.purchase.amountMinor, amount);
+				assert.equal((Date.parse(purchase.purchase.sessionEnd) - Date.parse(purchase.purchase.sessionStart)) / 60000, minutes);
+				await customer.getByText(/^Original purchase:/).waitFor();
+				assert.equal((await api(stranger, `/api/bookings/${id}`)).status, 404);
 				await editor.goto(`${base}/admin/bookings/venues/${config.venue}/${id}`);
 				await click(editor, "Reload booking detail");
 				const detail = editor.getByRole("region", { name: "Authorized staff booking detail" });
@@ -1151,9 +1175,36 @@ async function runPackageBooking(base) {
 				const staffBooking = (await json(editor, `/api/admin/venues/${config.venue}/bookings/${id}`)).booking;
 				assert.equal(staffBooking.revision, 1);
 				assert.equal(staffBooking.packageName, name);
+				assert.equal((Date.parse(staffBooking.scheduledEnd) - Date.parse(staffBooking.scheduledStart)) / 60000, minutes);
+				assert.equal((await api(editor, `/api/admin/venues/${config.otherVenue}/bookings/${id}`)).status, 403);
 				observations.push({ stage: "package-history-view", bookingId: id, packageVersionId: version,
 					customerRendered: true, staffRendered: true });
 			}
+			const requestPath = `/api/bank/requests/${receiptContext.request}`;
+			const staffRequest = `/api/admin/venues/${config.venue}/bank/requests/${receiptContext.request}`;
+			const previewPath = staffRequest + "/evidence/" + receiptContext.evidence;
+			const receipt = await json(customer, requestPath);
+			assert.equal(receipt.amountMinor, receiptContext.amount);
+			assert.deepEqual(receipt.evidence, receiptContext.metadata);
+			assert.equal((await api(stranger, requestPath)).status, 404);
+			assert.equal((await api(customer, previewPath)).status, 403);
+			assert.equal((await api(editor, previewPath.replace(config.venue, config.otherVenue))).status, 403);
+			assert.equal((await api(editor, staffRequest)).status, 200);
+			await customer.goto(`${base}/bank?evidence=${receiptContext.request}`);
+			await customer.getByRole("heading", { name: "Receipt evidence", exact: true }).waitFor();
+			await customer.getByText(/^READY · /).waitFor();
+			const preview = await editor.evaluate(async path => {
+				const response = await fetch(path, { cache: "no-store" });
+				return { status: response.status, type: response.headers.get("content-type"),
+					bytes: (await response.arrayBuffer()).byteLength };
+			}, previewPath);
+			assert.equal(preview.status, 200);
+			assert.equal(preview.type, "image/png");
+			assert.ok(preview.bytes > 0);
+			assert.equal((await control({ op: "package-inspect", retired: true, previewed: true,
+				versionId: replacement.versionId, quoteId: revised.quoteId })).purchaseAndPaymentsUnchanged, true);
+			observations.push({ stage: "protected-receipt-history", metadataUnchanged: true, staffPreview: 200,
+				otherCustomer: 404, ownerPreview: 403, wrongVenuePreview: 403 });
 		});
 	} finally {
 		await Promise.all(contexts.map(context => context.close()));

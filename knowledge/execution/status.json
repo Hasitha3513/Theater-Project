@@ -31919,5 +31919,36 @@
       "knowledge/PROGRESS.md": "f1a038fe9bf6d7a42714ee153a6dc6ccb6eba9c4fa319887f89e62588405fd45",
       "knowledge/execution/change-sets.json": "255a2c8a9f963e5efb1a5e4c6d10334582dbfbe8ef02b2689d0ba92ceb6bb156"
     }
+  },
+  "syntheticPackageWithdrawalHistoryBrowserQualification": {
+    "baseline": "e5a306281baefe8e7812adb7497753a4487a3ffa",
+    "changeSet": "CN-E2E-PACKAGE-WITHDRAWAL-HISTORY-001",
+    "scope": "SYNTHETIC_TEST_ONLY",
+    "requirements": [
+      "PK-AC06"
+    ],
+    "runtimeDisposition": "PASS",
+    "knowledgeReview": {
+      "baseline": "e5a306281baefe8e7812adb7497753a4487a3ffa",
+      "basis": "Verified predecessor inventory and package qualification delta"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "roomBlockingGate": "NOT_SATISFIED",
+    "productionAuthorization": "NONE",
+    "evidence": {
+      "runtime.log": "f03a03d14f018953d22bc8b085889176aaf27886edb9f82bab774fda2bfd6815",
+      "qualified-runtime.log": "ebec6c7d629a115280d5352164863bd29fee98ddea82480f8a59102dd443ab4e",
+      "browser-results.json": "82a33287289a559d5947e69dde8102d91d0dcf7ab1c33185778abf724042adc9",
+      "cleanup.log": "e9cc496ff3d11a73d14428f6bc83527e538f7943b152315774707057661af5d9"
+    },
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "37a010fc4fe820ee6c8d7d84f9f9b98fd4e0f09a0ffe14f2458e8ec1f26949f9",
+      "frontend/tests/synthetic-e2e.mjs": "e09064b4cc26bada06bd7a60d054ae97552329fe22e6846d0770342be03726ea",
+      "knowledge/PROGRESS.md": "32d1c160b9a3af99dcf173bcd4877743b2f6ff3d2e0ef2dc78548779c86ac75c",
+      "knowledge/execution/change-sets.json": "ae49cb35e2e9ea3b626c1d73041ae80b7f143f103030b02aea9a0c1b0b1b1ca4"
+    }
   }
 }

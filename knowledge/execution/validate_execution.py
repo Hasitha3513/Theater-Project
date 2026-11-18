@@ -16670,5 +16670,162 @@ receipt_admission_successor_errors = duration_refresh_e2e_errors
 inert_ci_main = duration_refresh_e2e_main
 
 
+
+# CN-E2E-PACKAGE-WITHDRAWAL-HISTORY-001
+WITHDRAWAL_HISTORY_E2E_BASE = 'e5a306281baefe8e7812adb7497753a4487a3ffa'
+WITHDRAWAL_HISTORY_E2E_KEY = 'syntheticPackageWithdrawalHistoryBrowserQualification'
+WITHDRAWAL_HISTORY_E2E_OWNED = {'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java',
+ 'frontend/tests/synthetic-e2e.mjs',
+ 'knowledge/PROGRESS.md',
+ 'knowledge/execution/change-sets.json',
+ 'knowledge/execution/status.json',
+ 'knowledge/execution/validate_execution.py',
+ 'knowledge/manifest.json'}
+WITHDRAWAL_HISTORY_E2E_RECORD = {'baseline': 'e5a306281baefe8e7812adb7497753a4487a3ffa',
+ 'changeSet': 'CN-E2E-PACKAGE-WITHDRAWAL-HISTORY-001',
+ 'scope': 'SYNTHETIC_TEST_ONLY',
+ 'requirements': ['PK-AC06'],
+ 'runtimeDisposition': 'PASS',
+ 'knowledgeReview': {'baseline': 'e5a306281baefe8e7812adb7497753a4487a3ffa',
+                     'basis': 'Verified predecessor inventory and package '
+                              'qualification delta'},
+ 'part1': {'completed': 4, 'total': 7},
+ 'roomBlockingGate': 'NOT_SATISFIED',
+ 'productionAuthorization': 'NONE',
+ 'evidence': {'runtime.log': 'f03a03d14f018953d22bc8b085889176aaf27886edb9f82bab774fda2bfd6815',
+              'qualified-runtime.log': 'ebec6c7d629a115280d5352164863bd29fee98ddea82480f8a59102dd443ab4e',
+              'browser-results.json': '82a33287289a559d5947e69dde8102d91d0dcf7ab1c33185778abf724042adc9',
+              'cleanup.log': 'e9cc496ff3d11a73d14428f6bc83527e538f7943b152315774707057661af5d9'},
+ 'sourceSha256': {'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '37a010fc4fe820ee6c8d7d84f9f9b98fd4e0f09a0ffe14f2458e8ec1f26949f9',
+                  'frontend/tests/synthetic-e2e.mjs': 'e09064b4cc26bada06bd7a60d054ae97552329fe22e6846d0770342be03726ea',
+                  'knowledge/PROGRESS.md': '32d1c160b9a3af99dcf173bcd4877743b2f6ff3d2e0ef2dc78548779c86ac75c',
+                  'knowledge/execution/change-sets.json': 'ae49cb35e2e9ea3b626c1d73041ae80b7f143f103030b02aea9a0c1b0b1b1ca4'}}
+WITHDRAWAL_HISTORY_E2E_ENTRYPOINT = DURATION_REFRESH_E2E_ENTRYPOINT
+
+def withdrawal_history_e2e_before(name):
+    return v41_git('show', WITHDRAWAL_HISTORY_E2E_BASE + ':' + name)
+
+
+def withdrawal_history_e2e_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', WITHDRAWAL_HISTORY_E2E_BASE, 'HEAD')
+
+        def paths(*args):
+            return parse_git_paths(v41_git(*args, text=True), nul=True)
+
+        baseline_entries = v41_git('ls-tree', '-r', '-z', WITHDRAWAL_HISTORY_E2E_BASE).split(b'\0')
+        baseline = {}
+        for entry in filter(None, baseline_entries):
+            metadata, name = entry.split(b'\t', 1)
+            mode, kind, oid = metadata.split()
+            baseline[name.decode()] = (mode, kind, oid)
+        live = paths('ls-files', '-z', '--cached', '--others', '--exclude-standard')
+        changed = paths('diff', '--no-ext-diff', WITHDRAWAL_HISTORY_E2E_BASE, '--name-only', '-z')
+        if changed != WITHDRAWAL_HISTORY_E2E_OWNED or live != set(baseline):
+            return ['Withdrawal history E2E exact seven-path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        migrations = {name for name in baseline if name.startswith(migration_prefix)}
+        actual_migrations = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(migrations) != 42 or actual_migrations != migrations:
+            return ['Withdrawal history E2E migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Withdrawal history E2E unsafe path: ' + name]
+            if name in WITHDRAWAL_HISTORY_E2E_OWNED:
+                if mode != b'100644' or path.stat().st_mode & 0o111:
+                    return ['Withdrawal history E2E unauthorized file mode: ' + name]
+                continue
+            data = path.read_bytes()
+            if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                return ['Withdrawal history E2E predecessor drift: ' + name]
+        state = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (state.pop(WITHDRAWAL_HISTORY_E2E_KEY, None) != WITHDRAWAL_HISTORY_E2E_RECORD
+                or state != json.loads(withdrawal_history_e2e_before(ADMIN_QA_STATUS))):
+            return ['Withdrawal history E2E review or acceptance accounting mismatch']
+        for name, expected in WITHDRAWAL_HISTORY_E2E_RECORD['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Withdrawal history E2E source fingerprint mismatch: ' + name]
+        old_validator = withdrawal_history_e2e_before(V41_VALIDATOR)
+        if (not old_validator.endswith(WITHDRAWAL_HISTORY_E2E_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(WITHDRAWAL_HISTORY_E2E_ENTRYPOINT)])):
+            return ['Withdrawal history E2E altered historical validator']
+        manifest = json.loads(withdrawal_history_e2e_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in WITHDRAWAL_HISTORY_E2E_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Withdrawal history E2E manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Withdrawal history E2E admission inputs inaccessible or invalid']
+    return []
+
+
+def withdrawal_history_e2e_controls():
+    from unittest.mock import patch
+
+    original = Path.read_bytes
+
+    def reject(path, data, reason):
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else original(current)):
+            if not any(error.startswith(reason) for error in withdrawal_history_e2e_errors()):
+                raise ValueError('Withdrawal history E2E negative control failed: ' + reason)
+
+    for name in WITHDRAWAL_HISTORY_E2E_RECORD['sourceSha256']:
+        reject(R / name, b'drift', 'Withdrawal history E2E source fingerprint mismatch')
+    reject(R / V41_MANIFEST, b'drift', 'Withdrawal history E2E manifest mismatch')
+    reject(K / 'execution/requirements.json', b'drift', 'Withdrawal history E2E predecessor drift')
+    reject(R / EXTENSION_FUNDING_MIGRATION, b'drift', 'Withdrawal history E2E predecessor drift')
+    path = R / ADMIN_QA_STATUS
+    state = json.loads(original(path))
+    state[WITHDRAWAL_HISTORY_E2E_KEY]['part1']['completed'] = 5
+    reject(path, json.dumps(state).encode(), 'Withdrawal history E2E review or acceptance accounting mismatch')
+    state = json.loads(original(path))
+    state[WITHDRAWAL_HISTORY_E2E_KEY].pop('knowledgeReview')
+    reject(path, json.dumps(state).encode(), 'Withdrawal history E2E review or acceptance accounting mismatch')
+
+    git = v41_git
+
+    def add_unapproved(*args, **kwargs):
+        value = git(*args, **kwargs)
+        return value + 'unapproved.txt\0' if args[0] == 'ls-files' else value
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if withdrawal_history_e2e_errors() != ['Withdrawal history E2E exact seven-path inventory mismatch']:
+            raise ValueError('Withdrawal history E2E unauthorized path negative control failed')
+    glob = Path.glob
+
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if withdrawal_history_e2e_errors() != ['Withdrawal history E2E migration inventory mismatch']:
+            raise ValueError('Withdrawal history E2E extra migration negative control failed')
+    print('PASS Withdrawal history E2E inventory, fingerprints, migration, review and acceptance controls', flush=True)
+
+
+def withdrawal_history_e2e_main():
+    import sys
+    import tempfile
+
+    errors = withdrawal_history_e2e_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    withdrawal_history_e2e_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-withdrawal-history-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', WITHDRAWAL_HISTORY_E2E_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = withdrawal_history_e2e_errors
+inert_ci_main = withdrawal_history_e2e_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
