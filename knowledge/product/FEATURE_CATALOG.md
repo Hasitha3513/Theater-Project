@@ -878,3 +878,7 @@ The owner-only reservation panel supports synthetic BANK request creation and ow
 ### Continuous venue hours across midnight
 
 Calendar availability and reservation holds share the same Booking rule. Seven explicit full-day venue-local windows permit a session and its cleaning interval to cross midnight, subject to minimum duration, capacity, maintenance and inventory guards. Any other schedule keeps its actual closing restrictions. The isolated PostgreSQL qualification covered next-day overlap and exact buffer adjacency. [Verification and scope](../PROGRESS.md#part-1-continuous-hours-inventory)
+
+### Synthetic staff admission assessment
+
+The booking detail panel reads a venue-scoped synthetic assessment separately from the roster. It compares the current confirmed purchase and roster with version-bound synthetic decisions and projects counts and coarse outcomes only. The default-off backend has no deployed decision adapter. A roster alone yields pending verification. Matching test decisions qualify staff review only and grant no physical entry. [Bounded policy](../PROJECT.md#synthetic-staff-admission-assessment)

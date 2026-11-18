@@ -5,7 +5,13 @@ import { once } from "node:events";
 import { createServer } from "node:net";
 import { mkdir } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
-import { venue, id, other, detailRecord } from "./staff-bookings-fixtures.mjs";
+import {
+	venue,
+	id,
+	other,
+	item,
+	detailRecord,
+} from "./staff-bookings-fixtures.mjs";
 import { rosterFixture } from "./staff-guest-roster-fixtures.mjs";
 const { chromium } = await import(
 	pathToFileURL(`${process.env.PLAYWRIGHT_MODULE_PATH}/index.mjs`).href
@@ -30,6 +36,7 @@ const child = spawn(
 	],
 	{ stdio: "ignore" },
 );
+const admissionOnly = process.argv.includes("--admission-only");
 let browser,
 	groups = 0;
 try {
@@ -50,11 +57,29 @@ try {
 				reads: 0,
 				writes: [],
 				network: false,
+				admission: {},
+				admissionStatus: 200,
 			};
 		await page.route("**/api/**", async (route) => {
 			const req = route.request(),
 				path = new URL(req.url()).pathname;
 			if (req.method() !== "GET") state.writes.push(path);
+			if (path.endsWith("/guest-admission")) {
+				return route.fulfill({
+					status: state.admissionStatus,
+					json: {
+						...item(),
+						bookingRevision: item().revision,
+						bookingState: item().state,
+						permittedGuestCount: 4,
+						checkedGuestCount: 0,
+						status: "PENDING_VERIFICATION",
+						physicalEntryAuthorized: false,
+						documentNumber: "PRIVATE_ADMISSION_SENTINEL",
+						...state.admission,
+					},
+				});
+			}
 			if (path.endsWith("/guest-roster")) {
 				state.reads++;
 				const snapshot = structuredClone(state.data),
@@ -92,7 +117,7 @@ try {
 				.getByRole("region", { name: "Staff guest roster" })
 				.getByRole("alert")
 				.waitFor();
-	for (const width of [375, 768, 1280]) {
+	for (const width of admissionOnly ? [] : [375, 768, 1280]) {
 		const { page, state } = await harness(width);
 		await page.goto(href);
 		await page
@@ -131,7 +156,7 @@ try {
 		await page.close();
 		groups++;
 	}
-	if (mode === "after") {
+	if (mode === "after" && !admissionOnly) {
 		for (const status of [401, 403, 404, 503]) {
 			const { page, state } = await harness();
 			state.status = status;
@@ -270,6 +295,52 @@ try {
 			groups++;
 		}
 	}
+	if (mode === "after" || admissionOnly) {
+		const { page, state } = await harness();
+		await page.goto(href);
+		const panel = page.getByRole("region", {
+			name: "Guest admission assessment",
+		});
+		await panel.getByText("PENDING_VERIFICATION", { exact: true }).waitFor();
+		assert.match(await panel.innerText(), /does not authorize physical entry/);
+		assert.doesNotMatch(
+			await page.locator("main").innerText(),
+			/PRIVATE_ADMISSION_SENTINEL/,
+		);
+		assert.deepEqual(state.writes, []);
+		const reload = panel.getByRole("button", {
+			name: "Load admission assessment",
+		});
+		state.admission = {
+			status: "ELIGIBLE_FOR_STAFF_REVIEW",
+			checkedGuestCount: 4,
+		};
+		await reload.click();
+		await panel
+			.getByText("ELIGIBLE_FOR_STAFF_REVIEW", { exact: true })
+			.waitFor();
+		groups++;
+		state.admission = { ...state.admission, bookingRevision: 2 };
+		await reload.click();
+		await panel.getByText(/Admission assessment unavailable/).waitFor();
+		assert.equal(
+			await panel
+				.getByText("ELIGIBLE_FOR_STAFF_REVIEW", { exact: true })
+				.count(),
+			0,
+		);
+		groups++;
+		state.admissionStatus = 403;
+		await reload.click();
+		await panel
+			.getByText("Admission assessment requires current venue authority.")
+			.waitFor();
+		assert.deepEqual(state.writes, []);
+		groups++;
+		await page.close();
+		groups++;
+	}
+
 	console.log(
 		`PASS ${groups} ${mode} synthetic roster browser/visual groups; intercepted APIs,not backend E2E`,
 	);

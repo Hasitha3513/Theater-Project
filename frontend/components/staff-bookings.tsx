@@ -24,6 +24,7 @@ import {
 	type StateKind,
 	StateMessage,
 } from "./primitives";
+import { StaffGuestAdmission } from "./staff-guest-admission";
 import { loadStaffRoster, StaffRosterSummary } from "./staff-guest-roster";
 import { StaffBookingOperationsPanel } from "./staff-booking-operations";
 import { StaffBookingRefundPanel } from "./staff-booking-refunds";
@@ -499,6 +500,12 @@ export function StaffBookingDetail({
 							key={`refund/${venue}/${booking}/${state.value.booking.revision}`}
 							booking={state.value.booking}
 						/>
+						{currentBooking && (
+							<StaffGuestAdmission
+								key={cancellationKey + currentBooking.state}
+								booking={currentBooking}
+							/>
+						)}
 						<StaffGuestRoster
 							key={`${venue}/${booking}/${state.value.booking.revision}`}
 							booking={state.value.booking}

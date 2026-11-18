@@ -29,7 +29,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties={"cinenest.booking.extension-reservations.enabled=true","cinenest.booking.extension-reservations.worker-enabled=false","cinenest.booking.extension-reservations.rate-count=5","cinenest.booking.extension-reservations.rate-seconds=60","cinenest.booking.extension-reservations.approval-reference=CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001 synthetic test","cinenest.booking.staff-read.enabled=true","cinenest.booking.guests.enabled=true","cinenest.booking.amendments.enabled=true","cinenest.bank.refunds.enabled=true","cinenest.bank.refunds.maximum-minor=50000","spring.datasource.hikari.maximum-pool-size=4","spring.datasource.hikari.minimum-idle=0","cinenest.bank.enabled=true","cinenest.bank.ledger.enabled=true","cinenest.bank.ledger.resolution-seconds=60","cinenest.bank.worker-enabled=false","cinenest.bank.policy-version=SYNTHETIC-BANK1","cinenest.bank.lead-seconds=60","cinenest.bank.request-seconds=3000","cinenest.bank.initiation-seconds=900","cinenest.bank.submission-seconds=1200","cinenest.bank.review-seconds=1800","cinenest.bank.hold-seconds=2400","cinenest.bank.escalation-seconds=2500","cinenest.bank.upload-seconds=60","cinenest.bank.retention-seconds=3600","cinenest.bank.cleanup-seconds=1","cinenest.bank.review-opens=00:00","cinenest.bank.review-closes=23:59:59.999999999","cinenest.verification.enabled=true","cinenest.verification.worker-enabled=false","cinenest.verification.policy-version=SYNTHETIC-V1","cinenest.verification.upload-seconds=60","cinenest.verification.retention-seconds=3600","cinenest.verification.decision-seconds=600","cinenest.verification.cleanup-seconds=1","cinenest.pricing.synthetic-quotes.enabled=true","cinenest.pricing.synthetic-quotes.tax-profile=SYNTHETIC_FIXED_MINOR_V1","cinenest.pricing.synthetic-quotes.tax-minor=7","cinenest.pricing.synthetic-quotes.approval-reference=SYNTHETIC test fixture only","cinenest.pricing.synthetic-quotes.rate-count=100","cinenest.pricing.synthetic-quotes.rate-seconds=60","cinenest.pricing.publication-worker.enabled=false","cinenest.booking.holds.enabled=true","cinenest.booking.holds.rate-count=100","cinenest.booking.holds.rate-seconds=60","cinenest.booking.holds.approval-reference=SYNTHETIC owner-approved inventory test"})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties={"cinenest.booking.guest-admission.enabled=true","cinenest.booking.extension-reservations.enabled=true","cinenest.booking.extension-reservations.worker-enabled=false","cinenest.booking.extension-reservations.rate-count=5","cinenest.booking.extension-reservations.rate-seconds=60","cinenest.booking.extension-reservations.approval-reference=CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001 synthetic test","cinenest.booking.staff-read.enabled=true","cinenest.booking.guests.enabled=true","cinenest.booking.amendments.enabled=true","cinenest.bank.refunds.enabled=true","cinenest.bank.refunds.maximum-minor=50000","spring.datasource.hikari.maximum-pool-size=4","spring.datasource.hikari.minimum-idle=0","cinenest.bank.enabled=true","cinenest.bank.ledger.enabled=true","cinenest.bank.ledger.resolution-seconds=60","cinenest.bank.worker-enabled=false","cinenest.bank.policy-version=SYNTHETIC-BANK1","cinenest.bank.lead-seconds=60","cinenest.bank.request-seconds=3000","cinenest.bank.initiation-seconds=900","cinenest.bank.submission-seconds=1200","cinenest.bank.review-seconds=1800","cinenest.bank.hold-seconds=2400","cinenest.bank.escalation-seconds=2500","cinenest.bank.upload-seconds=60","cinenest.bank.retention-seconds=3600","cinenest.bank.cleanup-seconds=1","cinenest.bank.review-opens=00:00","cinenest.bank.review-closes=23:59:59.999999999","cinenest.verification.enabled=true","cinenest.verification.worker-enabled=false","cinenest.verification.policy-version=SYNTHETIC-V1","cinenest.verification.upload-seconds=60","cinenest.verification.retention-seconds=3600","cinenest.verification.decision-seconds=600","cinenest.verification.cleanup-seconds=1","cinenest.pricing.synthetic-quotes.enabled=true","cinenest.pricing.synthetic-quotes.tax-profile=SYNTHETIC_FIXED_MINOR_V1","cinenest.pricing.synthetic-quotes.tax-minor=7","cinenest.pricing.synthetic-quotes.approval-reference=SYNTHETIC test fixture only","cinenest.pricing.synthetic-quotes.rate-count=100","cinenest.pricing.synthetic-quotes.rate-seconds=60","cinenest.pricing.publication-worker.enabled=false","cinenest.booking.holds.enabled=true","cinenest.booking.holds.rate-count=100","cinenest.booking.holds.rate-seconds=60","cinenest.booking.holds.approval-reference=SYNTHETIC owner-approved inventory test"})
 @ExtendWith(OutputCaptureExtension.class)
 @org.springframework.test.context.ActiveProfiles("synthetic-quotation")
 @org.springframework.test.annotation.DirtiesContext(classMode=org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS)
@@ -1050,6 +1050,33 @@ class BankIntegrationTest {
     @Test void guestPurchasedCapacityIncludesBooker()throws Exception{var c=accessCase();rosterInit(c);for(int i=1;i<=3;i++)json(guestAdd(c,companion(i-1,"SYNTHETIC-"+i)));assertThat(guestAdd(c,companion(3,"SYNTHETIC-4")).statusCode()).isEqualTo(409);}
     @Test void guestRoomCapacityIsCurrentAuthoritativeFact()throws Exception{var c=accessCase();rosterInit(c);jdbc.sql("UPDATE cinenest_rooms.room SET capacity=2 WHERE room_id=:r").param("r",RID).update();json(guestAdd(c,companion(0,"SYNTHETIC-1")));assertThat(guestAdd(c,companion(1,"SYNTHETIC-2")).statusCode()).isEqualTo(409);}
     @Test void guestWrongOwnerCannotReadOrWriteEvenWithFinanceGrant()throws Exception{var c=accessCase();assertThat(c.allocator().get(roster(c.booking())).statusCode()).isEqualTo(404);assertThat(write(c.allocator(),"POST",roster(c.booking()),JSONObjectUtils.toJSONString(guestBody(0))).statusCode()).isEqualTo(404);}
+    @Test void guestAdmissionRequiresScopedPermissionAndNeverTreatsRosterAsVerification() throws Exception {
+      var c=accessCase();
+      rosterInit(c);
+      String path="/api/admin/venues/"+VA+"/bookings/"+c.booking()+"/guest-admission";
+      assertThat(new Browser().get(path).statusCode()).isEqualTo(401);
+      grantTo(STAFF,VA,"booking.synthetic.read");
+      grantTo(STAFF,VB,"guest.admission.synthetic.read");
+      assertThat(c.staff().get(path).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"guest.admission.synthetic.read");
+      assertThat(c.allocator().get(path).statusCode()).isEqualTo(403);
+      assertThat(c.staff().get(path.replace(VA.toString(),VB.toString())).statusCode()).isEqualTo(403);
+      var result=json(c.staff().get(path));
+      assertThat(result).containsEntry("status","PENDING_VERIFICATION")
+          .containsEntry("physicalEntryAuthorized",false);
+      assertThat(((Number)result.get("checkedGuestCount")).intValue()).isZero();
+      assertThat(result.keySet()).containsExactlyInAnyOrder("bookingId","venueId","roomId","bookingRevision",
+          "scheduledStart","scheduledEnd","bookingState","permittedGuestCount","checkedGuestCount",
+          "status","synthetic","physicalEntryAuthorized");
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.guest_audit WHERE action='ADMISSION_READ'")
+          .query(Integer.class).single()).isEqualTo(1);
+      assertThat(write(c.staff(),"POST",path,"{}").statusCode()).isIn(403,405);
+      assertThat(c.staff().get(path.replace(c.booking().toString(),UUID.randomUUID().toString()))
+          .statusCode()).isEqualTo(404);
+      assertThat(cancel(c,cancellationBody()).statusCode()).isEqualTo(200);
+      assertThat(json(c.staff().get(path))).containsEntry("status","NOT_CONFIRMED")
+          .containsEntry("physicalEntryAuthorized",false);
+    }
     @Test void guestStaffRequiresDedicatedSameVenueGrant()throws Exception{
       var c=accessCase();rosterInit(c);String path="/api/admin/venues/"+VA+"/bookings/"+c.booking()+"/guest-roster";
       assertThat(c.staff().get(path).statusCode()).isEqualTo(403);UUID grant=grantTo(STAFF,VB,"guest.synthetic.read");assertThat(c.staff().get(path).statusCode()).isEqualTo(403);

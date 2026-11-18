@@ -17111,5 +17111,174 @@ receipt_admission_successor_errors = continuous_hours_errors
 inert_ci_main = continuous_hours_main
 
 
+GUEST_ADMISSION_STATE = {'changeSet': 'CN-GUEST-ADMISSION-CONTRACT-001',
+ 'baseline': '00a82d8ed31f78e2eb7cf677fa20410ae963f978',
+ 'status': 'LOCAL_QUALIFIED_HOSTED_CI_PENDING',
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'backendPassed': 25,
+ 'postgresHttpPassed': 2,
+ 'frontendPassed': 8,
+ 'interceptedChromiumPassed': 4,
+ 'cleanup': 'PASS',
+ 'configuredDecisionProvider': False,
+ 'physicalEntryAuthorized': False,
+ 'sourceSha256': {'backend/src/main/java/com/cinenest/booking/SyntheticGuestAdmission.java': 'f2b6aa712f395c56104817e8e882493a06746742dbcbd0d702b126c4898c1d15',
+                  'backend/src/main/java/com/cinenest/booking/internal/GuestAdmissionService.java': '7e955278aee822160a476d7ac5f42077a559fd203c6754e3e7d82de3fa72f6d3',
+                  'backend/src/main/java/com/cinenest/booking/internal/GuestRosterController.java': 'c6815a5fea76358937535ad46332a59ccfb8462ad55c8736caeb55ccf0913e6e',
+                  'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': 'f81575fb0bb05ae158f92b9079fb6831323af0cf1bcf521a4618fd80b8e98006',
+                  'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'ce1b56f4733d53059f6286e2ab1bc79e26aa47ee57a99b999e66de90df834e6e',
+                  'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '2c4dae299535246d55f4f98870d380f303ec63ed51ebc758fe8bf71341539976',
+                  'backend/src/test/java/com/cinenest/booking/internal/GuestAdmissionServiceTest.java': '4259bbeaab742985496a3377f4e535d3e7034201bbc4de74a4978fa97347095b',
+                  'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-admission/route.ts': 'be10bb7cea6f974cf54c7c960655674208c13049f5429999bfad15fd88f76640',
+                  'frontend/components/staff-bookings.tsx': '93d2d22c825a03c7b0acd582a1bbdcbb42206188e044e70d41fd5449963b7827',
+                  'frontend/components/staff-guest-admission.tsx': 'd2d8350c20e6a9ca8a6460d960cff3fe03976c6fc847d468c1288ff35009bcd4',
+                  'frontend/lib/bank-backend.ts': 'b1113eba22cdc977c2e076bf97ffa199ae6ff7eec0ea7a5c41e5177156f7a4d8',
+                  'frontend/tests/staff-guest-roster-browser.mjs': 'b17ea1f9eb90f0b70430a570ef16bb3d3686ba02c5e66421d6554505f0d06785',
+                  'frontend/tests/staff-guest-roster.test.mjs': '47993af6623abdf6cca5bf7c0ddc809bc0ab435fc135447de404cffa3a659290',
+                  'knowledge/PROGRESS.md': '0a1cd0c4eee6fca99728d78b397894d8213ebddd07f94807547fa7330760c320',
+                  'knowledge/PROJECT.md': 'd6b9fa9f350e4cf1ca839c65d313477d8fec5c16d7ea050bb029d43db0841d08',
+                  'knowledge/decisions/cinenest-open-decisions.json': 'c5683e0f294aa8fb31fe4aeefa7f23e1eadde2bd8fb022f6e5de47a58814263e',
+                  'knowledge/execution/change-sets.json': 'b3cc4806530ee58fe8ffb73250251739e8bd422503611a9512cd7afc4761baed',
+                  'knowledge/guides/USER_GUIDE.md': '7ecfaa69e8e441880474db2c8af3aa92e304a5b5454ccb322cf68334dd1ed97a',
+                  'knowledge/product/FEATURE_CATALOG.md': 'cde581f96397700c262571fe8530f45bcb2145905c37aad2e80d2ddd007b37cb'},
+ 'evidence': {'backend-final.log': 'd1bd002d2a5551b79b520897d27dbe3f20ed091a721cce8ee2f0f9da9e3ab849',
+              'browser-final.log': '3d949449415af38544a33f321d3387cf16a83cafbd0b111a171e6b9e0868141e',
+              'frontend.log': 'db4e12652f57ace843deab383acc2db13234a059b59c7975780b4ccd36eea8cc',
+              'build.log': '2819e1d9dd3fe97aeb7ca2f3ddaedda4c235c6ab81d3d8c3073f0ce98a9d93ad',
+              'typecheck.log': 'b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead',
+              'lint-final.log': '2d704ee71d415637992084bf340ac3254b0366789c6c060fb02810c68412172e',
+              'cleanup-final.log': '9e5335f1e00c5f39a9087c570918207f1cf1adaf7a020366651672b430e0fa19'}}
+GUEST_ADMISSION_BASE = GUEST_ADMISSION_STATE['baseline']
+GUEST_ADMISSION_KEY = 'syntheticStaffGuestAdmission'
+GUEST_ADMISSION_OWNED = set(GUEST_ADMISSION_STATE['sourceSha256']) | {
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+GUEST_ADMISSION_ENTRYPOINT = CONTINUOUS_HOURS_ENTRYPOINT
+GUEST_ADMISSION_NEW = {'backend/src/main/java/com/cinenest/booking/SyntheticGuestAdmission.java',
+ 'backend/src/main/java/com/cinenest/booking/internal/GuestAdmissionService.java',
+ 'backend/src/test/java/com/cinenest/booking/internal/GuestAdmissionServiceTest.java',
+ 'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-admission/route.ts',
+ 'frontend/components/staff-guest-admission.tsx'}
+
+
+def guest_admission_before(name):
+    return v41_git('show', GUEST_ADMISSION_BASE + ':' + name)
+
+
+def guest_admission_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', GUEST_ADMISSION_BASE, 'HEAD')
+        baseline = {}
+        for entry in filter(None, v41_git('ls-tree', '-r', '-z', GUEST_ADMISSION_BASE).split(b'\0')):
+            metadata, name = entry.split(b'\t', 1)
+            baseline[name.decode()] = metadata.split()
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard'), nul=True)
+        changed = parse_git_paths(v41_git('diff', '--no-ext-diff', GUEST_ADMISSION_BASE, '--name-only', '-z'), nul=True)
+        if live != set(baseline) | GUEST_ADMISSION_NEW or changed != GUEST_ADMISSION_OWNED:
+            return ['Guest admission exact path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        recorded = {name for name in baseline if name.startswith(migration_prefix)}
+        actual = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(recorded) != 42 or actual != recorded:
+            return ['Guest admission migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Guest admission unsafe path: ' + name]
+            if bool(path.stat().st_mode & 0o111) != (mode == b'100755'):
+                return ['Guest admission altered file mode: ' + name]
+            if name not in GUEST_ADMISSION_OWNED:
+                data = path.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                    return ['Guest admission predecessor drift: ' + name]
+        status = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (status.pop(GUEST_ADMISSION_KEY, None) != GUEST_ADMISSION_STATE
+                or status != json.loads(guest_admission_before(ADMIN_QA_STATUS))):
+            return ['Guest admission status or acceptance accounting mismatch']
+        for name in GUEST_ADMISSION_NEW:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path or path.stat().st_mode & 0o111:
+                return ['Guest admission unsafe new path: ' + name]
+        for name, expected in GUEST_ADMISSION_STATE['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Guest admission fingerprint mismatch: ' + name]
+        old_validator = guest_admission_before(V41_VALIDATOR)
+        if (not old_validator.endswith(GUEST_ADMISSION_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(GUEST_ADMISSION_ENTRYPOINT)])):
+            return ['Guest admission altered historical validator']
+        manifest = json.loads(guest_admission_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in GUEST_ADMISSION_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Guest admission manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Guest admission admission inputs inaccessible or invalid']
+    return []
+
+
+def guest_admission_controls():
+    from unittest.mock import patch
+
+    read = Path.read_bytes
+
+    def reject(name, data, reason):
+        path = R / name
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else read(current)):
+            if not any(error.startswith('Guest admission ' + reason) for error in guest_admission_errors()):
+                raise ValueError('Guest admission negative control failed: ' + reason)
+
+    for name in GUEST_ADMISSION_STATE['sourceSha256']:
+        reject(name, b'drift', 'fingerprint mismatch')
+    for name in ('knowledge/execution/requirements.json', EXTENSION_FUNDING_MIGRATION):
+        reject(name, b'drift', 'predecessor drift')
+    reject(V41_MANIFEST, b'drift', 'manifest mismatch')
+    status = json.loads(read(R / ADMIN_QA_STATUS))
+    status[GUEST_ADMISSION_KEY]['part1']['completed'] = 5
+    reject(ADMIN_QA_STATUS, json.dumps(status).encode(), 'status or acceptance accounting mismatch')
+
+    git = v41_git
+    def add_unapproved(*args, **kwargs):
+        result = git(*args, **kwargs)
+        return result + b'unapproved.txt\0' if args[0] == 'ls-files' else result
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if guest_admission_errors() != ['Guest admission exact path inventory mismatch']:
+            raise ValueError('Guest admission unauthorized path control failed')
+
+    glob = Path.glob
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if guest_admission_errors() != ['Guest admission migration inventory mismatch']:
+            raise ValueError('Guest admission migration inventory control failed')
+    print('PASS Guest admission inventory, fingerprints, migrations and acceptance controls', flush=True)
+
+
+def guest_admission_main():
+    import sys
+    import tempfile
+
+    errors = guest_admission_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    guest_admission_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-guest-admission-replay-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', GUEST_ADMISSION_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = guest_admission_errors
+inert_ci_main = guest_admission_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

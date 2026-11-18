@@ -563,3 +563,7 @@ For a synthetic package lifecycle rehearsal, use separate accounts for editing a
 ### Booking across midnight at a continuously open venue
 
 For an approved continuously open venue, configure all seven operating days as full local-day windows in the existing venue settings. In the room calendar, select the date on which the session **starts**. A late-evening result can end the following morning. Review the returned session end and inventory blocked-until separately before creating a hold. For example, an 11 PM start with a three-hour session and a 15-minute reset ends at 2 AM and blocks the room until 2:15 AM the next day. Maintenance and competing inventory can make the interval unavailable. A calendar result does not certify staffing or room readiness. [Verified behavior](../PROGRESS.md#part-1-continuous-hours-inventory)
+
+### Read synthetic guest admission status
+
+On a scoped staff booking detail page, open **Guest admission assessment**. Check the venue, room, scheduled session and purchased guest count in the booking detail. Read the assessment and the count of eligible synthetic guest checks. Use **Load admission assessment** to refresh. Pending means current decisions are missing or unresolved. A stale response is cleared. The section supplies no identity documents, check-in action or permission to physically enter. [Bounded policy](../PROJECT.md#synthetic-staff-admission-assessment)

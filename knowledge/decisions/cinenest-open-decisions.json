@@ -205,6 +205,44 @@
         "physicalAdmission": "NOT_QUALIFIED",
         "realIdentityEvidence": "NOT_AUTHORIZED",
         "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedStaffAdmissionApproval": {
+        "taskId": "CN-GUEST-ADMISSION-CONTRACT-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_READ_ONLY",
+        "minimumAttendingGuestAge": 18,
+        "eventualLiveOriginalDocumentRequired": true,
+        "proposedOriginalTypes": [
+          "NIC",
+          "PASSPORT"
+        ],
+        "liveDocumentListQualified": false,
+        "nonQualifyingEvidence": [
+          "PHOTOCOPY",
+          "SCREENSHOT",
+          "OCR",
+          "PAYMENT_RECEIPT",
+          "ROSTER_REGISTRATION"
+        ],
+        "bindTo": [
+          "guest",
+          "bookingRevision",
+          "rosterRevision",
+          "policyVersion"
+        ],
+        "nonPositiveDecisions": [
+          "MISSING",
+          "STALE",
+          "UNKNOWN",
+          "REVOKED",
+          "SUPERSEDED"
+        ],
+        "reEvaluateOn": [
+          "BOOKING_REVISION_CHANGED",
+          "ROSTER_REVISION_CHANGED"
+        ],
+        "physicalEntryAuthorized": false,
+        "approvalSource": "Current Owner-directed bounded policy approval",
+        "fullDecisionStatus": "OPEN_DECISION"
       }
     },
     {
@@ -305,6 +343,32 @@
         "canonicalSpecification": "PROJECT.md#synthetic-guest-roster-policy",
         "physicalAdmission": "NOT_QUALIFIED",
         "realIdentityEvidence": "NOT_AUTHORIZED",
+        "fullDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedStaffAdmissionApproval": {
+        "taskId": "CN-GUEST-ADMISSION-CONTRACT-001",
+        "status": "APPROVED_BOUNDED_SYNTHETIC_READ_ONLY",
+        "permission": "guest.admission.synthetic.read",
+        "scope": "VENUE",
+        "ordinaryFields": [
+          "bookingReference",
+          "venue",
+          "room",
+          "purchasedSessionInterval",
+          "confirmationStatus",
+          "guestCounts",
+          "coarseStatus"
+        ],
+        "excludedFields": [
+          "fullDocumentNumber",
+          "documentImage",
+          "dateOfBirth",
+          "reviewerNotes"
+        ],
+        "protectedEvidenceRequiresSeparatePermissionAndPurpose": true,
+        "attributableAuditRequired": true,
+        "realIdentityStorageRetentionDeletionQualified": false,
+        "approvalSource": "Current Owner-directed bounded policy approval",
         "fullDecisionStatus": "OPEN_DECISION"
       }
     },

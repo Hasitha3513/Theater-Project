@@ -1,3 +1,4 @@
+import { admissionRecord } from "../components/staff-guest-admission.tsx";
 import assert from "node:assert/strict";
 import test from "node:test";
 import React from "react";
@@ -127,5 +128,32 @@ test("permission, session, missing and unavailable failures propagate without fa
 		await assert.rejects(loadStaffRoster(item()));
 	} finally {
 		globalThis.fetch = original;
+	}
+});
+
+test("admission projection rejects stale or over-authoritative results and drops private fields", () => {
+	const booking = item();
+	const response = {
+		...booking,
+		bookingRevision: booking.revision,
+		bookingState: booking.state,
+		permittedGuestCount: booking.purchasedGuestCount,
+		checkedGuestCount: booking.purchasedGuestCount,
+		status: "ELIGIBLE_FOR_STAFF_REVIEW",
+		physicalEntryAuthorized: false,
+		documentNumber: "PRIVATE",
+	};
+	assert.deepEqual(admissionRecord(response, booking), {
+		status: "ELIGIBLE_FOR_STAFF_REVIEW",
+		checkedGuestCount: 4,
+	});
+	for (const patch of [
+		{ bookingRevision: 2 },
+		{ roomId: id },
+		{ venueId: other },
+		{ checkedGuestCount: 3 },
+		{ physicalEntryAuthorized: true },
+	]) {
+		assert.throws(() => admissionRecord({ ...response, ...patch }, booking));
 	}
 });

@@ -7565,4 +7565,56 @@
     "acceptance": "Across-midnight calendar and hold agree, next-day overlap denies, and genuine closing remains enforced.",
     "rollback": "Review and revert the bounded rule change if needed; preserve all inventory, booking and financial history."
   }
+,
+  "syntheticStaffGuestAdmission": {
+    "id": "CN-GUEST-ADMISSION-CONTRACT-001",
+    "baseline": "00a82d8ed31f78e2eb7cf677fa20410ae963f978",
+    "admission": "READY",
+    "ownerAuthorization": "EXPLICIT_SYNTHETIC_READ_ONLY",
+    "historicalPinTask": "CN-R1-PIN-LIFECYCLE-001",
+    "historicalPinTaskDisposition": "DEFERRED_PART_2",
+    "liveGates": [
+      "G-ADMISSION",
+      "G-PRIVACY"
+    ],
+    "requirements": [
+      "BR-08",
+      "CN-C05",
+      "CN-NFR-02"
+    ],
+    "authorizedPaths": [
+      "backend/src/main/java/com/cinenest/booking/SyntheticGuestAdmission.java",
+      "backend/src/main/java/com/cinenest/booking/internal/GuestAdmissionService.java",
+      "backend/src/main/java/com/cinenest/booking/internal/GuestRosterController.java",
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/booking/internal/GuestAdmissionServiceTest.java",
+      "frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-admission/route.ts",
+      "frontend/components/staff-bookings.tsx",
+      "frontend/components/staff-guest-admission.tsx",
+      "frontend/lib/bank-backend.ts",
+      "frontend/tests/staff-guest-roster-browser.mjs",
+      "frontend/tests/staff-guest-roster.test.mjs",
+      "knowledge/PROGRESS.md",
+      "knowledge/PROJECT.md",
+      "knowledge/decisions/cinenest-open-decisions.json",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md"
+    ],
+    "newSourcePaths": [
+      "backend/src/main/java/com/cinenest/booking/SyntheticGuestAdmission.java",
+      "backend/src/main/java/com/cinenest/booking/internal/GuestAdmissionService.java",
+      "backend/src/test/java/com/cinenest/booking/internal/GuestAdmissionServiceTest.java",
+      "frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-admission/route.ts",
+      "frontend/components/staff-guest-admission.tsx"
+    ],
+    "scope": "Dedicated venue-authorized read and coarse staff view; no eligibility writes, access, real evidence or grant assignment.",
+    "acceptance": "Exact confirmed booking and scoped current decisions only; missing or stale decisions fail closed. No complete check-in acceptance.",
+    "rollback": "Revert code without deleting audit or booking history."
+  }
 }

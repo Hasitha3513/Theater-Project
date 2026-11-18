@@ -25,7 +25,7 @@ export function bankRoute(path: string, method: string) {
 		return method === "POST";
 	if (
 		new RegExp(
-			`^/api/admin/venues/${uuid}/bookings/${uuid}/guest-roster$`,
+			`^/api/admin/venues/${uuid}/bookings/${uuid}/(guest-roster|guest-admission)$`,
 		).test(path)
 	)
 		return method === "GET";
