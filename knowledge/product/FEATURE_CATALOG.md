@@ -882,3 +882,7 @@ Calendar availability and reservation holds share the same Booking rule. Seven e
 ### Synthetic staff admission assessment
 
 The booking detail panel reads a venue-scoped synthetic assessment separately from the roster. It compares the current confirmed purchase and roster with version-bound synthetic decisions and projects counts and coarse outcomes only. The default-off backend has no deployed decision adapter. A roster alone yields pending verification. Matching test decisions qualify staff review only and grant no physical entry. [Bounded policy](../PROJECT.md#synthetic-staff-admission-assessment)
+
+### Synthetic staff check-in decision
+
+The existing staff booking detail supports an attributable synthetic check-in decision when the isolated feature is enabled and staff have the explicit same-venue grant. Current confirmed booking and roster revisions, eligible synthetic decisions and PostgreSQL time within the purchased session are required. A recorded decision grants no physical entry. [Scope](../PROGRESS.md#synthetic-staff-check-in-v44)

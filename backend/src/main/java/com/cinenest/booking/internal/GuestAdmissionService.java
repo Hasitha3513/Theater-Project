@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 class GuestAdmissionService {
-    private static final String POLICY = "SYNTHETIC-STAFF-ADMISSION-V1";
+    static final String POLICY = "SYNTHETIC-STAFF-ADMISSION-V1";
     private static final String CONFIRMED = "SIMULATED_CONFIRMED";
     private final StaffBookingReadStore staffBookings;
     private final BookingAccess bookings;

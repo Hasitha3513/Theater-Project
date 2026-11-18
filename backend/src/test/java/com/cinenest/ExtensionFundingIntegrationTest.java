@@ -34,7 +34,7 @@ class ExtensionFundingIntegrationTest {
 
     @BeforeAll static void cleanMigration() {
         var db = source(CLEAN);
-        var flyway = Flyway.configure().dataSource(db).load();
+        var flyway = Flyway.configure().dataSource(db).target("43").load();
         assertThat(flyway.info().applied()).isEmpty();
         assertThat(flyway.migrate().migrationsExecuted).isEqualTo(42);
         flyway.validate();
@@ -82,7 +82,7 @@ class ExtensionFundingIntegrationTest {
         var historical = client.sql("""
                 SELECT version, checksum FROM flyway_schema_history WHERE version IS NOT NULL ORDER BY installed_rank
                 """).query().listOfRows();
-        var latest = Flyway.configure().dataSource(db).load();
+        var latest = Flyway.configure().dataSource(db).target("43").load();
         assertThat(latest.migrate().migrationsExecuted).isEqualTo(1);
         latest.validate();
         assertThat(latest.info().current().getVersion().toString()).isEqualTo("43");

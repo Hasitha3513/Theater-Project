@@ -42,4 +42,13 @@ class GuestAdmissionServiceTest {
         assertThat(GuestAdmissionService.evaluate(2, List.of(guest, guest), scope, Map.of()).status())
                 .isEqualTo(INELIGIBLE);
     }
+
+    @Test void checkInWindowIncludesStartAndExcludesEnd() {
+        var start = java.time.Instant.parse("2026-11-18T12:00:00Z");
+        var end = start.plusSeconds(60);
+        assertThat(SyntheticStaffCheckInService.within(start.minusNanos(1), start, end)).isFalse();
+        assertThat(SyntheticStaffCheckInService.within(start, start, end)).isTrue();
+        assertThat(SyntheticStaffCheckInService.within(end.minusNanos(1), start, end)).isTrue();
+        assertThat(SyntheticStaffCheckInService.within(end, start, end)).isFalse();
+    }
 }

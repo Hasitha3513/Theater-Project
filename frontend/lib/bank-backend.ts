@@ -29,6 +29,12 @@ export function bankRoute(path: string, method: string) {
 		).test(path)
 	)
 		return method === "GET";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/bookings/${uuid}/guest-check-in$`,
+		).test(path)
+	)
+		return method === "GET" || method === "POST";
 	if (path === "/api/bank/requests/readiness") return method === "GET";
 	if (
 		new RegExp(

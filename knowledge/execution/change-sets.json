@@ -7616,5 +7616,62 @@
     "scope": "Dedicated venue-authorized read and coarse staff view; no eligibility writes, access, real evidence or grant assignment.",
     "acceptance": "Exact confirmed booking and scoped current decisions only; missing or stale decisions fail closed. No complete check-in acceptance.",
     "rollback": "Revert code without deleting audit or booking history."
+  },
+  "syntheticStaffCheckInV44": {
+    "id": "CN-PART1-SYNTHETIC-STAFF-CHECK-IN-001",
+    "baseline": "210d451617ca76aac1109ac11823a8f81dae07b5",
+    "admission": "READY",
+    "ownerAuthorization": "CURRENT_EXACT_CASCADE_COMPATIBLE_V44_AND_SYNTHETIC_COMMAND",
+    "historicalTask": "CN-R1-CHECKIN-GATE-001",
+    "prerequisite": "CN-GUEST-ADMISSION-CONTRACT-001",
+    "deferredPath": "CN-R1-PIN-LIFECYCLE-001",
+    "scope": "Default-off Booking command and staff panel with no identity evidence collection or physical entry.",
+    "migration": {
+      "path": "backend/src/main/resources/db/migration/V44__synthetic_staff_check_in.sql",
+      "sha256": "b4013c7de3126abe382dd110b34348026e96ee92144834978fcd1edec70c17ca",
+      "originalDefectiveProposalAdmitted": false
+    },
+    "window": "[start,end) using PostgreSQL time",
+    "rollback": "Disable or revert the application command and retain V44 rows and historical audit.",
+    "requirements": [
+      "BR-08",
+      "CN-C05",
+      "CN-NFR-02"
+    ],
+    "admissionEvidence": {
+      "migration-review-run.log": "2fc74e03022badbac1304e63c4dfd640c1f0fda27ca067c732cfc44f0886b772",
+      "four-suites.log": "8e832a72cfaab520354b5e206b656b0327a0e15cf252be280169a745683b708b",
+      "head-retest.log": "17f1ef53dd5efadb470aaff4fdc7755fd7554855660a41fc8e0696ab2c1b025e"
+    },
+    "authorizedPaths": [
+      "backend/src/main/java/com/cinenest/booking/internal/GuestAdmissionService.java",
+      "backend/src/main/java/com/cinenest/booking/internal/GuestRosterController.java",
+      "backend/src/main/java/com/cinenest/booking/internal/SyntheticStaffCheckInService.java",
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java",
+      "backend/src/main/resources/db/migration/V44__synthetic_staff_check_in.sql",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/ExtensionFundingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "backend/src/test/java/com/cinenest/booking/internal/GuestAdmissionServiceTest.java",
+      "frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-check-in/route.ts",
+      "frontend/components/staff-guest-admission.tsx",
+      "frontend/components/staff-synthetic-check-in.tsx",
+      "frontend/lib/bank-backend.ts",
+      "frontend/tests/staff-guest-roster-browser.mjs",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/guides/USER_GUIDE.md",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md"
+    ],
+    "newSourcePaths": [
+      "backend/src/main/java/com/cinenest/booking/internal/SyntheticStaffCheckInService.java",
+      "backend/src/main/resources/db/migration/V44__synthetic_staff_check_in.sql",
+      "frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-check-in/route.ts",
+      "frontend/components/staff-synthetic-check-in.tsx"
+    ]
   }
 }

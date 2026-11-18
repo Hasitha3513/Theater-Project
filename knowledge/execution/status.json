@@ -32058,5 +32058,52 @@
       "lint-final.log": "2d704ee71d415637992084bf340ac3254b0366789c6c060fb02810c68412172e",
       "cleanup-final.log": "9e5335f1e00c5f39a9087c570918207f1cf1adaf7a020366651672b430e0fa19"
     }
+  },
+  "syntheticStaffCheckInV44": {
+    "baseline": "210d451617ca76aac1109ac11823a8f81dae07b5",
+    "admissionStatus": "READY",
+    "qualification": "SYNTHETIC_ONLY",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE",
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/booking/internal/GuestAdmissionService.java": "332d708ab3298e5139c33a28f99a4cdc4f87dc3f33f61d5f129e0459224bfa92",
+      "backend/src/main/java/com/cinenest/booking/internal/GuestRosterController.java": "9997b4145548d86c45640dace0978ca357f327f1ae9a7fe081dbb743a85b81b5",
+      "backend/src/main/java/com/cinenest/booking/internal/SyntheticStaffCheckInService.java": "31d21c04ed72ad184c78640e30e5b1c9f6d0896c7ef33ae40eabce376e6e344b",
+      "backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java": "7b49f815957f12fd039b742f2096c2b492f6440f7758ba23029ff1a5ee6e4536",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "070fff2f65f1f45fe8c6ded4c8b39ad8913ffb5b67e77008fa33f7080a62ff42",
+      "backend/src/main/resources/db/migration/V44__synthetic_staff_check_in.sql": "b4013c7de3126abe382dd110b34348026e96ee92144834978fcd1edec70c17ca",
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "186576104c4ef2f898deee2a13b8cf8d0540315042046caa244a214d2bdd02ea",
+      "backend/src/test/java/com/cinenest/ExtensionFundingIntegrationTest.java": "7777435e919f0fcbadb05ef6bec685eee185e19c5f965e3d99f071c3014dbf48",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java": "e0818957539ac4e9c2055ef342cd95d4a43484e63b438f7b7896e60a04904ba3",
+      "backend/src/test/java/com/cinenest/booking/internal/GuestAdmissionServiceTest.java": "acf06caf281391505ab616ba8a7ff43e60e7012e69628b8f886922cd3ffb3c73",
+      "frontend/app/api/admin/venues/[venueId]/bookings/[booking]/guest-check-in/route.ts": "1c77933379d502162caa530066514a80c99500153f0475471a4f8640978f52e5",
+      "frontend/components/staff-guest-admission.tsx": "a19bc2d0d75c971b6164daae9e3c028ee89fa2f8e1af5ce0e0f6a3094c1b1427",
+      "frontend/components/staff-synthetic-check-in.tsx": "15ca9371d9866d4a522b3cb0716352afcedd9f7bdf5154e9869a8faf852d4722",
+      "frontend/lib/bank-backend.ts": "558c3ec3451a617083f41e1bbd7a2268801ff2990fba37bfffa6a7934bba1d8b",
+      "frontend/tests/staff-guest-roster-browser.mjs": "1479df0fc62140ad4e2609e48903a18a1655ffaffcd154645ea6d0b035e65582",
+      "knowledge/PROGRESS.md": "a4a5a34dc6f53e87cb50a17f673bf0d50bedb12d56d7a41d734c24bb838297ad",
+      "knowledge/execution/change-sets.json": "726df4e3e2cb0c7c922469c7b1de88a578d9c6f5b360537e9f2b213430272e0f",
+      "knowledge/guides/USER_GUIDE.md": "34ebc70ec42b2a8e66082c6fe0440cd7be600a2f82a0ae43054c06865d30e021",
+      "knowledge/product/FEATURE_CATALOG.md": "539888371fc6df40984b6718f05dfcd1bd84b6ae4d557bff4e293010f7abd5d4"
+    },
+    "evidenceSha256": {
+      "backend-final-cleanup.log": "9e5335f1e00c5f39a9087c570918207f1cf1adaf7a020366651672b430e0fa19",
+      "backend-final.log": "f8e73d87ff4c88a3ba6772cc4dad20fe1df307c13bc3c7d2a467884143f1882e",
+      "browser-admission.log": "3d949449415af38544a33f321d3387cf16a83cafbd0b111a171e6b9e0868141e",
+      "browser-check-in-final.log": "d92fd340900160acb3e45a25ac0647c62035f4878d1d7e26403072013a1d8bf5",
+      "build-final.log": "f85ba383b6a71b44e553cc8f948bc34589debdb62e367f4e20774425e4aacf7a",
+      "check-in-http-final-cleanup.log": "9e5335f1e00c5f39a9087c570918207f1cf1adaf7a020366651672b430e0fa19",
+      "check-in-http-final.log": "566de15b861d19be8befb9f249b40c358d9e76e461ae4784604e2ea888c488f7",
+      "check-in-http.log": "71b352ad08420a379674e590bba5859c8a132a849cff60fa254884f8787ebb74",
+      "four-suites.log": "8e832a72cfaab520354b5e206b656b0327a0e15cf252be280169a745683b708b",
+      "frontend-final.log": "62283ac06e6bea58d0cc81d0886dfec54a898ca41f9f513d19c2724212bbb699",
+      "head-retest.log": "17f1ef53dd5efadb470aaff4fdc7755fd7554855660a41fc8e0696ab2c1b025e",
+      "lint.log": "cdcd60ad359d681469633a933a9510d60c66c7724abdaf87e368cf897e3657e0",
+      "migration-review-run.log": "2fc74e03022badbac1304e63c4dfd640c1f0fda27ca067c732cfc44f0886b772",
+      "typecheck.log": "b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead"
+    }
   }
 }

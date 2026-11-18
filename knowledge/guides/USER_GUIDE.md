@@ -567,3 +567,7 @@ For an approved continuously open venue, configure all seven operating days as f
 ### Read synthetic guest admission status
 
 On a scoped staff booking detail page, open **Guest admission assessment**. Check the venue, room, scheduled session and purchased guest count in the booking detail. Read the assessment and the count of eligible synthetic guest checks. Use **Load admission assessment** to refresh. Pending means current decisions are missing or unresolved. A stale response is cleared. The section supplies no identity documents, check-in action or permission to physically enter. [Bounded policy](../PROJECT.md#synthetic-staff-admission-assessment)
+
+### Record a synthetic staff check-in decision
+
+On the scoped staff booking detail, review **Guest admission assessment** and **Synthetic staff check-in**. When **Record synthetic check-in** is available, it records the current synthetic decision. If the response is uncertain, retry from the same panel or reload check-in status to recover the recorded result. The panel shows staff attribution and the recorded time. This decision grants no physical entry. [Scope](../PROGRESS.md#synthetic-staff-check-in-v44)

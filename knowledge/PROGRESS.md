@@ -3903,3 +3903,8 @@ Focused local qualification passed 73 offline inventory and architecture tests. 
 Owner-approved CN-GUEST-ADMISSION-CONTRACT-001 adds a default-off, synthetic-only read assessment under Booking. Its decision-only port accepts test fixtures without a production decision source. Revision, venue, room, session and purchased count are checked against the current booking and roster. Ordinary UI projects coarse status and counts only. The earlier PIN lifecycle stays deferred, while check-in and physical safety remain separate gates. Official PART 1 remains 4/7, production authorization NONE.
 
 Local qualification passed 25 backend checks, including two PostgreSQL HTTP cases and the Spring Modulith architecture suite, plus eight targeted frontend tests and four intercepted Chromium admission checks. PostgreSQL cleanup passed. These checks do not represent a real decision provider, real evidence, a confirmed live admission or independent site-safety acceptance.
+
+<a id="synthetic-staff-check-in-v44"></a>
+## Synthetic staff check-in decision
+
+V44 preserves Booking-owned synthetic staff decisions with current booking and roster revision references, scoped actor attribution, database timestamps and actor-scoped idempotency. The command reuses the guest admission assessment and requires explicit current venue authority and the purchased session window. Exact replays return the existing decision. A changed payload or a different command for the same decision scope is rejected. The migration allows empty READ COMMITTED cleanup and protects existing decision history. The change-set registry records the exact SQL and retained qualification. Official PART 1 remains 4/7 and production authorization remains NONE.

@@ -36,7 +36,8 @@ const child = spawn(
 	],
 	{ stdio: "ignore" },
 );
-const admissionOnly = process.argv.includes("--admission-only");
+const checkInOnly = process.argv.includes("--check-in-only");
+const admissionOnly = checkInOnly || process.argv.includes("--admission-only");
 let browser,
 	groups = 0;
 try {
@@ -59,11 +60,45 @@ try {
 				network: false,
 				admission: {},
 				admissionStatus: 200,
+				checkIn: null,
+				commands: [],
 			};
 		await page.route("**/api/**", async (route) => {
 			const req = route.request(),
 				path = new URL(req.url()).pathname;
 			if (req.method() !== "GET") state.writes.push(path);
+			if (checkInOnly && path.endsWith("/session/csrf"))
+				return route.fulfill({ json: { token: "synthetic-csrf" } });
+			if (checkInOnly && path.endsWith("/guest-check-in")) {
+				if (req.method() === "GET") {
+					return route.fulfill({
+						json: {
+							available: !state.checkIn,
+							rosterRevision: 2,
+							decision: state.checkIn,
+						},
+					});
+				}
+				assert.equal(req.headers()["x-csrf-token"], "synthetic-csrf");
+				state.commands.push(req.postDataJSON());
+				if (state.commands.length === 1) {
+					return route.fulfill({
+						status: 503,
+						json: { message: "PRIVATE_CHECK_IN_ERROR" },
+					});
+				}
+				state.checkIn = {
+					...item(),
+					bookingRevision: 1,
+					rosterRevision: 2,
+					actorId: other,
+					recordedAt: item().scheduledStart,
+					physicalEntryAuthorized: false,
+					outcome: "SYNTHETIC_CHECK_IN_RECORDED",
+					documentNumber: "PRIVATE_CHECK_IN_RECEIPT",
+				};
+				return route.fulfill({ json: state.checkIn });
+			}
 			if (path.endsWith("/guest-admission")) {
 				return route.fulfill({
 					status: state.admissionStatus,
@@ -295,7 +330,7 @@ try {
 			groups++;
 		}
 	}
-	if (mode === "after" || admissionOnly) {
+	if (!checkInOnly && (mode === "after" || admissionOnly)) {
 		const { page, state } = await harness();
 		await page.goto(href);
 		const panel = page.getByRole("region", {
@@ -339,6 +374,36 @@ try {
 		groups++;
 		await page.close();
 		groups++;
+	}
+
+	if (checkInOnly) {
+		const { page, state } = await harness();
+		await page.goto(href);
+		const panel = page.getByRole("region", {
+			name: "Synthetic staff check-in",
+		});
+		const record = panel.getByRole("button", {
+			name: "Record synthetic check-in",
+		});
+		await record.focus();
+		await page.keyboard.press("Enter");
+		await panel
+			.getByRole("alert")
+			.getByText(/Retry the same request/)
+			.waitFor();
+		assert.doesNotMatch(await panel.innerText(), /PRIVATE_CHECK_IN_ERROR/);
+		groups++;
+		await record.click();
+		await panel.getByText(/Synthetic decision recorded by/).waitFor();
+		assert.equal(await record.count(), 0);
+		assert.equal(state.commands.length, 2);
+		assert.deepEqual(state.commands[0], state.commands[1]);
+		assert.equal(state.commands[0].bookingRevision, item().revision);
+		assert.equal(state.commands[0].rosterRevision, 2);
+		assert.match(await panel.innerText(), /grants no physical entry/);
+		assert.doesNotMatch(await panel.innerText(), /PRIVATE_CHECK_IN_RECEIPT/);
+		groups++;
+		await page.close();
 	}
 
 	console.log(

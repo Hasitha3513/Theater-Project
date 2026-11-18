@@ -3,6 +3,7 @@ import { roomRequest } from "../lib/rooms";
 import { offsetNanos, type StaffBooking } from "../lib/staff-bookings";
 import { Button, Card, StateMessage } from "./primitives";
 import { useProtectedRead } from "./staff-bookings";
+import { StaffSyntheticCheckIn } from "./staff-synthetic-check-in";
 
 const outcomes = {
 	NOT_CONFIRMED: "Booking is not currently confirmed.",
@@ -101,6 +102,7 @@ export function StaffGuestAdmission({ booking }: { booking: StaffBooking }) {
 					</output>
 				)}
 			</Card>
+			<StaffSyntheticCheckIn booking={booking} />
 		</section>
 	);
 }
