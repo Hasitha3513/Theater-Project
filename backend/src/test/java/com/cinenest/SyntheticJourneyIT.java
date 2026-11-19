@@ -18,6 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnabledIfEnvironmentVariable(named="CINENEST_E2E_RUN", matches="/tmp/cinenest-e2e-[^/]+")
 class SyntheticJourneyIT {
     @Autowired ConfigurableApplicationContext context;
+    @org.springframework.test.context.bean.override.mockito.MockitoBean
+    com.cinenest.booking.SyntheticGuestAdmission operationalEligibility;
+    private static boolean operationalJourney(){return "customer-turnover".equals(System.getenv("CINENEST_E2E_MODE"));}
+
     private static boolean cancellationJourney() {
         return "cancellation".equals(System.getenv("CINENEST_E2E_MODE"));
     }
@@ -55,7 +59,64 @@ class SyntheticJourneyIT {
             p.add("cinenest.booking.staff-read.enabled", () -> "true");
         }
         for(String flag:List.of("cinenest.iot.enabled","cinenest.access.enabled","cinenest.notifications.enabled","cinenest.reporting.synthetic-bank.enabled","cinenest.rooms.turnover.enabled"))p.add(flag,()->"false");
+        if(operationalJourney()) {
+            // Short, positive synthetic deadlines fit this near-term real-time journey.
+            // Preserve every production rule and ordering constraint; no clock override.
+            for(var timing:Map.of("lead",15,"request",75,"initiation",20,"submission",30,
+                "review",40,"hold",60,"escalation",50,"upload",5).entrySet())
+                p.add("cinenest.bank."+timing.getKey()+"-seconds",()->timing.getValue().toString());
+            p.add("server.address",()->"127.0.0.1");
+            for(String flag:List.of("cinenest.booking.staff-read.enabled","cinenest.booking.guests.enabled",
+                "cinenest.booking.guest-admission.enabled","cinenest.booking.staff-check-in.enabled",
+                "cinenest.booking.staff-session.enabled","cinenest.rooms.turnover.enabled"))p.add(flag,()->"true");
+        }
     }
+    private static Map<String,String> operationalFinancialState(BankIntegrationTest fixture){
+        var state=fixture.extensionDomainFingerprint();
+        state.keySet().removeIf(name->!(name.startsWith("cinenest_payments.")||name.startsWith("cinenest_pricing."))
+            ||name.endsWith("_audit")||name.endsWith("_work"));
+        return state;
+    }
+    private Map<String,String> operationalFinancial;
+    private String operationalPurchase,operationalInventory;
+    private Map<String,Object> operationalControl(BankIntegrationTest f,String op,Map<String,Object> body)throws Exception {
+        if(op.equals("operational-scan")){f.work();f.bankWork();return Map.of("scannedSyntheticFixtures",true);}
+        UUID booking=UUID.fromString(body.get("bookingId").toString());
+        if(op.equals("operational-baseline")){
+            operationalFinancial=operationalFinancialState(f);
+            operationalPurchase=f.jdbc.sql("SELECT to_jsonb(r)::text FROM cinenest_booking.booking_revision r WHERE booking_id=:b").param("b",booking).query(String.class).single();
+            operationalInventory=f.jdbc.sql("SELECT md5(string_agg(to_jsonb(b)::text,',' ORDER BY block_id)) FROM cinenest_booking.inventory_block b WHERE blocking").query(String.class).single();
+            return Map.of("capturedImmutablePurchaseAndFinancialState",true);
+        }
+        if(op.equals("operational-eligibility")){
+            org.mockito.Mockito.when(operationalEligibility.currentDecisions(org.mockito.ArgumentMatchers.any())).thenAnswer(call->{
+                com.cinenest.booking.SyntheticGuestAdmission.Scope scope=call.getArgument(0);
+                var decisions=new HashMap<UUID,com.cinenest.booking.SyntheticGuestAdmission.Decision>();
+                if(scope.booking().equals(booking)) for(UUID entry:f.jdbc.sql("SELECT entry_id FROM cinenest_booking.guest_entry WHERE booking_id=:b").param("b",booking).query(UUID.class).list())
+                    decisions.put(entry,new com.cinenest.booking.SyntheticGuestAdmission.Decision(scope,com.cinenest.booking.SyntheticGuestAdmission.Outcome.ELIGIBLE,false));
+                return decisions;
+            });
+            return Map.of("source","SYNTHETIC_ELIGIBILITY_PORT_FIXTURE","originalDocumentInspected",false);
+        }
+        if(!op.equals("operational-persistence"))throw new IllegalArgumentException("Unsupported operational fixture command");
+        assertThat(operationalFinancialState(f)).as("Immutable financial and pricing state").isEqualTo(operationalFinancial);
+        assertThat(f.jdbc.sql("SELECT to_jsonb(r)::text FROM cinenest_booking.booking_revision r WHERE booking_id=:b").param("b",booking).query(String.class).single()).isEqualTo(operationalPurchase);
+        assertThat(f.jdbc.sql("SELECT md5(string_agg(to_jsonb(b)::text,',' ORDER BY block_id)) FROM cinenest_booking.inventory_block b WHERE blocking").query(String.class).single()).isEqualTo(operationalInventory);
+        var row=f.jdbc.sql("SELECT b.state,b.synthetic FROM cinenest_booking.booking b JOIN cinenest_booking.booking_revision r USING(booking_id) WHERE b.booking_id=:b AND b.owner_id=:a AND b.venue_id=:v AND r.revision=(SELECT max(revision) FROM cinenest_booking.booking_revision WHERE booking_id=b.booking_id) AND (r.snapshot->>'roomId')::uuid=:r")
+            .param("b",booking).param("a",BankIntegrationTest.A).param("v",BankIntegrationTest.VA).param("r",BankIntegrationTest.RID).query().singleRow();
+        assertThat(row.get("state")).isEqualTo("SIMULATED_CONFIRMED");assertThat(row.get("synthetic")).isEqualTo(true);
+        var events=f.jdbc.sql("SELECT event_type FROM cinenest_booking.synthetic_staff_session_event WHERE booking_id=:b ORDER BY recorded_at,event_id").param("b",booking).query(String.class).list();
+        assertThat(events).containsExactly("START","CHECKOUT");
+        assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_booking.synthetic_staff_check_in WHERE booking_id=:b").param("b",booking).query(Integer.class).single()).isEqualTo(1);
+        UUID checkout=f.jdbc.sql("SELECT event_id FROM cinenest_booking.synthetic_staff_session_event WHERE booking_id=:b AND event_type='CHECKOUT'").param("b",booking).query(UUID.class).single();
+        assertThat(f.jdbc.sql("SELECT state FROM cinenest_rooms.turnover_case WHERE case_id=:c AND booking_id=:b AND assignee_id=:a").param("c",checkout).param("b",booking).param("a",BankIntegrationTest.STAFF).query(String.class).single()).isEqualTo("RESOLVED");
+        assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_rooms.turnover_audit WHERE case_id=:c AND action='REVIEW' AND actor_id=:a").param("c",checkout).param("a",BankIntegrationTest.B).query(Integer.class).single()).isEqualTo(1);
+        assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(1);
+        assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_access.access_credential").query(Integer.class).single()).isZero();
+        assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_block a JOIN cinenest_booking.inventory_block b ON a.room_id=b.room_id AND a.block_id<b.block_id WHERE a.blocking AND b.blocking AND tstzrange(a.session_start,a.blocked_until,'[)') && tstzrange(b.session_start,b.blocked_until,'[)')").query(Integer.class).single()).isZero();
+        return Map.of("booking","SIMULATED_CONFIRMED","sessionEvents",events,"checkInCount",1,"allocationCount",1,"turnover","RESOLVED","reviewerIndependent",true,"physicalOccupancy","UNKNOWN","physicalReadiness","UNVERIFIED","physicalCredentials",0);
+    }
+
     private static final List<String> ADMIN_ROLES =
         List.of("administrator", "wrong-venue", "ungranted", "revoked", "publisher");
 
@@ -725,7 +786,9 @@ class SyntheticJourneyIT {
             staff = fixture.signedIn("staff");
             pkg = fixture.setup(staff);
             fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.publish");
-            publication = fixture.published(fixture.signedIn("customer-b"), pkg, fixture.request(false));
+            var publicationRequest=fixture.request(false);
+            if(operationalJourney()) publicationRequest.put("sessionFromLocal",java.time.LocalDateTime.now(java.time.ZoneId.of("Asia/Colombo")).minusMinutes(5).withNano(0).toString());
+            publication = fixture.published(fixture.signedIn("customer-b"), pkg, publicationRequest);
         }
         if (supervised) {
             fixture.jdbc.sql("DELETE FROM cinenest_identity.access_grant").update();
@@ -751,6 +814,18 @@ class SyntheticJourneyIT {
         Map<String,Object> config=new HashMap<>();
         config.put("backend",fixture.base());config.put("room",BankIntegrationTest.RID.toString());
         config.put("ports",List.of(java.net.URI.create(fixture.base()).getPort(),java.net.URI.create(BankIntegrationTest.IDP.issuer()).getPort()));config.put("backendPid",ProcessHandle.current().pid());
+        if(operationalJourney()) {
+            fixture.reviewerGrants();fixture.bankGrants();fixture.financeGrants();
+            for(String permission:List.of("booking.synthetic.read","guest.synthetic.read","guest.admission.synthetic.read",
+                "guest.check-in.synthetic.record","booking.session.synthetic.read","booking.session.synthetic.start",
+                "booking.session.synthetic.checkout","operations.synthetic.read","operations.synthetic.record",
+                "operations.synthetic.assign","operations.synthetic.review","operations.synthetic.handoff.retry"))fixture.grantTo(BankIntegrationTest.STAFF,BankIntegrationTest.VA,permission);
+            for(String permission:List.of("operations.synthetic.read","operations.synthetic.review"))fixture.grantTo(BankIntegrationTest.B,BankIntegrationTest.VA,permission);
+            // PostgreSQL supplies the schedule. No application clock or purchased interval is rewritten.
+            String local=fixture.jdbc.sql("SELECT to_char((clock_timestamp()+interval '3 minutes') AT TIME ZONE 'Asia/Colombo','YYYY-MM-DD\"T\"HH24:MI')").query(String.class).single();
+            config.put("operationalStartLocal",local);
+            config.put("staffId",BankIntegrationTest.STAFF.toString());
+        }
         config.put("otherVenue",BankIntegrationTest.VB.toString());config.put("venue",BankIntegrationTest.VA.toString());config.put("local",fixture.local());
         if (cancellation != null) config.put("cancellationBooking", cancellation.booking().toString());
         if (funding != null) config.put("fundingBooking", funding.purchase.booking().toString());
@@ -784,7 +859,9 @@ class SyntheticJourneyIT {
                     Map<String,Object> response=new HashMap<>();
                     try {
                         String op=body.get("op").toString();
-                        if (packageJourney != null && op.equals("package-confirm")) {
+                        if(operationalJourney() && op.startsWith("operational-")) {
+                            response.putAll(operationalControl(fixture,op,body));
+                        } else if (packageJourney != null && op.equals("package-confirm")) {
                             response.putAll(packageJourney.confirm(fixture, body));
                         } else if (packageJourney != null && op.equals("package-inspect")) {
                             response.putAll(packageJourney.inspect(fixture, body));
@@ -1018,6 +1095,10 @@ class SyntheticJourneyIT {
                             java.util.Arrays.stream(failure.getStackTrace())
                                 .filter(frame -> frame.getClassName().startsWith(fixtureClass))
                                 .findFirst().ifPresent(frame -> diagnostic.put("fixtureLine", frame.getLineNumber()));
+                        }
+                        if(operationalJourney()){
+                            diagnostic.put("fixtureError",failure.getClass().getSimpleName());
+                            java.util.Arrays.stream(failure.getStackTrace()).filter(frame->frame.getClassName().equals(SyntheticJourneyIT.class.getName())).findFirst().ifPresent(frame->diagnostic.put("fixtureLine",frame.getLineNumber()));
                         }
                         response = diagnostic;
                     }

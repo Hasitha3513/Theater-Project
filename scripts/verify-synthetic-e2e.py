@@ -4,6 +4,7 @@ Application cgroup: <=3 CPU/7 GiB; independent database: <=1 CPU/1 GiB.
 Their sum enforces the approved <=4 CPU/8 GiB aggregate ceiling.
 """
 import argparse
+import itertools
 import re
 import importlib.util
 import json
@@ -64,9 +65,10 @@ CANCELLATION = "cancellation"
 FUNDING = "extension-funding"
 TWO_JOURNEYS = "reschedule-refund"
 PACKAGE_BOOKING = "package-booking"
+OPERATIONAL = "customer-turnover"
 SUPERVISED_SCENARIOS = {SUPERVISED, ADMIN_QA}
 SUPERVISED_ACTIVE_SECONDS = 1710
-VERIFIED_CLEANUP_SCENARIOS = SUPERVISED_SCENARIOS | {CANCELLATION, FUNDING, TWO_JOURNEYS, PACKAGE_BOOKING}
+VERIFIED_CLEANUP_SCENARIOS = SUPERVISED_SCENARIOS | {CANCELLATION, FUNDING, TWO_JOURNEYS, PACKAGE_BOOKING, OPERATIONAL}
 
 
 def preflight(supervised=False):
@@ -180,6 +182,21 @@ def cleanup(path):
         if target.read_bytes() not in (original, generated):
             raise RuntimeError('Concurrent next-env change; retaining original snapshot for owner recovery')
         target.write_bytes(original)
+    if state.get('scenario') == OPERATIONAL:
+        evidence = ROOT / '.cache' / (name + '-operational-evidence')
+        evidence.mkdir(mode=0o700, exist_ok=True)
+        if evidence.resolve() != evidence or evidence.stat().st_mode & 0o077:
+            raise RuntimeError('Unsafe operational evidence directory')
+        for filename in ('result.json', 'private-backend-journey.log', 'private-browser.log', 'database-ownership.json', 'database-port.json'):
+            source=path/filename
+            if source.is_file() and not source.is_symlink():
+                shutil.copyfile(source,evidence/filename)
+                os.chmod(evidence/filename,0o600)
+        for archive in path.glob('attempt-*'):
+            if archive.is_dir() and not archive.is_symlink():shutil.copytree(archive,evidence/archive.name,dirs_exist_ok=True)
+        (evidence/'cleanup.json').write_text(json.dumps({'ownedContainerAbsent':True,
+            'recordedPortsClosed':True,'taskProcessesAbsent':True}))
+        print('Operational private evidence: '+str(evidence),flush=True)
     if state.get('scenario') == ADMIN_QA:
         evidence = ROOT / '.cache' / (name + '-admin-evidence')
         evidence.mkdir(mode=0o700, exist_ok=True)
@@ -206,7 +223,7 @@ def admin_qa_options(scenario):
 
 
 def journey_test(scenario):
-    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT',ADMIN_QA:'SyntheticJourneyIT',CANCELLATION:'SyntheticJourneyIT',FUNDING:'SyntheticJourneyIT',TWO_JOURNEYS:'SyntheticJourneyIT',PACKAGE_BOOKING:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
+    tests={'campaign':'SyntheticJourneyIT','h1':'SyntheticJourneyIT',SUPERVISED:'SyntheticJourneyIT',ADMIN_QA:'SyntheticJourneyIT',CANCELLATION:'SyntheticJourneyIT',FUNDING:'SyntheticJourneyIT',TWO_JOURNEYS:'SyntheticJourneyIT',PACKAGE_BOOKING:'SyntheticJourneyIT',OPERATIONAL:'SyntheticJourneyIT','bank-instructions':'BankInstructionsJourneyIT'}
     if scenario not in tests:raise RuntimeError('Unsupported synthetic scenario')
     return tests[scenario]
 
@@ -254,7 +271,7 @@ def run_stage(stage, args, cwd, env, path, timeout):
 def browser_mode(scenario):
     if scenario in SUPERVISED_SCENARIOS:
         return SUPERVISED
-    return scenario if scenario in {'h1', CANCELLATION, FUNDING, TWO_JOURNEYS, PACKAGE_BOOKING} else 'campaign'
+    return scenario if scenario in {'h1', CANCELLATION, FUNDING, TWO_JOURNEYS, PACKAGE_BOOKING, OPERATIONAL} else 'campaign'
 
 
 def verify_cancellation_results(result):
@@ -296,6 +313,19 @@ def verify_package_booking_results(result):
                    or not isinstance(row.get('id'), str) for row in rows)
             or {row['id'] for row in rows} != expected):
         raise RuntimeError('Package booking browser result inventory incomplete or failed')
+
+
+OPERATIONAL_GROUPS = {'startup','operational-customer-quote','operational-verification-bank',
+    'operational-independent-finance','operational-roster-eligibility','operational-staff-session',
+    'operational-independent-turnover','operational-persistence'}
+
+def verify_operational_results(result):
+    rows=result.get('results')
+    if (result.get('mode') != OPERATIONAL or result.get('syntheticOnly') is not True
+        or not isinstance(rows,list) or len(rows)!=len(OPERATIONAL_GROUPS)
+        or any(not isinstance(row,dict) or row.get('status')!='PASS' for row in rows)
+        or {row.get('id') for row in rows}!=OPERATIONAL_GROUPS):
+        raise RuntimeError('Operational browser result inventory incomplete or failed')
 
 
 def cancellation_database_version(name, env, attempts=100):
@@ -344,6 +374,7 @@ def inside(path):
             if key in os.environ:
                 env[key] = os.environ[key]
     env['NEXT_TELEMETRY_DISABLED'] = '1'
+    active_deadline = time.monotonic() + 1500
     timeout = SUPERVISED_ACTIVE_SECONDS if supervised else 540
     run_stage('frontend-build', ['npm', 'run', 'build'], ROOT/'frontend', env, path, timeout)
     env['MAVEN_USER_HOME'] = str(ROOT/'.cache/maven')
@@ -364,7 +395,9 @@ def inside(path):
     if not port.isdigit():
         raise RuntimeError('Database must have one loopback binding')
     (path/'database-port.json').write_text(json.dumps({'ports': [int(port)]}))
-    if scenario in {CANCELLATION, FUNDING, TWO_JOURNEYS, PACKAGE_BOOKING}:
+    (path/'database-ownership.json').write_text(json.dumps({'containerId':config['Id'],'name':name,'image':IMAGE,'binding':'127.0.0.1:'+port,'label':LABEL+'='+name}))
+    print(json.dumps({'ownedContainer':config['Id'],'binding':'127.0.0.1:'+port}),flush=True)
+    if scenario in {CANCELLATION, FUNDING, TWO_JOURNEYS, PACKAGE_BOOKING, OPERATIONAL}:
         print(json.dumps({'postgresql': cancellation_database_version(name, env)}), flush=True)
     else:
         for _ in range(100):
@@ -378,14 +411,46 @@ def inside(path):
                CINENEST_DB_USER='cinenest_test', CINENEST_DB_PASSWORD=password,
                CINENEST_E2E_RUN=str(path), CINENEST_E2E_SOURCE=call(['git','rev-parse','HEAD']), MAVEN_USER_HOME=str(ROOT/'.cache/maven'), NEXT_TELEMETRY_DISABLED='1')
     # Only local caches; no npm install, Maven download or image pull.
-    try:
-        run_stage('backend-journey', [*maven, *admin_qa_options(scenario), '-Dtest='+test, 'test'], ROOT/'backend', env, path, timeout)
-    except RuntimeError:
-        if scenario == PACKAGE_BOOKING and (path/'result.json').is_file():
-            print((path/'result.json').read_text(), flush=True)
-        raise
+    if scenario == OPERATIONAL:
+        # Explicit in-session retries only. Retain each failed database and logs;
+        # never provision a second container or delete prior immutable evidence.
+        for attempt in itertools.count(1):
+            if time.monotonic() >= active_deadline-90:raise RuntimeError("Operational runtime budget exhausted; cleanup required")
+            try:
+                run_stage('backend-journey', [*maven, '-Dtest='+test, 'test'], ROOT/'backend', env, path,
+                          min(timeout, max(1, int(active_deadline-time.monotonic()))))
+                break
+            except RuntimeError:
+                archive=path/('attempt-'+str(attempt));archive.mkdir(mode=0o700)
+                for filename in ('result.json','private-backend-journey.log','private-browser.log'):
+                    if (path/filename).is_file():shutil.copyfile(path/filename,archive/filename)
+                print(json.dumps({'operationalAttempt':attempt,'status':'FAIL','retry':'AWAITING_EXPLICIT_REQUEST_SAME_CONTAINER'}),flush=True)
+                request=path/'retry-request.json'
+                until=min(active_deadline-90,time.monotonic()+120)
+                while not request.exists() and time.monotonic()<until:time.sleep(.2)
+                if not request.exists():raise
+                if request.is_symlink() or json.loads(request.read_text()) != {'retryAfterAttempt':attempt}:raise RuntimeError('Invalid bounded retry request')
+                request.unlink()
+                database='cinenest_retry_'+str(attempt)
+                call(['docker','exec','--env','PGPASSWORD',name,'createdb','-h','127.0.0.1','-U','cinenest_test',database],env=dict(env,PGPASSWORD=password))
+                env['CINENEST_DB_URL']='jdbc:postgresql://127.0.0.1:'+port+'/'+database
+                for filename in ('result.json','command.json','reply.json'):
+                    if (path/filename).is_file():(path/filename).unlink()
+    else:
+        try:
+            run_stage('backend-journey', [*maven, *admin_qa_options(scenario), '-Dtest='+test, 'test'], ROOT/'backend', env, path, timeout)
+        except RuntimeError:
+            if scenario == PACKAGE_BOOKING and (path/'result.json').is_file():
+                print((path/'result.json').read_text(), flush=True)
+            raise
+    if scenario == OPERATIONAL:
+        retained=ROOT/'.cache'/(name+'-operational-evidence');retained.mkdir(mode=0o700,exist_ok=True)
+        for archive in path.glob('attempt-*'):
+            shutil.copytree(archive,retained/archive.name,dirs_exist_ok=True)
     browser_result = (path/'result.json').read_text()
-    if scenario == CANCELLATION:
+    if scenario == OPERATIONAL:
+        verify_operational_results(json.loads(browser_result))
+    elif scenario == CANCELLATION:
         verify_cancellation_results(json.loads(browser_result))
     elif scenario == FUNDING:
         verify_funding_results(json.loads(browser_result))
@@ -399,7 +464,7 @@ def inside(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
-    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED,ADMIN_QA,CANCELLATION,FUNDING,TWO_JOURNEYS,PACKAGE_BOOKING], default='campaign')
+    parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED,ADMIN_QA,CANCELLATION,FUNDING,TWO_JOURNEYS,PACKAGE_BOOKING,OPERATIONAL], default='campaign')
     parser.add_argument('--inside', type=Path)
     parser.add_argument('--cleanup', type=Path)
     args = parser.parse_args()
@@ -426,6 +491,8 @@ def main():
                    '--property=MemorySwapMax=0', '--property=TasksMax=1024', '--property=RuntimeMaxSec=600',
                    '--property=TimeoutStopSec=30', '--property=KillMode=control-group',
                    '--property=ExecStopPost='+sys.executable+' "'+script+'" --cleanup "'+str(path)+'"']
+        if args.scenario == OPERATIONAL:
+            command[command.index('--property=RuntimeMaxSec=600')] = '--property=RuntimeMaxSec=1710'
         if supervised:
             command[command.index('--property=RuntimeMaxSec=600')] = f'--property=RuntimeMaxSec={SUPERVISED_ACTIVE_SECONDS}'
             print('Supervised synthetic session: close the Rooms or Admin tab to finish early.', flush=True)
@@ -436,7 +503,7 @@ def main():
             if key in os.environ:
                 command += ['--setenv='+key+'='+os.environ[key]]
         command += [sys.executable, '-B', script, '--inside', str(path)]
-        result = subprocess.run(command, timeout=1800 if supervised else 640)
+        result = subprocess.run(command, timeout=1800 if supervised or args.scenario == OPERATIONAL else 640)
         if path.exists():
             # No application service may remain before fallback cleanup.
             active = subprocess.run(['systemctl', '--user', 'is-active', path.name], capture_output=True, text=True, timeout=5).stdout.strip()

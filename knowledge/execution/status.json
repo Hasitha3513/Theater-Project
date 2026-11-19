@@ -31950,8 +31950,7 @@
       "knowledge/PROGRESS.md": "32d1c160b9a3af99dcf173bcd4877743b2f6ff3d2e0ef2dc78548779c86ac75c",
       "knowledge/execution/change-sets.json": "ae49cb35e2e9ea3b626c1d73041ae80b7f143f103030b02aea9a0c1b0b1b1ca4"
     }
-  }
-,
+  },
   "nextSecurityMaintenance": {
     "changeSet": "CN-SEC-NEXT-16-4-5-001",
     "baseline": "cb88ac1fd4b9e22736783cf0af3f861bcf2ae522",
@@ -31979,8 +31978,7 @@
       "knowledge/PROGRESS.md": "73b1fa77435fe2fe67eb43181ce399dd60a06afb97fce59d6a2f60cf299700a6",
       "knowledge/execution/change-sets.json": "59b2c49e884b8a22c078ffc01a591f61b98af11b90a2654522b080a99cf65213"
     }
-  }
-,
+  },
   "part1ContinuousHoursInventory": {
     "changeSet": "CN-PART1-247-INVENTORY-001",
     "baseline": "5b97f9c3433972f89506be66e4cbc7ea6aff3f15",
@@ -32010,8 +32008,7 @@
       "knowledge/guides/USER_GUIDE.md": "85ded4d1dfe7d5ba47e4c44753a6af5d86a7d573dec39747b15e3b1a2c865238",
       "knowledge/product/FEATURE_CATALOG.md": "c0d930460db7263f9e8db3bb9e01a43a676a76b3e8a23c2316a3e4394f777750"
     }
-  }
-,
+  },
   "syntheticStaffGuestAdmission": {
     "changeSet": "CN-GUEST-ADMISSION-CONTRACT-001",
     "baseline": "00a82d8ed31f78e2eb7cf677fa20410ae963f978",
@@ -32183,6 +32180,95 @@
       "session-http-before-recovery.log": "f8726c955799490e8cea524bbcb6416fef31f16b1d4bf0e8efa65b264a923052",
       "session-http-deadlock.log": "de15509a905d8f5f6d728ac0042ffd8cea6c98201ef5fa57a46825f1d481656e",
       "typecheck-final.log": "b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead"
+    }
+  },
+  "syntheticCustomerTurnoverJourney": {
+    "baseline": "c0e05e0fe3687f427d5c6dee88a75d80a9ae0f12",
+    "admissionStatus": "READY",
+    "qualification": {
+      "status": "PASS_SYNTHETIC_ONLY",
+      "baseline": "c0e05e0fe3687f427d5c6dee88a75d80a9ae0f12",
+      "runtime": {
+        "sessions": 1,
+        "attempts": 1,
+        "durationSecondsIncludingCleanup": 168.378,
+        "postgres": "18.6",
+        "image": "postgres:18.6@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336",
+        "resourceLimits": "VERIFIED",
+        "network": "LOOPBACK_ONLY"
+      },
+      "backend": {
+        "PASS": 1,
+        "FAIL": 0,
+        "ERROR": 0,
+        "SKIPPED": 0
+      },
+      "chromium": {
+        "PASS": 8,
+        "FAIL": 0,
+        "NOT_RUN": 0
+      },
+      "groups": {
+        "startup": "PASS",
+        "operational-customer-quote": "PASS",
+        "operational-verification-bank": "PASS",
+        "operational-independent-finance": "PASS",
+        "operational-roster-eligibility": "PASS",
+        "operational-staff-session": "PASS",
+        "operational-independent-turnover": "PASS",
+        "operational-persistence": "PASS"
+      },
+      "postgresql": {
+        "cleanFlyway": "PASS_44_MIGRATIONS_THROUGH_V45",
+        "persistence": {
+          "source": "POSTGRESQL_ASSERTIONS",
+          "booking": "SIMULATED_CONFIRMED",
+          "sessionEvents": [
+            "START",
+            "CHECKOUT"
+          ],
+          "checkInCount": 1,
+          "reviewerIndependent": true,
+          "physicalCredentials": 0,
+          "controlOk": true,
+          "turnover": "RESOLVED",
+          "allocationCount": 1,
+          "physicalOccupancy": "UNKNOWN",
+          "physicalReadiness": "UNVERIFIED"
+        },
+        "immutablePurchaseFinancialAndInventoryChecks": "PASS"
+      },
+      "http": "REAL_BACKEND_NO_RESPONSE_INTERCEPTION",
+      "eligibility": "EXPLICIT_SYNTHETIC_PORT_FIXTURE_NOT_REAL_IDENTITY_FINDING",
+      "security": "Ownership, venue, missing CSRF, stale revisions, replay, command ordering and reviewer separation PASS",
+      "cleanup": {
+        "taskOwned": "PASS",
+        "containers": "UNCHANGED",
+        "volumes": "UNCHANGED",
+        "networks": "UNCHANGED"
+      },
+      "historicalFailures": "Retained; initial publication timing, bank deadlines, session expiry and persistence observer corrected without production changes",
+      "productionAuthorization": "NONE",
+      "part1": {
+        "completed": 4,
+        "total": 7
+      },
+      "publication": "PENDING_FINAL_GOVERNANCE"
+    },
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE",
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "8ce516ad80c62f7f79cbca89fa981f73abbd349a76fb19bb34d774305066c62c",
+      "frontend/tests/synthetic-e2e.mjs": "33a9924017cdfd41805922f416d48ed538841b129a53b9e224accd11b02d6f28",
+      "knowledge/PROGRESS.md": "8ac703b56ec54122984876e7f71bdb25c099883f5eccd6330161c3583204a338",
+      "knowledge/execution/change-sets.json": "0ebb1b9ca54d39052790c3c04faf1fa7782f4ef455f574c14c54454fb5726777",
+      "knowledge/guides/USER_GUIDE.md": "2fa77bb7873cf860f55f9ee438890b587ea9c7d78bfa1e4749d60cc0b088d76f",
+      "knowledge/product/FEATURE_CATALOG.md": "01db13f28f50a897066c8e63b2ecba0b3e587ecd6859bf07dddaa7eb721dc422",
+      "scripts/test-synthetic-e2e.py": "bd7bf83dd6b9066ff94c33bb136d22cf7ac1bec3c42ad525aab2cf6c7e0e88e4",
+      "scripts/verify-synthetic-e2e.py": "2a66e61f0a5e4ddbfb1be23b358131497ac9ce97868b8579aa1d2336dbfc7890"
     }
   }
 }

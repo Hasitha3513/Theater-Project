@@ -579,3 +579,8 @@ In **Room operations**, have the assigned staff member acknowledge the case, rec
 ### Record synthetic session events
 
 In the staff booking detail, load **Synthetic session operations**. Record START when the current server assessment permits it. Record CHECKOUT after START, including a late departure assertion. The panel shows event time and actor. If a response is uncertain, reload session history and retry using the retained command. After checkout, use **Create or recover cleaning handoff** and review its status. Complete the linked case through the existing Room operations assignment, checklist and independent review. Physical readiness remains unverified. [Scope](../PROJECT.md#synthetic-session-lifecycle)
+
+<a id="customer-turnover-real-backend-e2e"></a>
+### Qualification workflow: customer to independent turnover review
+
+Use the existing opt-in synthetic runner with scenario customer-turnover only in its separately authorized disposable runtime. The journey signs in existing synthetic accounts; it does not test production registration. Customer quote acceptance and receipt evidence precede separate synthetic credit verification and allocation. Staff check-in and START require current booking/roster scope and synthetic eligibility. CHECKOUT links to one cleaning case; a different authorized reviewer resolves the cleaner's completed checklist. Resolution leaves occupancy UNKNOWN, physical readiness UNVERIFIED and inventory unchanged. Never enter actual bank or identity evidence. [Recorded outcome](../PROGRESS.md#customer-turnover-real-backend-e2e).

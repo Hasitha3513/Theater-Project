@@ -16,6 +16,18 @@ spec.loader.exec_module(journey)
 
 
 class AdmissionTests(unittest.TestCase):
+    def test_operational_inventory_rejects_missing_duplicate_and_failed_groups(self):
+        groups=journey.OPERATIONAL_GROUPS
+        valid={'mode':journey.OPERATIONAL,'syntheticOnly':True,'results':[{'id':i,'status':'PASS'} for i in groups]}
+        journey.verify_operational_results(valid)
+        for rows in [valid['results'][:-1],valid['results']+[valid['results'][0]],
+                     [dict(row,status='NOT_RUN') for row in valid['results']],
+                     valid['results'][:-1]+[{'id':'fabricated','status':'PASS'}]]:
+            with self.assertRaises(RuntimeError):journey.verify_operational_results(dict(valid,results=rows))
+        self.assertEqual(journey.browser_mode(journey.OPERATIONAL),'customer-turnover')
+        self.assertEqual(journey.journey_test(journey.OPERATIONAL),'SyntheticJourneyIT')
+        self.assertIn(journey.OPERATIONAL,journey.VERIFIED_CLEANUP_SCENARIOS)
+
     def test_cancellation_mode_uses_existing_journey_and_strict_cleanup(self):
         self.assertEqual(journey.journey_test(journey.CANCELLATION), 'SyntheticJourneyIT')
         self.assertEqual(journey.browser_mode(journey.CANCELLATION), 'cancellation')

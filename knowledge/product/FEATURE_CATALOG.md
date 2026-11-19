@@ -894,3 +894,8 @@ A different venue-authorized staff member reviews the assigned cleaner's complet
 ### Synthetic staff session lifecycle
 
 The scoped staff booking panel records START and CHECKOUT with immutable history, replay protection and PostgreSQL timestamps. Late checkout keeps purchased terms intact. Explicit checkout-linked cleaning handoff can recover after failure without duplicating cases. Existing assignment, checklist and independent review remain authoritative within synthetic turnover scope. [Policy](../PROJECT.md#synthetic-session-lifecycle)
+
+<a id="customer-turnover-real-backend-e2e"></a>
+### Synthetic customer-to-turnover qualification
+
+The opt-in customer-turnover scenario links the existing synthetic customer booking and manual-bank flow to roster, staff check-in, session events, cleaning handoff and independent review. Browser requests reach the actual backend; PostgreSQL observers verify persisted links and protected financial snapshots. Synthetic eligibility fixtures never establish original-document verification. [Actual results](../PROGRESS.md#customer-turnover-real-backend-e2e).

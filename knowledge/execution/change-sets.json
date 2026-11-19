@@ -7511,8 +7511,7 @@
     ],
     "scope": "SYNTHETIC_TEST_ONLY",
     "localQualification": "PASS"
-  }
-,
+  },
   "nextSecurityMaintenance": {
     "id": "CN-SEC-NEXT-16-4-5-001",
     "baseline": "cb88ac1fd4b9e22736783cf0af3f861bcf2ae522",
@@ -7535,8 +7534,7 @@
     "toVersion": "16.4.5",
     "rollback": "Restore the prior dependency artifacts in a reviewed revert while keeping affected exposure disabled.",
     "publicationGate": "Exact-source foundation CI and applicable review and branch controls."
-  }
-,
+  },
   "part1ContinuousHoursInventory": {
     "id": "CN-PART1-247-INVENTORY-001",
     "baseline": "5b97f9c3433972f89506be66e4cbc7ea6aff3f15",
@@ -7564,8 +7562,7 @@
     ],
     "acceptance": "Across-midnight calendar and hold agree, next-day overlap denies, and genuine closing remains enforced.",
     "rollback": "Review and revert the bounded rule change if needed; preserve all inventory, booking and financial history."
-  }
-,
+  },
   "syntheticStaffGuestAdmission": {
     "id": "CN-GUEST-ADMISSION-CONTRACT-001",
     "baseline": "00a82d8ed31f78e2eb7cf677fa20410ae963f978",
@@ -7799,5 +7796,67 @@
       "frontend/tests/staff-synthetic-session-browser.mjs",
       "frontend/tests/staff-synthetic-session.test.mjs"
     ]
+  },
+  "syntheticCustomerTurnoverJourney": {
+    "id": "CN-E2E-CUSTOMER-TURNOVER-001",
+    "baseline": "c0e05e0fe3687f427d5c6dee88a75d80a9ae0f12",
+    "admission": "READY",
+    "authority": "Explicit Owner message in this conversation: I approve the exact 11-path test-only change set, one bounded 30-minute PostgreSQL/Chromium session with the specified limits, and governed publication, CI verification and merge when required controls permit.",
+    "authorizedPaths": [
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java",
+      "frontend/tests/synthetic-e2e.mjs",
+      "scripts/verify-synthetic-e2e.py",
+      "scripts/test-synthetic-e2e.py",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "scope": "Synthetic real-backend HTTP and PostgreSQL booking-to-independent-turnover qualification. Existing authenticated customer; registration excluded. Synthetic eligibility port fixture explicitly distinguished from identity verification. No production source or migrations.",
+    "runtime": {
+      "sessions": 1,
+      "maximumSecondsIncludingCleanup": 1800,
+      "postgres": "repository-pinned PostgreSQL 18.6",
+      "cpu": 1,
+      "memoryMiB": 1024,
+      "pids": 128,
+      "dataTmpfsMiB": 496,
+      "shmMiB": 16,
+      "network": "LOOPBACK_ONLY",
+      "credentials": "SYNTHETIC_ONLY",
+      "taskOwnedProcesses": [
+        "backend",
+        "frontend",
+        "Chromium",
+        "fixtures"
+      ]
+    },
+    "acceptance": [
+      "exact scenario inventory and real HTTP responses",
+      "PostgreSQL immutable purchase/payment/guest/session/turnover linkage",
+      "owner and venue denial, CSRF, revision and replay guards",
+      "independent bank actors and independent turnover reviewer",
+      "cleanup and historical migration integrity"
+    ],
+    "rollback": "Remove/revert only test harness successor; preserve historical source, migrations and business evidence. No operational activation.",
+    "productionAuthorization": "NONE",
+    "qualification": "PASS_SYNTHETIC_ONLY",
+    "additionalRuntimeApproval": {
+      "source": "Explicit Owner FINAL REAL-BACKEND E2E RETEST AUTHORIZATION in this conversation",
+      "sessions": 1,
+      "maximumSecondsIncludingCleanup": 1800,
+      "previousSession": "CONSUMED_FAILED_FIXTURE",
+      "scope": "Same eleven test-only paths and conditional publication; no production source, migrations or deployment.",
+      "disposition": "CONSUMED_ONE_CONTAINER_THREE_IN_SESSION_ATTEMPTS_CLEANUP_VERIFIED"
+    },
+    "finalRuntimeApproval": {
+      "source": "Explicit Owner repeated FINAL REAL-BACKEND E2E RETEST AUTHORIZATION in this conversation",
+      "sessions": 1,
+      "maximumSecondsIncludingCleanup": 1800,
+      "disposition": "CONSUMED_ONE_CONTAINER_ONE_ATTEMPT_168_378_SECONDS_CLEANUP_VERIFIED"
+    }
   }
 }

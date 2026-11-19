@@ -17771,5 +17771,191 @@ receipt_admission_successor_errors = session_lifecycle_errors
 inert_ci_main = session_lifecycle_main
 
 
+
+
+OPERATIONAL_JOURNEY_STATE = {'baseline': 'c0e05e0fe3687f427d5c6dee88a75d80a9ae0f12',
+ 'admissionStatus': 'READY',
+ 'qualification': {'status': 'PASS_SYNTHETIC_ONLY',
+                   'baseline': 'c0e05e0fe3687f427d5c6dee88a75d80a9ae0f12',
+                   'runtime': {'sessions': 1,
+                               'attempts': 1,
+                               'durationSecondsIncludingCleanup': 168.378,
+                               'postgres': '18.6',
+                               'image': 'postgres:18.6@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336',
+                               'resourceLimits': 'VERIFIED',
+                               'network': 'LOOPBACK_ONLY'},
+                   'backend': {'PASS': 1, 'FAIL': 0, 'ERROR': 0, 'SKIPPED': 0},
+                   'chromium': {'PASS': 8, 'FAIL': 0, 'NOT_RUN': 0},
+                   'groups': {'startup': 'PASS',
+                              'operational-customer-quote': 'PASS',
+                              'operational-verification-bank': 'PASS',
+                              'operational-independent-finance': 'PASS',
+                              'operational-roster-eligibility': 'PASS',
+                              'operational-staff-session': 'PASS',
+                              'operational-independent-turnover': 'PASS',
+                              'operational-persistence': 'PASS'},
+                   'postgresql': {'cleanFlyway': 'PASS_44_MIGRATIONS_THROUGH_V45',
+                                  'persistence': {'source': 'POSTGRESQL_ASSERTIONS',
+                                                  'booking': 'SIMULATED_CONFIRMED',
+                                                  'sessionEvents': ['START', 'CHECKOUT'],
+                                                  'checkInCount': 1,
+                                                  'reviewerIndependent': True,
+                                                  'physicalCredentials': 0,
+                                                  'controlOk': True,
+                                                  'turnover': 'RESOLVED',
+                                                  'allocationCount': 1,
+                                                  'physicalOccupancy': 'UNKNOWN',
+                                                  'physicalReadiness': 'UNVERIFIED'},
+                                  'immutablePurchaseFinancialAndInventoryChecks': 'PASS'},
+                   'http': 'REAL_BACKEND_NO_RESPONSE_INTERCEPTION',
+                   'eligibility': 'EXPLICIT_SYNTHETIC_PORT_FIXTURE_NOT_REAL_IDENTITY_FINDING',
+                   'security': 'Ownership, venue, missing CSRF, stale revisions, replay, command ordering and reviewer '
+                               'separation PASS',
+                   'cleanup': {'taskOwned': 'PASS',
+                               'containers': 'UNCHANGED',
+                               'volumes': 'UNCHANGED',
+                               'networks': 'UNCHANGED'},
+                   'historicalFailures': 'Retained; initial publication timing, bank deadlines, session expiry and '
+                                         'persistence observer corrected without production changes',
+                   'productionAuthorization': 'NONE',
+                   'part1': {'completed': 4, 'total': 7},
+                   'publication': 'PENDING_FINAL_GOVERNANCE'},
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'sourceSha256': {'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '8ce516ad80c62f7f79cbca89fa981f73abbd349a76fb19bb34d774305066c62c',
+                  'frontend/tests/synthetic-e2e.mjs': '33a9924017cdfd41805922f416d48ed538841b129a53b9e224accd11b02d6f28',
+                  'knowledge/PROGRESS.md': '8ac703b56ec54122984876e7f71bdb25c099883f5eccd6330161c3583204a338',
+                  'knowledge/execution/change-sets.json': '0ebb1b9ca54d39052790c3c04faf1fa7782f4ef455f574c14c54454fb5726777',
+                  'knowledge/guides/USER_GUIDE.md': '2fa77bb7873cf860f55f9ee438890b587ea9c7d78bfa1e4749d60cc0b088d76f',
+                  'knowledge/product/FEATURE_CATALOG.md': '01db13f28f50a897066c8e63b2ecba0b3e587ecd6859bf07dddaa7eb721dc422',
+                  'scripts/test-synthetic-e2e.py': 'bd7bf83dd6b9066ff94c33bb136d22cf7ac1bec3c42ad525aab2cf6c7e0e88e4',
+                  'scripts/verify-synthetic-e2e.py': '2a66e61f0a5e4ddbfb1be23b358131497ac9ce97868b8579aa1d2336dbfc7890'}}
+OPERATIONAL_JOURNEY_BASE = OPERATIONAL_JOURNEY_STATE['baseline']
+OPERATIONAL_JOURNEY_KEY = 'syntheticCustomerTurnoverJourney'
+OPERATIONAL_JOURNEY_OWNED = set(OPERATIONAL_JOURNEY_STATE['sourceSha256']) | {
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+OPERATIONAL_JOURNEY_ENTRYPOINT = SESSION_LIFECYCLE_ENTRYPOINT
+OPERATIONAL_JOURNEY_NEW = set()
+
+
+def operational_journey_before(name):
+    return v41_git('show', OPERATIONAL_JOURNEY_BASE + ':' + name)
+
+
+def operational_journey_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', OPERATIONAL_JOURNEY_BASE, 'HEAD')
+        baseline = {}
+        for entry in filter(None, v41_git('ls-tree', '-r', '-z', OPERATIONAL_JOURNEY_BASE).split(b'\0')):
+            metadata, name = entry.split(b'\t', 1)
+            baseline[name.decode()] = metadata.split()
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard'), nul=True)
+        changed = parse_git_paths(v41_git('diff', '--no-ext-diff', OPERATIONAL_JOURNEY_BASE, '--name-only', '-z'), nul=True)
+        if live != set(baseline) | OPERATIONAL_JOURNEY_NEW or changed != OPERATIONAL_JOURNEY_OWNED:
+            return ['Operational journey exact path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        recorded = {name for name in baseline if name.startswith(migration_prefix)}
+        actual = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(recorded) != 44 or actual != recorded:
+            return ['Operational journey migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Operational journey unsafe path: ' + name]
+            if bool(path.stat().st_mode & 0o111) != (mode == b'100755'):
+                return ['Operational journey altered file mode: ' + name]
+            if name not in OPERATIONAL_JOURNEY_OWNED:
+                data = path.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                    return ['Operational journey predecessor drift: ' + name]
+        status = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (status.pop(OPERATIONAL_JOURNEY_KEY, None) != OPERATIONAL_JOURNEY_STATE
+                or status != json.loads(operational_journey_before(ADMIN_QA_STATUS))):
+            return ['Operational journey status or acceptance accounting mismatch']
+        for name in OPERATIONAL_JOURNEY_NEW:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path or path.stat().st_mode & 0o111:
+                return ['Operational journey unsafe new path: ' + name]
+        for name, expected in OPERATIONAL_JOURNEY_STATE['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Operational journey fingerprint mismatch: ' + name]
+        old_validator = operational_journey_before(V41_VALIDATOR)
+        if (not old_validator.endswith(OPERATIONAL_JOURNEY_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(OPERATIONAL_JOURNEY_ENTRYPOINT)])):
+            return ['Operational journey altered historical validator']
+        manifest = json.loads(operational_journey_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in OPERATIONAL_JOURNEY_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Operational journey manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Operational journey admission inputs inaccessible or invalid']
+    return []
+
+
+def operational_journey_controls():
+    from unittest.mock import patch
+
+    read = Path.read_bytes
+
+    def reject(name, data, reason):
+        path = R / name
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else read(current)):
+            if not any(error.startswith('Operational journey ' + reason) for error in operational_journey_errors()):
+                raise ValueError('Operational journey negative control failed: ' + reason)
+
+    for name in OPERATIONAL_JOURNEY_STATE['sourceSha256']:
+        reject(name, b'drift', 'fingerprint mismatch')
+    for name in ('knowledge/execution/requirements.json', EXTENSION_FUNDING_MIGRATION):
+        reject(name, b'drift', 'predecessor drift')
+    reject(V41_MANIFEST, b'drift', 'manifest mismatch')
+    status = json.loads(read(R / ADMIN_QA_STATUS))
+    status[OPERATIONAL_JOURNEY_KEY]['part1']['completed'] = 5
+    reject(ADMIN_QA_STATUS, json.dumps(status).encode(), 'status or acceptance accounting mismatch')
+
+    git = v41_git
+    def add_unapproved(*args, **kwargs):
+        result = git(*args, **kwargs)
+        return result + b'unapproved.txt\0' if args[0] == 'ls-files' else result
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if operational_journey_errors() != ['Operational journey exact path inventory mismatch']:
+            raise ValueError('Operational journey unauthorized path control failed')
+
+    glob = Path.glob
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if operational_journey_errors() != ['Operational journey migration inventory mismatch']:
+            raise ValueError('Operational journey migration inventory control failed')
+    print('PASS Operational journey inventory, fingerprints, migrations and acceptance controls', flush=True)
+
+
+def operational_journey_main():
+    import sys
+    import tempfile
+
+    errors = operational_journey_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    operational_journey_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-operational-journey-replay-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', OPERATIONAL_JOURNEY_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = operational_journey_errors
+inert_ci_main = operational_journey_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
