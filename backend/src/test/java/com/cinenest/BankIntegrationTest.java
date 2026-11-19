@@ -29,7 +29,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties={"cinenest.booking.staff-check-in.enabled=true","cinenest.booking.guest-admission.enabled=true","cinenest.booking.extension-reservations.enabled=true","cinenest.booking.extension-reservations.worker-enabled=false","cinenest.booking.extension-reservations.rate-count=5","cinenest.booking.extension-reservations.rate-seconds=60","cinenest.booking.extension-reservations.approval-reference=CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001 synthetic test","cinenest.booking.staff-read.enabled=true","cinenest.booking.guests.enabled=true","cinenest.booking.amendments.enabled=true","cinenest.bank.refunds.enabled=true","cinenest.bank.refunds.maximum-minor=50000","spring.datasource.hikari.maximum-pool-size=4","spring.datasource.hikari.minimum-idle=0","cinenest.bank.enabled=true","cinenest.bank.ledger.enabled=true","cinenest.bank.ledger.resolution-seconds=60","cinenest.bank.worker-enabled=false","cinenest.bank.policy-version=SYNTHETIC-BANK1","cinenest.bank.lead-seconds=60","cinenest.bank.request-seconds=3000","cinenest.bank.initiation-seconds=900","cinenest.bank.submission-seconds=1200","cinenest.bank.review-seconds=1800","cinenest.bank.hold-seconds=2400","cinenest.bank.escalation-seconds=2500","cinenest.bank.upload-seconds=60","cinenest.bank.retention-seconds=3600","cinenest.bank.cleanup-seconds=1","cinenest.bank.review-opens=00:00","cinenest.bank.review-closes=23:59:59.999999999","cinenest.verification.enabled=true","cinenest.verification.worker-enabled=false","cinenest.verification.policy-version=SYNTHETIC-V1","cinenest.verification.upload-seconds=60","cinenest.verification.retention-seconds=3600","cinenest.verification.decision-seconds=600","cinenest.verification.cleanup-seconds=1","cinenest.pricing.synthetic-quotes.enabled=true","cinenest.pricing.synthetic-quotes.tax-profile=SYNTHETIC_FIXED_MINOR_V1","cinenest.pricing.synthetic-quotes.tax-minor=7","cinenest.pricing.synthetic-quotes.approval-reference=SYNTHETIC test fixture only","cinenest.pricing.synthetic-quotes.rate-count=100","cinenest.pricing.synthetic-quotes.rate-seconds=60","cinenest.pricing.publication-worker.enabled=false","cinenest.booking.holds.enabled=true","cinenest.booking.holds.rate-count=100","cinenest.booking.holds.rate-seconds=60","cinenest.booking.holds.approval-reference=SYNTHETIC owner-approved inventory test"})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties={"cinenest.booking.staff-session.enabled=true","cinenest.booking.staff-check-in.enabled=true","cinenest.booking.guest-admission.enabled=true","cinenest.booking.extension-reservations.enabled=true","cinenest.booking.extension-reservations.worker-enabled=false","cinenest.booking.extension-reservations.rate-count=5","cinenest.booking.extension-reservations.rate-seconds=60","cinenest.booking.extension-reservations.approval-reference=CN-EXTENSION-ADMISSION-BUDGET-APPROVAL-001 synthetic test","cinenest.booking.staff-read.enabled=true","cinenest.booking.guests.enabled=true","cinenest.booking.amendments.enabled=true","cinenest.bank.refunds.enabled=true","cinenest.bank.refunds.maximum-minor=50000","spring.datasource.hikari.maximum-pool-size=4","spring.datasource.hikari.minimum-idle=0","cinenest.bank.enabled=true","cinenest.bank.ledger.enabled=true","cinenest.bank.ledger.resolution-seconds=60","cinenest.bank.worker-enabled=false","cinenest.bank.policy-version=SYNTHETIC-BANK1","cinenest.bank.lead-seconds=60","cinenest.bank.request-seconds=3000","cinenest.bank.initiation-seconds=900","cinenest.bank.submission-seconds=1200","cinenest.bank.review-seconds=1800","cinenest.bank.hold-seconds=2400","cinenest.bank.escalation-seconds=2500","cinenest.bank.upload-seconds=60","cinenest.bank.retention-seconds=3600","cinenest.bank.cleanup-seconds=1","cinenest.bank.review-opens=00:00","cinenest.bank.review-closes=23:59:59.999999999","cinenest.verification.enabled=true","cinenest.verification.worker-enabled=false","cinenest.verification.policy-version=SYNTHETIC-V1","cinenest.verification.upload-seconds=60","cinenest.verification.retention-seconds=3600","cinenest.verification.decision-seconds=600","cinenest.verification.cleanup-seconds=1","cinenest.pricing.synthetic-quotes.enabled=true","cinenest.pricing.synthetic-quotes.tax-profile=SYNTHETIC_FIXED_MINOR_V1","cinenest.pricing.synthetic-quotes.tax-minor=7","cinenest.pricing.synthetic-quotes.approval-reference=SYNTHETIC test fixture only","cinenest.pricing.synthetic-quotes.rate-count=100","cinenest.pricing.synthetic-quotes.rate-seconds=60","cinenest.pricing.publication-worker.enabled=false","cinenest.booking.holds.enabled=true","cinenest.booking.holds.rate-count=100","cinenest.booking.holds.rate-seconds=60","cinenest.booking.holds.approval-reference=SYNTHETIC owner-approved inventory test"})
 @ExtendWith(OutputCaptureExtension.class)
 @org.springframework.test.context.ActiveProfiles("synthetic-quotation")
 @org.springframework.test.annotation.DirtiesContext(classMode=org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS)
@@ -1047,7 +1047,7 @@ class BankIntegrationTest {
  @Test void reportGrantDoesNotPermitFinancialMutationsExportsOrDrilldown()throws Exception{reportGrant();var b=signedIn("staff");assertThat(b.get("/api/admin/venues/"+VA+"/bank/credits").statusCode()).isEqualTo(403);assertThat(b.get(report()+"&export=csv").statusCode()).isEqualTo(400);assertThat(write(b,"POST",report(),"{}").statusCode()).isBetween(403,405);var deniedBody=financial(0);deniedBody.put("fixtureKey","SYNTHETIC-BANK-100");assertThat(write(b,"POST","/api/admin/venues/"+VA+"/bank/credits",JSONObjectUtils.toJSONString(deniedBody)).statusCode()).isEqualTo(403);}
  @Test void reportCurrenciesRemainSeparateAndDatesAreValidated()throws Exception{reportGrant();var b=signedIn("staff");assertThat(reportSummary(json(b.get(report().replace("LKR","USD"))))).containsEntry("c","0");for(String suffix:java.util.List.of("&from=2026-01-01","&from=2026-01-02&to=2026-01-01","&from=2020-01-01&to=2026-01-01","&page=-1","&size=101","&asOf=2020-01-01"))assertThat(b.get(report()+suffix).statusCode()).as(suffix).isEqualTo(400);}
  @Test void reportCreditedCohortIncludesLaterVisibleEffects()throws Exception{var c=refundCase(100);approveRefund(c);reportGrant();String date=java.time.Instant.parse(CREDIT_TIME).atZone(java.time.ZoneId.of("Asia/Colombo")).toLocalDate().toString();var r=json(c.reviewer().get(report()+"&from="+date+"&to="+java.time.LocalDate.parse(date).plusDays(1)));assertThat(reportSummary(r)).containsEntry("c","50000").containsEntry("r","100");var empty=json(c.reviewer().get(report()+"&from="+java.time.LocalDate.parse(date).plusDays(1)+"&to="+java.time.LocalDate.parse(date).plusDays(2)));assertThat(reportSummary(empty)).containsEntry("c","0");}
- @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(44);assertThat(jdbc.sql("SELECT script FROM flyway_schema_history WHERE success AND version='43'").query(String.class).single()).isEqualTo("V43__synthetic_extension_funding_requests.sql");}
+ @Test void reportUsesExistingAuditWithoutMutatingFinancialSources()throws Exception{financeGrants();reportGrant();var b=signedIn("staff");credit(b,"SYNTHETIC-BANK-100");int allocations=jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single();json(b.get(report()));assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_audit WHERE action='SYNTHETIC_REPORT_READ'").query(Integer.class).single()).isEqualTo(1);assertThat(jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(allocations);assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(45);assertThat(jdbc.sql("SELECT script FROM flyway_schema_history WHERE success AND version='43'").query(String.class).single()).isEqualTo("V43__synthetic_extension_funding_requests.sql");}
 
 
  @Test void reportSnapshotCannotSplitConcurrentAllocation()throws Exception{financeGrants();reportGrant();var customer=signedIn("customer-a");var staff=signedIn("staff");var allocator=signedIn("customer-b");var request=bank(customer);var credit=credit(staff,"SYNTHETIC-BANK-50000");var matched=match(allocator,request,credit);Object old=com.cinenest.payments.internal.ReportFaults.afterSummary(context,()->{try{json(allocateCredit(allocator,matched,credit,Long.parseLong(matched.get("amountMinor").toString())));}catch(Exception e){throw new IllegalStateException(e);}});try{var report=json(staff.get(report()));assertThat(reportSummary(report).get("a")).isEqualTo("0");var row=(Map<?,?>)((java.util.List<?>)snapshot(report).get("rows")).getFirst();assertThat(((Map<?,?>)row.get("amounts")).get("a")).isEqualTo("0");}finally{com.cinenest.payments.internal.ReportFaults.restore(context,old);}assertThat(reportSummary(json(staff.get(report()))).get("a")).isEqualTo(matched.get("amountMinor").toString());}
@@ -1186,6 +1186,71 @@ class BankIntegrationTest {
       assertThat(write(c.staff(),"POST",path,JSONObjectUtils.toJSONString(command)).statusCode()).isEqualTo(409);
       assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.synthetic_staff_check_in")
           .query(Integer.class).single()).isEqualTo(1);
+
+      String session=path.replace("guest-check-in","session");
+      assertThat(c.staff().get(session).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"booking.session.synthetic.read");
+      UUID startGrant=grantTo(STAFF,VA,"booking.session.synthetic.start");
+      grantTo(STAFF,VA,"booking.session.synthetic.checkout");
+      var observed=json(c.staff().get(session));
+      var check=(Map<String,Object>)observed.get("checkIn");
+      var startBody=new HashMap<String,Object>(Map.of("commandKey",UUID.randomUUID().toString(),
+          "bookingRevision",revision,"rosterRevision",0,"checkInActorId",check.get("actorId"),
+          "checkInCommandKey",check.get("commandKey")));
+      assertThat(c.staff().call("POST",session+"/starts",Map.of()).statusCode()).isEqualTo(403);
+      assertThat(write(c.customer(),"POST",session+"/starts",JSONObjectUtils.toJSONString(startBody)).statusCode()).isEqualTo(403);
+      assertThat(write(c.staff(),"POST",session.replace(VA.toString(),VB.toString())+"/starts",JSONObjectUtils.toJSONString(startBody)).statusCode()).isEqualTo(403);
+      var missingStart=new HashMap<>(startBody);missingStart.put("startEventId",UUID.randomUUID().toString());
+      assertThat(write(c.staff(),"POST",session+"/checkouts",JSONObjectUtils.toJSONString(missingStart)).statusCode()).isEqualTo(409);
+      String startJson=JSONObjectUtils.toJSONString(startBody);
+      Map<String,Object> started;
+      try(var calls=java.util.concurrent.Executors.newFixedThreadPool(2)){
+        var one=calls.submit(()->json(write(c.staff(),"POST",session+"/starts",startJson)));
+        var two=calls.submit(()->json(write(c.staff(),"POST",session+"/starts",startJson)));
+        started=one.get(15,java.util.concurrent.TimeUnit.SECONDS);
+        assertThat(two.get(15,java.util.concurrent.TimeUnit.SECONDS)).isEqualTo(started);
+      }
+      startBody.put("rosterRevision",1);
+      assertThat(write(c.staff(),"POST",session+"/starts",JSONObjectUtils.toJSONString(startBody)).statusCode()).isEqualTo(409);
+      startBody.put("rosterRevision",0);startBody.put("commandKey",UUID.randomUUID().toString());
+      assertThat(write(c.staff(),"POST",session+"/starts",JSONObjectUtils.toJSONString(startBody)).statusCode()).isEqualTo(409);
+      startBody.put("startEventId",started.get("eventId"));startBody.put("commandKey",UUID.randomUUID().toString());
+      startBody.put("rosterRevision",1);
+      assertThat(write(c.staff(),"POST",session+"/checkouts",JSONObjectUtils.toJSONString(startBody)).statusCode()).isEqualTo(409);
+      startBody.put("rosterRevision",0);
+      String checkoutBody=JSONObjectUtils.toJSONString(startBody);
+      Map<String,Object> ended;
+      try(var calls=java.util.concurrent.Executors.newFixedThreadPool(2)){
+        var one=calls.submit(()->json(write(c.staff(),"POST",session+"/checkouts",checkoutBody)));
+        var two=calls.submit(()->json(write(c.staff(),"POST",session+"/checkouts",checkoutBody)));
+        ended=one.get(15,java.util.concurrent.TimeUnit.SECONDS);
+        assertThat(two.get(15,java.util.concurrent.TimeUnit.SECONDS)).isEqualTo(ended);
+      }
+      assertThat(json(write(c.staff(),"POST",session+"/checkouts",checkoutBody))).isEqualTo(ended);
+      assertThat(ended).containsEntry("eventType","CHECKOUT").containsEntry("lateCheckout",false);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.synthetic_staff_session_event").query(Integer.class).single()).isEqualTo(2);
+      grantTo(STAFF,VA,"operations.synthetic.read");grantTo(STAFF,VA,"operations.synthetic.record");
+      String handoff=JSONObjectUtils.toJSONString(Map.of("checkoutEventId",ended.get("eventId")));
+      assertThat(write(c.staff(),"POST",session+"/cleaning-handoff",handoff).statusCode()).isEqualTo(403);
+      grantTo(STAFF,VA,"operations.synthetic.handoff.retry");
+      jdbc.sql("CREATE FUNCTION cinenest_rooms.session_handoff_fault() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'SYNTHETIC audit unavailable' USING ERRCODE='58000'; END $$").update();
+      jdbc.sql("CREATE TRIGGER session_handoff_fault BEFORE INSERT ON cinenest_rooms.turnover_audit FOR EACH ROW EXECUTE FUNCTION cinenest_rooms.session_handoff_fault()").update();
+      try{
+        assertThat(write(c.staff(),"POST",session+"/cleaning-handoff",handoff).statusCode()).isEqualTo(503);
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_rooms.turnover_case WHERE case_id=:id")
+            .param("id",UUID.fromString(ended.get("eventId").toString())).query(Integer.class).single()).isZero();
+        assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.synthetic_staff_session_event").query(Integer.class).single()).isEqualTo(2);
+      }finally{jdbc.sql("DROP TRIGGER session_handoff_fault ON cinenest_rooms.turnover_audit").update();jdbc.sql("DROP FUNCTION cinenest_rooms.session_handoff_fault()").update();}
+      var handed=json(write(c.staff(),"POST",session+"/cleaning-handoff",handoff));
+      assertThat(handed).containsEntry("status","RECORDED");
+      for(String permission:java.util.List.of("booking.session.synthetic.read","operations.synthetic.read","operations.synthetic.record","operations.synthetic.handoff.retry"))grantTo(B,VA,permission);
+      assertThat(json(write(c.allocator(),"POST",session+"/cleaning-handoff",handoff))).containsEntry("status","RECORDED");
+      jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:id").param("id",startGrant).update();
+      assertThat(write(c.staff(),"POST",session+"/starts",startJson).statusCode()).isEqualTo(403);
+      assertThat(json(write(c.staff(),"POST",session+"/cleaning-handoff",handoff))).isEqualTo(handed);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_rooms.turnover_case WHERE case_id=:id")
+          .param("id",UUID.fromString(ended.get("eventId").toString())).query(Integer.class).single()).isEqualTo(1);
+      assertThat(jdbc.sql("SELECT count(*) FROM cinenest_booking.synthetic_staff_session_event").query(Integer.class).single()).isEqualTo(2);
       jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE grant_id=:g").param("g",grant).update();
       assertThat(write(c.staff(),"POST",path,original).statusCode()).isEqualTo(403);
     }

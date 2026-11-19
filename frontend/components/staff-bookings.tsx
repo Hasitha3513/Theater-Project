@@ -1,4 +1,5 @@
 "use client";
+import { StaffSyntheticSession } from "./staff-synthetic-session";
 import { BookingCancellationPanel } from "./booking-cancellation";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -501,10 +502,16 @@ export function StaffBookingDetail({
 							booking={state.value.booking}
 						/>
 						{currentBooking && (
-							<StaffGuestAdmission
-								key={cancellationKey + currentBooking.state}
-								booking={currentBooking}
-							/>
+							<>
+								<StaffSyntheticSession
+									key={cancellationKey + currentBooking.state}
+									booking={currentBooking}
+								/>
+								<StaffGuestAdmission
+									key={cancellationKey + currentBooking.state}
+									booking={currentBooking}
+								/>
+							</>
 						)}
 						<StaffGuestRoster
 							key={`${venue}/${booking}/${state.value.booking.revision}`}

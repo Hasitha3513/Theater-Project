@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-class TurnoverService {
+class TurnoverService implements com.cinenest.rooms.TurnoverHandoff {
  private final TurnoverRepository repository;
  private final RoomRepository rooms;
  private final ScopedAuthorization identity;
@@ -59,6 +59,49 @@ class TurnoverService {
    repository.update(caseId,next,assignee,ack);revision++;
   }
   repository.evidence(actor,caseId,revision,action,evidence);repository.audit(actor,venue,caseId,revision,action);repository.receipt(actor,key,hash,caseId);return view(actor,venue,repository.find(venue,caseId,false));
+ }
+
+ public Map<String,Object> handoffStatus(UUID actor,UUID venue,UUID booking,UUID checkout){
+  try{return observeHandoff(actor,venue,booking,checkout);}catch(RoomFailure e){throw new com.cinenest.rooms.TurnoverHandoff.Failure(e.status,e.getMessage());}
+ }
+ private Map<String,Object> observeHandoff(UUID actor,UUID venue,UUID booking,UUID checkout){
+  configured();permit(actor,venue,"read",true);
+  var source=sources.stream().map(x->x.checkout(checkout,venue,booking)).flatMap(Optional::stream).findFirst()
+   .orElseThrow(()->new RoomFailure(409,"Current checkout unavailable"));
+  repository.lock(checkout);
+  try{
+   var row=repository.find(venue,checkout,true);
+   if(!booking.equals(row.get("booking_id"))||!source.room().equals(row.get("room_id"))||
+      source.bookingRevision()!=((Number)row.get("booking_revision")).longValue())
+    throw new RoomFailure(409,"Handoff scope conflict");
+   permit(actor,venue,"read",true);
+   return Map.of("status","RECORDED","case",view(actor,venue,row));
+  }catch(RoomFailure e){
+   if(e.status!=404)throw e;
+   permit(actor,venue,"read",true);
+   return Map.of("status","PENDING","physicalReadiness","UNVERIFIED","physicalOccupancy","UNKNOWN");
+  }
+ }
+ public Map<String,Object> handoff(UUID actor,UUID venue,UUID booking,UUID checkout){
+  try{return performHandoff(actor,venue,booking,checkout);}catch(RoomFailure e){throw new com.cinenest.rooms.TurnoverHandoff.Failure(e.status,e.getMessage());}
+ }
+ private Map<String,Object> performHandoff(UUID actor,UUID venue,UUID booking,UUID checkout){
+  configured();
+  if(!identity.permits(actor,venue,"operations.synthetic.handoff.retry",true))throw new RoomFailure(403,"Handoff denied");
+  permit(actor,venue,"record",true);
+  var status=handoffStatus(actor,venue,booking,checkout);
+  if(status.get("status").equals("RECORDED"))return status;
+  var source=sources.stream().map(x->x.checkout(checkout,venue,booking)).flatMap(Optional::stream).findFirst()
+   .orElseThrow(()->new RoomFailure(409,"Checkout unavailable"));
+  var parts=definition.split(":");var items=List.of(parts[1].split(","));
+  if(new HashSet<>(items).size()!=items.size())throw new RoomFailure(503,"Checklist unavailable");
+  rooms.room(venue,source.room()).orElseThrow(()->new RoomFailure(404,"Room unavailable"));
+  permit(actor,venue,"record",true);
+  if(!identity.permits(actor,venue,"operations.synthetic.handoff.retry",true))throw new RoomFailure(403,"Handoff denied");
+  repository.create(checkout,actor,venue,source.room(),booking,source.bookingRevision(),parts[0],items);
+  repository.evidence(actor,checkout,0,"CREATE",Map.of("checkoutEventId",checkout.toString()));
+  repository.audit(actor,venue,checkout,0,"CREATE");
+  return handoffStatus(actor,venue,booking,checkout);
  }
  private static void assigned(UUID actor,UUID assignee){if(!actor.equals(assignee))throw new RoomFailure(403,"Only the assigned eligible actor may assert this work");}
  @SuppressWarnings("unchecked") private static Map<String,Object> data(Map<String,Object> entry){return (Map<String,Object>)entry.get("data");}

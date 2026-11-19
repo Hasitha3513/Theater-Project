@@ -1497,3 +1497,8 @@ Activation and quotation commands use exact venue, room, package-version and pol
 ## Synthetic extension funding request states
 
 The existing reservation panel presents the captured price and a separate explicit checkbox before offering request creation. Pending, expired, inactive and unavailable observations are shown with UNFUNDED. Recovery uses an explicit reload and the original opaque command key stored for the owner, booking and reservation in this browser session. No financial evidence is stored in browser state for recovery. An uncertain response preserves the key and does not trigger another create. Session changes clear displayed protected data. [Contract](ARCHITECTURE.md#synthetic-extension-funding-request).
+
+<a id="synthetic-session-lifecycle"></a>
+## Staff synthetic session controls
+
+The existing booking detail adds a protected session panel with backend-derived START and CHECKOUT availability, immutable event timestamps, staff attribution, a late-checkout indicator and cleaning handoff status. Explicit reload clears stale protected results. Uncertain commands retain their key while staff reload current history. Cleaning handoff recovery uses the committed checkout reference. Session, handoff and turnover outcomes continue to display occupancy UNKNOWN and readiness UNVERIFIED. [Policy](PROJECT.md#synthetic-session-lifecycle)

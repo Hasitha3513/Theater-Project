@@ -3913,3 +3913,10 @@ V44 preserves Booking-owned synthetic staff decisions with current booking and r
 ## Independent synthetic turnover review
 
 Rooms reuses the existing V17 turnover workflow. The assigned cleaner and the reviewing actor must differ. The reviewer needs current scoped review authority, a complete checklist and resolved exceptions. Synthetic case resolution preserves occupancy UNKNOWN, physical readiness UNVERIFIED and existing inventory. Session start and check-out still require a separately admitted persistence contract. Official PART 1 remains 4/7, and production authorization remains NONE.
+
+<a id="synthetic-session-lifecycle"></a>
+## Synthetic staff session lifecycle
+
+The Owner approved exact V45 SHA-256 091e8c2cb241d919e4def29d8854e7372ffc7267fe392f0c4959251c70efd1df and the bounded START, CHECKOUT and cleaning-handoff retry policies. Booking persistence records staff, current booking/roster/check-in, policy, grant provenance and PostgreSQL time. Rooms reuses the existing turnover case and independent review. The initial authenticated concurrency test exposed a SHARE-to-UPDATE account lock deadlock. The scoped Identity correction acquires the write lock before epoch verification, and the authenticated retest passed. Current exact-source qualification and evidence fingerprints are in the execution registry.
+
+Production authorization remains NONE, official PART 1 remains 4/7, and G-ROOM-BLOCK remains NOT_SATISFIED. Staff assertions and synthetic review do not establish physical vacancy or readiness.

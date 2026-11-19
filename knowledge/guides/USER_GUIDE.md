@@ -575,3 +575,7 @@ On the scoped staff booking detail, review **Guest admission assessment** and **
 ### Review synthetic cleaning completion
 
 In **Room operations**, have the assigned staff member acknowledge the case, record each required checklist item and assert completion. Resolve recorded exceptions through the existing exception controls. A different authorized staff member can then use **Review and resolve synthetic case**. The case records that review while physical readiness remains unverified. [Scope](../PROGRESS.md#independent-synthetic-turnover-review)
+
+### Record synthetic session events
+
+In the staff booking detail, load **Synthetic session operations**. Record START when the current server assessment permits it. Record CHECKOUT after START, including a late departure assertion. The panel shows event time and actor. If a response is uncertain, reload session history and retry using the retained command. After checkout, use **Create or recover cleaning handoff** and review its status. Complete the linked case through the existing Room operations assignment, checklist and independent review. Physical readiness remains unverified. [Scope](../PROJECT.md#synthetic-session-lifecycle)

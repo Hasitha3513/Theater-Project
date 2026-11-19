@@ -39,7 +39,7 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
         return jdbc.sql("SELECT count(*) FROM cinenest_identity.access_grant WHERE account_id=:a AND permission=:p AND scope_kind='SELF' AND venue_id IS NULL AND state='ACTIVE' AND valid_from<=clock_timestamp() AND valid_until>clock_timestamp()").param("a",actor).param("p",action).query(Integer.class).single()>0;
     }
     private String writeEquivalent(String action) {
-        return switch(action) { case "commercial.policy.read", "commercial.policy.edit", "commercial.policy.review.finance", "commercial.policy.review.legal", "commercial.policy.review.operations" -> action; case "booking.synthetic.cancel", "report.booking.synthetic.read", "booking.synthetic.read", "guest.synthetic.read", "guest.admission.synthetic.read", "guest.check-in.synthetic.record", "report.bank.synthetic.read" -> action; case "operations.synthetic.read", "operations.synthetic.record", "operations.synthetic.assign", "operations.synthetic.review" -> action; case "iot.lock.registry.register", "iot.lock.registry.read" -> action; case "iot.synthetic.read", "iot.synthetic.command", "iot.synthetic.simulate", "iot.synthetic.reconcile" -> action; case "notification.admin.read", "notification.admin.retries", "notification.admin.reconciliations", "notification.admin.simulations" -> action; case "access.synthetic.review", "access.synthetic.revoke", "access.synthetic.simulate" -> action; case "room.read" -> "room.write"; case "venue.read" -> "venue.write";
+        return switch(action) { case "booking.session.synthetic.read", "booking.session.synthetic.start", "booking.session.synthetic.checkout", "operations.synthetic.handoff.retry", "commercial.policy.read", "commercial.policy.edit", "commercial.policy.review.finance", "commercial.policy.review.legal", "commercial.policy.review.operations" -> action; case "booking.synthetic.cancel", "report.booking.synthetic.read", "booking.synthetic.read", "guest.synthetic.read", "guest.admission.synthetic.read", "guest.check-in.synthetic.record", "report.bank.synthetic.read" -> action; case "operations.synthetic.read", "operations.synthetic.record", "operations.synthetic.assign", "operations.synthetic.review" -> action; case "iot.lock.registry.register", "iot.lock.registry.read" -> action; case "iot.synthetic.read", "iot.synthetic.command", "iot.synthetic.simulate", "iot.synthetic.reconcile" -> action; case "notification.admin.read", "notification.admin.retries", "notification.admin.reconciliations", "notification.admin.simulations" -> action; case "access.synthetic.review", "access.synthetic.revoke", "access.synthetic.simulate" -> action; case "room.read" -> "room.write"; case "venue.read" -> "venue.write";
             case "iot.lock.assignment.create", "iot.lock.assignment.read" -> action;
             case "content.banner.read", "content.banner.edit", "content.banner.publish" -> action; case "package.read" -> "package.edit"; case "bank.instructions.propose", "bank.instructions.publish", "bank.instructions.read", "account.read", "audit.account.read", "audit.verification.read", "identity.grant.read" -> action; case "refund.synthetic.read", "refund.synthetic.review", "refund.synthetic.destination.verify", "refund.synthetic.approve", "refund.synthetic.execute", "refund.synthetic.reconcile", "bank.synthetic.credit.verify", "bank.synthetic.credit.read", "bank.synthetic.allocate", "bank.synthetic.resolve", "bank.synthetic.correct.request", "bank.synthetic.correct.approve", "bank.claim.review", "bank.evidence.read", "bank.claim.escalate", "verification.review", "verification.evidence.read", "inventory.block.create", "inventory.read", "package.publish", "package.deactivate", "package.edit", "room.write", "venue.write" -> action; default -> throw new IllegalArgumentException("Unknown action"); };
     }
@@ -75,7 +75,7 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
     }
     @Transactional
     public java.util.Optional<MatchedGrant> matchedGrant(UUID actor, UUID venue, String permission, boolean lock) {
-        if(actor==null || venue==null || !Set.of("commercial.policy.read", "commercial.policy.edit",
+        if(actor==null || venue==null || !Set.of("booking.session.synthetic.read", "booking.session.synthetic.start", "booking.session.synthetic.checkout", "commercial.policy.read", "commercial.policy.edit",
             "commercial.policy.review.finance", "commercial.policy.review.legal", "commercial.policy.review.operations").contains(permission))return java.util.Optional.empty();
         if(lock && !org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())return java.util.Optional.empty();
         var authentication=org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
@@ -83,6 +83,10 @@ class DatabaseScopedAuthorization implements ScopedAuthorization {
         var binding=CredentialEpochSessions.binding(authentication);
         if(!binding.account().equals(actor))throw new CredentialEpochSessions.Denied();
         var store=new IdentityStore(jdbc);
+        // Session commands acquire the account write lock before epoch checks take SHARE.
+        // Concurrent exact retries must not both hold SHARE and then upgrade to UPDATE.
+        if(lock && permission.startsWith("booking.session.synthetic.") && !eligible(actor,true))
+            return java.util.Optional.empty();
         CredentialEpochSessions.check(authentication,store,lock);
         if(!eligible(actor,lock) || !member(actor,venue,lock))return java.util.Optional.empty();
         // Lock candidates before evaluating fresh state/clock after any revocation wait.

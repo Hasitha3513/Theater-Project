@@ -890,3 +890,7 @@ The existing staff booking detail supports an attributable synthetic check-in de
 ### Independent synthetic turnover review
 
 A different venue-authorized staff member reviews the assigned cleaner's completed checklist. The review records synthetic case resolution and attribution. Physical readiness and inventory controls remain separate. [Scope](../PROGRESS.md#independent-synthetic-turnover-review)
+
+### Synthetic staff session lifecycle
+
+The scoped staff booking panel records START and CHECKOUT with immutable history, replay protection and PostgreSQL timestamps. Late checkout keeps purchased terms intact. Explicit checkout-linked cleaning handoff can recover after failure without duplicating cases. Existing assignment, checklist and independent review remain authoritative within synthetic turnover scope. [Policy](../PROJECT.md#synthetic-session-lifecycle)

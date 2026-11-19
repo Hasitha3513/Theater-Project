@@ -96,6 +96,7 @@ class IdentitySecurity {
         http.securityContext(context -> context.securityContextRepository(contexts))
             .requestCache(cache -> cache.disable())
             .authorizeHttpRequests(requests -> {
+                requests.requestMatchers("/api/admin/venues/*/bookings/*/session", "/api/admin/venues/*/bookings/*/session/**").authenticated();
                 if(facebook) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/facebook/status","/oauth2/authorization/facebook","/login/oauth2/code/facebook").permitAll();
                 if(google) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/google/status","/oauth2/authorization/google","/login/oauth2/code/google").permitAll();
                 if(manual) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/csrf").permitAll()

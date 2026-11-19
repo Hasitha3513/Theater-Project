@@ -2,6 +2,25 @@
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function bankRoute(path: string, method: string) {
 	if (
+		new RegExp(`^/api/admin/venues/${uuid}/bookings/${uuid}/session$`).test(
+			path,
+		)
+	)
+		return method === "GET";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/bookings/${uuid}/session/(starts|checkouts|cleaning-handoff)$`,
+		).test(path)
+	)
+		return method === "POST";
+	if (
+		new RegExp(
+			`^/api/admin/venues/${uuid}/bookings/${uuid}/session/cleaning-handoff/${uuid}$`,
+		).test(path)
+	)
+		return method === "GET";
+
+	if (
 		new RegExp(
 			`^/api/admin/venues/${uuid}/bank/(instructions/${uuid}|requests/${uuid}/instructions)$`,
 		).test(path)

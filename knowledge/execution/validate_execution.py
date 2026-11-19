@@ -17592,5 +17592,184 @@ receipt_admission_successor_errors = turnover_review_errors
 inert_ci_main = turnover_review_main
 
 
+SESSION_LIFECYCLE_STATE = {'baseline': 'b49935e5df99202b21fd729abf728a6a1271c912',
+ 'admissionStatus': 'READY',
+ 'qualification': 'SYNTHETIC_ONLY',
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'sourceSha256': {'backend/src/main/java/com/cinenest/booking/internal/SyntheticSessionController.java': 'ae567dfddb53be72b14c074493fdf252d1a1328401538536c5a8f7fe33d54e38',
+                  'backend/src/main/java/com/cinenest/booking/internal/SyntheticSessionService.java': '8a256e3770329de584c51bd30f769760dd5b496bb595c216a59805c6a1767943',
+                  'backend/src/main/java/com/cinenest/booking/internal/TurnoverBookingEvidence.java': 'ed2605662f8831232cf691c2567dfeb62f8b6a4b30c2b06f3819d99e7e533876',
+                  'backend/src/main/java/com/cinenest/identity/internal/DatabaseScopedAuthorization.java': '187a243c62b105db658edde29da705337e6549d1c3aa36f1ae456c56db86734f',
+                  'backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java': 'bc8ef7fb49266a02be6d1f4c993b29adc5ddac055fb5dcf922f1e8e21a7c5f90',
+                  'backend/src/main/java/com/cinenest/rooms/OperationsEvidence.java': 'c23333f2229d6711ace9935172ee66b80651ddad1eed5c48eb90ffea72a8abc2',
+                  'backend/src/main/java/com/cinenest/rooms/TurnoverHandoff.java': '81908f478c5bad3442e6f6753ecab7be0135b1565e0f97d361e1b5e87b01787d',
+                  'backend/src/main/java/com/cinenest/rooms/internal/TurnoverService.java': '041e0d1bda8661dc632e2fe91d1fa840fb05e7c8be73ac4e504e19035dd6560d',
+                  'backend/src/main/resources/db/migration/V45__synthetic_staff_session_events.sql': '091e8c2cb241d919e4def29d8854e7372ffc7267fe392f0c4959251c70efd1df',
+                  'backend/src/test/java/com/cinenest/BankIntegrationTest.java': 'd27f7ac924f1b1df6cf164f49ec9cf58ad4915490ea520d96d1b0b6d7f463f16',
+                  'backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java': '35fa812561fd3d754bf7f93c3cf09fc62c96c91729caa46233220d891d20f748',
+                  'backend/src/test/java/com/cinenest/booking/internal/SyntheticSessionServiceTest.java': 'e9021d5614eb73df49bf57d4fe414beacec4aa8a038fbeb972afbf2b4076d2c4',
+                  'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/session/[[...action]]/route.ts': 'd0057cb1a0644c0bec738030d8e39308bd76f6bcdd07f4b824a8ceb6030e6276',
+                  'frontend/components/staff-bookings.tsx': 'eb24e160a462651c1e34410a4b4ecd9f8218ba578b4710ce348ef2c9a61e74d9',
+                  'frontend/components/staff-synthetic-session.tsx': 'ce82abba761f899d1672bb77b071115f875f66f17b012a621d46f5d24074c9f1',
+                  'frontend/lib/bank-backend.ts': '30b11924baea1917a43eb6a283e4f25016b32343d89282d05bc1b3c6236b9b4a',
+                  'frontend/tests/staff-synthetic-session-browser.mjs': 'ed3d0ac4c08e8d92a2006c1ef77bd328a8af9234f1a5bfda093ced39df1ba00a',
+                  'frontend/tests/staff-synthetic-session.test.mjs': '18509d4c45577390516458189959e3536df08a2ddf8cb1d92e6673fa458d2c1d',
+                  'knowledge/ARCHITECTURE.md': '495e1ba3b7a12cf1077082d8e4db8d87c42ccef6e5154138a5cdeba01bd20120',
+                  'knowledge/DESIGN.md': '5a8797d10285754ef272a8dc6e38acd9865afc72e49bb59cab271384287db7f9',
+                  'knowledge/PROGRESS.md': '5e7883bfc0955aa10302bc02d19f977f3c461d8919759a0d26a0472bb9402b0e',
+                  'knowledge/PROJECT.md': 'fa735200ea55207ea2bffeeb0815b4acfc369870bda40d10e71c2c13883068a9',
+                  'knowledge/execution/change-sets.json': 'fcba9d5ae45134aad7dd2a9b2a2694c32a2be2b499b6f563920b32d88d5bcfc4',
+                  'knowledge/guides/USER_GUIDE.md': '7c8b6db522d374ffb230875a64b59230abb4d97dceb8a317db4491c924a4cf37',
+                  'knowledge/product/FEATURE_CATALOG.md': '3c91f87fae7bb8f843c06085dbc604bb05f6bc84358a340070f80f41b0c3e0d3'},
+ 'evidenceSha256': {'backend-final-cleanup.log': '9e5335f1e00c5f39a9087c570918207f1cf1adaf7a020366651672b430e0fa19',
+                    'backend-final.log': 'bcbe019d4af6a7d37ed2001b335f434d21e88bb84f6ec42db2fb1f0f860a4261',
+                    'backend-regression.log': '3afee56e54acf614e493ac2f7b50b49efb88131c9b72503d1d60362880e85b8f',
+                    'browser-final.log': '4ff9c79387886d8f2c02f9d0b0d52290aec3d64e43e39f042cb184bd7e065e78',
+                    'build-final.log': '5dee7f913563f2cdedf9dd96fd228cb91af7dcaab2c3c6fd679fba9310ae3f28',
+                    'cleanup-final.log': '9e5335f1e00c5f39a9087c570918207f1cf1adaf7a020366651672b430e0fa19',
+                    'cleanup-reconciled.log': 'c17093da4436fcaa7a68e12e2bbe4851433fc942fbb7e1b53c07c32c7e9b210e',
+                    'frontend-final.log': '98fd541782fcc14a0a8d5cf26f4c450bb8a80cc6513989aae9ede9e2dd49fd99',
+                    'frontend-focused.log': '8cedef7142ea839771f1a77748cf6e7a41065be14a654b1dee2abd76f4030f52',
+                    'lint-final.log': '13da2db2044b47946a332bedd91437255b6d80d6b2940c4436b972e127cbf79f',
+                    'migration-review-run.log': '5147a3012069b0bd8e11cc7912f8c44640c570ed11d3dad228009d7e721d73ba',
+                    'session-http-before-recovery.log': 'f8726c955799490e8cea524bbcb6416fef31f16b1d4bf0e8efa65b264a923052',
+                    'session-http-deadlock.log': 'de15509a905d8f5f6d728ac0042ffd8cea6c98201ef5fa57a46825f1d481656e',
+                    'typecheck-final.log': 'b5dbd55929c08369b84b7ab17d5dc3af48840766bd3232f5f710ad1dfbc7cead'}}
+SESSION_LIFECYCLE_BASE = SESSION_LIFECYCLE_STATE['baseline']
+SESSION_LIFECYCLE_KEY = 'syntheticSessionLifecycle'
+SESSION_LIFECYCLE_OWNED = set(SESSION_LIFECYCLE_STATE['sourceSha256']) | {
+    ADMIN_QA_STATUS, V41_VALIDATOR, V41_MANIFEST,
+}
+SESSION_LIFECYCLE_ENTRYPOINT = TURNOVER_REVIEW_ENTRYPOINT
+SESSION_LIFECYCLE_NEW = {'backend/src/main/java/com/cinenest/booking/internal/SyntheticSessionController.java',
+ 'backend/src/main/java/com/cinenest/booking/internal/SyntheticSessionService.java',
+ 'backend/src/main/java/com/cinenest/rooms/TurnoverHandoff.java',
+ 'backend/src/main/resources/db/migration/V45__synthetic_staff_session_events.sql',
+ 'backend/src/test/java/com/cinenest/booking/internal/SyntheticSessionServiceTest.java',
+ 'frontend/app/api/admin/venues/[venueId]/bookings/[booking]/session/[[...action]]/route.ts',
+ 'frontend/components/staff-synthetic-session.tsx',
+ 'frontend/tests/staff-synthetic-session-browser.mjs',
+ 'frontend/tests/staff-synthetic-session.test.mjs'}
+
+
+def session_lifecycle_before(name):
+    return v41_git('show', SESSION_LIFECYCLE_BASE + ':' + name)
+
+
+def session_lifecycle_errors():
+    try:
+        v41_git('merge-base', '--is-ancestor', SESSION_LIFECYCLE_BASE, 'HEAD')
+        baseline = {}
+        for entry in filter(None, v41_git('ls-tree', '-r', '-z', SESSION_LIFECYCLE_BASE).split(b'\0')):
+            metadata, name = entry.split(b'\t', 1)
+            baseline[name.decode()] = metadata.split()
+        live = parse_git_paths(v41_git('ls-files', '-z', '--cached', '--others', '--exclude-standard'), nul=True)
+        changed = parse_git_paths(v41_git('diff', '--no-ext-diff', SESSION_LIFECYCLE_BASE, '--name-only', '-z'), nul=True)
+        if live != set(baseline) | SESSION_LIFECYCLE_NEW or changed != SESSION_LIFECYCLE_OWNED:
+            return ['Session lifecycle exact path inventory mismatch']
+        migration_prefix = 'backend/src/main/resources/db/migration/'
+        recorded = {name for name in baseline if name.startswith(migration_prefix)}
+        actual = {p.relative_to(R).as_posix() for p in (R / migration_prefix).glob('*')}
+        if len(recorded) != 43 or actual != recorded | {migration_prefix + 'V45__synthetic_staff_session_events.sql'}:
+            return ['Session lifecycle migration inventory mismatch']
+        for name, (mode, kind, oid) in baseline.items():
+            path = R / name
+            if kind != b'blob' or not path.is_file() or path.is_symlink() or path.resolve() != path:
+                return ['Session lifecycle unsafe path: ' + name]
+            if bool(path.stat().st_mode & 0o111) != (mode == b'100755'):
+                return ['Session lifecycle altered file mode: ' + name]
+            if name not in SESSION_LIFECYCLE_OWNED:
+                data = path.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode() + data).hexdigest().encode() != oid:
+                    return ['Session lifecycle predecessor drift: ' + name]
+        status = json.loads((R / ADMIN_QA_STATUS).read_bytes())
+        if (status.pop(SESSION_LIFECYCLE_KEY, None) != SESSION_LIFECYCLE_STATE
+                or status != json.loads(session_lifecycle_before(ADMIN_QA_STATUS))):
+            return ['Session lifecycle status or acceptance accounting mismatch']
+        for name in SESSION_LIFECYCLE_NEW:
+            path = R / name
+            if not path.is_file() or path.is_symlink() or path.resolve() != path or path.stat().st_mode & 0o111:
+                return ['Session lifecycle unsafe new path: ' + name]
+        for name, expected in SESSION_LIFECYCLE_STATE['sourceSha256'].items():
+            if hashlib.sha256((R / name).read_bytes()).hexdigest() != expected:
+                return ['Session lifecycle fingerprint mismatch: ' + name]
+        old_validator = session_lifecycle_before(V41_VALIDATOR)
+        if (not old_validator.endswith(SESSION_LIFECYCLE_ENTRYPOINT)
+                or not (R / V41_VALIDATOR).read_bytes().startswith(old_validator[:-len(SESSION_LIFECYCLE_ENTRYPOINT)])):
+            return ['Session lifecycle altered historical validator']
+        manifest = json.loads(session_lifecycle_before(V41_MANIFEST))
+        for row in manifest['files']:
+            if 'knowledge/' + row['path'] in SESSION_LIFECYCLE_OWNED - {V41_MANIFEST}:
+                row['sha256'] = hashlib.sha256((K / row['path']).read_bytes()).hexdigest()
+        if (R / V41_MANIFEST).read_bytes() != (json.dumps(manifest, indent=2) + '\n').encode():
+            return ['Session lifecycle manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Session lifecycle admission inputs inaccessible or invalid']
+    return []
+
+
+def session_lifecycle_controls():
+    from unittest.mock import patch
+
+    read = Path.read_bytes
+
+    def reject(name, data, reason):
+        path = R / name
+        with patch.object(Path, 'read_bytes', lambda current: data if current == path else read(current)):
+            if not any(error.startswith('Session lifecycle ' + reason) for error in session_lifecycle_errors()):
+                raise ValueError('Session lifecycle negative control failed: ' + reason)
+
+    for name in SESSION_LIFECYCLE_STATE['sourceSha256']:
+        reject(name, b'drift', 'fingerprint mismatch')
+    for name in ('knowledge/execution/requirements.json', EXTENSION_FUNDING_MIGRATION):
+        reject(name, b'drift', 'predecessor drift')
+    reject(V41_MANIFEST, b'drift', 'manifest mismatch')
+    status = json.loads(read(R / ADMIN_QA_STATUS))
+    status[SESSION_LIFECYCLE_KEY]['part1']['completed'] = 5
+    reject(ADMIN_QA_STATUS, json.dumps(status).encode(), 'status or acceptance accounting mismatch')
+
+    git = v41_git
+    def add_unapproved(*args, **kwargs):
+        result = git(*args, **kwargs)
+        return result + b'unapproved.txt\0' if args[0] == 'ls-files' else result
+
+    with patch.dict(globals(), {'v41_git': add_unapproved}):
+        if session_lifecycle_errors() != ['Session lifecycle exact path inventory mismatch']:
+            raise ValueError('Session lifecycle unauthorized path control failed')
+
+    glob = Path.glob
+    def inject_migration(directory, pattern, *args, **kwargs):
+        yield from glob(directory, pattern, *args, **kwargs)
+        if directory == R / 'backend/src/main/resources/db/migration' and pattern == '*':
+            yield directory / 'V44__unauthorized.sql'
+
+    with patch.object(Path, 'glob', inject_migration):
+        if session_lifecycle_errors() != ['Session lifecycle migration inventory mismatch']:
+            raise ValueError('Session lifecycle migration inventory control failed')
+    print('PASS Session lifecycle inventory, fingerprints, migrations and acceptance controls', flush=True)
+
+
+def session_lifecycle_main():
+    import sys
+    import tempfile
+
+    errors = session_lifecycle_errors()
+    if errors:
+        print('\n'.join('FAIL ' + error for error in errors))
+        return 1
+    session_lifecycle_controls()
+    common = v41_git('rev-parse', '--path-format=absolute', '--git-common-dir', text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-session-lifecycle-replay-') as directory:
+        checkout = Path(directory) / 'predecessor'
+        subprocess.run(['git', 'clone', '--quiet', '--no-local', '--no-checkout', '--', common, str(checkout)], check=True)
+        subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', SESSION_LIFECYCLE_BASE], check=True)
+        return subprocess.run([sys.executable, '-u', V41_VALIDATOR], cwd=checkout).returncode
+
+
+receipt_admission_successor_errors = session_lifecycle_errors
+inert_ci_main = session_lifecycle_main
+
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
