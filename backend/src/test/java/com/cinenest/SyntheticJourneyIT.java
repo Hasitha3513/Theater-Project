@@ -20,6 +20,52 @@ class SyntheticJourneyIT {
     @Autowired ConfigurableApplicationContext context;
     @org.springframework.test.context.bean.override.mockito.MockitoBean
     com.cinenest.booking.SyntheticGuestAdmission operationalEligibility;
+    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean(name="syntheticCreditSource")
+    Object demoCreditSource;
+    private Map<String,Object> demoConfiguration;
+    private static boolean demoJourney(){return System.getenv("CINENEST_DEMO_FIXTURE")!=null;}
+    private static UUID demoActor(String role){return switch(role){case "customer"->BankIntegrationTest.A;case "operations"->BankIntegrationTest.STAFF;case "booking-inventory"->BankIntegrationTest.B;default->UUID.nameUUIDFromBytes(("SYNTHETIC_DEMO_"+role).getBytes(java.nio.charset.StandardCharsets.UTF_8));};}
+    private static String demoSubject(String role){return "synthetic-demo-"+role;}
+    private static UUID operationalCleaner(){return demoJourney()?demoActor("cleaner"):BankIntegrationTest.STAFF;}
+    private static UUID operationalReviewer(){return demoJourney()?demoActor("independent-turnover-reviewer"):BankIntegrationTest.B;}
+    private Map<String,Object> prepareDemo(BankIntegrationTest f)throws Exception {
+        Path input=Path.of(System.getenv("CINENEST_DEMO_FIXTURE"));
+        assertThat(input.getParent()).isEqualTo(Path.of(System.getenv("CINENEST_E2E_RUN")));
+        Map<String,Object> data=JSONObjectUtils.parse(Files.readString(input));
+        assertThat(data.get("classification")).isEqualTo("SYNTHETIC_TEST_ONLY");
+        var venue=(Map<?,?>)data.get("venue");var room=(Map<?,?>)data.get("room");var pack=(Map<?,?>)data.get("package");
+        assertThat(venue.get("label")).isEqualTo("CineNest Main Branch (DEMO)");assertThat(venue.get("timezone")).isEqualTo("Asia/Colombo");
+        assertThat(((Number)room.get("plannedCapacity")).intValue()).isEqualTo(5);assertThat(((Number)room.get("cleaningBufferMinutes")).intValue()).isEqualTo(15);
+        assertThat(((Number)pack.get("basePriceMinor")).longValue()).isEqualTo(250000);assertThat(((Number)pack.get("fifthGuestPriceMinor")).longValue()).isEqualTo(80000);assertThat(((Number)pack.get("additionalHourPriceMinor")).longValue()).isEqualTo(100000);
+        assertThat(((Number)pack.get("minimumMinutes")).intValue()).isEqualTo(180);
+        var roles=List.of("customer","operations","booking-inventory","bank-verifier","bank-allocator","admission","cleaner","independent-turnover-reviewer");
+        assertThat(((List<?>)data.get("principals")).stream().map(x->((Map<?,?>)x).get("role").toString()).toList()).containsExactlyInAnyOrderElementsOf(roles);
+        f.jdbc.sql("DELETE FROM cinenest_identity.external_identity").update();f.jdbc.sql("DELETE FROM cinenest_identity.account_scope").update();
+        var bindings=new LinkedHashMap<String,Object>();
+        for(String role:roles){UUID id=demoActor(role);f.jdbc.sql("INSERT INTO cinenest_identity.account VALUES(:id,TRUE,'ELIGIBLE',0) ON CONFLICT DO NOTHING").param("id",id).update();f.jdbc.sql("INSERT INTO cinenest_identity.external_identity VALUES(:issuer,:subject,:id)").param("issuer",BankIntegrationTest.IDP.issuer()).param("subject",demoSubject(role)).param("id",id).update();f.scope(id,BankIntegrationTest.VA);bindings.put(role,Map.of("subject",demoSubject(role),"id",id.toString(),"classification","SYNTHETIC_TEST_ONLY"));}
+        assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_identity.account").query(Integer.class).single()).isEqualTo(8);
+        f.jdbc.sql("UPDATE cinenest_rooms.venue SET display_name='CineNest Main Branch (DEMO)',cleaning_buffer_minutes=15 WHERE venue_id=:v").param("v",BankIntegrationTest.VA).update();
+        f.jdbc.sql("UPDATE cinenest_rooms.room SET name='Private Cinema Room 01',capacity=5 WHERE room_id=:r").param("r",BankIntegrationTest.RID).update();
+        var permissions=new LinkedHashMap<String,List<String>>();
+        permissions.put("operations",List.of("package.edit","booking.synthetic.read","guest.synthetic.read","guest.admission.synthetic.read","booking.session.synthetic.read","booking.session.synthetic.start","booking.session.synthetic.checkout","operations.synthetic.read","operations.synthetic.record","operations.synthetic.assign","operations.synthetic.handoff.retry"));
+        permissions.put("booking-inventory",List.of("package.publish","inventory.read","booking.synthetic.read"));
+        permissions.put("admission",List.of("verification.review","verification.evidence.read","booking.synthetic.read","guest.synthetic.read","guest.admission.synthetic.read","guest.check-in.synthetic.record"));
+        permissions.put("bank-verifier",List.of("bank.claim.review","bank.evidence.read","bank.synthetic.credit.verify","bank.synthetic.credit.read"));
+        permissions.put("bank-allocator",List.of("bank.synthetic.credit.read","bank.synthetic.allocate","bank.synthetic.resolve"));
+        permissions.put("cleaner",List.of("operations.synthetic.read","operations.synthetic.record"));
+        permissions.put("independent-turnover-reviewer",List.of("operations.synthetic.read","operations.synthetic.review"));
+        for(var entry:permissions.entrySet())for(String permission:entry.getValue())f.grantTo(demoActor(entry.getKey()),BankIntegrationTest.VA,permission);
+        // Controlled test-only statement fact. Every production policy/authority/ledger guard remains real.
+        var method=demoCreditSource.getClass().getDeclaredMethod("fixture",String.class);method.setAccessible(true);
+        org.mockito.Mockito.doAnswer(invocation->{
+            org.springframework.test.util.ReflectionTestUtils.invokeMethod(demoCreditSource,"configured");
+            Class<?> fact=Class.forName("com.cinenest.payments.internal.SyntheticCreditSource$Fact");var ctor=fact.getDeclaredConstructors()[0];ctor.setAccessible(true);
+            String key="SYNTHETIC-DEMO-BANK-330000";String hash=java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest((key+":OWNER_APPROVED_DEMO_FIXTURE").getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+            return ctor.newInstance(key,"SYNTHETIC-DEMO-TEST-ACCOUNT",key,"SYNTHETIC_BANK",330000L,java.time.Instant.parse(f.environment.getRequiredProperty("cinenest.bank.ledger.fixture-credited-at")),BankIntegrationTest.VA,hash);
+        }).when(demoCreditSource);
+        method.invoke(demoCreditSource,"SYNTHETIC-DEMO-BANK-330000");
+        return Map.of("classification","SYNTHETIC_TEST_ONLY","principals",bindings,"fixtureLoaded",true,"bankStatementSource","EXPLICIT_TEST_ONLY_STATEMENT_FACT_NOT_REAL_BANK_CREDIT","configuredValues",data);
+    }
     private static boolean operationalJourney(){return "customer-turnover".equals(System.getenv("CINENEST_E2E_MODE"));}
 
     private static boolean cancellationJourney() {
@@ -60,6 +106,7 @@ class SyntheticJourneyIT {
         }
         for(String flag:List.of("cinenest.iot.enabled","cinenest.access.enabled","cinenest.notifications.enabled","cinenest.reporting.synthetic-bank.enabled","cinenest.rooms.turnover.enabled"))p.add(flag,()->"false");
         if(operationalJourney()) {
+            if(demoJourney())p.add("cinenest.pricing.synthetic-quotes.tax-minor",()->"0"); // Explicit synthetic zero-tax fixture, not commercial tax approval.
             // Short, positive synthetic deadlines fit this near-term real-time journey.
             // Preserve every production rule and ordering constraint; no clock override.
             for(var timing:Map.of("lead",15,"request",75,"initiation",20,"submission",30,
@@ -81,6 +128,9 @@ class SyntheticJourneyIT {
     private String operationalPurchase,operationalInventory;
     private Map<String,Object> operationalControl(BankIntegrationTest f,String op,Map<String,Object> body)throws Exception {
         if(op.equals("operational-scan")){f.work();f.bankWork();return Map.of("scannedSyntheticFixtures",true);}
+        if(demoJourney() && op.equals("operational-demo-unfunded")){assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_booking.booking").query(Integer.class).single()).isZero();assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_credit_verification").query(Integer.class).single()).isZero();assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isZero();return Map.of("bookings",0,"verifiedCredits",0,"allocations",0);}
+        if(demoJourney() && op.equals("operational-demo-revoke")){f.jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE account_id=:a AND permission='guest.check-in.synthetic.record'").param("a",demoActor("admission")).update();return Map.of("revoked",true);}
+        if(demoJourney() && op.equals("operational-demo-restore")){f.grantTo(demoActor("admission"),BankIntegrationTest.VA,"guest.check-in.synthetic.record");return Map.of("restored",true);}
         UUID booking=UUID.fromString(body.get("bookingId").toString());
         if(op.equals("operational-baseline")){
             operationalFinancial=operationalFinancialState(f);
@@ -99,6 +149,16 @@ class SyntheticJourneyIT {
             return Map.of("source","SYNTHETIC_ELIGIBILITY_PORT_FIXTURE","originalDocumentInspected",false);
         }
         if(!op.equals("operational-persistence"))throw new IllegalArgumentException("Unsupported operational fixture command");
+        if(demoJourney()){
+            assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_identity.account").query(Integer.class).single()).isEqualTo(8);
+            assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_pricing.package_version WHERE snapshot->>'basePriceMinor'='250000' AND snapshot->>'extensionPriceMinor'='100000' AND snapshot->>'extraGuestPriceMinor'='80000' AND snapshot->>'includedMinutes'='180'").query(Integer.class).single()).isEqualTo(1);
+            assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_payments.bank_credit_verification WHERE verifier_id=:a AND status='SIMULATED_VERIFIED'").param("a",demoActor("bank-verifier")).query(Integer.class).single()).isEqualTo(1);
+            assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation WHERE actor_id=:a").param("a",demoActor("bank-allocator")).query(Integer.class).single()).isEqualTo(1);
+            assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_booking.synthetic_staff_check_in WHERE actor_id=:a").param("a",demoActor("admission")).query(Integer.class).single()).isEqualTo(1);
+
+            assertThat(f.jdbc.sql("SELECT cleaning_buffer_minutes FROM cinenest_rooms.venue WHERE venue_id=:v").param("v",BankIntegrationTest.VA).query(Integer.class).single()).isEqualTo(15);
+            assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_identity.access_grant WHERE state='ACTIVE' AND (scope_kind<>'VENUE' OR venue_id<>:v)").param("v",BankIntegrationTest.VA).query(Integer.class).single()).isZero();
+        }
         assertThat(operationalFinancialState(f)).as("Immutable financial and pricing state").isEqualTo(operationalFinancial);
         assertThat(f.jdbc.sql("SELECT to_jsonb(r)::text FROM cinenest_booking.booking_revision r WHERE booking_id=:b").param("b",booking).query(String.class).single()).isEqualTo(operationalPurchase);
         assertThat(f.jdbc.sql("SELECT md5(string_agg(to_jsonb(b)::text,',' ORDER BY block_id)) FROM cinenest_booking.inventory_block b WHERE blocking").query(String.class).single()).isEqualTo(operationalInventory);
@@ -109,8 +169,8 @@ class SyntheticJourneyIT {
         assertThat(events).containsExactly("START","CHECKOUT");
         assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_booking.synthetic_staff_check_in WHERE booking_id=:b").param("b",booking).query(Integer.class).single()).isEqualTo(1);
         UUID checkout=f.jdbc.sql("SELECT event_id FROM cinenest_booking.synthetic_staff_session_event WHERE booking_id=:b AND event_type='CHECKOUT'").param("b",booking).query(UUID.class).single();
-        assertThat(f.jdbc.sql("SELECT state FROM cinenest_rooms.turnover_case WHERE case_id=:c AND booking_id=:b AND assignee_id=:a").param("c",checkout).param("b",booking).param("a",BankIntegrationTest.STAFF).query(String.class).single()).isEqualTo("RESOLVED");
-        assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_rooms.turnover_audit WHERE case_id=:c AND action='REVIEW' AND actor_id=:a").param("c",checkout).param("a",BankIntegrationTest.B).query(Integer.class).single()).isEqualTo(1);
+        assertThat(f.jdbc.sql("SELECT state FROM cinenest_rooms.turnover_case WHERE case_id=:c AND booking_id=:b AND assignee_id=:a").param("c",checkout).param("b",booking).param("a",operationalCleaner()).query(String.class).single()).isEqualTo("RESOLVED");
+        assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_rooms.turnover_audit WHERE case_id=:c AND action='REVIEW' AND actor_id=:a").param("c",checkout).param("a",operationalReviewer()).query(Integer.class).single()).isEqualTo(1);
         assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_payments.payment_allocation").query(Integer.class).single()).isEqualTo(1);
         assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_access.access_credential").query(Integer.class).single()).isZero();
         assertThat(f.jdbc.sql("SELECT count(*) FROM cinenest_booking.inventory_block a JOIN cinenest_booking.inventory_block b ON a.room_id=b.room_id AND a.block_id<b.block_id WHERE a.blocking AND b.blocking AND tstzrange(a.session_start,a.blocked_until,'[)') && tstzrange(b.session_start,b.blocked_until,'[)')").query(Integer.class).single()).isZero();
@@ -777,18 +837,23 @@ class SyntheticJourneyIT {
         var fixture=new BankIntegrationTest();
         context.getAutowireCapableBeanFactory().autowireBean(fixture);
         fixture.fixtures();
+        if(demoJourney())demoConfiguration=prepareDemo(fixture);
         boolean supervised = "supervised-h1".equals(System.getenv("CINENEST_E2E_MODE"));
         boolean adminQa = supervised && Boolean.getBoolean("cinenest.test.admin-qa");
         BankIntegrationTest.Browser staff = null;
         UUID pkg = null;
         Map<String,Object> publication = null;
         if (!cancellationJourney() && !fundingJourney() && !twoJourneys() && !packageBookingJourney()) {
-            staff = fixture.signedIn("staff");
-            pkg = fixture.setup(staff);
+            staff = fixture.signedIn(demoJourney()?demoSubject("operations"):"staff");
+            if(demoJourney()){
+                var draft=JSONObjectUtils.parse(fixture.draft("SYNTHETIC-DEMO"));draft.put("name","SYNTHETIC_TEST_ONLY CineNest 180-minute package");draft.put("basePriceMinor","250000");draft.put("extensionPriceMinor","100000");draft.put("extraGuestPriceMinor","80000");
+                var created=fixture.write(staff,"POST",fixture.collection(),JSONObjectUtils.toJSONString(draft));assertThat(created.statusCode()).as(created.body()).isEqualTo(201);pkg=UUID.fromString(JSONObjectUtils.parse(created.body()).get("packageId").toString());
+            }else pkg = fixture.setup(staff);
             fixture.grantTo(BankIntegrationTest.B, BankIntegrationTest.VA, "package.publish");
             var publicationRequest=fixture.request(false);
             if(operationalJourney()) publicationRequest.put("sessionFromLocal",java.time.LocalDateTime.now(java.time.ZoneId.of("Asia/Colombo")).minusMinutes(5).withNano(0).toString());
-            publication = fixture.published(fixture.signedIn("customer-b"), pkg, publicationRequest);
+            publication = fixture.published(fixture.signedIn(demoJourney()?demoSubject("booking-inventory"):"customer-b"), pkg, publicationRequest);
+            if(demoJourney())fixture.jdbc.sql("UPDATE cinenest_identity.access_grant SET state='REVOKED' WHERE account_id=:a AND permission='package.edit'").param("a",BankIntegrationTest.STAFF).update();
         }
         if (supervised) {
             fixture.jdbc.sql("DELETE FROM cinenest_identity.access_grant").update();
@@ -815,12 +880,13 @@ class SyntheticJourneyIT {
         config.put("backend",fixture.base());config.put("room",BankIntegrationTest.RID.toString());
         config.put("ports",List.of(java.net.URI.create(fixture.base()).getPort(),java.net.URI.create(BankIntegrationTest.IDP.issuer()).getPort()));config.put("backendPid",ProcessHandle.current().pid());
         if(operationalJourney()) {
-            fixture.reviewerGrants();fixture.bankGrants();fixture.financeGrants();
+            if(!demoJourney()){fixture.reviewerGrants();fixture.bankGrants();fixture.financeGrants();
             for(String permission:List.of("booking.synthetic.read","guest.synthetic.read","guest.admission.synthetic.read",
                 "guest.check-in.synthetic.record","booking.session.synthetic.read","booking.session.synthetic.start",
                 "booking.session.synthetic.checkout","operations.synthetic.read","operations.synthetic.record",
                 "operations.synthetic.assign","operations.synthetic.review","operations.synthetic.handoff.retry"))fixture.grantTo(BankIntegrationTest.STAFF,BankIntegrationTest.VA,permission);
             for(String permission:List.of("operations.synthetic.read","operations.synthetic.review"))fixture.grantTo(BankIntegrationTest.B,BankIntegrationTest.VA,permission);
+            }else config.put("demo",demoConfiguration);
             // PostgreSQL supplies the schedule. No application clock or purchased interval is rewritten.
             String local=fixture.jdbc.sql("SELECT to_char((clock_timestamp()+interval '3 minutes') AT TIME ZONE 'Asia/Colombo','YYYY-MM-DD\"T\"HH24:MI')").query(String.class).single();
             config.put("operationalStartLocal",local);
@@ -1076,6 +1142,7 @@ class SyntheticJourneyIT {
                         }else if(op.equals("subject")){
                             String subject=body.get("subject").toString();
                             if(supervisedAuthSealed || !(List.of("customer-a","customer-b","staff").contains(subject)
+                                    || (demoJourney() && List.of("customer","operations","booking-inventory","bank-verifier","bank-allocator","admission","cleaner","independent-turnover-reviewer").stream().anyMatch(role->demoSubject(role).equals(subject)))
                                     || (packageJourney != null && subject.equals("qa-admin-history-observer"))
                                     || (adminQa && ADMIN_ROLES.stream().map(role -> "qa-admin-" + role).anyMatch(subject::equals))))throw new IllegalArgumentException();
                             BankIntegrationTest.IDP.subject=subject;

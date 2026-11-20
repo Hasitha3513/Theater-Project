@@ -899,3 +899,8 @@ The scoped staff booking panel records START and CHECKOUT with immutable history
 ### Synthetic customer-to-turnover qualification
 
 The opt-in customer-turnover scenario links the existing synthetic customer booking and manual-bank flow to roster, staff check-in, session events, cleaning handoff and independent review. Browser requests reach the actual backend; PostgreSQL observers verify persisted links and protected financial snapshots. Synthetic eligibility fixtures never establish original-document verification. [Actual results](../PROGRESS.md#customer-turnover-real-backend-e2e).
+
+
+## Eight-principal synthetic demo qualification
+
+The opt-in customer-to-turnover test harness accepts the approved SYNTHETIC_TEST_ONLY demo input and separates customer, Operations, Booking/Inventory, bank-credit verifier, allocator, admission, cleaner and independent review actors. It exercises existing customer/staff HTTP/UI with explicit test-only eligibility and statement facts. This is test functionality, not commercial/site approval or a persistent deployed environment. One PostgreSQL-backed method and eight real-backend Chromium groups passed with eight actors and verified cleanup; two screenshots are retained with capture-timing limitations. See [qualification record](../PROGRESS.md#eight-principal-demo-qualification).

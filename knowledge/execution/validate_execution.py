@@ -18258,5 +18258,216 @@ DAY03_CI_BUDGET_ENTRYPOINT = b"if __name__ == '__main__':\n    raise SystemExit(
 receipt_admission_successor_errors = day03_ci_budget_errors
 inert_ci_main = day03_ci_budget_main
 
+
+# Exact eleven-path Owner-authorized synthetic fixture qualification successor.
+EIGHT_DEMO_STATE = {'id': 'CN-E2E-EIGHT-PRINCIPAL-DEMO-001',
+ 'baseline': 'db492acaee908818d2843911d087a53e888c32a3',
+ 'status': 'READY',
+ 'authority': {'name': 'Hasitha Wijerathna',
+               'source': 'Direct Owner message EXPLICIT OWNER AUTHORIZATION — EIGHT-PRINCIPAL DEMO '
+                         'QUALIFICATION',
+               'dateLocal': '2026-11-20',
+               'evidence': 'OWNER_DIRECTED_IN_CHAT_NOT_SIGNATURE_VERIFICATION'},
+ 'orderedPaths': ['backend/src/test/java/com/cinenest/SyntheticJourneyIT.java',
+                  'frontend/tests/synthetic-e2e.mjs',
+                  'scripts/verify-synthetic-e2e.py',
+                  'scripts/test-synthetic-e2e.py',
+                  'knowledge/PROGRESS.md',
+                  'knowledge/execution/change-sets.json',
+                  'knowledge/execution/status.json',
+                  'knowledge/execution/validate_execution.py',
+                  'knowledge/manifest.json',
+                  'knowledge/product/FEATURE_CATALOG.md',
+                  'knowledge/guides/USER_GUIDE.md'],
+ 'fixtureSource': '/home/hasitha-wijerathna/Documents/Theater '
+                  'Project/.cache/part1-demo-fixture/fixture.json',
+ 'runtime': {'sessions': 1,
+             'maximumMinutesIncludingCleanup': 30,
+             'cpu': 1,
+             'ramMiB': 1024,
+             'pids': 128,
+             'tmpfsMiB': 496,
+             'shmMiB': 16,
+             'network': 'LOOPBACK_ONLY',
+             'credentials': 'SYNTHETIC_ONLY'},
+ 'acceptance': ['Exact input values; eight distinct synthetic accounts and explicit venue permissions',
+                'Real HTTP/PostgreSQL customer-to-turnover journey; synthetic eligibility and '
+                'bank-statement facts explicitly labelled',
+                'Ownership, venue, missing-credit, duplicate, stale, revoked, CSRF, replay and '
+                'independent review controls',
+                'No physical readiness or real bank/identity claims; complete task-owned cleanup',
+                'Historical replay, negative controls, manifest, all44migration fingerprints and '
+                'whitespace'],
+ 'rollback': 'Revert test/governance successor only; stop and remove task-owned '
+             'runtime/resources/private fixture; preserve all unrelated/demo resources and immutable '
+             'evidence. No production data mutation.',
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'fixtureSha256': '7cbdfc5c8af54f8d5a809c601547957256f1e8f867e6512cba7341866614970c',
+ 'syntheticBankSource': 'Test-only spy extends only the approved exact SYNTHETIC-DEMO-BANK-330000 '
+                        'statement fact; real configured/profile/venue/time and all HTTP '
+                        'ledger/verification/allocation/replay guards retained. No real bank statement '
+                        'or production source catalogue change.',
+ 'qualification': {'status': 'PASS_SYNTHETIC_ONLY',
+                   'backendIntegration': {'PASS': 1, 'FAIL': 0, 'ERROR': 0, 'SKIPPED': 0},
+                   'chromium': {'PASS': 8, 'FAIL': 0, 'NOT_RUN': 0},
+                   'accounts': 8,
+                   'principals': ['customer',
+                                  'operations',
+                                  'booking-inventory',
+                                  'bank-verifier',
+                                  'bank-allocator',
+                                  'admission',
+                                  'cleaner',
+                                  'independent-turnover-reviewer'],
+                   'runtime': {'sessions': 1,
+                               'attempts': 1,
+                               'secondsIncludingCleanup': 173.0,
+                               'resourceLimits': 'VERIFIED',
+                               'containersVolumesNetworks': 'UNCHANGED',
+                               'ownedProcessesContainerListenersPrivateFixture': 'CLEANED'},
+                   'database': {'cleanFlyway': '44_MIGRATIONS_THROUGH_V45',
+                                'configuredPricingAndRoleAttribution': 'PASS',
+                                'oneAllocationAndCheckIn': 'PASS',
+                                'START_CHECKOUT': 'PASS',
+                                'independentTurnover': 'RESOLVED',
+                                'immutableFinancialPurchaseInventory': 'PASS',
+                                'overlaps': 0,
+                                'physicalCredentials': 0},
+                   'configuredValues': {'baseMinor': 250000,
+                                        'additionalHourMinor': 100000,
+                                        'fifthGuestMinor': 80000,
+                                        'fiveGuestQuoteMinor': 330000,
+                                        'syntheticTaxMinor': 0,
+                                        'sessionMinutes': 180,
+                                        'cleaningMinutes': 15,
+                                        'capacity': 5},
+                   'http': 'REAL_BACKEND_NO_INTERCEPTION',
+                   'eligibility': 'EXPLICIT_SYNTHETIC_PORT_FIXTURE_NO_ORIGINAL_DOCUMENT_INSPECTION',
+                   'bankStatement': 'EXPLICIT_TEST_ONLY_330000_SOURCE_FACT_NOT_REAL_BANK_CREDIT',
+                   'screenshots': 2,
+                   'screenshotLimitations': 'Customer snapshot captured before roster registration. '
+                                            'Staff screenshot shows last-loaded PENDING cleaning '
+                                            'handoff; later HTTP/SQL assertions prove RESOLVED '
+                                            'turnover. Neither screenshot certifies physical readiness.',
+                   'realFinancialOperations': False,
+                   'physicalReadiness': 'UNVERIFIED',
+                   'productionAuthorization': 'NONE'},
+ 'syntheticEligibility': 'Explicit test-only published port fixture; no original document inspected',
+ 'sourceSha256': {'backend/src/test/java/com/cinenest/SyntheticJourneyIT.java': '25887f1f48d36e6265d80fe01d4ea81a739e78e47f28510fd8a397ebc83054c2',
+                  'frontend/tests/synthetic-e2e.mjs': 'b28a988dcadeaddc21b34ed0d13c1096fc5d084f3ab1ca68c0bc275e5274a25e',
+                  'scripts/verify-synthetic-e2e.py': '0585bf7d92b0454c42d453e591add39ee3a1e0a19b85d7fa3ddaf778d68cf9c0',
+                  'scripts/test-synthetic-e2e.py': '2f5859ce1e887a56898f51a3e43b06ca1b4698eab7ec2118297f04a66dc0fa77',
+                  'knowledge/PROGRESS.md': '57abb64356e1b8e60112d08ecde2738cf252b1a302c57880b4c2a1fde3aae159',
+                  'knowledge/execution/change-sets.json': '84e1f62bf0ea0cfb8114b29bc717f49eae42ceaa0f348335f1f800adf31e0301',
+                  'knowledge/product/FEATURE_CATALOG.md': 'a545a3ed30a6f403bde65afaddaba7f7a120bf2d76682a957d51a15fbed4fdad',
+                  'knowledge/guides/USER_GUIDE.md': 'e157570fd7d0d92d4c522da8df2d62cb5d08ef26ea85bd18b8a42e1f2b3047a6'}}
+EIGHT_DEMO_KEY = 'eightPrincipalDemoQualification'
+EIGHT_DEMO_PATHS = set(EIGHT_DEMO_STATE['orderedPaths'])
+
+def eight_demo_errors():
+    import hashlib
+    try:
+        base = EIGHT_DEMO_STATE['baseline']
+        v41_git('merge-base', '--is-ancestor', EIGHT_DEMO_STATE['baseline'], 'HEAD')
+        changed = parse_git_paths(v41_git('diff', '--no-ext-diff', EIGHT_DEMO_STATE['baseline'], '--name-only', '-z'), nul=True)
+        if changed != EIGHT_DEMO_PATHS:
+            return ['Eight demo exact changed paths mismatch']
+        blob = lambda name: v41_git('show', base + ':' + name)
+        rows = v41_git('ls-tree', '-rz', '--full-tree', base).split(b'\0')
+        inventory = {}
+        for row in rows:
+            if row:
+                meta, name = row.split(b'\t', 1)
+                inventory[name.decode()] = meta.split()
+        actual = set(v41_git('ls-files', '-z', text=True).split('\0')) - {''}
+        if actual != set(inventory) or v41_git('ls-files', '--others', '--exclude-standard', '-z'):
+            return ['Eight demo exact path inventory mismatch']
+        migrations = {p.name for p in (R / 'backend/src/main/resources/db/migration').glob('*')}
+        expected = {p.rsplit('/',1)[1] for p in inventory if p.startswith('backend/src/main/resources/db/migration/')}
+        if len(expected) != 44 or migrations != expected:
+            return ['Eight demo migration inventory mismatch']
+        for name, (mode, kind, oid) in inventory.items():
+            p = R / name
+            if kind != b'blob' or not p.is_file() or p.is_symlink() or bool(p.stat().st_mode & 0o111) != (mode == b'100755'):
+                return ['Eight demo unsafe source: ' + name]
+            if name not in EIGHT_DEMO_PATHS:
+                data = p.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode() != oid:
+                    return ['Eight demo predecessor drift: ' + name]
+        status = json.loads((R / 'knowledge/execution/status.json').read_bytes())
+        if status.pop(EIGHT_DEMO_KEY, None) != EIGHT_DEMO_STATE or status != json.loads(blob('knowledge/execution/status.json')):
+            return ['Eight demo status or acceptance mismatch']
+        for name, digest in EIGHT_DEMO_STATE['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest() != digest:
+                return ['Eight demo fingerprint mismatch: ' + name]
+        previous = blob('knowledge/execution/validate_execution.py')
+        if not (R/'knowledge/execution/validate_execution.py').read_bytes().startswith(previous[:-len(EIGHT_DEMO_ENTRYPOINT)]):
+            return ['Eight demo historical validator mismatch']
+        manifest = json.loads(blob('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in EIGHT_DEMO_PATHS - {'knowledge/manifest.json'}:
+                row['sha256'] = hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes() != (json.dumps(manifest,indent=2)+'\n').encode():
+            return ['Eight demo manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Eight demo inaccessible admission inputs']
+    return []
+
+def eight_demo_controls():
+    from unittest.mock import patch
+    read = Path.read_bytes
+    def reject(name, data):
+        target = R/name
+        with patch.object(Path,'read_bytes',lambda p: data if p == target else read(p)):
+            if not eight_demo_errors():
+                raise ValueError('Eight demo accepted unauthorized drift: '+name)
+    for name in EIGHT_DEMO_STATE['sourceSha256']:
+        reject(name, b'drift')
+    for name in ('knowledge/execution/requirements.json', 'backend/src/main/resources/db/migration/V45__synthetic_staff_session_lifecycle.sql', 'knowledge/manifest.json'):
+        if (R/name).exists(): reject(name,b'drift')
+    status = json.loads(read(R/'knowledge/execution/status.json'))
+    for field, value in [('productionAuthorization','GRANTED'),('status','ACCEPTED')]:
+        changed = json.loads(json.dumps(status));changed[EIGHT_DEMO_KEY][field]=value
+        reject('knowledge/execution/status.json',json.dumps(changed).encode())
+    changed = json.loads(json.dumps(status));changed[EIGHT_DEMO_KEY]['part1']['completed']=5
+    reject('knowledge/execution/status.json',json.dumps(changed).encode())
+    git = v41_git
+    def extra(*args,**kwargs):
+        result=git(*args,**kwargs)
+        return result+b'unapproved.txt\0' if args[0]=='ls-files' else result
+    with patch.dict(globals(),{'v41_git':extra}):
+        if not eight_demo_errors():raise ValueError('Eight demo accepted extra path')
+    glob = Path.glob
+    def extra_migration(p,pattern,*args,**kwargs):
+        yield from glob(p,pattern,*args,**kwargs)
+        if p==R/'backend/src/main/resources/db/migration' and pattern=='*':
+            yield p/'V46__unapproved.sql'
+    # Use a real existing migration path to emulate a second inventory entry without file writes.
+    def injected(p,pattern,*args,**kwargs):
+        yield from glob(p,pattern,*args,**kwargs)
+        if p==R/'backend/src/main/resources/db/migration' and pattern=='*':
+            yield R/'AGENTS.md'
+    with patch.object(Path,'glob',injected):
+        if not eight_demo_errors():raise ValueError('Eight demo accepted extra migration')
+    print('PASS Eight demo scope, approval, blocked gates, acceptance, migration and fingerprint negative controls',flush=True)
+
+def eight_demo_main():
+    import sys,tempfile
+    errors=eight_demo_errors()
+    if errors:
+        print('\n'.join('FAIL '+x for x in errors));return 1
+    eight_demo_controls()
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-eight-demo-replay-') as tmp:
+        checkout=Path(tmp)/'predecessor'
+        subprocess.run(['git','clone','--quiet','--no-local','--no-checkout','--',common,str(checkout)],check=True)
+        subprocess.run(['git','-C',str(checkout),'checkout','--quiet','--detach',EIGHT_DEMO_STATE['baseline']],check=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=checkout).returncode
+
+EIGHT_DEMO_ENTRYPOINT = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+receipt_admission_successor_errors = eight_demo_errors
+inert_ci_main = eight_demo_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

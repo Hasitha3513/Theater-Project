@@ -1219,7 +1219,17 @@ async function runOperationalJourney(base) {
   c.on('request',r=>{assert.ok(['127.0.0.1','localhost'].includes(new URL(r.url()).hostname),'external request prohibited');});
   await login(p,subject);return p;
  };
- const customer=await open('customer-a'), staff=await open('staff'), reviewer=await open('customer-b');
+ const demo=config.demo;
+ const subject=role=>demo?.principals[role].subject;
+ const customer=await open(demo?subject('customer'):'customer-a'), staff=await open(demo?subject('operations'):'staff'), reviewer=await open(demo?subject('independent-turnover-reviewer'):'customer-b');
+ const verifier=demo?await open(subject('bank-verifier')):staff;
+ const allocator=demo?await open(subject('bank-allocator')):reviewer;
+ const admission=demo?await open(subject('admission')):staff;
+ const cleaner=demo?await open(subject('cleaner')):staff;
+ const inventory=demo?await open(subject('booking-inventory')):null;
+ const guests=demo?5:4;
+ if(demo){assert.equal(demo.classification,'SYNTHETIC_TEST_ONLY');assert.equal(new Set(Object.values(demo.principals).map(p=>p.id)).size,8);assert.equal(new Set(Object.values(demo.principals).map(p=>p.subject)).size,8);}
+
  const send=async(p,path,body)=>{const r=await api(p,path,'POST',body); observations.push({stage,path:path.replace(/[0-9a-f]{8}-[0-9a-f-]{27,}/gi,'{reference}'),status:r.status,source:'REAL_HTTP'});assert.equal(r.status,200);return r.value;};
  const cmd=(revision)=>({revision,commandKey:crypto.randomUUID()});
  const financial=(revision)=>({expectedRevision:revision,commandKey:crypto.randomUUID(),reason:'SYNTHETIC integrated qualification'});
@@ -1236,14 +1246,18 @@ async function runOperationalJourney(base) {
  try {
  await scenario('operational-customer-quote',async()=>{
   await customer.goto(`${base}/rooms/${config.room}`);
-  const point=await json(customer,`/api/rooms/${config.room}/availability?sessionStartLocal=${config.operationalStartLocal}&durationMinutes=180&guests=4`);
+  const point=await json(customer,`/api/rooms/${config.room}/availability?sessionStartLocal=${config.operationalStartLocal}&durationMinutes=180&guests=${guests}`);
   assert.equal(point.available,true);
-  hold=await send(customer,'/api/holds',{roomId:config.room,sessionStartLocal:config.operationalStartLocal,durationMinutes:180,guests:4,expectedConfiguration:point.configuration,idempotencyKey:crypto.randomUUID()});
+  hold=await send(customer,'/api/holds',{roomId:config.room,sessionStartLocal:config.operationalStartLocal,durationMinutes:180,guests,expectedConfiguration:point.configuration,idempotencyKey:crypto.randomUUID()});
   const catalog=await json(customer,`/api/venues/${config.venue}/packages?roomId=${config.room}&sessionStart=${encodeURIComponent(point.sessionStart)}&sessionEnd=${encodeURIComponent(point.sessionEnd)}`);
   const pkg=catalog.items[0];assert.ok(pkg?.packageId&&pkg.versionId);
+  if(demo){assert.equal(Date.parse(point.sessionEnd)-Date.parse(point.sessionStart),180*60000);assert.equal(Date.parse(point.blockedUntil)-Date.parse(point.sessionEnd),15*60000);
+   assert.equal((await api(customer,`/api/rooms/${config.room}/availability?sessionStartLocal=${config.operationalStartLocal}&durationMinutes=180&guests=6`)).status,400);
+  }
   quote=await send(customer,'/api/quotes',{holdId:hold.holdId,packageId:pkg.packageId,packageVersionId:pkg.versionId,expectedHoldRevision:hold.revision,optionalServiceIds:[],paymentMethod:'BANK',idempotencyKey:crypto.randomUUID()});
   await send(customer,`/api/quotes/${quote.quoteId}/accept`,{expectedRevision:quote.revision,contentHash:quote.contentHash,disclosures:quote.disclosures,idempotencyKey:crypto.randomUUID()});
   assert.equal((await json(customer,`/api/quotes/${quote.quoteId}`)).state,'ACCEPTED');
+  if(demo)assert.ok(JSON.stringify(quote).includes('330000'),'five-guest exact synthetic payable total');
  });
  await scenario('operational-verification-bank',async()=>{
   verification=await send(customer,'/api/verification/requests',{commandKey:crypto.randomUUID(),quoteId:quote.quoteId,policyVersion:'SYNTHETIC-V1',consent:true});
@@ -1251,7 +1265,7 @@ async function runOperationalJourney(base) {
   await upload(customer,'/api/verification/uploads',allocation,'identity.png');
   await control({op:'operational-scan'});
   verification=await json(customer,`/api/verification/requests/${verification.id}`);
-  await send(staff,`/api/admin/venues/${config.venue}/verification/requests/${verification.id}/decisions`,{...cmd(verification.revision),verdict:'VERIFIED',reason:'SYNTHETIC_MATCH_18_PLUS'});
+  await send(admission,`/api/admin/venues/${config.venue}/verification/requests/${verification.id}/decisions`,{...cmd(verification.revision),verdict:'VERIFIED',reason:'SYNTHETIC_MATCH_18_PLUS'});
   bank=await send(customer,'/api/bank/requests',{quoteId:quote.quoteId,quoteRevision:quote.revision,contentHash:quote.contentHash,commandKey:crypto.randomUUID()});
   const claim=await send(customer,`/api/bank/requests/${bank.id}/claims`,{...cmd(bank.revision),declaredPaidAt:new Date().toISOString(),declaredAmountMinor:bank.amountMinor,declaredReference:'SYNTHETIC-NOT-A-BANK-REFERENCE'});
   allocation=await send(customer,`/api/bank/claims/${claim.claimId}/uploads`,cmd(claim.revision));
@@ -1260,49 +1274,57 @@ async function runOperationalJourney(base) {
   bank=await json(customer,`/api/bank/requests/${bank.id}`);
   assert.equal(bank.paymentVerified,false);assert.equal(bank.bookingConfirmed,false);
   assert.equal((await api(reviewer,`/api/bank/requests/${bank.id}`)).status,404);
-  await send(staff,`${bankRoot}/requests/${bank.id}/decisions`,{...cmd(bank.revision),action:'REVIEWED',reason:'SYNTHETIC_REVIEW'});
+  await send(verifier,`${bankRoot}/requests/${bank.id}/decisions`,{...cmd(bank.revision),action:'REVIEWED',reason:'SYNTHETIC_REVIEW'});
  });
  await scenario('operational-independent-finance',async()=>{
-  const credit=await send(staff,`${bankRoot}/credits`,{...financial(0),fixtureKey:'SYNTHETIC-BANK-50000'});
+  const creditBody={...financial(0),fixtureKey:demo?'SYNTHETIC-DEMO-BANK-330000':'SYNTHETIC-BANK-50000'};
+  if(demo){bank=await json(customer,`/api/bank/requests/${bank.id}`);const missing=await api(allocator,`${bankRoot}/requests/${bank.id}/allocations`,'POST',{...financial(bank.revision),creditId:crypto.randomUUID(),amountMinor:Number(bank.amountMinor)});assert.ok([403,404,409].includes(missing.status));assert.equal((await json(customer,`/api/bank/requests/${bank.id}`)).bookingConfirmed,false);const empty=await control({op:'operational-demo-unfunded'});assert.equal(empty.bookings,0);assert.equal(empty.verifiedCredits,0);assert.equal(empty.allocations,0);}
+  const credit=await send(verifier,`${bankRoot}/credits`,creditBody);
+  if(demo){assert.equal((await send(verifier,`${bankRoot}/credits`,creditBody)).id,credit.id);assert.equal((await api(verifier,`${bankRoot}/credits`,'POST',{...creditBody,commandKey:crypto.randomUUID()})).status,409);}
   bank=await json(customer,`/api/bank/requests/${bank.id}`);
   const match={...financial(bank.revision),requestId:bank.id};
-  assert.equal((await api(staff,`${bankRoot}/credits/${credit.id}/matches`,'POST',match)).status,403);
-  await send(reviewer,`${bankRoot}/credits/${credit.id}/matches`,match);
+  assert.equal((await api(verifier,`${bankRoot}/credits/${credit.id}/matches`,'POST',match)).status,403);
+  await send(allocator,`${bankRoot}/credits/${credit.id}/matches`,match);
   bank=await json(customer,`/api/bank/requests/${bank.id}`);
-  const allocation=await send(reviewer,`${bankRoot}/requests/${bank.id}/allocations`,{...financial(bank.revision),creditId:credit.id,amountMinor:Number(bank.amountMinor)});
+  const allocationBody={...financial(bank.revision),creditId:credit.id,amountMinor:Number(bank.amountMinor)};
+  const allocation=await send(allocator,`${bankRoot}/requests/${bank.id}/allocations`,allocationBody);
+  if(demo)assert.deepEqual(await send(allocator,`${bankRoot}/requests/${bank.id}/allocations`,allocationBody),allocation);
   assert.equal(allocation.syntheticBookingStatus,'SIMULATED_CONFIRMED');assert.equal(allocation.bookingConfirmed,false);
   booking=allocation.bookingId;assert.ok(booking);
   await control({op:'operational-baseline',bookingId:booking});
   await customer.goto(`${base}/bookings/${booking}`);
   await customer.getByRole('heading',{name:'Purchased snapshot',exact:true}).waitFor();
+  if(demo)await customer.screenshot({path:run+'/demo-customer.png',fullPage:true});
  });
  const root=()=>`/api/admin/venues/${config.venue}/bookings/${booking}`;
  await scenario('operational-roster-eligibility',async()=>{
   const path=`/api/bookings/${booking}/guest-roster`;
   roster=await json(customer,path);
   roster=await send(customer,path,{commandKey:crypto.randomUUID(),bookingRevision:roster.bookingRevision,revision:roster.revision});
-  for(let i=1;i<4;i++) roster=await send(customer,path+'/companions',{commandKey:crypto.randomUUID(),bookingRevision:roster.bookingRevision,revision:roster.revision,label:`SYNTHETIC-${i}`});
-  assert.equal(roster.count,4);
+  for(let i=1;i<guests;i++) roster=await send(customer,path+'/companions',{commandKey:crypto.randomUUID(),bookingRevision:roster.bookingRevision,revision:roster.revision,label:`SYNTHETIC-${i}`});
+  assert.equal(roster.count,guests);
   assert.equal((await api(reviewer,path)).status,404);
-  const absent=await json(staff,root()+'/guest-admission');assert.notEqual(absent.status,'ELIGIBLE_FOR_STAFF_REVIEW');
+  const absent=await json(admission,root()+'/guest-admission');assert.notEqual(absent.status,'ELIGIBLE_FOR_STAFF_REVIEW');
   const fixture=await control({op:'operational-eligibility',bookingId:booking});assert.equal(fixture.originalDocumentInspected,false);
-  const eligible=await json(staff,root()+'/guest-admission');assert.equal(eligible.status,'ELIGIBLE_FOR_STAFF_REVIEW');assert.equal(eligible.physicalEntryAuthorized,false);
+  const eligible=await json(admission,root()+'/guest-admission');assert.equal(eligible.status,'ELIGIBLE_FOR_STAFF_REVIEW');assert.equal(eligible.physicalEntryAuthorized,false);
  });
  // Wait for authoritative time naturally; do not rewrite clocks, purchases or policy boundaries.
  const deadline=Date.now()+240000;
  while(Date.now()<Date.parse(hold.sessionStart)&&Date.now()<deadline) await new Promise(r=>setTimeout(r,250));
  // The existing 120-second test sessions may expire while awaiting real time.
  // Use genuine OIDC sign-in again; never extend or rewrite a stored session.
- await login(staff,'staff');await login(customer,'customer-a');await login(reviewer,'customer-b');
+ if(demo){for(const [role,p] of [['customer',customer],['operations',staff],['booking-inventory',inventory],['bank-verifier',verifier],['bank-allocator',allocator],['admission',admission],['cleaner',cleaner],['independent-turnover-reviewer',reviewer]])await login(p,subject(role));}
+ else {await login(staff,'staff');await login(customer,'customer-a');await login(reviewer,'customer-b');}
  await scenario('operational-staff-session',async()=>{
-  const path=root()+'/guest-check-in';check=await json(staff,path);
+  const path=root()+'/guest-check-in';check=await json(admission,path);
   const body={commandKey:crypto.randomUUID(),roomId:config.room,bookingRevision:roster.bookingRevision,rosterRevision:roster.revision};
-  assert.equal((await api(staff,path,'POST',body,false)).status,403);
+  assert.equal((await api(admission,path,'POST',body,false)).status,403);
   assert.equal((await api(customer,path,'POST',body)).status,403);
-  assert.equal((await api(staff,path.replace(config.venue,config.otherVenue),'POST',body)).status,403);
-  assert.equal((await api(staff,path,'POST',{...body,rosterRevision:roster.revision+1})).status,409);
-  check=await send(staff,path,body);assert.equal(check.physicalEntryAuthorized,false);
-  assert.deepEqual(await send(staff,path,body),check);
+  assert.equal((await api(admission,path.replace(config.venue,config.otherVenue),'POST',body)).status,403);
+  assert.equal((await api(admission,path,'POST',{...body,rosterRevision:roster.revision+1})).status,409);
+  if(demo){assert.equal((await api(staff,path,'POST',body)).status,403);await control({op:'operational-demo-revoke'});assert.equal((await api(admission,path,'POST',body)).status,403);await control({op:'operational-demo-restore'});}
+  check=await send(admission,path,body);assert.equal(check.physicalEntryAuthorized,false);
+  assert.deepEqual(await send(admission,path,body),check);
   const session=await json(staff,root()+'/session');
   startBody={commandKey:crypto.randomUUID(),bookingRevision:roster.bookingRevision,rosterRevision:roster.revision,checkInActorId:session.checkIn.actorId,checkInCommandKey:session.checkIn.commandKey};
   assert.equal((await api(staff,root()+'/session/checkouts','POST',{...startBody,startEventId:crypto.randomUUID()})).status,409);
@@ -1322,16 +1344,17 @@ async function runOperationalJourney(base) {
  await scenario('operational-independent-turnover',async()=>{
   const path=`/api/admin/venues/${config.venue}/operations/cases/${turnover.case_id}`;
   const action=async(p,kind,extra={})=>{const body={commandKey:crypto.randomUUID(),expectedVersion:turnover.revision,...extra};turnover=await send(p,path+'/'+kind,body);return body;};
-  await action(staff,'assignments',{assigneeId:config.staffId});await action(staff,'acknowledgements');
-  for(const item of turnover.checklist)await action(staff,'checklist',{item,asserted:true});
-  await action(staff,'completion-assertions');
+  await action(staff,'assignments',{assigneeId:demo?demo.principals.cleaner.id:config.staffId});await action(cleaner,'acknowledgements');
+  for(const item of turnover.checklist)await action(cleaner,'checklist',{item,asserted:true});
+  await action(cleaner,'completion-assertions');
   const review={commandKey:crypto.randomUUID(),expectedVersion:turnover.revision};
-  assert.equal((await api(staff,path+'/reviews','POST',review)).status,403);
+  assert.equal((await api(cleaner,path+'/reviews','POST',review)).status,403);
   turnover=await send(reviewer,path+'/reviews',review);assert.equal(turnover.state,'RESOLVED');
   assert.deepEqual(await send(reviewer,path+'/reviews',review),turnover);
   assert.equal(turnover.physicalOccupancy,'UNKNOWN');assert.equal(turnover.physicalReadiness,'UNVERIFIED');assert.equal(turnover.inventoryChanged,false);
  });
  await scenario('operational-persistence',async()=>{
+  if(demo)await staff.screenshot({path:run+'/demo-staff.png',fullPage:true});
   const persisted=await control({op:'operational-persistence',bookingId:booking});
   assert.equal(persisted.reviewerIndependent,true);assert.deepEqual(persisted.sessionEvents,['START','CHECKOUT']);
   observations.push({source:'POSTGRESQL_ASSERTIONS',...persisted});

@@ -504,4 +504,22 @@ for (const invalid of [null, "/bank?evidence=malformed", "/bank?evidence=" + oth
         self.assertIn("'--property=RuntimeMaxSec=600'",source)
 
 
+class EightPrincipalFixtureTests(unittest.TestCase):
+    def fixture(self):
+        roles=['customer','operations','booking-inventory','bank-verifier','bank-allocator','admission','cleaner','independent-turnover-reviewer']
+        return {'classification':'SYNTHETIC_TEST_ONLY','brand':'CineNest','venue':{'label':'CineNest Main Branch (DEMO)','timezone':'Asia/Colombo','operatingWindows':[{'isoWeekday':i,'startMinute':0,'endMinute':1440} for i in range(1,8)]},'room':{'label':'Private Cinema Room 01','plannedCapacity':5,'cleaningBufferMinutes':15,'inspectedCapacity':None},'package':{'currency':'LKR','sessionMinutes':180,'minimumMinutes':180,'basePriceMinor':250000,'includedGuests':4,'maximumGuests':5,'fifthGuestPriceMinor':80000,'additionalHourPriceMinor':100000,'additionalHourMinutes':60,'commercialApproval':False},'principals':[{'role':r,'subject':r,'syntheticId':r,'classification':'SYNTHETIC_TEST_ONLY'} for r in roles],'payment':{'method':'SYNTHETIC_MANUAL_BANK_TRANSFER','realSettlement':False,'realBankAccount':None,'receiptIsVerifiedCredit':False},'boundaries':{'productionAuthorization':'NONE','liveIdentityIntake':False,'liveAdmission':False,'physicalOccupancy':'UNKNOWN','physicalReadiness':'UNVERIFIED','allowedTarget':'TASK_OWNED_DISPOSABLE_TEST_RUNTIME_ONLY'}}
+    def test_exact_fixture_is_accepted(self):
+        x=self.fixture();self.assertIs(journey.validate_demo_fixture(x),x)
+    def test_changed_money_or_duration_is_rejected(self):
+        for field,value in [('basePriceMinor',2500),('minimumMinutes',179),('commercialApproval',True)]:
+            x=self.fixture();x['package'][field]=value
+            with self.assertRaises(ValueError):journey.validate_demo_fixture(x)
+    def test_shared_identity_is_rejected(self):
+        x=self.fixture();x['principals'][1]['subject']=x['principals'][0]['subject']
+        with self.assertRaises(ValueError):journey.validate_demo_fixture(x)
+    def test_live_or_physical_claim_is_rejected(self):
+        for field,value in [('productionAuthorization','GRANTED'),('liveAdmission',True),('physicalReadiness','READY')]:
+            x=self.fixture();x['boundaries'][field]=value
+            with self.assertRaises(ValueError):journey.validate_demo_fixture(x)
+
 if __name__=='__main__':unittest.main()

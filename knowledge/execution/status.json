@@ -32361,5 +32361,128 @@
       "knowledge/PROGRESS.md": "c2043fa49161e1cf7de2ac21e9e2a6be8fcef91cd2f0d7a977a2c4f46f9970e6",
       "knowledge/execution/change-sets.json": "b0c6dd66906ce6b19d069e9a4b626ae4840da563728dca561f44d5e7a334f1ad"
     }
+  },
+  "eightPrincipalDemoQualification": {
+    "id": "CN-E2E-EIGHT-PRINCIPAL-DEMO-001",
+    "baseline": "db492acaee908818d2843911d087a53e888c32a3",
+    "status": "READY",
+    "authority": {
+      "name": "Hasitha Wijerathna",
+      "source": "Direct Owner message EXPLICIT OWNER AUTHORIZATION \u2014 EIGHT-PRINCIPAL DEMO QUALIFICATION",
+      "dateLocal": "2026-11-20",
+      "evidence": "OWNER_DIRECTED_IN_CHAT_NOT_SIGNATURE_VERIFICATION"
+    },
+    "orderedPaths": [
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java",
+      "frontend/tests/synthetic-e2e.mjs",
+      "scripts/verify-synthetic-e2e.py",
+      "scripts/test-synthetic-e2e.py",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "fixtureSource": "/home/hasitha-wijerathna/Documents/Theater Project/.cache/part1-demo-fixture/fixture.json",
+    "runtime": {
+      "sessions": 1,
+      "maximumMinutesIncludingCleanup": 30,
+      "cpu": 1,
+      "ramMiB": 1024,
+      "pids": 128,
+      "tmpfsMiB": 496,
+      "shmMiB": 16,
+      "network": "LOOPBACK_ONLY",
+      "credentials": "SYNTHETIC_ONLY"
+    },
+    "acceptance": [
+      "Exact input values; eight distinct synthetic accounts and explicit venue permissions",
+      "Real HTTP/PostgreSQL customer-to-turnover journey; synthetic eligibility and bank-statement facts explicitly labelled",
+      "Ownership, venue, missing-credit, duplicate, stale, revoked, CSRF, replay and independent review controls",
+      "No physical readiness or real bank/identity claims; complete task-owned cleanup",
+      "Historical replay, negative controls, manifest, all44migration fingerprints and whitespace"
+    ],
+    "rollback": "Revert test/governance successor only; stop and remove task-owned runtime/resources/private fixture; preserve all unrelated/demo resources and immutable evidence. No production data mutation.",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE",
+    "fixtureSha256": "7cbdfc5c8af54f8d5a809c601547957256f1e8f867e6512cba7341866614970c",
+    "syntheticBankSource": "Test-only spy extends only the approved exact SYNTHETIC-DEMO-BANK-330000 statement fact; real configured/profile/venue/time and all HTTP ledger/verification/allocation/replay guards retained. No real bank statement or production source catalogue change.",
+    "qualification": {
+      "status": "PASS_SYNTHETIC_ONLY",
+      "backendIntegration": {
+        "PASS": 1,
+        "FAIL": 0,
+        "ERROR": 0,
+        "SKIPPED": 0
+      },
+      "chromium": {
+        "PASS": 8,
+        "FAIL": 0,
+        "NOT_RUN": 0
+      },
+      "accounts": 8,
+      "principals": [
+        "customer",
+        "operations",
+        "booking-inventory",
+        "bank-verifier",
+        "bank-allocator",
+        "admission",
+        "cleaner",
+        "independent-turnover-reviewer"
+      ],
+      "runtime": {
+        "sessions": 1,
+        "attempts": 1,
+        "secondsIncludingCleanup": 173.0,
+        "resourceLimits": "VERIFIED",
+        "containersVolumesNetworks": "UNCHANGED",
+        "ownedProcessesContainerListenersPrivateFixture": "CLEANED"
+      },
+      "database": {
+        "cleanFlyway": "44_MIGRATIONS_THROUGH_V45",
+        "configuredPricingAndRoleAttribution": "PASS",
+        "oneAllocationAndCheckIn": "PASS",
+        "START_CHECKOUT": "PASS",
+        "independentTurnover": "RESOLVED",
+        "immutableFinancialPurchaseInventory": "PASS",
+        "overlaps": 0,
+        "physicalCredentials": 0
+      },
+      "configuredValues": {
+        "baseMinor": 250000,
+        "additionalHourMinor": 100000,
+        "fifthGuestMinor": 80000,
+        "fiveGuestQuoteMinor": 330000,
+        "syntheticTaxMinor": 0,
+        "sessionMinutes": 180,
+        "cleaningMinutes": 15,
+        "capacity": 5
+      },
+      "http": "REAL_BACKEND_NO_INTERCEPTION",
+      "eligibility": "EXPLICIT_SYNTHETIC_PORT_FIXTURE_NO_ORIGINAL_DOCUMENT_INSPECTION",
+      "bankStatement": "EXPLICIT_TEST_ONLY_330000_SOURCE_FACT_NOT_REAL_BANK_CREDIT",
+      "screenshots": 2,
+      "screenshotLimitations": "Customer snapshot captured before roster registration. Staff screenshot shows last-loaded PENDING cleaning handoff; later HTTP/SQL assertions prove RESOLVED turnover. Neither screenshot certifies physical readiness.",
+      "realFinancialOperations": false,
+      "physicalReadiness": "UNVERIFIED",
+      "productionAuthorization": "NONE"
+    },
+    "syntheticEligibility": "Explicit test-only published port fixture; no original document inspected",
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/SyntheticJourneyIT.java": "25887f1f48d36e6265d80fe01d4ea81a739e78e47f28510fd8a397ebc83054c2",
+      "frontend/tests/synthetic-e2e.mjs": "b28a988dcadeaddc21b34ed0d13c1096fc5d084f3ab1ca68c0bc275e5274a25e",
+      "scripts/verify-synthetic-e2e.py": "0585bf7d92b0454c42d453e591add39ee3a1e0a19b85d7fa3ddaf778d68cf9c0",
+      "scripts/test-synthetic-e2e.py": "2f5859ce1e887a56898f51a3e43b06ca1b4698eab7ec2118297f04a66dc0fa77",
+      "knowledge/PROGRESS.md": "57abb64356e1b8e60112d08ecde2738cf252b1a302c57880b4c2a1fde3aae159",
+      "knowledge/execution/change-sets.json": "84e1f62bf0ea0cfb8114b29bc717f49eae42ceaa0f348335f1f800adf31e0301",
+      "knowledge/product/FEATURE_CATALOG.md": "a545a3ed30a6f403bde65afaddaba7f7a120bf2d76682a957d51a15fbed4fdad",
+      "knowledge/guides/USER_GUIDE.md": "e157570fd7d0d92d4c522da8df2d62cb5d08ef26ea85bd18b8a42e1f2b3047a6"
+    }
   }
 }

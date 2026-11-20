@@ -71,6 +71,30 @@ SUPERVISED_ACTIVE_SECONDS = 1710
 VERIFIED_CLEANUP_SCENARIOS = SUPERVISED_SCENARIOS | {CANCELLATION, FUNDING, TWO_JOURNEYS, PACKAGE_BOOKING, OPERATIONAL}
 
 
+def validate_demo_fixture(data):
+    if data.get('classification') != 'SYNTHETIC_TEST_ONLY' or data.get('brand') != 'CineNest':
+        raise ValueError('Explicit synthetic CineNest fixture required')
+    venue,room,package,payment,boundaries=(data.get(k,{}) for k in ('venue','room','package','payment','boundaries'))
+    if venue.get('label') != 'CineNest Main Branch (DEMO)' or venue.get('timezone') != 'Asia/Colombo':
+        raise ValueError('Unexpected demo venue scope')
+    if venue.get('operatingWindows') != [{'isoWeekday':i,'startMinute':0,'endMinute':1440} for i in range(1,8)]:
+        raise ValueError('Seven full local demo days required')
+    if room.get('label') != 'Private Cinema Room 01' or room.get('plannedCapacity') != 5 or room.get('cleaningBufferMinutes') != 15 or room.get('inspectedCapacity') is not None:
+        raise ValueError('Demo room planning values drifted')
+    expected={'currency':'LKR','sessionMinutes':180,'minimumMinutes':180,'basePriceMinor':250000,'includedGuests':4,'maximumGuests':5,'fifthGuestPriceMinor':80000,'additionalHourPriceMinor':100000,'additionalHourMinutes':60,'commercialApproval':False}
+    if any(package.get(k)!=v or type(package.get(k)) is not type(v) for k,v in expected.items()):
+        raise ValueError('Exact demo pricing and duration required')
+    roles={'customer','operations','booking-inventory','bank-verifier','bank-allocator','admission','cleaner','independent-turnover-reviewer'}
+    principals=data.get('principals',[])
+    if len(principals)!=8 or {p.get('role') for p in principals}!=roles or len({p.get('subject') for p in principals})!=8 or len({p.get('syntheticId') for p in principals})!=8 or any(p.get('classification')!='SYNTHETIC_TEST_ONLY' for p in principals):
+        raise ValueError('Eight separated synthetic principals required')
+    if payment.get('method')!='SYNTHETIC_MANUAL_BANK_TRANSFER' or payment.get('realSettlement') is not False or payment.get('realBankAccount') is not None or payment.get('receiptIsVerifiedCredit') is not False:
+        raise ValueError('Real bank operations prohibited')
+    if boundaries.get('productionAuthorization')!='NONE' or boundaries.get('liveIdentityIntake') is not False or boundaries.get('liveAdmission') is not False or boundaries.get('physicalOccupancy')!='UNKNOWN' or boundaries.get('physicalReadiness')!='UNVERIFIED' or boundaries.get('allowedTarget')!='TASK_OWNED_DISPOSABLE_TEST_RUNTIME_ONLY':
+        raise ValueError('Production and physical evidence boundary required')
+    return data
+
+
 def preflight(supervised=False):
     if any(os.environ.get(k) for k in ['NODE_OPTIONS','JAVA_TOOL_OPTIONS','JDK_JAVA_OPTIONS','_JAVA_OPTIONS','MAVEN_OPTS','MAVEN_ARGS']):
         raise RuntimeError('Unset tool option-injection variables before qualification')
@@ -187,7 +211,7 @@ def cleanup(path):
         evidence.mkdir(mode=0o700, exist_ok=True)
         if evidence.resolve() != evidence or evidence.stat().st_mode & 0o077:
             raise RuntimeError('Unsafe operational evidence directory')
-        for filename in ('result.json', 'private-backend-journey.log', 'private-browser.log', 'database-ownership.json', 'database-port.json'):
+        for filename in ('result.json', 'private-backend-journey.log', 'private-browser.log', 'database-ownership.json', 'database-port.json', 'demo-customer.png', 'demo-staff.png'):
             source=path/filename
             if source.is_file() and not source.is_symlink():
                 shutil.copyfile(source,evidence/filename)
@@ -373,6 +397,11 @@ def inside(path):
         for key in ('DISPLAY', 'WAYLAND_DISPLAY', 'XAUTHORITY'):
             if key in os.environ:
                 env[key] = os.environ[key]
+    if state.get('demoFixture'):
+        fixture_file=path/'demo-fixture.json'
+        fixture_file.write_text(json.dumps(validate_demo_fixture(state['demoFixture'])))
+        os.chmod(fixture_file,0o600)
+        env['CINENEST_DEMO_FIXTURE']=str(fixture_file)
     env['NEXT_TELEMETRY_DISABLED'] = '1'
     active_deadline = time.monotonic() + 1500
     timeout = SUPERVISED_ACTIVE_SECONDS if supervised else 540
@@ -465,6 +494,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--scenario', choices=['campaign','bank-instructions','h1',SUPERVISED,ADMIN_QA,CANCELLATION,FUNDING,TWO_JOURNEYS,PACKAGE_BOOKING,OPERATIONAL], default='campaign')
+    parser.add_argument('--demo-fixture', type=Path)
     parser.add_argument('--inside', type=Path)
     parser.add_argument('--cleanup', type=Path)
     args = parser.parse_args()
@@ -475,6 +505,10 @@ def main():
         if args.inside:
             inside(args.inside)
             return 0
+        demo=None
+        if args.demo_fixture:
+            if args.scenario != OPERATIONAL: raise ValueError('Demo fixture is customer-turnover only')
+            demo=validate_demo_fixture(json.loads(args.demo_fixture.read_text()))
         supervised = args.scenario in SUPERVISED_SCENARIOS
         versions = preflight(supervised=True) if supervised else preflight()
         print(json.dumps({'preflight': 'TOOLS_PRESENT', 'versions': versions,
@@ -483,7 +517,7 @@ def main():
             return 0
         path = Path(tempfile.mkdtemp(prefix='cinenest-e2e-'))
         os.chmod(path, 0o700)
-        (path/'ownership.json').write_text(json.dumps({'name': path.name, 'scenario': args.scenario}))
+        (path/'ownership.json').write_text(json.dumps({'name': path.name, 'scenario': args.scenario, **({'demoFixture':demo} if demo else {})}))
         script = str(Path(__file__).resolve())
         # The service kills/reaps descendants on exit/timeout; ExecStopPost owns DB cleanup even after SIGKILL.
         command = ['systemd-run', '--user', '--wait', '--pipe', '--collect', '--unit='+path.name,

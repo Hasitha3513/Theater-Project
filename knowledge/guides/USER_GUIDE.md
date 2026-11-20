@@ -584,3 +584,10 @@ In the staff booking detail, load **Synthetic session operations**. Record START
 ### Qualification workflow: customer to independent turnover review
 
 Use the existing opt-in synthetic runner with scenario customer-turnover only in its separately authorized disposable runtime. The journey signs in existing synthetic accounts; it does not test production registration. Customer quote acceptance and receipt evidence precede separate synthetic credit verification and allocation. Staff check-in and START require current booking/roster scope and synthetic eligibility. CHECKOUT links to one cleaning case; a different authorized reviewer resolves the cleaner's completed checklist. Resolution leaves occupancy UNKNOWN, physical readiness UNVERIFIED and inventory unchanged. Never enter actual bank or identity evidence. [Recorded outcome](../PROGRESS.md#customer-turnover-real-backend-e2e).
+
+
+## Eight-principal synthetic qualification
+
+In an explicitly authorized disposable environment, use the existing runner with `--scenario customer-turnover --demo-fixture /absolute/path/to/fixture.json`. Without `--execute` it performs preflight only. The fixture must be SYNTHETIC_TEST_ONLY and satisfy the fixed planning values and eight-role separation; it is copied into private task-owned runtime storage. Add `--execute` only under an unused bounded runtime authorization. No production target or genuine bank/identity record is permitted.
+
+The generated runtime manifest records actual subject/account bindings for the eight roles; private input declaration identifiers are not staff appointments. Existing customer and staff components show the synthetic booking/session; no new dashboard or live feature is enabled. Customer/staff screenshots are evidence only when capture succeeds. Cleanup removes owned backend/frontend/Chromium, PostgreSQL and private fixtures and preserves unrelated resources. Original non-demo journeys remain selected by omitting the fixture. [Evidence and limits](../PROGRESS.md#eight-principal-demo-qualification).
