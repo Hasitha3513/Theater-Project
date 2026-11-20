@@ -18,7 +18,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
     env:
       V42_FOCUSED: ${{ github.event_name == 'workflow_dispatch' && inputs.v42_postgres }}
       V42_EXPECTED_SHA: ${{ inputs.expected_sha }}

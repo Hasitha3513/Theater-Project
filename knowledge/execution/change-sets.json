@@ -7900,5 +7900,45 @@
     "siteScope": "UNVERIFIED",
     "hardwareAutomation": "DEFERRED_PART_2",
     "independentSafetyReview": "REQUIRED_NOT_RECEIVED"
+  },
+  "day03CiBudgetRecovery": {
+    "id": "CN-DAY03-CI-BUDGET-RECOVERY-001",
+    "baseline": "d7b44c07037be58b3b1375991704d09db17d51a9",
+    "status": "READY",
+    "authority": {
+      "name": "Hasitha Wijerathna",
+      "source": "Direct Owner message: CINENEST \u2014 PR #20 CI TIMEOUT RECOVERY; EXPLICIT BOUNDED OWNER AUTHORIZATION",
+      "dateLocal": "2026-11-20",
+      "timezone": "Asia/Colombo",
+      "evidenceStatus": "OWNER_DIRECTED_IN_CHAT_NOT_VERIFIED_SIGNATURE",
+      "scope": "One added workflow path, verify.timeout-minutes 30 to 45 only; existing hardware documentation/governance admission controls, governed successor commit/PR CI and conditional merge/main CI"
+    },
+    "orderedPaths": [
+      ".github/workflows/foundation.yml",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "workflowDelta": {
+      "job": "verify",
+      "beforeMinutes": 30,
+      "afterMinutes": 45,
+      "otherSettingsChanged": false,
+      "checksRemovedOrWeakened": false
+    },
+    "acceptance": [
+      "Exact one-line workflow change and preserved complete checks",
+      "Preserve original seven-path hardware amendment, blocked gates and all historical evidence",
+      "Historical replay, standalone negative controls, workflow contracts, YAML/manifest/fingerprint/whitespace validation",
+      "No production application, schema, runtime grants or formal acceptance change"
+    ],
+    "rollback": "Reviewed workflow/documentation successor revert preserving approval and failed CI history; restore 30-minute budget if necessary, keep merge blocked if required CI cannot finish; no data/runtime mutation. Further timeout increases need separate explicit approval.",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE"
   }
 }
