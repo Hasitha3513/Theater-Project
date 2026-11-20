@@ -1213,3 +1213,15 @@ Ordinary staff views show the booking scope and time, confirmation state, counts
 Owner approval permits synthetic START after matching V44 check-in and current booking, roster, eligibility and venue authority. PostgreSQL time must be within the purchased [start,end) interval. CHECKOUT requires matching START, current booking and roster, and current venue authority. Late checkout records the actual database time without extending paid terms or allocating charges. The recorded timestamp is a staff assertion time. Physical occupancy remains UNKNOWN and readiness UNVERIFIED.
 
 Dedicated synthetic session read, start and checkout permissions are venue scoped. Explicit cleaning handoff and recovery require current operations read, record and handoff retry authority. A checkout remains recorded when cleaning handoff fails. No new service identity or grant is provisioned. Real identity processing, admission, staffing and safety acceptance remain open.
+
+
+<a id="day03-staff-managed-hardware-mapping"></a>
+## Day 03 staffed hardware evidence mapping — Owner approved 2026-11-20
+
+DAY03_STAFF_MANAGED_HARDWARE_MAPPING_V1 is explicitly approved by Hasitha Wijerathna in the Owner message “EXPLICIT OWNER APPROVAL — DAY 03 HARDWARE MAPPING”. Evidence is an attributable in-chat Owner decision; signature verification is not established. This model-level approval permits the exact seven documentation/governance paths and conditional governed delivery, not a site certification, staff appointment, specialist finding or live operation.
+
+PART 1 uses configurable 24/7 schedules, manual bank deposit/transfer, staff-managed admission/check-in/check-out and cleaning with independent cleaning review. Smart-lock automation, automated PIN provisioning and IoT-controlled admission are DEFERRED_PART_2. The historical automated hardware evidence remains preserved in the execution registry.
+
+G-HARDWARE remains mandatory and blocked: exact real venue/room, qualified inspection of applicable installed equipment, controlled staff/manual entry and safe exit, emergency access, power/network/software outage procedures and independent emergency egress require actual scoped evidence. G-ADMISSION remains unchanged and blocked, including named staff, applicable original-document/privacy requirements, capacity, cleaning, vacancy/readiness observation and independent review. Current operations software cannot certify physical occupancy or readiness. OD-02 remains OPEN_DECISION; its existing physical evidence and unresolved actual-site accountability are retained. No evidence owner, competence, signature or appointment is inferred from this product decision.
+
+All other decisions and real commercial/financial/privacy/legal/safety/release requirements remain unchanged. Form A remains OWNER_REPORTED_DEFER; Day 03 BLOCKED, Days 05/06 formal acceptance pending, G-ROOM-BLOCK NOT_SATISFIED; official PART 1 remains 4/7 (57.14%), production authorization NONE. [Execution record](PROGRESS.md#day03-staff-managed-hardware-mapping).

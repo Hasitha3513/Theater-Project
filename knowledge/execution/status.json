@@ -32270,5 +32270,51 @@
       "scripts/test-synthetic-e2e.py": "bd7bf83dd6b9066ff94c33bb136d22cf7ac1bec3c42ad525aab2cf6c7e0e88e4",
       "scripts/verify-synthetic-e2e.py": "2a66e61f0a5e4ddbfb1be23b358131497ac9ce97868b8579aa1d2336dbfc7890"
     }
+  },
+  "day03StaffManagedHardwareMapping": {
+    "id": "DAY03_STAFF_MANAGED_HARDWARE_MAPPING_V1",
+    "baseline": "367f71996a1d33dfe7dae55e5f1976edb5bfdcf8",
+    "status": "READY",
+    "authority": {
+      "name": "Hasitha Wijerathna",
+      "role": "Recorded Project Owner",
+      "source": "Direct Owner message in this conversation: EXPLICIT OWNER APPROVAL \u2014 DAY 03 HARDWARE MAPPING",
+      "dateLocal": "2026-11-20",
+      "timezone": "Asia/Colombo",
+      "evidenceStatus": "OWNER_DIRECTED_IN_CHAT",
+      "signatureVerification": "NOT_ESTABLISHED",
+      "scope": "Exact seven documentation/governance paths; admission, implementation, validation, conditional PR/CI/merge; no site certification or production authority"
+    },
+    "orderedPaths": [
+      "knowledge/PROJECT.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/decisions/cinenest-open-decisions.json",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "acceptance": [
+      "Version PART 1 hardware evidence for staff-managed entry and preserve historical automated route",
+      "Retain G-HARDWARE and G-ADMISSION BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+      "Preserve OD-02 OPEN_DECISION and unresolved physical evidence; no appointments or specialist findings invented",
+      "No changes to application, migrations, runtime grants or formal acceptance accounting",
+      "Historical replay, negative controls, manifest, exact source inventory and whitespace must pass before publication"
+    ],
+    "rollback": "Reviewed documentation/governance revert preserving Owner approval provenance and historical evidence; keep gates blocked and all safety obligations; never delete financial, booking, identity or audit history. No database rollback or runtime mutation.",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE",
+    "siteScope": "UNVERIFIED",
+    "hardwareAutomation": "DEFERRED_PART_2",
+    "independentSafetyReview": "REQUIRED_NOT_RECEIVED",
+    "sourceSha256": {
+      "knowledge/PROJECT.md": "5404dfaef017e2f9111956705e131eadf198ef200a5be79923f41eb9e34e35c6",
+      "knowledge/PROGRESS.md": "96b645a75302fa7202b6d365fd3fe33389cbefb5a5a09037dec6b3c2611df9db",
+      "knowledge/decisions/cinenest-open-decisions.json": "b9730595d04d7e976eb905361de72bad0fc2e973106bd94f1416fed2f5cd45e0",
+      "knowledge/execution/change-sets.json": "b20304f6d199174a887ccc05631ae09d616eaf7164a7c2bafdf1c72ec5e521a5"
+    }
   }
 }

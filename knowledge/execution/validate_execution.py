@@ -17957,5 +17957,155 @@ receipt_admission_successor_errors = operational_journey_errors
 inert_ci_main = operational_journey_main
 
 
+
+# Owner-approved DAY03_STAFF_MANAGED_HARDWARE_MAPPING_V1 additive successor.
+DAY03_MAPPING_STATE = {'id': 'DAY03_STAFF_MANAGED_HARDWARE_MAPPING_V1',
+ 'baseline': '367f71996a1d33dfe7dae55e5f1976edb5bfdcf8',
+ 'status': 'READY',
+ 'authority': {'name': 'Hasitha Wijerathna',
+               'role': 'Recorded Project Owner',
+               'source': 'Direct Owner message in this conversation: EXPLICIT OWNER APPROVAL — DAY 03 '
+                         'HARDWARE MAPPING',
+               'dateLocal': '2026-11-20',
+               'timezone': 'Asia/Colombo',
+               'evidenceStatus': 'OWNER_DIRECTED_IN_CHAT',
+               'signatureVerification': 'NOT_ESTABLISHED',
+               'scope': 'Exact seven documentation/governance paths; admission, implementation, '
+                        'validation, conditional PR/CI/merge; no site certification or production '
+                        'authority'},
+ 'orderedPaths': ['knowledge/PROJECT.md',
+                  'knowledge/PROGRESS.md',
+                  'knowledge/decisions/cinenest-open-decisions.json',
+                  'knowledge/execution/change-sets.json',
+                  'knowledge/execution/status.json',
+                  'knowledge/execution/validate_execution.py',
+                  'knowledge/manifest.json'],
+ 'acceptance': ['Version PART 1 hardware evidence for staff-managed entry and preserve historical '
+                'automated route',
+                'Retain G-HARDWARE and G-ADMISSION BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE',
+                'Preserve OD-02 OPEN_DECISION and unresolved physical evidence; no appointments or '
+                'specialist findings invented',
+                'No changes to application, migrations, runtime grants or formal acceptance accounting',
+                'Historical replay, negative controls, manifest, exact source inventory and whitespace '
+                'must pass before publication'],
+ 'rollback': 'Reviewed documentation/governance revert preserving Owner approval provenance and '
+             'historical evidence; keep gates blocked and all safety obligations; never delete '
+             'financial, booking, identity or audit history. No database rollback or runtime mutation.',
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'siteScope': 'UNVERIFIED',
+ 'hardwareAutomation': 'DEFERRED_PART_2',
+ 'independentSafetyReview': 'REQUIRED_NOT_RECEIVED',
+ 'sourceSha256': {'knowledge/PROJECT.md': '5404dfaef017e2f9111956705e131eadf198ef200a5be79923f41eb9e34e35c6',
+                  'knowledge/PROGRESS.md': '96b645a75302fa7202b6d365fd3fe33389cbefb5a5a09037dec6b3c2611df9db',
+                  'knowledge/decisions/cinenest-open-decisions.json': 'b9730595d04d7e976eb905361de72bad0fc2e973106bd94f1416fed2f5cd45e0',
+                  'knowledge/execution/change-sets.json': 'b20304f6d199174a887ccc05631ae09d616eaf7164a7c2bafdf1c72ec5e521a5'}}
+DAY03_MAPPING_KEY = 'day03StaffManagedHardwareMapping'
+DAY03_MAPPING_PATHS = set(DAY03_MAPPING_STATE['orderedPaths'])
+
+def day03_mapping_errors():
+    import hashlib
+    try:
+        base = DAY03_MAPPING_STATE['baseline']
+        v41_git('merge-base', '--is-ancestor', DAY03_MAPPING_STATE['baseline'], 'HEAD')
+        changed = parse_git_paths(v41_git('diff', '--no-ext-diff', DAY03_MAPPING_STATE['baseline'], '--name-only', '-z'), nul=True)
+        if changed != DAY03_MAPPING_PATHS:
+            return ['Day03 mapping exact changed paths mismatch']
+        blob = lambda name: v41_git('show', base + ':' + name)
+        rows = v41_git('ls-tree', '-rz', '--full-tree', base).split(b'\0')
+        inventory = {}
+        for row in rows:
+            if row:
+                meta, name = row.split(b'\t', 1)
+                inventory[name.decode()] = meta.split()
+        actual = set(v41_git('ls-files', '-z', text=True).split('\0')) - {''}
+        if actual != set(inventory) or v41_git('ls-files', '--others', '--exclude-standard', '-z'):
+            return ['Day03 mapping exact path inventory mismatch']
+        migrations = {p.name for p in (R / 'backend/src/main/resources/db/migration').glob('*')}
+        expected = {p.rsplit('/',1)[1] for p in inventory if p.startswith('backend/src/main/resources/db/migration/')}
+        if len(expected) != 44 or migrations != expected:
+            return ['Day03 mapping migration inventory mismatch']
+        for name, (mode, kind, oid) in inventory.items():
+            p = R / name
+            if kind != b'blob' or not p.is_file() or p.is_symlink() or bool(p.stat().st_mode & 0o111) != (mode == b'100755'):
+                return ['Day03 mapping unsafe source: ' + name]
+            if name not in DAY03_MAPPING_PATHS:
+                data = p.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode() != oid:
+                    return ['Day03 mapping predecessor drift: ' + name]
+        status = json.loads((R / 'knowledge/execution/status.json').read_bytes())
+        if status.pop(DAY03_MAPPING_KEY, None) != DAY03_MAPPING_STATE or status != json.loads(blob('knowledge/execution/status.json')):
+            return ['Day03 mapping status or acceptance mismatch']
+        for name, digest in DAY03_MAPPING_STATE['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest() != digest:
+                return ['Day03 mapping fingerprint mismatch: ' + name]
+        previous = blob('knowledge/execution/validate_execution.py')
+        if not (R/'knowledge/execution/validate_execution.py').read_bytes().startswith(previous[:-len(DAY03_MAPPING_ENTRYPOINT)]):
+            return ['Day03 mapping historical validator mismatch']
+        manifest = json.loads(blob('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in DAY03_MAPPING_PATHS - {'knowledge/manifest.json'}:
+                row['sha256'] = hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes() != (json.dumps(manifest,indent=2)+'\n').encode():
+            return ['Day03 mapping manifest mismatch']
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
+        return ['Day03 mapping inaccessible admission inputs']
+    return []
+
+def day03_mapping_controls():
+    from unittest.mock import patch
+    read = Path.read_bytes
+    def reject(name, data):
+        target = R/name
+        with patch.object(Path,'read_bytes',lambda p: data if p == target else read(p)):
+            if not day03_mapping_errors():
+                raise ValueError('Day03 mapping accepted unauthorized drift: '+name)
+    for name in DAY03_MAPPING_STATE['sourceSha256']:
+        reject(name, b'drift')
+    for name in ('knowledge/execution/requirements.json', 'backend/src/main/resources/db/migration/V45__synthetic_staff_session_lifecycle.sql', 'knowledge/manifest.json'):
+        if (R/name).exists(): reject(name,b'drift')
+    status = json.loads(read(R/'knowledge/execution/status.json'))
+    for field, value in [('productionAuthorization','GRANTED'),('status','ACCEPTED')]:
+        changed = json.loads(json.dumps(status));changed[DAY03_MAPPING_KEY][field]=value
+        reject('knowledge/execution/status.json',json.dumps(changed).encode())
+    changed = json.loads(json.dumps(status));changed[DAY03_MAPPING_KEY]['part1']['completed']=5
+    reject('knowledge/execution/status.json',json.dumps(changed).encode())
+    git = v41_git
+    def extra(*args,**kwargs):
+        result=git(*args,**kwargs)
+        return result+b'unapproved.txt\0' if args[0]=='ls-files' else result
+    with patch.dict(globals(),{'v41_git':extra}):
+        if not day03_mapping_errors():raise ValueError('Day03 mapping accepted extra path')
+    glob = Path.glob
+    def extra_migration(p,pattern,*args,**kwargs):
+        yield from glob(p,pattern,*args,**kwargs)
+        if p==R/'backend/src/main/resources/db/migration' and pattern=='*':
+            yield p/'V46__unapproved.sql'
+    # Use a real existing migration path to emulate a second inventory entry without file writes.
+    def injected(p,pattern,*args,**kwargs):
+        yield from glob(p,pattern,*args,**kwargs)
+        if p==R/'backend/src/main/resources/db/migration' and pattern=='*':
+            yield R/'AGENTS.md'
+    with patch.object(Path,'glob',injected):
+        if not day03_mapping_errors():raise ValueError('Day03 mapping accepted extra migration')
+    print('PASS Day03 mapping scope, approval, blocked gates, acceptance, migration and fingerprint negative controls',flush=True)
+
+def day03_mapping_main():
+    import sys,tempfile
+    errors=day03_mapping_errors()
+    if errors:
+        print('\n'.join('FAIL '+x for x in errors));return 1
+    day03_mapping_controls()
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-day03-mapping-replay-') as tmp:
+        checkout=Path(tmp)/'predecessor'
+        subprocess.run(['git','clone','--quiet','--no-local','--no-checkout','--',common,str(checkout)],check=True)
+        subprocess.run(['git','-C',str(checkout),'checkout','--quiet','--detach',DAY03_MAPPING_STATE['baseline']],check=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=checkout).returncode
+
+DAY03_MAPPING_ENTRYPOINT = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+receipt_admission_successor_errors = day03_mapping_errors
+inert_ci_main = day03_mapping_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

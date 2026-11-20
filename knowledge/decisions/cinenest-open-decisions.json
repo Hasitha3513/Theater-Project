@@ -163,6 +163,25 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "realEquipmentControl": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "day03StaffManagedHardwareMapping": {
+        "version": "DAY03_STAFF_MANAGED_HARDWARE_MAPPING_V1",
+        "approval": {
+          "name": "Hasitha Wijerathna",
+          "role": "Recorded Project Owner",
+          "source": "Direct Owner message in this conversation: EXPLICIT OWNER APPROVAL \u2014 DAY 03 HARDWARE MAPPING",
+          "dateLocal": "2026-11-20",
+          "timezone": "Asia/Colombo",
+          "evidenceStatus": "OWNER_DIRECTED_IN_CHAT",
+          "signatureVerification": "NOT_ESTABLISHED",
+          "scope": "Exact seven documentation/governance paths; admission, implementation, validation, conditional PR/CI/merge; no site certification or production authority"
+        },
+        "operatingModel": "STAFF_MANAGED_ENTRY",
+        "automatedAdmission": "DEFERRED_PART_2",
+        "physicalEvidence": "Qualified venue/equipment inspection, safe controlled entry and exit, independent emergency egress, outage/emergency procedures, named venue staff, physical readiness and relevant Legal/Privacy findings remain required.",
+        "actualSite": "UNVERIFIED",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "formalAcceptanceChanged": false
       }
     },
     {
@@ -1758,8 +1777,7 @@
       }
     }
   ],
-  "lastUpdatedTask": "CN-R1-PAYSLIP-BOUNDARY-001"
-,
+  "lastUpdatedTask": "CN-R1-PAYSLIP-BOUNDARY-001",
   "part1ContinuousHoursInventory": {
     "status": "OWNER_APPROVED_PRODUCT_DIRECTION",
     "source": "Owner directive CINENEST \u2014 MVP PART 1 COMMERCIAL IMPLEMENTATION",

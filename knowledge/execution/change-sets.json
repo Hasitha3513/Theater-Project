@@ -5427,8 +5427,10 @@
         "decisionIds": [
           "OD-02"
         ],
-        "requiredEvidence": "Owner and qualified installer: exact lock/controller make, model, firmware, documented protocol/SDK/license, PIN format/limits, idempotency/readback, local clock/timezone, offline/reboot/re-entry/revocation and power/manual override. No vendor or compatible PIN format selected.",
-        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION"
+        "requiredEvidence": "PART 1 STAFF_MANAGED_ENTRY: Owner supplies exact actual venue/room and named venue-scoped Operations authority. Qualified Site Safety and applicable competent equipment specialists inspect the installed equipment, safe staffed/manual entry and exit, emergency access, power/network/software outage fallback and independent emergency egress. Record physical readiness and operational procedures with attributable scoped findings; software configuration, timers, checkout or synthetic tests do not certify vacancy/readiness. Automated smart-lock/controller/PIN/IoT commissioning is DEFERRED_PART_2, not accepted. Preserve privacy, legal and independent-review requirements; keep this gate blocked until genuine scoped evidence passes.",
+        "assignedReviewer": "PENDING_EXACT_VENUE_AND_ACCEPTED_QUALIFICATION",
+        "historicalRequiredEvidenceBeforeStaffManagedPart1": "Owner and qualified installer: exact lock/controller make, model, firmware, documented protocol/SDK/license, PIN format/limits, idempotency/readback, local clock/timezone, offline/reboot/re-entry/revocation and power/manual override. No vendor or compatible PIN format selected.",
+        "evidenceMappingVersion": "DAY03_STAFF_MANAGED_HARDWARE_MAPPING_V1"
       },
       {
         "id": "G-ADMISSION",
@@ -7858,5 +7860,45 @@
       "maximumSecondsIncludingCleanup": 1800,
       "disposition": "CONSUMED_ONE_CONTAINER_ONE_ATTEMPT_168_378_SECONDS_CLEANUP_VERIFIED"
     }
+  },
+  "day03StaffManagedHardwareMapping": {
+    "id": "DAY03_STAFF_MANAGED_HARDWARE_MAPPING_V1",
+    "baseline": "367f71996a1d33dfe7dae55e5f1976edb5bfdcf8",
+    "status": "READY",
+    "authority": {
+      "name": "Hasitha Wijerathna",
+      "role": "Recorded Project Owner",
+      "source": "Direct Owner message in this conversation: EXPLICIT OWNER APPROVAL \u2014 DAY 03 HARDWARE MAPPING",
+      "dateLocal": "2026-11-20",
+      "timezone": "Asia/Colombo",
+      "evidenceStatus": "OWNER_DIRECTED_IN_CHAT",
+      "signatureVerification": "NOT_ESTABLISHED",
+      "scope": "Exact seven documentation/governance paths; admission, implementation, validation, conditional PR/CI/merge; no site certification or production authority"
+    },
+    "orderedPaths": [
+      "knowledge/PROJECT.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/decisions/cinenest-open-decisions.json",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "acceptance": [
+      "Version PART 1 hardware evidence for staff-managed entry and preserve historical automated route",
+      "Retain G-HARDWARE and G-ADMISSION BLOCKED_PENDING_SEPARATE_APPROVAL_AND_EVIDENCE",
+      "Preserve OD-02 OPEN_DECISION and unresolved physical evidence; no appointments or specialist findings invented",
+      "No changes to application, migrations, runtime grants or formal acceptance accounting",
+      "Historical replay, negative controls, manifest, exact source inventory and whitespace must pass before publication"
+    ],
+    "rollback": "Reviewed documentation/governance revert preserving Owner approval provenance and historical evidence; keep gates blocked and all safety obligations; never delete financial, booking, identity or audit history. No database rollback or runtime mutation.",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "productionAuthorization": "NONE",
+    "siteScope": "UNVERIFIED",
+    "hardwareAutomation": "DEFERRED_PART_2",
+    "independentSafetyReview": "REQUIRED_NOT_RECEIVED"
   }
 }
