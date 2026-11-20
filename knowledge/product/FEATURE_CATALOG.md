@@ -904,3 +904,15 @@ The opt-in customer-turnover scenario links the existing synthetic customer book
 ## Eight-principal synthetic demo qualification
 
 The opt-in customer-to-turnover test harness accepts the approved SYNTHETIC_TEST_ONLY demo input and separates customer, Operations, Booking/Inventory, bank-credit verifier, allocator, admission, cleaner and independent review actors. It exercises existing customer/staff HTTP/UI with explicit test-only eligibility and statement facts. This is test functionality, not commercial/site approval or a persistent deployed environment. One PostgreSQL-backed method and eight real-backend Chromium groups passed with eight actors and verified cleanup; two screenshots are retained with capture-timing limitations. See [qualification record](../PROGRESS.md#eight-principal-demo-qualification).
+
+## Cloud Run packaging qualification
+
+CN-GCP-CLOUD-RUN-PACKAGING-001 provides an explicit deployment profile, minimal health observations, standalone frontend packaging and a non-deployable approval-placeholder contract for the existing modular application. Health UP establishes process/schema observation only, never payment, customer, physical readiness or release approval. No production feature, account, grant or environment is activated. Local image/runtime outcomes and their limitations are recorded at [qualification](../PROGRESS.md#cloud-run-packaging).
+
+Current qualification: backend Docker build passed; frontend packaging omission corrected with an offline regression and host production compile. Corrected image/startup/PostgreSQL qualification remains blocked pending a fresh bounded runtime approval. No deployed environment is claimed.
+
+Cloud Run packaging qualification update: backend/frontend production image builds and runtime-content inspection passed with bounded build workers. End-to-end container startup and database validation remain unqualified after PostgreSQL TLS readiness failure; no deployment or production use authorized.
+
+Packaging evidence update: authenticated disposable PostgreSQL18.6 verify-full TLS passed. Schema and application startup remain unqualified because isolated Docker networking returned no published host ports; the bounded loopback test-relay correction is unit-qualified only. Do not use this as deployment or commercial authorization.
+
+Cloud Run packaging is locally qualified:14/14 container groups PASS for production-compatible images,certificate-verified disposable PostgreSQL,validate-only startup,health/security,failure recovery and cleanup. This supersedes prior local packaging blockers; live cloud connectivity and production/commercial qualification remain pending.

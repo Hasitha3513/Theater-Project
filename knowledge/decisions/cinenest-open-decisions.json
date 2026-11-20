@@ -126,6 +126,17 @@
         "fullDecisionStatus": "OPEN_DECISION",
         "realEquipmentControl": "DISABLED",
         "gateway": "DEFERRED_BLOCKED"
+      },
+      "boundedCloudRunPackaging": {
+        "status": "APPROVED_OFFLINE_PACKAGING_ONLY",
+        "source": "Direct Owner CLOUD RUN PACKAGING \u2014 BOUNDED OWNER AUTHORIZATION",
+        "baseline": "4833f95b69372fe7bfc9879ecb7fecfc868f1a58",
+        "taskId": "CN-GCP-CLOUD-RUN-PACKAGING-001",
+        "scope": "Exact20paths; one local30minute qualification; shared Cloud Run service identity/topology; conditional governed software publication",
+        "fullDecisionStatus": "OPEN_DECISION",
+        "cloudMutation": "NOT_AUTHORIZED",
+        "productionDeployment": "NOT_AUTHORIZED",
+        "liveAuthenticationBankingAdmission": "NOT_AUTHORIZED"
       }
     },
     {

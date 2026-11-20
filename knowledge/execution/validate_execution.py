@@ -18469,5 +18469,400 @@ EIGHT_DEMO_ENTRYPOINT = b"if __name__ == '__main__':\n    raise SystemExit(inert
 receipt_admission_successor_errors = eight_demo_errors
 inert_ci_main = eight_demo_main
 
+
+# Additive Owner-approved Cloud Run packaging successor; predecessor is replayed unchanged.
+CLOUD_RUN_STATE = {'id': 'CN-GCP-CLOUD-RUN-PACKAGING-001',
+ 'baseline': '4833f95b69372fe7bfc9879ecb7fecfc868f1a58',
+ 'status': 'READY',
+ 'authority': {'name': 'Hasitha Wijerathna',
+               'source': 'Direct Owner message CLOUD RUN PACKAGING — BOUNDED OWNER AUTHORIZATION '
+                         'in this conversation',
+               'recordedUtc': '2026-11-20T11:32:23.330338+00:00',
+               'evidence': 'OWNER_DIRECTED_IN_CHAT_NOT_SIGNATURE_VERIFICATION',
+               'proposalSha256': '0a6f2fb1562c66c8c3c7d985fa16a1568365450d2fc83406c95ee5e72abdea87'},
+ 'orderedPaths': ['backend/Dockerfile',
+                  'frontend/Dockerfile',
+                  '.dockerignore',
+                  'frontend/next.config.mjs',
+                  'backend/src/main/resources/application-cloud-run.properties',
+                  'backend/src/main/java/com/cinenest/foundation/internal/CloudRunRuntimeConfiguration.java',
+                  'backend/src/test/java/com/cinenest/CloudRunRuntimeIT.java',
+                  'frontend/app/healthz/route.ts',
+                  'deployment/cloud-run/service.template.yaml',
+                  'scripts/verify-cloud-run.py',
+                  'scripts/test-cloud-run.py',
+                  'knowledge/ARCHITECTURE.md',
+                  'knowledge/PROGRESS.md',
+                  'knowledge/decisions/cinenest-open-decisions.json',
+                  'knowledge/execution/change-sets.json',
+                  'knowledge/execution/status.json',
+                  'knowledge/execution/validate_execution.py',
+                  'knowledge/manifest.json',
+                  'knowledge/product/FEATURE_CATALOG.md',
+                  'knowledge/guides/USER_GUIDE.md'],
+ 'acceptance': ['Exact 20-path scope, no migrations, no business-logic or policy changes, '
+                'unchanged historical fingerprints',
+                'Both digest-pinned non-root images build reproducibly; lock/toolchain consistency '
+                'and final image secret/fixture exclusion',
+                'Correct interfaces/ports, actual startup dependency probes, graceful SIGTERM and '
+                'structured redacted logs',
+                'Missing credentials fail closed; forbidden synthetic production profiles/flags '
+                'rejected; no account/grant/financial/access bootstrap',
+                'Health success and DB/schema-unavailable denial with no diagnostics leakage; '
+                'normal protected routes and CSRF remain denied without authority',
+                'Startup does not migrate schema; runtime role cannot perform DDL; all44 '
+                'historical migrations unchanged',
+                'Frontend production assets, environment-specific upstream, forwarded HTTPS/origin '
+                'checks and Secure/HttpOnly/SameSite cookie regression',
+                'Architecture, targeted backend/frontend/security tests, runner negative controls, '
+                'KB/manifest, governance historical replay and whitespace',
+                'Inventory-matched cleanup of only task-owned resources, checksummed evidence and '
+                'explicit NOT_RUN cloud connectivity/restore/live operations'],
+ 'rollback': 'Keep cloud-run configuration disabled; revert only this reviewed packaging successor '
+             'through normal Git, retain all historical decisions, schema, business/audit data and '
+             'evidence. Stop/remove only newly owned disposable local resources. Do not change '
+             'cloud resources or perform schema down-migration',
+ 'topology': {'deploymentUnit': 'One Cloud Run service, Next.js ingress container and existing '
+                                'Java modular-monolith backend sidecar; no new microservices',
+              'frontend': 'Standalone production output, explicit static/public assets, non-root '
+                          'Node 24.22.0/npm 11.19.1, HOSTNAME=0.0.0.0, PORT supplied at runtime; '
+                          'exclude all .env files, caches, credentials, tests and evidence from '
+                          'final image',
+              'backend': 'Multi-stage checksum-pinned Maven 3.9.16/Java25 build and qualified '
+                         'digest-pinned minimal Java25 runtime; non-root exec entrypoint, explicit '
+                         'sidecar port, bounded graceful shutdown, JSON stdout logs without '
+                         'bodies/tokens/secrets',
+              'containerIdentity': 'Image digests and qualified exact runtime patches recorded '
+                                   'before use; no unqualified tag or toolchain substitution',
+              'health': 'Minimal health-only GET routes, separate liveness from readiness; '
+                        'database/schema readiness and dependency startup probe; no customer, '
+                        'version, credential or diagnostic detail exposure; all other '
+                        'authorization and CSRF rules unchanged',
+              'flyway': 'Cloud-run profile validates already-applied schema and fails closed on '
+                        'missing/pending/invalid migrations; no application-revision migration '
+                        'execution. Separate migration-owner execution, backup/restore and data '
+                        'approval remain required',
+              'configuration': 'Fail closed on missing credentials, malformed ports/origins, '
+                               'synthetic profiles or synthetic feature activation. No embedded '
+                               'production policy, accounts, hostnames or trust approvals',
+              'topologyQualification': 'Proposed shared-instance topology must pass actual '
+                                       'startup/probe, HTTPS-forwarding/origin/secure-cookie '
+                                       'checks and local container qualification before being '
+                                       'called qualified; no production transport assertions from '
+                                       'static review',
+              'identityBoundary': 'Both containers share one Cloud Run service identity and '
+                                  'application trust boundary. This is not per-container IAM '
+                                  'isolation; acceptance of this topology is part of this proposed '
+                                  'architecture approval. No default Compute service-account reuse '
+                                  'is inferred.',
+              'probeBoundary': 'Use established startup/liveness probes and expose application '
+                               'readiness separately. Do not silently enable Preview platform '
+                               'readiness functionality or claim traffic failover until explicitly '
+                               'selected and qualified.'},
+ 'runtime': {'authorizedSessions': 6,
+             'maximumSecondsIncludingCleanup': 1800,
+             'aggregateCpu': 3,
+             'aggregateMemoryGiB': 7,
+             'productionConnection': False,
+             'additionalApproval': {'source': 'Direct attached COMPLETE CLOUD RUN CONTAINER '
+                                              'RUNTIME QUALIFICATION, attachment '
+                                              'dd595be4-cb78-476c-8c0f-499704031693, followed by '
+                                              'direct Owner reply Authorize exact-source rebuilds',
+                                    'recordedUtc': '2026-11-20T15:04:58.396577+00:00',
+                                    'sessions': 1,
+                                    'maximumSecondsIncludingCleanup': 1800,
+                                    'scope': 'Existing exact20paths; one additional local session; '
+                                             'exact-source rebuild explicitly authorized because '
+                                             'prior images removed; conditional governed '
+                                             'publication/CI/merge; no GCP mutation or production '
+                                             'operations',
+                                    'referenceSha256': '9daea6b4a27247f83e64f2218e7a1ee347834a87b4fcd26fdd23e35c78c8cf68'},
+             'approvalReferenceSha256': '9daea6b4a27247f83e64f2218e7a1ee347834a87b4fcd26fdd23e35c78c8cf68',
+             'previousAdditionalApprovals': [{'source': 'Direct Owner FINAL CLOUD RUN PACKAGING '
+                                                        'QUALIFICATION in this conversation',
+                                              'recordedUtc': '2026-11-20T14:14:09.799475+00:00',
+                                              'scope': 'Existing exact20paths, one additional '
+                                                       'local container/PostgreSQL '
+                                                       'session,30minutes including cleanup; '
+                                                       'conditional Git publication/CI/merge; no '
+                                                       'GCP mutation',
+                                              'sessions': 1,
+                                              'maximumSecondsIncludingCleanup': 1800,
+                                              'referenceSha256': '2e9e416b892afb89f9ec5ad53469c30f176e7cb2757ebf11dfeca3b4e419b82c'},
+                                             {'source': 'Direct Owner CLOUD RUN PACKAGING — '
+                                                        'RESOURCE-SAFE FINAL QUALIFICATION in this '
+                                                        'conversation',
+                                              'recordedUtc': '2026-11-20T14:32:31.931356+00:00',
+                                              'sessions': 1,
+                                              'maximumSecondsIncludingCleanup': 1800,
+                                              'scope': 'Existing exact20paths; resource-safe local '
+                                                       'qualification; conditional governed Git '
+                                                       'publication/CI/merge; no GCP deployment or '
+                                                       'production operations',
+                                              'referenceSha256': '4f01071e22adbb63ac5a6243bea3917d8c3aa658fe4d7fbdded761fddd709a93'},
+                                             {'source': 'New direct Owner CLOUD RUN PACKAGING — '
+                                                        'RESOURCE-SAFE FINAL QUALIFICATION '
+                                                        'following storage cleanup in this '
+                                                        'conversation',
+                                              'recordedUtc': '2026-11-20T14:46:03.451893+00:00',
+                                              'sessions': 1,
+                                              'maximumSecondsIncludingCleanup': 1800,
+                                              'scope': 'Existing exact20paths,one additional local '
+                                                       'session,conditional governed publication; '
+                                                       'no GCP mutation or production operations',
+                                              'referenceSha256': '4dd4897864514a4693c4ee108f68ba7d9034d2c8c332220111d82549d46e7e39'},
+                                             {'source': 'Direct Owner POSTGRESQL TLS RECOVERY AND '
+                                                        'FINAL CONTAINER QUALIFICATION in this '
+                                                        'conversation',
+                                              'recordedUtc': '2026-11-20T14:52:59.913096+00:00',
+                                              'sessions': 1,
+                                              'maximumSecondsIncludingCleanup': 1800,
+                                              'scope': 'Existing exact20 paths; one bounded local '
+                                                       'runtime; conditional governed Git '
+                                                       'publication/CI/merge; no GCP deployment or '
+                                                       'production operations',
+                                              'referenceSha256': 'b8b44e9988242df24f27248c57c0d14a15360a7c27cc0e8797da87126d3063ba'}]},
+ 'qualification': {'status': 'PASS',
+                   'sessionsConsumed': 6,
+                   'sessionsRemaining': 0,
+                   'runtimeStatus': 'PASS',
+                   'cleanup': 'PASS',
+                   'backendDockerBuild': 'PASS',
+                   'frontendDockerBuild': 'PASS',
+                   'imageContentInspection': 'PASS',
+                   'postgresAuthenticatedTls': 'PASS verify-full PostgreSQL18.6',
+                   'runtimeResults': {'PASS': 14, 'FAIL': 0, 'ERROR': 0, 'NOT_RUN': 0},
+                   'secondsIncludingCleanup': 258.07852898900455,
+                   'evidenceReference': '/home/hasitha-wijerathna/Documents/Theater '
+                                        'Project/.cache/cloud-run-packaging/complete-runtime-final/runtime/runtime.json',
+                   'runnerTests': '20 PASS',
+                   'postgresTest': '1 PASS,0 skipped;44 migrations throughV45;runtime DDL denied',
+                   'cloudConnectivity': 'NOT_RUN',
+                   'hostedCI': 'NOT_RUN',
+                   'production': 'NONE'},
+ 'part1': {'completed': 4, 'total': 7},
+ 'productionAuthorization': 'NONE',
+ 'previousQualifications': [{'status': 'BLOCKED_RUNTIME_RETEST_REQUIRED',
+                             'runtimeStatus': 'ERROR',
+                             'backendDockerBuild': 'PASS_CURRENT_BACKEND_INPUTS_UNCHANGED',
+                             'frontendDockerBuild': 'ERROR_MISSING_DESIGN_TOKEN_COPY',
+                             'postFailureCorrection': 'Frontend Dockerfile now copies '
+                                                      'knowledge/tokens; offline regression failed '
+                                                      'before correction and passes after it',
+                             'correctedFrontendCompile': 'PASS_HOST_BUILD_FROM_DOCKER_COPY_INPUTS_NOT_CONTAINER_RETEST',
+                             'runnerTestsPassed': 13,
+                             'backendOfflinePassed': 10,
+                             'architecturePassed': 20,
+                             'postgresOptInSkippedOffline': 1,
+                             'runtimeResults': {'PASS': 2, 'FAIL': 0, 'ERROR': 1, 'NOT_RUN': 10},
+                             'cleanup': 'PASS',
+                             'secondsIncludingCleanup': 116.73291654000059,
+                             'sessionsConsumed': 1,
+                             'sessionsRemaining': 0,
+                             'postgresStarted': False,
+                             'startupHealthSecurityPostgres': 'NOT_RUN',
+                             'production': 'NONE'},
+                            {'status': 'BLOCKED',
+                             'sessionsConsumed': 2,
+                             'sessionsRemaining': 0,
+                             'runtimeStatus': 'ERROR',
+                             'cleanup': 'PASS',
+                             'backendDockerBuild': 'PASS',
+                             'frontendDockerBuild': 'ERROR',
+                             'runtimeResults': {'PASS': 2, 'FAIL': 0, 'ERROR': 1, 'NOT_RUN': 11},
+                             'secondsIncludingCleanup': 116.001,
+                             'evidenceReference': '/home/hasitha-wijerathna/Documents/Theater '
+                                                  'Project/.cache/cloud-run-packaging/final-retest/runtime/runtime.json',
+                             'failure': 'Next.js page-data collection started 15 workers; Tokio OS '
+                                        'error 11 thread exhaustion; SIGABRT. Build-only '
+                                        'CPU/thread caps corrected offline; container correction '
+                                        'NOT_RETESTED.',
+                             'production': 'NONE'},
+                            {'status': 'BLOCKED',
+                             'sessionsConsumed': 3,
+                             'sessionsRemaining': 0,
+                             'runtimeStatus': 'ERROR',
+                             'cleanup': 'PASS',
+                             'backendDockerBuild': 'PASS',
+                             'frontendDockerBuild': 'PASS',
+                             'imageContentInspection': 'PASS',
+                             'runtimeResults': {'PASS': 4, 'FAIL': 0, 'ERROR': 1, 'NOT_RUN': 9},
+                             'secondsIncludingCleanup': 151.07395220099716,
+                             'evidenceReference': '/home/hasitha-wijerathna/Documents/Theater '
+                                                  'Project/.cache/cloud-run-packaging/resource-safe-retest/runtime/runtime.json',
+                             'failure': 'PostgreSQL authenticated verify-full probe immediately '
+                                        'after configuration reload: server does not support SSL. '
+                                        'Readiness not established. No schema or backend startup '
+                                        'tests executed.',
+                             'correction': 'Bounded authenticated TLS readiness polling and '
+                                           'server-log capture added offline;16 runner tests PASS; '
+                                           'live correction NOT_RETESTED',
+                             'production': 'NONE'},
+                            {'status': 'BLOCKED',
+                             'sessionsConsumed': 4,
+                             'sessionsRemaining': 0,
+                             'runtimeStatus': 'ERROR',
+                             'cleanup': 'PASS',
+                             'backendDockerBuild': 'PASS',
+                             'frontendDockerBuild': 'PASS',
+                             'imageContentInspection': 'PASS',
+                             'runtimeResults': {'PASS': 4, 'FAIL': 0, 'ERROR': 1, 'NOT_RUN': 9},
+                             'secondsIncludingCleanup': 180.8016691169978,
+                             'evidenceReference': '/home/hasitha-wijerathna/Documents/Theater '
+                                                  'Project/.cache/cloud-run-packaging/tls-ready-final/runtime/runtime.json',
+                             'failure': 'Authenticated PostgreSQL verify-full TLS readiness timed '
+                                        'out. Root cause: SQL helper omitted docker exec -i, so '
+                                        'stdin configuration statements were not executed. The '
+                                        'earlier reload-race hypothesis was incomplete.',
+                             'correction': 'SQL stdin forwarding fixed, explicit ALTER '
+                                           'SYSTEM/reload acknowledgments enforced;18 offline '
+                                           'runner tests PASS;live correction NOT_RETESTED',
+                             'production': 'NONE'},
+                            {'status': 'BLOCKED',
+                             'sessionsConsumed': 5,
+                             'sessionsRemaining': 0,
+                             'runtimeStatus': 'ERROR',
+                             'cleanup': 'PASS',
+                             'backendDockerBuild': 'PASS',
+                             'frontendDockerBuild': 'PASS',
+                             'imageContentInspection': 'PASS',
+                             'postgresAuthenticatedTls': 'PASS verify-full PostgreSQL18.6',
+                             'runtimeResults': {'PASS': 4, 'FAIL': 0, 'ERROR': 1, 'NOT_RUN': 9},
+                             'secondsIncludingCleanup': 151.82590635900124,
+                             'evidenceReference': '/home/hasitha-wijerathna/Documents/Theater '
+                                                  'Project/.cache/cloud-run-packaging/postgres-stdin-final/runtime/runtime.json',
+                             'failure': 'Docker isolated network returned null published host '
+                                        'bindings; harness indexed unavailable HostPort before '
+                                        'schema/application startup.',
+                             'correction': 'Preserve Docker --internal; task-owned loopback-only '
+                                           'bounded relay into inspected internal container '
+                                           'network, TLS opaque/end-to-end.20 focused tests PASS '
+                                           'including real loopback forwarding/cleanup. Live '
+                                           'container integration NOT_RETESTED.',
+                             'production': 'NONE'}],
+ 'sourceSha256': {'backend/Dockerfile': 'c68669c0edf0a3947035817e3e73ad9805ed3a855625c40cc7feb0a79ca9a9d2',
+                  'frontend/Dockerfile': '36937527e97f391ff72e4489b02bcb9303ed654e66413eaf64e203ad1a9af7e7',
+                  '.dockerignore': '8bffb6259a965892469aab94098b5fca913b3aa66f4ab1effdd129cb3de9d36e',
+                  'frontend/next.config.mjs': 'ef6e101cb8ad1ced30a02e69dd3506ea0c8c3c63ef121ac0618c26a8a952f14a',
+                  'backend/src/main/resources/application-cloud-run.properties': '994505d62ecc8cc345f2ec7a3d8262bda12dbe4c29e8db3716e6303477cbc89a',
+                  'backend/src/main/java/com/cinenest/foundation/internal/CloudRunRuntimeConfiguration.java': 'f8b5e1bfbf8cb7c79b41cf09d6f44ba2bfc6a5e5a50592c4a66a7b565d8b13b4',
+                  'backend/src/test/java/com/cinenest/CloudRunRuntimeIT.java': '96ea08e9df581a57b8a796d02b98a8b3bcfdf28bc6b162daf86c4b99c07e6ca6',
+                  'frontend/app/healthz/route.ts': '9d164745760dacbc27ce57e4a1b04f0d49b84351af7059a71eccfddc29c1455c',
+                  'deployment/cloud-run/service.template.yaml': '8f927369858fc20c3894e37d40f34dade51a9b90e9d5ec2dd34fa2e23af9f7d5',
+                  'scripts/verify-cloud-run.py': '1fdc407c295ef9d2bbec532e8f55c8c6811867f9c242cea9e9eedf48d73f6c1e',
+                  'scripts/test-cloud-run.py': 'c0d7c4f044e4e7dc78e8b39c9089674571d6a5e6edf24547158acf2b8eb2efbf',
+                  'knowledge/ARCHITECTURE.md': 'a20ca3c37a254f5aed2b3d940d3b7120d862dbc151f15a406b076ffaa842b9a1',
+                  'knowledge/PROGRESS.md': '729573633e54cbf67617f0034c4da228643d2358bc98d01399a6e3f87f77f842',
+                  'knowledge/decisions/cinenest-open-decisions.json': '5303f4225d0867ec8201937e5858c986270db7117926bf3886eaf46a24727371',
+                  'knowledge/execution/change-sets.json': '5d904d8aa32ab588a99686fe7c44109fe365e1a87c08083bb2e075a76d3f01ae',
+                  'knowledge/product/FEATURE_CATALOG.md': '9246d3de87de9143ea89aec7265075add607d9e4f3bf38b9071a9c11cb9cd908',
+                  'knowledge/guides/USER_GUIDE.md': 'de01f87138eb91c9f049e4c899e3e00a8b50463afd2a27a40f7444c63cc9e0dd'}}
+CLOUD_RUN_KEY = 'cloudRunPackaging'
+CLOUD_RUN_PATHS = set(CLOUD_RUN_STATE['orderedPaths'])
+
+def cloud_run_errors():
+    import hashlib
+    try:
+        base=CLOUD_RUN_STATE['baseline']
+        v41_git('merge-base','--is-ancestor',base,'HEAD')
+        changed=parse_git_paths(v41_git('diff','--no-ext-diff',base,'--name-only','-z'),nul=True)
+        if changed != CLOUD_RUN_PATHS:return ['Cloud Run exact changed paths mismatch']
+        blob=lambda n:v41_git('show',base+':'+n)
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',base).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        new=CLOUD_RUN_PATHS-set(inventory)
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual != set(inventory)|new or v41_git('ls-files','--others','--exclude-standard','-z'):return ['Cloud Run unowned inventory']
+        migrations={p.name for p in (R/'backend/src/main/resources/db/migration').glob('*')}
+        expected={n.rsplit('/',1)[1] for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(expected)!=44 or migrations!=expected:return ['Cloud Run migration inventory mismatch']
+        for name in actual:
+            p=R/name
+            if not p.is_file() or p.is_symlink():return ['Cloud Run unsafe source '+name]
+            if name in inventory:
+                mode,kind,oid=inventory[name]
+                if kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):return ['Cloud Run source mode changed '+name]
+                if name not in CLOUD_RUN_PATHS:
+                    data=p.read_bytes()
+                    if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Cloud Run predecessor drift '+name]
+        status=json.loads((R/'knowledge/execution/status.json').read_bytes())
+        if status.pop(CLOUD_RUN_KEY,None)!=CLOUD_RUN_STATE or status!=json.loads(blob('knowledge/execution/status.json')):return ['Cloud Run acceptance/status drift']
+        changes=json.loads((R/'knowledge/execution/change-sets.json').read_bytes())
+        approval=dict(CLOUD_RUN_STATE);approval.pop('sourceSha256')
+        if changes.pop(CLOUD_RUN_KEY,None)!=approval or changes!=json.loads(blob('knowledge/execution/change-sets.json')):return ['Cloud Run historical admission drift']
+        decisions=json.loads((R/'knowledge/decisions/cinenest-open-decisions.json').read_bytes())
+        od=next(x for x in decisions['decisions'] if x['id']=='OD-01');addition=od.pop('boundedCloudRunPackaging',None)
+        if not addition or addition.get('productionDeployment')!='NOT_AUTHORIZED' or decisions!=json.loads(blob('knowledge/decisions/cinenest-open-decisions.json')):return ['Cloud Run decision scope/history drift']
+        for name,digest in CLOUD_RUN_STATE['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:return ['Cloud Run fingerprint drift '+name]
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(blob(name)):return ['Cloud Run historical prose drift '+name]
+        previous=blob('knowledge/execution/validate_execution.py')
+        if not (R/'knowledge/execution/validate_execution.py').read_bytes().startswith(previous[:-len(EIGHT_DEMO_ENTRYPOINT)]):return ['Cloud Run historical validator drift']
+        manifest=json.loads(blob('knowledge/manifest.json'))
+        for row in manifest['files']:
+            if 'knowledge/'+row['path'] in CLOUD_RUN_PATHS-{'knowledge/manifest.json'}:row['sha256']=hashlib.sha256((K/row['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Cloud Run manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):return ['Cloud Run inaccessible admission inputs']
+    return []
+
+def cloud_run_controls():
+    from unittest.mock import patch
+    read=Path.read_bytes
+    def reject(name,data):
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p:data if p==target else read(p)):
+            if not cloud_run_errors():raise ValueError('Cloud Run admitted unowned change '+name)
+    for name in CLOUD_RUN_STATE['sourceSha256']:reject(name,b'drift')
+    for name in ['knowledge/execution/requirements.json','backend/src/main/resources/db/migration/V45__synthetic_staff_session_events.sql','knowledge/manifest.json']:reject(name,b'drift')
+    state=json.loads(read(R/'knowledge/execution/status.json'))
+    for field,value in [('productionAuthorization','GRANTED'),('status','ACCEPTED'),('part1',{'completed':5,'total':7})]:
+        altered=json.loads(json.dumps(state));altered[CLOUD_RUN_KEY][field]=value;reject('knowledge/execution/status.json',json.dumps(altered).encode())
+    original=v41_git
+    def extra(*args,**kwargs):
+        result=original(*args,**kwargs)
+        return result+b'unapproved.txt\0' if args[0]=='ls-files' else result
+    with patch.dict(globals(),{'v41_git':extra}):
+        if not cloud_run_errors():raise ValueError('Cloud Run accepted additional inventory')
+    glob=Path.glob
+    def extra_migration(p,pattern,*args,**kwargs):
+        yield from glob(p,pattern,*args,**kwargs)
+        if p==R/'backend/src/main/resources/db/migration' and pattern=='*':yield R/'AGENTS.md'
+    with patch.object(Path,'glob',extra_migration):
+        if not cloud_run_errors():raise ValueError('Cloud Run accepted extra migration')
+    for qualification in [{'status':'PASS'},{'status':'PASS','runtimeStatus':'ERROR','cleanup':'PASS','runtimeResults':{'PASS':13,'FAIL':0,'ERROR':0,'NOT_RUN':0}}]:
+        altered=dict(CLOUD_RUN_STATE);altered['qualification']=qualification
+        with patch.dict(globals(),{'CLOUD_RUN_STATE':altered}):
+            if cloud_run_publication_ready():raise ValueError('Cloud Run admitted unqualified publication')
+    print('PASS Cloud Run exact scope, authorization, history, blocked gates and negative controls',flush=True)
+
+def cloud_run_publication_ready():
+    q=CLOUD_RUN_STATE.get('qualification')
+    if not isinstance(q,dict):return False
+    counts=q.get('runtimeResults',{})
+    return CLOUD_RUN_STATE.get('productionAuthorization')=='NONE' and q.get('status')=='PASS' and q.get('runtimeStatus')=='PASS' and q.get('cleanup')=='PASS' and q.get('backendDockerBuild')=='PASS' and q.get('frontendDockerBuild')=='PASS' and counts.get('PASS')==14 and all(counts.get(k)==0 for k in ['FAIL','ERROR','NOT_RUN'])
+
+def cloud_run_main():
+    import sys,tempfile
+    errors=cloud_run_errors()
+    if errors:
+        print('\n'.join('FAIL '+e for e in errors));return 1
+    cloud_run_controls()
+    check=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if check.returncode:return check.returncode
+    if not cloud_run_publication_ready():
+        print('BLOCKED Cloud Run publication: successful image/runtime qualification required',flush=True);return 1
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-cloud-run-replay-') as tmp:
+        checkout=Path(tmp)/'predecessor'
+        subprocess.run(['git','clone','--quiet','--no-local','--no-checkout','--',common,str(checkout)],check=True)
+        subprocess.run(['git','-C',str(checkout),'checkout','--quiet','--detach',CLOUD_RUN_STATE['baseline']],check=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=checkout).returncode
+
+receipt_admission_successor_errors = cloud_run_errors
+inert_ci_main = cloud_run_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
