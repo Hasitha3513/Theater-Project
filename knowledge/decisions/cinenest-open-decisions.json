@@ -157,6 +157,15 @@
         "cloudResourceMutation": "NOT_AUTHORIZED",
         "secretOrDatabaseChanges": "NOT_AUTHORIZED",
         "broaderDecisionStatus": "OPEN_DECISION"
+      },
+      "boundedCloudRuntimeActivation": {
+        "source": "Owner reply to call_8f2ddcb5f67f45508f8f7c7e4c3dd1b4",
+        "requestSha256": "f0791689aba5c235c9e3e93effb61c85650eff48a8feedae59a36b283798bde8",
+        "scope": "Existing14path nonproduction runtime harness and exact conditional activation supplement only",
+        "reviewException": "Owner reply to call_9bf11320fdab461cae2ea818a46d9ff5;this successor only",
+        "productionAuthorization": "NONE",
+        "broaderDecisionStatus": "OPEN_DECISION",
+        "realCustomerFinancialIdentityPhysicalApproval": "NONE"
       }
     },
     {

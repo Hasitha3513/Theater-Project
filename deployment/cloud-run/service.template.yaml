@@ -7,6 +7,7 @@ metadata:
   labels:
     cloud.googleapis.com/location: us-east1
   annotations:
+    run.googleapis.com/maxScale: '__APPROVED_MAX_INSTANCES__'
     run.googleapis.com/ingress: internal
 spec:
   template:

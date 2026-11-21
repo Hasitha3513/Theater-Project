@@ -921,3 +921,8 @@ Cloud Run packaging is locally qualified:14/14 container groups PASS for product
 ## Offline cloud connectivity qualification
 
 CN-GCP-CONNECTIVITY-CONTRACT-001 provides an inert operator validator for supplied JSON deployment configuration and explicit metadata/role snapshots. It checks private SQL18.6/PSC/DNS/TLS bindings,declared IAM/secret scopes,separate migration custody,disabled signing/feature activation,pool/capacity reserves,health and rollback consistency. FAIL,BLOCKED and OFFLINE_CONTRACT_VALID remain distinct. None grants deployment,actual Cloud Run access,effective permissions,real customer authentication,banking,admission or physical readiness. Current real resources remain incomplete;synthetic fixture success is not production evidence. Existing packaging and product acceptance are unchanged. [Operator instructions](../guides/USER_GUIDE.md#offline-cloud-connectivity-contract) and [evidence](../PROGRESS.md#cloud-run-connectivity-contract).
+
+
+### Internal connectivity qualification artifact
+
+The approved14path successor prepares an offline,nonproduction Java25 MIGRATE/PROBE artifact and separate restricted migration/probe job contracts. It adds no customer feature or business-policy approval. The new local restricted-role/credential flow passed;actual Cloud Run application connectivity remains NOT_RUN at this checkpoint. [Boundary](../ARCHITECTURE.md#cloud-runtime-activation-harness).
