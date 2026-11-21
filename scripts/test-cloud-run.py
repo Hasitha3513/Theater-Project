@@ -325,4 +325,87 @@ for _name,_path,_value in [
     setattr(DeploymentContracts,'test_reject_'+_name,_contract_negative_test(_path,_value))
 
 
+
+_runtime_spec=importlib.util.spec_from_file_location('cloud_runtime_artifact',Path(__file__).with_name('verify-cloud-connectivity.py'))
+runtime_artifact=importlib.util.module_from_spec(_runtime_spec);_runtime_spec.loader.exec_module(runtime_artifact)
+
+class RuntimeActivationBoundaries(unittest.TestCase):
+    def ready_state(self):
+        return {'status':'READY','productionAuthorization':'NONE','part1':{'completed':4,'total':7},'authority':{'requestSha256':runtime_artifact.APPROVAL_SHA256},'review':{'answer':'Approve task-only review exception','verifiedByteIdenticalFullReviewReuse':100,'taskScopedChangedFileReview':14,'fullCurrentKbReviewClaimed':False,'taskOnly':True},'sqlFingerprints':runtime_artifact.SQL_FILES,'qualification':{'status':'OFFLINE_TESTS_PASS'}}
+    def evidence(self):
+        from datetime import datetime,timezone
+        return {'localActivation':'PASS','localFailureControls':'PASS','sourceGovernance':'PASS','hostedExactSourceCI':'PASS','cloudSessionConsumed':False,'remainingUsd':1,'priorReservedUsd':4,'preparationStartedAt':datetime.now(timezone.utc).isoformat()}
+    def test_artifact_eligibility_never_means_cloud_pass(self):
+        result=runtime_artifact.runtime_ready(self.ready_state(),self.evidence())
+        self.assertEqual(result['status'],'ELIGIBLE_CONDITIONAL_OPERATION');self.assertEqual(result['cloudRunConnectivity'],'NOT_RUN');self.assertEqual(result['productionAuthorization'],'NONE')
+    def test_each_required_gate_missing_blocks(self):
+        for key in self.evidence():
+            e=self.evidence();e.pop(key)
+            with self.subTest(key=key):self.assertEqual(runtime_artifact.runtime_ready(self.ready_state(),e)['status'],'BLOCKED')
+    def test_consumed_session_cannot_be_reused(self):
+        e=self.evidence();e['cloudSessionConsumed']=True;self.assertEqual(runtime_artifact.runtime_ready(self.ready_state(),e)['status'],'BLOCKED')
+    def test_modified_approval_or_sql_is_denied(self):
+        import copy
+        for key,value in [('authority',{'requestSha256':'0'*64}),('sqlFingerprints',{}),('productionAuthorization','GO'),('part1',{'completed':7,'total':7})]:
+            state=copy.deepcopy(self.ready_state());state[key]=value
+            with self.subTest(key=key):self.assertTrue(runtime_artifact.admission_errors(state))
+    def test_review_exception_cannot_expand_or_claim_full_review(self):
+        state=self.ready_state();state['review']['fullCurrentKbReviewClaimed']=True;self.assertTrue(runtime_artifact.admission_errors(state))
+    def test_historical_migration_inventory_is_44(self):self.assertEqual(len(runtime_artifact.migration_inventory()),44)
+    def test_symlink_artifacts_rejected(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as root:
+            p=Path(root);(p/'source').write_text('synthetic-only');(p/'link').symlink_to(p/'source')
+            with self.assertRaises(ValueError):runtime_artifact.fingerprint(p/'link')
+    def image(self):return 'us-east1-docker.pkg.dev/'+runtime_artifact.PROJECT+'/cinenest-runtime/diagnostics@sha256:'+'a'*64
+    def versions(self):return dict.fromkeys(['runtimeUsername','runtimePassword','migrationPassword','databaseCa'],'1')
+    def test_migration_job_identity_and_secret_are_separate(self):
+        obj=runtime_artifact.job_document('MIGRATE',self.image(),self.versions());pod=obj['spec']['template']['spec']['template']['spec'];self.assertTrue(pod['serviceAccountName'].startswith('cinenest-migrator@'));self.assertEqual(pod['maxRetries'],0);self.assertEqual(pod['timeoutSeconds'],'600');self.assertNotIn('cinenest-qualification-db-password',str(pod));self.assertEqual(obj['spec']['template']['metadata']['annotations']['run.googleapis.com/vpc-access-egress'],'private-ranges-only')
+    def test_probe_job_cannot_access_migration_secret(self):
+        obj=runtime_artifact.job_document('PROBE',self.image(),self.versions(),'https://cinenest-connectivity-qualification-980464067041.us-east1.run.app');self.assertNotIn('cinenest-qualification-migration-password',str(obj));self.assertEqual(obj['spec']['template']['metadata']['annotations']['run.googleapis.com/vpc-access-egress'],'all-traffic')
+    def test_mutable_or_foreign_image_rejected(self):
+        for image in ['diagnostics:latest',self.image().replace(runtime_artifact.PROJECT,'foreign'),self.image()+'x']:
+            with self.subTest(image=image),self.assertRaises(ValueError):runtime_artifact.job_document('MIGRATE',image,self.versions())
+    def test_latest_or_unexpected_secret_version_rejected(self):
+        for value in ['latest','0','2']:
+            v=self.versions();v['runtimePassword']=value
+            with self.subTest(version=value),self.assertRaises(ValueError):runtime_artifact.job_document('MIGRATE',self.image(),v)
+    def test_probe_url_cannot_leak_bearer_identity(self):
+        for url in ['http://cinenest-connectivity-qualification-x.run.app','https://attacker.example','https://user:secret@cinenest-connectivity-qualification-x.run.app','https://cinenest-connectivity-qualification-x.run.app/path','https://cinenest-connectivity-qualification-x.run.app?token=secret']:
+            with self.subTest(url=url),self.assertRaises(ValueError):runtime_artifact.job_document('PROBE',self.image(),self.versions(),url)
+    def test_java_harness_does_not_expose_arbitrary_sql_mode_or_exception(self):
+        source=runtime_artifact.JAVA_SOURCE;self.assertNotIn('args[0].equals("SQL")',source);self.assertNotIn('printStackTrace',source);self.assertIn('sslmode=verify-full',source);self.assertNotIn('sslmode=require',source)
+    def test_context_refuses_overwrite_before_reading_secrets(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as root:
+            with self.assertRaises(ValueError):runtime_artifact.prepare_context(Path(root),Path(root),Path(root))
+
+# Approved single-line template successor. Replay the complete historical check
+# against only the removed cap line;any other byte change still fails its old hash.
+_historical_template_check=DeploymentContracts.test_template_is_the_unchanged_qualified_approval_placeholder_contract
+def _bounded_service_cap_successor(self):
+    target=m.ROOT/'deployment/cloud-run/service.template.yaml'
+    data=target.read_bytes();line=b"    run.googleapis.com/maxScale: '__APPROVED_MAX_INSTANCES__'\n"
+    self.assertEqual(data.count(line),1)
+    original=Path.read_bytes
+    with patch.object(Path,'read_bytes',lambda p:data.replace(line,b'',1) if p==target else original(p)):
+        _historical_template_check(self)
+DeploymentContracts.test_template_is_the_unchanged_qualified_approval_placeholder_contract=_bounded_service_cap_successor
+
+class RuntimeServiceCapBoundary(unittest.TestCase):
+    def test_only_the_approved_cap_is_accepted(self):
+        d=deployment_fixture();d['deployment']['metadata']['annotations']['run.googleapis.com/maxScale']='1'
+        self.assertEqual(m.deployment_report(d)['status'],'OFFLINE_CONTRACT_VALID')
+        for value in ['0','2',True,'latest']:
+            d['deployment']['metadata']['annotations']['run.googleapis.com/maxScale']=value
+            with self.subTest(value=value):self.assertEqual(m.deployment_report(d)['status'],'FAIL')
+
+def _expired_preparation_window_test(self):
+    from datetime import datetime,timezone,timedelta
+    now=datetime.now(timezone.utc)
+    for value in [(now-timedelta(minutes=61)).isoformat(),(now+timedelta(minutes=1)).isoformat(),'invalid',now.replace(tzinfo=None).isoformat(),None]:
+        e=self.evidence();e['preparationStartedAt']=value
+        with self.subTest(start=value):self.assertEqual(runtime_artifact.runtime_ready(self.ready_state(),e)['status'],'BLOCKED')
+RuntimeActivationBoundaries.test_expired_or_invalid_preparation_window_is_denied=_expired_preparation_window_test
+
 if __name__=='__main__':unittest.main()

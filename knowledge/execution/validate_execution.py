@@ -19186,5 +19186,98 @@ def connectivity_main():
 receipt_admission_successor_errors = connectivity_errors
 inert_ci_main = connectivity_main
 
+
+# CN-GCP-INTERNAL-CONNECTIVITY-RUNTIME-001:exact approved14path successor.
+RUNTIME_EXECUTION_STATE = {'id': 'CN-GCP-INTERNAL-CONNECTIVITY-RUNTIME-001', 'baseline': '6c9c75e5bcea8720bd1cfc2d68f7ce61f6166ba0', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-run.py', 'scripts/test-cloud-run.py', 'scripts/verify-cloud-connectivity.py', 'deployment/cloud-run/service.template.yaml', 'deployment/cloud-run/connectivity-job.template.yaml', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/decisions/cinenest-open-decisions.json', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'name': 'Hasitha Wijerathna', 'source': 'Owner reply to call_8f2ddcb5f67f45508f8f7c7e4c3dd1b4', 'answer': 'Approve exact activation supplement', 'requestSha256': 'f0791689aba5c235c9e3e93effb61c85650eff48a8feedae59a36b283798bde8', 'priorSourceScopeApprovalSha256': '2223c8203f7cd2ec1b6a10ef1131a4b97af9ed4a295653e8a3ae7ef30745f82c'}, 'review': {'source': 'Owner reply to call_9bf11320fdab461cae2ea818a46d9ff5', 'answer': 'Approve task-only review exception', 'verifiedByteIdenticalFullReviewReuse': 100, 'taskScopedChangedFileReview': 14, 'inventoryCount': 114, 'fullCurrentKbReviewClaimed': False, 'newVisualAuditClaimed': False, 'taskOnly': True, 'ledgerSha256': '59673e8dbc6b1f7ce673f1bc670c1404547a4c817941f6fc050563b33cec0582'}, 'scope': 'Exact14path nonproduction runtime-admission/diagnostic harness and documentation;no application logic or historical migration edits', 'sqlFingerprints': {'00-activation-authority-probe.sql.proposed': 'cd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d', '01-protected-credentials-and-migrator-login.psql.proposed': 'c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15', '02-post-migration-runtime-grants.sql.proposed': '52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52', '03-runtime-login-and-migrator-revocation.sql.proposed': '515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6', '04-login-revocation-and-session-cleanup.sql.proposed': '01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5', '05-runtime-readonly-verification.sql.proposed': '2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c', '06-data-preserving-quarantine.sql.proposed': 'ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676'}, 'resourceApproval': 'Conditional exact approved supplement;no public customer traffic;local qualification and governed source CI required before cloud execution', 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'OFFLINE_TESTS_PASS', 'localActivationGroups': 13, 'localFailureGroups': 8, 'localInventories': 'PASS', 'cloudRunConnectivity': 'NOT_RUN', 'runtimeCloudLogin': 'NOT_RUN', 'cloudMigrations': 'NOT_RUN', 'cloudHealth': 'NOT_RUN', 'productionAuthorization': 'NONE', 'javaDiagnosticCompilation': 'PASS', 'cloudSessionConsumed': False, 'architectureTests': 'RETAINED20PASS_APPLICATION_SOURCE_UNCHANGED', 'evidenceReference': '/tmp/cinenest-runtime-activation-review-20261121/', 'offlineTests': {'passed': 117, 'failed': 0}, 'sourceTestLogSha256': 'c5ccb59415442801b5387985bd8536ec8dd4d736fe10aa10e87f5390e5a2264b', 'javaDiagnosticSourceSha256': '8caf588aa7e27df0311951f68770ea7f248876f48500dde8c1f7c1562a72c37a'}, 'rollback': 'Remove only task-owned runtime resources and grants;preserve qualification database/history and NOLOGIN roles;no clean/repair/drop/credential reset of unrelated users', 'sourceSha256': {'scripts/verify-cloud-run.py': 'f358d38cd4397745fc2a75cbf4587541a111ecb0f37bf013b37eff191195ddbd', 'scripts/test-cloud-run.py': '9d00efa16667d98ff8441d11cea01aa466ee5ed9ab540cf6999e05409c38a25d', 'scripts/verify-cloud-connectivity.py': 'f9ea3d2462d87af07a7ca20dd72c7973c93072e7f03abbff66f2bda44746e62f', 'deployment/cloud-run/service.template.yaml': '9b2d327cadbb91b52b4de9f27eac3f05473d3beb7b878e368e9ebcbd919f5d42', 'deployment/cloud-run/connectivity-job.template.yaml': '1823274dc45679adec3adfdc4b76cda00996b60b06824ceca1b0cd6590f6885e', 'knowledge/ARCHITECTURE.md': 'b168ffa1b5b739635b5786c7141e2aed87c0c0d521038aa3a096c254f66bd70d', 'knowledge/PROGRESS.md': '635e811fa53330881c579441aff3a6fe16ad750a46703f0f2e7720475a2b13e6', 'knowledge/decisions/cinenest-open-decisions.json': '376d7f26f921b14b93605cfe5f0784949301b989091858022427f30d423fd4a4', 'knowledge/product/FEATURE_CATALOG.md': '32e179ca76e5b3aee21c068ec8d9d0942afd318203e6fd5e29adaa96bc0b4627', 'knowledge/guides/USER_GUIDE.md': 'c8e8bd1a9eb14f7193fd78077b87b44fb37d30f90b0f1b7ab7b69510edae10b7'}}
+RUNTIME_EXECUTION_KEY='cloudRunRuntimeExecution'
+RUNTIME_EXECUTION_BASE=RUNTIME_EXECUTION_STATE['baseline']
+RUNTIME_EXECUTION_PATHS=set(RUNTIME_EXECUTION_STATE['orderedPaths'])
+RUNTIME_EXECUTION_NEW={'scripts/verify-cloud-connectivity.py','deployment/cloud-run/connectivity-job.template.yaml'}
+RUNTIME_EXECUTION_OLD_MAIN=b"\nif __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+def runtime_execution_errors():
+    try:
+        unit=RUNTIME_EXECUTION_STATE;base=RUNTIME_EXECUTION_BASE
+        blob=lambda name:v41_git('show',base+':'+name)
+        if unit['status']!='READY' or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}:return ['Runtime activation scope/acceptance boundary']
+        if unit['authority']['requestSha256']!='f0791689aba5c235c9e3e93effb61c85650eff48a8feedae59a36b283798bde8':return ['Runtime exact authorization missing']
+        review=unit['review']
+        if review['answer']!='Approve task-only review exception' or review['verifiedByteIdenticalFullReviewReuse']!=100 or review['taskScopedChangedFileReview']!=14 or review['fullCurrentKbReviewClaimed'] is not False or review['taskOnly'] is not True:return ['Runtime review exception expanded']
+        for name in ['knowledge/execution/change-sets.json','knowledge/execution/status.json']:
+            data=json.loads((R/name).read_bytes())
+            if data.pop(RUNTIME_EXECUTION_KEY,None)!=unit or data!=json.loads(blob(name)):return ['Runtime admission or historical registry drift '+name]
+        for name,digest in unit['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:return ['Runtime source fingerprint drift '+name]
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',base).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual!=set(inventory)|RUNTIME_EXECUTION_NEW or v41_git('ls-files','--others','--exclude-standard','-z'):return ['Runtime unexpected source inventory']
+        changed=set(v41_git('diff','--name-only','-z',base,text=True).split('\0'))-{''}
+        if changed!=RUNTIME_EXECUTION_PATHS:return ['Runtime exact14path scope mismatch']
+        for name in actual:
+            p=R/name
+            if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(R.resolve()):return ['Runtime source type/path escape '+name]
+            if name in inventory:
+                mode,kind,oid=inventory[name]
+                if kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):return ['Runtime source mode drift '+name]
+                if name not in RUNTIME_EXECUTION_PATHS:
+                    data=p.read_bytes()
+                    if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Runtime unowned source drift '+name]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(x.relative_to(R)) for x in (R/'backend/src/main/resources/db/migration').iterdir()}!=migrations:return ['Runtime migration inventory drift']
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(blob(name)):return ['Runtime historical prose changed '+name]
+        old=blob('deployment/cloud-run/service.template.yaml')
+        expected=old.replace(b'  annotations:\n    run.googleapis.com/ingress: internal',b"  annotations:\n    run.googleapis.com/maxScale: '__APPROVED_MAX_INSTANCES__'\n    run.googleapis.com/ingress: internal")
+        if (R/'deployment/cloud-run/service.template.yaml').read_bytes()!=expected:return ['Runtime service change exceeds approved single cap']
+        for name,ending in [('scripts/verify-cloud-run.py',b"if __name__=='__main__':raise SystemExit(connectivity_entrypoint())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n")]:
+            old=blob(name)
+            if not old.endswith(ending) or not (R/name).read_bytes().startswith(old[:-len(ending)]):return ['Runtime predecessor runner/test changed '+name]
+        old=blob('knowledge/execution/validate_execution.py')
+        if not old.endswith(RUNTIME_EXECUTION_OLD_MAIN) or not (R/'knowledge/execution/validate_execution.py').read_bytes().startswith(old[:-len(RUNTIME_EXECUTION_OLD_MAIN)]):return ['Runtime historical validator changed']
+        decisions=json.loads((R/'knowledge/decisions/cinenest-open-decisions.json').read_bytes());od=next(x for x in decisions['decisions'] if x['id']=='OD-01');approval=od.pop('boundedCloudRuntimeActivation',None)
+        if not approval or approval['requestSha256']!=unit['authority']['requestSha256'] or approval['productionAuthorization']!='NONE' or approval['broaderDecisionStatus']!='OPEN_DECISION' or decisions!=json.loads(blob('knowledge/decisions/cinenest-open-decisions.json')):return ['Runtime approval provenance or historical decisions drift']
+        manifest=json.loads(blob('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in RUNTIME_EXECUTION_PATHS-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Runtime manifest drift']
+        q=unit['qualification']
+        if q['status']!='OFFLINE_TESTS_PASS' or q['offlineTests']!={'passed':117,'failed':0} or q['localActivationGroups']!=13 or q['localFailureGroups']!=8 or q['localInventories']!='PASS' or q['productionAuthorization']!='NONE':return ['Runtime source qualification incomplete']
+        if any(q[x]!='NOT_RUN' for x in ['cloudRunConnectivity','runtimeCloudLogin','cloudMigrations','cloudHealth']):return ['Runtime live result needs separate actual evidence admission']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):return ['Runtime admission inputs inaccessible']
+    return []
+
+def runtime_execution_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('productionAuthorization','GO'),('status','BLOCKED'),('part1',{'completed':7,'total':7}),('authority',{'requestSha256':'0'*64})]:
+        fake=json.loads(json.dumps(RUNTIME_EXECUTION_STATE));fake[field]=value
+        with patch.dict(globals(),{'RUNTIME_EXECUTION_STATE':fake}):
+            if not runtime_execution_errors():raise ValueError('Runtime accepted invalid '+field)
+    for key in ['cloudRunConnectivity','runtimeCloudLogin','cloudMigrations','cloudHealth']:
+        fake=json.loads(json.dumps(RUNTIME_EXECUTION_STATE));fake['qualification'][key]='PASS'
+        with patch.dict(globals(),{'RUNTIME_EXECUTION_STATE':fake}):
+            if not runtime_execution_errors():raise ValueError('Runtime accepted forged live '+key)
+    read=Path.read_bytes;target=R/'scripts/verify-cloud-connectivity.py'
+    with patch.object(Path,'read_bytes',lambda p:read(p)+b'\n#unexpected' if p==target else read(p)):
+        if not runtime_execution_errors():raise ValueError('Runtime accepted source fingerprint drift')
+    print('PASS Runtime exact14 scope,owner/review admission,source/migration preservation and negative controls',flush=True)
+
+def runtime_execution_main():
+    import tempfile,sys
+    errors=runtime_execution_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    runtime_execution_negative_controls()
+    check=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if check.returncode:return check.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-runtime-history-') as tmp:
+        checkout=Path(tmp)/'predecessor';subprocess.run(['git','clone','--quiet','--no-local','--no-checkout','--',common,str(checkout)],check=True);subprocess.run(['git','-C',str(checkout),'checkout','--quiet','--detach',RUNTIME_EXECUTION_BASE],check=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=checkout).returncode
+
+receipt_admission_successor_errors=runtime_execution_errors
+inert_ci_main=runtime_execution_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
