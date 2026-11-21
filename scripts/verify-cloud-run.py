@@ -699,4 +699,25 @@ def connectivity_entrypoint():
     return main()
 
 
-if __name__=='__main__':raise SystemExit(connectivity_entrypoint())
+def runtime_artifact_entrypoint():
+    if '--prepare-context' in sys.argv[1:]:
+        import runpy
+        return runpy.run_path(str(ROOT/'scripts/verify-cloud-connectivity.py'))['main'](sys.argv[1:])
+    return connectivity_entrypoint()
+
+# Controlled service-cap successor;legacy documents still use the exact old checks.
+_historical_deployment_report=deployment_report
+def deployment_report(document):
+    import copy
+    candidate=copy.deepcopy(document)
+    annotations=candidate.get('deployment',{}).get('metadata',{}).get('annotations',{}) if isinstance(candidate,dict) else {}
+    if not isinstance(annotations,dict) or 'run.googleapis.com/maxScale' not in annotations:
+        return _historical_deployment_report(document)
+    value=annotations.pop('run.googleapis.com/maxScale')
+    result=_historical_deployment_report(candidate)
+    valid=value=='1' and candidate.get('capacity',{}).get('maxInstances')==1
+    result['checks'].append({'id':'service.bounded-runtime-cap','status':'PASS' if valid else 'FAIL'})
+    if not valid:result['status']='FAIL'
+    return result
+
+if __name__=='__main__':raise SystemExit(runtime_artifact_entrypoint())

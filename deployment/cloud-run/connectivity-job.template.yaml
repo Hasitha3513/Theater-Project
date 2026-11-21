@@ -1,0 +1,69 @@
+# OFFLINE TEMPLATE ONLY;JSON is valid YAML.No deployment without exact admission.
+{
+  "apiVersion": "run.googleapis.com/v1",
+  "kind": "Job",
+  "metadata": {
+    "name": "__APPROVED_JOB_NAME__",
+    "namespace": "980464067041",
+    "labels": {
+      "cloud.googleapis.com/location": "us-east1"
+    }
+  },
+  "spec": {
+    "template": {
+      "spec": {
+        "taskCount": 1,
+        "parallelism": 1,
+        "template": {
+          "spec": {
+            "serviceAccountName": "__APPROVED_JOB_SERVICE_ACCOUNT__",
+            "maxRetries": 0,
+            "timeoutSeconds": "600",
+            "containers": [
+              {
+                "image": "__APPROVED_DIAGNOSTIC_IMAGE_AT_SHA256__",
+                "args": [
+                  "__APPROVED_MODE__",
+                  "/app/migrations"
+                ],
+                "env": [],
+                "volumeMounts": [
+                  {
+                    "name": "database-ca",
+                    "mountPath": "/run/secrets"
+                  }
+                ],
+                "resources": {
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                }
+              }
+            ],
+            "volumes": [
+              {
+                "name": "database-ca",
+                "secret": {
+                  "secretName": "cinenest-qualification-db-ca",
+                  "items": [
+                    {
+                      "key": "1",
+                      "path": "db-ca.pem"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "metadata": {
+        "annotations": {
+          "run.googleapis.com/network-interfaces": "[{\"network\":\"default\",\"subnetwork\":\"default\"}]",
+          "run.googleapis.com/vpc-access-egress": "__APPROVED_EGRESS__"
+        }
+      }
+    }
+  }
+}
