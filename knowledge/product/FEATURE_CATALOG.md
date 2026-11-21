@@ -916,3 +916,8 @@ Cloud Run packaging qualification update: backend/frontend production image buil
 Packaging evidence update: authenticated disposable PostgreSQL18.6 verify-full TLS passed. Schema and application startup remain unqualified because isolated Docker networking returned no published host ports; the bounded loopback test-relay correction is unit-qualified only. Do not use this as deployment or commercial authorization.
 
 Cloud Run packaging is locally qualified:14/14 container groups PASS for production-compatible images,certificate-verified disposable PostgreSQL,validate-only startup,health/security,failure recovery and cleanup. This supersedes prior local packaging blockers; live cloud connectivity and production/commercial qualification remain pending.
+
+
+## Offline cloud connectivity qualification
+
+CN-GCP-CONNECTIVITY-CONTRACT-001 provides an inert operator validator for supplied JSON deployment configuration and explicit metadata/role snapshots. It checks private SQL18.6/PSC/DNS/TLS bindings,declared IAM/secret scopes,separate migration custody,disabled signing/feature activation,pool/capacity reserves,health and rollback consistency. FAIL,BLOCKED and OFFLINE_CONTRACT_VALID remain distinct. None grants deployment,actual Cloud Run access,effective permissions,real customer authentication,banking,admission or physical readiness. Current real resources remain incomplete;synthetic fixture success is not production evidence. Existing packaging and product acceptance are unchanged. [Operator instructions](../guides/USER_GUIDE.md#offline-cloud-connectivity-contract) and [evidence](../PROGRESS.md#cloud-run-connectivity-contract).

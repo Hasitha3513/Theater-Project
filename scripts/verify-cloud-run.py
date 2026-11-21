@@ -428,4 +428,275 @@ def main():
     return 0
 
 
-if __name__=='__main__':raise SystemExit(main())
+
+# Offline successor only. This path never executes cloud/Docker commands or reads secret payloads.
+DEPLOYMENT_PROJECT = 'project-f903a5f6-f535-4016-aae'
+DEPLOYMENT_NUMBER = '980464067041'
+DEPLOYMENT_REGION = 'us-east1'
+DEPLOYMENT_INSTANCE = 'cine-nest-2026'
+DEPLOYMENT_DNS = 'ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog'
+
+
+def deployment_report(document):
+    """Check supplied configuration/snapshots, never authenticate their provenance or grant access."""
+    import re
+    import ipaddress
+    from decimal import Decimal, InvalidOperation
+    from urllib.parse import urlsplit, parse_qsl
+    checks = []
+    def missing(value):
+        return value is None or value == [] or isinstance(value, str) and (not value.strip() or '__' in value)
+    def require(key, value, predicate):
+        try:
+            status = 'BLOCKED' if missing(value) else 'PASS' if predicate(value) else 'FAIL'
+        except (ValueError, TypeError, KeyError, IndexError, AttributeError, InvalidOperation):
+            status = 'FAIL'
+        checks.append({'id': key, 'status': status})
+        return status == 'PASS'
+    def available(key, value, predicate):
+        if value is None:
+            checks.append({'id':key,'status':'BLOCKED'});return
+        try:
+            status='FAIL' if not isinstance(value,list) else 'PASS' if predicate(value) else 'BLOCKED'
+        except (ValueError,TypeError,KeyError,IndexError,AttributeError):status='FAIL'
+        checks.append({'id':key,'status':status})
+    def obj(value): return value if isinstance(value, dict) else {}
+    def rows(value): return value if isinstance(value, list) else []
+    def integer(value): return type(value) is int and value > 0
+    def present_reference(value): return isinstance(value, str) and 0 < len(value) <= 512 and not missing(value)
+    def resource(value):
+        for prefix in ['https://www.googleapis.com/compute/v1/', 'https://compute.googleapis.com/compute/v1/']:
+            if isinstance(value, str) and value.startswith(prefix): return value[len(prefix):]
+        return value
+    def image(value):
+        return isinstance(value, str) and re.fullmatch(re.escape(DEPLOYMENT_REGION+'.docker.pkg.dev/'+DEPLOYMENT_PROJECT+'/')+r'[a-z0-9][a-z0-9_-]*/[a-zA-Z0-9_./-]+@sha256:[0-9a-f]{64}', value) is not None
+    def memory(value):
+        match = re.fullmatch(r'([1-9][0-9]*)(Mi|Gi)', value or '')
+        if not match: raise ValueError()
+        return int(match[1]) * (1024**2 if match[2] == 'Mi' else 1024**3)
+    require('document.object', document, lambda x: isinstance(x, dict))
+    d = obj(document)
+    require('document.fields', list(d), lambda x: set(x) <= {'schemaVersion','mode','evidenceKind','deployment','inventory','capacity','rollback','approvalReferences','sharedIdentityAcknowledged','migrationContract','applicationSigning'})
+    require('document.version', d.get('schemaVersion'), lambda x: type(x) is int and x == 1)
+    require('document.offline-only', d.get('mode'), lambda x: x == 'OFFLINE_ONLY')
+    require('document.evidence-kind', d.get('evidenceKind'), lambda x: x in ['SYNTHETIC_TEST_ONLY','CONTROL_PLANE_SNAPSHOT'])
+    require('identity.shared-boundary', d.get('sharedIdentityAcknowledged'), lambda x: x is True)
+    refs = obj(d.get('approvalReferences'))
+    for key in ['configuration','capacity','sharedIdentity','databaseRoles','rollback']:
+        require('reference.'+key, refs.get(key), present_reference)
+    for field in ['deployment','inventory','capacity','rollback','approvalReferences','migrationContract','applicationSigning']:
+        require('document.object.'+field,d.get(field),lambda x:isinstance(x,dict))
+    manifest = obj(d.get('deployment')); metadata = obj(manifest.get('metadata'))
+    spec = obj(manifest.get('spec')); template = obj(spec.get('template')); annotations = obj(obj(template.get('metadata')).get('annotations')); pod = obj(template.get('spec'))
+    require('service.root-fields', list(manifest), lambda x:set(x)=={'apiVersion','kind','metadata','spec'})
+    require('service.metadata-fields',list(metadata),lambda x:set(x)=={'name','namespace','labels','annotations'})
+    require('service.ingress-fields',list(obj(metadata.get('annotations'))),lambda x:set(x)=={'run.googleapis.com/ingress'})
+    require('service.template-fields',list(template),lambda x:set(x)=={'metadata','spec'} and set(obj(template.get('metadata')))=={'annotations'})
+    require('service.kind', manifest.get('kind'), lambda x: x == 'Service')
+    require('service.api', manifest.get('apiVersion'), lambda x: x == 'serving.knative.dev/v1')
+    require('service.project', metadata.get('namespace'), lambda x: type(x) is str and x == DEPLOYMENT_NUMBER)
+    require('service.region', obj(metadata.get('labels')).get('cloud.googleapis.com/location'), lambda x: x == DEPLOYMENT_REGION)
+    require('service.name', metadata.get('name'), lambda x: isinstance(x,str) and len(x)<=63 and re.fullmatch(r'[a-z](?:[a-z0-9-]*[a-z0-9])?',x) is not None)
+    require('service.internal-ingress', obj(metadata.get('annotations')).get('run.googleapis.com/ingress'), lambda x: x == 'internal')
+    require('service.fields', list(spec), lambda x: set(x) == {'template'})
+    require('service.pod-fields', list(pod), lambda x: set(x) == {'serviceAccountName','containerConcurrency','containers','volumes'})
+    allowed_annotations = {'run.googleapis.com/execution-environment','run.googleapis.com/container-dependencies','run.googleapis.com/network-interfaces','run.googleapis.com/vpc-access-egress','autoscaling.knative.dev/maxScale'}
+    require('service.annotations', list(annotations), lambda x: set(x) == allowed_annotations)
+    require('service.generation', annotations.get('run.googleapis.com/execution-environment'), lambda x: x == 'gen2')
+    require('network.egress', annotations.get('run.googleapis.com/vpc-access-egress'), lambda x: x == 'private-ranges-only')
+    def encoded(value):
+        if not isinstance(value, str): raise ValueError()
+        return json.loads(value)
+    def network_interfaces(value):
+        n = encoded(value)
+        return isinstance(n,list) and len(n)==1 and set(n[0])=={'network','subnetwork'} and n[0]['network']=='default' and isinstance(n[0]['subnetwork'],str) and re.fullmatch(r'[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?',n[0]['subnetwork']) is not None
+    network_valid = require('network.interfaces', annotations.get('run.googleapis.com/network-interfaces'), network_interfaces)
+    require('startup.dependencies', annotations.get('run.googleapis.com/container-dependencies'), lambda x: encoded(x)=={'frontend':['backend']})
+    inv = obj(d.get('inventory')); project = obj(inv.get('project')); sql = obj(inv.get('sql'))
+    require('inventory.project', project.get('projectId'), lambda x: x == DEPLOYMENT_PROJECT)
+    require('inventory.number', project.get('projectNumber'), lambda x: str(x) == DEPLOYMENT_NUMBER)
+    require('sql.instance', sql.get('name'), lambda x: x == DEPLOYMENT_INSTANCE)
+    require('sql.region', sql.get('region'), lambda x: x == DEPLOYMENT_REGION)
+    require('sql.version', sql.get('databaseInstalledVersion'), lambda x: x == 'POSTGRES_18_6')
+    require('sql.running', sql.get('state'), lambda x: x == 'RUNNABLE')
+    ip = obj(obj(sql.get('settings')).get('ipConfiguration'))
+    require('sql.no-public-ip', ip.get('ipv4Enabled'), lambda x: x is False)
+    require('sql.encrypted-server', ip.get('sslMode'), lambda x: x == 'ENCRYPTED_ONLY')
+    require('sql.psc-enabled', obj(ip.get('pscConfig')).get('pscEnabled'), lambda x: x is True)
+    require('sql.ca-mode', ip.get('serverCaMode'), lambda x: x == 'GOOGLE_MANAGED_CAS_CA')
+    require('sql.dns', sql.get('dnsName'), lambda x: x.rstrip('.') == DEPLOYMENT_DNS)
+    if network_valid:
+        subnet = encoded(annotations['run.googleapis.com/network-interfaces'])[0]['subnetwork']
+        target = 'projects/'+DEPLOYMENT_PROJECT+'/regions/'+DEPLOYMENT_REGION+'/subnetworks/'+subnet
+        require('inventory.subnet', inv.get('subnets'), lambda x: any(resource(r.get('selfLink'))==target and resource(r.get('network'))=='projects/'+DEPLOYMENT_PROJECT+'/global/networks/default' and r.get('purpose')=='PRIVATE' and ipaddress.ip_network(r.get('ipCidrRange',''),strict=True).is_private and ipaddress.ip_network(r.get('ipCidrRange',''),strict=True).version==4 and ipaddress.ip_network(r.get('ipCidrRange',''),strict=True).prefixlen<=26 for r in rows(x)))
+    require('inventory.psc', inv.get('psc'), lambda x: any(r.get('IPAddress')=='10.40.32.2' and r.get('pscConnectionStatus')=='ACCEPTED' and resource(r.get('region'))=='projects/'+DEPLOYMENT_PROJECT+'/regions/'+DEPLOYMENT_REGION and resource(r.get('network'))=='projects/'+DEPLOYMENT_PROJECT+'/global/networks/default' and resource(r.get('target'))==resource(sql.get('pscServiceAttachmentLink')) for r in rows(x)))
+    zone=obj(inv.get('dnsZone'))
+    require('inventory.private-dns-zone',zone.get('visibility'),lambda x:x=='private' and zone.get('dnsName')=='us-east1.sql.goog.' and any(resource(r.get('networkUrl'))=='projects/'+DEPLOYMENT_PROJECT+'/global/networks/default' for r in rows(obj(zone.get('privateVisibilityConfig')).get('networks'))))
+    require('inventory.dns', inv.get('dns'), lambda x: any(r.get('name','').rstrip('.')==DEPLOYMENT_DNS and r.get('type')=='A' and r.get('rrdatas')==['10.40.32.2'] for r in rows(x)))
+    runtime = pod.get('serviceAccountName'); deployer = inv.get('deployerIdentity')
+    def service_account(value):
+        return isinstance(value,str) and re.fullmatch(r'[a-z][a-z0-9-]{4,28}[a-z0-9]@'+re.escape(DEPLOYMENT_PROJECT)+r'\.iam\.gserviceaccount\.com',value) is not None
+    require('identity.runtime.custom', runtime, service_account)
+    require('identity.deployer.custom', deployer, service_account)
+    require('identity.separation', deployer, lambda x: x != runtime)
+    for name, address in [('runtime',runtime),('deployer',deployer)]:
+        available('inventory.identity.'+name, inv.get('serviceAccounts'), lambda x: any(r.get('email')==address and r.get('disabled') is False for r in rows(x)))
+    values = rows(pod.get('containers')); containers = {x['name']:x for x in values if isinstance(x,dict) and isinstance(x.get('name'),str)}
+    require('containers.exact-two', pod.get('containers'), lambda x: isinstance(x,list) and len(x)==2 and set(containers)=={'frontend','backend'})
+    capacity = obj(d.get('capacity')); secret_names = set(); image_repos = set(); cpu_total=Decimal(0); memory_total=0
+    for name in ['frontend','backend']:
+        c = obj(containers.get(name)); env_rows = rows(c.get('env')); env = {e['name']:e for e in env_rows if isinstance(e,dict) and isinstance(e.get('name'),str)}
+        allowed = {'CINENEST_AUTH_ORIGIN','HOSTNAME'} if name=='frontend' else {'PORT','CINENEST_BIND_ADDRESS','CINENEST_DB_URL','CINENEST_DB_POOL_MAX','CINENEST_DB_USER','CINENEST_DB_PASSWORD'}
+        require(name+'.env.exact', c.get('env'), lambda x: isinstance(x,list) and len(x)==len(env) and set(env)==allowed)
+        for env_name in sorted(allowed & set(env)):
+            e=env[env_name]
+            if env_name not in ['CINENEST_DB_USER','CINENEST_DB_PASSWORD']:
+                require(name+'.env.literal.'+env_name,e,lambda x:set(x)=={'name','value'} and type(x.get('value')) is str)
+        require(name+'.fields', list(c), lambda x: set(x)==({'name','image','env','startupProbe','livenessProbe','resources','ports'} if name=='frontend' else {'name','image','env','startupProbe','livenessProbe','resources','volumeMounts'}))
+        if name=='frontend':
+            require('frontend.port', c.get('ports'), lambda x: x==[{'containerPort':8080}])
+            require('frontend.host', obj(env.get('HOSTNAME')).get('value'), lambda x: x=='0.0.0.0')
+            require('frontend.loopback', obj(env.get('CINENEST_AUTH_ORIGIN')).get('value'), lambda x: x=='http://127.0.0.1:8081')
+        else:
+            require('backend.port', obj(env.get('PORT')).get('value'), lambda x: x=='8081')
+            require('backend.host', obj(env.get('CINENEST_BIND_ADDRESS')).get('value'), lambda x: x=='0.0.0.0')
+            raw = obj(env.get('CINENEST_DB_URL')).get('value')
+            def jdbc(value):
+                if not isinstance(value,str) or not value.startswith('jdbc:postgresql://'): return False
+                u=urlsplit(value[5:]);q=parse_qsl(u.query,keep_blank_values=True,strict_parsing=True)
+                return u.hostname==DEPLOYMENT_DNS and u.port==5432 and not u.username and not u.password and not u.fragment and re.fullmatch(r'/[a-zA-Z0-9_-]+',u.path) and sorted(q)==[('sslmode','verify-full'),('sslrootcert','/run/secrets/db-ca.pem')]
+            require('backend.jdbc.verify-full',raw,jdbc)
+            require('backend.ca-mount',c.get('volumeMounts'),lambda x:x==[{'name':'database-ca','mountPath':'/run/secrets'}])
+            for key in ['CINENEST_DB_USER','CINENEST_DB_PASSWORD']:
+                e=obj(env.get(key));ref=obj(obj(e.get('valueFrom')).get('secretKeyRef'))
+                require('secret.'+key+'.reference-only',e,lambda x:set(x)=={'name','valueFrom'} and set(obj(x['valueFrom']))=={'secretKeyRef'} and set(ref)=={'name','key'})
+                require('secret.'+key+'.name',ref.get('name'),lambda x:re.fullmatch(r'[a-zA-Z0-9_-]{1,255}',x) is not None)
+                require('secret.'+key+'.version',ref.get('key'),lambda x:type(x) is str and re.fullmatch(r'[1-9][0-9]*',x) is not None)
+                if isinstance(ref.get('name'),str):secret_names.add(ref['name'])
+                available('secret.'+key+'.available',inv.get('secrets'),lambda x:any(r.get('name')=='projects/'+DEPLOYMENT_PROJECT+'/secrets/'+str(ref.get('name')) and any(v.get('version')==ref.get('key') and v.get('state')=='ENABLED' for v in rows(r.get('versions'))) for r in rows(x)))
+            require('backend.pool',obj(env.get('CINENEST_DB_POOL_MAX')).get('value'),lambda x:str(capacity.get('poolMax'))==x and 1<=int(x)<=32)
+        uri=c.get('image')
+        if require(name+'.image.digest',uri,image):
+            repo='projects/'+DEPLOYMENT_PROJECT+'/locations/'+DEPLOYMENT_REGION+'/repositories/'+uri.split('/')[2];image_repos.add(repo)
+            available(name+'.image.repository',inv.get('repositories'),lambda x:any(r.get('name')==repo and r.get('format')=='DOCKER' for r in rows(x)))
+            available(name+'.image.present',inv.get('images'),lambda x:any(r.get('uri')==uri and r.get('status')=='AVAILABLE' for r in rows(x)))
+        for kind,endpoint in [('startupProbe','/healthz' if name=='frontend' else '/health/ready'),('livenessProbe','/healthz' if name=='frontend' else '/health/live')]:
+            probe=obj(c.get(kind));port=8080 if name=='frontend' else 8081
+            require(name+'.'+kind+'.fields',list(probe),lambda x:set(x)=={'timeoutSeconds','periodSeconds','failureThreshold','httpGet'})
+            require(name+'.'+kind+'.endpoint',probe.get('httpGet'),lambda x:x=={'path':endpoint,'port':port})
+            require(name+'.'+kind+'.budget',probe,lambda x:integer(x.get('timeoutSeconds')) and integer(x.get('periodSeconds')) and integer(x.get('failureThreshold')) and x['timeoutSeconds']<=x['periodSeconds']<=240 and (kind!='startupProbe' or x['periodSeconds']*x['failureThreshold']<=600))
+        limits=obj(obj(c.get('resources')).get('limits'))
+        if require(name+'.cpu',limits.get('cpu'),lambda x:type(x) is str and Decimal(x).is_finite() and Decimal(x)>0):cpu_total+=Decimal(limits['cpu'])
+        if require(name+'.memory',limits.get('memory'),lambda x:memory(x)>0):memory_total+=memory(limits['memory'])
+    volumes=rows(pod.get('volumes'));volume=obj(volumes[0]) if len(volumes)==1 else {};ca=obj(volume.get('secret'));items=rows(ca.get('items'));ca_item=obj(items[0]) if len(items)==1 else {}
+    require('secret.ca.volume',pod.get('volumes'),lambda x:isinstance(x,list) and len(x)==1 and set(volume)=={'name','secret'} and volume.get('name')=='database-ca' and set(ca)=={'secretName','items'} and ca_item.get('path')=='db-ca.pem' and set(ca_item)=={'key','path'})
+    require('secret.ca.name',ca.get('secretName'),lambda x:re.fullmatch(r'[a-zA-Z0-9_-]{1,255}',x) is not None)
+    require('secret.ca.version',ca_item.get('key'),lambda x:type(x) is str and re.fullmatch(r'[1-9][0-9]*',x) is not None)
+    if isinstance(ca.get('secretName'),str):secret_names.add(ca['secretName'])
+    available('secret.ca.available',inv.get('secrets'),lambda x:any(r.get('name')=='projects/'+DEPLOYMENT_PROJECT+'/secrets/'+str(ca.get('secretName')) and any(v.get('version')==ca_item.get('key') and v.get('state')=='ENABLED' for v in rows(r.get('versions'))) for r in rows(x)))
+    require('secret.distinct',list(secret_names),lambda x:len(x)==3)
+    roles=obj(inv.get('databaseRoles'));role=obj(roles.get('runtime'));migrator=roles.get('migrationRole')
+    require('database.evidence-kind',roles.get('evidenceKind'),lambda x:x in ['SYNTHETIC_TEST_ONLY','POSTGRESQL_READONLY_RESULT'])
+    require('database.runtime-name',role.get('name'),lambda x:isinstance(x,str) and re.fullmatch(r'[a-zA-Z0-9_-]{1,63}',x) is not None and x.lower() not in ['postgres','cloudsqlsuperuser'])
+    require('database.migration-separation',migrator,lambda x:isinstance(x,str) and x!=role.get('name') and x!='postgres')
+    for key in ['superuser','createDb','createRole','replication','bypassRls','databaseOwner','schemaOwner','cloudSqlSuperuser','memberOfMigrationRole','ddlAllowed']:
+        require('database.runtime.'+key,role.get(key),lambda x:x is False)
+    for key in ['login','migrationHistoryReadable']:
+        require('database.runtime.'+key,role.get(key),lambda x:x is True)
+    require('database.schema',roles.get('schemaVersion'),lambda x:x=='45')
+    for key in ['maxInstances','concurrency','poolMax','maxOverlappingInstances','databaseMaxConnections','reservedConnections','maximumMemoryBytes']:
+        require('capacity.'+key,capacity.get(key),integer)
+    require('capacity.cpu-budget',capacity.get('maximumCpu'),lambda x:type(x) is str and Decimal(x).is_finite() and 0<cpu_total<=Decimal(x))
+    require('capacity.memory-budget',capacity.get('maximumMemoryBytes'),lambda x:integer(x) and 0<memory_total<=x)
+    require('capacity.rollout-overlap',capacity.get('maxOverlappingInstances'),lambda x:integer(x) and x>=2*capacity['maxInstances'])
+    require('capacity.pool-reserve',capacity.get('databaseMaxConnections'),lambda x:integer(x) and capacity['maxOverlappingInstances']*capacity['poolMax']+capacity['reservedConnections']<=x)
+    require('capacity.concurrency',pod.get('containerConcurrency'),lambda x:integer(x) and x==capacity['concurrency'] and x<=1000)
+    require('capacity.max-scale',annotations.get('autoscaling.knative.dev/maxScale'),lambda x:type(x) is str and x==str(capacity['maxInstances']))
+    bindings=rows(inv.get('declaredIamBindings'));runtime_member='serviceAccount:'+str(runtime);deployer_member='serviceAccount:'+str(deployer)
+    expected={(runtime_member,'roles/secretmanager.secretAccessor','projects/'+DEPLOYMENT_PROJECT+'/secrets/'+str(n)) for n in secret_names}
+    expected|={(deployer_member,'roles/run.developer','projects/'+DEPLOYMENT_PROJECT+'/locations/'+DEPLOYMENT_REGION+'/services/'+str(metadata.get('name'))),(deployer_member,'roles/iam.serviceAccountUser','projects/'+DEPLOYMENT_PROJECT+'/serviceAccounts/'+str(runtime))}
+    expected|={(deployer_member,'roles/artifactregistry.reader',repo) for repo in image_repos}
+    def iam(value):
+        values=rows(value)
+        if not all(isinstance(b,dict) and set(b)=={'member','role','resource'} and all(isinstance(v,str) for v in b.values()) for b in values):return False
+        actual={(b['member'],b['role'],b['resource']) for b in values}
+        return len(actual)==len(values) and actual==expected
+    require('iam.exact-declared-least-privilege',inv.get('declaredIamBindings'),iam)
+    rollback=obj(d.get('rollback'))
+    for name in ['backend','frontend']:require('rollback.'+name,rollback.get(name+'Image'),image)
+    require('rollback.schema',rollback.get('schemaVersion'),lambda x:x=='45')
+    require('rollback.schema-evidence',roles.get('schemaVersion'),lambda x:x==rollback.get('schemaVersion'))
+    require('rollback.no-migration',rollback.get('migrationAction'),lambda x:x=='NONE')
+    migration=obj(d.get('migrationContract'))
+    require('migration.contract-fields',list(migration),lambda x:set(x)=={'role','databaseName','passwordSecretRef','mountedInService','executionAuthorization','custodyReference'})
+    require('migration.role',migration.get('role'),lambda x:isinstance(x,str) and x.lower()!='postgres')
+    require('migration.role-evidence',roles.get('migrationRole'),lambda x:x==migration.get('role'))
+    require('migration.not-mounted',migration.get('mountedInService'),lambda x:x is False)
+    require('migration.not-authorized',migration.get('executionAuthorization'),lambda x:x=='NONE')
+    require('migration.custody-reference',migration.get('custodyReference'),present_reference)
+    def database_match(value):
+        backend_env={r['name']:r for r in rows(obj(containers.get('backend')).get('env')) if isinstance(r,dict) and isinstance(r.get('name'),str)}
+        jdbc_url=obj(backend_env.get('CINENEST_DB_URL')).get('value','')
+        return isinstance(value,str) and value==urlsplit(jdbc_url[5:]).path[1:]
+    require('migration.database-match',migration.get('databaseName'),database_match)
+    migration_ref=obj(migration.get('passwordSecretRef'))
+    require('migration.secret-fields',list(migration_ref),lambda x:set(x)=={'name','version'})
+    require('migration.secret-name',migration_ref.get('name'),lambda x:isinstance(x,str) and re.fullmatch(r'[a-zA-Z0-9_-]{1,255}',x) is not None and x not in secret_names)
+    require('migration.secret-version',migration_ref.get('version'),lambda x:type(x) is str and re.fullmatch(r'[1-9][0-9]*',x) is not None)
+    available('migration.secret-available',inv.get('secrets'),lambda x:any(r.get('name')=='projects/'+DEPLOYMENT_PROJECT+'/secrets/'+str(migration_ref.get('name')) and any(v.get('version')==migration_ref.get('version') and v.get('state')=='ENABLED' for v in rows(r.get('versions'))) for r in rows(x)))
+    signing=obj(d.get('applicationSigning'))
+    require('signing.contract-fields',list(signing),lambda x:set(x)=={'mode','secretReferences'})
+    require('signing.pending-boundary',signing.get('mode'),lambda x:x=='PENDING_SEPARATE_IDENTITY_APPROVAL')
+    require('signing.no-unapproved-material',None if signing.get('secretReferences') is None else signing.get('secretReferences')==[],lambda x:x is True)
+
+    status='FAIL' if any(x['status']=='FAIL' for x in checks) else 'BLOCKED' if any(x['status']=='BLOCKED' for x in checks) else 'OFFLINE_CONTRACT_VALID'
+    return {'status':status,'checks':checks,'evidenceKind':'SYNTHETIC_TEST_ONLY' if d.get('evidenceKind')=='SYNTHETIC_TEST_ONLY' or roles.get('evidenceKind')=='SYNTHETIC_TEST_ONLY' else 'CONTROL_PLANE_SNAPSHOT' if d.get('evidenceKind')=='CONTROL_PLANE_SNAPSHOT' else 'UNAVAILABLE','scope':'SUPPLIED_CONFIGURATION_AND_SNAPSHOT_CONTRACT_ONLY','approvalProvenance':'NOT_INDEPENDENTLY_VERIFIED','cloudRunConnectivity':'NOT_RUN','serverCertificateValidation':'NOT_RUN','effectiveIamVerification':'NOT_RUN','secretPayloads':'NOT_READ','liveSqlRoleVerification':'NOT_RUN','rollbackExecution':'NOT_RUN','migrationExecution':'NOT_RUN','applicationSigning':'BLOCKED_SEPARATE_APPROVAL_REQUIRED','customerAuthentication':'BLOCKED','realBanking':'BLOCKED','physicalAdmission':'BLOCKED','productionAuthorization':'NONE','deploymentExecuted':False}
+
+
+def deployment_main(argv=None):
+    """Separate inert mode; runtime --execute is not accepted by this argument parser."""
+    class RedactedParser(argparse.ArgumentParser):
+        def error(self,message):super().error('Deployment contract arguments unavailable or denied')
+    parser=RedactedParser(description='Offline deployment-contract validation; never cloud execution')
+    parser.add_argument('--validate-deployment',type=Path,required=True)
+    parser.add_argument('--evidence',type=Path,required=True)
+    args=parser.parse_args(argv)
+    if not args.validate_deployment.is_absolute() or not args.evidence.is_absolute():parser.error('Absolute input and evidence paths required')
+    root=ROOT.resolve();input_path=args.validate_deployment;output=args.evidence
+    if output.resolve().is_relative_to(root) or root.is_relative_to(output.resolve()):parser.error('Evidence must be outside the source checkout')
+    def pairs(values):
+        result={}
+        for key,value in values:
+            if key in result:raise ValueError()
+            result[key]=value
+        return result
+    try:
+        if input_path.is_symlink() or not input_path.is_file() or input_path.stat().st_size>262144:raise ValueError()
+        descriptor=os.open(input_path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+        with os.fdopen(descriptor,'rb') as source:
+            if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):raise ValueError()
+            raw=source.read(262145)
+        if len(raw)>262144:raise ValueError()
+        document=json.loads(raw.decode('utf-8'),object_pairs_hook=pairs,parse_constant=lambda _:(_ for _ in ()).throw(ValueError()))
+        result=deployment_report(document)
+    except (OSError,UnicodeError,ValueError,TypeError,KeyError,RecursionError):
+        result={'status':'FAIL','checks':[{'id':'document.unavailable-or-invalid','status':'FAIL'}],'cloudRunConnectivity':'NOT_RUN','productionAuthorization':'NONE','deploymentExecuted':False}
+    target=output/'deployment-contract.json'
+    try:
+        if output.is_symlink():parser.error('Evidence directory must not be a symlink')
+        output.mkdir(parents=True,exist_ok=True)
+        with target.open('x',encoding='utf-8') as destination:destination.write(json.dumps(result,indent=2)+'\n')
+    except FileExistsError:parser.error('Refusing to overwrite prior qualification evidence')
+    except OSError:parser.error('Qualification evidence unavailable')
+    print(json.dumps({'status':result['status'],'cloudRunConnectivity':'NOT_RUN','productionAuthorization':'NONE'}))
+    return {'OFFLINE_CONTRACT_VALID':0,'BLOCKED':2,'FAIL':1}[result['status']]
+
+
+def connectivity_entrypoint():
+    if any(x=='--validate-deployment' or x.startswith('--validate-deployment=') for x in sys.argv[1:]):return deployment_main()
+    if any(x in ['--help','-h'] for x in sys.argv[1:]):
+        print('Additional offline mode: --validate-deployment /absolute/configuration.json --evidence /absolute/new-evidence-directory; no runtime or cloud execution')
+    return main()
+
+
+if __name__=='__main__':raise SystemExit(connectivity_entrypoint())

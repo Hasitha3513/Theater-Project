@@ -137,6 +137,26 @@
         "cloudMutation": "NOT_AUTHORIZED",
         "productionDeployment": "NOT_AUTHORIZED",
         "liveAuthenticationBankingAdmission": "NOT_AUTHORIZED"
+      },
+      "boundedCloudRunConnectivityContract": {
+        "scope": "Exact11-path offline configuration/test/governance successor only",
+        "authority": {
+          "name": "Hasitha Wijerathna",
+          "source": "Owner attachment e2ec9652-8c33-41e5-a004-c639a5ce05b0/Pasted text.txt in this conversation",
+          "sourceSha256": "4b5aeced64f3233be7bc6849ca0d8ba6eeb0e9e279bb983c88480969d94c73e5",
+          "proposalSha256": "598de9951f545759b1b9a0e12c2506404e8defae16e3a27aaebd6cc974bc3ca8",
+          "recordedAt": "2026-11-21T01:36:48.867880+05:30",
+          "evidence": "OWNER_DIRECTED_IN_CHAT_NOT_SIGNATURE_VERIFICATION"
+        },
+        "reviewException": {
+          "source": "Direct Owner answer to request_user_input_async call_48863ceec0224c9e925d5991e4ad8608",
+          "answerSha256": "883a0e6a91a24712af7ade7e6e89f4e6a44de60b83c7361485c95ca790a65ee0",
+          "taskOnly": true
+        },
+        "productionDeployment": "NOT_AUTHORIZED",
+        "cloudResourceMutation": "NOT_AUTHORIZED",
+        "secretOrDatabaseChanges": "NOT_AUTHORIZED",
+        "broaderDecisionStatus": "OPEN_DECISION"
       }
     },
     {
