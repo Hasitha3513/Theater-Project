@@ -19456,5 +19456,99 @@ def managed_confirmation_main():
 receipt_admission_successor_errors=managed_confirmation_errors
 inert_ci_main=managed_confirmation_main
 
+
+
+SQL_STAGING_TOKEN_STATE = {'id': 'CN-GCP-SQL-STAGING-TOKEN-SAFETY-001', 'baseline': 'e05ab76c818455514d2e47530344db996a6dbaa2', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'approvedAtRecordedUtc': '2026-11-22T10:17:19.659799+00:00', 'source': 'Owner reply to call_dcb8a62e9f854ad49c4921c4fcaeb17f', 'decision': 'Approve exact source successor', 'requestSha256': '59361f4388f5c37332a72a62a27d50284ce6945f920641b9d3192271d9da2d20', 'reviewMethod': 'Owner-approved task-only verified ledger/controlled diff;100 unchanged reviewed-file reuse;14 accounted historical changes;no full fresh/visual audit claimed', 'inventoryFiles': 114, 'cloudSessionAuthorized': False}, 'scope': 'Exact manifest staging and protected IAM expiry guards,offline regression tests and append-only existing canonical/governance records;no cloud,SQL,app or migration change', 'rollback': 'Governed source revert only; remove only task-owned generated staging. Preserve SQL,databases,roles,images,approvals and historical evidence. No cloud mutation authorized by this source request.', 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'OFFLINE_QUALIFICATION_PASS', 'candidateTests': 30, 'historicalHarnessTests': 148, 'freshCloudSessionAuthorized': False, 'sqlFingerprintsChanged': False, 'historicalMigrations': 44, 'historicalReplay': 'PASS_UNCHANGED_BASELINE_WITH_SHARED_IMMUTABLE_OBJECTS', 'historicalReplayLogSha256': 'eeb2f4c00416c64d55d7386fcb297fe033bd1e66bd342339ad5da9f54f908acb', 'recoveredIntoPersistentWorkspace': True, 'offlineTests': 188, 'newRegressionTests': 40, 'cloudSessionConsumed': True, 'runtimeCloudLogin': 'NOT_RUN', 'cloudMigrations': 'NOT_RUN', 'cloudRunConnectivity': 'NOT_RUN', 'cloudHealth': 'NOT_RUN', 'newLocalPostgresSession': 'NOT_RUN_NOT_AUTHORIZED_OR_NEEDED_FOR_PURE_GUARDS', 'historicalLocalPostgresGroups': 17, 'historicalCloudCleanup': 'PASS_AFTER_INITIAL_ERRORS', 'liveCredentialExpiryAdapter': 'NOT_RUN', 'sourceTestLogSha256': '7c8e330e3b856edc0336be637556b9bd9b1fcb607ac41dc6da2247a72ea6414f'}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': '9b34bacd3729c1e7eb7f21915c64c01ec2bbffbdff5306583dc91d5bc2fee4e3', 'scripts/test-cloud-run.py': 'b7beee0fc9f3350878a92778451300b4a947af04bdb246adfc384318c446fe1e', 'knowledge/ARCHITECTURE.md': 'adeff00a64b3d0266cf51a19e94357e6a24d3971fc88bf0e279b0c0cb583ec45', 'knowledge/PROGRESS.md': 'aac1c0790eda10c18a12228e2a017380300374151c578bb735f4507b1a47e381', 'knowledge/product/FEATURE_CATALOG.md': '911eee301ac85f261b6ae730f2fff166ec61171df8ef60197e46e97a2984d863', 'knowledge/guides/USER_GUIDE.md': 'eccaf2b11b55d6a544a8d3cc892e62b5f0697348f9898b3417cc64f860f2c611'}}
+
+# CN-GCP-SQL-STAGING-TOKEN-SAFETY-001: exact Owner-approved source successor.
+SQL_STAGING_TOKEN_KEY='cloudRunSqlStagingTokenSafety'
+SQL_STAGING_TOKEN_BASE='e05ab76c818455514d2e47530344db996a6dbaa2'
+SQL_STAGING_TOKEN_PATHS=set(SQL_STAGING_TOKEN_STATE['orderedPaths'])
+SQL_STAGING_TOKEN_OLD_MAIN=b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+def sql_staging_token_errors():
+    try:
+        unit=SQL_STAGING_TOKEN_STATE;base=SQL_STAGING_TOKEN_BASE;blob=lambda n:v41_git('show',base+':'+n)
+        if unit['baseline']!=base or unit['status']!='READY' or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}:return ['SQL staging/token admission or production boundary']
+        authority=unit['authority']
+        if authority['source']!='Owner reply to call_dcb8a62e9f854ad49c4921c4fcaeb17f' or authority['decision']!='Approve exact source successor' or authority['requestSha256']!='59361f4388f5c37332a72a62a27d50284ce6945f920641b9d3192271d9da2d20' or authority['cloudSessionAuthorized'] is not False:return ['SQL staging/token Owner authority mismatch']
+        prior=json.loads(blob('knowledge/execution/status.json'))['cloudRunRuntimeExecution']
+        if len(SQL_STAGING_TOKEN_PATHS)!=10 or not SQL_STAGING_TOKEN_PATHS<=set(prior['orderedPaths']):return ['SQL staging/token exact source-scope expansion']
+        for n in ['knowledge/execution/change-sets.json','knowledge/execution/status.json']:
+            data=json.loads((R/n).read_bytes())
+            if data.pop(SQL_STAGING_TOKEN_KEY,None)!=unit or data!=json.loads(blob(n)):return ['SQL staging/token history/admission drift '+n]
+        q=unit['qualification']
+        if q['status']!='OFFLINE_QUALIFICATION_PASS' or q['offlineTests']!=188 or q['newRegressionTests']!=40 or q['historicalMigrations']!=44 or q['sqlFingerprintsChanged'] is not False or q['freshCloudSessionAuthorized'] is not False or q['cloudSessionConsumed'] is not True:return ['SQL staging/token qualification boundary']
+        if any(q[n]!='NOT_RUN' for n in ['runtimeCloudLogin','cloudMigrations','cloudRunConnectivity','cloudHealth','liveCredentialExpiryAdapter']):return ['SQL staging/token fabricated live result']
+        for n,h in unit['sourceSha256'].items():
+            if hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:return ['SQL staging/token source fingerprint drift '+n]
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',base).split(b'\0'):
+            if row:
+                meta,n=row.split(b'\t',1);inventory[n.decode()]=meta.split()
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):return ['SQL staging/token unexpected source inventory']
+        if set(v41_git('diff','--name-only','-z',base,text=True).split('\0'))-{''}!=SQL_STAGING_TOKEN_PATHS:return ['SQL staging/token exact10 path mismatch']
+        for n in actual:
+            p=R/n;mode,kind,oid=inventory[n]
+            if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):return ['SQL staging/token source type/mode drift '+n]
+            if n not in SQL_STAGING_TOKEN_PATHS:
+                data=p.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['SQL staging/token unowned source drift '+n]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(p.relative_to(R)) for p in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:return ['SQL staging/token historical migration inventory drift']
+        for n,main in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',SQL_STAGING_TOKEN_OLD_MAIN)]:
+            old=blob(n)
+            if not old.endswith(main) or not (R/n).read_bytes().startswith(old[:-len(main)]):return ['SQL staging/token predecessor source changed '+n]
+        for n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/n).read_bytes().startswith(blob(n)):return ['SQL staging/token historical prose changed '+n]
+        import runpy
+        module=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        if module['SQL_FILES']!=prior['sqlFingerprints']:return ['SQL staging/token approved SQL fingerprints changed']
+        module['migration_inventory']()
+        manifest=json.loads(blob('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in SQL_STAGING_TOKEN_PATHS-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['SQL staging/token manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):return ['SQL staging/token inputs inaccessible']
+    return []
+
+def sql_staging_token_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('status','BLOCKED'),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('authority',{})]:
+        fake=json.loads(json.dumps(SQL_STAGING_TOKEN_STATE));fake[field]=value
+        with patch.dict(globals(),{'SQL_STAGING_TOKEN_STATE':fake}):
+            if not sql_staging_token_errors():raise ValueError('SQL staging/token accepted invalid '+field)
+    for field,value in [('freshCloudSessionAuthorized',True),('cloudSessionConsumed',False),('cloudRunConnectivity','PASS'),('sqlFingerprintsChanged',True),('liveCredentialExpiryAdapter','PASS')]:
+        fake=json.loads(json.dumps(SQL_STAGING_TOKEN_STATE));fake['qualification'][field]=value
+        with patch.dict(globals(),{'SQL_STAGING_TOKEN_STATE':fake}):
+            if not sql_staging_token_errors():raise ValueError('SQL staging/token accepted forged '+field)
+    read=Path.read_bytes;target=R/'scripts/verify-cloud-connectivity.py'
+    with patch.object(Path,'read_bytes',lambda p:read(p)+b'\n#unapproved' if p==target else read(p)):
+        if not sql_staging_token_errors():raise ValueError('SQL staging/token accepted altered source')
+    glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob(p,*a,**kw),folder/'V46__unapproved.sql']) if p==folder else glob(p,*a,**kw)):
+        if not sql_staging_token_errors():raise ValueError('SQL staging/token accepted extra migration')
+    print('PASS SQL staging/token exact10 scope,Owner authority,history,SQL/migrations,source and fresh-session negative controls',flush=True)
+
+def sql_staging_token_main():
+    import tempfile,sys
+    errors=sql_staging_token_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    sql_staging_token_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-sql-staging-history-') as tmp:
+        target=Path(tmp)/'predecessor';subprocess.run(['git','clone','--quiet','--no-local','--no-checkout','--',common,str(target)],check=True);subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',SQL_STAGING_TOKEN_BASE],check=True)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:
+            (target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+receipt_admission_successor_errors=sql_staging_token_errors
+inert_ci_main=sql_staging_token_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

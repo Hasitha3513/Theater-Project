@@ -577,4 +577,382 @@ class ManagedAssignmentSequencingRegression(unittest.TestCase):
         for timeout in [0,16,True,float('inf'),float('nan'),'10']:
             with self.assertRaises(ValueError):runtime_artifact.wait_managed_assignment(lambda:[],[],timeout)
 
+
+
+import datetime
+import hashlib
+import json
+import os
+import stat
+import tempfile
+from unittest.mock import Mock
+staging_contract = runtime_artifact
+SYNTHETIC_SQL = {name: ('-- SYNTHETIC_TEST_ONLY ' + name + '\nSELECT 1;\n').encode() for name in runtime_artifact.SQL_FILES}
+APPROVED = {name: hashlib.sha256(data).hexdigest() for name, data in SYNTHETIC_SQL.items()}
+MANIFEST = json.dumps(APPROVED)
+NOW = datetime.datetime(2026, 11, 22, 8, 30, tzinfo=datetime.timezone.utc)
+TOKEN = 'SYNTHETIC_CANARY_NOT_A_CREDENTIAL_123456789'
+
+
+class SqlManifestStagingRegression(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        self.src = self.root / 'source'
+        self.src.mkdir()
+        for name in APPROVED:
+            (self.src / name).write_bytes(SYNTHETIC_SQL[name])
+
+    def stage(self, manifest=MANIFEST):
+        return staging_contract.stage_approved_sql(self.src, self.root, manifest, APPROVED)
+
+    def rejects(self, manifest=MANIFEST):
+        with self.assertRaises((ValueError, OSError)):
+            with self.stage(manifest):
+                self.fail('Unsafe staging accepted')
+        self.assertEqual(sorted(p.name for p in self.root.iterdir()), ['source'])
+
+    def test_exact_seven_ordered_files_and_private_permissions(self):
+        with self.stage() as (directory, names):
+            self.assertEqual(names, tuple(APPROVED))
+            self.assertEqual(stat.S_IMODE(directory.stat().st_mode), 0o700)
+            for name in names:
+                self.assertEqual(stat.S_IMODE((directory / name).stat().st_mode), 0o600)
+                self.assertEqual(hashlib.sha256((directory / name).read_bytes()).hexdigest(), APPROVED[name])
+        self.assertFalse(directory.exists())
+        self.assertEqual(set(p.name for p in self.src.iterdir()), set(APPROVED))
+
+    def test_original_glob_regression_catches_psql_omission(self):
+        omitted = set(APPROVED) - {p.name for p in self.src.glob('*.sql.proposed')}
+        self.assertEqual(omitted, {'01-protected-credentials-and-migrator-login.psql.proposed'})
+
+    def test_missing_psql_file(self):
+        (self.src / '01-protected-credentials-and-migrator-login.psql.proposed').unlink()
+        self.rejects()
+
+    def test_extra_sql_file(self):
+        (self.src / '99-unapproved.sql.proposed').write_text('SELECT 1')
+        self.rejects()
+
+    def test_extra_psql_file(self):
+        (self.src / '99-unapproved.psql.proposed').write_text('SELECT 1')
+        self.rejects()
+
+    def test_checksum_failure_cleans_partial_copy(self):
+        (self.src / list(APPROVED)[3]).write_text('CHANGED')
+        self.rejects()
+
+    def test_duplicate_manifest_entry(self):
+        name = next(iter(APPROVED))
+        self.rejects(MANIFEST[:-1] + ',' + json.dumps(name) + ':' + json.dumps(APPROVED[name]) + '}')
+
+    def test_order_mismatch(self):
+        self.rejects(json.dumps(dict(reversed(list(APPROVED.items())))))
+
+    def test_changed_manifest_hash(self):
+        bad = dict(APPROVED)
+        bad[next(iter(bad))] = '0' * 64
+        self.rejects(json.dumps(bad))
+
+    def test_extra_manifest_entry(self):
+        self.rejects(json.dumps(dict(APPROVED, **{'extra.sql.proposed': '0' * 64})))
+
+    def test_manifest_path_traversal(self):
+        bad = dict(APPROVED)
+        digest = bad.pop(next(iter(bad)))
+        bad['../unapproved.sql.proposed'] = digest
+        self.rejects(json.dumps(bad))
+
+    def test_symlink_input_denied(self):
+        name = next(iter(APPROVED))
+        data = (self.src / name).read_bytes()
+        (self.root / 'original').write_bytes(data)
+        (self.src / name).unlink()
+        (self.src / name).symlink_to(self.root / 'original')
+        with self.assertRaises(OSError):
+            with self.stage():
+                self.fail('Symlink accepted')
+        self.assertEqual(sorted(p.name for p in self.root.iterdir()), ['original', 'source'])
+
+    def test_injected_partial_write_failure(self):
+        original = staging_contract.os.open
+        def opened(path, flags, *args, **kwargs):
+            if flags & os.O_WRONLY and str(path).endswith(list(APPROVED)[2]):
+                raise OSError('Synthetic failure')
+            return original(path, flags, *args, **kwargs)
+        with patch.object(staging_contract.os, 'open', opened):
+            self.rejects()
+
+    def test_rejected_execution_removes_staging(self):
+        with self.assertRaises(RuntimeError):
+            with self.stage() as (directory, _):
+                raise RuntimeError('Rejected before authority acquisition')
+        self.assertFalse(directory.exists())
+
+
+class IamTokenExpiryRegression(unittest.TestCase):
+    def setUp(self):
+        self.wall = [NOW]
+        self.monotonic = [100.0]
+
+    def credential(self, seconds=600, token=TOKEN, principal=staging_contract.PRINCIPAL):
+        expiry = (NOW + datetime.timedelta(seconds=seconds)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        return staging_contract.ProtectedIamCredential(token, expiry, principal, lambda: self.wall[0], lambda: self.monotonic[0])
+
+    def helper_result(self, token=TOKEN, principal=staging_contract.PRINCIPAL, expiry=None):
+        return Mock(returncode=0, stdout=json.dumps({'credential': {'access_token': token,
+                   'token_expiry': expiry or (NOW + datetime.timedelta(minutes=10)).strftime('%Y-%m-%dT%H:%M:%SZ')},
+                   'configuration': {'properties': {'core': {'account': principal}}}}))
+
+    def test_valid_token_used_once_and_cleared(self):
+        credential = self.credential()
+        self.assertNotIn(TOKEN, repr(credential))
+        self.assertEqual(credential.use(lambda value: {'authenticated': value == TOKEN}), {'authenticated': True})
+        self.assertIsNone(credential._token)
+        with self.assertRaises(RuntimeError):
+            credential.use(lambda _: 'unexpected')
+
+    def test_expired_and_near_expiry_rejected(self):
+        for seconds in [-1, 0, 149, 150]:
+            with self.assertRaises(ValueError):
+                self.credential(seconds)
+
+    def test_expiry_checked_immediately_before_authentication(self):
+        credential = self.credential()
+        self.wall[0] += datetime.timedelta(seconds=500)
+        send = Mock()
+        with self.assertRaises(RuntimeError):
+            credential.use(send)
+        send.assert_not_called()
+        self.assertIsNone(credential._token)
+
+    def test_monotonic_elapsed_prevents_wallclock_rollback_extension(self):
+        credential = self.credential()
+        self.monotonic[0] += 500
+        with self.assertRaises(RuntimeError):
+            credential.use(lambda _: 'unexpected')
+
+    def test_wallclock_rollback_denied(self):
+        credential = self.credential()
+        self.wall[0] -= datetime.timedelta(seconds=1)
+        with self.assertRaises(RuntimeError):
+            credential.use(lambda _: 'unexpected')
+
+    def test_invalid_or_missing_expiry(self):
+        for value in ['', 'UNKNOWN', '2026-11-22T08:40:00+05:30']:
+            with self.assertRaises(ValueError):
+                staging_contract.ProtectedIamCredential(TOKEN, value, staging_contract.PRINCIPAL)
+
+    def test_wrong_identity_denied(self):
+        with self.assertRaises(ValueError):
+            self.credential(principal='other@example.invalid')
+        for field in ['impersonate_service_account', 'credential_file_override', 'access_token_file']:
+            result = self.helper_result()
+            data = json.loads(result.stdout)
+            data['configuration']['properties']['auth'] = {field: 'SYNTHETIC_UNAPPROVED_OVERRIDE'}
+            result.stdout = json.dumps(data)
+            with self.assertRaises(RuntimeError):
+                staging_contract.acquire_protected_iam('API', Mock(return_value=result), lambda: NOW, lambda: 100)
+        with patch.dict(os.environ, {'CLOUDSDK_AUTH_ACCESS_TOKEN': TOKEN}):
+            runner = Mock()
+            with self.assertRaises(RuntimeError):
+                staging_contract.acquire_protected_iam('API', runner, lambda: NOW, lambda: 100)
+            runner.assert_not_called()
+
+    def test_malformed_token_denied_without_echo(self):
+        for token in [TOKEN + '\n', TOKEN + '\x00', TOKEN + ' ', TOKEN + chr(34), TOKEN + chr(92), 'short']:
+            with self.assertRaises(ValueError) as caught:
+                self.credential(token=token)
+            self.assertNotIn(TOKEN, str(caught.exception))
+
+    def test_unbounded_duration_denied(self):
+        for value in [True, float('inf'), float('nan'), -1, 121, '120']:
+            with self.assertRaises(ValueError):
+                self.credential().check(value)
+
+    def test_cli_acquisition_no_secret_arguments_or_output_files(self):
+        runner = Mock(side_effect=[self.helper_result(), Mock(returncode=0, stdout=TOKEN + '\n')])
+        credential = staging_contract.acquire_protected_iam('SQL', runner, lambda: NOW, lambda: 100)
+        self.assertNotIn(TOKEN, repr(credential))
+        self.assertEqual(runner.call_count, 2)
+        for call in runner.call_args_list:
+            self.assertNotIn(TOKEN, repr(call.args))
+            self.assertNotIn('--output-file', repr(call.args))
+            self.assertTrue(call.kwargs['capture_output'])
+        self.assertIn('--force-auth-refresh', runner.call_args_list[0].args[0])
+
+    def test_login_token_without_matching_expiry_proof_denied(self):
+        runner = Mock(side_effect=[self.helper_result(), Mock(returncode=0, stdout='DIFFERENT_SYNTHETIC_TOKEN')])
+        with self.assertRaises(RuntimeError):
+            staging_contract.acquire_protected_iam('SQL', runner, lambda: NOW, lambda: 100)
+
+    def test_failed_cli_hides_secret_bearing_error(self):
+        runner = Mock(side_effect=RuntimeError(TOKEN))
+        with self.assertRaises(RuntimeError) as caught:
+            staging_contract.acquire_protected_iam('API', runner, lambda: NOW, lambda: 100)
+        self.assertNotIn(TOKEN, str(caught.exception))
+
+    def test_missing_expiry_from_cli_denied(self):
+        result = self.helper_result()
+        data = json.loads(result.stdout)
+        data['credential']['token_expiry'] = ''
+        result.stdout = json.dumps(data)
+        with self.assertRaises(RuntimeError):
+            staging_contract.acquire_protected_iam('API', Mock(return_value=result), lambda: NOW, lambda: 100)
+
+    def test_401_or_unknown_mutation_outcome_never_replayed(self):
+        for kind in ['MUTATION', 'READ_ONLY']:
+            acquire = Mock(side_effect=self.credential)
+            send = Mock(side_effect=RuntimeError('401 ' + TOKEN))
+            with self.assertRaises(RuntimeError) as caught:
+                staging_contract.authenticated_operation(acquire, send, kind)
+            self.assertEqual(acquire.call_count, 1)
+            self.assertEqual(send.call_count, 1)
+            self.assertNotIn(TOKEN, str(caught.exception))
+
+    def test_secret_in_return_value_denied(self):
+        for value in [TOKEN, {'output': TOKEN}, TOKEN.encode()]:
+            with self.assertRaises(RuntimeError) as caught:
+                self.credential().use(lambda _: value)
+            self.assertNotIn(TOKEN, str(caught.exception))
+
+    def test_failed_authentication_uses_fresh_revoker_credential(self):
+        calls = []
+        action_credential = self.credential()
+        revoke_credential = self.credential()
+        self.wall[0] += datetime.timedelta(seconds=500)
+        def revoke():
+            self.wall[0] = NOW
+            revoke_credential.use(lambda _: calls.append('fresh_revoke'))
+        with self.assertRaises(RuntimeError):
+            runtime_artifact.managed_role_lifecycle(
+                lambda: calls.append('grant'), lambda: {'status': 'CONFIRMED'},
+                revoke, lambda: {'status': 'CONFIRMED'},
+                lambda: action_credential.use(lambda _: calls.append('unsafe_action')))
+        self.assertEqual(calls, ['grant', 'fresh_revoke'])
+
+
+
+
+
+class SqlBundleInstallationRegression(unittest.TestCase):
+    setUp = SqlManifestStagingRegression.setUp
+
+    def install(self):
+        with patch.dict(runtime_artifact.SQL_FILES, APPROVED, clear=True):
+            return runtime_artifact.install_approved_sql(self.src, self.destination, MANIFEST)
+
+    def make_destination(self):
+        self.destination = self.root / 'destination'
+        self.destination.mkdir(mode=0o700)
+
+    def test_complete_manifest_installation_includes_psql(self):
+        self.make_destination()
+        result = self.install()
+        self.assertEqual(result['orderedFiles'], list(APPROVED))
+        self.assertEqual({p.name for p in self.destination.iterdir()}, set(APPROVED))
+        self.assertFalse(list(self.root.glob('cinenest-approved-sql-*')))
+
+    def test_existing_sql_output_never_overwritten(self):
+        self.make_destination()
+        preserved = self.destination / next(iter(APPROVED))
+        preserved.write_text('PRESERVE_EXISTING')
+        with self.assertRaises(ValueError):
+            self.install()
+        self.assertEqual(preserved.read_text(), 'PRESERVE_EXISTING')
+
+    def test_partial_installation_failure_removes_only_own_outputs(self):
+        self.make_destination()
+        retained = self.destination / 'public-helper.py'
+        retained.write_text('PRESERVE_HELPER')
+        link = runtime_artifact.os.link
+        calls = []
+        def fail_later(*args, **kwargs):
+            calls.append(args)
+            if len(calls) == 3:
+                raise OSError('Synthetic installation failure')
+            return link(*args, **kwargs)
+        with patch.object(runtime_artifact.os, 'link', fail_later):
+            with self.assertRaises(OSError):
+                self.install()
+        self.assertEqual(list(self.destination.iterdir()), [retained])
+        self.assertFalse(list(self.root.glob('cinenest-approved-sql-*')))
+
+    def test_insecure_destination_rejected(self):
+        self.make_destination()
+        self.destination.chmod(0o755)
+        with self.assertRaises(ValueError):
+            self.install()
+
+    def test_explicit_remote_command_has_no_extension_glob(self):
+        command = runtime_artifact.sql_staging_command()
+        self.assertIn('install_approved_sql', command)
+        self.assertNotIn('*.sql', command)
+        self.assertNotIn(TOKEN, command)
+
+    def test_changed_contract_or_wrong_order_cannot_install(self):
+        self.make_destination()
+        for manifest in [json.dumps(dict(reversed(list(APPROVED.items())))),
+                         json.dumps(dict(APPROVED, **{'bad.psql.proposed': '0' * 64}))]:
+            with patch.dict(runtime_artifact.SQL_FILES, APPROVED, clear=True):
+                with self.assertRaises(ValueError):
+                    runtime_artifact.install_approved_sql(self.src, self.destination, manifest)
+            self.assertEqual(list(self.destination.iterdir()), [])
+
+
+class RuntimeSafetyArtifactRegression(unittest.TestCase):
+    def fixture(self):
+        controller = "def preflight(v):return v['managed_confirmation_errors']()\ndef setup():\n return 'managed-role-source.sha256 *.sql.proposed cinenest-runtime/; cd cinenest-runtime;'\n"
+        helpers = "E=Path('/tmp/cinenest-role-confirmation-fix-20261122/cloud-candidate');\n" + 'def auth():\n pass\ndef api():\n pass\ndef operation(op):\n pass\ndef private_sql(mode):\n pass\ndef role_context(result):\n pass\n'
+        private = "fd=None;protected=[];authority_facts=None\ntry:\n token=request.pop('iamToken');protected.append(token);mode='probe'\n fd=os.memfd_create('cinenest-protected-passfile',0);value=1\n if mode=='credentials':\n  assert len(passwords)==2\nfinally:\n if fd is not None:os.close(fd)\n protected.clear()\n"
+        return controller, helpers, private
+
+    def test_offline_artifact_generation_and_remote_expiry_guard(self):
+        files = runtime_artifact.runtime_safety_artifacts(*self.fixture())
+        self.assertEqual(set(files), {'cloud-session.py', 'cloud-helpers.py', 'private-sql-helper.py'})
+        self.assertIn("M['sql_staging_command']()", files['cloud-session.py'])
+        self.assertNotIn('*.sql.proposed', files['cloud-session.py'])
+        self.assertIn('iamTokenExpiry', files['cloud-helpers.py'])
+        self.assertIn('E=Path(__file__).resolve().parent;', files['cloud-helpers.py'])
+        self.assertNotIn('/tmp/cinenest-role-confirmation-fix-20261122/cloud-candidate', files['cloud-helpers.py'])
+        private = files['private-sql-helper.py']
+        self.assertLess(private.index('credential.check(maximum)'), private.index('fd=os.memfd_create'))
+        self.assertIn('credential.close()', private)
+        self.assertNotIn('token_time>1200', files['cloud-helpers.py'])
+
+    def test_unknown_or_duplicate_predecessor_shape_denied(self):
+        controller, helpers, private = self.fixture()
+        for changed in [controller.replace('*.sql.proposed', 'unknown'), controller + controller]:
+            with self.assertRaises(ValueError):
+                runtime_artifact.runtime_safety_artifacts(changed, helpers, private)
+
+    def test_generated_api_failure_never_replays_mutation(self):
+        files = runtime_artifact.runtime_safety_artifacts(*self.fixture())
+        credential = Mock()
+        def use(sender, required_seconds):
+            self.assertEqual(required_seconds, 30)
+            return sender(TOKEN)
+        credential.use.side_effect = use
+        acquire = Mock(return_value=credential)
+        urllib_request = Mock()
+        urllib_error = __import__('urllib.error', fromlist=['HTTPError'])
+        urllib_request.urlopen.side_effect = urllib_error.HTTPError('https://example.invalid', 401, 'Unauthorized', {}, None)
+        scope = {'M': {'authenticated_operation': runtime_artifact.authenticated_operation,
+                       'acquire_protected_iam': acquire,
+                       'ProtectedRequestFailure': runtime_artifact.ProtectedRequestFailure}, 'urllib': Mock(request=urllib_request, error=urllib_error),
+                 'json': json, 'deadline': None, 'time': __import__('time'),
+                 'Path': Path, '__file__': str(Path.cwd() / 'synthetic-helper.py')}
+        exec(files['cloud-helpers.py'], scope)
+        with self.assertRaises(RuntimeError):
+            scope['api']('PUT', 'https://example.invalid', {'public': 'fixture'})
+        self.assertEqual(acquire.call_count, 1)
+        self.assertEqual(urllib_request.urlopen.call_count, 1)
+
+    def test_generation_never_executes_controller_or_cloud_calls(self):
+        with patch.object(runtime_artifact.subprocess, 'run', side_effect=AssertionError('Unexpected subprocess')):
+            files = runtime_artifact.runtime_safety_artifacts(*self.fixture())
+        for name, text in files.items():
+            compile(text, name, 'exec')
+
 if __name__=='__main__':unittest.main()

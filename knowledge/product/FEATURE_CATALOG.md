@@ -933,3 +933,7 @@ Internal connectivity qualification preserves the exact metadata/certificate DNS
 
 ### Managed-role qualification safeguard
 The internal connectivity harness now distinguishes optional API metadata from fresh authenticated SQL authority. It records effective identities and membership options,denies missing/stale/revoked/wrong-scope evidence,and verifies revocation after entry or action failure.17local PostgreSQL groups and148offline harness tests passed. No application feature,production authentication,SQL privilege or commercial acceptance changes;fresh cloud execution remains separately gated.
+
+
+## Internal qualification SQL staging and credential guards
+CN-GCP-SQL-STAGING-TOKEN-SAFETY-001 qualifies an explicit ordered seven-file manifest,private all-or-nothing staging and protected IAM expiry checks. Missing .psql inputs,unexpected files,duplicate or reordered manifests,changed hashes,expired tokens and uncertain mutation retries fail closed.188offline harness tests passed;generated-controller review is offline only. Live LOGIN,migration and Cloud Run qualification remain NOT_RUN;productionNONE andPART1 acceptance4/7. [Results](../PROGRESS.md#cloud-sql-staging-token-safety).
