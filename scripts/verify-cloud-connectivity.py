@@ -251,7 +251,6 @@ def wait_managed_assignment(fetch,expected,timeout=10,clock=None,pause=None):
 import contextlib
 import datetime as credential_datetime
 import hashlib
-import hmac
 import json
 import math
 import os
@@ -408,13 +407,14 @@ def acquire_protected_iam(purpose, run=None, clock=None, ticks=None):
     """CLI stdout stays in memory. No logging/output-file/secret-bearing argv.
 
     config-helper is an internal SDK interface: fail closed if its contract
-    changes. For SQL, expiry is accepted only for the byte-identical token
-    returned by the existing generate-login-token mechanism.
+    changes. SQL uses the same downscoping contract as generate-login-token,
+    but obtains token and expiry together from one scoped SDK response. A second
+    independently refreshed token must never be compared to the first.
     """
     if purpose not in ('API', 'SQL'):
         raise ValueError('Approved credential purpose required')
     run = run or subprocess.run
-    token = raw = login = None
+    token = raw = None
     try:
         if any(os.environ.get(name) for name in ('CLOUDSDK_AUTH_ACCESS_TOKEN',
                'CLOUDSDK_AUTH_ACCESS_TOKEN_FILE', 'CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE',
@@ -422,6 +422,8 @@ def acquire_protected_iam(purpose, run=None, clock=None, ticks=None):
             raise ValueError()
         args = ['gcloud', 'config', 'config-helper', '--force-auth-refresh',
                 '--account=' + PRINCIPAL, '--format=json', '--quiet', '--verbosity=error']
+        if purpose == 'SQL':
+            args.append('--scopes=https://www.googleapis.com/auth/sqlservice.login')
         environment = dict(os.environ, CLOUDSDK_CORE_LOG_HTTP='false', CLOUDSDK_CORE_VERBOSITY='error')
         q = run(args, capture_output=True, text=True, timeout=25, check=False, env=environment)
         if q.returncode or len(q.stdout) > 65536:
@@ -434,18 +436,11 @@ def acquire_protected_iam(purpose, run=None, clock=None, ticks=None):
             raise ValueError()
         token = raw['credential']['access_token']
         expiry = raw['credential']['token_expiry']
-        if purpose == 'SQL':
-            q = run(['gcloud', 'sql', 'generate-login-token', '--account=' + PRINCIPAL,
-                     '--quiet', '--verbosity=error'], capture_output=True, text=True,
-                    timeout=25, check=False, env=environment)
-            login = q.stdout.strip()
-            if q.returncode or not isinstance(token, str) or not hmac.compare_digest(token, login):
-                raise ValueError()
         return ProtectedIamCredential(token, expiry, principal, clock, ticks)
     except Exception:
         raise RuntimeError('Protected IAM acquisition or expiry verification failed') from None
     finally:
-        token = raw = login = None
+        token = raw = None
 
 
 def authenticated_operation(acquire, send, kind, required_seconds=120):
