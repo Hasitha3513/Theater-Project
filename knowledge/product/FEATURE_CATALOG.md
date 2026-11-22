@@ -926,3 +926,6 @@ CN-GCP-CONNECTIVITY-CONTRACT-001 provides an inert operator validator for suppli
 ### Internal connectivity qualification artifact
 
 The approved14path successor prepares an offline,nonproduction Java25 MIGRATE/PROBE artifact and separate restricted migration/probe job contracts. It adds no customer feature or business-policy approval. The new local restricted-role/credential flow passed;actual Cloud Run application connectivity remains NOT_RUN at this checkpoint. [Boundary](../ARCHITECTURE.md#cloud-runtime-activation-harness).
+
+
+Internal connectivity qualification preserves the exact metadata/certificate DNS name,including its trailing dot,in service/job JDBC URLs. Offline regression uses the real pinned JDBC verifier and rejects stripped or invalid names. This source correction does not establish live Cloud Run connectivity,activate a login or close an acceptance gate.

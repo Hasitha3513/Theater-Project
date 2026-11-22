@@ -19282,5 +19282,85 @@ def runtime_execution_main():
 receipt_admission_successor_errors=runtime_execution_errors
 inert_ci_main=runtime_execution_main
 
+# CN-GCP-TLS-HOSTNAME-CORRECTION-001: approved same-resource security correction.
+HOSTNAME_STATE = {'id': 'CN-GCP-TLS-HOSTNAME-CORRECTION-001', 'baseline': 'def83017163712209dc3776d3bdd80a1a072d93e', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-run.py', 'scripts/test-cloud-run.py', 'scripts/verify-cloud-connectivity.py', 'deployment/cloud-run/service.template.yaml', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'source': 'Owner renewal directive attachment a94dbb9c-d0a4-4da3-8c1f-348c4d345735;Tasks2,4,7 plus preserved exact14path source approval', 'directiveSha256': '519be299158befeb70b187a0d6c1161611db39c0ce0683e5a2982d8f8926bb53', 'scopeApprovalSha256': 'f0791689aba5c235c9e3e93effb61c85650eff48a8feedae59a36b283798bde8'}, 'scope': 'Only exact approved metadata hostname in JDBC configuration and guarded offline artifacts/tests;no application logic,SQL,resource,IAM,cost or production expansion', 'review': 'Preserved task-only verified ledger reuse and controlled-diff review;no new full KB or visual-audit claim', 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'FOCUSED_TESTS_PASS', 'tests': 121, 'cloudRunConnectivity': 'NOT_RUN', 'cloudSessionConsumed': False, 'sqlFingerprintsChanged': False, 'historicalMigrations': 44, 'predecessorReplay': 'RETAINED_EXACT_BASELINE_AND_MANDATORY_HOSTED_REPLAY', 'testLogSha256': '284e0bad58979e6ee15484c8cd8c7aee33088da785fb905efc5f4302eac0c045'}, 'rollback': 'Source-only non-force revert through governed PR;no cloud mutation before qualification', 'sourceSha256': {'scripts/verify-cloud-run.py': '2a105cfdc7519904e72573301fcb48d6b2134382b4f0773395c84e090687a0fc', 'scripts/test-cloud-run.py': '9e0ccbc55f0d3ea20ab0428860bb03dba4faff1858e54f633ca2c360485d6455', 'scripts/verify-cloud-connectivity.py': '5b2651e9815dc39c462d8bf354e5adac01d62c0b137afeb6364a3e99c1b6690d', 'deployment/cloud-run/service.template.yaml': '34ded99306a5d763d320f525f28c085beb777d5e3efdf1f924c58597cca897e8', 'knowledge/ARCHITECTURE.md': 'fb3c7de6e6b93d2d6a3b421b05ca71b1015117e462436185102cd57dc1ef79fc', 'knowledge/PROGRESS.md': 'fa9e201df7d3550ec65068169680eb2b698c6131334c41e747587aca4b29ce95', 'knowledge/product/FEATURE_CATALOG.md': '18e0a62887f9a3a40c2099d790e7c52b2a9d2fbbeb263146104fbd9db0ad1e96', 'knowledge/guides/USER_GUIDE.md': '667747104d64b882c7808c1282c34f00d687d8573bf546e8046c6683b66de79b'}}
+HOSTNAME_KEY='cloudRunTlsHostnameCorrection'
+HOSTNAME_BASE=HOSTNAME_STATE['baseline']
+HOSTNAME_PATHS=set(HOSTNAME_STATE['orderedPaths'])
+HOSTNAME_OLD_MAIN=b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+def hostname_errors():
+    try:
+        unit=HOSTNAME_STATE;base=HOSTNAME_BASE;blob=lambda n:v41_git('show',base+':'+n)
+        if unit['status']!='READY' or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}:return ['Hostname source/production boundary']
+        if unit['authority']['scopeApprovalSha256']!='f0791689aba5c235c9e3e93effb61c85650eff48a8feedae59a36b283798bde8' or unit['authority']['directiveSha256']!='519be299158befeb70b187a0d6c1161611db39c0ce0683e5a2982d8f8926bb53':return ['Hostname approval provenance']
+        old=json.loads(blob('knowledge/execution/status.json'))['cloudRunRuntimeExecution']
+        if not HOSTNAME_PATHS<=set(old['orderedPaths']):return ['Hostname scope expansion']
+        for n in ['knowledge/execution/change-sets.json','knowledge/execution/status.json']:
+            d=json.loads((R/n).read_bytes())
+            if d.pop(HOSTNAME_KEY,None)!=unit or d!=json.loads(blob(n)):return ['Hostname admission/history drift '+n]
+        q=unit['qualification']
+        if q['status']!='FOCUSED_TESTS_PASS' or q['tests']!=121 or q['cloudRunConnectivity']!='NOT_RUN' or q['cloudSessionConsumed'] is not False or q['sqlFingerprintsChanged'] is not False:return ['Hostname qualification or false live result']
+        for n,h in unit['sourceSha256'].items():
+            if hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:return ['Hostname source fingerprint drift '+n]
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',base).split(b'\0'):
+            if row:
+                meta,n=row.split(b'\t',1);inventory[n.decode()]=meta.split()
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):return ['Hostname unexpected file inventory']
+        if set(v41_git('diff','--name-only','-z',base,text=True).split('\0'))-{''}!=HOSTNAME_PATHS:return ['Hostname exact12 path mismatch']
+        for n in actual:
+            p=R/n;mode,kind,oid=inventory[n]
+            if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):return ['Hostname file mode/type drift '+n]
+            if n not in HOSTNAME_PATHS:
+                data=p.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Hostname unowned source drift '+n]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(x.relative_to(R)) for x in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:return ['Hostname migration inventory drift']
+        host=b'ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog'
+        for n in ['scripts/verify-cloud-connectivity.py','deployment/cloud-run/service.template.yaml']:
+            if (R/n).read_bytes()!=blob(n).replace(host+b':5432',host+b'.:5432'):return ['Hostname correction exceeds approved exact DNS '+n]
+        for n,main in [('scripts/verify-cloud-run.py',b"if __name__=='__main__':raise SystemExit(runtime_artifact_entrypoint())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',HOSTNAME_OLD_MAIN)]:
+            before=blob(n)
+            if not before.endswith(main) or not (R/n).read_bytes().startswith(before[:-len(main)]):return ['Hostname predecessor control changed '+n]
+        for n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/n).read_bytes().startswith(blob(n)):return ['Hostname historical prose changed '+n]
+        manifest=json.loads(blob('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in HOSTNAME_PATHS-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Hostname manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):return ['Hostname admission inputs inaccessible']
+    return []
+
+def hostname_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('status','BLOCKED'),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('authority',{'directiveSha256':'0'*64})]:
+        fake=json.loads(json.dumps(HOSTNAME_STATE));fake[field]=value
+        with patch.dict(globals(),{'HOSTNAME_STATE':fake}):
+            if not hostname_errors():raise ValueError('Hostname accepted invalid '+field)
+    read=Path.read_bytes;target=R/'scripts/verify-cloud-connectivity.py'
+    with patch.object(Path,'read_bytes',lambda p:read(p)+b'\n#drift' if p==target else read(p)):
+        if not hostname_errors():raise ValueError('Hostname accepted altered source')
+    glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob(p,*a,**kw),folder/'V27__unapproved.sql']) if p==folder else glob(p,*a,**kw)):
+        if not hostname_errors():raise ValueError('Hostname accepted extra migration')
+    print('PASS Hostname exact approved scope,history,source/migrations and negative controls',flush=True)
+
+def hostname_main():
+    import tempfile,sys
+    errors=hostname_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    hostname_negative_controls()
+    q=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if q.returncode:return q.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-hostname-history-') as tmp:
+        target=Path(tmp)/'predecessor';subprocess.run(['git','clone','--quiet','--no-local','--no-checkout','--',common,str(target)],check=True);subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',HOSTNAME_BASE],check=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+receipt_admission_successor_errors=hostname_errors
+inert_ci_main=hostname_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

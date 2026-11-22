@@ -57,7 +57,7 @@ spec:
             - name: CINENEST_BIND_ADDRESS
               value: 0.0.0.0
             - name: CINENEST_DB_URL
-              value: jdbc:postgresql://ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog:5432/__APPROVED_DATABASE__?sslmode=verify-full&sslrootcert=/run/secrets/db-ca.pem
+              value: jdbc:postgresql://ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog.:5432/__APPROVED_DATABASE__?sslmode=verify-full&sslrootcert=/run/secrets/db-ca.pem
             - name: CINENEST_DB_POOL_MAX
               value: '__APPROVED_POOL_MAX__'
             - name: CINENEST_DB_USER

@@ -624,3 +624,6 @@ Exit0 means OFFLINE_CONTRACT_VALID for the supplied configuration only;exit2 mea
 ### Internal qualification operator boundary
 
 `scripts/verify-cloud-connectivity.py` defaults to an offline historical-migration fingerprint report. Its explicit `--prepare-context` mode requires new absolute output and approved SQL/dependency roots;it builds no image,reads no secret payload and deploys nothing. Generated artifact contexts must stay outside Git. MIGRATE uses its separate identity/secret;PROBE and the app must never receive migration credentials. Do not run either cloud mode without exact approval,READY admission,local/hosted qualification and resource/cleanup checks. This is not a customer login,commercial launch or physical-admission procedure. [Current evidence](../PROGRESS.md#cloud-runtime-activation-harness).
+
+
+For internal Cloud SQL qualification,use the complete approved certificate hostname ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog. in JDBC configuration. Keep sslmode=verify-full and the pinned CA. Removing the terminal dot can fail JDBC certificate matching. Never substitute require,verify-ca or an arbitrary hostname. Run only after current source/CI,time,cost,credentials and cleanup gates pass;an offline result is not a live connection result.
