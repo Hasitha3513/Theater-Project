@@ -8786,15 +8786,15 @@
       "historicalLocalPostgresGroups": 17,
       "historicalCloudCleanup": "PASS_AFTER_INITIAL_ERRORS",
       "liveCredentialExpiryAdapter": "NOT_RUN",
-      "sourceTestLogSha256": "7c8e330e3b856edc0336be637556b9bd9b1fcb607ac41dc6da2247a72ea6414f"
+      "sourceTestLogSha256": "3de5ce0bb6d06096409df18a48cb504ea702924e8c371cb6ac3742b55b4220ed"
     },
     "sourceSha256": {
-      "scripts/verify-cloud-connectivity.py": "9b34bacd3729c1e7eb7f21915c64c01ec2bbffbdff5306583dc91d5bc2fee4e3",
-      "scripts/test-cloud-run.py": "b7beee0fc9f3350878a92778451300b4a947af04bdb246adfc384318c446fe1e",
-      "knowledge/ARCHITECTURE.md": "adeff00a64b3d0266cf51a19e94357e6a24d3971fc88bf0e279b0c0cb583ec45",
-      "knowledge/PROGRESS.md": "aac1c0790eda10c18a12228e2a017380300374151c578bb735f4507b1a47e381",
+      "scripts/verify-cloud-connectivity.py": "998d2e05141a44d2d82beb77f5d74f017e275e45f5dd4f2423af05a85aa92df2",
+      "scripts/test-cloud-run.py": "6690dc43141d2476058a8bc66e26f36a0ecdb975fbdb674dbcd07d5851ee2cab",
+      "knowledge/ARCHITECTURE.md": "b2e649d6e1747ddb4be74c783d8d35ed75293f357615db5fdb6cda780cbc9773",
+      "knowledge/PROGRESS.md": "235e42eb223f9443b1645317d11f42b1d38fe958d32b9241f63251d255146ec8",
       "knowledge/product/FEATURE_CATALOG.md": "911eee301ac85f261b6ae730f2fff166ec61171df8ef60197e46e97a2984d863",
-      "knowledge/guides/USER_GUIDE.md": "eccaf2b11b55d6a544a8d3cc892e62b5f0697348f9898b3417cc64f860f2c611"
+      "knowledge/guides/USER_GUIDE.md": "1569de477c22fec0ad556084d53ae254edad409d13faeb49ab577a39f3b41f7b"
     }
   }
 }

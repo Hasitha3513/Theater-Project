@@ -772,20 +772,30 @@ class IamTokenExpiryRegression(unittest.TestCase):
                 self.credential().check(value)
 
     def test_cli_acquisition_no_secret_arguments_or_output_files(self):
-        runner = Mock(side_effect=[self.helper_result(), Mock(returncode=0, stdout=TOKEN + '\n')])
+        runner = Mock(return_value=self.helper_result())
         credential = staging_contract.acquire_protected_iam('SQL', runner, lambda: NOW, lambda: 100)
         self.assertNotIn(TOKEN, repr(credential))
-        self.assertEqual(runner.call_count, 2)
+        self.assertEqual(runner.call_count, 1)
         for call in runner.call_args_list:
             self.assertNotIn(TOKEN, repr(call.args))
             self.assertNotIn('--output-file', repr(call.args))
             self.assertTrue(call.kwargs['capture_output'])
         self.assertIn('--force-auth-refresh', runner.call_args_list[0].args[0])
+        self.assertIn('--scopes=https://www.googleapis.com/auth/sqlservice.login', runner.call_args_list[0].args[0])
 
-    def test_login_token_without_matching_expiry_proof_denied(self):
-        runner = Mock(side_effect=[self.helper_result(), Mock(returncode=0, stdout='DIFFERENT_SYNTHETIC_TOKEN')])
-        with self.assertRaises(RuntimeError):
-            staging_contract.acquire_protected_iam('SQL', runner, lambda: NOW, lambda: 100)
+    def test_sql_pair_does_not_compare_independently_refreshed_tokens(self):
+        api_token = 'SYNTHETIC_API_TOKEN_123456789'
+        sql_token = 'SYNTHETIC_SQL_TOKEN_987654321'
+        def sdk(args, **kwargs):
+            # The installed SDK independently refreshes each scoped credential.
+            return self.helper_result(sql_token if any(a.startswith('--scopes=') for a in args) else api_token)
+        runner = Mock(side_effect=sdk)
+        api = staging_contract.acquire_protected_iam('API', runner, lambda: NOW, lambda: 100)
+        sql = staging_contract.acquire_protected_iam('SQL', runner, lambda: NOW, lambda: 100)
+        self.assertEqual(api.use(lambda value: value == api_token), True)
+        self.assertEqual(sql.use(lambda value: value == sql_token), True)
+        self.assertEqual(runner.call_count, 2)  # Exactly one call per purpose.
+        self.assertTrue(all(call.args[0][1:3] == ['config', 'config-helper'] for call in runner.call_args_list))
 
     def test_failed_cli_hides_secret_bearing_error(self):
         runner = Mock(side_effect=RuntimeError(TOKEN))
