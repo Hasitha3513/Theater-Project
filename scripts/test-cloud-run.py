@@ -443,7 +443,9 @@ class ExactCertificateHostnameBoundaries(unittest.TestCase):
         data=(m.ROOT/'deployment/cloud-run/service.template.yaml').read_text();self.assertEqual(data.count(m.DEPLOYMENT_DNS+'.:5432'),1);self.assertNotIn(m.DEPLOYMENT_DNS+':5432',data)
     def test_pinned_jdbc_verifier_rejects_stripped_and_invalid_names(self):
         import tempfile,subprocess,hashlib
-        jar=Path.home()/'.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar'
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        candidates=[m.ROOT/'.cache/m2'/relative,Path.home()/'.m2/repository'/relative]
+        jar=next((p for p in candidates if p.is_file()),candidates[0])
         self.assertEqual(hashlib.sha256(jar.read_bytes()).hexdigest(),runtime_artifact.DEPENDENCIES['org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar'])
         with tempfile.TemporaryDirectory() as tmp:
             source=Path(tmp)/'HostnameCheck.java';source.write_text('import org.postgresql.ssl.PGjdbcHostnameVerifier; class HostnameCheck { public static void main(String[] args) { var v=PGjdbcHostnameVerifier.INSTANCE; String host="'+m.DEPLOYMENT_DNS+'."; if(!v.verifyHostName(host,host)||v.verifyHostName(host.substring(0,host.length()-1),host)||v.verifyHostName("wrong.example",host))throw new AssertionError(); System.out.println("EXACT_NAME_AND_NEGATIVES:PASS"); } }')
