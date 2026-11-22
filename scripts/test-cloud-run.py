@@ -452,4 +452,129 @@ class ExactCertificateHostnameBoundaries(unittest.TestCase):
             result=subprocess.run(['java','-cp',str(jar),str(source)],capture_output=True,text=True,timeout=30)
             self.assertEqual(result.returncode,0,result.stderr);self.assertIn('EXACT_NAME_AND_NEGATIVES:PASS',result.stdout)
 
+
+
+class ManagedRoleConfirmationRegression(unittest.TestCase):
+    def fixture(self,phase='DELEGATED'):
+        from datetime import datetime,timezone,timedelta
+        import uuid
+        now=datetime.now(timezone.utc); nonce=str(uuid.uuid4())
+        user={'name':runtime_artifact.MANAGED_PRINCIPAL,'type':'CLOUD_IAM_USER'}
+        sql={'nonce':nonce,'observedAt':now.isoformat(),'currentUser':'cloudsqlsuperuser','sessionUser':user['name'],'database':'postgres','tls':True,'member':True,'canSet':True,'runtimeAdmin':True,'migratorAdmin':True,'restricted':True,'edges':[{'role':'cloudsqlsuperuser','member':user['name'],'grantor':'provider_fixture','admin':False,'inherit':False,'set':False}]}
+        context={'project':runtime_artifact.MANAGED_PROJECT,'instance':runtime_artifact.MANAGED_INSTANCE,'principal':user['name'],'nonce':nonce,'sslmode':'verify-full','host':'ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog.','hostaddr':'10.40.32.2','caSha256':'b9c1735f6619bc814020948a0da2e8970efa76f7d885fd28dbe1c21a85193f46','operation':{'id':str(uuid.uuid4()),'status':'DONE','phase':phase,'completedAt':(now-timedelta(seconds=1)).isoformat()},'revokerArmed':True,'probeSha256':runtime_artifact.AUTHORITY_PROBE_SHA256,'probePassed':True}
+        if phase=='REVOKED':
+            sql.update(currentUser=user['name'],member=False,canSet=False,runtimeAdmin=False,migratorAdmin=False,edges=[])
+        return user,sql,context,now
+    def result(self,parts,phase='DELEGATED'):
+        return runtime_artifact.managed_role_confirmation(*parts[:3],phase,parts[3])
+    def test_original_optional_metadata_assertion_regression(self):
+        f=self.fixture();self.assertEqual(f[0].get('databaseRoles',[]),[])
+        with self.assertRaises(AssertionError):assert f[0].get('databaseRoles',[])==['cloudsqlsuperuser']
+        self.assertIsNone(runtime_artifact.managed_role_metadata(f[0]));self.assertEqual(self.result(f)['status'],'CONFIRMED')
+    def test_api_metadata_alone_never_proves_authority(self):
+        f=self.fixture();f[0]['databaseRoles']=['cloudsqlsuperuser'];self.assertEqual(runtime_artifact.managed_role_confirmation(f[0],{},f[2],'DELEGATED',f[3])['status'],'DENIED')
+    def test_explicit_empty_or_conflicting_metadata_denied(self):
+        for roles in [[],['other'],['cloudsqlsuperuser','cloudsqlsuperuser'],None,'cloudsqlsuperuser']:
+            f=self.fixture();f[0]['databaseRoles']=roles;self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_explicit_matching_metadata_requires_sql(self):
+        f=self.fixture();f[0]['databaseRoles']=['cloudsqlsuperuser'];self.assertEqual(self.result(f)['status'],'CONFIRMED')
+        f[1]['member']=False;self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_current_session_and_effective_role_are_distinct(self):
+        for key,value in [('currentUser','cinenest44@gmail.com'),('sessionUser','postgres'),('database','cinenest_connectivity_qualification')]:
+            f=self.fixture();f[1][key]=value;self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_missing_revoked_or_unusable_authority_denied(self):
+        for key in ['member','canSet','runtimeAdmin','migratorAdmin','tls']:
+            for value in [False,None,'true',1]:
+                f=self.fixture();f[1][key]=value;self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_stored_options_not_confused_with_effective_provider_rights(self):
+        f=self.fixture();self.assertEqual(self.result(f)['status'],'CONFIRMED')
+        self.assertFalse(f[1]['edges'][0]['set']);f[1]['canSet']=False;self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_wrong_grant_scope_and_identity_denied(self):
+        for key in ['project','instance','principal','host','hostaddr','sslmode','caSha256']:
+            f=self.fixture();f[2][key]='wrong';self.assertEqual(self.result(f)['status'],'DENIED')
+        for key in ['name','type','project','instance']:
+            f=self.fixture();f[0][key]='wrong';self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_stale_future_or_pre_update_sql_denied(self):
+        from datetime import timedelta
+        for seconds in [-11,1,-2]:
+            f=self.fixture();f[1]['observedAt']=(f[3]+timedelta(seconds=seconds)).isoformat();self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_nonce_replay_denied(self):
+        import uuid
+        f=self.fixture();f[1]['nonce']=str(uuid.uuid4());self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_unfinished_or_failed_operation_denied(self):
+        for key,value in [('status','PENDING'),('error',{'code':'denied'}),('phase','REVOKED'),('id','')]:
+            f=self.fixture();f[2]['operation'][key]=value;self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_reviewed_noop_probe_and_independent_revoker_mandatory(self):
+        for key,value in [('revokerArmed',False),('probePassed',False),('probeSha256','0'*64)]:
+            f=self.fixture();f[2][key]=value;self.assertEqual(self.result(f)['status'],'DENIED')
+    def test_readonly_query_has_only_nonsecret_catalogs(self):
+        import uuid
+        q=runtime_artifact.managed_role_query(str(uuid.uuid4()));self.assertTrue(q.startswith('SELECT '))
+        for text in ['pg_auth_members','admin_option','inherit_option','set_option','current_user','session_user','clock_timestamp()']:self.assertIn(text,q)
+        for text in ['pg_authid','rolpassword','ALTER ','GRANT ','REVOKE ','PASSWORD']:self.assertNotIn(text,q)
+        with self.assertRaises(ValueError):runtime_artifact.managed_role_query("';GRANT x--")
+    def test_actual_revocation_required_not_empty_optional_metadata(self):
+        f=self.fixture('REVOKED');self.assertEqual(self.result(f,'REVOKED')['status'],'CONFIRMED')
+        for key in ['member','canSet','runtimeAdmin','migratorAdmin']:
+            bad=self.fixture('REVOKED');bad[1][key]=True;self.assertEqual(self.result(bad,'REVOKED')['status'],'DENIED')
+    def test_revocation_requires_restricted_login_and_no_edges(self):
+        f=self.fixture('REVOKED');f[1]['restricted']=False;self.assertEqual(self.result(f,'REVOKED')['status'],'DENIED')
+        f=self.fixture('REVOKED');f[1]['edges']=self.fixture()[1]['edges'];self.assertEqual(self.result(f,'REVOKED')['status'],'DENIED')
+    def test_failed_entry_revokes_without_running_action(self):
+        calls=[]
+        with self.assertRaises(RuntimeError):runtime_artifact.managed_role_lifecycle(lambda:calls.append('grant'),lambda:{'status':'DENIED'},lambda:calls.append('revoke'),lambda:{'status':'CONFIRMED'},lambda:calls.append('action'))
+        self.assertEqual(calls,['grant','revoke'])
+    def test_grant_or_action_exception_still_revokes(self):
+        for where in ['grant','action']:
+            calls=[]
+            def step(name):
+                calls.append(name)
+                if name==where:raise RuntimeError('injected failure')
+            with self.assertRaises(RuntimeError):runtime_artifact.managed_role_lifecycle(lambda:step('grant'),lambda:{'status':'CONFIRMED'},lambda:step('revoke'),lambda:{'status':'CONFIRMED'},lambda:step('action'))
+            self.assertEqual(calls[-1],'revoke')
+    def test_unverified_revocation_never_returns_success(self):
+        with self.assertRaises(RuntimeError):runtime_artifact.managed_role_lifecycle(lambda:None,lambda:{'status':'CONFIRMED'},lambda:None,lambda:{'status':'DENIED'},lambda:'done')
+
+
+
+class ManagedAssignmentMetadataRegression(unittest.TestCase):
+    fixture=ManagedRoleConfirmationRegression.fixture
+    def test_actual_catalog_assignment_replaces_optional_api_lookup(self):
+        f=self.fixture();f[1]['currentUser']=runtime_artifact.MANAGED_PRINCIPAL;f[1]['tls']=False
+        self.assertEqual(runtime_artifact.managed_assignment_roles(f[1],f[2]['nonce'],f[3]),['cloudsqlsuperuser'])
+        self.assertEqual(runtime_artifact.managed_role_confirmation(f[0],f[1],f[2],'DELEGATED',f[3])['status'],'DENIED')
+    def test_revoked_assignment_catalog_is_empty(self):
+        f=self.fixture('REVOKED');self.assertEqual(runtime_artifact.managed_assignment_roles(f[1],f[2]['nonce'],f[3]),[])
+    def test_unknown_concurrent_membership_is_preserved_by_refusal(self):
+        f=self.fixture('REVOKED');f[1]['edges']=[{'role':'other','member':runtime_artifact.MANAGED_PRINCIPAL,'grantor':'operator','admin':False,'inherit':True,'set':True}]
+        with self.assertRaises(ValueError):runtime_artifact.managed_assignment_roles(f[1],f[2]['nonce'],f[3])
+    def test_missing_stale_wrong_identity_catalog_cannot_be_empty_assignment(self):
+        from datetime import timedelta
+        for field,value in [('edges',None),('currentUser','postgres'),('sessionUser','postgres'),('nonce','wrong'),('observedAt',(self.fixture()[3]-timedelta(minutes=1)).isoformat()),('member',True)]:
+            f=self.fixture('REVOKED');f[1][field]=value
+            with self.assertRaises(ValueError):runtime_artifact.managed_assignment_roles(f[1],f[2]['nonce'],f[3])
+    def test_catalog_query_includes_actual_role_options_and_no_secret_fields(self):
+        import uuid
+        q=runtime_artifact.managed_assignment_query(str(uuid.uuid4()));self.assertIn('WHERE m.rolname=session_user',q);self.assertNotIn("WHERE r.rolname='cloudsqlsuperuser'",q)
+        for name in ['pg_authid','rolpassword','GRANT ','REVOKE ','ALTER ']:self.assertNotIn(name,q)
+
+
+
+class ManagedAssignmentSequencingRegression(unittest.TestCase):
+    def test_bounded_observation_retries_visibility_not_grants(self):
+        ticks=[0.0];observations=iter([[],[],['cloudsqlsuperuser']]);calls=[]
+        def fetch():calls.append('read');return next(observations)
+        result=runtime_artifact.wait_managed_assignment(fetch,['cloudsqlsuperuser'],1,lambda:ticks[0],lambda t:ticks.__setitem__(0,ticks[0]+t))
+        self.assertEqual(result,['cloudsqlsuperuser']);self.assertEqual(calls,['read']*3)
+    def test_missing_authority_times_out_without_positive_default(self):
+        ticks=[0.0]
+        with self.assertRaises(TimeoutError):runtime_artifact.wait_managed_assignment(lambda:[],['cloudsqlsuperuser'],1,lambda:ticks[0],lambda t:ticks.__setitem__(0,ticks[0]+t))
+        self.assertEqual(ticks[0],1)
+    def test_invalid_snapshot_not_retried_or_accepted(self):
+        for value in [None,['other'],'cloudsqlsuperuser']:
+            with self.assertRaises(ValueError):runtime_artifact.wait_managed_assignment(lambda:value,['cloudsqlsuperuser'])
+    def test_invalid_or_unbounded_deadlines_denied(self):
+        for timeout in [0,16,True,float('inf'),float('nan'),'10']:
+            with self.assertRaises(ValueError):runtime_artifact.wait_managed_assignment(lambda:[],[],timeout)
+
 if __name__=='__main__':unittest.main()

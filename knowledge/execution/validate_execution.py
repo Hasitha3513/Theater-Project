@@ -19362,5 +19362,99 @@ def hostname_main():
 receipt_admission_successor_errors=hostname_errors
 inert_ci_main=hostname_main
 
+
+MANAGED_CONFIRMATION_STATE = {'id': 'CN-GCP-MANAGED-ROLE-CONFIRMATION-001', 'baseline': '6c51eb3a2d3cb467d600baa2a4c3d350daca879b', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'source': 'Direct Owner directive FIX MANAGED-ROLE CONFIRMATION AND RESUME CLOUD ACTIVATION;Tasks3,4,5,7', 'preservedSourceScopeSha256': 'f0791689aba5c235c9e3e93effb61c85650eff48a8feedae59a36b283798bde8'}, 'scope': 'Pure managed-role confirmation/query/lifecycle guards and tests in existing approved harness paths;append-only canonical/governance records;no application,SQL privilege,template or migration change', 'rollback': 'Source revert through governed PR;original failed controller/evidence preserved;no cloud runtime authority implied', 'review': 'Continue existing bounded runtime workstream under preserved task-only ledger/controlled-diff review;100 unchanged files,14 changed historical files;no full current KB/visual review claimed', 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'LOCAL_QUALIFICATION_PASS', 'offlineTests': 148, 'localPostgresGroups': 17, 'localCleanup': 'PASS', 'priorCloudSessionConsumed': True, 'freshCloudSessionAuthorized': False, 'runtimeCloudLogin': 'NOT_RUN', 'cloudMigrations': 'NOT_RUN', 'cloudRunConnectivity': 'NOT_RUN', 'cloudHealth': 'NOT_RUN', 'historicalMigrations': 44, 'sqlFingerprintsChanged': False, 'unitLogSha256': '4249821c8a9564158e0e45b12be7ce9f3effe648261c207ce299f1fdafb3c735', 'localResultSha256': '9a604967db632e4ee29f7ffb5bd8528235bcde202bee116de4689ff9ff8549af', 'protectedControllerTests': 7, 'liveReadonlyAssignmentReader': 'PASS_METADATA_ONLY'}, 'failureEvidence': {'source': 'Retained runtime-renewal-20261122 and runtime-renewal-results-20261122 receipts', 'transientApiPayload': 'NOT_RETAINED_DO_NOT_INFER_OMISSION_VERSUS_STALENESS', 'sqlProbeDuringFailedBurst': 'NOT_RUN', 'operationGrant': '9740e6ac-5410-49c8-afbc-0eaf00000026 DONE', 'operationRevocation': '7fabc903-f62a-4def-8ecc-e13600000026 DONE'}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': 'd155e91e25ca4d4c17198333138442e5c374bc0bde46ed5fa5fe8d2c3d985bab', 'scripts/test-cloud-run.py': '0d533dc3a0bf251366a7d6e9b06b1079ba7ee072759e246e1d6f9edd67417222', 'knowledge/ARCHITECTURE.md': '3f1c8aec339934c65e3dfc9f4b13c8a2c2334a584084e3e1db78eabe85c25b00', 'knowledge/PROGRESS.md': '63010f537323ec151a1594c3dbb728cfa57c281a83d7e95d808e130898e89ba9', 'knowledge/product/FEATURE_CATALOG.md': 'adbdc4b4cbcd479a729c569dd5fbe4de1ce211fd6897707e1e8956e80e2bcd37', 'knowledge/guides/USER_GUIDE.md': '067a0dbd990efee4da95b6a6b4a4dd6aea94818bbb4250bcd2cd88acb2686662'}}
+# CN-GCP-MANAGED-ROLE-CONFIRMATION-001: scoped confirmation and failure cleanup.
+MANAGED_CONFIRMATION_KEY='cloudRunManagedRoleConfirmation'
+MANAGED_CONFIRMATION_BASE='6c51eb3a2d3cb467d600baa2a4c3d350daca879b'
+MANAGED_CONFIRMATION_PATHS=set(MANAGED_CONFIRMATION_STATE['orderedPaths'])
+MANAGED_CONFIRMATION_OLD_MAIN=b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+def managed_confirmation_errors():
+    try:
+        unit=MANAGED_CONFIRMATION_STATE;base=MANAGED_CONFIRMATION_BASE;blob=lambda n:v41_git('show',base+':'+n)
+        if unit['baseline']!=base or unit['status']!='READY' or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}:return ['Managed confirmation admission/production boundary']
+        if unit['authority']['preservedSourceScopeSha256']!='f0791689aba5c235c9e3e93effb61c85650eff48a8feedae59a36b283798bde8' or unit['authority']['source']!='Direct Owner directive FIX MANAGED-ROLE CONFIRMATION AND RESUME CLOUD ACTIVATION;Tasks3,4,5,7':return ['Managed confirmation authority mismatch']
+        prior=json.loads(blob('knowledge/execution/status.json'))['cloudRunRuntimeExecution']
+        if len(MANAGED_CONFIRMATION_PATHS)!=10 or not MANAGED_CONFIRMATION_PATHS<=set(prior['orderedPaths']):return ['Managed confirmation source-scope expansion']
+        for n in ['knowledge/execution/change-sets.json','knowledge/execution/status.json']:
+            data=json.loads((R/n).read_bytes())
+            if data.pop(MANAGED_CONFIRMATION_KEY,None)!=unit or data!=json.loads(blob(n)):return ['Managed confirmation history/admission drift '+n]
+        q=unit['qualification']
+        if q['status']!='LOCAL_QUALIFICATION_PASS' or q['offlineTests']!=148 or q['localPostgresGroups']!=17 or q['localCleanup']!='PASS' or q['priorCloudSessionConsumed'] is not True or q['freshCloudSessionAuthorized'] is not False or q['sqlFingerprintsChanged'] is not False or q['historicalMigrations']!=44:return ['Managed confirmation qualification boundary']
+        if any(q[k]!='NOT_RUN' for k in ['runtimeCloudLogin','cloudMigrations','cloudRunConnectivity','cloudHealth']):return ['Managed confirmation fabricated live result']
+        if unit['failureEvidence']['transientApiPayload']!='NOT_RETAINED_DO_NOT_INFER_OMISSION_VERSUS_STALENESS' or unit['failureEvidence']['sqlProbeDuringFailedBurst']!='NOT_RUN':return ['Managed confirmation historical failure attribution drift']
+        for n,h in unit['sourceSha256'].items():
+            if hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:return ['Managed confirmation source fingerprint drift '+n]
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',base).split(b'\0'):
+            if row:
+                meta,n=row.split(b'\t',1);inventory[n.decode()]=meta.split()
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):return ['Managed confirmation unexpected source inventory']
+        if set(v41_git('diff','--name-only','-z',base,text=True).split('\0'))-{''}!=MANAGED_CONFIRMATION_PATHS:return ['Managed confirmation exact10 path mismatch']
+        for n in actual:
+            p=R/n;mode,kind,oid=inventory[n]
+            if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):return ['Managed confirmation source type/mode drift '+n]
+            if n not in MANAGED_CONFIRMATION_PATHS:
+                data=p.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Managed confirmation unowned source drift '+n]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(p.relative_to(R)) for p in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:return ['Managed confirmation historical migration inventory drift']
+        for n,main in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',MANAGED_CONFIRMATION_OLD_MAIN)]:
+            old=blob(n)
+            if not old.endswith(main) or not (R/n).read_bytes().startswith(old[:-len(main)]):return ['Managed confirmation predecessor source changed '+n]
+        for n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/n).read_bytes().startswith(blob(n)):return ['Managed confirmation historical prose changed '+n]
+        import runpy
+        module=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        if module['SQL_FILES']!=prior['sqlFingerprints']:return ['Managed confirmation approved SQL fingerprints changed']
+        module['migration_inventory']()
+        manifest=json.loads(blob('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in MANAGED_CONFIRMATION_PATHS-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Managed confirmation manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):return ['Managed confirmation inputs inaccessible']
+    return []
+
+def managed_confirmation_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('status','BLOCKED'),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('authority',{})]:
+        fake=json.loads(json.dumps(MANAGED_CONFIRMATION_STATE));fake[field]=value
+        with patch.dict(globals(),{'MANAGED_CONFIRMATION_STATE':fake}):
+            if not managed_confirmation_errors():raise ValueError('Managed confirmation accepted invalid '+field)
+    for field,value in [('freshCloudSessionAuthorized',True),('priorCloudSessionConsumed',False),('cloudRunConnectivity','PASS'),('sqlFingerprintsChanged',True)]:
+        fake=json.loads(json.dumps(MANAGED_CONFIRMATION_STATE));fake['qualification'][field]=value
+        with patch.dict(globals(),{'MANAGED_CONFIRMATION_STATE':fake}):
+            if not managed_confirmation_errors():raise ValueError('Managed confirmation accepted forged '+field)
+    read=Path.read_bytes;target=R/'scripts/verify-cloud-connectivity.py'
+    with patch.object(Path,'read_bytes',lambda p:read(p)+b'\n#unapproved' if p==target else read(p)):
+        if not managed_confirmation_errors():raise ValueError('Managed confirmation accepted altered source')
+    glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob(p,*a,**kw),folder/'V46__unapproved.sql']) if p==folder else glob(p,*a,**kw)):
+        if not managed_confirmation_errors():raise ValueError('Managed confirmation accepted extra migration')
+    print('PASS Managed confirmation exact10 scope,authority/history/SQL/migrations,fresh-session boundaries and negative controls',flush=True)
+
+def managed_confirmation_main():
+    import tempfile,sys
+    errors=managed_confirmation_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    managed_confirmation_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-managed-confirmation-history-') as tmp:
+        target=Path(tmp)/'predecessor';subprocess.run(['git','clone','--quiet','--no-local','--no-checkout','--',common,str(target)],check=True);subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',MANAGED_CONFIRMATION_BASE],check=True)
+        # The unchanged predecessor verifies the exact JDBC jar checksum itself.
+        # Reuse the existing Maven cache read-only instead of downloading/copying it.
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:
+            (target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+receipt_admission_successor_errors=managed_confirmation_errors
+inert_ci_main=managed_confirmation_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

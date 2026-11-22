@@ -929,3 +929,7 @@ The approved14path successor prepares an offline,nonproduction Java25 MIGRATE/PR
 
 
 Internal connectivity qualification preserves the exact metadata/certificate DNS name,including its trailing dot,in service/job JDBC URLs. Offline regression uses the real pinned JDBC verifier and rejects stripped or invalid names. This source correction does not establish live Cloud Run connectivity,activate a login or close an acceptance gate.
+
+
+### Managed-role qualification safeguard
+The internal connectivity harness now distinguishes optional API metadata from fresh authenticated SQL authority. It records effective identities and membership options,denies missing/stale/revoked/wrong-scope evidence,and verifies revocation after entry or action failure.17local PostgreSQL groups and148offline harness tests passed. No application feature,production authentication,SQL privilege or commercial acceptance changes;fresh cloud execution remains separately gated.

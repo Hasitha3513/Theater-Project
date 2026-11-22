@@ -627,3 +627,7 @@ Exit0 means OFFLINE_CONTRACT_VALID for the supplied configuration only;exit2 mea
 
 
 For internal Cloud SQL qualification,use the complete approved certificate hostname ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog. in JDBC configuration. Keep sslmode=verify-full and the pinned CA. Removing the terminal dot can fail JDBC certificate matching. Never substitute require,verify-ca or an arbitrary hostname. Run only after current source/CI,time,cost,credentials and cleanup gates pass;an offline result is not a live connection result.
+
+
+### Internal SQL authority confirmation
+Use only the separately authorized private qualification session. Missing User.databaseRoles is UNKNOWN,not an empty assignment or permission to proceed. Capture sanitized scoped catalog facts after the completed mutation with a fresh nonce;then require private verify-full,effective managed role,per-role authority and unchanged probe00 before installing credentials. Record stored ADMIN/INHERIT/SET separately. Do not bypass a pending/denied result,repeat a grant,reset a password or infer administrator rights from IAM ownership. Failed entry must revoke and verify removal as well as the independent watchdog. The previous cloud session is consumed;17local model groups and148offline tests do not authorize a fresh cloud session,production migrations or customer access.
