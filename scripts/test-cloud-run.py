@@ -408,4 +408,46 @@ def _expired_preparation_window_test(self):
         with self.subTest(start=value):self.assertEqual(runtime_artifact.runtime_ready(self.ready_state(),e)['status'],'BLOCKED')
 RuntimeActivationBoundaries.test_expired_or_invalid_preparation_window_is_denied=_expired_preparation_window_test
 
+# Preserve every historical assertion;adapt only the approved DNS presentation.
+_hostname_prior_fixture=deployment_fixture
+def deployment_fixture():
+    d=_hostname_prior_fixture()
+    back=next(x for x in d['deployment']['spec']['template']['spec']['containers'] if x['name']=='backend')
+    env=next(x for x in back['env'] if x['name']=='CINENEST_DB_URL')
+    env['value']=env['value'].replace(m.DEPLOYMENT_DNS+':5432',m.DEPLOYMENT_DNS+'.:5432')
+    return d
+_hostname_prior_template_check=DeploymentContracts.test_template_is_the_unchanged_qualified_approval_placeholder_contract
+def _exact_hostname_template_successor(self):
+    target=m.ROOT/'deployment/cloud-run/service.template.yaml';data=target.read_bytes()
+    exact=(m.DEPLOYMENT_DNS+'.:5432').encode();old=(m.DEPLOYMENT_DNS+':5432').encode()
+    self.assertEqual(data.count(exact),1);self.assertNotIn(old,data)
+    original=Path.read_bytes
+    with patch.object(Path,'read_bytes',lambda p:data.replace(exact,old,1) if p==target else original(p)):
+        _hostname_prior_template_check(self)
+DeploymentContracts.test_template_is_the_unchanged_qualified_approval_placeholder_contract=_exact_hostname_template_successor
+
+class ExactCertificateHostnameBoundaries(unittest.TestCase):
+    def test_only_exact_metadata_hostname_is_accepted(self):
+        d=deployment_fixture();self.assertEqual(m.deployment_report(d)['status'],'OFFLINE_CONTRACT_VALID')
+        back=next(x for x in d['deployment']['spec']['template']['spec']['containers'] if x['name']=='backend')
+        env=next(x for x in back['env'] if x['name']=='CINENEST_DB_URL');original=env['value']
+        for host in [m.DEPLOYMENT_DNS,'wrong.example',m.DEPLOYMENT_DNS+'..']:
+            env['value']=original.replace(m.DEPLOYMENT_DNS+'.',host)
+            with self.subTest(host=host):self.assertEqual(m.deployment_report(d)['status'],'FAIL')
+    def test_job_and_java_keep_exact_hostname_and_verify_full(self):
+        exact=m.DEPLOYMENT_DNS+'.:5432';self.assertIn(exact,runtime_artifact.JAVA_SOURCE);self.assertNotIn(m.DEPLOYMENT_DNS+':5432',runtime_artifact.JAVA_SOURCE)
+        image='us-east1-docker.pkg.dev/'+runtime_artifact.PROJECT+'/cinenest-runtime/diagnostics@sha256:'+'a'*64
+        job=runtime_artifact.job_document('MIGRATE',image,dict.fromkeys(['runtimeUsername','runtimePassword','migrationPassword','databaseCa'],'1'))
+        env=job['spec']['template']['spec']['template']['spec']['containers'][0]['env'];url=next(x['value'] for x in env if x['name']=='CINENEST_DB_URL');self.assertIn(exact,url);self.assertIn('sslmode=verify-full',url)
+    def test_actual_template_preserves_certificate_dns_dot(self):
+        data=(m.ROOT/'deployment/cloud-run/service.template.yaml').read_text();self.assertEqual(data.count(m.DEPLOYMENT_DNS+'.:5432'),1);self.assertNotIn(m.DEPLOYMENT_DNS+':5432',data)
+    def test_pinned_jdbc_verifier_rejects_stripped_and_invalid_names(self):
+        import tempfile,subprocess,hashlib
+        jar=Path.home()/'.m2/repository/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar'
+        self.assertEqual(hashlib.sha256(jar.read_bytes()).hexdigest(),runtime_artifact.DEPENDENCIES['org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar'])
+        with tempfile.TemporaryDirectory() as tmp:
+            source=Path(tmp)/'HostnameCheck.java';source.write_text('import org.postgresql.ssl.PGjdbcHostnameVerifier; class HostnameCheck { public static void main(String[] args) { var v=PGjdbcHostnameVerifier.INSTANCE; String host="'+m.DEPLOYMENT_DNS+'."; if(!v.verifyHostName(host,host)||v.verifyHostName(host.substring(0,host.length()-1),host)||v.verifyHostName("wrong.example",host))throw new AssertionError(); System.out.println("EXACT_NAME_AND_NEGATIVES:PASS"); } }')
+            result=subprocess.run(['java','-cp',str(jar),str(source)],capture_output=True,text=True,timeout=30)
+            self.assertEqual(result.returncode,0,result.stderr);self.assertIn('EXACT_NAME_AND_NEGATIVES:PASS',result.stdout)
+
 if __name__=='__main__':unittest.main()

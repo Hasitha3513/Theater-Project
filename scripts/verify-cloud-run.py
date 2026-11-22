@@ -720,4 +720,24 @@ def deployment_report(document):
     if not valid:result['status']='FAIL'
     return result
 
+# Exact certificate metadata hostname successor. The controlled historical
+# projection removes only the terminal DNS dot;TLS mode and all other guards remain.
+_hostname_prior_report=deployment_report
+def deployment_report(document):
+    import copy
+    from urllib.parse import urlsplit
+    candidate=copy.deepcopy(document);valid=False
+    try:
+        containers=candidate['deployment']['spec']['template']['spec']['containers']
+        backend=next(x for x in containers if x['name']=='backend')
+        entry=next(x for x in backend['env'] if x['name']=='CINENEST_DB_URL')
+        raw=entry['value'];u=urlsplit(raw[5:])
+        valid=raw.startswith('jdbc:postgresql://'+DEPLOYMENT_DNS+'.:5432/') and u.hostname==DEPLOYMENT_DNS+'.'
+        if valid:entry['value']=raw.replace('://'+DEPLOYMENT_DNS+'.:5432/','://'+DEPLOYMENT_DNS+':5432/',1)
+    except (KeyError,TypeError,StopIteration,ValueError):pass
+    report=_hostname_prior_report(candidate)
+    report['checks'].append({'id':'backend.jdbc.exact-certificate-hostname','status':'PASS' if valid else 'FAIL'})
+    if not valid:report['status']='FAIL'
+    return report
+
 if __name__=='__main__':raise SystemExit(runtime_artifact_entrypoint())
