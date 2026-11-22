@@ -244,4 +244,340 @@ def wait_managed_assignment(fetch,expected,timeout=10,clock=None,pause=None):
         pause(min(.25,max(0,end-clock())))
     raise TimeoutError('Managed assignment not confirmed within observation deadline')
 
+
+
+# CN-GCP-SQL-STAGING-TOKEN-SAFETY-001: offline guards; no execution authority.
+"""Offline correction candidate. No cloud or SQL mutation is performed here."""
+import contextlib
+import datetime as credential_datetime
+import hashlib
+import hmac
+import json
+import math
+import os
+from pathlib import Path
+import re
+import shutil
+import stat
+import subprocess
+import tempfile
+import time
+
+PRINCIPAL = 'cinenest44@gmail.com'
+
+
+def approved_sql_manifest(raw, contract):
+    """Preserve order and reject duplicates before constructing a dictionary."""
+    try:
+        def pairs(rows):
+            if len({k for k, _ in rows}) != len(rows):
+                raise ValueError()
+            return rows
+        rows = json.loads(raw, object_pairs_hook=pairs)
+        if not isinstance(rows, list) or len(rows) != 7:
+            raise ValueError()
+        if rows != list(contract.items()):
+            raise ValueError()
+        if any(Path(n).name != n or not re.fullmatch(r'[0-9a-f]{64}', h)
+               for n, h in rows):
+            raise ValueError()
+        return tuple(tuple(row) for row in rows)
+    except (ValueError, TypeError, AttributeError):
+        raise ValueError('Exact ordered seven-file SQL manifest required') from None
+
+
+def sql_input_names(directory):
+    return {p.name for p in Path(directory).iterdir()
+            if p.name.endswith(('.sql.proposed', '.psql.proposed'))}
+
+
+@contextlib.contextmanager
+def stage_approved_sql(source, parent, manifest, contract):
+    """Copy only verified bytes into a private, automatically removed directory.
+
+    The caller must complete this preflight before acquiring credentials or
+    granting authority. Inputs are never moved, overwritten or deleted.
+    """
+    rows = approved_sql_manifest(manifest, contract)
+    source, parent = Path(source), Path(parent)
+    if source.is_symlink() or parent.is_symlink():
+        raise ValueError('Unsafe staging directory')
+    if sql_input_names(source) != {n for n, _ in rows}:
+        raise ValueError('Missing or unexpected SQL input')
+    with tempfile.TemporaryDirectory(prefix='cinenest-approved-sql-', dir=parent) as tmp:
+        target = Path(tmp)
+        os.chmod(target, 0o700)
+        for name, expected in rows:
+            fd = os.open(source / name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+            try:
+                meta = os.fstat(fd)
+                if not stat.S_ISREG(meta.st_mode) or not 0 < meta.st_size <= 1024 * 1024:
+                    raise ValueError('Unsafe SQL input type or size')
+                with os.fdopen(fd, 'rb', closefd=False) as stream:
+                    data = stream.read(1024 * 1024 + 1)
+                if len(data) != meta.st_size or hashlib.sha256(data).hexdigest() != expected:
+                    raise ValueError('SQL fingerprint mismatch')
+            finally:
+                os.close(fd)
+            out = os.open(target / name, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+            with os.fdopen(out, 'wb') as stream:
+                stream.write(data)
+        # Detect an unexpected input introduced during staging too.
+        if sql_input_names(source) != {n for n, _ in rows}:
+            raise ValueError('SQL inventory changed during staging')
+        if set(p.name for p in target.iterdir()) != {n for n, _ in rows}:
+            raise ValueError('Unexpected staged input')
+        for name, expected in rows:
+            if hashlib.sha256((target / name).read_bytes()).hexdigest() != expected:
+                raise ValueError('Staged SQL fingerprint mismatch')
+        yield target, tuple(name for name, _ in rows)
+
+
+class ProtectedRequestFailure(RuntimeError):
+    """Only a validated HTTP status may cross the protected error boundary."""
+    def __init__(self, status):
+        if type(status) is not int or not 400 <= status <= 599:
+            raise ValueError('Invalid protected HTTP status')
+        self.status = status
+        super().__init__('Protected request rejected; HTTP ' + str(status))
+
+
+class ProtectedIamCredential:
+    """Opaque in-memory credential with authoritative UTC expiry, never a TTL guess."""
+    __slots__ = ('_token', '_expiry', '_issued', '_monotonic', '_clock', '_ticks')
+
+    def __init__(self, token, expiry, principal, clock=None, ticks=None):
+        self._token = None
+        self._clock = clock or (lambda: credential_datetime.datetime.now(credential_datetime.timezone.utc))
+        self._ticks = ticks or time.monotonic
+        try:
+            now = self._clock()
+            end = credential_datetime.datetime.strptime(expiry, '%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=credential_datetime.timezone.utc)
+            if principal != PRINCIPAL or now.tzinfo is None:
+                raise ValueError()
+            if not isinstance(token, str) or not 16 <= len(token) <= 16384 or not re.fullmatch(r'[A-Za-z0-9._~+/-]+=*', token):
+                raise ValueError()
+            if (end - now).total_seconds() > 3630:
+                raise ValueError()
+            self._issued, self._expiry, self._monotonic = now, end, self._ticks()
+            self._token = token
+            self.check(120)
+        except (ValueError, TypeError, AttributeError, OverflowError):
+            self.close()
+            raise ValueError('Protected IAM credential unavailable or insufficiently valid') from None
+
+    def __repr__(self):
+        return '<ProtectedIamCredential REDACTED>'
+
+    def check(self, required_seconds):
+        now, tick = self._clock(), self._ticks()
+        if type(required_seconds) not in (int, float) or not math.isfinite(required_seconds) or not 0 <= required_seconds <= 120:
+            raise ValueError('Bounded operation duration required')
+        if now.tzinfo is None or self._token is None or now < self._issued or tick < self._monotonic:
+            raise ValueError('Expired or invalid protected credential')
+        elapsed = tick - self._monotonic
+        remaining = min((self._expiry - now).total_seconds(),
+                        (self._expiry - self._issued).total_seconds() - elapsed)
+        if remaining <= required_seconds + 30:
+            raise ValueError('Insufficient credential validity before authentication')
+
+    def use(self, sender, required_seconds=120):
+        try:
+            self.check(required_seconds)  # Immediately before the protected send.
+            result = sender(self._token)
+            serialized = result if isinstance(result, bytes) else json.dumps(result).encode()
+            if self._token.encode() in serialized:
+                raise ValueError('Protected response contains credential')
+            return result
+        except ProtectedRequestFailure:
+            raise
+        except Exception:
+            raise RuntimeError('Protected authentication failed; details withheld') from None
+        finally:
+            self.close()
+
+    @property
+    def expiry(self):
+        return self._expiry.strftime('%Y-%m-%dT%H:%M:%SZ')
+
+    def close(self):
+        self._token = None
+
+
+def acquire_protected_iam(purpose, run=None, clock=None, ticks=None):
+    """CLI stdout stays in memory. No logging/output-file/secret-bearing argv.
+
+    config-helper is an internal SDK interface: fail closed if its contract
+    changes. For SQL, expiry is accepted only for the byte-identical token
+    returned by the existing generate-login-token mechanism.
+    """
+    if purpose not in ('API', 'SQL'):
+        raise ValueError('Approved credential purpose required')
+    run = run or subprocess.run
+    token = raw = login = None
+    try:
+        if any(os.environ.get(name) for name in ('CLOUDSDK_AUTH_ACCESS_TOKEN',
+               'CLOUDSDK_AUTH_ACCESS_TOKEN_FILE', 'CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE',
+               'CLOUDSDK_AUTH_IMPERSONATE_SERVICE_ACCOUNT')):
+            raise ValueError()
+        args = ['gcloud', 'config', 'config-helper', '--force-auth-refresh',
+                '--account=' + PRINCIPAL, '--format=json', '--quiet', '--verbosity=error']
+        environment = dict(os.environ, CLOUDSDK_CORE_LOG_HTTP='false', CLOUDSDK_CORE_VERBOSITY='error')
+        q = run(args, capture_output=True, text=True, timeout=25, check=False, env=environment)
+        if q.returncode or len(q.stdout) > 65536:
+            raise ValueError()
+        raw = json.loads(q.stdout)
+        properties = raw['configuration']['properties']
+        principal = properties['core']['account']
+        if any(properties.get('auth', {}).get(name) for name in
+               ('impersonate_service_account', 'credential_file_override', 'access_token_file')):
+            raise ValueError()
+        token = raw['credential']['access_token']
+        expiry = raw['credential']['token_expiry']
+        if purpose == 'SQL':
+            q = run(['gcloud', 'sql', 'generate-login-token', '--account=' + PRINCIPAL,
+                     '--quiet', '--verbosity=error'], capture_output=True, text=True,
+                    timeout=25, check=False, env=environment)
+            login = q.stdout.strip()
+            if q.returncode or not isinstance(token, str) or not hmac.compare_digest(token, login):
+                raise ValueError()
+        return ProtectedIamCredential(token, expiry, principal, clock, ticks)
+    except Exception:
+        raise RuntimeError('Protected IAM acquisition or expiry verification failed') from None
+    finally:
+        token = raw = login = None
+
+
+def authenticated_operation(acquire, send, kind, required_seconds=120):
+    """No automatic replay, including after 401 or an uncertain response.
+
+    Cleanup/revocation must reacquire its own credential and verify actual state;
+    it must not depend on a cached credential from the failed operation.
+    """
+    if kind not in ('READ_ONLY', 'MUTATION'):
+        raise ValueError('Explicit operation classification required')
+    credential = acquire()
+    return credential.use(send, required_seconds)
+
+def install_approved_sql(source, destination, manifest):
+    """Install the complete verified bundle before any credential or authority.
+
+    Only the frozen source-owned SQL_FILES contract is accepted. No overwrite,
+    extension discovery for admission, or partial output is permitted.
+    """
+    destination = Path(destination)
+    if destination.is_symlink() or not destination.is_dir():
+        raise ValueError('Private SQL destination required')
+    if stat.S_IMODE(destination.stat().st_mode) != 0o700 or sql_input_names(destination):
+        raise ValueError('Empty private SQL destination required')
+    created = []
+    try:
+        with stage_approved_sql(source, destination.parent, manifest, SQL_FILES) as (staged, names):
+            for name in names:
+                # Hard linking verified private files is atomic and refuses overwrite.
+                os.link(staged / name, destination / name, follow_symlinks=False)
+                created.append(destination / name)
+            if sql_input_names(destination) != set(SQL_FILES):
+                raise ValueError('Installed SQL inventory mismatch')
+            for name, expected in SQL_FILES.items():
+                if hashlib.sha256((destination / name).read_bytes()).hexdigest() != expected:
+                    raise ValueError('Installed SQL fingerprint mismatch')
+        return {'status': 'VERIFIED_PUBLIC_SQL_STAGING', 'orderedFiles': list(SQL_FILES)}
+    except BaseException:
+        for path in reversed(created):
+            path.unlink()
+        raise
+
+
+def sql_staging_command():
+    """A public-input-only remote preflight; no token, SQL execution or cloud API."""
+    import shlex
+    program = ("import runpy;from pathlib import Path;"
+               "m=runpy.run_path('cinenest-runtime/managed-role-contract.py');"
+               "m['install_approved_sql']('.', 'cinenest-runtime', "
+               "Path('cinenest-runtime/approved-sql-hashes.json').read_text())")
+    return 'python3 -c ' + shlex.quote(program)
+
+
+def runtime_safety_artifacts(controller, helpers, private_helper):
+    """Offline, fail-closed correction of the retained public execution capsule.
+
+    Generated artifacts stay outside Git and grant no runtime authority. A fresh
+    exact fingerprint/session/time/cost admission is still mandatory. Historical
+    originals must be retained. Unknown predecessor shapes are rejected.
+    """
+    def once(text, old, new):
+        if text.count(old) != 1:
+            raise ValueError('Unexpected retained runtime artifact shape')
+        return text.replace(old, new, 1)
+    controller = once(controller,
+        "managed-role-source.sha256 *.sql.proposed cinenest-runtime/; cd cinenest-runtime;",
+        "managed-role-source.sha256 cinenest-runtime/; '+M['sql_staging_command']()+'; cd cinenest-runtime;")
+    if controller.count("v['managed_confirmation_errors']()") not in (1, 2):
+        raise ValueError('Unexpected retained source-admission gate')
+    controller = controller.replace("v['managed_confirmation_errors']()", "v['sql_staging_token_errors']()")
+    helpers = once(helpers,
+        "E=Path('/tmp/cinenest-role-confirmation-fix-20261122/cloud-candidate');",
+        'E=Path(__file__).resolve().parent;')
+    start, end = helpers.find('def auth():\n'), helpers.find('def operation(op):\n')
+    if start < 0 or end <= start or helpers.count('def auth():\n') != 1 or helpers.count('def api(') != 1:
+        raise ValueError('Unexpected retained API transport shape')
+    replacement = '''def api(method,url,body=None,missing=False):
+ def send(access_token):
+  req=urllib.request.Request(url,data=None if body is None else json.dumps(body).encode(),headers={'Authorization':'Bearer '+access_token,'Content-Type':'application/json'},method=method)
+  try:
+   with urllib.request.urlopen(req,timeout=max(1,min(25,deadline-time.monotonic()-3)) if deadline else 25) as response:data=response.read();return json.loads(data) if data else {}
+  except urllib.error.HTTPError as error:
+   if missing and error.code==404:return None
+   # Never print a secret-bearing response or automatically replay a mutation.
+   raise M['ProtectedRequestFailure'](error.code) from None
+ return M['authenticated_operation'](lambda:M['acquire_protected_iam']('API'),send,'READ_ONLY' if method=='GET' else 'MUTATION',30)
+'''
+    helpers = helpers[:start] + replacement + helpers[end:]
+    start, end = helpers.find('def private_sql('), helpers.find('def role_context(')
+    if start < 0 or end <= start or helpers.count('def private_sql(') != 1:
+        raise ValueError('Unexpected retained private SQL transport shape')
+    private_send = '''def private_sql(mode,passwords=None,expected_denial=False):
+ nonce=str(__import__('uuid').uuid4());credential=M['acquire_protected_iam']('SQL')
+ def budget():
+  remaining=min(50,state.get('burstActorDeadline',time.monotonic()+50)-time.monotonic()) if mode in ['probe','authority','credentials','activate','cleanup'] else 45;assert remaining>=8,'Admin actor cleanup reserve'
+  return remaining
+ def send(login_token):
+  remaining=budget()
+  payload=json.dumps({'mode':mode,'nonce':nonce,'iamToken':login_token,'iamTokenExpiry':credential.expiry,'passwords':passwords or [],'timeoutSeconds':remaining});secret_values.append(login_token)
+  try:return run('private-sql-'+mode,ssh+['cd cinenest-runtime; python3 private-sql-helper.py'],timeout=remaining+3,input=payload)
+  finally:secret_values.remove(login_token);payload=None
+ try:
+  remaining=budget()
+  code,out,err=credential.use(send,remaining+3)
+  result=json.loads(next(x for x in out.splitlines() if x.startswith('{')))
+  if expected_denial:assert result['status']=='FAIL' and any(t in result.get('output','').lower() for t in ['not permitted to log in','password authentication failed']),mode+' did not prove authentication denial'
+  else:assert result['status']=='PASS',mode
+  if mode=='revocation':assert USER+'|'+USER+'|t|t' in result['output']
+  result['_requestNonce']=nonce
+  return result
+ finally:credential.close()
+'''
+    helpers = helpers[:start] + private_send + helpers[end:]
+    private_helper = once(private_helper,
+        'fd=None;protected=[];authority_facts=None',
+        'fd=None;protected=[];authority_facts=None;credential=None')
+    private_helper = once(private_helper,
+        "token=request.pop('iamToken');protected.append(token);",
+        "token=request.pop('iamToken');expiry=request.pop('iamTokenExpiry');protected.append(token);")
+    private_helper = once(private_helper,
+        " fd=os.memfd_create('cinenest-protected-passfile',0);",
+        " contract_path=E/'managed-role-contract.py';assert hashlib.sha256(contract_path.read_bytes()).hexdigest()==(E/'managed-role-source.sha256').read_text().strip();contract=runpy.run_path(str(contract_path));credential=contract['ProtectedIamCredential'](token,expiry,'cinenest44@gmail.com');credential.check(maximum)\n fd=os.memfd_create('cinenest-protected-passfile',0);")
+    private_helper = once(private_helper,
+        " if mode=='credentials':\n  assert len(passwords)==2",
+        " credential.check(maximum)\n if mode=='credentials':\n  assert len(passwords)==2")
+    private_helper = once(private_helper,
+        ' if fd is not None:os.close(fd)\n protected.clear()',
+        ' if fd is not None:os.close(fd)\n if credential is not None:credential.close()\n protected.clear()')
+    result = {'cloud-session.py': controller, 'cloud-helpers.py': helpers,
+              'private-sql-helper.py': private_helper}
+    for name, text in result.items():
+        compile(text, name, 'exec')  # Syntax check only; never execute the controller.
+    return result
+
 if __name__=='__main__':raise SystemExit(main())

@@ -33182,5 +33182,69 @@
       "knowledge/product/FEATURE_CATALOG.md": "adbdc4b4cbcd479a729c569dd5fbe4de1ce211fd6897707e1e8956e80e2bcd37",
       "knowledge/guides/USER_GUIDE.md": "067a0dbd990efee4da95b6a6b4a4dd6aea94818bbb4250bcd2cd88acb2686662"
     }
+  },
+  "cloudRunSqlStagingTokenSafety": {
+    "id": "CN-GCP-SQL-STAGING-TOKEN-SAFETY-001",
+    "baseline": "e05ab76c818455514d2e47530344db996a6dbaa2",
+    "status": "READY",
+    "orderedPaths": [
+      "scripts/verify-cloud-connectivity.py",
+      "scripts/test-cloud-run.py",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "approvedAtRecordedUtc": "2026-11-22T10:17:19.659799+00:00",
+      "source": "Owner reply to call_dcb8a62e9f854ad49c4921c4fcaeb17f",
+      "decision": "Approve exact source successor",
+      "requestSha256": "59361f4388f5c37332a72a62a27d50284ce6945f920641b9d3192271d9da2d20",
+      "reviewMethod": "Owner-approved task-only verified ledger/controlled diff;100 unchanged reviewed-file reuse;14 accounted historical changes;no full fresh/visual audit claimed",
+      "inventoryFiles": 114,
+      "cloudSessionAuthorized": false
+    },
+    "scope": "Exact manifest staging and protected IAM expiry guards,offline regression tests and append-only existing canonical/governance records;no cloud,SQL,app or migration change",
+    "rollback": "Governed source revert only; remove only task-owned generated staging. Preserve SQL,databases,roles,images,approvals and historical evidence. No cloud mutation authorized by this source request.",
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "OFFLINE_QUALIFICATION_PASS",
+      "candidateTests": 30,
+      "historicalHarnessTests": 148,
+      "freshCloudSessionAuthorized": false,
+      "sqlFingerprintsChanged": false,
+      "historicalMigrations": 44,
+      "historicalReplay": "PASS_UNCHANGED_BASELINE_WITH_SHARED_IMMUTABLE_OBJECTS",
+      "historicalReplayLogSha256": "eeb2f4c00416c64d55d7386fcb297fe033bd1e66bd342339ad5da9f54f908acb",
+      "recoveredIntoPersistentWorkspace": true,
+      "offlineTests": 188,
+      "newRegressionTests": 40,
+      "cloudSessionConsumed": true,
+      "runtimeCloudLogin": "NOT_RUN",
+      "cloudMigrations": "NOT_RUN",
+      "cloudRunConnectivity": "NOT_RUN",
+      "cloudHealth": "NOT_RUN",
+      "newLocalPostgresSession": "NOT_RUN_NOT_AUTHORIZED_OR_NEEDED_FOR_PURE_GUARDS",
+      "historicalLocalPostgresGroups": 17,
+      "historicalCloudCleanup": "PASS_AFTER_INITIAL_ERRORS",
+      "liveCredentialExpiryAdapter": "NOT_RUN",
+      "sourceTestLogSha256": "7c8e330e3b856edc0336be637556b9bd9b1fcb607ac41dc6da2247a72ea6414f"
+    },
+    "sourceSha256": {
+      "scripts/verify-cloud-connectivity.py": "9b34bacd3729c1e7eb7f21915c64c01ec2bbffbdff5306583dc91d5bc2fee4e3",
+      "scripts/test-cloud-run.py": "b7beee0fc9f3350878a92778451300b4a947af04bdb246adfc384318c446fe1e",
+      "knowledge/ARCHITECTURE.md": "adeff00a64b3d0266cf51a19e94357e6a24d3971fc88bf0e279b0c0cb583ec45",
+      "knowledge/PROGRESS.md": "aac1c0790eda10c18a12228e2a017380300374151c578bb735f4507b1a47e381",
+      "knowledge/product/FEATURE_CATALOG.md": "911eee301ac85f261b6ae730f2fff166ec61171df8ef60197e46e97a2984d863",
+      "knowledge/guides/USER_GUIDE.md": "eccaf2b11b55d6a544a8d3cc892e62b5f0697348f9898b3417cc64f860f2c611"
+    }
   }
 }
