@@ -8613,7 +8613,7 @@
       "deployment/cloud-run/service.template.yaml": "9b2d327cadbb91b52b4de9f27eac3f05473d3beb7b878e368e9ebcbd919f5d42",
       "deployment/cloud-run/connectivity-job.template.yaml": "1823274dc45679adec3adfdc4b76cda00996b60b06824ceca1b0cd6590f6885e",
       "knowledge/ARCHITECTURE.md": "b168ffa1b5b739635b5786c7141e2aed87c0c0d521038aa3a096c254f66bd70d",
-      "knowledge/PROGRESS.md": "635e811fa53330881c579441aff3a6fe16ad750a46703f0f2e7720475a2b13e6",
+      "knowledge/PROGRESS.md": "36d1ea495acf1d4df151348216d9f080d56939f61c0a7608a9cd3159e45c00aa",
       "knowledge/decisions/cinenest-open-decisions.json": "376d7f26f921b14b93605cfe5f0784949301b989091858022427f30d423fd4a4",
       "knowledge/product/FEATURE_CATALOG.md": "32e179ca76e5b3aee21c068ec8d9d0942afd318203e6fd5e29adaa96bc0b4627",
       "knowledge/guides/USER_GUIDE.md": "c8e8bd1a9eb14f7193fd78077b87b44fb37d30f90b0f1b7ab7b69510edae10b7"
