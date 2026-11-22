@@ -107,4 +107,141 @@ def main(argv=None):
   print(json.dumps(result,indent=2));return 0
  except (OSError,ValueError,TypeError,KeyError):print('Qualification artifact unavailable or denied',file=sys.stderr);return 1
 
+
+
+# Pure, non-production confirmation contract;never grants roles or contacts GCP.
+from datetime import datetime,timezone
+import uuid
+
+MANAGED_PRINCIPAL='cinenest44@gmail.com'
+MANAGED_ROLE='cloudsqlsuperuser'
+MANAGED_INSTANCE='cine-nest-2026'
+MANAGED_PROJECT='project-f903a5f6-f535-4016-aae'
+AUTHORITY_PROBE_SHA256='cd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d'
+
+def managed_role_metadata(user):
+    """Missing optional metadata is UNKNOWN,not an observed empty assignment."""
+    if not isinstance(user,dict) or user.get('name')!=MANAGED_PRINCIPAL or user.get('type')!='CLOUD_IAM_USER':
+        raise ValueError('Wrong managed-role principal')
+    for key,expected in [('project',MANAGED_PROJECT),('instance',MANAGED_INSTANCE)]:
+        if key in user and user[key]!=expected:raise ValueError('Wrong managed-role scope')
+    if 'databaseRoles' not in user:return None
+    roles=user['databaseRoles']
+    if not isinstance(roles,list) or any(not isinstance(x,str) for x in roles) or len(set(roles))!=len(roles):
+        raise ValueError('Malformed managed-role metadata')
+    if set(roles)-{MANAGED_ROLE}:raise ValueError('Unapproved managed-role assignment')
+    return sorted(roles)
+
+def managed_role_query(nonce):
+    """Read-only catalog query;no password catalogs,no SQL grants or role changes."""
+    if str(uuid.UUID(nonce))!=nonce:raise ValueError('Canonical fresh nonce required')
+    return """SELECT json_build_object(
+      'nonce','%s','observedAt',clock_timestamp(),
+      'currentUser',current_user,'sessionUser',session_user,'database',current_database(),
+      'tls',COALESCE((SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()),false),
+      'member',pg_has_role(session_user,'cloudsqlsuperuser','MEMBER'),
+      'canSet',pg_has_role(session_user,'cloudsqlsuperuser','SET'),
+      'runtimeAdmin',pg_has_role(current_user,'cinenest_qualification_runtime','MEMBER WITH ADMIN OPTION'),
+      'migratorAdmin',pg_has_role(current_user,'cinenest_qualification_migrator','MEMBER WITH ADMIN OPTION'),
+      'restricted',(SELECT NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls FROM pg_roles WHERE rolname=session_user),
+      'edges',COALESCE((SELECT json_agg(json_build_object('role',r.rolname,'member',m.rolname,'grantor',g.rolname,'admin',a.admin_option,'inherit',a.inherit_option,'set',a.set_option)) FROM pg_auth_members a JOIN pg_roles r ON r.oid=a.roleid JOIN pg_roles m ON m.oid=a.member JOIN pg_roles g ON g.oid=a.grantor WHERE r.rolname='cloudsqlsuperuser' AND m.rolname=session_user),'[]'::json)
+    )""" % nonce
+
+def managed_role_confirmation(user,sql,context,phase,now=None):
+    """Validate actual fresh SQL facts plus scoped API identity;metadata alone never passes.
+    Supplied snapshots are not execution evidence. Callers must use a new authenticated
+    connection after the completed mutation,keep the independent revoker armed,and run
+    unchanged reviewed probe00 before any credential or activation action.
+    """
+    errors=[];roles=None
+    try:roles=managed_role_metadata(user)
+    except (ValueError,TypeError):errors.append('Managed-role identity/metadata unavailable or unsafe')
+    try:
+        if phase not in ['DELEGATED','REVOKED']:raise ValueError()
+        if not isinstance(context,dict) or context.get('project')!=MANAGED_PROJECT or context.get('instance')!=MANAGED_INSTANCE or context.get('principal')!=MANAGED_PRINCIPAL:raise ValueError()
+        nonce=context['nonce']
+        if str(uuid.UUID(nonce))!=nonce:raise ValueError()
+        if context.get('sslmode')!='verify-full' or context.get('host')!='ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog.' or context.get('hostaddr')!='10.40.32.2' or context.get('caSha256')!='b9c1735f6619bc814020948a0da2e8970efa76f7d885fd28dbe1c21a85193f46':raise ValueError()
+        operation=context['operation']
+        if operation.get('status')!='DONE' or operation.get('error') or not operation.get('id') or operation.get('phase')!=phase:raise ValueError()
+        current=now or datetime.now(timezone.utc)
+        completed=datetime.fromisoformat(operation['completedAt']);observed=datetime.fromisoformat(sql['observedAt'])
+        if any(x.tzinfo is None for x in [current,completed,observed]) or not 0<=(current-observed).total_seconds()<=10 or not completed<=observed<=current:raise ValueError()
+        if sql.get('nonce')!=nonce or sql.get('sessionUser')!=MANAGED_PRINCIPAL or sql.get('database')!='postgres' or sql.get('tls') is not True:raise ValueError()
+        if not isinstance(sql.get('edges'),list):raise ValueError()
+        for edge in sql['edges']:
+            if edge.get('role')!=MANAGED_ROLE or edge.get('member')!=MANAGED_PRINCIPAL or not edge.get('grantor') or any(type(edge.get(x)) is not bool for x in ['admin','inherit','set']):raise ValueError()
+        if phase=='DELEGATED':
+            if roles is not None and roles!=[MANAGED_ROLE]:raise ValueError()
+            if context.get('revokerArmed') is not True or context.get('probeSha256')!=AUTHORITY_PROBE_SHA256 or context.get('probePassed') is not True:raise ValueError()
+            if sql.get('currentUser')!=MANAGED_ROLE or any(sql.get(x) is not True for x in ['member','canSet','runtimeAdmin','migratorAdmin']):raise ValueError()
+        else:
+            if roles is not None and roles!=[]:raise ValueError()
+            if sql.get('currentUser')!=MANAGED_PRINCIPAL or sql.get('restricted') is not True or sql['edges'] or any(sql.get(x) is not False for x in ['member','canSet','runtimeAdmin','migratorAdmin']):raise ValueError()
+    except (ValueError,TypeError,KeyError,AttributeError,OverflowError):errors.append('Fresh scoped PostgreSQL authority not confirmed')
+    return {'status':'DENIED' if errors else 'CONFIRMED','phase':phase,'metadata':'UNKNOWN_OPTIONAL_FIELD' if roles is None else 'OBSERVED','errors':errors,'productionAuthorization':'NONE'}
+
+def managed_role_lifecycle(grant,confirm,revoke,confirm_revoked,action):
+    """Even failed entry/confirmation always invokes revocation;never relies on __exit__.
+    The externally verified independent revoker remains mandatory. Cleanup failures
+    propagate and prevent success,including when the body also failed.
+    """
+    try:
+        grant()
+        if confirm()['status']!='CONFIRMED':raise RuntimeError('Managed authority not confirmed')
+        return action()
+    finally:
+        revoke()
+        if confirm_revoked()['status']!='CONFIRMED':raise RuntimeError('Managed authority revocation not confirmed')
+
+
+
+def managed_assignment_query(nonce):
+    """Read-only control-plane SQL metadata;not proof of private TLS or authority."""
+    query=managed_role_query(nonce)
+    target="r.rolname='cloudsqlsuperuser' AND m.rolname=session_user"
+    if query.count(target)!=1:raise ValueError('Unexpected membership query shape')
+    return query.replace(target,'m.rolname=session_user')
+
+def managed_assignment_roles(sql,nonce,now=None):
+    """Use fresh authenticated catalogs when optional User.databaseRoles is absent.
+    Only the existing IAM system group and approved temporary managed group are
+    accepted. An unknown concurrent membership blocks wholesale role replacement.
+    This metadata check never substitutes for private verify-full/probe00.
+    """
+    try:
+        if str(uuid.UUID(nonce))!=nonce:raise ValueError()
+        observed=datetime.fromisoformat(sql['observedAt']);current=now or datetime.now(timezone.utc)
+        if observed.tzinfo is None or current.tzinfo is None or not 0<=(current-observed).total_seconds()<=10:raise ValueError()
+        if sql.get('nonce')!=nonce or sql.get('sessionUser')!=MANAGED_PRINCIPAL or sql.get('currentUser')!=MANAGED_PRINCIPAL or sql.get('database')!='postgres':raise ValueError()
+        edges=sql['edges']
+        if not isinstance(edges,list):raise ValueError()
+        names=[]
+        for edge in edges:
+            if edge.get('member')!=MANAGED_PRINCIPAL or edge.get('role') not in ['cloudsqliamuser',MANAGED_ROLE] or not edge.get('grantor') or any(type(edge.get(x)) is not bool for x in ['admin','inherit','set']):raise ValueError()
+            names.append(edge['role'])
+        if len(names)!=len(set(names)):raise ValueError()
+        present=MANAGED_ROLE in names
+        if sql.get('member') is not present:raise ValueError()
+        return [MANAGED_ROLE] if present else []
+    except (ValueError,KeyError,TypeError,AttributeError):raise ValueError('Fresh scoped SQL assignment metadata unavailable or unsafe') from None
+
+
+
+def wait_managed_assignment(fetch,expected,timeout=10,clock=None,pause=None):
+    """Bound only observation latency;never grants authority or retries a mutation.
+    fetch must obtain a new nonce-bound authenticated catalog snapshot each time.
+    Unsafe/malformed evidence fails immediately;fresh contrary assignments may be
+    observed again within the existing burst deadline. No cached positive result.
+    """
+    import time,math
+    if expected not in [[],[MANAGED_ROLE]] or type(timeout) not in [int,float] or not math.isfinite(timeout) or not 0<timeout<=15:raise ValueError('Bounded expected assignment required')
+    clock=clock or time.monotonic;pause=pause or time.sleep;end=clock()+timeout
+    while clock()<end:
+        actual=fetch()
+        if actual==expected:return actual
+        if actual not in [[],[MANAGED_ROLE]]:raise ValueError('Unsafe assignment observation')
+        pause(min(.25,max(0,end-clock())))
+    raise TimeoutError('Managed assignment not confirmed within observation deadline')
+
 if __name__=='__main__':raise SystemExit(main())

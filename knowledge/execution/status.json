@@ -33120,5 +33120,67 @@
       "knowledge/product/FEATURE_CATALOG.md": "18e0a62887f9a3a40c2099d790e7c52b2a9d2fbbeb263146104fbd9db0ad1e96",
       "knowledge/guides/USER_GUIDE.md": "667747104d64b882c7808c1282c34f00d687d8573bf546e8046c6683b66de79b"
     }
+  },
+  "cloudRunManagedRoleConfirmation": {
+    "id": "CN-GCP-MANAGED-ROLE-CONFIRMATION-001",
+    "baseline": "6c51eb3a2d3cb467d600baa2a4c3d350daca879b",
+    "status": "READY",
+    "orderedPaths": [
+      "scripts/verify-cloud-connectivity.py",
+      "scripts/test-cloud-run.py",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "source": "Direct Owner directive FIX MANAGED-ROLE CONFIRMATION AND RESUME CLOUD ACTIVATION;Tasks3,4,5,7",
+      "preservedSourceScopeSha256": "f0791689aba5c235c9e3e93effb61c85650eff48a8feedae59a36b283798bde8"
+    },
+    "scope": "Pure managed-role confirmation/query/lifecycle guards and tests in existing approved harness paths;append-only canonical/governance records;no application,SQL privilege,template or migration change",
+    "rollback": "Source revert through governed PR;original failed controller/evidence preserved;no cloud runtime authority implied",
+    "review": "Continue existing bounded runtime workstream under preserved task-only ledger/controlled-diff review;100 unchanged files,14 changed historical files;no full current KB/visual review claimed",
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "LOCAL_QUALIFICATION_PASS",
+      "offlineTests": 148,
+      "localPostgresGroups": 17,
+      "localCleanup": "PASS",
+      "priorCloudSessionConsumed": true,
+      "freshCloudSessionAuthorized": false,
+      "runtimeCloudLogin": "NOT_RUN",
+      "cloudMigrations": "NOT_RUN",
+      "cloudRunConnectivity": "NOT_RUN",
+      "cloudHealth": "NOT_RUN",
+      "historicalMigrations": 44,
+      "sqlFingerprintsChanged": false,
+      "unitLogSha256": "4249821c8a9564158e0e45b12be7ce9f3effe648261c207ce299f1fdafb3c735",
+      "localResultSha256": "9a604967db632e4ee29f7ffb5bd8528235bcde202bee116de4689ff9ff8549af",
+      "protectedControllerTests": 7,
+      "liveReadonlyAssignmentReader": "PASS_METADATA_ONLY"
+    },
+    "failureEvidence": {
+      "source": "Retained runtime-renewal-20261122 and runtime-renewal-results-20261122 receipts",
+      "transientApiPayload": "NOT_RETAINED_DO_NOT_INFER_OMISSION_VERSUS_STALENESS",
+      "sqlProbeDuringFailedBurst": "NOT_RUN",
+      "operationGrant": "9740e6ac-5410-49c8-afbc-0eaf00000026 DONE",
+      "operationRevocation": "7fabc903-f62a-4def-8ecc-e13600000026 DONE"
+    },
+    "sourceSha256": {
+      "scripts/verify-cloud-connectivity.py": "d155e91e25ca4d4c17198333138442e5c374bc0bde46ed5fa5fe8d2c3d985bab",
+      "scripts/test-cloud-run.py": "0d533dc3a0bf251366a7d6e9b06b1079ba7ee072759e246e1d6f9edd67417222",
+      "knowledge/ARCHITECTURE.md": "3f1c8aec339934c65e3dfc9f4b13c8a2c2334a584084e3e1db78eabe85c25b00",
+      "knowledge/PROGRESS.md": "63010f537323ec151a1594c3dbb728cfa57c281a83d7e95d808e130898e89ba9",
+      "knowledge/product/FEATURE_CATALOG.md": "adbdc4b4cbcd479a729c569dd5fbe4de1ce211fd6897707e1e8956e80e2bcd37",
+      "knowledge/guides/USER_GUIDE.md": "067a0dbd990efee4da95b6a6b4a4dd6aea94818bbb4250bcd2cd88acb2686662"
+    }
   }
 }
