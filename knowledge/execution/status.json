@@ -33107,12 +33107,12 @@
       "sqlFingerprintsChanged": false,
       "historicalMigrations": 44,
       "predecessorReplay": "RETAINED_EXACT_BASELINE_AND_MANDATORY_HOSTED_REPLAY",
-      "testLogSha256": "284e0bad58979e6ee15484c8cd8c7aee33088da785fb905efc5f4302eac0c045"
+      "testLogSha256": "afff86c3df2c28af3632bfb5625ea9f3ea1eeb3a66e3577499ce7c6df5a2b2bb"
     },
     "rollback": "Source-only non-force revert through governed PR;no cloud mutation before qualification",
     "sourceSha256": {
       "scripts/verify-cloud-run.py": "2a105cfdc7519904e72573301fcb48d6b2134382b4f0773395c84e090687a0fc",
-      "scripts/test-cloud-run.py": "9e0ccbc55f0d3ea20ab0428860bb03dba4faff1858e54f633ca2c360485d6455",
+      "scripts/test-cloud-run.py": "834543f5f6704317a9fc39f5f2bfa4a6fe6d7ee08725938c158bd9871b3867bc",
       "scripts/verify-cloud-connectivity.py": "5b2651e9815dc39c462d8bf354e5adac01d62c0b137afeb6364a3e99c1b6690d",
       "deployment/cloud-run/service.template.yaml": "34ded99306a5d763d320f525f28c085beb777d5e3efdf1f924c58597cca897e8",
       "knowledge/ARCHITECTURE.md": "fb3c7de6e6b93d2d6a3b421b05ca71b1015117e462436185102cd57dc1ef79fc",
