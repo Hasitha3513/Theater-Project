@@ -19550,5 +19550,128 @@ def sql_staging_token_main():
 receipt_admission_successor_errors=sql_staging_token_errors
 inert_ci_main=sql_staging_token_main
 
+
+# Owner-approved exact source successor. Historical validators remain unchanged.
+SUBNET_RECOVERY_BASE = '1755ff2f7a0a91146a904a316d79add86fe9853a'
+SUBNET_RECOVERY_STATE = {'id': 'CN-GCP-SUBNET-API-RECOVERY-001', 'baseline': '1755ff2f7a0a91146a904a316d79add86fe9853a', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'source': 'Owner message: OWNER APPROVAL — CINENEST PRIVATE GOOGLE ACCESS SOURCE SUCCESSOR; current conversation', 'requestSha256': '83bcc200c67d3032cf2fbe6c3dd517fb0be683cbe52048a3a056beefb0315bca', 'decision': 'APPROVED_EXACT_TEN_PATH_SOURCE_SUCCESSOR', 'recordedAtUtc': '2026-11-24T01:36:22.795744+00:00', 'reviewMethod': 'Exact approved task-only verified ledger reuse and controlled-diff review; no fresh full visual audit claimed'}, 'scope': ['Offline fail-closed subnet adapter: exact default subnet/us-east1/project only; GET before change; no-op when already true or path does not require PGA; POST setPrivateIpGoogleAccess with only approved Boolean; persistent nonzero UUID requestId; scoped async operation polling; bounded errors; no blind mutation retries', 'Before/after subnet identity and semantic state comparison; preserve all unrelated properties; document lack of atomic fingerprint precondition in this API; stop on detected drift; restore only task-owned false-to-true change using the dedicated POST method; preserve concurrent changes and report instead of overwriting', 'Reconcile existing NOLOGIN qualification roles without altering SQL: permit only original baseline or exactly evidenced runtime connlimit6/migrator2 and expired prior validity; reject LOGIN/elevated privileges/membership/PUBLIC access/session/history drift', 'Reuse only verified retained cinenest-runtime registry and cinenest-runtime/cinenest-deployer service accounts with current IDs, location and policies; preserve pre-existing resources in rollback; reject foreign/conflicting resources; no duplicate creation', 'Generate reviewed corrected cached controller offline; no execution permission implied; preserve old artifacts/fingerprints/failed receipts', 'Add exact 12 requested subnet regressions plus retained-role/resource-reuse/security negative controls; canonical append-only update; protected successor controls and historical replay'], 'rollback': 'Governed source revert; preserve all original approvals and historical artifacts. Source approval authorizes zero cloud mutation, SQL execution, container session or resource deletion. Future runtime rollback must preserve retained resources and unrelated subnet changes.', 'cloudSessionAuthorized': False, 'cloudMutationsAuthorized': False, 'sqlChangesAuthorized': False, 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'OFFLINE_QUALIFIED', 'migrations': 44, 'sqlFilesUnchanged': 7, 'cloudRuntime': 'NOT_RUN_NOT_AUTHORIZED', 'focusedTests': 26, 'architectureBoundary': 'PASS_OFFLINE_SOURCE_RULE', 'cloudSessionConsumed': True, 'historicalRuntimeSeconds': 665.41, 'cloudMigrations': 'NOT_RUN', 'cloudRun': 'NOT_RUN', 'offlineHarnessTests': 214, 'javaArchitectureTests': 68, 'fullHistoricalReplay': 'PASS_UNCHANGED_BASELINE', 'standaloneNegativeControls': 'PASS_SEQUENTIAL_AFTER_PRESERVED_DISK_FAILURE', 'secretPatternScan': 'PASS_LIMITED_DIFF_PATTERNS', 'hostedCI': 'PENDING'}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': '5b93f2858223b4257bc4d6309c736c07a25c7ca36f8a1a0d12d30aeb2b291531', 'scripts/test-cloud-run.py': '1154cecd77d236f364c376dbad66a2aa756ae8399bb28adb3912de583ab4fbba', 'knowledge/ARCHITECTURE.md': '1b4a786b0bff0e21d40b6e001253364a25c9a0cfe2311eb43a6246903ec53ed9', 'knowledge/PROGRESS.md': '9f605a662c8a910cff46b85bfd3ba0efdef22e8d212843b09591c424f9c7bf65', 'knowledge/product/FEATURE_CATALOG.md': '10ec057307dc6fe00a45a2d9355c8e6341e9533da99ba0e5591df8f2f51395f4', 'knowledge/guides/USER_GUIDE.md': '7149b88dd04d723f79a4678879cc915544fe70722d83921a0640ad34e7211589'}}
+SUBNET_RECOVERY_PATHS = set(SUBNET_RECOVERY_STATE['orderedPaths'])
+SUBNET_RECOVERY_MAIN = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+SUBNET_RECOVERY_SUFFIX_SHA = '6ccb6ef017f459890408a586c02d97a100d46b44c998207dc76af4c6911c0e06'
+
+
+def subnet_recovery_errors():
+    try:
+        unit=SUBNET_RECOVERY_STATE
+        before=lambda n:v41_git('show',SUBNET_RECOVERY_BASE+':'+n)
+        if (unit['id']!='CN-GCP-SUBNET-API-RECOVERY-001' or unit['status']!='READY'
+                or len(SUBNET_RECOVERY_PATHS)!=10 or unit['baseline']!=SUBNET_RECOVERY_BASE
+                or unit['authority']['requestSha256']!='83bcc200c67d3032cf2fbe6c3dd517fb0be683cbe52048a3a056beefb0315bca'
+                or unit['authority']['decision']!='APPROVED_EXACT_TEN_PATH_SOURCE_SUCCESSOR'
+                or not unit['authority']['source'] or unit['cloudSessionAuthorized'] is not False
+                or unit['cloudMutationsAuthorized'] is not False or unit['sqlChangesAuthorized'] is not False
+                or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}
+                or unit['qualification']['cloudRuntime']!='NOT_RUN_NOT_AUTHORIZED'
+                or unit['qualification']['cloudMigrations']!='NOT_RUN' or unit['qualification']['cloudRun']!='NOT_RUN'):
+            return ['Subnet recovery authority/scope/acceptance drift']
+        v41_git('merge-base','--is-ancestor',SUBNET_RECOVERY_BASE,'HEAD')
+        for name in ['knowledge/execution/change-sets.json','knowledge/execution/status.json']:
+            doc=json.loads((R/name).read_bytes())
+            if doc.pop('cloudRunSubnetApiRecovery',None)!=unit or doc!=json.loads(before(name)):
+                return ['Subnet recovery historical registry drift '+name]
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',SUBNET_RECOVERY_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):
+            return ['Subnet recovery source inventory drift']
+        if set(v41_git('diff','--name-only','-z',SUBNET_RECOVERY_BASE,text=True).split('\0'))-{''}!=SUBNET_RECOVERY_PATHS:
+            return ['Subnet recovery exact ten-path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            p=R/name
+            if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):
+                return ['Subnet recovery unsafe file '+name]
+            data=p.read_bytes()
+            if name not in SUBNET_RECOVERY_PATHS and hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:
+                return ['Subnet recovery unrelated/history drift '+name]
+        for name,digest in unit['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+                return ['Subnet recovery source fingerprint drift '+name]
+        for name,main in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',SUBNET_RECOVERY_MAIN)]:
+            old=before(name)
+            if not old.endswith(main) or not (R/name).read_bytes().startswith(old[:-len(main)]):
+                return ['Subnet recovery predecessor source modified '+name]
+        prefix=before('knowledge/execution/validate_execution.py')[:-len(SUBNET_RECOVERY_MAIN)]
+        suffix=(R/'knowledge/execution/validate_execution.py').read_bytes()[len(prefix):]
+        normalized=suffix.replace(SUBNET_RECOVERY_SUFFIX_SHA.encode(),b'0'*64,1)
+        if hashlib.sha256(normalized).hexdigest()!=SUBNET_RECOVERY_SUFFIX_SHA:
+            return ['Subnet recovery validator suffix drift']
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(before(name)):
+                return ['Subnet recovery historical prose drift '+name]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(p.relative_to(R)) for p in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:
+            return ['Subnet recovery historical migration inventory drift']
+        import runpy
+        module=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        expected_sql={'00-activation-authority-probe.sql.proposed': 'cd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d', '01-protected-credentials-and-migrator-login.psql.proposed': 'c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15', '02-post-migration-runtime-grants.sql.proposed': '52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52', '03-runtime-login-and-migrator-revocation.sql.proposed': '515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6', '04-login-revocation-and-session-cleanup.sql.proposed': '01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5', '05-runtime-readonly-verification.sql.proposed': '2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c', '06-data-preserving-quarantine.sql.proposed': 'ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676'}
+        if module['SQL_FILES']!=expected_sql:return ['Subnet recovery SQL fingerprint drift']
+        module['migration_inventory']()
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in SUBNET_RECOVERY_PATHS-{'knowledge/manifest.json'}:
+                entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():
+            return ['Subnet recovery manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):
+        return ['Subnet recovery inputs inaccessible']
+    return []
+
+
+def subnet_recovery_negative_controls():
+    from unittest.mock import patch
+    changes=[('status','BLOCKED'),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('authority',{}),('cloudSessionAuthorized',True),('cloudMutationsAuthorized',True),('sqlChangesAuthorized',True)]
+    for field,value in changes:
+        fake=json.loads(json.dumps(SUBNET_RECOVERY_STATE));fake[field]=value
+        with patch.dict(globals(),{'SUBNET_RECOVERY_STATE':fake}):
+            if not subnet_recovery_errors():raise ValueError('Subnet recovery accepted forged '+field)
+    for field in ['cloudRuntime','cloudMigrations','cloudRun']:
+        fake=json.loads(json.dumps(SUBNET_RECOVERY_STATE));fake['qualification'][field]='PASS'
+        with patch.dict(globals(),{'SUBNET_RECOVERY_STATE':fake}):
+            if not subnet_recovery_errors():raise ValueError('Subnet recovery accepted false cloud PASS')
+    read=Path.read_bytes
+    for relative in ['scripts/verify-cloud-connectivity.py','knowledge/execution/validate_execution.py','backend/src/main/resources/db/migration/V1__foundation.sql']:
+        target=R/relative
+        if not target.exists():target=next((R/'backend/src/main/resources/db/migration').glob('V1__*'))
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n#unapproved' if p==target else read(p,*a,**kw)):
+            if not subnet_recovery_errors():raise ValueError('Subnet recovery accepted altered source/history')
+    glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob(p,*a,**kw),folder/'V46__unapproved.sql']) if p==folder else glob(p,*a,**kw)):
+        if not subnet_recovery_errors():raise ValueError('Subnet recovery accepted extra migration')
+    print('PASS Subnet recovery scope,Owner approval,source/history/manifest,migrations,SQL and no-cloud negative controls',flush=True)
+
+
+def subnet_recovery_main():
+    import tempfile,sys
+    errors=subnet_recovery_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    subnet_recovery_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-subnet-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        # Read-only immutable Git object reuse; historical source/validators unchanged.
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',SUBNET_RECOVERY_BASE],check=True)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+
+receipt_admission_successor_errors=subnet_recovery_errors
+inert_ci_main=subnet_recovery_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

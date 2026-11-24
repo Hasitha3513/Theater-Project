@@ -965,4 +965,210 @@ class RuntimeSafetyArtifactRegression(unittest.TestCase):
         for name, text in files.items():
             compile(text, name, 'exec')
 
+
+class PrivateGoogleAccessRegression(unittest.TestCase):
+    def setUp(self):
+        import copy
+        self.copy = copy.deepcopy
+        self.url = runtime_artifact.SUBNET_URL
+        self.subnet = {'id': runtime_artifact.SUBNET_ID, 'name': 'default', 'selfLink': self.url,
+                       'region': self.url.rsplit('/subnetworks/', 1)[0],
+                       'network': self.url.split('/regions/')[0] + '/global/networks/default',
+                       'ipCidrRange': '10.142.0.0/20', 'fingerprint': 'old', 'privateIpGoogleAccess': False}
+        self.calls, self.journal, self.persisted = [], {}, []
+        self.guard = runtime_artifact.PrivateGoogleAccessGuard(self.api, self.wait, self.journal,
+                         lambda: self.persisted.append(self.copy(self.journal)))
+    def api(self, method, url, body=None):
+        self.calls.append((method, url, body))
+        if method == 'GET':
+            self.assertEqual(url, self.url)
+            return self.copy(self.subnet)
+        self.assertEqual(method, 'POST');self.assertTrue(url.startswith(self.url + '/setPrivateIpGoogleAccess?requestId='))
+        import uuid
+        self.assertNotEqual(uuid.UUID(url.split('requestId=')[1]).int, 0)
+        self.assertEqual(set(body), {'privateIpGoogleAccess'})
+        self.assertEqual(self.persisted[-1][('rollback' if body['privateIpGoogleAccess'] is False else 'enable')]['phase'], 'UNCERTAIN')
+        self.subnet.update(privateIpGoogleAccess=body['privateIpGoogleAccess'], fingerprint='new' if body['privateIpGoogleAccess'] else 'restored')
+        return {'selfLink': self.url.rsplit('/subnetworks/', 1)[0] + '/operations/test',
+                'targetLink': self.url, 'targetId': runtime_artifact.SUBNET_ID, 'status': 'PENDING'}
+    def wait(self, op):
+        return dict(op, status='DONE')
+    def mutations(self):
+        return [c for c in self.calls if c[0] != 'GET']
+    def test_already_enabled_is_noop_and_never_rolled_back(self):
+        self.subnet['privateIpGoogleAccess'] = True;self.guard.enable(True);self.guard.rollback()
+        self.assertEqual(self.mutations(), []);self.assertEqual(self.journal, {})
+    def test_psc_only_path_does_not_require_network_mutation(self):
+        self.guard.enable(False);self.assertEqual(self.mutations(), [])
+    def test_disabled_uses_dedicated_post_and_verified_completion(self):
+        self.guard.enable(True);self.assertTrue(self.subnet['privateIpGoogleAccess']);self.assertEqual(self.journal['enable']['phase'], 'VERIFIED');self.assertEqual(len(self.mutations()), 1)
+    def test_invalid_patch_or_unknown_capsule_is_refused(self):
+        with self.assertRaises(ValueError):runtime_artifact.subnet_recovery_artifacts('api("PATCH",foreign,{})', '', '')
+    def test_permission_denial_propagates_and_prevents_retry(self):
+        original=self.guard.api
+        self.guard.api=lambda method,*a: (_ for _ in ()).throw(PermissionError('DENIED')) if method=='POST' else original(method,*a)
+        with self.assertRaises(PermissionError):self.guard.enable(True)
+        with self.assertRaises(RuntimeError):self.guard.enable(True)
+        self.assertEqual(self.journal['enable']['phase'], 'UNCERTAIN')
+    def test_timeout_is_not_blindly_retried(self):
+        self.guard.wait=lambda op:(_ for _ in ()).throw(TimeoutError('operation deadline'))
+        with self.assertRaises(TimeoutError):self.guard.enable(True)
+        with self.assertRaises(RuntimeError):self.guard.enable(True)
+        with self.assertRaises(RuntimeError):self.guard.rollback()
+        self.assertEqual(len(self.mutations()),1)
+    def test_operation_failure_and_wrong_scope_are_rejected(self):
+        for override in [{'error':{'errors':[{'code':'FAILED'}]}},{'targetLink':'https://foreign/subnet'},{'targetId':'other'},{'status':'RUNNING'}]:
+            with self.subTest(override=override):
+                self.setUp();self.guard.wait=lambda op,extra=override:dict(op,status='DONE',**extra) if 'status' not in extra else dict(op,**extra)
+                with self.assertRaises(RuntimeError):self.guard.enable(True)
+    def test_duplicate_completed_command_does_not_resend(self):
+        self.guard.enable(True);request=self.journal['enable']['requestId'];self.guard.enable(True)
+        self.assertEqual(len(self.mutations()),1);self.assertEqual(self.journal['enable']['requestId'],request)
+    def test_before_state_drift_is_rejected_without_mutation(self):
+        original=self.guard.api
+        def changing(method,*args):
+            result=original(method,*args)
+            if len(self.calls)==1:self.subnet['fingerprint']='concurrent'
+            return result
+        self.guard.api=changing
+        with self.assertRaises(RuntimeError):self.guard.enable(True)
+        self.assertEqual(self.mutations(),[])
+    def test_after_state_drift_is_not_certified_or_rolled_back(self):
+        def changed(op):self.subnet['description']='other operator';return dict(op,status='DONE')
+        self.guard.wait=changed
+        with self.assertRaises(RuntimeError):self.guard.enable(True)
+        with self.assertRaises(RuntimeError):self.guard.rollback()
+        self.assertEqual(len(self.mutations()),1)
+    def test_rollback_uses_same_scoped_method_and_is_idempotent(self):
+        self.guard.enable(True);self.guard.rollback();self.guard.rollback()
+        self.assertFalse(self.subnet['privateIpGoogleAccess']);self.assertEqual(len(self.mutations()),2)
+    def test_rollback_preserves_concurrent_state(self):
+        self.guard.enable(True);self.subnet['fingerprint']='concurrent'
+        with self.assertRaises(RuntimeError):self.guard.rollback()
+        self.assertEqual(len(self.mutations()),1)
+    def test_unrelated_subnet_or_missing_state_is_rejected(self):
+        for key,value in [('id','foreign'),('name','other'),('network','foreign'),('region','us-west1'),('ipCidrRange','10.0.0.0/24'),('privateIpGoogleAccess',None),('selfLink',self.url.replace('googleapis.com','evil.test'))]:
+            with self.subTest(key=key):
+                self.setUp();self.subnet[key]=value
+                with self.assertRaises(ValueError):self.guard.enable(True)
+                self.assertEqual(self.mutations(),[])
+    def test_actual_www_compute_resource_links_are_supported(self):
+        for key in ['selfLink','region','network']:self.subnet[key]=self.subnet[key].replace('compute.googleapis.com','www.googleapis.com')
+        self.guard.enable(True);self.assertEqual(self.journal['enable']['phase'],'VERIFIED')
+    def test_persistence_failure_precedes_mutation(self):
+        self.guard.persist=lambda:(_ for _ in ()).throw(OSError('disk full'))
+        with self.assertRaises(OSError):self.guard.enable(True)
+        self.assertEqual(self.mutations(),[])
+
+
+class RetainedQualificationStateRegression(unittest.TestCase):
+    def roles(self):
+        return [dict(name='cinenest_qualification_'+name,login=False,superuser=False,createdb=False,createrole=False,replication=False,bypassrls=False,connectionLimit=-1,validUntil=None) for name in ['runtime','migrator']]
+    def now(self):
+        import datetime
+        return datetime.datetime(2026,11,24,2,tzinfo=datetime.timezone.utc)
+    def test_original_and_exact_retained_nologin_states(self):
+        roles=self.roles();self.assertEqual(runtime_artifact.qualification_role_baseline(roles,self.now()),'ORIGINAL_NOLOGIN')
+        roles[0]['connectionLimit']=6;roles[1].update(connectionLimit=2,validUntil='2026-11-24T01:05:24.905886Z')
+        self.assertEqual(runtime_artifact.qualification_role_baseline(roles,self.now()),'RETAINED_REVOKED_NOLOGIN')
+    def test_login_or_elevated_role_is_never_normalized(self):
+        for field in ['login','superuser','createdb','createrole','replication','bypassrls']:
+            roles=self.roles();roles[0][field]=True
+            with self.assertRaises(ValueError):runtime_artifact.qualification_role_baseline(roles,self.now())
+    def test_unknown_limits_future_expiry_missing_or_duplicate_roles_rejected(self):
+        for rolechange in [{'connectionLimit':7},{'validUntil':'2027-01-01T00:00:00Z'},{'login':'false'}]:
+            roles=self.roles();roles[0].update(rolechange)
+            with self.assertRaises(ValueError):runtime_artifact.qualification_role_baseline(roles,self.now())
+        with self.assertRaises(ValueError):runtime_artifact.qualification_role_baseline(self.roles()[:1],self.now())
+        with self.assertRaises(ValueError):runtime_artifact.qualification_role_baseline([self.roles()[0]]*2,self.now())
+    def policy(self):return {'version':1,'etag':'verified','bindings':[]}
+    def pin(self,policy):
+        import hashlib,json
+        return hashlib.sha256(json.dumps(policy,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+    def test_retained_service_ids_require_exact_policy_pin(self):
+        for name,uid in runtime_artifact.RETAINED_SERVICE_IDS.items():
+            doc={'email':name+'@'+runtime_artifact.PROJECT+'.iam.gserviceaccount.com','uniqueId':uid,'projectId':runtime_artifact.PROJECT}
+            self.assertTrue(runtime_artifact.retained_qualification_resource(name,doc,self.policy(),self.pin(self.policy())))
+            with self.assertRaises(ValueError):runtime_artifact.retained_qualification_resource(name,dict(doc,uniqueId='replacement'),self.policy(),self.pin(self.policy()))
+    def test_foreign_or_public_registry_and_policy_drift_rejected(self):
+        doc={'name':'projects/'+runtime_artifact.PROJECT+'/locations/us-east1/repositories/cinenest-runtime','format':'DOCKER','createTime':'2026-11-24T00:56:40.643736Z','labels':{'cinenest-task':'runtime-20261122'}}
+        self.assertTrue(runtime_artifact.retained_qualification_resource('repository',doc,self.policy(),self.pin(self.policy())))
+        for changed in [dict(doc,name='foreign'),dict(doc,format='MAVEN'),dict(doc,createTime='recreated')]:
+            with self.assertRaises(ValueError):runtime_artifact.retained_qualification_resource('repository',changed,self.policy(),self.pin(self.policy()))
+        public=dict(self.policy(),bindings=[{'role':'roles/artifactregistry.reader','members':['allUsers']}])
+        with self.assertRaises(ValueError):runtime_artifact.retained_qualification_resource('repository',doc,public,self.pin(public))
+        with self.assertRaises(ValueError):runtime_artifact.retained_qualification_resource('repository',doc,dict(self.policy(),etag='drift'),self.pin(self.policy()))
+
+
+class SubnetCapsuleRegression(unittest.TestCase):
+    # Minimal SYNTHETIC_TEST_ONLY fragments of the retained controller contract.
+    # No credentials, executable cloud session, runtime receipt or SQL is included.
+    def fixture(self):
+        return '''def preflight():
+ assert not v['sql_staging_token_errors'](),v['sql_staging_token_errors']()
+ fresh=json.loads((E/'fresh-session-authorization.requested.json').read_text());approved={}
+ qualified=[r['values'] for r in rows[1]['rows'] if r['values'][0]['value'].startswith('cinenest_qualification_')];assert len(qualified)==2 and all(all(r[i]['value']=='false' for i in range(1,7)) and r[7]['value']=='-1' and r[8].get('nullValue') for r in qualified)
+ for name,cmd in [('fresh-disks',[])]:
+  assert not any(x in [VM+'-boot',service,'cinenest-connectivity-migration','cinenest-connectivity-probe',repo,'secret'] for x in items)
+  if name=='fresh-sas':assert not any(x['email'].split('@')[0] in ['cinenest-runtime','cinenest-deployer','cinenest-connectivity-probe','cinenest-migrator'] for x in items)
+def prepare_cloud_resources():
+ for name in ['cinenest-runtime','cinenest-deployer','cinenest-connectivity-probe','cinenest-migrator']:
+  _,out,_=gc('create-sa-'+name,[])
+ gc('create-repository',['artifacts','repositories','create',repo,'--repository-format=docker','--location=us-east1','--labels=cinenest-task=runtime-20261122']);state['createdRepo']=True;save();binding('url','role','member')
+ before=api('GET',subnet_url);state['subnetBefore']=before;save()
+ if not before.get('privateIpGoogleAccess'):
+  operation(api('PATCH',subnet_url,{'privateIpGoogleAccess':True,'fingerprint':before['fingerprint']}));state['pgaChanged']=True;state['subnetAfterFingerprint']=api('GET',subnet_url)['fingerprint'];save()
+def cleanup():
+ if state.get('pgaChanged'):
+  def restore():
+   x=api('GET',subnet_url);assert x['fingerprint']==state['subnetAfterFingerprint'],'Concurrent subnet change;preserve for owner review';operation(api('PATCH',subnet_url,{'privateIpGoogleAccess':False,'fingerprint':x['fingerprint']}))
+  clean('private-google-access',restore)
+'''
+    def test_generated_controller_routes_enable_and_cleanup_through_guard(self):
+        result=runtime_artifact.subnet_recovery_artifacts(self.fixture(),'# synthetic helper\n','# synthetic private helper\n')
+        text=result['cloud-session.py'];compile(text,'synthetic-controller','exec')
+        self.assertNotIn("api('PATCH',subnet_url",text)
+        self.assertIn('guard.enable(required=True)',text)
+        self.assertIn("state['subnetChange'],save).rollback()",text)
+        self.assertIn("v['subnet_recovery_errors']()",text)
+        self.assertIn("'retained-resource-pins.json' in fresh['publicInputSha256']",text)
+        self.assertIn("policy=iam(url)",text)
+        self.assertNotIn("api('POST',url+':getIamPolicy'",text)
+        self.assertNotIn("gc('create-repository'",text)
+        self.assertIn("if name in state['retainedResources']:",text)
+        self.assertIn("M['qualification_role_baseline']",text)
+        self.assertEqual(result['cloud-helpers.py'],'# synthetic helper\n')
+        self.assertEqual(result['private-sql-helper.py'],'# synthetic private helper\n')
+    def test_generation_has_no_subprocess_cloud_or_credential_side_effects(self):
+        with patch.object(runtime_artifact,'acquire_protected_iam',side_effect=AssertionError('credential acquisition prohibited')):
+            result=runtime_artifact.subnet_recovery_artifacts(self.fixture(),'','')
+        self.assertEqual(set(result),{'cloud-session.py','cloud-helpers.py','private-sql-helper.py'})
+    def test_changed_or_duplicate_predecessor_is_denied(self):
+        for text in [self.fixture().replace("api('PATCH',subnet_url", "api('POST',subnet_url"), self.fixture()*2]:
+            with self.assertRaises(ValueError):runtime_artifact.subnet_recovery_artifacts(text,'','')
+    def test_architecture_preserves_application_sql_and_credential_boundaries(self):
+        import ast,inspect
+        functions=[runtime_artifact._subnet_snapshot,runtime_artifact.qualification_role_baseline,runtime_artifact.retained_qualification_resource,runtime_artifact.subnet_recovery_artifacts]
+        for func in functions:
+            tree=ast.parse(inspect.getsource(func))
+            names={n.id for n in ast.walk(tree) if isinstance(n,ast.Name)}
+            self.assertFalse(names & {'subprocess','psycopg','psycopg2','DriverManager','acquire_protected_iam'})
+        guard=inspect.getsource(runtime_artifact.PrivateGoogleAccessGuard._transition)
+        self.assertNotIn("'PATCH'",guard);self.assertIn("'/setPrivateIpGoogleAccess?requestId='",guard)
+
+
+
+class RetainedPolicyArtifactRegression(unittest.TestCase):
+    def test_only_exact_fingerprinted_pin_artifact_is_admitted(self):
+        import json,hashlib
+        pins={name:'a'*64 for name in ['repository','cinenest-runtime','cinenest-deployer']}
+        raw=json.dumps(pins).encode();digest=hashlib.sha256(raw).hexdigest()
+        self.assertEqual(runtime_artifact.approved_retained_policy_pins(raw,digest),pins)
+        for changed in [raw+b' ',b'{}',raw*300]:
+            with self.assertRaises(ValueError):runtime_artifact.approved_retained_policy_pins(changed,digest)
+    def test_duplicate_or_unknown_pins_cannot_be_self_approved(self):
+        import hashlib,json
+        for raw in [b'{"repository":"a","repository":"b"}',json.dumps({'foreign':'a'*64}).encode()]:
+            with self.assertRaises(ValueError):runtime_artifact.approved_retained_policy_pins(raw,hashlib.sha256(raw).hexdigest())
+
 if __name__=='__main__':unittest.main()
