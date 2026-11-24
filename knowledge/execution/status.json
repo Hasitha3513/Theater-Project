@@ -33246,5 +33246,72 @@
       "knowledge/product/FEATURE_CATALOG.md": "911eee301ac85f261b6ae730f2fff166ec61171df8ef60197e46e97a2984d863",
       "knowledge/guides/USER_GUIDE.md": "1569de477c22fec0ad556084d53ae254edad409d13faeb49ab577a39f3b41f7b"
     }
+  },
+  "cloudRunSubnetApiRecovery": {
+    "id": "CN-GCP-SUBNET-API-RECOVERY-001",
+    "baseline": "1755ff2f7a0a91146a904a316d79add86fe9853a",
+    "status": "READY",
+    "orderedPaths": [
+      "scripts/verify-cloud-connectivity.py",
+      "scripts/test-cloud-run.py",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "source": "Owner message: OWNER APPROVAL \u2014 CINENEST PRIVATE GOOGLE ACCESS SOURCE SUCCESSOR; current conversation",
+      "requestSha256": "83bcc200c67d3032cf2fbe6c3dd517fb0be683cbe52048a3a056beefb0315bca",
+      "decision": "APPROVED_EXACT_TEN_PATH_SOURCE_SUCCESSOR",
+      "recordedAtUtc": "2026-11-24T01:36:22.795744+00:00",
+      "reviewMethod": "Exact approved task-only verified ledger reuse and controlled-diff review; no fresh full visual audit claimed"
+    },
+    "scope": [
+      "Offline fail-closed subnet adapter: exact default subnet/us-east1/project only; GET before change; no-op when already true or path does not require PGA; POST setPrivateIpGoogleAccess with only approved Boolean; persistent nonzero UUID requestId; scoped async operation polling; bounded errors; no blind mutation retries",
+      "Before/after subnet identity and semantic state comparison; preserve all unrelated properties; document lack of atomic fingerprint precondition in this API; stop on detected drift; restore only task-owned false-to-true change using the dedicated POST method; preserve concurrent changes and report instead of overwriting",
+      "Reconcile existing NOLOGIN qualification roles without altering SQL: permit only original baseline or exactly evidenced runtime connlimit6/migrator2 and expired prior validity; reject LOGIN/elevated privileges/membership/PUBLIC access/session/history drift",
+      "Reuse only verified retained cinenest-runtime registry and cinenest-runtime/cinenest-deployer service accounts with current IDs, location and policies; preserve pre-existing resources in rollback; reject foreign/conflicting resources; no duplicate creation",
+      "Generate reviewed corrected cached controller offline; no execution permission implied; preserve old artifacts/fingerprints/failed receipts",
+      "Add exact 12 requested subnet regressions plus retained-role/resource-reuse/security negative controls; canonical append-only update; protected successor controls and historical replay"
+    ],
+    "rollback": "Governed source revert; preserve all original approvals and historical artifacts. Source approval authorizes zero cloud mutation, SQL execution, container session or resource deletion. Future runtime rollback must preserve retained resources and unrelated subnet changes.",
+    "cloudSessionAuthorized": false,
+    "cloudMutationsAuthorized": false,
+    "sqlChangesAuthorized": false,
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "OFFLINE_QUALIFIED",
+      "migrations": 44,
+      "sqlFilesUnchanged": 7,
+      "cloudRuntime": "NOT_RUN_NOT_AUTHORIZED",
+      "focusedTests": 26,
+      "architectureBoundary": "PASS_OFFLINE_SOURCE_RULE",
+      "cloudSessionConsumed": true,
+      "historicalRuntimeSeconds": 665.41,
+      "cloudMigrations": "NOT_RUN",
+      "cloudRun": "NOT_RUN",
+      "offlineHarnessTests": 214,
+      "javaArchitectureTests": 68,
+      "fullHistoricalReplay": "PASS_UNCHANGED_BASELINE",
+      "standaloneNegativeControls": "PASS_SEQUENTIAL_AFTER_PRESERVED_DISK_FAILURE",
+      "secretPatternScan": "PASS_LIMITED_DIFF_PATTERNS",
+      "hostedCI": "PENDING"
+    },
+    "sourceSha256": {
+      "scripts/verify-cloud-connectivity.py": "5b93f2858223b4257bc4d6309c736c07a25c7ca36f8a1a0d12d30aeb2b291531",
+      "scripts/test-cloud-run.py": "1154cecd77d236f364c376dbad66a2aa756ae8399bb28adb3912de583ab4fbba",
+      "knowledge/ARCHITECTURE.md": "1b4a786b0bff0e21d40b6e001253364a25c9a0cfe2311eb43a6246903ec53ed9",
+      "knowledge/PROGRESS.md": "9f605a662c8a910cff46b85bfd3ba0efdef22e8d212843b09591c424f9c7bf65",
+      "knowledge/product/FEATURE_CATALOG.md": "10ec057307dc6fe00a45a2d9355c8e6341e9533da99ba0e5591df8f2f51395f4",
+      "knowledge/guides/USER_GUIDE.md": "7149b88dd04d723f79a4678879cc915544fe70722d83921a0640ad34e7211589"
+    }
   }
 }

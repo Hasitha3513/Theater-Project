@@ -937,3 +937,8 @@ The internal connectivity harness now distinguishes optional API metadata from f
 
 ## Internal qualification SQL staging and credential guards
 CN-GCP-SQL-STAGING-TOKEN-SAFETY-001 qualifies an explicit ordered seven-file manifest,private all-or-nothing staging and protected IAM expiry checks. Missing .psql inputs,unexpected files,duplicate or reordered manifests,changed hashes,expired tokens and uncertain mutation retries fail closed.188offline harness tests passed;generated-controller review is offline only. Live LOGIN,migration and Cloud Run qualification remain NOT_RUN;productionNONE andPART1 acceptance4/7. [Results](../PROGRESS.md#cloud-sql-staging-token-safety).
+
+
+<a id="private-google-access-recovery"></a>
+### Internal qualification network recovery
+The offline operator harness now prepares the dedicated Private Google Access API path with no-op,scoped-operation,uncertain-result,drift and attributed rollback guards. It preserves restricted NOLOGIN database state and reuses only approved pinned registry/service identities. This is source qualification tooling,not a customer feature or proof of Cloud Run connectivity. Runtime requires separate exact approval;live customer operations and production remain disabled. [Boundary](../ARCHITECTURE.md#private-google-access-recovery);[results](../PROGRESS.md#private-google-access-recovery).

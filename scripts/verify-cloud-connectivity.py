@@ -575,4 +575,209 @@ def runtime_safety_artifacts(controller, helpers, private_helper):
         compile(text, name, 'exec')  # Syntax check only; never execute the controller.
     return result
 
+
+# CN-GCP-SUBNET-API-RECOVERY-001. These adapters never acquire credentials.
+SUBNET_URL = ('https://compute.googleapis.com/compute/v1/projects/' + PROJECT
+              + '/regions/us-east1/subnetworks/default')
+SUBNET_ID = '985145031189724551'
+RETAINED_SERVICE_IDS = {'cinenest-runtime': '111620249984773009308',
+                        'cinenest-deployer': '102296079302357771326'}
+
+
+def _compute_link(value):
+    if not isinstance(value, str):
+        return None
+    return value.replace('https://www.googleapis.com/compute/v1/', 'https://compute.googleapis.com/compute/v1/', 1)
+
+
+def _subnet_snapshot(value):
+    import copy
+    if (not isinstance(value, dict) or value.get('id') != SUBNET_ID
+            or _compute_link(value.get('selfLink')) != SUBNET_URL or value.get('name') != 'default'
+            or _compute_link(value.get('region')) != SUBNET_URL.rsplit('/subnetworks/', 1)[0]
+            or _compute_link(value.get('network')) != SUBNET_URL.split('/regions/')[0] + '/global/networks/default'
+            or value.get('ipCidrRange') != '10.142.0.0/20'
+            or type(value.get('privateIpGoogleAccess')) is not bool
+            or not isinstance(value.get('fingerprint'), str) or not value['fingerprint']):
+        raise ValueError('Unexpected approved subnet identity/state')
+    return copy.deepcopy(value)
+
+
+def _subnet_semantics(value):
+    return {k: v for k, v in value.items() if k not in ('privateIpGoogleAccess', 'fingerprint')}
+
+
+class PrivateGoogleAccessGuard:
+    """Journal before POST; no automatic replay of an uncertain mutation.
+
+    setPrivateIpGoogleAccess has no fingerprint precondition. Double observation
+    detects drift but is not atomic exclusion against other network operators.
+    The caller must hold the approved maintenance/control boundary. Any unknown
+    outcome or changed snapshot blocks further changes until reconciled.
+    """
+    def __init__(self, api, wait_operation, journal, persist):
+        self.api, self.wait = api, wait_operation
+        self.journal, self.persist = journal, persist
+
+    def _read(self):
+        return _subnet_snapshot(self.api('GET', SUBNET_URL))
+
+    def _transition(self, before, desired, label):
+        import uuid
+        # Exact second observation immediately before the request. No PATCH.
+        if self._read() != before:
+            raise RuntimeError('Subnet drift before mutation')
+        entry = {'before': before, 'desired': desired,
+                 'requestId': str(uuid.uuid4()), 'phase': 'UNCERTAIN'}
+        self.journal[label] = entry
+        self.persist()  # durable write must succeed before mutation
+        url = SUBNET_URL + '/setPrivateIpGoogleAccess?requestId=' + entry['requestId']
+        op = self.api('POST', url, {'privateIpGoogleAccess': desired})
+        expected_prefix = SUBNET_URL.rsplit('/subnetworks/', 1)[0] + '/operations/'
+        if (not isinstance(op, dict) or not (_compute_link(op.get('selfLink')) or '').startswith(expected_prefix)
+                or _compute_link(op.get('targetLink')) != SUBNET_URL or str(op.get('targetId')) != SUBNET_ID):
+            raise RuntimeError('Unexpected subnet operation identity')
+        entry.update(operation=op, phase='SUBMITTED'); self.persist()
+        done = self.wait(op)
+        if (done.get('selfLink') != op['selfLink'] or _compute_link(done.get('targetLink')) != SUBNET_URL
+                or str(done.get('targetId')) != SUBNET_ID or done.get('status') != 'DONE'
+                or done.get('error') or done.get('httpErrorStatusCode')):
+            raise RuntimeError('Subnet operation did not complete successfully')
+        after = self._read()
+        if after['privateIpGoogleAccess'] is not desired or _subnet_semantics(before) != _subnet_semantics(after):
+            raise RuntimeError('Subnet drift after mutation')
+        entry.update(after=after, phase='VERIFIED'); self.persist()
+        return after
+
+    def enable(self, required):
+        if type(required) is not bool:
+            raise ValueError('Explicit path requirement required')
+        current = self._read()
+        if 'enable' in self.journal:
+            entry = self.journal['enable']
+            if (entry.get('phase') != 'VERIFIED' or current != entry.get('after')
+                    or entry.get('desired') is not True):
+                raise RuntimeError('Uncertain/replaced subnet change; reconcile first')
+            return current
+        if not required or current['privateIpGoogleAccess']:
+            return current  # pre-existing true is never attributed to this task
+        return self._transition(current, True, 'enable')
+
+    def rollback(self):
+        entry = self.journal.get('enable')
+        if not entry:
+            return self._read()  # no task-owned mutation
+        current = self._read()
+        if 'rollback' in self.journal:
+            undo = self.journal['rollback']
+            if undo.get('phase') == 'VERIFIED' and current == undo.get('after'):
+                return current
+            raise RuntimeError('Uncertain rollback; reconcile first')
+        if (entry.get('phase') != 'VERIFIED' or entry.get('before', {}).get('privateIpGoogleAccess') is not False
+                or entry.get('desired') is not True or current != entry.get('after')):
+            raise RuntimeError('Subnet changed; preserve concurrent state')
+        return self._transition(current, False, 'rollback')
+
+
+def qualification_role_baseline(roles, now):
+    """Read-only admission for original or precisely retained NOLOGIN states."""
+    import datetime
+    if not isinstance(now, datetime.datetime) or now.tzinfo is None:
+        raise ValueError('Authoritative aware observation time required')
+    names = {'cinenest_qualification_runtime', 'cinenest_qualification_migrator'}
+    if not isinstance(roles, list) or len(roles) != 2 or {r['name'] for r in roles} != names:
+        raise ValueError('Exact qualification roles required')
+    for role in roles:
+        if set(role) != {'name', 'login', 'superuser', 'createdb', 'createrole', 'replication', 'bypassrls', 'connectionLimit', 'validUntil'}:
+            raise ValueError('Unexpected role fields')
+        if any(role[k] is not False for k in ('login', 'superuser', 'createdb', 'createrole', 'replication', 'bypassrls')):
+            raise ValueError('NOLOGIN restricted roles required')
+    pairs = {r['name']: r for r in roles}
+    runtime, migrator = (pairs['cinenest_qualification_' + name] for name in ('runtime', 'migrator'))
+    if all(type(r['connectionLimit']) is int and r['connectionLimit'] == -1 and r['validUntil'] is None for r in roles):
+        return 'ORIGINAL_NOLOGIN'
+    if (type(runtime['connectionLimit']) is not int or runtime['connectionLimit'] != 6
+            or type(migrator['connectionLimit']) is not int or migrator['connectionLimit'] != 2
+            or runtime['validUntil'] is not None or not isinstance(migrator['validUntil'], str)):
+        raise ValueError('Unexpected retained role limits')
+    expiry = datetime.datetime.fromisoformat(migrator['validUntil'].replace('Z', '+00:00'))
+    if expiry.tzinfo is None or expiry > now:
+        raise ValueError('Retained migrator validity must have expired')
+    return 'RETAINED_REVOKED_NOLOGIN'
+
+
+def approved_retained_policy_pins(raw, expected_sha256):
+    if (not isinstance(raw, bytes) or len(raw) > 16384
+            or not re.fullmatch(r'[0-9a-f]{64}', expected_sha256 or '')
+            or hashlib.sha256(raw).hexdigest() != expected_sha256):
+        raise ValueError('Retained policy pin artifact changed')
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError('Duplicate policy pin')
+            result[key] = value
+        return result
+    pins = json.loads(raw, object_pairs_hook=unique)
+    if (not isinstance(pins, dict) or set(pins) != {'repository', *RETAINED_SERVICE_IDS}
+            or any(not isinstance(v, str) or not re.fullmatch(r'[0-9a-f]{64}', v) for v in pins.values())):
+        raise ValueError('Exact retained resource policy pins required')
+    return pins
+
+
+def retained_qualification_resource(kind, value, policy, approved_policy_sha256):
+    """Pins supplied in a separately fingerprinted runtime approval, never self-approved."""
+    if (not re.fullmatch(r'[0-9a-f]{64}', approved_policy_sha256 or '')
+            or hashlib.sha256(json.dumps(policy, sort_keys=True, separators=(',', ':')).encode()).hexdigest() != approved_policy_sha256):
+        raise ValueError('Retained IAM policy drift or missing approved pin')
+    if kind in RETAINED_SERVICE_IDS:
+        email = kind + '@' + PROJECT + '.iam.gserviceaccount.com'
+        if value.get('email') != email or value.get('uniqueId') != RETAINED_SERVICE_IDS[kind] or value.get('disabled', False) is not False or value.get('projectId') != PROJECT:
+            raise ValueError('Retained identity drift')
+    elif kind == 'repository':
+        if (value.get('name') != 'projects/' + PROJECT + '/locations/us-east1/repositories/cinenest-runtime'
+                or value.get('createTime') != '2026-11-24T00:56:40.643736Z'
+                or value.get('format') != 'DOCKER' or value.get('mode', 'STANDARD_REPOSITORY') != 'STANDARD_REPOSITORY'
+                or value.get('labels', {}).get('cinenest-task') != 'runtime-20261122'):
+            raise ValueError('Retained registry drift')
+    else:
+        raise ValueError('Unapproved retained resource')
+    for binding in policy.get('bindings', []):
+        if any(x in ('allUsers', 'allAuthenticatedUsers') for x in binding.get('members', [])):
+            raise ValueError('Public retained-resource policy')
+    return True
+
+
+def subnet_recovery_artifacts(controller, helpers, private_helper):
+    """Correct the exact failed capsule offline; never executes or grants authority."""
+    def once(old, new):
+        nonlocal controller
+        if controller.count(old) != 1:
+            raise ValueError('Unexpected retained subnet capsule shape')
+        controller = controller.replace(old, new, 1)
+    once("assert not v['sql_staging_token_errors'](),v['sql_staging_token_errors']()",
+         "assert not v['subnet_recovery_errors'](),v['subnet_recovery_errors']()")
+    once("qualified=[r['values'] for r in rows[1]['rows'] if r['values'][0]['value'].startswith('cinenest_qualification_')];assert len(qualified)==2 and all(all(r[i]['value']=='false' for i in range(1,7)) and r[7]['value']=='-1' and r[8].get('nullValue') for r in qualified)",
+         "qualified=[r['values'] for r in rows[1]['rows'] if r['values'][0]['value'].startswith('cinenest_qualification_')];M['qualification_role_baseline']([dict(zip(['name','login','superuser','createdb','createrole','replication','bypassrls','connectionLimit','validUntil'],[r[0]['value']]+[{'false':False,'true':True}.get(r[i].get('value')) for i in range(1,7)]+[int(r[7]['value']),r[8].get('value')])) for r in qualified],datetime.datetime.now(datetime.timezone.utc))")
+    old="before=api('GET',subnet_url);state['subnetBefore']=before;save()\n if not before.get('privateIpGoogleAccess'):\n  operation(api('PATCH',subnet_url,{'privateIpGoogleAccess':True,'fingerprint':before['fingerprint']}));state['pgaChanged']=True;state['subnetAfterFingerprint']=api('GET',subnet_url)['fingerprint'];save()"
+    once(old,"assert subnet_url==M['SUBNET_URL'];journal=state.setdefault('subnetChange',{});guard=M['PrivateGoogleAccessGuard'](api,operation,journal,save);guard.enable(required=True)")
+    old="if state.get('pgaChanged'):\n  def restore():\n   x=api('GET',subnet_url);assert x['fingerprint']==state['subnetAfterFingerprint'],'Concurrent subnet change;preserve for owner review';operation(api('PATCH',subnet_url,{'privateIpGoogleAccess':False,'fingerprint':x['fingerprint']}))\n  clean('private-google-access',restore)"
+    once(old,"if state.get('subnetChange'):\n  clean('private-google-access',lambda:M['PrivateGoogleAccessGuard'](api,operation,state['subnetChange'],save).rollback())")
+    # A future runtime package must pin current policies. No undeclared reuse.
+    once("for name,cmd in [('fresh-disks'", "state['retainedResources']={}\n pin_path=E/'retained-resource-pins.json';assert not pin_path.is_symlink();pins=M['approved_retained_policy_pins'](pin_path.read_bytes(),fresh['publicInputSha256']['retained-resource-pins.json']);state['retainedPolicyPins']=pins\n for kind in pins:\n  url=('https://artifactregistry.googleapis.com/v1/projects/'+P+'/locations/us-east1/repositories/'+repo) if kind=='repository' else ('https://iam.googleapis.com/v1/projects/'+P+'/serviceAccounts/'+kind+'@'+P+'.iam.gserviceaccount.com')\n  obj=api('GET',url);policy=iam(url)\n  M['retained_qualification_resource'](kind,obj,policy,pins[kind]);state['retainedResources'][kind]={'url':url,'object':obj,'policy':policy};save()\n for name,cmd in [('fresh-disks'")
+    once("[VM+'-boot',service,'cinenest-connectivity-migration','cinenest-connectivity-probe',repo,", "[VM+'-boot',service,'cinenest-connectivity-migration','cinenest-connectivity-probe',")
+    once("if name=='fresh-sas':assert not any(x['email'].split('@')[0] in ['cinenest-runtime','cinenest-deployer','cinenest-connectivity-probe','cinenest-migrator'] for x in items)", "if name=='fresh-sas':assert not any(x['email'].split('@')[0] in ['cinenest-connectivity-probe','cinenest-migrator'] for x in items)")
+    once("for name in ['cinenest-runtime','cinenest-deployer','cinenest-connectivity-probe','cinenest-migrator']:\n  _,out,_=gc(", "for name in ['cinenest-runtime','cinenest-deployer','cinenest-connectivity-probe','cinenest-migrator']:\n  if name in state['retainedResources']:\n   item=state['retainedResources'][name];M['retained_qualification_resource'](name,api('GET',item['url']),iam(item['url']),pins_for_runtime()[name]);continue\n  _,out,_=gc(")
+    # Keep pins in the protected exact runtime input, not arbitrary caller data.
+    once("def prepare_cloud_resources():", "def pins_for_runtime():\n return dict(state['retainedPolicyPins'])\n\ndef prepare_cloud_resources():")
+    old="gc('create-repository',['artifacts','repositories','create',repo,'--repository-format=docker','--location=us-east1','--labels=cinenest-task=runtime-20261122']);state['createdRepo']=True;save();binding("
+    once(old,"item=state['retainedResources']['repository'];M['retained_qualification_resource']('repository',api('GET',item['url']),iam(item['url']),pins_for_runtime()['repository']);binding(")
+    # Reuse must never be admitted without fingerprinting the policy-pin artifact.
+    once("fresh=json.loads((E/'fresh-session-authorization.requested.json').read_text());approved=", "fresh=json.loads((E/'fresh-session-authorization.requested.json').read_text());assert 'retained-resource-pins.json' in fresh['publicInputSha256'];approved=")
+    if "api('PATCH',subnet_url" in controller:
+        raise ValueError('Invalid subnet PATCH retained')
+    for name, text in [('cloud-session.py', controller), ('cloud-helpers.py', helpers), ('private-sql-helper.py', private_helper)]:
+        compile(text, name, 'exec')
+    return {'cloud-session.py': controller, 'cloud-helpers.py': helpers, 'private-sql-helper.py': private_helper}
+
 if __name__=='__main__':raise SystemExit(main())
