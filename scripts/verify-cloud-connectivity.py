@@ -844,4 +844,274 @@ def ssh_trust_path_artifacts(controller, helpers, private_helper):
         compile(text, name, 'exec')
     return result
 
+
+SQL00_REVISION_SHA256 = '07d9b1a1199efe212697f443c2be1fcab8d47d7ce531006463807ee60c8ab884'
+SQL00_REVISION_APPROVAL = 'd4de6e3487335c535b5ae965e5c9e42ada66bcbe4d15138a88f7ed4a540ff8d0'
+SQL00_REVISION_FILES = dict(SQL_FILES, **{'00-activation-authority-probe.sql.proposed': SQL00_REVISION_SHA256})
+
+
+def require_sql00_revision_manifest(manifest):
+    """Closed, ordered seven-file revision; never alters historical SQL_FILES."""
+    if isinstance(manifest, str):
+        def unique(pairs):
+            result = {}
+            for name, value in pairs:
+                if name in result:
+                    raise ValueError('Duplicate revised SQL input')
+                result[name] = value
+            return result
+        manifest = json.loads(manifest, object_pairs_hook=unique)
+    if (not isinstance(manifest, dict) or manifest != SQL00_REVISION_FILES
+            or list(manifest) != list(SQL00_REVISION_FILES)):
+        raise ValueError('Exact admitted SQL00 revision and unchanged siblings required')
+    if hashlib.sha256(SQL00_REVISION_SQL.encode()).hexdigest() != SQL00_REVISION_SHA256:
+        raise ValueError('Revised SQL00 source drift')
+    return dict(manifest)
+
+
+def sql00_role_baseline(roles, now):
+    """Preliminary role check; SQL00 database time/ACL/authority remains mandatory."""
+    import datetime
+    if not isinstance(now, datetime.datetime) or now.tzinfo is None:
+        raise ValueError('Aware observation time required')
+    names = {'cinenest_qualification_runtime', 'cinenest_qualification_migrator'}
+    fields = {'name', 'login', 'superuser', 'createdb', 'createrole', 'replication', 'bypassrls', 'connectionLimit', 'validUntil'}
+    if not isinstance(roles, list) or len(roles) != 2 or any(not isinstance(r, dict) or set(r) != fields for r in roles) or {r['name'] for r in roles} != names:
+        raise ValueError('Exact two role records required')
+    for role in roles:
+        if any(role[k] is not False for k in ('login', 'superuser', 'createdb', 'createrole', 'replication', 'bypassrls')) or type(role['connectionLimit']) is not int:
+            raise ValueError('Restricted NOLOGIN role required')
+    if all(r['connectionLimit'] == -1 and r['validUntil'] is None for r in roles):
+        return 'ORIGINAL_NOLOGIN'
+    for role in roles:
+        if role['connectionLimit'] != (6 if role['name'].endswith('_runtime') else 2):
+            raise ValueError('Unexpected paired role limits')
+        if role['validUntil'] is not None:
+            if not isinstance(role['validUntil'], str):
+                raise ValueError('Invalid role validity')
+            expiry = datetime.datetime.fromisoformat(role['validUntil'].replace('Z', '+00:00'))
+            if expiry.tzinfo is None or expiry > now:
+                raise ValueError('Inactive finite expired validity required')
+    return 'RETAINED_REVOKED_NOLOGIN'
+
+
+def prepare_sql00_revision_inputs(legacy, destination):
+    """Public SQL only. Exclusive versioned output; original archives untouched."""
+    legacy, destination = Path(legacy), Path(destination)
+    if destination.exists() or destination.is_symlink() or not destination.parent.is_dir():
+        raise ValueError('New versioned SQL directory required')
+    # Authenticate every historical byte, including the superseded original00.
+    if legacy.is_symlink() or sql_input_names(legacy) != set(SQL_FILES):
+        raise ValueError('Historical seven-file inventory required')
+    data = {}
+    for name, digest in SQL_FILES.items():
+        path = legacy / name
+        if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+            raise ValueError('Historical SQL fingerprint drift')
+        data[name] = path.read_bytes()
+    data['00-activation-authority-probe.sql.proposed'] = SQL00_REVISION_SQL.encode()
+    require_sql00_revision_manifest(SQL00_REVISION_FILES)
+    destination.mkdir(mode=0o700)
+    created = []
+    try:
+        for name in SQL00_REVISION_FILES:
+            path = destination / name
+            fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+            created.append(path)
+            with os.fdopen(fd, 'wb') as stream:
+                stream.write(data[name])
+        with stage_approved_sql(destination, destination.parent, json.dumps(SQL00_REVISION_FILES), SQL00_REVISION_FILES):
+            pass
+        return dict(SQL00_REVISION_FILES)
+    except BaseException:
+        for path in reversed(created):
+            path.unlink()
+        destination.rmdir()
+        raise
+
+
+def sql00_staging_command():
+    import shlex
+    program = ("import runpy;from pathlib import Path;"
+               "m=runpy.run_path('cinenest-runtime/managed-role-contract.py');"
+               "m['install_sql00_revision']('.', 'cinenest-runtime', "
+               "Path('cinenest-runtime/approved-sql-hashes.json').read_text())")
+    return 'python3 -c ' + shlex.quote(program)
+
+
+def sql00_revision_artifacts(controller, helpers, private_helper):
+    """Offline capsule binding only; source/SQL approval adds no cloud session."""
+    def once(old, new):
+        nonlocal controller
+        if controller.count(old) != 1:
+            raise ValueError('Unexpected retained SQL00 capsule shape')
+        controller = controller.replace(old, new, 1)
+    once("assert not v['ssh_trust_path_errors'](),v['ssh_trust_path_errors']()",
+         "assert not v['sql00_retained_errors'](),v['sql00_retained_errors']()")
+    once("assert fresh['sqlTemplatesSha256']==json.loads((CACHE/'execution-authorization.requested.json').read_text())['sqlTemplatesSha256']",
+         "M['require_sql00_revision_manifest'](fresh['sqlTemplatesSha256']);assert fresh['sql00RevisionApprovalSha256']==M['SQL00_REVISION_APPROVAL']")
+    once("manifests=json.loads((E/'approved-sql-hashes.json').read_text());assert all(hashlib.sha256((CACHE/n).read_bytes()).hexdigest()==h for n,h in manifests.items())",
+         "manifests=M['require_sql00_revision_manifest']((E/'approved-sql-hashes.json').read_text());SQLROOT=E/'sql-inputs';assert not SQLROOT.is_symlink() and SQLROOT.is_dir() and M['sql_input_names'](SQLROOT)==set(manifests);assert all(not (SQLROOT/n).is_symlink() and (SQLROOT/n).is_file() and hashlib.sha256((SQLROOT/n).read_bytes()).hexdigest()==h for n,h in manifests.items())")
+    once("M['qualification_role_baseline'](", "M['sql00_role_baseline'](")
+    once("[CACHE/n for n in json.loads((E/'approved-sql-hashes.json').read_text())]",
+         "[E/'sql-inputs'/n for n in M['require_sql00_revision_manifest']((E/'approved-sql-hashes.json').read_text())]")
+    once("M['sql_staging_command']()", "M['sql00_staging_command']()")
+    old="files=json.loads((E/'approved-sql-hashes.json').read_text());assert all(hashlib.sha256((E/n).read_bytes()).hexdigest()==h for n,h in files.items())"
+    if private_helper.count(old) != 1:
+        raise ValueError('Unexpected private SQL manifest boundary')
+    private_helper = private_helper.replace(old,
+        "contract_path=E/'managed-role-contract.py';assert hashlib.sha256(contract_path.read_bytes()).hexdigest()==(E/'managed-role-source.sha256').read_text().strip();files=runpy.run_path(str(contract_path))['require_sql00_revision_manifest']((E/'approved-sql-hashes.json').read_text());assert all(hashlib.sha256((E/n).read_bytes()).hexdigest()==h for n,h in files.items())", 1)
+    if ("assert state.get('authorityProbe')=='PASS'" not in controller
+            or helpers.count("result=private_sql('probe' if self.n==1 else 'authority')") != 1
+            or "[CACHE/n for n" in controller):
+        raise ValueError('Mandatory authority/staging sequence changed')
+    if helpers.count("M['AUTHORITY_PROBE_SHA256']") != 1 or helpers.count("M['managed_role_confirmation']") != 2:
+        raise ValueError('Unexpected authority confirmation binding')
+    helpers = helpers.replace("M['AUTHORITY_PROBE_SHA256']", "M['SQL00_REVISION_SHA256']").replace("M['managed_role_confirmation']", "M['sql00_managed_role_confirmation']")
+    result = {'cloud-session.py': controller, 'cloud-helpers.py': helpers, 'private-sql-helper.py': private_helper}
+    for name, text in result.items():
+        compile(text, name, 'exec')
+    return result
+
+
+SQL00_REVISION_SQL = r'''-- PROPOSED REVISED SQL00. Exact admission required before any Cloud SQL execution.
+-- Original fingerprint cd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d remains historical.
+-- Controller verifies revoked baseline, authorized bounded delegation and independent revoker.
+-- This probe runs only inside that delegation and always rolls back its no-op ALTER checks.
+\set ON_ERROR_STOP on
+BEGIN;
+SET LOCAL lock_timeout='5s';
+SET LOCAL statement_timeout='30s';
+DO $guard$
+DECLARE
+ runtime_oid oid; migrator_oid oid; actor_oid oid; manager_oid oid;
+ qualification_oid oid; role_count integer;
+BEGIN
+ IF current_database()<>'postgres' OR current_user<>'cloudsqlsuperuser'
+    OR session_user<>'cinenest44@gmail.com' THEN RAISE EXCEPTION 'Wrong execution identity/database'; END IF;
+ IF NOT EXISTS(SELECT 1 FROM pg_stat_ssl WHERE pid=pg_backend_pid() AND ssl)
+    OR current_setting('password_encryption')<>'scram-sha-256' THEN RAISE EXCEPTION 'Verified TLS and SCRAM required'; END IF;
+ SELECT oid INTO actor_oid FROM pg_roles WHERE rolname=session_user AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls;
+ SELECT oid INTO manager_oid FROM pg_roles WHERE rolname=current_user;
+ SELECT oid INTO runtime_oid FROM pg_roles WHERE rolname='cinenest_qualification_runtime';
+ SELECT oid INTO migrator_oid FROM pg_roles WHERE rolname='cinenest_qualification_migrator';
+ IF actor_oid IS NULL OR manager_oid IS NULL OR runtime_oid IS NULL OR migrator_oid IS NULL
+ THEN RAISE EXCEPTION 'Missing or escalated identity/role'; END IF;
+ SELECT count(*) INTO role_count FROM pg_roles WHERE starts_with(rolname,'cinenest_qualification_');
+ IF role_count<>2 OR (SELECT count(*) FROM pg_roles WHERE oid IN(runtime_oid,migrator_oid)
+   AND NOT rolcanlogin AND NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole
+   AND NOT rolreplication AND NOT rolbypassrls)<>2
+ THEN RAISE EXCEPTION 'Unexpected active/elevated qualification role'; END IF;
+ -- Accept complete pairs only: original baseline, or configured inactive retry state.
+ -- NULL validity represents not-yet-activated preparation. Finite past validity is
+ -- preserved revoked history. Future/infinite validity is never admitted here.
+ IF NOT (
+   (SELECT count(*) FROM pg_roles WHERE oid IN(runtime_oid,migrator_oid) AND rolconnlimit=-1 AND rolvaliduntil IS NULL)=2
+   OR
+   (SELECT count(*) FROM pg_roles WHERE oid IN(runtime_oid,migrator_oid)
+      AND ((oid=runtime_oid AND rolconnlimit=6) OR (oid=migrator_oid AND rolconnlimit=2))
+      AND (rolvaliduntil IS NULL OR (isfinite(rolvaliduntil) AND rolvaliduntil<=clock_timestamp())))=2
+ ) THEN RAISE EXCEPTION 'Unexpected role baseline;no blind rotation'; END IF;
+ -- No role inheritance/delegation from either application identity. Only the
+ -- evidenced provider/creator administration edges into them may remain.
+ IF EXISTS(SELECT 1 FROM pg_auth_members WHERE member IN(runtime_oid,migrator_oid))
+    OR (SELECT count(*) FROM pg_auth_members WHERE roleid IN(runtime_oid,migrator_oid))<>2
+    OR EXISTS(SELECT 1 FROM pg_auth_members m JOIN pg_roles g ON g.oid=m.grantor
+      WHERE m.roleid IN(runtime_oid,migrator_oid) AND NOT
+       (m.member=manager_oid AND NOT m.inherit_option AND NOT m.set_option AND
+        g.rolname IN ('cloudsqlsuperuser','cloudsqladmin')))
+ THEN RAISE EXCEPTION 'Unexpected qualification role membership'; END IF;
+ IF NOT pg_has_role(current_user,'cinenest_qualification_runtime','MEMBER WITH ADMIN OPTION')
+    OR NOT pg_has_role(current_user,'cinenest_qualification_migrator','MEMBER WITH ADMIN OPTION')
+ THEN RAISE EXCEPTION 'Per-role administration authority unavailable'; END IF;
+ SELECT oid INTO qualification_oid FROM pg_database WHERE datname='cinenest_connectivity_qualification'
+   AND datdba=migrator_oid AND datallowconn AND NOT datistemplate;
+ IF qualification_oid IS NULL OR EXISTS(SELECT 1 FROM pg_database WHERE datdba IN(runtime_oid,migrator_oid) AND oid<>qualification_oid)
+ THEN RAISE EXCEPTION 'Unexpected qualification database ownership/state'; END IF;
+ IF NOT has_database_privilege(runtime_oid,qualification_oid,'CONNECT')
+    OR has_database_privilege(runtime_oid,qualification_oid,'CREATE')
+    OR has_database_privilege(runtime_oid,qualification_oid,'TEMP')
+    OR NOT has_database_privilege(actor_oid,qualification_oid,'CONNECT')
+ THEN RAISE EXCEPTION 'Unexpected qualification database privileges'; END IF;
+ IF EXISTS(SELECT 1 FROM pg_database d CROSS JOIN LATERAL aclexplode(COALESCE(d.datacl,acldefault('d',d.datdba))) a
+    WHERE (d.oid=qualification_oid AND
+      (a.grantee NOT IN(runtime_oid,migrator_oid,actor_oid) OR a.grantor<>migrator_oid
+       OR (a.grantee IN(runtime_oid,actor_oid) AND (a.privilege_type<>'CONNECT' OR a.is_grantable))))
+     OR (d.oid<>qualification_oid AND a.grantee IN(runtime_oid,migrator_oid)))
+ THEN RAISE EXCEPTION 'Unexpected explicit database grant'; END IF;
+END;
+$guard$;
+-- Real effective ALTER capability; neither settings nor history are committed.
+ALTER ROLE cinenest_qualification_runtime NOLOGIN;
+ALTER ROLE cinenest_qualification_migrator NOLOGIN;
+ROLLBACK;
+'''
+
+def install_sql00_revision(source, destination, manifest):
+    """Install the complete verified bundle before any credential or authority.
+
+    Only the frozen source-owned SQL00_REVISION_FILES contract is accepted. No overwrite,
+    extension discovery for admission, or partial output is permitted.
+    """
+    require_sql00_revision_manifest(manifest)
+    destination = Path(destination)
+    if destination.is_symlink() or not destination.is_dir():
+        raise ValueError('Private SQL destination required')
+    if stat.S_IMODE(destination.stat().st_mode) != 0o700 or sql_input_names(destination):
+        raise ValueError('Empty private SQL destination required')
+    created = []
+    try:
+        with stage_approved_sql(source, destination.parent, manifest, SQL00_REVISION_FILES) as (staged, names):
+            for name in names:
+                # Hard linking verified private files is atomic and refuses overwrite.
+                os.link(staged / name, destination / name, follow_symlinks=False)
+                created.append(destination / name)
+            if sql_input_names(destination) != set(SQL00_REVISION_FILES):
+                raise ValueError('Installed SQL inventory mismatch')
+            for name, expected in SQL00_REVISION_FILES.items():
+                if hashlib.sha256((destination / name).read_bytes()).hexdigest() != expected:
+                    raise ValueError('Installed SQL fingerprint mismatch')
+        return {'status': 'VERIFIED_PUBLIC_SQL_STAGING', 'orderedFiles': list(SQL00_REVISION_FILES)}
+    except BaseException:
+        for path in reversed(created):
+            path.unlink()
+        raise
+
+
+
+
+def sql00_managed_role_confirmation(user,sql,context,phase,now=None):
+    """Validate actual fresh SQL facts plus scoped API identity;metadata alone never passes.
+    Supplied snapshots are not execution evidence. Callers must use a new authenticated
+    connection after the completed mutation,keep the independent revoker armed,and run
+    exact admitted probe00 revision before any credential or activation action.
+    """
+    errors=[];roles=None
+    try:roles=managed_role_metadata(user)
+    except (ValueError,TypeError):errors.append('Managed-role identity/metadata unavailable or unsafe')
+    try:
+        if phase not in ['DELEGATED','REVOKED']:raise ValueError()
+        if not isinstance(context,dict) or context.get('project')!=MANAGED_PROJECT or context.get('instance')!=MANAGED_INSTANCE or context.get('principal')!=MANAGED_PRINCIPAL:raise ValueError()
+        nonce=context['nonce']
+        if str(uuid.UUID(nonce))!=nonce:raise ValueError()
+        if context.get('sslmode')!='verify-full' or context.get('host')!='ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog.' or context.get('hostaddr')!='10.40.32.2' or context.get('caSha256')!='b9c1735f6619bc814020948a0da2e8970efa76f7d885fd28dbe1c21a85193f46':raise ValueError()
+        operation=context['operation']
+        if operation.get('status')!='DONE' or operation.get('error') or not operation.get('id') or operation.get('phase')!=phase:raise ValueError()
+        current=now or datetime.now(timezone.utc)
+        completed=datetime.fromisoformat(operation['completedAt']);observed=datetime.fromisoformat(sql['observedAt'])
+        if any(x.tzinfo is None for x in [current,completed,observed]) or not 0<=(current-observed).total_seconds()<=10 or not completed<=observed<=current:raise ValueError()
+        if sql.get('nonce')!=nonce or sql.get('sessionUser')!=MANAGED_PRINCIPAL or sql.get('database')!='postgres' or sql.get('tls') is not True:raise ValueError()
+        if not isinstance(sql.get('edges'),list):raise ValueError()
+        for edge in sql['edges']:
+            if edge.get('role')!=MANAGED_ROLE or edge.get('member')!=MANAGED_PRINCIPAL or not edge.get('grantor') or any(type(edge.get(x)) is not bool for x in ['admin','inherit','set']):raise ValueError()
+        if phase=='DELEGATED':
+            if roles is not None and roles!=[MANAGED_ROLE]:raise ValueError()
+            if context.get('revokerArmed') is not True or context.get('probeSha256')!=SQL00_REVISION_SHA256 or context.get('probePassed') is not True:raise ValueError()
+            if sql.get('currentUser')!=MANAGED_ROLE or any(sql.get(x) is not True for x in ['member','canSet','runtimeAdmin','migratorAdmin']):raise ValueError()
+        else:
+            if roles is not None and roles!=[]:raise ValueError()
+            if sql.get('currentUser')!=MANAGED_PRINCIPAL or sql.get('restricted') is not True or sql['edges'] or any(sql.get(x) is not False for x in ['member','canSet','runtimeAdmin','migratorAdmin']):raise ValueError()
+    except (ValueError,TypeError,KeyError,AttributeError,OverflowError):errors.append('Fresh scoped PostgreSQL authority not confirmed')
+    return {'status':'DENIED' if errors else 'CONFIRMED','phase':phase,'metadata':'UNKNOWN_OPTIONAL_FIELD' if roles is None else 'OBSERVED','errors':errors,'productionAuthorization':'NONE'}
+
 if __name__=='__main__':raise SystemExit(main())

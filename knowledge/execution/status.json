@@ -33389,5 +33389,73 @@
       "knowledge/product/FEATURE_CATALOG.md": "2d71d415392db5a63e29abc3d5a352ba527bbb858385364de4de5f0ce475c99a",
       "knowledge/guides/USER_GUIDE.md": "616f515ee2a45a15bc3088cbdb364e24d4f90a1553acc2634fa5415f73c19640"
     }
+  },
+  "cloudRunSql00RetainedGuard": {
+    "id": "CN-GCP-SQL00-RETAINED-STATE-001",
+    "baseline": "37a9953b653de652c923fe2afc191e573e27ac31",
+    "status": "READY",
+    "orderedPaths": [
+      "scripts/verify-cloud-connectivity.py",
+      "scripts/test-cloud-run.py",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "decision": "APPROVED_EXACT_SOURCE_AND_SQL_REVISION",
+      "requestSha256": "d4de6e3487335c535b5ae965e5c9e42ada66bcbe4d15138a88f7ed4a540ff8d0",
+      "source": "User reply call_4801cc19dddd4e0eb2a38729491ddf8b: Approve exact source and SQL revision",
+      "recordedAtUtc": "2026-11-26T03:42:30.976782+00:00",
+      "sql00Sha256": "07d9b1a1199efe212697f443c2be1fcab8d47d7ce531006463807ee60c8ab884",
+      "reviewMethod": "Task-only verified-ledger reuse for100byte-identical assets plus fresh task-specific/controlled-diff review of14changed historical KB records;no new full visual audit claim",
+      "newCloudSessions": 0
+    },
+    "scope": [
+      "Append-only source successor;preserve all historical source/SQL/approvals/failures;no application logic or migration changes",
+      "Admit exact revised SQL00 hash07d9b1a1199efe212697f443c2be1fcab8d47d7ce531006463807ee60c8ab884;preserve original00hashcd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d and six unchanged sibling SQL files",
+      "Bind revised SQL manifest and a versioned task-owned seven-file input directory under explicit source/SQL admission;never overwrite historical approved input files,receipts or consumed markers;missing/changed/mixed inputs deny before temporary administration or secret creation",
+      "Align controller and SQL00 on complete original-1/NULL pair or configured6/2 pair with NOLOGIN and NULL or finite expired validity for each role;deny mixed limits,LOGIN,elevation,future/infinite validity and unsafe memberships/database ACL/ownership;NULL means not yet activated,not eligible for unbounded LOGIN",
+      "Keep exact identity,TLS/SCRAM,effective per-role ADMIN and rolled-back ALTER capability checks;provider/creator administration edges only;no permanent/elevated authority delegation;revoked baseline before and verified revocation after authorized temporary burst",
+      "Preserve existing01/03 bounded fresh10/15minute database-clock expiries and04revocation;keep SQL00 mandatory and preceding credential generation,secret custody or activation",
+      "Generate future capsule offline with revised manifest/root binding and current source-admission hook;no cloud execution or new runtime-session authority implied",
+      "Add relevant retained-state,manifest/token/authority/failure/revocation regression tests;update only existing canonical/progress/product/user/governance records and protected successor controls;full source qualification and permitted PR/main CI integration"
+    ],
+    "rollback": "Governed source revert;select only an explicitly admitted immutable SQL revision;preserve prior SQL versions,decisions,role/history data and consumed session evidence;no data destruction or live setting reset",
+    "cloudSessionAuthorized": false,
+    "cloudMutationsAuthorized": false,
+    "sqlChangesAuthorized": "EXACT_REVISED_SQL_ONLY_CONDITIONAL_ON_SEPARATE_CLOUD_SESSION",
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "LOCAL_SOURCE_AND_SQL_QUALIFIED",
+      "postgresqlGroups": 37,
+      "migrations": 44,
+      "unchangedSqlFiles": 6,
+      "cloudRuntime": "NOT_RUN_NOT_AUTHORIZED",
+      "cloudMigrations": "NOT_RUN",
+      "cloudRun": "NOT_RUN",
+      "offlineHarnessTests": 242,
+      "focusedSourceTests": 15,
+      "javaArchitectureTests": 68,
+      "historicalReplay": "PASS_IMMUTABLE_PREDECESSOR_CHAIN",
+      "standaloneNegativeControls": "PASS",
+      "hostedCI": "PENDING"
+    },
+    "sourceSha256": {
+      "scripts/verify-cloud-connectivity.py": "4023b6180a430a88526e2b363887b8c0fdbeb1d0789c7c7148fcdfa9d4e36a94",
+      "scripts/test-cloud-run.py": "cb4f69f0f168105465f6efb0ab4d38115e7ceabf943ae3c7d088bdb3da7277a2",
+      "knowledge/ARCHITECTURE.md": "86da34dc034fef1cae28f789d390f503c975ff24e493748525b6ebed159e70a1",
+      "knowledge/PROGRESS.md": "7a47f67a55605c85afb93c6845f4b9745c046d320c4b0759eac0a267da14c244",
+      "knowledge/product/FEATURE_CATALOG.md": "2c6ddcbb74bb1910ab1164a6b5a56d821cc068b7d0ca1ee01390b3b8cdbb318d",
+      "knowledge/guides/USER_GUIDE.md": "d79991b12031849831e21479e05776f2431de88a87807b7a985d9c9de7106f0d"
+    }
   }
 }

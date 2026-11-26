@@ -946,3 +946,7 @@ The offline operator harness now prepares the dedicated Private Google Access AP
 
 ## SSH qualification harness boundary
 CN-GCP-SSH-TRUST-PATH-001 adds offline task-private known-host path quoting and redacted fail-closed SSH readiness to the internal qualification harness. Shared SSH/SCP options and strict host-key protection remain. No UI,application behavior,customer login,SQL or physical feature changes.13focused/227total offline tests pass;parser proof is not host authentication. The preceding cloud attempt failed before SQL;Cloud Run connectivity remains NOT_RUN. Official acceptance stays4/7;production NONE. See [current evidence](../PROGRESS.md#ssh-trust-path-qualification).
+
+
+## SQL00 inactive retry-state qualification
+CN-GCP-SQL00-RETAINED-STATE-001 adds source-bound revised SQL00/manifest/staging and effective authority confirmation for the existing internal qualification workflow.37real PostgreSQL groups,242offline harness tests and68Java architecture tests passed. Inactive original/configured pairs are distinguished;future activation still requires fresh expiry,verified authority and separate cloud authorization. No customer/admin UI,application business logic or migration changed. The last cloud attempt failed at the stale SQL guard;internal Cloud Run health remains NOT_RUN. Official acceptance4/7,production NONE. See [qualification](../PROGRESS.md#sql00-retained-state).

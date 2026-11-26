@@ -19797,5 +19797,132 @@ def ssh_trust_path_main():
 receipt_admission_successor_errors=ssh_trust_path_errors
 inert_ci_main=ssh_trust_path_main
 
+
+
+# Owner-approved exact source successor. Historical validators remain unchanged.
+SQL00_RETAINED_BASE = '37a9953b653de652c923fe2afc191e573e27ac31'
+SQL00_RETAINED_STATE = {'id': 'CN-GCP-SQL00-RETAINED-STATE-001', 'baseline': '37a9953b653de652c923fe2afc191e573e27ac31', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'decision': 'APPROVED_EXACT_SOURCE_AND_SQL_REVISION', 'requestSha256': 'd4de6e3487335c535b5ae965e5c9e42ada66bcbe4d15138a88f7ed4a540ff8d0', 'source': 'User reply call_4801cc19dddd4e0eb2a38729491ddf8b: Approve exact source and SQL revision', 'recordedAtUtc': '2026-11-26T03:42:30.976782+00:00', 'sql00Sha256': '07d9b1a1199efe212697f443c2be1fcab8d47d7ce531006463807ee60c8ab884', 'reviewMethod': 'Task-only verified-ledger reuse for100byte-identical assets plus fresh task-specific/controlled-diff review of14changed historical KB records;no new full visual audit claim', 'newCloudSessions': 0}, 'scope': ['Append-only source successor;preserve all historical source/SQL/approvals/failures;no application logic or migration changes', 'Admit exact revised SQL00 hash07d9b1a1199efe212697f443c2be1fcab8d47d7ce531006463807ee60c8ab884;preserve original00hashcd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d and six unchanged sibling SQL files', 'Bind revised SQL manifest and a versioned task-owned seven-file input directory under explicit source/SQL admission;never overwrite historical approved input files,receipts or consumed markers;missing/changed/mixed inputs deny before temporary administration or secret creation', 'Align controller and SQL00 on complete original-1/NULL pair or configured6/2 pair with NOLOGIN and NULL or finite expired validity for each role;deny mixed limits,LOGIN,elevation,future/infinite validity and unsafe memberships/database ACL/ownership;NULL means not yet activated,not eligible for unbounded LOGIN', 'Keep exact identity,TLS/SCRAM,effective per-role ADMIN and rolled-back ALTER capability checks;provider/creator administration edges only;no permanent/elevated authority delegation;revoked baseline before and verified revocation after authorized temporary burst', 'Preserve existing01/03 bounded fresh10/15minute database-clock expiries and04revocation;keep SQL00 mandatory and preceding credential generation,secret custody or activation', 'Generate future capsule offline with revised manifest/root binding and current source-admission hook;no cloud execution or new runtime-session authority implied', 'Add relevant retained-state,manifest/token/authority/failure/revocation regression tests;update only existing canonical/progress/product/user/governance records and protected successor controls;full source qualification and permitted PR/main CI integration'], 'rollback': 'Governed source revert;select only an explicitly admitted immutable SQL revision;preserve prior SQL versions,decisions,role/history data and consumed session evidence;no data destruction or live setting reset', 'cloudSessionAuthorized': False, 'cloudMutationsAuthorized': False, 'sqlChangesAuthorized': 'EXACT_REVISED_SQL_ONLY_CONDITIONAL_ON_SEPARATE_CLOUD_SESSION', 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'LOCAL_SOURCE_AND_SQL_QUALIFIED', 'postgresqlGroups': 37, 'migrations': 44, 'unchangedSqlFiles': 6, 'cloudRuntime': 'NOT_RUN_NOT_AUTHORIZED', 'cloudMigrations': 'NOT_RUN', 'cloudRun': 'NOT_RUN', 'offlineHarnessTests': 242, 'focusedSourceTests': 15, 'javaArchitectureTests': 68, 'historicalReplay': 'PASS_IMMUTABLE_PREDECESSOR_CHAIN', 'standaloneNegativeControls': 'PASS', 'hostedCI': 'PENDING'}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': '4023b6180a430a88526e2b363887b8c0fdbeb1d0789c7c7148fcdfa9d4e36a94', 'scripts/test-cloud-run.py': 'cb4f69f0f168105465f6efb0ab4d38115e7ceabf943ae3c7d088bdb3da7277a2', 'knowledge/ARCHITECTURE.md': '86da34dc034fef1cae28f789d390f503c975ff24e493748525b6ebed159e70a1', 'knowledge/PROGRESS.md': '7a47f67a55605c85afb93c6845f4b9745c046d320c4b0759eac0a267da14c244', 'knowledge/product/FEATURE_CATALOG.md': '2c6ddcbb74bb1910ab1164a6b5a56d821cc068b7d0ca1ee01390b3b8cdbb318d', 'knowledge/guides/USER_GUIDE.md': 'd79991b12031849831e21479e05776f2431de88a87807b7a985d9c9de7106f0d'}}
+SQL00_RETAINED_PATHS = set(SQL00_RETAINED_STATE['orderedPaths'])
+SQL00_RETAINED_MAIN = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+SQL00_RETAINED_SUFFIX_SHA = '7382d013b368b90c4abc0bf675e94961f2e9d141910c4744d0e5433091937b37'
+
+
+def sql00_retained_errors():
+    try:
+        unit=SQL00_RETAINED_STATE
+        before=lambda n:v41_git('show',SQL00_RETAINED_BASE+':'+n)
+        if (unit['id']!='CN-GCP-SQL00-RETAINED-STATE-001' or unit['status']!='READY'
+                or len(SQL00_RETAINED_PATHS)!=10 or unit['baseline']!=SQL00_RETAINED_BASE
+                or unit['authority']['requestSha256']!='d4de6e3487335c535b5ae965e5c9e42ada66bcbe4d15138a88f7ed4a540ff8d0'
+                or unit['authority']['decision']!='APPROVED_EXACT_SOURCE_AND_SQL_REVISION'
+                or not unit['authority']['source'] or unit['cloudSessionAuthorized'] is not False
+                or unit['cloudMutationsAuthorized'] is not False or unit['sqlChangesAuthorized']!='EXACT_REVISED_SQL_ONLY_CONDITIONAL_ON_SEPARATE_CLOUD_SESSION'
+                or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}
+                or unit['qualification']['cloudRuntime']!='NOT_RUN_NOT_AUTHORIZED'
+                or unit['qualification']['cloudMigrations']!='NOT_RUN' or unit['qualification']['cloudRun']!='NOT_RUN'):
+            return ['SQL00 retained state authority/scope/acceptance drift']
+        v41_git('merge-base','--is-ancestor',SQL00_RETAINED_BASE,'HEAD')
+        for name in ['knowledge/execution/change-sets.json','knowledge/execution/status.json']:
+            doc=json.loads((R/name).read_bytes())
+            if doc.pop('cloudRunSql00RetainedGuard',None)!=unit or doc!=json.loads(before(name)):
+                return ['SQL00 retained state historical registry drift '+name]
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',SQL00_RETAINED_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):
+            return ['SQL00 retained state source inventory drift']
+        if set(v41_git('diff','--name-only','-z',SQL00_RETAINED_BASE,text=True).split('\0'))-{''}!=SQL00_RETAINED_PATHS:
+            return ['SQL00 retained state exact ten-path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            p=R/name
+            if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):
+                return ['SQL00 retained state unsafe file '+name]
+            data=p.read_bytes()
+            if name not in SQL00_RETAINED_PATHS and hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:
+                return ['SQL00 retained state unrelated/history drift '+name]
+        for name,digest in unit['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+                return ['SQL00 retained state source fingerprint drift '+name]
+        for name,main in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',SQL00_RETAINED_MAIN)]:
+            old=before(name)
+            if not old.endswith(main) or not (R/name).read_bytes().startswith(old[:-len(main)]):
+                return ['SQL00 retained state predecessor source modified '+name]
+        prefix=before('knowledge/execution/validate_execution.py')[:-len(SQL00_RETAINED_MAIN)]
+        suffix=(R/'knowledge/execution/validate_execution.py').read_bytes()[len(prefix):]
+        normalized=suffix.replace(SQL00_RETAINED_SUFFIX_SHA.encode(),b'0'*64,1)
+        if hashlib.sha256(normalized).hexdigest()!=SQL00_RETAINED_SUFFIX_SHA:
+            return ['SQL00 retained state validator suffix drift']
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(before(name)):
+                return ['SQL00 retained state historical prose drift '+name]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(p.relative_to(R)) for p in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:
+            return ['SQL00 retained state historical migration inventory drift']
+        import runpy
+        module=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        expected_sql={'00-activation-authority-probe.sql.proposed': 'cd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d', '01-protected-credentials-and-migrator-login.psql.proposed': 'c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15', '02-post-migration-runtime-grants.sql.proposed': '52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52', '03-runtime-login-and-migrator-revocation.sql.proposed': '515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6', '04-login-revocation-and-session-cleanup.sql.proposed': '01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5', '05-runtime-readonly-verification.sql.proposed': '2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c', '06-data-preserving-quarantine.sql.proposed': 'ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676'}
+        if module['SQL_FILES']!=expected_sql:return ['SQL00 retained state SQL fingerprint drift']
+        revised=dict(expected_sql,**{'00-activation-authority-probe.sql.proposed':'07d9b1a1199efe212697f443c2be1fcab8d47d7ce531006463807ee60c8ab884'})
+        if module['SQL00_REVISION_FILES']!=revised or module['SQL00_REVISION_APPROVAL']!='d4de6e3487335c535b5ae965e5c9e42ada66bcbe4d15138a88f7ed4a540ff8d0' or hashlib.sha256(module['SQL00_REVISION_SQL'].encode()).hexdigest()!=revised['00-activation-authority-probe.sql.proposed']:return ['SQL00 admitted revision drift']
+        module['require_sql00_revision_manifest'](revised)
+        module['migration_inventory']()
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in SQL00_RETAINED_PATHS-{'knowledge/manifest.json'}:
+                entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():
+            return ['SQL00 retained state manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):
+        return ['SQL00 retained state inputs inaccessible']
+    return []
+
+
+def sql00_retained_negative_controls():
+    from unittest.mock import patch
+    changes=[('status','BLOCKED'),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('authority',{}),('cloudSessionAuthorized',True),('cloudMutationsAuthorized',True),('sqlChangesAuthorized',True)]
+    for field,value in changes:
+        fake=json.loads(json.dumps(SQL00_RETAINED_STATE));fake[field]=value
+        with patch.dict(globals(),{'SQL00_RETAINED_STATE':fake}):
+            if not sql00_retained_errors():raise ValueError('SQL00 retained state accepted forged '+field)
+    for field in ['cloudRuntime','cloudMigrations','cloudRun']:
+        fake=json.loads(json.dumps(SQL00_RETAINED_STATE));fake['qualification'][field]='PASS'
+        with patch.dict(globals(),{'SQL00_RETAINED_STATE':fake}):
+            if not sql00_retained_errors():raise ValueError('SQL00 retained state accepted false cloud PASS')
+    read=Path.read_bytes
+    for relative in ['scripts/verify-cloud-connectivity.py','knowledge/execution/validate_execution.py','backend/src/main/resources/db/migration/V1__foundation.sql']:
+        target=R/relative
+        if not target.exists():target=next((R/'backend/src/main/resources/db/migration').glob('V1__*'))
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n#unapproved' if p==target else read(p,*a,**kw)):
+            if not sql00_retained_errors():raise ValueError('SQL00 retained state accepted altered source/history')
+    glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob(p,*a,**kw),folder/'V46__unapproved.sql']) if p==folder else glob(p,*a,**kw)):
+        if not sql00_retained_errors():raise ValueError('SQL00 retained state accepted extra migration')
+    print('PASS SQL00 retained state scope,Owner approval,source/history/manifest,migrations,SQL and no-cloud negative controls',flush=True)
+
+
+def sql00_retained_main():
+    import tempfile,sys
+    errors=sql00_retained_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    sql00_retained_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-sql00-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        # Read-only immutable Git object reuse; historical source/validators unchanged.
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',SQL00_RETAINED_BASE],check=True)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+
+receipt_admission_successor_errors=sql00_retained_errors
+inert_ci_main=sql00_retained_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
