@@ -1273,6 +1273,34 @@ def sql00_actor_role_query(nonce):
     return query.replace(needle, fields + needle, 1)
 
 
+def require_sql00_actor_pregrant(sql, context, now=None):
+    """Fresh read-only private proof before delegation;not a completed-mutation claim."""
+    try:
+        current = now or datetime.now(timezone.utc)
+        nonce = context['nonce']
+        if (str(uuid.UUID(nonce)) != nonce or sql.get('nonce') != nonce
+                or context.get('project') != MANAGED_PROJECT
+                or context.get('instance') != MANAGED_INSTANCE
+                or context.get('principal') != MANAGED_PRINCIPAL
+                or context.get('sslmode') != 'verify-full'
+                or context.get('host') != 'ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog.'
+                or context.get('hostaddr') != '10.40.32.2'
+                or context.get('caSha256') != 'b9c1735f6619bc814020948a0da2e8970efa76f7d885fd28dbe1c21a85193f46'
+                or sql.get('currentUser') != MANAGED_PRINCIPAL
+                or sql.get('sessionUser') != MANAGED_PRINCIPAL
+                or sql.get('database') != 'postgres' or sql.get('tls') is not True
+                or sql.get('restricted') is not True or sql.get('edges') != []
+                or any(sql.get(k) is not False for k in ('member','canSet','runtimeAdmin','migratorAdmin'))):
+            raise ValueError()
+        observed = datetime.fromisoformat(sql['observedAt'])
+        if current.tzinfo is None or observed.tzinfo is None or not 0 <= (current-observed).total_seconds() <= 10:
+            raise ValueError()
+        sql00_actor_flags(sql['actorFlags'], 'REVOKED')
+    except (ValueError,TypeError,KeyError,AttributeError,OverflowError):
+        raise ValueError('Fresh private restricted actor proof required before grant') from None
+    return 'RESTRICTED_BEFORE_GRANT'
+
+
 def sql00_actor_artifacts(controller, helpers, private_helper):
     """Offline version binding only. Never launches or authorizes cloud execution."""
     def replace(text, old, new, count):
@@ -1284,6 +1312,12 @@ def sql00_actor_artifacts(controller, helpers, private_helper):
     controller = replace(controller, "fresh['sql00RevisionApprovalSha256']", "fresh['sql00ActorApprovalSha256']", 1)
     controller = replace(controller, "M['SQL00_REVISION_APPROVAL']", "M['SQL00_ACTOR_APPROVAL']", 1)
     controller = replace(controller, "M['sql00_staging_command']", "M['sql00_actor_staging_command']", 1)
+    boundary = " assert all(v['value']=='false' for v in rows[3]['rows'][0]['values'])\n"
+    actor_check = " actor=[r['values'] for r in rows[1]['rows'] if r['values'][0].get('value')==USER];assert len(actor)==1;M['sql00_actor_flags']({k:{'true':True,'false':False}.get(actor[0][i].get('value')) for k,i in [('superuser',2),('createdb',3),('createrole',4),('replication',5),('bypassrls',6)]},'REVOKED')\n"
+    controller = replace(controller, boundary, actor_check + boundary, 1)
+    boundary = "  assert state['bursts']<3 and managed_roles()==[]\n"
+    pregrant = "  before=private_sql('revocation');M['require_sql00_actor_pregrant'](before['authorityFacts'],{'nonce':before['_requestNonce'],'project':P,'instance':'cine-nest-2026','principal':USER,'sslmode':'verify-full','host':HOST,'hostaddr':'10.40.32.2','caSha256':'b9c1735f6619bc814020948a0da2e8970efa76f7d885fd28dbe1c21a85193f46'})\n"
+    helpers = replace(helpers, boundary, boundary + pregrant, 1)
     helpers = replace(helpers, "M['SQL00_REVISION_SHA256']", "M['SQL00_ACTOR_SHA256']", 1)
     helpers = replace(helpers, "M['sql00_managed_role_confirmation']", "M['sql00_actor_managed_role_confirmation']", 2)
     private_helper = replace(private_helper, "['require_sql00_revision_manifest']", "['require_sql00_actor_manifest']", 1)

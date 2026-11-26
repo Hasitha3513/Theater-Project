@@ -9065,16 +9065,16 @@
       "standaloneNegativeControls": "PASS",
       "hostedCI": "PENDING",
       "postgresqlGroups": 48,
-      "offlineHarnessTests": 258,
-      "focusedSourceTests": 16,
+      "offlineHarnessTests": 263,
+      "focusedSourceTests": 21,
       "javaArchitectureTests": 68
     },
     "sourceSha256": {
-      "scripts/verify-cloud-connectivity.py": "063bc2bbb97d38682d1697a62d6a608805135cda8bffa9ec9d12f5dbb8418eef",
-      "scripts/test-cloud-run.py": "999cccd52664a1ddf445825e9ff551f67e266f975c5296e1273300603e2aefc3",
-      "knowledge/ARCHITECTURE.md": "f9108b53687cb5978c5516922217f57635325bea3a1d83a156fdb9dc3b2514e8",
-      "knowledge/PROGRESS.md": "4996e4eae554833464c43be6c5d967781deac7c1280642e3e13856aceb8a60ab",
-      "knowledge/product/FEATURE_CATALOG.md": "fa13f099563507b9c07b571791801f4987473cc6227f9ff48931ff73e1eb402f",
+      "scripts/verify-cloud-connectivity.py": "9dfd511b4412cb790f93871c0ca9713c9057ee728812f5bd3abfeca15f18c6f0",
+      "scripts/test-cloud-run.py": "83304d22901bc9d586815a5b8669f461079e70f1aa33fbb297d3a3850923ae92",
+      "knowledge/ARCHITECTURE.md": "1acb8f28c91364a1d9433fd7e2ad1d914d1b86b0e4f6f3cdcaa679cc3af95405",
+      "knowledge/PROGRESS.md": "26d25a21c9e12d3aab3b88f1fb81b41b1174c3626551703276e4792f8b3dd210",
+      "knowledge/product/FEATURE_CATALOG.md": "e11ea4a2bb5f6dc07a302518606741fc1388da6e2e78e34dfe7ea82b59ac2929",
       "knowledge/guides/USER_GUIDE.md": "b1b2ff233d5fc70aa5aed5cd5f8ef5cedc52ce4bc1ce981a6112bba773adeed9"
     }
   }

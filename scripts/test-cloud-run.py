@@ -1423,7 +1423,10 @@ class Sql00ActorRegression(unittest.TestCase):
     def capsule():
         result=runtime_artifact.sql00_revision_artifacts(*Sql00RevisionRegression.capsule())
         private=result['private-sql-helper.py']+"\ndef diagnostic(contract,nonce):\n return contract['managed_role_query'](nonce)\ndef confirmed(contract,nonce):\n return contract['managed_role_query'](nonce)\n"
-        return result['cloud-session.py'],result['cloud-helpers.py'],private
+        controller=result['cloud-session.py']+"\ndef preflight_actor(rows,M,USER):\n assert all(v['value']=='false' for v in rows[3]['rows'][0]['values'])\n"
+        helpers='class Synthetic:\n'+'\n'.join(' '+line for line in result['cloud-helpers.py'].splitlines())+'\n'
+        helpers=helpers.replace(' def enter(M):\n'," def enter(M):\n  assert state['bursts']<3 and managed_roles()==[]\n")
+        return controller,helpers,private
     def test_capsule_binds_new_manifest_query_confirmation_and_source(self):
         result=runtime_artifact.sql00_actor_artifacts(*self.capsule());c=result['cloud-session.py'];h=result['cloud-helpers.py'];p=result['private-sql-helper.py']
         self.assertIn("v['sql00_actor_errors']",c);self.assertIn("fresh['sql00ActorApprovalSha256']",c);self.assertIn("M['require_sql00_actor_manifest']",c);self.assertIn("assert state.get('authorityProbe')=='PASS'",c)
@@ -1439,5 +1442,33 @@ class Sql00ActorRegression(unittest.TestCase):
             with self.assertRaises(ValueError):runtime_artifact.prepare_sql00_actor_inputs(p,dest)
             with self.assertRaises(ValueError):runtime_artifact.install_sql00_actor(p,dest,runtime_artifact.SQL00_REVISION_FILES)
             self.assertEqual(list(dest.iterdir()),[])
+
+
+
+class Sql00ActorPregrantRegression(unittest.TestCase):
+    def fixture(self):
+        f=Sql00ActorRegression().fixture('REVOKED')
+        keys=['nonce','project','instance','principal','sslmode','host','hostaddr','caSha256']
+        return f[1],{k:f[2][k] for k in keys},f[3]
+    def test_fresh_restricted_private_actor_accepted(self):
+        f=self.fixture();self.assertEqual(runtime_artifact.require_sql00_actor_pregrant(*f),'RESTRICTED_BEFORE_GRANT')
+    def test_stale_wrong_identity_membership_and_tls_denied(self):
+        for key,value in [('observedAt','2020-01-01T00:00:00Z'),('currentUser','cloudsqlsuperuser'),('sessionUser','foreign'),('tls',False),('restricted',False),('member',True),('canSet',True),('runtimeAdmin',True),('migratorAdmin',True),('edges',[{}])]:
+            f=self.fixture();f[0][key]=value
+            with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+        f=self.fixture();f[0]['actorFlags']['createdb']=True
+        with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+    def test_transport_scope_nonce_and_missing_flags_denied(self):
+        for key,value in [('project','foreign'),('instance','foreign'),('principal','foreign'),('sslmode','require'),('host','invalid.example'),('hostaddr','127.0.0.1'),('caSha256','0'*64),('nonce','00000000-0000-4000-8000-000000000001')]:
+            f=self.fixture();f[1][key]=value
+            with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+        f=self.fixture();del f[0]['actorFlags']
+        with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+    def test_capsule_proves_pregrant_and_preflight_before_any_grant(self):
+        result=runtime_artifact.sql00_actor_artifacts(*Sql00ActorRegression.capsule());h=result['cloud-helpers.py'];c=result['cloud-session.py']
+        self.assertIn("M['require_sql00_actor_pregrant']",h);self.assertLess(h.index("before=private_sql('revocation')"),h.index("result=private_sql('probe'"));self.assertIn("actor=[r['values']",c)
+    def test_missing_pregrant_boundary_refused(self):
+        c,h,p=Sql00ActorRegression.capsule();h=h.replace("  assert state['bursts']<3 and managed_roles()==[]\n",'')
+        with self.assertRaises(ValueError):runtime_artifact.sql00_actor_artifacts(c,h,p)
 
 if __name__=='__main__':unittest.main()
