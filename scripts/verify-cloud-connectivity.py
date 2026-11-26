@@ -1416,4 +1416,461 @@ ALTER ROLE cinenest_qualification_migrator NOLOGIN;
 ROLLBACK;
 '''
 
+
+# Owner-approved source-only execution monitoring and cleanup successor.
+import math
+MONITORING_REGION = 'us-east1'
+MONITORING_PROJECT_NUMBER = '980464067041'
+MONITORING_APPROVAL_SHA256 = 'cd196604ac7669987bbc4af53fa666692a15a48d690405e1883d837daf66b093'
+MONITORING_PRINCIPAL = 'cinenest-deployer@' + PROJECT + '.iam.gserviceaccount.com'
+MONITORING_JOBS = frozenset(('cinenest-connectivity-migration', 'cinenest-connectivity-probe'))
+MONITORING_PERMISSIONS = frozenset(('run.jobs.get', 'run.jobs.run', 'run.executions.get',
+                                  'run.executions.list', 'run.tasks.get', 'run.tasks.list'))
+JOB_CLEANUP_PERMISSIONS = frozenset(('run.jobs.get', 'run.jobs.delete',
+                                   'run.executions.get', 'run.executions.cancel'))
+CLEANUP_PROJECT_PERMISSIONS = frozenset(('compute.instances.get', 'compute.instances.delete',
+    'compute.disks.get', 'compute.disks.delete', 'compute.zoneOperations.get',
+    'compute.regionOperations.get', 'compute.globalOperations.get',
+    'compute.firewalls.get', 'compute.firewalls.delete', 'secretmanager.secrets.get',
+    'secretmanager.secrets.delete', 'secretmanager.versions.disable',
+    'iam.serviceAccounts.delete', 'cloudsql.users.update'))
+EXECUTION_STATES = frozenset(('CREATED', 'STARTING', 'RUNNING', 'SUCCEEDED',
+                             'FAILED', 'CANCELLED', 'UNKNOWN'))
+
+
+def monitoring_job_resource(name):
+    if isinstance(name, str) and name.startswith('projects/' + MONITORING_PROJECT_NUMBER + '/'):
+        name = 'projects/' + PROJECT + name[len('projects/' + MONITORING_PROJECT_NUMBER):]
+    prefix = 'projects/' + PROJECT + '/locations/' + MONITORING_REGION + '/jobs/'
+    if name not in MONITORING_JOBS:
+        if not isinstance(name, str) or not name.startswith(prefix) or name[len(prefix):] not in MONITORING_JOBS:
+            raise ValueError('Unapproved job resource')
+        return name
+    return prefix + name
+
+
+def monitoring_execution_resource(job, name):
+    job = monitoring_job_resource(job)
+    if isinstance(name, str) and name.startswith('projects/' + MONITORING_PROJECT_NUMBER + '/'):
+        name = 'projects/' + PROJECT + name[len('projects/' + MONITORING_PROJECT_NUMBER):]
+    if (not isinstance(name, str) or not name.startswith(job + '/executions/')
+            or not re.fullmatch(re.escape(job.rsplit('/', 1)[-1]) + r'-[a-z0-9]{5,32}',
+                                name[len(job + '/executions/'):])):
+        raise ValueError('Execution outside exact approved job')
+    return name
+
+
+def monitoring_http_retryable(error):
+    # Retry reads only. Neither this classifier nor a 401 ever authorizes replaying a mutation.
+    return (isinstance(error, (TimeoutError, ConnectionError)) or
+            isinstance(error, ProtectedRequestFailure) and error.status in (403, 404, 429, 500, 502, 503, 504))
+
+
+class DeployerCredential:
+    """Exact keyless impersonation result; no repr, logging, caching or disk persistence."""
+    __slots__ = ('_token', '_expiry', '_clock', '_monotonic_end', 'principal')
+
+    def __init__(self, token, expiry, principal, clock=None):
+        self._token = None
+        self._clock = clock or (lambda: credential_datetime.datetime.now(credential_datetime.timezone.utc))
+        self.principal = principal
+        try:
+            end = credential_datetime.datetime.fromisoformat(expiry.replace('Z', '+00:00'))
+            remaining = (end - self._clock()).total_seconds()
+            if (principal != MONITORING_PRINCIPAL or not isinstance(token, str)
+                    or not 16 <= len(token) <= 16384 or re.fullmatch(r'[A-Za-z0-9._~+/-]+=*', token) is None
+                    or end.tzinfo is None or not 0 < remaining <= 901):
+                raise ValueError()
+            self._token, self._expiry = token, end
+            self._monotonic_end = time.monotonic() + min(remaining, 900)
+        except (ValueError, TypeError, AttributeError):
+            raise ValueError('Invalid exact deployer credential or authoritative expiry') from None
+
+    def __repr__(self):
+        return '<DeployerCredential protected>'
+
+    def use(self, send, required_seconds):
+        try:
+            if (type(required_seconds) not in (int, float) or not math.isfinite(required_seconds) or required_seconds <= 0
+                    or time.monotonic() + required_seconds >= self._monotonic_end or self._token is None
+                    or (self._expiry - self._clock()).total_seconds() < required_seconds):
+                raise ValueError('Deployer credential unavailable or insufficient lifetime')
+            try:
+                result = send(self._token)
+                if self._token.encode() in json.dumps(result).encode():
+                    raise ValueError('Protected result rejected')
+                return result
+            except ProtectedRequestFailure:
+                raise
+            except TimeoutError:
+                raise TimeoutError('Protected deployer transport timeout') from None
+            except ConnectionError:
+                raise ConnectionError('Protected deployer transport unavailable') from None
+            except Exception:
+                raise RuntimeError('Protected deployer request failed;details withheld') from None
+        finally:
+            self.close()
+
+    def close(self):
+        self._token = None
+
+
+def mint_monitoring_credential(owner_api, clock=None):
+    target = 'https://iam.googleapis.com/v1/projects/' + PROJECT + '/serviceAccounts/' + MONITORING_PRINCIPAL
+    identity = owner_api('GET', target)
+    if (identity.get('email') != MONITORING_PRINCIPAL or identity.get('uniqueId') != RETAINED_SERVICE_IDS['cinenest-deployer']
+            or identity.get('projectId') != PROJECT or identity.get('disabled', False)):
+        raise ValueError('Unverified deployer identity')
+    raw = owner_api('POST', 'https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/'
+                    + MONITORING_PRINCIPAL + ':generateAccessToken',
+                    {'scope': ['https://www.googleapis.com/auth/cloud-platform'], 'lifetime': '900s'})
+    try:
+        return DeployerCredential(raw['accessToken'], raw['expireTime'], MONITORING_PRINCIPAL, clock)
+    finally:
+        raw = None
+
+
+def execution_state(value):
+    """Cloud Run v2 observations. Missing/conflicting evidence is never success."""
+    if not isinstance(value, dict) or type(value.get('taskCount')) is not int or value['taskCount'] != 1:
+        return 'UNKNOWN'
+    conditions = value.get('conditions', [])
+    if not isinstance(conditions, list) or any(not isinstance(c, dict) for c in conditions):
+        return 'UNKNOWN'
+    complete = [c for c in conditions if c.get('type') == 'Completed']
+    if len(complete) > 1:
+        return 'UNKNOWN'
+    counts = [value.get(k, 0) for k in ('succeededCount', 'failedCount', 'cancelledCount', 'runningCount')]
+    if any(type(n) is not int or n < 0 for n in counts):
+        return 'UNKNOWN'
+    succeeded, failed, cancelled, running = counts
+    if complete:
+        state = complete[0].get('state')
+        if state == 'CONDITION_SUCCEEDED':
+            return 'SUCCEEDED' if value.get('taskCount') == 1 and succeeded == 1 and failed == cancelled == running == 0 else 'UNKNOWN'
+        if state == 'CONDITION_FAILED':
+            return 'CANCELLED' if cancelled or complete[0].get('reason') in ('Cancelled', 'CANCELLED') else 'FAILED'
+        if state not in ('CONDITION_PENDING', 'STATE_UNSPECIFIED'):
+            return 'UNKNOWN'
+    if cancelled or failed or succeeded:
+        return 'UNKNOWN'  # Counters alone cannot establish a terminal result.
+    if running == 1:
+        return 'RUNNING'
+    if any(c.get('type') == 'Started' for c in conditions):
+        return 'STARTING'
+    return 'CREATED' if value.get('createTime') and value.get('name') else 'UNKNOWN'
+
+
+class ExecutionMonitoringError(RuntimeError):
+    def __init__(self, execution, state):
+        self.execution, self.state = execution, state
+        super().__init__('Execution monitoring unavailable; no execution retry: ' + str(execution))
+
+
+class JobExecutionMonitor:
+    """One mutation followed by bounded read-only polling with an explicit cleanup reserve."""
+    def __init__(self, job, principal, permission_test, cleanup_test, launch, read,
+                 deadline, cost_check, record, clock=time.monotonic, sleep=time.sleep, expected_job_uid=None):
+        self.job = monitoring_job_resource(job)
+        if principal != MONITORING_PRINCIPAL:
+            raise ValueError('Wrong monitoring principal')
+        if not isinstance(expected_job_uid, str) or not expected_job_uid:
+            raise ValueError('Original job UID required')
+        self.expected_job_uid = expected_job_uid
+        self.principal, self.test, self.cleanup_test = principal, permission_test, cleanup_test
+        self.launch, self.read = launch, read
+        if type(deadline) not in (int, float) or not math.isfinite(deadline):
+            raise ValueError('Finite session deadline required')
+        self.deadline, self.cost_check, self.record = deadline, cost_check, record
+        self.clock, self.sleep = clock, sleep
+        self.execution, self.state, self.attempted = None, 'UNKNOWN', False
+
+    def budget(self, seconds=0):
+        if (self.cost_check() is not True or self.clock() + seconds >= self.deadline - 600):
+            raise TimeoutError('Monitoring cost/time/cleanup reserve exhausted')
+
+    def _proof(self, proof, principal, required):
+        if (not isinstance(proof, dict) or proof.get('principal') != principal
+                or proof.get('resource') != self.job or proof.get('jobUid') != self.expected_job_uid or proof.get('transport') != 'KEYLESS_EXACT_REQUEST'
+                or not isinstance(proof.get('permissions'), list)):
+            raise ValueError('Wrong permission proof principal/resource/transport')
+        return required <= set(proof['permissions'])
+
+    def ready(self, maximum_seconds=120):
+        if type(maximum_seconds) is not int or not 0 < maximum_seconds <= 120:
+            raise ValueError('Readiness bound expansion')
+        end = min(self.clock() + maximum_seconds, self.deadline - 840)
+        while self.clock() < end:
+            self.budget(240)
+            try:
+                monitor = self._proof(self.test(self.job, sorted(MONITORING_PERMISSIONS)), self.principal, MONITORING_PERMISSIONS)
+                cleanup = self._proof(self.cleanup_test(self.job, sorted(JOB_CLEANUP_PERMISSIONS)), PRINCIPAL, JOB_CLEANUP_PERMISSIONS)
+                self.budget(240)
+                if self.clock() >= end:
+                    raise TimeoutError('Permission readiness observation exceeded bound')
+                if monitor and cleanup:
+                    self.record({'event': 'PERMISSIONS_READY', 'job': self.job, 'principal': self.principal,
+                                 'existingExecutionRead': 'NOT_CLAIMED_RESOURCE_PERMISSION_TEST_ONLY'})
+                    return
+            except Exception as error:
+                if not monitoring_http_retryable(error):
+                    raise
+                self.record({'event': 'READINESS_RETRY', 'httpStatus': getattr(error, 'status', None)})
+            self.sleep(min(2, max(0, end - self.clock())))
+        raise TimeoutError('Effective monitoring/cleanup permissions not ready; job not launched')
+
+    def execute(self, maximum_seconds=240):
+        if self.attempted:
+            raise RuntimeError('Execution creation already attempted; no blind replay')
+        if type(maximum_seconds) is not int or not 0 < maximum_seconds <= 240:
+            raise ValueError('Monitoring bound expansion')
+        self.ready()
+        self.budget(maximum_seconds)
+        self.attempted = True
+        self.record({'event': 'CREATE_REQUESTED', 'job': self.job, 'state': 'UNKNOWN'})
+        try:
+            created = self.launch(self.job)  # Exactly once, including uncertain responses.
+            self.execution = monitoring_execution_resource(self.job, created['name'])
+        except Exception:
+            self.record({'event': 'CREATION_UNCERTAIN', 'job': self.job, 'state': 'UNKNOWN'})
+            raise ExecutionMonitoringError(None, 'UNKNOWN') from None
+        self.state = 'CREATED'
+        self.record({'event': 'EXECUTION_CREATED', 'execution': self.execution, 'state': self.state})
+        end = min(self.clock() + maximum_seconds, self.deadline - 600)
+        while self.clock() < end:
+            self.budget()
+            try:
+                value = self.read(self.execution)
+                self.budget()
+                if self.clock() >= end:
+                    break
+                if monitoring_execution_resource(self.job, value.get('name')) != self.execution:
+                    raise ValueError('Wrong execution observation')
+                if monitoring_job_resource(value.get('job', self.job)) != self.job:
+                    raise ValueError('Conflicting execution parent')
+                self.state = execution_state(value)
+                self.record({'event': 'EXECUTION_OBSERVED', 'execution': self.execution, 'state': self.state})
+                if self.state in ('SUCCEEDED', 'FAILED', 'CANCELLED'):
+                    return {'name': self.execution, 'state': self.state, 'observation': value}
+            except Exception as error:
+                if not monitoring_http_retryable(error):
+                    raise
+                self.state = 'UNKNOWN'
+                self.record({'event': 'STATUS_READ_RETRY', 'execution': self.execution,
+                             'state': self.state, 'httpStatus': getattr(error, 'status', None)})
+            self.sleep(min(2, max(0, end - self.clock())))
+        raise ExecutionMonitoringError(self.execution, 'UNKNOWN')
+
+
+def cleanup_binding_with_parent_check(binding, get_parent, remove, owned_jobs, record):
+    """Absence is resolution only for an exact task-owned deleted parent; retain evidence."""
+    url = binding['url']
+    if not isinstance(owned_jobs, dict):
+        raise ValueError('Original task job UID inventory required')
+    allowed = {'https://run.googleapis.com/v1/projects/' + PROJECT + '/locations/' + MONITORING_REGION + '/jobs/' + n: uid
+               for n, uid in owned_jobs.items() if n in MONITORING_JOBS and isinstance(uid, str) and uid}
+    if url not in allowed:
+        return remove(binding)
+    parent = get_parent(url)
+    if parent is not None and (parent.get('uid') or parent.get('metadata', {}).get('uid')) != allowed[url]:
+        raise ValueError('Job parent UID changed; binding removal refused')
+    if parent is None:
+        record({'event': 'BINDING_PARENT_ALREADY_ABSENT', 'resource': url, 'verification': 'GET_404'})
+        return
+    try:
+        return remove(binding)
+    except ProtectedRequestFailure as error:
+        record({'event': 'BINDING_REMOVAL_ERROR', 'resource': url, 'httpStatus': getattr(error, 'status', None)})
+        if error.status != 404 or get_parent(url) is not None:
+            raise
+        record({'event': 'BINDING_PARENT_REMOVAL_VERIFIED', 'resource': url, 'originalHttpStatus': 404})
+
+
+def owned_deletion_convergence(get_resource, expected_id, delete, record, deadline,
+                               attached=False, clock=time.monotonic, sleep=time.sleep):
+    """Delete once, then observe. Never extends the shared deadline or deletes an attached disk."""
+    if not isinstance(expected_id, str) or not expected_id or type(deadline) not in (int, float) or not math.isfinite(deadline):
+        raise ValueError('Exact ownership and bounded deadline required')
+    end = min(deadline, clock() + 240)
+    issued = False
+    started = clock()
+    slow_recorded = False
+    while clock() < end:
+        try:
+            resource = get_resource()
+        except ProtectedRequestFailure as error:
+            record({'event': 'DELETE_READ_ERROR', 'httpStatus': getattr(error, 'status', None)})
+            if error.status not in (429, 500, 502, 503, 504):
+                raise
+            sleep(min(2, max(0, end - clock())))
+            continue
+        if resource is None:
+            record({'event': 'OWNED_RESOURCE_ABSENCE_VERIFIED', 'id': expected_id})
+            return 'ABSENT_VERIFIED'
+        if str(resource.get('id')) != expected_id:
+            raise ValueError('Resource ownership changed; deletion refused')
+        if attached and resource.get('users'):
+            # The parent deletion can still be detaching its auto-delete disk. Never force it.
+            record({'event': 'DISK_STILL_ATTACHED_WAIT', 'id': expected_id})
+        elif not issued:
+            issued = True  # Set before the mutation: uncertain outcomes must not replay.
+            try:
+                operation = delete()
+                if isinstance(operation, dict):
+                    record({'event': 'DELETE_ACCEPTED', 'id': expected_id,
+                            'operation': operation.get('name'), 'status': operation.get('status')})
+                    if operation.get('error'):
+                        raise RuntimeError('Delete operation reported an error')
+            except (ProtectedRequestFailure, TimeoutError) as error:
+                record({'event': 'DELETE_REQUEST_ERROR', 'id': expected_id,
+                        'httpStatus': getattr(error, 'status', None), 'timeout': isinstance(error, TimeoutError)})
+                if isinstance(error, ProtectedRequestFailure) and error.status not in (404, 429, 500, 502, 503, 504):
+                    raise
+        if not slow_recorded and clock() - started >= 100:
+            slow_recorded = True
+            record({'event': 'DELETION_EXCEEDED_ORIGINAL_POLL', 'id': expected_id, 'seconds': 100})
+        sleep(min(2, max(0, end - clock())))
+    raise TimeoutError('Exact owned resource absence not verified within cleanup deadline')
+
+
+MONITORING_CAPSULE_BASE_SHA256 = {'cloud-session.py': '69d95eac7a3124a1c7eca20d6c0fa5931fa628ab1eb9dc4c5617c283f1856204', 'cloud-helpers.py': '7e68f0e8a2a903da7a0a5410a5663da0c135ece1198bd6c5c20d8ac21b933349', 'private-sql-helper.py': 'c2a3490d55b53fd5630f85b74978c82ef7cdb0da80882876a21ebbd98d2c0054'}
+MONITORING_LEGACY_BINDING_BLOCK = "   try:remove_binding(b)\n   except RuntimeError as e:\n    if 'API 404' not in str(e):raise"
+MONITORING_LEGACY_VM_BLOCK = " if state.get('vmTargetId'):\n  def remove_vm():\n   x=api('GET',V,missing=True)\n   if x:assert x['id']==state['vmTargetId'];operation(api('DELETE',V))\n  clean('private-VM-and-auto-delete-disk',remove_vm)\n if state.get('diskId'):\n  def remove_disk():\n   x=api('GET',state['diskUrl'],missing=True)\n   if x:assert x['id']==state['diskId'] and not x.get('users');operation(api('DELETE',state['diskUrl']))\n  clean('boot-disk',remove_disk)\n"
+
+
+def monitoring_cleanup_artifacts(controller, helpers, private_helper):
+    """Transform only the fingerprinted consumed capsule; output remains unapproved/offline."""
+    inputs = {'cloud-session.py': controller, 'cloud-helpers.py': helpers,
+              'private-sql-helper.py': private_helper}
+    if {n: hashlib.sha256(t.encode()).hexdigest() for n, t in inputs.items()} != MONITORING_CAPSULE_BASE_SHA256:
+        raise ValueError('Unknown monitoring capsule input; no authority inferred')
+    def once(old, new):
+        nonlocal controller
+        if controller.count(old) != 1:
+            raise ValueError('Monitoring capsule boundary changed')
+        controller = controller.replace(old, new, 1)
+    begin = controller.index('def job(mode,url=None):')
+    end = controller.index('\ndef deploy_service():', begin)
+    controller = controller[:begin] + MONITORING_JOB_CONTROLLER + controller[end:]
+    once("assert not v['sql00_actor_errors'](),v['sql00_actor_errors']()",
+         "assert not v['execution_monitoring_errors'](),v['execution_monitoring_errors']()")
+    once(" print('PREFLIGHT:PASS_EXACT_SOURCE_CI_TIME_SCOPE_CREDENTIALS_AND_BUDGET',flush=True)",
+         " required=sorted(M['CLEANUP_PROJECT_PERMISSIONS']);proof=api('POST','https://cloudresourcemanager.googleapis.com/v1/projects/'+P+':testIamPermissions',{'permissions':required});assert set(required)<=set(proof.get('permissions',[]))\n print('PREFLIGHT:PASS_EXACT_SOURCE_CI_TIME_SCOPE_CREDENTIALS_AND_BUDGET',flush=True)")
+    once(MONITORING_LEGACY_BINDING_BLOCK,
+         "   M['cleanup_binding_with_parent_check'](b,lambda url:api('GET',url,missing=True),remove_binding,state.get('jobUids',{}),monitor_record)")
+    once(MONITORING_LEGACY_VM_BLOCK, MONITORING_OWNED_CLEANUP)
+    once(" for name in reversed(state['createdJobs']):clean('job-'+name,lambda name=name:gc('delete-'+name,['run','jobs','delete',name,'--region=us-east1'],90))",
+         " for name in reversed(state['createdJobs']):clean('job-'+name,lambda name=name:M['delete_owned_job'](name,state.get('jobUids',{}).get(name),api,monitor_record,deadline-480))")
+    # No source/SQL mutation or runtime receipt is generated by this pure function.
+    result = dict(inputs, **{'cloud-session.py': controller,
+                            'cloud-helpers.py': helpers + MONITORING_HELPERS})
+    for name, text in result.items():
+        compile(text, name, 'exec')
+    return result
+
+
+MONITORING_HELPERS = r"""
+
+def monitor_record(event):
+ state.setdefault('monitoringEvidence',[]).append(event);save()
+
+def deployer_read_api(method,url,body=None):
+ # Exact keyless identity,not the CLI's ambient identity. No credential-bearing response is retained.
+ prefixes=['https://run.googleapis.com/v2/'+M['monitoring_job_resource'](n) for n in M['MONITORING_JOBS']]
+ allowed=False
+ for p in prefixes:
+  if url==p+':testIamPermissions' and method=='POST' or url==p and method=='GET':allowed=True
+  elif url.startswith(p+'/executions/') and method=='GET':M['monitoring_execution_resource'](p.removeprefix('https://run.googleapis.com/v2/'),url.removeprefix('https://run.googleapis.com/v2/'));allowed=True
+ if not allowed:raise ValueError('Unapproved deployer read endpoint')
+ credential=M['mint_monitoring_credential'](api)
+ def send(token):
+  req=urllib.request.Request(url,data=None if body is None else json.dumps(body).encode(),headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'},method=method)
+  try:
+   with urllib.request.urlopen(req,timeout=max(1,min(25,deadline-time.monotonic()-600))) as response:return json.loads(response.read())
+  except urllib.error.HTTPError as error:raise M['ProtectedRequestFailure'](error.code) from None
+  except urllib.error.URLError:raise ConnectionError('Protected monitoring transport unavailable') from None
+ try:return credential.use(send,30)
+ finally:credential.close()
+
+def monitoring_permissions(resource,permissions):
+ x=deployer_read_api('POST','https://run.googleapis.com/v2/'+resource+':testIamPermissions',{'permissions':permissions})
+ job=deployer_read_api('GET','https://run.googleapis.com/v2/'+resource)
+ return {'principal':M['MONITORING_PRINCIPAL'],'resource':resource,'jobUid':job.get('uid'),'permissions':x.get('permissions',[]),'transport':'KEYLESS_EXACT_REQUEST'}
+
+def owner_cleanup_permissions(resource,permissions):
+ x=api('POST','https://run.googleapis.com/v2/'+resource+':testIamPermissions',{'permissions':permissions})
+ job=api('GET','https://run.googleapis.com/v2/'+resource)
+ return {'principal':USER,'resource':resource,'jobUid':job.get('uid'),'permissions':x.get('permissions',[]),'transport':'KEYLESS_EXACT_REQUEST'}
+"""
+
+MONITORING_JOB_CONTROLLER = r"""def job(mode,url=None):
+ artifact=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'));doc=artifact['job_document'](mode,digests['diagnostics'],dict.fromkeys(['runtimeUsername','runtimePassword','migrationPassword','databaseCa'],'1'),url);name=doc['metadata']['name'];p=E/(name+'.json');p.write_text(json.dumps(doc,indent=2)+'\n')
+ if name not in state['createdJobs']:
+  _,created,_=gc('create-'+name,['run','jobs','replace',str(p),'--region=us-east1'],90);state['createdJobs'].append(name);save();uid=json.loads(created)['metadata']['uid'];assert isinstance(uid,str) and uid;state.setdefault('jobUids',{})[name]=uid;save();resource='https://run.googleapis.com/v1/projects/'+P+'/locations/us-east1/jobs/'+name
+  for role in ['roles/run.developer','roles/run.invoker']:binding(resource,role,'serviceAccount:'+state['deployer'])
+ else:assert mode=='PROBE','Migration must never be blindly rerun'
+ state.setdefault('executions',{});state['executions'][name]=state['executions'].get(name,0)+1;attempt=state['executions'][name];save()
+ def launch(resource):
+  # --async returns the accepted execution without the CLI's immediate GetExecution.
+  _,out,_=gc('execute-'+name+'-'+str(attempt),['run','jobs','execute',name,'--region=us-east1','--async','--impersonate-service-account='+state['deployer']],60)
+  x=json.loads(out);meta=x.get('metadata',{});labels=meta.get('labels',{});assert str(meta.get('namespace')) in [P,NUM] and labels.get('run.googleapis.com/job')==name
+  return {'name':resource+'/executions/'+meta['name']}
+ monitor=M['JobExecutionMonitor'](name,state['deployer'],monitoring_permissions,owner_cleanup_permissions,launch,lambda resource:deployer_read_api('GET','https://run.googleapis.com/v2/'+resource),deadline,lambda:time.monotonic()<deadline-600 and json.loads((E/'cost-reconciliation.json').read_text())['estimatedPhaseUsd']<=json.loads((E/'fresh-session-authorization.requested.json').read_text())['budget']['freshMaximumUsd'],monitor_record,expected_job_uid=state['jobUids'][name])
+ result=monitor.execute();state.setdefault('executionResults',[]).append({'mode':mode,'name':result['name'],'state':result['state']});save()
+ if result['state']!='SUCCEEDED':raise RuntimeError('Qualification execution ended '+result['state'])
+ print(mode+':PASS',flush=True)
+ if mode=='MIGRATE':state['migration']='PASS_44_V45';save()
+ else:state['probe']='PASS_PRIVATE_JDBC_AND_AUTHENTICATED_HTTP';save()
+"""
+
+MONITORING_OWNED_CLEANUP = r""" if state.get('vmTargetId'):
+  def remove_vm():
+   M['owned_deletion_convergence'](lambda:api('GET',V,missing=True),state['vmTargetId'],lambda:api('DELETE',V),monitor_record,deadline-120)
+  clean('private-VM-and-auto-delete-disk',remove_vm)
+ if state.get('diskId'):
+  def remove_disk():
+   M['owned_deletion_convergence'](lambda:api('GET',state['diskUrl'],missing=True),state['diskId'],lambda:api('DELETE',state['diskUrl']),monitor_record,deadline-120,attached=True)
+  clean('boot-disk',remove_disk)
+"""
+
+
+
+def delete_owned_job(name, expected_uid, api, record, deadline, clock=time.monotonic, sleep=time.sleep):
+    """Conditional Cloud Run v2 deletion, never a name-only deletion of a replacement job."""
+    resource = monitoring_job_resource(name)
+    if not isinstance(expected_uid, str) or not expected_uid:
+        raise ValueError('Original task job UID unavailable; deletion refused')
+    url = 'https://run.googleapis.com/v2/' + resource
+    issued = False
+    end = min(deadline, clock() + 120)
+    while clock() < end:
+        try:
+            value = api('GET', url, missing=True)
+        except ProtectedRequestFailure as error:
+            record({'event': 'JOB_DELETE_READ_ERROR', 'httpStatus': error.status})
+            if error.status not in (429, 500, 502, 503, 504):
+                raise
+            sleep(min(2, max(0, end-clock())))
+            continue
+        if value is None:
+            record({'event': 'OWNED_JOB_ABSENCE_VERIFIED', 'resource': resource, 'uid': expected_uid})
+            return
+        if value.get('uid') != expected_uid or not isinstance(value.get('etag'), str) or not value['etag']:
+            raise ValueError('Job identity/version unavailable or changed; deletion refused')
+        if not issued:
+            issued = True
+            from urllib.parse import urlencode
+            try:
+                op = api('DELETE', url + '?' + urlencode({'etag': value['etag']}))
+                record({'event': 'JOB_DELETE_ACCEPTED', 'resource': resource, 'operation': op.get('name')})
+                if op.get('error'):
+                    raise RuntimeError('Job deletion operation failed')
+            except (ProtectedRequestFailure, TimeoutError) as error:
+                record({'event': 'JOB_DELETE_REQUEST_ERROR', 'resource': resource,
+                        'httpStatus': getattr(error, 'status', None), 'timeout': isinstance(error, TimeoutError)})
+                if isinstance(error, ProtectedRequestFailure) and error.status not in (404, 429, 500, 502, 503, 504):
+                    raise
+        sleep(min(2, max(0, end-clock())))
+    raise TimeoutError('Exact job absence not verified before cleanup deadline')
+
 if __name__=='__main__':raise SystemExit(main())
