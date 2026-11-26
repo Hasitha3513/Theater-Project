@@ -780,4 +780,68 @@ def subnet_recovery_artifacts(controller, helpers, private_helper):
         compile(text, name, 'exec')
     return {'cloud-session.py': controller, 'cloud-helpers.py': helpers, 'private-sql-helper.py': private_helper}
 
+
+def private_known_hosts_option(private_directory, known_hosts):
+    """Quote for OpenSSH's config parser, not a shell. Never alter trust files."""
+    from pathlib import Path
+    import os
+    directory, target = map(os.fspath, (private_directory, known_hosts))
+    for value in (directory, target):
+        if (not isinstance(value, str) or not value or any(ord(c) < 32 or ord(c) == 127 for c in value)
+                or any(c in value for c in '\\"$%~*?[]') or not Path(value).is_absolute()
+                or str(Path(value)) != value or '..' in Path(value).parts):
+            raise ValueError('Unsafe task-private SSH trust path')
+    parent, path = Path(directory), Path(target)
+    if path != parent / 'known_hosts':
+        raise ValueError('Exactly one task-private known_hosts file required')
+    for candidate in (path, *path.parents):
+        if candidate.is_symlink():
+            raise ValueError('Symlink SSH trust path denied')
+    if parent.exists() and (not parent.is_dir() or parent.stat().st_mode & 0o077):
+        raise ValueError('SSH private directory must be private')
+    if path.exists() and (not path.is_file() or path.stat().st_mode & 0o077):
+        raise ValueError('SSH trust file must be private')
+    return 'UserKnownHostsFile="' + target + '"'
+
+
+def ssh_readiness_result(code, stdout, stderr):
+    """No raw stderr, usernames, tokens, paths or remote output in exceptions."""
+    lines = stdout.splitlines() if isinstance(stdout, str) else []
+    if type(code) is int and code == 0 and len(lines) >= 3 and lines[0].isdigit() and int(lines[0]) > 0 and all(lines[1:3]):
+        return True
+    text = stderr.lower() if isinstance(stderr, str) else ''
+    reason = ('HOST_KEY_REJECTED' if 'host key verification failed' in text or 'remote host identification has changed' in text
+              else 'AUTHENTICATION_DENIED' if 'permission denied' in text
+              else 'NON_ROOT_TOOLING_REQUIRED' if code == 0
+              else 'TRANSPORT_OR_CLIENT_FAILURE')
+    raise RuntimeError('SSH_READY:' + reason)
+
+
+def ssh_trust_path_artifacts(controller, helpers, private_helper):
+    """Exact retained-capsule correction only; compile, never execute cloud code."""
+    replacements = [
+        ("assert not v['subnet_recovery_errors'](),v['subnet_recovery_errors']()",
+         "assert not v['ssh_trust_path_errors'](),v['ssh_trust_path_errors']()"),
+        ("'UserKnownHostsFile='+str(keydir/'known_hosts')",
+         "M['private_known_hosts_option'](keydir,keydir/'known_hosts')"),
+        ("  if code==0 and out.splitlines()[0]!='0':break",
+         "  if code==0 and out.splitlines() and out.splitlines()[0]!='0':break"),
+        (" assert code==0\n files=[E/'client.tar.gz'",
+         " M['ssh_readiness_result'](code,out,err)\n files=[E/'client.tar.gz'")]
+    for old, new in replacements:
+        if controller.count(old) != 1:
+            raise ValueError('Unexpected retained SSH capsule shape')
+        controller = controller.replace(old, new, 1)
+    for required in ("'-o','IdentitiesOnly=yes'", "'-o','BatchMode=yes'", "'-o','StrictHostKeyChecking=accept-new'",
+                     "'-o','GlobalKnownHostsFile=/dev/null'", "ssh=['ssh',*opts,username+'@'+VM]", "['scp',*opts,"):
+        if controller.count(required) != 1:
+            raise ValueError('SSH/SCP security boundary changed')
+    for forbidden in ('StrictHostKeyChecking=no', 'UserKnownHostsFile=/dev/null', 'ssh-keygen -R'):
+        if forbidden in controller:
+            raise ValueError('SSH trust bypass denied')
+    result = {'cloud-session.py': controller, 'cloud-helpers.py': helpers, 'private-sql-helper.py': private_helper}
+    for name, text in result.items():
+        compile(text, name, 'exec')
+    return result
+
 if __name__=='__main__':raise SystemExit(main())

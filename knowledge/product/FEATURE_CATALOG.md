@@ -942,3 +942,7 @@ CN-GCP-SQL-STAGING-TOKEN-SAFETY-001 qualifies an explicit ordered seven-file man
 <a id="private-google-access-recovery"></a>
 ### Internal qualification network recovery
 The offline operator harness now prepares the dedicated Private Google Access API path with no-op,scoped-operation,uncertain-result,drift and attributed rollback guards. It preserves restricted NOLOGIN database state and reuses only approved pinned registry/service identities. This is source qualification tooling,not a customer feature or proof of Cloud Run connectivity. Runtime requires separate exact approval;live customer operations and production remain disabled. [Boundary](../ARCHITECTURE.md#private-google-access-recovery);[results](../PROGRESS.md#private-google-access-recovery).
+
+
+## SSH qualification harness boundary
+CN-GCP-SSH-TRUST-PATH-001 adds offline task-private known-host path quoting and redacted fail-closed SSH readiness to the internal qualification harness. Shared SSH/SCP options and strict host-key protection remain. No UI,application behavior,customer login,SQL or physical feature changes.13focused/227total offline tests pass;parser proof is not host authentication. The preceding cloud attempt failed before SQL;Cloud Run connectivity remains NOT_RUN. Official acceptance stays4/7;production NONE. See [current evidence](../PROGRESS.md#ssh-trust-path-qualification).

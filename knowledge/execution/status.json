@@ -33313,5 +33313,81 @@
       "knowledge/product/FEATURE_CATALOG.md": "10ec057307dc6fe00a45a2d9355c8e6341e9533da99ba0e5591df8f2f51395f4",
       "knowledge/guides/USER_GUIDE.md": "7149b88dd04d723f79a4678879cc915544fe70722d83921a0640ad34e7211589"
     }
+  },
+  "cloudRunSshTrustPath": {
+    "id": "CN-GCP-SSH-TRUST-PATH-001",
+    "baseline": "f913354362294436b05849a36820d9e5f868ef12",
+    "status": "READY",
+    "orderedPaths": [
+      "scripts/verify-cloud-connectivity.py",
+      "scripts/test-cloud-run.py",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "decision": "APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR",
+      "source": "User reply to call_97b3da2b39674ad3a8760869db163b6e: Approve exact source-only successor",
+      "requestSha256": "c473df6c3408236efd0532a9b2f5f2ce0b279daeb9f3ce776da813c541050277",
+      "recordedAtUtc": "2026-11-25T14:41:40.995433+00:00",
+      "reviewMethod": "Owner-approved task-only verified ledger reuse and controlled-diff review",
+      "cloudSessionAuthorized": false
+    },
+    "scope": [
+      "Add source-owned OpenSSH-config path quoting for exactly the intended task-private UserKnownHostsFile;do not indiscriminately shell-quote separate IdentityFile argv or ProxyCommand",
+      "Patch the exact retained SSH/SCP shared opts offline through the governed artifact generator;fail closed on unknown predecessor shape",
+      "Preserve StrictHostKeyChecking=accept-new,IdentitiesOnly=yes,BatchMode=yes,global-known-host behavior,IAP/OSLogin/private-only routing and existing security gates",
+      "Reject unsafe/multiple/outside-private/control-character paths;preserve shared/unrelated trust files;never clear trust or use ssh-keygen-R as a workaround",
+      "Provide attributable redacted stage failure instead of an empty AssertionError;never continue to administration after SSH failure",
+      "Append only existing canonical/registry evidence,freeze fingerprints,protected successor and historical negative controls;no application,SQL,policy/permission or migration changes"
+    ],
+    "acceptance": [
+      "Actual OpenSSH offline parser tests for paths with/without spaces and deliberate entry-limit negative controls",
+      "Quote/backslash handling explicit;NUL/newline/carriage-return/injected options rejected",
+      "Both SSH and SCP use exactly the same corrected options",
+      "No StrictHostKeyChecking=no,no UserKnownHostsFile=/dev/null,no shared known-host removal or trust bypass",
+      "Preserve distinction between option-parser proof and authenticated host-key provenance",
+      "Compile corrected actual retained capsule offline without cloud/credential execution",
+      "All existing/new harness,architecture,security,KB/manifest,negative controls,historical replay,source/SQL/migration fingerprints and whitespace checks pass",
+      "Exact10file diff and bounded secret scan;governed PR/exact-head CI/permitted merge/automatic main CI"
+    ],
+    "rollback": "Governed exact-source revert;preserve all historical SQL/migrations/approvals/failures and existing known-host files. Remove only owned generated test files. No cloud mutation or trust-file deletion is authorized.",
+    "cloudSessionAuthorized": false,
+    "cloudMutationsAuthorized": false,
+    "sqlChangesAuthorized": false,
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "OFFLINE_QUALIFIED",
+      "cloudRuntime": "NOT_RUN_NOT_AUTHORIZED",
+      "cloudMigrations": "NOT_RUN",
+      "cloudRun": "NOT_RUN",
+      "historicalRuntimeSeconds": 293.33,
+      "historicalSessionConsumed": true,
+      "migrations": 44,
+      "sqlFilesUnchanged": 7,
+      "focusedTests": 13,
+      "offlineHarnessTests": 227,
+      "architectureBoundary": "PASS_68_JAVA_TESTS_NO_FAILURES_ERRORS_OR_SKIPS",
+      "historicalReplay": "PASS_IMMUTABLE_PREDECESSOR_REPLAY",
+      "standaloneNegativeControls": "PASS",
+      "hostedCI": "PENDING"
+    },
+    "sourceSha256": {
+      "scripts/verify-cloud-connectivity.py": "d47db12bc1a2172fd91eff08e5d21d36c14a390ec3f3d4a10f852a9c0753dc0b",
+      "scripts/test-cloud-run.py": "0fbede99d6a03a4bab5265cce28892baa58bfc60e8d8407ae2b240f86a465e37",
+      "knowledge/ARCHITECTURE.md": "febf1ac0387beacb1d2d2a5821954f74dd3f4cc876899179d63d2feba2b9f0a5",
+      "knowledge/PROGRESS.md": "e232879a65c76727ff23c8a3b85df70ac22365cbe896dc6eca2ea8713bde1a0b",
+      "knowledge/product/FEATURE_CATALOG.md": "2d71d415392db5a63e29abc3d5a352ba527bbb858385364de4de5f0ce475c99a",
+      "knowledge/guides/USER_GUIDE.md": "616f515ee2a45a15bc3088cbdb364e24d4f90a1553acc2634fa5415f73c19640"
+    }
   }
 }

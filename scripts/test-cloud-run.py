@@ -1171,4 +1171,80 @@ class RetainedPolicyArtifactRegression(unittest.TestCase):
         for raw in [b'{"repository":"a","repository":"b"}',json.dumps({'foreign':'a'*64}).encode()]:
             with self.assertRaises(ValueError):runtime_artifact.approved_retained_policy_pins(raw,hashlib.sha256(raw).hexdigest())
 
+
+class SshTrustPath(unittest.TestCase):
+    def setUp(self):
+        import tempfile
+        self.temp=tempfile.TemporaryDirectory(prefix='cinenest SSH test ')
+        self.addCleanup(self.temp.cleanup)
+        self.directory=Path(self.temp.name)/'private';self.directory.mkdir(mode=0o700)
+        self.target=self.directory/'known_hosts'
+    def option(self):return runtime_artifact.private_known_hosts_option(self.directory,self.target)
+    def test_config_parser_quotes_spaces(self):
+        self.assertEqual(self.option(),'UserKnownHostsFile="'+str(self.target)+'"')
+    def test_actual_openssh_entry_limit_proves_grouping(self):
+        import subprocess,shutil
+        ssh=shutil.which('ssh');self.assertIsNotNone(ssh,'Installed OpenSSH required;test must not silently skip')
+        def probe(values):return subprocess.run([ssh,'-G','-F','/dev/null','-o','CanonicalizeHostname=no','-o','UserKnownHostsFile='+values,'synthetic-host.invalid'],capture_output=True,text=True,timeout=10)
+        unquoted=probe(' '.join([str(self.target)]*32));self.assertNotEqual(unquoted.returncode,0);self.assertIn('too many userknownhostsfile entries',unquoted.stderr)
+        quoted=probe(' '.join([self.option().split('=',1)[1]]*32));self.assertEqual(quoted.returncode,0,quoted.stderr)
+        excess=probe(' '.join([self.option().split('=',1)[1]]*64));self.assertNotEqual(excess.returncode,0)
+        plain=Path(self.temp.name.replace(' ','_'))/'private'
+        self.assertIn('"',runtime_artifact.private_known_hosts_option(plain,plain/'known_hosts'))
+        self.assertEqual(probe('"'+str(plain/'known_hosts')+'"').returncode,0)
+    def test_no_trust_file_created_or_modified(self):
+        self.assertFalse(self.target.exists());self.option();self.assertFalse(self.target.exists())
+        self.target.write_text('synthetic-existing-trust\n');self.target.chmod(0o600);before=self.target.read_bytes();self.option();self.assertEqual(before,self.target.read_bytes())
+    def test_rejects_multiple_and_outside_paths(self):
+        for target in [self.directory/'other',self.directory.parent/'known_hosts',str(self.target)+' /tmp/foreign','known_hosts']:
+            with self.subTest(target=str(target)),self.assertRaises(ValueError):runtime_artifact.private_known_hosts_option(self.directory,target)
+    def test_rejects_expansion_quotes_backslashes_and_controls(self):
+        for value in ['x\n','x\r','x\0','x\t','x\x7f','x"','x\\','x%h','x${HOME}','x~','x*','x?','x[0]']:
+            d=self.directory/value
+            with self.subTest(value=value),self.assertRaises(ValueError):runtime_artifact.private_known_hosts_option(d,d/'known_hosts')
+    def test_rejects_dotdot_and_symlinks(self):
+        with self.assertRaises(ValueError):runtime_artifact.private_known_hosts_option(str(self.directory)+'/../private',self.target)
+        alias=Path(self.temp.name)/'alias';alias.symlink_to(self.directory,target_is_directory=True)
+        with self.assertRaises(ValueError):runtime_artifact.private_known_hosts_option(alias,alias/'known_hosts')
+        self.target.symlink_to(self.directory/'other')
+        with self.assertRaises(ValueError):self.option()
+    def test_rejects_public_directory_or_trust_file(self):
+        self.directory.chmod(0o755)
+        with self.assertRaises(ValueError):self.option()
+        self.directory.chmod(0o700);self.target.write_text('synthetic');self.target.chmod(0o644)
+        with self.assertRaises(ValueError):self.option()
+    def test_nonroot_readiness(self):
+        self.assertTrue(runtime_artifact.ssh_readiness_result(0,'1000\n/usr/bin/python3\n/usr/bin/tar\n',''))
+    def test_root_empty_and_incomplete_readiness_denied(self):
+        for out in ['','0\n/usr/bin/python3\n/usr/bin/tar','1000\n','x\npython\ntar']:
+            with self.subTest(out=out),self.assertRaisesRegex(RuntimeError,'SSH_READY:NON_ROOT_TOOLING_REQUIRED'):runtime_artifact.ssh_readiness_result(0,out,'')
+    def test_errors_redacted_without_accepting_presented_host_key(self):
+        for err,reason in [('REMOTE HOST IDENTIFICATION HAS CHANGED! secret-value /private/path','HOST_KEY_REJECTED'),('Permission denied secret-value','AUTHENTICATION_DENIED'),('timeout secret-value','TRANSPORT_OR_CLIENT_FAILURE')]:
+            with self.subTest(reason=reason),self.assertRaisesRegex(RuntimeError,'^SSH_READY:'+reason+'$'):runtime_artifact.ssh_readiness_result(255,'',err)
+    @staticmethod
+    def capsule():
+        return '''def prepare(v, M, keydir, key, username, VM, E):
+ assert not v['subnet_recovery_errors'](),v['subnet_recovery_errors']()
+ opts=['-i',str(key),'-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=10','-o','UserKnownHostsFile='+str(keydir/'known_hosts'),'-o','GlobalKnownHostsFile=/dev/null','-o','StrictHostKeyChecking=accept-new'];ssh=['ssh',*opts,username+'@'+VM]
+ for i in range(1):
+  code,out,err=0,'1000\\n/python\\n/tar',''
+  if code==0 and out.splitlines()[0]!='0':break
+ assert code==0
+ files=[E/'client.tar.gz']
+ return ssh,['scp',*opts,*map(str,files)]
+'''
+    def test_artifacts_compile_and_share_ssh_scp_options(self):
+        import types
+        result=runtime_artifact.ssh_trust_path_artifacts(self.capsule(),'# helper\n','# private\n');namespace={};exec(result['cloud-session.py'],namespace)
+        v={'ssh_trust_path_errors':lambda:[]};ssh,scp=namespace['prepare'](v,runtime_artifact.__dict__,self.directory,self.directory/'id','synthetic','synthetic-vm',self.directory)
+        self.assertEqual(ssh[1:-1],scp[1:-1]);self.assertIn(self.option(),ssh);self.assertNotIn('assert code==0',result['cloud-session.py'])
+        self.assertEqual(result['private-sql-helper.py'],'# private\n')
+    def test_failure_stops_before_copy_or_admin(self):
+        capsule=self.capsule().replace("code,out,err=0,'1000\\n/python\\n/tar',''","code,out,err=255,'','host key verification failed'")
+        namespace={};exec(runtime_artifact.ssh_trust_path_artifacts(capsule,'','')['cloud-session.py'],namespace)
+        with self.assertRaisesRegex(RuntimeError,'HOST_KEY_REJECTED'):namespace['prepare']({'ssh_trust_path_errors':lambda:[]},runtime_artifact.__dict__,self.directory,self.directory/'id','synthetic','synthetic-vm',self.directory)
+    def test_unknown_duplicate_or_weakened_capsule_denied(self):
+        for text in [self.capsule().replace('UserKnownHostsFile','OtherKnownHostsFile'),self.capsule()+self.capsule(),self.capsule().replace('accept-new','no'),self.capsule().replace("['scp',*opts,","['scp',")]:
+            with self.subTest(text=text[:20]),self.assertRaises(ValueError):runtime_artifact.ssh_trust_path_artifacts(text,'','')
+
 if __name__=='__main__':unittest.main()
