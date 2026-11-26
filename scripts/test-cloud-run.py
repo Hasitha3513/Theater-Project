@@ -1247,4 +1247,111 @@ class SshTrustPath(unittest.TestCase):
         for text in [self.capsule().replace('UserKnownHostsFile','OtherKnownHostsFile'),self.capsule()+self.capsule(),self.capsule().replace('accept-new','no'),self.capsule().replace("['scp',*opts,","['scp',")]:
             with self.subTest(text=text[:20]),self.assertRaises(ValueError):runtime_artifact.ssh_trust_path_artifacts(text,'','')
 
+
+class Sql00RevisionRegression(unittest.TestCase):
+    @staticmethod
+    def roles():
+        return [dict(name='cinenest_qualification_'+n,login=False,superuser=False,createdb=False,createrole=False,replication=False,bypassrls=False,connectionLimit=v,validUntil=None) for n,v in [('runtime',6),('migrator',2)]]
+    def test_exact_qualified_sql_and_historical_manifest_preserved(self):
+        import hashlib
+        self.assertEqual(hashlib.sha256(runtime_artifact.SQL00_REVISION_SQL.encode()).hexdigest(),runtime_artifact.SQL00_REVISION_SHA256)
+        self.assertEqual(runtime_artifact.SQL_FILES['00-activation-authority-probe.sql.proposed'],'cd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d')
+        self.assertEqual([n for n in runtime_artifact.SQL_FILES if runtime_artifact.SQL_FILES[n]!=runtime_artifact.SQL00_REVISION_FILES[n]],['00-activation-authority-probe.sql.proposed'])
+    def test_revision_manifest_accepts_exact_order(self):
+        import json
+        self.assertEqual(runtime_artifact.require_sql00_revision_manifest(json.dumps(runtime_artifact.SQL00_REVISION_FILES)),runtime_artifact.SQL00_REVISION_FILES)
+    def test_old_changed_missing_extra_and_reordered_manifests_denied(self):
+        expected=runtime_artifact.SQL00_REVISION_FILES
+        cases=[runtime_artifact.SQL_FILES,dict(list(expected.items())[1:]),dict(expected,foreign='0'*64),dict(reversed(list(expected.items())))]
+        for value in cases:
+            with self.subTest(value=value),self.assertRaises(ValueError):runtime_artifact.require_sql00_revision_manifest(value)
+        changed=dict(expected);changed[next(n for n in expected if n.startswith('01-'))]='0'*64
+        with self.assertRaises(ValueError):runtime_artifact.require_sql00_revision_manifest(changed)
+    def test_duplicate_manifest_denied(self):
+        with self.assertRaises(ValueError):runtime_artifact.require_sql00_revision_manifest('{"duplicate":"a","duplicate":"b"}')
+    def test_retained_inactive_pairs_and_original_pair(self):
+        from datetime import datetime,timezone
+        now=datetime(2026,11,26,tzinfo=timezone.utc)
+        for validity in [(None,None),(None,'2026-11-24T00:00:00Z'),('2026-11-24T00:00:00Z',None),('2026-11-24T00:00:00Z','2026-11-24T00:00:00Z')]:
+            rows=self.roles()
+            for row,value in zip(rows,validity):row['validUntil']=value
+            self.assertEqual(runtime_artifact.sql00_role_baseline(rows,now),'RETAINED_REVOKED_NOLOGIN')
+        rows=self.roles()
+        for r in rows:r['connectionLimit']=-1
+        self.assertEqual(runtime_artifact.sql00_role_baseline(rows,now),'ORIGINAL_NOLOGIN')
+    def test_active_elevated_and_wrong_limit_denied(self):
+        from datetime import datetime,timezone
+        now=datetime.now(timezone.utc)
+        for field,value in [('login',True),('superuser',True),('createdb',True),('createrole',True),('replication',True),('bypassrls',True),('connectionLimit',7),('connectionLimit',True)]:
+            rows=self.roles();rows[0][field]=value
+            with self.subTest(field=field),self.assertRaises(ValueError):runtime_artifact.sql00_role_baseline(rows,now)
+    def test_future_infinite_naive_and_malformed_validity_denied(self):
+        from datetime import datetime,timezone
+        for value in ['2099-01-01T00:00:00Z','infinity','-infinity','2026-11-24',7]:
+            rows=self.roles();rows[1]['validUntil']=value
+            with self.subTest(value=value),self.assertRaises(ValueError):runtime_artifact.sql00_role_baseline(rows,datetime.now(timezone.utc))
+    def test_missing_duplicate_extra_role_and_fields_denied(self):
+        from datetime import datetime,timezone
+        for rows in [self.roles()[:1],self.roles()+self.roles()[:1],[self.roles()[0]]*2,[dict(self.roles()[0],extra=True),self.roles()[1]]]:
+            with self.subTest(rows=rows),self.assertRaises(ValueError):runtime_artifact.sql00_role_baseline(rows,datetime.now(timezone.utc))
+    def test_preparation_refuses_missing_history_and_existing_destination(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t);legacy=root/'legacy';legacy.mkdir();dest=root/'new'
+            with self.assertRaises(ValueError):runtime_artifact.prepare_sql00_revision_inputs(legacy,dest)
+            self.assertFalse(dest.exists());dest.mkdir()
+            with self.assertRaises(ValueError):runtime_artifact.prepare_sql00_revision_inputs(legacy,dest)
+    def test_install_refuses_old_manifest_before_writing(self):
+        import tempfile,json
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t);destination=root/'private';destination.mkdir(mode=0o700)
+            with self.assertRaises(ValueError):runtime_artifact.install_sql00_revision(root,destination,json.dumps(runtime_artifact.SQL_FILES))
+            self.assertEqual(list(destination.iterdir()),[])
+    def test_new_authority_evidence_requires_new_probe(self):
+        f=ManagedRoleConfirmationRegression().fixture()
+        self.assertEqual(runtime_artifact.sql00_managed_role_confirmation(*f[:3],'DELEGATED',f[3])['status'],'DENIED')
+        f[2]['probeSha256']=runtime_artifact.SQL00_REVISION_SHA256
+        self.assertEqual(runtime_artifact.sql00_managed_role_confirmation(*f[:3],'DELEGATED',f[3])['status'],'CONFIRMED')
+        f[2]['probePassed']=False
+        self.assertEqual(runtime_artifact.sql00_managed_role_confirmation(*f[:3],'DELEGATED',f[3])['status'],'DENIED')
+    def test_revoked_missing_stale_or_wrong_authority_denied(self):
+        from datetime import timedelta
+        for field,value in [('runtimeAdmin',False),('migratorAdmin',False),('member',False),('observedAt','2020-01-01T00:00:00Z')]:
+            f=ManagedRoleConfirmationRegression().fixture();f[2]['probeSha256']=runtime_artifact.SQL00_REVISION_SHA256;f[1][field]=value
+            self.assertEqual(runtime_artifact.sql00_managed_role_confirmation(*f[:3],'DELEGATED',f[3])['status'],'DENIED')
+        f=ManagedRoleConfirmationRegression().fixture('REVOKED');f[2]['probeSha256']=runtime_artifact.SQL00_REVISION_SHA256
+        self.assertEqual(runtime_artifact.sql00_managed_role_confirmation(*f[:3],'REVOKED',f[3])['status'],'CONFIRMED')
+    def test_remote_command_uses_new_closed_installer(self):
+        command=runtime_artifact.sql00_staging_command();self.assertIn('install_sql00_revision',command);self.assertNotIn("['install_approved_sql']",command)
+    @staticmethod
+    def capsule():
+        controller="""def preflight(v,M,E,CACHE,fresh,roles,now):
+ assert not v['ssh_trust_path_errors'](),v['ssh_trust_path_errors']()
+ assert fresh['sqlTemplatesSha256']==json.loads((CACHE/'execution-authorization.requested.json').read_text())['sqlTemplatesSha256']
+ manifests=json.loads((E/'approved-sql-hashes.json').read_text());assert all(hashlib.sha256((CACHE/n).read_bytes()).hexdigest()==h for n,h in manifests.items())
+ M['qualification_role_baseline'](roles,now)
+def setup(M,E,CACHE):
+ files=[CACHE/n for n in json.loads((E/'approved-sql-hashes.json').read_text())]
+ assert state.get('authorityProbe')=='PASS'
+ return M['sql_staging_command']()
+"""
+        helpers="""def enter(M):
+ result=private_sql('probe' if self.n==1 else 'authority')
+ value=M['AUTHORITY_PROBE_SHA256']
+ M['managed_role_confirmation']()
+def leave(M):
+ M['managed_role_confirmation']()
+"""
+        private="""files=json.loads((E/'approved-sql-hashes.json').read_text());assert all(hashlib.sha256((E/n).read_bytes()).hexdigest()==h for n,h in files.items())
+"""
+        return controller,helpers,private
+    def test_artifacts_bind_revision_root_and_effective_confirmation(self):
+        result=runtime_artifact.sql00_revision_artifacts(*self.capsule());controller=result['cloud-session.py'];helpers=result['cloud-helpers.py'];private=result['private-sql-helper.py']
+        self.assertIn("SQLROOT=E/'sql-inputs'",controller);self.assertNotIn('[CACHE/n for n',controller);self.assertIn("fresh['sql00RevisionApprovalSha256']",controller);self.assertIn("M['sql00_role_baseline']",controller)
+        self.assertIn("assert state.get('authorityProbe')=='PASS'",controller);self.assertEqual(helpers.count("M['sql00_managed_role_confirmation']"),2);self.assertIn("M['SQL00_REVISION_SHA256']",helpers);self.assertIn('require_sql00_revision_manifest',private)
+    def test_unknown_predecessor_or_skipped_probe_denied(self):
+        c,h,p=self.capsule()
+        for args in [(c.replace('ssh_trust_path_errors','other'),h,p),(c,h.replace("result=private_sql('probe' if self.n==1 else 'authority')",'pass'),p),(c.replace("assert state.get('authorityProbe')=='PASS'",'pass'),h,p),(c,h,p+p)]:
+            with self.assertRaises(ValueError):runtime_artifact.sql00_revision_artifacts(*args)
+
 if __name__=='__main__':unittest.main()
