@@ -1953,4 +1953,484 @@ def monitoring_cleanup_artifacts(controller,helpers,private_helper):
     compile(text,'cloud-session.py','exec');result['cloud-session.py']=text
     return result
 
+
+
+# Exact Owner-approved retained-history successor;previous source and SQL stay immutable.
+RETAINED_FLYWAY_APPROVAL_SHA256 = 'ebe105395fe33bc314d9e82b9eb7b669c0ae3dc3d30d3cb6c096810823d5394f'
+RETAINED_SCHEMA_SHA256 = "ee88078bdee65baf255f6cb77040c9a89ae4d924b2b279d4c01bb5e335b5af1d"
+_RETAINED_JAVA_TEMPLATE = 'import java.io.*;\nimport java.sql.*;\nimport org.flywaydb.core.Flyway;\npublic class CinenestConnectivityProbe {\n\n static String probeStage="CONFIGURATION",probeExpected="NONE",probeMethod="NONE";\n static final String probeId=java.util.UUID.randomUUID().toString();\n static void stage(String name,String method,String expected){if(!java.util.Set.of("CONFIGURATION","DATABASE_IDENTITY_TLS","DATABASE_HISTORY_PRIVILEGES","DATABASE_DENIAL_0","DATABASE_DENIAL_1","DATABASE_DENIAL_2","DATABASE_DENIAL_3","DATABASE_DENIAL_4","SERVICE_TARGET","METADATA_ID_TOKEN","HTTP_HEALTH","HTTP_HOME","HTTP_ACCOUNT_DENIAL","STATIC_ASSET_DISCOVERY","HTTP_STATIC_ASSET","HTTP_CSRF_DENIAL","MIGRATION_CLASSIFY","MIGRATION_FRESH_EXECUTE","MIGRATION_VALIDATE","MIGRATION_SCHEMA").contains(name)||!java.util.Set.of("NONE","GET","POST","SQL_READ","SQL_DENIAL","SQL_MIGRATE").contains(method)||!java.util.Set.of("NONE","IDENTITY_TLS","44_RESTRICTED","42501","PINNED_TARGET","200","401_OR_403","ASSET_PRESENT","200_NONEMPTY","403","44_V45","SCHEMA_MATCH","FRESH_AUTHORIZED").contains(expected))throw new IllegalArgumentException();probeStage=name;probeMethod=method;probeExpected=expected;System.err.println("CINENEST_PROBE stage="+probeStage+" id="+probeId+" method="+probeMethod+" expected="+probeExpected+" event=BEGIN");}\n static String failureClass(Throwable error){\n  if(error instanceof java.net.http.HttpTimeoutException)return "TIMEOUT";\n  if(error instanceof javax.net.ssl.SSLException)return "TLS";\n  if(error instanceof java.sql.SQLException sql){String code=sql.getSQLState();return "SQL_"+(code!=null&&code.matches("[0-9A-Z]{5}")?code:"UNKNOWN");}\n  if(error instanceof java.io.IOException)return "TRANSPORT";\n  if(error instanceof IllegalArgumentException)return "CONFIGURATION";\n  return "CONTRACT";\n }\n static void failure(Throwable error){System.err.println("CINENEST_PROBE stage="+probeStage+" id="+probeId+" method="+probeMethod+" expected="+probeExpected+" class="+failureClass(error)+" retry=NONE mutating="+(probeMethod.equals("POST")||probeMethod.equals("SQL_DENIAL")||probeMethod.equals("SQL_MIGRATE"))+" outcome="+((probeMethod.equals("POST")||probeMethod.equals("SQL_DENIAL")||probeMethod.equals("SQL_MIGRATE"))?"UNCERTAIN":"FAILED"));}\n static <T> java.net.http.HttpResponse<T> observed(java.net.http.HttpResponse<T> response){\n  String raw=response.headers().firstValue("Content-Type").orElse("").split(";",2)[0].toLowerCase(java.util.Locale.ROOT);\n  String type=java.util.Set.of("text/html","application/json","text/plain","application/javascript","text/css").contains(raw)?raw:"OTHER";\n  Object body=response.body();long length=body instanceof String text?text.length():body instanceof byte[] bytes?bytes.length:0;\n  System.err.println("CINENEST_PROBE stage="+probeStage+" id="+probeId+" expected="+probeExpected+" actual="+response.statusCode()+" type="+type+" length="+Math.min(length,1048577));if(!(probeExpected.equals("401_OR_403")?(response.statusCode()==401||response.statusCode()==403):probeExpected.equals("403")?response.statusCode()==403:response.statusCode()==200))throw new IllegalStateException();return response;\n }\n public static void main(String[] args) {\n  try { execute(args); } catch(Throwable failure) { failure(failure); System.exit(1); }\n }\n static void execute(String[] args) throws Exception {\n  if(args[0].equals("DEPENDENCIES")){System.out.println(Flyway.configure().getClass().getName());return;}\n  String url=System.getenv("CINENEST_DB_URL"),user=System.getenv("CINENEST_DB_USER"),password=System.getenv("CINENEST_DB_PASSWORD");\n  if(url==null||user==null||password==null||password.isBlank())throw new IllegalArgumentException();\n  if(!url.equals("jdbc:postgresql://ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog.:5432/cinenest_connectivity_qualification?sslmode=verify-full&sslrootcert=/run/secrets/db-ca.pem"))throw new IllegalArgumentException("Unexpected isolated JDBC target");\n  if(!user.equals("cinenest_qualification_runtime")&&!user.equals("cinenest_qualification_migrator"))throw new IllegalArgumentException("Unexpected SQL role");\n\n  stage("DATABASE_IDENTITY_TLS","SQL_READ","IDENTITY_TLS");\n  try(var c=DriverManager.getConnection(url,user,password);var s=c.createStatement()){\n   var r=s.executeQuery("SELECT current_user,ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()");if(!r.next()||!user.equals(r.getString(1))||!r.getBoolean(2))throw new IllegalStateException("Identity/TLS mismatch");\n  }\n  if(args[0].equals("PROBE")){\n   if(!user.equals("cinenest_qualification_runtime"))throw new IllegalArgumentException();\n   stage("DATABASE_HISTORY_PRIVILEGES","SQL_READ","44_RESTRICTED");\n   try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){\n    var rr=st.executeQuery("SELECT count(*) FROM public.flyway_schema_history WHERE success AND version IS NOT NULL");rr.next();if(rr.getInt(1)!=44)throw new IllegalStateException();\n    rr=st.executeQuery("SELECT NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls AND NOT has_database_privilege(current_user,current_database(),\'CREATE\') AND NOT has_database_privilege(current_user,current_database(),\'TEMP\') AND NOT pg_has_role(current_user,\'cinenest_qualification_migrator\',\'MEMBER\') FROM pg_roles WHERE rolname=current_user");if(!rr.next()||!rr.getBoolean(1))throw new IllegalStateException();\n   }\n   try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){\n    for(String deniedSql:new String[]{"CREATE TABLE public.cinenest_qualification_permission_probe(id integer)","CREATE TEMP TABLE cinenest_qualification_permission_probe(id integer)","CREATE ROLE cinenest_qualification_must_be_denied NOLOGIN","SELECT * FROM cinenest_identity.account","SET ROLE cinenest_qualification_migrator"}){\n     stage("DATABASE_DENIAL_"+java.util.List.of("CREATE TABLE public.cinenest_qualification_permission_probe(id integer)","CREATE TEMP TABLE cinenest_qualification_permission_probe(id integer)","CREATE ROLE cinenest_qualification_must_be_denied NOLOGIN","SELECT * FROM cinenest_identity.account","SET ROLE cinenest_qualification_migrator").indexOf(deniedSql),"SQL_DENIAL","42501");\n     c.setAutoCommit(false);try{st.execute(deniedSql);throw new IllegalStateException("Unexpected SQL authorization");}catch(SQLException error){if(!"42501".equals(error.getSQLState()))throw error;}finally{c.rollback();c.setAutoCommit(true);}\n    }\n   }\n   stage("SERVICE_TARGET","NONE","PINNED_TARGET");\n   var target=java.net.URI.create(System.getenv("CINENEST_QUALIFICATION_SERVICE_URL"));\n   if(!target.getScheme().equals("https")||target.getUserInfo()!=null||target.getQuery()!=null||target.getFragment()!=null||!target.getHost().startsWith("cinenest-connectivity-qualification-")||!target.getHost().endsWith(".run.app")||(!target.getPath().isEmpty()&&!target.getPath().equals("/")))throw new IllegalArgumentException();\n   var client=java.net.http.HttpClient.newBuilder().connectTimeout(java.time.Duration.ofSeconds(10)).followRedirects(java.net.http.HttpClient.Redirect.NEVER).build();\n   var metadata=java.net.URI.create("http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity?audience="+java.net.URLEncoder.encode(target.toString(),java.nio.charset.StandardCharsets.UTF_8)+"&format=full");\n   stage("METADATA_ID_TOKEN","GET","200");\n   var tokenResult=observed(client.send(java.net.http.HttpRequest.newBuilder(metadata).timeout(java.time.Duration.ofSeconds(10)).header("Metadata-Flavor","Google").GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString()));if(tokenResult.statusCode()!=200)throw new IllegalStateException();String token=tokenResult.body();\n   String html=null;\n   for(String path:new String[]{"/healthz","/","/api/accounts/me"}){\n    stage(path.equals("/healthz")?"HTTP_HEALTH":path.equals("/")?"HTTP_HOME":"HTTP_ACCOUNT_DENIAL","GET",path.equals("/api/accounts/me")?"401_OR_403":"200");\n    var response=observed(client.send(java.net.http.HttpRequest.newBuilder(target.resolve(path)).timeout(java.time.Duration.ofSeconds(15)).header("X-CineNest-Probe-ID",probeId).header("Authorization","Bearer "+token).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString()));\n    if(path.equals("/api/accounts/me")){if(response.statusCode()!=401&&response.statusCode()!=403)throw new IllegalStateException();}\n    else if(response.statusCode()!=200)throw new IllegalStateException();\n    if(path.equals("/"))html=response.body();\n    if(path.equals("/healthz")&&!response.body().contains("UP"))throw new IllegalStateException();\n   }\n   stage("STATIC_ASSET_DISCOVERY","NONE","ASSET_PRESENT");\n   var asset=java.util.regex.Pattern.compile("/_next/static/[^\\\\\\"\'<>\\\\s]+").matcher(html);if(!asset.find())throw new IllegalStateException();\n   stage("HTTP_STATIC_ASSET","GET","200_NONEMPTY");\n   var staticResponse=observed(client.send(java.net.http.HttpRequest.newBuilder(target.resolve(asset.group())).timeout(java.time.Duration.ofSeconds(15)).header("X-CineNest-Probe-ID",probeId).header("Authorization","Bearer "+token).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofByteArray()));if(staticResponse.statusCode()!=200||staticResponse.body().length==0)throw new IllegalStateException();\n   stage("HTTP_CSRF_DENIAL","POST","403");\n   var denied=observed(client.send(java.net.http.HttpRequest.newBuilder(target.resolve("/api/session/logout")).timeout(java.time.Duration.ofSeconds(15)).header("X-CineNest-Probe-ID",probeId).header("Authorization","Bearer "+token).header("Origin","https://wrong.example").POST(java.net.http.HttpRequest.BodyPublishers.noBody()).build(),java.net.http.HttpResponse.BodyHandlers.discarding()));if(denied.statusCode()!=403)throw new IllegalStateException();\n   token=null;System.out.println("PRIVATE_JDBC_RUNTIME_AND_AUTHENTICATED_HTTP_PROBE:PASS");return;\n  }\n\n  if(args[0].equals("MIGRATE")){\n   if(!user.equals("cinenest_qualification_migrator"))throw new IllegalArgumentException();\n   var f=Flyway.configure().dataSource(url,user,password).locations("filesystem:"+args[1]).cleanDisabled(true).baselineOnMigrate(false).outOfOrder(false).ignoreMigrationPatterns(new String[0]).target("45").load();\n   String expected=System.getenv("CINENEST_MIGRATION_EXPECTED_STATE");\n   if(expected==null)reject(MigrationFailure.UNEXPECTED_STATE);\n   var report=qualifyMigration(f,java.nio.file.Path.of(args[1]),expected);\n   System.out.println("MIGRATION_QUALIFICATION:"+report.state()+":NEW="+report.newMigrations()+":HISTORY=44:V45:PASS");return;\n  }\n\n  throw new IllegalArgumentException("Unexpected mode");\n }\n static final java.util.Map<String,String> EXPECTED_MIGRATION_FILES=java.util.Map.ofEntries(java.util.Map.entry("V10__synthetic_credit_allocation.sql","766b5e1cfaf93727937a13549705ef6c14d18dcd86c33e8b0ca7188b64f7f493"),\njava.util.Map.entry("V11__scoped_admin_read_audit.sql","21896b150a5a15c65dd5f17f865192d44a726e1f195163a08daad2e792558e29"),\njava.util.Map.entry("V12__synthetic_bank_refunds.sql","e9383d0f67240bcb50bea0cfed3b20e6897489e4b9ec23e80fb22a70f1b8465f"),\njava.util.Map.entry("V13__synthetic_access.sql","479c711653a1dce5010c930a11db432c4acdbcc0208f7f8a5d0dc0bd02633d8b"),\njava.util.Map.entry("V14__synthetic_notifications.sql","8b821fe4df26b21d996d3da097fc77fd36b27afaf0abbc3a0de0f2248d20118f"),\njava.util.Map.entry("V15__synthetic_booking_amendments.sql","74c68f2b0b1e4fb91f8a266db97f74e9578375d04429fd6bea605ca237344b55"),\njava.util.Map.entry("V16__synthetic_lighting.sql","a632d18ac7602951e40016f544886055072f11457385933228c27726f55a43df"),\njava.util.Map.entry("V17__synthetic_room_turnover.sql","d353b1e7258aed6cb1bb647cb3124dfdfd874e030a43fdcd028b25a995894ea3"),\njava.util.Map.entry("V18__synthetic_guest_roster.sql","9f5a2b064f382a8e22f9bd58d8c4ff69972ed7f21a7edd2d882507abb74af29c"),\njava.util.Map.entry("V19__staff_booking_read_audit.sql","67064d3b6939dc717b8c2d9d4d99f3b740004e6c4ee731841108c7a8acd02df6"),\njava.util.Map.entry("V1__foundation_namespace.sql","fd31a33e9a5fbcdfa61ef619559a1669d6674b76036b129631b19ac3293b92f1"),\njava.util.Map.entry("V20__managed_grant_read_audit.sql","82ec3c777478332258339f85898473b1f6a1e1c0749eef4d1ba97ed69e395ed6"),\njava.util.Map.entry("V21__maintenance_impact_read_audit.sql","3bb99640aaee87ecceea74d13a3bad543fc2c6fa17ee0a28969b54531dfae3c7"),\njava.util.Map.entry("V22__booking_confirmation_report_read_audit.sql","ed5a1c482744d76d8a2acb4054859f2902d71f849e49eff4eb53929c2d1b563e"),\njava.util.Map.entry("V23__popular_session_starts_read_audit.sql","13ddd9296f2e31c5db62425303a6b48609a8d0624ecc86efba0026a54f1693bb"),\njava.util.Map.entry("V24__synthetic_booking_cancellation.sql","aa79391ae3cfa07f7b32f248055d321471eddb5ccdb839b6a108097da11344c4"),\njava.util.Map.entry("V25__synthetic_extension_reservations.sql","b90cbb93256b8b89d9dcf88e9925a251b4f5842aeca229e7417297359d912223"),\njava.util.Map.entry("V26__staging_bank_instruction_reads.sql","e23d528454e17f1bb9d9cff2dd2536a1b6543c6d73b37056b4ff3eba57faed42"),\njava.util.Map.entry("V27__inactive_smart_lock_registry.sql","c9164abae01706f23588aeae077bdfd5810b5c14af54ba471156d27785566533"),\njava.util.Map.entry("V28__local_manual_customer_identity.sql","f7f18489b2d73fdbe164bc43581e286f77f70b5c67407140267080e0d579b4a8"),\njava.util.Map.entry("V29__local_customer_profile.sql","742ad5bd9714ddf7fdc5882fb268b64c8f5045fcd94afc27b0017cdefa1bf8af"),\njava.util.Map.entry("V2__identity_accounts_grants_sessions.sql","6794628d83c27062205d473a84808a293592ec8c31f9e9b50f26038e13f1e2c1"),\njava.util.Map.entry("V30__local_venue_banners.sql","dd0dd41e961db65eb5c64ed029b5eb4553586789eff68db4934d9b05e4bdb6ce"),\njava.util.Map.entry("V32__local_room_blocking.sql","2ed7d85229324cf5f1cb1fae9028977378289a8454bddbb9e807b01c4087f2aa"),\njava.util.Map.entry("V33__qualification_room_lock_assignments.sql","401aeeefc90e6721a5e4b48adb621ebea9c779b286c01315eb2b9c1a81cf390c"),\njava.util.Map.entry("V34__staging_bank_instruction_publication.sql","50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98"),\njava.util.Map.entry("V35__local_synthetic_credential_recovery.sql","2aca51352c8d3a8352e1df8bdbeea9661210a4b21a51ced5bb7046e25bd32aaa"),\njava.util.Map.entry("V36__commercial_policy_drafts.sql","bee769c1bed44bd52d4887975760f8775308945794c94c00b30e546ec39e7505"),\njava.util.Map.entry("V37__commercial_policy_binding.sql","5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5"),\njava.util.Map.entry("V38__commercial_policy_trusted_approval_intake.sql","8673fae44f1b365225777650e7a2815bcbeac7ad5a5404eeeb13d8995f7509fa"),\njava.util.Map.entry("V39__commercial_policy_activation.sql","9c8ded0d5b787b6e9db8127bb3c7887826e7f6c0bb957e3f96bcf1fdc79074ce"),\njava.util.Map.entry("V3__venue_room_catalog.sql","f2b25430b30177ffc90f1daf0dbaff415ca5bc8102536aee5a46a4c32ec4fc54"),\njava.util.Map.entry("V40__commercial_quotation_issuance.sql","e9c6b2c02d7134d5eeab64d409019f906be6ade58cf5733f18e12228c4a3621e"),\njava.util.Map.entry("V41__customer_commercial_quotation.sql","bcd02dccaf20e08e0e8cb70106b65eaa6f6fa64ee1a1533d6d0d563426f8dd6b"),\njava.util.Map.entry("V42__operational_commercial_policy_and_quotation.sql","ecc551549d4c6dfaafe99e9d0c676f6163121a82ebd9380bab1009e1f3236ab2"),\njava.util.Map.entry("V43__synthetic_extension_funding_requests.sql","86974955cb6607d25cbaee0841ebd8558fcac07aa9d68eda85b42ee6a5104488"),\njava.util.Map.entry("V44__synthetic_staff_check_in.sql","b4013c7de3126abe382dd110b34348026e96ee92144834978fcd1edec70c17ca"),\njava.util.Map.entry("V45__synthetic_staff_session_events.sql","091e8c2cb241d919e4def29d8854e7372ffc7267fe392f0c4959251c70efd1df"),\njava.util.Map.entry("V4__package_drafts_and_minimum_policy.sql","a4897ec35d1e351df4d5902a71d247226cdfbb42c87c95e682e451240a30a298"),\njava.util.Map.entry("V5__indicative_package_publication.sql","825350b732a8f9e1bab0a958a42bcc08ed35a12f163cffe0297f52819112dac8"),\njava.util.Map.entry("V6__inventory_holds.sql","a93ae6f188d672c674b061319dc0e89063f8c4872a0a46afc29359483c72386f"),\njava.util.Map.entry("V7__synthetic_quotations.sql","22e67f40702d78b4914a64d854767d38e86d447251e0bb1e2cb713125f0f63ff"),\njava.util.Map.entry("V8__synthetic_verification.sql","5454a1af6c2b03687d1f6ee7ac038d55685e10710812e71910f87ab1dc8db2e3"),\njava.util.Map.entry("V9__synthetic_bank_requests.sql","da0ed3f446a2b44782d3550a37c25db0fe7e94f9804d5d6107bb728109da5b48"));\n static final String EXPECTED_SCHEMA_QUERY="WITH ns AS (\\n SELECT oid,nspname,nspowner,nspacl FROM pg_namespace\\n WHERE nspname !~ \'^pg_\' AND nspname<>\'information_schema\'\\n), rels AS (\\n SELECT c.*,n.nspname FROM pg_class c JOIN ns n ON n.oid=c.relnamespace\\n WHERE c.relkind IN (\'r\',\'p\',\'v\',\'m\',\'S\',\'f\',\'c\')\\n AND NOT EXISTS(SELECT 1 FROM pg_depend d WHERE d.classid=\'pg_class\'::regclass AND d.objid=c.oid AND d.deptype=\'e\')\\n), funcs AS (\\n SELECT p.*,n.nspname FROM pg_proc p JOIN ns n ON n.oid=p.pronamespace\\n WHERE NOT EXISTS(SELECT 1 FROM pg_depend d WHERE d.classid=\'pg_proc\'::regclass AND d.objid=p.oid AND d.deptype=\'e\')\\n), objects AS (\\n SELECT \'schema\' kind,nspname identity,jsonb_build_object(\'owner\',pg_get_userbyid(nspowner))::text details FROM ns\\n UNION ALL SELECT \'relation\',nspname||\'.\'||relname,jsonb_build_object(\'kind\',relkind,\'owner\',pg_get_userbyid(relowner),\'rowsecurity\',relrowsecurity,\'force\',relforcerowsecurity,\'persistence\',relpersistence,\'replident\',relreplident,\'options\',reloptions,\'partition\',CASE WHEN relkind=\'p\' THEN pg_get_partkeydef(oid) ELSE NULL END,\'bound\',pg_get_expr(relpartbound,oid),\'view\',CASE WHEN relkind IN (\'v\',\'m\') THEN pg_get_viewdef(oid,false) ELSE NULL END)::text FROM rels\\n UNION ALL SELECT \'column\',r.nspname||\'.\'||r.relname||\'.\'||a.attnum,jsonb_build_object(\'name\',a.attname,\'type\',format_type(a.atttypid,a.atttypmod),\'notnull\',a.attnotnull,\'identity\',a.attidentity,\'generated\',a.attgenerated,\'dropped\',a.attisdropped,\'default\',pg_get_expr(d.adbin,d.adrelid),\'collation\',CASE WHEN a.attcollation<>0 THEN a.attcollation::regcollation::text END)::text FROM rels r JOIN pg_attribute a ON a.attrelid=r.oid AND a.attnum>0 LEFT JOIN pg_attrdef d ON d.adrelid=r.oid AND d.adnum=a.attnum\\n UNION ALL SELECT \'constraint\',r.nspname||\'.\'||r.relname||\'.\'||c.conname,jsonb_build_object(\'definition\',pg_get_constraintdef(c.oid,false),\'validated\',c.convalidated,\'deferrable\',c.condeferrable,\'deferred\',c.condeferred)::text FROM rels r JOIN pg_constraint c ON c.conrelid=r.oid\\n UNION ALL SELECT \'index\',r.nspname||\'.\'||ic.relname,jsonb_build_object(\'definition\',pg_get_indexdef(i.indexrelid,0,false),\'valid\',i.indisvalid,\'ready\',i.indisready,\'unique\',i.indisunique,\'primary\',i.indisprimary,\'options\',ic.reloptions)::text FROM rels r JOIN pg_index i ON i.indrelid=r.oid JOIN pg_class ic ON ic.oid=i.indexrelid\\n UNION ALL SELECT \'trigger\',r.nspname||\'.\'||r.relname||\'.\'||t.tgname,jsonb_build_object(\'definition\',pg_get_triggerdef(t.oid,false),\'enabled\',t.tgenabled)::text FROM rels r JOIN pg_trigger t ON t.tgrelid=r.oid AND NOT t.tgisinternal\\n UNION ALL SELECT \'function\',nspname||\'.\'||proname||\'(\'||pg_get_function_identity_arguments(oid)||\')\',jsonb_build_object(\'definition\',pg_get_functiondef(oid),\'owner\',pg_get_userbyid(proowner))::text FROM funcs\\n UNION ALL SELECT \'sequence\',r.nspname||\'.\'||r.relname,jsonb_build_object(\'type\',format_type(s.seqtypid,NULL),\'start\',s.seqstart,\'increment\',s.seqincrement,\'max\',s.seqmax,\'min\',s.seqmin,\'cache\',s.seqcache,\'cycle\',s.seqcycle)::text FROM rels r JOIN pg_sequence s ON s.seqrelid=r.oid\\n UNION ALL SELECT \'type\',n.nspname||\'.\'||t.typname,jsonb_build_object(\'kind\',t.typtype,\'owner\',pg_get_userbyid(t.typowner),\'base\',format_type(t.typbasetype,t.typtypmod),\'notnull\',t.typnotnull,\'default\',t.typdefault,\'labels\',(SELECT jsonb_agg(e.enumlabel ORDER BY e.enumsortorder) FROM pg_enum e WHERE e.enumtypid=t.oid))::text FROM ns n JOIN pg_type t ON t.typnamespace=n.oid AND t.typtype IN (\'e\',\'d\')\\n UNION ALL SELECT \'domain_constraint\',n.nspname||\'.\'||t.typname||\'.\'||c.conname,pg_get_constraintdef(c.oid,false) FROM ns n JOIN pg_type t ON t.typnamespace=n.oid JOIN pg_constraint c ON c.contypid=t.oid\\n UNION ALL SELECT \'policy\',r.nspname||\'.\'||r.relname||\'.\'||p.polname,jsonb_build_object(\'cmd\',p.polcmd,\'permissive\',p.polpermissive,\'roles\',(SELECT jsonb_agg(CASE WHEN roleid=0 THEN \'PUBLIC\' ELSE pg_get_userbyid(roleid) END ORDER BY roleid::regrole::text) FROM unnest(p.polroles) roleid),\'qual\',pg_get_expr(p.polqual,p.polrelid),\'check\',pg_get_expr(p.polwithcheck,p.polrelid))::text FROM rels r JOIN pg_policy p ON p.polrelid=r.oid\\n UNION ALL SELECT \'extension\',e.extname,jsonb_build_object(\'version\',e.extversion,\'schema\',n.nspname,\'owner\',CASE WHEN e.extname=\'plpgsql\' THEN \'PROVIDER_BUILTIN\' ELSE pg_get_userbyid(e.extowner) END)::text FROM pg_extension e JOIN pg_namespace n ON n.oid=e.extnamespace\\n UNION ALL SELECT \'schema_acl\',n.nspname,jsonb_build_object(\'grantee\',CASE WHEN a.grantee=0 THEN \'PUBLIC\' ELSE pg_get_userbyid(a.grantee) END,\'grantor\',pg_get_userbyid(a.grantor),\'privilege\',a.privilege_type,\'grantable\',a.is_grantable)::text FROM ns n CROSS JOIN LATERAL aclexplode(coalesce(n.nspacl,acldefault(\'n\',n.nspowner))) a WHERE NOT(n.nspname=\'public\' AND a.grantee IN (SELECT oid FROM pg_roles WHERE rolname=\'cloudsqlsuperuser\'))\\n UNION ALL SELECT \'relation_acl\',r.nspname||\'.\'||r.relname,jsonb_build_object(\'grantee\',CASE WHEN a.grantee=0 THEN \'PUBLIC\' ELSE pg_get_userbyid(a.grantee) END,\'grantor\',pg_get_userbyid(a.grantor),\'privilege\',a.privilege_type,\'grantable\',a.is_grantable)::text FROM rels r CROSS JOIN LATERAL aclexplode(coalesce(r.relacl,acldefault(CASE WHEN r.relkind=\'S\' THEN \'s\'::\\"char\\" ELSE \'r\'::\\"char\\" END,r.relowner))) a\\n UNION ALL SELECT \'function_acl\',p.nspname||\'.\'||p.proname||\'(\'||pg_get_function_identity_arguments(p.oid)||\')\',jsonb_build_object(\'grantee\',CASE WHEN a.grantee=0 THEN \'PUBLIC\' ELSE pg_get_userbyid(a.grantee) END,\'grantor\',pg_get_userbyid(a.grantor),\'privilege\',a.privilege_type,\'grantable\',a.is_grantable)::text FROM funcs p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault(\'f\',p.proowner))) a\\n UNION ALL SELECT \'default_acl\',coalesce(n.nspname,\'GLOBAL\')||\'.\'||pg_get_userbyid(d.defaclrole)||\'.\'||d.defaclobjtype::text,jsonb_build_object(\'grantee\',CASE WHEN a.grantee=0 THEN \'PUBLIC\' ELSE pg_get_userbyid(a.grantee) END,\'grantor\',pg_get_userbyid(a.grantor),\'privilege\',a.privilege_type,\'grantable\',a.is_grantable)::text FROM pg_default_acl d LEFT JOIN ns n ON n.oid=d.defaclnamespace CROSS JOIN LATERAL aclexplode(d.defaclacl) a WHERE d.defaclnamespace=0 OR n.oid IS NOT NULL\\n)\\nSELECT kind,identity,details FROM objects ORDER BY kind COLLATE \\"C\\",identity COLLATE \\"C\\",details COLLATE \\"C\\"\\n";\n static final String EXPECTED_SCHEMA_SHA256="__SCHEMA_SHA__";\n enum MigrationFailure { ARTIFACTS,TARGET_IDENTITY,TLS,AUTHORIZATION,NONEMPTY_FRESH,UNEXPECTED_STATE,HISTORY_COUNT,HISTORY_RECORD,HISTORY_CHECKSUM,FLYWAY_VALIDATION,SCHEMA_DRIFT,SCHEMA_EXPECTATION,FRESH_COUNT,BUSY }\n static class MigrationContractException extends IllegalStateException {\n  final MigrationFailure reason;MigrationContractException(MigrationFailure reason){this.reason=reason;}\n }\n static void reject(MigrationFailure reason){System.err.println("CINENEST_MIGRATION_REJECT reason="+reason.name()+" stage="+probeStage+" id="+probeId);throw new MigrationContractException(reason);}\n record MigrationReport(String state,int newMigrations,int historyRows,String schemaSha256){}\n static String hex(byte[] bytes){return java.util.HexFormat.of().formatHex(bytes);}\n static void verifyMigrationArtifacts(java.nio.file.Path root)throws Exception{\n  var actual=new java.util.TreeMap<String,String>();\n  try(var files=java.nio.file.Files.list(root)){\n   for(var path:files.toList()){\n    if(java.nio.file.Files.isSymbolicLink(path)||!java.nio.file.Files.isRegularFile(path))reject(MigrationFailure.ARTIFACTS);\n    actual.put(path.getFileName().toString(),hex(java.security.MessageDigest.getInstance("SHA-256").digest(java.nio.file.Files.readAllBytes(path))));\n   }\n  }\n  if(!actual.equals(EXPECTED_MIGRATION_FILES))reject(MigrationFailure.ARTIFACTS);\n }\n static void verifyMigrationIdentity(java.sql.Connection c)throws Exception{\n  try(var s=c.createStatement()){\n   var r=s.executeQuery("SELECT current_database(),current_user,session_user,pg_get_userbyid(datdba),current_setting(\'server_version_num\')::integer FROM pg_database WHERE datname=current_database()");\n   if(!r.next()||!r.getString(1).equals("cinenest_connectivity_qualification")||!r.getString(2).equals("cinenest_qualification_migrator")||!r.getString(3).equals("cinenest_qualification_migrator")||!r.getString(4).equals("cinenest_qualification_migrator")||r.getInt(5)!=180006)reject(MigrationFailure.TARGET_IDENTITY);\n   r=s.executeQuery("SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()");if(!r.next()||!r.getBoolean(1))reject(MigrationFailure.TLS);\n   r=s.executeQuery("SELECT NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls AND rolconnlimit=2 FROM pg_roles WHERE rolname=current_user");if(!r.next()||!r.getBoolean(1))reject(MigrationFailure.AUTHORIZATION);\n   r=s.executeQuery("SELECT NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls AND rolconnlimit=6 AND NOT has_database_privilege(rolname,current_database(),\'CREATE\') AND NOT has_database_privilege(rolname,current_database(),\'TEMP\') AND NOT pg_has_role(rolname,\'cinenest_qualification_migrator\',\'MEMBER\') FROM pg_roles WHERE rolname=\'cinenest_qualification_runtime\'");if(!r.next()||!r.getBoolean(1))reject(MigrationFailure.AUTHORIZATION);\n   r=s.executeQuery("SELECT count(*) FROM pg_database d CROSS JOIN LATERAL aclexplode(d.datacl) a WHERE d.datname=current_database() AND a.grantee=0");r.next();if(r.getInt(1)!=0)reject(MigrationFailure.AUTHORIZATION);\n  }\n }\n static String schemaSignature(java.sql.Connection c)throws Exception{\n  var digest=java.security.MessageDigest.getInstance("SHA-256");\n  try(var s=c.createStatement()){\n   s.execute("SET LOCAL search_path=pg_catalog");s.execute("SET LOCAL TimeZone=\'UTC\'");\n   try(var r=s.executeQuery(EXPECTED_SCHEMA_QUERY)){\n    for(;r.next();)for(int i=1;i<=3;i++){byte[] b=r.getString(i).getBytes(java.nio.charset.StandardCharsets.UTF_8);digest.update((b.length+":").getBytes(java.nio.charset.StandardCharsets.UTF_8));digest.update(b);}\n   }\n  }\n  return hex(digest.digest());\n }\n static void verifyPublicInfrastructure(java.sql.Connection c)throws Exception{\n  // PostgreSQL public ownership and the existing provider administration edge are\n  // checked separately;provider-only UC is not an application permission.\n  try(var s=c.createStatement()){\n   var r=s.executeQuery("SELECT pg_get_userbyid(nspowner) FROM pg_namespace WHERE nspname=\'public\'");if(!r.next()||!r.getString(1).equals("pg_database_owner"))reject(MigrationFailure.SCHEMA_DRIFT);\n   r=s.executeQuery("SELECT CASE WHEN a.grantee=0 THEN \'PUBLIC\' ELSE pg_get_userbyid(a.grantee) END,a.privilege_type,a.is_grantable,pg_get_userbyid(a.grantor) FROM pg_namespace n CROSS JOIN LATERAL aclexplode(n.nspacl) a WHERE n.nspname=\'public\'");\n   int provider=0;\n   for(;r.next();){\n    String who=r.getString(1),permission=r.getString(2);\n    boolean valid=who.equals("pg_database_owner")&&(permission.equals("USAGE")||permission.equals("CREATE"))||who.equals("PUBLIC")&&permission.equals("USAGE")||who.equals("cinenest_qualification_runtime")&&permission.equals("USAGE")||who.equals("cloudsqlsuperuser")&&(permission.equals("USAGE")||permission.equals("CREATE"));\n    if(!valid||r.getBoolean(3)||!r.getString(4).equals("pg_database_owner"))reject(MigrationFailure.SCHEMA_DRIFT);\n    if(who.equals("cloudsqlsuperuser"))provider++;\n   }\n   if(provider!=0&&provider!=2)reject(MigrationFailure.SCHEMA_DRIFT);\n  }\n }\n static void verifyExactHistory(org.flywaydb.core.api.MigrationInfo[] resolved,java.sql.Connection c)throws Exception{\n  try(var s=c.createStatement();var r=s.executeQuery("SELECT installed_rank,version,type,script,checksum,success,description FROM public.flyway_schema_history ORDER BY installed_rank")){\n   var seen=new java.util.HashSet<String>();int rank=0;var expectedVersions=EXPECTED_MIGRATION_FILES.keySet().stream().map(name->name.substring(1,name.indexOf("__"))).sorted(java.util.Comparator.comparingInt(Integer::parseInt)).toList();\n   for(;r.next();){\n    rank++;String version=r.getString(2),script=r.getString(4);\n    if(rank>44||r.getInt(1)!=rank||version==null||!version.equals(expectedVersions.get(rank-1))||!seen.add(version)||!r.getString(3).equals("SQL")||!r.getBoolean(6)||!EXPECTED_MIGRATION_FILES.containsKey(script)||!script.startsWith("V"+version+"__")||r.getObject(5)==null)reject(MigrationFailure.HISTORY_RECORD);\n    var pinned=java.util.Arrays.stream(resolved).filter(item->script.equals(item.getScript())).findFirst().orElseThrow();if(!java.util.Objects.equals(r.getObject(5),pinned.getResolvedChecksum())||!r.getString(7).equals(pinned.getDescription()))reject(MigrationFailure.HISTORY_CHECKSUM);\n   }\n   if(rank!=44||!seen.contains("45"))reject(MigrationFailure.HISTORY_COUNT);\n  }\n }\n static org.flywaydb.core.api.MigrationInfo[] resolvedHistory(org.flywaydb.core.Flyway f)throws Exception{\n  try{f.validate();var info=f.info();var all=info.all();\n   if(all.length!=44||info.pending().length!=0||info.current()==null||!info.current().getVersion().toString().equals("45"))reject(MigrationFailure.HISTORY_COUNT);\n   for(var migration:all){if(migration.getState()!=org.flywaydb.core.api.MigrationState.SUCCESS||!EXPECTED_MIGRATION_FILES.containsKey(migration.getScript())||!migration.isChecksumMatching()||!migration.isDescriptionMatching()||!migration.isTypeMatching()||migration.getAppliedChecksum()==null||!migration.getAppliedChecksum().equals(migration.getResolvedChecksum()))reject(MigrationFailure.HISTORY_CHECKSUM);}\n   return all;\n  }catch(MigrationContractException failure){throw failure;}catch(org.flywaydb.core.api.FlywayException error){reject(MigrationFailure.FLYWAY_VALIDATION);return null;}\n }\n\n static MigrationReport qualifyMigration(org.flywaydb.core.Flyway f,java.nio.file.Path root,String expectedState)throws Exception{\n  verifyMigrationArtifacts(root);\n  if(!expectedState.equals("FRESH_EMPTY")&&!expectedState.equals("RETAINED_CANDIDATE"))reject(MigrationFailure.UNEXPECTED_STATE);\n  if(!EXPECTED_SCHEMA_SHA256.matches("[0-9a-f]{64}"))reject(MigrationFailure.SCHEMA_EXPECTATION);\n  boolean hasHistory;\n  stage("MIGRATION_CLASSIFY","SQL_READ","44_V45");\n  try(var c=f.getConfiguration().getDataSource().getConnection();var s=c.createStatement()){\n   verifyMigrationIdentity(c);var r=s.executeQuery("SELECT to_regclass(\'public.flyway_schema_history\') IS NOT NULL");r.next();hasHistory=r.getBoolean(1);\n   if(!hasHistory){\n    if(!expectedState.equals("FRESH_EMPTY"))reject(MigrationFailure.UNEXPECTED_STATE);\n    r=s.executeQuery("SELECT count(*) FROM pg_namespace WHERE nspname !~ \'^pg_\' AND nspname NOT IN (\'information_schema\',\'public\')");r.next();if(r.getInt(1)!=0)reject(MigrationFailure.NONEMPTY_FRESH);\n    r=s.executeQuery("SELECT count(*) FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname=\'public\' AND c.relkind IN (\'r\',\'p\',\'v\',\'m\',\'S\',\'f\',\'c\')");r.next();if(r.getInt(1)!=0)reject(MigrationFailure.NONEMPTY_FRESH);\n    r=s.executeQuery("SELECT count(*) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname=\'public\'");r.next();if(r.getInt(1)!=0)reject(MigrationFailure.NONEMPTY_FRESH);\n   }else if(!expectedState.equals("RETAINED_CANDIDATE"))reject(MigrationFailure.UNEXPECTED_STATE);\n  }\n  int executed=0;\n  if(!hasHistory){\n   stage("MIGRATION_FRESH_EXECUTE","SQL_MIGRATE","FRESH_AUTHORIZED");\n   var postPath=java.nio.file.Path.of(System.getProperty("cinenest.postMigrationSql","/app/sql/02-post-migration-runtime-grants.sql.proposed"));\n   if(java.nio.file.Files.isSymbolicLink(postPath)||!java.nio.file.Files.isRegularFile(postPath))reject(MigrationFailure.ARTIFACTS);\n   byte[] postBytes=java.nio.file.Files.readAllBytes(postPath);\n   if(!hex(java.security.MessageDigest.getInstance("SHA-256").digest(postBytes)).equals("52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52"))reject(MigrationFailure.ARTIFACTS);\n   executed=f.migrate().migrationsExecuted;if(executed!=44)reject(MigrationFailure.FRESH_COUNT);\n   try(var c=f.getConfiguration().getDataSource().getConnection();var s=c.createStatement()){s.execute(new String(postBytes,java.nio.charset.StandardCharsets.UTF_8));}\n  }\n  stage("MIGRATION_VALIDATE","SQL_READ","44_V45");\n  String schema;\n  var resolved=resolvedHistory(f);\n  try(var c=f.getConfiguration().getDataSource().getConnection()){\n   c.setReadOnly(true);c.setTransactionIsolation(java.sql.Connection.TRANSACTION_REPEATABLE_READ);c.setAutoCommit(false);\n   try{\n    verifyMigrationIdentity(c);verifyExactHistory(resolved,c);verifyPublicInfrastructure(c);\n    stage("MIGRATION_SCHEMA","SQL_READ","SCHEMA_MATCH");schema=schemaSignature(c);\n    if(!schema.equals(EXPECTED_SCHEMA_SHA256))reject(MigrationFailure.SCHEMA_DRIFT);\n   }finally{c.rollback();}\n  }\n  return new MigrationReport(hasHistory?"RETAINED_HISTORY_VERIFIED":"FRESH_HISTORY_VERIFIED",executed,44,schema);\n }\n}\n'
+JAVA_SOURCE = _RETAINED_JAVA_TEMPLATE.replace("__SCHEMA_SHA__",RETAINED_SCHEMA_SHA256)
+
+_PREDECESSOR_RETAINED_JOB_DOCUMENT=job_document
+
+def job_document(mode,image,versions,service_url=None):
+    document=_PREDECESSOR_RETAINED_JOB_DOCUMENT(mode,image,versions,service_url)
+    if mode=='MIGRATE':
+        container=document['spec']['template']['spec']['template']['spec']['containers'][0]
+        container.setdefault('env',[]).append({'name':'CINENEST_MIGRATION_EXPECTED_STATE','value':'RETAINED_CANDIDATE'})
+    return document
+
+_PREDECESSOR_RETAINED_ARTIFACTS=monitoring_cleanup_artifacts
+
+def monitoring_cleanup_artifacts(controller,helpers,private_helper):
+    result=_PREDECESSOR_RETAINED_ARTIFACTS(controller,helpers,private_helper)
+    text=result['cloud-session.py'];old="if mode=='MIGRATE':state['migration']='PASS_44_V45';save()"
+    new="if mode=='MIGRATE':state['migration']='PASS_RETAINED_HISTORY_VERIFIED_44_V45';save()"
+    if text.count(old)!=1:raise ValueError('Retained migration result boundary drift')
+    text=text.replace(old,new,1).replace("v['probe_diagnostics_errors']()","v['retained_flyway_errors']()")
+    compile(text,'cloud-session.py','exec');result['cloud-session.py']=text
+    return result
+
+
+RETAINED_LOCAL_DRIVER_SOURCE = 'import java.sql.*;\nimport org.flywaydb.core.Flyway;\npublic class LocalQualificationDriver {\n static String url=System.getenv("CINENEST_LOCAL_DB_URL"),user="cinenest_qualification_migrator",password=System.getenv("CINENEST_LOCAL_DB_PASSWORD");\n static Flyway flyway(String root){return Flyway.configure().dataSource(url,user,password).locations("filesystem:"+root).cleanDisabled(true).baselineOnMigrate(false).outOfOrder(false).ignoreMigrationPatterns(new String[0]).target("45").load();}\n static void localOnly(){\n  if(!"SYNTHETIC_TEST_ONLY".equals(System.getenv("CINENEST_LOCAL_QUALIFICATION"))||url==null||!(url.startsWith("jdbc:postgresql://127.0.0.1:")||url.matches("jdbc:postgresql://cinenest-retained-pg-[a-f0-9]{12}:5432/.*"))||!url.contains("sslmode=verify-full&sslrootcert="))throw new IllegalArgumentException();\n }\n static String digestData()throws Exception{\n  var digest=java.security.MessageDigest.getInstance("SHA-256");\n  try(var c=DriverManager.getConnection(url,"postgres",System.getenv("CINENEST_LOCAL_ADMIN_PASSWORD"));var st=c.createStatement()){\n   c.setReadOnly(true);c.setAutoCommit(false);\n   var rs=st.executeQuery("SELECT n.nspname,c.relname FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE c.relkind=\'r\' AND (n.nspname LIKE \'cinenest_%\' OR n.nspname=\'public\') ORDER BY n.nspname,c.relname");var names=new java.util.ArrayList<String>();\n   while(rs.next())names.add(\'"\'+rs.getString(1).replace("\\"","\\"\\"")+"\\".\\""+rs.getString(2).replace("\\"","\\"\\"")+\'"\');rs.close();\n   for(String name:names){digest.update(name.getBytes(java.nio.charset.StandardCharsets.UTF_8));try(var rows=st.executeQuery("SELECT row_to_json(x)::text FROM "+name+" x ORDER BY row_to_json(x)::text")){while(rows.next())digest.update(rows.getString(1).getBytes(java.nio.charset.StandardCharsets.UTF_8));}}\n   c.rollback();\n  }\n  return java.util.HexFormat.of().formatHex(digest.digest());\n }\n public static void main(String[] args){\n  try{\n   localOnly();var root=java.nio.file.Path.of(args[1]);CinenestConnectivityProbe.verifyMigrationArtifacts(root);var f=flyway(args[1]);\n   if(args[0].equals("BASELINE")){\n    // Dedicated trusted disposable calibration,not present in the production image.\n    if(f.migrate().migrationsExecuted!=44)throw new IllegalStateException();f.validate();\n    var sql=java.nio.file.Path.of(System.getProperty("cinenest.postMigrationSql"));\n    if(!CinenestConnectivityProbe.hex(java.security.MessageDigest.getInstance("SHA-256").digest(java.nio.file.Files.readAllBytes(sql))).equals("52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52"))throw new IllegalStateException();\n    try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute(java.nio.file.Files.readString(sql));}\n    var resolved=CinenestConnectivityProbe.resolvedHistory(f);\n    try(var c=DriverManager.getConnection(url,user,password)){c.setReadOnly(true);c.setAutoCommit(false);CinenestConnectivityProbe.verifyMigrationIdentity(c);CinenestConnectivityProbe.verifyPublicInfrastructure(c);CinenestConnectivityProbe.verifyExactHistory(resolved,c);System.out.println("BASELINE_SCHEMA_SHA256="+CinenestConnectivityProbe.schemaSignature(c));c.rollback();}\n   }else if(args[0].equals("DIGEST")){System.out.println("DATA_SHA256="+digestData());}\n   else{\n    String expected=args[0];if(expected.equals("RETAINED_NO_POSTSQL")){System.setProperty("cinenest.postMigrationSql","/nonexistent/must_not_execute.sql");expected="RETAINED_CANDIDATE";}if(expected.equals("FRESH_BAD_POSTSQL")){System.setProperty("cinenest.postMigrationSql","/nonexistent/must_not_execute.sql");expected="FRESH_EMPTY";}\n    var report=CinenestConnectivityProbe.qualifyMigration(f,root,expected);System.out.println("RESULT="+report.state()+";NEW="+report.newMigrations()+";HISTORY="+report.historyRows()+";SCHEMA="+report.schemaSha256());\n   }\n  }catch(Throwable failure){\n   String code=failure instanceof CinenestConnectivityProbe.MigrationContractException m?m.reason.name():failure instanceof SQLException sql?"SQL_"+sql.getSQLState():failure.getClass().getSimpleName();\n   failure.printStackTrace();System.err.println("LOCAL_QUALIFICATION_FAILURE="+code);System.exit(1);\n  }\n }\n}\n'
+
+def retained_build_image(evidence,task,classes,tag,nonce,env,deadline):
+    import subprocess,time,tarfile,io,copy
+    E=Path(evidence);state=json.loads((E/'local-session.json').read_text())
+    continuing=state.get('imageBuildStarted',False)
+    if continuing and not(state.get('imageAssemblyContinuation') and (task/'base-image.tar').is_file() and fingerprint(task/'base-image.tar')==state['imageAssemblyContinuation']['archiveSha256']):raise ValueError('The one diagnostic build is already consumed')
+    if time.time()>deadline-300:raise TimeoutError('Insufficient image build/cleanup time')
+    proof=json.loads((E/'build-resource-proof.json').read_text());actual=proof['actual']
+    if not retained_resource_limits(actual['cpu.max'],actual['memory.max'],actual['memory.swap.max'],actual['pids.max']):raise ValueError('Actual supervised image-assembler bounds unavailable')
+    state['imageBuildStarted']=True;(E/'local-session.json').write_text(json.dumps(state,indent=2)+'\n')
+    def command(args,timeout=90):
+        q=subprocess.run(['docker',*args],env=env,capture_output=True,text=True,timeout=min(timeout,max(1,deadline-time.time()-180)))
+        if q.returncode:raise RuntimeError('Local image operation failed')
+        return q.stdout
+    existing=subprocess.run(['docker','image','inspect',tag],env=env,capture_output=True,text=True,timeout=15)
+    if existing.returncode==0:raise ValueError('Refuse to overwrite an existing image tag')
+    base=json.loads(command(['image','inspect',JRE]))[0]
+    if base['Id']!='sha256:b7528962e65d43064d8a8b67ba175367896bc948363ea2d3fcd7f10d34e1f048':raise ValueError('Pinned runtime base changed')
+    archive=task/'base-image.tar'
+    if not continuing:
+        q=subprocess.run(['docker','image','save','--output',str(archive),JRE],env=env,capture_output=True,text=True,timeout=120)
+        if q.returncode:raise RuntimeError('Existing pinned image export failed')
+    inputs={};cache=next(p for p in [ROOT/'.cache/m2',Path.home()/'.m2/repository'] if all((p/n).is_file() for n in DEPENDENCIES))
+    for path in sorted(classes.glob('CinenestConnectivityProbe*.class')):
+        data=path.read_bytes()
+        if data[:4]!=bytes.fromhex('cafebabe') or int.from_bytes(data[6:8],'big')!=69:raise ValueError('Java25 bytecode required')
+        inputs['app/classes/'+path.name]=data
+    if 'app/classes/CinenestConnectivityProbe.class' not in inputs:raise ValueError('Qualified diagnostic class missing')
+    for name,digest in DEPENDENCIES.items():
+        path=cache/name
+        if fingerprint(path)!=digest:raise ValueError('Dependency checksum changed')
+        inputs['app/lib/'+path.name]=path.read_bytes()
+    for name,digest in migration_inventory().items():
+        path=ROOT/'backend/src/main/resources/db/migration'/name
+        if fingerprint(path)!=digest:raise ValueError('Migration checksum changed')
+        inputs['app/migrations/'+name]=path.read_bytes()
+    sql=E.parent/'sql-staging-token-safety-20261122/next-cloud-monitoring-cleanup-20261126.proposed/sql-inputs/02-post-migration-runtime-grants.sql.proposed'
+    if fingerprint(sql)!=SQL00_ACTOR_FILES[sql.name]:raise ValueError('Approved SQL changed')
+    inputs['app/sql/'+sql.name]=sql.read_bytes()
+    if any('LocalQualificationDriver' in name or '.env' in name or 'root.crt' in name for name in inputs):raise ValueError('Test fixture leakage refused')
+    layer=io.BytesIO()
+    with tarfile.open(fileobj=layer,mode='w') as output:
+        for name,data in sorted(inputs.items()):
+            member=tarfile.TarInfo(name);member.size=len(data);member.mode=0o644;member.uid=10001;member.gid=10001;member.mtime=0;output.addfile(member,io.BytesIO(data))
+    layerbytes=layer.getvalue();layerhash=hashlib.sha256(layerbytes).hexdigest();production={name:hashlib.sha256(data).hexdigest() for name,data in inputs.items()};source_sha=hashlib.sha256(__import__('runpy').run_path(str(ROOT/'scripts/verify-cloud-connectivity.py'))['JAVA_SOURCE'].encode()).hexdigest()
+    result_archive=task/'diagnostic-qualified-image.tar'
+    with tarfile.open(archive,'r') as old,tarfile.open(result_archive,'w') as new:
+        manifests=json.load(old.extractfile('manifest.json'))
+        if len(manifests)!=1:raise ValueError('Single pinned base archive required')
+        manifest=manifests[0];config=json.load(old.extractfile(manifest['Config']))
+        # Preserve exact base config bytes/layers;append only the reviewed layer.
+        retained_verify_oci_base(old,base,manifest)
+        for member in old.getmembers():
+            if member.name in ['manifest.json','repositories','index.json','oci-layout']:continue
+            new.addfile(member,old.extractfile(member) if member.isfile() else None)
+        config['config']={**config.get('config',{}),'User':'10001:10001','WorkingDir':'/app','Entrypoint':['java','-Xmx256m','-cp','/app/classes:/app/lib/*','CinenestConnectivityProbe'],'Cmd':['PROBE'],'Labels':{'com.cinenest.retained-qualification':nonce,'com.cinenest.diagnostic.java.sha256':source_sha,'com.cinenest.diagnostic.schema.sha256':RETAINED_SCHEMA_SHA256,'com.cinenest.diagnostic.artifacts.sha256':hashlib.sha256(json.dumps(production,sort_keys=True).encode()).hexdigest()}}
+        config['rootfs']['diff_ids'].append('sha256:'+layerhash);config.setdefault('history',[]).append({'created_by':'CineNest reviewed offline artifact assembler','comment':'No RUN steps;no credentials/test fixtures'})
+        data=json.dumps(config,separators=(',',':')).encode();config_hash=hashlib.sha256(data).hexdigest();config_name=config_hash+'.json';layer_name=layerhash+'/layer.tar'
+        new_manifest=[{'Config':config_name,'RepoTags':[tag],'Layers':manifest['Layers']+[layer_name]}]
+        for name,payload in [(layer_name,layerbytes),(config_name,data),('manifest.json',json.dumps(new_manifest).encode())]:
+            member=tarfile.TarInfo(name);member.size=len(payload);member.mode=0o644;new.addfile(member,io.BytesIO(payload))
+    command(['image','load','--input',str(result_archive)],120)
+    image=json.loads(command(['image','inspect',tag]))[0]
+    if not image['Id'].startswith('sha256:') or image['Config']['Labels']!=config['config']['Labels'] or image['Config']['User']!='10001:10001' or image['RootFS']['Layers']!=base['RootFS']['Layers']+['sha256:'+layerhash]:raise ValueError('Local image content/base verification failed')
+    (E/'image-content-proof.json').write_text(json.dumps({'tag':tag,'id':image['Id'],'pinnedBase':base['Id'],'javaSourceSha256':source_sha,'schemaSha256':RETAINED_SCHEMA_SHA256,'compiledFiles':production,'compiler':'EXISTING_LOCAL_JDK25_RELEASE25_SUPERVISED_CGROUP','classFileMajor':69,'fixturesBundled':False,'credentialsBundled':False,'runtimeUser':'10001:10001','buildResourceProof':'build-resource-proof.json','cloudPublication':'NOT_RUN_NOT_AUTHORIZED'},indent=2)+'\n')
+    archive.unlink();result_archive.unlink()
+
+
+def retained_parent_cleanup(evidence):
+    """Independent task-ID cleanup even if the bounded worker terminates early."""
+    import subprocess,time
+    E=Path(evidence);state=json.loads((E/'local-session.json').read_text());nonce=state['nonce'];env=dict(os.environ,DOCKER_HOST='unix:///var/run/docker.sock');events=[]
+    task=E/('local-runtime-'+nonce);owned=state.get('ownedContainers',{}).copy()
+    for p in task.glob('*.cid'):
+        cid=p.read_text().strip()
+        if re.fullmatch('[a-f0-9]{64}',cid):owned.setdefault('cinenest-retained-client-'+nonce+'-'+cid[:12],cid)
+    for name,cid in owned.items():
+        q=subprocess.run(['docker','inspect',cid],env=env,capture_output=True,text=True,timeout=10)
+        if q.returncode:events.append({'kind':'container','name':name,'status':'ABSENCE_VERIFIED'});continue
+        row=json.loads(q.stdout)[0]
+        if row['Id']!=cid or row['Config'].get('Labels',{}).get('com.cinenest.retained-qualification')!=nonce:
+            events.append({'kind':'container','name':name,'status':'IDENTITY_DRIFT_NOT_REMOVED'});continue
+        q=subprocess.run(['docker','rm','-f',cid],env=env,capture_output=True,text=True,timeout=20);events.append({'kind':'container','name':name,'status':'REMOVED_OWNED' if q.returncode==0 else 'ERROR'})
+    network=state.get('ownedNetwork')
+    if network:
+        q=subprocess.run(['docker','network','inspect',network['id']],env=env,capture_output=True,text=True,timeout=10)
+        if q.returncode:events.append({'kind':'network','status':'ABSENCE_VERIFIED'})
+        else:
+            row=json.loads(q.stdout)[0]
+            if row['Id']==network['id'] and row.get('Labels',{}).get('com.cinenest.retained-qualification')==nonce and not row.get('Containers'):
+                q=subprocess.run(['docker','network','rm',network['id']],env=env,capture_output=True,text=True,timeout=20);events.append({'kind':'network','status':'REMOVED_OWNED' if q.returncode==0 else 'ERROR'})
+            else:events.append({'kind':'network','status':'IDENTITY_OR_ATTACHMENT_DRIFT_NOT_REMOVED'})
+    for name in ['database.env','client.env','root.key','server.key']:
+        path=task/name
+        if path.is_file() and not path.is_symlink():path.unlink()
+    after={}
+    for kind,args in [('containers',['ps','-aq']),('volumes',['volume','ls','-q']),('networks',['network','ls','-q'])]:
+        q=subprocess.run(['docker',*args],env=env,capture_output=True,text=True,timeout=10)
+        after[kind]=sorted(q.stdout.strip().splitlines()) if q.returncode==0 else ['INVENTORY_UNAVAILABLE']
+    result={'events':events,'after':after,'before':state.get('beforeInventory'),'inventoryPreserved':state.get('beforeInventory')==after,'elapsedSeconds':round(time.time()-state['startedEpoch'],2),'within30Minutes':time.time()-state['startedEpoch']<=1800,'credentialsPersisted':any((task/n).exists() for n in ['database.env','client.env','root.key','server.key'])}
+    (E/'independent-local-cleanup.json').write_text(json.dumps(result,indent=2)+'\n')
+    if not result['inventoryPreserved'] or not result['within30Minutes'] or result['credentialsPersisted']:raise RuntimeError('Independent local cleanup not verified')
+
+
+def retained_resource_limits(cpu,memory,swap,pids):
+    try:
+        quota,period=cpu.split()
+        return (quota!='max' and 0<int(quota)<=int(period) and int(memory)<=1024**3
+                and int(memory)>0 and int(swap)==0 and 0<int(pids)<=128)
+    except (ValueError,TypeError,AttributeError):return False
+
+
+def retained_qualification_receipt(evidence,now=None,allow_failed_resume=False):
+    import time
+    root=Path(evidence)
+    if not root.is_absolute() or root.is_symlink():raise ValueError('Absolute owned evidence directory required')
+    request=root/'source-admission.requested.json';owner=root/'owner-approval.json'
+    if fingerprint(request)!=RETAINED_FLYWAY_APPROVAL_SHA256:raise ValueError('Exact retained-history Owner request required')
+    approval=json.loads(owner.read_text())
+    if (approval.get('source')!='Owner answer call_f541ecd9e60247dd9e87b82d008c1792: Approve exact source and local qualification'
+            or approval.get('requestSha256')!=RETAINED_FLYWAY_APPROVAL_SHA256 or approval.get('newLocalSessions')!=1
+            or approval.get('maximumLocalSecondsIncludingCleanup')!=1800 or approval.get('cloudSessions')!=0):raise ValueError('Local-only Owner receipt mismatch')
+    current=json.loads((ROOT/'knowledge/execution/change-sets.json').read_text())['cloudRunRetainedFlywayHistory']
+    if current['status']!='READY' or current['authority']!=approval:raise ValueError('Retained-history source not admitted')
+    if not re.fullmatch(r'[1-9][0-9]*_PASS_0_FAILURE_0_ERROR_0_SKIPPED',current['qualification'].get('offlineTests','')):raise ValueError('Offline source qualification required before local runtime')
+    now=time.time() if now is None else now
+    marker=root/'local-session.json'
+    if marker.exists():
+        state=json.loads(marker.read_text())
+        if state['requestSha256']!=RETAINED_FLYWAY_APPROVAL_SHA256 or not 0<=now-state['startedEpoch']<retained_local_seconds(root)-120:raise ValueError('Local session consumed or expired;no new window inferred')
+        if state.get('completed') and not(allow_failed_resume and state.get('qualification')=='FAIL' and state.get('inventoryPreserved') is True):raise ValueError('Completed successful/unsafe local session cannot be resumed')
+    return approval
+
+
+def retained_local_worker(evidence):
+    import subprocess,time,uuid,signal,stat,tarfile,io,tempfile,copy
+    E=Path(evidence);retained_qualification_receipt(E);state=json.loads((E/'local-session.json').read_text());nonce=state['nonce'];deadline=state['startedEpoch']+retained_local_seconds(E)
+    if not re.fullmatch('[a-f0-9]{12}',nonce):raise ValueError('Task nonce unavailable')
+    def save():
+        (E/'local-session.json').write_text(json.dumps(state,indent=2)+'\n')
+    # The native compiler/image assembler is actually bounded,not merely declared.
+    cg=Path('/sys/fs/cgroup')/next(x.split(':',2)[2].lstrip('/') for x in Path('/proc/self/cgroup').read_text().splitlines() if x.startswith('0::'))
+    if not str(cg).endswith('cinenest-retained-qualification-'+nonce+'.service'):raise ValueError('Exact task worker cgroup required')
+    controls={n:(cg/n).read_text().strip() for n in ['cpu.max','memory.max','memory.swap.max','pids.max']}
+    if not retained_resource_limits(controls['cpu.max'],controls['memory.max'],controls['memory.swap.max'],controls['pids.max']):raise ValueError('Build/qualification worker cgroup limits not enforced')
+    (E/'build-resource-proof.json').write_text(json.dumps({'cgroup':str(cg),'actual':controls,'status':'PASS'},indent=2)+'\n')
+    task=E/('local-runtime-'+nonce);task.mkdir(mode=0o700,exist_ok=True);public=task/'public';public.mkdir(mode=0o755,exist_ok=True);public.chmod(0o755)
+    env=dict(os.environ,DOCKER_HOST='unix:///var/run/docker.sock');state.setdefault('ownedContainers',{});state.setdefault('groups',[]);state.setdefault('attempts',0);state['attempts']+=1;save()
+    def run(args,timeout=90,input=None,extra_env=None,reserve=180):
+        if time.time()>=deadline-reserve:raise TimeoutError('Local work deadline reached;cleanup reserve preserved')
+        result=subprocess.run(args,input=input,text=True,capture_output=True,env=env if extra_env is None else dict(env,**extra_env),timeout=max(1,min(timeout,deadline-time.time()-reserve)))
+        return result
+    def docker(*args,timeout=90,input=None):
+        q=run(['docker',*args],timeout,input)
+        if q.returncode:raise RuntimeError('Owned Docker operation failed;details kept private')
+        return q.stdout.strip()
+    def inventory(cleanup=False):
+        if cleanup:
+            def read(*a):
+                q=subprocess.run(["docker",*a],env=env,capture_output=True,text=True,timeout=15)
+                if q.returncode:raise RuntimeError("Final inventory unavailable")
+                return sorted(q.stdout.strip().splitlines())
+            return {"containers":read("ps","-aq"),"volumes":read("volume","ls","-q"),"networks":read("network","ls","-q")}
+        return {'containers':sorted(docker('ps','-aq').splitlines()),'volumes':sorted(docker('volume','ls','-q').splitlines()),'networks':sorted(docker('network','ls','-q').splitlines())}
+    if 'beforeInventory' not in state:state['beforeInventory']=inventory();save()
+    pg='cinenest-retained-pg-'+nonce;network='cinenest-retained-net-'+nonce;tag='cinenest-retained-diagnostics:qualification-'+nonce;label='com.cinenest.retained-qualification='+nonce
+    migrations=ROOT/'backend/src/main/resources/db/migration';sqlroot=E.parent/'sql-staging-token-safety-20261122/next-cloud-monitoring-cleanup-20261126.proposed/sql-inputs';cache=next((p for p in [ROOT/'.cache/m2',Path.home()/'.m2/repository'] if all((p/n).is_file() for n in DEPENDENCIES)),None)
+    if cache is None:raise ValueError('Existing pinned dependency cache unavailable')
+    for n,h in DEPENDENCIES.items():
+        if fingerprint(cache/n)!=h:raise ValueError('Pinned dependency mismatch')
+    require_sql00_actor_manifest({n:fingerprint(sqlroot/n) for n in SQL00_ACTOR_FILES});migration_inventory()
+    pgimage='postgres:18.6@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336'
+    for image in [pgimage,JRE]:docker('image','inspect',image)
+    password='SYNTHETIC_TEST_ONLY_'+uuid.uuid4().hex;admin='SYNTHETIC_TEST_ONLY_'+uuid.uuid4().hex
+    secret=task/'database.env';secret.write_text('POSTGRES_PASSWORD='+admin+'\n');secret.chmod(0o600)
+    ca=task/'root.crt';cakey=task/'root.key';serverkey=task/'server.key';servercsr=task/'server.csr';servercrt=task/'server.crt';extensions=task/'server.ext'
+    extensions.write_text('subjectAltName=DNS:'+pg+',IP:127.0.0.1\nextendedKeyUsage=serverAuth\n')
+    for args in [
+        ['openssl','req','-x509','-newkey','rsa:2048','-nodes','-sha256','-days','1','-subj','/CN=CineNest SYNTHETIC_TEST_ONLY local CA','-keyout',str(cakey),'-out',str(ca)],
+        ['openssl','req','-newkey','rsa:2048','-nodes','-sha256','-subj','/CN='+pg,'-keyout',str(serverkey),'-out',str(servercsr)],
+        ['openssl','x509','-req','-in',str(servercsr),'-CA',str(ca),'-CAkey',str(cakey),'-CAcreateserial','-days','1','-sha256','-extfile',str(extensions),'-out',str(servercrt)]]:
+        if run(args).returncode:raise RuntimeError('Synthetic TLS fixture generation failed')
+    cakey.chmod(0o600);serverkey.chmod(0o600);shutil.copyfile(ca,public/'root.crt');(public/'root.crt').chmod(0o644)
+    hba=task/'pg_hba.conf';hba.write_text('local all all trust\nhostnossl all all all reject\nhostssl all all all scram-sha-256\n');hba.chmod(0o644)
+    cp=os.pathsep.join(str(cache/n) for n in DEPENDENCIES)
+    classes=task/'classes';classes.mkdir(exist_ok=True);source=task/'CinenestConnectivityProbe.java';driver=task/'LocalQualificationDriver.java';driver.write_text(RETAINED_LOCAL_DRIVER_SOURCE)
+    def compile_classes():
+        mod=__import__('runpy').run_path(str(ROOT/'scripts/verify-cloud-connectivity.py'));source.write_text(mod['JAVA_SOURCE']);driver.write_text(mod['RETAINED_LOCAL_DRIVER_SOURCE'])
+        javac=shutil.which('javac');q=run([javac,'-proc:none','--release','25','-J-Xmx256m','-J-XX:ActiveProcessorCount=1','-cp',cp,'-d',str(classes),str(source),str(driver)],120)
+        if q.returncode:raise RuntimeError('Qualification Java compilation failed')
+        return mod
+    compile_classes()
+    pgid=None;netid=None;failures=[];image_id=None
+    def admin_sql(sql):
+        if pgid is None:raise ValueError('Owned database not initialized')
+        return docker('exec','-i',pgid,'psql','-X','-U','postgres','-d','postgres','-v','ON_ERROR_STOP=1','-At',input=sql)
+    def create_empty():
+        admin_sql("DROP DATABASE IF EXISTS cinenest_connectivity_qualification WITH(FORCE);CREATE DATABASE cinenest_connectivity_qualification OWNER cinenest_qualification_migrator ALLOW_CONNECTIONS false;BEGIN;REVOKE ALL ON DATABASE cinenest_connectivity_qualification FROM PUBLIC;GRANT CONNECT ON DATABASE cinenest_connectivity_qualification TO cinenest_qualification_runtime;ALTER DATABASE cinenest_connectivity_qualification ALLOW_CONNECTIONS true;COMMIT;")
+    def restore():
+        admin_sql("DROP DATABASE cinenest_connectivity_qualification WITH(FORCE);CREATE DATABASE cinenest_connectivity_qualification WITH TEMPLATE cinenest_retained_template OWNER cinenest_qualification_migrator STRATEGY FILE_COPY ALLOW_CONNECTIONS false;BEGIN;REVOKE ALL ON DATABASE cinenest_connectivity_qualification FROM PUBLIC;GRANT CONNECT ON DATABASE cinenest_connectivity_qualification TO cinenest_qualification_runtime;ALTER DATABASE cinenest_connectivity_qualification ALLOW_CONNECTIONS true;COMMIT;")
+    def mutate(sql):return docker('exec','-i',pgid,'psql','-X','-U','postgres','-d','cinenest_connectivity_qualification','-v','ON_ERROR_STOP=1','-At',input=sql)
+    url=None
+    java_counter=0
+    runtime_lib=task/'lib';runtime_lib.mkdir(exist_ok=True);runtime_lib.chmod(0o755)
+    runtime_sql=task/'sql';runtime_sql.mkdir(exist_ok=True);runtime_sql.chmod(0o755)
+    for dependency,digest in DEPENDENCIES.items():
+        target=runtime_lib/Path(dependency).name;shutil.copyfile(cache/dependency,target);target.chmod(0o644)
+    name='02-post-migration-runtime-grants.sql.proposed';shutil.copyfile(sqlroot/name,runtime_sql/name);(runtime_sql/name).chmod(0o644)
+    def java(mode,initial=None):
+        nonlocal java_counter
+        java_counter+=1;client_nonce=uuid.uuid4().hex[:12];name='cinenest-retained-java-'+nonce+'-'+client_nonce;cidfile=task/('java-'+client_nonce+'.cid')
+        clientenv=task/'client.env';clientenv.write_text('CINENEST_LOCAL_DB_URL='+url+'\nCINENEST_LOCAL_DB_PASSWORD='+password+'\nCINENEST_LOCAL_ADMIN_PASSWORD='+admin+'\nCINENEST_LOCAL_QUALIFICATION=SYNTHETIC_TEST_ONLY\n');clientenv.chmod(0o600)
+        command=['docker','run','--rm','--name',name,'--cidfile',str(cidfile),'--label',label,'--network',network,'--user','10001:10001','--cpus','1','--memory','1g','--memory-swap','1g','--pids-limit','128','--read-only','--security-opt','no-new-privileges','--cap-drop','ALL','--tmpfs','/tmp:rw,size=16m','--env-file',str(clientenv)]
+        for source,target in [(public,'/qualification'),(classes,'/qualification-classes'),(runtime_lib,'/qualification-lib'),(runtime_sql,'/qualification-sql')]:command+=['--mount','type=bind,src='+str(source)+',dst='+target+',readonly']
+        command+=['--entrypoint','java',JRE,'-Xmx256m','-XX:ActiveProcessorCount=1','-Dcinenest.postMigrationSql=/qualification-sql/02-post-migration-runtime-grants.sql.proposed','-cp','/qualification-classes:/qualification-lib/*','LocalQualificationDriver',mode,'/app/migrations']
+        command[-1]='/qualification-migrations'
+        command[command.index('--entrypoint'):command.index('--entrypoint')]=['--mount','type=bind,src='+str(migrations)+',dst=/qualification-migrations,readonly']
+        try:q=run(command,180)
+        finally:
+            if cidfile.exists():state['ownedContainers'][name]=cidfile.read_text().strip();save()
+        log=task/('java-'+str(time.time_ns())+'.log');log.write_text(q.stdout+q.stderr);log.chmod(0o600)
+        return q
+    cases={}
+    def correction_wait(phase):
+        state['phase']='WAITING_SOURCE_CORRECTION';state['failedPhase']=phase;save();control=E/'local-correction.json'
+        while time.time()<deadline-300:
+            if control.exists():
+                data=json.loads(control.read_text());control.unlink()
+                if set(data)!={'action','sourceSha256'} or data['action']!='RETEST' or data['sourceSha256']!=fingerprint(ROOT/'scripts/verify-cloud-connectivity.py'):raise ValueError('Exact authorized source correction signal required')
+                compile_classes();state['phase']='QUALIFYING_SAME_LOCAL_SESSION';save();return
+            time.sleep(1)
+        raise TimeoutError('No qualified correction within original local window')
+    def group(name,fn):
+        cases[name]=fn
+        try:fn();state['groups'].append({'name':name,'status':'PASS','evidence':'REAL_POSTGRESQL_18_6_JDBC_VERIFY_FULL'})
+        except Exception as error:failures.append(name);state['groups'].append({'name':name,'status':'FAIL','failureClass':type(error).__name__})
+        save()
+    def expect(result,success):
+        if (result.returncode==0)!=success:raise AssertionError('Unexpected qualification outcome')
+        return result
+    def negative(name,sql):
+        def test():
+            restore();mutate(sql);before=expect(java('DIGEST'),True).stdout;expect(java('RETAINED_CANDIDATE'),False);after=expect(java('DIGEST'),True).stdout
+            if before!=after:raise AssertionError('Failed verification mutated data/history')
+        group(name,test)
+    try:
+        netid=docker('network','create','--internal','--label',label,network);state['ownedNetwork']={'name':network,'id':netid};save()
+        wrapper='cp /qualification/server.key /var/lib/postgresql/qualification.key; cp /qualification/server.crt /var/lib/postgresql/qualification.crt; cp /qualification/pg_hba.conf /var/lib/postgresql/qualification.hba; chown postgres:postgres /var/lib/postgresql/qualification.key /var/lib/postgresql/qualification.crt /var/lib/postgresql/qualification.hba; chmod 600 /var/lib/postgresql/qualification.key; exec docker-entrypoint.sh postgres -c listen_addresses=0.0.0.0 -c ssl=on -c ssl_min_protocol_version=TLSv1.3 -c ssl_cert_file=/var/lib/postgresql/qualification.crt -c ssl_key_file=/var/lib/postgresql/qualification.key -c hba_file=/var/lib/postgresql/qualification.hba -c max_connections=32 -c shared_buffers=64MB -c max_wal_size=64MB -c min_wal_size=32MB -c checkpoint_timeout=30s -c log_min_error_statement=panic'
+        pgid=docker('run','-d','--name',pg,'--label',label,'--network',network,'--cpus','1','--memory','1g','--memory-swap','1g','--pids-limit','128','--tmpfs','/var/lib/postgresql:rw,size=496m','--shm-size','16m','--env-file',str(secret),'-p','127.0.0.1::5432','--mount','type=bind,src='+str(task)+',dst=/qualification,readonly','--entrypoint','sh',pgimage,'-c',wrapper)
+        state['ownedContainers'][pg]=pgid;save();ins=json.loads(docker('inspect',pgid))[0];host=ins['HostConfig'];assert host['NanoCpus']==10**9 and host['Memory']==1024**3 and host['MemorySwap']==1024**3 and host['PidsLimit']==128 and host['ShmSize']==16*1024**2 and host['Tmpfs']=={'/var/lib/postgresql':'rw,size=496m'}
+        bindings=host.get('PortBindings',{}).get('5432/tcp',[]);assert bindings and all(x['HostIp']=='127.0.0.1' for x in bindings)
+        state['postgresPortMetadata']={'requestedLoopback':bindings,'actual':ins['NetworkSettings'].get('Ports'),'internalNetwork':True};save()
+        url='jdbc:postgresql://'+pg+':5432/cinenest_connectivity_qualification?sslmode=verify-full&sslrootcert=/qualification/root.crt'
+        ready=False
+        for attempt in range(120):
+            q=run(['docker','exec',pgid,'pg_isready','-h','127.0.0.1','-U','postgres'],10)
+            if q.returncode==0:ready=True;break
+            time.sleep(0.25)
+        if not ready:raise TimeoutError('Database process readiness failed')
+        admin_sql("CREATE ROLE cinenest_qualification_runtime NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS CONNECTION LIMIT 6;CREATE ROLE cinenest_qualification_migrator NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS CONNECTION LIMIT 2;")
+        admin_sql("ALTER ROLE cinenest_qualification_migrator LOGIN PASSWORD '"+password+"';")
+        while True:
+            create_empty();baseline=java('BASELINE');match=re.search(r'BASELINE_SCHEMA_SHA256=([0-9a-f]{64})',baseline.stdout)
+            if baseline.returncode==0 and match:break
+            state.setdefault('failedCalibrationAttempts',[]).append({'status':'FAIL','exit':baseline.returncode,'atEpoch':time.time()});save();correction_wait('TRUSTED_FRESH_CALIBRATION')
+        digest=match[1];state['trustedFreshSchemaSha256']=digest;state['schemaExpectationProvenance']='SAME44IMMUTABLE_MIGRATIONS_AND_APPROVED_SQL02_ON_DISPOSABLE_POSTGRES18_6';save()
+        sourcefile=ROOT/'scripts/verify-cloud-connectivity.py';text=sourcefile.read_text();pattern=r'^RETAINED_SCHEMA_SHA256 = "(?:PENDING_TRUSTED_LOCAL_BASELINE|[0-9a-f]{64})"$'
+        if len(re.findall(pattern,text,re.M))!=1:raise ValueError('Schema expectation update boundary changed')
+        text=re.sub(pattern,'RETAINED_SCHEMA_SHA256 = "'+digest+'"',text,flags=re.M);sourcefile.write_text(text);compile_classes()
+        admin_sql("CREATE DATABASE cinenest_retained_template WITH TEMPLATE cinenest_connectivity_qualification OWNER cinenest_qualification_migrator STRATEGY FILE_COPY ALLOW_CONNECTIONS false;")
+        def fresh():
+            create_empty();q=expect(java('FRESH_EMPTY'),True)
+            if 'RESULT=FRESH_HISTORY_VERIFIED;NEW=44;HISTORY=44;' not in q.stdout:raise AssertionError('Wrong fresh reporting')
+        group('01_fresh44_and_schema',fresh)
+        def retained():
+            before=expect(java('DIGEST'),True).stdout;q=expect(java('RETAINED_CANDIDATE'),True);after=expect(java('DIGEST'),True).stdout
+            if before!=after or 'RESULT=RETAINED_HISTORY_VERIFIED;NEW=0;HISTORY=44;' not in q.stdout:raise AssertionError('Retained history changed or inaccurate reporting')
+        group('02_retained44_V45_zero_mutations',retained)
+        group('03_safe_retained_retry',retained)
+        negative('04_missing_migration',"DELETE FROM public.flyway_schema_history WHERE version='45';")
+        negative('05_failed_migration',"UPDATE public.flyway_schema_history SET success=false WHERE version='45';")
+        negative('06_wrong_checksum',"UPDATE public.flyway_schema_history SET checksum=checksum+1 WHERE version='1';")
+        negative('07_unexpected_version',"UPDATE public.flyway_schema_history SET version='99',script='V99__unexpected.sql' WHERE version='45';")
+        negative('08_duplicate_version',"UPDATE public.flyway_schema_history SET version='1',script='V1__foundation_namespace.sql' WHERE version='2';")
+        negative('09_schema_drift',"CREATE TABLE public.unapproved_schema_drift(id integer);")
+        negative('10_missing_object',"DROP TABLE cinenest_identity.account CASCADE;")
+        negative('11_wrong_schema_owner',"ALTER SCHEMA cinenest_booking OWNER TO postgres;")
+        negative('12_unauthorized_baseline_record',"UPDATE public.flyway_schema_history SET type='BASELINE' WHERE version='1';")
+        negative('13_interrupted_partial_state',"DELETE FROM public.flyway_schema_history WHERE version IN ('44','45');CREATE TABLE public.interrupted_partial(id integer);")
+        negative('14_wrong_description',"UPDATE public.flyway_schema_history SET description='unapproved description' WHERE version='1';")
+        def wrong_database():
+            nonlocal url
+            old=url;url=url.replace('/cinenest_connectivity_qualification?','/postgres?')
+            try:expect(java('RETAINED_CANDIDATE'),False)
+            finally:url=old
+        group('15_wrong_database',wrong_database)
+        def unexpected_empty():
+            create_empty();expect(java('RETAINED_CANDIDATE'),False);assert admin_sql("SELECT count(*) FROM pg_database WHERE datname='cinenest_connectivity_qualification';")=='1'
+        group('16_retained_mode_never_migrates_empty',unexpected_empty)
+        restore()
+        def no_fresh_on_retained():expect(java('FRESH_EMPTY'),False)
+        group('17_fresh_mode_refuses_retained',no_fresh_on_retained)
+        def no_postsql_on_retained():expect(java('RETAINED_NO_POSTSQL'),True)
+        group('18_retained_does_not_read_or_execute_post_sql',no_postsql_on_retained)
+        def invalid_postsql_no_migration():
+            create_empty();before=expect(java('DIGEST'),True).stdout;expect(java('FRESH_BAD_POSTSQL'),False);after=expect(java('DIGEST'),True).stdout
+            if before!=after:raise AssertionError('Bad post-SQL artifact executed migration')
+            restore()
+        group('19_fresh_invalid_artifact_refused_before_migration',invalid_postsql_no_migration)
+        while failures:
+            failed=list(failures);state.setdefault('failedTestAttempts',[]).append({'groups':failed,'atEpoch':time.time()});save();correction_wait('POSTGRESQL_CASES');failures.clear()
+            for name in failed:group(name,cases[name])
+        state['postgresQualification']='PASS';save()
+        # Local image build/import is separate from cloud publication. No Docker
+        # build worker is required:the bounded native worker assembles a new layer.
+        reloaded=__import__('runpy').run_path(str(ROOT/'scripts/verify-cloud-connectivity.py'));globals()['RETAINED_SCHEMA_SHA256']=reloaded['RETAINED_SCHEMA_SHA256']
+        retained_build_image(E,task,classes,tag,nonce,env,deadline)
+        reloaded=__import__('runpy').run_path(str(ROOT/'scripts/verify-cloud-connectivity.py'));globals()['RETAINED_SCHEMA_SHA256']=reloaded['RETAINED_SCHEMA_SHA256']
+        state['imageBuildStarted']=True
+        image_id=json.loads(docker('image','inspect',tag))[0]['Id'];state['retainedImage']={'tag':tag,'id':image_id};save()
+        # Test fixtures are mounted read-only for this local assertion,never baked.
+        shutil.copyfile(classes/'LocalQualificationDriver.class',public/'LocalQualificationDriver.class');(public/'LocalQualificationDriver.class').chmod(0o644)
+        clientenv=task/'client.env';clientenv.write_text('CINENEST_LOCAL_DB_URL=jdbc:postgresql://'+pg+':5432/cinenest_connectivity_qualification?sslmode=verify-full&sslrootcert=/qualification/root.crt\nCINENEST_LOCAL_DB_PASSWORD='+password+'\nCINENEST_LOCAL_QUALIFICATION=SYNTHETIC_TEST_ONLY\n');clientenv.chmod(0o600)
+        def image_retained():
+            name='cinenest-retained-client-'+nonce;cidfile=task/'client.cid';q=run(['docker','run','--rm','--name',name,'--cidfile',str(cidfile),'--label',label,'--network',network,'--cpus','1','--memory','1g','--memory-swap','1g','--pids-limit','128','--read-only','--tmpfs','/tmp:rw,size=16m','--env-file',str(clientenv),'--mount','type=bind,src='+str(public)+',dst=/qualification,readonly','--entrypoint','java',tag,'-Xmx256m','-XX:ActiveProcessorCount=1','-cp','/app/classes:/app/lib/*:/qualification','LocalQualificationDriver','RETAINED_CANDIDATE','/app/migrations'],180)
+            if cidfile.exists():state['ownedContainers'][name]=cidfile.read_text().strip();save()
+            if q.returncode or 'RESULT=RETAINED_HISTORY_VERIFIED;NEW=0;HISTORY=44;' not in q.stdout:raise AssertionError('Actual diagnostic image retained validation failed')
+        group('20_actual_image_retained_JRE_and_TLS',image_retained)
+        if failures:raise AssertionError('Image qualification failed')
+        state['qualification']='PASS';state['imageReadiness']='QUALIFIED_LOCAL_ONLY_NOT_PUBLISHED';save()
+    except Exception as error:
+        state['imageBuildStarted']=state.get('imageBuildStarted',False) or json.loads((E/'local-session.json').read_text()).get('imageBuildStarted',False)
+        import traceback
+        state['qualification']='FAIL';state['failureClass']=type(error).__name__;state['failureLocation']=[{'file':Path(x.filename).name,'line':x.lineno,'function':x.name} for x in traceback.extract_tb(error.__traceback__)];save()
+    finally:
+        state['cleanup']=[]
+        for cidfile in task.glob('*.cid'):
+            cid=cidfile.read_text().strip()
+            if re.fullmatch('[a-f0-9]{64}',cid):state['ownedContainers'].setdefault('cinenest-retained-client-'+nonce+'-'+cid[:12],cid)
+        for name,cid in list(state['ownedContainers'].items())[::-1]:
+            q=subprocess.run(['docker','inspect',cid],env=env,capture_output=True,text=True,timeout=15)
+            if q.returncode:state['cleanup'].append({'kind':'container','name':name,'status':'ABSENT'});continue
+            info=json.loads(q.stdout)[0]
+            if info['Id']!=cid or info['Config'].get('Labels',{}).get('com.cinenest.retained-qualification')!=nonce:
+                state['cleanup'].append({'kind':'container','name':name,'status':'IDENTITY_MISMATCH_NOT_REMOVED'});continue
+            q=subprocess.run(['docker','rm','-f',cid],env=env,capture_output=True,text=True,timeout=30);state['cleanup'].append({'kind':'container','name':name,'status':'PASS' if q.returncode==0 else 'ERROR'})
+        if netid:
+            q=subprocess.run(['docker','network','inspect',netid],env=env,capture_output=True,text=True,timeout=15)
+            if q.returncode==0:
+                info=json.loads(q.stdout)[0]
+                if info['Id']==netid and info.get('Labels',{}).get('com.cinenest.retained-qualification')==nonce:
+                    q=subprocess.run(['docker','network','rm',netid],env=env,capture_output=True,text=True,timeout=30);state['cleanup'].append({'kind':'network','status':'PASS' if q.returncode==0 else 'ERROR'})
+        for path in [secret,cakey,serverkey,task/'client.env']:
+            if path.is_file():path.unlink()
+        state['afterInventory']=inventory(True);state['inventoryPreserved']=state['beforeInventory']==state['afterInventory'];state['completedEpoch']=time.time();state['elapsedSeconds']=round(time.time()-state['startedEpoch'],2);state['within30Minutes']=state['elapsedSeconds']<=1800;state['withinApprovedWindow']=retained_elapsed_within_budget(state['elapsedSeconds'],retained_local_seconds(E));state['completed']=True;save()
+    return {'status':state.get('qualification','ERROR'),'postgres':state.get('postgresQualification','NOT_RUN'),'image':state.get('imageReadiness','NOT_RUN'),'groups':state['groups'],'cleanup':state['cleanup'],'inventoryPreserved':state['inventoryPreserved'],'within30Minutes':state['within30Minutes'],'withinApprovedWindow':state['withinApprovedWindow'],'cloudRun':'NOT_RUN_NOT_AUTHORIZED'}
+
+
+def retained_local_launch(evidence,resume=False):
+    import subprocess,time,uuid
+    E=Path(evidence);retained_qualification_receipt(E,allow_failed_resume=resume)
+    marker=E/'local-session.json'
+    if marker.exists():
+        if not resume:raise ValueError('One local session already launched;no fresh session inferred')
+        state=json.loads(marker.read_text());previous=marker.read_bytes();snapshot=E/('local-session.failed-attempt-'+str(state.get('attempts',0))+'.json')
+        with snapshot.open('xb') as f:f.write(previous)
+        if time.time()>=state['startedEpoch']+retained_local_seconds(E)-300:raise TimeoutError('Original local window lacks correction/cleanup time')
+        state['resumedWithinOriginalWindow']=True;state['completed']=False;state['ownedContainers']={};state.pop('ownedNetwork',None);state['groups']=[];state.pop('failureClass',None);state.pop('failureLocation',None);state.pop('qualification',None);marker.write_text(json.dumps(state,indent=2)+'\n')
+    else:
+        if resume:raise ValueError('Cannot invent a prior session')
+        nonce=uuid.uuid4().hex[:12];state={'requestSha256':RETAINED_FLYWAY_APPROVAL_SHA256,'startedEpoch':time.time(),'nonce':nonce,'completed':False,'cloudSession':False}
+        with marker.open('x') as f:json.dump(state,f,indent=2);f.write('\n')
+    nonce=state['nonce'];remaining=int(state['startedEpoch']+retained_local_seconds(E)-time.time());maximum=min(1700,remaining-90)
+    # RuntimeMaxSec=1700 is a ceiling,not a reset:continuations use original time.
+    if maximum<120:raise TimeoutError('Original session window expired')
+    unit='cinenest-retained-qualification-'+nonce
+    command=['systemd-run','--user','--wait','--pipe','--collect','--quiet','--unit='+unit,'-p','CPUQuota=100%','-p','MemoryMax=1G','-p','MemorySwapMax=0','-p','TasksMax=128','-p','RuntimeMaxSec='+str(maximum),'-p','TimeoutStopSec=30','-p','NoNewPrivileges=yes','/usr/bin/python3',str(ROOT/'scripts/verify-cloud-connectivity.py'),'--retained-local-worker','--evidence',str(E)]
+    try:
+        result=subprocess.run(command,capture_output=True,text=True,timeout=min(1740,remaining-60))
+        (E/('local-worker-output-'+str(state.get('attempts',0)+1)+'.log')).write_text(result.stdout+result.stderr)
+    finally:retained_parent_cleanup(E)
+    if result.returncode:raise RuntimeError('Bounded local worker failed;original window unchanged')
+    return json.loads((E/'local-result.json').read_text())
+
+_PREDECESSOR_RETAINED_MAIN=main
+
+def main(argv=None):
+    arguments=sys.argv[1:] if argv is None else argv
+    if '--retained-local-worker' in arguments or '--qualify-retained-history' in arguments or '--resume-retained-history' in arguments:
+        parser=argparse.ArgumentParser();parser.add_argument('--retained-local-worker',action='store_true');parser.add_argument('--qualify-retained-history',action='store_true');parser.add_argument('--resume-retained-history',action='store_true');parser.add_argument('--evidence',required=True);parser.add_argument('--execute',action='store_true');args=parser.parse_args(arguments)
+        if args.retained_local_worker:
+            import fcntl
+            lease=(Path(args.evidence)/'local-worker.lock').open('a');fcntl.flock(lease,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            result=retained_local_worker(args.evidence);(Path(args.evidence)/'local-result.json').write_text(json.dumps(result,indent=2)+'\n');return 0 if result['status']=='PASS' and result['inventoryPreserved'] and result['withinApprovedWindow'] else 1
+        if not args.execute:print('NOT_RUN: exact local approval and --execute required');return 0
+        result=retained_local_launch(args.evidence,resume=args.resume_retained_history);print(json.dumps(result,indent=2));return 0 if result['status']=='PASS' else 1
+    return _PREDECESSOR_RETAINED_MAIN(argv)
+
+
+_PREDECESSOR_RETAINED_PREPARE_CONTEXT=prepare_context
+
+def prepare_context(destination,sql_root,dependency_root):
+    dest=Path(destination);sql=Path(sql_root);dep=Path(dependency_root)
+    if not re.fullmatch('[a-f0-9]{64}',RETAINED_SCHEMA_SHA256):raise ValueError('Trusted disposable schema expectation not qualified')
+    if not dest.is_absolute() or dest.exists() or not sql.is_absolute() or not dep.is_absolute():raise ValueError('Exclusive absolute context paths required')
+    require_sql00_actor_manifest({name:fingerprint(sql/name) for name in SQL00_ACTOR_FILES});migrations=migration_inventory()
+    for name,digest in DEPENDENCIES.items():
+        if fingerprint(dep/name)!=digest:raise ValueError('Pinned dependency mismatch')
+    dest.mkdir(mode=0o700)
+    for directory in ['lib','migrations','sql']:(dest/directory).mkdir()
+    try:
+        for name in DEPENDENCIES:shutil.copyfile(dep/name,dest/'lib'/Path(name).name)
+        for name in migrations:shutil.copyfile(ROOT/'backend/src/main/resources/db/migration'/name,dest/'migrations'/name)
+        name='02-post-migration-runtime-grants.sql.proposed';shutil.copyfile(sql/name,dest/'sql'/name)
+        (dest/'CinenestConnectivityProbe.java').write_text(JAVA_SOURCE)
+        (dest/'Dockerfile').write_text(f'FROM {JDK} AS build\nWORKDIR /build\nCOPY lib/ lib/\nCOPY CinenestConnectivityProbe.java .\nRUN mkdir classes && javac -proc:none --release 25 -J-Xmx256m -J-XX:ActiveProcessorCount=1 -cp "/build/lib/*" -d classes CinenestConnectivityProbe.java\nFROM {JRE}\nWORKDIR /app\nCOPY --from=build --chown=10001:10001 /build/classes/ /app/classes/\nCOPY --chown=10001:10001 lib/ /app/lib/\nCOPY --chown=10001:10001 migrations/ /app/migrations/\nCOPY --chown=10001:10001 sql/ /app/sql/\nUSER 10001:10001\nENTRYPOINT ["java","-Xmx256m","-cp","/app/classes:/app/lib/*","CinenestConnectivityProbe"]\nCMD ["PROBE"]\n')
+        manifest={str(p.relative_to(dest)):fingerprint(p) for p in dest.rglob('*') if p.is_file()};(dest/'context-sha256.json').write_text(json.dumps(manifest,indent=2)+'\n')
+        return {'status':'PREPARED_OFFLINE_ONLY','files':manifest,'schemaSha256':RETAINED_SCHEMA_SHA256,'cloudRunConnectivity':'NOT_RUN','productionAuthorization':'NONE'}
+    except BaseException:shutil.rmtree(dest);raise
+
+
+def retained_verify_oci_base(archive,base,manifest):
+    """Verify pinned OCI index -> platform manifest -> config;IDs are distinct."""
+    def blob(digest):
+        if not re.fullmatch('sha256:[a-f0-9]{64}',digest):raise ValueError('Invalid OCI digest')
+        data=archive.extractfile('blobs/sha256/'+digest.removeprefix('sha256:')).read()
+        if 'sha256:'+hashlib.sha256(data).hexdigest()!=digest:raise ValueError('Pinned OCI blob mismatch')
+        return json.loads(data)
+    if base['Id']!='sha256:b7528962e65d43064d8a8b67ba175367896bc948363ea2d3fcd7f10d34e1f048':raise ValueError('Unapproved base')
+    index=blob(base['Id']);selected=[entry for entry in index['manifests'] if entry.get('platform',{}).get('architecture')==base['Architecture'] and entry.get('platform',{}).get('os')==base['Os']]
+    if len(selected)!=1:raise ValueError('Pinned OCI platform ambiguous')
+    platform=blob(selected[0]['digest']);digest=platform['config']['digest'];config=blob(digest)
+    if 'sha256:'+hashlib.sha256(archive.extractfile(manifest['Config']).read()).hexdigest()!=digest or config['rootfs']['diff_ids']!=base['RootFS']['Layers']:raise ValueError('Pinned base config mismatch')
+    return digest
+
+
+def retained_local_seconds(evidence):
+    e=Path(evidence);request=e/'local-completion-authorization.requested.json'
+    if not request.exists():return 1800
+    if fingerprint(request)!='5e230cacb99d3ec6be0b50087e8edcbdae5ecf56d000b8c37bad0188cbdfc24f':raise ValueError('Local completion exact request mismatch')
+    receipt=json.loads((e/'local-completion-owner-approval.json').read_text())
+    unit=json.loads((ROOT/'knowledge/execution/change-sets.json').read_text())['cloudRunRetainedFlywayHistory']
+    if receipt!=unit.get('localCompletionAuthority') or receipt.get('source')!='Owner answer call_fccb96332e154e52b0448f0254b7b1ad: Approve exact local completion session' or receipt.get('maximumSecondsIncludingCleanup')!=900 or receipt.get('sessions')!=1 or receipt.get('cloudSessions')!=0:raise ValueError('Local completion authority unavailable')
+    previous=json.loads((e/'consumed-local-session.original-window.json').read_text())
+    if not previous.get('completed') or previous.get('inventoryPreserved') is not True:raise ValueError('Original session cleanup unverified')
+    return 900
+
+def retained_elapsed_within_budget(elapsed,maximum):
+    return maximum in (900,1800) and isinstance(elapsed,(int,float)) and 0<=elapsed<=maximum
+
 if __name__=='__main__':raise SystemExit(main())

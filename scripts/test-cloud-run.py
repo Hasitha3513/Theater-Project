@@ -1860,4 +1860,107 @@ class OwnedServiceDeletion(unittest.TestCase):
         times=iter([100,100,100,201]);api=unittest.mock.Mock(side_effect=[{'uid':'original','etag':'x'},{'name':'op'}])
         with self.assertRaises(TimeoutError):self.delete(api,clock=lambda:next(times))
 
+
+
+class RetainedFlywayContracts(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import runpy
+        cls.m=runpy.run_path(str(Path(__file__).with_name('verify-cloud-connectivity.py')))
+    def test_resource_proof_accepts_only_enforced_bounds(self):
+        self.assertTrue(self.m['retained_resource_limits']('100000 100000','1073741824','0','128'))
+        for cpu,mem,swap,pids in [('max 100000','1073741824','0','128'),('100001 100000','1073741824','0','128'),('100000 100000','1073741825','0','128'),('100000 100000','1073741824','1','128'),('100000 100000','1073741824','0','129'),('invalid','max','max','max')]:
+            self.assertFalse(self.m['retained_resource_limits'](cpu,mem,swap,pids))
+    def test_local_cli_is_inert_without_execute(self):
+        launch=unittest.mock.Mock()
+        with patch.dict(self.m['main'].__globals__,{'retained_local_launch':launch}):
+            self.assertEqual(self.m['main'](['--qualify-retained-history','--evidence','/tmp/not-an-approved-session']),0)
+        launch.assert_not_called()
+    def test_missing_or_forged_local_authority_rejected(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as t:
+            e=Path(t);(e/'source-admission.requested.json').write_text('{}')
+            with self.assertRaises(ValueError):self.m['retained_qualification_receipt'](e)
+        with self.assertRaises(ValueError):self.m['retained_qualification_receipt']('relative-evidence')
+    def test_local_worker_demands_actual_task_cgroup(self):
+        import inspect
+        source=inspect.getsource(self.m['retained_local_worker']);self.assertIn('pids.max',source);self.assertIn('memory.swap.max',source);self.assertIn("endswith('cinenest-retained-qualification-'+nonce+'.service')",source)
+    def test_explicit_retained_mode_is_pinned_in_job(self):
+        d=self.m['job_document']('MIGRATE','us-east1-docker.pkg.dev/'+self.m['PROJECT']+'/cinenest-runtime/diagnostics@sha256:'+'a'*64,dict.fromkeys(['runtimeUsername','runtimePassword','migrationPassword','databaseCa'],'1'))
+        env=d['spec']['template']['spec']['template']['spec']['containers'][0]['env'];self.assertEqual([x['value'] for x in env if x['name']=='CINENEST_MIGRATION_EXPECTED_STATE'],['RETAINED_CANDIDATE'])
+    def test_probe_mode_does_not_gain_migration_state_override(self):
+        d=self.m['job_document']('PROBE','us-east1-docker.pkg.dev/'+self.m['PROJECT']+'/cinenest-runtime/diagnostics@sha256:'+'a'*64,dict.fromkeys(['runtimeUsername','runtimePassword','migrationPassword','databaseCa'],'1'),'https://cinenest-connectivity-qualification-approved.run.app')
+        self.assertNotIn('CINENEST_MIGRATION_EXPECTED_STATE',str(d))
+    def test_exact_fresh_gate_and_no_repair_baseline_or_clean(self):
+        java=self.m['JAVA_SOURCE'];section=java[java.index(' static MigrationReport qualifyMigration('):]
+        self.assertEqual(section.count('f.migrate()'),1);self.assertLess(section.index('if(!hasHistory){\n   stage("MIGRATION_FRESH_EXECUTE"'),section.index('f.migrate()'))
+        for call in ['.repair(','.baseline(','.clean(']:self.assertNotIn(call,java)
+        self.assertIn('c.setReadOnly(true)',section);self.assertIn('TRANSACTION_REPEATABLE_READ',section);self.assertIn('c.rollback()',section)
+    def test_artifacts_are_checked_before_migration_and_post_sql_is_pinned(self):
+        java=self.m['JAVA_SOURCE'];s=java[java.index(' static MigrationReport qualifyMigration('):];self.assertLess(s.index('verifyMigrationArtifacts(root)'),s.index('f.migrate()'));self.assertLess(s.index('postBytes'),s.index('f.migrate()'));self.assertIn(self.m['SQL00_ACTOR_FILES']['02-post-migration-runtime-grants.sql.proposed'],s)
+    def test_expected_history_is_closed_and_versioned(self):
+        java=self.m['JAVA_SOURCE'];self.assertIn('rank!=44',java);self.assertIn('getState()!=org.flywaydb.core.api.MigrationState.SUCCESS',java);self.assertIn('getAppliedChecksum().equals(migration.getResolvedChecksum())',java);self.assertIn('expectedVersions.get(rank-1)',java);self.assertIn('f.validate()',java)
+    def test_schema_signature_covers_required_objects_and_ownership(self):
+        java=self.m['JAVA_SOURCE']
+        for token in ['pg_get_constraintdef','pg_get_indexdef','pg_get_triggerdef','pg_get_functiondef','pg_default_acl','pg_policy','relrowsecurity','nspowner','seqcycle']:self.assertIn(token,java)
+        self.assertIn('SCHEMA_DRIFT',java);self.assertIn('SCHEMA_EXPECTATION',java)
+    def test_retained_and_fresh_reports_cannot_conflate_counts(self):
+        java=self.m['JAVA_SOURCE'];self.assertIn('int executed=0',java);self.assertIn('RETAINED_HISTORY_VERIFIED',java);self.assertIn('FRESH_HISTORY_VERIFIED',java);self.assertIn('MIGRATION_QUALIFICATION:',java)
+    def test_diagnostic_fixture_is_not_a_production_entrypoint(self):
+        import inspect
+        source=inspect.getsource(self.m['retained_build_image']);self.assertIn("classes.glob('CinenestConnectivityProbe*.class')",source);self.assertIn("'LocalQualificationDriver' in name",source);self.assertIn("'root.crt' in name",source)
+    def test_empty_schema_expectation_cannot_prepare_an_image_context(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as t:
+            target=Path(t)/'must-not-be-created'
+            with patch.dict(self.m['prepare_context'].__globals__,{'RETAINED_SCHEMA_SHA256':'PENDING_TRUSTED_LOCAL_BASELINE'}):
+                with self.assertRaises(ValueError):self.m['prepare_context'](target,Path(t),Path(t))
+            self.assertFalse(target.exists())
+    def test_original_diagnostics_and_transport_security_preserved(self):
+        java=self.m['JAVA_SOURCE']
+        for token in ['sslmode=verify-full','Redirect.NEVER','X-CineNest-Probe-ID','HTTP_CSRF_DENIAL','expected=','actual=','retry=NONE']:self.assertIn(token,java)
+        for bad in ['printStackTrace','getMessage()','sslmode=require']:self.assertNotIn(bad,java)
+    def test_builder_is_offline_pinned_nonroot_and_capped(self):
+        import inspect
+        source=inspect.getsource(self.m['retained_build_image']);self.assertIn("'User':'10001:10001'",source);self.assertIn('retained_resource_limits',source);self.assertIn('base[\'Id\']',source);self.assertNotIn("'push'",source);self.assertNotIn("'pull'",source)
+    def test_session_window_never_resets_or_adds_cloud_authority(self):
+        import inspect
+        source=inspect.getsource(self.m['retained_local_launch']);self.assertIn("marker.open('x')",source);self.assertIn("'cloudSession':False",source);self.assertIn("RuntimeMaxSec=1700",source);self.assertIn('retained_parent_cleanup(E)',source)
+
+
+class RetainedRecoveryRegressions(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import runpy
+        cls.m=runpy.run_path(str(Path(__file__).with_name('verify-cloud-connectivity.py')))
+    def test_flyway_connections_finish_before_snapshot_connection(self):
+        java=self.m['JAVA_SOURCE'];s=java[java.index(' static MigrationReport qualifyMigration('):]
+        self.assertLess(s.index('var resolved=resolvedHistory(f)'),s.index('try(var c=f.getConfiguration().getDataSource().getConnection())'))
+        history=java[java.index(' static void verifyExactHistory'):java.index(' static org.flywaydb.core.api.MigrationInfo[] resolvedHistory')]
+        self.assertNotIn('f.info()',history);self.assertNotIn('f.validate()',history);self.assertIn('pinned.getResolvedChecksum()',history);self.assertIn('pinned.getDescription()',history)
+    def test_actual_elapsed_time_is_checked_against_approved_window(self):
+        check=self.m['retained_elapsed_within_budget']
+        for value in [0,95.46,900]:self.assertTrue(check(value,900))
+        for value in [-1,900.01,1800,float('nan'),float('inf')]:self.assertFalse(check(value,900))
+        self.assertTrue(check(1800,1800));self.assertFalse(check(1800.01,1800));self.assertFalse(check(1,3600))
+    def test_oci_index_cannot_be_confused_with_image_config(self):
+        import io,tarfile,json,hashlib
+        root='sha256:b7528962e65d43064d8a8b67ba175367896bc948363ea2d3fcd7f10d34e1f048'
+        base={'Id':root,'Architecture':'amd64','Os':'linux','RootFS':{'Layers':['sha256:'+'a'*64]}}
+        config=json.dumps({'rootfs':{'diff_ids':base['RootFS']['Layers']}}).encode();configsha='sha256:'+hashlib.sha256(config).hexdigest()
+        platform=json.dumps({'config':{'digest':configsha}}).encode();platformsha='sha256:'+hashlib.sha256(platform).hexdigest()
+        index=json.dumps({'manifests':[{'digest':platformsha,'platform':{'architecture':'amd64','os':'linux'}}]}).encode()
+        contents={root:index,platformsha:platform,configsha:config}
+        class Archive:
+            def extractfile(self,path):return io.BytesIO(contents['sha256:'+path.rsplit('/',1)[1]])
+        # A fabricated index cannot pass even when config/platform are internally valid.
+        with self.assertRaisesRegex(ValueError,'OCI blob mismatch'):self.m['retained_verify_oci_base'](Archive(),base,{'Config':'blobs/sha256/'+configsha[7:]})
+    def test_local_continuation_preserves_original_deadline(self):
+        import inspect
+        source=inspect.getsource(self.m['retained_local_launch']);self.assertIn("state['startedEpoch']+retained_local_seconds(E)",source);self.assertIn('remaining-90',source);self.assertIn("snapshot.open('xb')",source)
+    def test_client_cid_file_is_unique_across_failed_continuations(self):
+        import inspect
+        source=inspect.getsource(self.m['retained_local_worker']);self.assertIn('client_nonce=uuid.uuid4().hex[:12]',source);self.assertIn("cidfile=task/('java-'+client_nonce+'.cid')",source)
+
+
 if __name__=='__main__':unittest.main()

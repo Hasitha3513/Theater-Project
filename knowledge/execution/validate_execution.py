@@ -20272,5 +20272,114 @@ def probe_diagnostics_main():
 
 receipt_admission_successor_errors=probe_diagnostics_errors
 inert_ci_main=probe_diagnostics_main
+# Owner-approved exact source successor. Historical validators remain unchanged.
+RETAINED_FLYWAY_BASE = '4f198efb61428abef824f4c8f4ac866a2b5dde2f'
+RETAINED_FLYWAY_STATE = {'id': 'CN-GCP-RETAINED-FLYWAY-QUALIFICATION-001', 'baseline': '4f198efb61428abef824f4c8f4ac866a2b5dde2f', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'decision': 'APPROVED_EXACT_SOURCE_AND_LOCAL_QUALIFICATION', 'source': 'Owner answer call_f541ecd9e60247dd9e87b82d008c1792: Approve exact source and local qualification', 'requestSha256': 'ebe105395fe33bc314d9e82b9eb7b669c0ae3dc3d30d3cb6c096810823d5394f', 'recordedAtUtc': '2026-11-26T16:33:05.350645+00:00', 'cloudSessions': 0, 'cloudMutations': False, 'newLocalSessions': 1, 'maximumLocalSecondsIncludingCleanup': 1800, 'productionAuthorization': 'NONE', 'reviewMethod': 'Task-only verified-ledger and controlled-diff exception explicitly included'}, 'scope': ['Explicit FRESH_EMPTY,RETAINED_CANDIDATE,RETAINED_HISTORY_VERIFIED,PARTIAL_INVALID states;only explicitly authorized fresh-empty branch may migrate', 'Retained branch never invokes migrate,repair,baseline,clean or schema/history writes;require exact database/current migration identity,44 expected version/script/type/success records throughV45,no extra/duplicate/missing records,Flyway validate/checksum agreement against the44 immutable artifacts', 'Derive canonical schema-object,owner and required invariant expectations from the same approved migrations in a trusted disposable fresh database;fail closed for unsupported drift,missing objects,wrong ownership or unrecognized extension/schema state;never manufacture expected metadata from the observed cloud database', 'Partial/failed/interrupted/checksum mismatch/unexpected history fail without repair or continuation;preserve data and expose safe state diagnostics', 'Preserve PR33 stage/correlation/status/redaction,strict private verify-full,role separation,cleanup identity/etag/absence controls;update only fingerprinted controller/artifact generation and governed records', 'Keep fresh44-execution assertion in fresh branch;retained validation reports zero new migrations and RETAINED_HISTORY_VERIFIED only after complete successful verification;no requirement satisfied by mocks alone'], 'localQualification': {'sessions': 1, 'maximumSecondsIncludingCleanup': 1800, 'postgresImage': 'postgres:18.6@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336', 'postgresLimits': {'cpus': 1, 'memoryMiB': 1024, 'memorySwapMiB': 1024, 'pids': 128, 'dataTmpfsMiB': 496, 'sharedMemoryMiB': 16, 'hostBindings': '127.0.0.1 only;synthetic credentials;no production connections'}, 'resources': 'Task-labeled disposable database/network only;record before/after inventory and delete only owned resources', 'diagnosticImage': 'One sequential exact-source local diagnostic image build/content inspection under the stated build limits,using existing digest-pinned bases and unchanged dependency checksums;no publication', 'backendFrontendImages': 'Read-only inspect and reuse exact-source existing images;no unchanged application-image rebuild or startup session', 'diagnosticBuildLimits': {'cpuMaximum': 1, 'memoryMiBMaximum': 1024, 'memorySwapMiBMaximum': 1024, 'pidsMaximum': 128, 'buildConcurrency': 1, 'network': 'Offline existing pinned base images/dependency cache only', 'enforcement': 'Verify existing supervised builder can enforce all limits before build;otherwise NOT_RUN,no silent increase'}}, 'rollback': 'Governed revert of successor-owned source only;immutable predecessor approvals,failure evidence,all SQL/migrations and existing cloud database preserved. Disposable local fixtures may be removed only by exact task identity;no cloud rollback or data deletion.', 'cloudSessionAuthorized': False, 'cloudMutationsAuthorized': False, 'sqlChangesAuthorized': False, 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'LOCAL_AND_GOVERNANCE_QUALIFIED_PENDING_HOSTED_CI', 'cloudRuntime': 'NOT_RUN_NOT_AUTHORIZED', 'offlineTests': '359_PASS_0_FAILURE_0_ERROR_0_SKIPPED', 'newOfflineCases': 21, 'architecture': '68_PASS_0_FAILURE_0_ERROR_0_SKIPPED', 'historicalReplay': 'PASS_FULL_PRESERVED_PREDECESSOR_CHAIN', 'negativeControls': 'PASS_STANDALONE_AND_CURRENT_SUCCESSOR', 'hostedCI': 'PENDING_EXACT_PR_AND_MAIN_SOURCE', 'postgresql': '20_REAL_POSTGRESQL18_6_GROUPS_PASS', 'image': 'QUALIFIED_LOCAL_ONLY_NOT_PUBLISHED', 'migrations': 44, 'unchangedSqlFiles': 7, 'cleanup': 'PASS_INVENTORIES_PRESERVED', 'localCompletionSeconds': 95.46, 'firstWindow': 'FAIL_PRESERVED_CLEANED_NO_DEADLINE_RESET', 'localCompletion': 'PASS_SEPARATELY_AUTHORIZED_15_MINUTE_WINDOW', 'trustedSchemaSha256': 'ee88078bdee65baf255f6cb77040c9a89ae4d924b2b279d4c01bb5e335b5af1d', 'diagnosticImage': 'sha256:35ed77e9eee7a74522a114240c858fdc8abccad1142a8e673c296173fb0e532e', 'diagnosticJavaSha256': '6af0ab7f8fcb7e28af6ba50355d2df99ef5aa1ae6c6b0ab0813b0f834d50c911', 'cloudHistory': 'DENIED_NOT_VERIFIED_PERMISSION_DENIED_FOR_FLYWAY_HISTORY'}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': 'd22d415a0a65e08474409be51868956220460cc7a0606e799d59af22f63dfa70', 'scripts/test-cloud-run.py': '95088c43ce3ebf4e9b05024a722ac37695007529df5833defafd97a5d25d31cb', 'knowledge/ARCHITECTURE.md': '323b6c0a6f3130b0df7f03cc1905332a452ae734cfa1adb8e6a4d6b0bf799ae9', 'knowledge/PROGRESS.md': '719ec3d3c240477d1f847c63b9e5e47edb7b6537052b1c16717a07d368a3b21a', 'knowledge/product/FEATURE_CATALOG.md': '7d76e00e34960a8a1aa142d23195b8406a3b577d72e720415664e3f0ca170f37', 'knowledge/guides/USER_GUIDE.md': 'f335a8cbde1ec810ee3524d6bf48986dd145e8f5bc50a34bcb7bc8f28e17ce15'}, 'localCompletionAuthority': {'requestSha256': '5e230cacb99d3ec6be0b50087e8edcbdae5ecf56d000b8c37bad0188cbdfc24f', 'source': 'Owner answer call_fccb96332e154e52b0448f0254b7b1ad: Approve exact local completion session', 'sessions': 1, 'maximumSecondsIncludingCleanup': 900, 'cloudSessions': 0, 'productionAuthorization': 'NONE'}, 'evidenceSha256': {'source-admission.requested.json': 'ebe105395fe33bc314d9e82b9eb7b669c0ae3dc3d30d3cb6c096810823d5394f', 'local-completion-authorization.requested.json': '5e230cacb99d3ec6be0b50087e8edcbdae5ecf56d000b8c37bad0188cbdfc24f', 'consumed-local-session.original-window.json': '984f6267974d810b90327975586f16b294f13d9bc00a0447014fe7eb4aa33104', 'local-session.json': '9ed17c55a30eb64744e2d29541bf95de5247fb768a57f3b34ce77ff9986d31a3', 'image-content-proof.json': '176b0a4416235a268970894ec9cd39049bb51263416367865722ac917a0ab901', 'oci-chain-offline-proof.json': 'ce33c329d6957ad718c617bcbaabc0636d37fedc4ff4b5ff175a336099a07438', 'architecture.log': '2222d7834246a49872ebc86e10ee5fb6160f08b9dd989296c2a3e82b0438b61a', 'offline-completion-admission.log': 'f9846260908417e26963075848c8432db4c7e54e6575f520beff40023f6ce370', 'live-retained-history-readonly.json': 'a687f8bb90be50d8cdff1b7d11378e8d27ccf2ff3657e244ac5f56fd037b49b3', 'offline-final-359.log': '34c01d1595d39fa2609b7c44d80e58e95691c49bd5f0a067a19b4e643194930e', 'historical-replay.log': '7e136ea33c7a5cd019ac214047c334f025d638de7f073c529d054be12f7e823b', 'standalone-negative-controls.log': '72a1990878798c2d37135715ecb3a8d01964a0d4f09473febf70a1b0d48bcb38', 'kb-final.log': 'da881d04b433b186df3b30e40dad2cd65a57270cdf384771abed60cc65c46722', 'final-source-input-check.json': 'c29298856b5c2c3db58351efb4762fe8e3404b03ccbd53b8ad3d73e2a715cf6a'}}
+RETAINED_FLYWAY_PATHS = set(RETAINED_FLYWAY_STATE['orderedPaths'])
+RETAINED_FLYWAY_SUFFIX_SHA = '9437ec4f7f07295bf274b22c2cdb9b0703d101432f757dfb89dde011fb682376'
+RETAINED_FLYWAY_MAIN = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+
+def retained_flyway_errors():
+    try:
+        unit=RETAINED_FLYWAY_STATE
+        if unit['id']!='CN-GCP-RETAINED-FLYWAY-QUALIFICATION-001' or unit['baseline']!=RETAINED_FLYWAY_BASE or unit['status']!='READY':
+            return ['Retained Flyway source not admitted']
+        authority=unit['authority']
+        if (authority['decision']!='APPROVED_EXACT_SOURCE_AND_LOCAL_QUALIFICATION' or authority['requestSha256']!='ebe105395fe33bc314d9e82b9eb7b669c0ae3dc3d30d3cb6c096810823d5394f'
+                or authority['source']!='Owner answer call_f541ecd9e60247dd9e87b82d008c1792: Approve exact source and local qualification'
+                or authority['cloudSessions']!=0 or authority['cloudMutations'] is not False or authority['newLocalSessions']!=1 or authority.get('maximumLocalSecondsIncludingCleanup')!=1800):
+            return ['Retained Flyway Owner authority mismatch']
+        if (unit['cloudSessionAuthorized'] is not False or unit['cloudMutationsAuthorized'] is not False or unit['sqlChangesAuthorized'] is not False
+                or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}
+                or unit['qualification'].get('cloudRuntime')!='NOT_RUN_NOT_AUTHORIZED'):
+            return ['Retained Flyway grants or acceptance expansion']
+        def before(name):return v41_git('show',RETAINED_FLYWAY_BASE+':'+name)
+        for name in ['change-sets.json','status.json']:
+            now=json.loads((K/'execution'/name).read_text());previous=json.loads(before('knowledge/execution/'+name))
+            if now.pop('cloudRunRetainedFlywayHistory',None)!=unit or now!=previous:
+                return ['Retained Flyway altered registry/history '+name]
+        inventory={}
+        for row in v41_git('ls-tree','-r','-z',RETAINED_FLYWAY_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        if set(v41_git('ls-files','-z',text=True).split('\0'))-{''}!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):
+            return ['Retained Flyway source inventory drift']
+        if set(v41_git('diff','--name-only','-z',RETAINED_FLYWAY_BASE,text=True).split('\0'))-{''}!=RETAINED_FLYWAY_PATHS:
+            return ['Retained Flyway exact ten-path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            f=R/name
+            if not f.is_file() or f.is_symlink() or kind!=b'blob' or not f.resolve().is_relative_to(R.resolve()) or bool(f.stat().st_mode&0o111)!=(mode==b'100755'):
+                return ['Retained Flyway unsafe file '+name]
+            if name not in RETAINED_FLYWAY_PATHS:
+                data=f.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Retained Flyway unrelated/history drift '+name]
+        for name,digest in unit['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:return ['Retained Flyway source fingerprint drift '+name]
+        for name,dispatch in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',RETAINED_FLYWAY_MAIN.encode())]:
+            previous=before(name)
+            if not previous.endswith(dispatch) or not (R/name).read_bytes().startswith(previous[:-len(dispatch)]):return ['Retained Flyway predecessor code modified '+name]
+        prefix=before('knowledge/execution/validate_execution.py')[:-len(RETAINED_FLYWAY_MAIN.encode())]
+        suffix=(R/'knowledge/execution/validate_execution.py').read_bytes()[len(prefix):]
+        if hashlib.sha256(suffix.replace(RETAINED_FLYWAY_SUFFIX_SHA.encode(),b'0'*64,1)).hexdigest()!=RETAINED_FLYWAY_SUFFIX_SHA:
+            return ['Retained Flyway validator suffix drift']
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(before(name)):return ['Retained Flyway historical prose changed '+name]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(f.relative_to(R)) for f in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:
+            return ['Retained Flyway migration inventory drift']
+        import runpy
+        mod=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        expected={'00-activation-authority-probe.sql.proposed':'4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c','01-protected-credentials-and-migrator-login.psql.proposed':'c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15','02-post-migration-runtime-grants.sql.proposed':'52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52','03-runtime-login-and-migrator-revocation.sql.proposed':'515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6','04-login-revocation-and-session-cleanup.sql.proposed':'01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5','05-runtime-readonly-verification.sql.proposed':'2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c','06-data-preserving-quarantine.sql.proposed':'ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676'}
+        if mod['SQL00_ACTOR_FILES']!=expected or mod['RETAINED_FLYWAY_APPROVAL_SHA256']!=authority['requestSha256']:return ['Retained Flyway SQL/approval drift']
+        mod['require_sql00_actor_manifest'](expected);mod['migration_inventory']()
+        if unit['qualification']['status']!='LOCAL_QUALIFICATION_PENDING' and not re.fullmatch('[a-f0-9]{64}',mod['RETAINED_SCHEMA_SHA256']):return ['Retained schema expectation unqualified']
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in RETAINED_FLYWAY_PATHS-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Retained Flyway manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):
+        return ['Retained Flyway inputs inaccessible']
+    return []
+
+
+def retained_flyway_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('status','BLOCKED'),('authority',{}),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('cloudSessionAuthorized',True),('cloudMutationsAuthorized',True),('sqlChangesAuthorized',True)]:
+        fake=json.loads(json.dumps(RETAINED_FLYWAY_STATE));fake[field]=value
+        with patch.dict(globals(),{'RETAINED_FLYWAY_STATE':fake}):
+            if not retained_flyway_errors():raise ValueError('Retained Flyway accepted forged '+field)
+    fake=json.loads(json.dumps(RETAINED_FLYWAY_STATE));fake['qualification']['cloudRuntime']='PASS'
+    with patch.dict(globals(),{'RETAINED_FLYWAY_STATE':fake}):
+        if not retained_flyway_errors():raise ValueError('Retained Flyway accepted false cloud PASS')
+    read=Path.read_bytes
+    for relative in ['scripts/verify-cloud-connectivity.py','knowledge/execution/validate_execution.py','backend/src/main/resources/db/migration/V1__foundation.sql']:
+        target=R/relative
+        if not target.exists():target=next((R/'backend/src/main/resources/db/migration').glob('V1__*'))
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n#unapproved' if p==target else read(p,*a,**kw)):
+            if not retained_flyway_errors():raise ValueError('Retained Flyway accepted altered source/history')
+    print('PASS execution monitoring exact source,approval,history,SQL,migrations and no-cloud negative controls',flush=True)
+
+
+def retained_flyway_main():
+    import tempfile,sys
+    errors=retained_flyway_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    retained_flyway_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-retained-flyway-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',RETAINED_FLYWAY_BASE],check=True)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+
+receipt_admission_successor_errors=retained_flyway_errors
+inert_ci_main=retained_flyway_main
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
