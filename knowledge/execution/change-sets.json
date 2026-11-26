@@ -9007,5 +9007,75 @@
       "knowledge/product/FEATURE_CATALOG.md": "2c6ddcbb74bb1910ab1164a6b5a56d821cc068b7d0ca1ee01390b3b8cdbb318d",
       "knowledge/guides/USER_GUIDE.md": "d79991b12031849831e21479e05776f2431de88a87807b7a985d9c9de7106f0d"
     }
+  },
+  "cloudRunSql00DelegatedActor": {
+    "id": "CN-GCP-SQL00-DELEGATED-ACTOR-001",
+    "baseline": "8d88cd61e8f28dfeab4cdadb463f4a93d429e72a",
+    "status": "READY",
+    "orderedPaths": [
+      "scripts/verify-cloud-connectivity.py",
+      "scripts/test-cloud-run.py",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "decision": "APPROVED_EXACT_SOURCE_SQL_CORRECTION_AND_LOCAL_QUALIFICATION",
+      "source": "User answer call_a4971bf4862a4013b1ac561ce4970e91: Approve exact correction and local qualification",
+      "requestSha256": "7baffd9c976c457cbe6db25ab41495ef81dc478b2dc88ce28f3a1614ea2bd902",
+      "sql00Sha256": "4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c",
+      "recordedAtUtc": "2026-11-26T05:20:13.500564+00:00",
+      "cloudSessions": 0,
+      "cloudMutations": false,
+      "newLocalSessions": 1,
+      "maximumLocalSecondsIncludingCleanup": 1800,
+      "productionAuthorization": "NONE"
+    },
+    "scope": [
+      "Append-only successor preserving prior SQL00 versions,source,approval and failure evidence;no application business logic or migration changes",
+      "Correct only delegated custodian actor-phase validation;preserve strict nonprivileged runtime/migrator roles and all retained-state/ACL/membership/expiry guards",
+      "Accept only existing exact authenticated custodian acting as approved cloudsqlsuperuser;require effective MEMBER and SET;allow only CREATEDB/CREATEROLE as phase-specific temporary actor attributes;SUPERUSER/REPLICATION/BYPASSRLS always denied",
+      "Mandatory fresh revoked-state restricted-actor proof before grant and after revocation;no permanent administrator flags or grants",
+      "Preserve authority probe before credential generation and all six other SQL fingerprints;introduce a closed version-specific SQL manifest and proof binding without rewriting historical inputs",
+      "Retain non-sensitive exact actor flags and phase in diagnostic evidence even when SQL00 fails;never passwords,tokens or protected catalogs",
+      "Update only existing canonical/governance/product/user records and protected successor controls;governed commit,PR,CI,permitted merge and automatic main CI"
+    ],
+    "rollback": "Governed source revert;preserve all SQL/approval/failure versions and database/history;no destructive migration or data rollback",
+    "cloudSessionAuthorized": false,
+    "cloudMutationsAuthorized": false,
+    "sqlChangesAuthorized": "EXACT_QUALIFIED_SQL_ONLY_CONDITIONAL_ON_SEPARATE_CLOUD_SESSION",
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "LOCAL_SOURCE_AND_SQL_QUALIFIED",
+      "cloudRuntime": "NOT_RUN_NOT_AUTHORIZED",
+      "cloudMigrations": "NOT_RUN",
+      "cloudRun": "NOT_RUN",
+      "migrations": 44,
+      "unchangedSqlFiles": 6,
+      "historicalReplay": "PASS_IMMUTABLE_PREDECESSOR_CHAIN",
+      "standaloneNegativeControls": "PASS",
+      "hostedCI": "PENDING",
+      "postgresqlGroups": 48,
+      "offlineHarnessTests": 263,
+      "focusedSourceTests": 21,
+      "javaArchitectureTests": 68
+    },
+    "sourceSha256": {
+      "scripts/verify-cloud-connectivity.py": "9dfd511b4412cb790f93871c0ca9713c9057ee728812f5bd3abfeca15f18c6f0",
+      "scripts/test-cloud-run.py": "83304d22901bc9d586815a5b8669f461079e70f1aa33fbb297d3a3850923ae92",
+      "knowledge/ARCHITECTURE.md": "1acb8f28c91364a1d9433fd7e2ad1d914d1b86b0e4f6f3cdcaa679cc3af95405",
+      "knowledge/PROGRESS.md": "26d25a21c9e12d3aab3b88f1fb81b41b1174c3626551703276e4792f8b3dd210",
+      "knowledge/product/FEATURE_CATALOG.md": "e11ea4a2bb5f6dc07a302518606741fc1388da6e2e78e34dfe7ea82b59ac2929",
+      "knowledge/guides/USER_GUIDE.md": "b1b2ff233d5fc70aa5aed5cd5f8ef5cedc52ce4bc1ce981a6112bba773adeed9"
+    }
   }
 }

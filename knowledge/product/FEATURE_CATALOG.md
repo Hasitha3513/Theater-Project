@@ -950,3 +950,7 @@ CN-GCP-SSH-TRUST-PATH-001 adds offline task-private known-host path quoting and 
 
 ## SQL00 inactive retry-state qualification
 CN-GCP-SQL00-RETAINED-STATE-001 adds source-bound revised SQL00/manifest/staging and effective authority confirmation for the existing internal qualification workflow.37real PostgreSQL groups,242offline harness tests and68Java architecture tests passed. Inactive original/configured pairs are distinguished;future activation still requires fresh expiry,verified authority and separate cloud authorization. No customer/admin UI,application business logic or migration changed. The last cloud attempt failed at the stale SQL guard;internal Cloud Run health remains NOT_RUN. Official acceptance4/7,production NONE. See [qualification](../PROGRESS.md#sql00-retained-state).
+
+
+## Delegated custodian qualification boundary
+CN-GCP-SQL00-DELEGATED-ACTOR-001 distinguishes a restricted revoked custodian from the approved temporary managed administrator,while keeping application identities strictly unprivileged.48real PostgreSQL groups,263offline harness tests and68architecture tests passed. The previous cloud attempt stopped at SQL00;credentials,migrations and Cloud Run health were NOT_RUN. No application UI,business logic or migration changed. A fresh cloud session remains separately unauthorized. See [actual evidence](../PROGRESS.md#sql00-delegated-actor). Official4/7;production NONE.

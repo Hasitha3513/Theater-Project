@@ -1354,4 +1354,121 @@ def leave(M):
         for args in [(c.replace('ssh_trust_path_errors','other'),h,p),(c,h.replace("result=private_sql('probe' if self.n==1 else 'authority')",'pass'),p),(c.replace("assert state.get('authorityProbe')=='PASS'",'pass'),h,p),(c,h,p+p)]:
             with self.assertRaises(ValueError):runtime_artifact.sql00_revision_artifacts(*args)
 
+
+
+class Sql00ActorRegression(unittest.TestCase):
+    def fixture(self,phase='DELEGATED'):
+        f=ManagedRoleConfirmationRegression().fixture(phase)
+        f[2]['probeSha256']=runtime_artifact.SQL00_ACTOR_SHA256
+        f[1]['actorFlags']=dict(superuser=False,createdb=phase=='DELEGATED',createrole=phase=='DELEGATED',replication=False,bypassrls=False)
+        f[1]['restricted']=phase=='REVOKED'
+        return f
+    def confirmed(self,f,phase='DELEGATED'):
+        return runtime_artifact.sql00_actor_managed_role_confirmation(*f[:3],phase,f[3])['status']
+    def test_exact_sql_hash_and_two_immutable_predecessors(self):
+        import hashlib
+        self.assertEqual(hashlib.sha256(runtime_artifact.SQL00_ACTOR_SQL.encode()).hexdigest(),'4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c')
+        self.assertEqual(runtime_artifact.SQL00_REVISION_FILES['00-activation-authority-probe.sql.proposed'],'07d9b1a1199efe212697f443c2be1fcab8d47d7ce531006463807ee60c8ab884')
+        self.assertEqual([n for n in runtime_artifact.SQL_FILES if runtime_artifact.SQL_FILES[n]!=runtime_artifact.SQL00_ACTOR_FILES[n]],['00-activation-authority-probe.sql.proposed'])
+    def test_manifest_exact_and_changed_legacy_denials(self):
+        import json
+        value=runtime_artifact.SQL00_ACTOR_FILES
+        self.assertEqual(runtime_artifact.require_sql00_actor_manifest(json.dumps(value)),value)
+        for bad in [runtime_artifact.SQL_FILES,runtime_artifact.SQL00_REVISION_FILES,dict(reversed(list(value.items()))),dict(list(value.items())[1:]),dict(value,extra='0'*64)]:
+            with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_manifest(bad)
+        with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_manifest('{"x":"a","x":"b"}')
+    def test_delegated_actor_all_four_permitted_attribute_pairs(self):
+        for db,role in [(False,False),(False,True),(True,False),(True,True)]:
+            f=self.fixture();f[1]['actorFlags'].update(createdb=db,createrole=role)
+            f[1]['restricted']=not (db or role)
+            self.assertEqual(self.confirmed(f),'CONFIRMED')
+    def test_forbidden_actor_attributes_always_denied(self):
+        for phase in ['DELEGATED','REVOKED']:
+            for key in ['superuser','replication','bypassrls']:
+                f=self.fixture(phase);f[1]['actorFlags'][key]=True
+                self.assertEqual(self.confirmed(f,phase),'DENIED')
+    def test_revoked_actor_cannot_retain_admin_flags(self):
+        self.assertEqual(self.confirmed(self.fixture('REVOKED'),'REVOKED'),'CONFIRMED')
+        for key in ['createdb','createrole']:
+            f=self.fixture('REVOKED');f[1]['actorFlags'][key]=True
+            self.assertEqual(self.confirmed(f,'REVOKED'),'DENIED')
+    def test_missing_extra_and_nonboolean_flags_denied(self):
+        for flags in [None,{},dict(self.fixture()[1]['actorFlags'],extra=False),dict(self.fixture()[1]['actorFlags'],createdb=1)]:
+            f=self.fixture();f[1]['actorFlags']=flags;self.assertEqual(self.confirmed(f),'DENIED')
+        f=self.fixture();del f[1]['actorFlags'];self.assertEqual(self.confirmed(f),'DENIED')
+    def test_unbound_phase_cannot_confer_authority(self):
+        for key,value in [('member',False),('canSet',False),('runtimeAdmin',False),('migratorAdmin',False),('sessionUser','foreign'),('currentUser','foreign'),('tls',False),('observedAt','2020-01-01T00:00:00Z')]:
+            f=self.fixture();f[1][key]=value;self.assertEqual(self.confirmed(f),'DENIED')
+        f=self.fixture();f[2]['revokerArmed']=False;self.assertEqual(self.confirmed(f),'DENIED')
+    def test_inconsistent_or_unknown_aggregate_flags_denied(self):
+        for value in [True,None,'false',0]:
+            f=self.fixture();f[1]['restricted']=value;self.assertEqual(self.confirmed(f),'DENIED')
+    def test_all_predecessor_probe_hashes_denied(self):
+        for value in [runtime_artifact.AUTHORITY_PROBE_SHA256,runtime_artifact.SQL00_REVISION_SHA256,'0'*64]:
+            f=self.fixture();f[2]['probeSha256']=value;self.assertEqual(self.confirmed(f),'DENIED')
+    def test_successful_probe_still_required(self):
+        f=self.fixture();f[2]['probePassed']=False;self.assertEqual(self.confirmed(f),'DENIED')
+    def test_revocation_requires_actual_restricted_role_and_no_membership(self):
+        for key,value in [('restricted',False),('member',True),('canSet',True)]:
+            f=self.fixture('REVOKED');f[1][key]=value;self.assertEqual(self.confirmed(f,'REVOKED'),'DENIED')
+    def test_readonly_query_includes_non_sensitive_actor_flags(self):
+        q=runtime_artifact.sql00_actor_role_query('00000000-0000-4000-8000-000000000001')
+        for key in ['actorFlags','rolcreatedb','rolcreaterole','rolsuper','rolreplication','rolbypassrls']:self.assertIn(key,q)
+        self.assertNotIn('pg_authid',q);self.assertNotIn('rolpassword',q);self.assertTrue(q.startswith('SELECT'))
+        with self.assertRaises(ValueError):runtime_artifact.sql00_actor_role_query('invalid')
+    def test_actor_phase_values_closed(self):
+        for phase in [None,'READY','PRODUCTION']:
+            with self.assertRaises(ValueError):runtime_artifact.sql00_actor_flags(self.fixture()[1]['actorFlags'],phase)
+    @staticmethod
+    def capsule():
+        result=runtime_artifact.sql00_revision_artifacts(*Sql00RevisionRegression.capsule())
+        private=result['private-sql-helper.py']+"\ndef diagnostic(contract,nonce):\n return contract['managed_role_query'](nonce)\ndef confirmed(contract,nonce):\n return contract['managed_role_query'](nonce)\n"
+        controller=result['cloud-session.py']+"\ndef preflight_actor(rows,M,USER):\n assert all(v['value']=='false' for v in rows[3]['rows'][0]['values'])\n"
+        helpers='class Synthetic:\n'+'\n'.join(' '+line for line in result['cloud-helpers.py'].splitlines())+'\n'
+        helpers=helpers.replace(' def enter(M):\n'," def enter(M):\n  assert state['bursts']<3 and managed_roles()==[]\n")
+        return controller,helpers,private
+    def test_capsule_binds_new_manifest_query_confirmation_and_source(self):
+        result=runtime_artifact.sql00_actor_artifacts(*self.capsule());c=result['cloud-session.py'];h=result['cloud-helpers.py'];p=result['private-sql-helper.py']
+        self.assertIn("v['sql00_actor_errors']",c);self.assertIn("fresh['sql00ActorApprovalSha256']",c);self.assertIn("M['require_sql00_actor_manifest']",c);self.assertIn("assert state.get('authorityProbe')=='PASS'",c)
+        self.assertEqual(h.count("M['sql00_actor_managed_role_confirmation']"),2);self.assertEqual(p.count("contract['sql00_actor_role_query']"),2)
+    def test_unknown_capsule_or_skipped_probe_denied(self):
+        c,h,p=self.capsule()
+        for args in [(c.replace('sql00_retained_errors','foreign'),h,p),(c,h,p+p),(c.replace("assert state.get('authorityProbe')=='PASS'",'pass'),h,p),(c,h.replace("result=private_sql('probe' if self.n==1 else 'authority')",'pass'),p)]:
+            with self.assertRaises(ValueError):runtime_artifact.sql00_actor_artifacts(*args)
+    def test_existing_destination_or_unverified_history_not_overwritten(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as temp:
+            p=Path(temp);dest=p/'dest';dest.mkdir()
+            with self.assertRaises(ValueError):runtime_artifact.prepare_sql00_actor_inputs(p,dest)
+            with self.assertRaises(ValueError):runtime_artifact.install_sql00_actor(p,dest,runtime_artifact.SQL00_REVISION_FILES)
+            self.assertEqual(list(dest.iterdir()),[])
+
+
+
+class Sql00ActorPregrantRegression(unittest.TestCase):
+    def fixture(self):
+        f=Sql00ActorRegression().fixture('REVOKED')
+        keys=['nonce','project','instance','principal','sslmode','host','hostaddr','caSha256']
+        return f[1],{k:f[2][k] for k in keys},f[3]
+    def test_fresh_restricted_private_actor_accepted(self):
+        f=self.fixture();self.assertEqual(runtime_artifact.require_sql00_actor_pregrant(*f),'RESTRICTED_BEFORE_GRANT')
+    def test_stale_wrong_identity_membership_and_tls_denied(self):
+        for key,value in [('observedAt','2020-01-01T00:00:00Z'),('currentUser','cloudsqlsuperuser'),('sessionUser','foreign'),('tls',False),('restricted',False),('member',True),('canSet',True),('runtimeAdmin',True),('migratorAdmin',True),('edges',[{}])]:
+            f=self.fixture();f[0][key]=value
+            with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+        f=self.fixture();f[0]['actorFlags']['createdb']=True
+        with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+    def test_transport_scope_nonce_and_missing_flags_denied(self):
+        for key,value in [('project','foreign'),('instance','foreign'),('principal','foreign'),('sslmode','require'),('host','invalid.example'),('hostaddr','127.0.0.1'),('caSha256','0'*64),('nonce','00000000-0000-4000-8000-000000000001')]:
+            f=self.fixture();f[1][key]=value
+            with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+        f=self.fixture();del f[0]['actorFlags']
+        with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+    def test_capsule_proves_pregrant_and_preflight_before_any_grant(self):
+        result=runtime_artifact.sql00_actor_artifacts(*Sql00ActorRegression.capsule());h=result['cloud-helpers.py'];c=result['cloud-session.py']
+        self.assertIn("M['require_sql00_actor_pregrant']",h);self.assertLess(h.index("before=private_sql('revocation')"),h.index("result=private_sql('probe'"));self.assertIn("actor=[r['values']",c)
+    def test_missing_pregrant_boundary_refused(self):
+        c,h,p=Sql00ActorRegression.capsule();h=h.replace("  assert state['bursts']<3 and managed_roles()==[]\n",'')
+        with self.assertRaises(ValueError):runtime_artifact.sql00_actor_artifacts(c,h,p)
+
 if __name__=='__main__':unittest.main()
