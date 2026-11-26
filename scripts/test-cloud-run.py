@@ -1471,4 +1471,275 @@ class Sql00ActorPregrantRegression(unittest.TestCase):
         c,h,p=Sql00ActorRegression.capsule();h=h.replace("  assert state['bursts']<3 and managed_roles()==[]\n",'')
         with self.assertRaises(ValueError):runtime_artifact.sql00_actor_artifacts(c,h,p)
 
+
+class ExecutionMonitoringRegression(unittest.TestCase):
+    def fixture(self, job='cinenest-connectivity-migration'):
+        from unittest.mock import Mock
+        import copy
+        mod = runtime_artifact
+        class Clock:
+            seconds = 0
+            def now(self): return self.seconds
+            def sleep(self, seconds): self.seconds += seconds
+        clock=Clock(); resource=mod.monitoring_job_resource(job); name=resource+'/executions/'+job+'-abc12'
+        proof=lambda principal,permissions:{'principal':principal,'resource':resource,'permissions':list(permissions),'transport':'KEYLESS_EXACT_REQUEST','jobUid':'synthetic-job-uid'}
+        test=Mock(return_value=proof(mod.MONITORING_PRINCIPAL,mod.MONITORING_PERMISSIONS))
+        cleanup=Mock(return_value=proof(mod.PRINCIPAL,mod.JOB_CLEANUP_PERMISSIONS))
+        created={'name':name,'taskCount':1,'createTime':'2026-11-26T00:00:00Z'}
+        success=dict(created,succeededCount=1,conditions=[{'type':'Completed','state':'CONDITION_SUCCEEDED'}])
+        launch=Mock(return_value=created); read=Mock(return_value=success);events=[]
+        guard=mod.JobExecutionMonitor(job,mod.MONITORING_PRINCIPAL,test,cleanup,launch,read,1800,lambda:True,events.append,clock.now,clock.sleep,expected_job_uid='synthetic-job-uid')
+        return guard,clock,test,cleanup,launch,read,events,created,success
+    def test_correct_effective_permissions_and_actual_execution_success(self):
+        f=self.fixture();self.assertEqual(f[0].execute()['state'],'SUCCEEDED');f[4].assert_called_once();self.assertEqual(f[6][0]['existingExecutionRead'],'NOT_CLAIMED_RESOURCE_PERMISSION_TEST_ONLY')
+    def test_wrong_principal_fails_before_launch(self):
+        f=self.fixture();f[2].return_value['principal']='foreign'
+        with self.assertRaises(ValueError):f[0].execute()
+        f[4].assert_not_called()
+    def test_wrong_resource_fails_before_launch(self):
+        f=self.fixture();f[2].return_value['resource']='projects/other/locations/us-east1/jobs/foreign'
+        with self.assertRaises(ValueError):f[0].execute()
+        f[4].assert_not_called()
+    def test_missing_or_condition_denied_permissions_never_launch(self):
+        for missing in runtime_artifact.MONITORING_PERMISSIONS:
+            f=self.fixture();f[2].return_value['permissions'].remove(missing)
+            with self.assertRaises(TimeoutError):f[0].execute()
+            f[4].assert_not_called();self.assertLessEqual(f[1].seconds,120)
+    def test_cleanup_authority_separately_required(self):
+        for key,value in [('principal','foreign'),('permissions',[])]:
+            f=self.fixture();f[3].return_value[key]=value
+            with self.assertRaises((ValueError,TimeoutError)):f[0].execute()
+            f[4].assert_not_called()
+    def test_permission_propagation_has_bounded_read_only_retry(self):
+        f=self.fixture();good=f[2].return_value;f[2].side_effect=[dict(good,permissions=[]),runtime_artifact.ProtectedRequestFailure(403),good]
+        self.assertEqual(f[0].execute()['state'],'SUCCEEDED');self.assertEqual(f[1].seconds,4);f[4].assert_called_once()
+    def test_wrong_execution_name_rejected(self):
+        f=self.fixture();f[5].return_value=dict(f[8],name=f[7]['name'].replace('us-east1','us-west1'))
+        with self.assertRaises(ValueError):f[0].execute()
+        f[4].assert_called_once()
+    def test_unknown_status_never_claims_success(self):
+        f=self.fixture();f[5].return_value=dict(f[7],conditions=[{'type':'Completed','state':'UNRECOGNIZED'}])
+        with self.assertRaises(runtime_artifact.ExecutionMonitoringError) as caught:f[0].execute()
+        self.assertEqual(caught.exception.state,'UNKNOWN');f[4].assert_called_once()
+    def test_creation_success_transient_monitor_failure_does_not_cancel_or_rerun(self):
+        f=self.fixture();f[5].side_effect=[runtime_artifact.ProtectedRequestFailure(403),TimeoutError(),ConnectionError(),f[8]]
+        self.assertEqual(f[0].execute()['state'],'SUCCEEDED');f[4].assert_called_once();self.assertEqual(len([e for e in f[6] if e['event']=='STATUS_READ_RETRY']),3)
+    def test_monitor_failure_exhaustion_keeps_execution_reference(self):
+        f=self.fixture();f[5].side_effect=runtime_artifact.ProtectedRequestFailure(403)
+        with self.assertRaises(runtime_artifact.ExecutionMonitoringError) as caught:f[0].execute()
+        self.assertEqual(caught.exception.execution,f[7]['name']);f[4].assert_called_once();self.assertEqual(f[1].seconds,240)
+    def test_uncertain_creation_never_replayed(self):
+        f=self.fixture();f[4].side_effect=TimeoutError()
+        with self.assertRaises(runtime_artifact.ExecutionMonitoringError):f[0].execute()
+        with self.assertRaises(RuntimeError):f[0].execute()
+        f[4].assert_called_once();f[5].assert_not_called()
+    def test_terminal_failed_and_cancelled_are_not_success(self):
+        for reason,expected in [('ExecutionFailed','FAILED'),('Cancelled','CANCELLED')]:
+            f=self.fixture();f[5].return_value=dict(f[7],conditions=[{'type':'Completed','state':'CONDITION_FAILED','reason':reason}]);self.assertEqual(f[0].execute()['state'],expected)
+    def test_statuses_and_inconsistent_success_counts(self):
+        f=self.fixture();base=f[7];state=runtime_artifact.execution_state
+        self.assertEqual(state(base),'CREATED');self.assertEqual(state(dict(base,conditions=[{'type':'Started','state':'CONDITION_PENDING'}])),'STARTING');self.assertEqual(state(dict(base,runningCount=1)),'RUNNING')
+        for value in [None,{},dict(f[8],succeededCount=0),dict(f[8],failedCount=1),dict(f[8],taskCount=True),dict(base,failedCount=1),dict(base,conditions=[{},None])]:self.assertEqual(state(value),'UNKNOWN')
+    def test_wrong_parent_or_closed_scope_denied(self):
+        for job in ['foreign','projects/foreign/locations/us-east1/jobs/cinenest-connectivity-migration','projects/'+runtime_artifact.PROJECT+'/locations/us-west1/jobs/cinenest-connectivity-migration']:
+            with self.assertRaises(ValueError):runtime_artifact.monitoring_job_resource(job)
+        f=self.fixture();f[5].return_value=dict(f[8],job='foreign')
+        with self.assertRaises(ValueError):f[0].execute()
+    def test_cost_expiry_and_no_extra_monitor_budget(self):
+        f=self.fixture();f[0].cost_check=lambda:False
+        with self.assertRaises(TimeoutError):f[0].execute()
+        f[4].assert_not_called()
+        f=self.fixture();f[1].seconds=1000
+        with self.assertRaises(TimeoutError):f[0].execute()
+        f[4].assert_not_called()
+        for bound in [0,241,True,float('inf')]:
+            with self.assertRaises(ValueError):self.fixture()[0].execute(bound)
+    def test_unauthorized_transport_not_retried(self):
+        f=self.fixture();f[5].side_effect=runtime_artifact.ProtectedRequestFailure(401)
+        with self.assertRaises(runtime_artifact.ProtectedRequestFailure):f[0].execute()
+        self.assertEqual(f[5].call_count,1)
+    def test_keyless_expiry_identity_and_no_credential_echo(self):
+        from datetime import datetime,timezone,timedelta
+        mod=runtime_artifact;now=datetime(2026,11,26,tzinfo=timezone.utc);expiry=(now+timedelta(minutes=15)).isoformat();token='SYNTHETIC_TEST_ONLY_TOKEN'
+        c=mod.DeployerCredential(token,expiry,mod.MONITORING_PRINCIPAL,lambda:now);self.assertNotIn(token,repr(c))
+        with self.assertRaises(RuntimeError):c.use(lambda value:{'leak':value},30)
+        with self.assertRaises(ValueError):c.use(lambda _:True,30)
+        for principal,end,value in [('foreign',expiry,token),(mod.MONITORING_PRINCIPAL,now.isoformat(),token),(mod.MONITORING_PRINCIPAL,(now+timedelta(hours=1)).isoformat(),token),(mod.MONITORING_PRINCIPAL,expiry,token+'\r')]:
+            with self.assertRaises(ValueError):mod.DeployerCredential(value,end,principal,lambda:now)
+    def test_keyless_mint_exact_pinned_identity_only(self):
+        from datetime import datetime,timezone,timedelta
+        from unittest.mock import Mock
+        mod=runtime_artifact;now=datetime(2026,11,26,tzinfo=timezone.utc)
+        identity={'email':mod.MONITORING_PRINCIPAL,'projectId':mod.PROJECT,'uniqueId':mod.RETAINED_SERVICE_IDS['cinenest-deployer']}
+        api=Mock(side_effect=[identity,{'accessToken':'SYNTHETIC_TEST_ONLY_TOKEN','expireTime':(now+timedelta(minutes=15)).isoformat()}]);c=mod.mint_monitoring_credential(api,lambda:now);self.assertEqual(c.principal,mod.MONITORING_PRINCIPAL);self.assertEqual(api.call_args.args[2]['lifetime'],'900s');c.close()
+        for field in ['email','projectId','uniqueId']:
+            api=Mock(return_value=dict(identity,**{field:'foreign'}))
+            with self.assertRaises(ValueError):mod.mint_monitoring_credential(api,lambda:now)
+            self.assertEqual(api.call_count,1)
+
+
+class MonitoringCleanupRegression(unittest.TestCase):
+    def test_deleted_owned_job_binding_no_mutation(self):
+        from unittest.mock import Mock
+        mod=runtime_artifact;url='https://run.googleapis.com/v1/'+mod.monitoring_job_resource('cinenest-connectivity-migration');remove=Mock();events=[]
+        mod.cleanup_binding_with_parent_check({'url':url},lambda _:None,remove,{'cinenest-connectivity-migration':'synthetic-job-uid'},events.append);remove.assert_not_called();self.assertEqual(events[0]['verification'],'GET_404')
+    def test_typed404_preserved_and_independently_resolved(self):
+        from unittest.mock import Mock
+        mod=runtime_artifact;url='https://run.googleapis.com/v1/'+mod.monitoring_job_resource('cinenest-connectivity-migration');events=[];get=Mock(side_effect=[{'uid':'synthetic-job-uid'},None]);remove=Mock(side_effect=mod.ProtectedRequestFailure(404))
+        mod.cleanup_binding_with_parent_check({'url':url},get,remove,{'cinenest-connectivity-migration':'synthetic-job-uid'},events.append);self.assertEqual(events[0]['httpStatus'],404);self.assertEqual(events[-1]['originalHttpStatus'],404)
+    def test_cleanup_denial_and_unowned404_not_suppressed(self):
+        from unittest.mock import Mock
+        mod=runtime_artifact;url='https://run.googleapis.com/v1/'+mod.monitoring_job_resource('cinenest-connectivity-migration')
+        for status,owned in [(403,True),(404,False)]:
+            with self.assertRaises(mod.ProtectedRequestFailure):mod.cleanup_binding_with_parent_check({'url':url},lambda _: {'uid':'synthetic-job-uid'},Mock(side_effect=mod.ProtectedRequestFailure(status)),{'cinenest-connectivity-migration':'synthetic-job-uid'} if owned else {},lambda _:None)
+    def deletion(self, get, delete, attached=False, maximum=600):
+        f=ExecutionMonitoringRegression().fixture();events=[]
+        return runtime_artifact.owned_deletion_convergence(get,'123',delete,events.append,maximum,attached,f[1].now,f[1].sleep),events,f
+    def test_slow137_second_deletion_exceeds_old_poll_but_converges(self):
+        from unittest.mock import Mock
+        f=ExecutionMonitoringRegression().fixture();clock=f[1];delete=Mock(return_value={'name':'operation-synthetic','status':'RUNNING'});events=[]
+        result=runtime_artifact.owned_deletion_convergence(lambda: {'id':'123'} if clock.seconds<137 else None,'123',delete,events.append,600,False,clock.now,clock.sleep)
+        self.assertEqual(result,'ABSENT_VERIFIED');delete.assert_called_once();self.assertTrue(any(x['event']=='DELETION_EXCEEDED_ORIGINAL_POLL' for x in events));self.assertEqual(clock.seconds,138)
+    def test_delete_uncertain_response_does_not_repeat_mutation(self):
+        from unittest.mock import Mock
+        f=ExecutionMonitoringRegression().fixture();clock=f[1];delete=Mock(side_effect=TimeoutError());events=[]
+        result=runtime_artifact.owned_deletion_convergence(lambda:{'id':'123'} if clock.seconds<4 else None,'123',delete,events.append,600,False,clock.now,clock.sleep)
+        self.assertEqual(result,'ABSENT_VERIFIED');delete.assert_called_once();self.assertTrue(any(x['event']=='DELETE_REQUEST_ERROR' for x in events))
+    def test_delete_permission_denial_stops_and_is_retained(self):
+        from unittest.mock import Mock
+        delete=Mock(side_effect=runtime_artifact.ProtectedRequestFailure(403));events=[];f=ExecutionMonitoringRegression().fixture()
+        with self.assertRaises(runtime_artifact.ProtectedRequestFailure):runtime_artifact.owned_deletion_convergence(lambda:{'id':'123'},'123',delete,events.append,600,False,f[1].now,f[1].sleep)
+        delete.assert_called_once();self.assertEqual(events[0]['httpStatus'],403)
+    def test_retry_exhaustion_and_session_deadline(self):
+        from unittest.mock import Mock
+        f=ExecutionMonitoringRegression().fixture();delete=Mock()
+        with self.assertRaises(TimeoutError):runtime_artifact.owned_deletion_convergence(lambda:{'id':'123'},'123',delete,lambda _:None,30,False,f[1].now,f[1].sleep)
+        self.assertEqual(f[1].seconds,30);delete.assert_called_once()
+    def test_unrelated_replacement_id_refused(self):
+        from unittest.mock import Mock
+        delete=Mock()
+        with self.assertRaises(ValueError):self.deletion(lambda:{'id':'foreign'},delete)
+        delete.assert_not_called()
+    def test_attached_disk_is_never_deleted(self):
+        from unittest.mock import Mock
+        f=ExecutionMonitoringRegression().fixture();delete=Mock();clock=f[1]
+        self.assertEqual(runtime_artifact.owned_deletion_convergence(lambda:{'id':'123','users':['owned-VM']} if clock.seconds<4 else None,'123',delete,lambda _:None,60,True,clock.now,clock.sleep),'ABSENT_VERIFIED');delete.assert_not_called()
+    def test_read_retry_retains_failure(self):
+        from unittest.mock import Mock
+        get=Mock(side_effect=[runtime_artifact.ProtectedRequestFailure(503),None]);delete=Mock();result,events,_=self.deletion(get,delete);self.assertEqual(result,'ABSENT_VERIFIED');self.assertEqual(events[0]['httpStatus'],503);delete.assert_not_called()
+    def test_forbidden_monitoring_replay_and_admin_contract_unchanged(self):
+        self.assertFalse(runtime_artifact.monitoring_http_retryable(runtime_artifact.ProtectedRequestFailure(401)))
+        self.assertEqual(runtime_artifact.SQL00_ACTOR_SHA256,'4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c')
+        f=Sql00ActorPregrantRegression().fixture();f[0]['actorFlags']['createdb']=True
+        with self.assertRaises(ValueError):runtime_artifact.require_sql00_actor_pregrant(*f)
+    def test_closed_capsule_refuses_modified_inputs(self):
+        with self.assertRaises(ValueError):runtime_artifact.monitoring_cleanup_artifacts('foreign','foreign','foreign')
+
+
+class MonitoringIdentityAndWiringRegression(unittest.TestCase):
+    def test_replaced_job_denied_before_execution(self):
+        f=ExecutionMonitoringRegression().fixture();f[2].return_value['jobUid']='replacement'
+        with self.assertRaises(ValueError):f[0].execute()
+        f[4].assert_not_called()
+    def test_parent_binding_replacement_never_modified(self):
+        from unittest.mock import Mock
+        m=runtime_artifact;remove=Mock();url='https://run.googleapis.com/v1/'+m.monitoring_job_resource('cinenest-connectivity-migration')
+        with self.assertRaises(ValueError):m.cleanup_binding_with_parent_check({'url':url},lambda _:{'uid':'replacement'},remove,{'cinenest-connectivity-migration':'owned'},lambda _:None)
+        remove.assert_not_called()
+    def test_conditional_job_delete_uid_and_etag(self):
+        from unittest.mock import Mock
+        m=runtime_artifact;f=ExecutionMonitoringRegression().fixture();events=[];api=Mock(side_effect=[{'uid':'owned','etag':'A+/='},{'name':'operation-synthetic'},None]);m.delete_owned_job('cinenest-connectivity-migration','owned',api,events.append,100,f[1].now,f[1].sleep)
+        self.assertEqual(api.call_args_list[1].args[0],'DELETE');self.assertIn('etag=A%2B%2F%3D',api.call_args_list[1].args[1]);self.assertEqual(events[-1]['event'],'OWNED_JOB_ABSENCE_VERIFIED')
+    def test_conditional_job_delete_refuses_replacement_or_missing_version(self):
+        from unittest.mock import Mock
+        m=runtime_artifact
+        for value in [{'uid':'foreign','etag':'etag'},{'uid':'owned'},{'uid':'owned','etag':''}]:
+            api=Mock(return_value=value);f=ExecutionMonitoringRegression().fixture()
+            with self.assertRaises(ValueError):m.delete_owned_job('cinenest-connectivity-migration','owned',api,lambda _:None,100,f[1].now,f[1].sleep)
+            self.assertTrue(all(call.args[0]=='GET' for call in api.call_args_list))
+    def test_conditional_job_delete_403_not_suppressed(self):
+        from unittest.mock import Mock
+        m=runtime_artifact;api=Mock(side_effect=[{'uid':'owned','etag':'etag'},m.ProtectedRequestFailure(403)]);f=ExecutionMonitoringRegression().fixture();events=[]
+        with self.assertRaises(m.ProtectedRequestFailure):m.delete_owned_job('cinenest-connectivity-migration','owned',api,events.append,100,f[1].now,f[1].sleep)
+        self.assertEqual(events[-1]['httpStatus'],403)
+    def test_conditional_job_unknown_mutation_not_repeated(self):
+        from unittest.mock import Mock
+        m=runtime_artifact;api=Mock(side_effect=[{'uid':'owned','etag':'etag'},TimeoutError(),{'uid':'owned','etag':'etag'},None]);f=ExecutionMonitoringRegression().fixture();events=[]
+        m.delete_owned_job('cinenest-connectivity-migration','owned',api,events.append,100,f[1].now,f[1].sleep);self.assertEqual(len([c for c in api.call_args_list if c.args[0]=='DELETE']),1);self.assertTrue(events[0]['timeout'])
+    def test_missing_ownership_never_calls_provider(self):
+        from unittest.mock import Mock
+        m=runtime_artifact;api=Mock()
+        with self.assertRaises(ValueError):m.delete_owned_job('cinenest-connectivity-migration',None,api,lambda _:None,100)
+        api.assert_not_called()
+    def test_late_success_not_promoted_past_monitor_budget(self):
+        f=ExecutionMonitoringRegression().fixture()
+        def late(_):f[1].seconds=241;return f[8]
+        f[5].side_effect=late
+        with self.assertRaises(runtime_artifact.ExecutionMonitoringError):f[0].execute()
+        f[4].assert_called_once()
+    def test_finite_deadline_and_required_lifetime(self):
+        m=runtime_artifact;f=ExecutionMonitoringRegression().fixture()
+        for value in [float('nan'),float('inf'),True]:
+            with self.assertRaises(ValueError):m.JobExecutionMonitor('cinenest-connectivity-migration',m.MONITORING_PRINCIPAL,f[2],f[3],f[4],f[5],value,lambda:True,lambda _:None,expected_job_uid='owned')
+        from datetime import datetime,timezone,timedelta
+        now=datetime(2026,11,26,tzinfo=timezone.utc);c=m.DeployerCredential('SYNTHETIC_TEST_ONLY_TOKEN',(now+timedelta(minutes=15)).isoformat(),m.MONITORING_PRINCIPAL,lambda:now)
+        with self.assertRaises(ValueError):c.use(lambda _: {},float('nan'))
+        c.close()
+    def test_generated_job_uses_async_and_actual_state_with_mocks(self):
+        self.run_generated(False)
+    def test_generated_job_cannot_launch_without_monitoring_permission(self):
+        self.run_generated(True)
+    def run_generated(self,deny):
+        import ast,json,tempfile,types,time,runpy
+        m=runtime_artifact;f=ExecutionMonitoringRegression().fixture();clock=f[1];calls=[];events=[]
+        node=ast.parse(m.MONITORING_JOB_CONTROLLER).body[0]
+        with tempfile.TemporaryDirectory() as temp:
+            e=Path(temp);(e/'cost-reconciliation.json').write_text(json.dumps({'estimatedPhaseUsd':0.35}));(e/'fresh-session-authorization.requested.json').write_text(json.dumps({'budget':{'freshMaximumUsd':0.35}}))
+            state={'createdJobs':[],'deployer':m.MONITORING_PRINCIPAL}
+            def gc(name,args,*unused):
+                calls.append(args)
+                if 'replace' in args:return 0,json.dumps({'metadata':{'uid':'owned'}}),''
+                self.assertIn('--async',args);self.assertNotIn('--wait',args)
+                return 0,json.dumps({'metadata':{'namespace':'980464067041','name':'cinenest-connectivity-migration-abc12','labels':{'run.googleapis.com/job':'cinenest-connectivity-migration'}}}),''
+            def proof(resource,perms,principal):return {'principal':principal,'resource':resource,'jobUid':'owned','transport':'KEYLESS_EXACT_REQUEST','permissions':[] if deny else perms}
+            def monitor(*args,**kw):return m.JobExecutionMonitor(*args,**kw,clock=clock.now,sleep=clock.sleep)
+            scope={'M':dict(vars(m),JobExecutionMonitor=monitor),'R':Path(__file__).resolve().parents[1],'E':e,'state':state,'runpy':runpy,'digests':{'diagnostics':'us-east1-docker.pkg.dev/'+m.PROJECT+'/cinenest-runtime/diagnostics@sha256:'+'a'*64},'json':json,'gc':gc,'save':lambda:None,'P':m.PROJECT,'NUM':'980464067041','binding':lambda *a:None,'deadline':1800,'time':types.SimpleNamespace(monotonic=clock.now),'monitor_record':events.append,'monitoring_permissions':lambda r,p:proof(r,p,m.MONITORING_PRINCIPAL),'owner_cleanup_permissions':lambda r,p:proof(r,p,m.PRINCIPAL),'deployer_read_api':lambda *a:dict(f[8],name=m.monitoring_job_resource('cinenest-connectivity-migration')+'/executions/cinenest-connectivity-migration-abc12')}
+            exec(compile(ast.Module(body=[node],type_ignores=[]),'SYNTHETIC_TEST_ONLY_CONTROLLER','exec'),scope)
+            if deny:
+                with self.assertRaises(TimeoutError):scope['job']('MIGRATE')
+                self.assertEqual(len(calls),1);self.assertNotIn('migration',state)
+            else:
+                scope['job']('MIGRATE');self.assertEqual(state['migration'],'PASS_44_V45');self.assertEqual(len(calls),2);self.assertEqual(state['executionResults'][0]['state'],'SUCCEEDED')
+
+
+
+class MonitoringProjectAliasRegression(unittest.TestCase):
+    def test_only_verified_project_number_alias_is_equivalent(self):
+        m=runtime_artifact;job=m.monitoring_job_resource('cinenest-connectivity-migration');self.assertEqual(m.monitoring_job_resource(job.replace(m.PROJECT,m.MONITORING_PROJECT_NUMBER)),job)
+        with self.assertRaises(ValueError):m.monitoring_job_resource(job.replace(m.PROJECT,'999999999999'))
+    def test_execution_response_canonical_project_number_supported(self):
+        f=ExecutionMonitoringRegression().fixture();m=runtime_artifact;f[5].return_value=dict(f[8],name=f[8]['name'].replace(m.PROJECT,m.MONITORING_PROJECT_NUMBER),job=f[0].job.replace(m.PROJECT,m.MONITORING_PROJECT_NUMBER));self.assertEqual(f[0].execute()['state'],'SUCCEEDED')
+    def test_wrong_execution_number_alias_is_not_another_project(self):
+        f=ExecutionMonitoringRegression().fixture();m=runtime_artifact;f[5].return_value=dict(f[8],name=f[8]['name'].replace(m.PROJECT,'999999999999'))
+        with self.assertRaises(ValueError):f[0].execute()
+
+
+
+class DeployerSingleUseRegression(unittest.TestCase):
+    def test_invalid_lifetime_also_consumes_protected_credential(self):
+        from datetime import datetime,timezone,timedelta
+        from unittest.mock import Mock
+        m=runtime_artifact;now=datetime(2026,11,26,tzinfo=timezone.utc);credential=m.DeployerCredential('SYNTHETIC_TEST_ONLY_TOKEN',(now+timedelta(minutes=15)).isoformat(),m.MONITORING_PRINCIPAL,lambda:now);send=Mock(return_value={})
+        with self.assertRaises(ValueError):credential.use(send,float('nan'))
+        with self.assertRaises(ValueError):credential.use(send,30)
+        send.assert_not_called()
+
+class DeployerTokenEncodingRegression(unittest.TestCase):
+    def test_escaped_or_oversized_bearer_material_is_rejected(self):
+        from datetime import datetime,timezone,timedelta
+        m=runtime_artifact;now=datetime(2026,11,26,tzinfo=timezone.utc)
+        for token in ['short','SYNTHETIC_TEST_ONLY_"TOKEN','SYNTHETIC_TEST_ONLY_\\TOKEN','a'*16385]:
+            with self.subTest(length=len(token)),self.assertRaises(ValueError):
+                m.DeployerCredential(token,(now+timedelta(minutes=15)).isoformat(),m.MONITORING_PRINCIPAL,lambda:now)
+
 if __name__=='__main__':unittest.main()

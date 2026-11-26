@@ -20054,5 +20054,115 @@ def sql00_actor_main():
 receipt_admission_successor_errors=sql00_actor_errors
 inert_ci_main=sql00_actor_main
 
+
+
+# Owner-approved exact source successor. Historical validators remain unchanged.
+EXECUTION_MONITORING_BASE = 'a77e1b52d9d032bf68409152d859ed76a4cf8dd8'
+EXECUTION_MONITORING_STATE = {'id': 'CN-GCP-EXECUTION-MONITORING-CLEANUP-001', 'baseline': 'a77e1b52d9d032bf68409152d859ed76a4cf8dd8', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'decision': 'APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR', 'source': 'Owner answer call_038a526f1bfd4153b573cfb6a4b7f923: Approve exact source-only successor', 'requestSha256': 'cd196604ac7669987bbc4af53fa666692a15a48d690405e1883d837daf66b093', 'recordedAtUtc': '2026-11-26T09:55:44.122458+00:00', 'reviewMethod': 'Task-only verified-ledger and controlled-diff exception explicitly included', 'cloudSessions': 0, 'cloudMutations': False, 'newLocalSessions': 0, 'productionAuthorization': 'NONE'}, 'scope': {'monitoringPrincipal': 'cinenest-deployer@project-f903a5f6-f535-4016-aae.iam.gserviceaccount.com', 'project': 'project-f903a5f6-f535-4016-aae', 'region': 'us-east1', 'jobs': ['cinenest-connectivity-migration', 'cinenest-connectivity-probe'], 'permissionReadiness': 'Supported exact-job testIamPermissions under validated keyless deployer identity;require run.jobs.get/run and run.executions.get/list plus run.tasks.get/list where used;separately verify actual cleanup principal and required scoped cleanup permissions. No hypothetical execution read may be reported as PASS.', 'credentialBoundary': 'If direct REST is required,use exact pinned existing deployer service identity and existing approved keyless impersonation authority;authoritative expiry,in-memory opaque tokens,no token persistence/logging;preserve restricted existing Owner/SQL credential and revocation contracts. No new IAM grants or secret versions.', 'beforeRun': 'Bounded permission-propagation polling within both preparation/session/cleanup budgets;refuse launch if missing,wrong principal/scope/condition,permission denial or timeout. No role broadening.', 'runAndMonitor': 'Separate one execution-creation request from read-only polling;capture and strictly validate returned full execution identity/job parent;use documented parent-scoped execution GET;never blindly repeat a mutation on transient/uncertain outcomes. Poll transient authorization/network responses only within a closed bounded policy;preserve CREATED/STARTING/RUNNING/SUCCEEDED/FAILED/CANCELLED/UNKNOWN and actual terminal evidence. Fail closed on exhausted monitoring,using approved bounded cancellation/cleanup.', 'cleanup404': 'Classify ProtectedRequestFailure.status,not error-message strings. Preserve original 404/error evidence. Treat deleted-job IAM as absent only after verifying exact owned parent is gone;403 remains an error.', 'cleanupOperations': 'Bounded operation/state convergence with shared deadline and cleanup reserve;record original timeout and subsequent resolution separately;wait for exact saved VM ID and associated auto-delete disk to disappear before considering manual unattached exact-ID disk cleanup;never delete attached,mismatched or unrelated resources;explicit diagnostic reasons for failed preconditions.', 'independentCleanup': 'Require independent final container/cloud resource and retained-policy/SQL restriction inventories as applicable;preserve original errors even when later inventory converges.', 'preserve': 'All7approved SQL files and44historical migrations byte-identical;existing administrator revocation,private TLS,secret and deployment guards unchanged.'}, 'rollback': 'Revert only successor-owned source commits through governed workflow;preserve qualified predecessor,all historical approvals/evidence,allSQL and migrations;no cloud/database/data rollback or resource mutation authorized', 'cloudSessionAuthorized': False, 'cloudMutationsAuthorized': False, 'sqlChangesAuthorized': False, 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'OFFLINE_QUALIFIED_HOSTED_CI_PENDING', 'offlineTests': '309_PASS_0_FAILURE_0_ERROR_0_SKIPPED', 'architecture': '68_PASS_0_SKIPPED', 'historicalReplay': 'PASS_FULL_UNCHANGED_PREDECESSOR_CHAIN_AFTER_RECORDED_DISK_FAILURES', 'hostedCI': 'PENDING_EXACT_SOURCE', 'cloudRuntime': 'NOT_RUN_NOT_AUTHORIZED', 'migrations': 44, 'unchangedSqlFiles': 7, 'focusedSourceTests': 46, 'negativeControls': 'PASS_COMPLETE_STANDALONE_EXIT_0'}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': '16174bb1a3ee88017e7192c8a6d98d3767976f439b389f3f5f1ae77d3d2e4320', 'scripts/test-cloud-run.py': 'ac684fe537c16089ddea1008b268958badf2098f2c04f231358754269a943adc', 'knowledge/ARCHITECTURE.md': '9efe86ab0216a8885a67c361335d1b067414251b8e32309b3309c774b70db30f', 'knowledge/PROGRESS.md': '6ad879f3b1eaeac6d6bd080c3f76d7bd117baf4adaa244d61015ecbb724ebed6', 'knowledge/product/FEATURE_CATALOG.md': 'e16fbd8ae8ba206eeb0d5c0ba33e32872d1e3f1975cd0c27702bce68c40ffa6d', 'knowledge/guides/USER_GUIDE.md': '2f5024a1424f2b3c46b6c12efadb4987e085c923d137e534694b9a3c050766a2'}}
+EXECUTION_MONITORING_PATHS = set(EXECUTION_MONITORING_STATE['orderedPaths'])
+EXECUTION_MONITORING_SUFFIX_SHA = 'a0d66df0a590a744f6e0ddc7ae5cf9a1bfbb154c978f6e38774b8327218aa44c'
+EXECUTION_MONITORING_MAIN = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+
+def execution_monitoring_errors():
+    try:
+        unit=EXECUTION_MONITORING_STATE
+        if unit['id']!='CN-GCP-EXECUTION-MONITORING-CLEANUP-001' or unit['baseline']!=EXECUTION_MONITORING_BASE or unit['status']!='READY':
+            return ['Execution monitoring source not admitted']
+        authority=unit['authority']
+        if (authority['decision']!='APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR' or authority['requestSha256']!='cd196604ac7669987bbc4af53fa666692a15a48d690405e1883d837daf66b093'
+                or authority['source']!='Owner answer call_038a526f1bfd4153b573cfb6a4b7f923: Approve exact source-only successor'
+                or authority['cloudSessions']!=0 or authority['cloudMutations'] is not False or authority['newLocalSessions']!=0):
+            return ['Execution monitoring Owner authority mismatch']
+        if (unit['cloudSessionAuthorized'] is not False or unit['cloudMutationsAuthorized'] is not False or unit['sqlChangesAuthorized'] is not False
+                or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}
+                or unit['qualification'].get('cloudRuntime')!='NOT_RUN_NOT_AUTHORIZED'):
+            return ['Execution monitoring grants or acceptance expansion']
+        def before(name):return v41_git('show',EXECUTION_MONITORING_BASE+':'+name)
+        for name in ['change-sets.json','status.json']:
+            now=json.loads((K/'execution'/name).read_text());previous=json.loads(before('knowledge/execution/'+name))
+            if now.pop('cloudRunExecutionMonitoringCleanup',None)!=unit or now!=previous:
+                return ['Execution monitoring altered registry/history '+name]
+        inventory={}
+        for row in v41_git('ls-tree','-r','-z',EXECUTION_MONITORING_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        if set(v41_git('ls-files','-z',text=True).split('\0'))-{''}!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):
+            return ['Execution monitoring source inventory drift']
+        if set(v41_git('diff','--name-only','-z',EXECUTION_MONITORING_BASE,text=True).split('\0'))-{''}!=EXECUTION_MONITORING_PATHS:
+            return ['Execution monitoring exact ten-path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            f=R/name
+            if not f.is_file() or f.is_symlink() or kind!=b'blob' or not f.resolve().is_relative_to(R.resolve()) or bool(f.stat().st_mode&0o111)!=(mode==b'100755'):
+                return ['Execution monitoring unsafe file '+name]
+            if name not in EXECUTION_MONITORING_PATHS:
+                data=f.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Execution monitoring unrelated/history drift '+name]
+        for name,digest in unit['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:return ['Execution monitoring source fingerprint drift '+name]
+        for name,dispatch in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',EXECUTION_MONITORING_MAIN.encode())]:
+            previous=before(name)
+            if not previous.endswith(dispatch) or not (R/name).read_bytes().startswith(previous[:-len(dispatch)]):return ['Execution monitoring predecessor code modified '+name]
+        prefix=before('knowledge/execution/validate_execution.py')[:-len(EXECUTION_MONITORING_MAIN.encode())]
+        suffix=(R/'knowledge/execution/validate_execution.py').read_bytes()[len(prefix):]
+        if hashlib.sha256(suffix.replace(EXECUTION_MONITORING_SUFFIX_SHA.encode(),b'0'*64,1)).hexdigest()!=EXECUTION_MONITORING_SUFFIX_SHA:
+            return ['Execution monitoring validator suffix drift']
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(before(name)):return ['Execution monitoring historical prose changed '+name]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(f.relative_to(R)) for f in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:
+            return ['Execution monitoring migration inventory drift']
+        import runpy
+        mod=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        expected={'00-activation-authority-probe.sql.proposed':'4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c','01-protected-credentials-and-migrator-login.psql.proposed':'c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15','02-post-migration-runtime-grants.sql.proposed':'52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52','03-runtime-login-and-migrator-revocation.sql.proposed':'515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6','04-login-revocation-and-session-cleanup.sql.proposed':'01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5','05-runtime-readonly-verification.sql.proposed':'2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c','06-data-preserving-quarantine.sql.proposed':'ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676'}
+        if mod['SQL00_ACTOR_FILES']!=expected or mod['MONITORING_APPROVAL_SHA256']!=authority['requestSha256']:return ['Execution monitoring SQL/approval drift']
+        mod['require_sql00_actor_manifest'](expected);mod['migration_inventory']()
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in EXECUTION_MONITORING_PATHS-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Execution monitoring manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):
+        return ['Execution monitoring inputs inaccessible']
+    return []
+
+
+def execution_monitoring_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('status','BLOCKED'),('authority',{}),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('cloudSessionAuthorized',True),('cloudMutationsAuthorized',True),('sqlChangesAuthorized',True)]:
+        fake=json.loads(json.dumps(EXECUTION_MONITORING_STATE));fake[field]=value
+        with patch.dict(globals(),{'EXECUTION_MONITORING_STATE':fake}):
+            if not execution_monitoring_errors():raise ValueError('Execution monitoring accepted forged '+field)
+    fake=json.loads(json.dumps(EXECUTION_MONITORING_STATE));fake['qualification']['cloudRuntime']='PASS'
+    with patch.dict(globals(),{'EXECUTION_MONITORING_STATE':fake}):
+        if not execution_monitoring_errors():raise ValueError('Execution monitoring accepted false cloud PASS')
+    read=Path.read_bytes
+    for relative in ['scripts/verify-cloud-connectivity.py','knowledge/execution/validate_execution.py','backend/src/main/resources/db/migration/V1__foundation.sql']:
+        target=R/relative
+        if not target.exists():target=next((R/'backend/src/main/resources/db/migration').glob('V1__*'))
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n#unapproved' if p==target else read(p,*a,**kw)):
+            if not execution_monitoring_errors():raise ValueError('Execution monitoring accepted altered source/history')
+    print('PASS execution monitoring exact source,approval,history,SQL,migrations and no-cloud negative controls',flush=True)
+
+
+def execution_monitoring_main():
+    import tempfile,sys
+    errors=execution_monitoring_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    execution_monitoring_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-execution-monitor-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',EXECUTION_MONITORING_BASE],check=True)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+
+receipt_admission_successor_errors=execution_monitoring_errors
+inert_ci_main=execution_monitoring_main
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

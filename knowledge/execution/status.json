@@ -33527,5 +33527,79 @@
       "knowledge/product/FEATURE_CATALOG.md": "e11ea4a2bb5f6dc07a302518606741fc1388da6e2e78e34dfe7ea82b59ac2929",
       "knowledge/guides/USER_GUIDE.md": "b1b2ff233d5fc70aa5aed5cd5f8ef5cedc52ce4bc1ce981a6112bba773adeed9"
     }
+  },
+  "cloudRunExecutionMonitoringCleanup": {
+    "id": "CN-GCP-EXECUTION-MONITORING-CLEANUP-001",
+    "baseline": "a77e1b52d9d032bf68409152d859ed76a4cf8dd8",
+    "status": "READY",
+    "orderedPaths": [
+      "scripts/verify-cloud-connectivity.py",
+      "scripts/test-cloud-run.py",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "decision": "APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR",
+      "source": "Owner answer call_038a526f1bfd4153b573cfb6a4b7f923: Approve exact source-only successor",
+      "requestSha256": "cd196604ac7669987bbc4af53fa666692a15a48d690405e1883d837daf66b093",
+      "recordedAtUtc": "2026-11-26T09:55:44.122458+00:00",
+      "reviewMethod": "Task-only verified-ledger and controlled-diff exception explicitly included",
+      "cloudSessions": 0,
+      "cloudMutations": false,
+      "newLocalSessions": 0,
+      "productionAuthorization": "NONE"
+    },
+    "scope": {
+      "monitoringPrincipal": "cinenest-deployer@project-f903a5f6-f535-4016-aae.iam.gserviceaccount.com",
+      "project": "project-f903a5f6-f535-4016-aae",
+      "region": "us-east1",
+      "jobs": [
+        "cinenest-connectivity-migration",
+        "cinenest-connectivity-probe"
+      ],
+      "permissionReadiness": "Supported exact-job testIamPermissions under validated keyless deployer identity;require run.jobs.get/run and run.executions.get/list plus run.tasks.get/list where used;separately verify actual cleanup principal and required scoped cleanup permissions. No hypothetical execution read may be reported as PASS.",
+      "credentialBoundary": "If direct REST is required,use exact pinned existing deployer service identity and existing approved keyless impersonation authority;authoritative expiry,in-memory opaque tokens,no token persistence/logging;preserve restricted existing Owner/SQL credential and revocation contracts. No new IAM grants or secret versions.",
+      "beforeRun": "Bounded permission-propagation polling within both preparation/session/cleanup budgets;refuse launch if missing,wrong principal/scope/condition,permission denial or timeout. No role broadening.",
+      "runAndMonitor": "Separate one execution-creation request from read-only polling;capture and strictly validate returned full execution identity/job parent;use documented parent-scoped execution GET;never blindly repeat a mutation on transient/uncertain outcomes. Poll transient authorization/network responses only within a closed bounded policy;preserve CREATED/STARTING/RUNNING/SUCCEEDED/FAILED/CANCELLED/UNKNOWN and actual terminal evidence. Fail closed on exhausted monitoring,using approved bounded cancellation/cleanup.",
+      "cleanup404": "Classify ProtectedRequestFailure.status,not error-message strings. Preserve original 404/error evidence. Treat deleted-job IAM as absent only after verifying exact owned parent is gone;403 remains an error.",
+      "cleanupOperations": "Bounded operation/state convergence with shared deadline and cleanup reserve;record original timeout and subsequent resolution separately;wait for exact saved VM ID and associated auto-delete disk to disappear before considering manual unattached exact-ID disk cleanup;never delete attached,mismatched or unrelated resources;explicit diagnostic reasons for failed preconditions.",
+      "independentCleanup": "Require independent final container/cloud resource and retained-policy/SQL restriction inventories as applicable;preserve original errors even when later inventory converges.",
+      "preserve": "All7approved SQL files and44historical migrations byte-identical;existing administrator revocation,private TLS,secret and deployment guards unchanged."
+    },
+    "rollback": "Revert only successor-owned source commits through governed workflow;preserve qualified predecessor,all historical approvals/evidence,allSQL and migrations;no cloud/database/data rollback or resource mutation authorized",
+    "cloudSessionAuthorized": false,
+    "cloudMutationsAuthorized": false,
+    "sqlChangesAuthorized": false,
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "OFFLINE_QUALIFIED_HOSTED_CI_PENDING",
+      "offlineTests": "309_PASS_0_FAILURE_0_ERROR_0_SKIPPED",
+      "architecture": "68_PASS_0_SKIPPED",
+      "historicalReplay": "PASS_FULL_UNCHANGED_PREDECESSOR_CHAIN_AFTER_RECORDED_DISK_FAILURES",
+      "hostedCI": "PENDING_EXACT_SOURCE",
+      "cloudRuntime": "NOT_RUN_NOT_AUTHORIZED",
+      "migrations": 44,
+      "unchangedSqlFiles": 7,
+      "focusedSourceTests": 46,
+      "negativeControls": "PASS_COMPLETE_STANDALONE_EXIT_0"
+    },
+    "sourceSha256": {
+      "scripts/verify-cloud-connectivity.py": "16174bb1a3ee88017e7192c8a6d98d3767976f439b389f3f5f1ae77d3d2e4320",
+      "scripts/test-cloud-run.py": "ac684fe537c16089ddea1008b268958badf2098f2c04f231358754269a943adc",
+      "knowledge/ARCHITECTURE.md": "9efe86ab0216a8885a67c361335d1b067414251b8e32309b3309c774b70db30f",
+      "knowledge/PROGRESS.md": "6ad879f3b1eaeac6d6bd080c3f76d7bd117baf4adaa244d61015ecbb724ebed6",
+      "knowledge/product/FEATURE_CATALOG.md": "e16fbd8ae8ba206eeb0d5c0ba33e32872d1e3f1975cd0c27702bce68c40ffa6d",
+      "knowledge/guides/USER_GUIDE.md": "2f5024a1424f2b3c46b6c12efadb4987e085c923d137e534694b9a3c050766a2"
+    }
   }
 }

@@ -954,3 +954,7 @@ CN-GCP-SQL00-RETAINED-STATE-001 adds source-bound revised SQL00/manifest/staging
 
 ## Delegated custodian qualification boundary
 CN-GCP-SQL00-DELEGATED-ACTOR-001 distinguishes a restricted revoked custodian from the approved temporary managed administrator,while keeping application identities strictly unprivileged.48real PostgreSQL groups,263offline harness tests and68architecture tests passed. The previous cloud attempt stopped at SQL00;credentials,migrations and Cloud Run health were NOT_RUN. No application UI,business logic or migration changed. A fresh cloud session remains separately unauthorized. See [actual evidence](../PROGRESS.md#sql00-delegated-actor). Official4/7;production NONE.
+
+
+## Internal qualification execution monitoring
+CN-GCP-EXECUTION-MONITORING-CLEANUP-001 adds fail-closed permission readiness,explicit execution states,single-launch monitoring and attributable cleanup convergence to the offline qualification tooling. It does not add customer/staff application functionality. Previous live qualification reached execution creation but failed status authorization;no Flyway history or running application was qualified. Current tests are mocked/source-only. See [evidence and limits](../PROGRESS.md#execution-monitoring-cleanup). Official PART1 remains4/7;production NONE.
