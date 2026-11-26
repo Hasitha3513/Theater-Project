@@ -962,3 +962,7 @@ CN-GCP-EXECUTION-MONITORING-CLEANUP-001 adds fail-closed permission readiness,ex
 
 ## Secret-safe internal probe diagnostics
 CN-GCP-PROBE-DIAGNOSTICS-SERVICE-CLEANUP-001 improves qualification diagnostics and exact deleted-service cleanup. It adds no customer/staff feature or production authority. Previous actual cloud migrations/startup passed; authenticated probe failed at an UNKNOWN later step. Mock status/authorization scenarios are offline contracts,not verified real IAM/customer sessions. See [evidence](../PROGRESS.md#probe-diagnostics-service-cleanup). PART1 remains4/7.
+
+
+## Retained database qualification
+CN-GCP-RETAINED-FLYWAY-QUALIFICATION-001 separates explicitly authorized fresh migration from read-only retained history verification. Valid retained44/V45 history must match exact artifacts,checksums and the trusted application-schema contract;new migration count remains zero. Invalid/partial state is denied without repair or data deletion. This is qualification tooling,not a new customer feature or production release. Local real PostgreSQL,image and mocked diagnostics are reported separately. [Evidence](../PROGRESS.md#retained-flyway-history);PART1 remains4/7.
