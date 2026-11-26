@@ -19924,5 +19924,135 @@ def sql00_retained_main():
 receipt_admission_successor_errors=sql00_retained_errors
 inert_ci_main=sql00_retained_main
 
+
+
+# Owner-approved exact source successor. Historical validators remain unchanged.
+SQL00_ACTOR_BASE = '8d88cd61e8f28dfeab4cdadb463f4a93d429e72a'
+SQL00_ACTOR_STATE = {'id': 'CN-GCP-SQL00-DELEGATED-ACTOR-001', 'baseline': '8d88cd61e8f28dfeab4cdadb463f4a93d429e72a', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'decision': 'APPROVED_EXACT_SOURCE_SQL_CORRECTION_AND_LOCAL_QUALIFICATION', 'source': 'User answer call_a4971bf4862a4013b1ac561ce4970e91: Approve exact correction and local qualification', 'requestSha256': '7baffd9c976c457cbe6db25ab41495ef81dc478b2dc88ce28f3a1614ea2bd902', 'sql00Sha256': '4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c', 'recordedAtUtc': '2026-11-26T05:20:13.500564+00:00', 'cloudSessions': 0, 'cloudMutations': False, 'newLocalSessions': 1, 'maximumLocalSecondsIncludingCleanup': 1800, 'productionAuthorization': 'NONE'}, 'scope': ['Append-only successor preserving prior SQL00 versions,source,approval and failure evidence;no application business logic or migration changes', 'Correct only delegated custodian actor-phase validation;preserve strict nonprivileged runtime/migrator roles and all retained-state/ACL/membership/expiry guards', 'Accept only existing exact authenticated custodian acting as approved cloudsqlsuperuser;require effective MEMBER and SET;allow only CREATEDB/CREATEROLE as phase-specific temporary actor attributes;SUPERUSER/REPLICATION/BYPASSRLS always denied', 'Mandatory fresh revoked-state restricted-actor proof before grant and after revocation;no permanent administrator flags or grants', 'Preserve authority probe before credential generation and all six other SQL fingerprints;introduce a closed version-specific SQL manifest and proof binding without rewriting historical inputs', 'Retain non-sensitive exact actor flags and phase in diagnostic evidence even when SQL00 fails;never passwords,tokens or protected catalogs', 'Update only existing canonical/governance/product/user records and protected successor controls;governed commit,PR,CI,permitted merge and automatic main CI'], 'rollback': 'Governed source revert;preserve all SQL/approval/failure versions and database/history;no destructive migration or data rollback', 'cloudSessionAuthorized': False, 'cloudMutationsAuthorized': False, 'sqlChangesAuthorized': 'EXACT_QUALIFIED_SQL_ONLY_CONDITIONAL_ON_SEPARATE_CLOUD_SESSION', 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'LOCAL_SOURCE_AND_SQL_QUALIFIED', 'cloudRuntime': 'NOT_RUN_NOT_AUTHORIZED', 'cloudMigrations': 'NOT_RUN', 'cloudRun': 'NOT_RUN', 'migrations': 44, 'unchangedSqlFiles': 6, 'historicalReplay': 'PASS_IMMUTABLE_PREDECESSOR_CHAIN', 'standaloneNegativeControls': 'PASS', 'hostedCI': 'PENDING', 'postgresqlGroups': 48, 'offlineHarnessTests': 258, 'focusedSourceTests': 16, 'javaArchitectureTests': 68}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': '063bc2bbb97d38682d1697a62d6a608805135cda8bffa9ec9d12f5dbb8418eef', 'scripts/test-cloud-run.py': '999cccd52664a1ddf445825e9ff551f67e266f975c5296e1273300603e2aefc3', 'knowledge/ARCHITECTURE.md': 'f9108b53687cb5978c5516922217f57635325bea3a1d83a156fdb9dc3b2514e8', 'knowledge/PROGRESS.md': '4996e4eae554833464c43be6c5d967781deac7c1280642e3e13856aceb8a60ab', 'knowledge/product/FEATURE_CATALOG.md': 'fa13f099563507b9c07b571791801f4987473cc6227f9ff48931ff73e1eb402f', 'knowledge/guides/USER_GUIDE.md': 'b1b2ff233d5fc70aa5aed5cd5f8ef5cedc52ce4bc1ce981a6112bba773adeed9'}}
+SQL00_ACTOR_PATHS = set(SQL00_ACTOR_STATE['orderedPaths'])
+SQL00_ACTOR_MAIN = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+SQL00_ACTOR_SUFFIX_SHA = '3d7048691b5b941fc7e12573542a570eb8e5446ef56fcf7f9ce34c2a9ccf7c0d'
+
+
+def sql00_actor_errors():
+    try:
+        unit=SQL00_ACTOR_STATE
+        before=lambda n:v41_git('show',SQL00_ACTOR_BASE+':'+n)
+        if (unit['id']!='CN-GCP-SQL00-DELEGATED-ACTOR-001' or unit['status']!='READY'
+                or len(SQL00_ACTOR_PATHS)!=10 or unit['baseline']!=SQL00_ACTOR_BASE
+                or unit['authority']['requestSha256']!='7baffd9c976c457cbe6db25ab41495ef81dc478b2dc88ce28f3a1614ea2bd902'
+                or unit['authority']['decision']!='APPROVED_EXACT_SOURCE_SQL_CORRECTION_AND_LOCAL_QUALIFICATION'
+                or not unit['authority']['source'] or unit['cloudSessionAuthorized'] is not False
+                or unit['cloudMutationsAuthorized'] is not False or unit['sqlChangesAuthorized']!='EXACT_QUALIFIED_SQL_ONLY_CONDITIONAL_ON_SEPARATE_CLOUD_SESSION'
+                or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}
+                or unit['qualification']['cloudRuntime']!='NOT_RUN_NOT_AUTHORIZED'
+                or unit['qualification']['cloudMigrations']!='NOT_RUN' or unit['qualification']['cloudRun']!='NOT_RUN'):
+            return ['SQL00 delegated actor authority/scope/acceptance drift']
+        v41_git('merge-base','--is-ancestor',SQL00_ACTOR_BASE,'HEAD')
+        for name in ['knowledge/execution/change-sets.json','knowledge/execution/status.json']:
+            doc=json.loads((R/name).read_bytes())
+            if doc.pop('cloudRunSql00DelegatedActor',None)!=unit or doc!=json.loads(before(name)):
+                return ['SQL00 delegated actor historical registry drift '+name]
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',SQL00_ACTOR_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):
+            return ['SQL00 delegated actor source inventory drift']
+        if set(v41_git('diff','--name-only','-z',SQL00_ACTOR_BASE,text=True).split('\0'))-{''}!=SQL00_ACTOR_PATHS:
+            return ['SQL00 delegated actor exact ten-path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            p=R/name
+            if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):
+                return ['SQL00 delegated actor unsafe file '+name]
+            data=p.read_bytes()
+            if name not in SQL00_ACTOR_PATHS and hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:
+                return ['SQL00 delegated actor unrelated/history drift '+name]
+        for name,digest in unit['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+                return ['SQL00 delegated actor source fingerprint drift '+name]
+        for name,main in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',SQL00_ACTOR_MAIN)]:
+            old=before(name)
+            if not old.endswith(main) or not (R/name).read_bytes().startswith(old[:-len(main)]):
+                return ['SQL00 delegated actor predecessor source modified '+name]
+        prefix=before('knowledge/execution/validate_execution.py')[:-len(SQL00_ACTOR_MAIN)]
+        suffix=(R/'knowledge/execution/validate_execution.py').read_bytes()[len(prefix):]
+        normalized=suffix.replace(SQL00_ACTOR_SUFFIX_SHA.encode(),b'0'*64,1)
+        if hashlib.sha256(normalized).hexdigest()!=SQL00_ACTOR_SUFFIX_SHA:
+            return ['SQL00 delegated actor validator suffix drift']
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(before(name)):
+                return ['SQL00 delegated actor historical prose drift '+name]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(p.relative_to(R)) for p in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:
+            return ['SQL00 delegated actor historical migration inventory drift']
+        import runpy
+        module=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        expected_sql={'00-activation-authority-probe.sql.proposed': 'cd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d', '01-protected-credentials-and-migrator-login.psql.proposed': 'c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15', '02-post-migration-runtime-grants.sql.proposed': '52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52', '03-runtime-login-and-migrator-revocation.sql.proposed': '515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6', '04-login-revocation-and-session-cleanup.sql.proposed': '01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5', '05-runtime-readonly-verification.sql.proposed': '2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c', '06-data-preserving-quarantine.sql.proposed': 'ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676'}
+        if module['SQL_FILES']!=expected_sql:return ['SQL00 delegated actor SQL fingerprint drift']
+        revised=dict(expected_sql,**{'00-activation-authority-probe.sql.proposed':'07d9b1a1199efe212697f443c2be1fcab8d47d7ce531006463807ee60c8ab884'})
+        if module['SQL00_REVISION_FILES']!=revised or module['SQL00_REVISION_APPROVAL']!='d4de6e3487335c535b5ae965e5c9e42ada66bcbe4d15138a88f7ed4a540ff8d0' or hashlib.sha256(module['SQL00_REVISION_SQL'].encode()).hexdigest()!=revised['00-activation-authority-probe.sql.proposed']:return ['SQL00 admitted revision drift']
+        module['require_sql00_revision_manifest'](revised)
+        actor=dict(expected_sql,**{'00-activation-authority-probe.sql.proposed':'4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c'})
+        if module['SQL00_ACTOR_FILES']!=actor or module['SQL00_ACTOR_APPROVAL']!='7baffd9c976c457cbe6db25ab41495ef81dc478b2dc88ce28f3a1614ea2bd902' or hashlib.sha256(module['SQL00_ACTOR_SQL'].encode()).hexdigest()!=actor['00-activation-authority-probe.sql.proposed']:return ['SQL00 delegated actor revision drift']
+        module['require_sql00_actor_manifest'](actor)
+        module['migration_inventory']()
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in SQL00_ACTOR_PATHS-{'knowledge/manifest.json'}:
+                entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():
+            return ['SQL00 delegated actor manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):
+        return ['SQL00 delegated actor inputs inaccessible']
+    return []
+
+
+def sql00_actor_negative_controls():
+    from unittest.mock import patch
+    changes=[('status','BLOCKED'),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('authority',{}),('cloudSessionAuthorized',True),('cloudMutationsAuthorized',True),('sqlChangesAuthorized',True)]
+    for field,value in changes:
+        fake=json.loads(json.dumps(SQL00_ACTOR_STATE));fake[field]=value
+        with patch.dict(globals(),{'SQL00_ACTOR_STATE':fake}):
+            if not sql00_actor_errors():raise ValueError('SQL00 delegated actor accepted forged '+field)
+    for field in ['cloudRuntime','cloudMigrations','cloudRun']:
+        fake=json.loads(json.dumps(SQL00_ACTOR_STATE));fake['qualification'][field]='PASS'
+        with patch.dict(globals(),{'SQL00_ACTOR_STATE':fake}):
+            if not sql00_actor_errors():raise ValueError('SQL00 delegated actor accepted false cloud PASS')
+    read=Path.read_bytes
+    for relative in ['scripts/verify-cloud-connectivity.py','knowledge/execution/validate_execution.py','backend/src/main/resources/db/migration/V1__foundation.sql']:
+        target=R/relative
+        if not target.exists():target=next((R/'backend/src/main/resources/db/migration').glob('V1__*'))
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n#unapproved' if p==target else read(p,*a,**kw)):
+            if not sql00_actor_errors():raise ValueError('SQL00 delegated actor accepted altered source/history')
+    glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob(p,*a,**kw),folder/'V46__unapproved.sql']) if p==folder else glob(p,*a,**kw)):
+        if not sql00_actor_errors():raise ValueError('SQL00 delegated actor accepted extra migration')
+    print('PASS SQL00 delegated actor scope,Owner approval,source/history/manifest,migrations,SQL and no-cloud negative controls',flush=True)
+
+
+def sql00_actor_main():
+    import tempfile,sys
+    errors=sql00_actor_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    sql00_actor_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-sql00-actor-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        # Read-only immutable Git object reuse; historical source/validators unchanged.
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',SQL00_ACTOR_BASE],check=True)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+
+receipt_admission_successor_errors=sql00_actor_errors
+inert_ci_main=sql00_actor_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
