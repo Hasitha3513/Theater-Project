@@ -1742,4 +1742,122 @@ class DeployerTokenEncodingRegression(unittest.TestCase):
             with self.subTest(length=len(token)),self.assertRaises(ValueError):
                 m.DeployerCredential(token,(now+timedelta(minutes=15)).isoformat(),m.MONITORING_PRINCIPAL,lambda:now)
 
+
+
+class ProbeDiagnosticsCleanup(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import runpy,tempfile,subprocess,shutil
+        cls.mod=runpy.run_path(str(Path(__file__).with_name('verify-cloud-connectivity.py')))
+        cls.temp=tempfile.TemporaryDirectory(prefix='cinenest-probe-diagnostic-unit-');cls.directory=Path(cls.temp.name)
+        java=cls.mod['JAVA_SOURCE'];begin=java.index(' static String probeStage=');end=java.index(' public static void main',begin)
+        helper=java[begin:end]
+        cls.java=shutil.which('java');javac=shutil.which('javac')
+        if not cls.java or not javac:raise RuntimeError('JDK required;diagnostic tests cannot be skipped')
+        driver=r"""
+ public static void main(String[] args){
+  stage(args[0],args[1],args[2]);
+  try{
+   if(args[3].equals("timeout"))throw new java.net.http.HttpTimeoutException("secret-canary-cookie-token");
+   if(args[3].equals("sql"))throw new java.sql.SQLException("secret-canary-cookie-token","42501");
+   if(args[3].equals("tls"))throw new javax.net.ssl.SSLException("secret-canary-cookie-token");
+   if(args[3].equals("invalid"))throw new IllegalArgumentException("secret-canary-cookie-token");
+   int status=Integer.parseInt(args[3]);
+   observed(new java.net.http.HttpResponse<String>(){
+    public int statusCode(){return status;}
+    public java.net.http.HttpRequest request(){return null;}
+    public java.util.Optional<java.net.http.HttpResponse<String>> previousResponse(){return java.util.Optional.empty();}
+    public java.net.http.HttpHeaders headers(){return java.net.http.HttpHeaders.of(java.util.Map.of("Content-Type",java.util.List.of(args.length>4?args[4]:"application/json"),"Set-Cookie",java.util.List.of("secret-canary-cookie-token")),(a,b)->true);}
+    public String body(){return "secret-canary-cookie-token";}
+    public java.util.Optional<javax.net.ssl.SSLSession> sslSession(){return java.util.Optional.empty();}
+    public java.net.URI uri(){return java.net.URI.create("https://private.invalid/?secret-canary-cookie-token");}
+    public java.net.http.HttpClient.Version version(){return java.net.http.HttpClient.Version.HTTP_1_1;}
+   });
+   System.out.println("CONTRACT_PASS");
+  }catch(Throwable error){failure(error);System.exit(1);}
+ }
+"""
+        (cls.directory/'ProbeDiagnosticUnit.java').write_text('import java.sql.*;\npublic class ProbeDiagnosticUnit {\n'+helper+driver+'\n}')
+        q=subprocess.run([javac,str(cls.directory/'ProbeDiagnosticUnit.java')],capture_output=True,text=True)
+        if q.returncode:raise AssertionError(q.stderr)
+    @classmethod
+    def tearDownClass(cls):cls.temp.cleanup()
+    def probe(self,stage='HTTP_HEALTH',method='GET',expected='200',actual='200',mime='application/json'):
+        import subprocess
+        q=subprocess.run([self.java,'-cp',str(self.directory),'ProbeDiagnosticUnit',stage,method,expected,actual,mime],capture_output=True,text=True,timeout=10)
+        self.assertNotIn('secret-canary-cookie-token',q.stdout+q.stderr);return q
+    def test_successful_authenticated_response_contract_sequence(self):
+        for stage,expected,status in [('METADATA_ID_TOKEN','200','200'),('HTTP_HEALTH','200','200'),('HTTP_HOME','200','200'),('HTTP_ACCOUNT_DENIAL','401_OR_403','401'),('HTTP_STATIC_ASSET','200_NONEMPTY','200'),('HTTP_CSRF_DENIAL','403','403')]:
+            q=self.probe(stage,'POST' if stage=='HTTP_CSRF_DENIAL' else 'GET',expected,status);self.assertEqual(q.returncode,0,q.stderr);self.assertIn('actual='+status,q.stderr)
+    def test_invalid_login_is_observed_and_rejected(self):self.assertEqual(self.probe(actual='401').returncode,1)
+    def test_expired_token_denied(self):self.assertIn('actual=401',self.probe(actual='401').stderr)
+    def test_missing_authorization_denied(self):self.assertEqual(self.probe(actual='403').returncode,1)
+    def test_wrong_service_identity_denied(self):self.assertIn('actual=403',self.probe(actual='403').stderr)
+    def test_expected_csrf_rejection_passes(self):self.assertEqual(self.probe('HTTP_CSRF_DENIAL','POST','403','403').returncode,0)
+    def test_incorrect_route_is_visible(self):self.assertIn('actual=404',self.probe(actual='404').stderr)
+    def test_backend_500_is_not_success(self):self.assertEqual(self.probe(actual='500').returncode,1)
+    def test_unexpected_redirect_or_auth_or_missing_status(self):
+        for status in ['302','401','403','404']:self.assertEqual(self.probe(actual=status).returncode,1)
+    def test_database_denial_reports_safe_sqlstate(self):self.assertIn('class=SQL_42501',self.probe('DATABASE_IDENTITY_TLS','SQL_READ','IDENTITY_TLS','sql').stderr)
+    def test_timeout_mutation_is_uncertain_and_never_retried(self):
+        q=self.probe('HTTP_CSRF_DENIAL','POST','403','timeout');self.assertIn('outcome=UNCERTAIN',q.stderr);self.assertIn('retry=NONE',q.stderr)
+    def test_readonly_timeout_reports_failure_without_mutation(self):self.assertIn('mutating=false',self.probe(actual='timeout').stderr)
+    def test_missing_diagnostics_rejected(self):self.assertNotEqual(self.probe('UNKNOWN').returncode,0)
+    def test_sensitive_data_and_arbitrary_metadata_redacted(self):
+        q=self.probe(mime='application/json-secret-canary-cookie-token');self.assertIn('type=OTHER',q.stderr);self.assertNotIn('Set-Cookie',q.stderr)
+    def receipt(self):return {'url':self.mod['SERVICE_PARENT_URL'],'uid':'owned-original','deletionAcknowledged':True}
+    def clean(self,parent,remove,receipt=None,url=None):
+        events=[];self.mod['cleanup_service_binding']({'url':url or self.mod['SERVICE_PARENT_URL']},parent,remove,self.receipt() if receipt is None else receipt,events.append);return events
+    def test_parent_service_deleted_before_cleanup(self):
+        remove=unittest.mock.Mock();events=self.clean(lambda _:None,remove);remove.assert_not_called();self.assertEqual(events[0]['event'],'SERVICE_BINDING_PARENT_ALREADY_ABSENT')
+    def test_unrelated_resource_404_not_masked(self):
+        remove=unittest.mock.Mock();
+        with self.assertRaises(ValueError):self.clean(lambda _:None,remove,url=self.mod['SERVICE_PARENT_URL']+'-unrelated')
+        remove.assert_not_called()
+    def test_incomplete_cleanup_is_error_and_original_404_retained(self):
+        events=[];error=self.mod['ProtectedRequestFailure'](404)
+        with self.assertRaises(self.mod['ProtectedRequestFailure']):self.mod['cleanup_service_binding']({'url':self.mod['SERVICE_PARENT_URL']},lambda _:{'uid':'owned-original'},unittest.mock.Mock(side_effect=error),self.receipt(),events.append)
+        self.assertEqual(events[0]['httpStatus'],404)
+    def test_resource_replacement_and_missing_ownership_refused(self):
+        for receipt in [{},dict(self.receipt(),deletionAcknowledged=False)]:
+            with self.assertRaises(ValueError):self.clean(lambda _:None,unittest.mock.Mock(),receipt=receipt)
+        with self.assertRaises(ValueError):self.clean(lambda _:{'uid':'replacement'},unittest.mock.Mock())
+    def test_service_binding_race_verified_absent_preserves_original(self):
+        events=[];self.mod['cleanup_service_binding']({'url':self.mod['SERVICE_PARENT_URL']},unittest.mock.Mock(side_effect=[{'uid':'owned-original'},None]),unittest.mock.Mock(side_effect=self.mod['ProtectedRequestFailure'](404)),self.receipt(),events.append)
+        self.assertEqual([e['event'] for e in events],['SERVICE_BINDING_REMOVAL_ERROR','SERVICE_BINDING_PARENT_REMOVAL_VERIFIED'])
+    def test_service_403_is_never_absence(self):
+        with self.assertRaises(self.mod['ProtectedRequestFailure']):self.clean(lambda _:{'uid':'owned-original'},unittest.mock.Mock(side_effect=self.mod['ProtectedRequestFailure'](403)))
+    def test_no_unsafe_request_retry_or_credential_logging(self):
+        java=self.mod['JAVA_SOURCE'];self.assertNotIn('printStackTrace',java);self.assertNotIn('getMessage()',java);self.assertIn('Redirect.NEVER',java);self.assertIn('X-CineNest-Probe-ID',java);self.assertNotIn('while(',java)
+
+
+class OwnedServiceDeletion(unittest.TestCase):
+    def setUp(self):
+        import runpy
+        self.m=runpy.run_path(str(Path(__file__).with_name('verify-cloud-connectivity.py')));self.receipt={'url':self.m['SERVICE_PARENT_URL'],'uid':'original','deletionAcknowledged':False};self.events=[]
+    def delete(self,api,clock=lambda:100):return self.m['delete_owned_service'](self.receipt,api,self.events.append,200,clock=clock,sleep=lambda _:None)
+    def test_exact_uid_etag_deleted_once_and_verified_absent(self):
+        api=unittest.mock.Mock(side_effect=[{'uid':'original','etag':'a+/='},{'name':'approved-operation'},None]);self.assertEqual(self.delete(api),'ABSENT_VERIFIED');self.assertEqual(api.call_count,3);self.assertIn('?etag=a%2B%2F%3D',api.call_args_list[1].args[1]);self.assertTrue(self.receipt['deletionAcknowledged'])
+    def test_replacement_refuses_delete(self):
+        api=unittest.mock.Mock(return_value={'uid':'replacement','etag':'x'})
+        with self.assertRaises(ValueError):self.delete(api)
+        self.assertEqual(api.call_count,1)
+    def test_uncertain_delete_not_replayed_and_original_preserved(self):
+        api=unittest.mock.Mock(side_effect=[{'uid':'original','etag':'x'},TimeoutError(),None]);self.assertEqual(self.delete(api),'ABSENT_VERIFIED');self.assertEqual(sum(c.args[0]=='DELETE' for c in api.call_args_list),1);self.assertEqual(self.events[0]['event'],'SERVICE_DELETE_REQUEST_ERROR')
+    def test_delete_403_is_not_absence(self):
+        with self.assertRaises(self.m['ProtectedRequestFailure']):self.delete(unittest.mock.Mock(side_effect=[{'uid':'original','etag':'x'},self.m['ProtectedRequestFailure'](403)]))
+    def test_missing_etag_fails_closed(self):
+        api=unittest.mock.Mock(return_value={'uid':'original'})
+        with self.assertRaises(ValueError):self.delete(api)
+        self.assertEqual(api.call_count,1)
+    def test_expired_deadline_prevents_any_request(self):
+        api=unittest.mock.Mock()
+        with self.assertRaises(TimeoutError):self.delete(api,clock=lambda:201)
+        api.assert_not_called()
+    def test_existing_absence_requires_original_receipt(self):
+        api=unittest.mock.Mock(return_value=None);self.assertEqual(self.delete(api),'ABSENT_VERIFIED');self.assertFalse(any(c.args[0]=='DELETE' for c in api.call_args_list))
+    def test_incomplete_deletion_is_not_success(self):
+        times=iter([100,100,100,201]);api=unittest.mock.Mock(side_effect=[{'uid':'original','etag':'x'},{'name':'op'}])
+        with self.assertRaises(TimeoutError):self.delete(api,clock=lambda:next(times))
+
 if __name__=='__main__':unittest.main()
