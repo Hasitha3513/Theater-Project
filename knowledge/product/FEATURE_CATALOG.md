@@ -958,3 +958,7 @@ CN-GCP-SQL00-DELEGATED-ACTOR-001 distinguishes a restricted revoked custodian fr
 
 ## Internal qualification execution monitoring
 CN-GCP-EXECUTION-MONITORING-CLEANUP-001 adds fail-closed permission readiness,explicit execution states,single-launch monitoring and attributable cleanup convergence to the offline qualification tooling. It does not add customer/staff application functionality. Previous live qualification reached execution creation but failed status authorization;no Flyway history or running application was qualified. Current tests are mocked/source-only. See [evidence and limits](../PROGRESS.md#execution-monitoring-cleanup). Official PART1 remains4/7;production NONE.
+
+
+## Secret-safe internal probe diagnostics
+CN-GCP-PROBE-DIAGNOSTICS-SERVICE-CLEANUP-001 improves qualification diagnostics and exact deleted-service cleanup. It adds no customer/staff feature or production authority. Previous actual cloud migrations/startup passed; authenticated probe failed at an UNKNOWN later step. Mock status/authorization scenarios are offline contracts,not verified real IAM/customer sessions. See [evidence](../PROGRESS.md#probe-diagnostics-service-cleanup). PART1 remains4/7.

@@ -20164,5 +20164,113 @@ def execution_monitoring_main():
 
 receipt_admission_successor_errors=execution_monitoring_errors
 inert_ci_main=execution_monitoring_main
+# Owner-approved exact source successor. Historical validators remain unchanged.
+PROBE_DIAGNOSTICS_BASE = '58f40a0422a540fe7a232b83914857e189286b4b'
+PROBE_DIAGNOSTICS_STATE = {'id': 'CN-GCP-PROBE-DIAGNOSTICS-SERVICE-CLEANUP-001', 'baseline': '58f40a0422a540fe7a232b83914857e189286b4b', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'source': 'Owner answer call_24ede5470de74873908e95d8a55eb254: Approve exact source-only successor', 'answer': 'Approve exact source-only successor', 'requestSha256': '1aa01b5f96e847cd1ce446e9f4b7f47da46e44630a20ef2c8fa4abcef6e95bdc', 'recordedAtUtc': '2026-11-26T14:42:16.442958+00:00', 'scope': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'cloudSession': False, 'decision': 'APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR', 'cloudSessions': 0, 'cloudMutations': False, 'newLocalSessions': 0, 'reviewMethod': 'Task-only verified-ledger and controlled-diff exception explicitly included'}, 'scope': ['Instrument existing Java probe with fixed allowlisted stage, generated safe correlation ID, expected/actual HTTP status, safe failure class, SQLSTATE allowlist, bounded content-type/length metadata, read-only/mutating and uncertain-outcome labels; never raw bodies,headers,exceptions,tokens,cookies or URL queries', 'No retries of mutating operations; bounded read-only retry only for explicitly retryable transport/status classes; preserve existing status/CSRF/SQL assertions and strict TLS', 'Extend typed deleted-parent cleanup to exact owned service UID and deletion acknowledgement, verify absence independently, reject replacement/drift/unrelated 404/403 and retain original errors', 'Add all 18 requested offline scenario groups; mocks and loopback only, clearly distinguished from real IAM/cloud qualification', 'Update existing canonical records and execution successor validators without inventing product acceptance'], 'rollback': 'Governed revert of successor-only source changes; preserve all SQL, migrations, historical failures and cloud evidence. No database or cloud rollback authorized.', 'cloudSessionAuthorized': False, 'cloudMutationsAuthorized': False, 'sqlChangesAuthorized': False, 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'OFFLINE_QUALIFIED_HOSTED_CI_PENDING', 'cloudRuntime': 'NOT_RUN_NOT_AUTHORIZED', 'offlineTests': '338_PASS_0_FAILURE_0_ERROR_0_SKIPPED', 'focusedSourceTests': 29, 'architecture': '68_PASS_0_FAILURE_0_ERROR_0_SKIPPED', 'historicalReplay': 'PASS_FULL_IMMUTABLE_PREDECESSOR_CHAIN_WITH_READ_ONLY_OBJECT_REUSE', 'negativeControls': 'PASS_COMPLETE_STANDALONE_EXIT_0', 'hostedCI': 'PENDING_EXACT_SOURCE', 'migrations': 44, 'unchangedSqlFiles': 7, 'javaFullCompilation': 'PASS_JAVA25_FLYWAY12_4_0'}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': '482c852af8bdbab9142e1ed5a65c49846da257a37aa241c8fe26dbe3561f9a3d', 'scripts/test-cloud-run.py': '1e083576907d26ff326ab168dcaa94827cc75ca443a5c8c855c5896a8b104063', 'knowledge/ARCHITECTURE.md': 'f6b7beee88daa0486194edc78d53f966a7e58b73417005465bd4dfa5cd2e6487', 'knowledge/PROGRESS.md': 'e789e4dd40e271caee7b620cc95d35d027b35adcf74e72b0d4baeaeaca28b41d', 'knowledge/product/FEATURE_CATALOG.md': 'd9e60cb38aa83521da3d8a4332718141c41cf682642f8235fb51b8748eaa7f87', 'knowledge/guides/USER_GUIDE.md': '601289181d33c8c67f6cb309afcba7ab550359eb76c99d0507292213e9759a22'}}
+PROBE_DIAGNOSTICS_PATHS = set(PROBE_DIAGNOSTICS_STATE['orderedPaths'])
+PROBE_DIAGNOSTICS_SUFFIX_SHA = '4ba0759937a6241dd7b0105d4091ceffdbbb77f79a323dd39b4882e1aa05babb'
+PROBE_DIAGNOSTICS_MAIN = "if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+
+
+def probe_diagnostics_errors():
+    try:
+        unit=PROBE_DIAGNOSTICS_STATE
+        if unit['id']!='CN-GCP-PROBE-DIAGNOSTICS-SERVICE-CLEANUP-001' or unit['baseline']!=PROBE_DIAGNOSTICS_BASE or unit['status']!='READY':
+            return ['Probe diagnostics source not admitted']
+        authority=unit['authority']
+        if (authority['decision']!='APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR' or authority['requestSha256']!='1aa01b5f96e847cd1ce446e9f4b7f47da46e44630a20ef2c8fa4abcef6e95bdc'
+                or authority['source']!='Owner answer call_24ede5470de74873908e95d8a55eb254: Approve exact source-only successor'
+                or authority['cloudSessions']!=0 or authority['cloudMutations'] is not False or authority['newLocalSessions']!=0):
+            return ['Probe diagnostics Owner authority mismatch']
+        if (unit['cloudSessionAuthorized'] is not False or unit['cloudMutationsAuthorized'] is not False or unit['sqlChangesAuthorized'] is not False
+                or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}
+                or unit['qualification'].get('cloudRuntime')!='NOT_RUN_NOT_AUTHORIZED'):
+            return ['Probe diagnostics grants or acceptance expansion']
+        def before(name):return v41_git('show',PROBE_DIAGNOSTICS_BASE+':'+name)
+        for name in ['change-sets.json','status.json']:
+            now=json.loads((K/'execution'/name).read_text());previous=json.loads(before('knowledge/execution/'+name))
+            if now.pop('cloudRunProbeDiagnosticsCleanup',None)!=unit or now!=previous:
+                return ['Probe diagnostics altered registry/history '+name]
+        inventory={}
+        for row in v41_git('ls-tree','-r','-z',PROBE_DIAGNOSTICS_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        if set(v41_git('ls-files','-z',text=True).split('\0'))-{''}!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):
+            return ['Probe diagnostics source inventory drift']
+        if set(v41_git('diff','--name-only','-z',PROBE_DIAGNOSTICS_BASE,text=True).split('\0'))-{''}!=PROBE_DIAGNOSTICS_PATHS:
+            return ['Probe diagnostics exact ten-path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            f=R/name
+            if not f.is_file() or f.is_symlink() or kind!=b'blob' or not f.resolve().is_relative_to(R.resolve()) or bool(f.stat().st_mode&0o111)!=(mode==b'100755'):
+                return ['Probe diagnostics unsafe file '+name]
+            if name not in PROBE_DIAGNOSTICS_PATHS:
+                data=f.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Probe diagnostics unrelated/history drift '+name]
+        for name,digest in unit['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:return ['Probe diagnostics source fingerprint drift '+name]
+        for name,dispatch in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',PROBE_DIAGNOSTICS_MAIN.encode())]:
+            previous=before(name)
+            if not previous.endswith(dispatch) or not (R/name).read_bytes().startswith(previous[:-len(dispatch)]):return ['Probe diagnostics predecessor code modified '+name]
+        prefix=before('knowledge/execution/validate_execution.py')[:-len(PROBE_DIAGNOSTICS_MAIN.encode())]
+        suffix=(R/'knowledge/execution/validate_execution.py').read_bytes()[len(prefix):]
+        if hashlib.sha256(suffix.replace(PROBE_DIAGNOSTICS_SUFFIX_SHA.encode(),b'0'*64,1)).hexdigest()!=PROBE_DIAGNOSTICS_SUFFIX_SHA:
+            return ['Probe diagnostics validator suffix drift']
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(before(name)):return ['Probe diagnostics historical prose changed '+name]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(f.relative_to(R)) for f in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:
+            return ['Probe diagnostics migration inventory drift']
+        import runpy
+        mod=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        expected={'00-activation-authority-probe.sql.proposed':'4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c','01-protected-credentials-and-migrator-login.psql.proposed':'c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15','02-post-migration-runtime-grants.sql.proposed':'52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52','03-runtime-login-and-migrator-revocation.sql.proposed':'515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6','04-login-revocation-and-session-cleanup.sql.proposed':'01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5','05-runtime-readonly-verification.sql.proposed':'2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c','06-data-preserving-quarantine.sql.proposed':'ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676'}
+        if mod['SQL00_ACTOR_FILES']!=expected or mod['PROBE_DIAGNOSTICS_APPROVAL_SHA256']!=authority['requestSha256']:return ['Probe diagnostics SQL/approval drift']
+        mod['require_sql00_actor_manifest'](expected);mod['migration_inventory']()
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in PROBE_DIAGNOSTICS_PATHS-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Probe diagnostics manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):
+        return ['Probe diagnostics inputs inaccessible']
+    return []
+
+
+def probe_diagnostics_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('status','BLOCKED'),('authority',{}),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('cloudSessionAuthorized',True),('cloudMutationsAuthorized',True),('sqlChangesAuthorized',True)]:
+        fake=json.loads(json.dumps(PROBE_DIAGNOSTICS_STATE));fake[field]=value
+        with patch.dict(globals(),{'PROBE_DIAGNOSTICS_STATE':fake}):
+            if not probe_diagnostics_errors():raise ValueError('Probe diagnostics accepted forged '+field)
+    fake=json.loads(json.dumps(PROBE_DIAGNOSTICS_STATE));fake['qualification']['cloudRuntime']='PASS'
+    with patch.dict(globals(),{'PROBE_DIAGNOSTICS_STATE':fake}):
+        if not probe_diagnostics_errors():raise ValueError('Probe diagnostics accepted false cloud PASS')
+    read=Path.read_bytes
+    for relative in ['scripts/verify-cloud-connectivity.py','knowledge/execution/validate_execution.py','backend/src/main/resources/db/migration/V1__foundation.sql']:
+        target=R/relative
+        if not target.exists():target=next((R/'backend/src/main/resources/db/migration').glob('V1__*'))
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n#unapproved' if p==target else read(p,*a,**kw)):
+            if not probe_diagnostics_errors():raise ValueError('Probe diagnostics accepted altered source/history')
+    print('PASS execution monitoring exact source,approval,history,SQL,migrations and no-cloud negative controls',flush=True)
+
+
+def probe_diagnostics_main():
+    import tempfile,sys
+    errors=probe_diagnostics_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    probe_diagnostics_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-probe-diagnostics-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',PROBE_DIAGNOSTICS_BASE],check=True)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+
+receipt_admission_successor_errors=probe_diagnostics_errors
+inert_ci_main=probe_diagnostics_main
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

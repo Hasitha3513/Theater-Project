@@ -33601,5 +33601,83 @@
       "knowledge/product/FEATURE_CATALOG.md": "e16fbd8ae8ba206eeb0d5c0ba33e32872d1e3f1975cd0c27702bce68c40ffa6d",
       "knowledge/guides/USER_GUIDE.md": "2f5024a1424f2b3c46b6c12efadb4987e085c923d137e534694b9a3c050766a2"
     }
+  },
+  "cloudRunProbeDiagnosticsCleanup": {
+    "id": "CN-GCP-PROBE-DIAGNOSTICS-SERVICE-CLEANUP-001",
+    "baseline": "58f40a0422a540fe7a232b83914857e189286b4b",
+    "status": "READY",
+    "orderedPaths": [
+      "scripts/verify-cloud-connectivity.py",
+      "scripts/test-cloud-run.py",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "source": "Owner answer call_24ede5470de74873908e95d8a55eb254: Approve exact source-only successor",
+      "answer": "Approve exact source-only successor",
+      "requestSha256": "1aa01b5f96e847cd1ce446e9f4b7f47da46e44630a20ef2c8fa4abcef6e95bdc",
+      "recordedAtUtc": "2026-11-26T14:42:16.442958+00:00",
+      "scope": [
+        "scripts/verify-cloud-connectivity.py",
+        "scripts/test-cloud-run.py",
+        "knowledge/ARCHITECTURE.md",
+        "knowledge/PROGRESS.md",
+        "knowledge/execution/change-sets.json",
+        "knowledge/execution/status.json",
+        "knowledge/execution/validate_execution.py",
+        "knowledge/manifest.json",
+        "knowledge/product/FEATURE_CATALOG.md",
+        "knowledge/guides/USER_GUIDE.md"
+      ],
+      "cloudSession": false,
+      "decision": "APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR",
+      "cloudSessions": 0,
+      "cloudMutations": false,
+      "newLocalSessions": 0,
+      "reviewMethod": "Task-only verified-ledger and controlled-diff exception explicitly included"
+    },
+    "scope": [
+      "Instrument existing Java probe with fixed allowlisted stage, generated safe correlation ID, expected/actual HTTP status, safe failure class, SQLSTATE allowlist, bounded content-type/length metadata, read-only/mutating and uncertain-outcome labels; never raw bodies,headers,exceptions,tokens,cookies or URL queries",
+      "No retries of mutating operations; bounded read-only retry only for explicitly retryable transport/status classes; preserve existing status/CSRF/SQL assertions and strict TLS",
+      "Extend typed deleted-parent cleanup to exact owned service UID and deletion acknowledgement, verify absence independently, reject replacement/drift/unrelated 404/403 and retain original errors",
+      "Add all 18 requested offline scenario groups; mocks and loopback only, clearly distinguished from real IAM/cloud qualification",
+      "Update existing canonical records and execution successor validators without inventing product acceptance"
+    ],
+    "rollback": "Governed revert of successor-only source changes; preserve all SQL, migrations, historical failures and cloud evidence. No database or cloud rollback authorized.",
+    "cloudSessionAuthorized": false,
+    "cloudMutationsAuthorized": false,
+    "sqlChangesAuthorized": false,
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "OFFLINE_QUALIFIED_HOSTED_CI_PENDING",
+      "cloudRuntime": "NOT_RUN_NOT_AUTHORIZED",
+      "offlineTests": "338_PASS_0_FAILURE_0_ERROR_0_SKIPPED",
+      "focusedSourceTests": 29,
+      "architecture": "68_PASS_0_FAILURE_0_ERROR_0_SKIPPED",
+      "historicalReplay": "PASS_FULL_IMMUTABLE_PREDECESSOR_CHAIN_WITH_READ_ONLY_OBJECT_REUSE",
+      "negativeControls": "PASS_COMPLETE_STANDALONE_EXIT_0",
+      "hostedCI": "PENDING_EXACT_SOURCE",
+      "migrations": 44,
+      "unchangedSqlFiles": 7,
+      "javaFullCompilation": "PASS_JAVA25_FLYWAY12_4_0"
+    },
+    "sourceSha256": {
+      "scripts/verify-cloud-connectivity.py": "482c852af8bdbab9142e1ed5a65c49846da257a37aa241c8fe26dbe3561f9a3d",
+      "scripts/test-cloud-run.py": "1e083576907d26ff326ab168dcaa94827cc75ca443a5c8c855c5896a8b104063",
+      "knowledge/ARCHITECTURE.md": "f6b7beee88daa0486194edc78d53f966a7e58b73417005465bd4dfa5cd2e6487",
+      "knowledge/PROGRESS.md": "e789e4dd40e271caee7b620cc95d35d027b35adcf74e72b0d4baeaeaca28b41d",
+      "knowledge/product/FEATURE_CATALOG.md": "d9e60cb38aa83521da3d8a4332718141c41cf682642f8235fb51b8748eaa7f87",
+      "knowledge/guides/USER_GUIDE.md": "601289181d33c8c67f6cb309afcba7ab550359eb76c99d0507292213e9759a22"
+    }
   }
 }

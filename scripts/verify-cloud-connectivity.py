@@ -1873,4 +1873,84 @@ def delete_owned_job(name, expected_uid, api, record, deadline, clock=time.monot
         sleep(min(2, max(0, end-clock())))
     raise TimeoutError('Exact job absence not verified before cleanup deadline')
 
+
+
+# Owner-approved probe diagnostics/service-cleanup successor; historical source is retained.
+PROBE_DIAGNOSTICS_APPROVAL_SHA256 = '1aa01b5f96e847cd1ce446e9f4b7f47da46e44630a20ef2c8fa4abcef6e95bdc'
+JAVA_SOURCE = 'import java.io.*;\nimport java.sql.*;\nimport org.flywaydb.core.Flyway;\npublic class CinenestConnectivityProbe {\n\n static String probeStage="CONFIGURATION",probeExpected="NONE",probeMethod="NONE";\n static final String probeId=java.util.UUID.randomUUID().toString();\n static void stage(String name,String method,String expected){if(!java.util.Set.of("CONFIGURATION","DATABASE_IDENTITY_TLS","DATABASE_HISTORY_PRIVILEGES","DATABASE_DENIAL_0","DATABASE_DENIAL_1","DATABASE_DENIAL_2","DATABASE_DENIAL_3","DATABASE_DENIAL_4","SERVICE_TARGET","METADATA_ID_TOKEN","HTTP_HEALTH","HTTP_HOME","HTTP_ACCOUNT_DENIAL","STATIC_ASSET_DISCOVERY","HTTP_STATIC_ASSET","HTTP_CSRF_DENIAL").contains(name)||!java.util.Set.of("NONE","GET","POST","SQL_READ","SQL_DENIAL").contains(method)||!java.util.Set.of("NONE","IDENTITY_TLS","44_RESTRICTED","42501","PINNED_TARGET","200","401_OR_403","ASSET_PRESENT","200_NONEMPTY","403").contains(expected))throw new IllegalArgumentException();probeStage=name;probeMethod=method;probeExpected=expected;System.err.println("CINENEST_PROBE stage="+probeStage+" id="+probeId+" method="+probeMethod+" expected="+probeExpected+" event=BEGIN");}\n static String failureClass(Throwable error){\n  if(error instanceof java.net.http.HttpTimeoutException)return "TIMEOUT";\n  if(error instanceof javax.net.ssl.SSLException)return "TLS";\n  if(error instanceof java.sql.SQLException sql){String code=sql.getSQLState();return "SQL_"+(code!=null&&code.matches("[0-9A-Z]{5}")?code:"UNKNOWN");}\n  if(error instanceof java.io.IOException)return "TRANSPORT";\n  if(error instanceof IllegalArgumentException)return "CONFIGURATION";\n  return "CONTRACT";\n }\n static void failure(Throwable error){System.err.println("CINENEST_PROBE stage="+probeStage+" id="+probeId+" method="+probeMethod+" expected="+probeExpected+" class="+failureClass(error)+" retry=NONE mutating="+(probeMethod.equals("POST")||probeMethod.equals("SQL_DENIAL"))+" outcome="+((probeMethod.equals("POST")||probeMethod.equals("SQL_DENIAL"))?"UNCERTAIN":"FAILED"));}\n static <T> java.net.http.HttpResponse<T> observed(java.net.http.HttpResponse<T> response){\n  String raw=response.headers().firstValue("Content-Type").orElse("").split(";",2)[0].toLowerCase(java.util.Locale.ROOT);\n  String type=java.util.Set.of("text/html","application/json","text/plain","application/javascript","text/css").contains(raw)?raw:"OTHER";\n  Object body=response.body();long length=body instanceof String text?text.length():body instanceof byte[] bytes?bytes.length:0;\n  System.err.println("CINENEST_PROBE stage="+probeStage+" id="+probeId+" expected="+probeExpected+" actual="+response.statusCode()+" type="+type+" length="+Math.min(length,1048577));if(!(probeExpected.equals("401_OR_403")?(response.statusCode()==401||response.statusCode()==403):probeExpected.equals("403")?response.statusCode()==403:response.statusCode()==200))throw new IllegalStateException();return response;\n }\n public static void main(String[] args) {\n  try { execute(args); } catch(Throwable failure) { failure(failure); System.exit(1); }\n }\n static void execute(String[] args) throws Exception {\n  if(args[0].equals("DEPENDENCIES")){System.out.println(Flyway.configure().getClass().getName());return;}\n  String url=System.getenv("CINENEST_DB_URL"),user=System.getenv("CINENEST_DB_USER"),password=System.getenv("CINENEST_DB_PASSWORD");\n  if(url==null||user==null||password==null||password.isBlank())throw new IllegalArgumentException();\n  if(!url.equals("jdbc:postgresql://ddc7a2d85eb1.18o4rx1o80d5g.us-east1.sql.goog.:5432/cinenest_connectivity_qualification?sslmode=verify-full&sslrootcert=/run/secrets/db-ca.pem"))throw new IllegalArgumentException("Unexpected isolated JDBC target");\n  if(!user.equals("cinenest_qualification_runtime")&&!user.equals("cinenest_qualification_migrator"))throw new IllegalArgumentException("Unexpected SQL role");\n\n  stage("DATABASE_IDENTITY_TLS","SQL_READ","IDENTITY_TLS");\n  try(var c=DriverManager.getConnection(url,user,password);var s=c.createStatement()){\n   var r=s.executeQuery("SELECT current_user,ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()");if(!r.next()||!user.equals(r.getString(1))||!r.getBoolean(2))throw new IllegalStateException("Identity/TLS mismatch");\n  }\n  if(args[0].equals("PROBE")){\n   if(!user.equals("cinenest_qualification_runtime"))throw new IllegalArgumentException();\n   stage("DATABASE_HISTORY_PRIVILEGES","SQL_READ","44_RESTRICTED");\n   try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){\n    var rr=st.executeQuery("SELECT count(*) FROM public.flyway_schema_history WHERE success AND version IS NOT NULL");rr.next();if(rr.getInt(1)!=44)throw new IllegalStateException();\n    rr=st.executeQuery("SELECT NOT rolsuper AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls AND NOT has_database_privilege(current_user,current_database(),\'CREATE\') AND NOT has_database_privilege(current_user,current_database(),\'TEMP\') AND NOT pg_has_role(current_user,\'cinenest_qualification_migrator\',\'MEMBER\') FROM pg_roles WHERE rolname=current_user");if(!rr.next()||!rr.getBoolean(1))throw new IllegalStateException();\n   }\n   try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){\n    for(String deniedSql:new String[]{"CREATE TABLE public.cinenest_qualification_permission_probe(id integer)","CREATE TEMP TABLE cinenest_qualification_permission_probe(id integer)","CREATE ROLE cinenest_qualification_must_be_denied NOLOGIN","SELECT * FROM cinenest_identity.account","SET ROLE cinenest_qualification_migrator"}){\n     stage("DATABASE_DENIAL_"+java.util.List.of("CREATE TABLE public.cinenest_qualification_permission_probe(id integer)","CREATE TEMP TABLE cinenest_qualification_permission_probe(id integer)","CREATE ROLE cinenest_qualification_must_be_denied NOLOGIN","SELECT * FROM cinenest_identity.account","SET ROLE cinenest_qualification_migrator").indexOf(deniedSql),"SQL_DENIAL","42501");\n     c.setAutoCommit(false);try{st.execute(deniedSql);throw new IllegalStateException("Unexpected SQL authorization");}catch(SQLException error){if(!"42501".equals(error.getSQLState()))throw error;}finally{c.rollback();c.setAutoCommit(true);}\n    }\n   }\n   stage("SERVICE_TARGET","NONE","PINNED_TARGET");\n   var target=java.net.URI.create(System.getenv("CINENEST_QUALIFICATION_SERVICE_URL"));\n   if(!target.getScheme().equals("https")||target.getUserInfo()!=null||target.getQuery()!=null||target.getFragment()!=null||!target.getHost().startsWith("cinenest-connectivity-qualification-")||!target.getHost().endsWith(".run.app")||(!target.getPath().isEmpty()&&!target.getPath().equals("/")))throw new IllegalArgumentException();\n   var client=java.net.http.HttpClient.newBuilder().connectTimeout(java.time.Duration.ofSeconds(10)).followRedirects(java.net.http.HttpClient.Redirect.NEVER).build();\n   var metadata=java.net.URI.create("http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity?audience="+java.net.URLEncoder.encode(target.toString(),java.nio.charset.StandardCharsets.UTF_8)+"&format=full");\n   stage("METADATA_ID_TOKEN","GET","200");\n   var tokenResult=observed(client.send(java.net.http.HttpRequest.newBuilder(metadata).timeout(java.time.Duration.ofSeconds(10)).header("Metadata-Flavor","Google").GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString()));if(tokenResult.statusCode()!=200)throw new IllegalStateException();String token=tokenResult.body();\n   String html=null;\n   for(String path:new String[]{"/healthz","/","/api/accounts/me"}){\n    stage(path.equals("/healthz")?"HTTP_HEALTH":path.equals("/")?"HTTP_HOME":"HTTP_ACCOUNT_DENIAL","GET",path.equals("/api/accounts/me")?"401_OR_403":"200");\n    var response=observed(client.send(java.net.http.HttpRequest.newBuilder(target.resolve(path)).timeout(java.time.Duration.ofSeconds(15)).header("X-CineNest-Probe-ID",probeId).header("Authorization","Bearer "+token).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofString()));\n    if(path.equals("/api/accounts/me")){if(response.statusCode()!=401&&response.statusCode()!=403)throw new IllegalStateException();}\n    else if(response.statusCode()!=200)throw new IllegalStateException();\n    if(path.equals("/"))html=response.body();\n    if(path.equals("/healthz")&&!response.body().contains("UP"))throw new IllegalStateException();\n   }\n   stage("STATIC_ASSET_DISCOVERY","NONE","ASSET_PRESENT");\n   var asset=java.util.regex.Pattern.compile("/_next/static/[^\\\\\\"\'<>\\\\s]+").matcher(html);if(!asset.find())throw new IllegalStateException();\n   stage("HTTP_STATIC_ASSET","GET","200_NONEMPTY");\n   var staticResponse=observed(client.send(java.net.http.HttpRequest.newBuilder(target.resolve(asset.group())).timeout(java.time.Duration.ofSeconds(15)).header("X-CineNest-Probe-ID",probeId).header("Authorization","Bearer "+token).GET().build(),java.net.http.HttpResponse.BodyHandlers.ofByteArray()));if(staticResponse.statusCode()!=200||staticResponse.body().length==0)throw new IllegalStateException();\n   stage("HTTP_CSRF_DENIAL","POST","403");\n   var denied=observed(client.send(java.net.http.HttpRequest.newBuilder(target.resolve("/api/session/logout")).timeout(java.time.Duration.ofSeconds(15)).header("X-CineNest-Probe-ID",probeId).header("Authorization","Bearer "+token).header("Origin","https://wrong.example").POST(java.net.http.HttpRequest.BodyPublishers.noBody()).build(),java.net.http.HttpResponse.BodyHandlers.discarding()));if(denied.statusCode()!=403)throw new IllegalStateException();\n   token=null;System.out.println("PRIVATE_JDBC_RUNTIME_AND_AUTHENTICATED_HTTP_PROBE:PASS");return;\n  }\n\n  if(args[0].equals("MIGRATE")){\n   if(!user.equals("cinenest_qualification_migrator"))throw new IllegalArgumentException();\n   var f=Flyway.configure().dataSource(url,user,password).locations("filesystem:"+args[1]).cleanDisabled(true).load();\n   if(f.migrate().migrationsExecuted!=44)throw new IllegalStateException("Expected44migrations");f.validate();\n   if(!f.info().current().getVersion().toString().equals("45")||f.info().pending().length!=0)throw new IllegalStateException("Wrong Flyway state");\n   try(var c=DriverManager.getConnection(url,user,password);var st=c.createStatement()){st.execute(java.nio.file.Files.readString(java.nio.file.Path.of("/app/sql/02-post-migration-runtime-grants.sql.proposed")));}\n   System.out.println("MIGRATE_VALIDATE_AND_GRANTS:44:V45:PASS");return;\n  }\n\n  throw new IllegalArgumentException("Unexpected mode");\n }\n}\n'
+
+_PREDECESSOR_BINDING_CLEANUP = cleanup_binding_with_parent_check
+SERVICE_PARENT_URL = 'https://run.googleapis.com/v1/projects/'+PROJECT+'/locations/us-east1/services/cinenest-connectivity-qualification'
+
+
+def cleanup_service_binding(binding,get_parent,remove,receipt,record):
+    """Resolve only the pinned original service after acknowledged deletion and fresh absence."""
+    if binding.get('url')!=SERVICE_PARENT_URL:
+        raise ValueError('Service cleanup resource outside scope')
+    if (not isinstance(receipt,dict) or receipt.get('url')!=SERVICE_PARENT_URL
+            or not isinstance(receipt.get('uid'),str) or not receipt['uid']
+            or receipt.get('deletionAcknowledged') is not True):
+        raise ValueError('Owned service identity/deletion acknowledgement required')
+    parent=get_parent(SERVICE_PARENT_URL)
+    if parent is None:
+        record({'event':'SERVICE_BINDING_PARENT_ALREADY_ABSENT','resource':SERVICE_PARENT_URL,'uid':receipt['uid'],'verification':'GET_404'})
+        return
+    uid=parent.get('uid') or parent.get('metadata',{}).get('uid')
+    if uid!=receipt['uid']:raise ValueError('Service parent replaced; cleanup refused')
+    try:return remove(binding)
+    except ProtectedRequestFailure as error:
+        record({'event':'SERVICE_BINDING_REMOVAL_ERROR','resource':SERVICE_PARENT_URL,'httpStatus':error.status})
+        if error.status!=404 or get_parent(SERVICE_PARENT_URL) is not None:raise
+        record({'event':'SERVICE_BINDING_PARENT_REMOVAL_VERIFIED','resource':SERVICE_PARENT_URL,'originalHttpStatus':404})
+
+
+
+def delete_owned_service(receipt,api,record,deadline,save=lambda:None,clock=time.monotonic,sleep=time.sleep):
+    if (not isinstance(receipt,dict) or receipt.get('url')!=SERVICE_PARENT_URL
+            or not isinstance(receipt.get('uid'),str) or not receipt['uid']):
+        raise ValueError('Exact owned service receipt required')
+    if type(deadline) not in (int,float) or not math.isfinite(deadline) or clock()>=deadline:
+        raise TimeoutError('Service cleanup deadline exhausted before mutation')
+    target='https://run.googleapis.com/v2/projects/'+PROJECT+'/locations/us-east1/services/cinenest-connectivity-qualification'
+    current=api('GET',target,missing=True)
+    if current is not None:
+        if current.get('uid')!=receipt['uid'] or not current.get('etag'):
+            raise ValueError('Service identity/etag drift; deletion refused')
+        try:
+            from urllib.parse import quote
+            result=api('DELETE',target+'?etag='+quote(current['etag'],safe=''))
+            if result.get('error'):raise RuntimeError('Service deletion operation rejected')
+            receipt['deletionAcknowledged']=True;save()
+            record({'event':'SERVICE_DELETE_ACCEPTED','uid':receipt['uid'],'operation':result.get('name')})
+        except (ProtectedRequestFailure,TimeoutError) as error:
+            record({'event':'SERVICE_DELETE_REQUEST_ERROR','httpStatus':getattr(error,'status',None),'uncertain':True})
+            if isinstance(error,ProtectedRequestFailure) and error.status not in (404,429,500,502,503,504):raise
+    def observe():
+        item=api('GET',target,missing=True)
+        return None if item is None else {'id':item.get('uid')}
+    result=owned_deletion_convergence(observe,receipt['uid'],lambda:None,record,deadline,clock=clock,sleep=sleep)
+    receipt['deletionAcknowledged']=True;save()
+    return result
+
+_PREDECESSOR_MONITORING_ARTIFACTS=monitoring_cleanup_artifacts
+
+def monitoring_cleanup_artifacts(controller,helpers,private_helper):
+    result=_PREDECESSOR_MONITORING_ARTIFACTS(controller,helpers,private_helper)
+    text=result['cloud-session.py']
+    old="p.write_text(template);gc('create-internal-service',['run','services','replace',str(p),'--region=us-east1','--async'],60);state['createdService']=True;save();resource="
+    new="p.write_text(template);_,raw,_=gc('create-internal-service',['run','services','replace',str(p),'--region=us-east1','--async'],60);state['createdService']=True;state['serviceReceipt']={'url':M['SERVICE_PARENT_URL'],'uid':json.loads(raw)['metadata']['uid'],'deletionAcknowledged':False};assert state['serviceReceipt']['uid'];save();resource="
+    if text.count(old)!=1:raise ValueError('Service creation boundary drift')
+    text=text.replace(old,new,1)
+    old=" if state['createdService']:clean('internal-service',lambda:gc('delete-service',['run','services','delete',service,'--region=us-east1'],90))"
+    new=""" if state['createdService']:
+  clean('internal-service',lambda:M['delete_owned_service'](state.get('serviceReceipt'),api,monitor_record,deadline-480,save))"""
+    if text.count(old)!=1:raise ValueError('Service deletion boundary drift')
+    text=text.replace(old,new,1)
+    old="M['cleanup_binding_with_parent_check'](b,lambda url:api('GET',url,missing=True),remove_binding,state.get('jobUids',{}),monitor_record)"
+    new="M['cleanup_service_binding'](b,lambda url:api('GET',url,missing=True),remove_binding,state.get('serviceReceipt'),monitor_record) if b['url']==M['SERVICE_PARENT_URL'] else "+old
+    if text.count(old)!=1:raise ValueError('Service binding boundary drift')
+    text=text.replace(old,new,1).replace("v['execution_monitoring_errors']()","v['probe_diagnostics_errors']()")
+    compile(text,'cloud-session.py','exec');result['cloud-session.py']=text
+    return result
+
 if __name__=='__main__':raise SystemExit(main())
