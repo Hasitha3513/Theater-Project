@@ -33752,14 +33752,14 @@
       "total": 7
     },
     "qualification": {
-      "status": "LOCAL_AND_GOVERNANCE_QUALIFIED_PENDING_HOSTED_CI",
+      "status": "LOCAL_AND_GOVERNANCE_QUALIFIED_PENDING_CORRECTED_HEAD_CI",
       "cloudRuntime": "NOT_RUN_NOT_AUTHORIZED",
-      "offlineTests": "359_PASS_0_FAILURE_0_ERROR_0_SKIPPED",
-      "newOfflineCases": 21,
+      "offlineTests": "361_PASS_0_FAILURE_0_ERROR_0_SKIPPED",
+      "newOfflineCases": 23,
       "architecture": "68_PASS_0_FAILURE_0_ERROR_0_SKIPPED",
-      "historicalReplay": "PASS_FULL_PRESERVED_PREDECESSOR_CHAIN",
-      "negativeControls": "PASS_STANDALONE_AND_CURRENT_SUCCESSOR",
-      "hostedCI": "PENDING_EXACT_PR_AND_MAIN_SOURCE",
+      "historicalReplay": "PASS_FULL_CHAIN_NO_AMBIENT_OBJECT_ENV",
+      "negativeControls": "PASS_STANDALONE_NO_AMBIENT_OBJECT_ENV_AND_CURRENT_SUCCESSOR",
+      "hostedCI": "ATTEMPT1_BACKEND_FRONTEND_PASS_GOVERNANCE_FAIL_PRESERVED_CORRECTED_HEAD_PENDING",
       "postgresql": "20_REAL_POSTGRESQL18_6_GROUPS_PASS",
       "image": "QUALIFIED_LOCAL_ONLY_NOT_PUBLISHED",
       "migrations": 44,
@@ -33771,13 +33771,15 @@
       "trustedSchemaSha256": "ee88078bdee65baf255f6cb77040c9a89ae4d924b2b279d4c01bb5e335b5af1d",
       "diagnosticImage": "sha256:35ed77e9eee7a74522a114240c858fdc8abccad1142a8e673c296173fb0e532e",
       "diagnosticJavaSha256": "6af0ab7f8fcb7e28af6ba50355d2df99ef5aa1ae6c6b0ab0813b0f834d50c911",
-      "cloudHistory": "DENIED_NOT_VERIFIED_PERMISSION_DENIED_FOR_FLYWAY_HISTORY"
+      "cloudHistory": "DENIED_NOT_VERIFIED_PERMISSION_DENIED_FOR_FLYWAY_HISTORY",
+      "previousHistoricalReplay": "PASS_EXPLICIT_READONLY_ROOT_ENV",
+      "previousNegativeControls": "PASS_EXPLICIT_READONLY_ROOT_ENV"
     },
     "sourceSha256": {
       "scripts/verify-cloud-connectivity.py": "d22d415a0a65e08474409be51868956220460cc7a0606e799d59af22f63dfa70",
-      "scripts/test-cloud-run.py": "95088c43ce3ebf4e9b05024a722ac37695007529df5833defafd97a5d25d31cb",
-      "knowledge/ARCHITECTURE.md": "323b6c0a6f3130b0df7f03cc1905332a452ae734cfa1adb8e6a4d6b0bf799ae9",
-      "knowledge/PROGRESS.md": "719ec3d3c240477d1f847c63b9e5e47edb7b6537052b1c16717a07d368a3b21a",
+      "scripts/test-cloud-run.py": "7a66d5387cc4037f3c289b92f09a5e7bfba59d18639adc08accce36316622329",
+      "knowledge/ARCHITECTURE.md": "06b1fe6890100461668db44418ef58ea18171b6546925d3d4e8183a6d0bed5b8",
+      "knowledge/PROGRESS.md": "387b27e3a0e6cf1a67845daca6c3d70e12f81a426a7e80e2f98d5ae054961b8d",
       "knowledge/product/FEATURE_CATALOG.md": "7d76e00e34960a8a1aa142d23195b8406a3b577d72e720415664e3f0ca170f37",
       "knowledge/guides/USER_GUIDE.md": "f335a8cbde1ec810ee3524d6bf48986dd145e8f5bc50a34bcb7bc8f28e17ce15"
     },
@@ -33803,7 +33805,14 @@
       "historical-replay.log": "7e136ea33c7a5cd019ac214047c334f025d638de7f073c529d054be12f7e823b",
       "standalone-negative-controls.log": "72a1990878798c2d37135715ecb3a8d01964a0d4f09473febf70a1b0d48bcb38",
       "kb-final.log": "da881d04b433b186df3b30e40dad2cd65a57270cdf384771abed60cc65c46722",
-      "final-source-input-check.json": "c29298856b5c2c3db58351efb4762fe8e3404b03ccbd53b8ad3d73e2a715cf6a"
+      "final-source-input-check.json": "c29298856b5c2c3db58351efb4762fe8e3404b03ccbd53b8ad3d73e2a715cf6a",
+      "pr-ci-attempt1.log": "1238e01ba65d209b631ac2d3507a49191debf5cbb0d4f0e8618806c8a29bc023",
+      "offline-final-361.log": "9fa168d3e41f873d0af7aa2d760839ecfcf41d18270d1766f09544e938dd567e",
+      "offline-final-361-corrected.log": "ff7904ab1bcd0132d06e8094a5db237f2f3f1d24d406639b9a2740f68a66b087",
+      "historical-replay-no-ambient-env.log": "d9e78b941969ca9d172433e17ba8fa3bbc6cca5634f2ca872e4b92268e9e3799",
+      "standalone-negative-controls-no-ambient-env.log": "45187dcb780cf2d5be0e0675c563af0050dd11cef07e82dc0fb5a2209350c3b6",
+      "offline-final-361-hardened.log": "86a71aa80fa684f6c1607efff4b711e35d86cd5c538e3c102526da074212dfc5",
+      "budget-evidence-review.json": "0126f637a7fb8987ddc1566eefd31f2a0e9ba68489dbe47fc5b45991e2d3db44"
     }
   }
 }

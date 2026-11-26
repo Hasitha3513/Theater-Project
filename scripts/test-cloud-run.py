@@ -1963,4 +1963,43 @@ class RetainedRecoveryRegressions(unittest.TestCase):
         source=inspect.getsource(self.m['retained_local_worker']);self.assertIn('client_nonce=uuid.uuid4().hex[:12]',source);self.assertIn("cidfile=task/('java-'+client_nonce+'.cid')",source)
 
 
+class RetainedReplayObjectStores(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import runpy
+        cls.v=runpy.run_path(str(Path(__file__).parents[1]/'knowledge/execution/validate_execution.py'))
+    def test_deep_real_shared_clone_chain_keeps_direct_root_objects(self):
+        import tempfile,subprocess,os
+        with tempfile.TemporaryDirectory(prefix='cinenest-replay-object-unit-') as tmp:
+            root=Path(tmp)/'root';env=dict(os.environ);env.pop('GIT_ALTERNATE_OBJECT_DIRECTORIES',None)
+            def git(args,environment=env):
+                q=subprocess.run(['git',*args],env=environment,capture_output=True,text=True)
+                self.assertEqual(q.returncode,0,q.stderr)
+                if 'nesting too deep' in q.stderr:print('OBSERVED Git alternate-depth warning;direct-root object verification must still pass')
+                return q.stdout.strip()
+            git(['init','--quiet',str(root)]);git(['-C',str(root),'-c','user.name=SyntheticTest','-c','user.email=synthetic@example.invalid','-c','commit.gpgSign=false','-c','core.hooksPath=/dev/null','commit','--quiet','--allow-empty','-m','SYNTHETIC_TEST_ONLY'])
+            head=git(['-C',str(root),'rev-parse','HEAD']);direct=self.v['retained_replay_environment'](root/'.git',env);previous=root
+            for i in range(9):
+                target=Path(tmp)/('replay-'+str(i));git(['clone','--quiet','--shared','--no-checkout','--',str(previous),str(target)],direct);git(['-C',str(target),'checkout','--quiet','--detach',head],direct)
+                direct=self.v['retained_replay_environment'](target/'.git',direct);self.assertEqual(direct['GIT_ALTERNATE_OBJECT_DIRECTORIES'].split(os.pathsep)[0],str((root/'.git/objects').resolve()));previous=target
+            self.assertEqual(git(['-C',str(previous),'rev-parse','HEAD'],direct),head);git(['-C',str(previous),'cat-file','-e',head+'^{commit}'],direct)
+            # Reproduce the original fatal condition with no direct-root environment.
+            failed=False;previous=root
+            for i in range(12):
+                target=Path(tmp)/('unfixed-'+str(i));q=subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',str(previous),str(target)],env=env,capture_output=True,text=True)
+                if q.returncode:
+                    self.assertIn('nesting too deep',q.stderr);failed=True;break
+                previous=target
+            self.assertTrue(failed,'Expected original deep-alternate failure was not reproduced')
+    def test_missing_or_relative_object_stores_are_refused_without_global_changes(self):
+        import tempfile,os
+        snapshot=dict(os.environ)
+        with tempfile.TemporaryDirectory() as tmp:
+            common=Path(tmp)/'.git';(common/'objects').mkdir(parents=True)
+            for value in ['relative/store',str(Path(tmp)/'missing')]:
+                with self.assertRaises(ValueError):self.v['retained_replay_environment'](common,{'GIT_ALTERNATE_OBJECT_DIRECTORIES':value})
+            with self.assertRaises(ValueError):self.v['retained_replay_environment'](Path(tmp)/'missing',{})
+        self.assertEqual(dict(os.environ),snapshot)
+
+
 if __name__=='__main__':unittest.main()
