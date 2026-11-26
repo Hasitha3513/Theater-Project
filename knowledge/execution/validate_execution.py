@@ -19673,5 +19673,129 @@ def subnet_recovery_main():
 receipt_admission_successor_errors=subnet_recovery_errors
 inert_ci_main=subnet_recovery_main
 
+
+
+# Owner-approved exact source successor. Historical validators remain unchanged.
+SSH_TRUST_PATH_BASE = 'f913354362294436b05849a36820d9e5f868ef12'
+SSH_TRUST_PATH_STATE = {'id': 'CN-GCP-SSH-TRUST-PATH-001', 'baseline': 'f913354362294436b05849a36820d9e5f868ef12', 'status': 'READY', 'orderedPaths': ['scripts/verify-cloud-connectivity.py', 'scripts/test-cloud-run.py', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'decision': 'APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR', 'source': 'User reply to call_97b3da2b39674ad3a8760869db163b6e: Approve exact source-only successor', 'requestSha256': 'c473df6c3408236efd0532a9b2f5f2ce0b279daeb9f3ce776da813c541050277', 'recordedAtUtc': '2026-11-25T14:41:40.995433+00:00', 'reviewMethod': 'Owner-approved task-only verified ledger reuse and controlled-diff review', 'cloudSessionAuthorized': False}, 'scope': ['Add source-owned OpenSSH-config path quoting for exactly the intended task-private UserKnownHostsFile;do not indiscriminately shell-quote separate IdentityFile argv or ProxyCommand', 'Patch the exact retained SSH/SCP shared opts offline through the governed artifact generator;fail closed on unknown predecessor shape', 'Preserve StrictHostKeyChecking=accept-new,IdentitiesOnly=yes,BatchMode=yes,global-known-host behavior,IAP/OSLogin/private-only routing and existing security gates', 'Reject unsafe/multiple/outside-private/control-character paths;preserve shared/unrelated trust files;never clear trust or use ssh-keygen-R as a workaround', 'Provide attributable redacted stage failure instead of an empty AssertionError;never continue to administration after SSH failure', 'Append only existing canonical/registry evidence,freeze fingerprints,protected successor and historical negative controls;no application,SQL,policy/permission or migration changes'], 'acceptance': ['Actual OpenSSH offline parser tests for paths with/without spaces and deliberate entry-limit negative controls', 'Quote/backslash handling explicit;NUL/newline/carriage-return/injected options rejected', 'Both SSH and SCP use exactly the same corrected options', 'No StrictHostKeyChecking=no,no UserKnownHostsFile=/dev/null,no shared known-host removal or trust bypass', 'Preserve distinction between option-parser proof and authenticated host-key provenance', 'Compile corrected actual retained capsule offline without cloud/credential execution', 'All existing/new harness,architecture,security,KB/manifest,negative controls,historical replay,source/SQL/migration fingerprints and whitespace checks pass', 'Exact10file diff and bounded secret scan;governed PR/exact-head CI/permitted merge/automatic main CI'], 'rollback': 'Governed exact-source revert;preserve all historical SQL/migrations/approvals/failures and existing known-host files. Remove only owned generated test files. No cloud mutation or trust-file deletion is authorized.', 'cloudSessionAuthorized': False, 'cloudMutationsAuthorized': False, 'sqlChangesAuthorized': False, 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'OFFLINE_QUALIFIED', 'cloudRuntime': 'NOT_RUN_NOT_AUTHORIZED', 'cloudMigrations': 'NOT_RUN', 'cloudRun': 'NOT_RUN', 'historicalRuntimeSeconds': 293.33, 'historicalSessionConsumed': True, 'migrations': 44, 'sqlFilesUnchanged': 7, 'focusedTests': 13, 'offlineHarnessTests': 227, 'architectureBoundary': 'PASS_68_JAVA_TESTS_NO_FAILURES_ERRORS_OR_SKIPS', 'historicalReplay': 'PASS_IMMUTABLE_PREDECESSOR_REPLAY', 'standaloneNegativeControls': 'PASS', 'hostedCI': 'PENDING'}, 'sourceSha256': {'scripts/verify-cloud-connectivity.py': 'd47db12bc1a2172fd91eff08e5d21d36c14a390ec3f3d4a10f852a9c0753dc0b', 'scripts/test-cloud-run.py': '0fbede99d6a03a4bab5265cce28892baa58bfc60e8d8407ae2b240f86a465e37', 'knowledge/ARCHITECTURE.md': 'febf1ac0387beacb1d2d2a5821954f74dd3f4cc876899179d63d2feba2b9f0a5', 'knowledge/PROGRESS.md': 'e232879a65c76727ff23c8a3b85df70ac22365cbe896dc6eca2ea8713bde1a0b', 'knowledge/product/FEATURE_CATALOG.md': '2d71d415392db5a63e29abc3d5a352ba527bbb858385364de4de5f0ce475c99a', 'knowledge/guides/USER_GUIDE.md': '616f515ee2a45a15bc3088cbdb364e24d4f90a1553acc2634fa5415f73c19640'}}
+SSH_TRUST_PATH_PATHS = set(SSH_TRUST_PATH_STATE['orderedPaths'])
+SSH_TRUST_PATH_MAIN = b"if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n"
+SSH_TRUST_PATH_SUFFIX_SHA = '42edd173e8cf2b39629f6ca3c89ebbb6ec681db41395fef87f4096e31ef15f80'
+
+
+def ssh_trust_path_errors():
+    try:
+        unit=SSH_TRUST_PATH_STATE
+        before=lambda n:v41_git('show',SSH_TRUST_PATH_BASE+':'+n)
+        if (unit['id']!='CN-GCP-SSH-TRUST-PATH-001' or unit['status']!='READY'
+                or len(SSH_TRUST_PATH_PATHS)!=10 or unit['baseline']!=SSH_TRUST_PATH_BASE
+                or unit['authority']['requestSha256']!='c473df6c3408236efd0532a9b2f5f2ce0b279daeb9f3ce776da813c541050277'
+                or unit['authority']['decision']!='APPROVED_EXACT_SOURCE_ONLY_SUCCESSOR'
+                or not unit['authority']['source'] or unit['cloudSessionAuthorized'] is not False
+                or unit['cloudMutationsAuthorized'] is not False or unit['sqlChangesAuthorized'] is not False
+                or unit['productionAuthorization']!='NONE' or unit['part1']!={'completed':4,'total':7}
+                or unit['qualification']['cloudRuntime']!='NOT_RUN_NOT_AUTHORIZED'
+                or unit['qualification']['cloudMigrations']!='NOT_RUN' or unit['qualification']['cloudRun']!='NOT_RUN'):
+            return ['SSH trust path authority/scope/acceptance drift']
+        v41_git('merge-base','--is-ancestor',SSH_TRUST_PATH_BASE,'HEAD')
+        for name in ['knowledge/execution/change-sets.json','knowledge/execution/status.json']:
+            doc=json.loads((R/name).read_bytes())
+            if doc.pop('cloudRunSshTrustPath',None)!=unit or doc!=json.loads(before(name)):
+                return ['SSH trust path historical registry drift '+name]
+        inventory={}
+        for row in v41_git('ls-tree','-rz','--full-tree',SSH_TRUST_PATH_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        actual=set(v41_git('ls-files','-z',text=True).split('\0'))-{''}
+        if actual!=set(inventory) or v41_git('ls-files','--others','--exclude-standard','-z'):
+            return ['SSH trust path source inventory drift']
+        if set(v41_git('diff','--name-only','-z',SSH_TRUST_PATH_BASE,text=True).split('\0'))-{''}!=SSH_TRUST_PATH_PATHS:
+            return ['SSH trust path exact ten-path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            p=R/name
+            if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(p.stat().st_mode&0o111)!=(mode==b'100755'):
+                return ['SSH trust path unsafe file '+name]
+            data=p.read_bytes()
+            if name not in SSH_TRUST_PATH_PATHS and hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:
+                return ['SSH trust path unrelated/history drift '+name]
+        for name,digest in unit['sourceSha256'].items():
+            if hashlib.sha256((R/name).read_bytes()).hexdigest()!=digest:
+                return ['SSH trust path source fingerprint drift '+name]
+        for name,main in [('scripts/verify-cloud-connectivity.py',b"if __name__=='__main__':raise SystemExit(main())\n"),('scripts/test-cloud-run.py',b"if __name__=='__main__':unittest.main()\n"),('knowledge/execution/validate_execution.py',SSH_TRUST_PATH_MAIN)]:
+            old=before(name)
+            if not old.endswith(main) or not (R/name).read_bytes().startswith(old[:-len(main)]):
+                return ['SSH trust path predecessor source modified '+name]
+        prefix=before('knowledge/execution/validate_execution.py')[:-len(SSH_TRUST_PATH_MAIN)]
+        suffix=(R/'knowledge/execution/validate_execution.py').read_bytes()[len(prefix):]
+        normalized=suffix.replace(SSH_TRUST_PATH_SUFFIX_SHA.encode(),b'0'*64,1)
+        if hashlib.sha256(normalized).hexdigest()!=SSH_TRUST_PATH_SUFFIX_SHA:
+            return ['SSH trust path validator suffix drift']
+        for name in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/name).read_bytes().startswith(before(name)):
+                return ['SSH trust path historical prose drift '+name]
+        migrations={n for n in inventory if n.startswith('backend/src/main/resources/db/migration/')}
+        if len(migrations)!=44 or {str(p.relative_to(R)) for p in (R/'backend/src/main/resources/db/migration').glob('*')}!=migrations:
+            return ['SSH trust path historical migration inventory drift']
+        import runpy
+        module=runpy.run_path(str(R/'scripts/verify-cloud-connectivity.py'))
+        expected_sql={'00-activation-authority-probe.sql.proposed': 'cd2a892c70da4197cacc61e815419ed7014de0f441606c2cc40b851a78c28c2d', '01-protected-credentials-and-migrator-login.psql.proposed': 'c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15', '02-post-migration-runtime-grants.sql.proposed': '52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52', '03-runtime-login-and-migrator-revocation.sql.proposed': '515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6', '04-login-revocation-and-session-cleanup.sql.proposed': '01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5', '05-runtime-readonly-verification.sql.proposed': '2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c', '06-data-preserving-quarantine.sql.proposed': 'ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676'}
+        if module['SQL_FILES']!=expected_sql:return ['SSH trust path SQL fingerprint drift']
+        module['migration_inventory']()
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in SSH_TRUST_PATH_PATHS-{'knowledge/manifest.json'}:
+                entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (R/'knowledge/manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():
+            return ['SSH trust path manifest drift']
+    except (OSError,ValueError,KeyError,TypeError,StopIteration,subprocess.SubprocessError):
+        return ['SSH trust path inputs inaccessible']
+    return []
+
+
+def ssh_trust_path_negative_controls():
+    from unittest.mock import patch
+    changes=[('status','BLOCKED'),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('authority',{}),('cloudSessionAuthorized',True),('cloudMutationsAuthorized',True),('sqlChangesAuthorized',True)]
+    for field,value in changes:
+        fake=json.loads(json.dumps(SSH_TRUST_PATH_STATE));fake[field]=value
+        with patch.dict(globals(),{'SSH_TRUST_PATH_STATE':fake}):
+            if not ssh_trust_path_errors():raise ValueError('SSH trust path accepted forged '+field)
+    for field in ['cloudRuntime','cloudMigrations','cloudRun']:
+        fake=json.loads(json.dumps(SSH_TRUST_PATH_STATE));fake['qualification'][field]='PASS'
+        with patch.dict(globals(),{'SSH_TRUST_PATH_STATE':fake}):
+            if not ssh_trust_path_errors():raise ValueError('SSH trust path accepted false cloud PASS')
+    read=Path.read_bytes
+    for relative in ['scripts/verify-cloud-connectivity.py','knowledge/execution/validate_execution.py','backend/src/main/resources/db/migration/V1__foundation.sql']:
+        target=R/relative
+        if not target.exists():target=next((R/'backend/src/main/resources/db/migration').glob('V1__*'))
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n#unapproved' if p==target else read(p,*a,**kw)):
+            if not ssh_trust_path_errors():raise ValueError('SSH trust path accepted altered source/history')
+    glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob(p,*a,**kw),folder/'V46__unapproved.sql']) if p==folder else glob(p,*a,**kw)):
+        if not ssh_trust_path_errors():raise ValueError('SSH trust path accepted extra migration')
+    print('PASS SSH trust path scope,Owner approval,source/history/manifest,migrations,SQL and no-cloud negative controls',flush=True)
+
+
+def ssh_trust_path_main():
+    import tempfile,sys
+    errors=ssh_trust_path_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    ssh_trust_path_negative_controls()
+    result=subprocess.run([sys.executable,'-B','scripts/test-cloud-run.py'],cwd=R)
+    if result.returncode:return result.returncode
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip()
+    with tempfile.TemporaryDirectory(prefix='cinenest-ssh-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        # Read-only immutable Git object reuse; historical source/validators unchanged.
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',SSH_TRUST_PATH_BASE],check=True)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar')
+        cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','knowledge/execution/validate_execution.py'],cwd=target).returncode
+
+
+receipt_admission_successor_errors=ssh_trust_path_errors
+inert_ci_main=ssh_trust_path_main
+
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
