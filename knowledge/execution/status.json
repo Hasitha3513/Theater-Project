@@ -34529,5 +34529,75 @@
       "scope": "DISPOSABLE_LOCAL_ONLY"
     },
     "publication": "LOCAL_GATES_PASSED_PENDING_EXACT_STAGED_REVIEW_AND_HOSTED_CI"
+  },
+  "customerIdentityV46Compatibility": {
+    "id": "CN-IDENTITY-V46-BANK-TEST-COMPATIBILITY-001",
+    "baseline": "01622eca122d45e8436b917b15f618057b3c23b0",
+    "status": "READY",
+    "phase": "LOCAL_STATIC_QUALIFIED",
+    "orderedPaths": [
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json"
+    ],
+    "authority": {
+      "source": "Owner reply call_d4e6cb80338a423ba507ba081676774e",
+      "answer": "Approve exact six-path CI successor",
+      "requestSha256": "67cf4b973078a852632aeb6af896b8355dee697c9da884272eb0388e0fbf3a69",
+      "includesReviewMethod": true,
+      "publication": "FOLLOW_UP_ON_PR37_AFTER_REQUIRED_GATES"
+    },
+    "review": {
+      "method": "Owner-approved task-only114file ledger reuse plus fresh task-specific and controlled-diff review;no new full visual audit",
+      "productionBehavior": "UNCHANGED",
+      "catalogueAndGuide": "Assessed unaffected;not modified"
+    },
+    "testPatch": {
+      "old": "assertThat(jdbc.sql(\"SELECT max(version::int) FROM flyway_schema_history WHERE success\").query(Integer.class).single()).isEqualTo(45);",
+      "new": "assertThat(jdbc.sql(\"SELECT max(version::int) FROM flyway_schema_history WHERE success\").query(Integer.class).single()).isEqualTo(46);",
+      "oldFileSha256": "d27f7ac924f1b1df6cf164f49ec9cf58ad4915490ea520d96d1b0b6d7f463f16",
+      "newFileSha256": "19f29cdd3895ecf1cf74c7913ec9caf30330ec92ecf1295c0d2d3d000ee8d449",
+      "financialAndAuditAssertionsUnchanged": true,
+      "existingV43ScriptAssertionUnchanged": true
+    },
+    "qualification": {
+      "localStatic": "PASS",
+      "hostedCI": "REQUIRED_EXACT_HEAD_AND_MAIN",
+      "failedRun": 45991155877,
+      "failedBackend": {
+        "test": "BankIntegrationTest.reportUsesExistingAuditWithoutMutatingFinancialSources:1050",
+        "expected": 45,
+        "actual": 46,
+        "backendTests": 1606,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 110,
+        "frontend": "NOT_RUN",
+        "hostedGovernance": "NOT_RUN"
+      },
+      "retainedIdentity": "110backend/73architecture/41PostgreSQL-HTTP/7Chromium/602existing+9new frontend/31runner PASS;application and Identity inputs unchanged",
+      "testCompile": "PASS_NO_RUNTIME_STARTED",
+      "testCompileLogSha256": "5ff258b9d72b7bbb3bf6187759f0c453afe6ceac82abc931131400acc84c2dba",
+      "governance": "PASS_COMPLETE_HISTORICAL_REPLAY_AND_STANDALONE",
+      "logSha256": {
+        "compatibility-historical-replay-corrected.log": "d4cbb7a32f081eb67cad266a9e7e64bec3e20251cc8483fe22ee380cbf53dadf",
+        "compatibility-standalone-controls-corrected.log": "3328fc1aff415782ad914491136fd19cb1f3f084dfa81cb215bb6e300d5a347b"
+      }
+    },
+    "localSessions": 0,
+    "cloudSessions": 0,
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "rollback": "Normal history-preserving revert of successor commit only;no database or external state change",
+    "sourceSha256": {
+      "backend/src/test/java/com/cinenest/BankIntegrationTest.java": "19f29cdd3895ecf1cf74c7913ec9caf30330ec92ecf1295c0d2d3d000ee8d449",
+      "knowledge/PROGRESS.md": "2e9a7a19ccaf063c5c1f2ea505059a0522aecdeb7c5ede9d5c92e070e0f9d4d3"
+    }
   }
 }

@@ -20655,5 +20655,93 @@ def VERTICAL_main():
 
 receipt_admission_successor_errors=VERTICAL_errors
 inert_ci_main=VERTICAL_main
+
+# Exact V46 bank-test compatibility successor; all predecessor bytes remain frozen.
+COMPAT_STATE = {'id': 'CN-IDENTITY-V46-BANK-TEST-COMPATIBILITY-001', 'baseline': '01622eca122d45e8436b917b15f618057b3c23b0', 'status': 'READY', 'phase': 'LOCAL_STATIC_QUALIFIED', 'orderedPaths': ['backend/src/test/java/com/cinenest/BankIntegrationTest.java', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json'], 'authority': {'source': 'Owner reply call_d4e6cb80338a423ba507ba081676774e', 'answer': 'Approve exact six-path CI successor', 'requestSha256': '67cf4b973078a852632aeb6af896b8355dee697c9da884272eb0388e0fbf3a69', 'includesReviewMethod': True, 'publication': 'FOLLOW_UP_ON_PR37_AFTER_REQUIRED_GATES'}, 'review': {'method': 'Owner-approved task-only114file ledger reuse plus fresh task-specific and controlled-diff review;no new full visual audit', 'productionBehavior': 'UNCHANGED', 'catalogueAndGuide': 'Assessed unaffected;not modified'}, 'testPatch': {'old': 'assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(45);', 'new': 'assertThat(jdbc.sql("SELECT max(version::int) FROM flyway_schema_history WHERE success").query(Integer.class).single()).isEqualTo(46);', 'oldFileSha256': 'd27f7ac924f1b1df6cf164f49ec9cf58ad4915490ea520d96d1b0b6d7f463f16', 'newFileSha256': '19f29cdd3895ecf1cf74c7913ec9caf30330ec92ecf1295c0d2d3d000ee8d449', 'financialAndAuditAssertionsUnchanged': True, 'existingV43ScriptAssertionUnchanged': True}, 'qualification': {'localStatic': 'PASS', 'hostedCI': 'REQUIRED_EXACT_HEAD_AND_MAIN', 'failedRun': 45991155877, 'failedBackend': {'test': 'BankIntegrationTest.reportUsesExistingAuditWithoutMutatingFinancialSources:1050', 'expected': 45, 'actual': 46, 'backendTests': 1606, 'failures': 1, 'errors': 0, 'skipped': 110, 'frontend': 'NOT_RUN', 'hostedGovernance': 'NOT_RUN'}, 'retainedIdentity': '110backend/73architecture/41PostgreSQL-HTTP/7Chromium/602existing+9new frontend/31runner PASS;application and Identity inputs unchanged', 'testCompile': 'PASS_NO_RUNTIME_STARTED', 'testCompileLogSha256': '5ff258b9d72b7bbb3bf6187759f0c453afe6ceac82abc931131400acc84c2dba', 'governance': 'PASS_COMPLETE_HISTORICAL_REPLAY_AND_STANDALONE', 'logSha256': {'compatibility-historical-replay-corrected.log': 'd4cbb7a32f081eb67cad266a9e7e64bec3e20251cc8483fe22ee380cbf53dadf', 'compatibility-standalone-controls-corrected.log': '3328fc1aff415782ad914491136fd19cb1f3f084dfa81cb215bb6e300d5a347b'}}, 'localSessions': 0, 'cloudSessions': 0, 'productionAuthorization': 'NONE', 'part1': {'completed': 4, 'total': 7}, 'rollback': 'Normal history-preserving revert of successor commit only;no database or external state change', 'sourceSha256': {'backend/src/test/java/com/cinenest/BankIntegrationTest.java': '19f29cdd3895ecf1cf74c7913ec9caf30330ec92ecf1295c0d2d3d000ee8d449', 'knowledge/PROGRESS.md': '2e9a7a19ccaf063c5c1f2ea505059a0522aecdeb7c5ede9d5c92e070e0f9d4d3'}}
+COMPAT_BASE = '01622eca122d45e8436b917b15f618057b3c23b0'
+COMPAT_SUFFIX_SHA = '5263a7db2c1d13532fec76d1eda61b50efe16cac61f9b43ad7acda4be8083433'
+
+def COMPAT_errors(publication=False):
+    try:
+        u=COMPAT_STATE;a=u.get('authority',{})
+        if u.get('status')!='READY' or u.get('baseline')!=COMPAT_BASE or u.get('id')!='CN-IDENTITY-V46-BANK-TEST-COMPATIBILITY-001':return ['Compatibility admission missing']
+        if a!={'source':'Owner reply call_d4e6cb80338a423ba507ba081676774e','answer':'Approve exact six-path CI successor','requestSha256':'67cf4b973078a852632aeb6af896b8355dee697c9da884272eb0388e0fbf3a69','includesReviewMethod':True,'publication':'FOLLOW_UP_ON_PR37_AFTER_REQUIRED_GATES'}:return ['Compatibility Owner approval mismatch']
+        paths=['backend/src/test/java/com/cinenest/BankIntegrationTest.java','knowledge/PROGRESS.md','knowledge/execution/change-sets.json','knowledge/execution/status.json','knowledge/execution/validate_execution.py','knowledge/manifest.json'];allowed=set(paths)
+        if u.get('orderedPaths')!=paths or u.get('localSessions')!=0 or u.get('cloudSessions')!=0 or u.get('productionAuthorization')!='NONE' or u.get('part1')!={'completed':4,'total':7}:return ['Compatibility scope expansion']
+        def before(p):return v41_git('show',COMPAT_BASE+':'+p)
+        for n in ['status.json','change-sets.json']:
+            now=json.loads((K/'execution'/n).read_text());old=json.loads(before('knowledge/execution/'+n))
+            if now.pop('customerIdentityV46Compatibility',None)!=u or now!=old:return ['Compatibility historical registry mutation '+n]
+        inventory={}
+        for row in v41_git('ls-tree','-r','-z',COMPAT_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        tracked=set(v41_git('ls-files','-z',text=True).split('\0'))-{''};untracked=set(v41_git('ls-files','--others','--exclude-standard','-z',text=True).split('\0'))-{''}
+        if tracked|untracked!=set(inventory):return ['Compatibility inventory expansion/removal']
+        changed=(set(v41_git('diff','--name-only','-z',COMPAT_BASE,text=True).split('\0'))-{''})|untracked
+        if changed-allowed:return ['Compatibility unauthorized changed path']
+        for name,(mode,kind,oid) in inventory.items():
+            f=R/name
+            if not f.is_file() or f.is_symlink() or kind!=b'blob' or not f.resolve().is_relative_to(R.resolve()) or bool(f.stat().st_mode&0o111)!=(mode==b'100755'):return ['Compatibility unsafe source '+name]
+            if name not in allowed:
+                data=f.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Compatibility unrelated/application/history mutation '+name]
+        migrationRoot=R/'backend/src/main/resources/db/migration'
+        expectedMigrations={Path(name).name for name in inventory if name.startswith('backend/src/main/resources/db/migration/') and name.endswith('.sql')}
+        if {f.name for f in migrationRoot.glob('*.sql')}!=expectedMigrations:return ['Compatibility unapproved or missing migration']
+        patch=u['testPatch'];old=before(paths[0]).decode();new=old.replace(patch['old'],patch['new'])
+        if old.count(patch['old'])!=1 or patch['new']!=patch['old'].replace('.isEqualTo(45);','.isEqualTo(46);') or hashlib.sha256(old.encode()).hexdigest()!=patch['oldFileSha256'] or hashlib.sha256(new.encode()).hexdigest()!=patch['newFileSha256']:return ['Compatibility invalid test patch']
+        current=(R/paths[0]).read_bytes();expected=new.encode() if publication or u.get('phase')!='ADMITTED_PENDING_IMPLEMENTATION' else before(paths[0])
+        if current!=expected:return ['Compatibility exceeds exact one-literal test change']
+        expectedHashes={paths[0],paths[1]}
+        if set(u.get('sourceSha256',{}))!=expectedHashes or any(hashlib.sha256((R/p).read_bytes()).hexdigest()!=h for p,h in u['sourceSha256'].items()):return ['Compatibility source fingerprints differ']
+        if not (K/'PROGRESS.md').read_bytes().startswith(before(paths[1])):return ['Compatibility historical progress mutation']
+        prefix=before('knowledge/execution/validate_execution.py').removesuffix("if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n".encode());raw=(K/'execution/validate_execution.py').read_bytes()
+        if not raw.startswith(prefix) or hashlib.sha256(raw[len(prefix):].replace(COMPAT_SUFFIX_SHA.encode(),b'0'*64,1)).hexdigest()!=COMPAT_SUFFIX_SHA:return ['Compatibility frozen validator/suffix mutation']
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for x in manifest['files']:
+            if 'knowledge/'+x['path'] in allowed-{'knowledge/manifest.json'}:x['sha256']=hashlib.sha256((K/x['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Compatibility manifest differs']
+        if publication and (changed!=allowed or u.get('phase')!='LOCAL_STATIC_QUALIFIED' or u.get('qualification',{}).get('localStatic')!='PASS'):return ['Compatibility publication requires exact six-path qualified correction']
+    except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError):return ['Compatibility inputs unavailable']
+    return []
+
+def COMPAT_negative_controls():
+    from unittest.mock import patch
+    for key,value in [('authority',{}),('orderedPaths',[]),('status','BLOCKED'),('localSessions',1),('cloudSessions',1),('productionAuthorization','GO'),('part1',{'completed':7,'total':7}),('sourceSha256',{})]:
+        fake=json.loads(json.dumps(COMPAT_STATE));fake[key]=value
+        with patch.dict(globals(),{'COMPAT_STATE':fake}):
+            if not COMPAT_errors():raise ValueError('Compatibility accepted forged '+key)
+    rb=Path.read_bytes
+    for name in ['backend/src/test/java/com/cinenest/BankIntegrationTest.java','backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialService.java','backend/src/main/resources/db/migration/V45__synthetic_staff_session_events.sql']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:rb(p,*a,**kw)+b'\n' if p==target else rb(p,*a,**kw)):
+            if not COMPAT_errors():raise ValueError('Compatibility accepted unowned/oversized test change')
+    glob=Path.glob;folder=R/'backend/src/main/resources/db/migration'
+    with patch.object(Path,'glob',lambda p,*a,**kw:iter([*glob(p,*a,**kw),folder/'V47__unapproved.sql']) if p==folder else glob(p,*a,**kw)):
+        if not COMPAT_errors():raise ValueError('Compatibility accepted unapproved migration inventory')
+    print('PASS compatibility scope,Owner,history,application,SQL and exact-test-patch refusal controls',flush=True)
+
+def COMPAT_main():
+    import tempfile,sys
+    errors=COMPAT_errors(publication=True)
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    COMPAT_negative_controls()
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip();env=retained_replay_environment(common)
+    with tempfile.TemporaryDirectory(prefix='cinenest-v46-compat-history-') as tmp:
+        target=Path(tmp)/'predecessor';subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True,env=env);subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',COMPAT_BASE],check=True,env=env)
+        for name in ['package.json','package-lock.json']:
+            if (target/'frontend'/name).read_bytes()!=(R/'frontend'/name).read_bytes():raise ValueError('Predecessor dependency contract differs')
+        deps=R/'frontend/node_modules'
+        if not deps.is_dir():raise ValueError('Verified installed frontend dependencies required for immutable replay')
+        (target/'frontend/node_modules').symlink_to(deps.resolve(),target_is_directory=True)
+        # Directory-only repository ignores do not match a cache symlink; exclude only this owned replay cache.
+        with (target/'.git/info/exclude').open('a') as out:out.write('\n/frontend/node_modules\n')
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar');cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','-B','knowledge/execution/validate_execution.py'],cwd=target,env=env).returncode
+
+receipt_admission_successor_errors=COMPAT_errors
+inert_ci_main=COMPAT_main
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
