@@ -674,3 +674,7 @@ Run local qualification only under its exact unused bounded authorization. Verif
 
 ## Customer lifecycle preparation boundary
 The provider-neutral credential core adds no customer or staff action. Existing synthetic registration/login/recovery instructions remain applicable;no real email or production account is enabled. Future production onboarding requires approved delivery,privacy,retention and separate qualified persistence/HTTP adapters.
+
+
+## Bank provenance preparation boundary
+No new customer or staff banking action is available. Receipt upload remains evidence for investigation;it cannot confirm actual credited funds or a paid booking. The new internal contract only prepares review classifications. Real receiving instructions,credit evidence,Finance authority,privacy controls and qualified adapters remain required before any real banking workflow.

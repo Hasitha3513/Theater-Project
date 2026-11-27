@@ -20483,5 +20483,88 @@ def IDENTITY_CORE_main():
 
 receipt_admission_successor_errors=IDENTITY_CORE_errors
 inert_ci_main=IDENTITY_CORE_main
+
+# Exact Owner-approved pure core successor; frozen predecessor bytes remain above.
+BANK_CORE_STATE = {'id': 'CN-PAYMENTS-CREDIT-PROVENANCE-CORE-001', 'baseline': '9588917834a3a01f3bd224ea5b5c2194e7714dbe', 'originalApprovedBaselineMain': 'aae83964be4c35018d83e8b15e8cac538ccd91d2', 'approvedPredecessorOverlay': 'CN-IDENTITY-CUSTOMER-LIFECYCLE-CORE-001', 'status': 'READY', 'orderedPaths': ['backend/src/main/java/com/cinenest/payments/internal/BankCreditProvenance.java', 'backend/src/test/java/com/cinenest/payments/internal/BankCreditProvenanceTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'requirementIds': ['PR-BANK-001', 'CN-C10', 'CN-A13', 'BP-AC04', 'BP-AC06', 'BP-AC07', 'BP-AC08', 'BP-AC09', 'BP-AC10'], 'authority': {'source': 'Owner reply call_195dd6e47ffb4e27967747fbc410fefc', 'requestSha256': '4288cddcf2b88586067f0ebb54526980d598e1283abeff251aadd2619177a136', 'reviewSource': 'Owner reply call_aa30a26a495442da8c5fa394ba8870d0: Approve review method for both scopes', 'scope': 'PURE_SOURCE_ONLY', 'publication': True}, 'review': {'inventory': 114, 'reusedFullCoverage': 106, 'historicalControlledDiff': 8, 'method': 'Owner-approved task-only ledger reuse plus fresh task-specific/controlled-diff review; first approved overlay preserved; no new visual audit'}, 'implementation': ['Package-private immutable bank-credit provenance/review-context contract and pure default-deny admission policy', 'Bind venue, approved receiving-account revision, currency/minor-unit amount, credited time, unique source movement, source revision and protected evidence digest/reference', 'Receipt/OCR/customer claims never establish actual credited funds', 'Separate verifier and allocator authority; deny claimant/customer/verifier/allocator conflicts', 'Reject missing/stale/revoked/wrong-venue/unmatched/disputed/reversed evidence', 'Classify exact/conflicting replay against trusted outcome snapshot without claiming durable idempotency', 'Result means eligible for independent review only, never PAID/confirmed/refunded/admitted'], 'negativeTests': ['Missing/invalid account scope or revision denies', 'Receipt-only evidence denies', 'Role conflicts/revoked authority/wrong venue deny', 'Amount/currency/time/source revision mismatch denies', 'Changed replay rejects; exact snapshot replay classification is stable', 'Immutable copies and redaction', 'Existing synthetic profile-denial and architecture restrictions remain'], 'rollback': 'Normal history-preserving revert of exact admitted paths; no database or external state changes', 'productionAuthorization': 'NONE', 'cloudSessions': 0, 'sqlChanges': False, 'migrations': False, 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'LOCAL_CORE_TESTS_QUALIFIED', 'newTests': 43, 'focusedTestsIncludingExistingProfiles': 85, 'failures': 0, 'errors': 0, 'skipped': 0, 'historicalReplay': 'MANDATORY_BEFORE_PUBLICATION_RESULT_IN_EXTERNAL_EXECUTION_EVIDENCE', 'hostedCI': 'REQUIRED_EXACT_HEAD_AND_AUTOMATIC_MAIN', 'runtime': 'NOT_RUN_OUT_OF_SCOPE'}, 'sourceSha256': {'backend/src/main/java/com/cinenest/payments/internal/BankCreditProvenance.java': 'afc917d5005e3c89d56425b9e16b3d429d927fb8045c3588f73556f8e085fbe2', 'backend/src/test/java/com/cinenest/payments/internal/BankCreditProvenanceTest.java': '8d33a0c84f01d2ef657e52455f0c4385355f111f8f3b91fffa5d2901c3b5b956', 'knowledge/ARCHITECTURE.md': 'b1c900b80f18d94c4f66a04c351d5b9adb21edf94043cdd72c2b75e1c6e40aef', 'knowledge/PROGRESS.md': 'c4acbe285b0a05c67cd588eaf31dd40c629b330252062f62486672b26ba8d449', 'knowledge/product/FEATURE_CATALOG.md': '52012f2b29473800a980401413d0a4124246a437246ece0bfd2d606a84505a4f', 'knowledge/guides/USER_GUIDE.md': 'c6647f3f6de7248256d066d175340e9ce7202a7595ca921e2062d154a3cf0d26'}}
+BANK_CORE_BASE = '9588917834a3a01f3bd224ea5b5c2194e7714dbe'
+BANK_CORE_KEY = 'bankCreditProvenanceCore'
+BANK_CORE_SUFFIX_SHA = 'fa44a84d31d4b82db2212093ca8a13e7c9db17e86f4b6d203def2fc387fc9859'
+
+def BANK_CORE_errors():
+    try:
+        u=BANK_CORE_STATE
+        if u['status']!='READY' or u['id']!='CN-PAYMENTS-CREDIT-PROVENANCE-CORE-001' or u['baseline']!=BANK_CORE_BASE:return ['Core admission missing']
+        if u['authority']['requestSha256']!='4288cddcf2b88586067f0ebb54526980d598e1283abeff251aadd2619177a136' or u['authority']['source']!='Owner reply call_195dd6e47ffb4e27967747fbc410fefc' or u['authority']['reviewSource']!='Owner reply call_aa30a26a495442da8c5fa394ba8870d0: Approve review method for both scopes':return ['Core Owner authority mismatch']
+        if u['orderedPaths']!=['backend/src/main/java/com/cinenest/payments/internal/BankCreditProvenance.java', 'backend/src/test/java/com/cinenest/payments/internal/BankCreditProvenanceTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'] or u['productionAuthorization']!='NONE' or u['cloudSessions']!=0 or u['sqlChanges'] is not False or u['migrations'] is not False or u['part1']!={'completed':4,'total':7}:return ['Core scope or authority expansion']
+        def before(name):return v41_git('show',BANK_CORE_BASE+':'+name)
+        for n in ['change-sets.json','status.json']:
+            now=json.loads((K/'execution'/n).read_text());previous=json.loads(before('knowledge/execution/'+n))
+            if now.pop(BANK_CORE_KEY,None)!=u or now!=previous:return ['Core registry history changed '+n]
+        inventory={}
+        for row in v41_git('ls-tree','-r','-z',BANK_CORE_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        allowed=set(u['orderedPaths']);new=allowed-set(inventory)
+        tracked=set(v41_git('ls-files','-z',text=True).split('\0'))-{''};untracked=set(v41_git('ls-files','--others','--exclude-standard','-z',text=True).split('\0'))-{''}
+        if tracked|untracked!=set(inventory)|new or untracked-new:return ['Core source inventory drift']
+        changed=(set(v41_git('diff','--name-only','-z',BANK_CORE_BASE,text=True).split('\0'))-{''})|untracked
+        if changed!=allowed:return ['Core exact path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            f=R/name
+            if not f.is_file() or f.is_symlink() or not f.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(f.stat().st_mode&0o111)!=(mode==b'100755'):return ['Core unsafe existing source '+name]
+            if name not in allowed:
+                data=f.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Core unrelated or historical mutation '+name]
+        for name in new:
+            f=R/name
+            if not f.is_file() or f.is_symlink() or f.stat().st_mode&0o111 or not f.resolve().is_relative_to(R.resolve()):return ['Core unsafe new source '+name]
+        expectedHashes={n for n in allowed if n.endswith('.java') or n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']}
+        if set(u['sourceSha256'])!=expectedHashes:return ['Core missing source fingerprints']
+        for n,h in u['sourceSha256'].items():
+            if hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:return ['Core source fingerprint mismatch '+n]
+        for n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/n).read_bytes().startswith(before(n)):return ['Core historical prose modified '+n]
+        prefix=before('knowledge/execution/validate_execution.py').removesuffix("if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n".encode());actual=(R/'knowledge/execution/validate_execution.py').read_bytes()
+        if not actual.startswith(prefix):return ['Core predecessor validator changed']
+        suffix=actual[len(prefix):]
+        if hashlib.sha256(suffix.replace(BANK_CORE_SUFFIX_SHA.encode(),b'0'*64,1)).hexdigest()!=BANK_CORE_SUFFIX_SHA:return ['Core validator suffix drift']
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in allowed-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Core manifest mismatch']
+        mod=__import__('runpy').run_path(str(R/'scripts/verify-cloud-connectivity.py'));mod['migration_inventory']()
+        if len(list((R/'backend/src/main/resources/db/migration').glob('*.sql')))!=44:return ['Core historical migration inventory changed']
+    except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError):return ['Core admission inputs unavailable']
+    return []
+
+def BANK_CORE_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('status','BLOCKED'),('authority',{}),('orderedPaths',[]),('productionAuthorization','GO'),('cloudSessions',1),('sqlChanges',True),('migrations',True),('part1',{'completed':7,'total':7}),('sourceSha256',{})]:
+        fake=json.loads(json.dumps(BANK_CORE_STATE));fake[field]=value
+        with patch.dict(globals(),{'BANK_CORE_STATE':fake}):
+            if not BANK_CORE_errors():raise ValueError('Core accepted forged '+field)
+    read=Path.read_bytes
+    for name in ['backend/src/main/resources/db/migration/V1__foundation_namespace.sql','backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java','knowledge/execution/validate_execution.py']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n' if p==target else read(p,*a,**kw)):
+            if not BANK_CORE_errors():raise ValueError('Core accepted altered source '+name)
+    print('PASS core exact scope,approval,history and security negative controls',flush=True)
+
+def BANK_CORE_main():
+    import tempfile,sys
+    errors=BANK_CORE_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    BANK_CORE_negative_controls()
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip();env=retained_replay_environment(common)
+    with tempfile.TemporaryDirectory(prefix='cinenest-core-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True,env=env)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',BANK_CORE_BASE],check=True,env=env)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar');cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','-B','knowledge/execution/validate_execution.py'],cwd=target,env=env).returncode
+
+receipt_admission_successor_errors=BANK_CORE_errors
+inert_ci_main=BANK_CORE_main
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())
