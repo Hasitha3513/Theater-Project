@@ -1,13 +1,14 @@
-import { PageHeading } from "../../components/primitives";
 import { ManualAuthForm } from "../../components/manual-auth-form";
+import { PageHeading } from "../../components/primitives";
 export default function Page() {
 	return (
 		<>
 			<PageHeading
-				eyebrow="LOCAL SYNTHETIC TEST ONLY"
-				title="Create a local test account"
+				eyebrow="CONFIGURED ACCOUNT ACCESS"
+				title="Create an account"
 			>
-				Real customer registration and provider sign-in are unavailable.
+				Registration follows the configured account, privacy and delivery
+				policy. Missing configuration keeps access disabled.
 			</PageHeading>
 			<ManualAuthForm mode="register" />
 		</>

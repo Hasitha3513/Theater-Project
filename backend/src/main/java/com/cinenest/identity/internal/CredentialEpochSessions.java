@@ -38,6 +38,30 @@ final class CredentialEpochSessions {
         var result=UsernamePasswordAuthenticationToken.authenticated(account.toString(),null,List.of());
         result.setDetails(new Binding(account,epoch));return result;
     }
+    private record CustomerBinding(UUID account, long epoch) implements Serializable {
+        private static final long serialVersionUID = 1L;
+        CustomerBinding { if (account == null || epoch < 0) throw new Denied(); }
+    }
+
+    static Authentication customerAuthentication(UUID account, long epoch) {
+        var auth = UsernamePasswordAuthenticationToken.authenticated(account.toString(), null, List.of());
+        auth.setDetails(new CustomerBinding(account, epoch));
+        return auth;
+    }
+
+    static boolean customer(Authentication auth) {
+        return auth != null && auth.isAuthenticated() && auth.getDetails() instanceof CustomerBinding binding
+            && binding.account().toString().equals(auth.getName());
+    }
+
+    static IdentityStore.CustomerCredential customerCredential(Authentication auth, IdentityStore store, boolean lock) {
+        if (!customer(auth)) throw new Denied();
+        var binding = (CustomerBinding) auth.getDetails();
+        var credential = store.customerCredential(binding.account(), lock).orElseThrow(Denied::new);
+        if (credential.epoch() != binding.epoch()) throw new Denied();
+        return credential;
+    }
+
     private record OperationalBinding(UUID account, String issuer, String subject, long epoch)
         implements Serializable {
         private static final long serialVersionUID = 1L;
@@ -70,6 +94,11 @@ final class CredentialEpochSessions {
         return b;
     }
     static void check(Authentication authentication,IdentityStore store,boolean lock) {
+        if (store.customerMode() && !customer(authentication)) throw new Denied();
+        if (customer(authentication)) {
+            customerCredential(authentication, store, lock);
+            return;
+        }
         if (operational(authentication)) {
             operationalCredential(authentication, store, lock);
             return;
@@ -83,7 +112,7 @@ final class CredentialEpochSessions {
                 // Provider authentication is transient; only the existing success handler's
                 // locally associated, epoch-bound principal may enter durable application state.
                 if(a instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken)return;
-                if(a!=null&&a.isAuthenticated()&&!operational(a))binding(a);
+                if(a!=null&&a.isAuthenticated()&&!operational(a)&&!customer(a))binding(a);
                 super.saveContext(context,request,response);
                 if(a!=null&&a.isAuthenticated()) {
                     var session=request.getSession(false);var access=CURRENT.get();
@@ -102,6 +131,12 @@ final class CredentialEpochSessions {
                         try {check(a,store,false);}
                         catch(RuntimeException denied){SecurityContextHolder.clearContext();var s=request.getSession(false);if(s!=null)s.invalidate();response.setHeader("Cache-Control","no-store");response.setStatus(401);return;}
                     }
+                    if (customer(a) && !customerRoute(request.getMethod(), request.getServletPath(), a)) {
+                        store.audit(UUID.fromString(a.getName()), null, "HTTP_DENIAL", false);
+                        response.setHeader("Cache-Control", "no-store");
+                        response.setStatus(403);
+                        return;
+                    }
                     if (operational(a) && !operationalRoute(request.getMethod(), request.getServletPath())) {
                         response.setHeader("Cache-Control", "no-store");
                         response.setStatus(403);
@@ -112,6 +147,17 @@ final class CredentialEpochSessions {
             }
         };
     }
+    static boolean customerRoute(String method, String path, Authentication auth) {
+        if (!customer(auth)) return false;
+        return switch (method) {
+            case "GET" -> path.equals("/api/accounts/me") || path.equals("/api/session/csrf")
+                || path.equals("/api/auth/csrf") || path.equals("/api/accounts/" + auth.getName());
+            case "POST" -> Set.of("/api/session/logout", "/api/auth/registrations", "/api/auth/email-verifications",
+                "/api/auth/login", "/api/auth/recovery-requests", "/api/auth/recoveries").contains(path);
+            default -> false;
+        };
+    }
+
     static boolean operationalRoute(String method, String path) {
         return switch (method) {
             case "GET" -> path.equals("/api/accounts/me") || path.equals("/api/session/csrf")

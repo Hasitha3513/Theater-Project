@@ -1,9 +1,11 @@
-// Exact local-synthetic Identity transport; no credentials or tokens are logged or retained here.
+// Exact Identity transport. The backend selects the mode; no credentials or tokens are retained here.
 const actions = new Set([
 	"csrf",
 	"registrations",
 	"email-verifications",
 	"login",
+	"recovery-requests",
+	"recoveries",
 ]);
 export async function forwardManualAuth(
 	request: Request,
@@ -74,13 +76,30 @@ export async function forwardManualAuth(
 			} catch {
 				return empty(400);
 			}
-			const keys =
-				action === "email-verifications" ? ["token"] : ["email", "password"];
+			const customer = Object.hasOwn(value ?? {}, "commandId");
+			const keys = customer
+				? action === "registrations"
+					? ["commandId", "email", "password", "privacyRevision"]
+					: action === "email-verifications"
+						? ["commandId", "token", "password"]
+						: action === "recovery-requests"
+							? ["commandId", "email"]
+							: action === "recoveries"
+								? ["commandId", "token", "newPassword"]
+								: ["commandId", "email", "password"]
+				: action === "email-verifications"
+					? ["token"]
+					: ["email", "password"];
 			if (
 				!value ||
 				Array.isArray(value) ||
 				Object.keys(value).length !== keys.length ||
-				keys.some((key) => typeof value[key] !== "string")
+				keys.some((key) => typeof value[key] !== "string") ||
+				(!customer && ["recovery-requests", "recoveries"].includes(action)) ||
+				(customer &&
+					!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+						String(value.commandId),
+					))
 			)
 				return empty(400);
 			// Original bounded bytes preserve duplicate-member evidence for the backend's strict parser.
@@ -115,13 +134,46 @@ export async function forwardManualAuth(
 				value.headerName !== "X-CSRF-TOKEN"
 			)
 				return empty(503);
+			if (value.mode === undefined)
+				return Response.json(
+					{ token: value.token, headerName: value.headerName },
+					{ headers: output },
+				);
+			if (
+				value.mode !== "CUSTOMER_CREDENTIAL" ||
+				!["QUALIFICATION_ONLY", "APPROVED"].includes(value.deliveryMode) ||
+				![value.privacyRevision, value.policyRevision].every(
+					(reference) =>
+						typeof reference === "string" &&
+						reference.length > 0 &&
+						reference.length <= 256 &&
+						Array.from(reference).every((character) => {
+							const point = character.codePointAt(0) ?? 0;
+							return (
+								point >= 32 &&
+								(point < 127 || point > 159) &&
+								(point < 55296 || point > 57343)
+							);
+						}),
+				)
+			)
+				return empty(503);
 			return Response.json(
-				{ token: value.token, headerName: value.headerName },
+				{
+					token: value.token,
+					headerName: value.headerName,
+					mode: value.mode,
+					privacyRevision: value.privacyRevision,
+					policyRevision: value.policyRevision,
+					deliveryMode: value.deliveryMode,
+				},
 				{ headers: output },
 			);
 		}
 		return new Response(null, {
-			status: [202, 204, 400, 401, 403, 404, 429, 503].includes(upstream.status)
+			status: [202, 204, 400, 401, 403, 404, 409, 429, 503].includes(
+				upstream.status,
+			)
 				? upstream.status
 				: 503,
 			headers: output,
