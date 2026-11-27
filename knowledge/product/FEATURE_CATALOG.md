@@ -974,3 +974,13 @@ Identity now contains a default-disabled, package-private lifecycle/security pla
 
 ## Manual-bank provenance preparation
 Payments contains an inert review-eligibility contract separating trusted bank-source facts from customer receipts and keeping current independent authority,revision and replay classifications explicit. It does not activate real credit ingestion,allocation,confirmation or refunds. Existing synthetic banking remains unchanged. [Architecture](../ARCHITECTURE.md#bank-credit-provenance-core).
+
+
+### Customer credential vertical — implementation admitted, unavailable
+Complete registration,verification,login and recovery persistence/API/UI work is admitted under CN-IDENTITY-COMPLETE-CUSTOMER-VERTICAL-001. It is not implemented, tested, deployed or accepted at this checkpoint. Existing core/synthetic evidence does not establish a live customer feature. Real delivery/privacy/deployment remain blocked.
+
+Credential vertical source candidate now includes persistence,REST/customer screens,resend and expired-registration recovery,protected mail work and reset-session invalidation. Offline checks passed and all7 actual-backend browser groups passed using private test mail;all35PostgreSQL/HTTP tests now pass after correcting two test-harness defects. Real provider/privacy/deployment acceptance remains blocked. This is not a COMPLETE workstream.
+
+Final security review added exact schema,legacy-session isolation and generic stale/inactive-account responses. The hardened source passes offline checks;its new PostgreSQL/HTTP/browser regressions await exact local execution admission. Prior runtime evidence is retained separately;the workstream is not COMPLETE.
+
+The final hardened source now passes41actual PostgreSQL/HTTP tests and7real-backend Chromium groups,including schema/session/enumeration regressions. This qualifies local software with private test mail;real delivery,privacy,deployment and acceptance remain blocked.

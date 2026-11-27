@@ -30,7 +30,7 @@ class AccountController {
         try {
             UUID target = UUID.fromString(accountId);
             if (!target.toString().equals(accountId)) throw new IllegalArgumentException();
-            return response(store.read(actor, target));
+            return targetAccount(actor, target);
         } catch (IllegalArgumentException invalid) {
             store.audit(actor, null, "ACCOUNT_READ", false);
             return ResponseEntity.status(403).build();
@@ -48,8 +48,26 @@ class AccountController {
         return ResponseEntity.ok(Map.of("token", token.getToken(), "headerName", token.getHeaderName()));
     }
 
+    private ResponseEntity<AccountView> targetAccount(UUID actor, UUID target) {
+        var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (CredentialEpochSessions.customer(auth)) {
+            if (!target.equals(actor)) {
+                store.audit(actor, target, "ACCOUNT_READ", false);
+                return ResponseEntity.status(403).header("Cache-Control", "no-store").build();
+            }
+            return ownAccount(actor);
+        }
+        return response(store.read(actor, target));
+    }
+
     private ResponseEntity<AccountView> ownAccount(UUID actor) {
         var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (CredentialEpochSessions.customer(auth)) {
+            var current = CredentialEpochSessions.customerCredential(auth, store, false);
+            if (!current.account().equals(actor)) return ResponseEntity.status(403).build();
+            store.audit(actor, actor, "ACCOUNT_READ", true);
+            return response(java.util.Optional.of(new AccountView(actor, "ELIGIBLE")));
+        }
         if (CredentialEpochSessions.operational(auth)) {
             var current = CredentialEpochSessions.operationalCredential(auth, store, false);
             if (!current.account().equals(actor)) return ResponseEntity.status(403).build();
@@ -61,6 +79,8 @@ class AccountController {
 
     private boolean csrfEligible(UUID actor) {
         var auth = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (CredentialEpochSessions.customer(auth))
+            return CredentialEpochSessions.customerCredential(auth, store, false).account().equals(actor);
         return CredentialEpochSessions.operational(auth)
             ? CredentialEpochSessions.operationalCredential(auth, store, false).account().equals(actor)
             : store.eligible(actor);

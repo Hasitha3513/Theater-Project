@@ -33998,5 +33998,536 @@
       "knowledge/product/FEATURE_CATALOG.md": "52012f2b29473800a980401413d0a4124246a437246ece0bfd2d606a84505a4f",
       "knowledge/guides/USER_GUIDE.md": "c6647f3f6de7248256d066d175340e9ce7202a7595ca921e2062d154a3cf0d26"
     }
+  },
+  "customerIdentityVertical": {
+    "id": "CN-IDENTITY-COMPLETE-CUSTOMER-VERTICAL-001",
+    "baseline": "e34f2400bc6aa221ec4f3312bd66ae79758507bb",
+    "status": "READY",
+    "phase": "LOCAL_SOFTWARE_QUALIFIED",
+    "orderedPaths": [
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialService.java",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialRepository.java",
+      "backend/src/main/java/com/cinenest/identity/internal/JdbcCustomerCredentialRepository.java",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialController.java",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialConfiguration.java",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialDeliveryDispatcher.java",
+      "backend/src/main/resources/db/migration/V46__customer_credential_lifecycle.sql",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialServiceTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialPostgresTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialHttpSecurityTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialApplicationArchitectureTest.java",
+      "backend/src/test/java/com/cinenest/CustomerCredentialJourneyIT.java",
+      "frontend/app/verify-email/page.tsx",
+      "frontend/app/recover-account/page.tsx",
+      "frontend/app/reset-password/page.tsx",
+      "frontend/app/api/auth/recovery-requests/route.ts",
+      "frontend/app/api/auth/recoveries/route.ts",
+      "frontend/tests/customer-credential.test.mjs",
+      "frontend/tests/customer-credential-e2e.mjs",
+      "scripts/verify-customer-credential.py",
+      "scripts/test-customer-credential.py",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java",
+      "backend/src/main/java/com/cinenest/identity/internal/CredentialEpochSessions.java",
+      "backend/src/main/java/com/cinenest/identity/internal/AccountController.java",
+      "frontend/components/manual-auth-form.tsx",
+      "frontend/lib/manual-auth-backend.ts",
+      "frontend/app/register/page.tsx",
+      "frontend/app/login/page.tsx",
+      "frontend/app/account/page.tsx",
+      "backend/src/test/java/com/cinenest/CloudRunRuntimeIT.java",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "source": "Owner reply call_8a5925290b014f659188179f44b84ca7",
+      "answer": "Approve exact complete Identity vertical scope",
+      "requestSha256": "ae78fc23623b7831e98c11e23940cdeb3de0aa394aff396db85f06a7eda5880e",
+      "recordedAtUtc": "2026-11-27T05:59:23.856286+00:00",
+      "approvalTimestamp": "Actual message timestamp not supplied;recording time is not substituted for acceptance time",
+      "includesReviewMethod": true,
+      "sqlExecutionAuthorized": false,
+      "localSessionsAuthorized": 1,
+      "localSessionsConsumed": 0,
+      "cloudSessionsAuthorized": 0
+    },
+    "review": {
+      "method": "For this exact vertical only,verified114file ledger reuse plus fresh task-specific and controlled-diff review of eight changed historical records;no new full visual audit claim",
+      "baselineInventory": 114,
+      "priorFullCoverageReused": 106,
+      "historicalControlledDiff": 8,
+      "newFullVisualAudit": false
+    },
+    "qualification": {
+      "software": "PASS",
+      "postgres": "PASS",
+      "chromium": "PASS",
+      "governance": "PASS_HISTORICAL_REPLAY_STANDALONE_SCOPE_TRACEABILITY_MANIFEST_WHITESPACE",
+      "hostedCI": "REQUIRED_EXACT_PR_HEAD_AND_AUTOMATIC_MAIN;OUTCOMES_COMMIT_LINKED_EXTERNAL_EVIDENCE",
+      "offline": {
+        "newBackendTests": 38,
+        "newFrontendGroups": 9,
+        "legacyFrontendGroups": 4,
+        "fullFrontendRegression": 602,
+        "runnerControls": 31,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "build": "PASS",
+        "typecheck": "PASS",
+        "scopedLint": "PASS",
+        "postgres": "NOT_RUN",
+        "httpIntegration": "NOT_RUN",
+        "chromium": "NOT_RUN",
+        "focusedBackendTestsIncludingNew": 110,
+        "fullLint": "PASS_EXACT_SOURCE_NORMAL_CHECKOUT_CONTEXT",
+        "preparation": "PASS",
+        "preparedRuntimeSourceSha256": "7ea919fc5e369367107c933f2e3f6630e3500c7342bab346ebf60fe4cc083229",
+        "sqlRequestSha256": "f274863e68a745c5320ab8ee6c120c0ec4ce987b04b913411fff29ef5f576fbb",
+        "lintContextLimitation": "Raw hidden-cache checkout produced two existing unused-suppression warnings. Byte-identical frontend/config/dependencies in task-owned normal checkout passed full unchanged lint; no lint rule/file exclusions or unrelated source edits.",
+        "newLocalCompletion": "REQUESTED_NOT_APPROVED",
+        "architectureTests": 73,
+        "architecture": "PASS"
+      },
+      "runtimeFailure": {
+        "reportedTests": 31,
+        "passed": 17,
+        "errors": 14,
+        "failures": 0,
+        "skipped": 0,
+        "httpSecurity": 12,
+        "journey": "STARTUP_ERROR",
+        "cleanup": "PASS_AFTER_SUPERVISOR_EXIT",
+        "inventoryPreserved": true
+      },
+      "runtimeCompletion": {
+        "consumed": true,
+        "reported": 36,
+        "passed": 34,
+        "errors": 2,
+        "failures": 0,
+        "skipped": 0,
+        "postgresPassed": 17,
+        "httpSecurityPassed": 12,
+        "journeyAssertionsPassed": 5,
+        "journeyTeardownError": 1,
+        "chromiumPassed": 7,
+        "interceptedRequests": 0,
+        "cookieInjection": false,
+        "screenshots": 0,
+        "cleanup": "PASS",
+        "inventoryPreserved": true,
+        "freshCompletion": "NOT_APPROVED"
+      },
+      "qualifiedRuntime": {
+        "classification": "CURRENT_EXACT_SOURCE_LOCAL_SOFTWARE_QUALIFIED",
+        "javaTests": 41,
+        "postgresTests": 20,
+        "httpSecurityTests": 15,
+        "backendJourneyTests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "chromiumGroups": 7,
+        "interceptedRequests": 0,
+        "cookieInjection": false,
+        "delivery": "PRIVATE_TEST_MAILBOX_ONLY",
+        "screenshots": 0,
+        "cleanup": "PASS",
+        "inventoryPreserved": true,
+        "runtimeSourceSha256": "7ea919fc5e369367107c933f2e3f6630e3500c7342bab346ebf60fe4cc083229",
+        "evidenceSha256": {
+          "runtime-results.json": "3545121139a96a076e07f8e63aaefe696f2ef3acd8b274f4d1cc70120ec8d0f7",
+          "browser-results.json": "28334fa7309111def804f968f188d6e885cc12ca2a03a906d7d02acbfb1d9279",
+          "cleanup.json": "b6ea3bda40f5075e0ba746878a397cc03ed84df2743a5c15f891a63f1c3cb0c8"
+        }
+      },
+      "finalReviewFindings": [
+        "Reject unexpected future/incomplete Flyway schema state",
+        "Reject persisted non-customer authentication bindings in customer mode",
+        "Preserve generic public login/recovery outcomes for retained stale-policy accounts"
+      ],
+      "pendingSecurityRuntime": {
+        "postgres": 20,
+        "httpSecurity": 15,
+        "backendJourney": 6,
+        "chromium": 7,
+        "status": "PASS",
+        "admission": "APPROVED",
+        "requestSha256": "900f00985aa97a02506f9e90b3239e396b8fe755ad11d8a26acf6e1b6e83ad1f"
+      },
+      "runtimeHistory": [
+        {
+          "javaTests": 35,
+          "postgresTests": 18,
+          "httpSecurityTests": 12,
+          "backendJourneyTests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "chromiumGroups": 7,
+          "interceptedRequests": 0,
+          "cookieInjection": false,
+          "delivery": "PRIVATE_TEST_MAILBOX_ONLY",
+          "screenshots": 0,
+          "cleanup": "PASS",
+          "inventoryPreserved": true,
+          "runtimeSourceSha256": "812353d7fd6310fcf33b1f26dd26f1084faf86627587346a0ff48158ea95e4f0",
+          "evidenceSha256": {
+            "runtime-results.json": "909ea7c31bc5fa4fb72e07d9d5b3c12ba448f6e825e8211bfb7fe1290b7d9b38",
+            "browser-results.json": "f3d1b0094e7bf791ee88d54e707483fafdcb42beba03b4a70808b0c5f2866f9b",
+            "cleanup.json": "b6ea3bda40f5075e0ba746878a397cc03ed84df2743a5c15f891a63f1c3cb0c8"
+          },
+          "classification": "RETAINED_BEFORE_FINAL_SECURITY_HARDENING_NOT_CURRENT_SOURCE"
+        }
+      ],
+      "localGateEvidenceSha256": {
+        "historicalReplay": "fdbffbdab4bbb0d2c479bbac78d5ca2b4aa2e26e8128663f9b5187966fb56204",
+        "standaloneNegativeControls": "0c03ba3a36a4139efa138358c8a9b9b42e5a6cdeb85c517ff7616725ef825a4a",
+        "architecture": "4f56ff28d8adc0d909528498aaf13cac1e143ce84281370fff3aff14d70430d0"
+      },
+      "sourceHygieneEquivalence": {
+        "oldRuntimeSourceSha256": "7ea919fc5e369367107c933f2e3f6630e3500c7342bab346ebf60fe4cc083229",
+        "oldFileSha256": "02da778e5ece9857bbc0d05a6f6cbec37aafdf03b4df072f900eea0586d484b3",
+        "newFileSha256": "ce1108be336cc3102c837b245e16d5e1d34538b755426826c6f869d3f8407b1f",
+        "compiledClassBefore": "cc2eefa03ad1f0602237d35d823562ca1d94a92b6a137512dd9c6dd9df68c86e",
+        "file": "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialService.java",
+        "change": "Trailing spaces only;line count unchanged;no statements changed",
+        "newRuntimeSourceSha256": "ede5d74290c0a2761699ef5f5ae78bc26382e1f0eab93061e15fd623977b8b67",
+        "compiledClassAfter": "cc2eefa03ad1f0602237d35d823562ca1d94a92b6a137512dd9c6dd9df68c86e",
+        "status": "PASS_IDENTICAL_QUALIFIED_BYTECODE"
+      }
+    },
+    "sqlAdmission": {
+      "status": "APPROVED",
+      "source": "Owner reply call_b13d2ffd67c94d6996088b38c987581e: Approve exact disposable V46 SQL admission",
+      "sha256": "f368b0f15123fbfe211e17f7b9eebe09dc744431c8eae2e14e2cdce257456647",
+      "scope": "DISPOSABLE_LOCAL_QUALIFICATION_ONLY",
+      "requestSha256": "f274863e68a745c5320ab8ee6c120c0ec4ce987b04b913411fff29ef5f576fbb"
+    },
+    "localSessionsAuthorized": 1,
+    "localSessionsConsumed": 1,
+    "cloudSessions": 0,
+    "productionAuthorization": "NONE",
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "scoreboard": {
+      "baselineMain": "e34f2400bc6aa221ec4f3312bd66ae79758507bb",
+      "sourceDirective": "Current Owner execution-priority change",
+      "originalSixWorkstreamDirective": {
+        "path": "/home/hasitha-wijerathna/.codex/attachments/ca2c31a3-d30e-4c73-b393-88907bdd30e8/Pasted text.txt",
+        "sha256": "5d1ed1d10bf65e4d9d38c198d325f111247fb2e335c050ccb0862eb8d1237b7c"
+      },
+      "statusSemantics": {
+        "IMPLEMENTED": "Complete functional application/persistence/API/UI path exists;contracts or PR merges alone do not qualify",
+        "TESTED": "Required exact-source real integration/E2E/security/concurrency/recovery evidence actually passes;fixtures identified",
+        "DEPLOYED": "Exact artifacts/configuration installed in named approved environment;internal qualification distinct from public production",
+        "ACCEPTED": "Required accountable Owner and independent professional/operational findings pass",
+        "BLOCKED": "Each outstanding approval,missing feature or failed/unexecuted mandatory gate remains explicit",
+        "COMPLETE": "Only when every applicable actual Definition of Done and acceptance criterion passes;no inference from PR count"
+      },
+      "workstreams": [
+        {
+          "id": "WS-01",
+          "name": "Cloud authenticated E2E",
+          "implemented": "PARTIAL_INTERNAL_PATH",
+          "tested": "PARTIAL;authenticated application probe not qualified",
+          "deployed": "HISTORICAL_INTERNAL_ONLY;no production deployment claimed",
+          "accepted": "NO",
+          "blocked": [
+            "Attributable budget/exposure bound and exact fresh cloud authorization",
+            "Authenticated backend/frontend probe,restricted SQL and cleanup acceptance"
+          ],
+          "definitionOfDone": [
+            "One approved internal exact-source deployment passes authenticated customer/staff application requests over private CloudSQL DNS/TCP/verify-full TLS",
+            "Approved migrations and restricted runtime permissions,backend/frontend readiness and expected security denial pass",
+            "Failure/recovery,temporary authority revocation,owned-resource cleanup and attributable cost evidence pass"
+          ],
+          "complete": false
+        },
+        {
+          "id": "WS-02",
+          "name": "Customer registration,verification,login and recovery",
+          "implemented": "FUNCTIONAL_APPLICATION_PERSISTENCE_API_UI_LOCAL_QUALIFIED",
+          "tested": "110focused backend/73architecture/41realPostgreSQL-HTTP/7Chromium groups PASS;private test delivery only",
+          "deployed": "NO_PRODUCTION_DEPLOYMENT",
+          "accepted": "NO",
+          "blocked": [
+            "Final standalone governance,exact staged review and governed PR/main CI",
+            "Qualified email provider/sender/hostname,privacy/retention and account/recovery policy",
+            "Governed publication,deployment and actual acceptance"
+          ],
+          "definitionOfDone": [
+            "Persistent unique real-address customer can register,receive approved verification,verify,login,read only own account,request recovery,reset and relogin through actual UI/backend",
+            "Single-use capability,PostgreSQL time,current policy,credential epochs,durable abuse limits and immutable audit/outbox enforced",
+            "Reset invalidates prior sessions;concurrency,CSRF,IDOR,enumeration,delivery uncertainty and failure recovery pass real PostgreSQL/HTTP/Chromium tests",
+            "Qualified real delivery,privacy/security findings and scoped customer acceptance are recorded;no pending mandatory acceptance gate"
+          ],
+          "complete": false
+        },
+        {
+          "id": "WS-03",
+          "name": "Manual-bank booking workflow",
+          "implemented": "PARTIAL;synthetic workflow plus provenance core",
+          "tested": "SYNTHETIC_ONLY;production credit/allocation/confirmation NOT_RUN",
+          "deployed": "NO_PRODUCTION_DEPLOYMENT",
+          "accepted": "NO",
+          "blocked": [
+            "Complete production persistence/application/API/UI and Booking-owned confirmation admission",
+            "Actual receiving account,authoritative bank-side evidence,independent Finance appointments",
+            "Commercial/privacy/refund policies and controlled Finance acceptance"
+          ],
+          "definitionOfDone": [
+            "Customer booking request obtains versioned approved bank instructions,submits private claim and sees distinct claim/credit/allocation/booking statuses",
+            "Protected authoritative bank-side credit evidence is independently verified/matched;receipt/OCR alone cannot establish funds",
+            "Stable credit identity and concurrent bounded idempotent allocation prevent double use;verifier/allocator are currently authorized,distinct and unconflicted",
+            "Booking-owned confirmation checks real payment fact,quote,inventory,eligibility and current revisions;failed confirmation retains funds",
+            "Under/over/late/disputed/reversed funds,unknown outcomes and independent refunds have audited reconciliation;no blind repeat",
+            "Real backend/PostgreSQL/Chromium security/concurrency journey and required genuine Finance acceptance pass"
+          ],
+          "complete": false
+        },
+        {
+          "id": "WS-04",
+          "name": "Commercial,privacy and legal",
+          "implemented": "PARTIAL;draft/version/review configuration exists",
+          "tested": "BOUNDED_SYNTHETIC_SOFTWARE_ONLY",
+          "deployed": "NO_APPROVED_COMMERCIAL_CONFIGURATION",
+          "accepted": "NO",
+          "blocked": [
+            "Owner final scoped commercial decisions",
+            "Independent Finance/Legal/Privacy findings,notice and retention versions"
+          ],
+          "definitionOfDone": [
+            "Scoped approved tariffs,tax/rounding,fees,quote validity/price honoring,cancellation/refund terms and accepted purchase history work end-to-end",
+            "Privacy notice/consent,private evidence access,retention/deletion/backup/legal-hold and incident controls implement approved policy",
+            "All independently executable software tests pass and genuine accountable Finance/Legal/Privacy findings satisfy the remaining gates"
+          ],
+          "complete": false
+        },
+        {
+          "id": "WS-05",
+          "name": "Venue,staff and physical operations",
+          "implemented": "SOFTWARE_PARTIAL_QUALIFIED;checkin/start/checkout/cleaning/review reused",
+          "tested": "SYNTHETIC_SOFTWARE_QUALIFIED;physical acceptance NOT_QUALIFIED",
+          "deployed": "NO_APPROVED_LIVE_OPERATIONS",
+          "accepted": "NO",
+          "blocked": [
+            "Actual operator/site/room/capacity and named venue-scoped appointments",
+            "Qualified controlled-entry/emergency-access/independent-egress/readiness evidence",
+            "OD-10/OD-13/OD-29 scoped findings and G-ROOM-BLOCK independent acceptance"
+          ],
+          "definitionOfDone": [
+            "Existing staff lifecycle works with actual approved scoped staff/procedures and required current-authority/revision guards",
+            "Form A genuine site/capacity/entry/egress/outage/cleaning/readiness returns and independent findings pass",
+            "Approved staff-managed PART1 mapping preserved;smartlock/PIN/IoT stay deferred;software review never certifies vacancy/readiness",
+            "Day03/Day06 accountable scope and independent acceptance findings are genuinely recorded"
+          ],
+          "complete": false
+        },
+        {
+          "id": "WS-06",
+          "name": "Production security,recovery and final release",
+          "implemented": "PARTIAL;container/security foundations exist",
+          "tested": "PACKAGING_AND_BOUNDED_SECURITY_ONLY;production restore/capacity/release NOT_QUALIFIED",
+          "deployed": "NO_PUBLIC_PRODUCTION_RELEASE",
+          "accepted": "NO",
+          "blocked": [
+            "Production configuration,secrets,target and attributable budget",
+            "Restore/rollback/failure/capacity/support qualification",
+            "Independent release findings and explicit production GO"
+          ],
+          "definitionOfDone": [
+            "Approved exact artifacts/configuration/HTTPS/least-privilege roles and reviewed migrations deployed to approved target",
+            "Monitoring,backup verification,restore rehearsal,rollback,failure recovery,capacity and real-backend browser/security tests pass with attributable evidence",
+            "Customer support/incident/operations procedures and required independent acceptance complete",
+            "Explicit production release authorization obtained before public/customer activation"
+          ],
+          "complete": false
+        }
+      ],
+      "completedWorkstreams": 0,
+      "officialAcceptance": {
+        "completed": 4,
+        "total": 7,
+        "percentage": "57.14",
+        "differentDenominatorFromWorkstreamScoreboard": true
+      },
+      "production": "NO_GO",
+      "canonicalWriteStatus": "PROJECTION_ONLY_UNTIL_EXACT_READY_SOURCE_ADMISSION",
+      "existingProfessionalEvidenceRecords": [
+        {
+          "path": "/home/hasitha-wijerathna/Documents/Theater Project/.cache/day05-day06-closure.8D5MzA/OWNER_ACTION_PACKAGE.md",
+          "sha256": "71056578102fc585011619cb47a194ceff6ddb51d673f35bb46f9fafc4d77375",
+          "use": "Reuse editable returns;historical proposal wording is not current approval status;approved current canonical hardware mapping remains authoritative"
+        },
+        {
+          "path": "/home/hasitha-wijerathna/Documents/Theater Project/.cache/part1-closure-sprint.BVGrKv/DAY03_OWNER_ACTION_SHEET.md",
+          "sha256": "51ad2f62be123fed8eee290dccbf90f6520522f0ba6716cba718b363d2357c89",
+          "use": "Reuse editable returns;historical proposal wording is not current approval status;approved current canonical hardware mapping remains authoritative"
+        }
+      ]
+    },
+    "preservation": {
+      "historicalMigrations": {
+        "backend/src/main/resources/db/migration/V10__synthetic_credit_allocation.sql": "766b5e1cfaf93727937a13549705ef6c14d18dcd86c33e8b0ca7188b64f7f493",
+        "backend/src/main/resources/db/migration/V11__scoped_admin_read_audit.sql": "21896b150a5a15c65dd5f17f865192d44a726e1f195163a08daad2e792558e29",
+        "backend/src/main/resources/db/migration/V12__synthetic_bank_refunds.sql": "e9383d0f67240bcb50bea0cfed3b20e6897489e4b9ec23e80fb22a70f1b8465f",
+        "backend/src/main/resources/db/migration/V13__synthetic_access.sql": "479c711653a1dce5010c930a11db432c4acdbcc0208f7f8a5d0dc0bd02633d8b",
+        "backend/src/main/resources/db/migration/V14__synthetic_notifications.sql": "8b821fe4df26b21d996d3da097fc77fd36b27afaf0abbc3a0de0f2248d20118f",
+        "backend/src/main/resources/db/migration/V15__synthetic_booking_amendments.sql": "74c68f2b0b1e4fb91f8a266db97f74e9578375d04429fd6bea605ca237344b55",
+        "backend/src/main/resources/db/migration/V16__synthetic_lighting.sql": "a632d18ac7602951e40016f544886055072f11457385933228c27726f55a43df",
+        "backend/src/main/resources/db/migration/V17__synthetic_room_turnover.sql": "d353b1e7258aed6cb1bb647cb3124dfdfd874e030a43fdcd028b25a995894ea3",
+        "backend/src/main/resources/db/migration/V18__synthetic_guest_roster.sql": "9f5a2b064f382a8e22f9bd58d8c4ff69972ed7f21a7edd2d882507abb74af29c",
+        "backend/src/main/resources/db/migration/V19__staff_booking_read_audit.sql": "67064d3b6939dc717b8c2d9d4d99f3b740004e6c4ee731841108c7a8acd02df6",
+        "backend/src/main/resources/db/migration/V1__foundation_namespace.sql": "fd31a33e9a5fbcdfa61ef619559a1669d6674b76036b129631b19ac3293b92f1",
+        "backend/src/main/resources/db/migration/V20__managed_grant_read_audit.sql": "82ec3c777478332258339f85898473b1f6a1e1c0749eef4d1ba97ed69e395ed6",
+        "backend/src/main/resources/db/migration/V21__maintenance_impact_read_audit.sql": "3bb99640aaee87ecceea74d13a3bad543fc2c6fa17ee0a28969b54531dfae3c7",
+        "backend/src/main/resources/db/migration/V22__booking_confirmation_report_read_audit.sql": "ed5a1c482744d76d8a2acb4054859f2902d71f849e49eff4eb53929c2d1b563e",
+        "backend/src/main/resources/db/migration/V23__popular_session_starts_read_audit.sql": "13ddd9296f2e31c5db62425303a6b48609a8d0624ecc86efba0026a54f1693bb",
+        "backend/src/main/resources/db/migration/V24__synthetic_booking_cancellation.sql": "aa79391ae3cfa07f7b32f248055d321471eddb5ccdb839b6a108097da11344c4",
+        "backend/src/main/resources/db/migration/V25__synthetic_extension_reservations.sql": "b90cbb93256b8b89d9dcf88e9925a251b4f5842aeca229e7417297359d912223",
+        "backend/src/main/resources/db/migration/V26__staging_bank_instruction_reads.sql": "e23d528454e17f1bb9d9cff2dd2536a1b6543c6d73b37056b4ff3eba57faed42",
+        "backend/src/main/resources/db/migration/V27__inactive_smart_lock_registry.sql": "c9164abae01706f23588aeae077bdfd5810b5c14af54ba471156d27785566533",
+        "backend/src/main/resources/db/migration/V28__local_manual_customer_identity.sql": "f7f18489b2d73fdbe164bc43581e286f77f70b5c67407140267080e0d579b4a8",
+        "backend/src/main/resources/db/migration/V29__local_customer_profile.sql": "742ad5bd9714ddf7fdc5882fb268b64c8f5045fcd94afc27b0017cdefa1bf8af",
+        "backend/src/main/resources/db/migration/V2__identity_accounts_grants_sessions.sql": "6794628d83c27062205d473a84808a293592ec8c31f9e9b50f26038e13f1e2c1",
+        "backend/src/main/resources/db/migration/V30__local_venue_banners.sql": "dd0dd41e961db65eb5c64ed029b5eb4553586789eff68db4934d9b05e4bdb6ce",
+        "backend/src/main/resources/db/migration/V32__local_room_blocking.sql": "2ed7d85229324cf5f1cb1fae9028977378289a8454bddbb9e807b01c4087f2aa",
+        "backend/src/main/resources/db/migration/V33__qualification_room_lock_assignments.sql": "401aeeefc90e6721a5e4b48adb621ebea9c779b286c01315eb2b9c1a81cf390c",
+        "backend/src/main/resources/db/migration/V34__staging_bank_instruction_publication.sql": "50a49d850ff0e10668d622cee1eaab5a1fdf58ebdebe71f287aba706f3e2df98",
+        "backend/src/main/resources/db/migration/V35__local_synthetic_credential_recovery.sql": "2aca51352c8d3a8352e1df8bdbeea9661210a4b21a51ced5bb7046e25bd32aaa",
+        "backend/src/main/resources/db/migration/V36__commercial_policy_drafts.sql": "bee769c1bed44bd52d4887975760f8775308945794c94c00b30e546ec39e7505",
+        "backend/src/main/resources/db/migration/V37__commercial_policy_binding.sql": "5b8300720fa412956c0e607fadb6e800ffccc3618e5cdaa989a771c760a6ecb5",
+        "backend/src/main/resources/db/migration/V38__commercial_policy_trusted_approval_intake.sql": "8673fae44f1b365225777650e7a2815bcbeac7ad5a5404eeeb13d8995f7509fa",
+        "backend/src/main/resources/db/migration/V39__commercial_policy_activation.sql": "9c8ded0d5b787b6e9db8127bb3c7887826e7f6c0bb957e3f96bcf1fdc79074ce",
+        "backend/src/main/resources/db/migration/V3__venue_room_catalog.sql": "f2b25430b30177ffc90f1daf0dbaff415ca5bc8102536aee5a46a4c32ec4fc54",
+        "backend/src/main/resources/db/migration/V40__commercial_quotation_issuance.sql": "e9c6b2c02d7134d5eeab64d409019f906be6ade58cf5733f18e12228c4a3621e",
+        "backend/src/main/resources/db/migration/V41__customer_commercial_quotation.sql": "bcd02dccaf20e08e0e8cb70106b65eaa6f6fa64ee1a1533d6d0d563426f8dd6b",
+        "backend/src/main/resources/db/migration/V42__operational_commercial_policy_and_quotation.sql": "ecc551549d4c6dfaafe99e9d0c676f6163121a82ebd9380bab1009e1f3236ab2",
+        "backend/src/main/resources/db/migration/V43__synthetic_extension_funding_requests.sql": "86974955cb6607d25cbaee0841ebd8558fcac07aa9d68eda85b42ee6a5104488",
+        "backend/src/main/resources/db/migration/V44__synthetic_staff_check_in.sql": "b4013c7de3126abe382dd110b34348026e96ee92144834978fcd1edec70c17ca",
+        "backend/src/main/resources/db/migration/V45__synthetic_staff_session_events.sql": "091e8c2cb241d919e4def29d8854e7372ffc7267fe392f0c4959251c70efd1df",
+        "backend/src/main/resources/db/migration/V4__package_drafts_and_minimum_policy.sql": "a4897ec35d1e351df4d5902a71d247226cdfbb42c87c95e682e451240a30a298",
+        "backend/src/main/resources/db/migration/V5__indicative_package_publication.sql": "825350b732a8f9e1bab0a958a42bcc08ed35a12f163cffe0297f52819112dac8",
+        "backend/src/main/resources/db/migration/V6__inventory_holds.sql": "a93ae6f188d672c674b061319dc0e89063f8c4872a0a46afc29359483c72386f",
+        "backend/src/main/resources/db/migration/V7__synthetic_quotations.sql": "22e67f40702d78b4914a64d854767d38e86d447251e0bb1e2cb713125f0f63ff",
+        "backend/src/main/resources/db/migration/V8__synthetic_verification.sql": "5454a1af6c2b03687d1f6ee7ac038d55685e10710812e71910f87ab1dc8db2e3",
+        "backend/src/main/resources/db/migration/V9__synthetic_bank_requests.sql": "da0ed3f446a2b44782d3550a37c25db0fe7e94f9804d5d6107bb728109da5b48"
+      },
+      "approvedSqlFiles": {
+        "00-activation-authority-probe.sql.proposed": "4bdfcf360c8c93b7569b83319c623f26425c7c41ce6ba7268f33efe9dd2c624c",
+        "01-protected-credentials-and-migrator-login.psql.proposed": "c4530905d672f4a31ebd6eb284ffcc7cfefa3fbb81bf66e39c16c4da8c060b15",
+        "02-post-migration-runtime-grants.sql.proposed": "52c43896824718533d5ecd113d2f1016f3009e8260927278a70edb836ce8eb52",
+        "03-runtime-login-and-migrator-revocation.sql.proposed": "515a05725a35f91887739482a3d3b9c3c38922da2f1d74352a71612a99fc1ae6",
+        "04-login-revocation-and-session-cleanup.sql.proposed": "01602c6134e185cfb86812033b76e5e8fde831e734dfd9af600803dfe50d5ad5",
+        "05-runtime-readonly-verification.sql.proposed": "2030021053c7f24b89e9b0d7fd391e5be0e716a1db25dd7ed30fc112f46aea1c",
+        "06-data-preserving-quarantine.sql.proposed": "ca93cc636de0544fcab1783e81086d1d77e044feea33ca4195f1ddd28330a676"
+      },
+      "sqlInputRootReference": "/home/hasitha-wijerathna/Documents/Theater Project/.cache/sql-staging-token-safety-20261122/next-cloud-monitoring-cleanup-20261126.proposed/sql-inputs",
+      "syntheticGuards": "Unchanged,includingV28/V35/V10constraints",
+      "architecture": "Java25/SpringModulith/modularmonolith/hexagonal/moduleownedpersistence/currentvenueauthority"
+    },
+    "rollback": "Disable new customer mode;preserve historical accounts,credential/audit and approval history;ordinary exact-scope source revert,reviewed forward migration if needed;owned local fixtures only may be removed",
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialService.java": "ce1108be336cc3102c837b245e16d5e1d34538b755426826c6f869d3f8407b1f",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialRepository.java": "51e822f8eba251908f60f26f9cde27c4edd8f61b0d9b917482662ead523f371f",
+      "backend/src/main/java/com/cinenest/identity/internal/JdbcCustomerCredentialRepository.java": "81f975aa860515add76a5dddf93e475e52cd8fc2e67db6aa0fe9df7728287ec2",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialController.java": "bb131a36e2575b865c2698b1533ed9b77e7d9979b7099403bdc7227891715c0a",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialConfiguration.java": "b03640ed1a8b020582a5c2d21a64b563e23a1942a1c9ffca61b1fc0e97659dcd",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialDeliveryDispatcher.java": "178f85cc3d81cc39c0f4c93ea63540a68151e10cd8f9b4a1b5fbe2189d80c695",
+      "backend/src/main/resources/db/migration/V46__customer_credential_lifecycle.sql": "f368b0f15123fbfe211e17f7b9eebe09dc744431c8eae2e14e2cdce257456647",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialServiceTest.java": "4683e0eb50671cab0342265e6af587c8d4775ae7c2ecc37140f618be72ee8a95",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialPostgresTest.java": "94382d4f5aaf61fddf7ec1d4fc4b74d6a27a5eb0a86b60cf63d10184037741d6",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialHttpSecurityTest.java": "23514bf3aa8ab80a72cfa35f78eddf58c1b172363167e4854c59b945547d684f",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialApplicationArchitectureTest.java": "0ddc9e1e65ecc40b40aaaa09c1d159d0699b6b6e8480aa6eb6c5c28b146c97ca",
+      "backend/src/test/java/com/cinenest/CustomerCredentialJourneyIT.java": "5c7da9e691b95da3fb431c988e0b489fde5eca5eb020c24d7bf6b46af0d1237a",
+      "frontend/app/verify-email/page.tsx": "bfedb2047f5ea64040b0bd4991e151de812335f320bcc98576e210977510f3c0",
+      "frontend/app/recover-account/page.tsx": "e3b6a494708c073af017f0203300f9591274f92d639f06337e607af515fd4ad2",
+      "frontend/app/reset-password/page.tsx": "969253c5ab53498ea8c8b91477a8755dd1d183e7eff10dca1667779277a84607",
+      "frontend/app/api/auth/recovery-requests/route.ts": "20fe205eb518efe5c0e82967a729a72c87766f19fd41a7361404708511b2d1e7",
+      "frontend/app/api/auth/recoveries/route.ts": "e4aceac7d2132cf564ba75a8a4f9dc4b038cf5f61500b649afd43c1016c38b59",
+      "frontend/tests/customer-credential.test.mjs": "964d87eeb1c5b08b430b4030a80c5a458904e5bd29969f8ba4ef2d22e866f3b8",
+      "frontend/tests/customer-credential-e2e.mjs": "1268312a3a7dd0aee1e87de2fb510b22e7425916badccdc4406776cd68c2f5b5",
+      "scripts/verify-customer-credential.py": "2d370b366653f6f3d806a81017054c860e43e35af0e36fda1e95a4070dc1b798",
+      "scripts/test-customer-credential.py": "d30ce18ce6a3a23ce9656db2ebffbc1691c505e5cf7c4cffcf8cf4bda43109b7",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentitySecurity.java": "a75742c0c1f6cda518ff3f8d18f7e5aa2033aa75b3e067cf8af566e364b9eadc",
+      "backend/src/main/java/com/cinenest/identity/internal/IdentityStore.java": "21349db221ff00ced407ea5a0ab697a8c0e94e24737b7b08945b0bb790aa9c0c",
+      "backend/src/main/java/com/cinenest/identity/internal/CredentialEpochSessions.java": "8a948c2911794d3207a78f61d52056fee68b8c057e92eb53ce5e5c50ecb08a07",
+      "backend/src/main/java/com/cinenest/identity/internal/AccountController.java": "cfd3dea22eb31196fdae43a7ae49baa2a57ec7f728396c3524588ddd1d1840ec",
+      "frontend/components/manual-auth-form.tsx": "4fef6786de015c707e79628e3c91cdca9f585a2f7a0c7a5edbd831b7de76b4e3",
+      "frontend/lib/manual-auth-backend.ts": "b017cc8aefb72a739bdfba727e8f6cf9367a39a5d55b1924b6bedc297c3c3932",
+      "frontend/app/register/page.tsx": "da4fa6f4c1077de04fd7a151ede774187f2211e196365d6dcd3e0228b93fbfe0",
+      "frontend/app/login/page.tsx": "1f4bf0fce36eabbf39491be196318e0f07c4c73b25476932adb4f8a28043aa28",
+      "frontend/app/account/page.tsx": "6077a6439587fff8b14d1fb2d0ee3c0fc5d8148ff37d4a8768760d5cef9b37ef",
+      "backend/src/test/java/com/cinenest/CloudRunRuntimeIT.java": "44249fa0d0ff263970ccc65363896faafc2b0c3e41ad1e87f66c084404173754",
+      "backend/src/test/java/com/cinenest/RoomBlockingIntegrationTest.java": "1f91989004c8c72cfd7ac64cb47f0dc2334239b7b77415835bf2f4ec4abe67b9",
+      "knowledge/ARCHITECTURE.md": "707a2a0c12e14debc9264e40200a7ad29de9c0390775ed0d32bf180bb8a6e08f",
+      "knowledge/PROGRESS.md": "763e4c400d690117a3b7741b9dc3c58f7d9c8f844f58838049fd73ca4a9e9a86",
+      "knowledge/product/FEATURE_CATALOG.md": "cdf927ad020f9b0fe666f7e0baa9cb5a5ab7751587ec8dc64019ab9e5a66d23e",
+      "knowledge/guides/USER_GUIDE.md": "b3206f4df372094e8251b137b8cd98a64a4feea99f2862300ae3b50ee9a838c2"
+    },
+    "sqlCandidateSha256": "f368b0f15123fbfe211e17f7b9eebe09dc744431c8eae2e14e2cdce257456647",
+    "completionSession": {
+      "status": "APPROVED",
+      "source": "Owner reply call_70ac2c82c29f43f59a1a622fd46bb88d: Approve exact security qualification supplement",
+      "requestSha256": "900f00985aa97a02506f9e90b3239e396b8fe755ad11d8a26acf6e1b6e83ad1f",
+      "sessions": 1,
+      "maximumSecondsIncludingCleanup": 1800,
+      "cloudExecution": false,
+      "runtimeSourceSha256": "7ea919fc5e369367107c933f2e3f6630e3500c7342bab346ebf60fe4cc083229",
+      "sqlSha256": "f368b0f15123fbfe211e17f7b9eebe09dc744431c8eae2e14e2cdce257456647",
+      "recordedAtEpoch": 1795776877.7138464,
+      "launchExpiresEpoch": 1795863277.7138464,
+      "consumed": true
+    },
+    "completionHistory": [
+      {
+        "status": "APPROVED",
+        "source": "Owner reply call_7465c2e9366d4aba8ac99eb27d9fce74: Approve exact local completion supplement",
+        "requestSha256": "c37a8c276f4990fa51c4bca5afb853eef9e08c9314ab5711935a81df6267e377",
+        "sessions": 1,
+        "maximumSecondsIncludingCleanup": 1800,
+        "cloudExecution": false,
+        "runtimeSourceSha256": "d5258aa5164a532efa148cbc9484428afbd810b12b1a4492c39d7bb51ee8bf43",
+        "sqlSha256": "f368b0f15123fbfe211e17f7b9eebe09dc744431c8eae2e14e2cdce257456647",
+        "recordedAtEpoch": 1795764768.7405999,
+        "launchExpiresEpoch": 1795851168.7405999,
+        "consumed": true
+      },
+      {
+        "status": "APPROVED",
+        "source": "Owner reply call_bb9ec4ea571e4611b0de1bfb864b7611: Approve exact test-harness completion",
+        "requestSha256": "8deb1c8928be538959d707f0c8e32137ca80d13c6b7cd860df608a0c1aaba328",
+        "sessions": 1,
+        "maximumSecondsIncludingCleanup": 1800,
+        "cloudExecution": false,
+        "runtimeSourceSha256": "812353d7fd6310fcf33b1f26dd26f1084faf86627587346a0ff48158ea95e4f0",
+        "sqlSha256": "f368b0f15123fbfe211e17f7b9eebe09dc744431c8eae2e14e2cdce257456647",
+        "recordedAtEpoch": 1795765425.4350045,
+        "launchExpiresEpoch": 1795851825.4350045,
+        "consumed": true
+      }
+    ],
+    "fixtureSqlAdmission": {
+      "status": "APPROVED",
+      "source": "Owner reply call_70ac2c82c29f43f59a1a622fd46bb88d: Approve exact security qualification supplement",
+      "requestSha256": "900f00985aa97a02506f9e90b3239e396b8fe755ad11d8a26acf6e1b6e83ad1f",
+      "sourceSha256": {
+        "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialPostgresTest.java": "94382d4f5aaf61fddf7ec1d4fc4b74d6a27a5eb0a86b60cf63d10184037741d6",
+        "backend/src/test/java/com/cinenest/CustomerCredentialJourneyIT.java": "5c7da9e691b95da3fb431c988e0b489fde5eca5eb020c24d7bf6b46af0d1237a"
+      },
+      "scope": "DISPOSABLE_LOCAL_ONLY"
+    },
+    "publication": "LOCAL_GATES_PASSED_PENDING_EXACT_STAGED_REVIEW_AND_HOSTED_CI"
   }
 }

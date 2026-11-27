@@ -1,13 +1,14 @@
-import { PageHeading } from "../../components/primitives";
 import { ManualAuthForm } from "../../components/manual-auth-form";
+import { PageHeading } from "../../components/primitives";
 export default function Page() {
 	return (
 		<>
 			<PageHeading
-				eyebrow="LOCAL SYNTHETIC TEST ONLY"
-				title="Log in to your local test account"
+				eyebrow="CONFIGURED ACCOUNT ACCESS"
+				title="Log in to your account"
 			>
-				Real customer registration and provider sign-in are unavailable.
+				Use your existing credentials. Provider sign-in remains separately
+				controlled.
 			</PageHeading>
 			<ManualAuthForm mode="login" />
 		</>

@@ -62,7 +62,7 @@ class IdentitySecurity {
     }
 
     @Bean
-    @ConditionalOnProperty(name="cinenest.identity.manual.enabled", havingValue="false", matchIfMissing=true)
+    @ConditionalOnProperty(name={"cinenest.identity.manual.enabled", "cinenest.identity.customer.enabled"}, havingValue="false", matchIfMissing=true)
     ClientRegistrationRepository identityClient(
             @Value("${cinenest.identity.issuer}") String issuer,
             @Value("${cinenest.identity.authorization-uri}") String authorization,
@@ -80,6 +80,12 @@ class IdentitySecurity {
     @Bean
     SecurityFilterChain identityBoundary(HttpSecurity http, IdentityStore store, org.springframework.core.env.Environment env, org.springframework.beans.factory.ObjectProvider<FacebookLoginContract.Provider> facebookProviders, org.springframework.beans.factory.ObjectProvider<org.springframework.security.oauth2.client.web.AuthorizationRequestRepository<org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest>> transactions) throws Exception {
         boolean manual=env.getProperty("cinenest.identity.manual.enabled",Boolean.class,false);
+        boolean customer=env.getProperty("cinenest.identity.customer.enabled",Boolean.class,false);
+        if(customer && (manual || env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic", "synthetic-quotation"))
+                || env.getProperty("cinenest.identity.operational-enabled",Boolean.class,false)
+                || env.getProperty("cinenest.identity.google.enabled",Boolean.class,false)
+                || env.getProperty("cinenest.identity.facebook.enabled",Boolean.class,false)))
+            throw new IllegalStateException("Customer identity mode must be isolated");
         if(manual && !env.acceptsProfiles(org.springframework.core.env.Profiles.of("local-synthetic"))) throw new IllegalStateException("Local synthetic profile required");
         boolean facebook=env.getProperty("cinenest.identity.facebook.enabled",Boolean.class,false);
         var facebookProvider=facebookProviders.getIfAvailable();
@@ -99,8 +105,10 @@ class IdentitySecurity {
                 requests.requestMatchers("/api/admin/venues/*/bookings/*/session", "/api/admin/venues/*/bookings/*/session/**").authenticated();
                 if(facebook) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/facebook/status","/oauth2/authorization/facebook","/login/oauth2/code/facebook").permitAll();
                 if(google) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/google/status","/oauth2/authorization/google","/login/oauth2/code/google").permitAll();
-                if(manual) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/csrf").permitAll()
+                if(manual || customer) requests.requestMatchers(org.springframework.http.HttpMethod.GET,"/api/auth/csrf").permitAll()
                     .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/auth/registrations","/api/auth/email-verifications","/api/auth/login").permitAll();
+                if(customer) requests.requestMatchers(org.springframework.http.HttpMethod.POST,
+                    "/api/auth/recovery-requests", "/api/auth/recoveries").permitAll();
                 if(env.getProperty("cinenest.identity.manual.recovery.enabled",Boolean.class,false))
                     requests.requestMatchers(org.springframework.http.HttpMethod.POST,
                         "/api/admin/venues/*/accounts/*/credential-recovery/capabilities",
@@ -183,7 +191,7 @@ class IdentitySecurity {
                     response.setStatus(403);
                 }))
             .sessionManagement(sessions -> sessions.sessionFixation(fixation -> fixation.changeSessionId()));
-        if(!manual || google || facebook) http.oauth2Login(login -> login.loginPage(google?"/oauth2/authorization/google":facebook?"/oauth2/authorization/facebook":"/oauth2/authorization/cinenest")
+        if(!customer && (!manual || google || facebook)) http.oauth2Login(login -> login.loginPage(google?"/oauth2/authorization/google":facebook?"/oauth2/authorization/facebook":"/oauth2/authorization/cinenest")
                 .authorizedClientRepository(discardProviderTokens())
                 .authorizationEndpoint(endpoint -> {if(facebook)endpoint.authorizationRequestRepository(transactions.getObject());})
                 .tokenEndpoint(token -> {if(google || facebook)token.accessTokenResponseClient(request -> request.getClientRegistration().getRegistrationId().equals("facebook") && facebook ? facebookProvider.exchange(request) : GoogleOidcContract.tokenClient().getTokenResponse(request));})

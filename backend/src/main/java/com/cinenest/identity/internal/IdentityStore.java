@@ -48,6 +48,37 @@ class IdentityStore {
             row.getString("subject"), row.getLong("epoch"), row.getLong("revision"), row.getString("account_class"));
     }
 
+    @org.springframework.beans.factory.annotation.Value("${cinenest.identity.customer.enabled:false}")
+    private boolean customerEnabled;
+    @org.springframework.beans.factory.annotation.Value("${cinenest.identity.customer.policy-revision:}")
+    private String customerPolicy;
+    @org.springframework.beans.factory.annotation.Value("${cinenest.identity.customer.privacy-revision:}")
+    private String customerPrivacy;
+    @org.springframework.beans.factory.annotation.Value("${cinenest.identity.customer.delivery-revision:}")
+    private String customerDelivery;
+
+    boolean customerMode() { return customerEnabled; }
+
+    record CustomerCredential(UUID account, long epoch, long revision) {}
+
+    Optional<CustomerCredential> customerCredential(UUID account, boolean lock) {
+        if (!customerEnabled) return Optional.empty();
+        // Same account-before-credential order as customer credential mutation and session saves.
+        if (lock && jdbc.sql("SELECT account_id FROM cinenest_identity.account WHERE account_id=:id AND NOT synthetic AND eligibility='ELIGIBLE' FOR SHARE")
+                .param("id", account).query(UUID.class).list().size() != 1) return Optional.empty();
+        return jdbc.sql("""
+            SELECT a.revision, c.credential_epoch FROM cinenest_identity.customer_credential c
+            JOIN cinenest_identity.account a ON a.account_id=c.account_id
+            WHERE c.account_id=:id AND NOT a.synthetic AND a.eligibility='ELIGIBLE'
+              AND c.state='VERIFIED' AND c.credential_epoch>=0
+              AND c.verified_at IS NOT NULL AND c.verified_at<=clock_timestamp()
+              AND c.policy_revision=:policy AND c.privacy_revision=:privacy AND c.delivery_revision=:delivery
+            """ + (lock ? " FOR SHARE OF c" : ""))
+            .param("id", account).param("policy", customerPolicy).param("privacy", customerPrivacy)
+            .param("delivery", customerDelivery).query((row, index) -> new CustomerCredential(account,
+                row.getLong("credential_epoch"), row.getLong("revision"))).optional();
+    }
+
     Optional<UUID> associatedEligibleAccount(String issuer, String subject) {
         return jdbc.sql("""
             SELECT a.account_id FROM cinenest_identity.account a

@@ -678,3 +678,13 @@ The provider-neutral credential core adds no customer or staff action. Existing 
 
 ## Bank provenance preparation boundary
 No new customer or staff banking action is available. Receipt upload remains evidence for investigation;it cannot confirm actual credited funds or a paid booking. The new internal contract only prepares review classifications. Real receiving instructions,credit evidence,Finance authority,privacy controls and qualified adapters remain required before any real banking workflow.
+
+
+### Customer account work in progress
+The complete credential journey is under implementation, not available for real customers. Existing local synthetic instructions remain valid only in their test mode. Registration/email ownership/recovery cannot be inferred from a core test or PR merge. No real email or production account activation is authorized.
+
+Candidate customer flow:register with configured privacy acknowledgment,enter the private verification token and chosen registration password,login,request recovery,then reset and login again. Verification re-request navigation returns to registration without sending automatically. Generic accepted requests do not prove email delivery. This candidate flow passed7real-backend browser groups with a private test mailbox;all35PostgreSQL/HTTP tests now also pass after correcting the harness. Use no real customer details until production/privacy/provider authorization. Passwords/tokens stay out of URLs and browser storage.
+
+Final security hardening is offline-qualified;new database-backed regressions are pending authorized local execution. The candidate remains unavailable for real customers,and prior browser qualification does not authorize real delivery or deployment.
+
+The hardened candidate flow now passes41PostgreSQL/HTTP tests and7Chromium groups in the protected local test environment. This remains private-test-mail qualification;do not use real customer data or infer production availability.

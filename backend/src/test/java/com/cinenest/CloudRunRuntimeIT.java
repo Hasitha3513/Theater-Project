@@ -107,8 +107,17 @@ class CloudRunRuntimeIT {
         String runtimePassword = System.getenv("CINENEST_PACKAGING_RUNTIME_PASSWORD");
         assertThat(runtimePassword).matches("[a-f0-9]{48}");
         var flyway = Flyway.configure().dataSource(url, owner, password).load();
-        assertThat(flyway.migrate().migrationsExecuted).isEqualTo(44);
-        assertThat(flyway.info().current().getVersion().toString()).isEqualTo("45");
+        assertThat(flyway.migrate().migrationsExecuted).isEqualTo(45);
+        assertThat(flyway.info().current().getVersion().toString()).isEqualTo("46");
+        assertThat(flyway.info().current().getScript()).isEqualTo("V46__customer_credential_lifecycle.sql");
+        assertThat(java.util.Arrays.stream(flyway.info().applied())
+            .filter(migration -> migration.getVersion() != null && migration.getVersion().toString().equals("45")).toList())
+            .singleElement().satisfies(migration -> assertThat(migration.getScript()).isEqualTo("V45__synthetic_staff_session_events.sql"));
+        try (var historical = getClass().getResourceAsStream("/db/migration/V45__synthetic_staff_session_events.sql")) {
+            assertThat(historical).isNotNull();
+            assertThat(java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(historical.readAllBytes())))
+                .isEqualTo("091e8c2cb241d919e4def29d8854e7372ffc7267fe392f0c4959251c70efd1df");
+        }
         flyway.validate();
         try (var connection = DriverManager.getConnection(url, owner, password); var sql = connection.createStatement()) {
             var ssl = sql.executeQuery("SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()"); ssl.next(); assertThat(ssl.getBoolean(1)).isTrue();

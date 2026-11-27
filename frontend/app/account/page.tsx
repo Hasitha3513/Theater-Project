@@ -8,8 +8,8 @@ export default function AccountPage() {
 				Your current session, own profile and protected booking history.
 			</PageHeading>
 			<p>
-				<a href="/login">Log in</a> ·{" "}
-				<a href="/register">Create local test account</a>
+				<a href="/login">Log in</a> · <a href="/register">Create account</a> ·{" "}
+				<a href="/recover-account">Recover account</a>
 			</p>
 			<SessionPanel />
 			<CustomerProfilePanel />
