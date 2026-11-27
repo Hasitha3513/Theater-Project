@@ -20400,5 +20400,88 @@ def retained_flyway_main():
 
 receipt_admission_successor_errors=retained_flyway_errors
 inert_ci_main=retained_flyway_main
+
+# Exact Owner-approved pure core successor; frozen predecessor bytes remain above.
+IDENTITY_CORE_STATE = {'id': 'CN-IDENTITY-CUSTOMER-LIFECYCLE-CORE-001', 'baseline': 'aae83964be4c35018d83e8b15e8cac538ccd91d2', 'status': 'READY', 'orderedPaths': ['backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialLifecycle.java', 'backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialPorts.java', 'backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialSecurity.java', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleTest.java', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialPortsTest.java', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialSecurityTest.java', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleArchitectureTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'], 'authority': {'source': 'Owner reply call_195dd6e47ffb4e27967747fbc410fefc', 'requestSha256': '257e8d7a056cba18722fe510d4049869a64d17aaa135223bbeb96b4ff4293c64', 'reviewSource': 'Owner reply call_aa30a26a495442da8c5fa394ba8870d0: Approve review method for both scopes', 'scope': 'PURE_SOURCE_ONLY', 'publication': True}, 'review': {'ledgerSha256': '4423003d89fe177445a37a593836a0ec0cdc0c29bc49989fe5dea86c8b9305fe', 'inventory': 114, 'reusedFullCoverage': 106, 'historicalControlledDiff': 8, 'method': 'Owner-approved task-only verified-ledger reuse plus fresh task-specific and controlled-diff review; no new full visual audit claimed'}, 'implementation': ['Package-private provider-neutral registration/verification/login/recovery lifecycle planner; disabled by default', 'Immutable commands and snapshots; narrow trusted-time, atomic-commit, credential-read, abuse-limit and protected-delivery ports', 'Digest-only one-use purpose/account/revision/expiry-bound capabilities; no plaintext secrets in plans/audit/errors', 'Reuse existing qualified password hashing and session credential-epoch contracts without changing synthetic guards', 'Require current verified account, exact revision and credential epoch; atomic capability consumption, audit and epoch invalidation receipt contracts', 'Explicit bounded rate/hash permits with no invented production policy defaults', 'Unknown commit/delivery outcome stays reconciliation-required; no automatic mutating retry'], 'negativeTests': ['Default disabled denies all', 'Wrong purpose/account/revision, consumed/future/expired capability and expiry equality deny', 'Unverified/suspended/stale credential login denies', 'Enumeration-safe public outcomes and secret redaction', 'Missing/revoked abuse permits deny; hashing stays bounded', 'Mismatched/uncertain atomic receipt never becomes success', 'No Spring beans/controllers/JDBC/network/provider/endpoint/migration dependencies introduced'], 'rollback': 'Normal history-preserving revert of exact admitted paths; no database or external state changes', 'productionAuthorization': 'NONE', 'cloudSessions': 0, 'sqlChanges': False, 'migrations': False, 'part1': {'completed': 4, 'total': 7}, 'qualification': {'status': 'LOCAL_CORE_TESTS_QUALIFIED', 'newTests': 35, 'focusedTestsIncludingExistingRecovery': 53, 'failures': 0, 'errors': 0, 'skipped': 0, 'historicalReplay': 'MANDATORY_BEFORE_PUBLICATION_RESULT_IN_EXTERNAL_EXECUTION_EVIDENCE', 'hostedCI': 'REQUIRED_EXACT_HEAD_AND_AUTOMATIC_MAIN', 'runtime': 'NOT_RUN_OUT_OF_SCOPE'}, 'sourceSha256': {'backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialLifecycle.java': '89978316602642ddadd720e9a154b776ff47b3016615d946add8e5eb2d8d7541', 'backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialPorts.java': '068da537942667ee94cc3e4628e090d1c42100103aac6e8ede184d792b226837', 'backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialSecurity.java': '71cd857d74362115e747b8fe83cbbf682ff2e12e69d462ffbd1e784548996094', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleTest.java': '835f7921828ebde30271329da8965928a85ebf238246d3c4c1278b0fc948649b', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialPortsTest.java': 'db6373d79c438fe4a36a67aabd03c3987d937435cb106eaada7ffbb8ac701e31', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialSecurityTest.java': '32d9282347581a522e84c6cd82a52a609bba0472594b015fe4dba416dc824ac4', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleArchitectureTest.java': 'b47335b16a9553bc58d621a1398bc24c7e3cc9187db02ed48e275fd4558fd56d', 'knowledge/ARCHITECTURE.md': 'f67905a5626945db7ee621fe85f8c45b1d5c9a334094ae3acdc978eb79b121cc', 'knowledge/PROGRESS.md': '457eeb9136b1ca2f7d13dceea13f9dd93f4cc1c7260687d4320c07988eae1a96', 'knowledge/product/FEATURE_CATALOG.md': 'def0367255a58131183729d466577f05dcf8f4409ae455de3ea7b11946a4a217', 'knowledge/guides/USER_GUIDE.md': '089fe8e6aad8be9978f5294124ead9a73f4343a003b4bc6e80bb1ca3d3cb5b6e'}, 'requirementIds': ['CN-C01', 'CN-C02', 'CN-C08', 'CN-NFR-01', 'CN-NFR-02', 'CN-NFR-03']}
+IDENTITY_CORE_BASE = 'aae83964be4c35018d83e8b15e8cac538ccd91d2'
+IDENTITY_CORE_KEY = 'customerCredentialLifecycleCore'
+IDENTITY_CORE_SUFFIX_SHA = '4bf6282985b16f62b5b690cf4f24b0cf6890fce9322451ef170955d7c0d8e0de'
+
+def IDENTITY_CORE_errors():
+    try:
+        u=IDENTITY_CORE_STATE
+        if u['status']!='READY' or u['id']!='CN-IDENTITY-CUSTOMER-LIFECYCLE-CORE-001' or u['baseline']!=IDENTITY_CORE_BASE:return ['Core admission missing']
+        if u['authority']['requestSha256']!='257e8d7a056cba18722fe510d4049869a64d17aaa135223bbeb96b4ff4293c64' or u['authority']['source']!='Owner reply call_195dd6e47ffb4e27967747fbc410fefc' or u['authority']['reviewSource']!='Owner reply call_aa30a26a495442da8c5fa394ba8870d0: Approve review method for both scopes':return ['Core Owner authority mismatch']
+        if u['orderedPaths']!=['backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialLifecycle.java', 'backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialPorts.java', 'backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialSecurity.java', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleTest.java', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialPortsTest.java', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialSecurityTest.java', 'backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleArchitectureTest.java', 'knowledge/ARCHITECTURE.md', 'knowledge/PROGRESS.md', 'knowledge/execution/change-sets.json', 'knowledge/execution/status.json', 'knowledge/execution/validate_execution.py', 'knowledge/manifest.json', 'knowledge/product/FEATURE_CATALOG.md', 'knowledge/guides/USER_GUIDE.md'] or u['productionAuthorization']!='NONE' or u['cloudSessions']!=0 or u['sqlChanges'] is not False or u['migrations'] is not False or u['part1']!={'completed':4,'total':7}:return ['Core scope or authority expansion']
+        def before(name):return v41_git('show',IDENTITY_CORE_BASE+':'+name)
+        for n in ['change-sets.json','status.json']:
+            now=json.loads((K/'execution'/n).read_text());previous=json.loads(before('knowledge/execution/'+n))
+            if now.pop(IDENTITY_CORE_KEY,None)!=u or now!=previous:return ['Core registry history changed '+n]
+        inventory={}
+        for row in v41_git('ls-tree','-r','-z',IDENTITY_CORE_BASE).split(b'\0'):
+            if row:
+                meta,name=row.split(b'\t',1);inventory[name.decode()]=meta.split()
+        allowed=set(u['orderedPaths']);new=allowed-set(inventory)
+        tracked=set(v41_git('ls-files','-z',text=True).split('\0'))-{''};untracked=set(v41_git('ls-files','--others','--exclude-standard','-z',text=True).split('\0'))-{''}
+        if tracked|untracked!=set(inventory)|new or untracked-new:return ['Core source inventory drift']
+        changed=(set(v41_git('diff','--name-only','-z',IDENTITY_CORE_BASE,text=True).split('\0'))-{''})|untracked
+        if changed!=allowed:return ['Core exact path mismatch']
+        for name,(mode,kind,oid) in inventory.items():
+            f=R/name
+            if not f.is_file() or f.is_symlink() or not f.resolve().is_relative_to(R.resolve()) or kind!=b'blob' or bool(f.stat().st_mode&0o111)!=(mode==b'100755'):return ['Core unsafe existing source '+name]
+            if name not in allowed:
+                data=f.read_bytes()
+                if hashlib.sha1(f'blob {len(data)}\0'.encode()+data).hexdigest().encode()!=oid:return ['Core unrelated or historical mutation '+name]
+        for name in new:
+            f=R/name
+            if not f.is_file() or f.is_symlink() or f.stat().st_mode&0o111 or not f.resolve().is_relative_to(R.resolve()):return ['Core unsafe new source '+name]
+        expectedHashes={n for n in allowed if n.endswith('.java') or n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']}
+        if set(u['sourceSha256'])!=expectedHashes:return ['Core missing source fingerprints']
+        for n,h in u['sourceSha256'].items():
+            if hashlib.sha256((R/n).read_bytes()).hexdigest()!=h:return ['Core source fingerprint mismatch '+n]
+        for n in ['knowledge/ARCHITECTURE.md','knowledge/PROGRESS.md','knowledge/product/FEATURE_CATALOG.md','knowledge/guides/USER_GUIDE.md']:
+            if not (R/n).read_bytes().startswith(before(n)):return ['Core historical prose modified '+n]
+        prefix=before('knowledge/execution/validate_execution.py').removesuffix("if __name__ == '__main__':\n    raise SystemExit(inert_ci_main())\n".encode());actual=(R/'knowledge/execution/validate_execution.py').read_bytes()
+        if not actual.startswith(prefix):return ['Core predecessor validator changed']
+        suffix=actual[len(prefix):]
+        if hashlib.sha256(suffix.replace(IDENTITY_CORE_SUFFIX_SHA.encode(),b'0'*64,1)).hexdigest()!=IDENTITY_CORE_SUFFIX_SHA:return ['Core validator suffix drift']
+        manifest=json.loads(before('knowledge/manifest.json'))
+        for entry in manifest['files']:
+            if 'knowledge/'+entry['path'] in allowed-{'knowledge/manifest.json'}:entry['sha256']=hashlib.sha256((K/entry['path']).read_bytes()).hexdigest()
+        if (K/'manifest.json').read_bytes()!=(json.dumps(manifest,indent=2)+'\n').encode():return ['Core manifest mismatch']
+        mod=__import__('runpy').run_path(str(R/'scripts/verify-cloud-connectivity.py'));mod['migration_inventory']()
+        if len(list((R/'backend/src/main/resources/db/migration').glob('*.sql')))!=44:return ['Core historical migration inventory changed']
+    except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError):return ['Core admission inputs unavailable']
+    return []
+
+def IDENTITY_CORE_negative_controls():
+    from unittest.mock import patch
+    for field,value in [('status','BLOCKED'),('authority',{}),('orderedPaths',[]),('productionAuthorization','GO'),('cloudSessions',1),('sqlChanges',True),('migrations',True),('part1',{'completed':7,'total':7}),('sourceSha256',{})]:
+        fake=json.loads(json.dumps(IDENTITY_CORE_STATE));fake[field]=value
+        with patch.dict(globals(),{'IDENTITY_CORE_STATE':fake}):
+            if not IDENTITY_CORE_errors():raise ValueError('Core accepted forged '+field)
+    read=Path.read_bytes
+    for name in ['backend/src/main/resources/db/migration/V1__foundation_namespace.sql','backend/src/main/java/com/cinenest/identity/internal/LocalCustomerIdentity.java','knowledge/execution/validate_execution.py']:
+        target=R/name
+        with patch.object(Path,'read_bytes',lambda p,*a,**kw:read(p,*a,**kw)+b'\n' if p==target else read(p,*a,**kw)):
+            if not IDENTITY_CORE_errors():raise ValueError('Core accepted altered source '+name)
+    print('PASS core exact scope,approval,history and security negative controls',flush=True)
+
+def IDENTITY_CORE_main():
+    import tempfile,sys
+    errors=IDENTITY_CORE_errors()
+    if errors:print('\n'.join('FAIL '+x for x in errors));return 1
+    IDENTITY_CORE_negative_controls()
+    common=v41_git('rev-parse','--path-format=absolute','--git-common-dir',text=True).strip();env=retained_replay_environment(common)
+    with tempfile.TemporaryDirectory(prefix='cinenest-core-history-') as tmp:
+        target=Path(tmp)/'predecessor'
+        subprocess.run(['git','clone','--quiet','--shared','--no-checkout','--',common,str(target)],check=True,env=env)
+        subprocess.run(['git','-C',str(target),'checkout','--quiet','--detach',IDENTITY_CORE_BASE],check=True,env=env)
+        relative=Path('org/postgresql/postgresql/42.7.13/postgresql-42.7.13.jar');cache=next((p for p in [R/'.cache/m2',Path.home()/'.m2/repository'] if (p/relative).is_file()),None)
+        if cache is not None:(target/'.cache').mkdir();(target/'.cache/m2').symlink_to(cache.resolve(),target_is_directory=True)
+        return subprocess.run([sys.executable,'-u','-B','knowledge/execution/validate_execution.py'],cwd=target,env=env).returncode
+
+receipt_admission_successor_errors=IDENTITY_CORE_errors
+inert_ci_main=IDENTITY_CORE_main
 if __name__ == '__main__':
     raise SystemExit(inert_ci_main())

@@ -33814,5 +33814,100 @@
       "offline-final-361-hardened.log": "86a71aa80fa684f6c1607efff4b711e35d86cd5c538e3c102526da074212dfc5",
       "budget-evidence-review.json": "0126f637a7fb8987ddc1566eefd31f2a0e9ba68489dbe47fc5b45991e2d3db44"
     }
+  },
+  "customerCredentialLifecycleCore": {
+    "id": "CN-IDENTITY-CUSTOMER-LIFECYCLE-CORE-001",
+    "baseline": "aae83964be4c35018d83e8b15e8cac538ccd91d2",
+    "status": "READY",
+    "orderedPaths": [
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialLifecycle.java",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialPorts.java",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialSecurity.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialPortsTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialSecurityTest.java",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleArchitectureTest.java",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "authority": {
+      "source": "Owner reply call_195dd6e47ffb4e27967747fbc410fefc",
+      "requestSha256": "257e8d7a056cba18722fe510d4049869a64d17aaa135223bbeb96b4ff4293c64",
+      "reviewSource": "Owner reply call_aa30a26a495442da8c5fa394ba8870d0: Approve review method for both scopes",
+      "scope": "PURE_SOURCE_ONLY",
+      "publication": true
+    },
+    "review": {
+      "ledgerSha256": "4423003d89fe177445a37a593836a0ec0cdc0c29bc49989fe5dea86c8b9305fe",
+      "inventory": 114,
+      "reusedFullCoverage": 106,
+      "historicalControlledDiff": 8,
+      "method": "Owner-approved task-only verified-ledger reuse plus fresh task-specific and controlled-diff review; no new full visual audit claimed"
+    },
+    "implementation": [
+      "Package-private provider-neutral registration/verification/login/recovery lifecycle planner; disabled by default",
+      "Immutable commands and snapshots; narrow trusted-time, atomic-commit, credential-read, abuse-limit and protected-delivery ports",
+      "Digest-only one-use purpose/account/revision/expiry-bound capabilities; no plaintext secrets in plans/audit/errors",
+      "Reuse existing qualified password hashing and session credential-epoch contracts without changing synthetic guards",
+      "Require current verified account, exact revision and credential epoch; atomic capability consumption, audit and epoch invalidation receipt contracts",
+      "Explicit bounded rate/hash permits with no invented production policy defaults",
+      "Unknown commit/delivery outcome stays reconciliation-required; no automatic mutating retry"
+    ],
+    "negativeTests": [
+      "Default disabled denies all",
+      "Wrong purpose/account/revision, consumed/future/expired capability and expiry equality deny",
+      "Unverified/suspended/stale credential login denies",
+      "Enumeration-safe public outcomes and secret redaction",
+      "Missing/revoked abuse permits deny; hashing stays bounded",
+      "Mismatched/uncertain atomic receipt never becomes success",
+      "No Spring beans/controllers/JDBC/network/provider/endpoint/migration dependencies introduced"
+    ],
+    "rollback": "Normal history-preserving revert of exact admitted paths; no database or external state changes",
+    "productionAuthorization": "NONE",
+    "cloudSessions": 0,
+    "sqlChanges": false,
+    "migrations": false,
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "LOCAL_CORE_TESTS_QUALIFIED",
+      "newTests": 35,
+      "focusedTestsIncludingExistingRecovery": 53,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "historicalReplay": "MANDATORY_BEFORE_PUBLICATION_RESULT_IN_EXTERNAL_EXECUTION_EVIDENCE",
+      "hostedCI": "REQUIRED_EXACT_HEAD_AND_AUTOMATIC_MAIN",
+      "runtime": "NOT_RUN_OUT_OF_SCOPE"
+    },
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialLifecycle.java": "89978316602642ddadd720e9a154b776ff47b3016615d946add8e5eb2d8d7541",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialPorts.java": "068da537942667ee94cc3e4628e090d1c42100103aac6e8ede184d792b226837",
+      "backend/src/main/java/com/cinenest/identity/internal/CustomerCredentialSecurity.java": "71cd857d74362115e747b8fe83cbbf682ff2e12e69d462ffbd1e784548996094",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleTest.java": "835f7921828ebde30271329da8965928a85ebf238246d3c4c1278b0fc948649b",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialPortsTest.java": "db6373d79c438fe4a36a67aabd03c3987d937435cb106eaada7ffbb8ac701e31",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialSecurityTest.java": "32d9282347581a522e84c6cd82a52a609bba0472594b015fe4dba416dc824ac4",
+      "backend/src/test/java/com/cinenest/identity/internal/CustomerCredentialLifecycleArchitectureTest.java": "b47335b16a9553bc58d621a1398bc24c7e3cc9187db02ed48e275fd4558fd56d",
+      "knowledge/ARCHITECTURE.md": "f67905a5626945db7ee621fe85f8c45b1d5c9a334094ae3acdc978eb79b121cc",
+      "knowledge/PROGRESS.md": "457eeb9136b1ca2f7d13dceea13f9dd93f4cc1c7260687d4320c07988eae1a96",
+      "knowledge/product/FEATURE_CATALOG.md": "def0367255a58131183729d466577f05dcf8f4409ae455de3ea7b11946a4a217",
+      "knowledge/guides/USER_GUIDE.md": "089fe8e6aad8be9978f5294124ead9a73f4343a003b4bc6e80bb1ca3d3cb5b6e"
+    },
+    "requirementIds": [
+      "CN-C01",
+      "CN-C02",
+      "CN-C08",
+      "CN-NFR-01",
+      "CN-NFR-02",
+      "CN-NFR-03"
+    ]
   }
 }

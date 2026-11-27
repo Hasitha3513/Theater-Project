@@ -966,3 +966,7 @@ CN-GCP-PROBE-DIAGNOSTICS-SERVICE-CLEANUP-001 improves qualification diagnostics 
 
 ## Retained database qualification
 CN-GCP-RETAINED-FLYWAY-QUALIFICATION-001 separates explicitly authorized fresh migration from read-only retained history verification. Valid retained44/V45 history must match exact artifacts,checksums and the trusted application-schema contract;new migration count remains zero. Invalid/partial state is denied without repair or data deletion. This is qualification tooling,not a new customer feature or production release. Local real PostgreSQL,image and mocked diagnostics are reported separately. [Evidence](../PROGRESS.md#retained-flyway-history);PART1 remains4/7.
+
+
+## Provider-neutral customer lifecycle core
+Identity now contains a default-disabled, package-private lifecycle/security planning contract for registration, email ownership, login and recovery. It has no public UI/API, delivery adapter or production persistence. Synthetic registration remains the only implemented onboarding runtime. See [architecture](../ARCHITECTURE.md#customer-credential-lifecycle-core).
