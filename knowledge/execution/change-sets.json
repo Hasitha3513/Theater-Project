@@ -9459,5 +9459,94 @@
       "CN-NFR-02",
       "CN-NFR-03"
     ]
+  },
+  "bankCreditProvenanceCore": {
+    "id": "CN-PAYMENTS-CREDIT-PROVENANCE-CORE-001",
+    "baseline": "9588917834a3a01f3bd224ea5b5c2194e7714dbe",
+    "originalApprovedBaselineMain": "aae83964be4c35018d83e8b15e8cac538ccd91d2",
+    "approvedPredecessorOverlay": "CN-IDENTITY-CUSTOMER-LIFECYCLE-CORE-001",
+    "status": "READY",
+    "orderedPaths": [
+      "backend/src/main/java/com/cinenest/payments/internal/BankCreditProvenance.java",
+      "backend/src/test/java/com/cinenest/payments/internal/BankCreditProvenanceTest.java",
+      "knowledge/ARCHITECTURE.md",
+      "knowledge/PROGRESS.md",
+      "knowledge/execution/change-sets.json",
+      "knowledge/execution/status.json",
+      "knowledge/execution/validate_execution.py",
+      "knowledge/manifest.json",
+      "knowledge/product/FEATURE_CATALOG.md",
+      "knowledge/guides/USER_GUIDE.md"
+    ],
+    "requirementIds": [
+      "PR-BANK-001",
+      "CN-C10",
+      "CN-A13",
+      "BP-AC04",
+      "BP-AC06",
+      "BP-AC07",
+      "BP-AC08",
+      "BP-AC09",
+      "BP-AC10"
+    ],
+    "authority": {
+      "source": "Owner reply call_195dd6e47ffb4e27967747fbc410fefc",
+      "requestSha256": "4288cddcf2b88586067f0ebb54526980d598e1283abeff251aadd2619177a136",
+      "reviewSource": "Owner reply call_aa30a26a495442da8c5fa394ba8870d0: Approve review method for both scopes",
+      "scope": "PURE_SOURCE_ONLY",
+      "publication": true
+    },
+    "review": {
+      "inventory": 114,
+      "reusedFullCoverage": 106,
+      "historicalControlledDiff": 8,
+      "method": "Owner-approved task-only ledger reuse plus fresh task-specific/controlled-diff review; first approved overlay preserved; no new visual audit"
+    },
+    "implementation": [
+      "Package-private immutable bank-credit provenance/review-context contract and pure default-deny admission policy",
+      "Bind venue, approved receiving-account revision, currency/minor-unit amount, credited time, unique source movement, source revision and protected evidence digest/reference",
+      "Receipt/OCR/customer claims never establish actual credited funds",
+      "Separate verifier and allocator authority; deny claimant/customer/verifier/allocator conflicts",
+      "Reject missing/stale/revoked/wrong-venue/unmatched/disputed/reversed evidence",
+      "Classify exact/conflicting replay against trusted outcome snapshot without claiming durable idempotency",
+      "Result means eligible for independent review only, never PAID/confirmed/refunded/admitted"
+    ],
+    "negativeTests": [
+      "Missing/invalid account scope or revision denies",
+      "Receipt-only evidence denies",
+      "Role conflicts/revoked authority/wrong venue deny",
+      "Amount/currency/time/source revision mismatch denies",
+      "Changed replay rejects; exact snapshot replay classification is stable",
+      "Immutable copies and redaction",
+      "Existing synthetic profile-denial and architecture restrictions remain"
+    ],
+    "rollback": "Normal history-preserving revert of exact admitted paths; no database or external state changes",
+    "productionAuthorization": "NONE",
+    "cloudSessions": 0,
+    "sqlChanges": false,
+    "migrations": false,
+    "part1": {
+      "completed": 4,
+      "total": 7
+    },
+    "qualification": {
+      "status": "LOCAL_CORE_TESTS_QUALIFIED",
+      "newTests": 43,
+      "focusedTestsIncludingExistingProfiles": 85,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "historicalReplay": "MANDATORY_BEFORE_PUBLICATION_RESULT_IN_EXTERNAL_EXECUTION_EVIDENCE",
+      "hostedCI": "REQUIRED_EXACT_HEAD_AND_AUTOMATIC_MAIN",
+      "runtime": "NOT_RUN_OUT_OF_SCOPE"
+    },
+    "sourceSha256": {
+      "backend/src/main/java/com/cinenest/payments/internal/BankCreditProvenance.java": "afc917d5005e3c89d56425b9e16b3d429d927fb8045c3588f73556f8e085fbe2",
+      "backend/src/test/java/com/cinenest/payments/internal/BankCreditProvenanceTest.java": "8d33a0c84f01d2ef657e52455f0c4385355f111f8f3b91fffa5d2901c3b5b956",
+      "knowledge/ARCHITECTURE.md": "b1c900b80f18d94c4f66a04c351d5b9adb21edf94043cdd72c2b75e1c6e40aef",
+      "knowledge/PROGRESS.md": "c4acbe285b0a05c67cd588eaf31dd40c629b330252062f62486672b26ba8d449",
+      "knowledge/product/FEATURE_CATALOG.md": "52012f2b29473800a980401413d0a4124246a437246ece0bfd2d606a84505a4f",
+      "knowledge/guides/USER_GUIDE.md": "c6647f3f6de7248256d066d175340e9ce7202a7595ca921e2062d154a3cf0d26"
+    }
   }
 }

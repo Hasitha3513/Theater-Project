@@ -970,3 +970,7 @@ CN-GCP-RETAINED-FLYWAY-QUALIFICATION-001 separates explicitly authorized fresh m
 
 ## Provider-neutral customer lifecycle core
 Identity now contains a default-disabled, package-private lifecycle/security planning contract for registration, email ownership, login and recovery. It has no public UI/API, delivery adapter or production persistence. Synthetic registration remains the only implemented onboarding runtime. See [architecture](../ARCHITECTURE.md#customer-credential-lifecycle-core).
+
+
+## Manual-bank provenance preparation
+Payments contains an inert review-eligibility contract separating trusted bank-source facts from customer receipts and keeping current independent authority,revision and replay classifications explicit. It does not activate real credit ingestion,allocation,confirmation or refunds. Existing synthetic banking remains unchanged. [Architecture](../ARCHITECTURE.md#bank-credit-provenance-core).
